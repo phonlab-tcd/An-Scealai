@@ -1,0 +1,25 @@
+.btn {
+    margin: 10px;
+    color: white;
+    font-size: 16pt;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+}
+
+.loginBtn {
+    background-color: #cc670a;
+}
+
+.loginBtn:hover {
+    background-color: #af5503;
+}
+
+.registerBtn {
+    background-color: #e5bd3b;
+}
+
+.registerBtn:hover {
+    background-color: #c49f27;
+}

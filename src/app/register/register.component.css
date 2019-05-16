@@ -1,0 +1,44 @@
+.btn {
+    margin: 10px;
+    color: white;
+    font-size: 14pt;
+    padding: 5px;
+    padding-bottom: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+}
+
+.loginBtn {
+    background-color: #cc670a;
+}
+
+.loginBtn:hover {
+    background-color: #af5503;
+}
+
+.inputField {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.formContainer {
+    width: 300px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    background-color: #efefef;
+}
+
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
+
+.loginContainer {
+    width: 300px;
+    display: inline-block;
+    background-color: #d8d8d8;
+    border-radius: 25px;
+}
