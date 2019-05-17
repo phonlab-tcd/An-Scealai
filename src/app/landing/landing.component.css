@@ -1,25 +1,59 @@
-.btn {
-    margin: 10px;
-    color: white;
-    font-size: 16pt;
-    padding: 5px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 30px;
+.bottomLeftImg {
+    width: 300px;
+    height: auto;
+    left: 0px;
+    bottom:0px;
+    position: fixed;
 }
 
-.loginBtn {
-    background-color: #cc670a;
+.bottomRightImg {
+    width: 300px;
+    height: auto;
+    right: 0px;
+    bottom:0px;
+    position: fixed;
 }
 
-.loginBtn:hover {
-    background-color: #af5503;
+.topRightImg {
+    width: 300px;
+    height: auto;
+    right: 0px;
+    top: 0px;
+    margin-top: 50px;
+    position: fixed;
 }
 
-.registerBtn {
-    background-color: #e5bd3b;
+.catImg {
+    width: 180px;
+    height: auto;
+    bottom: 60px;
+    position: fixed;
+    margin-left: -10%;
+    
 }
 
-.registerBtn:hover {
-    background-color: #c49f27;
+.catContainer {
+    width: 100%;
+    text-align: center;
+}
+
+@media only screen and (max-width: 550px) {
+    .catImg {
+        display: none;
+    }
+
+    .topRightImg {
+        display: none;
+    }
+
+    .bottomRightImg {
+        display: none;
+    }
+
+}
+
+@media only screen and (min-width: 900px) {
+    .catImg {
+        display: none;
+    }
 }

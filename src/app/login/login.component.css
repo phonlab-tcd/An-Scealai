@@ -1,14 +1,3 @@
-.btn {
-    margin: 10px;
-    color: white;
-    font-size: 14pt;
-    padding: 5px;
-    padding-bottom: 2px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 30px;
-}
-
 .loginBtn {
     background-color: #cc670a;
 }
@@ -36,9 +25,18 @@
     font-size: 18pt;
 }
 
-.loginContainer {
+.registerContainer {
     width: 300px;
     display: inline-block;
     background-color: #d8d8d8;
     border-radius: 25px;
+
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.formLabel {
+    text-align: left;
+    margin-left: 20%;
 }

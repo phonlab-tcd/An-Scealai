@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background: url("assets/img/paperBg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: "Palatino";
+}
+
+.btn {
+  margin: 10px;
+  color: white;
+  font-size: 16pt;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 30px;
+}
+
+.loginBtn {
+  background-color: #c15a2e;
+  color: white;
+}
+
+.loginBtn:hover {
+  background-color: #843c1d;
+  color: white;
+}
+
+.registerBtn {
+  background-color: #e5bd3b;
+  color: white;
+}
+
+.registerBtn:hover {
+  background-color: #ad8f2b;
+  color: white;
+}
