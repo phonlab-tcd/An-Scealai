@@ -10,6 +10,9 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BookContentsComponent } from './book-contents/book-contents.component';
+import { BookStoryComponent } from './book-story/book-story.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     LanguageComponent,
     LoginComponent,
     RegisterComponent,
-    DashboardComponent
+    DashboardComponent,
+    BookContentsComponent,
+    BookStoryComponent,
+    ChatbotComponent
   ],
   imports: [
     BrowserModule,

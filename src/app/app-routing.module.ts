@@ -7,6 +7,7 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BookContentsComponent } from './book-contents/book-contents.component'; 
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'dashboard', component: DashboardComponent},
+  { path: 'dashboard/contents', component: BookContentsComponent},
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 

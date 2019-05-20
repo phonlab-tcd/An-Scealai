@@ -1,0 +1,38 @@
+.bookContainer {
+    width: 80%;
+    height: 70vh;
+    margin-left: 10%;
+    background-color: #c15a2e;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.bookTitle {
+    color: white;
+    display: inline;
+    font-size: 18pt;
+}
+
+.bookHeader {
+    text-align: center;
+}
+
+.contentsContainer {
+    padding-top: 5vh;
+    padding-left: 10%;
+}
+
+.contentsLinkContainer {
+    margin: 5px;
+}
+
+.contentsLink {
+    color: white;
+    float: left;
+}
+
+.contentsDate {
+    margin-left: 50%;
+    color: white;
+}

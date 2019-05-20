@@ -7,6 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
+  showContents: boolean = false;
+  showStory: boolean = true;
+  showChatbot: boolean = false;
+  title: string = "Teideal";
+  leftBtnLabel: string = "My Stories";
+  rightBtnLabel: string = "Taidhgín";
+  leftBtnVisible: boolean = true;
+  rightBtnVisible: boolean = true;
+
   constructor() { }
 
   ngOnInit() {

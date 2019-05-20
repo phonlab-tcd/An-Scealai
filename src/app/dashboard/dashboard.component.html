@@ -1,3 +1,10 @@
-<p>
-  dashboard works!
-</p>
+<div class="bookContainer">
+  <div class="bookHeader">
+    <button routerLink="/dashboard/contents" *ngIf="leftBtnVisible" class="btn myStoriesBtn">{{leftBtnLabel}}</button>
+    <div class="bookTitle">{{title}}</div>
+    <button (click)="topRightButton()" *ngIf="rightBtnVisible" class="btn chatbotBtn">{{rightBtnLabel}}</button>
+  </div>
+  <app-book-contents *ngIf="showContents"></app-book-contents>
+  <app-book-story *ngIf="showStory"></app-book-story>
+  <app-chatbot *ngIf="showChatbot"></app-chatbot>
+</div>

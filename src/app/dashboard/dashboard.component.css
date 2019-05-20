@@ -1,0 +1,51 @@
+.bookContainer {
+    width: 80%;
+    height: 70vh;
+    margin-left: 10%;
+    background-color: #c15a2e;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.bookTitle {
+    color: white;
+    display: inline;
+    font-size: 18pt;
+}
+
+.myStoriesBtn {
+    display: inline;
+    float: left;
+    background-color: #e5bd3b;
+    border-style: none;
+    color: white;
+    font-size: 12pt;
+    margin: 0px;
+    border-radius: 0px 0px 5px 0px;
+}
+
+.myStoriesBtn:hover {
+    background-color: #ad8f2b;
+    color: white;
+}
+
+.chatbotBtn {
+    display: inline;
+    float: right;
+    background-color: #e5bd3b;
+    border-style: none;
+    color: white;
+    font-size: 12pt;
+    margin: 0px;
+    border-radius: 0px 0px 0px 5px;
+}
+
+.chatbotBtn:hover {
+    background-color: #ad8f2b;
+    color: white;
+}
+
+.bookHeader {
+    text-align: center;
+}
