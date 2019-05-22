@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component'; 
+import { NewStoryComponent } from './new-story/new-story.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -16,8 +17,9 @@ const routes: Routes = [
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'dashboard', component: DashboardComponent},
-  { path: 'dashboard/contents', component: BookContentsComponent},
+  { path: 'dashboard/:id', component: DashboardComponent},
+  { path: 'contents', component: BookContentsComponent},
+  { path: 'new-story', component: NewStoryComponent},
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 

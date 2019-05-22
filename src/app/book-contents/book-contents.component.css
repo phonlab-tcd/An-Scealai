@@ -1,38 +1,119 @@
 .bookContainer {
     width: 80%;
     height: 70vh;
+    padding-top: 2vh;
     margin-left: 10%;
-    background-color: #c15a2e;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.bookImg {
+    z-index: -10;
+    width: 90%;
+    height: 75vh;
+    position: fixed;
+    right: 5%;
 }
 
 .bookTitle {
-    color: white;
-    display: inline;
+    color: #261500;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: inline-block;
     font-size: 18pt;
 }
 
-.bookHeader {
-    text-align: center;
-}
-
 .contentsContainer {
-    padding-top: 5vh;
-    padding-left: 10%;
+    padding-top: 1vh;
+    padding-left: 3%;
+    padding-right: 3%;
+    height: 58vh;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 5vh;
+    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .contentsLinkContainer {
+    height: 36vh;
+    overflow: scroll;
+    padding: 3%;
+    -webkit-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
+-moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
+box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
+}
+
+.contentsTitleContainer {
     margin: 5px;
 }
 
 .contentsLink {
-    color: white;
+    color: #261500;
     float: left;
 }
 
 .contentsDate {
-    margin-left: 50%;
+    margin-left: 60%;
+    color:#261500;
+}
+
+.contentsDateTitle {
+    margin-left: 65%;
+    font-size: 14pt;
+    color: #e5bd3b;
+}
+
+.contentsLinkTitle {
+    float: left;
+    margin-left: 1%;
+    font-size: 14pt;
+    color: #e5bd3b;
+}
+
+.contentsBtnsContainer {
+    margin-top: 1.5vh;
+}
+
+.newStoryBtn {
+    font-size: 14pt;
+    background-color: #e5bd3b;
+    border-style: none;
     color: white;
+    font-size: 12pt;
+    margin: 0px;
+    float: right;
+    border-radius: 5px 5px 5px 5px;
+}
+
+@media only screen and (max-width: 550px) { 
+    .contentsLinkContainer {
+        height: 32vh;
+    }
+}
+
+@media only screen and (min-width: 700px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        top: 50%;
+        margin-left: -315px;
+        margin-top: -35vh;
+    }
+
+    .bookContainer {
+        width: 560px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -280px;
+        margin-top: -35vh;
+    }
+
 }

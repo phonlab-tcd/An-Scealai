@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
@@ -11,8 +12,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component';
-import { BookStoryComponent } from './book-story/book-story.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { NewStoryComponent } from './new-story/new-story.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +26,13 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     RegisterComponent,
     DashboardComponent,
     BookContentsComponent,
-    BookStoryComponent,
-    ChatbotComponent
+    ChatbotComponent,
+    NewStoryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,35 +4,21 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  font-family: "Palatino";
+  font-family: "Open Sans";
 }
 
 .btn {
-  margin: 10px;
   color: white;
-  font-size: 16pt;
+  font-size: 14pt;
   padding: 5px;
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 30px;
-}
-
-.loginBtn {
-  background-color: #c15a2e;
-  color: white;
-}
-
-.loginBtn:hover {
-  background-color: #843c1d;
-  color: white;
-}
-
-.registerBtn {
   background-color: #e5bd3b;
-  color: white;
+  z-index: 20;
 }
 
-.registerBtn:hover {
+.btn:hover {
   background-color: #ad8f2b;
   color: white;
 }

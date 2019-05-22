@@ -1,51 +1,116 @@
 .bookContainer {
-    width: 80%;
-    height: 70vh;
-    margin-left: 10%;
-    background-color: #c15a2e;
+    width: 70%;
+    height: 62vh;
+    margin-left: 15%;
+    z-index: 10;
+    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.page {
+    padding-top: 5vh;
+}
+
+.bookImg {
+    z-index: -10;
+    width: 90%;
+    height: 75vh;
+    position: fixed;
+    right: 5%;
 }
 
 .bookTitle {
-    color: white;
-    display: inline;
+    color: #261500;  
+    padding-left: 5%;
+    padding-right: 5%;
+    display: inline-block;
     font-size: 18pt;
 }
 
 .myStoriesBtn {
     display: inline;
     float: left;
-    background-color: #e5bd3b;
     border-style: none;
-    color: white;
+    color: #261500;
     font-size: 12pt;
-    margin: 0px;
-    border-radius: 0px 0px 5px 0px;
+    padding-top: 1.5vh;
+    padding-left: 5%;
 }
 
 .myStoriesBtn:hover {
-    background-color: #ad8f2b;
-    color: white;
+    color: #c15a2e;
+    text-decoration: none;
 }
 
 .chatbotBtn {
     display: inline;
     float: right;
+    color: #261500;
+    border-style: none;
+    font-size: 12pt;
+    padding-top: 1.5vh;
+    padding-right: 5%;
+}
+
+.chatbotBtn:hover {
+    color: #c15a2e;
+}
+
+.bookHeader {
+    text-align: center;
+}
+
+.textField {
+    width: 90%;
+    height: 48vh;
+    resize: none;
+    z-index: 1;
+}
+
+.saveBtn {
+    font-size: 14pt;
     background-color: #e5bd3b;
     border-style: none;
     color: white;
     font-size: 12pt;
     margin: 0px;
-    border-radius: 0px 0px 0px 5px;
+    margin-right: 5%;
+    float: right;
+    border-radius: 5px 5px 5px 5px;
 }
 
-.chatbotBtn:hover {
+.saveBtn:hover {
     background-color: #ad8f2b;
     color: white;
 }
 
-.bookHeader {
-    text-align: center;
+.storyContainer {
+    z-index: 1;
+}
+
+@media only screen and (min-width: 700px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        top: 50%;
+        margin-left: -315px;
+        margin-top: -35vh;
+    }
+
+    .bookContainer {
+        width: 490px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -245px;
+        margin-top: -30vh;
+    }
+
 }

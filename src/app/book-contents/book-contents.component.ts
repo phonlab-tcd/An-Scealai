@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Story } from '../story';
+import { StoryService } from '../story.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -6,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./book-contents.component.css']
 })
 export class BookContentsComponent implements OnInit {
+  
+  stories: Story[];
 
-  constructor() { }
+  constructor(private storyService: StoryService) { }
 
   ngOnInit() {
+    this.storyService
+    .getStory()
+    .subscribe((data: Story[]) => {
+      this.stories = data;
+    });
+  }
+
+  chooseStory(story: Story) {
+    this.storyService.chosenStory = story;
   }
 
 }

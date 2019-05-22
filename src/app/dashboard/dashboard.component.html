@@ -1,10 +1,18 @@
-<div class="bookContainer">
-  <div class="bookHeader">
-    <button routerLink="/dashboard/contents" *ngIf="leftBtnVisible" class="btn myStoriesBtn">{{leftBtnLabel}}</button>
-    <div class="bookTitle">{{title}}</div>
-    <button (click)="topRightButton()" *ngIf="rightBtnVisible" class="btn chatbotBtn">{{rightBtnLabel}}</button>
+<img src="assets/img/book.png" class="bookImg">
+<div class="page">
+  <div class="bookContainer">
+      <div class="bookHeader">
+        <a routerLink="/contents" class="myStoriesBtn">Contents</a>
+        <div class="bookTitle">{{story?.title}}</div>
+        <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
+      </div>
+      <div class="storyContainer">
+        <div class="textFieldContainer">
+            <textarea class="textField" value="{{story?.text}}"></textarea>
+        </div>
+        <div class="saveBtnContainer">
+            <button class="btn saveBtn" (click)="saveStory(story.title, story.date, story.text)">Save</button>
+        </div>
+      </div>
   </div>
-  <app-book-contents *ngIf="showContents"></app-book-contents>
-  <app-book-story *ngIf="showStory"></app-book-story>
-  <app-chatbot *ngIf="showChatbot"></app-chatbot>
 </div>

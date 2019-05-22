@@ -1,0 +1,92 @@
+.bookContainer {
+    width: 80%;
+    height: 70vh;
+    padding-top: 2vh;
+    margin-left: 10%;
+    z-index: 10;
+}
+
+.bookImg {
+    z-index: -10;
+    width: 90%;
+    height: 75vh;
+    position: fixed;
+    right: 5%;
+}
+
+.bookTitle {
+    color: #261500;
+    width: 80%;
+    padding-left: 5%;
+    padding-right: 25%;
+    display: inline-block;
+    font-size: 18pt;
+}
+
+.contentsContainer {
+    padding-top: 1vh;
+    padding-left: 3%;
+    padding-right: 3%;
+    height: 58vh;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 5vh;
+    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.contentsBtnsContainer {
+    margin-top: 5vh;
+}
+
+.createBtn {
+    font-size: 12pt;
+}
+
+.formGroup {
+    margin: 2vh;
+}
+
+.formLabel {
+    color: #261500;
+}
+
+.backBtn {
+    display: inline-block;
+    border-style: none;
+    color: #261500;
+    font-size: 12pt;
+    width: 20%;
+}
+
+.backBtn:hover {
+    color: #c15a2e;
+    text-decoration: none;
+}
+
+@media only screen and (min-width: 700px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        top: 50%;
+        margin-left: -315px;
+        margin-top: -35vh;
+    }
+
+    .bookContainer {
+        width: 560px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -280px;
+        margin-top: -35vh;
+    }
+
+}
