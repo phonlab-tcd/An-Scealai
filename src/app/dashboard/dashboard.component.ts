@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
     // been retrieved.
     this.getStories().then(stories => {
       this.stories = stories;
+      console.log(stories);
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
         this.id = params['id'];
@@ -58,8 +59,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  saveStory(id, title, date, text) {
-    this.storyService.saveStory(id, title, date, text);
+  saveStory(text) {
+    this.route.params.subscribe(
+      params => {
+        this.storyService.updateStory(text, params['id']);
+        console.log("Saved story!");
+      }
+    )
   }
 
 }

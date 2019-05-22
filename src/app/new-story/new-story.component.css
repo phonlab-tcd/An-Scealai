@@ -70,6 +70,11 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     text-decoration: none;
 }
 
+.validationAlert {
+    color: red;
+    font-size: 12pt;
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;

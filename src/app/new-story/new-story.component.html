@@ -1,23 +1,28 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="bookContainer">
   <div class="contentsContainer">
-      <a class="backBtn" routerLink="/contents">Back</a>
-      <div class="bookTitle">New Story</div>
-    <form>
-      <div class="formGroup">
+    <a class="backBtn" routerLink="/contents">Back</a>
+    <div class="bookTitle">New Story</div>
+    <form [formGroup]="newStoryForm">
+      <div class="formGroup" novalidate>
         <p class="formLabel">Title</p>
-        <input type="text" class="titleInput">
+        <input type="text" class="titleInput" formControlName="title">
+        <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
+          <div *ngIf="newStoryForm.controls['title'].errors.required">
+            *Person Name is required.
+          </div>
+        </div>
       </div>
       <div class="formGroup">
         <p class="formLabel">Dialect</p>
-        <select>
+        <select formControlName="dialect">
           <option value="connemara">Connemara</option>
           <option value="donegal">Donegal</option>
           <option value="kerry">Kerry</option>
         </select>
       </div>
       <div class="contentsBtnsContainer">
-        <button class="btn createBtn" (click)="makeUUID()">Create</button>
+        <button class="btn createBtn" type="submit" (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >Create</button>
       </div>
     </form>
   </div>

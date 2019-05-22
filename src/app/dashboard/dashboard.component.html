@@ -8,10 +8,10 @@
       </div>
       <div class="storyContainer">
         <div class="textFieldContainer">
-            <textarea class="textField" value="{{story?.text}}"></textarea>
+            <textarea class="textField" value="{{story?.text}}" #storyInput></textarea>
         </div>
         <div class="saveBtnContainer">
-            <button class="btn saveBtn" (click)="saveStory(story.title, story.date, story.text)">Save</button>
+            <button class="btn saveBtn" (click)="saveStory(storyInput.value)">Save</button>
         </div>
       </div>
   </div>

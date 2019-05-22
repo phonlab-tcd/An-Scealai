@@ -24,4 +24,19 @@ storyRoutes.route('/').get(function (req, res) {
     });
 });
 
+storyRoutes.route('/update/:id').post(function (req, res) {
+    Story.findOne({"id": req.params.id}, function(err, story) {
+        if(story === null) {
+            console.log("story is null!");
+        } else {
+            story.text = req.body.text;
+            story.save().then(story => {
+                res.json('Update complete');
+            }).catch(err => {
+                res.status(400).send("Unable to update");
+            });
+        }
+    });
+})
+
 module.exports = storyRoutes;

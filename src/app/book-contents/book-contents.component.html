@@ -6,11 +6,14 @@
       <div class="contentsLinkTitle">Title</div>
       <div class="contentsDateTitle">Last Updated</div>
     </div>
-    <div *ngFor="let story of stories" class="contentsLinkContainer">
-      <a [routerLink]="['/dashboard', story.id]" class="contentsLink">{{story.title}}</a>
-      <div class="contentsDate">{{story.date | date}}</div>
+    <div class="contentsLinkContainer">
+      <div *ngFor="let story of stories">
+        <a [routerLink]="['/dashboard', story.id]" class="contentsLink">{{story.title}}</a>
+        <div class="contentsDate">{{story.date | date}}</div>
+      </div>
     </div>     
     <div class="contentsBtnsContainer">
+      <button class="btn trashBtn"><img src="assets/img/trash.ico" class="trashImg"></button>
       <button class="btn newStoryBtn" routerLink="/new-story">New Story</button>
     </div>        
   </div>

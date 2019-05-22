@@ -11,6 +11,9 @@ let Story = new Schema({
     date: {
         type: Date
     },
+    dialect: {
+        type: String
+    },
     text: {
         type: String
     }
