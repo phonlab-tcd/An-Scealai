@@ -4,7 +4,8 @@ const storyRoutes = express.Router();
 
 let Story = require('../models/Story');
 
-storyRoutes.route('/save').post(function (req, res) {
+// Create new story
+storyRoutes.route('/create').post(function (req, res) {
     let story = new Story(req.body);
     story.save().then(story => {
         res.status(200).json({'story': 'story added successfully'});
@@ -14,6 +15,7 @@ storyRoutes.route('/save').post(function (req, res) {
     });
 });
 
+// Get story from DB
 storyRoutes.route('/').get(function (req, res) {
     Story.find(function (err, stories) {
     if(err) {
@@ -24,8 +26,10 @@ storyRoutes.route('/').get(function (req, res) {
     });
 });
 
+// Update story by ID
 storyRoutes.route('/update/:id').post(function (req, res) {
     Story.findOne({"id": req.params.id}, function(err, story) {
+        if(err) res.json(err);
         if(story === null) {
             console.log("story is null!");
         } else {
@@ -38,5 +42,13 @@ storyRoutes.route('/update/:id').post(function (req, res) {
         }
     });
 })
+
+// Delete story by ID
+storyRoutes.route('/delete/:id').get(function(req, res) {
+    Story.findOneAndRemove({"id": req.params.id}, function(err, story) {
+        if(err) res.json(err);
+        else res.json("Successfully removed");
+    });
+});
 
 module.exports = storyRoutes;

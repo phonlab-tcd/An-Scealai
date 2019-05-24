@@ -71,6 +71,11 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     height: 48vh;
     resize: none;
     z-index: 1;
+    color: #261500;
+    background-color: #f7f2e7;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
 }
 
 .saveBtn {

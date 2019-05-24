@@ -8,13 +8,20 @@
     </div>
     <div class="contentsLinkContainer">
       <div *ngFor="let story of stories">
-        <a [routerLink]="['/dashboard', story.id]" class="contentsLink">{{story.title}}</a>
+        <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">
+        <a [routerLink]="['/dashboard', story.id]" 
+        class="contentsLink">{{story.title}}</a>
         <div class="contentsDate">{{story.date | date}}</div>
       </div>
     </div>     
     <div class="contentsBtnsContainer">
-      <button class="btn trashBtn"><img src="assets/img/trash.ico" class="trashImg"></button>
+      <button class="btn optionsBtn" (click)="togglePopupVisible()">Options</button>
       <button class="btn newStoryBtn" routerLink="/new-story">New Story</button>
     </div>        
+  </div>
+  <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
+    <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
+    <button class="btn optionsBtn optionsPopupBtn">Rename</button>
+    <button class="btn optionsBtn optionsPopupBtn">Change Dialect</button>
   </div>
 </div>

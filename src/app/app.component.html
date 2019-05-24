@@ -1,26 +1,27 @@
 <ng2-slim-loading-bar color="green"></ng2-slim-loading-bar>
 <div class="page">
-        <div class="nav">
-            <input type="checkbox" id="nav-check" [checked]="checkVal">
-            <div class="nav-header">
-            <div class="nav-title">
-                <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
-            </div>
-            </div>
-            <div class="nav-btn" (click)="changeCheck()">
-            <label>
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            </div>
-                <div class="nav-links">
-                    <a routerLink="/about" class="navBtn" (click)="changeCheck()">About</a>
-                    <a routerLink="/technology" class="navBtn" (click)="changeCheck()">Technology</a>
-                    <a routerLink="/language" class="navBtn" (click)="changeCheck()">Language</a>  
-                </div>
+    <div class="nav">
+        <input type="checkbox" id="nav-check" [checked]="checkVal">
+        <div class="nav-header">
+        <div class="nav-title">
+            <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
         </div>
-        <div class="content">
-            <router-outlet></router-outlet>
         </div>
+        <div class="nav-btn" (click)="changeCheck()">
+        <label>
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        </div>
+            <div class="nav-links">
+                <a routerLink="/about" class="navBtn" (click)="changeCheck()">About</a>
+                <a routerLink="/technology" class="navBtn" (click)="changeCheck()">Technology</a>
+                <a routerLink="/language" class="navBtn" (click)="changeCheck()">Language</a>  
+                <a routerLink="/language" class="navBtn" (click)="changeCheck()">Profile</a> 
+            </div>
     </div>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

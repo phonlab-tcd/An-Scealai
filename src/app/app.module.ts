@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { FormsModule } from '@angular/forms';
+
+import { StoryService } from './story.service';
+import { UserService } from './user.service';
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
@@ -37,8 +41,9 @@ import { NewStoryComponent } from './new-story/new-story.component';
     HttpClientModule,
     ReactiveFormsModule,
     SlimLoadingBarModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [ StoryService, UserService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

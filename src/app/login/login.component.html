@@ -1,4 +1,4 @@
-<div class="registerContainer">
+<!--<div class="registerContainer">
     <div class="formTitle">Login</div><br>
     <div class="formContainer">
         <div class="form-group">
@@ -10,5 +10,23 @@
           <input type="password" class="form-control inputField" placeholder="Password">
         </div>
         <button routerLink="/contents" class="btn loginBtn">Submit</button>
+    </div>
+</div>-->
+<div class="registerContainer">
+    <div class="formTitle">Login</div><br>
+    <div class="formContainer">
+      <form (submit)="login()">
+        <div class="form-group">
+          <div class="formLabel"><label>Username</label></div>
+          <input type="text" class="form-control inputField"
+          placeholder="Enter username" name="username" [(ngModel)]="credentials.username">
+        </div>
+        <div class="form-group">
+          <div class="formLabel"><label>Password</label></div>
+          <input type="password" class="form-control inputField" 
+          placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
+        </div>
+        <button type="submit" class="btn loginBtn">Login</button>
+      </form>
     </div>
 </div>

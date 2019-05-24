@@ -23,7 +23,7 @@ export class StoryService {
       text: text
     };
     console.log(storyObj);
-    this.http.post('http://localhost:4000/story/save', storyObj)
+    this.http.post('http://localhost:4000/story/create', storyObj)
       .subscribe(res => this.router.navigateByUrl('/dashboard/' + id));
   }
 
@@ -38,6 +38,10 @@ export class StoryService {
     this.http.post('http://localhost:4000/story/update/'+id, obj).subscribe(
       res => console.log('Done')
     );
+  }
+
+  deleteStory(id) {
+    return this.http.get('http://localhost:4000/story/delete/'+id);
   }
 
 }

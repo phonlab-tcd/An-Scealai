@@ -9,7 +9,7 @@
         <input type="text" class="titleInput" formControlName="title">
         <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
           <div *ngIf="newStoryForm.controls['title'].errors.required">
-            *Person Name is required.
+            *Title is required.
           </div>
         </div>
       </div>

@@ -107,7 +107,7 @@ box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
     height: 0px;
   }
   .nav > #nav-check:checked ~ .nav-links {
-      height: calc(32vh - 50px);
+      height: calc(40vh - 50px);
       overflow-y: auto;
   }
 }
