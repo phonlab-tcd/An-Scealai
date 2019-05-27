@@ -16,7 +16,9 @@
     display: inline-block;
     padding-top: 15px;
     padding-bottom: 25px;
-    background-color: #efefef;
+    color: #261500;
+    background-color: #e6e8ed;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .formTitle {
@@ -28,7 +30,8 @@
 .registerContainer {
     width: 300px;
     display: inline-block;
-    background-color: #d8d8d8;
+    background-color: #cc670a;
+    color: white;
     border-radius: 25px;
 
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);

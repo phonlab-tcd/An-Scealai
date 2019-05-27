@@ -1,0 +1,92 @@
+.loginBtn {
+    background-color: #9a69db;
+}
+
+.loginBtn:hover {
+    background-color: #7c53b2;
+}
+
+.inputField {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.formContainer {
+    width: 300px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #261500;
+    background-color: #e6e8ed;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
+
+.profileContainer {
+    width: 300px;
+    display: inline-block;
+    background-color: #9a69db;
+    color: white;
+    border-radius: 25px;
+
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.formLabel {
+    display: inline-block;
+    float: left;
+    text-align: left;
+    padding-left: 15%;
+    width: 50%;
+}
+
+.editIcon {
+    width: 32px;
+    height: 32px;
+    float: right;
+    margin-right: 5%;
+    margin-top: -13px;
+    border-radius: 10px 10px 10px 10px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+}
+
+.editIcon:hover {
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    margin-right: 4.75%;
+    margin-top: -14px;
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+-moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+}
+
+.editImg {
+    width: 66%;
+}
+
+.userInfo {
+    width: 50%;
+    text-align: left;
+    padding-left: 5%;
+    display: inline-block;
+}
+
+.logoutBtn {
+    font-size: 12pt;
+    background-color: #dd000e;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.logoutBtn:hover {
+    background-color: #b7000a;
+}

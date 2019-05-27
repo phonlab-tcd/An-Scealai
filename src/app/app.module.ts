@@ -20,6 +20,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { NewStoryComponent } from './new-story/new-story.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NewStoryComponent } from './new-story/new-story.component';
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
-    NewStoryComponent
+    NewStoryComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

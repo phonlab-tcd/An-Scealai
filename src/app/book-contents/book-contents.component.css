@@ -114,10 +114,6 @@ border-radius: 5px 5px 5px 5px;
     color: white;
 }
 
-.deleteMode {
-    color: red;
-}
-
 .optionsPopup {
     z-index: 10;
     width: 330px;

@@ -18,7 +18,8 @@
                 <a routerLink="/about" class="navBtn" (click)="changeCheck()">About</a>
                 <a routerLink="/technology" class="navBtn" (click)="changeCheck()">Technology</a>
                 <a routerLink="/language" class="navBtn" (click)="changeCheck()">Language</a>  
-                <a routerLink="/language" class="navBtn" (click)="changeCheck()">Profile</a> 
+                <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">Sign in</a>
+                <a *ngIf="auth.isLoggedIn()" routerLink="/profile" class="navBtn rightNavBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}}</a> 
             </div>
     </div>
     <div class="content">

@@ -15,16 +15,26 @@ export class RegisterComponent implements OnInit {
     password: ''
   };
 
+  usernameExists: boolean;
+  emptyFields: boolean;
+
   constructor(private auth: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
+    this.usernameExists = false;
+    this.emptyFields = false;
   }
 
   register() {
     this.auth.register(this.credentials).subscribe(() => {
       this.router.navigateByUrl('/landing');
     }, (err) => {
-      console.error("This: ", err);
+      if(err.status === 409) {
+        this.usernameExists = true;
+      }
+      if(err.status === 400) {
+        this.emptyFields = true;
+      }
     });
   }
 

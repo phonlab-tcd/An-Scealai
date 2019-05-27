@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 export interface UserDetails {
   _id: string;
-  id: string;
   username: string;
   exp: number;
   iat: number;
@@ -55,6 +54,7 @@ export class AuthenticationService {
 
   public isLoggedIn(): boolean {
     const user = this.getUserDetails();
+    
     if(user) {
       return user.exp > Date.now() / 1000;
     } else {

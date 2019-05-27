@@ -9,6 +9,8 @@ import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component'; 
 import { NewStoryComponent } from './new-story/new-story.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -20,6 +22,7 @@ const routes: Routes = [
   { path: 'dashboard/:id', component: DashboardComponent},
   { path: 'contents', component: BookContentsComponent},
   { path: 'new-story', component: NewStoryComponent},
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 

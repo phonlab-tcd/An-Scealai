@@ -1,7 +1,6 @@
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-var uuidv4 = require('uuid/v4');
 
 var sendJSONresponse = function(res, status, content) {
     res.status(status);
@@ -17,14 +16,17 @@ module.exports.register = function(req, res) {
         return;
     }
 
+    console.log(req.body);
+
     var user = new User();
 
     user.username = req.body.username;
-    user.id = uuidv4();
 
     user.setPassword(req.body.password);
 
     user.save(function(err) {
+        console.log(user._id);
+        if(err) { console.log("BIG ERROR", err); return; };
         var token;
         token = user.generateJwt();
         res.status(200);
