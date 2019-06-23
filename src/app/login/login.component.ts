@@ -15,16 +15,23 @@ export class LoginComponent implements OnInit {
     password: ''
   };
 
+  loginError: boolean;
+  errorText: String;
+
   constructor(private auth: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
+    this.loginError = false;
   }
 
   login() {
     this.auth.login(this.credentials).subscribe(() => {
       this.router.navigateByUrl('/contents');
     }, (err) => {
-      console.error(err);
+      if(err.status === 400) {
+        this.errorText = err.error.message;
+        this.loginError = true;
+      }
     });
   }
 

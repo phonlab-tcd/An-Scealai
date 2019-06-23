@@ -24,3 +24,8 @@ body {
   background-color: #ad8f2b;
   color: white;
 }
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}

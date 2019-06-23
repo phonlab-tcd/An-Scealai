@@ -25,6 +25,7 @@
           <div class="formLabel"><label>Password</label></div>
           <input type="password" class="form-control inputField" 
           placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
+          <div *ngIf="loginError" class="errorMessage">{{errorText}}</div>
         </div>
         <button type="submit" class="btn loginBtn">Login</button>
       </form>

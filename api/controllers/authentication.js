@@ -68,7 +68,7 @@ module.exports.login = function(req, res) {
                 "token" : token
             });
         } else {
-            res.status(401).json(info);
+            res.status(400).json(info);
         }
     })(req, res);
 };
