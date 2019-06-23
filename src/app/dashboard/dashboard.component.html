@@ -8,11 +8,14 @@
       </div>
       <div class="storyContainer">
         <div class="textFieldContainer">
-            <textarea class="textField" value="{{story?.text}}" #storyInput></textarea>
+            <textarea class="textField" value="{{story?.text}}" #storyInput (input)="storyEdited()"></textarea>
         </div>
         <div class="saveBtnContainer">
-            <button class="btn saveBtn" (click)="saveStory(storyInput.value)">
-              Save <i *ngIf="storySaved" class="fas fa-check tickIcon"></i>
+            <button *ngIf="storySaved" class="btn saveBtn savedBtn">
+              Saved <i class="fas fa-check tickIcon"></i>
+            </button>
+            <button *ngIf="!storySaved" class="btn saveBtn unsavedBtn" (click)="saveStory(storyInput.value)">
+                Save
             </button>
         </div>
       </div>

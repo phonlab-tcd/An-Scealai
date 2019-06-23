@@ -16,10 +16,12 @@ export class DashboardComponent implements OnInit {
   stories: Story[];
   id: String;
   storyFound: Boolean;
+  storySaved: Boolean;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.storySaved = true;
     // Get the stories from the storyService, and run
     // the following function once that data has
     // been retrieved.
@@ -64,9 +66,13 @@ export class DashboardComponent implements OnInit {
     this.route.params.subscribe(
       params => {
         this.storyService.updateStory(text, params['id']);
-        console.log("Saved story!");
+        this.storySaved = true;
       }
     )
+  }
+
+  storyEdited() {
+    this.storySaved = false;
   }
 
 }

@@ -81,7 +81,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 
 .saveBtn {
     font-size: 14pt;
-    background-color: #e5bd3b;
+    
     border-style: none;
     color: white;
     font-size: 12pt;
@@ -91,7 +91,11 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     border-radius: 5px 5px 5px 5px;
 }
 
-.saveBtn:hover {
+.unsavedBtn {
+    background-color: #e5bd3b;
+}
+
+.unsavedBtn:hover {
     background-color: #ad8f2b;
     color: white;
 }
@@ -102,6 +106,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 
 .tickIcon {
     margin-left: 5px;
+}
+
+.savedBtn {
+    background-color: #70a87f;
 }
 
 @media only screen and (min-width: 700px) {
