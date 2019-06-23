@@ -12,7 +12,7 @@
           <div class="formLabel"><label>Password</label></div>
           <input type="password" class="form-control inputField" 
           placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
-          <div *ngIf="emptyFields" class="errorMessage">*Must provide a username and password</div>
+          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
         </div>
         <button type="submit" class="btn loginBtn">Register</button>
       </form>

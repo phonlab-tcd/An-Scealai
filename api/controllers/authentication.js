@@ -11,7 +11,7 @@ module.exports.register = function(req, res) {
 
     if(!req.body.username || !req.body.password) {
         sendJSONresponse(res, 400, {
-            "message": "All fields required"
+            "message": "Username and password required"
         });
         return;
     }
@@ -26,7 +26,15 @@ module.exports.register = function(req, res) {
 
     user.save(function(err) {
         console.log(user._id);
-        if(err) { console.log("BIG ERROR", err); return; };
+        if(err) { 
+            console.log("Mongo error\nError code: ", err.code, "\n");
+            if(err.code === 11000) {
+                sendJSONresponse(res, 400, {
+                    "message": "Username taken, please choose another"
+                })
+            } 
+            return;
+        };
         var token;
         token = user.generateJwt();
         res.status(200);
@@ -40,7 +48,7 @@ module.exports.login = function(req, res) {
     
     if(!req.body.username || !req.body.password) {
         sendJSONresponse(res, 400, {
-            "message": "All fields are required"
+            "message": "Username and password required"
         });
         return;
     }
