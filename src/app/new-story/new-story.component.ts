@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { StoryService } from '../story.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthenticationService, TokenPayload } from '../authentication.service';
 
 
 @Component({
@@ -13,7 +14,8 @@ export class NewStoryComponent implements OnInit {
 
   newStoryForm: FormGroup;
   constructor(private fb: FormBuilder, 
-    private storyService: StoryService) {
+    private storyService: StoryService,
+    private auth: AuthenticationService) {
     this.createForm();
   }
 
@@ -25,12 +27,12 @@ export class NewStoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    
   }
 
   addNewStory(title, dialect) {
     let id = uuid();
     let date = new Date();
-    this.storyService.saveStory(id, title, date, dialect, "");
+    let username = this.auth.getUserDetails().username;
+    this.storyService.saveStory(id, title, date, dialect, "", username);
   }
 }

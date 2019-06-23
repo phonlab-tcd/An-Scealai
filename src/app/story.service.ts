@@ -3,6 +3,7 @@ import { Story } from './story';
 import { HttpClient } from '@angular/common/http';
 import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
+import { AuthenticationService, TokenPayload } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +13,17 @@ export class StoryService {
   chosenStory: Story;
 
   constructor(private http: HttpClient,
-    private router: Router) { }
+    private router: Router,
+    private auth: AuthenticationService) { }
 
-  saveStory(id, title, date, dialect, text) {
+  saveStory(id, title, date, dialect, text, author) {
     const storyObj = {
       id: id,
       title: title,
       date: date,
       dialect: dialect,
-      text: text
+      text: text,
+      author: author
     };
     console.log(storyObj);
     this.http.post('http://localhost:4000/story/create', storyObj)
@@ -28,7 +31,8 @@ export class StoryService {
   }
 
   getStory() {
-    return this.http.get('http://localhost:4000/story/');
+    let author = this.auth.getUserDetails().username;
+    return this.http.get('http://localhost:4000/story/'+author);
   }
 
   updateStory(text, id) {

@@ -4,4 +4,5 @@ export class Story {
     date: Date;
     dialect: String;
     text: String;
+    author: String;
 }

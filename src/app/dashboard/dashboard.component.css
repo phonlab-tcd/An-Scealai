@@ -3,6 +3,7 @@
     height: 62vh;
     margin-left: 15%;
     z-index: 10;
+    border-radius: 5px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -97,6 +98,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 
 .storyContainer {
     z-index: 1;
+}
+
+.tickIcon {
+    margin-left: 5px;
 }
 
 @media only screen and (min-width: 700px) {

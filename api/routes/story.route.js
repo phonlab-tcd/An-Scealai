@@ -16,8 +16,8 @@ storyRoutes.route('/create').post(function (req, res) {
 });
 
 // Get story from DB
-storyRoutes.route('/').get(function (req, res) {
-    Story.find(function (err, stories) {
+storyRoutes.route('/:author').get(function (req, res) {
+    Story.find({"author": req.params.author}, function (err, stories) {
     if(err) {
         console.log(err);
     } else {

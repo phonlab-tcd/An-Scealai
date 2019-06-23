@@ -16,6 +16,9 @@ let Story = new Schema({
     },
     text: {
         type: String
+    },
+    author: {
+        type: String
     }
 }, {
     collection: 'story'

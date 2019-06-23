@@ -11,7 +11,9 @@
             <textarea class="textField" value="{{story?.text}}" #storyInput></textarea>
         </div>
         <div class="saveBtnContainer">
-            <button class="btn saveBtn" (click)="saveStory(storyInput.value)">Save</button>
+            <button class="btn saveBtn" (click)="saveStory(storyInput.value)">
+              Save <i *ngIf="storySaved" class="fas fa-check tickIcon"></i>
+            </button>
         </div>
       </div>
   </div>
