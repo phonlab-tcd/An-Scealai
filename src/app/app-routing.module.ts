@@ -11,6 +11,8 @@ import { BookContentsComponent } from './book-contents/book-contents.component';
 import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuardService } from './auth-guard.service';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { RoleGuardService } from './role-guard.service';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -19,10 +21,11 @@ const routes: Routes = [
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'dashboard/:id', component: DashboardComponent},
-  { path: 'contents', component: BookContentsComponent},
-  { path: 'new-story', component: NewStoryComponent},
+  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
+  { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+  { path: 'admin', component: AdminPanelComponent, canActivate: [RoleGuardService], data: { expectedRole: 'ADMIN' } },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 

@@ -21,6 +21,7 @@ import { BookContentsComponent } from './book-contents/book-contents.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ProfileComponent } from './profile/profile.component';
     BookContentsComponent,
     ChatbotComponent,
     NewStoryComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,
