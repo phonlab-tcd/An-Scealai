@@ -18,6 +18,7 @@ interface TokenResponse {
 export interface TokenPayload {
   username: string;
   password: string;
+  role: string;
 }
 
 @Injectable({

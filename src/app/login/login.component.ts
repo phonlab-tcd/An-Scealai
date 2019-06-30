@@ -12,7 +12,8 @@ export class LoginComponent implements OnInit {
 
   credentials: TokenPayload = {
     username: '',
-    password: ''
+    password: '',
+    role: 'STUDENT',
   };
 
   loginError: boolean;

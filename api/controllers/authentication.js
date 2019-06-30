@@ -24,6 +24,8 @@ module.exports.register = function(req, res) {
 
     user.setPassword(req.body.password);
 
+    user.role = req.body.role;
+
     user.save(function(err) {
         console.log(user._id);
         if(err) { 

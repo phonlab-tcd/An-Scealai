@@ -12,7 +12,8 @@ import { createDecipher } from 'crypto';
 export class RegisterComponent implements OnInit {
   credentials: TokenPayload = {
     username: '',
-    password: ''
+    password: '',
+    role: 'STUDENT',
   };
 
   registrationError: boolean;

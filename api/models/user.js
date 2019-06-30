@@ -9,6 +9,11 @@ let userSchema = new mongoose.Schema({
         index: true,
         unique: true,
     },
+    role: {
+        type: String,
+        enum: ['ADMIN', 'TEACHER', 'STUDENT'],
+        default: 'STUDENT'
+    },
     hash: String,
     salt: String
 });
@@ -30,6 +35,7 @@ userSchema.methods.generateJwt = function() {
     return jwt.sign({
         _id: this._id,
         username: this.username,
+        role: this.role,
         exp: parseInt(expiry.getTime() / 1000),
     }, "sonJJxVqRC"); // 5ecret
 };
