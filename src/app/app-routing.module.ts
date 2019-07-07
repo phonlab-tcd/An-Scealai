@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
@@ -10,8 +11,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component'; 
 import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AuthGuardService } from './auth-guard.service';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { TeachersComponent } from './teachers/teachers.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+
+import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 
 const routes: Routes = [
@@ -25,7 +29,26 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'admin', component: AdminPanelComponent, canActivate: [RoleGuardService], data: { expectedRole: 'ADMIN' } },
+  { path: 'admin', 
+    component: AdminPanelComponent, 
+    canActivate: [RoleGuardService],
+    data: { expectedRole: 'ADMIN' },
+    children: [
+      {
+        path: '', 
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent,
+      },
+      {
+        path: 'teachers',
+        component: TeachersComponent,
+      },
+    ]
+  },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 

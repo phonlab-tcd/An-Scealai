@@ -1,9 +1,9 @@
 .loginBtn {
-    background-color: #9a69db;
+    background-color: #876daa;
 }
 
 .loginBtn:hover {
-    background-color: #7c53b2;
+    background-color: #685383;
 }
 
 .inputField {
@@ -18,7 +18,7 @@
     padding-bottom: 15px;
     color: #261500;
     background-color: #e6e8ed;
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .formTitle {
@@ -30,9 +30,9 @@
 .profileContainer {
     width: 300px;
     display: inline-block;
-    background-color: #9a69db;
+    background-color: #876daa;
     color: white;
-    border-radius: 25px;
+    border-radius: 10px;
 
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
@@ -51,23 +51,16 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     width: 32px;
     height: 32px;
     float: right;
-    margin-right: 5%;
+    margin-right: 4%;
     margin-top: -13px;
-    border-radius: 10px 10px 10px 10px;
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
--moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
 }
 
 .editIcon:hover {
     cursor: pointer;
-    width: 34px;
-    height: 34px;
-    margin-right: 4.75%;
-    margin-top: -14px;
-    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
--moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+    width: 35px;
+    height: 35px;
+    margin-right: 3.5%;
+    margin-top: -13px;
 }
 
 .editImg {

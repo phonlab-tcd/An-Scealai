@@ -1,0 +1,45 @@
+.content {
+    display: flex;
+    padding: 10%;
+    padding-top: 5vh;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    flex-wrap: wrap;
+    height: 72vh;
+}
+
+.btnContainer {
+    width: 150px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16pt;
+    background-color: #534d3d;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.btnContainer:hover {
+    color:#ff9100;
+    background-color: #3b372b;
+    transition: color, background-color, 0.5s;
+    cursor: pointer;
+}
+
+@media (max-width:550px) {
+    .content {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .btnContainer {
+        width: 90%;
+        height: 80px;
+        padding: 10px;
+    }
+}

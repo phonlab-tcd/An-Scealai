@@ -1,0 +1,16 @@
+<div class="content">
+  <div class="generateCodeTitle"><div class="teacherCodeTitle">Teacher Account Code</div><div class="teacherCodeButton" (click)="generateCode()">Generate</div></div>
+  <div class="teacherCodeDisplay">
+    <textarea readonly class="teacherCodeTextarea">{{teacherCode}}</textarea>
+    <i class="far fa-copy copyIcon" (click)="copyToClipboard()"></i>
+    <div class="{{copiedTextClass}} copiedText">Copied!</div>
+  </div>
+  <div class="teacherAccountsDisplay">
+    <div class="teacherAccountsHeader">
+      Teacher Accounts
+    </div>
+    <div class="teacherAccountsBody">
+      
+    </div>
+  </div>
+</div>

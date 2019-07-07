@@ -22,6 +22,8 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { TeachersComponent } from './teachers/teachers.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
     ChatbotComponent,
     NewStoryComponent,
     ProfileComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    TeachersComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
