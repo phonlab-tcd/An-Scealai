@@ -63,7 +63,7 @@ export class AuthenticationService {
     }
   }
 
-  private request(method: 'post'|'get', type: 'login'|'register'|'profile', user?: TokenPayload): Observable<any> {
+  private request(method: 'post'|'get', type: 'login'|'register'|'registerTeacher'|'profile', user?: TokenPayload): Observable<any> {
     let base;
 
     if(method === 'post') {
@@ -86,6 +86,15 @@ export class AuthenticationService {
 
   public register(user: TokenPayload): Observable<any> {
     return this.request('post', 'register', user);
+  }
+
+  public registerTeacher(user: TokenPayload, code: String): Observable<any> {
+    this.http.get('http://localhost:4000/teacherCode/delete/' + code).subscribe(() => {
+      return this.request('post', 'register', user);
+    }, (err) => {
+      return err;
+    });
+    return null;
   }
 
   public login(user: TokenPayload): Observable<any> {

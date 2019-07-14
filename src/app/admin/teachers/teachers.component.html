@@ -20,7 +20,7 @@
       <div class="teacherAccountsBody">
         <div class="activeTeacherCodeContainer" *ngFor="let code of activeTeacherCodes">
           {{code.code}} 
-          <i class="fa fa-times deleteBtn" aria-hidden="true" (click)="showModal(code._id)"></i>
+          <i class="fa fa-times deleteBtn" aria-hidden="true" (click)="showModal(code.code)"></i>
         </div>
       </div>
     </div>

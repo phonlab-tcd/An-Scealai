@@ -3,16 +3,18 @@ import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-register-teacher',
+  templateUrl: './register-teacher.component.html',
+  styleUrls: ['./register-teacher.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterTeacherComponent implements OnInit {
   credentials: TokenPayload = {
     username: '',
     password: '',
-    role: 'STUDENT',
+    role: 'TEACHER',
   };
+
+  teacherCode : String;
 
   registrationError: boolean;
   errorText: String;
@@ -24,7 +26,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.auth.register(this.credentials).subscribe(() => {
+    this.auth.registerTeacher(this.credentials, this.teacherCode).subscribe(() => {
       this.router.navigateByUrl('/landing');
     }, (err) => {
       if(err.status === 400) {
@@ -33,5 +35,4 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
-
 }

@@ -61,30 +61,37 @@
     color: #261500;
 }
 
-.registerBtn {
-    font-size: 12pt;
-    
+.landingBtnsContainer {
+    margin-top: 1vh;
 }
 
-.loginBtn {
-    font-size: 12pt;
+.teacherRegisterBtn {
+    font-size: 14pt;
+}
+
+.studentRegisterBtn {
+    font-size: 14pt;
     background-color: #c15a2e;
 }
 
-.loginBtn:hover {
+.studentRegisterBtn:hover {
     background-color: #843c1d;
     color: white;
 }
 
-.registerBtn {
+.teacherRegisterBtn {
     margin: 10px;
     background-color: #e5bd3b;
     color: white;
 }
 
-.registerBtn:hover {
+.teacherRegisterBtn:hover {
 background-color: #ad8f2b;
 color: white;
+}
+
+.loginTextContainer {
+    margin-top: 2vh;
 }
 
 @media only screen and (max-width: 550px) {

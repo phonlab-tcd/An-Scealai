@@ -13,7 +13,7 @@ export class TeachersComponent implements OnInit {
 
   teacherCode : String;
   activeTeacherCodes : TeacherCodeDetails[];
-  idOfCodeToDelete : String;
+  codeToDelete : String;
 
   copiedTextClass : String = "hidden";
   modalClass : String = "hidden";
@@ -45,12 +45,12 @@ export class TeachersComponent implements OnInit {
   }
 
   deleteTeacherCode() {
-    if(this.idOfCodeToDelete != null) {
-      console.log(this.idOfCodeToDelete);
-      this.http.get('http://localhost:4000/teacherCode/delete/' + this.idOfCodeToDelete).subscribe((res) => {
-      this.getActiveTeacherCodes();
-      this.hideModal();
-    });
+    if(this.codeToDelete != null) {
+      console.log(this.codeToDelete);
+      this.http.get('http://localhost:4000/teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
+        this.getActiveTeacherCodes();
+        this.hideModal();
+      });
     } else {
       console.log("Error, code id not found.");
     }
@@ -68,9 +68,9 @@ export class TeachersComponent implements OnInit {
     setTimeout(() => this.copiedTextClass = "hiddenFade", 1000);
   }
 
-  showModal(_id : String) {
+  showModal(code : String) {
     this.modalClass = "visibleFade";
-    this.idOfCodeToDelete = _id;
+    this.codeToDelete = code;
   }
 
   hideModal() {

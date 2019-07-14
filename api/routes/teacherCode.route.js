@@ -24,12 +24,13 @@ teacherCodeRoutes.route('/activeCodes').get(function (req, res) {
     });
 });
 
-teacherCodeRoutes.route('/delete/:_id').get(function(req, res) {
-    TeacherCode.findOneAndRemove({_id:req.params._id}, function(err) {
+teacherCodeRoutes.route('/delete/:code').get(function(req, res) {
+    TeacherCode.findOneAndRemove({"code":req.params.code}, function(err) {
         if(err) {
-            res.json("error: " + err);
+            res.status(400).json({'message' : "Invalid code"});
         } else {
-            res.json("Successfully removed code with _id " + req.params._id);
+            res.status(200)
+            res.json("Successfully deleted activation code " + req.params.code);
         }
     });
 });

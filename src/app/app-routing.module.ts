@@ -7,6 +7,7 @@ import { TechnologyComponent } from './technology/technology.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component'; 
 import { NewStoryComponent } from './new-story/new-story.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
+  { path: 'register-teacher', component: RegisterTeacherComponent},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },

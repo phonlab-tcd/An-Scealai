@@ -24,6 +24,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin/teachers/teachers.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
     ProfileComponent,
     AdminPanelComponent,
     TeachersComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    RegisterTeacherComponent
   ],
   imports: [
     BrowserModule,
