@@ -11,6 +11,7 @@ require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
+const teacherCodeRoute = require('./routes/teacherCode.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -24,6 +25,7 @@ app.use(cors());
 app.use(passport.initialize());
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
+app.use('/teacherCode', teacherCodeRoute);
 const port = process.env.PORT || 4000;
 
 // catch 404 and forward to error handler

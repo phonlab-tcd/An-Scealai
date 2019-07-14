@@ -11,9 +11,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookContentsComponent } from './book-contents/book-contents.component'; 
 import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { TeachersComponent } from './teachers/teachers.component';
-import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { TeachersComponent } from './admin/teachers/teachers.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
