@@ -1,0 +1,21 @@
+<div class="content">
+  <div class="generateCodeTitle">Profile Summary for '{{username}}'</div>
+    <div class="userInfoDisplay">
+      <b>Username:</b> <textarea readonly class="userInfoTextarea">{{username}}</textarea>
+    </div>
+    <div class="userInfoDisplay">
+      <b>Role:</b> <textarea readonly class="userInfoTextarea">{{role}}</textarea>
+    </div>
+  <div class="teacherAccountsContainer">
+    <div class="teacherAccountsDisplay">
+      <div class="teacherAccountsHeader">
+        {{username}}'s Stories
+      </div>
+      <div class="teacherAccountsBody">
+        <div class="activeTeacherCodeContainer" *ngFor="let story of Stories">
+          {{story.title}} 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

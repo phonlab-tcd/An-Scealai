@@ -1,6 +1,5 @@
-import { Story } from 'src/app/story';
-
 export class User {
-    id: String;
+    _id: String;
     username: String;
+    role: String;
 }

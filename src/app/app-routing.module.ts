@@ -14,6 +14,7 @@ import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin/teachers/teachers.component';
+import { UserComponent } from './admin/user/user.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
@@ -48,6 +49,10 @@ const routes: Routes = [
       {
         path: 'teachers',
         component: TeachersComponent,
+      },
+      {
+        path: 'user/:id',
+        component: UserComponent,
       },
     ]
   },
