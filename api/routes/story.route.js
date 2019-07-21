@@ -9,6 +9,7 @@ storyRoutes.route('/create').post(function (req, res) {
     let story = new Story(req.body);
     story.save().then(story => {
         res.status(200).json({'story': 'story added successfully'});
+
     })
     .catch(err => {
         res.status(400).send("unable to save to DB");

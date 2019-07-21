@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 export interface UserDetails {
   _id: string;
@@ -86,15 +87,6 @@ export class AuthenticationService {
 
   public register(user: TokenPayload): Observable<any> {
     return this.request('post', 'register', user);
-  }
-
-  public registerTeacher(user: TokenPayload, code: String): Observable<any> {
-    this.http.get('http://localhost:4000/teacherCode/delete/' + code).subscribe(() => {
-      return this.request('post', 'register', user);
-    }, (err) => {
-      return err;
-    });
-    return null;
   }
 
   public login(user: TokenPayload): Observable<any> {

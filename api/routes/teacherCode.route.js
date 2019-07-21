@@ -24,12 +24,29 @@ teacherCodeRoutes.route('/activeCodes').get(function (req, res) {
     });
 });
 
-teacherCodeRoutes.route('/delete/:code').get(function(req, res) {
-    TeacherCode.findOneAndRemove({"code":req.params.code}, function(err) {
-        if(err) {
-            res.status(400).json({'message' : "Invalid code"});
+teacherCodeRoutes.route('/isActiveCode/:code').get(function (req, res) {
+    console.log("req code", req.params.code);
+    TeacherCode.findOne({"code":req.params.code}, function(err, code) {
+        console.log("err", err, "code", code);
+        if(err || code === null) {
+            res.status(400);
+            res.json({"message" : "Invalid activation code"});
         } else {
-            res.status(200)
+            console.log("200");
+            res.status(200);
+            res.json("Teacher code is active.");
+        }
+    });
+});
+
+teacherCodeRoutes.route('/delete/:code').get(function(req, res) {
+    TeacherCode.findOneAndRemove({"code":req.params.code}, function(err, code) {
+        if(err || code === null) {
+            console.log("err");
+            res.status(400);
+            res.json({"message" : "Error activating account"});
+        } else {
+            res.status(200);
             res.json("Successfully deleted activation code " + req.params.code);
         }
     });

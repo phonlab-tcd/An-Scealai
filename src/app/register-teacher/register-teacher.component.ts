@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register-teacher',
@@ -19,20 +20,30 @@ export class RegisterTeacherComponent implements OnInit {
   registrationError: boolean;
   errorText: String;
 
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
     this.registrationError = false;
   }
 
   register() {
-    this.auth.registerTeacher(this.credentials, this.teacherCode).subscribe(() => {
-      this.router.navigateByUrl('/landing');
+    this.http.get('http://localhost:4000/teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
+      this.auth.register(this.credentials).subscribe(() => {
+        this.http.get('http://localhost:4000/teacherCode/delete/' + this.teacherCode).subscribe(() => {
+          this.router.navigateByUrl('/landing');
+        }, (err) => {
+          this.showErrorMessage(err.error.message);
+        });
+      }, (err) => {
+        this.showErrorMessage(err.error.message);
+      });
     }, (err) => {
-      if(err.status === 400) {
-        this.errorText = err.error.message;
-        this.registrationError = true;
-      }
+      this.showErrorMessage(err.error.message);
     });
+  }
+
+  showErrorMessage(message : String) {
+    this.errorText = message;
+    this.registrationError = true;
   }
 }
