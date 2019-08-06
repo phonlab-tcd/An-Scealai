@@ -16,6 +16,7 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin/teachers/teachers.component';
 import { UserComponent } from './admin/user/user.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { StoryComponent } from './admin/story/story.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -53,6 +54,10 @@ const routes: Routes = [
       {
         path: 'user/:id',
         component: UserComponent,
+      },
+      {
+        path: 'story/:id',
+        component: StoryComponent,
       },
     ]
   },

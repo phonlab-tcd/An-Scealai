@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
 
   getStories(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storyService.getStory().subscribe(
+      this.storyService.getStoriesForLoggedInUser().subscribe(
         (stories: Story[]) => {
           resolve(stories);
         }

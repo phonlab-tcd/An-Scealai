@@ -1,0 +1,60 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.userInfoDisplay {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+    width: 30%;
+}
+
+.userInfoTextarea {
+    height: 30px;
+    margin-left: 10px;
+    padding-left: 5px;
+    font-size: 12pt;
+    resize: none;
+    background-color: #d1d1d1;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    white-space: nowrap;
+}
+
+.userInfo {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    margin-top: 2vh;
+}
+
+.dateTextArea {
+    width: 220px;
+    margin-right: -38px;
+}
+
+.textContainer {
+    margin-top: 5vh;
+    background-color: #d1d1d1;
+    border-radius: 5px 5px 5px 5px;
+    width: 60%;
+}
+
+.textContainerHeader {
+    width: 100%;
+    border-radius: 5px 5px 0px 0px;
+    background-color: #70a87f;
+    color: white;
+    font-size: 12pt;
+    padding: 4px;
+}
+
+.textContainerBody {
+    height: 38vh;
+    overflow: auto;
+    text-align: left;
+    padding: 4px;
+}

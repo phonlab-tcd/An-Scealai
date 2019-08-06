@@ -30,7 +30,11 @@ export class StoryService {
       .subscribe(res => this.router.navigateByUrl('/dashboard/' + id));
   }
 
-  getStory() {
+  getStoriesFor(author : string) {
+    return this.http.get('http://localhost:4000/story/'+author);
+  }
+
+  getStoriesForLoggedInUser() {
     let author = this.auth.getUserDetails().username;
     return this.http.get('http://localhost:4000/story/'+author);
   }

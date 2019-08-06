@@ -31,21 +31,27 @@
 }
 
 .userInfoDisplay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width:30%;
+    margin-left: 30%;
     margin-top: 2vh;
 }
 
 .userInfoTextarea {
     height: 30px;
     margin-left: 10px;
+    padding-left: 5px;
     font-size: 12pt;
     resize: none;
     background-color: #d1d1d1;
     border: none;
     border-radius: 5px 5px 5px 5px;
     white-space: nowrap;
+}
+
+.userInfo {
+    float: right;
+    display: flex;
+    align-items: center;
 }
 
 .copyIcon {
@@ -65,7 +71,7 @@
 
 .teacherAccountsHeader {
     font-size: 14pt;
-    height: 4vh;
+    height: 5vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,7 +92,7 @@
     width: 40%;
     height: 45vh;
     background-color: #d1d1d1;
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 
 .teacherAccountsBody {
@@ -129,4 +135,12 @@
 .copiedText {
     margin-left: 10px;
     color: #70a87f;
+}
+
+.storyLink {
+    color: black;
+}
+
+.storyLink:hover {
+    text-decoration: none;
 }

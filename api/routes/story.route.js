@@ -16,7 +16,7 @@ storyRoutes.route('/create').post(function (req, res) {
     });
 });
 
-// Get story from DB
+// Get story by a given author from DB
 storyRoutes.route('/:author').get(function (req, res) {
     Story.find({"author": req.params.author}, function (err, stories) {
     if(err) {
@@ -24,6 +24,17 @@ storyRoutes.route('/:author').get(function (req, res) {
     } else {
         res.json(stories);
     }
+    });
+});
+
+// Get story with a given ID from DB
+storyRoutes.route('/viewStory/:id').get(function(req, res) {
+    Story.find({_id:req.params.id}, (err, story) => {
+        if(err) {
+            res.json({"status" : err.status}, {"message" : err.message});
+        } else {
+            res.json(story);
+        }
     });
 });
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Story } from '../story';
 import { StoryService } from '../story.service';
+import { AuthenticationService, TokenPayload } from '../authentication.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -14,11 +15,11 @@ export class BookContentsComponent implements OnInit {
   toBeDeleted: String[];
   popupVisible: Boolean;
 
-  constructor(private storyService: StoryService) { }
+  constructor(private storyService: StoryService, private auth: AuthenticationService) { }
 
   ngOnInit() {
     this.storyService
-    .getStory()
+    .getStoriesForLoggedInUser()
     .subscribe((data: Story[]) => {
       this.stories = data;
     });

@@ -1,19 +1,31 @@
 <div class="content">
-  <div class="generateCodeTitle">Profile Summary for '{{username}}'</div>
+  <div class="generateCodeTitle">Profile Summary for '{{user.username}}'</div>
     <div class="userInfoDisplay">
-      <b>Username:</b> <textarea readonly class="userInfoTextarea">{{username}}</textarea>
+      <div class="userInfo"><b>Username:</b> <textarea readonly class="userInfoTextarea">{{user.username}}</textarea></div>
     </div>
     <div class="userInfoDisplay">
-      <b>Role:</b> <textarea readonly class="userInfoTextarea">{{role}}</textarea>
+      <div class="userInfo"><b>Role:</b> <textarea readonly class="userInfoTextarea">{{user.role}}</textarea></div>
     </div>
-  <div class="teacherAccountsContainer">
+  <div class="teacherAccountsContainer" *ngIf="user?.role === 'TEACHER'">
     <div class="teacherAccountsDisplay">
       <div class="teacherAccountsHeader">
-        {{username}}'s Stories
+        {{user.username}}'<span style="margin-right: 8px;" *ngIf="user.username[user.username.length-1] !== 's'">s</span> Classrooms
       </div>
       <div class="teacherAccountsBody">
-        <div class="activeTeacherCodeContainer" *ngFor="let story of Stories">
-          {{story.title}} 
+        <div class="activeTeacherCodeContainer" *ngFor="let story of stories">
+          {{story.title}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="teacherAccountsContainer" *ngIf="user?.role === 'STUDENT'">
+    <div class="teacherAccountsDisplay">
+      <div class="teacherAccountsHeader">
+        {{user.username}}'<span style="margin-right: 8px;" *ngIf="user?.username[user.username.length-1] !== 's'">s</span> Stories
+      </div>
+      <div class="teacherAccountsBody">
+        <div class="activeTeacherCodeContainer" *ngFor="let story of stories">
+          <a routerLink="admin/story/{{story._id}}" routerLinkActive="active">{{story.title}}</a>
         </div>
       </div>
     </div>
