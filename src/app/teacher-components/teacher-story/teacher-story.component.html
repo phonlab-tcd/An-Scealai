@@ -1,0 +1,50 @@
+<div class="content">
+    <div class="{{modalClass}} modalContainer">
+      <div class="modalContent">
+          <div class="modalText">Record Audio Message</div>
+          <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+          <div>
+            <button *ngIf="!recording" (click)="startRecording()" class="headerIconBtn">Record audio</button>
+            <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">Stop Recodring</button>          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          </div>
+          <div>
+              <button class="modalBtn" (click)="hideModal()">Cancel</button>
+              <button class="modalBtn createBtnGreen" (click)="saveAudio()" *ngIf="newRecording">Save</button>
+          </div>
+      </div>
+    </div>
+    <div class="classContainer">
+        <div class="classHeader">
+          {{story?.title}}
+        </div>
+        <div class="classBody">
+            
+            <div class="storyTextContainer">
+              <div class="storyTextHeader">Text</div>
+              <div class="storyText">{{story?.text}}</div>
+            </div>
+            <div class="storyInfoContainer">
+                <div class="storyTextHeader">Information</div>
+                <div class="storyInfoBody">
+                    <div class="userInfo">Title: <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
+                    <div class="userInfo">Author: <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
+                    <div class="userInfo">Creation date: <textarea readonly class="userInfoTextarea">{{story?.date}}</textarea></div>
+                    <div class="userInfo">Dialect: <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
+                    <div class="feedbackContainer">
+                      <div class="feedbackHeader">Feedback</div>
+                      <div class="feedbackBody">{{feedbackText}}</div>
+                    </div>
+                    <div class="feedbackBtnContainer">
+                      <div *ngIf="audioSource">
+                        <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+                      </div>
+                      <div>
+                          <button (click)="showModal()" class="headerIconBtn">Record audio</button>
+                      </div>
+                      <button class="headerIconBtn">Add</button>
+                    </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+</div>

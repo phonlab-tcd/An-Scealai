@@ -12,20 +12,24 @@ require('./config/passport');
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
+const classroomRoute = require('./routes/classroom.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-    () => {console.log('Database is connected') },
-    err => { console.log('Can not connect to the database'+ err)}
+    () => {console.log('Database is connected');},
+    (err) => { console.log('Can not connect to the database'+ err)}
 );
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
+
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
 app.use('/teacherCode', teacherCodeRoute);
+app.use('/classroom', classroomRoute);
+
 const port = process.env.PORT || 4000;
 
 // catch 404 and forward to error handler

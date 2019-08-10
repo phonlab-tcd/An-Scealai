@@ -1,0 +1,49 @@
+<div class="contents">
+    <div class="{{modalClass}} modalContainer">
+      <div class="modalContent" *ngIf="classroom">
+          <div class="modalText">Edit Classroom Title</div>
+          <input type="text" class="titleInput" placeholder="Enter title" name="title" [(ngModel)]="newTitle">
+          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          <div>
+              <button class="modalBtn" (click)="hideModal()">Cancel</button><button class="modalBtn createBtnGreen" (click)="editTitle()">Save</button>
+          </div>
+      </div>
+    </div>
+    <div class="{{shareModalClass}} modalContainer">
+        <div class="modalContent" *ngIf="classroom">
+            <div class="modalText">Classroom Code</div>
+            <pre class="codeView">{{classroom.code}}</pre>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="hideShareModal()">Done</button>
+            </div>
+        </div>
+    </div>
+    <div class="{{deleteModalClass}} modalContainer">
+        <div class="modalContent">
+          <div class="deleteModalText">Are you sure you want to delete this code?</div>
+          <div>
+            <button class="modalBtn" (click)="hideDeleteModal()">Cancel</button>
+            <button class="modalBtn deleteRedBtn" (click)="deleteClassroom()">Delete</button>
+          </div>
+        </div>
+      </div>
+
+    <div class="classContainer">
+      <div class="classHeader">
+        {{classroom?.title}}
+        <div class="headerIconContainer">
+          <div class="headerIconBtn" (click)="showShareModal()">Share Code<i class="fas fa-share-alt headerIcon"></i></div>
+          <div class="headerIconBtn" (click)="showModal()">Edit <i class="fas fa-edit headerIcon"></i></div>
+          <div class="headerIconBtn" (click)="showDeleteModal()">Delete <i class="fas fa-trash-alt headerIcon"></i></div>
+        </div>
+      </div>
+      <div class="classroomKey">
+        <div class="keyTitle">Username</div>
+      </div>
+      <div class="classBody">
+        <div class="classroomCard" *ngFor="let student of students" (click)="goToStudent(student._id)">
+          <div class="classroomTitle">{{student.username}}</div>
+        </div>
+      </div>
+    </div>
+  </div>

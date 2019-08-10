@@ -31,3 +31,14 @@ module.exports.viewUser = function(req, res) {
     });
   }
 };
+
+module.exports.getTeachers = function(req, res) {
+  User.find({'role':'TEACHER'}).exec(function(err, teachers) {
+    if(err) {
+      res.status(400).json({"message" : "Teachers not found"});
+    }
+    if(teachers) {
+      res.status(200).json(teachers);
+    }
+  });
+};

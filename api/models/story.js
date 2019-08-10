@@ -19,6 +19,17 @@ let Story = new Schema({
     },
     author: {
         type: String
+    },
+    feedback: {
+        text: {
+            type: String
+        },
+        seenByStudent: {
+            type: Boolean
+        },
+        audioId: {
+            type: String
+        }
     }
 }, {
     collection: 'story'

@@ -12,6 +12,7 @@ var ctrlAuth = require('../controllers/authentication');
 
 userRoutes.get('/profile', auth, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
+userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);

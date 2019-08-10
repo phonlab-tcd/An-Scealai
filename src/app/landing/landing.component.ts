@@ -13,7 +13,12 @@ export class LandingComponent implements OnInit {
 
   ngOnInit() {
     if(this.auth.isLoggedIn()) {
-      this.router.navigateByUrl('/contents');
+      if(this.auth.getUserDetails().role === 'STUDENT') {
+        this.router.navigateByUrl('/contents');
+      }
+      if(this.auth.getUserDetails().role === 'TEACHER') {
+        this.router.navigateByUrl('/teacher');
+      }
     }
   }
 

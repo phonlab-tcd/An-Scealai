@@ -16,17 +16,26 @@ import { TechnologyComponent } from './technology/technology.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { BookContentsComponent } from './book-contents/book-contents.component';
-import { ChatbotComponent } from './chatbot/chatbot.component';
-import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { TeachersComponent } from './admin/teachers/teachers.component';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
-import { UserComponent } from './admin/user/user.component';
-import { StoryComponent } from './admin/story/story.component';
+
+import { DashboardComponent } from './student-components/dashboard/dashboard.component';
+import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
+import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
+import { NewStoryComponent } from './student-components/new-story/new-story.component';
+
+import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
+import { TeachersComponent } from './admin-components/teachers/teachers.component';
+import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
+import { UserComponent } from './admin-components/user/user.component';
+import { StoryComponent } from './admin-components/story/story.component';
+import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
+import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
+import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
+import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
+import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
+
+
 
 @NgModule({
   declarations: [
@@ -47,7 +56,12 @@ import { StoryComponent } from './admin/story/story.component';
     AdminDashboardComponent,
     RegisterTeacherComponent,
     UserComponent,
-    StoryComponent
+    StoryComponent,
+    TeacherDashboardComponent,
+    TeacherStudentComponent,
+    TeacherClassroomComponent,
+    TeacherStoryComponent,
+    TeacherPanelComponent,
   ],
   imports: [
     BrowserModule,

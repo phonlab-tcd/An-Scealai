@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.auth.login(this.credentials).subscribe(() => {
-      this.router.navigateByUrl('/contents');
+      this.router.navigateByUrl('/landing');
     }, (err) => {
       if(err.status === 400) {
         this.errorText = err.error.message;

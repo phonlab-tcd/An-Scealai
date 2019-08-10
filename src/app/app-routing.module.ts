@@ -8,15 +8,23 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { BookContentsComponent } from './book-contents/book-contents.component'; 
-import { NewStoryComponent } from './new-story/new-story.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { TeachersComponent } from './admin/teachers/teachers.component';
-import { UserComponent } from './admin/user/user.component';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { StoryComponent } from './admin/story/story.component';
+
+import { DashboardComponent } from './student-components/dashboard/dashboard.component';
+import { BookContentsComponent } from './student-components/book-contents/book-contents.component'; 
+import { NewStoryComponent } from './student-components/new-story/new-story.component';
+
+import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
+import { TeachersComponent } from './admin-components/teachers/teachers.component';
+import { UserComponent } from './admin-components/user/user.component';
+import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
+import { StoryComponent } from './admin-components/story/story.component';
+
+import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
+import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
+import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
+import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
+import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -59,6 +67,34 @@ const routes: Routes = [
         path: 'story/:id',
         component: StoryComponent,
       },
+    ]
+  },
+  { path: 'teacher', 
+    component: TeacherPanelComponent,
+    canActivate: [RoleGuardService],
+    data: { expectedRole: 'TEACHER' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        component: TeacherDashboardComponent,
+      },
+      {
+        path: 'classroom/:id',
+        component: TeacherClassroomComponent,
+      },
+      {
+        path: 'student/:id',
+        component: TeacherStudentComponent,
+      },
+      {
+        path: 'story/:id',
+        component: TeacherStoryComponent,
+      }
     ]
   },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},

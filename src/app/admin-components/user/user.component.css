@@ -1,0 +1,161 @@
+.content {
+    width: 100%;
+    padding: 3vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.generateCodeTitle {
+    font-size: 14pt;
+    display: flex;
+    justify-content: center;
+}
+
+.teacherCodeButton {
+    background-color: #70a87f;
+    color: white;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.teacherCodeButton:hover {
+    cursor: pointer;
+    background-color: #304e38;
+}
+
+.teacherCodeTitle {
+    padding: 5px;
+}
+
+.userInfoDisplay {
+    width:30%;
+    margin-left: 30%;
+    margin-top: 2vh;
+}
+
+.userInfoTextarea {
+    height: 30px;
+    margin-left: 10px;
+    padding-left: 5px;
+    font-size: 12pt;
+    resize: none;
+    background-color: #d1d1d1;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    white-space: nowrap;
+}
+
+.userInfo {
+    float: right;
+    display: flex;
+    align-items: center;
+}
+
+.copyIcon {
+    background-color: #70a87f;
+    color: white;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+    font-size: 16pt;
+    border-radius: 0px 5px 5px 0px;
+}
+
+.copyIcon:hover {
+    cursor: pointer;
+    background-color: #304e38;
+}
+
+.teacherAccountsHeader {
+    font-size: 14pt;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #304e38;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.teacherAccountsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.teacherAccountsDisplay {
+    margin-top: 4vh;
+    width: 40%;
+    height: 45vh;
+    background-color: #d1d1d1;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.teacherAccountsBody {
+    padding: 10px;
+    padding-bottom: 0px;
+    text-align: left;
+    overflow: auto;
+    height: 40vh;
+}
+
+.activeTeacherCodeContainer {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
+.copiedText {
+    margin-left: 10px;
+    color: #70a87f;
+}
+
+.storyLink {
+    color: black;
+}
+
+.storyLink:hover {
+    text-decoration: none;
+}
+
+.activeTeacherCodeContainer:hover {
+    cursor: pointer;
+    padding: 6px;
+    z-index: 5;
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
+    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
+}
+
+.whiteBtn:hover {
+    color:white;
+    background-color: #3b372b;
+    cursor: pointer;
+  }
