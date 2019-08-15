@@ -28,13 +28,40 @@
 .feedbackBtnContainer {
     display: flex;
     align-items: center;
-    margin-top: 8px;
+    justify-content: center;
+}
+
+.feedbackFooter {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-top: 1px solid #d1d1d1;
+    border-radius: 5px;
+    margin-top: auto;
+}
+
+.seenByStudent {
+    font-size: 10pt;
+    color: #999999;
+    margin-left: 4px;
+}
+
+.sendFeedbackBtn {
+    margin-left: auto;
+}
+
+.feedbackTextarea {
+    border: none;
+    width: 100%;
+    height: 75px;
+    resize: none;
 }
 
 .audioPlayer {
     width: 350px;
-    height: 30px;
-    margin-top: 5px;
+    height: 32px;
+    margin-top: 7px;
 }
 
 .addClassBtn {
@@ -94,7 +121,7 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    max-height: 29vh;
+    height: 28vh;
 }
 
 .feedbackBody {
@@ -194,12 +221,13 @@
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modalContent {
-    margin-top: 22vh;
-    width: 30%;
-    margin-left: 35%;
+    width: 400px;
     padding: 25px;
     background-color: white;
     border-radius: 5px;
@@ -222,8 +250,37 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 15px;
 }
 
+.inactiveBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #d1d1d1;
+    color: #707070;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+    opacity: 0.7;
+}
+
+.modalBtnContainer {
+    display: flex;
+    flex-direction: row;
+}
+
 .modalText {
     font-size: 14pt;
+    margin-bottom: 10px;
+}
+
+.greenLinkText {
+    margin-top: 10px;
+    color: #70a87f;
+    text-decoration: underline;
+}
+
+.greenLinkText:hover {
+    cursor: pointer;
 }
 
 .deleteModalText {
@@ -285,7 +342,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
-    float: right;
 }
 
 .headerIconBtn:hover {
@@ -316,4 +372,23 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .deleteRedBtn:hover {
     background-color: #8f0018;
+}
+
+.recordBtnContainer {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.recordingIcon {
+    font-size: 14pt;
+    margin-left: 10px;
+    color: #c40021;
+    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

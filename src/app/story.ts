@@ -1,8 +1,14 @@
 export class Story {
-    id: String;
-    title: String;
+    _id: string;
+    id: string;
+    title: string;
     date: Date;
-    dialect: String;
-    text: String;
-    author: String;
+    dialect: string;
+    text: string;
+    author: string;
+    feedback: {
+        seenByStudent: boolean;
+        text: string;
+        audioId: string;
+    };
 }

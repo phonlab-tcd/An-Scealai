@@ -1,0 +1,22 @@
+<img src="assets/img/book.png" class="bookImg">
+<div class="page">
+  <div class="bookContainer">
+      <div class="bookHeader">
+        <a routerLink="/contents" class="myStoriesBtn">Contents</a>
+        <div class="bookTitle">{{story?.title}}</div>
+        <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
+      </div>
+      <div class="storyContainer" *ngIf="story">
+        <div class="textFieldContainer" *ngIf="!feedbackVisible">
+            <div class="textContainer">
+              <div *ngFor="let p of responseHtml">
+                <span [innerHTML]="p"></span><button (click)="logMeme(responseHtml.indexOf(p))"><i class="fa fa-play"></i></button>
+              </div>
+            </div>
+        </div>
+        <div class="saveBtnContainer">
+            
+        </div>
+      </div>
+  </div>
+</div>

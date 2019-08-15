@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Story } from './story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
@@ -35,6 +35,10 @@ export class StoryService {
 
   getStoriesFor(author : string) {
     return this.http.get('http://localhost:4000/story/'+author);
+  }
+
+  getStory(id: string) : Observable<any> {
+    return this.http.get('http://localhost:4000/story/getStoryById/' + id);
   }
 
   getStoriesForLoggedInUser() {
@@ -77,4 +81,7 @@ export class StoryService {
     return this.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);
   }
 
+  synthesise(id: string) : Observable<any> {
+    return this.http.get(this.baseUrl + 'synthesise/' + id);
+  }
 }

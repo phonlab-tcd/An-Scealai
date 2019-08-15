@@ -7,18 +7,25 @@
 }
 
 .inputField {
-    width: 60%;
-    margin-left: 20%;
+    width: 100%;
+    margin-left: 5%;
 }
 
-.formContainer {
-    width: 300px;
-    display: inline-block;
-    padding-top: 15px;
-    padding-bottom: 15px;
+.formBody {
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
     color: #261500;
     background-color: #e6e8ed;
     border-radius: 0px 0px 10px 10px;
+}
+
+.formContainer {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
 
 .formTitle {
@@ -28,23 +35,19 @@
 }
 
 .profileContainer {
-    width: 300px;
+    width: 500px;
     display: inline-block;
-    background-color: #876daa;
+    background-color: #437250;
     color: white;
     border-radius: 10px;
 
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
 }
 
 .formLabel {
-    display: inline-block;
-    float: left;
-    text-align: left;
-    padding-left: 15%;
-    width: 50%;
+    white-space: nowrap;
 }
 
 .editIcon {
@@ -68,18 +71,39 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .userInfo {
-    width: 50%;
-    text-align: left;
     padding-left: 5%;
-    display: inline-block;
+    white-space: nowrap;
 }
 
 .logoutBtn {
     font-size: 12pt;
-    background-color: #dd000e;
+    background-color: #70a87f;
     border-radius: 10px 10px 10px 10px;
 }
 
 .logoutBtn:hover {
-    background-color: #b7000a;
+    background-color: #437250;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+}
+
+.centerForm {
+    justify-content: center;
+}
+
+.notFoundText {
+    color: #d6123c;
+}
+
+.greenLink {
+    text-decoration: underline;
+    color: #70a87f;
+    font-size: 12pt;
+}
+
+.greenLink:hover {
+    cursor: pointer;
 }

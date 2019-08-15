@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+declare var MediaRecorder : any;
+
 @Component({
   selector: 'app-teacher-story',
   templateUrl: './teacher-story.component.html',
@@ -22,6 +24,14 @@ export class TeacherStoryComponent implements OnInit {
   story : any;
   audioSource : SafeUrl;
   feedbackText: string;
+  authorPossessive : string;
+  feedbackSent : boolean = false;
+  newRecording : boolean = false;
+  showListenBack : boolean = false;
+  canSendAudio : boolean = false;
+
+  errorText : string;
+  registrationError : boolean;
 
   recorder;
   stream;
@@ -35,21 +45,26 @@ export class TeacherStoryComponent implements OnInit {
     this.getParams().then(params => {
       this.http.get('http://localhost:4000/story/viewStory/' + params['id'].toString()).subscribe((res) => {
         this.story = res[0];
-        this.getFeedback();
         this.getFeedbackAudio();
+        this.getAuthorPossessive();
       });
     })
   }
 
-  getFeedback() {
-    this.storyService.getFeedback(this.story._id).subscribe((res) => {
-      this.feedbackText = res.text;
-    });
+  getAuthorPossessive() {
+    let name : string = this.story.author;
+    this.authorPossessive = name + '\'' + (name[name.length - 1] === 's' ? '' : 's');
   }
 
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+    });
+  }
+
+  sendFeedback() {
+    this.storyService.addFeedback(this.story._id, this.story.feedback.text).subscribe((res) => {
+      this.feedbackSent = true;
     });
   }
 
@@ -63,18 +78,25 @@ export class TeacherStoryComponent implements OnInit {
     navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
       this.stream = _stream;
       this.recorder = new MediaRecorder(this.stream);
+      this.startRecording();
       this.recorder.ondataavailable = e => {
         this.chunks.push(e.data);
         if(this.recorder.state == 'inactive') {
-          this.saveBlob();
+          
         };
       };
       console.log('got media successfully');
     }).catch();
   }
 
+  prepRecording() {
+    this.recordAudio();
+  }
+
   startRecording() {
     this.recording = true;
+    this.newRecording = false;
+    this.showListenBack = false;
     this.chunks = [];
     this.recorder.start();
   }
@@ -82,12 +104,23 @@ export class TeacherStoryComponent implements OnInit {
   stopRecording() {
     this.recorder.stop();
     this.recording = false;
+    this.showListenBack = true;
+    this.canSendAudio = true;
+    this.stream.getTracks().forEach(track => track.stop());
   }
 
-  saveBlob() {
+  playbackAudio() {
+    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
+    this.newRecording = true;
+  }
+
+  saveAudio() {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     this.storyService.addFeedbackAudio(this.story._id, blob).subscribe((res) => {
-      console.log(res);
+      this.hideModal();
+    }, (err) => {
+      this.errorText = err.message;
+      this.registrationError = true;
     });
   }
 
@@ -101,11 +134,18 @@ export class TeacherStoryComponent implements OnInit {
   }
 
   showModal() {
-    this.recordAudio();
     this.modalClass = "visibleFade";
   }
 
   hideModal() {
     this.modalClass = "hiddenFade";
+    if(this.recorder.state != 'inactive') {
+      this.recorder.stop();
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+    this.chunks = [];
+    this.recording = false;
+    this.newRecording = false;
+    this.showListenBack = false;
   }
 }

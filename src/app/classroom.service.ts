@@ -47,6 +47,14 @@ export class ClassroomService {
     return this.http.get(this.baseUrl + "getAllCodes");
   }
 
+  getClassroomFromCode(code: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "getClassroomForCode/" + code);
+  }
+
+  getAllClassrooms() : Observable<any> {
+    return this.http.get(this.baseUrl);
+  }
+
   generateCode() : string{
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

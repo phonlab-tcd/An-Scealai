@@ -19,6 +19,7 @@ import { TeachersComponent } from './admin-components/teachers/teachers.componen
 import { UserComponent } from './admin-components/user/user.component';
 import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
 import { StoryComponent } from './admin-components/story/story.component';
+import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
@@ -28,6 +29,7 @@ import { TeacherStoryComponent } from './teacher-components/teacher-story/teache
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
+import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -38,6 +40,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
@@ -66,6 +69,10 @@ const routes: Routes = [
       {
         path: 'story/:id',
         component: StoryComponent,
+      },
+      {
+        path: 'classroom/:id',
+        component: AdminClassroomComponent,
       },
     ]
   },

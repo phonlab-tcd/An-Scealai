@@ -23,17 +23,21 @@ import { DashboardComponent } from './student-components/dashboard/dashboard.com
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
+import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
 import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
 import { UserComponent } from './admin-components/user/user.component';
 import { StoryComponent } from './admin-components/story/story.component';
+
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
+import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
+
 
 
 
@@ -62,6 +66,8 @@ import { TeacherPanelComponent } from './teacher-components/teacher-panel/teache
     TeacherClassroomComponent,
     TeacherStoryComponent,
     TeacherPanelComponent,
+    AdminClassroomComponent,
+    SynthesisComponent,
   ],
   imports: [
     BrowserModule,

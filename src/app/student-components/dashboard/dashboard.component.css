@@ -79,16 +79,58 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     padding-top: 4px;
 }
 
+.feedbackVisibleTextfieldAudio {
+    height: 22vh;
+}
+
+.feedbackVisibleTextfield {
+    height: 20vh;
+}
+
+.feedbackTextareaAudio {
+    height: 15vh;
+}
+
+.feedbackTextarea {
+    height: 23vh;
+}
+
+.feedbackHeader {
+    width: 90%;
+    margin-left: 5%;
+    border-radius: 4px 4px 0px 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    align-items: column;
+}
+
+.closeFeedbackBtn {
+    margin-left: auto;
+}
+
+.closeFeedbackBtn:hover {
+    cursor: pointer;
+}
+
 .saveBtn {
     font-size: 14pt;
-    
     border-style: none;
     color: white;
     font-size: 12pt;
     margin: 0px;
     margin-right: 5%;
-    float: right;
+    margin-left: auto;
     border-radius: 5px 5px 5px 5px;
+}
+
+.audioPlayer {
+    height: 30px;
+    width: 90%;
+    background-color: #f1f3f4;
+    border: 1px solid #8c806e86;
 }
 
 .unsavedBtn {
@@ -111,6 +153,88 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .savedBtn {
     background-color: #70a87f;
 }
+
+.saveBtnContainer {
+    display: flex;
+    
+}
+
+.optionsBtn {
+    font-size: 14pt;
+    background-color: #e5bd3b;
+    border-style: none;
+    color: white;
+    font-size: 12pt;
+    margin: 0px;
+    float: left;
+    border-radius: 5px 5px 5px 5px;
+    display: flex;
+    align-items: center;
+}
+
+.optionsBtn:hover {
+    background-color: #ad8f2b;
+    color: white;
+}
+
+.optionsBtnClicked {
+    background-color: #ad8f2b;
+    color: white;
+}
+
+.optionsPopup {
+    z-index: 10;
+    position: fixed;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    padding-right: 0px;
+    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+border-radius: 5px 5px 5px 5px;
+}
+
+.optionsPopup:after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	left: 70px;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-bottom-color: #f1e9d8;
+	border-top: 0;
+	margin-left: -10px;
+    margin-top: -10px;
+}
+
+.optionsPopupBtn {
+    height: 38px;
+    margin-right: 4px;
+}
+
+.notificationBtn {
+    margin-left: 5px;
+    background-color: #bd2323;
+    color: white;
+    font-size: 8pt;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+  box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+  }
 
 @media only screen and (min-width: 700px) {
     .bookImg {

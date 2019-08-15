@@ -6,18 +6,34 @@
         <div class="bookTitle">{{story?.title}}</div>
         <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
       </div>
-      <div class="storyContainer">
-        <div class="textFieldContainer">
-            <textarea class="textField" value="{{story?.text}}" #storyInput (input)="storyEdited()"></textarea>
+      <div class="storyContainer" *ngIf="story">
+        <div class="textFieldContainer" *ngIf="!feedbackVisible">
+            <textarea class="textField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+        </div>
+        <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
+          <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+          <div class="feedbackHeader"><div>Feedback</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+          <textarea class="textField feedbackTextarea" placeholder="No feedback has been provided for this story" readonly value="{{story?.feedback.text}}"></textarea>
+        </div>
+        <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
+          <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+          <div class="feedbackHeader"><div>Feedback</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+          <textarea class="textField feedbackTextareaAudio" placeholder="No feedback has been provided for this story" readonly value="{{story?.feedback.text}}"></textarea>
+          <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         </div>
         <div class="saveBtnContainer">
+            <button class="btn optionsBtn" style="margin-left: 5%;" (click)="popupVisible = !popupVisible">Options<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button>
             <button *ngIf="storySaved" class="btn saveBtn savedBtn">
               Saved <i class="fas fa-check tickIcon"></i>
             </button>
-            <button *ngIf="!storySaved" class="btn saveBtn unsavedBtn" (click)="saveStory(storyInput.value)">
+            <button *ngIf="!storySaved" class="btn saveBtn unsavedBtn" (click)="saveStory()">
                 Save
             </button>
         </div>
+      </div>
+      <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="getFeedback()">Feedback<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="goToSynthesis()">Synthesise</button></div>
       </div>
   </div>
 </div>

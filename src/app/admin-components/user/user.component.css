@@ -108,6 +108,11 @@
     padding: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
+    display: flex;
+}
+
+.studentCount {
+    margin-left: auto;
 }
 
 .hidden {
@@ -143,15 +148,6 @@
 
 .storyLink:hover {
     text-decoration: none;
-}
-
-.activeTeacherCodeContainer:hover {
-    cursor: pointer;
-    padding: 6px;
-    z-index: 5;
-    -webkit-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
-    -moz-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
-    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.28);
 }
 
 .whiteBtn:hover {

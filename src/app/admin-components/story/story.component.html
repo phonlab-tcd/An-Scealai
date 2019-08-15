@@ -1,15 +1,34 @@
 <div class="content">
-  <div class="userInfoDisplay">
-    <div class="userInfo"><b>Title:</b> <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
-    <div class="userInfo"><b>Author:</b> <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
-    <div class="userInfo"><b>Creation date:</b> <textarea readonly class="userInfoTextarea dateTextArea">{{story?.date}}</textarea></div>
-  </div>
-  <div class="textContainer">
-    <div class="textContainerHeader">
-      <b>Text</b>
-    </div>
-    <div class="textContainerBody">
-      {{story?.text}}
-    </div>
+  <div class="classBody">
+      <div class="storyTextContainer">
+        <div class="storyTextHeader">Text</div>
+        <div class="storyText">{{story?.text}}</div>
+      </div>
+      <div class="storyInfoContainer">
+          <div class="storyTextHeader">Information</div>
+          <div class="storyInfoBody">
+              <div class="userInfo">Title: <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
+              <div class="userInfo">Author: <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
+              <div class="userInfo">Creation date: <textarea readonly class="userInfoTextarea">{{story?.date}}</textarea></div>
+              <div class="userInfo">Dialect: <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
+              <div class="feedbackContainer">
+                <div class="feedbackHeader">Feedback</div>
+                <div class="feedbackBody" *ngIf="story">
+                    <textarea class="feedbackTextarea" placeholder="Leave some feedback on {{authorPossessive}} story" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
+                  </div>
+                <div class="feedbackFooter">
+                  <div class="seenByStudent" *ngIf="story">
+                    <span *ngIf="story.feedback.seenByStudent">Seen by {{story?.author}} <i class="fas fa-check"></i></span>
+                    <span *ngIf="!story.feedback.seenByStudent">Not seen by {{story?.author}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="feedbackBtnContainer">
+                <div *ngIf="audioSource">
+                  <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+                </div>
+              </div>
+            </div>
+        </div>
   </div>
 </div>

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CompileTemplateMetadata } from '@angular/compiler';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NotificationService } from '../../notification-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,9 +19,13 @@ export class DashboardComponent implements OnInit {
   id: String;
   storyFound: Boolean;
   storySaved: Boolean;
+  popupVisible: boolean;
+  feedbackVisible: boolean;
+  audioSource: SafeUrl;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
-    private auth: AuthenticationService,) { }
+    private auth: AuthenticationService, protected sanitizer: DomSanitizer,
+    private notifications: NotificationService, private router: Router) { }
 
   ngOnInit() {
     this.storySaved = true;
@@ -28,7 +34,6 @@ export class DashboardComponent implements OnInit {
     // been retrieved.
     this.getStories().then(stories => {
       this.stories = stories;
-      console.log(stories);
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
         this.id = params['id'];
@@ -63,17 +68,63 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  saveStory(text) {
+  saveStory() {
     this.route.params.subscribe(
       params => {
-        this.storyService.updateStory(text, params['id']);
+        console.log(this.story.text);
+        this.storyService.updateStory(this.story.text, params['id']);
         this.storySaved = true;
       }
     )
   }
 
+  getFeedback() {
+    this.popupVisible = false;
+    this.feedbackVisible = true;
+    this.getFeedbackAudio();
+    this.story.feedback.seenByStudent = true;
+    this.notifications.removeStory(this.story);
+    this.storyService.viewFeedback(this.story._id).subscribe();
+  }
+
+  getFeedbackAudio() {
+    this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
+      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+    });
+  }
+
   storyEdited() {
     this.storySaved = false;
+  }
+
+  closeFeedback() {
+    this.feedbackVisible = false;
+  }
+
+  hasNewFeedback() : boolean {
+    if(this.story && this.story.feedback.seenByStudent === false) {
+      return true;
+    }
+    return false;
+  }
+
+  goToSynthesis() {
+    this.router.navigateByUrl('/synthesis/' + this.story.id);
+  }
+
+  wasInside : boolean = false;
+  
+  @HostListener('click')
+  clickInside() {
+    this.wasInside = true;
+  }
+  
+  @HostListener('document:click')
+  clickout() {
+    if (!this.wasInside) {
+      this.popupVisible = false;
+    }
+    this.wasInside = false;
   }
 
 }

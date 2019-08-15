@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { StoryService } from '../../story.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-story',
@@ -10,14 +12,18 @@ import { HttpClient } from '@angular/common/http';
 export class StoryComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private http: HttpClient,) { }
+              private http: HttpClient,
+              protected sanitizer: DomSanitizer,
+              private storyService: StoryService,) { }
 
   story : any;
+  audioSource : SafeUrl;
   
   ngOnInit() {
     this.getParams().then(params => {
       this.http.get('http://localhost:4000/story/viewStory/' + params['id'].toString()).subscribe((res) => {
         this.story = res[0];
+        this.getFeedbackAudio();
       });
     })
   }
@@ -28,6 +34,13 @@ export class StoryComponent implements OnInit {
         params => {
           resolve(params);
       });
+    });
+  }
+
+  getFeedbackAudio() {
+    this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
+      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      console.log(this.audioSource);
     });
   }
 

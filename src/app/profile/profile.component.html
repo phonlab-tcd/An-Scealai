@@ -15,17 +15,32 @@
         <button type="submit" class="btn loginBtn">Save</button>
       </form>
     </div>
-    <div *ngIf="!editMode" class="formContainer">
+    <div *ngIf="!editMode" class="formBody">
+      <div class="formContainer">
         <div class="form-group">
           <div class="formLabel">Username</div>
-          <div class="userInfo">{{auth.getUserDetails().username}}</div>
+          <div class="userInfo"><b>{{auth.getUserDetails().username}}</b></div>
         </div>
         <div class="form-group">
           <div class="formLabel">Password</div>
-          <div class="userInfo">*******</div>
+          <div class="userInfo"><b>*******</b></div>
         </div>
-        <div class="form-group">
-          <button routerLink="/landing" class="btn logoutBtn" (click)="auth.logout()">log out</button>
+        <div class="form-group" *ngIf="classroom">
+          <div class="formLabel">Classroom</div>
+          <div class="userInfo"><b>{{classroom.title}}</b></div>
+        </div>
+        <div class="form-group" *ngIf="!classroom">
+            <div class="formLabel">Classroom code</div>
+            <input type="text" class="form-control inputField"
+          placeholder="Enter code here" name="classroomcode" [formControl]="codeInput">
+        </div>
+        <div class="form-group centerForm">
+          <div *ngIf="classroomCodeOutput" class="notFoundText">{{classroomCodeOutput}}</div>
+          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()">Join classroom '<b>{{foundClassroom.title}}</b>'?</div>
+        </div>
+        <div class="btnContainer">
+          <button routerLink="/landing" class="btn logoutBtn" (click)="auth.logout()">log out <i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
+    </div>
 </div>

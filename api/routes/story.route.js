@@ -7,6 +7,9 @@ const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
+const querystring = require('querystring');
+const request = require('request');
+const { parse, stringify } = require('node-html-parser');
 
 let Story = require('../models/Story');
 
@@ -19,9 +22,19 @@ MongoClient.connect('mongodb://localhost:27017', (err, client) => {
   db = client.db('an-scealai');
 });
 
+storyRoutes.route('/getStoryById/:id').get((req, res) => {
+    Story.findOne({id: req.params.id}, (err, story) => {
+        if(err) res.json(err);
+        if(story) res.json(story);
+    });
+});
+
 // Create new story
 storyRoutes.route('/create').post(function (req, res) {
     let story = new Story(req.body);
+    story.feedback.seenByStudent = null;
+    story.feedback.text = null;
+    story.feedback.audioId = null;
     story.save().then(story => {
         res.status(200).json({'story': 'story added successfully'});
 
@@ -195,6 +208,61 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
         }
     });
     
+});
+
+storyRoutes.route('/synthesise/:id').get((req, res) => {
+    Story.findById(req.params.id, (err, story) => {
+        if(story) {
+            let dialectCode;
+            if(story.dialect === 'connemara') dialectCode = 'ga_CM';
+            if(story.dialect === 'donegal') dialectCode = 'ga_GD';
+            if(story.dialect === 'kerry') dialectCode = 'ga_MU';
+
+            var form = {
+                Input: story.text,
+                Locale: dialectCode,
+                Format: 'html',
+                Speed: '1',
+            };
+
+            var formData = querystring.stringify(form);
+            var contentLength = formData.length;
+
+            request({
+                headers: {
+                'Host' : 'www.abair.tcd.ie',
+                'Content-Length': contentLength,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+                body: formData,
+                method: 'POST'
+            }, function (err, resp, body) {
+                if(err) res.send(err);
+                if(body) {
+                    let audioContainer = parse(body.toString()).querySelectorAll('.audio_paragraph');
+                    let paragraphs = [];
+                    let urls = [];
+                    for(let p of audioContainer) {
+                        let sentences = [];
+                        for(let s of p.childNodes) {
+                            if(s.tagName === 'span') {
+                                sentences.push(s.toString());
+                            } else if(s.tagName === 'audio') {
+                                urls.push(s.id);
+                            }
+                        }
+                        paragraphs.push(sentences);
+                    }
+                    res.json({ html : paragraphs, audio : urls });
+                } else {
+                    res.json({status: '404', message: 'No response from synthesiser'});
+                }
+            });
+        } else {
+            res.json({status: '404', message: 'Story not found'});
+        }
+    });
 });
 
 module.exports = storyRoutes;

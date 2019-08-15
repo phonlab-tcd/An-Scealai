@@ -76,6 +76,19 @@ classroomRoutes.route('/delete/:id').get((req, res) => {
     });
 });
 
+classroomRoutes.route('/getClassroomForCode/:code').get((req, res) => {
+    Classroom.findOne({"code": req.params.code}, (err, classroom) => {
+        if(err) {
+            res.json({message: "Error finding classroom", found: false});
+        }
+        if(classroom) {
+            res.json({classroom: classroom, found: true});
+        } else {
+            res.json({message: "No classroom with this code exists", found: false})
+        }
+    });
+});
+
 classroomRoutes.route('/addStudent/:id').post((req, res) => {
     Classroom.findById(req.params.id, (err, classroom) => {
         if(err) {
@@ -85,7 +98,7 @@ classroomRoutes.route('/addStudent/:id').post((req, res) => {
             if(!classroom.studentIds.includes(req.body.studentId)) {
                 classroom.studentIds.push(req.body.studentId);
                 classroom.save();
-                res.status(200).json("Student added succesfully");
+                res.json({message: "Student added succesfully", status: 200});
             } else {
                 res.status(409).json("Student is already a member of this classroom");
             }
@@ -111,5 +124,15 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
         }
     });
 });
+
+classroomRoutes.route('/').get((req, res) => {
+    Classroom.find({}, (err, classrooms) => {
+        if(classrooms) {
+            res.json(classrooms);
+        } else {
+            req.json({message: "No classrooms were found", status: 404})
+        }
+    })
+})
 
 module.exports = classroomRoutes;

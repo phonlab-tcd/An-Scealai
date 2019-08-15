@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" *ngIf="user">
   <div class="generateCodeTitle">Profile Summary for '{{user.username}}'</div>
     <div class="userInfoDisplay">
       <div class="userInfo"><b>Username:</b> <textarea readonly class="userInfoTextarea">{{user.username}}</textarea></div>
@@ -12,8 +12,9 @@
         {{user.username}}'<span style="margin-right: 8px;" *ngIf="user.username[user.username.length-1] !== 's'">s</span> Classrooms
       </div>
       <div class="teacherAccountsBody">
-        <div class="activeTeacherCodeContainer" *ngFor="let story of stories">
-          {{story.title}}
+        <div class="activeTeacherCodeContainer whiteBtn" *ngFor="let classroom of classrooms" (click)="goToClassroom(classroom._id)">
+          <div>{{classroom.title}}</div>
+          <div class="studentCount">{{classroom.studentIds.length}}</div>
         </div>
       </div>
     </div>
