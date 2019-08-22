@@ -39,9 +39,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.notificationSerivce.getStories().subscribe((res: Story[]) => {
-      this.storiesForNotifications = res;
-    })
+    if(this.auth.isLoggedIn()) {
+      this.notificationSerivce.getStories().subscribe((res: Story[]) => {
+        this.storiesForNotifications = res;
+      });
+    }
   }
 
   showNotifications() {
