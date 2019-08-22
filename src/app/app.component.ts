@@ -69,12 +69,12 @@ export class AppComponent {
   }
 
   wasInside : boolean = false;
-  
+
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
-  
+
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {

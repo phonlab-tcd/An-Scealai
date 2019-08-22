@@ -2,21 +2,24 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { StoryService } from './story.service';
 import { Story } from './story';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  
+
   private _stories: BehaviorSubject<Story[]>;
   private dataStore: {
     stories: Story[]
   }
 
-  constructor(private storyService : StoryService) {
+  constructor(private storyService : StoryService, private auth: AuthenticationService) {
     this.dataStore = { stories: [] };
     this._stories = <BehaviorSubject<Story[]>>new BehaviorSubject([]);
-    this.getNotifications();
+    if(this.auth.isLoggedIn()) {
+      this.getNotifications();
+    }
   }
 
   getNotifications() {
