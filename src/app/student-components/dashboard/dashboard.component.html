@@ -7,8 +7,11 @@
         <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
       </div>
       <div class="storyContainer" *ngIf="story">
-        <div class="textFieldContainer" *ngIf="!feedbackVisible">
-            <textarea class="textField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+        <div class="textFieldContainer"  *ngIf="!feedbackVisible">
+          <div mwlTextInputHighlightContainer>
+            <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea></textarea>
+            <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" #highlightElement></mwl-text-input-highlight>
+          </div>
         </div>
         <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
           <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
@@ -34,6 +37,7 @@
       <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
         <div><button class="btn optionsBtn optionsPopupBtn" (click)="getFeedback()">Feedback<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button></div>
         <div><button class="btn optionsBtn optionsPopupBtn" (click)="goToSynthesis()">Synthesise</button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="runGramadoir()">Gramadóir</button></div>
       </div>
   </div>
 </div>

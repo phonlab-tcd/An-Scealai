@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewEncapsulation, ViewChild } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,11 +6,14 @@ import { CompileTemplateMetadata } from '@angular/compiler';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
+import { HighlightTag, TextInputHighlightModule } from 'angular-text-input-highlight';
+import { TextInputHighlightComponent } from 'angular-text-input-highlight/text-input-highlight.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
 
@@ -22,6 +25,9 @@ export class DashboardComponent implements OnInit {
   popupVisible: boolean;
   feedbackVisible: boolean;
   audioSource: SafeUrl;
+  grammarChecked: boolean = false;
+  tags: HighlightTag[] = [];
+  @ViewChild('highlightElement') highlightElement: TextInputHighlightComponent;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
@@ -110,6 +116,35 @@ export class DashboardComponent implements OnInit {
 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story.id);
+  }
+
+  runGramadoir() {
+    this.tags.push({
+      indices: {
+        start: 0,
+        end: 10
+      },
+      cssClass: "bg-blue",
+    });
+    this.grammarChecked = true;
+    /*
+    this.storyService.gramadoir(this.story._id).subscribe((res) => {
+      res.forEach(g => {
+        console.log(g);
+        let tag : HighlightTag = {
+          indices: {
+            start: +g.fromx,
+            end: +g.tox+1,
+          },
+          cssClass: "bg-blue",
+        };
+        this.tags.push(tag);
+        console.log(this.tags);
+      });
+      console.log(this.highlightElement);
+      this.grammarChecked = true;
+      this.grammarChecked = false;
+    });*/
   }
 
   wasInside : boolean = false;

@@ -2,20 +2,27 @@
 <div class="page">
   <div class="bookContainer">
       <div class="bookHeader">
-        <a routerLink="/contents" class="myStoriesBtn">Contents</a>
-        <div class="bookTitle">{{story?.title}}</div>
-        <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
+        <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> Story</div>
+        <div></div>
       </div>
       <div class="storyContainer" *ngIf="story">
-        <div class="textFieldContainer" *ngIf="!feedbackVisible">
+        <div class="storyHeader">
+          Synthesis of '{{story?.title}}'
+        </div>
+        <div class="textFieldContainer">
             <div class="textContainer">
-              <div *ngFor="let p of responseHtml">
-                <span [innerHTML]="p"></span><button (click)="logMeme(responseHtml.indexOf(p))"><i class="fa fa-play"></i></button>
+              <div *ngIf="!audioFinishedLoading" class="loaderContainer">
+                  <b>Synthesising</b>
+                  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </div>
+              <div *ngIf="audioFinishedLoading">
+                <div *ngFor="let p of paragraphs" class="paragraphContainer">
+                  <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                  <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                  <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                </div>
               </div>
             </div>
-        </div>
-        <div class="saveBtnContainer">
-            
         </div>
       </div>
   </div>

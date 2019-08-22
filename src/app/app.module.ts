@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
+import { TextInputHighlightModule } from 'angular-text-input-highlight';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -76,6 +77,7 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
     ReactiveFormsModule,
     SlimLoadingBarModule,
     FormsModule,
+    TextInputHighlightModule,
   ],
   providers: [ StoryService, UserService ],
   bootstrap: [AppComponent]

@@ -218,15 +218,15 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
             if(story.dialect === 'donegal') dialectCode = 'ga_GD';
             if(story.dialect === 'kerry') dialectCode = 'ga_MU';
 
-            var form = {
+            let form = {
                 Input: story.text,
                 Locale: dialectCode,
                 Format: 'html',
                 Speed: '1',
             };
 
-            var formData = querystring.stringify(form);
-            var contentLength = formData.length;
+            let formData = querystring.stringify(form);
+            let contentLength = formData.length;
 
             request({
                 headers: {
@@ -264,5 +264,39 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
         }
     });
 });
+
+storyRoutes.route('/gramadoir/:id').get((req, res) => {
+    Story.findById(req.params.id, (err, story) => {
+        if(err) {
+            res.send(err);
+        }
+        if(story) {
+            let form = {
+                teacs: story.text.replace(/\n/g, " "),
+                teanga: 'en',
+            };
+
+            let formData = querystring.stringify(form);
+
+            request({headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                uri: 'https://cadhan.com/api/gramadoir/1.0',
+                body: formData,
+                method: 'POST'
+            }, (err, resp, body) => {
+                if(err) res.send(err);
+                if(body) {
+                    res.send(body);
+                } else {
+                    res.sendStatus(404);
+                }
+            });
+
+        } else {
+            res.sendStatus(404).send("Story not found.");
+        }
+    });
+})
 
 module.exports = storyRoutes;

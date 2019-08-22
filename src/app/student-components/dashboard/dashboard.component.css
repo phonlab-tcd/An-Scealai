@@ -14,10 +14,6 @@
 box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
-.page {
-    padding-top: 5vh;
-}
-
 .bookImg {
     z-index: -10;
     width: 90%;
@@ -73,10 +69,22 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     resize: none;
     z-index: 1;
     color: #261500;
-    background-color: #f7f2e7;
+    background: #f7f2e7;
     padding-left: 8px;
     padding-right: 8px;
     padding-top: 4px;
+}
+
+.text-highlight-element {
+    margin-left: 5%;
+}
+
+.text-input-highlight-container .text-highlight-element  {
+    background: #f7f2e7;
+}
+
+.bg-blue {
+background-color: lightblue;
 }
 
 .feedbackVisibleTextfieldAudio {
