@@ -11,8 +11,9 @@ import { RegisterTeacherComponent } from './register-teacher/register-teacher.co
 import { ProfileComponent } from './profile/profile.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { BookContentsComponent } from './student-components/book-contents/book-contents.component'; 
+import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
+import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -40,17 +41,18 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'admin', 
-    component: AdminPanelComponent, 
+  { path: 'admin',
+    component: AdminPanelComponent,
     canActivate: [RoleGuardService],
     data: { expectedRole: 'ADMIN' },
     children: [
       {
-        path: '', 
+        path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
@@ -76,7 +78,7 @@ const routes: Routes = [
       },
     ]
   },
-  { path: 'teacher', 
+  { path: 'teacher',
     component: TeacherPanelComponent,
     canActivate: [RoleGuardService],
     data: { expectedRole: 'TEACHER' },
