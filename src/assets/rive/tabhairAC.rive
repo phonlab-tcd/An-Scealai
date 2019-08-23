@@ -140,7 +140,7 @@
 < object
 
 + start
-- Inniu táimid ag foghlaim <b><i>tar</i></b>.\s
+- Inniu táimid ag foghlaim <b><i>tabhair</i></b>.\s
 ^ Cén aimsir ar mhaith leat a dhéanamh, a <call>getName</call>? <br>
 ^ <button class="rive-button" onclick="chatSetup('chaite')">Aimsir Chaite</button>
 ^ <button class="rive-button" onclick="chatSetup('tar-al')">Aimsir Laithreach</button>
@@ -187,7 +187,7 @@
 
 > topic level1
   + startl1
-  - Anois, a <call>getName</call>, creidim go bhfuil tú ag iarraidh féachaint ar an mbriathar tar san aimsir chaite.
+  - Anois, a <call>getName</call>, creidim go bhfuil tú ag iarraidh féachaint ar an mbriathar tabhair san aimsir chaite.
   ^ <call>chatSetup cearta true</call>
 
   + cearta
@@ -215,7 +215,7 @@
   ^ <call>chatSetup iol true</call>
 
   + iol
-  ^ “Thug sí aghaidh ar Bhaile Átha Cliath.”<br>
+  - “Thug sí aghaidh ar Bhaile Átha Cliath.”<br>
   ^ “Thug sé an chluas bhodhar di.”
   ^ <call>chatSetup iarr true</call>
 
@@ -231,7 +231,7 @@
   - <call>chatSetup cleachtadh nowait</call>
 
   + cleachtadh
-  - Go maith. Líon isteach an fhoirm cheart den bhriathar tar san aimsir chaite:<br><br>
+  - Go maith. Líon isteach an fhoirm cheart den bhriathar tabhair san aimsir chaite:<br><br>
   ^ <call>levelComplete false</call><call>getRandomQuestion 1</call><call>resetProgress</call><call>setAnsweringQuestions true</call>
 
   + *
@@ -444,8 +444,8 @@
   ^ <call>getProgress</call>
 
   + levelcomplete
-  - Tá triúr ceart agat i ndiaidh a chéile. Tá an mbriathar saor críochnaithe agat. Maith thú, a <call>getName</call>! <call>chatSetup ceisteach true</call>
-  ^ <call>setAnsweringQuestions false</call>
+  - Tá triúr ceart agat i ndiaidh a chéile. Tá an mbriathar saor críochnaithe agat. Maith thú, a <call>getName</call>!
+  ^ <call>setAnsweringQuestions false</call><call>chatSetup ceisteach true</call>
 
   + continue
   - Ar mhaith leat leanúint ar aghaidh?

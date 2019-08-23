@@ -76,7 +76,7 @@ function next(){
   else{
     appendTypingIndicator();
     setTimeout(function(){
-      appendMessage(true, false, "Please choose a dialect and gender!", false);
+      appendMessage(true, false, "Please choose a dialect!", false);
       $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
     }, 1200);
   }
@@ -140,7 +140,7 @@ function askName(){
 function getProgress(){
   if(isLevelComplete == true && quiz == false) return "";
   else if(isQuizComplete == true) return "";
-  else return "Scór: " + progress + ".<br>";
+  else return "Scór: " + progress + "<br>";
 }
 
 function resetProgress(){
@@ -161,7 +161,7 @@ function triailAris(){
     thisHint = "<b>Hint:</b> <a href=\"javascript:void(0)\" onclick=\"openHint()\"><button class='rive-button'>www.teanglann.ie</button></a>"
   }
   else if(wrongCount == 6){
-    thisHint = "<i><b>Freagra:</b></i> " + currentQuestion.answer + " ";
+    thisHint = "<i><b>Freagra:</b></i> " + currentQuestion.answer + ". ";
     wrongCount = 0;
     setTimeout(function(){
       chatSetup("continue", "true");

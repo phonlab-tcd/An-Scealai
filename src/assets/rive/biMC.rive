@@ -379,7 +379,7 @@
   ^ <call>getProgress</call>
 
   + levelcomplete
-  - Tá triúr ceart agat i ndiaidh a chéile. Tá céim an mbriathar saor críochnaithe agat. Maith thú, a <call>getName</call>! <call>chatSetup ceisteach</call>
+  - Tá triúr ceart agat i ndiaidh a chéile. Tá céim an mbriathar saor críochnaithe agat. Maith thú, a <call>getName</call>! <call>chatSetup ceisteach true</call>
   ^ <call>setAnsweringQuestions false</call>
 
   + continue

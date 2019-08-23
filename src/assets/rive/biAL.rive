@@ -373,7 +373,6 @@
   ^ <button class="rive-button2" onclick="chatSetup('briatharsaor')">Briathar Saor</button>
   ^ <button class="rive-button2" onclick="chatSetup('ceisteach')">An Fhoirm Cheisteach</button>
   ^ <button class="rive-button2" onclick="chatSetup('spleách')">An Fhoirm Spleách/Neamhspleách</button><call>setAnsweringQuestions false</call>
-  ^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button>
 
   + briatharsaor
   - Úsáidtear ‘bítear’ agus ‘ní bhítear’ don mbriathar saor ach ní minic a thagann siad suas. <br>
@@ -393,9 +392,9 @@
   - {topic=spleach}
   ^ <call>chatSetup tosu nowait</call>
 
-  + coibhneasta
+  /*+ coibhneasta
   - Ceart go leor, a <call>getName</call>\s
-  ^ {topic=coibhneasta}<call>chatSetup tosu nowait</call>
+  ^ {topic=coibhneasta}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat tarAC chaite</call>
@@ -479,8 +478,8 @@
   + (níl|níor mhaith)
   - <call>nilToCeim</call>
 
-  + coibhneasta
-  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>
+  /*+ coibhneasta
+  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat tarAC chaite</call>
@@ -504,20 +503,6 @@
   + (níl|níor mhaith)
   - <call>nilToCeim</call>
 
-  /*+ seasann
-  - “Tagann sí ar cuairt chugainn go minic.”<br>
-  ^ - tá ‘tagann’ neamhspleách mar níl sé ag brath ar aon fhrása eile.<br>
-  ^ <call>chatSetup ceapaim true</call>
-
-  + ceapaim
-  - Ar an taobh eile má thógann tú: <br>
-  ^ “Tá mé cinnte go dtagann sí isteach luath gach maidin.”<br>
-  ^ - tá an ‘tagann’ ag brath ar ‘tá mé cinnte’ agus deirtear mar go bhfuil sé spleách.
-  ^ <call>chatSetup chas true</call>
-
-  + chas
-  - Sa chás seo úsáidtear ‘go’ nó ‘nach’ roimh an fhoirm spleách den mbriathar.<br><call>chatSetup trial true</call>*/
-
   + trial
   - Bain triail as an gcleachtadh seo:<br>
   ^ <call>levelComplete false</call><call>getRandomQuestion 5</call><call>setAnsweringQuestions true</call><call>resetProgress</call>
@@ -531,7 +516,7 @@
   ^ <call>getProgress</call>
 
   + levelcomplete
-  - Tá triúr ceart agat i ndiaidh a chéile. Tá an briathar neamhspleách críochnaithe agat. Maith thú! <call>getRandomReply</call> <call>chatSetup coibhneasta true</call>
+  - Tá triúr ceart agat i ndiaidh a chéile. Tá an briathar neamhspleách críochnaithe agat. Maith thú! <call>getRandomReply</call> <call>chatSetup master true</call>
   ^ <call>setAnsweringQuestions false</call>
 
   + continue
@@ -545,8 +530,12 @@
   % ar mhaith leat leanúint ar aghaidh
   - <call>setAnsweringQuestions false</call><call>chatSetup coibhneasta nowait</call>
 
-  + coibhneasta
-  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>
+  /*+ coibhneasta
+  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>*/
+
+  + master
+  - Tá máistreacht agat anois ar an mbriathar “bí” san aimsir laithreach, a <call>getName</call>. \s
+  ^ {topic=extraquestions}<call>chatSetup tosu true</call>
 
   + (chaite|aimsir chaite)
   - <call>setKeepMessages true</call><call>loadFromChat biAC chaite</call>
@@ -568,82 +557,6 @@
 
   + ceisteach
   - Ansin, an fhoirm cheist. An bhfuil tú réidh?{topic=ceisteach}
-< topic
-
-> topic coibhneasta
-  + tosu
-  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an píosa deireanach?
-
-  + (tá|ba mhaith|sea)
-  - NEED TO FILL IN
-
-  + (níl|níor mhaith)
-  - <call>nilToCeim</call>
-
-  + reidh
-  - An bhfuil tú réidh?
-
-  + (níl|níor mhaith)
-  % an bhfuil tú réidh
-  - Sin a bhfuil mar sin. Slán go fóill agus bain triail as gné eile den ghramadach uair éigin eile. Slán!
-
-  + (tá|ba mhaith|sea)
-  % an bhfuil tú réidh
-  - <call>chatSetup ceist nowait</call>
-
-  + ceist
-  - <call>levelComplete false</call><call>getRandomQuestion 6</call><call>setAnsweringQuestions true</call><call>resetProgress</call>
-
-  + *
-  * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
-  * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
-  ^ <call>getRandomQuestion 6</call>
-  * <call>checkAnswer <star></call> == false => Mícheart <call>resetProgress</call><call>triailAris</call><br>
-  ^ <call>getProgress</call>
-
-  + levelcomplete
-  - Tá triúr ceart agat i ndiaidh a chéile. \s
-  ^ Tá máistreacht agat anois a <call>getName</call> ar an mbriathar "bí" san aimsir láithreach. \s
-  ^ <call>setAnsweringQuestions false</call><call>setCompletedLevel 3</call>
-  ^ {topic=extraquestions}<call>chatSetup tosu true</call>
-
-  + continue
-  - Ar mhaith leat leanúint ar aghaidh?
-
-  + (tá|ba mhaith|sea)
-  % ar mhaith leat leanúint ar aghaidh
-  - <call>setAnsweringQuestions false</call><call>chatSetup ceist nowait</call>
-
-  + (níl|níor mhaith)
-  % ar mhaith leat leanúint ar aghaidh
-  - <call>setAnsweringQuestions false</call>
-  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>
-
-  + (aimsir chaite|chaite)
-  - <call>setKeepMessages true</call><call>loadFromChat tarAC chaite</call>
-
-  + (aimsir fháistineach|aimsir fhaistineach|fháistineach|fhaistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tarAF</call>
-
-  + (modh coinniollach|coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tarMC</call>
-
-  + (ceim 2|céim 2)
-  - {topic=level2}<call>chatSetup startl2 nowait</call>
-
-  + (ceim 1|céim 1)
-  - {topic=level1}<call>chatSetup startl1 nowait</call>
-
-  + briathar saor
-  - {topic=level3}<call>chatSetup briatharsaor nowait</call>
-
-  + ceisteach
-  - Ansin, an fhoirm cheist. An bhfuil tú réidh?{topic=ceisteach}
-
-  + (spleách|spleach)
-  - Féachaimid anois ar An Fhoirm Spleách.{topic=spleach}
-  ^ <call>chatSetup tosu nowait</call>
 < topic
 
 > topic extraquestions

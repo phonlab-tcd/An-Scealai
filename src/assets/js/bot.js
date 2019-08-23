@@ -40,30 +40,27 @@ function loadData(data, tabletop){
 }
 
 function setup(){
-  testButton = document.createElement("button");
-  testButton.style.display = "none";
-  testButton.setAttribute("id", "testButton");
   clearName();
-  load("start", "start");
+  //load("start", "start"); //for testing only
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
   dictPopup = document.querySelector(".dictPopup");
   dictText = document.querySelector(".dictText");
-  dictTri = document.querySelector(".tri");
+  dictTri = document.querySelector(".bot-tri");
 
 
   //if the 'chatbot' button is clicked
-  var button = document.getElementById("chat-button");
+  var button = document.getElementById("bot-chat-button");
   //console.log(button);
   if(button){
     button.addEventListener("click", function(){
-      $(".messages").empty();
-      load("start");
+      $(".bot-messages").empty();
+      load("start", "start");
     });
   }
 
   //collapsable menu for the contents
-  var coll = document.getElementsByClassName("collapsable");
+  var coll = document.getElementsByClassName("bot-collapsable");
   var i;
   for(i = 0; i < coll.length; i++){
     coll[i].addEventListener("click", function(){
@@ -82,15 +79,15 @@ function setup(){
 }
 
 function showBot(){
-  var bot = document.querySelector(".bg-modal");
+  var bot = document.querySelector(".bot-bg-modal");
   var menu = document.querySelector(".bot-contents");
-  console.log(bot);
+  //console.log(bot);
   bot.style.right = "0px";
   menu.style.right = "200px";
 }
 
 function hideBot(){
-  var bot = document.querySelector(".bg-modal");
+  var bot = document.querySelector(".bot-bg-modal");
   var menu = document.querySelector(".bot-contents");
   console.log(bot);
   bot.style.right = "-500px";
@@ -134,7 +131,7 @@ function load(fileId, start, toPlay){
 
   console.log("To Load: " + fileId);
   if(keepMessages == false){
-    $(".messages").empty();
+    $(".bot-messages").empty();
   }
   for(i = 0; i < files.length; i++){
     if(fileId == files[i].id){
@@ -156,7 +153,7 @@ function loadFromChat(fileId, start){ load(fileId, start); }
 
 function appendTypingIndicator(){
   stillChatting = true;
-  $(".messages").append($("<div class=\"typing-indicator\"><div class=\"user-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"chat-message\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
+  $(".bot-messages").append($("<div class=\"typing-indicator\"><div class=\"user-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"chat-message\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
   $(".typing-indicator").delay(1000).fadeOut("fast");
   $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
 }
@@ -239,14 +236,15 @@ function appendMessage(isBot, isUser, text, showButtons){
 }
 
   newMessage.appendChild(newP);
-  $(".messages").append(newMessage);
+  $(".bot-messages").append(newMessage);
   messageDivs.push(newMessage);
 }
 
 //CHAT REPLIES AND INPUTS
 function chatSetup(text, holdMessages, showButtons){
   //console.log(holdMessages);
-  var messages = document.querySelector(".messages");
+  //console.log("chatSetup: " + text);
+  var messages = document.querySelector(".bot-messages");
   if(holdMessages == "true" && audioCheckbox.checked == true){
     audioPlayer.addEventListener("ended", function(){
       isPlaying = false;
@@ -285,12 +283,12 @@ function chatSetup(text, holdMessages, showButtons){
 
 function chat(){
   //if(holdInput) setTimeout(function(){}, 1200);
-  var input = document.getElementById("user_input").value;
+  var input = document.getElementById("bot-user_input").value;
   $("form").on("submit", (event) => {
     event.preventDefault();
   });
   if(input != ""){
-    document.getElementById("user_input").value = "";
+    document.getElementById("bot-user_input").value = "";
     makeMessageObj(false, input);
     appendMessage(false, true, input);
     audio(input, bubbleId, true)

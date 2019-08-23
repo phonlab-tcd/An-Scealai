@@ -35,9 +35,9 @@
 
 + start
 - Please choose gender and dialect: <br>
-^ Connemara (male)<input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
-^ Kerry (female)<input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
-^ Donegal (female)<input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>
+^ Connemara (male)  <input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
+^ Kerry (female)  <input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
+^ Donegal (female)  <input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>
 ^ <button class="rive-button" onclick="next()">Next</button>
 
 /** <call>isNameStored</call> == true => <call>chatSetup failte</call>
