@@ -1,13 +1,14 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewEncapsulation, ViewChild, Renderer2, Renderer } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ChildActivationEnd } from '@angular/router';
 import { CompileTemplateMetadata } from '@angular/compiler';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
 import { HighlightTag, TextInputHighlightModule } from 'angular-text-input-highlight';
 import { TextInputHighlightComponent } from 'angular-text-input-highlight/text-input-highlight.component';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,11 +28,13 @@ export class DashboardComponent implements OnInit {
   audioSource: SafeUrl;
   grammarChecked: boolean = false;
   tags: HighlightTag[] = [];
-  @ViewChild('highlightElement') highlightElement: TextInputHighlightComponent;
+  chosenTag: GrammarTag;
+  grammarLoading: boolean = false;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
-    private notifications: NotificationService, private router: Router) { }
+    private notifications: NotificationService, private router: Router,
+    private renderer: Renderer2) { }
 
   ngOnInit() {
     this.storySaved = true;
@@ -119,6 +122,11 @@ export class DashboardComponent implements OnInit {
   }
 
   runGramadoir() {
+    this.popupVisible = false;
+    this.grammarChecked = false;
+    this.grammarLoading = true;
+    this.tags = [];
+    this.chosenTag = null;
     this.storyService.gramadoir(this.story._id).subscribe((res) => {
       res.forEach(g => {
         console.log(g);
@@ -127,14 +135,34 @@ export class DashboardComponent implements OnInit {
             start: +g.fromx,
             end: +g.tox+1,
           },
-          cssClass: "bg-blue",
+          cssClass: GrammarTag.getCssClassFromRule(GrammarTag.getRuleFromRuleId(g.ruleId)),
+          data: g
         };
         this.tags.push(tag);
-        console.log(this.tags);
       });
-      console.log(this.highlightElement);
+      this.grammarLoading = false;
       this.grammarChecked = true;
     });
+  }
+
+  chooseGrammarTag(tag: HighlightTag) {
+    this.chosenTag = new GrammarTag(tag.data);
+  }
+
+  closeGrammar() {
+    this.grammarChecked = false;
+    this.tags = [];
+    this.chosenTag = null;
+  }
+
+  addTagHoverClass(tagElement: HTMLInputElement) {
+    tagElement.classList.remove("tagNotHover");
+    tagElement.classList.add("tagHover");
+  }
+
+  removeTagHoverClass(tagElement: HTMLInputElement) {
+    tagElement.classList.remove("tagHover");
+    tagElement.classList.add("tagNotHover");
   }
 
   wasInside : boolean = false;
@@ -152,4 +180,35 @@ export class DashboardComponent implements OnInit {
     this.wasInside = false;
   }
 
+}
+
+class GrammarTag {
+  message: string;
+  rule: string;
+
+  constructor(tagData: any) {
+    this.rule = GrammarTag.getRuleFromRuleId(tagData.ruleId);
+    this.message = GrammarTag.getMessageFromRule(this.rule);
+    if(!this.message) {
+      this.message = tagData.msg;
+    }
+  }
+
+  static getMessageFromRule(rule: string) : string {
+    if(rule === 'SEIMHIU') {
+      return "Séimhiu missing";
+    }
+    if(rule === 'URU') {
+      return "Urú missing";
+    }
+    // etc.
+  }
+
+  static getCssClassFromRule(rule: string) : string {
+    return rule.toLowerCase() + "-color tagNotHover";
+  }
+
+  static getRuleFromRuleId(ruleId: string) : string {
+    return ruleId.split('/')[1];
+  }
 }
