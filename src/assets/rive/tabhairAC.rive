@@ -50,6 +50,7 @@
 > object checkAnswer javascript
   var ans = args[0];
   if(args[1] != null) ans += " " + args[1];
+  if(args[2] != null) ans += " " + args[2];
   console.log("ans: " + ans);
   console.log("current ans: " + currentQuestion.answer);
   if(ans == currentQuestion.answer){
@@ -143,9 +144,9 @@
 - Inniu táimid ag foghlaim <b><i>tabhair</i></b>.\s
 ^ Cén aimsir ar mhaith leat a dhéanamh, a <call>getName</call>? <br>
 ^ <button class="rive-button" onclick="chatSetup('chaite')">Aimsir Chaite</button>
-^ <button class="rive-button" onclick="chatSetup('tar-al')">Aimsir Laithreach</button>
-^ <button class="rive-button" onclick="chatSetup('tar-af')">Aimsir Fháistineach</button>
-^ <button class="rive-button" onclick="chatSetup('tar-mc')">Modh Coinniollach</button>
+^ <button class="rive-button" onclick="chatSetup('tabhair-al')">Aimsir Laithreach</button>
+^ <button class="rive-button" onclick="chatSetup('tabhair-af')">Aimsir Fháistineach</button>
+^ <button class="rive-button" onclick="chatSetup('tabhair-mc')">Modh Coinniollach</button>
 ^ <button class="rive-button2" onclick="chatSetupQuiz('tabhair')">Tabhair Quiz</button>
 ^ <call>setCompletedLevel</call>
 
@@ -155,13 +156,13 @@
 ^ <button class="rive-button2" onclick="chatSetup('ceim 2')">Céim 2</button>
 ^ <button class="rive-button2" onclick="chatSetup('ceim 3')">Céim 3</button><call>setAnsweringQuestions false</call>
 
-+ tar-al
++ tabhair-al
 - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
 
-+ tar-af
++ tabhair-af
 - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
 
-+ tar-mc
++ tabhair-mc
 - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
 
 + *

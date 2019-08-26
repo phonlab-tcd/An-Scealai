@@ -15,6 +15,7 @@ var dictImg;
 var thisVerb;
 var dictOn = false;
 var play = false;
+var pause = false;
 
 //for database....
 var currentTopic = "";
@@ -55,7 +56,7 @@ function setup(){
   if(button){
     button.addEventListener("click", function(){
       $(".bot-messages").empty();
-      load("start", "start");
+      load("abairAC", "start", true);
     });
   }
 
@@ -117,6 +118,7 @@ function load(fileId, start, toPlay){
     var length = fileId.length - 2;
     thisVerb = fileId.substr(0, length);
     if(thisVerb == "bi") thisVerb = "bí";
+    else if(thisVerb == "teigh") thisVerb = "téigh";
   }
 
   if(toPlay) play = true;
@@ -205,6 +207,7 @@ function appendMessage(isBot, isUser, text, showButtons){
   pauseImg.onclick = function(){
     audioPlayer.pause();
     isPlaying = false;
+    pause = false;
   }
   newP.appendChild(pauseImg);
 

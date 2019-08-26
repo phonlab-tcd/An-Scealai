@@ -118,7 +118,7 @@ function editMessageForAudio(){
 
 function testCallAudio(testString, id){
   console.log(testString);
-  var messageBubble = {text: testString, dialect: ""};
+  var messageBubble = {text: testString, dialect: "GD"};
   if(thisDialect == "connemara") messageBubble.dialect = "CM";
   else if(thisDialect == "donegal") messageBubble.dialect = "GD";
   else if(thisDialect == "kerry") messageBubble.dialect = "MU";
@@ -146,7 +146,6 @@ function playAudio(bubble){
     var playPromise = audioPlayer.play();
     if(playPromise !== undefined){
       playPromise.then(_ => {
-
       }).catch(error => {
         console.log(error);
       });

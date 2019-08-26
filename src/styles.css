@@ -43,7 +43,7 @@ button:focus, input:focus, audio:focus{
   right: -500px;
   transition: 0.5s;
   background-color: #70a87f;
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 25px;
   padding-left: 0px;
   padding-right: 0px;
@@ -60,7 +60,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   scroll-behavior: auto;
   border-radius: ;
   padding: 5px;
-  background: #f7f2e7;
+  background: #FEF9E7;
 }
 
 .chatlogs::-webkit-scrollbar{
@@ -83,7 +83,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .user-photo{
   width: 45px;
   height: 45px;
-  background: #f7f2e7;
+  background: #FEF9E7;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -156,6 +156,8 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   margin: 0 10px;
   border-radius: 8px;
   background-color: #ccc;
+  right: 28px;
+  position: absolute;
 }
 
 .chatform #bot-message-button:hover{
@@ -182,12 +184,12 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   padding: 5px;
 }
 
-#recordImg{
+.recordImg{
   height: 19px;
   width: 17px;
   position: absolute;
-  right: 3px;
-  top: 7px;
+  right: 0px;
+  top: 8px;
 }
 
 #recordImg:hover{
@@ -246,7 +248,8 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .bot-close:hover{
-  color: #566573;
+  color: #91ffa5;
+  transition: 1s;
 }
 
 /* Contents */
@@ -311,12 +314,14 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   height: 30px;
   width: 30px;
   cursor: pointer;
-  right: 20px;
-  top: -2px;
+  right: 15px;
+  top: 4px;
+  color: white;
 }
 
 .bot-contents-button:hover{
-  color: #566573;
+  color: #91ffa5;
+  transition: 1s;
 }
 
 

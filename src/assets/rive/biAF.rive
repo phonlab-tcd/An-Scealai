@@ -50,6 +50,7 @@
 > object checkAnswer javascript
   var ans = args[0];
   if(args[1] != null) ans += " " + args[1];
+  if(args[2] != null) ans += " " + args[2];
   console.log("ans: " + ans);
   console.log("current ans: " + currentQuestion.answer);
   if(ans == currentQuestion.answer){
@@ -149,7 +150,7 @@
 ^ <button class="rive-button2" onclick="chatSetup('ceim 3')">Céim 3</button>
 
 + (níl|níor mhaith)
-- Ar mhaith leat an briathar ‘tar’ a dhéanamh: <br>
+- Ar mhaith leat an briathar ‘bí’ a dhéanamh: <br>
 ^ <button class="rive-button2" onclick="chatSetup('chaite')">Aimsir Chaite</button><br>
 ^ <button class="rive-button2" onclick="chatSetup('laithreach')">Aimsir Laithreach</button><br>
 ^ <button class="rive-button2" onclick="chatSetup('coinniollach')">Modh Coinniollach</button><br>

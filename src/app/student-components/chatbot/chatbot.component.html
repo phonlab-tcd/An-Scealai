@@ -36,7 +36,7 @@
   </div>
   <div class="bot-bg-modal">
     <div class="bot-close" onclick="hideBot()">+</div>
-    <div><img src="assets/img/menuIcon.png" class="bot-contents-button" onclick="showContents()"></div>
+    <div><!--<img src="assets/img/menuIcon.png" class="bot-contents-button" onclick="showContents()">--><i class="fas fa-bars bot-contents-button" onclick="showContents()"></i></div>
     <div class="bot-checked"><input type="checkbox" name="audio" class="audioCheckbox" checked>Autoplay</div>
     <div class="chatlogs">
       <div class="bot-messages">
@@ -44,8 +44,8 @@
     </div>
     <form class="chatform">
       <input id="bot-user_input" type="text" autocomplete="off">
-      <button type="submit" id="bot-message-button" onclick="chat()">></button>
-      <div class="record"><img src="assets/img/mic.png" id="recordImg"></div>
+      <button type="submit" id="bot-message-button" onclick="chat()"><i class="fas fa-paper-plane"></i></button>
+      <div class="record"><!--<img src="assets/img/mic.png" class="recordImg">--><i class="fas fa-microphone-alt recordImg"></i></div>
     </form>
     </div>
     <div class="bot-tri"></div>

@@ -49,6 +49,7 @@
 > object checkAnswer javascript
   var ans = args[0];
   if(args[1] != null) ans += " " + args[1];
+  if(args[2] != null) ans += " " + args[2];
   console.log("ans: " + ans);
   console.log("current ans: " + currentQuestion.answer);
   if(ans == currentQuestion.answer){
@@ -391,10 +392,6 @@
   + (spleách|spleach)
   - {topic=spleach}
   ^ <call>chatSetup tosu nowait</call>
-
-  /*+ coibhneasta
-  - Ceart go leor, a <call>getName</call>\s
-  ^ {topic=coibhneasta}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat tarAC chaite</call>

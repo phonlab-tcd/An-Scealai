@@ -50,6 +50,7 @@
 > object checkAnswer javascript
   var ans = args[0];
   if(args[1] != null) ans += " " + args[1];
+  if(args[2] != null) ans += " " + args[2];
   console.log("ans: " + ans);
   console.log("current ans: " + currentQuestion.answer);
   if(ans == currentQuestion.answer){
@@ -140,13 +141,13 @@
 < object
 
 + start
-- Inniu táimid ag foghlaim <b><i>tabhair</i></b>.\s
+- Inniu táimid ag foghlaim <b><i>téigh</i></b>.\s
 ^ Cén aimsir ar mhaith leat a dhéanamh, a <call>getName</call>? <br>
 ^ <button class="rive-button" onclick="chatSetup('chaite')">Aimsir Chaite</button>
-^ <button class="rive-button" onclick="chatSetup('tar-al')">Aimsir Laithreach</button>
-^ <button class="rive-button" onclick="chatSetup('tar-af')">Aimsir Fháistineach</button>
-^ <button class="rive-button" onclick="chatSetup('tar-mc')">Modh Coinniollach</button>
-^ <button class="rive-button2" onclick="chatSetupQuiz('tabhair')">Tabhair Quiz</button>
+^ <button class="rive-button" onclick="chatSetup('teigh-al')">Aimsir Laithreach</button>
+^ <button class="rive-button" onclick="chatSetup('teigh-af')">Aimsir Fháistineach</button>
+^ <button class="rive-button" onclick="chatSetup('teigh-mc')">Modh Coinniollach</button>
+^ <button class="rive-button2" onclick="chatSetupQuiz('teigh')">Téigh Quiz</button>
 ^ <call>setCompletedLevel</call>
 
 + (chaite|aimsir chaite)
@@ -155,26 +156,26 @@
 ^ <button class="rive-button2" onclick="chatSetup('ceim 2')">Céim 2</button>
 ^ <button class="rive-button2" onclick="chatSetup('ceim 3')">Céim 3</button><call>setAnsweringQuestions false</call>
 
-+ tar-al
-- <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
++ teigh-al
+- <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
-+ tar-af
-- <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
++ teigh-af
+- <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
-+ tar-mc
-- <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
++ teigh-mc
+- <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 
 + *
 - Tá brón orm cad a dúirt tú?
 
 + (laithreach|aimsir laithreach)
-- <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+- <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
 + (fháistineach|fhaistineach|aimsir fháistineach)
-- <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+- <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
 + (coinniollach|modh coinniollach)
-- <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+- <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 
 + (céim 1|ceim 1|1)
 - {topic=level1}<call>startLevel 1</call>
@@ -187,7 +188,7 @@
 
 > topic level1
   + startl1
-  - Anois, a <call>getName</call>, creidim go bhfuil tú ag iarraidh féachaint ar an mbriathar tabhair san aimsir chaite.
+  - Anois, a <call>getName</call>, creidim go bhfuil tú ag iarraidh féachaint ar an mbriathar téigh san aimsir chaite.
   ^ <call>chatSetup cearta true</call>
 
   + cearta
@@ -199,24 +200,23 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil ceart agam
-  - Ar aghaidh linn mar sin. <call>chatSetup ceannde true</call>
+  - Iontach! Ar aghaidh linn mar sin. <call>chatSetup ceannde true</call>
 
   + ceannde
-  - Ceann de na briathra neamhrialta is ea ‘tabhair’. San aimsir chaite ‘thug’ atá mar fhréamh.
+  - Is í an bhunfhréamh atá ag an mbriathar ‘téigh’ ná ‘chuaigh’ (C, H, U, A, I, G, H).
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - Thugas (Thug mé), <br>
-  ^ Thug tú, <br>
-  ^ Thug sé nó sí, <br>
-  ^ Thugamar (nó thug muid),<br>
-  ^ Thug sibh, agus<br>
-  ^ Thugadar (Thug siad).<br>
+  - Chuaigh mé, <br>
+  ^ Chuaigh tú, <br>
+  ^ Chuaigh sé nó sí, <br>
+  ^ Chuamar (nó chuaigh muid), <br>
+  ^ Chuaigh sibh, agus<br>
+  ^ Chuaigh siad.
   ^ <call>chatSetup iol true</call>
 
   + iol
-  - “Thug sí aghaidh ar Bhaile Átha Cliath.”<br>
-  ^ “Thug sé an chluas bhodhar di.”
+  - “Chuaigh mé ar an aonach is dhíol mé mo bhó.”
   ^ <call>chatSetup iarr true</call>
 
   + iarr
@@ -231,7 +231,7 @@
   - <call>chatSetup cleachtadh nowait</call>
 
   + cleachtadh
-  - Go maith. Líon isteach an fhoirm cheart den bhriathar tabhair san aimsir chaite:<br><br>
+  - Go maith. Líon isteach an fhoirm cheart den bhriathar téigh san aimsir chaite:<br><br>
   ^ <call>levelComplete false</call><call>getRandomQuestion 1</call><call>resetProgress</call><call>setAnsweringQuestions true</call>
 
   + *
@@ -281,13 +281,13 @@
   - {topic=level3}<call>startLevel 3</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic level2
@@ -304,25 +304,16 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh leanúint ar aghaidh
-  - Ceart go leor mar sin. Ní athraíonn an briathar anseo ón bhfoim dhearfach ach cuirtear ‘níor’ roimhe. <br>
+  - Ceart go leor mar sin. Úsáidtear an fhoirm spleách den bhriathar don fhoirm dhiúltach. ‘Ní dheachaigh’ is mó a úsáidtear cé go bhfuil ‘níor chuaigh’ le fáil i gcanúint na Mumhan.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - Níor thug mé, <br>
-  ^ Níor thug tú, <br>
-  ^ Níor thug sé nó sí, <br>
-  ^ Níor thugamar (nó ‘níor thug muid’), <br>
-  ^ Níor thug sibh, <br>
-  ^ Níor thugadar (nó ‘níor thug siad’).
-  ^ <call>chatSetup quote true</call>
-
-  + quote
-  - “Níor thug tú dom é.”
-  ^ <call>chatSetup quote2 true</call>
-
-  + quote2
-  - “Níor thug sé aon cheann dá athair.” (= níor thug sé aon aird air).<br>
-  ^ “Níor thug siad a gcosa leo an uair seo.” (= níor éalaigh siad).
+  - Ní dheachaigh mé, <br>
+  ^ Ní dheachaigh tú, <br>
+  ^ Ní dheachaigh sé nó sí, <br>
+  ^ Ní dheachamar(nó ‘ní dheachaigh muid’), <br>
+  ^ Ní dheachaigh sibh, <br>
+  ^ Ní dheachaigh siad.
   ^ <call>chatSetup ceist true</call>
 
   + ceist
@@ -388,17 +379,21 @@
   - {topic=level3}<call>startLevel 3</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic level3
   + startl3
+  - Sa chuid seo beimid ag díriú ar an mbriathar saor (passive); ar an bhfoirm spleách agus ar an bhfoirm cheisteach.
+  ^ <call>chatSetup inis true</call>
+
+  + inis
   - Inis dom an ábhar atá le déanamh ar dtús. Is féidir leat topaic a athrú ag am ar bith. <br>
   ^ <button class="rive-button2" onclick="chatSetup('briatharsaor')">Briathar Saor</button>
   ^ <button class="rive-button2" onclick="chatSetup('ceisteach')">An Fhoirm Cheisteach</button>
@@ -406,12 +401,11 @@
   ^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button><call>setAnsweringQuestions false</call>
 
   + briatharsaor
-  - Tosóimid leis an mbriathar saor. Úsáidimid an briathar saor nuair nach bhfuilimid ábalta nó sásta pearsa a chur leis an mbriathar.
+  - TBC
   ^ <call>chatSetup usaidtear true</call>
 
   + usaidtear
-  - Úsáidtear ‘tugadh’ agus ‘níor tugadh’ don bhriathar saor. \s
-  ^ Tabhair faoi deara nach gcuirtear séimhiú ar an gcéad litir den mbriathar saor riamh san aimsir chaite, is cuma é a bheith diúltach nó dearfach.
+  - NEED TO FILL IN
   ^ <call>chatSetup egs true</call>
 
   + egs
@@ -429,7 +423,7 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh cleachtadh a dhéanamh ar an mbriathar saor aimsir chaite den bhriathar
-  - Iontach a <call>getName</call>! Líon isteach an fhoirm cheart den bhriathar <i>tabhair</<i> mar sin:
+  - Iontach a <call>getName</call>! Líon isteach an fhoirm cheart den bhriathar <i>téigh</<i> mar sin:
   ^ <call>chatSetup cleachtadh true</call>
 
   + cleachtadh
@@ -473,13 +467,13 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic ceisteach
@@ -490,22 +484,21 @@
   - <call>nilToCeim</call>
 
   + (tá|ba mhaith|sea)
-  - Cuirtear ‘ar’ nó ‘nár’ roimh an mbriathar chun an fhoirm cheisteach a fháil:
+  - Ar aghaidh linn, a <call>getName</call>.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - Ar thug mé…? / Nár thug mé. <br>
-  ^ Ar thug tú…?/ Nár thug tú.<br>
-  ^ Ar thug sé nó sí…?/ Nár thug sé nó sí. <br>
-  ^ Ar thug muid…?/ Nár thug muid.<br>
-  ^ Ar thug sibh…?/ Nár thug sibh.<br>
-  ^ Ar thugadar…? (Ar thug siad…?) / Nár thugadar…? (nár thug siad…?)<br><br>
-  ^ Ar tugadh…? / Nár tugadh…? (briathar saor)
+  - Cuirtear ‘an’ nó ‘nach’ roimh an fhoirm spleách den mbriathar de ghnáth: <br>
+  ^ An ndeachaigh mé…? <br>
+  ^ An ndeachaigh tú…? <br>
+  ^ An ndeachaigh sé nó sí…? <br>
+  ^ An ndeachamar…? <br>
+  ^ An ndeachaigh sibh…? <br>
+  ^ An ndeachaigh siad…?
   ^ <call>chatSetup liom true</call>
 
   + liom
-  - ‘Ar thug tú aon rud as an ngách faoi deara…?’<br><br>
-  ^ ‘Nár tugadh go leor seansanna dó cheana?’
+  - I nGaeilge na Mumhan úsáidtear ‘Ar chuaigh…?’
   ^ <call>chatSetup chuncl true</call>
 
   + chuncl
@@ -517,7 +510,7 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú réidh chun cleachtadh a dhéanamh ar cheisteanna a chur
-  - <call>chatSetup cleachtadh nowait</call>
+  - Ar aghaidh linn, a <call>getName</call>. <call>chatSetup cleachtadh true</call>
 
   + cleachtadh
   - Anois déan cleachtadh ar cheisteanna a chur san aimsir chaite:<br>
@@ -547,14 +540,14 @@
   - <call>setAnsweringQuestions false</call>{topic=spleach}<call>chatSetup tosu true</call>
 
   + (spleách|spleach)
-  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách?
+  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách den bhriathar?
 
   + (tá|ba mhaith|sea)
-  % an bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách
+  % an bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách den bhriathar
   - {topic=spleach}<call>chatSetup tosu nowait</call>
 
   + (níl|níor mhaith)
-  % an bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách
+  % an bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhoirm spleách den bhriathar
   - Go breá. Is féidir leat briathar eile a phiocadh nó teacht ar ais uair éigin eile.
 
   + briathar saor
@@ -567,13 +560,13 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic spleach
@@ -594,13 +587,11 @@
   ^ <call>chatSetup fuairsi true</call>
 
   + fuairsi
-  - “Thug sí bronntanas deas do Chiarán.”<br>
+  - TBC
   ^ <call>chatSetup moreq</call>
 
   + moreq
-  - Cuirtear ‘gur’ nó ‘nár’ roimh an mbriathar san fhoirm spleách.<br><br>
-  ^ “Dúirt sí gur thug sí lón mór léi.”<br>
-  ^ “Bhí a fhios agam nár thug sé an scéal ar fad leis.”<br>
+  - TBC
   ^ <call>chatSetup cleachtadh true</call>
 
   + cleachtadh
@@ -654,13 +645,13 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic coibhneasta
@@ -701,7 +692,7 @@
   - <call>setAnsweringQuestions false</call>{topic=extraquestions}<call>chatSetup tosu nowait</call>
 
   + master
-  - Tá máistreacht agat anois ar an mbriathar “tabhair” san aimsir chaite, a <call>getName</call>. \s
+  - Tá máistreacht agat anois ar an mbriathar “téigh” san aimsir chaite, a <call>getName</call>. \s
   ^ {topic=extraquestions}<call>chatSetup tosu true</call>
 
   + briathar saor
@@ -721,18 +712,18 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
 > topic extraquestions
   + tosu
-  - An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar ‘tabhair’ san aimsir chaite?
+  - An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar ‘téigh’ san aimsir chaite?
 
   + (níl|níor mhaith)
   - <call>nilToQuiz</call>
@@ -751,7 +742,7 @@
 
   + levelcomplete
   - Tá triúr ceart agat i ndiaidh a chéile. Maith thú, a <call>getName</call>!\s
-  ^ Tá máistreacht agat anois ar an mbriathar “tabhair” san aimsir chaite!\s
+  ^ Tá máistreacht agat anois ar an mbriathar “téigh” san aimsir chaite!\s
   ^ <call>getCrioch</call>
   ^ <call>setAnsweringQuestions false</call>
 
@@ -787,11 +778,11 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (laithreach|aimsir laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (fháistineach|fhaistineach|aimsir fháistineach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairAF</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat tabhairMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
