@@ -43,7 +43,7 @@ button:focus, input:focus, audio:focus{
   right: -500px;
   transition: 0.5s;
   background-color: #70a87f;
-  border-radius: 15px;
+  border-radius: 5px;
   padding: 25px;
   padding-left: 0px;
   padding-right: 0px;
@@ -60,7 +60,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   scroll-behavior: auto;
   border-radius: ;
   padding: 5px;
-  background: #FCF3CF;
+  background: #f7f2e7;
 }
 
 .chatlogs::-webkit-scrollbar{
@@ -83,7 +83,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .user-photo{
   width: 45px;
   height: 45px;
-  background: #FCF3CF;
+  background: #f7f2e7;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -239,7 +239,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   margin-top: -28px;
   right: 7px;
   font-size: 22px;
-  color: #17202A;
+  color: white;
   transform: rotate(45deg);
   cursor: pointer;
   transition: 0.1s;
@@ -426,10 +426,11 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 
 .bot-checked{
   font-size: 13px;
+  color: white;
   position: absolute;
   top: 5px;
   left: 5px;
-  font-family: cursive;
+  font-family: sans-serif;
 }
 
 /* RiveScript buttons */
