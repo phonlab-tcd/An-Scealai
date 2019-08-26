@@ -119,15 +119,6 @@ export class DashboardComponent implements OnInit {
   }
 
   runGramadoir() {
-    this.tags.push({
-      indices: {
-        start: 0,
-        end: 10
-      },
-      cssClass: "bg-blue",
-    });
-    this.grammarChecked = true;
-    /*
     this.storyService.gramadoir(this.story._id).subscribe((res) => {
       res.forEach(g => {
         console.log(g);
@@ -143,8 +134,7 @@ export class DashboardComponent implements OnInit {
       });
       console.log(this.highlightElement);
       this.grammarChecked = true;
-      this.grammarChecked = false;
-    });*/
+    });
   }
 
   wasInside : boolean = false;

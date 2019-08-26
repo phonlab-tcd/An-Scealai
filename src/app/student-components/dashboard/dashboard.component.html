@@ -7,8 +7,8 @@
         <a (click)="topRightButton()" class="chatbotBtn">Taidhgín</a>
       </div>
       <div class="storyContainer" *ngIf="story">
-        <div class="textFieldContainer"  *ngIf="!feedbackVisible">
-          <div mwlTextInputHighlightContainer>
+        <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
+          <div mwlTextInputHighlightContainer >
             <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea></textarea>
             <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" #highlightElement></mwl-text-input-highlight>
           </div>
