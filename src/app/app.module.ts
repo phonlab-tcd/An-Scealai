@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
+import { createCustomElement } from '@angular/elements';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -80,6 +81,12 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
     TextInputHighlightModule,
   ],
   providers: [ StoryService, UserService ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ChatbotComponent],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    const chatbotElement = createCustomElement(ChatbotComponent, {injector});
+    customElements.define('app-chatbot', chatbotElement);
+  }
+ }

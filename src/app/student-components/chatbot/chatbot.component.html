@@ -1,3 +1,57 @@
-<p>
-  chatbot works!
-</p>
+<body>
+  <button id="bot-chat-button" onclick="showBot()"><span>Taighín</span></button>
+  <div class="bot-contents">
+    <button class="bot-collapsable" id="BriathraNeamhrialta" onclick="">Briathra Neamhrialta</button>
+    <div class="bot-content">
+      <ul>
+        <li id="BriathraNeamhrialtaInfo" onclick="load('BriathraNeamhrialtaInfo')">Info & Questions</li>
+        <li id="BQuiz" onclick="load('BQuiz')">Quiz</li>
+      </ul>
+    </div>
+    <button class="bot-collapsable">Extra Option 1</button>
+    <div class="bot-content">
+      <ul>
+        <li>Option 1</li>
+        <li>Option 2</li>
+      </ul>
+    </div>
+    <button class="bot-collapsable">Extra Option 2</button>
+    <div class="bot-content">
+      <ul>
+        <li>Option 1</li>
+        <li>Option 2</li>
+      </ul>
+    </div>
+    <button class="bot-collapsable">Extra Option 3</button>
+    <div class="bot-content">
+      <ul>
+        <li>Option 1</li>
+        <li>Option 2</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bot-audio">
+    <audio id='botaudio' src='' controls>
+    </audio>
+  </div>
+  <div class="bot-bg-modal">
+    <div class="bot-close" onclick="hideBot()">+</div>
+    <div><img src="assets/img/menuIcon.png" class="bot-contents-button" onclick="showContents()"></div>
+    <div class="bot-checked"><input type="checkbox" name="audio" class="audioCheckbox" checked>Autoplay</div>
+    <div class="chatlogs">
+      <div class="bot-messages">
+      </div>
+    </div>
+    <form class="chatform">
+      <input id="bot-user_input" type="text" autocomplete="off">
+      <button type="submit" id="bot-message-button" onclick="chat()">></button>
+      <div class="record"><img src="assets/img/mic.png" id="recordImg"></div>
+    </form>
+    </div>
+    <div class="bot-tri"></div>
+    <div class="dictPopup">
+      <div class="dictText">
+        Dictionary TBC
+      </div>
+    </div>
+</body>

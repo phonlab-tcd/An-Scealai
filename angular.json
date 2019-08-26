@@ -27,6 +27,9 @@
               "node_modules/angular-text-input-highlight/text-input-highlight.css"
             ],
             "scripts": [
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
             ],
             "es5BrowserSupport": true
           },
