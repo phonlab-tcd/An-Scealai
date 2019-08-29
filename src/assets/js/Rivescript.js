@@ -69,7 +69,7 @@ var quizProgress = 0;
 var isAQuestion = false;
 
 function next(){
-  if(thisDialect != "" && thisGender != "" || thisDialect != "" || thisGender != ""){
+  if(thisDialect != ""){
     chatSetup("askname");
     play = true;
   }
@@ -178,7 +178,7 @@ function openHint(){
 
 function nilToCeim(){
   var nils = ["Tóg briseadh beag mar sin", "Fág é go dtí an chéad lá eile", "Ar aghaidh go briathar eile", "Ar ais go dtí an leathanach baile mar sin",
-  "Go breá. Is féidir leat topaic eile a phiocadh nó teacht ar ais uair éigin eile. (exit back to main menu?)"];
+  "Go breá. Is féidir leat topaic eile a phiocadh nó teacht ar ais uair éigin eile."];
   var ran = getRandomIntInclusive(0, nils.length - 1);
   return nils[ran];
 }

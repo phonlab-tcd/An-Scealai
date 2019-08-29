@@ -34,7 +34,7 @@
 < object
 
 + start
-- Please choose gender and dialect: <br>
+- Please choose a dialect: <br>
 ^ Connemara (male)  <input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
 ^ Kerry (female)  <input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
 ^ Donegal (female)  <input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>

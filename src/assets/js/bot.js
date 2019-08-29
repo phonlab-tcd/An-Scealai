@@ -16,6 +16,7 @@ var thisVerb;
 var dictOn = false;
 var play = false;
 var pause = false;
+var thisFile = "";
 
 //for database....
 var currentTopic = "";
@@ -42,7 +43,7 @@ function loadData(data, tabletop){
 
 function setup(){
   clearName();
-  //load("start", "start"); //for testing only
+  load("abairAC", "start", true); //for testing only
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
   dictPopup = document.querySelector(".dictPopup");
@@ -55,8 +56,9 @@ function setup(){
   //console.log(button);
   if(button){
     button.addEventListener("click", function(){
+      play = false;
       $(".bot-messages").empty();
-      load("abairAC", "start", true);
+      load("BriathraNeamhrialta", "start");
     });
   }
 
@@ -76,6 +78,11 @@ function setup(){
       $(".bot-contents").animate({ scrollTop: $(".bot-contents")[0].scrollHeight }, 200);
     });
   }
+
+  var home = document.querySelector(".homeButton");
+  home.addEventListener("click", function(){
+    if(thisFile != "BriathraNeamhrialta") load("BriathraNeamhrialta", "start");
+  });
 
 }
 
@@ -120,6 +127,8 @@ function load(fileId, start, toPlay){
     if(thisVerb == "bi") thisVerb = "bí";
     else if(thisVerb == "teigh") thisVerb = "téigh";
   }
+
+  thisFile = fileId;
 
   if(toPlay) play = true;
   if(fileId == "start"){

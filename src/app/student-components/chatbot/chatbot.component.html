@@ -1,10 +1,10 @@
 <body>
-  <button id="bot-chat-button" onclick="showBot()"><span>Taidhgín</span></button>
+  <button id="bot-chat-button" onclick="showBot()"><span>Taidhgín <i class="fa fa-comments"></i></span></button>
   <div class="bot-contents">
     <button class="bot-collapsable" id="BriathraNeamhrialta" onclick="">Briathra Neamhrialta</button>
     <div class="bot-content">
       <ul>
-        <li id="BriathraNeamhrialtaInfo" onclick="load('BriathraNeamhrialtaInfo')">Info & Questions</li>
+        <li id="BriathraNeamhrialtaInfo" onclick="load('BriathraNeamhrialta')">Info & Questions</li>
         <li id="BQuiz" onclick="load('BQuiz')">Quiz</li>
       </ul>
     </div>
@@ -36,6 +36,7 @@
   </div>
   <div class="bot-bg-modal">
     <div class="bot-close" onclick="hideBot()">+</div>
+    <i class="fas fa-home homeButton"></i>
     <div><!--<img src="assets/img/menuIcon.png" class="bot-contents-button" onclick="showContents()">--><i class="fas fa-bars bot-contents-button" onclick="showContents()"></i></div>
     <div class="bot-checked"><input type="checkbox" name="audio" class="audioCheckbox" checked>Autoplay</div>
     <div class="chatlogs">

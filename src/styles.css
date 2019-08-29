@@ -16,7 +16,7 @@ body {
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 30px;
-  background-color: #e5bd3b; 
+  background-color: #e5bd3b;
   z-index: 20;
 }
 
@@ -40,7 +40,7 @@ button:focus, input:focus, audio:focus{
   font-family: sans-serif;
   width: 300px;
   bottom: 0px;
-  right: -500px;
+  right: 0px;
   transition: 0.5s;
   background-color: #70a87f;
   border-radius: 8px;
@@ -254,6 +254,19 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   transition: 1s;
 }
 
+/*Home Button*/
+
+.homeButton{
+  position: absolute;
+  top: 5px;
+  right: 25px;
+  color: white;
+}
+
+.homeButton:hover{
+  cursor: pointer;
+}
+
 /* Contents */
 .bot-contents{
   background: #70a87f;
@@ -270,6 +283,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   transition: 0.7s;
   opacity: 0;
   z-index: 1;
+  display: none;
   /*right: 350px;*/
 }
 
@@ -316,9 +330,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   height: 30px;
   width: 30px;
   cursor: pointer;
-  right: 15px;
+  right: 17px;
   top: 4px;
   color: white;
+  display: none;
 }
 
 .bot-contents-button:hover{
