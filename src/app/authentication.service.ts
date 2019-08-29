@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
-
 export interface UserDetails {
   _id: string;
   username: string;
@@ -29,7 +28,7 @@ export interface TokenPayload {
 export class AuthenticationService {
   private token: string;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router,) { }
 
   private saveToken(token: string): void {
     localStorage.setItem('scealai-token', token);
@@ -53,6 +52,7 @@ export class AuthenticationService {
     } else {
       return null;
     }
+    
   }
 
   public isLoggedIn(): boolean {
@@ -91,6 +91,7 @@ export class AuthenticationService {
   }
 
   public login(user: TokenPayload): Observable<any> {
+    
     return this.request('post', 'login', user);
   }
 
@@ -99,6 +100,7 @@ export class AuthenticationService {
   }
 
   public logout(): void {
+
     this.token = '';
     window.localStorage.removeItem('scealai-token');
     this.router.navigateByUrl('/landing');

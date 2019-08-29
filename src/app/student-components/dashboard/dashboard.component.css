@@ -30,6 +30,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .headerItem {
     width: 33%;
     display: flex;
+    align-items: center;
 }
 
 .titleItem {
@@ -162,7 +163,7 @@ background-color: lightblue;
     background-color: #70a87f;
 }
 
-.saveBtnContainer {
+.footerBtnContainer {
     display: flex;
     
 }
@@ -277,6 +278,10 @@ border-radius: 5px 5px 5px 5px;
     background-color: #4c00ff;
 }
 
+.default-color {
+    background-color: #d41e1e;
+}
+
 .tagHover {
     opacity: 0.8;
     transition: 0.5s;
@@ -315,13 +320,86 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .savedIcon {
-    color: #70a87f;
+    color: #b3a995;
     margin-left: auto;
 }
 
 .unsavedIcon {
-    color: #c15a2e;
+    background-color: #70a87f;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 5px;
+    margin-top: -5px;
+    color: white;
     margin-left: auto;
+}
+
+.unsavedIcon:hover {
+    background-color: #437250;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
+.modalContainer {
+    position: absolute;
+    z-index: 100;
+    height: 62vh;
+    width: 100%;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    margin-top: 10vh;
+    width: 80%;
+    margin-left: 10%;
+    padding: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+-moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #d1d1d1;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+}
+
+.modalText {
+    font-size: 14pt;
 }
 
 @media only screen and (min-width: 700px) {

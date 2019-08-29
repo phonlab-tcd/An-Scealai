@@ -94,6 +94,11 @@ color: white;
     margin-top: 2vh;
 }
 
+.quoteAuthorText {
+    margin-left: 450px;
+    margin-top: 5px;
+}
+
 @media only screen and (max-width: 550px) {
     .catJumpingImg {
         display: none;

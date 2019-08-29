@@ -1,14 +1,14 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, ViewChild, Renderer2, Renderer } from '@angular/core';
+import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute, Router, ChildActivationEnd } from '@angular/router';
-import { CompileTemplateMetadata } from '@angular/compiler';
-import { AuthenticationService, TokenPayload } from '../../authentication.service';
-import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { AuthenticationService } from '../../authentication.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
-import { HighlightTag, TextInputHighlightModule } from 'angular-text-input-highlight';
-import { TextInputHighlightComponent } from 'angular-text-input-highlight/text-input-highlight.component';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { HighlightTag, } from 'angular-text-input-highlight';
+import { Subject } from 'rxjs';
+import { EventType } from '../../event';
+import { EngagementService } from '../../engagement.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,21 +20,26 @@ export class DashboardComponent implements OnInit {
 
   story: Story;
   stories: Story[];
-  id: String;
-  storyFound: Boolean;
-  storySaved: Boolean;
+  id: string;
+  storyFound: boolean;
+  storySaved: boolean;
   popupVisible: boolean;
   feedbackVisible: boolean;
   audioSource: SafeUrl;
   grammarChecked: boolean = false;
   tags: HighlightTag[] = [];
+  visibleTags: HighlightTag[] = [];
+  tagFilters: Array<string> = [];
   chosenTag: GrammarTag;
   grammarLoading: boolean = false;
+  modalClass : string = "hidden";
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
-    private renderer: Renderer2) { }
+    private engagement: EngagementService) {
+
+    }
 
   ngOnInit() {
     this.storySaved = true;
@@ -82,6 +87,7 @@ export class DashboardComponent implements OnInit {
       params => {
         console.log(this.story.text);
         this.storyService.updateStory(this.story.text, params['id']);
+        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
         this.storySaved = true;
       }
     )
@@ -93,7 +99,9 @@ export class DashboardComponent implements OnInit {
     this.getFeedbackAudio();
     this.story.feedback.seenByStudent = true;
     this.notifications.removeStory(this.story);
-    this.storyService.viewFeedback(this.story._id).subscribe();
+    this.storyService.viewFeedback(this.story._id).subscribe(() => {
+      this.engagement.addEventForLoggedInUser(EventType["VIEW-FEEDBACK"], this.story);
+    });
   }
 
   getFeedbackAudio() {
@@ -122,6 +130,7 @@ export class DashboardComponent implements OnInit {
   }
 
   runGramadoir() {
+    this.saveStory();
     this.popupVisible = false;
     this.grammarChecked = false;
     this.grammarLoading = true;
@@ -142,6 +151,7 @@ export class DashboardComponent implements OnInit {
       });
       this.grammarLoading = false;
       this.grammarChecked = true;
+      this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
     });
   }
 
@@ -165,6 +175,19 @@ export class DashboardComponent implements OnInit {
     tagElement.classList.add("tagNotHover");
   }
 
+  addTagFilter(filter: string) {
+    this.tagFilters.push(filter);
+    //this.refreshHighlights();
+  }
+
+  removeTagFilter(filter: string) {
+    let i = this.tagFilters.indexOf(filter);
+    if(i > -1) {
+      this.tagFilters.splice(i, 1);
+    }
+    //this.refreshHighlights();
+  }
+
   wasInside : boolean = false;
   
   @HostListener('click')
@@ -178,6 +201,26 @@ export class DashboardComponent implements OnInit {
       this.popupVisible = false;
     }
     this.wasInside = false;
+  }
+  
+  showModal() {
+    this.modalClass = "visibleFade";
+  }
+
+  hideModal() {
+    this.modalClass = "hiddenFade";
+    this.modalChoice.next(false);
+  }
+
+  modalChoice: Subject<boolean> = new Subject<boolean>();
+
+  setModalChoice() {
+    this.modalChoice.next(true);
+  }
+
+  saveModal() {
+    this.saveStory();
+    this.modalChoice.next(true);
   }
 
 }
@@ -199,7 +242,7 @@ class GrammarTag {
       return "Séimhiu missing";
     }
     if(rule === 'URU') {
-      return "Urú missing";
+      return "This noun should be plural.";
     }
     // etc.
   }

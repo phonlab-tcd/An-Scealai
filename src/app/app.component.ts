@@ -10,6 +10,7 @@ import { AuthenticationService } from './authentication.service';
 import { StoryService } from './story.service';
 import { Story } from './story';
 import { NotificationService } from './notification-service.service';
+import { EngagementService } from './engagement.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,8 @@ export class AppComponent {
   }
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
-              private storyService : StoryService, private notificationSerivce : NotificationService) {
+              private storyService : StoryService, private notificationSerivce : NotificationService,
+              private engagement: EngagementService) {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });

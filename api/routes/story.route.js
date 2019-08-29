@@ -11,7 +11,7 @@ const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 
-let Story = require('../models/Story');
+let Story = require('../models/story');
 
 let db;
 MongoClient.connect('mongodb://localhost:27017', (err, client) => {
@@ -59,7 +59,7 @@ storyRoutes.route('/:author').get(function (req, res) {
 storyRoutes.route('/viewStory/:id').get(function(req, res) {
     Story.find({_id:req.params.id}, (err, story) => {
         if(err) {
-            res.json({"status" : err.status}, {"message" : err.message});
+            res.status(400).json({"message" : err.message});
         } else {
             res.json(story);
         }

@@ -1,4 +1,4 @@
-.bookContainer {
+.bookContentsContainer {
     width: 80%;
     height: 70vh;
     padding-top: 2vh;
@@ -207,7 +207,7 @@ border-radius: 5px 5px 5px 5px;
         margin-top: -35vh;
     }
 
-    .bookContainer {
+    .bookContentsContainer {
         width: 560px;
         position: fixed;
         left: 50%;

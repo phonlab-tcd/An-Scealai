@@ -3,6 +3,8 @@ import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { EventType } from '../../event';
+import { EngagementService } from '../../engagement.service';
 
 @Component({
   selector: 'app-synthesis',
@@ -12,7 +14,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class SynthesisComponent implements OnInit {
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
-              private router: Router, private sanitizer: DomSanitizer) { }
+              private router: Router, private sanitizer: DomSanitizer,
+              private engagement: EngagementService) { }
 
   story: Story;
   paragraphs: Paragraph[] = [];
@@ -39,6 +42,7 @@ export class SynthesisComponent implements OnInit {
           this.paragraphs[i].index = i;
           console.log(this.paragraphs[i]);
         }
+        this.engagement.addEventForLoggedInUser(EventType["SYNTHESISE-STORY"], this.story);
         this.audioFinishedLoading = true;
       });
     });

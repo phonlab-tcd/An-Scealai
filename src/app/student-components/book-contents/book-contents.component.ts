@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
+import { EventType } from '../../event';
+import { EngagementService } from '../../engagement.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -15,7 +17,8 @@ export class BookContentsComponent implements OnInit {
   toBeDeleted: String[];
   popupVisible: Boolean;
 
-  constructor(private storyService: StoryService, private auth: AuthenticationService) { }
+  constructor(private storyService: StoryService, private auth: AuthenticationService,
+    private engagement: EngagementService) { }
 
   ngOnInit() {
     this.storyService
@@ -35,6 +38,7 @@ export class BookContentsComponent implements OnInit {
   toggleDeleteMode() {
     if(this.deleteMode && this.toBeDeleted.length > 0) {
       for(let id of this.toBeDeleted) {
+        this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], {_id: id});
         this.storyService.deleteStory(id).subscribe(
           res => {
             console.log('Deleted: ', id);

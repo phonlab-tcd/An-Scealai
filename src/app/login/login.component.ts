@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
+import { EventType } from '../event';
+import { EngagementService } from '../engagement.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,8 @@ export class LoginComponent implements OnInit {
   loginError: boolean;
   errorText: String;
 
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private router: Router,
+              private engagement: EngagementService) { }
 
   ngOnInit() {
     this.loginError = false;
@@ -27,6 +30,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.auth.login(this.credentials).subscribe(() => {
+      this.engagement.addEventForLoggedInUser(EventType.LOGIN);
       this.router.navigateByUrl('/landing');
     }, (err) => {
       if(err.status === 400) {

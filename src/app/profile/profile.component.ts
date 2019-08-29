@@ -3,6 +3,8 @@ import { AuthenticationService } from '../authentication.service';
 import { ClassroomService } from '../classroom.service';
 import { FormControl } from '@angular/forms';
 import { Classroom } from '../classroom';
+import { EngagementService } from '../engagement.service';
+import { EventType } from '../event';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +20,7 @@ export class ProfileComponent implements OnInit {
   classroom: Classroom;
 
   constructor(public auth: AuthenticationService,
-              private classroomService: ClassroomService,) { }
+              private classroomService: ClassroomService, private engagement: EngagementService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -67,6 +69,11 @@ export class ProfileComponent implements OnInit {
     } else {
       this.editMode = true;
     }
+  }
+
+  logout() {
+    this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
+    this.auth.logout();
   }
 
 }

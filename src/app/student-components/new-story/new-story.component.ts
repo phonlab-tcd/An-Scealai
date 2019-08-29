@@ -13,8 +13,7 @@ import { AuthenticationService, TokenPayload } from '../../authentication.servic
 export class NewStoryComponent implements OnInit {
 
   newStoryForm: FormGroup;
-  constructor(private fb: FormBuilder, 
-    private storyService: StoryService,
+  constructor(private fb: FormBuilder,  private storyService: StoryService,
     private auth: AuthenticationService) {
     this.createForm();
   }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
+import { EngagementService } from '../engagement.service';
+import { EventType } from '../event';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +19,8 @@ export class RegisterComponent implements OnInit {
   registrationError: boolean;
   errorText: String;
 
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private router: Router,
+              private engagement: EngagementService,) { }
 
   ngOnInit() {
     this.registrationError = false;
@@ -25,6 +28,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     this.auth.register(this.credentials).subscribe(() => {
+      this.engagement.addEventForLoggedInUser(EventType.REGISTER);
       this.router.navigateByUrl('/landing');
     }, (err) => {
       if(err.status === 400) {

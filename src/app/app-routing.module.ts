@@ -31,6 +31,7 @@ import { TeacherStoryComponent } from './teacher-components/teacher-story/teache
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
+import { CanDeactivateGuard } from './can-deactivate.guard';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -40,7 +41,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
-  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService] },
+  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
   { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },

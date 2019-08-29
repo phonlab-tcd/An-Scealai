@@ -5,6 +5,8 @@ import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
+import { EngagementService } from './engagement.service';
+import { EventType } from './event';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class StoryService {
 
   constructor(private http: HttpClient,
     private router: Router,
-    private auth: AuthenticationService) { }
+    private auth: AuthenticationService, private engagement: EngagementService) { }
 
   baseUrl: string = "http://localhost:4000/story/";
 
@@ -30,7 +32,10 @@ export class StoryService {
     };
     console.log(storyObj);
     this.http.post('http://localhost:4000/story/create', storyObj)
-      .subscribe(res => this.router.navigateByUrl('/dashboard/' + id));
+      .subscribe(res => {
+        this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
+        this.router.navigateByUrl('/dashboard/' + id);
+      });
   }
 
   getStoriesFor(author : string) {
@@ -50,9 +55,7 @@ export class StoryService {
     const obj = {
       text: text
     };
-    this.http.post('http://localhost:4000/story/update/'+id, obj).subscribe(
-      res => console.log('Done')
-    );
+    this.http.post('http://localhost:4000/story/update/'+id, obj).subscribe();
   }
 
   deleteStory(id) {
