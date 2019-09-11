@@ -43,7 +43,7 @@ function loadData(data, tabletop){
 
 function setup(){
   clearName();
-  load("abairAC", "start", true); //for testing only
+  //load("start", "start", true); //for testing only
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
   dictPopup = document.querySelector(".dictPopup");
@@ -53,11 +53,11 @@ function setup(){
 
   //if the 'chatbot' button is clicked
   var button = document.getElementById("bot-chat-button");
-  //console.log(button);
   if(button){
     button.addEventListener("click", function(){
       play = false;
       $(".bot-messages").empty();
+      if(audioCheckbox.checked == false) audioCheckbox.checked = true;
       load("BriathraNeamhrialta", "start");
     });
   }
@@ -103,6 +103,7 @@ function hideBot(){
   menu.style.right = "-500px";
   menu.style.opacity = "0";
   clearName();
+  audioPlayer.pause();
 }
 
 function showContents(){

@@ -40,7 +40,7 @@ button:focus, input:focus, audio:focus{
   font-family: sans-serif;
   width: 300px;
   bottom: 0px;
-  right: 0px;
+  right: -500px;
   transition: 0.5s;
   background-color: #70a87f;
   border-radius: 8px;

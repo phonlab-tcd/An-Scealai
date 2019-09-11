@@ -278,7 +278,7 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh cleachtadh beag a dhéanamh air seo
-  ^ <call>chatSetup ceist nowait</call>
+  - <call>chatSetup ceist nowait</call>
 
   + ceist
   - <call>levelComplete false</call><call>getRandomQuestion 7</call><call>resetProgress</call>
