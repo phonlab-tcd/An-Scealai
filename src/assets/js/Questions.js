@@ -160,15 +160,15 @@ var teighQuiz = [
 
 var abairAimsirChaiteQuestions = [
   {question: "___________ sí go raibh sé ar fheabhas.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
-  {question: "___________ Liam go raibh sé tinn.", answer: "dúirt", hint1: "dearfach, aimser chaite"},
-  {question: "___________ na buachaillí nach raibh éinne eile ann.", answer: "dúirt", hint1: "dearfach, aimser chaite"},
-  {question: "___________ (sinn) nár chualamar an scéal sin riamh.", answer: "dúramar", hint1: "dearfach, aimser chaite"},
-  {question: "___________ mé é sin leat cheana.", answer: "dúirt", hint1: "dearfach, aimser chaite"},
-  {question: "___________ bean liom go ndúirt bean léi.", answer: "dúirt", hint1: "dearfach, aimser chaite"},
-  {question: "___________ (sinn) ár bpaidreacha ina dhiaidh sin.", answer: "dúramar", hint1: "dearfach, aimser chaite"},
-  {question: "___________ Síle go raibh an scéal sin fíor.", answer: "dúirt", hint1: "dearfach, aimser chaite"},
-  {question: "___________ sé go raibh brón air.", answer: "dúirt", hint1: "dearfdearfach, aimser chaiteach"},
-  {question: "B’shin é a ___________ mé leat.", answer: "dúirt", hint1: "dearfach, aimser chaite"}
+  {question: "___________ Liam go raibh sé tinn.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ na buachaillí nach raibh éinne eile ann.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ (sinn) nár chualamar an scéal sin riamh.", answer: "dúramar", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ mé é sin leat cheana.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ bean liom go ndúirt bean léi.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ (sinn) ár bpaidreacha ina dhiaidh sin.", answer: "dúramar", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ Síle go raibh an scéal sin fíor.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "___________ sé go raibh brón air.", answer: "dúirt", hint1: "dearfach, aimsir chaite"},
+  {question: "B’shin é a ___________ mé leat.", answer: "dúirt", hint1: "dearfach, aimsir chaite"}
 ];
 
 var abairAimsirChaiteNi = [
@@ -2016,4 +2016,86 @@ var teighMCExtraQuestions = [
   {question: "Níl mé cinnte ach dúirt siad ____ ___________ ann. (siad, dearfach)", answer: "go rachaidís", answer2: "go rachadh siad", hint1: "dearfach, siad"},
   {question: "Nach raibh a fhios agat go maith ___ ___________ ann liom féin. (mé, diúltach)", answer: "nach rachainn", answer2: "nach rachadh mé", hint1: "diúltach"},
   {question: "Bhí eagla orm ___ ___________ar strae sa cheo an oíche sin. (siad, dearfach)", answer: "go rachaidís", answer2: "go rachadh siad", hint1: "dearfach"},
+];
+
+var cloisACQuestions = [
+  {question: "________ mé torann íseal taobh thíar díon.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ tú an ceann sin go minic cheacha.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ sé an scéál ach níor chreid sé é.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ sí ráfla ach ní raibh sí cinnte.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ an bus ag teacht agus ritheamar amach.", answer: "chualamar", answer2: "chuala muid", hint1: "dearfach, sinn"},
+  {question: "________ sibh mé á rá sin go soiléir ar maidin.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ go raibh tú ag cuimheamh ar dhul go Meiriceá.", answer: "chualamar", answer2: "chuala muid", hint1: "dearfach, sinn"},
+  {question: "________ an scéál ach níor chreideamar é.", answer: "chualamar", answer2: "chuala muid", hint1: "dearfach, sinn"},
+  {question: "________ me torann taibhseach i bhfad uaim.", answer: "chuala", hint1: "dearfach"},
+  {question: "________ sí crónán an chait sna driseacha.", answer: "chuala", hint1: "dearfach"},
+];
+
+var cloisACNi = [
+  {question: "____ _______ mé ráíte riamh é.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ _______ tú aon rud. Is ag rámhallaí atá tú.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ _______ sé uainse é, pé áit ar chuala sé é.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ _______ sí an carr ag teacht ina coinne.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ _______ faic uatha le seachtain anuas.", answer: "níor chualamar", answer2: "níor chuala muid", hint1: "diúltach, sinn"},
+  {question: "____ ________ siad an scéal ba dheanaí búiochas le Dia.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ ________ caint chomh speagúil sinn le fada an lá.", answer: "níor chualamar", answer2: "níor chuala muid", hint1: "diúltach, sinn"},
+  {question: "____ _______ aon nuacht le roinnt laethanta anois. (sinn)", answer: "níor chuala", answer2: "níor chuala muid", hint1: "diúltach, sinn"},
+  {question: "____ ________ mé a leithéid de sheagórd riamh.", answer: "níor chuala", hint1: "diúltach"},
+  {question: "____ ________ sé aon rud ar ais go fóill.", answer: "níor chuala", hint1: "diúltach"},
+];
+
+var cloisACBritharsaor = [
+  {question: "______ eitleán in airde sa spéir (dearfach).", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "______ an screadail i bhfad i gcéin. (dearfach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "______ an geata ag oscailt. (dearfach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "____ ______ an t-amhrán sin ar an raidio riamh ina dhiaidh sin. (diúltach)", answer: "níor chuathas", hint1: "diúltach, briathar saor"},
+  {question: "______ an carr ag imeacht den bhóthar. (dearfach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "______ an phléase ach ní raibh a fhios ag éinne cad a bhí ann. (dearfach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "____ ______ éinne ag dul in airde staighre an oíche sin. (diúltach)", answer: "níor chuathas", hint1: "diúltach, briathar saor"},
+  {question: "____ ______ caint uirthi sin riamh ó shin. (diúltach)", answer: "níor chuathas", hint1: "diúltach, briathar saor"},
+  {question: "______ an phléasc i gcian is i gcóngar. (dearfach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+  {question: "______ na francaigh faoin úrlár í shin. (diúltach)", answer: "chuathas", hint1: "dearfach, briathar saor"},
+];
+
+var cloisACCeisteach = [
+  {question: "___ ______ tú é Mhairtín ó Shín? (dearfach)", answer: "ar chuala", hint1: "dearfach"},
+  {question: "___ ______ tú an scéal sin míle uair cheana? (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "___ ______ tú Máiréad riamh ag ceol ar an bpíob? (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "___ ______ tú mé ag glaoch ort? (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "___ ______ tú an scéal faoin tíogar a d'eafaigh ón siorcas? (dearfach)", answer: "ar chuala", hint1: "dearfach"},
+  {question: "___ ______ sibh aon torann lasmuigh den bhfuinneog aréir? (dearfach)", answer: "ar chuala", hint1: "dearfach"},
+  {question: "___ ______ sibh scéalta riamh mar gheall ar an mbean sídhe? (dearfach)", answer: "ar chuala", hint1: "dearfach"},
+  {question: "___ ______ tú an toirneach uafásach i lár na hoíche aréir? (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "___ ______ sibh na scéálta nuachta ar Radio na Gaeltachta ar maidin? (dearfach)", answer: "ar chuala", hint1: "dearfach"},
+  {question: "___ ______ aon duine agaibh faoin athrú a tháinig ar na rialacha le deanaí? (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+];
+
+var cloisACSpleach = [
+  {question: "Dúirt siad ____ _______ siad an coileach ag glaoch sa chlós. (dearfach)", answer: "gur chuala", hint1: "dearfach"},
+  {question: "Dúirt sé ____ _______ sé an ráfla go dtí an tráthnóna sin. (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "Credim ____ _______ siad é agus nár thug siad an aird air. (dearfach)", answer: "gur chuala", hint1: "dearfach"},
+  {question: "Tá mé lán-chinnte ____ _______ mé aon torann i lár na hoíche. (diultach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "Chuir siad inár leith ____ _______ é ach nár thangamar i gcabhair air. (dearfach)", answer: "gur chuala", hint1: "dearfach"},
+  {question: "Deirtear ____ _______ an bhean sídhe an oíche a fuair sé bás. (dearfach, brithar saor)", answer: "gur chualathas", hint1: "dearfach, briathar saor"},
+  {question: "Tá a fhios agam go maith ____ _______ sí mé ag glaoch uirthi. (dearfach)", answer: "gur chuala", hint1: "dearfach"},
+  {question: "Dúirt mé léi ____ _______ mé faic faoin ráfla a bhí ag dul thart. (diúltach)", answer: "nár chuala", hint1: "diúltach"},
+  {question: "Táím go láidir den fuairim ____ _______ siad an nuacht an tráthnóna sin.", answer: "gur chuala", hint1: "dearfach"},
+  {question: "Nach cuimhin leat ____ _______ an scéal céanna an t-am seo anuraidh. (sinn, dearfach)", answer: "gur chualamar", hint1: "dearfach, sinn"},
+];
+
+var cloisACCoibhneasta = [
+
+];
+
+var cloisACExtraQuestions = [
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
+  {question: "____ ________", answer: "", hint1: ""},
 ];

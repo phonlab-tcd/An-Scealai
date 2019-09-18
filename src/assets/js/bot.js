@@ -121,44 +121,49 @@ function showContents(){
 
 //loads file chosen by the user
 function load(fileId, start, toPlay){
-  //for dictionary
-  if(fileId.indexOf("quiz") == -1){
-    var length = fileId.length - 2;
-    thisVerb = fileId.substr(0, length);
-    if(thisVerb == "bi") thisVerb = "bí";
-    else if(thisVerb == "teigh") thisVerb = "téigh";
-  }
-
-  thisFile = fileId;
-
-  if(toPlay) play = true;
-  if(fileId == "start"){
-    switchTopic = false;
-    currentTopic = fileId;
-  }
-  else{
-    currentTopic = fileId;
-    switchTopic = true;
-  }
-
-  console.log("To Load: " + fileId);
-  if(keepMessages == false){
-    $(".bot-messages").empty();
-  }
-  for(i = 0; i < files.length; i++){
-    if(fileId == files[i].id){
-      console.log(files[i].id + " " + files[i].file);
-      bot = new RiveScript({utf8: true});
-      bot.loadFile(files[i].file).then( () => {
-        bot.sortReplies();
-        console.log(fileId + " loaded");
-        if(fileId == "start") chatSetup("start", false, false);
-        else if(start != null) chatSetup(start);
-        else chatSetup("start");
-      });
+  if(thisDialect != "" || fileId == "BriathraNeamhrialta"){
+    //for dictionary
+    if(fileId.indexOf("quiz") == -1){
+      var length = fileId.length - 2;
+      thisVerb = fileId.substr(0, length);
+      if(thisVerb == "bi") thisVerb = "bí";
+      else if(thisVerb == "teigh") thisVerb = "téigh";
     }
+
+    thisFile = fileId;
+
+    if(toPlay) play = true;
+    if(fileId == "start"){
+      switchTopic = false;
+      currentTopic = fileId;
+    }
+    else{
+      currentTopic = fileId;
+      switchTopic = true;
+    }
+
+    console.log("To Load: " + fileId);
+    if(keepMessages == false){
+      $(".bot-messages").empty();
+    }
+    for(i = 0; i < files.length; i++){
+      if(fileId == files[i].id){
+        console.log(files[i].id + " " + files[i].file);
+        bot = new RiveScript({utf8: true});
+        bot.loadFile(files[i].file).then( () => {
+          bot.sortReplies();
+          console.log(fileId + " loaded");
+          if(fileId == "BriathraNeamhrialta") chatSetup("start", false, false);
+          else if(start != null) chatSetup(start);
+          else{
+            if(isNameStored() == false) chatSetup("askname");
+            else chatSetup("start");
+          }
+        });
+      }
+    }
+    keepMessages = false;
   }
-  keepMessages = false;
 }
 
 function loadFromChat(fileId, start){ load(fileId, start); }
@@ -215,9 +220,11 @@ function appendMessage(isBot, isUser, text, showButtons){
   pauseImg.setAttribute("class", "pauseButton");
   pauseImg.src = "assets/img/pause.png"
   pauseImg.onclick = function(){
-    audioPlayer.pause();
-    isPlaying = false;
-    pause = false;
+    if(audioCheckbox.checked == false){
+      audioPlayer.pause();
+      isPlaying = false;
+      pause = false;
+    }
   }
   newP.appendChild(pauseImg);
 
@@ -246,7 +253,7 @@ function appendMessage(isBot, isUser, text, showButtons){
   if(showButtons == false){
     speakerImg.style.display = "none";
     pauseImg.style.display = "none";
-}
+  }
 
   newMessage.appendChild(newP);
   $(".bot-messages").append(newMessage);
@@ -255,8 +262,6 @@ function appendMessage(isBot, isUser, text, showButtons){
 
 //CHAT REPLIES AND INPUTS
 function chatSetup(text, holdMessages, showButtons){
-  //console.log(holdMessages);
-  //console.log("chatSetup: " + text);
   var messages = document.querySelector(".bot-messages");
   if(holdMessages == "true" && audioCheckbox.checked == true){
     audioPlayer.addEventListener("ended", function(){

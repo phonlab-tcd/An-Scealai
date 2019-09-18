@@ -150,7 +150,7 @@
 ^ <button class="rive-button2" onclick="chatSetup('ceim 3')">Céim 3</button>
 
 + (níl|níor mhaith)
-- Ar mhaith leat an briathar ‘tabhair’ a dhéanamh: <br>
+- Ar mhaith leat an briathar "teigh" a dhéanamh: <br>
 ^ <button class="rive-button2" onclick="chatSetup('chaite')">Aimsir Chaite</button><br>
 ^ <button class="rive-button2" onclick="chatSetup('laithreach')">Aimsir Laithreach</button><br>
 ^ <button class="rive-button2" onclick="chatSetup('coinniollach')">Modh Coinniollach</button><br>
@@ -421,7 +421,7 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (aimsir chaite|chaite)
-  - <call>setKeepMessages true</call><call>loadFromChat teighMCAC chaite</call>
+  - <call>setKeepMessages true</call><call>loadFromChat teighAC chaite</call>
 
   + (aimsir laithreach|laithreach)
   - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>

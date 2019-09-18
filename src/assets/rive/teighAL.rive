@@ -176,7 +176,7 @@
 - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
 + (modh coinniollach|coinniollach)
-- <call>setKeepMessages true</call><call>loadFromChat teighrMC</call>
+- <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 
 + *
 - Tá brón orm cad a dúirt tú?

@@ -118,7 +118,7 @@ function editMessageForAudio(){
 
 function testCallAudio(testString, id){
   console.log(testString);
-  var messageBubble = {text: testString, dialect: "GD"};
+  var messageBubble = {text: testString, dialect: thisDialect};
   if(thisDialect == "connemara") messageBubble.dialect = "CM";
   else if(thisDialect == "donegal") messageBubble.dialect = "GD";
   else if(thisDialect == "kerry") messageBubble.dialect = "MU";

@@ -82,7 +82,7 @@ export class TeacherStoryComponent implements OnInit {
       this.recorder.ondataavailable = e => {
         this.chunks.push(e.data);
         if(this.recorder.state == 'inactive') {
-          
+
         };
       };
       console.log('got media successfully');

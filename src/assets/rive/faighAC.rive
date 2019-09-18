@@ -139,6 +139,22 @@
   return "";
 < object
 
+> object askName javascript
+  return askName();
+< object
+
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
++ askname
+- <call>askName</call>
+
++ (_|_ is ainm dom)
+- <call>storeName <formal></call>
+^ Fáilte romhat isteach, a <call>getName</call>.\s
+^ <call>chatSetup start true</call>
+
 + start
 - Inniu táimid ag foghlaim <b><i>faigh</i></b>.\s
 ^ Cén aimsir ar mhaith leat a dhéanamh, a <call>getName</call>? <br>

@@ -259,7 +259,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .homeButton{
   position: absolute;
   top: 5px;
-  right: 25px;
+  right: 65px;
   color: white;
 }
 
@@ -283,7 +283,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   transition: 0.7s;
   opacity: 0;
   z-index: 1;
-  display: none;
+  display: block;
   /*right: 350px;*/
 }
 
@@ -319,6 +319,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   z-index: 5;
 }
 
+.bot-content li{
+  margin-top: 3px;
+}
+
 
 .bot-content li:hover{
   cursor: pointer;
@@ -330,10 +334,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   height: 30px;
   width: 30px;
   cursor: pointer;
-  right: 17px;
+  right: 20px;
   top: 4px;
   color: white;
-  display: none;
+  display: flex;
 }
 
 .bot-contents-button:hover{
@@ -453,6 +457,32 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   top: 5px;
   left: 5px;
   font-family: sans-serif;
+}
+
+.recording{
+  display: none;
+  position: fixed;
+  width: 300px;
+  height: 80px;
+  bottom: 70px;
+  right: 20px;
+  background-color: #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 5;
+  box-shadow: 1px 1px 1px 0px #ccc;
+}
+
+#stopRecording{
+  position: absolute;
+  border-radius: 5px;
+  right: 40px;
+  top: 15px;
+}
+
+.recording-message{
+  position: absolute;
+  top: 20px;
 }
 
 /* RiveScript buttons */

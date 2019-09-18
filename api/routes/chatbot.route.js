@@ -6,6 +6,10 @@ const https = require("https");
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const multer = require('multer');
+const { Readable } = require('stream');
+const formidable = require('formidable')
+const util = require('util');
 
 // Require Chatbot model in our routes module
 let Models = require('../models/Chatbot');
@@ -118,6 +122,10 @@ chatbotRoute.route('/getAudio').post(function(req, res){
   } else {
     res.json({status: '404', message: 'Text not found'});
   }
+});
+
+chatbotRoute.route('/addAudio/').post((req, res) => {
+  console.log("e");
 });
 
 module.exports = chatbotRoute;

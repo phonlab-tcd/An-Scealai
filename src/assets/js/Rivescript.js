@@ -158,7 +158,7 @@ function triailAris(){
   }
   else if(wrongCount == 4){
     var link =   "https://www.teanglann.ie/ga/gram/" + thisVerb;
-    thisHint = "<b>Hint:</b> <a href=\"javascript:void(0)\" onclick=\"openHint()\"><button class='rive-button'>www.teanglann.ie</button></a>"
+    thisHint = "<b>Hint:</b> <a href=\"javascript:void(0)\" onclick=\"openHintWindowPopup()\"><button class='rive-button'>www.teanglann.ie</button></a>"
   }
   else if(wrongCount == 6){
     thisHint = "<i><b>Freagra:</b></i> " + currentQuestion.answer + ". ";
@@ -172,8 +172,9 @@ function triailAris(){
   return rep[ran] + getName() + ". <br><br>" + thisHint;
 }
 
-function openHint(){
-  window.open("https://www.teanglann.ie/ga/gram/" + thisVerb, "_blank")
+function openHintWindowPopup(){
+  var url  = "https://www.teanglann.ie/ga/gram/" + thisVerb;
+  window.open(url,'popUpWindow','height=500,width=700,left=50,top=50,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes');
 }
 
 function nilToCeim(){

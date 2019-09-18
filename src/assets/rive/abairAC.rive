@@ -149,9 +149,14 @@
   return holdMessages;
 < object
 
-> object console javascript
-  console.log("blah");
+> object askName javascript
+  return askName();
 < object
+
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
 
 + start
 - Inniu táimid ag foghlaim <b><i>abair</i></b>.\s
@@ -162,6 +167,14 @@
 ^ <button class="rive-button" onclick="chatSetup('abair-mc')">Modh Coinniollach</button>
 ^ <button class="rive-button2" onclick="chatSetupQuiz('abair')">Abair Quiz</button>
 ^ <call>setCompletedLevel</call>
+
++ askname
+- <call>askName</call>
+
++ (_|_ is ainm dom)
+- <call>storeName <formal></call>
+^ Fáilte romhat isteach, a <call>getName</call>.\s
+^ <call>chatSetup start true</call>
 
 + (chaite|aimsir chaite)
 - Cén céim ar mhaith leat a dhéanamh san aimsir chaite:<br>
