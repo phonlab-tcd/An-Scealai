@@ -39,6 +39,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
+import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 
 
 
@@ -70,6 +71,7 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
     TeacherPanelComponent,
     AdminClassroomComponent,
     SynthesisComponent,
+    StoryHistoryComponent,
   ],
   imports: [
     BrowserModule,

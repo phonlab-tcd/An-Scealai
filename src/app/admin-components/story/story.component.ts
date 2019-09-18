@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -14,7 +14,8 @@ export class StoryComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private http: HttpClient,
               protected sanitizer: DomSanitizer,
-              private storyService: StoryService,) { }
+              private storyService: StoryService,
+              private router: Router) { }
 
   story : any;
   audioSource : SafeUrl;
@@ -42,6 +43,10 @@ export class StoryComponent implements OnInit {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       console.log(this.audioSource);
     });
+  }
+
+  goToStoryHistory() {
+    this.router.navigateByUrl('/admin/story-history/' + this.story._id);
   }
 
 }

@@ -32,6 +32,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { CanDeactivateGuard } from './can-deactivate.guard';
+import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: 'classroom/:id',
         component: AdminClassroomComponent,
+      },
+      {
+        path: 'story-history/:id',
+        component: StoryHistoryComponent,
       },
     ]
   },

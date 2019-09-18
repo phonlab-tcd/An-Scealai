@@ -153,7 +153,21 @@
     background-color: white;
     border-radius: 5px;
     margin: 8px;
-    height: 60vh;
+    height: 55vh;
+}
+
+.greenBtn {
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-top: -3px;
+    color: white;
+    background-color: #70a87f;
+    border-radius: 5px;
+}
+
+.greenBtn:hover {
+    background-color: #304e38;
+    transition: 0.5s;
 }
 
 .userInfoTextarea {

@@ -45,7 +45,7 @@ engagementRoutes.route('/eventsForUser/:id').get((req, res) => {
 });
 
 engagementRoutes.route('/eventsForStory/:id').get((req, res) => {
-    Event.find({'storyId':req.params.id}, (err, events) => {
+    Event.find({"storyData._id" : req.params.id}, (err, events) => {
         if(err) {
             res.json(err);
         }
