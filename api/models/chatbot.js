@@ -28,7 +28,7 @@ var LogModel = mongoose.model('Log', Log);
 
 let Chatbot = new Schema({
   username: { type: String },
-  user_id: { type: String },
+  _id: { type: String },
   logs: [Log],
 },
   {

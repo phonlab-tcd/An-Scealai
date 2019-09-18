@@ -28,39 +28,44 @@ chatbotRoute.route('/addUser').post(function(req, res){
 
 //Add to logs by id/name
 chatbotRoute.route('/addLog/:name').post(function(req, res){
-  let log = new Models.Log(req.body);
-  let date = log.date;
-  fs.appendFileSync('./logs.txt', "\n" + "Date: " + date + "\n", function(err){
-    if(err) console.log(err);
-    else console.log("fs logged");
-  });
-  for(i = 0; i < log.conversation.length; i++){
-    console.log(log.conversation[i].text);
-    var from = "";
-    if(log.conversation[i].sentByBot == true) from = "Bot: ";
-    else from = "User: ";
-
-    fs.appendFileSync('./logs.txt', from + log.conversation[i].text + "\n", function(err){
-      if(err) console.log(err);
-      else console.log("fs logged");
-    });
+  var obj = req.body;
+  var newLog = {
+    date: obj.date,
+    topic: obj.topic,
+    complete: obj.complete,
+    conversation: obj.conversation
   }
+  let log = new Models.Log(newLog);
   Models.Chatbot.findOne({"username": req.params.name}, function(err, bot){
-    //console.log(bot.username);
-    //console.log(JSON.stringify(bot.logs));
-    bot.logs.push(log);
-    bot.save().then(bot =>{
+    var thisBot;
+    if(bot){
+      thisBot = bot;
+      thisBot.logs.push(log);
+    }
+    else{
+      var newUserBotObj = {
+        username: req.params.name,
+        _id: obj._id,
+        logs: []
+      }
+      thisBot = new Models.Chatbot(newUserBotObj);
+      thisBot.logs.push(log);
+    }
+    console.log(thisBot);
+
+    thisBot.save().then(thisBot =>{
       res.json('Update complete');
     }).catch(err => {
       res.status(400).send("Unable to update");
     });
-    //console.log(JSON.stringify(bot.logs));
   });
 });
 
 //clear logs by username
 chatbotRoute.route('/clearLogs/:name').get(function(req, res){
   Models.Chatbot.findOne({"username": req.params.name}, function(err, bot){
+    console.log(bot);
+    console.log(req.params.name)
     if(err) res.status(400).send("Unable to update");
     else{
       bot.logs = [];
@@ -74,7 +79,7 @@ chatbotRoute.route('/clearLogs/:name').get(function(req, res){
 
 chatbotRoute.route('/getAudio').post(function(req, res){
   let bubble = new Models.AudioBubble(req.body);
-  console.log(bubble);
+  //console.log(bubble);
   if(bubble.text){
     var form = {
       Input: bubble.text,
@@ -112,7 +117,7 @@ chatbotRoute.route('/getAudio').post(function(req, res){
             }
             paragraphs.push(sentences);
         }
-        console.log("Success!");
+        //console.log("Success!");
         res.json({ html : paragraphs, audio : urls });
       } else {
         console.log("Fail");

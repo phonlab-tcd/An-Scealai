@@ -50,18 +50,6 @@ function setup(){
   dictText = document.querySelector(".dictText");
   dictTri = document.querySelector(".bot-tri");
 
-
-  //if the 'chatbot' button is clicked
-  var button = document.getElementById("bot-chat-button");
-  if(button){
-    button.addEventListener("click", function(){
-      play = false;
-      $(".bot-messages").empty();
-      if(audioCheckbox.checked == false) audioCheckbox.checked = true;
-      load("BriathraNeamhrialta", "start");
-    });
-  }
-
   //collapsable menu for the contents
   var coll = document.getElementsByClassName("bot-collapsable");
   var i;
@@ -89,9 +77,13 @@ function setup(){
 function showBot(){
   var bot = document.querySelector(".bot-bg-modal");
   var menu = document.querySelector(".bot-contents");
-  //console.log(bot);
   bot.style.right = "0px";
   menu.style.right = "200px";
+
+  play = false;
+  $(".bot-messages").empty();
+  if(audioCheckbox.checked == false) audioCheckbox.checked = true;
+  load("BriathraNeamhrialta", "start");
 }
 
 function hideBot(){
@@ -133,7 +125,7 @@ function load(fileId, start, toPlay){
     thisFile = fileId;
 
     if(toPlay) play = true;
-    if(fileId == "start"){
+    if(fileId == "BriathraNeamhrialta"){
       switchTopic = false;
       currentTopic = fileId;
     }
