@@ -194,6 +194,13 @@ function nilToCleachtadh(){
   return "";
 }
 
+function missingContentMessage(){
+  var missingCont = ["Ó, níl na ceisteanna réidh don chuid seo go fóillín. Bogfaimid ar aghaigh go dtí an chéad chuid eile.", "A " + getName() + "níl an chuid seo ullmhaithe i gceart duit go fóill. Bogfaimid " +
+  "ar aghaidh.", "A " + getName() + "bogfaimid ar aghaidh is cosúil nach bhfuil an chuid seo réidh.", "A " + getName() + "bogfaimid ar aghaidh níor smaoinigh mé ar cheisteanna duit anseo go fóill."];
+  var ran = getRandomIntInclusive(0, missingCont.length - 1);
+  return missingCont[ran];
+}
+
 function getCrioch(){
   var crioch = ["Maith thú, a " + getName() + ", sin deireadh leis an gcleachtadh anois!", "Fágfaidh mé slán anseo agat! Bhí sé go deas bheith ag caint leat, a " +
   getName(), "Slán go fóill, a " + getName() + ". Beimid ag caint arís tá súil agam.", "Bhí sé go deas bheith ag caint leat. Más maith leat cleachtadh eile a dhéanamh téigh go dtí an leathanach baile."];

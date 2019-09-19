@@ -68,18 +68,20 @@ function setup(){
   }
 
   var home = document.querySelector(".homeButton");
-  home.addEventListener("click", function(){
-    if(thisFile != "BriathraNeamhrialta") load("BriathraNeamhrialta", "start");
-  });
-
+  if(home){
+    home.addEventListener("click", function(){
+      if(thisFile != "BriathraNeamhrialta") load("BriathraNeamhrialta", "start");
+    });
+  }
 }
 
 function showBot(){
+  getUserDetails();
   var bot = document.querySelector(".bot-bg-modal");
   var menu = document.querySelector(".bot-contents");
   bot.style.right = "0px";
   menu.style.right = "200px";
-
+  
   play = false;
   $(".bot-messages").empty();
   if(audioCheckbox.checked == false) audioCheckbox.checked = true;
@@ -96,6 +98,8 @@ function hideBot(){
   menu.style.opacity = "0";
   clearName();
   audioPlayer.pause();
+  sendLog();
+  currentTopic = "";
 }
 
 function showContents(){
@@ -120,18 +124,21 @@ function load(fileId, start, toPlay){
       thisVerb = fileId.substr(0, length);
       if(thisVerb == "bi") thisVerb = "bí";
       else if(thisVerb == "teigh") thisVerb = "téigh";
+      else if(thisVerb == "dean") thisVerb = "déan";
     }
 
     thisFile = fileId;
 
     if(toPlay) play = true;
-    if(fileId == "BriathraNeamhrialta"){
+    if(thisFile == "BriathraNeamhrialta"){
       switchTopic = false;
       currentTopic = fileId;
     }
     else{
       currentTopic = fileId;
+      console.log(currentTopic);
       switchTopic = true;
+      sendLog();
     }
 
     console.log("To Load: " + fileId);
@@ -261,7 +268,6 @@ function chatSetup(text, holdMessages, showButtons){
       bot.reply("local-user", text).then( (reply) => {
         if(reply != ""){
           //console.log(reply);
-          makeMessageObj(true, reply);
           appendTypingIndicator();
           setTimeout(function(){
             appendMessage(true, false, reply, showButtons);
@@ -277,7 +283,6 @@ function chatSetup(text, holdMessages, showButtons){
     bot.reply("local-user", text).then( (reply) => {
       if(reply != ""){
         //console.log(reply);
-        makeMessageObj(true, reply);
         appendTypingIndicator();
         setTimeout(function(){
           appendMessage(true, false, reply, showButtons);
@@ -299,14 +304,12 @@ function chat(){
   });
   if(input != ""){
     document.getElementById("bot-user_input").value = "";
-    makeMessageObj(false, input);
     appendMessage(false, true, input);
     audio(input, bubbleId, true)
     $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
   }
   bot.reply("local-user", input).then( (reply) => {
     if(reply != ""){
-      makeMessageObj(true, reply);
       appendTypingIndicator();
       setTimeout(function(){
         appendMessage(true, false, reply);

@@ -9,6 +9,7 @@ var botObj = {
   role: "",
   logs: []
 }
+var thisPayload = "";
 getUserDetails();
 
 
@@ -23,28 +24,27 @@ function getUserDetails(){
   } else {
     return null;
   }
-
 }
 
 //build conversation with array of message objects, then add to logs in db when a new topic is started
-function makeMessageObj(sentByBot, text){
-  if(switchTopic){
-    if(level1Complete == true && level2Complete == true && level3Complete == true) complete = true;
-    logToAdd.date = new Date().toISOString();
-    logToAdd.complete = complete;
-    logToAdd.conversation = messages;
-    if(logToAdd.topic != ""){
-      postLogToDb(logToAdd);
-      messages = [];
-      switchTopic = false;
-      complete = false;
-    }
-  }
-  else{
-    logToAdd.topic = currentTopic;
-    date = new Date().toISOString();
-    var newMessage = {date: date, sentByBot: sentByBot, text: text};
-    messages.push(newMessage);
+function makeMessageObj(isUser, text){
+  if(currentTopic) logToAdd.topic = currentTopic;
+  date = new Date().toISOString();
+  var newMessage = {date: date, isUser: isUser, text: text};
+  messages.push(newMessage);
+}
+
+function sendLog(){
+  console.log(messages);
+  if(level1Complete == true && level2Complete == true && level3Complete == true) complete = true;
+  logToAdd.date = new Date().toISOString();
+  logToAdd.complete = complete;
+  logToAdd.conversation = messages;
+  if(logToAdd.topic != ""){
+    postLogToDb(logToAdd);
+    messages = [];
+    switchTopic = false;
+    complete = false;
   }
 }
 
@@ -60,15 +60,17 @@ function addUserToDb(chatbotObj){
 
 //add log to db
 function postLogToDb(logObj){
-  logObj.username = thisPayload.username;
-  logObj.role = thisPayload.role;
-  logObj._id = thisPayload._id;
-  console.log(logObj);
-  request.open('POST', 'http://localhost:4000/Chatbot/addLog/' + thisPayload.username, true);
-  request.setRequestHeader("Content-type", "application/json");
-  request.send(JSON.stringify(logObj));
-  request.onload = function(){
-    console.log(this.response);
+  if(logObj){
+    logObj.username = thisPayload.username;
+    logObj.role = thisPayload.role;
+    logObj._id = thisPayload._id;
+    console.log(logObj);
+    request.open('POST', 'http://localhost:4000/Chatbot/addLog/', true);
+    request.setRequestHeader("Content-type", "application/json");
+    request.send(JSON.stringify(logObj));
+    request.onload = function(){
+      console.log(this.response);
+    }
   }
 }
 

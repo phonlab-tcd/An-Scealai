@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // Define collection and schema for Chatbot
 let Message = new Schema({
   date: { type: Date },
-  sentByBot: { type: Boolean },
+  isUser: { type: Boolean },
   text: { type: String },
 },
   {
@@ -29,6 +29,7 @@ var LogModel = mongoose.model('Log', Log);
 let Chatbot = new Schema({
   username: { type: String },
   _id: { type: String },
+  role: { type: String },
   logs: [Log],
 },
   {

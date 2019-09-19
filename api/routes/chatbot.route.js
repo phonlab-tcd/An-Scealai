@@ -27,7 +27,7 @@ chatbotRoute.route('/addUser').post(function(req, res){
 });
 
 //Add to logs by id/name
-chatbotRoute.route('/addLog/:name').post(function(req, res){
+chatbotRoute.route('/addLog/').post(function(req, res){
   var obj = req.body;
   var newLog = {
     date: obj.date,
@@ -36,7 +36,7 @@ chatbotRoute.route('/addLog/:name').post(function(req, res){
     conversation: obj.conversation
   }
   let log = new Models.Log(newLog);
-  Models.Chatbot.findOne({"username": req.params.name}, function(err, bot){
+  Models.Chatbot.findOne({"username": obj.username}, function(err, bot){
     var thisBot;
     if(bot){
       thisBot = bot;
@@ -44,18 +44,18 @@ chatbotRoute.route('/addLog/:name').post(function(req, res){
     }
     else{
       var newUserBotObj = {
-        username: req.params.name,
+        username: obj.username,
         _id: obj._id,
+        role: obj.role,
         logs: []
       }
       thisBot = new Models.Chatbot(newUserBotObj);
       thisBot.logs.push(log);
     }
-    console.log(thisBot);
-
     thisBot.save().then(thisBot =>{
       res.json('Update complete');
     }).catch(err => {
+      console.log(err);
       res.status(400).send("Unable to update");
     });
   });

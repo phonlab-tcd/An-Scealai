@@ -6,7 +6,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContenxt;
 var audioContext = new AudioContext;
 var recordButton = document.querySelector(".record");
 var stopButton = document.querySelector("#stopRecording");
-stopButton.disabled = true;
+if(stopButton) stopButton.disabled = true;
 var recordList = document.querySelector(".recList");
 var thisBlob;
 
