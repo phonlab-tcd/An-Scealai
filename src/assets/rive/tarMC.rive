@@ -137,6 +137,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Tuigim go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘tar’ sa <b><i>mhodh coinníollach</i></b>, a <call>getName</call>.\s
 ^ An bhfuil an ceart agam?
@@ -360,8 +364,7 @@
   //^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button><call>setAnsweringQuestions false</call>
 
   + briatharsaor
-  - NEED TO FILL
-  ^ <call>chatSetup reidh true</call>
+  - <call>getMissingMessage</call>{topic=ceisteach}<call>chatSetup tosu true</call>
 
   + reidh
   - An bhfuil tú réidh chun an ceacht seo a thosú?
@@ -387,7 +390,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 3</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -453,7 +455,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 4</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -529,7 +530,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 5</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -587,7 +587,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 6</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>

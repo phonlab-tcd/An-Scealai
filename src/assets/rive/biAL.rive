@@ -137,6 +137,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - A <call>getName</call> táimid chun dul ag féachaint ar an mbriathar ‘bí’ agus an fhoirm atá aige san <b><i>aimsir láithreach</i></b>.
 ^ <call>setCompletedLevel</call><call>chatSetup tosu true</call>

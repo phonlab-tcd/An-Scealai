@@ -137,6 +137,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Tuigim go bhfuil tú ag iarraidh féachaint ar an mbriathar 'téigh' sa <b><i>mhodh coinníollach</i></b>, a <call>getName</call>.\s
 ^ An bhfuil an ceart agam?
@@ -351,6 +355,9 @@
   //^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button><call>setAnsweringQuestions false</call>
 
   + briatharsaor
+  - <call>getMissingMessage</call>{topic=ceisteach}<call>chatSetup tosu true</call>
+
+  /*
   - TBC
   ^ <call>chatSetup reidh true</call>
 
@@ -396,7 +403,7 @@
   - <call>setAnsweringQuestions false</call><call>chatSetup cleachtadh nowait</call>
 
   + (nil|níl|níor mhaith)
-  - <call>setAnsweringQuestions false</call>{topic=ceisteach}<call>chatSetup tosu nowait</call>
+  - <call>setAnsweringQuestions false</call>{topic=ceisteach}<call>chatSetup tosu nowait</call>*/
 
   + ceisteach
   - {topic=ceisteach}<call>chatSetup tosu nowait</call>

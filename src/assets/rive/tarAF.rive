@@ -138,6 +138,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Creidim, a <call>getName</call> go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘tar’ san <b><i>aimsir fháistineach</i></b>.\s
 ^ An bhfuil an ceart agam?
@@ -316,7 +320,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 2</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -384,7 +387,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 3</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -609,26 +611,9 @@
 
 > topic coibhneasta
   + tosu
-  - NEED TO FILL
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
-  + quote
-  - “Éist go cúramach lena ndéarfaidh mé leat.” <call>chatSetup bain true</call>
-
-  + bain
-  - Bain triail as na samplaí seo a leanas, a <call>getName</call>, agus rachaidh tú i dtaithí orthu. <call>chatSetup reidh true</call>
-
-  + reidh
-  - An bhfuil tú réidh?
-
-  + (tá|ba mhaith|sea)
-  % an bhfuil tú réidh
-  - <call>chatSetup cleachtadh nowait</call>
-
-  + (níl|níor mhaith)
-  % an bhfuil tú réidh
-  - <call>nilToCeim</call>
-
-  + cleachtadh
+  /*+ cleachtadh
   - <call>levelComplete false</call><call>getRandomQuestion 18</call><call>resetProgress</call><call>setAnsweringQuestions true</call>
 
   + *
@@ -656,7 +641,7 @@
 
   + master
   - Tá máistreacht agat anois ar an mbriathar “tar” san aimsir fháistineach. \s
-  ^ {topic=extraquestions}<call>chatSetup tosu true</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu true</call>*/
 
   + briathar saor
   - {topic=level3}<call>chatSetup briatharsaor nowait</call>

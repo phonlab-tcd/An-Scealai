@@ -137,6 +137,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Anois, a <call>getName</call> táimid chun dul ag féachaint ar an mbriathar ‘tar’ agus an fhoirm atá aige san <b><i>aimsir láithreach</i></b>.
 ^ <call>setCompletedLevel</call><call>chatSetup tosu true</call>
@@ -564,26 +568,9 @@
 
 > topic coibhneasta
   + tosu
-  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an píosa deireanach?
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
-  + (tá|ba mhaith|sea)
-  - NEED TO FILL IN
-
-  + (níl|níor mhaith)
-  - <call>nilToCeim</call>
-
-  + reidh
-  - An bhfuil tú réidh?
-
-  + (níl|níor mhaith)
-  % an bhfuil tú réidh
-  - Sin a bhfuil mar sin. Slán go fóill agus bain triail as gné eile den ghramadach uair éigin eile. Slán!
-
-  + (tá|ba mhaith|sea)
-  % an bhfuil tú réidh
-  - <call>chatSetup ceist nowait</call>
-
-  + ceist
+  /*+ ceist
   - <call>levelComplete false</call><call>getRandomQuestion 6</call><call>setAnsweringQuestions true</call><call>resetProgress</call>
 
   + *
@@ -610,7 +597,7 @@
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
   - <call>setAnsweringQuestions false</call>
-  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat tarAC chaite</call>
@@ -651,7 +638,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 7</call>
   * <call>checkAnswer <star></call> == false => Mícheart <call>resetProgress</call><call>triailAris</call><br>

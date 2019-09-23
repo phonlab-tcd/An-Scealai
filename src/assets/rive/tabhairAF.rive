@@ -138,6 +138,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Creidim, a <call>getName</call> go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘tabhair’ san <b><i>aimsir fháistineach</i></b>.\s
 ^ An bhfuil an ceart agam?
@@ -603,6 +607,10 @@
 
 > topic coibhneasta
   + tosu
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
+
+  /*
+
   - NEED TO FILL
 
   + quote
@@ -650,7 +658,7 @@
 
   + master
   - Tá máistreacht agat anois ar an mbriathar “tabhair” san aimsir fháistineach. \s
-  ^ {topic=extraquestions}<call>chatSetup tosu true</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu true</call>*/
 
   + briathar saor
   - {topic=level3}<call>chatSetup briatharsaor nowait</call>

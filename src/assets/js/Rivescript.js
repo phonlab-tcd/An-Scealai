@@ -195,8 +195,8 @@ function nilToCleachtadh(){
 }
 
 function missingContentMessage(){
-  var missingCont = ["Ó, níl na ceisteanna réidh don chuid seo go fóillín. Bogfaimid ar aghaigh go dtí an chéad chuid eile.", "A " + getName() + "níl an chuid seo ullmhaithe i gceart duit go fóill. Bogfaimid " +
-  "ar aghaidh.", "A " + getName() + "bogfaimid ar aghaidh is cosúil nach bhfuil an chuid seo réidh.", "A " + getName() + "bogfaimid ar aghaidh níor smaoinigh mé ar cheisteanna duit anseo go fóill."];
+  var missingCont = ["Ó, níl na ceisteanna réidh don chuid seo go fóillín. Bogfaimid ar aghaigh go dtí an chéad chuid eile.", "A " + getName() + " níl an chuid seo ullmhaithe i gceart duit go fóill. Bogfaimid " +
+  "ar aghaidh.", "A " + getName() + " bogfaimid ar aghaidh is cosúil nach bhfuil an chuid seo réidh.", "A " + getName() + "bogfaimid ar aghaidh níor smaoinigh mé ar cheisteanna duit anseo go fóill."];
   var ran = getRandomIntInclusive(0, missingCont.length - 1);
   return missingCont[ran];
 }

@@ -138,6 +138,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Creidim, a <call>getName</call> go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘clois’ san <b><i>aimsir fháistineach</i></b>.\s
 ^ An bhfuil an ceart agam?
@@ -551,6 +555,9 @@
 
 > topic spleach
   + tosu
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
+
+  /*
   - TBC
   ^ <call>chatSetup seasann true</call>
 

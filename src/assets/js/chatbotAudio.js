@@ -10,7 +10,6 @@ var donegal;
 var bubbleObjArr = [];
 var thisId = 0;
 var duration;
-var isPlaying = false;
 var thisDialect = "";
 var thisGender = "";
 var isPlaying = false;

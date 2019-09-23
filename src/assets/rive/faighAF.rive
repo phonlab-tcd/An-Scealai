@@ -137,6 +137,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Creidim, a <call>getName</call> go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘faigh’ san <b><i>aimsir fháistineach</i></b>.\s
 ^ An bhfuil an ceart agam?
@@ -530,6 +534,9 @@
 
 > topic spleach
   + tosu
+  - <call>getMissingMessage</call>{topic=coibhneasta}<call>chatSetup tosu true</call>
+
+  /*
   - Féachaimis anois ar an gclaoninsint. an difríocht idir an fhoirm spleách agus an fhoirm neamhspleách den bhriathar.\s
   ^ Deirtear go bhfuil an briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile:
   ^ <call>chatSetup seasann true</call>
@@ -573,7 +580,7 @@
 
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
-  - <call>setAnsweringQuestions false</call><call>chatSetup coibhneasta true</call>
+  - <call>setAnsweringQuestions false</call><call>chatSetup coibhneasta true</call>*/
 
   + coibhneasta
   - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhorainm coibhneasta?
@@ -610,6 +617,9 @@
 
 > topic coibhneasta
   + tosu
+  - <call>c=getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
+
+  /*
   - Ar aghaidh linn mar sin go forainm coibhneasta an mhéid. \s
   ^ Ciallaíonn “a ndéarfaidh mé leat” gach aon rud a déarfaidh mé leat.<call>chatSetup quote true</call>
 
@@ -635,7 +645,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 18</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -658,7 +667,7 @@
 
   + master
   - Tá máistreacht agat anois ar an mbriathar “faigh” san aimsir fháistineach. \s
-  ^ {topic=extraquestions}<call>chatSetup tosu true</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu true</call>*/
 
   + briathar saor
   - {topic=level3}<call>chatSetup briatharsaor nowait</call>
@@ -699,7 +708,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 7</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>

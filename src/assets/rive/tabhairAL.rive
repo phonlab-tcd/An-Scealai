@@ -138,6 +138,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Anois, a <call>getName</call> táimid chun dul ag féachaint ar an mbriathar ‘tabhair’ agus an fhoirm atá aige san <b><i>aimsir láithreach</i></b>.
 ^ <call>setCompletedLevel</call><call>chatSetup tosu true</call>
@@ -597,6 +601,9 @@
 
 > topic coibhneasta
   + tosu
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
+
+  /*
   - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an píosa deireanach?
 
   + (tá|ba mhaith|sea)
@@ -643,7 +650,7 @@
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
   - <call>setAnsweringQuestions false</call>
-  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat tabhairAC chaite</call>

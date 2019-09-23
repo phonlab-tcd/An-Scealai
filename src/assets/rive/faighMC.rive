@@ -136,6 +136,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Tuigim go bhfuil tú ag iarraidh féachaint ar an mbriathar ‘faigh’ sa <b><i>mhodh coinníollach</i></b>, a <call>getName</call>.\s
 ^ An bhfuil an ceart agam?
@@ -365,7 +369,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 3</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -559,6 +562,9 @@
 
 > topic extraquestions
   + tosu
+  - <call>getMissingMessage</call><call>getCrioch</call>
+
+  /*
   - An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar ‘faigh’ sa mhodh coinníollach?
 
   + (tá|ba mhaith|sea)
@@ -570,7 +576,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 6</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -591,7 +596,7 @@
 
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
-  - Tá sé sin go breá. Ar ais go dtí an leathanach baile mar sin.
+  - Tá sé sin go breá. Ar ais go dtí an leathanach baile mar sin.*/
 
   + briathar saor
   - {topic=level3}<call>chatSetup briatharsaor nowait</call>

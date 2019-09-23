@@ -81,7 +81,7 @@ function showBot(){
   var menu = document.querySelector(".bot-contents");
   bot.style.right = "0px";
   menu.style.right = "200px";
-  
+
   play = false;
   $(".bot-messages").empty();
   if(audioCheckbox.checked == false) audioCheckbox.checked = true;
@@ -272,7 +272,6 @@ function chatSetup(text, holdMessages, showButtons){
           setTimeout(function(){
             appendMessage(true, false, reply, showButtons);
             if(play) audio(reply, bubbleId, false);
-
             $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
           }, 1200);
         }
