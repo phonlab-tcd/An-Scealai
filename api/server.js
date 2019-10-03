@@ -6,7 +6,6 @@ const express = require('express'),
     config = require('./DB'),
     passport = require('passport');
 
-
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');

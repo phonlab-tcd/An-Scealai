@@ -244,11 +244,11 @@
   + ceart
   - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
+  + (tá|sea|ba mhaith|tuigim|tuigeann mé|tuigeann)
   % an dtuigeann tú mé
   - <call>chatSetup bain nowait</call>
 
-  + (níl|níor mhaith)
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
   % an dtuigeann tú mé
   - Ah ceart go leor, a <call>getName</call>. Míneoidh mé arís.
   ^ <call>chatSetup next true</call>
@@ -325,10 +325,10 @@
     ^ <call>chatSetup te true</call>
 
     + te
-    - Tuigim?
+    - An dtuigeann tú an méid sin?
 
-    + (tá|sea|ba mhaith)
-    % tuigim
+    + (tá|sea|ba mhaith|tuigim|tuigeann mé|tuigeann)
+    % an dtuigeann tú an méid sin
     - Ceart go leor, a <call>getName</call>. 😁 Anois déanfaimid cúpla cleachtadh.
     ^ <call>chatSetup cleachtadh true</call>
 
@@ -406,14 +406,14 @@
   ^ <call>chatSetup anssd true</call>
 
   + anssd
-  - A dhéanann sé ciall?
+  - An ndéanann sé sin ciall?
 
-  + (tá|sea|ba mhaith)
-  % a dhéanann sé ciall
+  + (tá|sea|ba mhaith|déanann)
+  % an ndéanann sé sin ciall
   - Ceart go leor, a <call>getName</call>. 😆 An bhfuil tú réidh chun cleachtadh beag a dhéanamh air seo?
 
-  + (níl|níor mhaith)
-  % a dhéanann sé ciall
+  + (níl|níor mhaith|ní dhéanann)
+  % an ndéanann sé sin ciall
   - Níl aon fhadhb ar chor ar bith, a <call>getName</call>.
   ^ <call>chatSetup usad true</call>
 

@@ -234,6 +234,13 @@ function getCurrentAnswer(){
   return currentQuestion.answer;
 }
 
+function getTranslation(){
+  console.log(currentQuestion);
+  if("translation" in currentQuestion){
+    dictText.innerHTML = currentQuestion.translastion;
+  }
+}
+
 function getRandomReply(){
   if(isLevelComplete == true && quiz == false) return "";
   if(isQuizComplete == true) return "";
@@ -244,6 +251,390 @@ function getRandomReply(){
   var replies = [reply, reply2, reply3, reply4];
   var i = getRandomIntInclusive(0, replies.length-1);
   return replies[i];
+}
+
+function getQuizArray(tense){
+  var verbs = ["abair", "bi", "beir", "clois", "dean", "faigh", "feic", "ith", "tabhair", "tar", "teigh"];
+  var topics = ["Questions", "Ni", "BriatharSaor", "Ceisteach", "Spleach", "Coibhneasta"];
+  var ac = "AC";
+  for(i = 0; i < verbs.length; i++){
+    var thisVerb = verbs[i];
+    for(j = 1; j < topics.length + 1; j++){
+      var ran = getRandomIntInclusive(0, 9);
+      var array = getQuestion(thisVerb, j, ran, tense);
+      //BQuizArray.push(array[ran]);
+    }
+  }
+}
+
+function getQuestion(verb, topic, ran, tense){
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "beir"){
+    if(tense == "AC"){
+      if(topic == 1) return beirACQuestions[ran];
+      else if(topic == 2) return beirACNi[ran];
+      else if(topic == 3) return beirACBriatharSaor[ran];
+      else if(topic == 4) return beirACCeisteach[ran];
+      else if(topic == 5) return beirACSpleach[ran];
+      else if(topic == 6) return beirACCoibhneasta[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return beirALQuestions[ran];
+      else if(topic == 2) return beirALNi[ran];
+      else if(topic == 3) return beirALBriatharSaor[ran];
+      else if(topic == 4) return beirALCeisteach[ran];
+      else if(topic == 5) return beirALSpleach[ran];
+      else if(topic == 6) return beirALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return beirAFQuestions[ran];
+      else if(topic == 2) return beirAFNi[ran];
+      else if(topic == 3) return beirAFBriatharSaor[ran];
+      else if(topic == 4) return beirAFCeisteach[ran];
+      else if(topic == 5) return beirAFSpleach[ran];
+      else if(topic == 6) return beirAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return beirMCQuestions[ran];
+      else if(topic == 2) return beirMCNi[ran];
+      else if(topic == 3) return beirMCBriatharSaor[ran];
+      else if(topic == 4) return beirMCCeisteach[ran];
+      else if(topic == 5) return beirMCSpleach[ran];
+    }
+  }
+
+  if(verb == "bi"){
+    if(tense == "AC"){
+      if(topic == 1) return biACQuestions[ran];
+      else if(topic == 2) return biACNi[ran];
+      else if(topic == 3) return biACBriatharSaor[ran];
+      else if(topic == 4) return biACCeisteach[ran];
+      else if(topic == 5) return biACSpleach[ran];
+      else if(topic == 6) return biACCoibhneasta[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return biALQuestions[ran];
+      else if(topic == 2) return biALNi[ran];
+      else if(topic == 3) return biALBriatharSaor[ran];
+      else if(topic == 4) return biALCeisteach[ran];
+      else if(topic == 5) return biALSpleach[ran];
+      else if(topic == 6) return biALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return biAFQuestions[ran];
+      else if(topic == 2) return biAFNi[ran];
+      else if(topic == 3) return biAFBriatharSaor[ran];
+      else if(topic == 4) return biAFCeisteach[ran];
+      else if(topic == 5) return biAFSpleach[ran];
+      else if(topic == 6) return biAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return biMCQuestions[ran];
+      else if(topic == 2) return biMCNi[ran];
+      else if(topic == 3) return biMCBriatharSaor[ran];
+      else if(topic == 4) return biMCCeisteach[ran];
+      else if(topic == 5) return biMCSpleach[ran];
+    }
+  }
+
+  if(verb == "clois"){
+    if(tense == "AC"){
+      if(topic == 1) return cloisACQuestions[ran];
+      else if(topic == 2) return cloisACNi[ran];
+      else if(topic == 3) return cloisACBritharsaor[ran];
+      else if(topic == 4) return cloisACCeisteach[ran];
+      else if(topic == 5) return cloisACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return cloisALQuestions[ran];
+      else if(topic == 2) return cloisALNi[ran];
+      else if(topic == 3) return cloisALBriatharSaor[ran];
+      else if(topic == 4) return cloisALCeisteach[ran];
+      else if(topic == 5) return cloisALSpleach[ran];
+      else if(topic == 6) return cloisALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return cloisAFQuestions[ran];
+      else if(topic == 2) return cloisAFNi[ran];
+      else if(topic == 3) return cloisAFBriatharSaor[ran];
+      else if(topic == 4) return cloisAFCeisteach[ran];
+      else if(topic == 5) return cloisAFSpleach[ran];
+      else if(topic == 6) return cloisAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return cloisMCQuestions[ran];
+      else if(topic == 2) return cloisMCNi[ran];
+      else if(topic == 3) return cloisMCBriatharSaor[ran];
+      else if(topic == 4) return cloisMCCeisteach[ran];
+      else if(topic == 5) return cloisMCSpleach[ran];
+    }
+  }
+
+  if(verb == "dean"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+  if(verb == "abair"){
+    if(tense == "AC"){
+      if(topic == 1) return abairAimsirChaiteQuestions[ran];
+      else if(topic == 2) return abairAimsirChaiteNi[ran];
+      else if(topic == 3) return abairACBriatharSaor[ran];
+      else if(topic == 4) return abairACCeisteach[ran];
+      else if(topic == 5) return abairACSpleach[ran];
+    }
+    else if(tense == "AL"){
+      if(topic == 1) return abairAimsirLaithreachQuestions[ran];
+      else if(topic == 2) return abairAimsirLaithreachNi[ran];
+      else if(topic == 3) return abairALBriatharSaor[ran];
+      else if(topic == 4) return abairALCeisteach[ran];
+      else if(topic == 5) return abairALSpleach[ran];
+      else if(topic == 6) return abairALCoibhneasta[ran];
+    }
+    else if(tense == "AF"){
+      if(topic == 1) return abairAFQuestions[ran];
+      else if(topic == 2) return abairAFNi[ran];
+      else if(topic == 3) return abairAFBriatharSaor[ran];
+      else if(topic == 4) return abairAFCeisteach[ran];
+      else if(topic == 5) return abairAFSpleach[ran];
+      else if(topic == 6) return abairAFCoibhneasta[ran];
+    }
+    else if(tense == "MC"){
+      if(topic == 1) return abairMCQuestions[ran];
+      else if(topic == 2) return abairMCNi[ran];
+      else if(topic == 3) return abairMCBriatharSaor[ran];
+      else if(topic == 4) return abairMCCeisteach[ran];
+      else if(topic == 5) return abairMCSpleach[ran];
+    }
+  }
+
+
+
 }
 
 function getRandomIntInclusive(min, max) {

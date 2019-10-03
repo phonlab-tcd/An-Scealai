@@ -110,6 +110,10 @@
   return "";
 < object
 
+> object getQuizArray javascript
+  return getQuizArray();
+< object
+
 + start
 * <call>isNameStored</call> == false => Dia Dhuit! Níl a fhios agam d’ainm. Cad is ainm duit?
 * <call>isNameStored</call> == true => Dia Dhuit a <call>getName</call>! Welcome to the Big Quiz.\s
@@ -144,11 +148,11 @@
   * <call>answeringQuestions</call> == false => Tá brón orm cad a dúirt tú?
   * <call>checkAnswer <star></call> == true => <call>changeProgress +</call><call>quizComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion quiz</call>
-  * <call>checkAnswer <star></call> == false =>  Mícheart <call>resetProgress</call> Déan iarracht arís.<br>
+  * <call>checkAnswer <star></call> == false =>  Mícheart <call>resetProgress</call> Déan iarracht arís<br>
   ^ <call>getProgress</call>
 
   + quizcomplete
-  - Well Done! Score: 10 <call>chatSetup endquiz</call>
+  - Well Done! Score: 11 <call>chatSetup endquiz</call>
 
   + endquiz
   - <call>quiz false</call>

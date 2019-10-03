@@ -296,7 +296,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   border-radius: 8px;
 }
 
-.bot-collapsable{
+.bot-collapsable, .QuizButton{
   background-color: #70a87f;
   color: white;
   cursor: pointer;
@@ -306,7 +306,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   text-align: left;
 }
 
-.bot-collapsable:hover{
+.bot-collapsable:hover, .QuizButton:hover{
   background-color: #598665;
 }
 

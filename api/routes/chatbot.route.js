@@ -11,6 +11,11 @@ const { Readable } = require('stream');
 const formidable = require('formidable')
 const util = require('util');
 
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
+app.use(multipartMiddleware);
+
+
 // Require Chatbot model in our routes module
 let Models = require('../models/Chatbot');
 
@@ -130,7 +135,8 @@ chatbotRoute.route('/getAudio').post(function(req, res){
 });
 
 chatbotRoute.route('/addAudio/').post((req, res) => {
-  console.log("e");
+  console.log(req.body);
+  console.log(req.file);
 });
 
 module.exports = chatbotRoute;

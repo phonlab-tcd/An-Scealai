@@ -148,6 +148,11 @@
   return storeName(args[0]);
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
+
 + askname
 - <call>askName</call>
 
@@ -234,11 +239,11 @@
   + iol
   - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
+  + (tá|sea|ba mhaith|tuigim|tuigeann|tuigeann mé)
   % an dtuigeann tú mé
   - <call>chatSetup iarr nowait</call>
 
-  + (níl|níor mhaith)
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
   % an dtuigeann tú mé
   - Ah ceart go leor, a <call>getName</call>. Míneoidh mé arís.
   ^ <call>chatSetup verbcon true</call>
@@ -340,15 +345,15 @@
   ^ <call>chatSetup te true</call>
 
   + te
-  - Tuigim?
+  - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
-  % tuigim
+  + (tá|sea|ba mhaith|tuigim|tuigeann|tuigeann mé)
+  % an dtuigeann tú mé
   - Ceart go leor, a <call>getName</call>. 😁 Anois déanfaimid cúpla cleachtadh.
   ^ <call>chatSetup ceist true</call>
 
-  + (níl|níor mhaith)
-  % tuigim
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
+  % an dtuigeann tú mé
   - Ceart go leor. Tá sé seo an simplí.
   ^ <call>chatSetup verbcon true</call>
 
@@ -445,14 +450,14 @@
   ^ <call>chatSetup anssd true</call>
 
   + anssd
-  - A dhéanann sé ciall?
+  - An ndéanann sé sin ciall?
 
-  + (tá|sea|ba mhaith)
-  % a dhéanann sé ciall
+  + (tá|sea|ba mhaith|déanann)
+  % An ndéanann sé sin ciall
   - Ceart go leor, a <call>getName</call>. 😆 <call>chatSetup reidh true</call>
 
-  + (níl|níor mhaith)
-  % a dhéanann sé ciall
+  + (níl|níor mhaith|ní dhéanann)
+  % An ndéanann sé sin ciall
   - Níl aon fhadhb ar chor ar bith, a <call>getName</call>.
   ^ <call>chatSetup usad true</call>
 
@@ -465,7 +470,7 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh cleachtadh a dhéanamh ar an mbriathar saor aimsir chaite den bhriathar
-  - Iontach a <call>getName</call>! Líon isteach an fhoirm cheart den bhriathar <i>téigh</<i> mar sin:
+  - Iontach a <call>getName</call>! Líon isteach an fhoirm cheart den bhriathar <i>clois</<i> mar sin:
   ^ <call>chatSetup cleachtadh true</call>
 
   + cleachtadh
@@ -667,7 +672,7 @@
 
   + levelcomplete
   - Tá triúr ceart agat i ndiaidh a chéile. Tá céim an fhoirm spleách críochnaithe agat. Iontach, a <call>getName</call>!
-  ^ <call>setAnsweringQuestions false</call> {topic=extraquestions} <call>chatSetup tosu true</call>
+  ^ <call>setAnsweringQuestions false</call> {topic=coibhneasta} <call>chatSetup tosu true</call>
 
   + continue
   - Ar mhaith leat leanúint ar aghaidh?
@@ -681,7 +686,7 @@
   - <call>setAnsweringQuestions false</call>{topic=coibhneasta}<call>chatSetup tosu true</call>
 
   /*+ coibhneasta
-  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhorainm coibhneasta?
+  -
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhorainm coibhneasta
@@ -713,11 +718,12 @@
   - <call>setKeepMessages true</call><call>loadFromChat cloisMC</call>
 < topic
 
-/*> topic coibhneasta
+> topic coibhneasta
   + tosu
-  - NEED TO FILL
+  - Anois, an fhorainm coibhneasta.
+  ^ <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
-  + quote
+  /*+ quote
   - ..<br>
   ^ ...<br>
   ^ ...
@@ -776,8 +782,8 @@
   - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
-< topic*/
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>*/
+< topic
 
 > topic extraquestions
   + tosu

@@ -138,6 +138,10 @@
   return "";
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + start
 - Anois, a <call>getName</call> táimid chun dul ag féachaint ar an mbriathar 'clois' agus an fhoirm atá aige san <b><i>aimsir láithreach</i></b>.
 ^ <call>setCompletedLevel</call><call>chatSetup tosu true</call>
@@ -198,7 +202,7 @@
   ^ - Cloisim (nó cloiseann mé), <br>
   ^ - Cloiseann tú, <br>
   ^ - Cloiseann sé nó sí, <br>
-  ^ - Cloisimid (nó ‘téann muid’), <br>
+  ^ - Cloisimid (nó ‘cloiseann muid’), <br>
   ^ - Cloiseann sibh, <br>
   ^ - Cloiseann siad.
   ^ <call>chatSetup lioma true</call>
@@ -615,8 +619,8 @@
   % ar mhaith leat leanúint ar aghaidh
   - <call>setAnsweringQuestions false</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
-  /*+ coibhneasta
-  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>*/
+  + coibhneasta
+  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>
 
   + (chaite|aimsir chaite)
   - <call>setKeepMessages true</call><call>loadFromChat cloisAC chaite</call>
@@ -625,7 +629,7 @@
   - <call>setKeepMessages true</call><call>loadFromChat cloisAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat cloishMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat cloisMC</call>
 
   + (ceim 2|céim 2)
   - {topic=level2}<call>chatSetup startl2 nowait</call>
@@ -640,10 +644,11 @@
   - Ansin, an fhoirm cheist. An bhfuil tú réidh?{topic=ceisteach}
 < topic
 
-/*> topic coibhneasta
+> topic coibhneasta
   + tosu
-  - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an píosa deireanach?
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
+  /*
   + (tá|ba mhaith|sea)
   - NEED TO FILL IN
 
@@ -688,7 +693,7 @@
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
   - <call>setAnsweringQuestions false</call>
-  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>
+  ^ {topic=extraquestions}<call>chatSetup tosu nowait</call>*/
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat teighAC chaite</call>
@@ -714,7 +719,7 @@
   + (spleách|spleach)
   - Féachaimid anois ar An Fhoirm Spleách.{topic=spleach}
   ^ <call>chatSetup tosu nowait</call>
-< topic*/
+< topic
 
 > topic extraquestions
   + tosu

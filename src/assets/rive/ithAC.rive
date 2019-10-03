@@ -148,6 +148,10 @@
   return storeName(args[0]);
 < object
 
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
 + askname
 - <call>askName</call>
 
@@ -160,9 +164,9 @@
 - Inniu táimid ag foghlaim <b><i>ith</i></b>.\s
 ^ Cén aimsir ar mhaith leat a dhéanamh, a <call>getName</call>? <br>
 ^ <button class="rive-button" onclick="chatSetup('chaite')">Aimsir Chaite</button>
-^ <button class="rive-button" onclick="chatSetup('clois-al')">Aimsir Laithreach</button>
-^ <button class="rive-button" onclick="chatSetup('clois-af')">Aimsir Fháistineach</button>
-^ <button class="rive-button" onclick="chatSetup('clois-mc')">Modh Coinniollach</button>
+^ <button class="rive-button" onclick="chatSetup('ith-al')">Aimsir Laithreach</button>
+^ <button class="rive-button" onclick="chatSetup('ith-af')">Aimsir Fháistineach</button>
+^ <button class="rive-button" onclick="chatSetup('ith-mc')">Modh Coinniollach</button>
 ^ <button class="rive-button2" onclick="chatSetupQuiz('ith')">Ith Quiz</button>
 ^ <call>setCompletedLevel</call>
 
@@ -172,13 +176,13 @@
 ^ <button class="rive-button2" onclick="chatSetup('ceim 2')">Céim 2</button>
 ^ <button class="rive-button2" onclick="chatSetup('ceim 3')">Céim 3</button><call>setAnsweringQuestions false</call>
 
-+ clois-al
++ ith-al
 - <call>setKeepMessages true</call><call>loadFromChat ithAL</call>
 
-+ clois-af
++ ith-af
 - <call>setKeepMessages true</call><call>loadFromChat ithAF</call>
 
-+ clois-mc
++ ith-mc
 - <call>setKeepMessages true</call><call>loadFromChat ithMC</call>
 
 + *
@@ -234,14 +238,20 @@
   + iol
   - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
+  + (tá|sea|ba mhaith|tuigim|tuigeann|tuigeann mé)
   % an dtuigeann tú mé
-  - <call>chatSetup iarr nowait</call>
+  - <call>chatSetup exp nowait</call>
 
-  + (níl|níor mhaith)
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
   % an dtuigeann tú mé
   - Ah ceart go leor, a <call>getName</call>. 😆 Míneoidh mé arís.
   ^ <call>chatSetup verbcon true</call>
+
+  + exp
+  - Seo sampla:<br>
+  ^ “D’ith sí gan salann é”. (í ar buile!)<br>
+  ^ “D’itheamar ár sáith.”
+  ^ <call>chatSetup iarr true</call>
 
   + iarr
   - An bhfuil tú ag iarraidh cleachtadh a dhéanamh air sin?
@@ -323,7 +333,7 @@
 
   + (níl|níor mhaith)
   % an bhfuil tú ag iarraidh leanúint ar aghaidh
-  - Ar ais go dtí an leathanach baile mar sin.
+  - Go breá. Ar ais go dtí an leathanach tosaigh mar sin.
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh leanúint ar aghaidh
@@ -340,15 +350,15 @@
   ^ <call>chatSetup te true</call>
 
   + te
-  - Tuigim?
+  - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
-  % tuigim
+  + (tá|sea|ba mhaith|tuigim|tuigeann|tuigeann mé)
+  % an dtuigeann tú mé
   - Ceart go leor, a <call>getName</call>. 😁 Anois déanfaimid cúpla cleachtadh.
   ^ <call>chatSetup ceist true</call>
 
-  + (níl|níor mhaith)
-  % tuigim
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
+  % an dtuigeann tú mé
   - Ceart go leor. Tá sé seo an simplí.
   ^ <call>chatSetup verbcon true</call>
 
@@ -433,10 +443,14 @@
   ^ <button class="rive-button2" onclick="chatSetup('briatharsaor')">Briathar Saor</button>
   ^ <button class="rive-button2" onclick="chatSetup('ceisteach')">An Fhoirm Cheisteach</button>
   ^ <button class="rive-button2" onclick="chatSetup('spleách')">An Fhoirm Spleách/Neamhspleách</button>
-  //^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button><call>setAnsweringQuestions false</call>
+  ^ <button class="rive-button2" onclick="chatSetup('coibhneasta')">Forainm Coibhneasta</button><call>setAnsweringQuestions false</call>
 
   + briatharsaor
-  - Úsaidtear "itheadh" agua "níor itheadh" (diúltach) chun an briathar saor a chur in iúl.
+  - Tosóimid leis an mbriathar saor. Úsáidimid an briathar saor nuair nach bhfuilimid ábalta nó sásta pearsa a chur leis an mbriathar.
+  ^ <call>chatSetup tear true</call>
+
+  + tear
+  - Úsaidtear "itheadh" agua "níor itheadh" chun an briathar saor a chur in iúl.
   ^ <call>chatSetup egs true</call>
 
   + egs
@@ -446,11 +460,11 @@
   + anssd
   - A dhéanann sé ciall?
 
-  + (tá|sea|ba mhaith)
+  + (tá|sea|ba mhaith|déanann)
   % a dhéanann sé ciall
   - Ceart go leor, a <call>getName</call>. 😆 <call>chatSetup reidh true</call>
 
-  + (níl|níor mhaith)
+  + (níl|níor mhaith|ní dhéanann)
   % a dhéanann sé ciall
   - Níl aon fhadhb ar chor ar bith, a <call>getName</call>.
   ^ <call>chatSetup usad true</call>
@@ -500,6 +514,9 @@
   - Féachaimid anois ar An Fhoirm Spleách.{topic=spleach}
   ^ <call>chatSetup tosu true</call>
 
+  + coibhneasta
+  - {topic=coibhneasta}<call>chatSetup tosu true</call>
+
   + (ceim 2|céim 2)
   - {topic=level2}<call>startLevel 2</call>
 
@@ -537,14 +554,14 @@
   ^ <call>chatSetup tuy true</call>
 
   + tuy
-  - Tuigim? 😁
+  - An dtuigeann tú mé?
 
-  + (tá|sea|ba mhaith)
-  % tuigim
+  + (tá|sea|ba mhaith|tuigim|tuigeann|tuigeann mé)
+  % an dtuigeann tú mé
   - <call>chatSetup chuncl nowait</call>
 
-  + (níl|níor mhaith)
-  % tuigim
+  + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
+  % an dtuigeann tú mé
   - Ah. 😅 Ceart go leor.
   ^ <call>chatSetup verbcon true</call>
 
@@ -628,17 +645,24 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú réidh
-  - Cuirtear "gur" nó "nár" roimh an mbriathar.
+  - Deirtear go bhfuil briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile. <br><br>
+  ^ Cuirtear "gur" nó "nár" roimh an mbriathar.
   ^ <call>chatSetup fuairsi true</call>
 
   + fuairsi
   - Seo samplaí: <br>
-  ^ "Dúirt sí gur ith sí a dinnéir."<br>
-  ^ "Dúirt sé nár ith sé aon rud an lá sin."
-  ^ <call>chatSetup moreq</call>
+  ^ "D'ith sí a dinnéir."<br>
+  ^ Tá ‘ith’ anseo ag seasamh leis féin go neamhspleách.
+  ^ <call>chatSetup taobh true</call>
 
-  + moreq
-  - "Bhí siad cinnte nár chuala siad aon rud."
+  + taobh
+  - Ar an taobh eile: <br>
+  ^ “Dúirt sí gur ith sí a dinnéar.”<br>
+  ^ Tá an ‘ith’ anseo ag brath ar ‘dúirt sí’ agus deirtear go bhfuil sé ‘spleách’.
+  ^ <call>chatSetup nar true</call>
+
+  + nar
+  - "Dúirt sé nár ith sé aon rud an lá sin."
   ^ <call>chatSetup lioma true</call>
 
   + lioma
@@ -666,7 +690,7 @@
 
   + levelcomplete
   - Tá triúr ceart agat i ndiaidh a chéile. Tá céim an fhoirm spleách críochnaithe agat. Iontach, a <call>getName</call>!
-  ^ <call>setAnsweringQuestions false</call> {topic=extraquestions} <call>chatSetup tosu true</call>
+  ^ <call>setAnsweringQuestions false</call>{topic=coibhneasta}<call>chatSetup tosu true</call>
 
   + continue
   - Ar mhaith leat leanúint ar aghaidh?
@@ -712,11 +736,15 @@
   - <call>setKeepMessages true</call><call>loadFromChat cloisMC</call>
 < topic
 
-/*> topic coibhneasta
+> topic coibhneasta
   + tosu
-  - NEED TO FILL
+  - Anois an fhorainm coibhneasta.
+  ^ <call>chatSetup sor true</call>
 
-  + quote
+  + sor
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
+
+  /*+ quote
   - ..<br>
   ^ ...<br>
   ^ ...
@@ -775,8 +803,8 @@
   - <call>setKeepMessages true</call><call>loadFromChat teighAF</call>
 
   + (coinniollach|modh coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
-< topic*/
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>*/
+< topic
 
 > topic extraquestions
   + tosu

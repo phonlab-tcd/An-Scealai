@@ -45,6 +45,7 @@ function stopRecording() {
 var url;
 function createDownloadLink(blob){
   thisBlob = blob;
+  console.log(thisBlob);
   url = URL.createObjectURL(blob);
   var au = document.createElement("audio");
   var div = document.createElement("div");
@@ -58,11 +59,9 @@ function createDownloadLink(blob){
   div.appendChild(link);
 
   var filename = new Date().toISOString() + ".wav";
-  var upload = document.createElement("a");
-  upload.href = "#";
+  var upload = document.createElement("button");
   upload.innerHTML = "upload";
   upload.addEventListener("click", sendRecording);
-  div.appendChild(document.createTextNode(" ")) //add a space in between
   div.appendChild(upload) //add the upload link to li
   recordList.appendChild(div);
 }
@@ -74,7 +73,7 @@ function sendRecording(){
   form.append("audio", thisBlob, "RecordedAnswer.wav");
   console.log(form);
   req.open("POST", "http://localhost:4000/Chatbot/addAudio", true);
-  req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  req.setRequestHeader("Content-Type", "multipart/form-data");
   req.send(thisBlob);
   req.onload = function(){
     console.log(this.response);

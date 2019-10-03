@@ -1,0 +1,169 @@
+> object getName javascript
+  return getName();
+< object
+
+> object startLevel javascript
+  if(args[0] == 1) chatSetup("startl1");
+  if(args[0] == 2) chatSetup("startl2");
+  if(args[0] == 3) chatSetup("startl3");
+  return "";
+< object
+
+> object getRandomQuestion javascript
+  if(args[0] == 1) return getRandomQuestion(beirACQuestions);
+  if(args[0] == 2) return getRandomQuestion(beirACNi);
+  if(args[0] == 3) return getRandomQuestion(beirACBriathorSaor);
+  if(args[0] == 4) return getRandomQuestion(beirACCeisteach);
+  if(args[0] == 5) return getRandomQuestion(beirACSpleach);
+  if(args[0] == 6) return getRandomQuestion(beirACCoibhneasta);
+  if(args[0] == 7) return getRandomQuestion(beirACExtraQuestions);
+< object
+
+> object getRandomReply javascript
+  return getRandomReply();
+< object
+
+> object changeProgress javascript
+  return changeProgress(args[0]);
+< object
+
+> object getProgress javascript
+  return getProgress();
+< object
+
+> object getWrongCount javascript
+  return wrongCount;
+< object
+
+> object resetProgress javascript
+  return resetProgress();
+< object
+
+> object chatSetup javascript
+  if(args[1] == "nowait") return chatSetup(args[0]);
+  setTimeout(function(){
+    return chatSetup(args[0], args[1]);
+  }, 2500);
+  return "";
+< object
+
+> object checkAnswer javascript
+  var ans = args[0];
+  if(args[1] != null) ans += " " + args[1];
+  if(args[2] != null) ans += " " + args[2];
+  console.log("ans: " + ans);
+  console.log("current ans: " + currentQuestion.answer);
+  if(ans == currentQuestion.answer){
+    console.log("true");
+    return true;
+  }
+  else if(ans == answer2){
+    console.log("true");
+    return true;
+  }
+  else {
+    wrongCount++;
+    //console.log("wrongCount: " + wrongCount);
+    return false;
+  }
+< object
+
+> object answeringQuestions javascript
+  //console.log(answeringQuestions);
+  return answeringQuestions;
+< object
+
+> object setAnsweringQuestions javascript
+  answeringQuestions = args[0];
+  wrongCount = 0;
+  return "";
+< object
+
+> object loadFromChat javascript
+  loadFromChat(args[0], args[1]);
+  return "";
+< object
+
+> object setKeepMessages javascript
+  keepMessages = args[0];
+  return "";
+< object
+
+> object levelComplete javascript
+  if(args[0] == "false"){
+    isLevelComplete = false;
+  }
+  if(isLevelComplete == true){
+    chatSetup("levelcomplete");
+  }
+  console.log("isLevelComplete: " + isLevelComplete);
+  return "";
+< object
+
+> object getLink javascript
+  return getLink();
+< object
+
+> object triailAris javascript
+  return triailAris();
+< object
+
+> object getCrioch javascript
+  return getCrioch();
+< object
+
+> object nilToCeim javascript
+  return nilToCeim();
+< object
+
+> object nilToQuiz javascript
+  return nilToQuiz();
+< object
+
+> object setCompletedLevel javascript
+  if(complete == false){
+    if(args[0] == 1){
+      level1Complete = true;
+    }
+    else if(args[0] == 2){
+      level2Complete = true;
+    }
+    else if(args[0] == 3){
+      level3Complete = true;
+    }
+    else{
+      level1Complete = false;
+      level2Complete = false;
+      level2Complete = false;
+    }
+  }
+  return "";
+< object
+
+> object askName javascript
+  return askName();
+< object
+
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
+> object getMissingMessage javascript
+  return missingContentMessage();
+< object
+
+
++ start
+- <call>getMissingMessage</call><call>chatSetup choose true</call>
+
++ choose
+- Is féidir leat briathar eile nó aimsir eile a phiocadh nó teacht ar ais uair éigin eile.
+
++ beir-ac
+- <call>setKeepMessages true</call><call>loadFromChat beirAC chaite</call>
+
++ beir-al
+- <call>setKeepMessages true</call><call>loadFromChat beirAL</call>
+
++ beir-mc
+- <call>setKeepMessages true</call><call>loadFromChat beirMC</call>

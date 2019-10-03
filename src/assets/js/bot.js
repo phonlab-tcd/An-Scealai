@@ -117,16 +117,19 @@ function showContents(){
 
 //loads file chosen by the user
 function load(fileId, start, toPlay){
-  if(thisDialect != "" || fileId == "BriathraNeamhrialta"){
-    //for dictionary
-    if(fileId.indexOf("quiz") == -1){
-      var length = fileId.length - 2;
-      thisVerb = fileId.substr(0, length);
-      if(thisVerb == "bi") thisVerb = "bí";
-      else if(thisVerb == "teigh") thisVerb = "téigh";
-      else if(thisVerb == "dean") thisVerb = "déan";
+  console.log(fileId);
+  if(fileId != "BQuiz"){
+    if(thisDialect != "" || fileId == "BriathraNeamhrialta"){
+      //for dictionary
+      if(fileId.indexOf("quiz") == -1){
+        var length = fileId.length - 2;
+        thisVerb = fileId.substr(0, length);
+        if(thisVerb == "bi") thisVerb = "bí";
+        else if(thisVerb == "teigh") thisVerb = "téigh";
+        else if(thisVerb == "dean") thisVerb = "déan";
+      }
     }
-
+  }
     thisFile = fileId;
 
     if(toPlay) play = true;
@@ -136,8 +139,6 @@ function load(fileId, start, toPlay){
     }
     else{
       currentTopic = fileId;
-      console.log(currentTopic);
-      switchTopic = true;
       sendLog();
     }
 
@@ -152,7 +153,7 @@ function load(fileId, start, toPlay){
         bot.loadFile(files[i].file).then( () => {
           bot.sortReplies();
           console.log(fileId + " loaded");
-          if(fileId == "BriathraNeamhrialta") chatSetup("start", false, false);
+          if(fileId == "BriathraNeamhrialta" || fileId == "BQuiz") chatSetup("start", false, false);
           else if(start != null) chatSetup(start);
           else{
             if(isNameStored() == false) chatSetup("askname");
@@ -162,7 +163,6 @@ function load(fileId, start, toPlay){
       }
     }
     keepMessages = false;
-  }
 }
 
 function loadFromChat(fileId, start){ load(fileId, start); }
@@ -236,7 +236,7 @@ function appendMessage(isBot, isUser, text, showButtons){
       if(dictOn == false){
         dictPopup.style.display = "flex";
         dictTri.style.display = "flex";
-        dictText.innerHTML = thisVerb;
+        dictText.innerHTML = currentQuestion.translation;
         dictOn = true;
       }
       else if(dictOn){
