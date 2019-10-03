@@ -63,7 +63,7 @@ function setup(){
       else {
         content.style.maxHeight = content.scrollHeight + "px";
       }
-      $(".bot-contents").animate({ scrollTop: $(".bot-contents")[0].scrollHeight }, 200);
+      //$(".bot-contents").animate({ scrollTop: $(".bot-contents")[0].scrollHeight }, 200);
     });
   }
 
@@ -117,10 +117,9 @@ function showContents(){
 
 //loads file chosen by the user
 function load(fileId, start, toPlay){
-  console.log(fileId);
   if(fileId != "BQuiz"){
+    console.log(fileId);
     if(thisDialect != "" || fileId == "BriathraNeamhrialta"){
-      //for dictionary
       if(fileId.indexOf("quiz") == -1){
         var length = fileId.length - 2;
         thisVerb = fileId.substr(0, length);
@@ -128,41 +127,42 @@ function load(fileId, start, toPlay){
         else if(thisVerb == "teigh") thisVerb = "téigh";
         else if(thisVerb == "dean") thisVerb = "déan";
       }
+
+      thisFile = fileId;
+
+      if(toPlay) play = true;
+      if(thisFile == "BriathraNeamhrialta"){
+        switchTopic = false;
+        currentTopic = fileId;
+      }
+      else{
+        currentTopic = fileId;
+        sendLog();
+      }
+
+      console.log("To Load: " + fileId);
+      if(keepMessages == false){
+        $(".bot-messages").empty();
+      }
+      for(i = 0; i < files.length; i++){
+        if(fileId == files[i].id){
+          console.log(files[i].id + " " + files[i].file);
+          bot = new RiveScript({utf8: true});
+          bot.loadFile(files[i].file).then( () => {
+            bot.sortReplies();
+            console.log(fileId + " loaded");
+            if(fileId == "BriathraNeamhrialta" || fileId == "BQuiz") chatSetup("start", false, false);
+            else if(start != null) chatSetup(start);
+            else{
+              if(isNameStored() == false) chatSetup("askname");
+              else chatSetup("start");
+            }
+          });
+        }
+      }
+      keepMessages = false;
     }
   }
-    thisFile = fileId;
-
-    if(toPlay) play = true;
-    if(thisFile == "BriathraNeamhrialta"){
-      switchTopic = false;
-      currentTopic = fileId;
-    }
-    else{
-      currentTopic = fileId;
-      sendLog();
-    }
-
-    console.log("To Load: " + fileId);
-    if(keepMessages == false){
-      $(".bot-messages").empty();
-    }
-    for(i = 0; i < files.length; i++){
-      if(fileId == files[i].id){
-        console.log(files[i].id + " " + files[i].file);
-        bot = new RiveScript({utf8: true});
-        bot.loadFile(files[i].file).then( () => {
-          bot.sortReplies();
-          console.log(fileId + " loaded");
-          if(fileId == "BriathraNeamhrialta" || fileId == "BQuiz") chatSetup("start", false, false);
-          else if(start != null) chatSetup(start);
-          else{
-            if(isNameStored() == false) chatSetup("askname");
-            else chatSetup("start");
-          }
-        });
-      }
-    }
-    keepMessages = false;
 }
 
 function loadFromChat(fileId, start){ load(fileId, start); }

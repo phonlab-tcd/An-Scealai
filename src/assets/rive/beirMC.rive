@@ -1,4 +1,4 @@
-> object getName javascript
+  > object getName javascript
   return getName();
 < object
 
@@ -159,7 +159,7 @@
 + choose
 - Is féidir leat briathar eile nó aimsir eile a phiocadh nó teacht ar ais uair éigin eile.
 
-+ beir-ac
++ chaite
 - <call>setKeepMessages true</call><call>loadFromChat beirAC chaite</call>
 
 + beir-al

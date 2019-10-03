@@ -453,11 +453,11 @@
   - An ndéanann sé sin ciall?
 
   + (tá|sea|ba mhaith|déanann)
-  % An ndéanann sé sin ciall
+  % an ndéanann sé sin ciall
   - Ceart go leor, a <call>getName</call>. 😆 <call>chatSetup reidh true</call>
 
   + (níl|níor mhaith|ní dhéanann)
-  % An ndéanann sé sin ciall
+  % an ndéanann sé sin ciall
   - Níl aon fhadhb ar chor ar bith, a <call>getName</call>.
   ^ <call>chatSetup usad true</call>
 

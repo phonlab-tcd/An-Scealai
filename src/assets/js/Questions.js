@@ -425,10 +425,10 @@ var beirACCeisteach = [
   {question: "____ ___________ sí lámh ort chun dul in airde staighre? (dearfach)", answer: "ar rug", hint1: "dearfach"},
   {question: "____ ___________ in am ar an tinneas a bhí air. (briathar saor, dearfach)", answer: "ar rugadh", hint1: "dearfach, briathar saor"},
   {question: "____ ___________ tú greim maith air? (diúltach)", answer: "nár rug", hint1: "diúltach"},
-  {question: "____ ___________ sí go maith ar an liathróid? (diúltach)", answer: "nár rug"", hint1: "diúltach"},
-  {question: "____ ___________ tú amach air go han-éasca? (diúltach)", answer: "nár rug"", hint1: "diúltach"},
+  {question: "____ ___________ sí go maith ar an liathróid? (diúltach)", answer: "nár rug", hint1: "diúltach"},
+  {question: "____ ___________ tú amach air go han-éasca? (diúltach)", answer: "nár rug", hint1: "diúltach"},
   {question: "____ ___________ ar na daoine a thosaigh an trioblóid ar fad? (briathar saor, dearfach)", answer: "ar rugadh", hint1: "dearfach, briathar saor"},
-  {question: "____ ___________ tusa roimh 2000? (briathar saor, diúltach)", answer: "nár rug"", hint1: "diúltach"},
+  {question: "____ ___________ tusa roimh 2000? (briathar saor, diúltach)", answer: "nár rug", hint1: "diúltach"},
 ];
 
 //beir AC Spleách, if there are 2 possible answers, copy in ' answer2: "", ' after 'answer:'
