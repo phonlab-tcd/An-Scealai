@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
+import config from '../abairconfig.json';
+
 export interface UserDetails {
   _id: string;
   username: string;
@@ -26,6 +28,8 @@ export interface TokenPayload {
   providedIn: 'root'
 })
 export class AuthenticationService {
+  baseUrl : string = config.baseurl + 'user/';
+
   private token: string;
 
   constructor(private http: HttpClient, private router: Router,) { }
@@ -69,9 +73,9 @@ export class AuthenticationService {
     let base;
 
     if(method === 'post') {
-      base = this.http.post('http://localhost:4000/user/' + type, user);
+      base = this.http.post(this.baseUrl + type, user);
     } else {
-      base = this.http.get('http://localhost:4000/user/${type}', { headers: { Authorization: 'Bearer ${this.getToken()}'}});
+      base = this.http.get(this.baseUrl + '${type}', { headers: { Authorization: 'Bearer ${this.getToken()}'}});
     }
 
     const request = base.pipe(

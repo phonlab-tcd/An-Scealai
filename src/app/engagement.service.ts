@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';  
 import { Story } from './story';
-
+import config from '../abairconfig.json';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class EngagementService {
 
   constructor(private http: HttpClient, private auth: AuthenticationService) { }
 
-  baseUrl: string = "http://localhost:4000/engagement/";
+  baseUrl: string = config.baseurl + 'engagement/';
 
   addEventForLoggedInUser(type: EventType, story?: Object){
     if(this.auth.isLoggedIn()) {
