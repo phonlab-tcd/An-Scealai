@@ -7,6 +7,7 @@ import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
 import { EngagementService } from './engagement.service';
 import { EventType } from './event';
+import config from '../abairconfig.json';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class StoryService {
     private router: Router,
     private auth: AuthenticationService, private engagement: EngagementService) { }
 
-  baseUrl: string = "http://localhost:4000/story/";
+  baseUrl: string = config.baseurl + "story/";
 
   saveStory(id, title, date, dialect, text, author) {
     const storyObj = {
@@ -31,7 +32,7 @@ export class StoryService {
       author: author
     };
     console.log(storyObj);
-    this.http.post('http://localhost:4000/story/create', storyObj)
+    this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
         this.router.navigateByUrl('/dashboard/' + id);
@@ -39,27 +40,27 @@ export class StoryService {
   }
 
   getStoriesFor(author : string) {
-    return this.http.get('http://localhost:4000/story/'+author);
+    return this.http.get(this.baseUrl+author);
   }
 
   getStory(id: string) : Observable<any> {
-    return this.http.get('http://localhost:4000/story/getStoryById/' + id);
+    return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
   getStoriesForLoggedInUser() {
     let author = this.auth.getUserDetails().username;
-    return this.http.get('http://localhost:4000/story/'+author);
+    return this.http.get(this.baseUrl+author);
   }
 
   updateStory(text, id) {
     const obj = {
       text: text
     };
-    this.http.post('http://localhost:4000/story/update/'+id, obj).subscribe();
+    this.http.post(this.baseUrl + 'update/'+id, obj).subscribe();
   }
 
   deleteStory(id) {
-    return this.http.get('http://localhost:4000/story/delete/'+id);
+    return this.http.get(this.baseUrl + 'delete/'+id);
   }
 
   addFeedback(id, feedbackText: string) : Observable<any> {
