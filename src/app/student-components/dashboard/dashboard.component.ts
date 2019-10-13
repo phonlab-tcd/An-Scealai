@@ -9,6 +9,7 @@ import { HighlightTag, } from 'angular-text-input-highlight';
 import { Subject } from 'rxjs';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { GrammarService, GrammarTag } from '../../grammar.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,7 +38,7 @@ export class DashboardComponent implements OnInit {
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
-    private engagement: EngagementService) {
+    private engagement: EngagementService, private grammar: GrammarService) {
 
     }
 
@@ -136,19 +137,8 @@ export class DashboardComponent implements OnInit {
     this.grammarLoading = true;
     this.tags = [];
     this.chosenTag = null;
-    this.storyService.gramadoir(this.story._id).subscribe((res) => {
-      res.forEach(g => {
-        console.log(g);
-        let tag : HighlightTag = {
-          indices: {
-            start: +g.fromx,
-            end: +g.tox+1,
-          },
-          cssClass: GrammarTag.getCssClassFromRule(GrammarTag.getRuleFromRuleId(g.ruleId)),
-          data: g
-        };
-        this.tags.push(tag);
-      });
+    this.grammar.checkGrammar(this.story._id).subscribe((res: HighlightTag[]) => {
+      this.tags = res;
       this.grammarLoading = false;
       this.grammarChecked = true;
       this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
@@ -223,35 +213,4 @@ export class DashboardComponent implements OnInit {
     this.modalChoice.next(true);
   }
 
-}
-
-class GrammarTag {
-  message: string;
-  rule: string;
-
-  constructor(tagData: any) {
-    this.rule = GrammarTag.getRuleFromRuleId(tagData.ruleId);
-    this.message = GrammarTag.getMessageFromRule(this.rule);
-    if(!this.message) {
-      this.message = tagData.msg;
-    }
-  }
-
-  static getMessageFromRule(rule: string) : string {
-    if(rule === 'SEIMHIU') {
-      return "Séimhiu missing";
-    }
-    if(rule === 'URU') {
-      return "This noun should be plural.";
-    }
-    // etc.
-  }
-
-  static getCssClassFromRule(rule: string) : string {
-    return rule.toLowerCase() + "-color tagNotHover";
-  }
-
-  static getRuleFromRuleId(ruleId: string) : string {
-    return ruleId.split('/')[1];
-  }
 }
