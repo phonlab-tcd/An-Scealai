@@ -178,7 +178,7 @@
 
 > topic level1
   + startl1
-  - Is í an fhoirm thaite den mbriathar is mó a úsaidtear sa mhodh coinníollach
+  - Is í an fhoirm thaite den mbriathar is mó a úsaidtear sa mhodh coinníollach.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
@@ -578,8 +578,8 @@
   - <call>setAnsweringQuestions false</call>{topic=extraquestions}<call>chatSetup tosu nowait</call>
 
   + maistreacht
-  - Tá máistreacht agat anois ar an mbriathar “téigh” sa mhodh coinníollach.
-  ^ An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar ‘tabhair’ sa mhodh coinníollach?
+  - Tá máistreacht agat anois ar an mbriathar “clois” sa mhodh coinníollach.
+  ^ An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar clois sa mhodh coinníollach?
   ^ {topic=extraquestions}<call>chatSetup tosu true</call>
 
   + briathar saor
@@ -609,7 +609,7 @@
   - An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar ‘clois’ sa mhodh coinníollach?
 
   + (tá|ba mhaith|sea)
-  - Seo cleachtadh ar an mbriathar ‘tabhair’ sa mhodh coinníollach mar sin, a <call>getName</call>:<br><br>
+  - Seo cleachtadh ar an mbriathar clois sa mhodh coinníollach mar sin, a <call>getName</call>:<br><br>
   ^ <call>levelComplete false</call><call>getRandomQuestion 6</call><call>resetProgress</call><call>setAnsweringQuestions true</call>
 
   + (níl|níor mhaith)
