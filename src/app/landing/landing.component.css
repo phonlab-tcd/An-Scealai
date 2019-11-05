@@ -62,7 +62,7 @@
 }
 
 .landingBtnsContainer {
-    margin-top: 1vh;
+    margin-top: 20px;
 }
 
 .teacherRegisterBtn {
@@ -86,8 +86,8 @@
 }
 
 .teacherRegisterBtn:hover {
-background-color: #ad8f2b;
-color: white;
+    background-color: #ad8f2b;
+    color: white;
 }
 
 .loginTextContainer {
@@ -95,8 +95,9 @@ color: white;
 }
 
 .quoteAuthorText {
-    margin-left: 450px;
-    margin-top: 5px;
+    position: absolute;
+    right: 20%;
+    z-index: -5;
 }
 
 @media only screen and (max-width: 550px) {
@@ -154,5 +155,23 @@ color: white;
 
     .landingImg {
         width: 350px;
+    }
+}
+
+@media only screen and (max-height: 540px) {
+    .catJumpingImg {
+        display: none;
+    }
+
+    .catWalkingImg {
+        display: none;
+    }
+
+    .bottomRightImg {
+        display: none;
+    }
+
+    .bottomLeftImg {
+        display: none;
     }
 }
