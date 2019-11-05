@@ -639,10 +639,11 @@
   - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
 < topic
 
-/*> topic coibhneasta
+> topic coibhneasta
   + tosu
-  - NEED TO FILL
+  - <call>getMissingMessage</call>{topic=extraquestions}<call>chatSetup tosu true</call>
 
+  /*
   + quote
   - “Éist go cúramach lena ndéarfaidh mé leat.” <call>chatSetup bain true</call>
 
@@ -713,8 +714,8 @@
   - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
 
   + (modh coinniollach|coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
-< topic*/
+  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>*/
+< topic
 
 > topic extraquestions
   + tosu
@@ -757,6 +758,9 @@
 
   + ceisteach
   - {topic=ceisteach}<call>chatSetup tosu nowait</call>
+
+  + coibhneasta
+  - {topic=coibhneasta}<call>chatSetup tosu nowait</call>
 
   + (spleách|spleach)
   - Féachaimid anois ar An Fhoirm Spleách.{topic=spleach}

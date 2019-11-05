@@ -469,7 +469,7 @@
 
   + coibhneasta
   - Ceart go leor, a <call>getName</call>\s
-  ^ {topic=coibhneasta}<call>chatSetup tosu nowait</call>
+  ^ {topic=coibhneasta}<call>chatSetup tosu true</call>
 
   + (aimsir chaite|chaite)
   - <call>setKeepMessages true</call><call>loadFromChat ithAC chaite</call>
