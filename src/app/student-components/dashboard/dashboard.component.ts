@@ -9,7 +9,8 @@ import { HighlightTag, } from 'angular-text-input-highlight';
 import { Subject } from 'rxjs';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
-import { GrammarService, GrammarTag } from '../../grammar.service';
+import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +30,7 @@ export class DashboardComponent implements OnInit {
   audioSource: SafeUrl;
   grammarChecked: boolean = false;
   tags: HighlightTag[] = [];
+  tagSets : TagSet;
   visibleTags: HighlightTag[] = [];
   tagFilters: Array<string> = [];
   chosenTag: GrammarTag;
@@ -137,12 +139,23 @@ export class DashboardComponent implements OnInit {
     this.grammarLoading = true;
     this.tags = [];
     this.chosenTag = null;
-    this.grammar.checkGrammar(this.story._id).subscribe((res: HighlightTag[]) => {
-      this.tags = res;
+    this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
+      this.tagSets = res;
+      this.tags = this.tagSets.gramadoirTags;
       this.grammarLoading = false;
       this.grammarChecked = true;
       this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
     });
+  }
+
+  onChangeGrammarFilter(eventValue : any) {
+    this.chosenTag = null;
+    if(eventValue == 'vowel') {
+      this.tags = this.tagSets.vowelTags;
+    }
+    if(eventValue == 'gramadoir') {
+      this.tags = this.tagSets.gramadoirTags;
+    }
   }
 
   chooseGrammarTag(tag: HighlightTag) {

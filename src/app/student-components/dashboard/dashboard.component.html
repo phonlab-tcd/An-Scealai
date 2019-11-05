@@ -35,10 +35,19 @@
               </div>
           </div>
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
-          <div class="feedbackHeader"><div>Grammar Checker <i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
+          <div class="feedbackHeader"><div>Grammar Checker </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
           <div class="grammarMessageContainer {{grammarMessageClass}}">
             <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
             <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">Choose an error to see details.</span>
+          </div>
+          <div class="grammarToolbar">
+            <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
+            <div class="selectGrammarFilter">
+              <select (change)="onChangeGrammarFilter($event.target.value)">
+                <option value="gramadoir">Gramadóir</option>
+                <option value="vowel">Leathan/Caol</option>
+              </select>
+          </div>
           </div>
           <div mwlTextInputHighlightContainer>
             <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea></textarea>

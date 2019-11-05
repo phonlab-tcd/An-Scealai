@@ -47,6 +47,10 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
+  getStoryBy_id(id: string) : Observable<any> {
+    return this.http.get(this.baseUrl + 'getStoryByUnderscoreId/' + id);
+  }
+
   getStoriesForLoggedInUser() {
     let author = this.auth.getUserDetails().username;
     return this.http.get(this.baseUrl+author);

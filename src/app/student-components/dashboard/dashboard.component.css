@@ -250,7 +250,7 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .textFieldGrammarCheck {
-    height: 32vh;
+    height: 28vh;
 }
 
 .grammarMessageContainer {
@@ -259,7 +259,6 @@ border-radius: 5px 5px 5px 5px;
     background: #f7f2e7;
     width: 90%;
     margin-left: 5%;
-    margin-bottom: 1vh;
     text-align: left;
     padding: 4px;
     padding-left: 8px;
@@ -270,6 +269,20 @@ border-radius: 5px 5px 5px 5px;
     color: #999999;
 }
 
+.grammarToolbar {
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
+    padding: 5px;
+}
+
+.selectGrammarFilter {
+    font-size: 10pt;
+    margin-left: 5px;
+}
+
 .seimhiu-color {
     background-color: #00c732;
 }
@@ -278,8 +291,16 @@ border-radius: 5px 5px 5px 5px;
     background-color: #4c00ff;
 }
 
-.default-color {
-    background-color: #d41e1e;
+.vowel-caol-agreement-tag {
+    background-color: #0077c7;
+}
+
+.vowel-leathan-agreement-tag {
+    background-color: #da4c0a;
+}
+
+.default-tag {
+    background-color: #bd2323;
 }
 
 .tagHover {
