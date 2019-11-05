@@ -92,6 +92,7 @@ export class DashboardComponent implements OnInit {
         this.storyService.updateStory(this.story.text, params['id']);
         this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
         this.storySaved = true;
+        console.log("Story saved");
       }
     )
   }

@@ -24,17 +24,18 @@ export class GrammarService {
           });
           tagSets.gramadoirTags = tags;
           tags = [];
-          let vowelTags = this.getVowelAgreementTags(story.text);
-          vowelTags.forEach((tag) => {
-            tags.push(tag);
-          })
-          tagSets.vowelTags = tags;
-          console.log(tagSets);
-          observer.next(tagSets);
-          observer.complete();
+          this.storyService.getStoryBy_id(id).subscribe((story: Story) => {
+            let vowelTags = this.getVowelAgreementTags(story.text);
+            vowelTags.forEach((tag) => {
+              tags.push(tag);
+            })
+            tagSets.vowelTags = tags;
+            console.log(tagSets);
+            observer.next(tagSets);
+            observer.complete();
+          });
         });
       });
-      
     });
   }
 
