@@ -29,6 +29,13 @@ storyRoutes.route('/getStoryById/:id').get((req, res) => {
     });
 });
 
+storyRoutes.route('/getStoryByUnderscoreId/:id').get((req, res) => {
+    Story.findOne({_id: req.params.id}, (err, story) => {
+        if(err) res.json(err);
+        if(story) res.json(story);
+    });
+});
+
 // Create new story
 storyRoutes.route('/create').post(function (req, res) {
     let story = new Story(req.body);
