@@ -1,7 +1,6 @@
 .bookContentsContainer {
     width: 80%;
-    height: 70vh;
-    padding-top: 2vh;
+    padding-top: 20px;
     margin-left: 10%;
     z-index: 10;
 }
@@ -9,7 +8,7 @@
 .bookImg {
     z-index: -10;
     width: 90%;
-    height: 75vh;
+    height: 500px;
     position: fixed;
     right: 5%;
 }
@@ -23,13 +22,13 @@
 }
 
 .contentsContainer {
-    padding-top: 1vh;
+    padding-top: 10px;
     padding-left: 3%;
     padding-right: 3%;
-    height: 58vh;
+    height: 400px;
     width: 80%;
     margin-left: 10%;
-    margin-top: 5vh;
+    margin-top: 20px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -42,7 +41,7 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .contentsLinkContainer {
-    height: 36vh;
+    height: 260px;
     overflow: scroll;
     padding: 3%;
     -webkit-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
@@ -79,7 +78,7 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .contentsBtnsContainer {
-    margin-top: 1.5vh;
+    margin-top: 10px;
 }
 
 .newStoryBtn {
@@ -118,9 +117,9 @@ border-radius: 5px 5px 5px 5px;
     z-index: 10;
     width: 330px;
     margin-left: 8%;
-    height: 10vh;
+    height: 60px;
     position: fixed;
-    margin-top: 2vh;
+    margin-top: 10px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -191,10 +190,31 @@ border-radius: 5px 5px 5px 5px;
     margin-top: 5px;
 }
 
-@media only screen and (max-width: 550px) { 
-    .contentsLinkContainer {
-        height: 32vh;
+@media only screen and (max-width: 600px) { 
+    .bookImg {
+        display: none;
     }
+    .bookContentsContainer {
+        width: 95%;
+        padding-top: 10px;
+        margin-left: 2.5%;
+        z-index: 10;
+    }
+    .contentsContainer {
+       width: 90%;
+       margin-left: 5%;
+    }
+    .contentsLinkContainer {
+        height: 270px;
+    }
+    .contentsLinkTitle {
+        font-size: 10pt;
+    }
+
+    .contentsDateTitle {
+        font-size: 10pt;
+    }
+    
 }
 
 @media only screen and (min-width: 700px) {
