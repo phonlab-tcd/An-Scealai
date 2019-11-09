@@ -441,18 +441,15 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         z-index: -10;
         width: 630px;
         left: 50%;
-        top: 50%;
         margin-left: -315px;
-        margin-top: -35vh;
     }
 
     .bookContainer {
         width: 490px;
         position: fixed;
         left: 50%;
-        top: 50%;
         margin-left: -245px;
-        margin-top: -30vh;
+        margin-top: 30px;
     }
 
 }
