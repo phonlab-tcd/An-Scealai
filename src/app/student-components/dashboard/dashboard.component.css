@@ -101,6 +101,10 @@ background-color: lightblue;
     height: 100px;
 }
 
+.feedbackTextarea {
+    height: 170px;
+}
+
 .feedbackHeader {
     width: 90%;
     margin-left: 5%;
