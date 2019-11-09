@@ -35,7 +35,7 @@ button:focus, input:focus, audio:focus{
 }
 
 .bot-bg-modal{
-  display: ;
+  display: none;
 	position: fixed;
   font-family: sans-serif;
   width: 300px;
