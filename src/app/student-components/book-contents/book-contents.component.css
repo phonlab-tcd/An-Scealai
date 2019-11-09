@@ -113,13 +113,16 @@ border-radius: 5px 5px 5px 5px;
     color: white;
 }
 
+
 .optionsPopup {
     z-index: 10;
-    width: 330px;
-    margin-left: 8%;
-    height: 60px;
     position: fixed;
-    margin-top: 10px;
+    margin-top: 20px;
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    padding-right: 0px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -135,14 +138,14 @@ border-radius: 5px 5px 5px 5px;
 	content: '';
 	position: absolute;
 	top: 0px;
-	left: 15%;
+	left: 60px;
 	width: 0;
 	height: 0;
 	border: 10px solid transparent;
 	border-bottom-color: #f1e9d8;
 	border-top: 0;
 	margin-left: -10px;
-	margin-top: -10px;
+    margin-top: -10px;
 }
 
 .deleteBtn {
@@ -155,9 +158,8 @@ border-radius: 5px 5px 5px 5px;
     padding-right: 7px;
     padding-bottom: 7px;
     padding-top: 2px;
-    margin-top: 2vh;
-    margin-left: 3%;
-    height: 6vh;
+    height: 38px;
+    margin-right: 4px;
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -179,9 +181,8 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .optionsPopupBtn {
-    margin-left: 3%;
-    margin-top: 2vh;
-    height: 6vh;
+    height: 38px;
+    margin-right: 4px;
 }
 
 .deleteCheckbox {
@@ -233,7 +234,6 @@ border-radius: 5px 5px 5px 5px;
     }
 
     .optionsPopup {
-        width: 330px;
         margin-left: 55px;
     }
 
