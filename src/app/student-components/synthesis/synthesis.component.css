@@ -1,6 +1,6 @@
 .bookContainer {
     width: 70%;
-    height: 62vh;
+    height: 400px;
     margin-left: 15%;
     z-index: 10;
     border-radius: 5px;
@@ -15,13 +15,13 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .page {
-    padding-top: 5vh;
+    padding-top: 20px;
 }
 
 .bookImg {
     z-index: -10;
     width: 90%;
-    height: 75vh;
+    height: 500px;
     position: fixed;
     right: 5%;
 }
@@ -45,8 +45,9 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     display: inline;
     border-style: none;
     color: #261500;
+    width: 100px;
     font-size: 12pt;
-    padding-top: 1.5vh;
+    padding-top: 10px;
     padding-left: 5%;
 }
 
@@ -62,7 +63,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     color: #261500;
     border-style: none;
     font-size: 12pt;
-    padding-top: 1.5vh;
+    padding-top: 10px;
     padding-right: 5%;
 }
 
@@ -78,7 +79,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .textContainer {
     width: 90%;
     margin-left: 5%;
-    height: 48vh;
+    height: 300px;
     color: #261500;
     background-color: #f7f2e7;
     border: 1px solid #261500a2;
@@ -118,23 +119,37 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     color: #437250;
 }
 
+@media only screen and (max-width: 700px) { 
+  .bookImg {
+      display: none;
+  }
+  .bookContentsContainer {
+      width: 100%;
+      padding-top: 10px;
+      z-index: 10;
+  }
+  .bookContainer {
+     width: 90%;
+     margin-left: 5%;
+  }
+  
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
         width: 630px;
         left: 50%;
-        top: 50%;
+        top: 100px;
         margin-left: -315px;
-        margin-top: -35vh;
     }
 
     .bookContainer {
         width: 490px;
         position: fixed;
         left: 50%;
-        top: 50%;
+        top: 140px;
         margin-left: -245px;
-        margin-top: -30vh;
     }
 
 }

@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
 
   runGramadoir() {
     this.saveStory();
+    this.feedbackVisible = false;
     this.popupVisible = false;
     this.grammarChecked = false;
     this.grammarLoading = true;

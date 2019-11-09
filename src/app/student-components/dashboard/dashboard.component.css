@@ -1,9 +1,9 @@
 .bookContainer {
-    width: 70%;
-    height: 62vh;
-    margin-left: 15%;
-    z-index: 10;
-    border-radius: 5px;
+    padding-top: 10px;
+    height: 400px;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 20px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -12,12 +12,13 @@
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+border-radius: 5px 5px 5px 5px;
 }
 
 .bookImg {
     z-index: -10;
     width: 90%;
-    height: 75vh;
+    height: 500px;
     position: fixed;
     right: 5%;
 }
@@ -41,7 +42,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     border-style: none;
     color: #261500;
     font-size: 12pt;
-    padding-top: 1.5vh;
+    padding-top: 10px;
     padding-left: 5%;
 }
 
@@ -55,7 +56,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     color: #261500;
     border-style: none;
     font-size: 12pt;
-    padding-top: 1.5vh;
+    padding-top: 10px;
     padding-right: 5%;
 }
 
@@ -66,7 +67,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 
 .textField {
     width: 90%;
-    height: 48vh;
+    height: 300px;
     resize: none;
     z-index: 1;
     color: #261500;
@@ -89,19 +90,15 @@ background-color: lightblue;
 }
 
 .feedbackVisibleTextfieldAudio {
-    height: 22vh;
+    height: 130px;
 }
 
 .feedbackVisibleTextfield {
-    height: 20vh;
+    height: 100px;
 }
 
 .feedbackTextareaAudio {
-    height: 15vh;
-}
-
-.feedbackTextarea {
-    height: 23vh;
+    height: 100px;
 }
 
 .feedbackHeader {
@@ -250,11 +247,11 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .textFieldGrammarCheck {
-    height: 28vh;
+    height: 160px;
 }
 
 .grammarMessageContainer {
-    height: 11vh;
+    height: 80px;
     border: 1px solid #999999;
     background: #f7f2e7;
     width: 90%;
@@ -328,7 +325,7 @@ border-radius: 5px 5px 5px 5px;
 .textContainer {
     width: 90%;
     margin-left: 5%;
-    height: 48vh;
+    height: 300px;
     color: #261500;
     background-color: #f7f2e7;
     border: 1px solid #999999;
@@ -421,6 +418,22 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .modalText {
     font-size: 14pt;
+}
+
+@media only screen and (max-width: 700px) { 
+    .bookImg {
+        display: none;
+    }
+    .bookContentsContainer {
+        width: 100%;
+        padding-top: 10px;
+        z-index: 10;
+    }
+    .bookContainer {
+       width: 90%;
+       margin-left: 5%;
+    }
+    
 }
 
 @media only screen and (min-width: 700px) {
