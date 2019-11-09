@@ -1,7 +1,7 @@
-.bookContainer {
+.bookContainerNewStory {
     width: 80%;
-    height: 70vh;
-    padding-top: 2vh;
+    height: 400px;
+    padding-top: 20px;
     margin-left: 10%;
     z-index: 10;
 }
@@ -9,7 +9,7 @@
 .bookImg {
     z-index: -10;
     width: 90%;
-    height: 75vh;
+    height: 500px;
     position: fixed;
     right: 5%;
 }
@@ -24,13 +24,13 @@
 }
 
 .contentsContainer {
-    padding-top: 1vh;
+    padding-top: 10px;
     padding-left: 3%;
     padding-right: 3%;
-    height: 58vh;
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 5vh;
+    height: 400px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 20px;
     border-radius: 5px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -43,7 +43,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .contentsBtnsContainer {
-    margin-top: 5vh;
+    margin-top: 20px;
 }
 
 .createBtn {
@@ -51,7 +51,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .formGroup {
-    margin: 2vh;
+    margin: 10px;
 }
 
 .formLabel {
@@ -76,23 +76,34 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     font-size: 12pt;
 }
 
+@media only screen and (max-width: 600px) { 
+    .bookImg {
+        display: none;
+    }
+    .bookContentsContainer {
+        width: 100%;
+        padding-top: 10px;
+        z-index: 10;
+    }
+    .bookContainerNewStory {
+       width: 90%;
+       margin-left: 5%;
+    }
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
         width: 630px;
         left: 50%;
-        top: 50%;
         margin-left: -315px;
-        margin-top: -35vh;
     }
 
-    .bookContainer {
-        width: 560px;
+    .bookContainerNewStory {
+        width: 490px;
         position: fixed;
         left: 50%;
-        top: 50%;
-        margin-left: -280px;
-        margin-top: -35vh;
+        margin-left: -245px;
     }
 
 }
