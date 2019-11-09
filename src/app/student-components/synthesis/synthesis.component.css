@@ -140,7 +140,6 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
         z-index: -10;
         width: 630px;
         left: 50%;
-        top: 100px;
         margin-left: -315px;
     }
 
@@ -148,8 +147,8 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
         width: 490px;
         position: fixed;
         left: 50%;
-        top: 140px;
         margin-left: -245px;
+        margin-top: 20px;
     }
 
 }
