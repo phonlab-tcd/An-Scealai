@@ -449,6 +449,45 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         background-color: rgba(0, 0, 0, 0.5);
         text-align: center;
     }
+    .optionsPopup {
+        z-index: 10;
+        position: fixed;
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        padding-right: 0px;
+        background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+        -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
+    }
+    
+    .optionsPopup:after {
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 50px;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-bottom-color: #f1e9d8;
+        border-top: 0;
+        margin-left: -10px;
+        margin-top: -10px;
+    }
+    
+    .optionsPopupBtn {
+        padding: 5px;
+        margin: 0px;
+        height: 30px;
+        margin-right: 4px;
+        font-size: 12pt;
+    }
 }
 
 @media only screen and (min-width: 700px) {
