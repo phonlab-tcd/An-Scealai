@@ -386,8 +386,9 @@ border-radius: 5px 5px 5px 5px;
 
 .modalContainer {
     position: absolute;
+    margin-top: -10px;
     z-index: 100;
-    height: 62vh;
+    height: 400px;
     width: 100%;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -395,7 +396,7 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .modalContent {
-    margin-top: 10vh;
+    margin-top: 80px;
     width: 80%;
     margin-left: 10%;
     padding: 25px;
@@ -427,6 +428,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 @media only screen and (max-width: 700px) { 
     .bookImg {
         display: none;
+        width: 5px;
     }
     .bookContentsContainer {
         width: 100%;
@@ -437,7 +439,16 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
        width: 90%;
        margin-left: 5%;
     }
-    
+    .modalContainer {
+        position: absolute;
+        margin-top: -10px;
+        z-index: 100;
+        height: 400px;
+        width: 90%;
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.5);
+        text-align: center;
+    }
 }
 
 @media only screen and (min-width: 700px) {
@@ -455,7 +466,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         margin-left: -245px;
         margin-top: 30px;
     }
-
 }
 
 .lds-grid {

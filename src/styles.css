@@ -283,7 +283,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   transition: 0.7s;
   opacity: 0;
   z-index: 1;
-  display: block;
+  display: none;
   /*right: 350px;*/
 }
 
