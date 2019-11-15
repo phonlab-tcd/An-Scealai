@@ -117,7 +117,7 @@ border-radius: 5px 5px 5px 5px;
 .optionsPopup {
     z-index: 10;
     position: fixed;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: 5%;
     display: flex;
     align-items: center;
@@ -215,7 +215,11 @@ border-radius: 5px 5px 5px 5px;
     .contentsDateTitle {
         font-size: 10pt;
     }
-    
+    .optionsPopupBtn {
+        height: 38px;
+        margin-right: 4px;
+        font-size: 10pt;
+    }
 }
 
 @media only screen and (min-width: 700px) {
