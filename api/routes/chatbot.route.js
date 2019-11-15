@@ -17,7 +17,7 @@ app.use(multipartMiddleware);
 
 
 // Require Chatbot model in our routes module
-let Models = require('../models/Chatbot');
+let Models = require('../models/chatbot');
 
 //Add user started
 chatbotRoute.route('/addUser').post(function(req, res){
