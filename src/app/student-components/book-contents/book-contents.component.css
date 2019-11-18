@@ -1,6 +1,5 @@
 .bookContentsContainer {
     width: 80%;
-    padding-top: 20px;
     margin-left: 10%;
     z-index: 10;
 }
@@ -22,13 +21,11 @@
 }
 
 .contentsContainer {
-    padding-top: 10px;
     padding-left: 3%;
     padding-right: 3%;
-    height: 400px;
+    height: 390px;
     width: 80%;
     margin-left: 10%;
-    margin-top: 20px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -191,7 +188,7 @@ border-radius: 5px 5px 5px 5px;
     margin-top: 5px;
 }
 
-@media only screen and (max-width: 600px) { 
+@media only screen and (max-width: 700px) { 
     .bookImg {
         display: none;
     }
@@ -216,9 +213,44 @@ border-radius: 5px 5px 5px 5px;
         font-size: 10pt;
     }
     .optionsPopupBtn {
-        height: 38px;
+        padding: 5px;
+        padding-top: 2px;
+        margin: 0px;
+        height: 30px;
         margin-right: 4px;
-        font-size: 10pt;
+        font-size: 12pt;
+    }
+
+    .deleteBtn {
+        background-color: #e5bd3b;
+        border-style: none;
+        color: white;
+        margin: 0px;
+        float: left;
+        padding-left: 3px;
+        padding-right: 3px;
+        padding-bottom: 3px;
+        padding-top: 0px;
+        height: 30px;
+        margin-right: 4px;
+        border-radius: 5px 5px 5px 5px;
+    }
+    
+    .deleteBtn:hover {
+        background-color: #ad8f2b;
+    }
+    
+    .deleteModeBtn {
+        background-color: #dd000e;
+    }
+    
+    .deleteModeBtn:hover {
+        background-color: #b7000a;
+    }
+    
+    
+    .trashImg {
+        width: 20px;
     }
 }
 
@@ -235,6 +267,7 @@ border-radius: 5px 5px 5px 5px;
         position: fixed;
         left: 50%;
         margin-left: -280px;
+        padding-top: 40px;
     }
 
     .optionsPopup {
