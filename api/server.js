@@ -15,6 +15,8 @@ const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
 const engagementRoute = require('./routes/engagement.route');
 const statsRoute = require('./routes/stats.route');
+const albumRoute = require('./routes/album.route');
+const profileRoute = require('./routes/profile.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -34,6 +36,8 @@ app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
 app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
+app.use('/album', albumRoute);
+app.use('/profile', profileRoute);
 
 const port = process.env.PORT || 4000;
 

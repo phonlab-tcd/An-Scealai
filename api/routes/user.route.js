@@ -2,6 +2,8 @@ var express = require('express');
 var userRoutes = express.Router();
 var jwt = require('express-jwt');
 
+let User = require('../models/user');
+
 var auth = jwt({
     secret: 'sonJJxVqRC',
     userProperty: 'payload'
@@ -16,5 +18,28 @@ userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);
+
+userRoutes.route('/setLanguage/:id').post((req, res) => {
+    User.findById(req.params.id, (err, user) => {
+        if(user) {
+            user.language = req.body.language;
+            user.save().then(() => {
+                res.status(200).json("Language set successfully");
+            }).catch(err => {
+                resizeBy.status(400).send(err);
+            })
+        }
+    });
+});
+
+userRoutes.route('/getLanguage/:id').get((req, res) => {
+    User.findById(req.params.id, (err, user) => {
+        if(user) {
+            res.json({"language" : user.language});
+        } else {
+            res.status(404).json("User not found");
+        }
+    });
+});
 
 module.exports = userRoutes;

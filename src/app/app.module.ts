@@ -40,6 +40,10 @@ import { TeacherStoryComponent } from './teacher-components/teacher-story/teache
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import { RecordingContentsComponent } from './student-components/recording/recording-contents/recording-contents.component';
+import { RegisterProfileComponent } from './register-profile/register-profile.component';
+import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
+import { StatsComponent } from './admin-components/stats/stats.component';
 
 
 
@@ -72,6 +76,10 @@ import { StoryHistoryComponent } from './admin-components/story-history/story-hi
     AdminClassroomComponent,
     SynthesisComponent,
     StoryHistoryComponent,
+    RecordingContentsComponent,
+    RegisterProfileComponent,
+    StoryDetailsComponent,
+    StatsComponent,
   ],
   imports: [
     BrowserModule,

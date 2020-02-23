@@ -3,22 +3,22 @@
   <div class="bookContainer">
       <div class="{{modalClass}} modalContainer">
         <div class="modalContent" *ngIf="story">
-            <div class="modalText">Save changes made to <b>{{story?.title}}</b>?</div>
+            <div class="modalText">{{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?</div>
             <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
             <div>
-                <button class="modalBtn" (click)="hideModal();">Cancel</button><button class="modalBtn createBtnGreen" (click)="saveModal()">Save</button>
+                <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">Save</button>
             </div>
         </div>
       </div>
       <div class="bookHeader">
-        <div routerLink="/contents" class="myStoriesBtn headerItem">Contents</div>
+        <div routerLink="/contents" class="myStoriesBtn headerItem">{{ts.l.contents}}</div>
         <div class="bookTitle headerItem titleItem">{{story?.title}}<span *ngIf="!storySaved">*</span></div>
         <div class="saveIcon headerItem">
           <div *ngIf="storySaved" class="savedIcon">
-              Saved <i class="fas fa-check"></i>
+            {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>
           <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
-              Save <i class="fas fa-save"></i>
+            {{ts.l.save}} <i class="fas fa-save"></i>
           </div>
         </div>
       </div>
@@ -29,13 +29,13 @@
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
             <div class="textContainer">
                 <div class="loaderContainer">
-                    <b>Correcting Grammar</b>
+                    <b>{{ts.l.correcting_grammar}}</b>
                     <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
               </div>
           </div>
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
-          <div class="feedbackHeader"><div>Grammar Checker </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
+          <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
           <div class="grammarMessageContainer {{grammarMessageClass}}">
             <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
             <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">Choose an error to see details.</span>
@@ -44,8 +44,8 @@
             <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
             <div class="selectGrammarFilter">
               <select (change)="onChangeGrammarFilter($event.target.value)">
-                <option value="gramadoir">Gramadóir</option>
-                <option value="vowel">Leathan/Caol</option>
+                <option value="gramadoir">{{ts.l.gramadoir}}</option>
+                <option value="vowel">{{ts.l.broad_slender}}</option>
               </select>
           </div>
           </div>
@@ -56,24 +56,25 @@
         </div>
         <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
           <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
-          <div class="feedbackHeader"><div>Feedback</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-          <textarea class="textField feedbackTextarea" placeholder="No feedback has been provided for this story" readonly value="{{story?.feedback.text}}"></textarea>
+          <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+          <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
         </div>
         <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
           <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
-          <div class="feedbackHeader"><div>Feedback</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-          <textarea class="textField feedbackTextareaAudio" placeholder="No feedback has been provided for this story" readonly value="{{story?.feedback.text}}"></textarea>
+          <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+          <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
           <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         </div>
         <div class="footerBtnContainer">
-            <button class="btn optionsBtn" style="margin-left: 5%;" (click)="popupVisible = !popupVisible">Options<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button>
+            <button class="btn optionsBtn" style="margin-left: 5%;" (click)="popupVisible = !popupVisible">{{ts.l.options}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button>
         </div>
       </div>
       <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="getFeedback()">Feedback<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button></div>
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="goToSynthesis()">Synthesise</button></div>
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="runGramadoir()">Gramadóir</button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}</button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="getFeedback()">{{ts.l.feedback}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="goToSynthesis()">{{ts.l.audio_check}}</button></div>
+        <div><button class="btn optionsBtn optionsPopupBtn" (click)="runGramadoir()">{{ts.l.grammar_check}}</button></div>
       </div>
-      <app-chatbot></app-chatbot >
+      <app-chatbot></app-chatbot>
   </div>
 </div>

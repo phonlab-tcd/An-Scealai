@@ -80,7 +80,20 @@ storyRoutes.route('/update/:id').post(function (req, res) {
         if(story === null) {
             console.log("story is null!");
         } else {
-            story.text = req.body.text;
+            
+            if(req.body.text) {
+                story.text = req.body.text;
+            }
+            if(req.body.date) {
+                story.date = req.body.date;
+            }
+            if(req.body.dialect) {
+                story.dialect = req.body.dialect;
+            }
+            if(req.body.title) {
+                story.title = req.body.title;
+            }
+            
             story.save().then(story => {
                 res.json('Update complete');
             }).catch(err => {
@@ -272,7 +285,7 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
     });
 });
 
-storyRoutes.route('/gramadoir/:id').get((req, res) => {
+storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
         if(err) {
             res.send(err);
@@ -280,7 +293,7 @@ storyRoutes.route('/gramadoir/:id').get((req, res) => {
         if(story) {
             let form = {
                 teacs: story.text.replace(/\n/g, " "),
-                teanga: 'en',
+                teanga: req.params.lang,
             };
 
             let formData = querystring.stringify(form);

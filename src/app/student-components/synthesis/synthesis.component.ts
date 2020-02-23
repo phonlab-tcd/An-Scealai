@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-synthesis',
@@ -15,12 +16,13 @@ export class SynthesisComponent implements OnInit {
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
               private router: Router, private sanitizer: DomSanitizer,
-              private engagement: EngagementService) { }
+              private engagement: EngagementService, private ts : TranslationService) { }
 
   story: Story;
   paragraphs: Paragraph[] = [];
   audioFinishedLoading: boolean = false;
   a;
+  audioPlaying: boolean = false;
 
   ngOnInit() {
     this.getStory().then(() => {
@@ -71,17 +73,20 @@ export class SynthesisComponent implements OnInit {
   playAudio(p: Paragraph) {
     if(this.a) {
       this.a.pause();
+      this.audioPlaying = false;
       this.paragraphs.forEach((para) => {
         para.stopHighlighting();
       })
     }
     this.a = new Audio(p.audioUrl);
     this.a.play();
+    this.audioPlaying = true;
     p.startHighlighting();
   }
 
   stopAudio(p: Paragraph) {
     this.a.pause();
+    this.audioPlaying = false;
     p.stopHighlighting();
   }
 

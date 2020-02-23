@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
+import { TranslationService } from '../translation.service';
 
 @Component({
   selector: 'app-register-teacher',
@@ -23,7 +24,8 @@ export class RegisterTeacherComponent implements OnInit {
   errorText: String;
 
   constructor(private auth: AuthenticationService, private http: HttpClient, 
-    private router: Router, private engagement: EngagementService,) { }
+    private router: Router, private engagement: EngagementService,
+    private ts: TranslationService) { }
 
   ngOnInit() {
     this.registrationError = false;

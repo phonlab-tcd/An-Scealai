@@ -1,28 +1,28 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="bookContainerNewStory">
   <div class="contentsContainer">
-    <a class="backBtn" routerLink="/contents">Back</a>
-    <div class="bookTitle">New Story</div>
+    <a class="backBtn" routerLink="/contents">{{ts.l.back}}</a>
+    <div class="bookTitle">{{ts.l.new_story}}</div>
     <form [formGroup]="newStoryForm">
       <div class="formGroup" novalidate>
-        <p class="formLabel">Title</p>
+        <p class="formLabel">{{ts.l.title}}</p>
         <input type="text" class="titleInput" formControlName="title">
         <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
           <div *ngIf="newStoryForm.controls['title'].errors.required">
-            *Title is required.
+            *{{ts.l.title_required}}.
           </div>
         </div>
       </div>
       <div class="formGroup">
-        <p class="formLabel">Dialect</p>
-        <select formControlName="dialect">
-          <option value="connemara">Connemara</option>
-          <option value="donegal">Donegal</option>
-          <option value="kerry">Kerry</option>
+        <p class="formLabel">{{ts.l.dialect}}</p>
+        <select formControlName="dialect" class="dialectSelect">
+          <option value="connemara">{{ts.l.connacht}}</option>
+          <option value="donegal">{{ts.l.ulster}}</option>
+          <option value="kerry">{{ts.l.munster}}</option>
         </select>
       </div>
       <div class="contentsBtnsContainer">
-        <button class="btn createBtn" type="submit" (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >Create</button>
+        <button class="btn createBtn" type="submit" (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >{{ts.l.create}}</button>
       </div>
     </form>
   </div>

@@ -1,45 +1,41 @@
 <div class="profileContainer">
-    <div class="formTitle">Profile</div><div class="editIcon" (click)="toggleEditMode()"><img src="../../assets/img/editIcon.ico" class="editImg"></div><br>
-    <div *ngIf="editMode" class="formContainer">
-      <form>
-        <div class="form-group">
-          <div class="formLabel"><label>Username</label></div>
-          <input type="text" class="form-control inputField"
-          placeholder="Enter username" name="username">
-        </div>
-        <div class="form-group">
-          <div class="formLabel"><label>Password</label></div>
-          <input type="password" class="form-control inputField" 
-          placeholder="Enter password" name="password">
-        </div>
-        <button type="submit" class="btn loginBtn">Save</button>
-      </form>
-    </div>
+    <div class="formTitle">{{ts.l.profile}}</div><br>
     <div *ngIf="!editMode" class="formBody">
       <div class="formContainer">
         <div class="form-group">
-          <div class="formLabel">Username</div>
-          <div class="userInfo"><b>{{auth.getUserDetails().username}}</b></div>
-        </div>
-        <div class="form-group">
-          <div class="formLabel">Password</div>
-          <div class="userInfo"><b>*******</b></div>
+          <div class="formLabel">{{ts.l.username}} :</div>
+          <div class="userInfo"><i>{{auth.getUserDetails().username}}</i></div>
         </div>
         <div class="form-group" *ngIf="classroom">
-          <div class="formLabel">Classroom</div>
-          <div class="userInfo"><b>{{classroom.title}}</b></div>
+          <div class="formLabel">{{ts.l.classroom}} :</div>
+          <div class="userInfo"><i>{{classroom.title}}</i></div>
+          <button class="btn leaveClassroomButton" (click)="leaveClassroom()">{{ts.l.leave}}</button>
         </div>
-        <div class="form-group" *ngIf="!classroom">
-            <div class="formLabel">Classroom code</div>
+        <div class="form-group-vertical" *ngIf="!classroom">
+          <div class="form-group-section">
+            <div class="formLabel classroomCodeLabel">{{ts.l.classroom_code}} :</div>
             <input type="text" class="form-control inputField"
-          placeholder="Enter code here" name="classroomcode" [formControl]="codeInput">
+            placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
+          </div>
+          <div class="classroomMessages">
+            <div *ngIf="classroomCodeOutput" class="notFoundText classroomMessage">{{classroomCodeOutput}}</div>
+            <div *ngIf="foundClassroom" class="greenLink classroomMessage" (click)="joinClassroom()">{{ts.l.join_classroom}} '<b>{{foundClassroom.title}}</b>'?</div>
+          </div>
         </div>
-        <div class="form-group centerForm">
-          <div *ngIf="classroomCodeOutput" class="notFoundText">{{classroomCodeOutput}}</div>
-          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()">Join classroom '<b>{{foundClassroom.title}}</b>'?</div>
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.language}} :</div>
+          <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
+            <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
+            <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+          </div>
+          <div *ngIf="ts.inIrish()" class="languageButtonContainer">
+            <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
+            <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+          </div>
         </div>
         <div class="btnContainer">
-          <button routerLink="/landing" class="btn logoutBtn" (click)="logout()">log out <i class="fas fa-sign-out-alt"></i></button>
+          <button routerLink="/register-profile" class="btn logoutBtn">{{ts.l.my_info}}</button>
+          <button routerLink="/landing" class="btn logoutBtn" (click)="logout()">{{ts.l.sign_out}} <i class="fas fa-sign-out-alt"></i></button>
         </div>
       </div>
     </div>

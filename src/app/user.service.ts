@@ -16,5 +16,5 @@ export class UserService {
   getUserById(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'viewUser', {headers: {_id : id}});
   }
- 
+
 }

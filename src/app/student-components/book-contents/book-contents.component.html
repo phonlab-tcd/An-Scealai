@@ -1,27 +1,22 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="bookContentsContainer">
   <div class="contentsContainer">
-    <div class="bookTitle">My Stories</div>
+    <div class="bookTitle">{{ts.l.my_stories}}</div>
     <div class="contentsTitleContainer">
-      <div class="contentsLinkTitle">Title</div>
-      <div class="contentsDateTitle">Last Updated</div>
+      <div class="contentsLinkTitle">{{ts.l.title}}</div>
+      <div class="contentsDateTitle">{{ts.l.last_updated}}</div>
     </div>
     <div class="contentsLinkContainer">
       <div *ngFor="let story of stories">
         <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">
         <a [routerLink]="['/dashboard', story.id]" 
         class="contentsLink">{{story.title}}</a>
-        <div class="contentsDate">{{story.date | date}}</div>
+        <div class="contentsDate">{{story.date | date : 'short' }}</div>
       </div>
     </div>     
     <div class="contentsBtnsContainer">
-      <button class="btn optionsBtn" (click)="togglePopupVisible()">Options</button>
-      <button class="btn newStoryBtn" routerLink="/new-story">New Story</button>
+      <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
+      <button class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}</button>
     </div>        
-  </div>
-  <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
-    <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
-    <button class="btn optionsBtn optionsPopupBtn">Rename</button>
-    <button class="btn optionsBtn optionsPopupBtn">Change Dialect</button>
   </div>
 </div>

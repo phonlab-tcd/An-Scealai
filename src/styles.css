@@ -1,12 +1,23 @@
 @import "../node_modules/ng2-slim-loading-bar/style.css";
 
-body {
-    background: url("assets/img/paperBg.png") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  font-family: "Open Sans";
+html,body.rootBody {
+  height: 100%;
+}
+
+html {
+  overflow-y: hidden;
+}
+body.rootBody {
+  overflow-y: scroll;
+}
+
+body.rootBody {
+   background: url("assets/img/paperBg.png") no-repeat center fixed;
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+ font-family: "Open Sans";
 }
 
 .btn {

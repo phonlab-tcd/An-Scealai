@@ -21,6 +21,7 @@
     padding-right: 25%;
     display: inline-block;
     font-size: 18pt;
+    margin-bottom: 20px;
 }
 
 .contentsContainer {
@@ -51,11 +52,23 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .formGroup {
-    margin: 10px;
+    width: 60%;
+    margin-left: 20%;
+    margin-bottom: 20px;
 }
 
 .formLabel {
     color: #261500;
+    float: left;
+}
+
+.titleInput {
+    border-radius: 4px;
+    width: 100%;
+}
+
+.dialectSelect {
+    width: 100%;
 }
 
 .backBtn {
