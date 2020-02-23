@@ -17,7 +17,7 @@
     justify-content: center;
     padding: 15px;
     color: #261500;
-    background-color: #e6e8ed;
+    background-color: white;
     border-radius: 0px 0px 10px 10px;
 }
 
@@ -50,26 +50,6 @@
     white-space: nowrap;
 }
 
-.editIcon {
-    width: 32px;
-    height: 32px;
-    float: right;
-    margin-right: 4%;
-    margin-top: -13px;
-}
-
-.editIcon:hover {
-    cursor: pointer;
-    width: 35px;
-    height: 35px;
-    margin-right: 3.5%;
-    margin-top: -13px;
-}
-
-.editImg {
-    width: 66%;
-}
-
 .userInfo {
     padding-left: 5%;
     white-space: nowrap;
@@ -79,6 +59,7 @@
     font-size: 12pt;
     background-color: #70a87f;
     border-radius: 10px 10px 10px 10px;
+    padding: 5px;
 }
 
 .logoutBtn:hover {
@@ -88,6 +69,41 @@
 .form-group {
     display: flex;
     align-items: center;
+    padding: 5px;
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 4px;
+}
+
+.form-group-vertical {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 4px;
+    flex-direction : column;
+    margin-bottom: 15px;
+}
+
+.form-group-section {
+    display: flex;
+    align-items: center;
+}
+
+.classroomMessage {
+    margin: 10px;
+}
+
+.leaveClassroomButton {
+    background-color: #d6123c;
+    border-radius: 5px;
+    padding: 2px;
+    font-size: 12pt;
+    margin-left: auto;
+}
+
+.leaveClassroomButton:hover {
+    background-color: #9b0d2b;
+    transition: 0.5s;
 }
 
 .centerForm {
@@ -106,4 +122,44 @@
 
 .greenLink:hover {
     cursor: pointer;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.languageButtonContainer {
+    display: flex;
+    margin-left: 4px;
+}
+
+.languageButton {
+    background-color: #70a87f;
+    color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.languageButton:hover { 
+    cursor: pointer;
+    background-color: #437250;
+}
+
+.languageButtonSelected {
+    background-color: #437250;
+}
+
+@media only screen and (max-width: 700px) {
+    .profileContainer {
+        width: 90%;
+    }
+    .formBody {
+        width: 100%;
+    }
+    .logoutBtn {
+        font-size: 10pt;
+    }
 }

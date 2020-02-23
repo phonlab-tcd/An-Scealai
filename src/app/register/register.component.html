@@ -1,20 +1,42 @@
 <div class="registerContainer">
-    <div class="formTitle">Register</div><br>
+    <div class="formTitle">{{ts.l.register}}</div><br>
     <div class="formContainer">
       <form (submit)="register()">
         <div class="form-group">
-          <div class="formLabel"><label>Username</label></div>
+          <div class="formLabel"><label>{{ts.l.username}}</label></div>
           <input type="text" class="form-control inputField"
-          placeholder="Enter username" name="username" [(ngModel)]="credentials.username">
-          <div *ngIf="usernameExists" class="errorMessage">*Username already in use</div>
+          name="username" [(ngModel)]="credentials.username">
+          <div *ngIf="usernameExists" class="errorMessage">{{ts.l.username_in_use}}</div>
         </div>
         <div class="form-group">
-          <div class="formLabel"><label>Password</label></div>
+          <div class="formLabel"><label>{{ts.l.create_password}}</label></div>
           <input type="password" class="form-control inputField" 
-          placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
+          name="password" [(ngModel)]="credentials.password">
+        </div>
+        <div class="form-group">
+          <div class="formLabel"><label>{{ts.l.confirm_password}}</label></div>
+          <input type="password" class="form-control inputField"
+          name="password" [(ngModel)]="passwordConfirm">
           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
         </div>
-        <button type="submit" class="btn loginBtn">Register</button>
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.language}} :</div>
+          <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
+            <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
+            <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+          </div>
+          <div *ngIf="ts.inIrish()" class="languageButtonContainer">
+            <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
+            <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="termsOfUseContainer">
+            <div class="termsOfUseButton" (click)="toggleTerms()">*{{ts.l.agree_to_terms}}</div>
+            <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
+          </div>
+        </div>
+        <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
       </form>
     </div>
 </div>

@@ -7,7 +7,7 @@ let Classroom = require('../models/classroom');
 classroomRoutes.route('/create').post((req, res) => {
     let classroom = new Classroom(req.body);
     classroom.save().then(classroom => {
-        res.status(200).json({"message" : "story added successfully"});
+        res.status(200).json({"message" : "classroom created successfully"});
     }).catch(err => {
         res.status(400).send("Unable to save to DB");
     });

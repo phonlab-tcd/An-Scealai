@@ -7,6 +7,7 @@ import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
 import { EngagementService } from './engagement.service';
 import { EventType } from './event';
+import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
 
 @Injectable({
@@ -16,9 +17,9 @@ export class StoryService {
 
   chosenStory: Story;
 
-  constructor(private http: HttpClient,
-    private router: Router,
-    private auth: AuthenticationService, private engagement: EngagementService) { }
+  constructor(private http: HttpClient, private router: Router,
+    private auth: AuthenticationService, private engagement: EngagementService,
+    private ts : TranslationService) { }
 
   baseUrl: string = config.baseurl + "story/";
 
@@ -56,11 +57,8 @@ export class StoryService {
     return this.http.get(this.baseUrl+author);
   }
 
-  updateStory(text, id) {
-    const obj = {
-      text: text
-    };
-    this.http.post(this.baseUrl + 'update/'+id, obj).subscribe();
+  updateStory(data, id) : Observable<any> {
+    return this.http.post(this.baseUrl + 'update/'+id, data);
   }
 
   deleteStory(id) {
@@ -94,6 +92,6 @@ export class StoryService {
   }
 
   gramadoir(id: string) : Observable<any> {
-    return this.http.get(this.baseUrl + 'gramadoir/' + id);
+    return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
 }

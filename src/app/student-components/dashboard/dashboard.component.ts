@@ -11,6 +11,7 @@ import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +41,8 @@ export class DashboardComponent implements OnInit {
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
-    private engagement: EngagementService, private grammar: GrammarService) {
+    private engagement: EngagementService, private grammar: GrammarService,
+    private ts : TranslationService) {
 
     }
 
@@ -88,8 +90,11 @@ export class DashboardComponent implements OnInit {
   saveStory() {
     this.route.params.subscribe(
       params => {
-        console.log(this.story.text);
-        this.storyService.updateStory(this.story.text, params['id']);
+        let updateData = {
+          text : this.story.text,
+          date : new Date(),
+        };
+        this.storyService.updateStory(updateData, params['id']).subscribe();
         this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
         this.storySaved = true;
         console.log("Story saved");

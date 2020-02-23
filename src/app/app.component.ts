@@ -11,6 +11,7 @@ import { StoryService } from './story.service';
 import { Story } from './story';
 import { NotificationService } from './notification-service.service';
 import { EngagementService } from './engagement.service';
+import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-root',
@@ -34,13 +35,14 @@ export class AppComponent {
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
               private storyService : StoryService, private notificationSerivce : NotificationService,
-              private engagement: EngagementService) {
+              private engagement: EngagementService, private ts : TranslationService) {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
   }
 
   ngOnInit() {
+    this.ts.initLanguage();
     this.notificationSerivce.getStories().subscribe((res: Story[]) => {
       this.storiesForNotifications = res;
     });
@@ -84,4 +86,5 @@ export class AppComponent {
     }
     this.wasInside = false;
   }
+  
 }

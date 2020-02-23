@@ -15,17 +15,18 @@
         </label>
         </div>
             <div class="nav-links">
-                <a routerLink="/about" class="navBtn" (click)="changeCheck()">About</a>
-                <a routerLink="/technology" class="navBtn" (click)="changeCheck()">Technology</a>
-                <a routerLink="/language" class="navBtn" (click)="changeCheck()">Language</a>  
-                <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">Sign in</a>
+                <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a>
+                <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
+                <a routerLink="/language" class="navBtn" (click)="changeCheck()">{{ts.l.language}}</a>
+                <a routerLink="/recordings" class="navBtn" (click)="changeCheck()"></a>  
+                <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
                 <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
                     <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}}</a>
                     <div class="notificationBtn" *ngIf="storiesForNotifications && storiesForNotifications.length > 0" (click)="showNotifications()">{{storiesForNotifications.length}}</div>
                 </div>
             </div>
             <div *ngIf="notificationsShown && storiesForNotifications.length > 0" class="optionsPopup notifcationPopup">
-                <div class="notificationsHeader">New Feedback</div>
+                <div class="notificationsHeader">{{ts.l.new_feedback}}</div>
                 <div class="notificationsBody">
                     <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
                         {{story.title}}

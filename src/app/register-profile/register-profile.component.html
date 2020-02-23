@@ -1,0 +1,161 @@
+<div class="registerContainer">
+  <div class="formTitle">{{ts.l.my_info}}</div><br>
+  <div class="formContainer">
+      <div class="form-group-set">
+        <div class="group-set-header">
+          {{ts.l.personal_info}}
+        </div>
+        <div class="group-set-body">
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.gender}}</p>
+            <select class="selectOptions" [(ngModel)]="gender">
+              <option *ngFor="let g of genders" [value]="g">{{g}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.age}}</p>
+            <select [(ngModel)]="age" class="selectOptions">
+              <option *ngFor="let a of ages" [value]="a">{{a}}</option>
+            </select>
+          </div>
+          <div *ngIf="!notFromIreland" class="form-group">
+            <p class="formLabel">{{ts.l.county}}</p>
+            <select name="county" id="county_ireland" class="selectOptions" [(ngModel)]="county">
+              <option *ngFor="let c of counties" [ngValue]="c">{{c}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">
+              <input type="checkbox" [(ngModel)]="notFromIreland"/>
+              {{ts.l.not_from_ireland}}
+            </p>
+          </div>
+          <div *ngIf="notFromIreland" class="form-group">
+            <p class="formLabel">{{ts.l.country}}</p>
+            <input type="text" class="form-control inputField" [(ngModel)]="country"/>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.type_of_school}}</p>
+            <select class="selectOptions" [(ngModel)]="school">
+              <option *ngFor="let s of schools" [ngValue]="s">{{s}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group-set">
+        <div class="group-set-header">
+          {{ts.l.language_competence}}
+        </div>
+        <div class="group-set-body">
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.native_speaker}}</p>
+            <select class="selectOptions" [(ngModel)]="nativeSpeakerStatus">
+              <option *ngFor="let nss of nativeSpeakerStatuses" [ngValue]="nss">{{nss}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.which_dialect}}</p>
+            <select class="selectOptions" [(ngModel)]="dialectPreference">
+              <option *ngFor="let dp of dialectPreferences" [ngValue]="dp">{{dp}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.how_well_understand_spoken}}</p>
+            <select class="selectOptions" [(ngModel)]="spokenComprehensionLevel">
+              <option *ngFor="let scl of spokenComprehensionLevels" [ngValue]="scl">{{scl}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.whats_cefr_level}}</p>
+            <select class="selectOptions" [(ngModel)]="cefrLevel">
+              <option *ngFor="let cl of cefrLevels" [ngValue]="cl">{{cl}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group-set">
+        <div class="group-set-header">
+          {{ts.l.exposure_to_irish}}
+        </div>
+        <div class="group-set-body">
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.how_often_speak}}</p>
+            <select class="selectOptions" [(ngModel)]="speakingFrequency">
+              <option *ngFor="let hoo of howOftenOptions" [ngValue]="hoo">{{hoo}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.who_speak_with}}</p>
+            <select class="selectOptions" [(ngModel)]="speakWith">
+              <option *ngFor="let sw of speakWithOptions" [ngValue]="sw">{{sw}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.watch_irish_media}}</p>
+            <div class="checkbox-group">
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.rnag"/> Raidió na Gaeltachta</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.tg4"/> TG4</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.bbcUladh"/> BBC Uladh</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.rnalife"/> Raidió na Life</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.radioRiRa"/> Raidió Rí-Rá</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.socialMedia"/> {{ts.l.social_media}}</div>
+            </div>
+          </div>
+          <div *ngIf="irishMediaChecked()" class="form-group">
+            <p class="formLabel">{{ts.l.how_often}}</p>
+            <select class="selectOptions" [(ngModel)]="howOftenMedia">
+              <option *ngFor="let hoo of howOftenOptions" [ngValue]="hoo">{{hoo}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.read_irish}}</p>
+            <div class="checkbox-group">
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishReading.newspapers"/> {{ts.l.newspapers}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishReading.socialMedia"/> {{ts.l.social_media}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishReading.books"/> {{ts.l.books}}</div>
+            </div>
+          </div>
+          <div *ngIf="irishReadingChecked()" class="form-group">
+            <p class="formLabel">{{ts.l.how_often}}</p>
+            <select class="selectOptions" [(ngModel)]="howOftenReading">
+              <option *ngFor="let hoo of howOftenOptions" [ngValue]="hoo">{{hoo}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p class="formLabel">{{ts.l.write_irish}}</p>
+            <div class="checkbox-group">
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.email"/> {{ts.l.email_sms}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.socialMedia"/> {{ts.l.social_media}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.blog"/> {{ts.l.blogs}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.teachingMaterial"/> {{ts.l.teaching_material}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.articles"/> {{ts.l.articles}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.shortStories"/> {{ts.l.short_stories}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.books"/> {{ts.l.books}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishWriting.poetry"/> {{ts.l.poetry}}</div>
+            </div>
+          </div>
+          <div *ngIf="irishWritingChecked()" class="form-group">
+            <p class="formLabel">{{ts.l.how_often}}</p>
+            <select class="selectOptions" [(ngModel)]="howOftenWriting">
+              <option *ngFor="let hoo of howOftenOptions" [ngValue]="hoo">{{hoo}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group-set">
+        <div class="group-set-header">
+          {{ts.l.synthetic_voices}}
+        </div>
+        <div class="group-set-body">
+          <div class="form-group">
+            <p class="formLabel"><i>{{ts.l.synthetic_voices_info}}</i></p>
+            <p class="formLabel">{{ts.l.synthetic_voices_opinion}}</p>
+            <select class="selectOptions" [(ngModel)]="synthOpinion">
+              <option *ngFor="let so of synthOpinions" [ngValue]="so">{{so}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn loginBtn" (click)="saveDetails()"><i class="fas fa-save"></i>  {{ts.l.save_details}} </button>
+  </div>
+</div>

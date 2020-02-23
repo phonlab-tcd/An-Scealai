@@ -42,3 +42,60 @@
     text-align: left;
     margin-left: 20%;
 }
+
+.errorMessage {
+    margin-left: 10%;
+    width: 80%;
+}
+
+
+.languageButtonContainer {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    margin-left: 20%;
+}
+
+.languageButton {
+    background-color: #70a87f;
+    color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.languageButton:hover { 
+    cursor: pointer;
+    background-color: #437250;
+}
+
+.languageButtonSelected {
+    background-color: #437250;
+}
+
+.termsOfUseContainer {
+    font-size: 10pt;
+    width: 100%;
+}
+
+.termsOfUseButton {
+    width: 60%;
+    margin-left: 20%;
+    color: #437250;
+}
+
+.termsOfUseButton:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.termsOfUseText {
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 4px;
+    padding: 4px;
+    width: 90%;
+    margin-left: 5%;
+    text-align: left;
+    color: rgb(97, 97, 97);
+}

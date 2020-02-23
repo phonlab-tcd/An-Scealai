@@ -8,39 +8,92 @@ let Event = require('../models/event');
 let Story = require('../models/story');
 
 statsRoutes.route('/synthesisFixes').get((req, res) => {
-    getTexts().then((texts) => {
-        res.json(texts);
+    getTexts().then(data => {
+        if(data) {
+            let errorDifferences = new Map();
+            countErrors(data, 'BEFORE').then(beforeErrors => {
+                console.log(beforeErrors);
+                countErrors(data, 'AFTER').then(afterErrors => {
+                    beforeErrors.forEach((val, key) => {
+                        if(afterErrors.has(key)) {
+                            errorDifferences.set(key, (val-afterErrors.get(key)));
+                        } else {
+                            errorDifferences.set(key, val);
+                        }
+                    });
+                    res.json(mapToObj(errorDifferences));
+                });
+            })
+        }
     });
 });
 
+function countErrors(data, dataSet) {
+    return new Promise((resolve, reject) => {
+        let counter = 0;
+        let errorsMap = new Map();
+        data.forEach((d, index, array ) => {
+            getGramadoirErrorsForText((dataSet === 'BEFORE') ? d.before : d.after).then(body => {
+                errors = JSON.parse(body)
+                errors.forEach(error => {
+                    if(errorsMap.has(error.ruleId)) {
+                        errorsMap.set(error.ruleId, errorsMap.get(error.ruleId)+1);
+                    } else {
+                        errorsMap.set(error.ruleId, 1);
+                    }
+                });
+                counter++;
+                if(counter === array.length) {
+                    resolve(errorsMap);
+                }
+            });
+        });
+    });
+}
 
 function getTexts() {
-    return new Promise(function(resolve, reject) {
-        let texts = [];
+    return new Promise((resolve, reject) => {
+        let data = [];
         Story.find({}, (err, stories) => {
             if(stories) {
-                stories.forEach((story) => {
-                    Event.find({"storyData._id":story._id.toString()}, (err, events) => {
-                        if(events) {
-                            let prevEvent;
-                            events.forEach((event) => {
-                                if( prevEvent 
-                                    && prevEvent.type === 'SYNTHESISE-STORY' 
-                                    && event.type === 'SAVE-STORY') {
-                                        console.log(prevEvent.storyData.text);
-                                        texts.push(prevEvent.storyData.text);
-                                }
-                                prevEvent = event;
-                            });
+                let counter = 0;
+                stories.forEach((story, index, array) => {
+                    getEvents(story).then(eventData => {
+                        //data.push(eventData); // This pushes data per story (as opposed to all together)
+                        eventData.forEach(datum => {
+                            data.push(datum);
+                        });
+                        counter++
+                        if(counter === array.length) {
+                            resolve(data);
                         }
-                    })
+                    });
                 });
-                resolve(texts);
             }
         });
-        
     });
-    
+}
+
+function getEvents(story) {
+    return new Promise((resolve, reject) => {
+        let data = [];
+        Event.find({"storyData._id":story._id.toString()}, (err, events) => {
+            if(events) {
+                let previousEvent = events[0];
+                events.forEach((event, index, array) => {
+                    if(previousEvent.type === "SYNTHESISE-STORY"
+                    && event.type === "SAVE-STORY") {
+                        data.push({"before" : previousEvent.storyData.text,
+                                    "after" : event.storyData.text});
+                    }
+                    if(index === array.length-1) {
+                        resolve(data);
+                    }
+                    previousEvent = event;
+                })
+            }
+        })
+    });
 }
 
 function getGramadoirErrorsForText(text) {
@@ -60,12 +113,22 @@ function getGramadoirErrorsForText(text) {
             method: 'POST'
         }, (err, resp, body) => {
             if (body) {
-            resolve(body);
+                resolve(body);
             }
         });
         
       });
     
+}
+
+function mapToObj(inputMap) {
+    let obj = {};
+
+    inputMap.forEach(function(value, key){
+        obj[key] = value
+    });
+
+    return obj;
 }
 
 module.exports = statsRoutes;

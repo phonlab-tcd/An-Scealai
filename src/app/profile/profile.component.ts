@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { Classroom } from '../classroom';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
+import { TranslationService } from '../translation.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,9 @@ export class ProfileComponent implements OnInit {
   classroom: Classroom;
 
   constructor(public auth: AuthenticationService,
-              private classroomService: ClassroomService, private engagement: EngagementService) { }
+              private classroomService: ClassroomService, 
+              private engagement: EngagementService,
+              private ts : TranslationService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -60,6 +63,12 @@ export class ProfileComponent implements OnInit {
           this.classroom = classroom;
         }
       }
+    });
+  }
+
+  leaveClassroom() {
+    this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
+      this.classroom = null;
     });
   }
 

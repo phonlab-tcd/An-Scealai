@@ -4,6 +4,7 @@ import { StoryService } from '../../story.service';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -14,11 +15,11 @@ export class BookContentsComponent implements OnInit {
   
   stories: Story[];
   deleteMode: Boolean;
+  editMode : boolean;
   toBeDeleted: String[];
-  popupVisible: Boolean;
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService) { }
+    private engagement: EngagementService, private ts : TranslationService) { }
 
   ngOnInit() {
     this.storyService
@@ -27,7 +28,6 @@ export class BookContentsComponent implements OnInit {
       this.stories = data;
     });
     this.deleteMode = false;
-    this.popupVisible = false;
     this.toBeDeleted = [];
   }
 
@@ -53,14 +53,8 @@ export class BookContentsComponent implements OnInit {
     }
   }
 
-  togglePopupVisible() {
-    if(this.popupVisible) {
-      this.popupVisible = false;
-      this.deleteMode = false;
-      this.toBeDeleted = [];
-    } else {
-      this.popupVisible = true;
-    }
+  toggleEditMode() {
+    this.editMode = !this.editMode;
   }
 
   toggleDelete(id: String) {

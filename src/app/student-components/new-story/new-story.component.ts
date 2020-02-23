@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { StoryService } from '../../story.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
-
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-new-story',
@@ -14,7 +14,7 @@ export class NewStoryComponent implements OnInit {
 
   newStoryForm: FormGroup;
   constructor(private fb: FormBuilder,  private storyService: StoryService,
-    private auth: AuthenticationService) {
+    private auth: AuthenticationService, private ts : TranslationService) {
     this.createForm();
   }
 

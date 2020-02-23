@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
+import { TranslationService } from '../translation.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,7 +10,8 @@ import { Router } from '@angular/router';
 })
 export class LandingComponent implements OnInit {
 
-  constructor(private auth: AuthenticationService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private router: Router,
+    private ts : TranslationService) { }
 
   ngOnInit() {
     if(this.auth.isLoggedIn()) {

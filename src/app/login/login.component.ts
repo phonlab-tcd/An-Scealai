@@ -3,6 +3,8 @@ import { AuthenticationService, TokenPayload } from '../authentication.service';
 import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from '../engagement.service';
+import { TranslationService } from '../translation.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,14 +17,14 @@ export class LoginComponent implements OnInit {
   credentials: TokenPayload = {
     username: '',
     password: '',
-    role: 'STUDENT',
+    role: '',
   };
 
   loginError: boolean;
   errorText: String;
 
   constructor(private auth: AuthenticationService, private router: Router,
-              private engagement: EngagementService) { }
+              private engagement: EngagementService, private ts : TranslationService) { }
 
   ngOnInit() {
     this.loginError = false;

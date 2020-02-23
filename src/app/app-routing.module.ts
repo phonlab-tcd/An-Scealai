@@ -8,12 +8,16 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
+import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
+import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
+
+import { RecordingContentsComponent } from './student-components/recording/recording-contents/recording-contents.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -21,6 +25,7 @@ import { UserComponent } from './admin-components/user/user.component';
 import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
 import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
+import { StatsComponent } from './admin-components/stats/stats.component';
 
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
@@ -32,6 +37,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { CanDeactivateGuard } from './can-deactivate.guard';
+import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 
 const routes: Routes = [
@@ -42,12 +48,15 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
+  { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
   { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
-  { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService] },
+  { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+  { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
+  { path: 'recordings', component: RecordingContentsComponent, canActivate: [AuthGuardService]},
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -81,6 +90,10 @@ const routes: Routes = [
       {
         path: 'story-history/:id',
         component: StoryHistoryComponent,
+      },
+      {
+        path: 'stats',
+        component: StatsComponent,
       },
     ]
   },

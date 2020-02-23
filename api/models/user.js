@@ -14,6 +14,11 @@ let userSchema = new mongoose.Schema({
         enum: ['ADMIN', 'TEACHER', 'STUDENT'],
         default: 'STUDENT'
     },
+    language: {
+        type: String,
+        enum: ['ga', 'en'],
+        default: 'en'
+    },
     hash: String,
     salt: String
 });
@@ -36,6 +41,7 @@ userSchema.methods.generateJwt = function() {
         _id: this._id,
         username: this.username,
         role: this.role,
+        language: this.language,
         exp: parseInt(expiry.getTime() / 1000),
     }, "sonJJxVqRC"); // 5ecret
 };

@@ -1,0 +1,24 @@
+<img src="assets/img/book.png" class="bookImg">
+<div class="bookContentsContainer">
+  <div class="contentsContainer">
+    <div class="topHeader">
+      <div [routerLink]="['/dashboard', story.id]" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div>
+    </div>
+    <div class="bookTitle">{{ts.l.story_details}}</div>
+    <div class="contentBody">
+      <div class="contentGroup">
+        <div class="contentLabel">{{ts.l.title}}</div>
+        <input type="text" class="titleInput" [(ngModel)]="story.title"/>
+      </div>
+      <div class="contentGroup">
+        <div class="contentLabel">{{ts.l.dialect}}</div>
+        <select [(ngModel)]="story.dialect" class="selectOptions">
+          <option *ngFor="let d of dialects" [ngValue]="d.code">{{d.name}}</option>
+        </select>
+      </div>
+      <div class="contentGroup">
+        <button type="submit" class="btn loginBtn" (click)="saveDetails()"><i class="fas fa-save"></i>  {{ts.l.save_details}} </button>
+      </div>
+    </div>
+  </div>
+</div>
