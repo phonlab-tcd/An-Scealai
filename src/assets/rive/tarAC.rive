@@ -590,7 +590,8 @@
   + (tá|ba mhaith|sea)
   % an bhfuil tú réidh
   - Deirtear go bhfuil briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile.\s
-  ^ Úsáidtear ‘gur’ nó ‘nár’ roimh an mbriathar.
+  ^ Tá an briathar spleách má tá sé faoi réir ag briathar nó frása eile.\s
+  ^ Úsáidtear ‘gur’ nó ‘nár’ roimh an mbriathar san fhoirm spleách.
   ^ <call>chatSetup fuairsi true</call>
 
   + fuairsi

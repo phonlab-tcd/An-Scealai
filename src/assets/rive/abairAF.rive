@@ -178,7 +178,7 @@
 
 > topic level1
   + startl1
-  - Is é an bunfhréamh atá ag an mbriathar ‘abair’ san aimsir fháistineach ná ‘déar’ (D, É, A, R). <br>
+  - Is í an bhunfhréamh atá ag an mbriathar ‘abair’ san aimsir fháistineach ná ‘déar’ (D, É, A, R). <br>
   ^ Ina dhiaidh sin leanann sé gnáth phátrún don aimsir fháistineach le ‘faidh’ (f-a-o-d-h) mar chríoch.
   ^ <call>chatSetup verbcon true</call>
 
@@ -432,7 +432,7 @@
   ^ <call>chatSetup an-simpli true</call>
 
   + an-simpli
-  - An-simplí, a <call>getName</call>. Anois, dean cleachtadh ar cheisteanna a chur san aimsir fháistineach. <br><call>chatSetup reidh true</call>
+  - An-simplí, a <call>getName</call>. Anois, déan cleachtadh ar cheisteanna a chur san aimsir fháistineach. <br><call>chatSetup reidh true</call>
 
   + reidh
   - An bhfuil tú réidh?

@@ -182,7 +182,7 @@
 
 > topic level1
   + startl1
-  - Is é an bunfhréamh atá ag an mbriathar ‘faigh’ san aimsir fháistineach ná ‘gheobhaidh’ (G, H, E, O, B, H, A, I, D, H). \s
+  - Is í an bhunfhréamh atá ag an mbriathar ‘faigh’ san aimsir fháistineach ná ‘gheobhaidh’ (G, H, E, O, B, H, A, I, D, H). \s
   ^ Tabhair faoi deara go bhfuil séimhiú ar an gcéad litir rud atá neamh choitianta san aimsir fháistineach.
   ^ <call>chatSetup verbcon true</call>
 
@@ -459,7 +459,7 @@
   ^ <call>chatSetup quest true</call>
 
   + quest
-  - Déanaimis cleachta ar cheisteanna a chur san aimsir fháistineach anois, a <call>getName</call>.
+  - Déanaimis cleachtadh ar cheisteanna a chur san aimsir fháistineach anois, a <call>getName</call>.
   ^ <call>chatSetup reidh true</call>
 
   + reidh
@@ -534,25 +534,31 @@
 
 > topic spleach
   + tosu
-  - <call>getMissingMessage</call>{topic=coibhneasta}<call>chatSetup tosu true</call>
-
-  /*
-  - Féachaimis anois ar an gclaoninsint. an difríocht idir an fhoirm spleách agus an fhoirm neamhspleách den bhriathar.\s
-  ^ Deirtear go bhfuil an briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile:
+  - Féachaimis anois ar an gclaoninsint. an difríocht idir an fhoirm spleách agus an fhoirm neamhspleách den bhriathar.
   ^ <call>chatSetup seasann true</call>
 
   + seasann
-  - NEED TO FILL FROM HERE<br>
+  - Deirtear go bhfuil an briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile:
   ^ <call>chatSetup taobh true</call>
 
   + taobh
-  - ...<br>
-  ^ ...<br>
-  ^ ...
+  - “Gheobhaidh mé duit é.”<br>
+  ^ - seasann an “Gheobhaidh mé” leis féin agus níl sé ag brath ar aon mhír eile.
   ^ <call>chatSetup chas true</call>
 
   + chas
-  - ...
+  - Ar an taobh eile, i gcás:<br>
+  ^ “Ceapaim go bhfaighidh mé duit é.”<br>
+  ^ - tá an “Gheobhaidh/bhfaighidh” ag brath ar ‘ceapaim.’
+  ^ <call>chatSetup exp1 true</call>
+
+  + exp1
+  - Sa chás seo úsáidtear ‘go’ nó ‘nach’ roimh an fhoirm spleách den bhriathar agus cuirtear urú air.
+  ^ <call>chatSetup exp2 true</call>
+
+  + exp2
+  - “Ní dóigh liom go bhfaighidh mé amach é go brách.”<br>
+  ^ “Táim den tuairim nach bhfaighidh siad aon rud eile .”
   ^ <call>chatSetup trial true</call>
 
   + trial
@@ -561,7 +567,6 @@
 
   + *
   * <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
-  //* <call>getWrongCount</call> > 2 => <call>getLink</call><call>chatSetup continue true</call>
   * <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>levelComplete</call><call>getRandomReply</call><call>getProgress</call>
   ^ <call>getRandomQuestion 5</call>
   * <call>checkAnswer <star></call> == false => Mícheart. <call>resetProgress</call><call>triailAris</call><br>
@@ -580,7 +585,7 @@
 
   + (níl|níor mhaith)
   % ar mhaith leat leanúint ar aghaidh
-  - <call>setAnsweringQuestions false</call><call>chatSetup coibhneasta true</call>*/
+  - <call>setAnsweringQuestions false</call><call>chatSetup coibhneasta true</call>
 
   + coibhneasta
   - An bhfuil tú ag iarraidh bogadh ar aghaidh go dtí an fhorainm coibhneasta?

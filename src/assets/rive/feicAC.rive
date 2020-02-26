@@ -220,16 +220,16 @@
 
   //PLACEHOLDERS BEGINS...
   + ceannde
-  - PLACEHOLDER
+  - Ceann eile de na briathra neamhrialta is ea ‘feic’. Is í an bhunfhréamh atá ag an mbriathar ‘feic’ san aimsir chaite ná ‘chonaic’. Úsáidtear an fhoirm tháite ‘chonaiceamar’ don chéad phearsa iolra.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - TBC mé, <br>
-  ^ TBC tú, <br>
-  ^ TBC sé nó sí, <br>
-  ^ TBC , <br>
-  ^ TBC sibh, agus<br>
-  ^ TBC siad.
+  - Chonaic mé, <br>
+  ^ Chonaic tú, <br>
+  ^ Chonaic sé nó sí, <br>
+  ^ Chonaiceamar, <br>
+  ^ Chonaic sibh, agus<br>
+  ^ Chonaic siad.
   ^ <call>chatSetup iol true</call>
   //PLACEHOLDER ENDS...
 
@@ -238,12 +238,17 @@
 
   + (tá|sea|ba mhaith)
   % an dtuigeann tú mé
-  - <call>chatSetup iarr nowait</call>
+  - <call>chatSetup exp nowait</call>
 
   + (níl|níor mhaith)
   % an dtuigeann tú mé
   - Ah ceart go leor, a <call>getName</call>. Míneoidh mé arís.
   ^ <call>chatSetup verbcon true</call>
+
+  + exp
+  - “Chonaic mé uaim é.”<br>
+  ^ “Chonaiceamar iontais an domhain.”
+  ^ <call>chatSetup iarr true</call>
 
   + iarr
   - An bhfuil tú ag iarraidh cleachtadh a dhéanamh air sin?
@@ -321,27 +326,32 @@
   ^ <call>chatSetup agiarraidh true</call>
 
   + agiarraidh
-  - An bhfuil tú ag iarraidh leanúint ar aghaidh?
+  - An bhfuil tú ag iarraidh leanúint ar aghaidh go Céim a Dó?
 
   + (níl|níor mhaith)
-  % an bhfuil tú ag iarraidh leanúint ar aghaidh
+  % an bhfuil tú ag iarraidh leanúint ar aghaidh go céim a dó
   - Ar ais go dtí an leathanach baile mar sin.
 
   //PLACEHOLDER BEGINS....
   + (tá|ba mhaith|sea)
-  % an bhfuil tú ag iarraidh leanúint ar aghaidh
-  - PLACEHOLDER
+  % an bhfuil tú ag iarraidh leanúint ar aghaidh go céim a dó
+  - Úsáidtear ‘ní fhaca chun an fhoirm dhiúltach a chur in iúl.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - TBC mé, <br>
-  ^ TBC tú, <br>
-  ^ TBC sé nó sí, <br>
-  ^ TBC, <br>
-  ^ TBC sibh, <br>
-  ^ TBC  siad.
+  - Ní fhaca mé, <br>
+  ^ Ní fhaca tú, <br>
+  ^ Ní fhaca sé nó sí, <br>
+  ^ Ní fhacamar (nó ‘ní fhaca muid’), <br>
+  ^ Ní fhaca sibh, <br>
+  ^ Ní fhaca siad.
   ^ <call>chatSetup te true</call>
   //PLACEHOLDER ENDS....
+
+  + exp
+  - “Ní fhaca mé a leithéid de radharc riamh.”<br>
+  ^ “Ní fhacamar duine ná deoraí san áit.”
+  ^ <call>chatSetup te true</call>
 
   + te
   - An dtuigeann tú mé?
@@ -441,12 +451,16 @@
 
   //PLACEHOLDER BEGINS...
   + briatharsaor
-  - PLACEHOLDER
+  - Tosóimid leis an mbriathar saor. Úsáidimid an briathar saor nuair nach bhfuilimid ábalta nó sásta pearsa a chur leis an mbriathar.
+  ^ <call>chatSetup expl true</call>
+
+  + expl
+  - Úsáidtear ‘chonacthas’ agus ‘ní fhacthas’ (diúltach) chun an briathar saor a chur in iúl san aimsir chaite.
   ^ <call>chatSetup egs true</call>
 
   + egs
-  - EXAMPLE 1
-  ^ EXAMPLE 2
+  - “Mar a chonacthas domsa arís ní chífear’, ‘Jack’ le Máire Mhac an tSaoi.<br>
+  ^ “Ní fhacthas míorúilt mar sin ó thús aimsire.”
   ^ <call>chatSetup anssd true</call>
   //PLACEHOLDER ENDS...
 
@@ -536,12 +550,13 @@
 
   //PLACEHOLDER BEGIN....
   + verbcon
-  - PLACEHOLDER
+  - Cuirtear ‘an bhfaca’ nó ‘nach bhfaca’ roimh an mbriathar chun ceist a chur san aimsir chaite.
   ^ <call>chatSetup liom true</call>
 
   + liom
-  - EXAMPLE 1
-  ^ EXAMPLE 2
+  - ‘An bhfaca tú mo Shéamaisín, mo Shéamaisín, mo Shéamaisín…?’<br>
+  ^ An bhfaca tú mo Shéamaisín is é ag dul síos an bóthar…?’ (amhrán traidisiúnta)<br>
+  ^ ‘Nach bhfaca tú an rud a bhí os do chomhair amach?’<br>
   ^ <call>chatSetup tuy true</call>
   //PLACEHOLDER ENDS...
 
@@ -555,7 +570,7 @@
   + (níl|níor mhaith|ní thuigim|ní thuigeann|ní thuigeann mé|no)
   % an dtuigeann tú mé
   - Ah. 😅 Ceart go leor.
-  ^ <call>chatSetup verbcon true</call>
+  ^ <call>chatSetup chuncl true</call>
 
   + chuncl
   - An bhfuil tú réidh chun cleachtadh a dhéanamh ar cheisteanna a chur?
@@ -566,7 +581,7 @@
 
   + (tá|ba mhaith|sea)
   % an bhfuil tú réidh chun cleachtadh a dhéanamh ar cheisteanna a chur
-  - Ar aghaidh linn, a <call>getName</call>. <call>chatSetup cleachtadh true</call>
+  - Ar aghaidh linn, a <call>getName</call>.<call>chatSetup cleachtadh true</call>
 
   + cleachtadh
   - Anois déan cleachtadh ar cheisteanna a chur san aimsir chaite:<br>
@@ -626,28 +641,34 @@
 
 > topic spleach
   + tosu
-  - Ceart go leor. Tosóimid claoninsint agus an fhoirm spleách anois, a <call>getName</call>.\s
-  ^ Seo é an chuid is deacra, ach níl sé ródheacair má dhíríonn tú air ar feadh píosa.<call>chatSetup reidh true</call>
+  - Ceart go leor. Tosóimid an píosa deireanach anois. Claoninsint agus an fhoirm spleách.\s
+  ^ <call>chatSetup reidh true</call>
 
   + reidh
-  - An bhfuil tú réidh?
+  - An bhfuil tú ag iarraidh bogadh ar aghaidh?
 
   + (níl|níor mhaith)
-  % an bhfuil tú réidh
+  % an bhfuil tú ag iarraidh bogadh ar aghaidh
   - <call>nilToCeim</call>
 
   //PLACEHOLDER BEGINS.....
   + (tá|ba mhaith|sea)
-  % an bhfuil tú réidh
-  - PLACEHOLDER
+  % an bhfuil tú ag iarraidh bogadh ar aghaidh
+  - Ceart go leor.
+  ^ <call>chatSetup utear true</call>
+
+  + utear
+  - Úsáidtear ‘go bhfaca’ nó ‘nach bhfaca’ nuair a bhíonn claoninsint i gceist
   ^ <call>chatSetup fuairsi true</call>
 
   + fuairsi
-  - PLACEHOLDER
+  - “Chonaic sé taibhse sa teach.”<br>
+  ^ -> “Dúirt sí go bhfaca sé taibhse sa teach.”
   ^ <call>chatSetup moreq</call>
 
   + moreq
-  - EXAMPLE
+  - “Ní fhaca siad duine ná deoraí eile ar an slí abhaile.”<br>
+  ^ -> “Mhaígh siad nach bhfaca siad duine ná deoraí eile ar an slí abhaile.”
   ^ <call>chatSetup lioma true</call>
   //PLACEHOLDER ENDS...
 
@@ -790,10 +811,14 @@
 
 > topic extraquestions
   + tosu
+  - Tá máistreacht anois agat ar an mbriathar ‘feic’ san aimsir chaite, a <call>getName</call>.
+  ^ <call>chatSetup anbh true</call>
+
+  + anbh
   - An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar gach a bhfuil déanta agat leis an mbriathar "feic" san aimsir chaite?
 
   + (níl|níor mhaith)
-  - <call>nilToQuiz</call>
+  -	Sin a bhfuil mar sin. Slán go fóill agus bain triail as gné eile den ghramadach uair éigin eile. Slán!
 
   + (tá|ba mhaith|sea)
   - Déan an cleachtadh seo mar sin, a <call>getName</call>:<br>

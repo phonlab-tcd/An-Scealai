@@ -220,18 +220,29 @@
 
   //PLACEHOLDERS BEGINS...
   + ceannde
-  - PLACEHOLDER
+  - Ceann de na briathra neamhrialta is ea ‘déan’. Úsáidtear ‘rinne’ i gcanúint Chonnacht agus i gcanúint Uladh san aimsir chaite. Úsáidtear ‘dhein’ i nGaeilge na Mumhan.
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - TBC mé, <br>
-  ^ TBC tú, <br>
-  ^ TBC sé nó sí, <br>
-  ^ TBC , <br>
-  ^ TBC sibh, agus<br>
-  ^ TBC siad.
+  - Rinne mé, <br>
+  ^ Rinne tú, <br>
+  ^ Rinne sé nó sí, <br>
+  ^ Rinneamar (nó rinne muid), <br>
+  ^ Rinne sibh, agus<br>
+  ^ Rinne siad.
   ^ <call>chatSetup iol true</call>
   //PLACEHOLDER ENDS...
+
+  + mor
+  - (nó dheineas; dhein tú, dhein sé/sí; dheineamar; dheineabhair; dheineadar i gcanúint na Mumhan, ach cloígh le ‘rinne’ anois mar is de réir an chaighdeáin atá na cleachtaí seo ag dul).
+  ^ <call>chatSetup exp true</call>
+
+  + exp
+  - “Rinne tú obair na gcapall le mí anuas.”<br>
+  ^ “Rinne mé mo sheacht ndícheall leis.”<br>
+  ^ “Rinne sé praiseach den rud ar fad.”<br>
+  ^ “Rinne sí paidir chapaill de.”
+  ^ <call>chatSetup iol true</call>
 
   + iol
   - An dtuigeann tú mé?
@@ -330,18 +341,27 @@
   //PLACEHOLDER BEGINS....
   + (tá|ba mhaith|sea)
   % an bhfuil tú ag iarraidh leanúint ar aghaidh
-  - PLACEHOLDER
+  - Ceart go leor mar sin.
+  ^ <call>chatSetup usad true</call>
+
+  + usad
+  - Úsáidtear ‘ní dhearna’ chun an fhoirm dhiúltach a chur in iúl. (I nGaeilge na Mumhan cuirtear ‘níor’ roimh an mbriathar (‘níor dhein’)).
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - TBC mé, <br>
-  ^ TBC tú, <br>
-  ^ TBC sé nó sí, <br>
-  ^ TBC, <br>
-  ^ TBC sibh, <br>
-  ^ TBC  siad.
-  ^ <call>chatSetup te true</call>
+  - Ní dhearna mé, <br>
+  ^ Ní dhearna tú, <br>
+  ^ Ní dhearna sé nó sí, <br>
+  ^ Ní dhearnamar (nó ‘ní dhearna muid’), <br>
+  ^ Ní dhearna sibh, <br>
+  ^ Ní dhearna siad.
+  ^ <call>chatSetup exp true</call>
   //PLACEHOLDER ENDS....
+
+  + exp
+  - “Ní dhearna mé tada eile ina dhiaidh sin.”<br>
+  ^ “Ní dhearna sé faic na ngrást faoi.”
+  ^ <call>chatSetup te true</call>
 
   + te
   - Tuigim?
@@ -441,12 +461,16 @@
 
   //PLACEHOLDER BEGINS...
   + briatharsaor
-  - PLACEHOLDER
+  - Tosóimid leis an mbriathar saor. Úsáidimid an briathar saor nuair nach bhfuilimid ábalta nó sásta pearsa a chur leis an mbriathar.
+  ^ <call>chatSetup usad true</call>
+
+  + usad
+  - Úsáidtear ‘rinneadh’ agus ‘ní dhearnadh’ chun an briathar saor a chur in iúl san aimsir chaite. (‘Deineadh’ agus ‘níor deineadh’ a úsáidtear i nGaeilge na Mumhan).
   ^ <call>chatSetup egs true</call>
 
   + egs
-  - EXAMPLE 1
-  ^ EXAMPLE 2
+  - “Rinneadh an-damáiste do na tithe sin an geimhreadh seo caite.”<br>
+  ^ “Cé go raibh an-chuid daoine ag gearán, ní dhearnadh rud ar bith faoi.”
   ^ <call>chatSetup anssd true</call>
   //PLACEHOLDER ENDS...
 
@@ -536,12 +560,13 @@
 
   //PLACEHOLDER BEGIN....
   + verbcon
-  - PLACEHOLDER
+  - Cuirtear ‘an’ nó ‘nach’ roimh an mbriathar chun ceist a chur san aimsir chaite:<br>
+  ^ An ndearna mé…? / Nach ndearna mé…?
   ^ <call>chatSetup liom true</call>
 
   + liom
-  - EXAMPLE 1
-  ^ EXAMPLE 2
+  - ‘An ndearna tú é sin leat féin…?’<br>
+  ^ ‘Nach ndearna tú an botún céanna anuraidh?’
   ^ <call>chatSetup tuy true</call>
   //PLACEHOLDER ENDS...
 
@@ -639,15 +664,24 @@
   //PLACEHOLDER BEGINS.....
   + (tá|ba mhaith|sea)
   % an bhfuil tú réidh
-  - PLACEHOLDER
+  - Ceart go leor.<br>
+  ^ Deirtear go bhfuil briathar neamhspleách má sheasann sé leis féin agus muna bhfuil sé ag brath ar aon fhrása ná ar aon mhír eile.
   ^ <call>chatSetup fuairsi true</call>
 
   + fuairsi
-  - PLACEHOLDER
+  - Tóg, mar shampla, an abairt:<br>
+  ^ “Rinne sí go han-mhaith sna scrúduithe.”<br><br>
+  ^ <call>chatSetup exp1 true</call>
+
+  + exp1
+  - Cuirtear ‘go’ nó ‘nach’ roimh an mbriathar san fhoirm spleách.<br>
+  ^ -> “Chuala mé go ndearna sí go han-mhaith sna scrúduithe.”
   ^ <call>chatSetup moreq</call>
 
   + moreq
-  - EXAMPLE
+  - “Ní dhearna sé aon rud nach raibh ceadaithe.”<br>
+  ^ -> “Dúirt sé nach ndearna sé aon rud nach raibh ceadaithe.”<br><br>
+  ^ Tá an briathar ‘Rinne’ sa chás seo ag Chuala’ nó ‘Dúirt’brath ar‘
   ^ <call>chatSetup lioma true</call>
   //PLACEHOLDER ENDS...
 

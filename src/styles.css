@@ -46,7 +46,7 @@ button:focus, input:focus, audio:focus{
 }
 
 .bot-bg-modal{
-  display: none;
+  display: ;
 	position: fixed;
   font-family: sans-serif;
   width: 300px;
@@ -294,7 +294,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   transition: 0.7s;
   opacity: 0;
   z-index: 1;
-  display: none;
+  display: ;
   /*right: 350px;*/
 }
 

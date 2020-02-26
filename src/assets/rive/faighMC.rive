@@ -181,7 +181,7 @@
 
 > topic level1
   + startl1
-  - Úsáidtear an fhoirm tháite leis an modh coinníollach. Bíonn an pearsa ceangailte leis an gcraobh – ach amháin an tríú pearsa uatha agus an dara pearsa iolra. Leanann sé mar sin:
+  - Úsáidtear an fhoirm tháite leis an modh coinníollach. Bíonn an pearsa ceangailte leis an bhfréamh – ach amháin an tríú pearsa uatha agus an dara pearsa iolra. Leanann sé mar sin:
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
@@ -361,6 +361,11 @@
 
   + eg1
   - Gheofaí nó Ní bhfaighfí.
+  ^ <call>chatSetup exp1 true</call>
+
+  + exp1
+  - Gheofaí é dá mbeadh aon teacht air.<br><br>
+  ^ Ní bhfaighfí amach riamh é murach an béal mór atá ag Seán
   ^ <call>chatSetup cleachtadh true</call>
 
   + cleachtadh
@@ -505,7 +510,7 @@
 
   + chas
   - Sa chás seo úsáidtear ‘go’ nó ‘nach’ roimh an fhoirm spleách den bhriathar agus cuirtear urú air: <br>
-  ^ “Ní dóigh liom go bhfaigheadh éinne dó gréine inniu”<br>
+  ^ “Ní dóigh liom go bhfaigheadh éinne dath gréine inniu”<br>
   ^ Leanann an fhoirm spleách ‘dá’.
   ^ <call>chatSetup cleachtadh true</call>
 
