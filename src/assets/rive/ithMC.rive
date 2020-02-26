@@ -187,12 +187,12 @@
 
   + verbcon
   - Leanann sé mar sin:<br>
-  ^ - D’íosfainn (D’íosfadh mé), <br>
-  ^ - D’íosfá (D’íosfadh tú), <br>
+  ^ - D’íosfainn, <br>
+  ^ - D’íosfá, <br>
   ^ - D’íosfadh sé nó sí, <br>
   ^ - D’íosfaimis (D’íosfadh muid), <br>
   ^ - D’íosfadh sibh, agus<br>
-  ^ - D’íosfaidís (D’íosfadh siad).
+  ^ - D’íosfaidís.
   ^ <call>chatSetup quote true</call>
 
   + quote
@@ -274,7 +274,7 @@
 
 > topic level2
   + startl2
-  ^ I gCéim a Dó féachfaimid ar an bhfoim dhiúltach den mbriathar ith sa mhodh coinníollach.
+  - I gCéim a Dó féachfaimid ar an bhfoim dhiúltach den mbriathar ith sa mhodh coinníollach.
   ^ <call>chatSetup uru true</call>
 
   + uru
@@ -282,16 +282,16 @@
   ^ <call>chatSetup verbcon true</call>
 
   + verbcon
-  - Ní íosfainn (Ní íosfadh mé), <br>
-  ^ Ní íosfá (Ní íosfadh tú), <br>
+  - Ní íosfainn, <br>
+  ^ Ní íosfá, <br>
   ^ Ní íosfadh sé nó sí, <br>
   ^ Ní íosfaimis (Ní íosfadh muid), <br>
   ^ Ní íosfadh sibh, agus<br>
-  ^ Ní íosfaidís (Ní íosfadh siad).
+  ^ Ní íosfaidís.
   ^ <call>chatSetup quote true</call>
 
   + quote
-  - “Ní íosfadh gadhar é sin!”
+  - “Ní íosfadh gadhar an sin!”
   ^ <call>chatSetup ceart true</call>
 
   + ceart
@@ -560,6 +560,10 @@
 
   + chas
   - Sa chás seo úsáidtear ‘go’ nó ‘nach’ roimh an fhoirm spleách den bhriathar agus cuirtear urú air.
+  ^ <call>chatSetup exp1 true</call>
+
+  + exp1
+  - Ní dóigh liom go n-íosfaidís bia mar sin.
   ^ <call>chatSetup tuy true</call>
 
   + tuy

@@ -497,12 +497,12 @@
   ^ <call>chatSetup liom true</call>
 
   + liom
-  - An rabhas…?<br>
+  - An rabhas……(An raibh mé)?<br>
   ^ An raibh tú…?<br>
   ^ An raibh sé nó sí…?<br>
   ^ An rabhamar…?<br>
   ^ An raibh sibh…?<br>
-  ^ An rabhadar…<br>
+  ^ An rabhadar……(An raibh siad)?<br>
   ^ <call>chatSetup chuncl true</call>
 
   + chuncl

@@ -633,13 +633,13 @@
   - {topic=level1}<call>startLevel 1</call>
 
   + (aimsir chaite|chaite)
-  - <call>setKeepMessages true</call><call>loadFromChat teighAC chaite</call>
+  - <call>setKeepMessages true</call><call>loadFromChat ithAC chaite</call>
 
   + (aimsir laithreach|laithreach)
-  - <call>setKeepMessages true</call><call>loadFromChat teighAL</call>
+  - <call>setKeepMessages true</call><call>loadFromChat ithAL</call>
 
   + (modh coinniollach|coinniollach)
-  - <call>setKeepMessages true</call><call>loadFromChat teighMC</call>
+  - <call>setKeepMessages true</call><call>loadFromChat ithMC</call>
 < topic
 
 > topic coibhneasta

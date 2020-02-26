@@ -66,7 +66,7 @@
 
 + foghlaim
 - A, <call>getName</call>. Níl ach aon cheann déag de bhriathra neamhrialta sa Ghaeilge Sin an méid. \s
-^ Níl sé seo ródheacair. Is féidir leat tosnú le haon cheann is mian leat. Abair liom cad é an chéan cheann ar mhaith leat tosnú leis. \s
+^ Níl sé seo ródheacair. Is féidir leat tosú le haon cheann is mian leat. Abair liom cad é an chéad cheann ar mhaith leat tosú leis. \s
 ^ Tá do rogha féin agat:<br>
 ^ <button class="rive-button" onclick="load('deanAC')">Déan</button>
 ^ <button class="rive-button" onclick="load('beirAC')">Beir</button>
