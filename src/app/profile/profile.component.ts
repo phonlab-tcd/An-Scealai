@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
               private engagement: EngagementService,
-              private ts : TranslationService) { }
+              public ts : TranslationService) { }
 
   ngOnInit() {
     this.editMode = false;

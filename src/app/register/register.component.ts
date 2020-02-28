@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   termsVisible : boolean;
 
   constructor(private auth: AuthenticationService, private router: Router,
-              private engagement: EngagementService, private ts : TranslationService) { }
+              private engagement: EngagementService, public ts : TranslationService) { }
 
   ngOnInit() {
     this.registrationError = false;

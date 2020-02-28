@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
     private engagement: EngagementService, private grammar: GrammarService,
-    private ts : TranslationService) {
+    public ts : TranslationService) {
 
     }
 

@@ -14,7 +14,7 @@ export class RegisterProfileComponent implements OnInit {
   constructor(private profileService : ProfileService,
               private auth : AuthenticationService,
               private router : Router,
-              private ts : TranslationService) { }
+              public ts : TranslationService) { }
 
   input : string;
   showError : boolean;

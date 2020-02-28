@@ -1,0 +1,117 @@
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
+> object getName javascript
+  return getName();
+< object
+
+> object getUserName javascript
+  return getUserName();
+< object
+
+> object isNameStored javascript
+  if(isNameStored()) return true;
+  else return false;
+< object
+
+> object loadFromChat javascript
+  loadFromChat(args[0]);
+  return "";
+< object
+
+> object askName javascript
+  return askName();
+< object
+
+> object chatSetup javascript
+  if(args[1] == "nowait") return chatSetup(args[0]);
+  setTimeout(function(){
+    return chatSetup(args[0], args[1]);
+  }, 2500);
+  return "";
+< object
+
++ start
+* <call>isNameStored</call> == false =>  Please choose a dialect: <br>
+^ Connemara (male)  <input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
+^ Kerry (female)  <input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
+^ Donegal (female)  <input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>
+^ <button class="rive-button" onclick="next()">Next</button>
+* <call>isNameStored</call> == true => Anois, a <call>getName</call> feicim go bhfuil spéis agat sna briathra neamhrialta. An bhfuil an ceart agam?
+
++ askname
+- <call>askName</call>
+
++ (_|_ is ainm dom)
+- <call>storeName <formal></call>
+^ Fáilte romhat isteach, a <call>getName</call>.\s
+^ <call>chatSetup ans true</call>
+
++ ans
+- Táim anseo chun cabhrú leat le roinnt briathra neamhrialta.\s
+^ Feicim go bhfuil spéis agat!<call>chatSetup reidh true</call>
+
++ reidh
+- An bhfuil tú réidh?
+
++ (tá|sea|ba mhaith)
+- <call>chatSetup foghlaim nowait</call>
+//- Ceart go leor, a <call>getName</call>. Tá dhá chuid ann ar féidir leat a roghnú, Foghlaim nó Quiz. Cad ba mhaith leat a dhéanamh:\s <br>
+//^ <button class="rive-button" onclick="chatSetup('foghlaim')">Foghlaim</button>
+//^ <button class="rive-button" onclick="load('BQuiz')">Quiz</button>
+
++ (níl|níor mhaith)
+- Go breá. Is féidir leat topaic eile a phiocadh nó teacht ar ais uair éigin eile.
+
++ foghlaim
+- A, <call>getName</call>. Níl ach aon cheann déag de bhriathra neamhrialta sa Ghaeilge Sin an méid. \s
+^ Níl sé seo ródheacair. Is féidir leat tosnú le haon cheann is mian leat. Abair liom cad é an chéan cheann ar mhaith leat tosnú leis. \s
+^ Tá do rogha féin agat:<br>
+^ <button class="rive-button" onclick="load('deanAC')">Déan</button>
+^ <button class="rive-button" onclick="load('beirAC')">Beir</button>
+^ <button class="rive-button" onclick="load('abairAC')">Abair</button>
+^ <button class="rive-button" onclick="load('faighAC')">Faigh</button>
+^ <button class="rive-button" onclick="load('ithAC')">Ith</button>
+^ <button class="rive-button" onclick="load('teighAC')">Téigh</button>
+^ <button class="rive-button" onclick="load('tarAC')">Tar</button>
+^ <button class="rive-button" onclick="load('tabhairAC')">Tabhair</button>
+^ <button class="rive-button" onclick="load('cloisAC')">Clois</button>
+^ <button class="rive-button" onclick="load('biAC')">Bí</button>
+^ <button class="rive-button" onclick="load('feicAC')">Feic</button>
+
++ (dean|déan)
+- <call>loadFromChat deanAC</call>
+
++ abair
+- <call>loadFromChat abairAC</call>
+
++ beir
+- <call>loadFromChat beirAC</call>
+
++ faigh
+- <call>loadFromChat faighAC</call>
+
++ ith
+- <call>loadFromChat ithAC</call>
+
++ (teigh|téigh)
+- <call>loadFromChat teighAC</call>
+
++ tar
+- <call>loadFromChat tarAC</call>
+
++ tabhair
+- <call>loadFromChat tabhairAC</call>
+
++ clois
+- <call>loadFromChat cloisAC</call>
+
++ (bi|bí)
+- <call>loadFromChat biAC</call>
+
++ feic
+- <call>loadFromChat feicAC</call>
+
++ quiz
+- <call>loadFromChat BQuiz</call>

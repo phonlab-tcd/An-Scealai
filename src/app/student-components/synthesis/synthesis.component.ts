@@ -16,7 +16,7 @@ export class SynthesisComponent implements OnInit {
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
               private router: Router, private sanitizer: DomSanitizer,
-              private engagement: EngagementService, private ts : TranslationService) { }
+              private engagement: EngagementService, public ts : TranslationService) { }
 
   story: Story;
   paragraphs: Paragraph[] = [];
