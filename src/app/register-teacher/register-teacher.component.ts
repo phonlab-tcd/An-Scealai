@@ -25,7 +25,7 @@ export class RegisterTeacherComponent implements OnInit {
 
   constructor(private auth: AuthenticationService, private http: HttpClient, 
     private router: Router, private engagement: EngagementService,
-    private ts: TranslationService) { }
+    public ts: TranslationService) { }
 
   ngOnInit() {
     this.registrationError = false;

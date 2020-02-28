@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   errorText: String;
 
   constructor(private auth: AuthenticationService, private router: Router,
-              private engagement: EngagementService, private ts : TranslationService) { }
+              private engagement: EngagementService, public ts : TranslationService) { }
 
   ngOnInit() {
     this.loginError = false;

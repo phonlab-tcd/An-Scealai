@@ -14,7 +14,7 @@ export class StoryDetailsComponent implements OnInit {
   constructor(private route : ActivatedRoute,
               private storyService : StoryService,
               private router : Router,
-              private ts : TranslationService) { }
+              public ts : TranslationService) { }
 
   story : Story;
 

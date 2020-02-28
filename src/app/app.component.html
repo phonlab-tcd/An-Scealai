@@ -17,8 +17,6 @@
             <div class="nav-links">
                 <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a>
                 <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
-                <a routerLink="/language" class="navBtn" (click)="changeCheck()">{{ts.l.language}}</a>
-                <a routerLink="/recordings" class="navBtn" (click)="changeCheck()"></a>  
                 <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
                 <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
                     <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}}</a>

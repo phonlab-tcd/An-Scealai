@@ -19,7 +19,7 @@ export class BookContentsComponent implements OnInit {
   toBeDeleted: String[];
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService, private ts : TranslationService) { }
+    private engagement: EngagementService, public ts : TranslationService) { }
 
   ngOnInit() {
     this.storyService

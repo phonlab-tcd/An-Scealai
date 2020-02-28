@@ -133,7 +133,15 @@
             "story" : "Story",
 
             "agree_to_terms" : "By registering I agree to the terms of use",
-            "terms_of_use" : "By registering I understand that my details will be used for linguistic research and for Irish Speech and Language Technology development. Data will be stored on a password protected secure server at the Phonetics and Speech Lab, School of Linguistic, Speech and Communication Sciences, Trinity College, Dublin and not shared with anyone outside the core research team. For more information contact Prof. Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie"
+            "terms_of_use" : "By registering I understand that my details will be used for linguistic research and for Irish Speech and Language Technology development. Data will be stored on a password protected secure server at the Phonetics and Speech Lab, School of Linguistic, Speech and Communication Sciences, Trinity College, Dublin and not shared with anyone outside the core research team. For more information contact Prof. Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie",
+            
+            "about_an_scealai" : "About An Scéalaí",
+            "about_quote" : "Technology is the campfire around which we tell our stories",
+            "about_quote_author" : "Laurie Anderson",
+            "about_content_text" : "An Scéalaí is currently under development. It is an intelligent Computer-Assisted Language Learning (iCALL) platform for Irish which exploits the latest developments in Irish speech and language technology as its key feature. It promotes a holistic approach to language learning, simultaneously training the four skills of writing, listening, reading and speaking, focusing particularly on reinforcing the linkages between the spoken and written word. The goal is to offer the learner an interactive, personalised experience to foster their second language learning. It can be used as a standalone platform, incorporating automatic feedback and/or as a complement to classroom learning, incorporating teacher feedback. The following paper summarises the approach, rationale and development to date.",
+            "related_technology" : "Related Technology",
+            "abair_technology_title" : "The ABAIR initiative: speech synthesis for Irish",
+            "gramadoir_technology_title" : "An Gramadóir (grammar checker for Irish developed by Kevin Scannell)"
         },
         {
             "iso_code" : "ga",
@@ -264,9 +272,15 @@
             "story_details" : "Sonraí an scéil",
             "synthesising" : "Ag déanamh na sintéise",
             "story" : "Scéal",
+            "terms_of_use" : "Nuair a chláirím tuigim go n-úsáidfear mo chuid sonraí ar mhaithe le taighde teangeolaíochta agus ar mhaithe le teicneolaíocht na hurlabhra agus teanga a fhorbairt don Ghaeilge. Coimeádfar na sonraí ar fad ar fhreastalaí atá slán faoi chosaint pasfhocail sa tSaotharlann Foghraíochta & Urlabhra, Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide agus ní roinnfear iad le héinne lasmuigh d'fhoireann lárnach na taighe. Tuilleadh eolais ar fáil ón Ollamh Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie",
 
             "agree_to_terms" : "By registering I agree to the terms of use",
-            "terms_of_use" : "Nuair a chláirím tuigim go n-úsáidfear mo chuid sonraí ar mhaithe le taighde teangeolaíochta agus ar mhaithe le teicneolaíocht na hurlabhra agus teanga a fhorbairt don Ghaeilge. Coimeádfar na sonraí ar fad ar fhreastalaí atá slán faoi chosaint pasfhocail sa tSaotharlann Foghraíochta & Urlabhra, Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide agus ní roinnfear iad le héinne lasmuigh d'fhoireann lárnach na taighe. Tuilleadh eolais ar fáil ón Ollamh Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie"
+            "about_an_scealai" : "About An Scéalaí",
+            "about_quote" : "Technology is the campfire around which we tell our stories - Laurie Anderson",
+            "about_content_text" : "    An Scéalaí is currently under development. It is an intelligent Computer-Assisted Language Learning (iCALL) platform for Irish which exploits the latest developments in Irish speech and language technology as its key feature. It promotes a holistic approach to language learning, simultaneously training the four skills of writing, listening, reading and speaking, focusing particularly on reinforcing the linkages between the spoken and written word. The goal is to offer the learner an interactive, personalised experience to foster their second language learning. It can be used as a standalone platform, incorporating automatic feedback and/or as a complement to classroom learning, incorporating teacher feedback. The following paper summarises the approach, rationale and development to date.",
+            "related_technology" : "Related Technology",
+            "abair_technology_title" : "The ABAIR initiative: speech synthesis for Irish",
+            "gramadoir_technology_title" : "An Gramadóir (grammar checker for Irish developed by Kevin Scannell)"
         }
     ]
 }

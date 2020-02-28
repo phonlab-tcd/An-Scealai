@@ -14,7 +14,7 @@ export class NewStoryComponent implements OnInit {
 
   newStoryForm: FormGroup;
   constructor(private fb: FormBuilder,  private storyService: StoryService,
-    private auth: AuthenticationService, private ts : TranslationService) {
+    private auth: AuthenticationService, public ts : TranslationService) {
     this.createForm();
   }
 
