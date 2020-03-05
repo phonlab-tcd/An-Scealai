@@ -25,13 +25,7 @@ border-radius: 5px 5px 5px 5px;
 
 .bookTitle {
     color: #261500;
-    font-size: 18pt;
-}
-
-.headerItem {
-    width: 33%;
-    display: flex;
-    align-items: center;
+    font-size: 15pt;
 }
 
 .titleItem {
@@ -41,8 +35,7 @@ border-radius: 5px 5px 5px 5px;
 .myStoriesBtn {
     border-style: none;
     color: #261500;
-    font-size: 12pt;
-    padding-top: 10px;
+    font-size: 11pt;
     padding-left: 5%;
 }
 
@@ -55,19 +48,33 @@ border-radius: 5px 5px 5px 5px;
 .saveIcon {
     color: #261500;
     border-style: none;
-    font-size: 12pt;
-    padding-top: 10px;
+    font-size: 11pt;
     padding-right: 5%;
+}
+
+.backArrow {
+    margin-right: 5px;
 }
 
 .bookHeader {
     display: flex;
+    flex-direction: column;
+}
+
+.headerUpper {
+    display: flex;
     justify-content: space-between;
+}
+
+.lowerHeader {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .textField {
     width: 90%;
-    height: 300px;
+    height: 290px;
     resize: none;
     z-index: 1;
     color: #261500;
@@ -176,7 +183,6 @@ background-color: lightblue;
     color: white;
     font-size: 12pt;
     margin: 0px;
-    float: left;
     border-radius: 5px 5px 5px 5px;
     display: flex;
     align-items: center;
@@ -185,6 +191,7 @@ background-color: lightblue;
 .optionsBtn:hover {
     background-color: #ad8f2b;
     color: white;
+    cursor: pointer;
 }
 
 .optionsBtnClicked {
@@ -197,7 +204,6 @@ background-color: lightblue;
     position: fixed;
     margin-top: 25px;
     display: flex;
-    align-items: center;
     padding: 4px;
     padding-right: 0px;
     background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
@@ -226,7 +232,6 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .optionsPopupBtn {
-    height: 38px;
     margin-right: 4px;
 }
 
@@ -343,7 +348,6 @@ border-radius: 5px 5px 5px 5px;
 
 .savedIcon {
     color: #b3a995;
-    margin-left: auto;
 }
 
 .unsavedIcon {
@@ -353,7 +357,6 @@ border-radius: 5px 5px 5px 5px;
     border-radius: 5px;
     margin-top: -5px;
     color: white;
-    margin-left: auto;
 }
 
 .unsavedIcon:hover {
@@ -425,6 +428,22 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     font-size: 14pt;
 }
 
+@media only screen and (max-width: 400px) { 
+
+    .bookTitle {
+        font-size: 12pt;
+    }
+
+    .myStoriesBtn {
+        font-size: 10pt;
+    }
+
+    .savedIcon {
+        font-size: 10pt;
+    }
+
+}
+
 @media only screen and (max-width: 700px) { 
     .bookImg {
         display: none;
@@ -439,6 +458,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
        width: 90%;
        margin-left: 5%;
     }
+
     .modalContainer {
         position: absolute;
         margin-top: -10px;
@@ -451,11 +471,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     }
     .optionsPopup {
         z-index: 10;
-        position: fixed;
         margin-top: 25px;
         display: flex;
-        align-items: center;
         padding-right: 0px;
+        max-width: 90%;
         background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
       -webkit-background-size: cover;
       -moz-background-size: cover;
@@ -485,9 +504,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         padding: 5px;
         padding-top: 2px;
         margin: 0px;
-        height: 30px;
         margin-right: 4px;
-        font-size: 12pt;
+        font-size: 10pt;
     }
 }
 

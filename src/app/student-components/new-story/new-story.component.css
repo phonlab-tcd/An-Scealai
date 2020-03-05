@@ -104,6 +104,23 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     }
 }
 
+@media only screen and (max-width: 400px) { 
+    .bookImg {
+        display: none;
+    }
+    .bookContentsContainer {
+        width: 100%;
+        padding-top: 10px;
+        z-index: 10;
+    }
+    .bookContainerNewStory {
+       width: 90%;
+       margin-left: 5%;
+       padding-top: 0px;
+    }
+}
+
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;

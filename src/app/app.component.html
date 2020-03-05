@@ -15,11 +15,12 @@
         </label>
         </div>
             <div class="nav-links">
+                <a routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
                 <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a>
                 <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
                 <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
                 <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
-                    <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}}</a>
+                    <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
                     <div class="notificationBtn" *ngIf="storiesForNotifications && storiesForNotifications.length > 0" (click)="showNotifications()">{{storiesForNotifications.length}}</div>
                 </div>
             </div>

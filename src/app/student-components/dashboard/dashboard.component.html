@@ -11,16 +11,21 @@
         </div>
       </div>
       <div class="bookHeader">
-        <div routerLink="/contents" class="myStoriesBtn headerItem">{{ts.l.contents}}</div>
-        <div class="bookTitle headerItem titleItem">{{story?.title}}<span *ngIf="!storySaved">*</span></div>
-        <div class="saveIcon headerItem">
-          <div *ngIf="storySaved" class="savedIcon">
-            {{ts.l.saved}} <i class="fas fa-check"></i>
-          </div>
-          <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
-            {{ts.l.save}} <i class="fas fa-save"></i>
+        <div class="headerUpper">
+          <div routerLink="/contents" class="myStoriesBtn"><i class="fa fa-chevron-left backArrow"></i>{{ts.l.contents}}</div>
+          <div class="saveIcon">
+            <div *ngIf="storySaved" class="savedIcon">
+              {{ts.l.saved}} <i class="fas fa-check"></i>
+            </div>
+            <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
+              {{ts.l.save}} <i class="fas fa-save"></i>
+            </div>
           </div>
         </div>
+        <div class="lowerHeader">
+          <div class="bookTitle">{{story?.title}}<span *ngIf="!storySaved">*</span></div>
+        </div>
+        
       </div>
       <div class="storyContainer" *ngIf="story">
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading">
@@ -70,11 +75,11 @@
         </div>
       </div>
       <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
-        <div><button class="btn optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}</button></div>
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="getFeedback()">{{ts.l.feedback}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button></div>
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="goToSynthesis()">{{ts.l.audio_check}}</button></div>
-        <div><button class="btn optionsBtn optionsPopupBtn" (click)="runGramadoir()">{{ts.l.grammar_check}}</button></div>
+        <div class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}</div>
+        <div class="optionsBtn optionsPopupBtn" (click)="getFeedback()">{{ts.l.feedback}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></div>
+        <div class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">{{ts.l.audio_check}}</div>
+        <div class="optionsBtn optionsPopupBtn" (click)="runGramadoir()">{{ts.l.grammar_check}}</div>
       </div>
-      <app-chatbot></app-chatbot>
+      <!-- app-chatbot></app-chatbot -->
   </div>
 </div>

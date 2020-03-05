@@ -6,6 +6,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
+import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -90,7 +91,11 @@ import { StatsComponent } from './admin-components/stats/stats.component';
     FormsModule,
     TextInputHighlightModule,
   ],
-  providers: [ StoryService, UserService ],
+  providers: [ 
+    StoryService,
+    UserService,
+    {provide : LocationStrategy , useClass: HashLocationStrategy}
+  ],
   bootstrap: [AppComponent],
   entryComponents: [ChatbotComponent],
 })
