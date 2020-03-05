@@ -8,11 +8,14 @@
     </div>
     <div class="contentsLinkContainer">
       <div *ngFor="let story of stories">
+      <div class="contentSection">
         <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">
         <a [routerLink]="['/dashboard', story.id]" 
         class="contentsLink">{{story.title}}</a>
-        <div class="contentsDate">{{story.date | date : 'short' }}</div>
+        <div class="contentsDate">{{story.date | date : 'M/d/yy, h:mm' }}</div>
       </div>
+      <hr/>
+    </div>
     </div>     
     <div class="contentsBtnsContainer">
       <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>

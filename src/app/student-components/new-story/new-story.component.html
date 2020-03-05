@@ -6,7 +6,7 @@
     <form [formGroup]="newStoryForm">
       <div class="formGroup" novalidate>
         <p class="formLabel">{{ts.l.title}}</p>
-        <input type="text" class="titleInput" formControlName="title">
+        <input type="text" class="titleInput" formControlName="title" maxLength="35">
         <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
           <div *ngIf="newStoryForm.controls['title'].errors.required">
             *{{ts.l.title_required}}.

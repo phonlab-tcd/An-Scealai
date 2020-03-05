@@ -40,7 +40,7 @@ border-radius: 5px 5px 5px 5px;
 .contentsLinkContainer {
     height: 260px;
     overflow: scroll;
-    padding: 3%;
+    padding: 10px;
     -webkit-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 -moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
@@ -56,12 +56,18 @@ border-radius: 5px 5px 5px 5px;
 
 .contentsLink {
     color: #261500;
-    float: left;
+    text-align: left;
+    width: 50%;
 }
 
 .contentsDate {
-    margin-left: 60%;
     color:#261500;
+}
+
+.contentSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .contentsDateTitle {
@@ -206,6 +212,7 @@ border-radius: 5px 5px 5px 5px;
     }
     .contentsLinkContainer {
         height: 270px;
+        padding-top: 10px;
     }
     .contentsLinkTitle {
         font-size: 12pt;

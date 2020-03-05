@@ -76,7 +76,7 @@
 
 .form-group-vertical {
     display: flex;
-    align-items: center;
+    align-items: left;
     padding: 5px;
     border: 1px solid rgb(189, 189, 189);
     border-radius: 4px;
@@ -97,6 +97,8 @@
     background-color: #d6123c;
     border-radius: 5px;
     padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
     font-size: 12pt;
     margin-left: auto;
 }
@@ -158,6 +160,21 @@
     }
     .formBody {
         width: 100%;
+    }
+    .logoutBtn {
+        font-size: 10pt;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .profileContainer {
+        width: 90%;
+    }
+    .formBody {
+        width: 100%;
+    }
+    .formContainer {
+        width: 95%;
     }
     .logoutBtn {
         font-size: 10pt;

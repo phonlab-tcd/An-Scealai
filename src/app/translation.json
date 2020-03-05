@@ -46,6 +46,7 @@
             "sign_out" : "Sign out",
             
             "leave" : "leave",
+            "classroom" : "Classroom",
             "join_classroom" : "Join classroom",
             "my_info" : "My Information",
             "register" : "Register",
@@ -253,6 +254,7 @@
             "how_often" : "Cé chomh minic?",
             "leave" : "Fág",
             "join_classroom" : "Isteach sa rang",
+            "classroom" : "Rang",
             "my_info" : "Eolas fúm",
             "register" : "Cláraigh",
             "username_in_use" : "*An t-ainm tógtha cheana",
