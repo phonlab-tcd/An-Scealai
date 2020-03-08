@@ -4,7 +4,7 @@
     width: 80%;
     margin-left: 10%;
     margin-top: 20px;
-    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+    background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -186,6 +186,7 @@ background-color: lightblue;
     border-radius: 5px 5px 5px 5px;
     display: flex;
     align-items: center;
+    padding: 5px;
 }
 
 .optionsBtn:hover {
@@ -206,7 +207,7 @@ background-color: lightblue;
     display: flex;
     padding: 4px;
     padding-right: 0px;
-    background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+    background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -260,7 +261,7 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .grammarMessageContainer {
-    height: 80px;
+    height: 72px;
     border: 1px solid #999999;
     background: #f7f2e7;
     width: 90%;
@@ -334,7 +335,7 @@ border-radius: 5px 5px 5px 5px;
 .textContainer {
     width: 90%;
     margin-left: 5%;
-    height: 300px;
+    height: 290px;
     color: #261500;
     background-color: #f7f2e7;
     border: 1px solid #999999;
@@ -475,7 +476,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         display: flex;
         padding-right: 0px;
         max-width: 90%;
-        background: url("/assets/img/paperBg.png") no-repeat center center fixed; 
+        background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
