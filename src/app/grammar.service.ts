@@ -166,12 +166,14 @@ export class GrammarTag {
   }
 
   static getMessageFromRule(rule: string) : string {
+    /*
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
       return "Séimhiu missing";
     }
     if(rule === 'Lingua::GA::Gramadoir/URU') {
       return "This noun should be plural.";
     }
+    */
     // etc.
     if(rule === 'VOWEL') {
       return "These vowels should be in agreement according to the Leathan/Caol rule."

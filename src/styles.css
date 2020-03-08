@@ -12,7 +12,7 @@ body.rootBody {
 }
 
 body.rootBody {
-   background: url("assets/img/paperBg.png") no-repeat center fixed;
+   background: url("assets/img/paperBg.webp") no-repeat center fixed;
  -webkit-background-size: cover;
  -moz-background-size: cover;
  -o-background-size: cover;
