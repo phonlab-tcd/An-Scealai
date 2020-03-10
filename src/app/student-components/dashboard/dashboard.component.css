@@ -4,7 +4,7 @@
     width: 80%;
     margin-left: 10%;
     margin-top: 20px;
-    background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -109,7 +109,7 @@ background-color: lightblue;
 }
 
 .feedbackTextarea {
-    height: 170px;
+    height: 160px;
 }
 
 .feedbackHeader {
@@ -207,7 +207,7 @@ background-color: lightblue;
     display: flex;
     padding: 4px;
     padding-right: 0px;
-    background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -476,7 +476,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         display: flex;
         padding-right: 0px;
         max-width: 90%;
-        background: url("/assets/img/paperBg.webp") no-repeat center center fixed; 
+        background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
