@@ -276,13 +276,13 @@
             "story" : "Scéal",
             "terms_of_use" : "Nuair a chláirím tuigim go n-úsáidfear mo chuid sonraí ar mhaithe le taighde teangeolaíochta agus ar mhaithe le teicneolaíocht na hurlabhra agus teanga a fhorbairt don Ghaeilge. Coimeádfar na sonraí ar fad ar fhreastalaí atá slán faoi chosaint pasfhocail sa tSaotharlann Foghraíochta & Urlabhra, Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide agus ní roinnfear iad le héinne lasmuigh d'fhoireann lárnach na taighe. Tuilleadh eolais ar fáil ón Ollamh Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie",
 
-            "agree_to_terms" : "By registering I agree to the terms of use",
-            "about_an_scealai" : "About An Scéalaí",
+            "agree_to_terms" : "Ar chlárú dom glacaim leis na coinníollacha úsáide",
+            "about_an_scealai" : "Faoi An Scéalaí",
             "about_quote" : "Technology is the campfire around which we tell our stories - Laurie Anderson",
-            "about_content_text" : "    An Scéalaí is currently under development. It is an intelligent Computer-Assisted Language Learning (iCALL) platform for Irish which exploits the latest developments in Irish speech and language technology as its key feature. It promotes a holistic approach to language learning, simultaneously training the four skills of writing, listening, reading and speaking, focusing particularly on reinforcing the linkages between the spoken and written word. The goal is to offer the learner an interactive, personalised experience to foster their second language learning. It can be used as a standalone platform, incorporating automatic feedback and/or as a complement to classroom learning, incorporating teacher feedback. The following paper summarises the approach, rationale and development to date.",
-            "related_technology" : "Related Technology",
-            "abair_technology_title" : "The ABAIR initiative: speech synthesis for Irish",
-            "gramadoir_technology_title" : "An Gramadóir (grammar checker for Irish developed by Kevin Scannell)"
+            "about_content_text" : "    Tionscadal nua is ea An Scéalaí atá á fhorbairt faoi láthair. Ardán Foghlaim Ríomhchuidithe Teanga-cliste atá ann a tharraingíonn na forbairtí is déanaí i dteicneolaíocht na hurlabhra agus na teanga don Ghaeilge le chéile ar mhaithe le teagasc/foghlaim na Gaeilge. Is cur chuige iomlánaíoch atá i gceist, a dhíríonn ar an scríobh, éisteacht, léamh agus caint ag an am céanna, le béim ar leith ar na nascanna idir an focal scíofa agus an fuaimniú. Tá sé mar aidhm againn ardán a chruthú d’fhoghlaimeoirí atá idirghníomhach agus pearsantaithe chun sealbhú an dara teanga a chothú. Is féidir le daoine An Scéalaí a úsáid iad féin agus leas a bhaint as an aiseolas a ghineann an córas go huathoibríoch agus/nó is féidir an t-ardán a úsáid mar acmhainn bhreise le cur leis an méid atá ar siúl sa seomra ranga, agus aiseolas an mhúinteora a fháil chomh maith. Seo a leanas foilseachán a thugann an cúlra, na haidhmeanna agus an fhorbairt atá déanta go dtí seo.",
+            "related_technology" : "Teicneolaíocht eile",
+            "abair_technology_title" : "ABAIR: an focal scríofa go caint bheo",
+            "gramadoir_technology_title" : "An Gramadóir (seiceálaí gramadaí forbartha ag Kevin Scannell)"
         }
     ]
 }
