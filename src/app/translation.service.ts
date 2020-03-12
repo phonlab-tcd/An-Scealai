@@ -21,7 +21,7 @@ export class TranslationService {
         this.l = this.getLanguageFromCode(res.language);
       })
     } else {
-      this.l = this.getLanguageFromCode('en');
+      this.l = this.getLanguageFromCode('ga');
     }
   }
 
