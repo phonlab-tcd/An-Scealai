@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
+import config from '../../abairconfig.json';
 
 @Component({
   selector: 'app-register-teacher',
@@ -23,6 +24,8 @@ export class RegisterTeacherComponent implements OnInit {
   registrationError: boolean;
   errorText: String;
 
+  baseurl : String = config.baseurl;
+
   constructor(private auth: AuthenticationService, private http: HttpClient, 
     private router: Router, private engagement: EngagementService,
     public ts: TranslationService) { }
@@ -32,9 +35,9 @@ export class RegisterTeacherComponent implements OnInit {
   }
 
   register() {
-    this.http.get('http://localhost:4000/teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
+    this.http.get(this.baseurl + 'teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
       this.auth.register(this.credentials).subscribe(() => {
-        this.http.get('http://localhost:4000/teacherCode/delete/' + this.teacherCode).subscribe(() => {
+        this.http.get(this.baseurl + 'teacherCode/delete/' + this.teacherCode).subscribe(() => {
           this.engagement.addEventForLoggedInUser(EventType.REGISTER);
           this.router.navigateByUrl('/landing');
         }, (err) => {
