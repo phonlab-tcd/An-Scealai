@@ -12,7 +12,7 @@ import { TranslationService } from '../translation.service';
 export class RegisterProfileComponent implements OnInit {
 
   constructor(private profileService : ProfileService,
-              private auth : AuthenticationService,
+              public auth : AuthenticationService,
               private router : Router,
               public ts : TranslationService) { }
 
