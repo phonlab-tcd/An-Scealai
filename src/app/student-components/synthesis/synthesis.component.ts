@@ -160,7 +160,7 @@ export class SynthesisComponent implements OnInit {
   }
 
   playAudio(section) {
-    this.pauseAllAudio();
+    //this.pauseAllAudio();
     if(section.constructor.name === "Paragraph") {
       this.a = new Audio(section.audioUrl);
       this.a.play();
