@@ -70,14 +70,16 @@ export class SynthesisComponent implements OnInit {
       this.paragraphs.forEach(p => {
         console.log(p.index);
         let pElem = document.getElementById("paragraph-" + p.index);
-        let spans = pElem.querySelectorAll('span');
-        spans.forEach(span => {
-          if(span.className != "sentence_normal") {
-            span.addEventListener('click', this.playWord.bind(this));
-            span.setAttribute("audio-url", p.audioUrl);
-            span.classList.add("wordBtn");
-          }
-        })
+        if(pElem) {
+          let spans = pElem.querySelectorAll('span');
+          spans.forEach(span => {
+            if(span.className != "sentence_normal") {
+              span.addEventListener('click', this.playWord.bind(this));
+              span.setAttribute("audio-url", p.audioUrl);
+              span.classList.add("wordBtn");
+            }
+          })
+        }
       });
     }, 1000);
   }
@@ -88,14 +90,16 @@ export class SynthesisComponent implements OnInit {
     setTimeout(() => {
       this.sentences.forEach(s => {
         let sElem = document.getElementById("sentence-" + s.index);
-        let spans = sElem.children[0].querySelectorAll('span');
-        spans.forEach(span => {
-          if(span.className != "sentence_normal") {
-            span.addEventListener('click', this.playWord.bind(this));
-            span.setAttribute("audio-url", s.paragraph.audioUrl);
-            span.classList.add("wordBtn");
-          }
-        })
+        if(sElem) {
+          let spans = sElem.children[0].querySelectorAll('span');
+          spans.forEach(span => {
+            if(span.className != "sentence_normal") {
+              span.addEventListener('click', this.playWord.bind(this));
+              span.setAttribute("audio-url", s.paragraph.audioUrl);
+              span.classList.add("wordBtn");
+            }
+          })
+        }
       });
     }, 1000);
   }
@@ -160,13 +164,15 @@ export class SynthesisComponent implements OnInit {
   }
 
   playAudio(section) {
-    //this.pauseAllAudio();
-    if(section.constructor.name === "Paragraph") {
+    this.pauseAllAudio();
+    console.log(section.type);
+    if(section.type === "Paragraph") {
+      
       this.a = new Audio(section.audioUrl);
       this.a.play();
       this.audioPlaying = true;
       Highlighter.startHighlighting(section);
-    } else if(section.constructor.name === "Sentence") {
+    } else if(section.type === "Sentence") {
       let sentenceElement = document.getElementById('sentence-' + section.index);
       if(!section.startTime) {
         section.startTime = sentenceElement.children[0].children[0].getAttribute("data-begin");
@@ -209,6 +215,7 @@ class Paragraph {
     audioPlaying: boolean;
     highlightTimeouts = [];
     sentences : Sentence[] = [];
+    type: string = "Paragraph";
 }
 
 class Sentence {
@@ -219,6 +226,7 @@ class Sentence {
   startTime : number;
   duration : number;
   paragraph : Paragraph;
+  type: string = "Sentence";
 }
 
 class Highlighter {
@@ -226,8 +234,8 @@ class Highlighter {
   static startHighlighting(section) {
     section.audioPlaying = true;
 
-    let isParagraph = section.constructor.name === "Paragraph";
-    let isSentence = section.constructor.name === "Sentence";
+    let isParagraph = section.type === "Paragraph";
+    let isSentence = section.type === "Sentence";
 
     let spans, delay = 0;
     if(isParagraph) {
@@ -280,23 +288,30 @@ class Highlighter {
   static resetHighlight(section) {
     section.audioPlaying = false;
 
-    let isParagraph = section.constructor.name === "Paragraph";
-    let isSentence = section.constructor.name === "Sentence";
+    let isParagraph = section.type === "Paragraph";
+    let isSentence = section.type === "Sentence";
 
     let spans;
     if(isParagraph) {
       let sectionElement = document.getElementById('paragraph-' + section.index);
-      spans = sectionElement.querySelectorAll('span');
+      if(sectionElement) {
+        spans = sectionElement.querySelectorAll('span');
+      }
     } else if(isSentence) {
       let sectionElement = document.getElementById('sentence-' + section.index);
-      spans = sectionElement.children[0].querySelectorAll('span');
+      if(sectionElement) {
+        spans = sectionElement.children[0].querySelectorAll('span');
+      }
     }
 
-    spans.forEach((s) => {
-      s.classList.remove("spanText");
-      s.classList.remove("spanTextHighlight");
-      s.classList.remove("spanTextNoHighlight");
-    });
+    if(spans) {
+      spans.forEach((s) => {
+        s.classList.remove("spanText");
+        s.classList.remove("spanTextHighlight");
+        s.classList.remove("spanTextNoHighlight");
+      });
+    }
+    
   }
 
 }
