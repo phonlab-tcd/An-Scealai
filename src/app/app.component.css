@@ -108,7 +108,7 @@ box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
   text-align: center;
 }
 
-.optionsPopup {
+.optionsPopupOld {
   z-index: 10;
   width: 180px;
   position: fixed;
@@ -122,7 +122,7 @@ box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
 border-radius: 5px;
 }
 
-.optionsPopup:after {
+.optionsPopupOld:after {
 content: '';
 position: absolute;
 top: 0px;
@@ -219,5 +219,41 @@ box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
     z-index: 30;
     overflow-y: auto;
   }
+
+  .notifcationPopup {
+    position: absolute;
+    top: 220px;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notificationsHeader {
+    width: 100%;
+    color: white;
+    background-color: #437250;
+    padding: 4px;
+    border-radius: 0px;
+    text-align: center;
+  }
+
+  .optionsPopupOld {
+    z-index: 50;
+    width: 50%;
+    position: fixed;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    background-color: #f7f2e7;
+    -webkit-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
+    -moz-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
+    box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
+    border-radius: 0px 0px 5px 5px;
+  }
+
+  .optionsPopupOld:after {
+    display: none;
+  }
+
 }
 

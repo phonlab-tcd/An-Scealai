@@ -96,33 +96,6 @@ border-radius: 5px 5px 5px 5px;
 background-color: lightblue;
 }
 
-.feedbackVisibleTextfieldAudio {
-    height: 130px;
-}
-
-.feedbackVisibleTextfield {
-    height: 100px;
-}
-
-.feedbackTextareaAudio {
-    height: 100px;
-}
-
-.feedbackTextarea {
-    height: 160px;
-}
-
-.feedbackHeader {
-    width: 90%;
-    margin-left: 5%;
-    border-radius: 4px 4px 0px 0px;
-    padding-left: 8px;
-    padding-right: 8px;
-    background-color: #70a87f;
-    color: white;
-    display: flex;
-    align-items: column;
-}
 
 .closeFeedbackBtn {
     margin-left: auto;
@@ -510,6 +483,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     }
 }
 
+.feedbackVisibleTextfieldAudio {
+    height: 130px;
+}
+
+.feedbackVisibleTextfield {
+    height: 100px;
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
@@ -525,6 +506,148 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         margin-left: -245px;
         margin-top: 30px;
     }
+
+    .optionsPopupBtn {
+        margin-top: 0px;
+    }
+}
+
+@media only screen and (min-width: 1000px) and (min-height: 750px) {
+    .bookImg {
+        z-index: -10;
+        width: 800px;
+        height: 600px;
+        left: 50%;
+        margin-left: -400px;
+    }
+
+    .bookContainer {
+        width: 620px;
+        height: 510px;
+        position: fixed;
+        left: 50%;
+        margin-left: -310px;
+        margin-top: 30px;
+    }
+
+    .textField {
+        height: 380px;
+        margin-bottom: 10px;
+    }
+
+    .feedbackVisibleTextfield {
+        height: 190px;
+    }
+
+    .feedbackVisibleTextfieldAudio {
+        height: 160px;
+    }
+
+    .textFieldGrammarCheck {
+        height: 240px;
+    }
+
+    .textContainer {
+        height: 380px;
+    }
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 900px) {
+    .bookImg {
+        z-index: -10;
+        width: 1000px;
+        height: 740px;
+        left: 50%;
+        margin-left: -500px;
+    }
+
+    .bookContainer {
+        width: 800px;
+        height: 600px;
+        position: fixed;
+        left: 50%;
+        margin-left: -400px;
+        margin-top: 50px;
+    }
+
+    .textField {
+        height: 470px;
+    }
+
+    .feedbackVisibleTextfield {
+        height: 275px;
+    }
+
+    .feedbackVisibleTextfieldAudio {
+        height: 245px;
+    }
+
+    .textFieldGrammarCheck {
+        height: 330px;
+    }
+
+    .textContainer {
+        height: 470px;
+    }
+}
+
+@media only screen and (min-width: 1900px) and (min-height: 1000px) {
+    .bookImg {
+        z-index: -10;
+        width: 1200px;
+        height: 850px;
+        left: 50%;
+        margin-left: -600px;
+    }
+
+    .bookContainer {
+        width: 980px;
+        height: 730px;
+        position: fixed;
+        left: 50%;
+        margin-left: -490px;
+        margin-top: 50px;
+    }
+
+    .textField {
+        height: 590px;
+    }
+
+    .feedbackVisibleTextfield {
+        height: 395px;
+    }
+
+    .feedbackVisibleTextfieldAudio {
+        height: 365px;
+    }
+
+    .textFieldGrammarCheck {
+        height: 470px;
+    }
+
+    .textContainer {
+        height: 590px;
+    }
+}
+
+.feedbackTextareaAudio {
+    height: 100px;
+}
+
+.feedbackTextarea {
+    height: 160px;
+}
+
+.feedbackHeader {
+    width: 90%;
+    margin-left: 5%;
+    border-radius: 4px 4px 0px 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    align-items: column;
 }
 
 .lds-grid {

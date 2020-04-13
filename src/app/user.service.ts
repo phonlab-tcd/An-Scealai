@@ -17,4 +17,8 @@ export class UserService {
     return this.http.get(this.baseUrl + 'viewUser', {headers: {_id : id}});
   }
 
+  getUserByUsername(username: string) : Observable<any> {
+    return this.http.get(this.baseUrl + 'getUserByUsername/' + username);
+  }
+
 }

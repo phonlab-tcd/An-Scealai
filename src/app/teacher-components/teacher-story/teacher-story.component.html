@@ -1,61 +1,62 @@
 <div class="content">
     <div class="{{modalClass}} modalContainer">
       <div class="modalContent">
-          <div class="modalText">Record Audio Message</div>
+          <div class="modalText">{{ts.l.record_audio_message}}</div>
           <div class="recordBtnContainer">
-            <button *ngIf="!recording" (click)="prepRecording()" class="headerIconBtn">Record audio</button>
-            <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">Stop Recording</button>          
+            <button *ngIf="!recording" (click)="prepRecording()" class="headerIconBtn">{{ts.l.record_audio}}</button>
+            <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
             <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
           </div>
-          <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">Would you like to listen back to that?</div>
+          <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
           <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
           <div class="modalBtnContainer">
-              <button class="modalBtn" (click)="hideModal()">Cancel</button>
-              <button class="modalBtn createBtnGreen" (click)="saveAudio()" *ngIf="canSendAudio">Send <i class="fas fa-paper-plane"></i></button>
-              <div class="inactiveBtn" *ngIf="!canSendAudio">Send <i class="fas fa-paper-plane"></i></div>
+              <button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
+              <button class="modalBtn createBtnGreen" (click)="saveAudio()" *ngIf="canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
+              <div class="inactiveBtn" *ngIf="!canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></div>
           </div>
       </div>
     </div>
     <div class="classContainer">
         <div class="classHeader">
+          <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
           {{story?.title}}
         </div>
         <div class="classBody">
             
             <div class="storyTextContainer">
-              <div class="storyTextHeader">Text</div>
+              <div class="storyTextHeader">{{ts.l.text}}</div>
               <div class="storyText">{{story?.text}}</div>
             </div>
             <div class="storyInfoContainer">
-                <div class="storyTextHeader">Information</div>
+                <div class="storyTextHeader">{{ts.l.information}}</div>
                 <div class="storyInfoBody">
-                    <div class="userInfo">Title: <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
-                    <div class="userInfo">Author: <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
-                    <div class="userInfo">Creation date: <textarea readonly class="userInfoTextarea">{{story?.date}}</textarea></div>
-                    <div class="userInfo">Dialect: <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
+                    <div class="userInfo">{{ts.l.title}} <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
+                    <div class="userInfo">{{ts.l.story_author}} <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
+                    <div class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date}}</textarea></div>
+                    <div class="userInfo">{{ts.l.dialect}} <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
                     <div class="feedbackContainer">
-                      <div class="feedbackHeader">Feedback</div>
+                      <div class="feedbackHeader">{{ts.l.feedback}}</div>
                       <div class="feedbackBody" *ngIf="story">
-                          <textarea class="feedbackTextarea" placeholder="Leave some feedback on {{authorPossessive}} story" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
+                          <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
                         </div>
                       <div class="feedbackFooter">
                         <div class="seenByStudent" *ngIf="story">
-                          <span *ngIf="story.feedback.seenByStudent">Seen by {{story?.author}} <i class="fas fa-check"></i></span>
-                          <span *ngIf="!story.feedback.seenByStudent">Not seen by {{story?.author}}</span>
+                          <span *ngIf="story.feedback.seenByStudent">{{ts.l.seen_by}} {{story?.author}} <i class="fas fa-check"></i></span>
+                          <span *ngIf="!story.feedback.seenByStudent">{{ts.l.not_seen_by}} {{story?.author}}</span>
                         </div>
                         <div class="sendFeedbackBtn">
-                          <button *ngIf="!feedbackSent" class="headerIconBtn" (click)="sendFeedback()">Send <i class="fas fa-paper-plane"></i></button>
-                          <button *ngIf="feedbackSent" class="headerIconBtn">Sent <i class="fas fa-check"></i></button>
+                          <button *ngIf="!feedbackSent" class="headerIconBtn" (click)="sendFeedback()">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
+                          <button *ngIf="feedbackSent" class="headerIconBtn">{{ts.l.sent}} <i class="fas fa-check"></i></button>
                         </div>
                       </div>
                     </div>
                     <div class="feedbackBtnContainer">
                       <div *ngIf="audioSource">
-                          <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
-                        </div>
+                        <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+                      </div>
                       <div>
-                          <button (click)="showModal()" class="headerIconBtn">Audio Message</button>
+                          <button (click)="showModal()" class="headerIconBtn">{{ts.l.audio_message}}</button>
                       </div>
                     </div>
                   </div>

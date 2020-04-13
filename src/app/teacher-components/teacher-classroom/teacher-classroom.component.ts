@@ -6,6 +6,7 @@ import { Classroom } from '../../classroom';
 import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -18,7 +19,8 @@ export class TeacherClassroomComponent implements OnInit {
               private http: HttpClient,
               private classroomService: ClassroomService,
               private router: Router,
-              private userService: UserService) { }
+              private userService: UserService,
+              public ts : TranslationService) { }
   
   classroom : Classroom;
   modalClass : string = "hidden";

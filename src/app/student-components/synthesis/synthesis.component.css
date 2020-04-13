@@ -1,4 +1,4 @@
-.bookContainer {
+.bookContainerSynth {
     width: 70%;
     height: 400px;
     margin-left: 15%;
@@ -76,10 +76,10 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     justify-content: space-between;
 }
 
-.textContainer {
+.textContainerSynth {
     width: 90%;
     margin-left: 5%;
-    height: 300px;
+    height: 290px;
     color: #261500;
     background-color: #f7f2e7;
     border: 1px solid #261500a2;
@@ -119,6 +119,45 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     color: #437250;
 }
 
+.footer {
+  margin-left: 5%;
+  width: 90%;
+  display: flex;
+}
+
+.footerText {
+  display: flex;
+  align-items: center;
+  font-size: 12pt;
+  margin-right: 5px;
+}
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.changeSplitBtn {
+  background-color: #70a87f;
+  border-radius: 4px;
+  margin-right: 5px;
+  color: white;
+}
+
+.changeSplitBtn:hover {
+  background-color: #437250;
+}
+
+.sentenceContainer {
+  margin-bottom: 10px;
+}
+
+.selectedBtn {
+  background-color: #437250;
+}
+
 @media only screen and (max-width: 700px) { 
   .bookImg {
       display: none;
@@ -128,7 +167,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
       padding-top: 10px;
       z-index: 10;
   }
-  .bookContainer {
+  .bookContainerSynth {
      width: 90%;
      margin-left: 5%;
   }
@@ -143,14 +182,86 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
         margin-left: -315px;
     }
 
-    .bookContainer {
+    .bookContainerSynth {
         width: 490px;
         position: fixed;
         left: 50%;
         margin-left: -245px;
         margin-top: 20px;
     }
+}
 
+@media only screen and (min-width: 1000px) and (min-height: 750px) {
+  .bookImg {
+      z-index: -10;
+      width: 800px;
+      height: 600px;
+      left: 50%;
+      margin-left: -400px;
+  }
+
+  .bookContainerSynth {
+      width: 620px;
+      height: 510px;
+      position: fixed;
+      left: 50%;
+      margin-left: -310px;
+      margin-top: 20px;
+  }
+
+  .textContainerSynth {
+      height: 390px;
+  }
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 900px) {
+  .bookImg {
+      z-index: -10;
+      width: 1000px;
+      height: 740px;
+      left: 50%;
+      margin-left: -500px;
+  }
+
+  .bookContainerSynth {
+      width: 800px;
+      height: 600px;
+      position: fixed;
+      left: 50%;
+      margin-left: -400px;
+      margin-top: 30px;
+  }
+
+  .textContainerSynth {
+      height: 480px;
+  }
+}
+
+@media only screen and (min-width: 1900px) and (min-height: 1000px) {
+  .bookImg {
+      z-index: -10;
+      width: 1200px;
+      height: 850px;
+      left: 50%;
+      margin-left: -600px;
+  }
+
+  .bookContainerSynth {
+      width: 980px;
+      height: 730px;
+      position: fixed;
+      left: 50%;
+      margin-left: -490px;
+      margin-top: 30px;
+  }
+
+  .textContainerSynth {
+      height: 610px;
+  }
+
+  .myStoriesBtn {
+    width: 120px;
+  }
 }
 
 /* 
@@ -179,6 +290,16 @@ Some pseudo-classes used to highlight text
 .paragraphContainer ::ng-deep .spanTextNoHighlight::before {
     right: 0;
     width: 0%;
+}
+
+.paragraphContainer ::ng-deep .wordBtn:hover {
+  background: #0088ff36;
+  cursor: pointer;
+}
+
+.sentenceContainer ::ng-deep .wordBtn:hover {
+  background: #0088ff36;
+  cursor: pointer;
 }
 
 /*

@@ -210,3 +210,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .deleteRedBtn:hover {
     background-color: #8f0018;
 }
+
+.arrow {
+    margin-left: auto;
+}
+
+.backArrow {
+    margin-right: 8px;
+}
+
+.backArrow:hover {
+    cursor: pointer;
+    color:#ff9100;
+    transition: color, 0.5s;
+}

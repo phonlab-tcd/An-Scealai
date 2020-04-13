@@ -7,8 +7,8 @@
 }
 
 .inputField {
-    width: 100%;
     margin-left: 5%;
+    min-width: 0;
 }
 
 .formBody {

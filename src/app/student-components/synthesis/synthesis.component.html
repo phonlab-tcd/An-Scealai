@@ -1,6 +1,6 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="page">
-  <div class="bookContainer">
+  <div class="bookContainerSynth">
       <div class="bookHeader">
         <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div>
         <div></div>
@@ -10,16 +10,40 @@
           {{ts.l.listen_and_correct}}
         </div>
         <div class="textFieldContainer">
-            <div class="textContainer">
+            <div class="textContainerSynth">
               <div *ngIf="!audioFinishedLoading" class="loaderContainer">
                   <b>{{ts.l.synthesising}}</b>
                   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
               </div>
               <div *ngIf="audioFinishedLoading">
-                <div *ngFor="let p of paragraphs" class="paragraphContainer">
-                  <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
-                  <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                  <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                  <div *ngFor="let p of paragraphs" class="paragraphContainer">
+                    <span *ngIf="sectionSplit==='paragraph'">
+                      <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                      <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                      <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                    </span>
+                    <span *ngIf="sectionSplit==='sentence'">
+                      <div *ngFor="let s of p.sentences" class="sentenceContainer">
+                          <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
+                          <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                          <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                      </div>
+                    </span>
+                  </div>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="btnContainer">
+                <div class="footerText">
+                  Listen by
+                </div>
+                <div *ngIf="sectionSplit==='paragraph'">
+                  <button class="changeSplitBtn selectedBtn">Paragraph</button>
+                  <button class="changeSplitBtn" (click)="sentenceMode()">Sentence</button>
+                </div>
+                <div *ngIf="sectionSplit==='sentence'">
+                  <button class="changeSplitBtn" (click)="paragraphMode()">Paragraph</button>
+                  <button class="changeSplitBtn selectedBtn">Sentence</button>
                 </div>
               </div>
             </div>

@@ -23,6 +23,8 @@ export class RegisterTeacherComponent implements OnInit {
 
   registrationError: boolean;
   errorText: String;
+  passwordConfirm : string;
+  termsVisible : boolean;
 
   baseurl : String = config.baseurl;
 
@@ -35,24 +37,49 @@ export class RegisterTeacherComponent implements OnInit {
   }
 
   register() {
-    this.http.get(this.baseurl + 'teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
-      this.auth.register(this.credentials).subscribe(() => {
-        this.http.get(this.baseurl + 'teacherCode/delete/' + this.teacherCode).subscribe(() => {
-          this.engagement.addEventForLoggedInUser(EventType.REGISTER);
-          this.router.navigateByUrl('/landing');
+    if(this.checkDetails()) {
+      this.http.get(this.baseurl + 'teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
+        this.auth.register(this.credentials).subscribe(() => {
+          this.http.get(this.baseurl + 'teacherCode/delete/' + this.teacherCode).subscribe(() => {
+            this.engagement.addEventForLoggedInUser(EventType.REGISTER);
+            this.router.navigateByUrl('/register-profile');
+          }, (err) => {
+            this.showErrorMessage(err.error.message);
+          });
         }, (err) => {
           this.showErrorMessage(err.error.message);
         });
       }, (err) => {
         this.showErrorMessage(err.error.message);
       });
-    }, (err) => {
-      this.showErrorMessage(err.error.message);
-    });
+    }
   }
 
   showErrorMessage(message : String) {
     this.errorText = message;
     this.registrationError = true;
+  }
+
+  checkDetails() : boolean {
+    if(this.credentials.password !== this.passwordConfirm) {
+      this.errorText = this.ts.l.passwords_must_match;
+      this.registrationError = true;
+      return false;
+    }
+    if(this.credentials.password.length < 5) {
+      this.errorText = this.ts.l.passwords_5_char_long;
+      this.registrationError = true;
+      return false;
+    }
+    if(!this.credentials.username.match('^[A-Za-z0-9]+$')) {
+      this.errorText = this.ts.l.username_no_special_chars;
+      this.registrationError = true;
+      return false;
+    }
+    return true;
+  }
+
+  toggleTerms() {
+    this.termsVisible = !this.termsVisible;
   }
 }

@@ -12,8 +12,9 @@ statsRoutes.route('/synthesisFixes').get((req, res) => {
         if(data) {
             let errorDifferences = new Map();
             countErrors(data, 'BEFORE').then(beforeErrors => {
-                console.log(beforeErrors);
+                console.log("BEFORE ERRORS", beforeErrors);
                 countErrors(data, 'AFTER').then(afterErrors => {
+                    console.log("AFTER ERRORS", afterErrors);
                     beforeErrors.forEach((val, key) => {
                         if(afterErrors.has(key)) {
                             errorDifferences.set(key, (val-afterErrors.get(key)));
@@ -36,10 +37,12 @@ function countErrors(data, dataSet) {
             getGramadoirErrorsForText((dataSet === 'BEFORE') ? d.before : d.after).then(body => {
                 errors = JSON.parse(body)
                 errors.forEach(error => {
-                    if(errorsMap.has(error.ruleId)) {
-                        errorsMap.set(error.ruleId, errorsMap.get(error.ruleId)+1);
+                    let ruleStr =  error.ruleId.toString();
+                    let ruleLabel = ruleStr.match("(?<=\/)(.*?)(?=\{|$)")[0];
+                    if(errorsMap.has(ruleLabel)) {
+                        errorsMap.set(ruleLabel, errorsMap.get(ruleLabel)+1);
                     } else {
-                        errorsMap.set(error.ruleId, 1);
+                        errorsMap.set(ruleLabel, 1);
                     }
                 });
                 counter++;
@@ -56,14 +59,17 @@ function getTexts() {
         let data = [];
         Story.find({}, (err, stories) => {
             if(stories) {
+                
                 let counter = 0;
+
                 stories.forEach((story, index, array) => {
                     getEvents(story).then(eventData => {
                         //data.push(eventData); // This pushes data per story (as opposed to all together)
                         eventData.forEach(datum => {
                             data.push(datum);
                         });
-                        counter++
+                        counter++;
+                        console.log(counter, array.length);
                         if(counter === array.length) {
                             resolve(data);
                         }
@@ -75,22 +81,27 @@ function getTexts() {
 }
 
 function getEvents(story) {
+    console.log("getEvents()");
     return new Promise((resolve, reject) => {
         let data = [];
         Event.find({"storyData._id":story._id.toString()}, (err, events) => {
             if(events) {
-                let previousEvent = events[0];
-                events.forEach((event, index, array) => {
-                    if(previousEvent.type === "SYNTHESISE-STORY"
-                    && event.type === "SAVE-STORY") {
-                        data.push({"before" : previousEvent.storyData.text,
-                                    "after" : event.storyData.text});
-                    }
-                    if(index === array.length-1) {
-                        resolve(data);
-                    }
-                    previousEvent = event;
-                })
+                if(events.length > 0) {
+                    let previousEvent = events[0];
+                    events.forEach((event, index, array) => {
+                        if(previousEvent.type === "SYNTHESISE-STORY"
+                        && event.type === "SAVE-STORY") {
+                            data.push({"before" : previousEvent.storyData.text,
+                                        "after" : event.storyData.text});
+                        }
+                        if(index === array.length-1) {
+                            resolve(data);
+                        }
+                        previousEvent = event;
+                    });
+                } else {
+                    resolve([]);
+                }
             }
         })
     });

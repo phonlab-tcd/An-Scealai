@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../authentication.service';
 import { Observable } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -14,7 +15,9 @@ export class TeacherDashboardComponent implements OnInit {
 
   constructor(private classroom: ClassroomService,
               private auth: AuthenticationService,
-              private router: Router) { }
+              private router: Router,
+              public ts : TranslationService) { }
+              
   
   classrooms : Observable<Classroom[]>;
   modalClass : string = "hidden";

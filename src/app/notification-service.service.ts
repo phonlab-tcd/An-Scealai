@@ -36,7 +36,6 @@ export class NotificationService {
 
   private loadObservable() {
     this._stories.next(Object.assign({}, this.dataStore).stories);
-    console.log("ran");
   }
 
   getStories() {
