@@ -4,9 +4,11 @@
 <div *ngIf="!graphGenerated" class="loaderContainer">
   <b>Compiling Data</b>
   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  <div>(This may take a while!)</div>
 </div>
 <div class="bodyContainer">
-  <div class="chart-container">    
+  <div *ngIf="graphGenerated">Net errors corrected: {{netErrors}}</div>
+  <div class="chart-container">
     <canvas id="canvas"></canvas>    
   </div>
 </div>

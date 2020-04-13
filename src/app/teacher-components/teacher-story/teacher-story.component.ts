@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { TranslationService } from '../../translation.service';
+import { UserService } from '../../user.service';
 
 declare var MediaRecorder : any;
 
@@ -16,7 +18,10 @@ export class TeacherStoryComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private http: HttpClient,
     private storyService: StoryService,
-    protected sanitizer: DomSanitizer) { }
+    protected sanitizer: DomSanitizer,
+    public ts : TranslationService,
+    private router: Router,
+    private userService: UserService) { }
 
   modalClass : string = "hidden";
 
@@ -29,6 +34,7 @@ export class TeacherStoryComponent implements OnInit {
   newRecording : boolean = false;
   showListenBack : boolean = false;
   canSendAudio : boolean = false;
+  userId: string;
 
   errorText : string;
   registrationError : boolean;
@@ -47,6 +53,7 @@ export class TeacherStoryComponent implements OnInit {
         this.story = res[0];
         this.getFeedbackAudio();
         this.getAuthorPossessive();
+        this.getUserId();
       });
     })
   }
@@ -54,6 +61,12 @@ export class TeacherStoryComponent implements OnInit {
   getAuthorPossessive() {
     let name : string = this.story.author;
     this.authorPossessive = name + '\'' + (name[name.length - 1] === 's' ? '' : 's');
+  }
+
+  getUserId() {
+    this.userService.getUserByUsername(this.story.author).subscribe((res) => {
+      this.userId = res[0]._id;
+    })
   }
 
   getFeedbackAudio() {
@@ -147,5 +160,9 @@ export class TeacherStoryComponent implements OnInit {
     this.recording = false;
     this.newRecording = false;
     this.showListenBack = false;
+  }
+
+  goBack() {
+    this.router.navigateByUrl('teacher/student/' + this.userId);
   }
 }

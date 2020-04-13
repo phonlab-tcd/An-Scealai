@@ -55,7 +55,7 @@
           </div>
           </div>
           <div mwlTextInputHighlightContainer>
-            <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea></textarea>
+            <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea readonly></textarea>
             <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
           </div>
         </div>

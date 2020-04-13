@@ -30,6 +30,7 @@ export class AppComponent {
       this.checkVal = true;
     } else {
       this.checkVal = false;
+      this.notificationsShown = false;
     }
   }
 
@@ -46,6 +47,7 @@ export class AppComponent {
     this.notificationSerivce.getStories().subscribe((res: Story[]) => {
       this.storiesForNotifications = res;
     });
+    console.log(this.auth.getUserDetails().username);
   }
 
   showNotifications() {

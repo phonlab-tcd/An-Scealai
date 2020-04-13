@@ -125,6 +125,16 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
     });
 });
 
+classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
+    Classroom.findOne({ studentIds: { $all: [req.params.studentId] } }, (err, classroom) => {
+        if(classroom) {
+            res.json(classroom);
+        } else {
+            req.json({message: "No classrooms were found", status: 404})
+        }
+    })
+})
+
 classroomRoutes.route('/').get((req, res) => {
     Classroom.find({}, (err, classrooms) => {
         if(classrooms) {

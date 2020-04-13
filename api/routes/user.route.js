@@ -42,4 +42,14 @@ userRoutes.route('/getLanguage/:id').get((req, res) => {
     });
 });
 
+userRoutes.route('/getUserByUsername/:username').get((req, res) => {
+    User.find({"username" : req.params.username}, (err, user) => {
+        if(user) {
+            res.json(user);
+        } else {
+            res.status(404).json("User not found");
+        }
+    });
+});
+
 module.exports = userRoutes;

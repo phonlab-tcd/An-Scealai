@@ -13,6 +13,7 @@ export class StatsComponent implements OnInit {
 
   chart: any;
   graphGenerated : boolean = false;
+  netErrors : number = 0;
 
   ngOnInit() {
 
@@ -22,8 +23,11 @@ export class StatsComponent implements OnInit {
       let dataArray = [];
 
       for (const key of Object.keys(data)) {
-        labelArray.push(key);
-        dataArray.push(data[key]);
+        this.netErrors += data[key];
+        if(data[key] > 0) {
+          labelArray.push(key);
+          dataArray.push(data[key]);
+        }
       }
 
       this.generateChart(labelArray, dataArray);
@@ -67,7 +71,9 @@ export class StatsComponent implements OnInit {
             display: false  
           }],  
         }  
-      }  
+      },
+      responsive: true,
+      maintainAspectRatio: false
     }); 
   }
 

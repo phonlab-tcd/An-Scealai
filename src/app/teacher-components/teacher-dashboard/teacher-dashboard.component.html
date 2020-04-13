@@ -1,21 +1,21 @@
 <div class="contents">
   <div class="{{modalClass}} modalContainer">
     <div class="modalContent" *ngIf="newClassroom">
-        <div class="modalText">Add new Classroom</div>
-        <input type="text" class="titleInput" placeholder="Enter title" name="title" [(ngModel)]="newClassroom.title">
+        <div class="modalText">{{ts.l.add_new_classroom}}</div>
+        <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="newClassroom.title">
         <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
         <div>
-            <button class="modalBtn" (click)="hideModal()">Cancel</button><button class="modalBtn createBtnGreen" (click)="createNewClassroom()">Create</button>
+            <button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="createNewClassroom()">{{ts.l.create}}</button>
         </div>
     </div>
   </div>
   <div class="classContainer">
     <div class="classHeader">
-      Classrooms <div class="addClassBtn" (click)="addNewClassroom()"><i class="fas fa-plus"></i></div>
+      {{ts.l.classrooms}} <div class="addClassBtn" (click)="addNewClassroom()"><i class="fas fa-plus"></i></div>
     </div>
     <div class="classroomKey">
-      <div class="keyTitle">Title</div>
-      <div class="keyNumStudents">No. Students</div>
+      <div class="keyTitle">{{ts.l.title}}</div>
+      <div class="keyNumStudents">{{ts.l.no_students}}</div>
     </div>
     <div class="classBody">
       <div class="classroomCard" *ngFor="let classroom of classrooms | async" (click)="goToClassroom(classroom._id)">

@@ -47,12 +47,17 @@ export class RegisterComponent implements OnInit {
 
   checkDetails() : boolean {
     if(this.credentials.password !== this.passwordConfirm) {
-      this.errorText = "Passwords must match!";
+      this.errorText = this.ts.l.passwords_must_match;
       this.registrationError = true;
       return false;
     }
     if(this.credentials.password.length < 5) {
-      this.errorText = "Passwords must be at least 5 characters long!";
+      this.errorText = this.ts.l.passwords_5_char_long;
+      this.registrationError = true;
+      return false;
+    }
+    if(!this.credentials.username.match('^[A-Za-z0-9]+$')) {
+      this.errorText = this.ts.l.username_no_special_chars;
       this.registrationError = true;
       return false;
     }

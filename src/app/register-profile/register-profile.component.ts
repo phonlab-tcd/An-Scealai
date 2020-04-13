@@ -222,6 +222,9 @@ export class RegisterProfileComponent implements OnInit {
   synthOpinion : string = this.synthOpinions[0];
 
   ngOnInit() {
+    if(this.auth.getUserDetails().role === 'TEACHER') {
+      this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
+    }
   }
 
   saveDetails() {

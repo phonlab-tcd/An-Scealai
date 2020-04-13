@@ -6,12 +6,12 @@
           <div class="formLabel">{{ts.l.username}} :</div>
           <div class="userInfo"><i>{{auth.getUserDetails().username}}</i></div>
         </div>
-        <div class="form-group" *ngIf="classroom">
+        <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="formLabel">{{ts.l.classroom}} :</div>
           <div class="userInfo"><i>{{classroom.title}}</i></div>
           <button class="btn leaveClassroomButton" (click)="leaveClassroom()">{{ts.l.leave}}</button>
         </div>
-        <div class="form-group-vertical" *ngIf="!classroom">
+        <div class="form-group-vertical" *ngIf="!classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="form-group-section">
             <div class="formLabel classroomCodeLabel">{{ts.l.classroom_code}} :</div>
             <input type="text" class="form-control inputField"
