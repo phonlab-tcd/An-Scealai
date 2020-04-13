@@ -5,6 +5,7 @@ import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { TranslationService } from '../../translation.service';
 import { ClassroomService } from '../../classroom.service';
+import config from '../../../abairconfig.json';
 
 @Component({
   selector: 'app-teacher-student',
@@ -24,10 +25,12 @@ export class TeacherStudentComponent implements OnInit {
     stories: Story[];
     userId: string;
     classroomId: string;
+
+    baseUrl: string = config.baseurl;
   
     ngOnInit() {
       this.getUserId().then(params => {
-        this.http.get('http://localhost:4000/user/viewUser', {headers: {_id : params['id'].toString()}}).subscribe((res) => {
+        this.http.get(this.baseUrl + 'user/viewUser', {headers: {_id : params['id'].toString()}}).subscribe((res) => {
           this.userId = params['id'].toString();
           this.student = res;
           this.setClassroomId();
