@@ -7,6 +7,9 @@
       <div class="contentsDateTitle">{{ts.l.last_updated}}</div>
     </div>
     <div class="contentsLinkContainer">
+      <div *ngIf="stories.length === 0" class="newStoryMessage">
+        {{ts.l.click_new_story}}
+      </div>
       <div *ngFor="let story of stories">
       <div class="contentSection">
         <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">

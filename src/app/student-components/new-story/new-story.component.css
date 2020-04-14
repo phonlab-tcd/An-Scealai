@@ -1,7 +1,7 @@
 .bookContainerNewStory {
     width: 80%;
     height: 400px;
-    padding-top: 20px;
+    padding-top: 40px;
     margin-left: 10%;
     z-index: 10;
 }
@@ -28,10 +28,9 @@
     padding-top: 10px;
     padding-left: 3%;
     padding-right: 3%;
-    height: 400px;
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 20px;
+    height: 390px;
+    width: 80%;
+    margin-left: 10%;
     border-radius: 5px;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -100,7 +99,12 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     }
     .bookContainerNewStory {
        width: 90%;
+       margin-top: -20px;
        margin-left: 5%;
+    }
+    .contentsContainer {
+        width: 100%;
+        margin-left: 0%;
     }
 }
 
@@ -116,7 +120,12 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     .bookContainerNewStory {
        width: 90%;
        margin-left: 5%;
+       margin-top: -20px;
        padding-top: 0px;
+    }
+    .contentsContainer {
+        width: 100%;
+        margin-left: 0%;
     }
 }
 
@@ -134,6 +143,26 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
         position: fixed;
         left: 50%;
         margin-left: -245px;
+    }
+
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 800px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        margin-left: -315px;
+        margin-top: 100px;
+    }
+
+    .bookContainerNewStory {
+        width: 560px;
+        position: fixed;
+        left: 50%;
+        margin-left: -280px;
+        padding-top: 40px;
+        margin-top: 100px;
     }
 
 }

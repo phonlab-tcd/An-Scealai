@@ -263,6 +263,13 @@ border-radius: 5px 5px 5px 5px;
     }
 }
 
+.newStoryMessage {
+    color: rgb(167, 157, 136);
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 30px;
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
@@ -277,6 +284,30 @@ border-radius: 5px 5px 5px 5px;
         left: 50%;
         margin-left: -280px;
         padding-top: 40px;
+    }
+
+    .optionsPopup {
+        margin-left: 55px;
+    }
+
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 800px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        margin-left: -315px;
+        margin-top: 100px;
+    }
+
+    .bookContentsContainer {
+        width: 560px;
+        position: fixed;
+        left: 50%;
+        margin-left: -280px;
+        padding-top: 40px;
+        margin-top: 100px;
     }
 
     .optionsPopup {

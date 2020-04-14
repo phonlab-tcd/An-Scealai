@@ -173,7 +173,9 @@
             "school_not_in_ireland_teacher" : "I do not teach at a school in Ireland",
             "passwords_must_match" : "Passwords must match!",
             "passwords_5_char_long" : "Passwords must be at least 5 characters long!",
-            "username_no_special_chars" : "Username may not contain special characters!"
+            "username_no_special_chars" : "Username may not contain special characters!",
+            "click_new_story" : "Click 'New Story' below to create your first story!",
+            "my_classrooms" : "My Classrooms"
         },
         {
             "iso_code" : "ga",

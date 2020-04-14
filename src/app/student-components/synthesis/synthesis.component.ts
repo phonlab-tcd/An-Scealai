@@ -167,7 +167,6 @@ export class SynthesisComponent implements OnInit {
     this.pauseAllAudio();
     console.log(section.type);
     if(section.type === "Paragraph") {
-      
       this.a = new Audio(section.audioUrl);
       this.a.play();
       this.audioPlaying = true;

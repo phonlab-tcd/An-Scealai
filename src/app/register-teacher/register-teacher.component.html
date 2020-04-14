@@ -4,8 +4,9 @@
     <form (submit)="register()">
       <div class="form-group">
         <div class="formLabel"><label>{{ts.l.username}}</label></div>
-        <input type="text" class="form-control inputField"
-        name="username" [(ngModel)]="credentials.username">
+        <input type="text" class="form-control inputField {{usernameClass}}"
+        name="username" [(ngModel)]="credentials.username" [formControl]="usernameInput">
+        <div class="usernameErrorText">{{usernameErrorText}}</div>
       </div>
       <div class="form-group">
         <div class="formLabel"><label>{{ts.l.create_password}}</label></div>

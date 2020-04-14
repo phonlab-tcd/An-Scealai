@@ -93,9 +93,9 @@
 }
 
 .modalContent {
-    margin-top: 22vh;
-    width: 30%;
-    margin-left: 35%;
+    margin-top: 10vh;
+    width: 40%;
+    margin-left: 30%;
     padding: 25px;
     background-color: white;
     border-radius: 5px;
@@ -161,4 +161,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     visibility: visible;
     opacity: 1;
     transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
+@media (max-width:550px) {
+
+    .modalContent {
+        margin-top: 10vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
 }
