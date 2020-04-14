@@ -402,3 +402,26 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+@-webkit-keyframes blinker {  
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+@media (min-width: 1000px) {
+
+    .classContainer {
+        width: 900px;
+        position: absolute;
+        left: 50%;
+        margin-left: -450px;
+    }
+
+    .modalContainer {
+        width: 900px;
+        position: absolute;
+        left: 50%;
+        margin-left: -450px;
+    }
+
+}

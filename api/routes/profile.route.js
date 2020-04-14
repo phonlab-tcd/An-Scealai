@@ -26,4 +26,18 @@ profileRoutes.route('/get/:id').get((req, res) => {
     });
 });
 
+profileRoutes.route('/getForUser/:id').get((req, res) => {
+    Profile.findOne({"userId" : req.params.id}, (err, profile) => {
+        if(err) {
+            res.status(400).send("An error occurred while trying to find this profile");
+        } else {
+            if(profile) {
+                res.status(200).json({"profile" : profile});
+            } else {
+                res.status(404).send("Profile with given ID not found");
+            }
+        }
+    });
+});
+
 module.exports = profileRoutes;

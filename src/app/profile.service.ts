@@ -16,4 +16,8 @@ export class ProfileService {
     return this.http.post(this.baseUrl + 'create', profile);
   }
 
+  getForUser(userId) : Observable<any> {
+    return this.http.get(this.baseUrl + 'getForUser/' + userId);
+  }
+
 }

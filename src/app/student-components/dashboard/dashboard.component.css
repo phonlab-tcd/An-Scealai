@@ -550,6 +550,9 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     .textContainer {
         height: 380px;
     }
+    .modalContainer {
+        height:  510px;
+    }
 }
 
 @media only screen and (min-width: 1400px) and (min-height: 900px) {
@@ -589,6 +592,9 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     .textContainer {
         height: 470px;
     }
+    .modalContainer {
+        height:  600px;
+    }
 }
 
 @media only screen and (min-width: 1900px) and (min-height: 1000px) {
@@ -627,6 +633,9 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
     .textContainer {
         height: 590px;
+    }
+    .modalContainer {
+        height:  730px;
     }
 }
 

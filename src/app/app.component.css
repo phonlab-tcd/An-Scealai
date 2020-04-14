@@ -179,6 +179,30 @@ margin-left: -10px;
   .nav > .nav-btn > label:hover,.nav  #nav-check:checked ~ .nav-btn > label {
     background-color: #437250;
   }
+
+  .closeMenu {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #437250;
+  }
+  
+  .closeMenuTimes {
+    font-size: 22pt;
+    color: white;
+  }
+
+  .menuNotificationBtn {
+    z-index: 30;
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    width: 14px;
+    height: 14px;
+  }
+
   .nav > .nav-btn > label > span {
     display: block;
     width: 25px;

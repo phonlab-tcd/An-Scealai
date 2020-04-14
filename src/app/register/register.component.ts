@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -21,12 +22,31 @@ export class RegisterComponent implements OnInit {
   errorText: String;
   passwordConfirm : string;
   termsVisible : boolean;
+  usernameInput : FormControl;
+  usernameClass : string;
+  usernameErrorText : string;
 
   constructor(private auth: AuthenticationService, private router: Router,
               private engagement: EngagementService, public ts : TranslationService) { }
 
   ngOnInit() {
     this.registrationError = false;
+    this.usernameClass = "";
+    this.usernameErrorText = "";
+    this.usernameInput = new FormControl();
+    this.usernameInput.valueChanges.subscribe((text) => {
+      if(text.match(" ")) {
+        this.usernameClass = "usernameInputRed";
+        this.usernameErrorText = "Your username shouldn't contain spaces";
+      } else if(!text.match("^[A-Za-z0-9]*$")) {
+        this.usernameClass = "usernameInputRed";
+        this.usernameErrorText = "Your username shouldn't contain special characters (this includes fadas unfortunately!)";
+      } else {
+        this.usernameClass = "";
+        this.usernameErrorText = "";
+      }
+
+    })
   }
 
   register() {

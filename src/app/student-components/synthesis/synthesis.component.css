@@ -158,6 +158,24 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   background-color: #437250;
 }
 
+@media only screen and (max-width: 350px) {
+  .footerText {
+    font-size: 10pt;
+  }
+  .changeSplitBtn {
+    font-size: 10pt;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  .footerText {
+    font-size: 8pt;
+  }
+  .changeSplitBtn {
+    font-size: 8pt;
+  }
+}
+
 @media only screen and (max-width: 700px) { 
   .bookImg {
       display: none;

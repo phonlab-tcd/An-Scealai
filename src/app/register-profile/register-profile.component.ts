@@ -222,6 +222,32 @@ export class RegisterProfileComponent implements OnInit {
   synthOpinion : string = this.synthOpinions[0];
 
   ngOnInit() {
+    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+      if(res) {
+        let p = res.profile;
+        this.gender = p.gender;
+        this.age = p.age;
+        this.county = p.county;
+        this.notFromIreland = p.notFromIreland;
+        this.country = p.country;
+        this.school = p.school;
+        this.nativeSpeakerStatus = p.nativeSpeakerStatus;
+        this.dialectPreference = p.dialectPreference;
+        this.spokenComprehensionLevel = p.spokenComprehensionLevel;
+        this.cefrLevel = p.cefrLevel;
+        this.speakingFrequency = p.speakingFrequency;
+        this.speakWith = p.speakWith;
+        this.irishMedia = p.irishMedia;
+        this.irishWriting = p.irishWriting;
+        this.howOftenMedia = p.howOftenMedia;
+        this.howOftenReading = p.howOftenReading;
+        this.howOftenWriting = p.howOftenWriting;
+        this.synthOpinion = p.synthOpinion;
+      }
+    }, (err) => {
+      console.log("No previous profile data associated with user.");
+    });
+
     if(this.auth.getUserDetails().role === 'TEACHER') {
       this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
     }
@@ -251,7 +277,12 @@ export class RegisterProfileComponent implements OnInit {
       synthOpinion : this.synthOpinion,
     };
     this.profileService.create(profile).subscribe((res) => {
-      this.router.navigateByUrl('/contents');
+      if(this.auth.getUserDetails().role === 'STUDENT') {
+        this.router.navigateByUrl('/contents');
+      } else if(this.auth.getUserDetails().role === 'TEACHER') {
+        this.router.navigateByUrl('/teacher/dashboard');
+      }
+      
     })
   }
 

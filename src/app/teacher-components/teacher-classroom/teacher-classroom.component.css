@@ -92,9 +92,9 @@
 }
 
 .modalContent {
-    margin-top: 22vh;
-    width: 30%;
-    margin-left: 35%;
+    margin-top: 20vh;
+    width: 50%;
+    margin-left: 25%;
     padding: 25px;
     background-color: white;
     border-radius: 5px;
@@ -223,4 +223,22 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     cursor: pointer;
     color:#ff9100;
     transition: color, 0.5s;
+}
+
+@media (max-width:550px) {
+
+    .modalContent {
+        margin-top: 10vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .classHeader {
+        font-size: 10pt;
+    }
+
+    .headerIconBtn {
+        font-size: 10pt;
+    }
+
 }
