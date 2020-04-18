@@ -60,13 +60,13 @@
               <option *ngFor="let dp of dialectPreferences" [ngValue]="dp">{{dp}}</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="auth.getUserDetails().role !== 'TEACHER'">
             <p class="formLabel">{{ts.l.how_well_understand_spoken}}</p>
             <select class="selectOptions" [(ngModel)]="spokenComprehensionLevel">
               <option *ngFor="let scl of spokenComprehensionLevels" [ngValue]="scl">{{scl}}</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="auth.getUserDetails().role !== 'TEACHER'">
             <p class="formLabel">{{ts.l.whats_cefr_level}}</p>
             <select class="selectOptions" [(ngModel)]="cefrLevel">
               <option *ngFor="let cl of cefrLevels" [ngValue]="cl">{{cl}}</option>

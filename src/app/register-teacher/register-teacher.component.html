@@ -18,11 +18,11 @@
         <input type="password" class="form-control inputField"
         name="password" [(ngModel)]="passwordConfirm">
       </div>
-      <div class="form-group">
+      <!-- div class="form-group">
         <div class="formLabel"><label>{{ts.l.activation_code}}</label></div>
         <input type="text" class="form-control inputField" name="code" [(ngModel)]="teacherCode">
         <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-      </div>
+      </div -->
       <div class="form-group">
         <div class="formLabel">{{ts.l.language}} :</div>
         <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
