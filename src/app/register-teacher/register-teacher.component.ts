@@ -20,8 +20,6 @@ export class RegisterTeacherComponent implements OnInit {
     role: 'TEACHER',
   };
 
-  teacherCode : String;
-
   registrationError: boolean;
   errorText: String;
   passwordConfirm : string;
@@ -58,20 +56,12 @@ export class RegisterTeacherComponent implements OnInit {
 
   register() {
     if(this.checkDetails()) {
-      this.http.get(this.baseurl + 'teacherCode/isActiveCode/' + this.teacherCode).subscribe(() => {
         this.auth.register(this.credentials).subscribe(() => {
-          this.http.get(this.baseurl + 'teacherCode/delete/' + this.teacherCode).subscribe(() => {
-            this.engagement.addEventForLoggedInUser(EventType.REGISTER);
-            this.router.navigateByUrl('/register-profile');
-          }, (err) => {
-            this.showErrorMessage(err.error.message);
-          });
+          this.engagement.addEventForLoggedInUser(EventType.REGISTER);
+          this.router.navigateByUrl('/register-profile');
         }, (err) => {
           this.showErrorMessage(err.error.message);
         });
-      }, (err) => {
-        this.showErrorMessage(err.error.message);
-      });
     }
   }
 
