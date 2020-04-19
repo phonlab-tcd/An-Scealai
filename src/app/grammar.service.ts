@@ -115,14 +115,42 @@ export class GrammarService {
   // Output : an array 'skipIndices' that contains at a given index i the amount
   //          of characters to be skipped in order to get past a word
   //          in the 'ignore' array, from where it starts in the input string.
+
   getSkipIndices(text : string) : number[] {
     let skipIndices : number[] = [];
     for(let word of this.ignore) {
-      if(text.indexOf(word) > -1) {
-        skipIndices[text.indexOf(word)] = word.length;
+      let lowerCaseText = text.toLowerCase();
+      let indices = this.getAllIndexes(lowerCaseText, word);
+      for(let index of indices) {
+        skipIndices[index] = word.length;
       }
-    }
+    } 
     return skipIndices;
+  }
+
+  getAllIndexes(arr, val) : number[] {
+    var indexes = [];
+
+    let regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
+    let match = regex.exec(arr);
+    
+    while(match) {
+      regex = new RegExp(val);
+      let interiorMatch = regex.exec(match[0])
+      indexes.push(match.index + interiorMatch.index);
+      arr = this.replaceAt(arr, match.index, '#'.repeat(5));
+      regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
+      match = regex.exec(arr);
+      console.log("matched " + val);
+      console.log("indexes", indexes);
+    }
+    
+    return indexes;
+  }
+
+
+  replaceAt(str, index, replacement) : string {
+    return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
   }
 
   isVowel(char) : boolean {

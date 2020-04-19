@@ -94,6 +94,14 @@ export class RegisterProfileComponent implements OnInit {
 
   school : string = this.schools[0];
 
+  attendSecondary : boolean = false;
+
+  schoolYears : number[] = [
+    1, 2, 3, 4, 5, 6
+  ];
+
+  schoolYear : number = this.schoolYears[0];
+
   nativeSpeakerStatuses : string[] = [
     this.ts.l.yes,
     this.ts.l.no,

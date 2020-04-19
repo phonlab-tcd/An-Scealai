@@ -180,7 +180,13 @@
             "user_guide" : "User Guide",
             "academic_paper" : "Academic Paper",
             "what_is_an_scealai": "What is An Scéalaí?",
-            "about_content_text" : "An Scéalaí is an online learning platform for students of the Irish language. It provides an environment in which users can write and correct Irish texts, or stories. One of An Scéalaí ’s unique features is the ability to listen back to a computer-generated voice reading your story as Gaeilge. As well as this, users can run their story through a grammar-checker that highlights any spelling mistakes or other grammatical errors found in the text. More detail on these technologies can be found at the Technology tab on our website.\n\nAn Scéalaí also serves as a research project by Trinity College Dublin, investigating the effectiveness of different language-learning methods. We invite you to try using audio check as well as grammar check to correct spelling and grammar mistakes in your stories. This will provide us with useful data to help design language-learning resources in the future!\n\nYou can contact us with any queries/feedback at scealai.info@gmail.com"
+            "about_content_text" : "An Scéalaí is an online learning platform for students of the Irish language. It provides an environment in which users can write and correct Irish texts, or stories. One of An Scéalaí ’s unique features is the ability to listen back to a computer-generated voice reading your story as Gaeilge. As well as this, users can run their story through a grammar-checker that highlights any spelling mistakes or other grammatical errors found in the text. More detail on these technologies can be found at the Technology tab on our website.\n\nAn Scéalaí also serves as a research project by Trinity College Dublin, investigating the effectiveness of different language-learning methods. We invite you to try using audio check as well as grammar check to correct spelling and grammar mistakes in your stories. This will provide us with useful data to help design language-learning resources in the future!\n\nYou can contact us with any queries/feedback at scealai.info@gmail.com",
+            
+            "attends_secondary_school" : "I am currently attending secondary school.",
+            "what_year_are_you_in" : "What school year are you in?",
+            "listen_by" : "Listen by",
+            "paragraph" : "Paragraph",
+            "sentence" : "Sentence"
         },
         {
             "iso_code" : "ga",
@@ -253,10 +259,10 @@
             "comprehension_level_3" : "Cuid den comhrá",
             "comprehension_level_4" : "An chuid is mó den chomhrá má labhraítear go soléir",
             "comprehension_level_5" : "Beagnach gach rud ar ghnáthluas cainte",
-            "unknown" : "unknown",
+            "unknown" : "Anaithnid",
             "every_day" : "Gach lá",
             "every_week" : "Gach seachtain ach ní gach lá",
-            "few_times_a_month" : "Cúpla uair sa mí",
+            "few_times_a_month" : "Cúpla uair sa mhí",
             "hardly_ever" : "Go fíor-annamh",
             "learners_and_natives" : "Foghlaimeoirí agus cainteoirí dúchais",
             "natives" : "Cainteoirí dúchais",
@@ -267,7 +273,7 @@
             "synth_opinion_4" : "Uaireanta bíonn guth sintéiseach feiliúnach",
             "synth_opinion_5" : "Uaireanta bíonn guth sintéiseach níos fearr",
             "social_media" : "Meáin shoisialta",
-            "native_speaker" : "Native Speaker",
+            "native_speaker" : "Cainteoir dúchais",
             "how_well_understand_spoken" : "Cén tuiscint atá agat ar Ghaeilge labhartha?",
             "whats_cefr_level" : "Cén léibhéal CEFR atá agat?",
             "how_often_speak" : "Cé chomh minic a labhraíonn tú Gaeilge?",
@@ -278,7 +284,7 @@
             "synthetic_voices_info" : "Tá guthanna sintéiseacha an-choitianta sa lá atá inniú ann. Cloistear san ardaitheoir, ag an aerfort nó in óstáin iad, agus baineann comhlachtaí móra úsáid astu chun glaonna gutháin a fhreagairt go minic.",
             "synthetic_voices_opinion" : "Céard í do thuairim faoi ghuthanna sintéiseacha?",
             "newspapers" : "Páipéir nuachta",
-            "books" : "Leabhra",
+            "books" : "Leabhair",
             "email_sms" : "Ríomhphost, SMS",
             "blogs" : "Blag(anna)",
             "teaching_material" : "Ábhar teagaisc",
@@ -355,10 +361,16 @@
             "click_new_story" : "Cliceáil 'Scéal Nua' thíos le do chéad scéal a scríobh!",
             "my_classrooms" : "Mo Sheomraí Ranga",
 
-            "user_guide" : "User Guide",
-            "academic_paper" : "Academic Paper",
+            "user_guide" : "Treoir d'Úsáideoirí",
+            "academic_paper" : "Foilseachán Acadúil",
             "what_is_an_scealai": "Cad é An Scéalaí?",
-            "about_content_text" : "Áis nua ríomhbhunaithe d’fhoghlaimeoirí na Gaeilge is ea ‘An Scéalaí’. Tugann sé ardán dóibh chun téacsanna nó scéalta a scríobh agus a cheartú. Ceann de na gnéithe nua a bhaineann leis ná go léann sé a scéal féin ar ais don fhoghlaimeoir. Anuas air seo aimsíonn sé botúin ghramadaí agus botúin litrithe a d’fhéadfadh a bheith sa téacs. Is féidir tuilleadh eolais a fháil faoin dtáb ‘teicneolaíocht’ ar ár suíomh gréasáin (www.abair.tcd.ie/scealai). Is cuid dár dtionscadal taighde anseo i Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide, é An Scéalaí, áit a bhfuilimid ag fiosrú na héifeachta a bhaineann le modhanna éagsúla foghlama teangacha. Ba mhaith linn go mbainfeadh sibh triail as profáil ó chluas chomh maith leis an seiceálaí gramadaí chun botúin a aimsiú is a cheartú sna scéalta. Beidh sé seo ina chabhair dúinne anseo i gColáiste na Tríonóide freisin agus sinn ag cur lenár n- áiseanna foghlama, ach thar aon ní eile ba mhaith linn go mbainfeadh na foghlaimeoirí taitneamh agus tairbhe as."
+            "about_content_text" : "Áis nua ríomhbhunaithe d’fhoghlaimeoirí na Gaeilge is ea ‘An Scéalaí’. Tugann sé ardán dóibh chun téacsanna nó scéalta a scríobh agus a cheartú. Ceann de na gnéithe nua a bhaineann leis ná go léann sé a scéal féin ar ais don fhoghlaimeoir. Anuas air seo aimsíonn sé botúin ghramadaí agus botúin litrithe a d’fhéadfadh a bheith sa téacs. Is féidir tuilleadh eolais a fháil faoin dtáb ‘teicneolaíocht’ ar ár suíomh gréasáin (www.abair.tcd.ie/scealai). Is cuid dár dtionscadal taighde anseo i Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide, é An Scéalaí, áit a bhfuilimid ag fiosrú na héifeachta a bhaineann le modhanna éagsúla foghlama teangacha. Ba mhaith linn go mbainfeadh sibh triail as profáil ó chluas chomh maith leis an seiceálaí gramadaí chun botúin a aimsiú is a cheartú sna scéalta. Beidh sé seo ina chabhair dúinne anseo i gColáiste na Tríonóide freisin agus sinn ag cur lenár n- áiseanna foghlama, ach thar aon ní eile ba mhaith linn go mbainfeadh na foghlaimeoirí taitneamh agus tairbhe as.",
+        
+            "attends_secondary_school" : "Táim ag freastal ar an meánscoil.",
+            "what_year_are_you_in" : "Cén bhliain ina bhfuil tú?",
+            "listen_by" : "Éist leis",
+            "paragraph" : "An t-alt ar fad ",
+            "sentence" : "Abairt ar abairt"
         }
     ]
 }
