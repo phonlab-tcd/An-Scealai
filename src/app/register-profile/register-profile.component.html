@@ -41,6 +41,15 @@
               <option *ngFor="let s of schools" [ngValue]="s">{{s}}</option>
             </select>
           </div>
+          <div *ngIf="auth.getUserDetails().role === 'STUDENT'" class="form-group">
+            <p class="formLabel"><input type="checkbox" [(ngModel)]="attendSecondary"/> {{ts.l.attends_secondary_school}}</p>
+          </div>
+          <div *ngIf="attendSecondary" class="form-group">
+            <p class="formLabel">{{ts.l.what_year_are_you_in}}</p>
+            <select class="selectOptions" [(ngModel)]="schoolYear">
+              <option *ngFor="let s of schoolYears" [ngValue]="s">{{s}}</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="form-group-set">

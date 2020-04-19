@@ -106,7 +106,9 @@ export class DashboardComponent implements OnInit {
     this.popupVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
-    this.story.feedback.seenByStudent = true;
+    if(this.story.feedback.text != "") {
+      this.story.feedback.seenByStudent = true;
+    }
     this.notifications.removeStory(this.story);
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
       this.engagement.addEventForLoggedInUser(EventType["VIEW-FEEDBACK"], this.story);

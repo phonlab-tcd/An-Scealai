@@ -35,15 +35,15 @@
             <div class="footer">
               <div class="btnContainer">
                 <div class="footerText">
-                  Listen by
+                  {{ts.l.listen_by}}
                 </div>
                 <div *ngIf="sectionSplit==='paragraph'">
-                  <button class="changeSplitBtn selectedBtn">Paragraph</button>
-                  <button class="changeSplitBtn" (click)="sentenceMode()">Sentence</button>
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn" (click)="sentenceMode()">{{ts.l.sentence}}</button>
                 </div>
                 <div *ngIf="sectionSplit==='sentence'">
-                  <button class="changeSplitBtn" (click)="paragraphMode()">Paragraph</button>
-                  <button class="changeSplitBtn selectedBtn">Sentence</button>
+                  <button class="changeSplitBtn" (click)="paragraphMode()">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
                 </div>
               </div>
             </div>

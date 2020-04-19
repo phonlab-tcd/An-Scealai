@@ -9,6 +9,8 @@ let Profile = new Schema({
     notFromIreland : Boolean,
     country : String,
     school : String,
+    inSecondarySchool : Boolean,
+    schoolYear: String,
     nativeSpeakerStatus : String,
     dialectPreference : String,
     spokenComprehensionLevel : String,
