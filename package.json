@@ -29,7 +29,7 @@
     "diff2html": "^2.11.2",
     "document-register-element": "^1.7.2",
     "highlight-within-textarea": "^2.0.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jwt-decode": "^2.2.0",
     "ng2-slim-loading-bar": "^4.0.0",
     "path": "^0.12.7",
