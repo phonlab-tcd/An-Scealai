@@ -21,4 +21,8 @@ export class UserService {
     return this.http.get(this.baseUrl + 'getUserByUsername/' + username);
   }
 
+  getAllUsers() : Observable<any> {
+    return this.http.get(this.baseUrl + 'getAllUsers/');
+  }
+
 }

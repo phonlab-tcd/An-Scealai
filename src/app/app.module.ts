@@ -45,6 +45,7 @@ import { RecordingContentsComponent } from './student-components/recording/recor
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
+import { FindUserComponent } from './admin-components/find-user/find-user.component';
 
 
 
@@ -81,6 +82,7 @@ import { StatsComponent } from './admin-components/stats/stats.component';
     RegisterProfileComponent,
     StoryDetailsComponent,
     StatsComponent,
+    FindUserComponent,
   ],
   imports: [
     BrowserModule,

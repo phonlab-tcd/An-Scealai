@@ -52,4 +52,15 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
     });
 });
 
+// Endpoint to get all users from database
+userRoutes.route('/getAllUsers').get((req, res) => {
+    User.find({}, (err, users) => {
+        if(users) {
+            res.json(users);
+        } else {
+            res.status(404).json("No users exist on the database");
+        }
+    });
+});
+
 module.exports = userRoutes;
