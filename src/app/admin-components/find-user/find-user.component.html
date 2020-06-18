@@ -1,0 +1,13 @@
+<div class='container'>
+  <div class='searchContainer'>
+    <div class='searchHeader'>
+      All Users
+    </div>
+    <div class='searchResultsContainer'>
+      <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults">
+        <div class='resultName'>{{user.username}}</div>
+        <div class='resultRole'>{{user.role}}</div>
+      </div>
+    </div>
+  </div>
+</div>
