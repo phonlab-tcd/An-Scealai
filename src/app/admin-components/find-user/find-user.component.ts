@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 
@@ -17,6 +17,7 @@ export class FindUserComponent implements OnInit {
 
   // This array will store User objects to be displayed
   userResults : User[] = [];
+  
   numberOfUsers : number = 0;
   students : boolean = false;
   teachers : boolean = false;
@@ -24,9 +25,10 @@ export class FindUserComponent implements OnInit {
   allStudents : User[] = [];
   allTeachers : User[] = [];
   allAdmins: User[] = [];
-  
+  searchText: string = '';
+
   /**
-   * Gets an array of all users on the database
+   * Gets an array of all users on the database, call the function to make subarrays
    */
   getUserResults() {
     this.userService.getAllUsers().subscribe((users: any) => {
