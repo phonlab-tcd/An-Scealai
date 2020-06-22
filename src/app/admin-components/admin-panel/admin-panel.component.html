@@ -1,5 +1,10 @@
 <div class="content">
-  <div class="adminTitle">Admin Panel</div>
+  
+  <div class="adminTitle">
+    <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
+    Admin Panel
+  </div>
+  
   <div class="routerContent">
     <router-outlet></router-outlet>
   </div>

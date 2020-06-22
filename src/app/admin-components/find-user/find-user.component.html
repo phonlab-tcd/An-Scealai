@@ -1,12 +1,42 @@
 <div class='container'>
   <div class='searchContainer'>
     <div class='searchHeader'>
-      All Users
+      All Users ({{numberOfUsers}})
     </div>
     <div class='searchResultsContainer'>
-      <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults">
-        <div class='resultName'>{{user.username}}</div>
-        <div class='resultRole'>{{user.role}}</div>
+      <div class='filter'>
+        <div> Filter by: </div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="students"/> Students ({{allStudents.length}})</div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="teachers"/> Teachers ({{allTeachers.length}})</div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="admins"/> Admins ({{allAdmins.length}})</div>
+      </div> Results
+      
+      <div *ngIf="!students && !teachers && !admins">
+        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults">
+          <div class='resultName'>{{user.username}}</div>
+          <div class='resultRole'>{{user.role}}</div>
+        </div>
+      </div>
+      
+      <div *ngIf="students">
+        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allStudents">
+          <div class='resultName'>{{user.username}}</div>
+          <div class='resultRole'>{{user.role}}</div>
+        </div>
+      </div>
+      
+      <div *ngIf="teachers">
+        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allTeachers">
+          <div class='resultName'>{{user.username}}</div>
+          <div class='resultRole'>{{user.role}}</div>
+        </div>
+      </div>
+      
+      <div *ngIf="admins">
+        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allAdmins">
+          <div class='resultName'>{{user.username}}</div>
+          <div class='resultRole'>{{user.role}}</div>
+        </div>
       </div>
     </div>
   </div>

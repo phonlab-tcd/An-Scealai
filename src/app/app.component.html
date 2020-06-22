@@ -24,9 +24,9 @@
                 <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
                 <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
                 <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">Admin Dashboard</a>
-                <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a>
+                <!-- <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
                 <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
-                <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
+                <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a> -->
                 <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
                 <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
                     <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
