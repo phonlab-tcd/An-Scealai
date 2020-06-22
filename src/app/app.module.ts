@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { FilterPipe } from './pipes/filter.pipe';
+import { HighlightDirective } from './directives/highlight.directive';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -83,6 +85,8 @@ import { FindUserComponent } from './admin-components/find-user/find-user.compon
     StoryDetailsComponent,
     StatsComponent,
     FindUserComponent,
+    HighlightDirective,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
