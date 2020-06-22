@@ -150,7 +150,7 @@ var abairALSpleach = [
   {question: "Deir Síle ____ ___________ Máire an rud céanna? ", answer: "go ndeir", answer2: "nach ndeir", hint1: "go/nach"},
   {question: "An bhful sé fíor ____ ___________ Rónán go bhfuil sé chun éirí as? (dearfach)", answer: "go ndeir", hint1: "dearfach"},
   {question: "Tá mé cinnte ____ ___________ é sin riamh. (briathar saor, diúltach)", answer: "nach ndeirtear", hint1: "diúltach"},
-  {question: "Ní dóigh liom gurb é sin ____ ___________ siad rómhinic.", answer: "a deir", hint1: "dearfach"}
+  {question: "Ní dóigh liom gurb é sin ____ ___________ siad rómhinic.", answer: "a deir", hint1: "dearfach"},
   {question: "Deir sí ____ ___________ sí rudaí mar sin riamh. (diúltach)", answer: "nach ndeir", hint1: "diúltach"},
   {question: "Tá sé ag séanadh ____ ___________ sé a leithéid lena rang go rialta.", answer: "go ndeir", hint1: "dearfach"},
   {question: "Is é an trua ____ ___________é sin níos minice. (briathar saor, diúltach)", answer: "nach ndeirtear", hint1: "diúltach"},

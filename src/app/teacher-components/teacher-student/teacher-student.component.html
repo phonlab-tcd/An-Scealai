@@ -3,7 +3,7 @@
         <div class="classHeader">
           <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
           <span *ngIf="ts.inEnglish()">
-            {{student?.username}}'<span style="margin-right: 8px;" *ngIf="user?.username[user?.username.length-1] !== 's'">s</span> {{ts.l.stories}}
+            {{student?.username}}'<span style="margin-right: 8px;" *ngIf="user?.username[user?.username.length-1] !== 's'">s</span>{{ts.l.stories}}
           </span>
           <span *ngIf="ts.inIrish()">
             {{ts.l.stories}} {{student?.username}}

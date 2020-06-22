@@ -20,6 +20,17 @@
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
+.backArrow {
+    margin-right: 8px;
+}
+
+.backArrow:hover {
+    cursor: pointer;
+    color:#ff9100;
+    transition: color, 0.5s;
+}
+
+
 @media (max-width:550px) {
     .content {
         margin-top: 0vh;
