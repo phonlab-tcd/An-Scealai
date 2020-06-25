@@ -10,6 +10,7 @@ let Profile = new Schema({
     country : String,
     school : String,
     inSecondarySchool : Boolean,
+    schoolName : String,
     schoolYear: String,
     nativeSpeakerStatus : String,
     dialectPreference : String,
