@@ -95,6 +95,8 @@ export class RegisterProfileComponent implements OnInit {
   school : string = this.schools[0];
 
   attendSecondary : boolean = false;
+  
+  schoolName : string = "";
 
   schoolYears : number[] = [
     1, 2, 3, 4, 5, 6
@@ -239,6 +241,7 @@ export class RegisterProfileComponent implements OnInit {
         this.notFromIreland = p.notFromIreland;
         this.country = p.country;
         this.school = p.school;
+        this.schoolName = p.schoolName;
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
         this.spokenComprehensionLevel = p.spokenComprehensionLevel;
@@ -270,6 +273,7 @@ export class RegisterProfileComponent implements OnInit {
       notFromIreland : this.notFromIreland,
       country : (this.notFromIreland) ? this.country : "Ireland",
       school : this.school,
+      schoolName : this.schoolName,
       nativeSpeakerStatus : this.nativeSpeakerStatus,
       dialectPreference : this.dialectPreference,
       spokenComprehensionLevel : this.spokenComprehensionLevel,
