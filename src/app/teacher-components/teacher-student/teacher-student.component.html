@@ -1,21 +1,36 @@
+<!--Display the stories of a particular student in a class -->
 <div class="content">
     <div class="classContainer">
         <div class="classHeader">
           <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
-          <span *ngIf="ts.inEnglish()">
+          <!-- display student name along with feedback checkbox-->
+          <span class="storyAuthor" *ngIf="ts.inEnglish()">
             {{student?.username}}'<span style="margin-right: 8px;" *ngIf="user?.username[user?.username.length-1] !== 's'">s</span>{{ts.l.stories}}
           </span>
-          <span *ngIf="ts.inIrish()">
+          <span class="storyAuthor" *ngIf="ts.inIrish()">
             {{ts.l.stories}} {{student?.username}}
           </span>
+          <!-- filter by checkbox -->
+          <div class="filter"> Filter by: </div>
+          <div class="checkbox"> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> No feedback given ({{storiesWithoutFeedback.length}})</div>
         </div>
         <div class="classroomKey">
-          <div class="keyTitle">{{ts.l.title}}</div>
+          <div class="title">{{ts.l.title}}</div>
+          <div> Creation date </div> <div> </div>
         </div>
-        <div class="classBody">
+        <!-- list of stories -->
+        <div class="classBody" *ngIf="!viewNoFeedback">
           <div class="classroomCard" *ngFor="let story of stories" (click)="goToStory(story._id)">
-            <div class="classroomTitle">{{story.title}}</div>
-            <i class="fas fa-arrow-right arrow"></i>
+            <div class="storyTitle">{{story.title}}</div>
+            <div> {{story.date | date }} </div>
+            <div><i class="fas fa-arrow-right arrow"></i></div>
+          </div>
+        </div>
+        <div class="classBody" *ngIf="viewNoFeedback">
+          <div class="classroomCard" *ngFor="let story of storiesWithoutFeedback" (click)="goToStory(story._id)">
+            <div class="storyTitle">{{story.title}}</div>
+            <div> {{story.date | date }} </div>
+            <div><i class="fas fa-arrow-right arrow"></i></div>
           </div>
         </div>
       </div>
