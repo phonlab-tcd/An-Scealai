@@ -21,6 +21,10 @@ export class BookContentsComponent implements OnInit {
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService) { }
 
+/*
+* Set story array of stories for logged in user
+* set delete mode to false and create empty to be deleted array
+*/
   ngOnInit() {
     this.storyService
     .getStoriesForLoggedInUser()
@@ -30,11 +34,16 @@ export class BookContentsComponent implements OnInit {
     this.deleteMode = false;
     this.toBeDeleted = [];
   }
-
+  
+//use story service to set the chosen story
   chooseStory(story: Story) {
     this.storyService.chosenStory = story;
   }
 
+/*delete stories added to the to be deleted array
+* adds delete event to event list 
+* deletes story using the story service 
+*/
   toggleDeleteMode() {
     if(this.deleteMode && this.toBeDeleted.length > 0) {
       for(let id of this.toBeDeleted) {
@@ -53,10 +62,12 @@ export class BookContentsComponent implements OnInit {
     }
   }
 
+//Change the edit mode to true or false
   toggleEditMode() {
     this.editMode = !this.editMode;
   }
 
+//add story to be deleted to an array given the story id as a paramter
   toggleDelete(id: String) {
     if(this.toBeDeleted.includes(id)) {
       var indexToRemove = this.toBeDeleted.indexOf(id);

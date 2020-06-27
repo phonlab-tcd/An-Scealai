@@ -1,18 +1,22 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="bookContainerNewStory">
   <div class="contentsContainer">
+    <!-- back button -->
     <a class="backBtn" routerLink="/contents">{{ts.l.back}}</a>
     <div class="bookTitle">{{ts.l.new_story}}</div>
     <form [formGroup]="newStoryForm">
+      <!-- input the title -->
       <div class="formGroup" novalidate>
         <p class="formLabel">{{ts.l.title}}</p>
         <input type="text" class="titleInput" formControlName="title" maxLength="35">
+        <!-- check for invalid title -->
         <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
           <div *ngIf="newStoryForm.controls['title'].errors.required">
             *{{ts.l.title_required}}.
           </div>
         </div>
       </div>
+      <!-- Select dialect -->
       <div class="formGroup">
         <p class="formLabel">{{ts.l.dialect}}</p>
         <select formControlName="dialect" class="dialectSelect">
@@ -21,6 +25,7 @@
           <option value="kerry">{{ts.l.munster}}</option>
         </select>
       </div>
+      <!-- Create button -->
       <div class="contentsBtnsContainer">
         <button class="btn createBtn" type="submit" (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >{{ts.l.create}}</button>
       </div>

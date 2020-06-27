@@ -1,5 +1,7 @@
+<!--Lists all of the teacher's classrooms -->
 <div class="contents">
   <div class="{{modalClass}} modalContainer">
+    <!-- add new classroom option -->
     <div class="modalContent" *ngIf="newClassroom">
         <div class="modalText">{{ts.l.add_new_classroom}}</div>
         <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="newClassroom.title">
@@ -10,13 +12,16 @@
     </div>
   </div>
   <div class="classContainer">
+    <!-- header plus add classroom button -->
     <div class="classHeader">
       {{ts.l.classrooms}} <div class="addClassBtn" (click)="addNewClassroom()"><i class="fas fa-plus"></i></div>
     </div>
+    <!-- title and number of students headers -->
     <div class="classroomKey">
       <div class="keyTitle">{{ts.l.title}}</div>
       <div class="keyNumStudents">{{ts.l.no_students}}</div>
     </div>
+    <!-- display list of classrooms-->
     <div class="classBody">
       <div class="classroomCard" *ngFor="let classroom of classrooms | async" (click)="goToClassroom(classroom._id)">
         <div class="classroomTitle">{{classroom.title}}</div>

@@ -24,6 +24,17 @@
     padding-left: 16px;
     font-size: 16pt;
 }
+.filter {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+}
+
+
+.storyAuthor {
+  width: 300px;
+  text-align: left;
+}
 
 .addClassBtn {
     margin-left: auto;
@@ -48,7 +59,7 @@
 .classroomCard {
     width: 100%;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     padding: 8px;
     color: white;
     font-size: 14pt;
@@ -64,8 +75,19 @@
     cursor: pointer;
 }
 
+.storyTitle {
+  width: 400px;
+  text-align: left;
+}
+
+.title {
+  width: 370px;
+  text-align: left;
+}
+
 .classroomKey {
     display: flex;
+    justify-content: space-between;
     padding-left: 16px;
     padding-right: 16px;
     background-color: #d1d1d1;

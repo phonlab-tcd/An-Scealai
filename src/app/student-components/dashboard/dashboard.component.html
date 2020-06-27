@@ -1,3 +1,4 @@
+<!-- Display the written story along with edit options -->
 <img src="assets/img/book.png" class="bookImg">
 <div class="page">
   <div class="bookContainer">
@@ -12,7 +13,9 @@
       </div>
       <div class="bookHeader">
         <div class="headerUpper">
+          <!-- back button to redirect to contents page -->
           <div routerLink="/contents" class="myStoriesBtn"><i class="fa fa-chevron-left backArrow"></i>{{ts.l.contents}}</div>
+          <!-- save icon -->
           <div class="saveIcon">
             <div *ngIf="storySaved" class="savedIcon">
               {{ts.l.saved}} <i class="fas fa-check"></i>
@@ -22,15 +25,19 @@
             </div>
           </div>
         </div>
+        <!-- story title -->
         <div class="lowerHeader">
           <div class="bookTitle">{{story?.title}}<span *ngIf="!storySaved">*</span></div>
         </div>
         
       </div>
+      <!-- story contents -->
       <div class="storyContainer" *ngIf="story">
+        <!-- display story before grammar checked (i.e. writing mode)-->
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading">
           <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
         </div>
+        <!-- display grammar loading -->
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
             <div class="textContainer">
                 <div class="loaderContainer">
@@ -39,12 +46,14 @@
                 </div>
               </div>
           </div>
+          <!-- display story after grammar checked -->
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
           <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
           <div class="grammarMessageContainer {{grammarMessageClass}}">
             <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
             <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
           </div>
+          <!-- display grammar corrections -->
           <div class="grammarToolbar">
             <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
             <div class="selectGrammarFilter">
@@ -52,27 +61,32 @@
                 <option value="gramadoir">{{ts.l.gramadoir}}</option>
                 <option value="vowel">{{ts.l.broad_slender}}</option>
               </select>
+            </div>
           </div>
-          </div>
+          <!-- display the story -->
           <div mwlTextInputHighlightContainer>
             <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea readonly></textarea>
             <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
           </div>
         </div>
+        <!-- display story with feedback excluding audio feedback-->
         <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
           <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
           <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
           <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
         </div>
+        <!-- display story with feedback inclusing audio feedback -->
         <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
           <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
           <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
           <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
           <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         </div>
+        <!-- options button -->
         <div class="footerBtnContainer">
             <button class="btn optionsBtn" style="margin-left: 5%;" (click)="popupVisible = !popupVisible">{{ts.l.options}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button>
         </div>
+        <!-- edit/feedback/auiogrammar options -->
       </div>
       <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
         <div class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}</div>

@@ -23,8 +23,10 @@ export class TeacherStudentComponent implements OnInit {
 
     student: any;
     stories: Story[];
+    storiesWithoutFeedback: Story[] = [];
     userId: string;
     classroomId: string;
+    viewNoFeedback: boolean = false;
 
     baseUrl: string = config.baseurl;
   
@@ -37,12 +39,20 @@ export class TeacherStudentComponent implements OnInit {
           this.storyService
           .getStoriesFor(this.student.username)
           .subscribe((data: Story[]) => {
-            this.stories = data;
+            this.stories = data, this.filterFeedback(data);
           });
         });
       })
     }
-
+    
+    filterFeedback(data: Story[]) {
+      for(let story of data) {
+        if(story.feedback.text == null && story.feedback.audioId == null) {
+          this.storiesWithoutFeedback.push(story);
+        }
+      }
+    }
+    
     setClassroomId() {
       this.classroomSerivce.getClassroomOfStudent(this.userId).subscribe((res) => {
         this.classroomId = res._id;
