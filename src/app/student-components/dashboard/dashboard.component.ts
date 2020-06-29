@@ -32,25 +32,31 @@ export class DashboardComponent implements OnInit {
   grammarChecked: boolean = false;
   tags: HighlightTag[] = [];
   tagSets : TagSet;
-  visibleTags: HighlightTag[] = [];
-  tagFilters: Array<string> = [];
+  filteredTags: Map<string, HighlightTag[]> = new Map();
+  checkBox: Map<string, boolean> = new Map();
+  displayTags: HighlightTag[] = [];
   chosenTag: GrammarTag;
   grammarLoading: boolean = false;
+  grammarSelected: boolean = true;
+  boxChanged: boolean = false;
   modalClass : string = "hidden";
+  wasInside : boolean = false;
+  modalChoice: Subject<boolean> = new Subject<boolean>();
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
     private engagement: EngagementService, private grammar: GrammarService,
-    public ts : TranslationService) {
+    public ts : TranslationService) {}
 
-    }
-
+/*
+* set the stories array of all the student's stories 
+* and the current story being edited given its id from url 
+*/
   ngOnInit() {
     this.storySaved = true;
-    // Get the stories from the storyService, and run
-    // the following function once that data has
-    // been retrieved.
+    // Get the stories from the storyService and run
+    // the following function once that data has been retrieved
     this.getStories().then(stories => {
       this.stories = stories;
       // Get the story id from the URL in the same way
@@ -68,6 +74,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+/*
+* return the student's set of stories using the story service 
+*/
   getStories(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storyService.getStoriesForLoggedInUser().subscribe(
@@ -78,6 +87,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+/*
+* return the story id using the routing parameters
+*/
   getStoryId(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
@@ -87,6 +99,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+/*
+* Update story data (text and date) using story service 
+* Add logged event for saved story  using engagement service
+*/
   saveStory() {
     this.route.params.subscribe(
       params => {
@@ -102,10 +118,16 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+/*
+* Get audio feedback with function call 
+* Set feedback status to seen by student and remove story from not yet seen array
+* Add logged event for viewed feedback 
+*/
   getFeedback() {
     this.popupVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
+    // set feedback status to seen by student
     if(this.story.feedback.text != "") {
       this.story.feedback.seenByStudent = true;
     }
@@ -115,20 +137,26 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+/*
+* set the url for the audio source feedback 
+*/
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
+// Set story saved to false
   storyEdited() {
     this.storySaved = false;
   }
 
+// set feedback window to false 
   closeFeedback() {
     this.feedbackVisible = false;
   }
 
+// return whether or not the student has viewed the feedback
   hasNewFeedback() : boolean {
     if(this.story && this.story.feedback.seenByStudent === false) {
       return true;
@@ -136,10 +164,17 @@ export class DashboardComponent implements OnInit {
     return false;
   }
 
+// route to synthesis 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story.id);
   }
 
+/*
+* Set boolean variables for checking data / grammar window in interface
+* Check grammar using grammar service 
+* Set grammar tags using grammar service subscription
+* Add logged event for checked grammar
+*/
   runGramadoir() {
     this.saveStory();
     this.feedbackVisible = false;
@@ -147,66 +182,92 @@ export class DashboardComponent implements OnInit {
     this.grammarChecked = false;
     this.grammarLoading = true;
     this.tags = [];
+    this.filteredTags = new Map();
     this.chosenTag = null;
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
       this.tagSets = res;
       this.tags = this.tagSets.gramadoirTags;
+      // filter tag arrays into error type
+      this.filterTags();
       this.grammarLoading = false;
       this.grammarChecked = true;
       this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
     });
   }
 
+/*
+* Set tags to vowel tags or grammar tags based on event value
+*/
   onChangeGrammarFilter(eventValue : any) {
     this.chosenTag = null;
     if(eventValue == 'vowel') {
       this.tags = this.tagSets.vowelTags;
+      this.grammarSelected = false;
     }
     if(eventValue == 'gramadoir') {
       this.tags = this.tagSets.gramadoirTags;
+      this.grammarSelected = true;
     }
   }
 
+// set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
     this.chosenTag = new GrammarTag(tag.data);
   }
 
+// reset checked grammar to false, set tags array and chosen tag to null
   closeGrammar() {
     this.grammarChecked = false;
     this.tags = [];
     this.chosenTag = null;
   }
 
+// set the css class to hover over the tag
   addTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagNotHover");
     tagElement.classList.add("tagHover");
   }
 
+// set the css class to not hover over the tag
   removeTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagHover");
     tagElement.classList.add("tagNotHover");
   }
 
-  addTagFilter(filter: string) {
-    this.tagFilters.push(filter);
-    //this.refreshHighlights();
-  }
-
-  removeTagFilter(filter: string) {
-    let i = this.tagFilters.indexOf(filter);
-    if(i > -1) {
-      this.tagFilters.splice(i, 1);
+/*
+* filter the grammar tags by implamenting a map
+* key: rule name 
+* value: array of tags that match the rule
+* sets checkBox map value to false for each rule
+*/
+  filterTags() {
+    for(let tag of this.tags) {
+      let values: HighlightTag[] = [];
+      let rule: string = tag.data.ruleId.substring(22);
+      
+      if(rule.substring(0, 9) === "CAIGHDEAN") rule = "CAIGHDEAN";
+      if(rule.substring(0, 4) === "GRAM") rule = "GRAM";
+      
+      if(this.filteredTags.has(rule)) {
+        values = this.filteredTags.get(rule);
+        values.push(tag);
+        this.filteredTags.set(rule, values);
+      }
+      else {
+        values.push(tag);
+        this.filteredTags.set(rule, values);
+        this.checkBox.set(rule, false);
+      }
     }
-    //this.refreshHighlights();
   }
 
-  wasInside : boolean = false;
-  
+// set wasInside variable to true when user clicks
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
-  
+
+// set popup to false if not wasInside 
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {
@@ -215,21 +276,23 @@ export class DashboardComponent implements OnInit {
     this.wasInside = false;
   }
   
+// set mmodalClass to visible fade 
   showModal() {
     this.modalClass = "visibleFade";
   }
 
+// set modalClass to hidden fade and next choice to false 
   hideModal() {
     this.modalClass = "hiddenFade";
     this.modalChoice.next(false);
   }
 
-  modalChoice: Subject<boolean> = new Subject<boolean>();
-
+// set next modal choice to true
   setModalChoice() {
     this.modalChoice.next(true);
   }
 
+// save story and set next modal choice to true 
   saveModal() {
     this.saveStory();
     this.modalChoice.next(true);

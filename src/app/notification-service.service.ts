@@ -22,6 +22,9 @@ export class NotificationService {
     }
   }
 
+/*
+* Fill dataStore stories array with stories where the student has not yet viewed the feedback
+*/
   getNotifications() {
     this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
       let stories = res;
@@ -34,14 +37,23 @@ export class NotificationService {
     });
   }
 
+/*
+* Fill _stories array with data from dataStore
+*/
   private loadObservable() {
     this._stories.next(Object.assign({}, this.dataStore).stories);
   }
 
+/*
+* Return the list of stories that have not viewed feedback
+*/
   getStories() {
     return this._stories.asObservable();
   }
 
+/*
+* remove a story from the not yet viewed feedback array 
+*/
   removeStory(story: Story) {
     for(let s of this.dataStore.stories) {
       if(s._id === story._id) {
