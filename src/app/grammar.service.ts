@@ -10,23 +10,37 @@ import { Story } from './story';
   providedIn: 'root'
 })
 export class GrammarService {
+  
+  broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
+  slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
+  consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
+  ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
   constructor(private storyService: StoryService, ) { }
 
+/*
+* Set grammar and vowel tags of TagSet object 
+*/
   checkGrammar(id: string) : Observable<any> {
     return Observable.create((observer: Observer<any>) => {
       let tagSets : TagSet = new TagSet;
+      // get a story object given an id
       this.storyService.getStoryBy_id(id).subscribe((story: Story) => {
+        // get grammar tags for the story object
         this.getGramadoirTags(id).subscribe((res : HighlightTag[]) => {
           let tags : HighlightTag[] = [];
+          // push grammar tags
           res.forEach((tag) => {
             tags.push(tag);
           });
           tagSets.gramadoirTags = tags;
           tags = [];
+          //get story object
           this.storyService.getStoryBy_id(id).subscribe((story: Story) => {
+            //set the vowel tags
             let vowelTags = this.getVowelAgreementTags(story.text);
             vowelTags.forEach((tag) => {
+              // push vowel tags
               tags.push(tag);
             })
             tagSets.vowelTags = tags;
@@ -39,6 +53,9 @@ export class GrammarService {
     });
   }
 
+/*
+* Get grammar tag data from an gramadoir
+*/
   getGramadoirTags(id: string) : Observable<any> {
     return Observable.create((observer: Observer<any>) => {
       this.storyService.gramadoir(id).subscribe((res) => {
@@ -59,12 +76,11 @@ export class GrammarService {
       });
     });
   }
-
-  broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
-  slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
-  consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
-  ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
-
+  
+/*
+* Takes in a story text and return an array of vowel tags showing slender/broad 
+* errors around consonants of words in the text
+*/
   getVowelAgreementTags(text: string) : HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);
@@ -75,28 +91,35 @@ export class GrammarService {
       if(skipIndices[i] > 0) {
         i += skipIndices[i];
       }
+      // if vowel and following letter a consonant
       if(this.isVowel(text[i]) && this.isConsonant(text[i+1])) {
         let vowelIndex = i++;
         while(this.isConsonant(text[i])) {
           i++;
         }
+        // stop at an index in the text where there is a vowel
         if(this.isVowel(text[i])) {
+          // push vowel tags onto array if the vowels do not agree
           if(!this.vowelsAgree(text[vowelIndex], text[i])) {
+            // set tag for first vowel
             let firstVowelTag : HighlightTag = {
               indices: {
                 start: vowelIndex,
                 end: vowelIndex+1,
               },
+              // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[vowelIndex]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
                 ruleId: 'VOWEL',
               },
             };
+            // set tag for second vowel
             let secondVowelTag : HighlightTag = {
               indices: {
                 start: i,
                 end: i+1,
               },
+              // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[i]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
                 ruleId: 'VOWEL',
@@ -128,6 +151,9 @@ export class GrammarService {
     return skipIndices;
   }
 
+/*
+* 
+*/
   getAllIndexes(arr, val) : number[] {
     var indexes = [];
 
@@ -148,38 +174,50 @@ export class GrammarService {
     return indexes;
   }
 
-
+// given a string, return the string after changing the content a specified index
   replaceAt(str, index, replacement) : string {
     return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
   }
 
+// given a character, returns whether or not it is a vowel
   isVowel(char) : boolean {
     return this.broad.includes(char) || this.slender.includes(char);
   }
 
+// given a character, returns whether or not it is broad
   isLeathan(char) : boolean {
     return this.broad.includes(char);
   }
 
+// given a character, returns whether or not it is slender
   isCaol(char) : boolean {
     return this.slender.includes(char);
   }
 
+// given a character, returns whether or not it is a consonant
   isConsonant(char) : boolean {
     return this.consonants.includes(char);
   }
 
+// given two vowels, returns whether they are both broad or both slender 
   vowelsAgree(v1, v2) : boolean {
     return (this.broad.includes(v1) && this.broad.includes(v2)) || (this.slender.includes(v1) && this.slender.includes(v2));
   }
 
 }
 
+/*
+** **************** Tag Set Class **************************
+
+*/
 export class TagSet {
   gramadoirTags : HighlightTag[];
   vowelTags : HighlightTag[];
 }
 
+/*
+* **************** Grammar Tag Class ************************
+*/
 export class GrammarTag {
   message: string;
   rule: string;
@@ -187,12 +225,16 @@ export class GrammarTag {
   constructor(tagData: any) {
     this.rule = tagData.ruleId;
     console.log("rule", this.rule);
+    
     this.message = GrammarTag.getMessageFromRule(this.rule);
     if(!this.message) {
       this.message = tagData.msg;
     }
   }
 
+/*
+* Takes in a rule specifing a grammar concept and returns a message explaining the error
+*/
   static getMessageFromRule(rule: string) : string {
     /*
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
@@ -208,6 +250,9 @@ export class GrammarTag {
     }
   }
 
+/*
+* Specifies the pertaining css class of a given grammar rule
+*/
   static getCssClassFromRule(rule: string) : string {
     let cssClass : string;
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {

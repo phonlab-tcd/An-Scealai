@@ -48,6 +48,7 @@
           </div>
           <!-- display story after grammar checked -->
         <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
+          <!-- dipslay chosen tag window -->
           <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
           <div class="grammarMessageContainer {{grammarMessageClass}}">
             <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
@@ -63,10 +64,25 @@
               </select>
             </div>
           </div>
-          <!-- display the story -->
+          <!-- display grammar error filter options -->
+          <div class="selectErrorCheckbox" *ngIf="grammarSelected">
+            <div *ngFor="let recipient of filteredTags | keyvalue">
+               <div><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
+            </div>
+          </div>
+          <!-- display the story with error highlighting-->
           <div mwlTextInputHighlightContainer>
             <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea readonly></textarea>
-            <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
+            <div *ngIf="grammarSelected">
+            <div *ngFor="let recipient of filteredTags | keyvalue">
+              <div *ngIf="checkBox.get(recipient.key)">
+                <mwl-text-input-highlight [tags]="recipient.value" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
+              </div>
+            </div>
+            </div>
+            <div *ngIf="!grammarSelected">
+              <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
+              </div>
           </div>
         </div>
         <!-- display story with feedback excluding audio feedback-->
