@@ -34,11 +34,9 @@ export class DashboardComponent implements OnInit {
   tagSets : TagSet;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
-  displayTags: HighlightTag[] = [];
   chosenTag: GrammarTag;
   grammarLoading: boolean = false;
   grammarSelected: boolean = true;
-  boxChanged: boolean = false;
   modalClass : string = "hidden";
   wasInside : boolean = false;
   modalChoice: Subject<boolean> = new Subject<boolean>();
@@ -108,7 +106,7 @@ export class DashboardComponent implements OnInit {
       params => {
         let updateData = {
           text : this.story.text,
-          date : new Date(),
+          lastUpdated : new Date(),
         };
         this.storyService.updateStory(updateData, params['id']).subscribe();
         this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
@@ -172,7 +170,7 @@ export class DashboardComponent implements OnInit {
 /*
 * Set boolean variables for checking data / grammar window in interface
 * Check grammar using grammar service 
-* Set grammar tags using grammar service subscription
+* Set grammar tags using grammar service subscription and filter them by rule
 * Add logged event for checked grammar
 */
   runGramadoir() {
@@ -187,7 +185,6 @@ export class DashboardComponent implements OnInit {
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
       this.tagSets = res;
       this.tags = this.tagSets.gramadoirTags;
-      // filter tag arrays into error type
       this.filterTags();
       this.grammarLoading = false;
       this.grammarChecked = true;
@@ -235,10 +232,10 @@ export class DashboardComponent implements OnInit {
   }
 
 /*
-* filter the grammar tags by implamenting a map
+* filter the grammar tags using a map
 * key: rule name 
 * value: array of tags that match the rule
-* sets checkBox map value to false for each rule
+* sets checkBox map value to false (value) for each rule (key)
 */
   filterTags() {
     for(let tag of this.tags) {
@@ -247,6 +244,7 @@ export class DashboardComponent implements OnInit {
       
       if(rule.substring(0, 9) === "CAIGHDEAN") rule = "CAIGHDEAN";
       if(rule.substring(0, 4) === "GRAM") rule = "GRAM";
+      if(rule.substring(0, 10) === "COMHFHOCAL") rule = "COMHFHOCAL";
       
       if(this.filteredTags.has(rule)) {
         values = this.filteredTags.get(rule);

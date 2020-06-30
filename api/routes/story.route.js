@@ -84,8 +84,8 @@ storyRoutes.route('/update/:id').post(function (req, res) {
             if(req.body.text) {
                 story.text = req.body.text;
             }
-            if(req.body.date) {
-                story.date = req.body.date;
+            if(req.body.lastUpdated) {
+                story.lastUpdated = req.body.lastUpdated;
             }
             if(req.body.dialect) {
                 story.dialect = req.body.dialect;

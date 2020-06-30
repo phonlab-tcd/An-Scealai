@@ -16,20 +16,20 @@
         </div>
         <div class="classroomKey">
           <div class="title">{{ts.l.title}}</div>
-          <div> Creation date </div> <div> </div>
+          <div> {{ts.l.last_updated}} </div> <div> </div>
         </div>
         <!-- list of stories -->
         <div class="classBody" *ngIf="!viewNoFeedback">
           <div class="classroomCard" *ngFor="let story of stories" (click)="goToStory(story._id)">
             <div class="storyTitle">{{story.title}}</div>
-            <div> {{story.date | date }} </div>
+            <div> {{story.lastUpdated | date:'MMMM dd,  yyyy h:mm' }} </div>
             <div><i class="fas fa-arrow-right arrow"></i></div>
           </div>
         </div>
         <div class="classBody" *ngIf="viewNoFeedback">
           <div class="classroomCard" *ngFor="let story of storiesWithoutFeedback" (click)="goToStory(story._id)">
             <div class="storyTitle">{{story.title}}</div>
-            <div> {{story.date | date }} </div>
+            <div> {{ story.lastUpdated | date:'MMMM dd,  yyyy h:mm aa' }} </div>
             <div><i class="fas fa-arrow-right arrow"></i></div>
           </div>
         </div>

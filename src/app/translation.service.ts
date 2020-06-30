@@ -12,7 +12,7 @@ export class TranslationService {
 
   constructor(private auth : AuthenticationService, private http : HttpClient) { }
 
-  l : any;
+  l : any = '';
   baseUrl : string = config.baseurl;
 
   initLanguage() {

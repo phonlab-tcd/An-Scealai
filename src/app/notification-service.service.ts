@@ -50,6 +50,13 @@ export class NotificationService {
   getStories() {
     return this._stories.asObservable();
   }
+  
+  getNotificationByUser() {
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      return this.getStories();
+    }
+    
+  }
 
 /*
 * remove a story from the not yet viewed feedback array 
