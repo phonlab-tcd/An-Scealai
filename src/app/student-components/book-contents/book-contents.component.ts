@@ -13,10 +13,10 @@ import { TranslationService } from '../../translation.service';
 })
 export class BookContentsComponent implements OnInit {
   
-  stories: Story[];
+  stories: Story[] = [];
   deleteMode: Boolean;
   editMode : boolean;
-  toBeDeleted: String[];
+  toBeDeleted: String[] = [];
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService) { }

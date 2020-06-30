@@ -1,12 +1,17 @@
+<!-- main page where all of the components are displayed over -->
 <ng2-slim-loading-bar color="green"></ng2-slim-loading-bar>
 <div class="page">
+  <!-- nav bar at the top of the page -->
     <div class="nav">
         <input type="checkbox" id="nav-check" [checked]="checkVal">
+        <!-- logo -->
         <div class="nav-header">
-        <div class="nav-title">
-            <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
+          <!-- redirect to the landing component for login / register -->
+          <div class="nav-title">
+              <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
+          </div>
         </div>
-        </div>
+        <!-- not sure yet -->
         <div class="nav-btn" (click)="changeCheck()">
             <label *ngIf="!checkVal">
                 <span></span>
@@ -18,30 +23,35 @@
                     <i class="fas fa-times closeMenuTimes"></i>
                 </div>
             </div>
+            
             <div class="notificationBtn menuNotificationBtn" *ngIf="!checkVal && storiesForNotifications && storiesForNotifications.length > 0" (click)="changeCheck()"></div>
         </div>
-            <div class="nav-links">
-                <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
-                <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
-                <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">Admin Dashboard</a>
-                <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
-                <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
-                <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
-                <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
-                <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
-                    <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
-                    <div class="notificationBtn" *ngIf="storiesForNotifications && storiesForNotifications.length > 0" (click)="showNotifications()">{{storiesForNotifications.length}}</div>
+        <!-- links on the nav bar -->
+        <div class="nav-links">
+            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
+            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
+            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">Admin Dashboard</a>
+            <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
+            <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
+            <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
+            <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
+            <!-- user buttons on right -->
+            <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
+                <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
+                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 " (click)="showNotifications()">{{storiesForNotifications.length}}</div>
+            </div>
+        </div>
+        <!-- notification container if button clicked-->
+        <div *ngIf="notificationsShown && storiesForNotifications.length > 0" class="optionsPopupOld notifcationPopup">
+            <div class="notificationsHeader">{{ts.l.new_feedback}}</div>
+            <div class="notificationsBody">
+                <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
+                    {{story.title}}
                 </div>
             </div>
-            <div *ngIf="notificationsShown && storiesForNotifications.length > 0" class="optionsPopupOld notifcationPopup">
-                <div class="notificationsHeader">{{ts.l.new_feedback}}</div>
-                <div class="notificationsBody">
-                    <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
-                        {{story.title}}
-                    </div>
-                </div>
-            </div>
+        </div>
     </div>
+    <!-- add component here given a specific route -->
     <div class="content">
         <router-outlet></router-outlet>
     </div>
