@@ -48,6 +48,7 @@ import { RegisterProfileComponent } from './register-profile/register-profile.co
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
+import { MessagesComponent } from './messages/messages.component';
 
 
 
@@ -86,7 +87,8 @@ import { FindUserComponent } from './admin-components/find-user/find-user.compon
     StatsComponent,
     FindUserComponent,
     HighlightDirective,
-    FilterPipe
+    FilterPipe,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

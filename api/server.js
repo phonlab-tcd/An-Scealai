@@ -17,6 +17,7 @@ const engagementRoute = require('./routes/engagement.route');
 const statsRoute = require('./routes/stats.route');
 const albumRoute = require('./routes/album.route');
 const profileRoute = require('./routes/profile.route');
+const messageRoute = require('./routes/messages.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -38,6 +39,7 @@ app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
 app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
+app.use('/messages', messageRoute);
 
 const port = process.env.PORT || 4000;
 

@@ -7,6 +7,7 @@ import { Story } from './story';
 import { NotificationService } from './notification-service.service';
 import { EngagementService } from './engagement.service';
 import { TranslationService } from './translation.service';
+import { MessageService } from './message.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
   checkVal: boolean = false;
   notificationsShown : boolean = false;
   storiesForNotifications : Story[] = [];
+  //messagesForNotifications : Message[] = [];
+  //unreadMessages : number = 0;
   wasInside : boolean = false;
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
@@ -36,9 +39,9 @@ export class AppComponent {
 */
   ngOnInit() {
     this.ts.initLanguage();
-    this.notificationSerivce.getNotificationByUser().subscribe((res: Story[]) => {
+    this.notificationSerivce.getStories().subscribe((res: Story[]) => {
       this.storiesForNotifications = res;
-      console.log(this.storiesForNotifications);
+      console.log(this.storiesForNotifications); 
     });
     console.log(this.auth.getUserDetails().username);
   }

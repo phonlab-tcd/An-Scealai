@@ -17,4 +17,5 @@ export enum EventType {
     'LOGIN' = 'LOGIN',
     'LOGOUT' = 'LOGOUT',
     'VIEW-FEEDBACK' = 'VIEW-FEEDBACK',
+    'CREATE-MESSAGE' = 'CREATE-MESSAGE',
 }

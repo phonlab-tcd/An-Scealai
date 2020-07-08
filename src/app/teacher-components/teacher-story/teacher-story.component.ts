@@ -5,6 +5,8 @@ import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
+import { ProfileService } from '../../profile.service';
+import { AuthenticationService } from '../../authentication.service';
 
 declare var MediaRecorder : any;
 
@@ -21,7 +23,9 @@ export class TeacherStoryComponent implements OnInit {
     protected sanitizer: DomSanitizer,
     public ts : TranslationService,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService,
+    private profileService: ProfileService,
+    private auth: AuthenticationService) { }
 
   modalClass : string = "hidden";
 
@@ -35,6 +39,7 @@ export class TeacherStoryComponent implements OnInit {
   showListenBack : boolean = false;
   canSendAudio : boolean = false;
   userId: string;
+  isFromAmerica: boolean = false;
 
   errorText : string;
   registrationError : boolean;
@@ -45,8 +50,23 @@ export class TeacherStoryComponent implements OnInit {
 
   ngOnInit() {
     this.getStoryData();
+    //set date format
+    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+      let p = res.profile;
+      let country = p.country;
+      if(country == "United States of America" || country == "America") {
+        this.isFromAmerica = true;
+      }
+      else {
+        this.isFromAmerica = false;
+      }
+    });
   }
 
+/*
+* Use url parameters to get the story and its audio feedback, the author's name 
+* with possessive ending, and the user's id 
+*/
   getStoryData() {
     this.getParams().then(params => {
       this.http.get('http://localhost:4000/story/viewStory/' + params['id'].toString()).subscribe((res) => {
@@ -58,29 +78,47 @@ export class TeacherStoryComponent implements OnInit {
     })
   }
 
+/*
+* Add the possessive 's' ending to the author's name
+*/
   getAuthorPossessive() {
     let name : string = this.story.author;
     this.authorPossessive = name + '\'' + (name[name.length - 1] === 's' ? '' : 's');
   }
 
+/*
+* Get the id of the author using the user service 
+* Set date format dependng on where the user is from using the profile service
+*/
   getUserId() {
     this.userService.getUserByUsername(this.story.author).subscribe((res) => {
       this.userId = res[0]._id;
     })
   }
 
+/*
+* get audio feedback from the database using the story service 
+*/
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      if(res) {
+        this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      }
     });
   }
 
+/*
+* Add feedback text to the story using the story service 
+*/
   sendFeedback() {
     this.storyService.addFeedback(this.story._id, this.story.feedback.text).subscribe((res) => {
       this.feedbackSent = true;
     });
   }
 
+/*
+* Create media object and record audio
+*/
   recordAudio() {
     let media = {
       tag: 'audio',
@@ -102,10 +140,16 @@ export class TeacherStoryComponent implements OnInit {
     }).catch();
   }
 
+/*
+* Call the recording audio function
+*/
   prepRecording() {
     this.recordAudio();
   }
 
+/*
+* Set parameters for recording audio and start the process
+*/
   startRecording() {
     this.recording = true;
     this.newRecording = false;
@@ -114,6 +158,9 @@ export class TeacherStoryComponent implements OnInit {
     this.recorder.start();
   }
 
+/*
+* Reset parameters for recording audio and stop the process 
+*/
   stopRecording() {
     this.recorder.stop();
     this.recording = false;
@@ -122,11 +169,17 @@ export class TeacherStoryComponent implements OnInit {
     this.stream.getTracks().forEach(track => track.stop());
   }
 
+/*
+* Playback the recorded audio
+*/
   playbackAudio() {
     this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
     this.newRecording = true;
   }
 
+/*
+* Add the audio fedback to the database 
+*/
   saveAudio() {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     this.storyService.addFeedbackAudio(this.story._id, blob).subscribe((res) => {
@@ -137,6 +190,9 @@ export class TeacherStoryComponent implements OnInit {
     });
   }
 
+/*
+* Return the url parameters as a promise
+*/
   getParams(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
@@ -145,7 +201,8 @@ export class TeacherStoryComponent implements OnInit {
       });
     });
   }
-
+  
+// fix the css class for recording audio
   showModal() {
     this.modalClass = "visibleFade";
   }

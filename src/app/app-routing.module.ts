@@ -33,6 +33,7 @@ import { TeacherDashboardComponent } from './teacher-components/teacher-dashboar
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
+import { MessagesComponent } from './messages/messages.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -58,6 +59,7 @@ const routes: Routes = [
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
   { path: 'recordings', component: RecordingContentsComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
+  { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -127,7 +129,7 @@ const routes: Routes = [
       {
         path: 'story/:id',
         component: TeacherStoryComponent,
-      }
+      },
     ]
   },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},

@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { StoryService } from './story.service';
+import { MessageService } from './message.service';
 import { Story } from './story';
 import { AuthenticationService } from './authentication.service';
+import { Message } from './message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  private _stories: BehaviorSubject<Story[]>;
+  private _messages: BehaviorSubject<Story[]>;
   private dataStore: {
-    stories: Story[]
+    stories: Story[],
+    messages: Message[]
   }
 
-  constructor(private storyService : StoryService, private auth: AuthenticationService) {
-    this.dataStore = { stories: [] };
-    this._stories = <BehaviorSubject<Story[]>>new BehaviorSubject([]);
+  constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService ) {
+    this.dataStore = { stories: [], messages: [] };
+    this._messages = <BehaviorSubject<Story[]>>new BehaviorSubject([]);
     if(this.auth.isLoggedIn()) {
       this.getNotifications();
     }
@@ -41,25 +44,31 @@ export class NotificationService {
 * Fill _stories array with data from dataStore
 */
   private loadObservable() {
-    this._stories.next(Object.assign({}, this.dataStore).stories);
+    this._messages.next(Object.assign({}, this.dataStore).stories);
   }
 
 /*
 * Return the list of stories that have not viewed feedback
 */
   getStories() {
-    return this._stories.asObservable();
+    return this._messages.asObservable();
   }
   
-  getNotificationByUser() {
-    if(this.auth.getUserDetails().role === "STUDENT") {
-      return this.getStories();
-    }
-    
+  getMessages() {
+    this.messageService.getMessagesForLoggedInUser().subscribe((res : Message[]) => {
+      let messages = res;
+      for(let m of messages) {
+        if(m.seenByRecipient === false) {
+          this.dataStore.messages.push(m);
+        }
+      }
+      this.loadObservable(); //// NEEDS FIXING 
+    });
   }
+  
 
 /*
-* remove a story from the not yet viewed feedback array 
+* remove a story from the 'not yet viewed feedback' array 
 */
   removeStory(story: Story) {
     for(let s of this.dataStore.stories) {

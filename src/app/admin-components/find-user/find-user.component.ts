@@ -26,6 +26,7 @@ export class FindUserComponent implements OnInit {
   allTeachers : User[] = [];
   allAdmins: User[] = [];
   searchText: string = '';
+  //onDashboard: Boolean = false;
 
   /**
    * Gets an array of all users on the database, call the function to make subarrays
@@ -55,4 +56,9 @@ export class FindUserComponent implements OnInit {
       }
     }
   }
+  /*
+  goBack() {
+    this.router.navigateByUrl('/admin/dashboard/');
+  }
+  */
 }

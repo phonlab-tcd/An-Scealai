@@ -5,6 +5,10 @@ import { AuthenticationService, TokenPayload } from '../../authentication.servic
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
+import { ProfileService } from '../../profile.service';
+import { Router } from '@angular/router';
+import { MessageService } from '../../message.service';
+import { Message } from '../../message';
 
 @Component({
   selector: 'app-book-contents',
@@ -17,22 +21,47 @@ export class BookContentsComponent implements OnInit {
   deleteMode: Boolean;
   editMode : boolean;
   toBeDeleted: String[] = [];
+  userId: String = '';
+  messagesForNotifications : Message[] = [];
+  unreadMessages: number = 0;
+  isFromAmerica: boolean = false;
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService, public ts : TranslationService) { }
+    private engagement: EngagementService, public ts : TranslationService, private router: Router,
+    private messageService: MessageService, private profileService: ProfileService ) { }
 
 /*
 * Set story array of stories for logged in user
 * set delete mode to false and create empty to be deleted array
 */
   ngOnInit() {
+    // get stories for the user
     this.storyService
     .getStoriesForLoggedInUser()
     .subscribe((data: Story[]) => {
       this.stories = data;
     });
+    this.userId = this.auth.getUserDetails()._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
+    
+    // get number of unread messages
+    this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
+      this.messagesForNotifications = res;
+      this.unreadMessages = this.messageService.getNumberOfUnreadMessages(this.messagesForNotifications);
+    });
+
+    // get date format for user 
+    this.profileService.getForUser(this.userId).subscribe((res) => {
+      let p = res.profile;
+      let country = p.country;
+      if(country == "United States of America" || country == "America") {
+        this.isFromAmerica = true;
+      }
+      else {
+        this.isFromAmerica = false;
+      }
+    });
   }
   
 //use story service to set the chosen story
@@ -40,7 +69,7 @@ export class BookContentsComponent implements OnInit {
     this.storyService.chosenStory = story;
   }
 
-/*delete stories added to the to be deleted array
+/* delete stories added to the to be deleted array
 * adds delete event to event list 
 * deletes story using the story service 
 */
@@ -75,6 +104,10 @@ export class BookContentsComponent implements OnInit {
     } else {
       this.toBeDeleted.push(id);
     }
+  }
+  
+  goToMessages() {
+    this.router.navigateByUrl('/messages/' + this.userId);
   }
 
 }

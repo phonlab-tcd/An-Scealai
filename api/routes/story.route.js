@@ -147,7 +147,7 @@ storyRoutes.route('/viewFeedback/:id').post((req, res) => {
             res.status(404).json({"message" : "Story does not exist"});
         }
     });
-})
+});
 
 storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
