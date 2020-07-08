@@ -21,7 +21,7 @@ import { TranslationService } from '../../translation.service';
 })
 export class DashboardComponent implements OnInit {
 
-  story: Story;
+  story: Story = new Story();
   stories: Story[];
   id: string;
   storyFound: boolean;

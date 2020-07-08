@@ -15,6 +15,7 @@ let Event = new Schema({
             'LOGIN',
             'LOGOUT',
             'VIEW-FEEDBACK',
+            'CREATE-MESSAGE'
         ],
     },
     storyData: Object,

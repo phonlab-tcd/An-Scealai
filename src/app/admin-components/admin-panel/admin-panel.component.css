@@ -22,6 +22,7 @@
 
 .backArrow {
     margin-right: 8px;
+    float: left;
 }
 
 .backArrow:hover {

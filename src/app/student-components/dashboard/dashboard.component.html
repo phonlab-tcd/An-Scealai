@@ -102,7 +102,7 @@
         <div class="footerBtnContainer">
             <button class="btn optionsBtn" style="margin-left: 5%;" (click)="popupVisible = !popupVisible">{{ts.l.options}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></button>
         </div>
-        <!-- edit/feedback/auiogrammar options -->
+        <!-- edit/feedback/audio/grammar options -->
       </div>
       <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
         <div class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}</div>

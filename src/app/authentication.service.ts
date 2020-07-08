@@ -111,6 +111,7 @@ export class AuthenticationService {
     this.token = '';
     window.localStorage.removeItem('scealai-token');
     this.router.navigateByUrl('/landing');
+    //location.reload();
   }
 
 }

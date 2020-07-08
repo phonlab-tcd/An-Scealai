@@ -19,7 +19,8 @@
           <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">
           <!-- link the story to its dashboard -->
           <a [routerLink]="['/dashboard', story.id]" class="contentsLink">{{story.title}}</a>
-          <div class="contentsDate">{{story.date | date : 'M/d/yy, h:mm' }}</div>
+          <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm' }}</div>
+          <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm' }}</div>
         </div>
         <hr/>
       </div>
@@ -27,6 +28,7 @@
     <!-- delte and new story buttons -->
     <div class="contentsBtnsContainer">
       <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
+      <button class="btn messagesBtn" (click)="goToMessages()"> Messages <span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></button>
       <button class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}</button>
     </div>        
   </div>

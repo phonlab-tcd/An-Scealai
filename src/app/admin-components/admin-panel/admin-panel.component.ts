@@ -7,14 +7,17 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./admin-panel.component.css']
 })
 export class AdminPanelComponent implements OnInit {
+  
+  //onDashboard: Boolean = true;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
   }
   
+  /*
   goBack() {
     this.router.navigateByUrl('admin/dashboard/');
   }
-
+  */
 }
