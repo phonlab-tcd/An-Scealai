@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 import config from '../abairconfig.json';
 
 export interface UserDetails {
@@ -29,8 +29,8 @@ export interface TokenPayload {
 })
 export class AuthenticationService {
   baseUrl : string = config.baseurl + 'user/';
-
   private token: string;
+  public getLoggedInName : any = new Subject();
 
   constructor(private http: HttpClient, private router: Router,) { }
 
@@ -53,6 +53,8 @@ export class AuthenticationService {
       
       payload = token.split('.')[1];
       payload = window.atob(payload);
+      
+      this.getLoggedInName.next(JSON.parse(payload).username);
       
       return JSON.parse(payload);
       
@@ -113,5 +115,7 @@ export class AuthenticationService {
     this.router.navigateByUrl('/landing');
     //location.reload();
   }
+  
+
 
 }

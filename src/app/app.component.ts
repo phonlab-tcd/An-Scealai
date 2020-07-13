@@ -21,9 +21,8 @@ export class AppComponent {
   checkVal: boolean = false;
   notificationsShown : boolean = false;
   storiesForNotifications : Story[] = [];
-  //messagesForNotifications : Message[] = [];
-  //unreadMessages : number = 0;
   wasInside : boolean = false;
+  currentUser: string = '';
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
               private storyService : StoryService, private notificationSerivce : NotificationService,
@@ -57,6 +56,7 @@ export class AppComponent {
       this.notificationsShown = false;
     }
   }
+  
 
 // Set value to show notifications to true
   showNotifications() {

@@ -6,6 +6,9 @@ import { Classroom } from '../classroom';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
+import { NotificationService } from '../notification-service.service';
+import { StatsService } from '../stats.service';
+import { StudentStats } from '../studentStats';
 
 @Component({
   selector: 'app-profile',
@@ -19,11 +22,14 @@ export class ProfileComponent implements OnInit {
   codeInput : FormControl;
   foundClassroom: Classroom;
   classroom: Classroom;
+  statObj: StudentStats = new StudentStats();
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
               private engagement: EngagementService,
-              public ts : TranslationService) { }
+              public ts : TranslationService,
+              public ns: NotificationService,
+              public ss: StatsService,) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -47,11 +53,19 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+/*
+* Join a classroom with a given classroom code
+* Create a new stats object in the database
+*/
   joinClassroom() {
     this.classroomService.addStudentToClassroom(this.foundClassroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
       if(res.status === 200) {
         this.classroom = this.foundClassroom;
         this.foundClassroom = null;
+        this.statObj.studentId = this.auth.getUserDetails()._id;
+        this.statObj.studentUsername = this.auth.getUserDetails().username;
+        this.statObj.classroomId = this.classroom._id;
+        this.ss.addNewStatEntry(this.statObj).subscribe();
       }
     });
   }
@@ -70,6 +84,9 @@ export class ProfileComponent implements OnInit {
     this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
       this.classroom = null;
     });
+    this.ss.deleteStats(this.auth.getUserDetails()._id).subscribe( (res) => {
+      console.log("stat entry deleted");
+    });
   }
 
   toggleEditMode() {
@@ -82,6 +99,7 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
+    let value: boolean = false;  
     this.auth.logout();
   }
 

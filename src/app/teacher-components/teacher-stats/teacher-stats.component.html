@@ -1,0 +1,61 @@
+<!-- View grammar statistics for students in the class -->
+<div class="content">
+    <div class="classContainer">
+      <!-- nav bar -->
+        <div class="classHeader">
+          <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> Class Statistics
+        </div>
+        <!-- main body container -->
+        <div class="contentBody">
+          <!-- Container to list students along with their grammar errors -->
+          <div class="teacherAccountsContainer">
+            <div class="teacherAccountsDisplay">
+              <div class="teacherAccountsHeader">
+                  Individual Student Statistics
+              </div>
+              <div class="teacherAccountsBody">
+                <!-- activity cards -->
+                <div class="" *ngFor="let student of stats">
+                  <div class="activeTeacherCodeContainer eventContainer" >
+                      <div class="eventHeader">
+                          <b>{{student.studentUsername}}</b>
+                      </div>
+                      <div class="eventBody mainEventBody" *ngFor="let error of student.grammarErrors | keyvalue">
+                        <div>{{error.key}} : {{error.value}}</div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          <!-- Container to list students along with their grammar errors -->
+          <div class="teacherAccountsContainer">
+            <div class="teacherAccountsDisplay">
+              <div class="teacherAccountsHeader">
+                Classroom Statistics
+              </div>
+              <div class="teacherAccountsBody">
+                <div class="activeTeacherCodeContainer eventContainer">
+                    <div class="eventHeader">
+                        <b>Grammar Errors</b>
+                    </div>
+                    <div class="eventBody mainEventBody" *ngFor="let entry of totalStats | keyvalue">
+                      <div> {{entry.key}} : {{entry.value}}</div>
+                    </div>
+                    <!-- pie chart test -->
+                    <div id="divChart" class="divChart">
+                      <canvas id="statChart"> </canvas>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Activity container -->
+        
+        </div>
+
+    </div>
+</div>

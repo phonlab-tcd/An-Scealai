@@ -12,6 +12,7 @@ import { EngagementService } from '../../engagement.service';
 import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
+import { StatsService } from '../../stats.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,7 +46,7 @@ export class DashboardComponent implements OnInit {
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
     private engagement: EngagementService, private grammar: GrammarService,
-    public ts : TranslationService) {}
+    public ts : TranslationService, public statsService: StatsService) {}
 
 /*
 * set the stories array of all the student's stories 
@@ -156,7 +157,7 @@ export class DashboardComponent implements OnInit {
 
 // return whether or not the student has viewed the feedback
   hasNewFeedback() : boolean {
-    if(this.story && this.story.feedback.seenByStudent === false) {
+    if(this.story && this.story.feedback && this.story.feedback.seenByStudent === false) {
       return true;
     }
     return false;
@@ -242,9 +243,8 @@ export class DashboardComponent implements OnInit {
       let values: HighlightTag[] = [];
       let rule: string = tag.data.ruleId.substring(22);
       
-      if(rule.substring(0, 9) === "CAIGHDEAN") rule = "CAIGHDEAN";
-      if(rule.substring(0, 4) === "GRAM") rule = "GRAM";
-      if(rule.substring(0, 10) === "COMHFHOCAL") rule = "COMHFHOCAL";
+      let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
+      rule = rx[0];
       
       if(this.filteredTags.has(rule)) {
         values = this.filteredTags.get(rule);
@@ -257,6 +257,17 @@ export class DashboardComponent implements OnInit {
         this.checkBox.set(rule, false);
       }
     }
+    this.updateStats();
+  }
+  
+/*
+* Update the grammar error map of the stat object corresponding to the current student id
+*/
+  updateStats() {
+    console.log("Update grammar errors");
+    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags).subscribe( (res) => {
+      console.log(res);
+    });
   }
 
 // set wasInside variable to true when user clicks
