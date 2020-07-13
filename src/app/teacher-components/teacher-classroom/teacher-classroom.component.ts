@@ -113,6 +113,10 @@ export class TeacherClassroomComponent implements OnInit {
   goToMessages() {
     this.router.navigateByUrl('/messages/' + this.classroom._id);
   }
+  
+  goToStats() {
+    this.router.navigateByUrl('/teacher/teacher-stats/' + this.classroom._id);
+  }
 
 /*
 * Set modal to visible

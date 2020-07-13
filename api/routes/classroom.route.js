@@ -130,7 +130,8 @@ classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
         if(classroom) {
             res.json(classroom);
         } else {
-            req.json({message: "No classrooms were found", status: 404})
+            //res.json({message: "No classrooms were found", status: 404});
+            res.json(err);
         }
     })
 })

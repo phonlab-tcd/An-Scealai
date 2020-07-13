@@ -16,6 +16,7 @@ export class NotificationService {
     stories: Story[],
     messages: Message[]
   }
+  
 
   constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService ) {
     this.dataStore = { stories: [], messages: [] };

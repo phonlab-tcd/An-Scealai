@@ -28,7 +28,7 @@
     <!-- delte and new story buttons -->
     <div class="contentsBtnsContainer">
       <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
-      <button class="btn messagesBtn" (click)="goToMessages()"> Messages <span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></button>
+      <button *ngIf="isEnrolled" class="btn messagesBtn" (click)="goToMessages()"> Messages <span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></button>
       <button class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}</button>
     </div>        
   </div>

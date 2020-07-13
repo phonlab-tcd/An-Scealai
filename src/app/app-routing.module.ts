@@ -18,6 +18,7 @@ import { ChatbotComponent } from './student-components/chatbot/chatbot.component
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 
 import { RecordingContentsComponent } from './student-components/recording/recording-contents/recording-contents.component';
+import { MessagesComponent } from './messages/messages.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -33,7 +34,7 @@ import { TeacherDashboardComponent } from './teacher-components/teacher-dashboar
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
-import { MessagesComponent } from './messages/messages.component';
+import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -130,6 +131,10 @@ const routes: Routes = [
         path: 'story/:id',
         component: TeacherStoryComponent,
       },
+      {
+        path: 'teacher-stats/:id',
+        component: TeacherStatsComponent,
+      }
     ]
   },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},

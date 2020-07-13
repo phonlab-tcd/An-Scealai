@@ -19,7 +19,7 @@ export class TeacherStudentComponent implements OnInit {
     private storyService: StoryService,
     private router: Router,
     public ts : TranslationService,
-    private classroomSerivce: ClassroomService) { }
+    private classroomService: ClassroomService) { }
 
     student: any;
     stories: Story[];
@@ -54,7 +54,7 @@ export class TeacherStudentComponent implements OnInit {
     }
     
     setClassroomId() {
-      this.classroomSerivce.getClassroomOfStudent(this.userId).subscribe((res) => {
+      this.classroomService.getClassroomOfStudent(this.userId).subscribe((res) => {
         this.classroomId = res._id;
       });
     }

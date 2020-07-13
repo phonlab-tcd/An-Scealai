@@ -9,6 +9,7 @@ import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
+import { ClassroomService } from '../../classroom.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -21,14 +22,15 @@ export class BookContentsComponent implements OnInit {
   deleteMode: Boolean;
   editMode : boolean;
   toBeDeleted: String[] = [];
-  userId: String = '';
+  userId: string = '';
   messagesForNotifications : Message[] = [];
   unreadMessages: number = 0;
   isFromAmerica: boolean = false;
+  isEnrolled: boolean = false;
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService, private router: Router,
-    private messageService: MessageService, private profileService: ProfileService ) { }
+    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService ) { }
 
 /*
 * Set story array of stories for logged in user
@@ -44,6 +46,16 @@ export class BookContentsComponent implements OnInit {
     this.userId = this.auth.getUserDetails()._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
+    
+    //see if student is enrolled in a class (if not the case, hide message feature in html)
+    this.classroomService.getClassroomOfStudent(this.userId).subscribe( (res) => {
+      if(res != null) {
+        this.isEnrolled = true;
+      }
+      else {
+        this.isEnrolled = false;
+      }
+    })
     
     // get number of unread messages
     this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
@@ -61,7 +73,9 @@ export class BookContentsComponent implements OnInit {
       else {
         this.isFromAmerica = false;
       }
+    
     });
+  
   }
   
 //use story service to set the chosen story

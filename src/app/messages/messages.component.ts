@@ -107,6 +107,7 @@ export class MessagesComponent implements OnInit {
     }
     this.getMessages();
     
+    //// ********* ADD DATE FORMAT ************
     
   }
   

@@ -49,6 +49,7 @@ import { StoryDetailsComponent } from './student-components/story-details/story-
 import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { MessagesComponent } from './messages/messages.component';
+import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 
 
 
@@ -88,7 +89,8 @@ import { MessagesComponent } from './messages/messages.component';
     FindUserComponent,
     HighlightDirective,
     FilterPipe,
-    MessagesComponent
+    MessagesComponent,
+    TeacherStatsComponent
   ],
   imports: [
     BrowserModule,
