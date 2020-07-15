@@ -12,6 +12,7 @@ import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';
 import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ProfileService } from '../profile.service';
 
 declare var MediaRecorder : any;
 
@@ -40,6 +41,7 @@ export class MessagesComponent implements OnInit {
   totalNumberOfMessages: number = 0;
   deleteMode: Boolean = false;
   toBeDeleted: String[] = [];
+  isFromAmerica: boolean = false;
   
   //used for creating a new message
   message: Message = {
@@ -64,8 +66,8 @@ export class MessagesComponent implements OnInit {
   newRecording : boolean = false;
   showListenBack : boolean = false;
   canSendAudio : boolean = false;
-  audioTaken: boolean = false;
   showAudio: boolean = false;
+  blob: any;
 
   errorText : string;
   registrationError : boolean;
@@ -82,7 +84,8 @@ export class MessagesComponent implements OnInit {
               public ts : TranslationService,
               private router: Router,
               private messageService: MessageService,
-              protected sanitizer: DomSanitizer, ) { }
+              protected sanitizer: DomSanitizer,
+              protected profileService: ProfileService) { }
 
   
   ngOnInit() {
@@ -107,7 +110,17 @@ export class MessagesComponent implements OnInit {
     }
     this.getMessages();
     
-    //// ********* ADD DATE FORMAT ************
+    // get date format for user 
+    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+      let p = res.profile;
+      let country = p.country;
+      if(country == "United States of America" || country == "America") {
+        this.isFromAmerica = true;
+      }
+      else {
+        this.isFromAmerica = false;
+      }
+    });
     
   }
   
@@ -121,7 +134,6 @@ export class MessagesComponent implements OnInit {
     this.message.seenByRecipient = false;
     this.message.senderUsername = this.auth.getUserDetails().username;
 
-    
     if(this.isTeacher) {
       this.message.senderId = this.teacherId;
     }
@@ -131,13 +143,18 @@ export class MessagesComponent implements OnInit {
     }
 
     this.messageService.saveMessage(this.message);
-    if(this.audioTaken) {
+    // add audio file to database if recorded
+    if(this.canSendAudio) {
       this.messageService.getMessageById(this.message.id).subscribe((res) => {
-        this.saveAudio(res._id);
+        this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
+          this.hideModal();
+        }, (err) => {
+          this.errorText = err.message;
+          this.registrationError = true;
+        });
       })
       
     }
-    
     this.createNewMessage = false;
   }
   
@@ -149,9 +166,11 @@ export class MessagesComponent implements OnInit {
       this.receivedMessages = res;
       this.receivedMessages.sort((a, b) => (a.date > b.date) ? -1 : 1)
       this.numberOfUnread = this.messageService.getNumberOfUnreadMessages(this.receivedMessages);
+      /*
       if(this.receivedMessages.length > 0) {
         this.messageContent = this.receivedMessages[0].text;
       }
+      */
       this.totalNumberOfMessages = this.receivedMessages.length;
     });
   }
@@ -291,7 +310,6 @@ export class MessagesComponent implements OnInit {
       this.showListenBack = true;
       this.canSendAudio = true;
       this.stream.getTracks().forEach(track => track.stop());
-      this.audioTaken = true;
     }
 
   /*
@@ -304,19 +322,11 @@ export class MessagesComponent implements OnInit {
     }
 
   /*
-  * Add the audio fedback to the database 
+  * Save audio data into a blob (function called in sendMessage)
   */
-    saveAudio(id: string) {
-      
-      let blob = new Blob(this.chunks, {type: 'audio/mp3'});
-      console.log(blob);
-      this.messageService.addMessageAudio(id, blob).subscribe((res) => {
-        this.hideModal();
-      }, (err) => {
-        this.errorText = err.message;
-        this.registrationError = true;
-      });
-      
+    saveAudio() {
+      this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
+      console.log(this.blob);
     }
     
   // change css class to show recording container
@@ -368,5 +378,6 @@ export class MessagesComponent implements OnInit {
         this.toBeDeleted.push(id);
       }
     }
+    
 
 }

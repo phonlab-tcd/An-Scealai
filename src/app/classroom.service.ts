@@ -69,5 +69,15 @@ export class ClassroomService {
     }
     return result;
  }
+ 
+ setGrammarRules(classroomId: string, rules: string[]): Observable<any> {
+   console.log("rules to add:")
+   console.log( rules);
+   return this.http.post(this.baseUrl + 'setGrammarRules/' + classroomId, {"grammarRules":rules});
+ }
+ 
+ getGrammarRules(classroomId): Observable<any> {
+   return this.http.get(this.baseUrl + 'getGrammarRules/' + classroomId);
+ }
 
 }

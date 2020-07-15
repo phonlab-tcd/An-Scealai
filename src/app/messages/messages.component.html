@@ -15,7 +15,7 @@
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
       <div *ngIf="receivedMessages.length > 0" class="messageList">
-        <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message)"> 
+        <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);"> 
           <div class="messageEntries"> 
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
@@ -23,7 +23,8 @@
               <div class="sender"> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>
-            <div class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
+            <div *ngIf="!isFromAmerica" class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
+            <div *ngIf="isFromAmerica" class="date">{{message.date | date:'MM/dd/yyyy h:mm aa' }} </div>
           </div>
         </div>
       </div>
@@ -58,8 +59,8 @@
                <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                <!-- Cancel or send audio -->
                <div class="modalBtnContainer">
-                   <button type="button" class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
-                   <button type="button" class="modalBtn createBtnGreen" (click)="playbackAudio(); hideModal()" *ngIf="canSendAudio"> add to message </button>
+                   <button type="button" class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button>
+                   <button type="button" class="modalBtn createBtnGreen" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> add to message </button>
                </div>
            </div>
          </div>
@@ -90,7 +91,7 @@
           <!-- buttons -->
           <div class="bottomButtons">
             <div class="">
-                <button class="headerIconBtn" (click)=" messageForm.reset(); createNewMessage = false;"> {{ts.l.cancel}} </button>
+                <button class="headerIconBtn" (click)="messageForm.reset(); createNewMessage = false;"> {{ts.l.cancel}} </button>
             </div>
             <!-- audio message player -->
             <div class="audioReplay">

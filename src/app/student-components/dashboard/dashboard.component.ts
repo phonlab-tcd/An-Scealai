@@ -13,6 +13,7 @@ import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
+import { ClassroomService } from '../../classroom.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,12 +42,15 @@ export class DashboardComponent implements OnInit {
   modalClass : string = "hidden";
   wasInside : boolean = false;
   modalChoice: Subject<boolean> = new Subject<boolean>();
+  teacherSelectedErrors: String[] = [];
+  classroomId: string;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
     private engagement: EngagementService, private grammar: GrammarService,
-    public ts : TranslationService, public statsService: StatsService) {}
+    public ts : TranslationService, public statsService: StatsService,
+    public classroomService: ClassroomService) {}
 
 /*
 * set the stories array of all the student's stories 
@@ -71,6 +75,11 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
+      this.classroomId = res._id;
+      console.log(this.classroomId);
+    });
+
   }
 
 /*
@@ -239,35 +248,57 @@ export class DashboardComponent implements OnInit {
 * sets checkBox map value to false (value) for each rule (key)
 */
   filterTags() {
-    for(let tag of this.tags) {
-      let values: HighlightTag[] = [];
-      let rule: string = tag.data.ruleId.substring(22);
+    this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
+      this.teacherSelectedErrors = res;
+      //loop through tags of errors found in the story
+      for(let tag of this.tags) {
+        let values: HighlightTag[] = [];
+        let rule: string = tag.data.ruleId.substring(22);
+        
+        let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
+        rule = rx[0];
       
-      let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
-      rule = rx[0];
-      
-      if(this.filteredTags.has(rule)) {
-        values = this.filteredTags.get(rule);
-        values.push(tag);
-        this.filteredTags.set(rule, values);
+        // check against errors that the teacher provides
+        if(this.teacherSelectedErrors.length > 0) {
+          if(this.teacherSelectedErrors.indexOf(rule) !== -1) {
+            if(this.filteredTags.has(rule)) {
+              values = this.filteredTags.get(rule);
+              values.push(tag);
+              this.filteredTags.set(rule, values);
+            }
+            else {
+              values.push(tag);
+              this.filteredTags.set(rule, values);
+              this.checkBox.set(rule, false);
+            }    
+          }
+        }
+        // otherwise check against all grammar errors 
+        else {
+          console.log("this should be read");
+          if(this.filteredTags.has(rule)) {
+            values = this.filteredTags.get(rule);
+            values.push(tag);
+            this.filteredTags.set(rule, values);
+          }
+          else {
+            values.push(tag);
+            this.filteredTags.set(rule, values);
+            this.checkBox.set(rule, false);
+          }
+        } 
       }
-      else {
-        values.push(tag);
-        this.filteredTags.set(rule, values);
-        this.checkBox.set(rule, false);
-      }
-    }
-    this.updateStats();
+      console.log(this.filteredTags);
+      this.updateStats();
+    });
   }
-  
+
 /*
 * Update the grammar error map of the stat object corresponding to the current student id
 */
   updateStats() {
     console.log("Update grammar errors");
-    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags).subscribe( (res) => {
-      console.log(res);
-    });
+    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags).subscribe();
   }
 
 // set wasInside variable to true when user clicks

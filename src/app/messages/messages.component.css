@@ -192,6 +192,12 @@ label {
     cursor: pointer;
 }
 
+.clickedresultCard {
+    color:white;
+    background-color: #3b372b;
+    cursor: pointer;
+}
+
 .messageEntries {
   display: flex;
   justify-content: space-between;

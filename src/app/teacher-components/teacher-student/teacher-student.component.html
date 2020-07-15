@@ -22,7 +22,7 @@
         <div class="classBody" *ngIf="!viewNoFeedback">
           <div class="classroomCard" *ngFor="let story of stories" (click)="goToStory(story._id)">
             <div class="storyTitle">{{story.title}}</div>
-            <div> {{story.lastUpdated | date:'MMMM dd,  yyyy h:mm' }} </div>
+            <div> {{story.lastUpdated | date:'MMMM dd,  yyyy h:mm aa' }} </div>
             <div><i class="fas fa-arrow-right arrow"></i></div>
           </div>
         </div>

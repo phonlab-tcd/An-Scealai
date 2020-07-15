@@ -5,7 +5,8 @@ let Classroom = new Schema({
     teacherId: String,
     title: String,
     studentIds: [String],
-    code: String
+    code: String,
+    grammarRules: [String],
 }, {
     collection: 'classroom'
 });

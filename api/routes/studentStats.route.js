@@ -46,6 +46,7 @@ studentStatsRoutes.route('/updateGrammarErrors/:id').post(function (req, res) {
         } else {
           //loop through param map input and update stats map where the keys match
           // (a particular grammar error)
+          console.log(req.body);
           for(let entry of req.body) {
             let originalAmount = parseInt(stat.grammarErrors.get(entry[0]));
             let amountToAdd = parseInt(entry[1].length);

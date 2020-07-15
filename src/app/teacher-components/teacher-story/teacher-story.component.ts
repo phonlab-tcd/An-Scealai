@@ -104,6 +104,7 @@ export class TeacherStoryComponent implements OnInit {
       if(res) {
         this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       }
+      
     });
   }
 
