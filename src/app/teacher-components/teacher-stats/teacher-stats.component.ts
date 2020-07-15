@@ -8,6 +8,7 @@ import { User } from '../../user';
 import { StatsService } from '../../stats.service';
 import { StudentStats } from '../../studentStats';
 import { Chart } from 'node_modules/chart.js';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-teacher-stats',
@@ -25,11 +26,17 @@ export class TeacherStatsComponent implements OnInit {
   graphLabels: string[] = [];
   graphValues: number[] = [];
   colorValues: string[] = [];
+  errorModalClass: string = "hidden";
+  listOfGrammarErrors: any;
+  setGrammarErrors: string[] = [];
+  wasInside: boolean = false;
+  
 
   constructor(private classroomService: ClassroomService, private auth: AuthenticationService, 
               private userService: UserService, private router: Router,
               private route: ActivatedRoute,
-              private statsService : StatsService) { }
+              private statsService : StatsService,
+              private ts: TranslationService) { }
 
   ngOnInit() {
     this.getClassroom();
@@ -38,6 +45,9 @@ export class TeacherStatsComponent implements OnInit {
       let color: string = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
       this.colorValues.push(color);
     }
+    this.listOfGrammarErrors = this.statsService.listErrors();
+    
+    
   }
   
   /*
@@ -64,6 +74,16 @@ export class TeacherStatsComponent implements OnInit {
           this.classroomId = this.classroom._id;
           this.teacherId = this.classroom.teacherId;
           console.log(this.classroom);
+          
+          this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {
+            let rules: string[] = res;
+            this.listOfGrammarErrors.forEach(item => {
+              if(rules.includes(item.error)) {
+                item.checked = true;
+              }
+            });
+          });
+          
           this.getStudents();
           this.getStatsForStudents();
         });
@@ -87,14 +107,7 @@ export class TeacherStatsComponent implements OnInit {
     getStatsForStudents() {
       this.statsService.getStatsForClassroom(this.classroomId).subscribe( (res: StudentStats[]) => {
         this.stats = res;
-        /*
-        for( let s of this.stats) {
-          console.log("Stat entry:");
-          console.log("student id: " + s.studentUsername);
-          console.log("Class id: " + s.classroomId);
-          console.log(s.grammarErrors);
-        }
-        */
+        console.log(this.stats);
         this.getStatsForClass();
       });
     }
@@ -125,12 +138,10 @@ export class TeacherStatsComponent implements OnInit {
       }
   
       for (let entry of Array.from(this.totalStats.entries())) {
-        console.log(entry[0]);
         this.graphLabels.push(entry[0]);
         this.graphValues.push(entry[1]);
       }
       this.createChart(this.graphLabels, this.graphValues);
-
     }
     
     createChart(labels, values) {
@@ -172,5 +183,40 @@ export class TeacherStatsComponent implements OnInit {
     this.router.navigateByUrl('teacher/classroom/' + this.classroom._id);
   }
   
+  // show grammar error selector container
+  showErrorSelectionModal() {
+    this.errorModalClass = "visibleFade";
+  }
+
+ /*
+ * Hide grammar error selector container and set list of selected 
+ * grammar rules for students
+ */ 
+  hideErrorSelectionModal() {
+    this.errorModalClass = "hiddenFade";
+    this.listOfGrammarErrors.forEach(item => {
+      if(item.checked) {
+        if(!this.setGrammarErrors.includes(item.error)) {
+          this.setGrammarErrors.push(item.error);
+        }
+      }
+      else {
+        if(this.setGrammarErrors.includes(item.error) ) {
+          const index: number = this.setGrammarErrors.indexOf(item.error);
+          if (index !== -1) {
+          this.setGrammarErrors.splice(index, 1);
+          } 
+        }
+      }
+    });
+    
+    this.classroomService.setGrammarRules(this.classroomId, this.setGrammarErrors).subscribe();
+  }
+  
+  // select all grammar error checkboxes
+  selectAll(event) {
+    const checked = event.target.checked;
+    this.listOfGrammarErrors.forEach(item => item.checked = checked);
+  }
 
 }

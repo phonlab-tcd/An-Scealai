@@ -182,7 +182,8 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
                     res.end();
                 });
             } else {
-                res.status(404).json({message:"No audio feedback has been associated with this story"});
+                //res.status(404).json({"message" : "No audio feedback has been associated with this story"});
+                res.json(null);
             }
             
         } else {

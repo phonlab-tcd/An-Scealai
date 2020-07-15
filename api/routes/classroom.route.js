@@ -134,7 +134,7 @@ classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
             res.json(err);
         }
     })
-})
+});
 
 classroomRoutes.route('/').get((req, res) => {
     Classroom.find({}, (err, classrooms) => {
@@ -144,6 +144,29 @@ classroomRoutes.route('/').get((req, res) => {
             req.json({message: "No classrooms were found", status: 404})
         }
     })
-})
+});
+
+classroomRoutes.route('/setGrammarRules/:id').post((req, res) => {
+  Classroom.findById(req.params.id, (err, classroom) => {
+      if(err) {
+          res.status(400).json(err);
+      }
+      if(classroom) {
+          classroom.grammarRules = req.body.grammarRules;
+          classroom.save().then(classroom => {
+              res.status(200).json("Updated successfully");
+          }).catch(err => {
+              res.status(404).send(err);
+          });
+      }
+  });
+});
+
+classroomRoutes.route('/getGrammarRules/:id').get( (req, res) => {
+  Classroom.findById(req.params.id, (err, classroom) => {
+      if(err) res.json(err);
+      if(classroom) res.json(classroom.grammarRules);
+  });
+});
 
 module.exports = classroomRoutes;

@@ -149,6 +149,7 @@
     text-align: left;
     padding: 4px;
     overflow: auto;
+    white-space: pre-wrap;
     background-color: white;
     border-radius: 5px;
     margin: 8px;

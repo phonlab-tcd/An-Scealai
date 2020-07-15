@@ -4,4 +4,5 @@ export class Classroom {
     teacherId: string;
     title: string;
     code: string;
+    grammarRules: string[];
 }

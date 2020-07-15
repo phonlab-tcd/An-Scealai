@@ -4,19 +4,91 @@
       <!-- nav bar -->
         <div class="classHeader">
           <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> Class Statistics
+          <div class="headerIconContainer">
+            <div class="headerIconBtn" (click)="showErrorSelectionModal()"> Edit Grammar Errors <i class="fas fa-edit headerIcon"></i></div>
+          </div>
+        </div>
+        <!-- Edit grammar error selection container (when option selected)-->
+        <div class="{{errorModalClass}} modalContainer">
+            <div class="modalContent" *ngIf="classroom">
+              <label> <input type="checkbox" name="options" (change)="selectAll($event)"/> Select all </label>
+              <!-- containers for each set of grammar options -->
+              <div class="grammarOptions">
+                  <div>
+                    <div class="modalText"> General </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'GENERAL'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="modalText"> Word Choice </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'WORDCHOICE'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>              
+                  <div>
+                    <div class="modalText"> Unrecognised Word </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'UNRECOGNISEDWORD'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>                
+                  <div>
+                    <div class="modalText"> Prefix </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'PREFIX'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>              
+                  <div>
+                    <div class="modalText"> Lenition </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'LENITION'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>              
+                  <div>
+                    <div class="modalText"> Eclipsis </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'ECLIPSIS'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>              
+                  <div>
+                    <div class="modalText"> Language Specific </div>
+                    <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
+                        <label *ngIf="entry.type == 'SPECIFICLANGUAGE'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
+                            {{entry.error}} -- {{entry.description}}
+                        </label>
+                    </div>
+                  </div>
+              </div>
+              <!-- save button to check which grammar errors to use -->
+              <div>
+                  <button class="modalBtn createBtnGreen" (click)="hideErrorSelectionModal()">{{ts.l.save}}</button>
+              </div>
+            </div>
         </div>
         <!-- main body container -->
         <div class="contentBody">
           <!-- Container to list students along with their grammar errors -->
-          <div class="teacherAccountsContainer">
-            <div class="teacherAccountsDisplay">
-              <div class="teacherAccountsHeader">
+          <div class="infoContainer">
+            <div class="infoDisplay">
+              <div class="infoHeader">
                   Individual Student Statistics
               </div>
-              <div class="teacherAccountsBody">
+              <div class="infoBody">
                 <!-- activity cards -->
                 <div class="" *ngFor="let student of stats">
-                  <div class="activeTeacherCodeContainer eventContainer" >
+                  <div class="eventCard eventContainer">
                       <div class="eventHeader">
                           <b>{{student.studentUsername}}</b>
                       </div>
@@ -28,34 +100,28 @@
               </div>
             </div>
           </div>
-          
-          
-          <!-- Container to list students along with their grammar errors -->
-          <div class="teacherAccountsContainer">
-            <div class="teacherAccountsDisplay">
-              <div class="teacherAccountsHeader">
+          <!-- Container to list classroom errors and pie chart -->
+          <div class="infoContainer">
+            <div class="infoDisplay">
+              <div class="infoHeader">
                 Classroom Statistics
               </div>
-              <div class="teacherAccountsBody">
-                <div class="activeTeacherCodeContainer eventContainer">
+              <div class="infoBody">
+                <div class="eventCard eventContainer">
                     <div class="eventHeader">
-                        <b>Grammar Errors</b>
+                        <b>Total Grammar Errors</b>
                     </div>
                     <div class="eventBody mainEventBody" *ngFor="let entry of totalStats | keyvalue">
                       <div> {{entry.key}} : {{entry.value}}</div>
                     </div>
                     <!-- pie chart test -->
-                    <div id="divChart" class="divChart">
+                    <div>
                       <canvas id="statChart"> </canvas>
                     </div>
-
                 </div>
               </div>
             </div>
           </div>
-          <!-- Activity container -->
-        
         </div>
-
     </div>
 </div>
