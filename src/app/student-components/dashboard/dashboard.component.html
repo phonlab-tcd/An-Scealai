@@ -34,20 +34,20 @@
       <!-- story contents -->
       <div class="storyContainer" *ngIf="story">
         <!-- display story before grammar checked (i.e. writing mode)-->
-        <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading">
+        <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
           <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
         </div>
         <!-- display grammar loading -->
-        <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
+        <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !dictionaryVisible && grammarLoading">
             <div class="textContainer">
                 <div class="loaderContainer">
                     <b>{{ts.l.correcting_grammar}}</b>
                     <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
               </div>
-          </div>
+        </div>
           <!-- display story container after grammar checked -->
-        <div class="textFieldContainer"  *ngIf="!feedbackVisible && grammarChecked">
+        <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible && grammarChecked">
           <!-- dipslay chosen tag window -->
           <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times"></i></div></div>
           <div class="grammarMessageContainer {{grammarMessageClass}}">
@@ -86,17 +86,23 @@
           </div>
         </div>
         <!-- display story with feedback excluding audio feedback-->
-        <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
+        <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId && !dictionaryVisible">
           <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
           <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
           <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
         </div>
-        <!-- display story with feedback inclusing audio feedback -->
-        <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
+        <!-- display story with feedback including audio feedback -->
+        <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId && !dictionaryVisible">
           <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
           <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
           <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
           <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+        </div>
+        <!-- display dictionary-->
+        <div class="textFieldContainer" *ngIf="dictionaryVisible && !feedbackVisible">
+          <textarea class="dictionaryVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+          <div class="dictionaryHeader"><div>Dictionary</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
+          <iframe class="dictionary" src="https://www.teanglann.ie/en"></iframe>
         </div>
         <!-- options button -->
         <div class="footerBtnContainer">
@@ -109,6 +115,7 @@
         <div class="optionsBtn optionsPopupBtn" (click)="getFeedback()">{{ts.l.feedback}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></div>
         <div class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">{{ts.l.audio_check}}</div>
         <div class="optionsBtn optionsPopupBtn" (click)="runGramadoir()">{{ts.l.grammar_check}}</div>
+        <div class="optionsBtn optionsPopupBtn" (click)="showDictionary(); popupVisible = !popupVisible">Dictionary</div>
       </div>
       <!-- app-chatbot></app-chatbot -->
   </div>

@@ -14,12 +14,15 @@ export class LandingComponent implements OnInit {
     public ts : TranslationService) { }
 
   ngOnInit() {
-    if(this.auth.isLoggedIn()) {
+    if(this.auth.isLoggedIn()) {  
       if(this.auth.getUserDetails().role === 'STUDENT') {
         this.router.navigateByUrl('/contents');
       }
       if(this.auth.getUserDetails().role === 'TEACHER') {
         this.router.navigateByUrl('/teacher');
+      }
+      if(this.auth.getUserDetails().role === 'ADMIN') {
+        this.router.navigateByUrl('/admin');
       }
     }
   }

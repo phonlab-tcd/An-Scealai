@@ -13,6 +13,7 @@ import { AuthenticationService } from '../authentication.service';
 import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
+import { NotificationService } from '../notification-service.service';
 
 declare var MediaRecorder : any;
 
@@ -40,7 +41,7 @@ export class MessagesComponent implements OnInit {
   numberOfUnread: number = 0;
   totalNumberOfMessages: number = 0;
   deleteMode: Boolean = false;
-  toBeDeleted: String[] = [];
+  toBeDeleted: string[] = [];
   isFromAmerica: boolean = false;
   
   //used for creating a new message
@@ -85,7 +86,8 @@ export class MessagesComponent implements OnInit {
               private router: Router,
               private messageService: MessageService,
               protected sanitizer: DomSanitizer,
-              protected profileService: ProfileService) { }
+              protected profileService: ProfileService,
+              protected notificationService: NotificationService) { }
 
   
   ngOnInit() {
@@ -107,8 +109,9 @@ export class MessagesComponent implements OnInit {
         });
       });
       this.isStudent = true;
+      this.getMessages();
     }
-    this.getMessages();
+    
     
     // get date format for user 
     this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
@@ -121,7 +124,6 @@ export class MessagesComponent implements OnInit {
         this.isFromAmerica = false;
       }
     });
-    
   }
   
   /*
@@ -163,7 +165,21 @@ export class MessagesComponent implements OnInit {
   */
   getMessages() {  
     this.messageService.getMessagesForLoggedInUser().subscribe( (res: Message[]) =>{
-      this.receivedMessages = res;
+      this.receivedMessages = [];
+      if(this.auth.getUserDetails().role === "TEACHER") {
+        let messages = res;
+        for(let m of messages) {
+          for(let s of this.students) {
+            if(s._id === m.senderId) {
+              this.receivedMessages.push(m);
+            }  
+          }
+        }
+      }
+      else {
+          this.receivedMessages = res;
+      }
+      
       this.receivedMessages.sort((a, b) => (a.date > b.date) ? -1 : 1)
       this.numberOfUnread = this.messageService.getNumberOfUnreadMessages(this.receivedMessages);
       /*
@@ -203,11 +219,13 @@ export class MessagesComponent implements OnInit {
 
   /*
   * Loop through student ids in classroom object to get student objects
+  * Get the messages for the particular classroom 
   */
     getStudents() {
       for(let id of this.classroom.studentIds) {
         this.userService.getUserById(id).subscribe((res : User) => {
           this.students.push(res);
+          this.getMessages();
         });
       }
     }
@@ -238,7 +256,15 @@ export class MessagesComponent implements OnInit {
     this.messageService.markAsOpened(message._id).subscribe(() => {
       message.seenByRecipient = true;
     });
-
+    console.log("message to remove from notification: " + message._id);
+    
+    if(this.auth.getUserDetails().role === "TEACHER") {
+      this.notificationService.removeTeacherMessage(message.senderId);
+    }
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      this.notificationService.removeMessage(message);
+    }
+    
     if(message.audioId) {
       this.getMessageAudio(message._id);
       this.showAudio = true;
@@ -355,6 +381,7 @@ export class MessagesComponent implements OnInit {
       if(this.deleteMode && this.toBeDeleted.length > 0) {
         console.log("to be deleted: " + this.toBeDeleted);
         for(let id of this.toBeDeleted) {
+          this.notificationService.removeTeacherMessage(id);
           this.messageService.deleteMessage(id).subscribe(
             res => {
               console.log('Deleted: ', id);
@@ -370,13 +397,17 @@ export class MessagesComponent implements OnInit {
     }
 
   //add message to be deleted to an array given the message id as a paramter
-    toggleDelete(id: String) {
+    toggleDelete(id: string) {
       if(this.toBeDeleted.includes(id)) {
         var indexToRemove = this.toBeDeleted.indexOf(id);
         this.toBeDeleted.splice(indexToRemove, 1);
       } else {
         this.toBeDeleted.push(id);
       }
+    }
+    
+    resetMessages() {
+      this.notificationService.setNotifications();
     }
     
 

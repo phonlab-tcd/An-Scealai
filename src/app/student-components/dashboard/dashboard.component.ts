@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   storySaved: boolean;
   popupVisible: boolean;
   feedbackVisible: boolean;
+  dictionaryVisible: boolean;
   audioSource: SafeUrl;
   grammarChecked: boolean = false;
   tags: HighlightTag[] = [];
@@ -50,7 +51,7 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService, private router: Router,
     private engagement: EngagementService, private grammar: GrammarService,
     public ts : TranslationService, public statsService: StatsService,
-    public classroomService: ClassroomService) {}
+    public classroomService: ClassroomService,) {}
 
 /*
 * set the stories array of all the student's stories 
@@ -125,6 +126,11 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
+  
+  showDictionary() {
+    this.popupVisible = false;
+    this.dictionaryVisible = true;
+  }
 
 /*
 * Get audio feedback with function call 
@@ -190,7 +196,7 @@ export class DashboardComponent implements OnInit {
     this.grammarChecked = false;
     this.grammarLoading = true;
     this.tags = [];
-    this.filteredTags = new Map();
+    this.filteredTags.clear();
     this.chosenTag = null;
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
       this.tagSets = res;

@@ -8,6 +8,7 @@ import { EngagementService } from './engagement.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import { Message } from './message';
+import { User } from './user';
 import config from '../abairconfig.json';
 
 @Injectable({
@@ -63,7 +64,6 @@ export class MessageService {
   * Given a message id, change the seenByRecipient value of the message to true
   */
   markAsOpened(id): Observable<any> {
-    console.log("ID: "+ id);
     return this.http.post(this.baseUrl + "markAsOpened/" + id, {});
   }
   
@@ -80,6 +80,27 @@ export class MessageService {
   getNumberOfUnreadMessages(messages: Message[]): number {
     let sum: number = 0;
     for(let m of messages) {
+      if(!m.seenByRecipient) {
+        sum++;
+      }
+    }
+    return sum;
+  }
+  
+  /*
+  * Return the number of messages that have not yet been read for a given class
+  */
+  getNumberOfUnreadMessagesForClass(messages: Message[], studentIds: String[]): number {
+    let sum: number = 0;
+    let filteredMessages: Message[] = [];
+    for(let s of studentIds) {
+      for(let m of messages) {
+        if(s === m.senderId) {
+          filteredMessages.push(m);  
+        }
+      }
+    }
+    for(let m of filteredMessages) {
       if(!m.seenByRecipient) {
         sum++;
       }

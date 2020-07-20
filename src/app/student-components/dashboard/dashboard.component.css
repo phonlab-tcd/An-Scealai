@@ -105,6 +105,14 @@ background-color: lightblue;
     cursor: pointer;
 }
 
+.closeDictionaryBtn {
+    margin-left: auto;
+}
+
+.closeDictionaryBtn:hover {
+    cursor: pointer;
+}
+
 .saveBtn {
     font-size: 14pt;
     border-style: none;
@@ -502,6 +510,18 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     height: 100px;
 }
 
+.dictionaryVisibleTextfield {
+  width: 90%;
+  height: 160px;
+  resize: none;
+  z-index: 1;
+  color: #261500;
+  background: #f7f2e7;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+}
+
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
@@ -670,6 +690,23 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     align-items: column;
 }
 
+.dictionaryHeader {
+    width: 90%;
+    margin-left: 5%;
+    border-radius: 4px 4px 0px 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    align-items: column;
+}
+
+.dictionary {
+  width: 90%;
+  height: 160px;
+}
+
 .lds-grid {
     display: inline-block;
     position: relative;
@@ -737,4 +774,3 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       opacity: 0.5;
     }
   }
-  

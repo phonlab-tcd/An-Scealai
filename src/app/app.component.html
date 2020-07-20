@@ -38,10 +38,11 @@
             <!-- user buttons on right -->
             <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
                 <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
-                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 " (click)="showNotifications()">{{storiesForNotifications.length}}</div>
+                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 " (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
+                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>
             </div>
         </div>
-        <!-- notification container if button clicked-->
+        <!-- notification container for STUDENTS if button clicked-->
         <div *ngIf="notificationsShown && storiesForNotifications.length > 0" class="optionsPopupOld notifcationPopup">
             <div class="notificationsHeader">{{ts.l.new_feedback}}</div>
             <div class="notificationsBody">
@@ -49,7 +50,23 @@
                     {{story.title}}
                 </div>
             </div>
+            <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">New Messages</div>
+            <div class="notificationsBody">
+                <div *ngFor="let message of messagesForNotifications" class="notificationCard" (click)="goToMessages(message.senderId)">
+                    {{message.subject}}
+                </div>
+            </div>
         </div>
+        <!-- notification container for TEACHER messages if button clicked -->
+        <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notifcationPopup">
+          <div class="notificationsHeader">New Messages</div>
+          <div class="notificationsBody" *ngFor="let message of teacherMessagesForNotifications | keyvalue">
+              <div *ngIf="message.value > 0" class="notificationCard" (click)="goToMessages(message.key._id)">
+                  {{message.key.title}} -- {{message.value}}
+              </div>
+          </div>
+        </div>
+        
     </div>
     <!-- add component here given a specific route -->
     <div class="content">

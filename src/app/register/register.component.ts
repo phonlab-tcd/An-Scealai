@@ -25,6 +25,7 @@ export class RegisterComponent implements OnInit {
   usernameInput : FormControl;
   usernameClass : string;
   usernameErrorText : string;
+  checkeUsername: string;
 
   constructor(private auth: AuthenticationService, private router: Router,
               private engagement: EngagementService, public ts : TranslationService) { }
