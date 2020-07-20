@@ -6,7 +6,8 @@
     <div class="classHeader">
       <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> Messages ({{totalNumberOfMessages}})
       <div class="headerIconContainer">
-        <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
+        <div class="btn deleteBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
+        <button *ngIf="!createNewMessage" class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
         <div *ngIf="!createNewMessage" class="headerIconBtn" (click)="createNewMessage = true"> New message <i class="fas fa-plus"></i></div>
       </div>
     </div>
@@ -60,7 +61,7 @@
                <!-- Cancel or send audio -->
                <div class="modalBtnContainer">
                    <button type="button" class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button>
-                   <button type="button" class="modalBtn createBtnGreen" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> add to message </button>
+                   <button type="button" class="modalBtn createBtnGreen" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> Add to message </button>
                </div>
            </div>
          </div>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
+import { NotificationService } from '../../notification-service.service';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -16,7 +17,8 @@ export class TeacherDashboardComponent implements OnInit {
   constructor(private classroom: ClassroomService,
               private auth: AuthenticationService,
               private router: Router,
-              public ts : TranslationService) { }
+              public ts : TranslationService,
+              public ns: NotificationService) { }
               
   
   classrooms : Observable<Classroom[]>;
@@ -27,6 +29,7 @@ export class TeacherDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.classrooms = this.getClassrooms();
+    this.ns.setNotifications();
   }
 
   getClassrooms() : Observable<Classroom[]> {

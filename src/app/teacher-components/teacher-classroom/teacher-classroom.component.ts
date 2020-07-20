@@ -30,6 +30,7 @@ export class TeacherClassroomComponent implements OnInit {
   shareModalClass : string = "hidden";
   deleteModalClass : string = "hidden";
   students : User[] = [];
+  studentIds: String[] = [];
   errorText : string;
   registrationError : boolean = false;
   newTitle: string;
@@ -38,10 +39,6 @@ export class TeacherClassroomComponent implements OnInit {
 
   ngOnInit() {
     this.getClassroom();
-    this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
-      this.messagesForNotifications = res;
-      this.unreadMessages = this.messageService.getNumberOfUnreadMessages(this.messagesForNotifications);
-    });
   }
 
 /*
@@ -73,13 +70,19 @@ export class TeacherClassroomComponent implements OnInit {
 
 /*
 * Loop through student ids in classroom object to get student objects
+* Use the message service to get number of unread messages for the classroom
 */
   getStudents() {
     for(let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe((res : User) => {
         this.students.push(res);
+        this.studentIds.push(res._id);
       });
     }
+    this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
+      this.messagesForNotifications = res;
+      this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.studentIds);
+    });
   }
 
 /*

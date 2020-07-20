@@ -43,12 +43,12 @@
                   <!--information details -->
                     <div class="userInfo">{{ts.l.title}} <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
                     <div class="userInfo">{{ts.l.story_author}} <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
-                    <div *ngIf="isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'MM/dd/yyyy, hh:mm'}}</textarea></div>
-                    <div *ngIf="!isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'dd/MM/yyyy, hh:mm'}}</textarea></div>
+                    <div *ngIf="isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'MM/dd/yyyy, hh:mm aa'}}</textarea></div>
+                    <div *ngIf="!isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'dd/MM/yyyy, hh:mm aa'}}</textarea></div>
                     <div class="userInfo">{{ts.l.dialect}} <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
                     <!-- feedback container -->
                     <div class="feedbackContainer">
-                      <div class="feedbackHeader">{{ts.l.feedback}}</div>
+                      <div class="feedbackHeaderTeacherStory">{{ts.l.feedback}}</div>
                       <div class="feedbackBody" *ngIf="story">
                           <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
                         </div>

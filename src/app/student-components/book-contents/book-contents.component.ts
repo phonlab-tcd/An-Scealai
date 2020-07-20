@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
+import { NotificationService } from '../../notification-service.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -30,7 +31,8 @@ export class BookContentsComponent implements OnInit {
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService, private router: Router,
-    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService ) { }
+    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService,
+    private ns: NotificationService) { }
 
 /*
 * Set story array of stories for logged in user
@@ -46,6 +48,7 @@ export class BookContentsComponent implements OnInit {
     this.userId = this.auth.getUserDetails()._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
+    this.ns.setNotifications();
     
     //see if student is enrolled in a class (if not the case, hide message feature in html)
     this.classroomService.getClassroomOfStudent(this.userId).subscribe( (res) => {

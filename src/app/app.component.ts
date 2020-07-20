@@ -4,6 +4,8 @@ import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStar
 import { AuthenticationService } from './authentication.service';
 import { StoryService } from './story.service';
 import { Story } from './story';
+import { Message } from './message';
+import { Classroom } from './classroom';
 import { NotificationService } from './notification-service.service';
 import { EngagementService } from './engagement.service';
 import { TranslationService } from './translation.service';
@@ -21,8 +23,11 @@ export class AppComponent {
   checkVal: boolean = false;
   notificationsShown : boolean = false;
   storiesForNotifications : Story[] = [];
+  messagesForNotifications: Message[] = [];  
+  teacherMessagesForNotifications: Map<Classroom, number> = new Map();
   wasInside : boolean = false;
   currentUser: string = '';
+  teacherMessagesSum: number = 0;
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
               private storyService : StoryService, private notificationSerivce : NotificationService,
@@ -38,11 +43,35 @@ export class AppComponent {
 */
   ngOnInit() {
     this.ts.initLanguage();
+    this.notificationSerivce.storyEmitter.subscribe( (res) => {
+      this.storiesForNotifications = res;
+      console.log(this.storiesForNotifications);
+    });
+
+    this.notificationSerivce.messageEmitter.subscribe( (res) => {
+      this.messagesForNotifications = res;
+      console.log(this.messagesForNotifications);
+    });
+  
+    this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
+      this.teacherMessagesForNotifications = res;
+      console.log(this.teacherMessagesForNotifications);
+      this.teacherMessagesSum = 0;
+      for (let entry of Array.from(this.teacherMessagesForNotifications.entries())) {
+        this.teacherMessagesSum += entry[1];
+      }
+      console.log(this.teacherMessagesSum);
+    });
+    
+    if(this.auth.isLoggedIn()){
+      console.log(this.auth.getUserDetails().username);
+    }
+    /*
     this.notificationSerivce.getStories().subscribe((res: Story[]) => {
       this.storiesForNotifications = res;
       console.log(this.storiesForNotifications); 
     });
-    console.log(this.auth.getUserDetails().username);
+    */
   }
   
 /*
@@ -57,7 +86,6 @@ export class AppComponent {
     }
   }
   
-
 // Set value to show notifications to true
   showNotifications() {
     this.notificationsShown = !this.notificationsShown;
@@ -67,6 +95,11 @@ export class AppComponent {
   goToStory(id : string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/dashboard/' + id);
+  }
+  
+  goToMessages(id: string) {
+    this.notificationsShown = false;
+    this._router.navigateByUrl('/messages/' + id);
   }
 
 /*

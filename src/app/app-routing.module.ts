@@ -38,6 +38,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
+import { NotificationService } from './notification-service.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { CanDeactivateGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
@@ -142,6 +143,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [ NotificationService ]
 })
 export class AppRoutingModule { }
