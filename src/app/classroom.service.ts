@@ -23,6 +23,10 @@ export class ClassroomService {
   getClassroomsForTeacher(teacherId: string) : Observable<any> {
     return this.http.get(this.baseUrl + "forTeacher/" + teacherId);
   }
+  
+  deleteClassroomsForTeachers(teacherId: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "deleteAllClassrooms/" + teacherId);
+  }
 
   getClassroom(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + id);

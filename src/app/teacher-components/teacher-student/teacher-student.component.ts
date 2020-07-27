@@ -42,7 +42,7 @@ export class TeacherStudentComponent implements OnInit {
             this.stories = data, this.filterFeedback(data);
           });
         });
-      })
+      });
     }
     
     filterFeedback(data: Story[]) {

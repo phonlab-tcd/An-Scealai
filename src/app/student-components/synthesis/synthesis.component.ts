@@ -27,9 +27,13 @@ export class SynthesisComponent implements OnInit {
   sectionSplit : string = "paragraph";
   audioTimeouts = [];
 
+/*
+* Get paragaph and sentence data from the synthesiser 
+*/
   ngOnInit() {
     this.getStory().then(() => {
       this.storyService.synthesise(this.story._id).subscribe((res) => {
+        // loop through the html of the synthesis response and create sentences/paragraph instances
         for(let p of res.html) {
           let paragraphStr: string = "";
           let paragraphObject = new Paragraph();
@@ -47,6 +51,7 @@ export class SynthesisComponent implements OnInit {
           this.paragraphs.push(paragraphObject);
         }
         let j = 0;
+        // loop through the audio of the synthesis response and add to sentence/paragraph instances
         for(let i in res.audio) {
           this.paragraphs[i].audioUrl = res.audio[i];
           this.paragraphs[i].index = i;
@@ -58,11 +63,13 @@ export class SynthesisComponent implements OnInit {
         this.engagement.addEventForLoggedInUser(EventType["SYNTHESISE-STORY"], this.story);
         this.audioFinishedLoading = true;
         this.paragraphMode();
-        
       });
     });
   }
 
+/*
+* Set the html format for paragraph mode
+*/
   paragraphMode() {
     this.sectionSplit = "paragraph";
     this.pauseAllAudio();
@@ -84,6 +91,9 @@ export class SynthesisComponent implements OnInit {
     }, 1000);
   }
 
+/*
+* Set the html for sentence mode
+*/
   sentenceMode() {
     this.sectionSplit = "sentence";
     this.pauseAllAudio();
@@ -122,6 +132,9 @@ export class SynthesisComponent implements OnInit {
     this.audioTimeouts.push(t);
   }
 
+/*
+* Get story using story service
+*/
   getStory() {
     return new Promise((resolve, reject) => {
         this.getParamsFromUrl().then((params) => {
@@ -132,7 +145,10 @@ export class SynthesisComponent implements OnInit {
       });
     });
   }
-
+  
+/*
+* Get story id from url parameters (function called in getStory())
+*/
   getParamsFromUrl() {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
@@ -206,6 +222,8 @@ export class SynthesisComponent implements OnInit {
   }
 
 }
+
+/***************************** ASSOCIATED CLASSES *****************************/
 
 class Paragraph {
     index: string;

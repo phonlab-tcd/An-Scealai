@@ -30,6 +30,7 @@ export class TeacherStatsComponent implements OnInit {
   listOfGrammarErrors: any;
   setGrammarErrors: string[] = [];
   wasInside: boolean = false;
+  dateToDisplay: string = "";
   
 
   constructor(private classroomService: ClassroomService, private auth: AuthenticationService, 
@@ -121,15 +122,17 @@ export class TeacherStatsComponent implements OnInit {
         for(let error of Object.entries(entry.grammarErrors)) {
           
           let originalAmount = this.totalStats.get(error[0]);
+          let newArrayOfValues = error[1];
           //console.log("type of original amount: " +  originalAmount);
         //  console.log("type of map object: " + typeof );
           //console.log("original amount: " + originalAmount);
         //  console.log("error[1]: " + error[1]);
-          if(originalAmount == null || isNaN(originalAmount)) {
-            this.totalStats.set(error[0], error[1]);
+        
+          if(originalAmount == null) {
+            this.totalStats.set(error[0], newArrayOfValues[newArrayOfValues.length-1]);
           }
           else {
-            let newAmount = (originalAmount + error[1]);
+            let newAmount = (originalAmount + newArrayOfValues[newArrayOfValues.length-1]);
             //console.log("New amount: " + newAmount);
             this.totalStats.set(error[0], newAmount);
           }
@@ -217,6 +220,12 @@ export class TeacherStatsComponent implements OnInit {
   selectAll(event) {
     const checked = event.target.checked;
     this.listOfGrammarErrors.forEach(item => item.checked = checked);
+  }
+  
+  hoverDate(stamps, key) {
+    console.log(stamps);
+    console.log(key);
+    this.dateToDisplay = stamps.get(key).toString();
   }
 
 }

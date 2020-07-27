@@ -3,5 +3,6 @@ export class StudentStats {
   studentId: string;
   classroomId: string;
   studentUsername: string;
-  grammarErrors: Map<string, number> = new Map();
+  grammarErrors: Map<string, number[]> = new Map();
+  timeStamps: Map<string, Date[]> = new Map();
 }

@@ -13,9 +13,14 @@ let StudentStats = new Schema({
     },
     grammarErrors: {
         type: Map,
-        of: Number,
+        of: [Number],
         default: {}
-    }
+    },
+    timeStamps: {
+        type: Map,
+        of: [Date],
+        default: {}
+    },
 }, {
     collection: 'studentStats'
 });

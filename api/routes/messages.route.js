@@ -29,7 +29,7 @@ messageRoutes.route('/create').post(function (req, res) {
     });
 });
 
-// Get messages
+// Get messages 
 messageRoutes.route('/viewMessges/:id').get(function(req, res) {
     Message.find({recipientId:req.params.id}, (err, message) => {
         if(err) {
@@ -64,7 +64,15 @@ messageRoutes.route('/markAsOpened/:id').post((req, res) => {
 
 // Delete message by ID
 messageRoutes.route('/delete/:id').get(function(req, res) {
-    Message.findOneAndRemove({"id": req.params.id}, function(err, story) {
+    Message.findOneAndRemove({"id": req.params.id}, function(err, message) {
+        if(err) res.json(err);
+        else res.json("Successfully removed");
+    });
+});
+
+// Delete all messages with recipient id
+messageRoutes.route('/deleteAllMessages/:userId').get(function(req, res) {
+    Message.deleteMany({"recipientId": req.params.userId}, function(err, message) {
         if(err) res.json(err);
         else res.json("Successfully removed");
     });
@@ -151,7 +159,36 @@ messageRoutes.route('/messageAudio/:id').get((req, res) => {
             res.status(404).json({"message" : "Message does not exist"});
         }
     });
-})
+});
+
+// Delete audio message
+messageRoutes.route('/deleteMessageAudio/:id').get((req, res) => {
+    Message.findOne({id : req.params.id}, (err, message) => {
+        if(err) return res.json(err);
+        if(message) {
+          if(message.audioId) {
+              var audioId;
+              try {
+                  audioId = new ObjectID(message.audioId);
+              } catch(err) {
+                  return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
+              }
+
+              let bucket = new mongodb.GridFSBucket(db, {
+                  bucketName: 'audioMessage'
+              });
+          
+              let downloadStream = bucket.delete(audioId);
+              res.status(200).json({"message" : "Audio deleted successfully"});
+              
+          } else {
+              res.status(404).json({message:"No audio feedback has been associated with this message"});
+          }
+        } else {
+            res.status(404).json({"message" : "Message does not exist"});
+        }
+    });
+});
 
 
 module.exports = messageRoutes;

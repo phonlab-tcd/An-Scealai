@@ -58,11 +58,15 @@ export class StoryService {
   }
 
   updateStory(data, id) : Observable<any> {
-    return this.http.post(this.baseUrl + 'update/'+id, data);
+    return this.http.post(this.baseUrl + 'update/' +id, data);
   }
 
   deleteStory(id) {
-    return this.http.get(this.baseUrl + 'delete/'+id);
+    return this.http.get(this.baseUrl + 'delete/' + id);
+  }
+  
+  deleteAllStories(author) {
+    return this.http.get(this.baseUrl + 'deleteAllStories/' + author);
   }
 
   addFeedback(id, feedbackText: string) : Observable<any> {

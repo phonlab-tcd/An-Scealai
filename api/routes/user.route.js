@@ -63,4 +63,12 @@ userRoutes.route('/getAllUsers').get((req, res) => {
     });
 });
 
+// Delete user by username
+userRoutes.route('/deleteUser/:username').get(function(req, res) {
+    User.findOneAndRemove({"username": req.params.username}, function(err, user) {
+        if(err) res.json(err);
+        else res.json("Successfully removed user");
+    });
+});
+
 module.exports = userRoutes;

@@ -270,6 +270,7 @@ border-radius: 5px 5px 5px 5px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  text-align: left;
   background-color: #70a87f;
   display: flex;
   width: 90%;

@@ -129,7 +129,9 @@ export class DashboardComponent implements OnInit {
   
   showDictionary() {
     this.popupVisible = false;
+    this.feedbackVisible = false;
     this.dictionaryVisible = true;
+    
   }
 
 /*
@@ -139,6 +141,7 @@ export class DashboardComponent implements OnInit {
 */
   getFeedback() {
     this.popupVisible = false;
+    this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
@@ -281,7 +284,6 @@ export class DashboardComponent implements OnInit {
         }
         // otherwise check against all grammar errors 
         else {
-          console.log("this should be read");
           if(this.filteredTags.has(rule)) {
             values = this.filteredTags.get(rule);
             values.push(tag);
@@ -304,7 +306,8 @@ export class DashboardComponent implements OnInit {
 */
   updateStats() {
     console.log("Update grammar errors");
-    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags).subscribe();
+    let updatedTimeStamp = new Date();
+    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags, updatedTimeStamp).subscribe();
   }
 
 // set wasInside variable to true when user clicks

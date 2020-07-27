@@ -40,4 +40,12 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
     });
 });
 
+// Delete profile by user ID
+profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
+    Profile.findOneAndRemove({"userId": req.params.id}, function(err, profile) {
+        if(err) res.json(err);
+        else res.json("Successfully removed");
+    });
+});
+
 module.exports = profileRoutes;

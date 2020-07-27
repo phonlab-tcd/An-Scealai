@@ -38,13 +38,14 @@
             <!-- user buttons on right -->
             <div *ngIf="auth.isLoggedIn()" class="rightNavBtn">
                 <a routerLink="/profile" class="navBtn" (click)="changeCheck()">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
-                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 " (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
+                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 && messagesForNotifications" (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
+                <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications.length == 0 && messagesForNotifications.length > 0 " (click)="showNotifications()">{{messagesForNotifications.length}}</div>
                 <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>
             </div>
         </div>
         <!-- notification container for STUDENTS if button clicked-->
-        <div *ngIf="notificationsShown && storiesForNotifications.length > 0" class="optionsPopupOld notifcationPopup">
-            <div class="notificationsHeader">{{ts.l.new_feedback}}</div>
+        <div *ngIf="notificationsShown && (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)" class="optionsPopupOld notifcationPopup">
+            <div *ngIf="storiesForNotifications.length > 0" class="notificationsHeader">{{ts.l.new_feedback}}</div>
             <div class="notificationsBody">
                 <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
                     {{story.title}}

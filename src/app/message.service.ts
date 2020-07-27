@@ -107,15 +107,35 @@ export class MessageService {
     }
     return sum;
   }
-  
+
+  /*
+  * Get audio file from DB for assoiaated message
+  */
   getMessageAudio(id) : Observable<any> {
     return this.http.get(this.baseUrl + "messageAudio/" + id, {responseType: "blob"});
   }
-  
+
+  /*
+  * Add an audio file to the DB for associated message
+  */
   addMessageAudio(id, audioBlob: Blob) : Observable<any> {
     let formData = new FormData();
     formData.append('audio', audioBlob);
     return this.http.post(this.baseUrl + "addMessageAudio/" + id, formData);
+  }
+  
+  /*
+  * Delete all messages for given recipient id
+  */  
+  deleteAllMessages(userId): Observable<any> {
+    return this.http.get(this.baseUrl + 'deleteAllMessages/' + userId);
+  }
+
+  /*
+  * Delete audio file associated with message
+  */  
+  deleteMessageAudio(id: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'deleteMessageAudio/' + id);
   }
 
 }

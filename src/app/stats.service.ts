@@ -38,10 +38,10 @@ export class StatsService {
 /*
 * Update the grammar error map for the stat object of a given student
 */
-  updateGrammarErrors(id: string, data): Observable<any> {
+  updateGrammarErrors(id: string, data, updatedTimeStamp: Date): Observable<any> {
     console.log("errors to add");
     console.log(data);
-    return this.http.post(this.baseUrlStudents + 'updateGrammarErrors/' + id, data);
+    return this.http.post(this.baseUrlStudents + 'updateGrammarErrors/' + id + '/' + updatedTimeStamp, data);
   }
 
 /*

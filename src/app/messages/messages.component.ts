@@ -99,25 +99,25 @@ export class MessagesComponent implements OnInit {
       this.getClassroom();
       this.teacherId = this.auth.getUserDetails()._id;
     }
-    else {
+    if(this.auth.getUserDetails().role === "STUDENT") {
       this.studentId = this.auth.getUserDetails()._id;
       this.classroomService.getClassroomOfStudent(this.studentId).subscribe((res: Classroom) => {
         this.classroom = res;
         this.teacherId = this.classroom.teacherId;
+        this.getMessages();
+        
         this.userService.getUserById(this.teacherId).subscribe( (res) => {
           this.teacherName = res.username;
         });
       });
       this.isStudent = true;
-      this.getMessages();
     }
-    
     
     // get date format for user 
     this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
       let p = res.profile;
       let country = p.country;
-      if(country == "United States of America" || country == "America") {
+      if(country == "United States of America" || country == "America" || country == "USA" || country == "United States") {
         this.isFromAmerica = true;
       }
       else {
@@ -129,33 +129,53 @@ export class MessagesComponent implements OnInit {
   /*
   * Set remaining message fields that were not filled with the form 
   * Use message service to send message to the DB
+  * Add audio file to DB if audio taken
   */
   sendMessage() {
     this.message.id = uuid();
     this.message.date = new Date();
     this.message.seenByRecipient = false;
     this.message.senderUsername = this.auth.getUserDetails().username;
-
+    let ids: string[] = [];
+    
     if(this.isTeacher) {
       this.message.senderId = this.teacherId;
+      if(this.message.recipientId === this.classroom._id) {
+        for(let id of this.classroom.studentIds) {
+          this.message.recipientId = id;
+          this.message.id = uuid();
+          ids.push(this.message.id);
+          this.messageService.saveMessage(this.message);
+        }
+      }
+      else {
+        this.messageService.saveMessage(this.message);
+        ids.push(this.message.id);
+      }
     }
+    
     if(this.isStudent) {
       this.message.senderId = this.studentId;
       this.message.recipientId = this.teacherId;
+      this.messageService.saveMessage(this.message);
+      ids.push(this.message.id);
     }
-
-    this.messageService.saveMessage(this.message);
-    // add audio file to database if recorded
+    
+    //Add audio to DB if taken
     if(this.canSendAudio) {
-      this.messageService.getMessageById(this.message.id).subscribe((res) => {
-        this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
-          this.hideModal();
-        }, (err) => {
-          this.errorText = err.message;
-          this.registrationError = true;
-        });
-      })
-      
+      for(let id of ids) {
+        console.log("id: " + id);
+        this.messageService.getMessageById(id).subscribe((res) => {
+          this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
+            console.log("audio message sent to : " + id);
+            console.log(this.blob);
+            this.hideModal();
+          }, (err) => {
+            this.errorText = err.message;
+            this.registrationError = true;
+          });
+        })
+      }
     }
     this.createNewMessage = false;
   }
@@ -166,29 +186,24 @@ export class MessagesComponent implements OnInit {
   getMessages() {  
     this.messageService.getMessagesForLoggedInUser().subscribe( (res: Message[]) =>{
       this.receivedMessages = [];
-      if(this.auth.getUserDetails().role === "TEACHER") {
+      if(this.isTeacher) {
         let messages = res;
         for(let m of messages) {
-          for(let s of this.students) {
-            if(s._id === m.senderId) {
+          for(let s of this.classroom.studentIds) {
+            if(s === m.senderId) {
               this.receivedMessages.push(m);
-            }  
-          }
+            }
+          }  
         }
       }
       else {
-          this.receivedMessages = res;
+        this.receivedMessages = res;
       }
-      
       this.receivedMessages.sort((a, b) => (a.date > b.date) ? -1 : 1)
       this.numberOfUnread = this.messageService.getNumberOfUnreadMessages(this.receivedMessages);
-      /*
-      if(this.receivedMessages.length > 0) {
-        this.messageContent = this.receivedMessages[0].text;
-      }
-      */
-      this.totalNumberOfMessages = this.receivedMessages.length;
+      this.totalNumberOfMessages = this.receivedMessages.length; 
     });
+    
   }
   
   /*
@@ -206,12 +221,14 @@ export class MessagesComponent implements OnInit {
   /*
   * Get classroom id with function and call getClassroom with classroom service
   * call function to get list of students
+  * Get the messages for the particular classroom by calling getMessages function
   */
     getClassroom() {
       this.getClassroomId().then((params) => {
         let id: string = params.id.toString();
         this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
           this.classroom = res;
+          this.getMessages();
           this.getStudents();
         });
       });
@@ -219,13 +236,11 @@ export class MessagesComponent implements OnInit {
 
   /*
   * Loop through student ids in classroom object to get student objects
-  * Get the messages for the particular classroom 
   */
     getStudents() {
       for(let id of this.classroom.studentIds) {
         this.userService.getUserById(id).subscribe((res : User) => {
           this.students.push(res);
-          this.getMessages();
         });
       }
     }
@@ -238,7 +253,7 @@ export class MessagesComponent implements OnInit {
       this.createNewMessage = false;
     }
     else {
-      if(this.auth.getUserDetails().role === "TEACHER") {
+      if(this.isTeacher) {
         this.router.navigateByUrl(`teacher/classroom/${this.classroom._id}`);
       }
       else {
@@ -251,31 +266,32 @@ export class MessagesComponent implements OnInit {
   * Set the parameters for showing the message body
   */
   showMessageBody(message: Message) {
-    this.messageContent = message.text;
-    this.numberOfUnread--;
-    this.messageService.markAsOpened(message._id).subscribe(() => {
-      message.seenByRecipient = true;
-    });
-    console.log("message to remove from notification: " + message._id);
-    
-    if(this.auth.getUserDetails().role === "TEACHER") {
-      this.notificationService.removeTeacherMessage(message.senderId);
-    }
-    if(this.auth.getUserDetails().role === "STUDENT") {
-      this.notificationService.removeMessage(message);
-    }
-    
-    if(message.audioId) {
-      this.getMessageAudio(message._id);
-      this.showAudio = true;
-    }
-    else {
-      this.showAudio = false;
+    if(message) {
+      this.messageContent = message.text;
+      this.numberOfUnread--;
+      this.messageService.markAsOpened(message._id).subscribe(() => {
+        message.seenByRecipient = true;
+      });
+      
+      if(this.isTeacher) {
+        this.notificationService.removeTeacherMessage(message.senderId);
+      }
+      if(this.isStudent) {
+        this.notificationService.removeMessage(message);
+      }
+      
+      if(message.audioId) {
+        this.getMessageAudio(message._id);
+        this.showAudio = true;
+      }
+      else {
+        this.showAudio = false;
+      }
     }
   }
   
   /*
-  * get audio message from the database using the message service 
+  * get audio message from the database using the message service and message id
   */
   getMessageAudio(id: string) {
     this.messageService.getMessageAudio(id).subscribe((res) => {
@@ -359,6 +375,15 @@ export class MessagesComponent implements OnInit {
     showModal() {
       this.modalClass = "visibleFade";
     }
+    
+  // clear out audio source if it exists and close new messsage
+    resetForm() {
+      if(this.audioSource) {
+        this.audioSource = !this.audioSource;
+        this.chunks = [];
+      }
+      this.createNewMessage = false;
+    }
 
   // change the css class to hide the recording container 
     hideModal() {
@@ -381,13 +406,17 @@ export class MessagesComponent implements OnInit {
       if(this.deleteMode && this.toBeDeleted.length > 0) {
         console.log("to be deleted: " + this.toBeDeleted);
         for(let id of this.toBeDeleted) {
-          this.notificationService.removeTeacherMessage(id);
+          this.messageService.deleteMessageAudio(id).subscribe( (res) => {
+            console.log("Audio deleted: " + id);
+          });
+        
           this.messageService.deleteMessage(id).subscribe(
             res => {
               console.log('Deleted: ', id);
               this.ngOnInit();
             }
-          )
+          );
+        
         }
       } else if(this.deleteMode && this.toBeDeleted.length === 0) {
         this.deleteMode = false;

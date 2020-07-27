@@ -36,39 +36,81 @@ studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
 });
 
 /*
-* Update a student's grammar error count given user id
+* Update a student's grammar error count and error time stamps given user id
+* Loop through each error currently recorded in the DB and see if the error matches
+* one of the new errors given. If a match is found, entry is deleted.  Any left over
+* entries are then added as new errors to the DB
+* Different cases: 
+*   Case 1) If new error matches DB error => add new count if not the same as previous
+*   Case 2) If DB has had error before not error has been resolved => add a 0 to previous count
+*   Case 3) If DB has not seen this error => add it and its count to the DB
 */
-studentStatsRoutes.route('/updateGrammarErrors/:id').post(function (req, res) {
+studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(function (req, res) {
     StudentStats.findOne({"studentId": req.params.id}, function(err, stat) {
         if(err) res.json(err);
         if(stat === null) {
             console.log("stat is null!");
         } else {
-          //loop through param map input and update stats map where the keys match
-          // (a particular grammar error)
-          console.log(req.body);
-          for(let entry of req.body) {
-            let originalAmount = parseInt(stat.grammarErrors.get(entry[0]));
-            let amountToAdd = parseInt(entry[1].length);
-            console.log("Original amount: " + originalAmount);
-            console.log("Amount to add : " + amountToAdd);
-            //calculate number of a particular grammar error 
-            if(originalAmount == null || isNaN(originalAmount)) {
-              stat.grammarErrors.set(entry[0], amountToAdd);
+          let newErrors = Object.entries(req.body);
+          console.log(newErrors);
+          console.log(stat.grammarErrors);
+          // loop through db errors
+          for(let entry of stat.grammarErrors) {
+            let originalAmount = entry[1];
+            let dateArray = [];
+            let errorFound = false;
+            // loop through new errors
+            for(let i = 0; i < newErrors.length; i++) {
+              if(entry[0] === newErrors[i][1][0]) {
+                errorFound = true;
+                console.log("original amount: " + originalAmount[originalAmount.length -1]);
+                console.log("amount to add: " + newErrors[i][1][1].length);
+                // Case 1
+                if(originalAmount[originalAmount.length -1] !== newErrors[i][1][1].length) {
+                  originalAmount.push(newErrors[i][1][1].length);
+                  stat.grammarErrors.set(entry[0], originalAmount);
+                  dateArray = stat.timeStamps.get(entry[0]);
+                  dateArray.push(req.params.updatedTimeStamp);
+                  stat.timeStamps.set(entry[0], dateArray);
+                }
+                // delete new error from array to speed up process
+                const index = newErrors.indexOf(newErrors[i]);
+                if (index > -1) {
+                  newErrors.splice(index, 1);
+                  console.log("entry deleted");
+                }
+              }
             }
-            else {
-              let newAmount = originalAmount + amountToAdd;
-              stat.grammarErrors.set(entry[0], newAmount);
+            // Case 2
+            if(!errorFound && (originalAmount[originalAmount.length -1] !== 0)) {
+              originalAmount.push(0);
+              stat.grammarErrors.set(entry[0], originalAmount);
+              dateArray = stat.timeStamps.get(entry[0]);
+              dateArray.push(req.params.updatedTimeStamp);
+              stat.timeStamps.set(entry[0], dateArray);
+              errorFound = false;
             }
-            console.log("New amount: " + stat.grammarErrors.get(entry[0]));
+          }
+          // Case 3
+          for(let i = 0; i < newErrors.length; i++) {
+              originalAmount = [];
+              originalAmount.push(newErrors[i][1][1].length);
+              stat.grammarErrors.set(newErrors[i][1][0], originalAmount);
+              dateArray = [];
+              dateArray.push(req.params.updatedTimeStamp);
+              stat.timeStamps.set(newErrors[i][1][0], dateArray);
+              console.log("new error entry added");
           }
           
+          console.log("Updated errors in db: ");
+          console.log(stat.grammarErrors);
+          console.log(stat.timeStamps);
+
           stat.save().then(stat => {
               res.json('Update complete');
           }).catch(err => {
               res.status(400).send("Unable to update");
-          });
-      
+          });  
         }
     });
 });

@@ -39,8 +39,8 @@
         <div class="backArrow" routerLink="/teacher/dashboard"><i class="fas fa-arrow-left"></i></div>
         {{classroom?.title}}
         <div class="headerIconContainer">
-          <div class="headerIconBtn" (click)="goToMessages()"> Messages <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>
-          <div class="headerIconBtn" (click)="goToStats()">Stats <i class='fas fa-calculator'></i></div>
+          <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToMessages()"> Messages <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>
+          <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToStats()">Stats <i class='fas fa-calculator'></i></div>
           <div class="headerIconBtn" (click)="showShareModal()">{{ts.l.share_code}}<i class="fas fa-share-alt headerIcon"></i></div>
           <div class="headerIconBtn" (click)="showModal()">{{ts.l.edit}} <i class="fas fa-edit headerIcon"></i></div>
           <div class="headerIconBtn" (click)="showDeleteModal()">{{ts.l.delete}} <i class="fas fa-trash-alt headerIcon"></i></div>

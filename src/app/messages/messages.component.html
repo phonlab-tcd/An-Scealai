@@ -6,7 +6,7 @@
     <div class="classHeader">
       <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> Messages ({{totalNumberOfMessages}})
       <div class="headerIconContainer">
-        <div class="btn deleteBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
+        <div *ngIf="!createNewMessage" class="btn deleteBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
         <button *ngIf="!createNewMessage" class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
         <div *ngIf="!createNewMessage" class="headerIconBtn" (click)="createNewMessage = true"> New message <i class="fas fa-plus"></i></div>
       </div>
@@ -15,18 +15,19 @@
 
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
+      <div class="messagesContainerHeader"> <div>From</div> <div> Subject </div> <div> Date </div> </div>
       <div *ngIf="receivedMessages.length > 0" class="messageList">
         <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);"> 
-          <div class="messageEntries"> 
+        <!--  <div class="messageEntries"> -->
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
               <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle' style='font-size:10px;color:#70a87f;padding-right:5px'></i></div>
               <div class="sender"> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>
-            <div *ngIf="!isFromAmerica" class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
-            <div *ngIf="isFromAmerica" class="date">{{message.date | date:'MM/dd/yyyy h:mm aa' }} </div>
-          </div>
+            <div *ngIf="!isFromAmerica">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
+            <div *ngIf="isFromAmerica">{{message.date | date:'MM/dd/yyyy h:mm aa' }} </div> 
+        <!--  </div> -->
         </div>
       </div>
       <div *ngIf="receivedMessages.length == 0" class="messageList"> You have no messages
@@ -81,18 +82,18 @@
             </div>
           </div>
           <!-- subject field -->
-          <div class="subject">
+          <div class="subjectNewMessage">
             <label> Subject </label>
             <input type="text" name="subject" id="subject" size="80" [(ngModel)]="message.subject" required>
           </div>
           <!-- message body -->
-          <div class="messageBody">
+          <div class="newMessageBody">
             <textarea class="textField" name="text" value="{{messageText}}" [(ngModel)]="message.text" (input)="messageSent = false" required></textarea>
           </div>
           <!-- buttons -->
           <div class="bottomButtons">
             <div class="">
-                <button class="headerIconBtn" (click)="messageForm.reset(); createNewMessage = false;"> {{ts.l.cancel}} </button>
+                <button class="headerIconBtn" (click)="messageForm.reset(); resetForm();"> {{ts.l.cancel}} </button>
             </div>
             <!-- audio message player -->
             <div class="audioReplay">

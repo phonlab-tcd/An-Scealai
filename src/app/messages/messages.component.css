@@ -21,6 +21,15 @@
   padding-bottom: 10px;
 }
 
+.messagesContainerHeader {
+  padding-left: 10px;
+  padding-bottom: 2px;
+  padding-right: 25%;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .classContainer {
     width: 100%;
@@ -144,11 +153,11 @@ label {
 }
 
 .subject {
-  display: inline-flex;
-  margin-bottom: 10px;
+  width: 42%;
+  text-align: left;
 }
 
-.messageBody {
+.newMessageBody {
   display: inline-flex;
   width: 98%;
   height: 70%;
@@ -179,11 +188,14 @@ label {
     font-size: 12pt;
     display: flex;
     justify-content: space-between;
+    flex-direction: row;
+    text-align: left;
     padding: 10px;
     margin-left: 2px;
     margin-right: 2px;
     margin-top: 2px;
     margin-bottom: 5px;
+    padding-right: 20%;
 }
 
 .resultCard:hover {
@@ -199,21 +211,18 @@ label {
 }
 
 .messageEntries {
-  display: flex;
+  display: inline-flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.subject {
-  width: 500px;
-}
-
-.sender {
-  width: 500px;
-  text-align: left;
+.subjectNewMessage {
+  display: flex;
+  margin-bottom: 10px;
 }
 
 .messageList {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   overflow-y: scroll;
   height: 40%;
@@ -323,8 +332,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .dotNewMessage {
-  display: inline-flex;
+  display: flex;
+  padding-right: 20px;
+  width: 30%;
+  flex-grow: 1;
 }
+
 
 .deleteBtn:hover {
   cursor: pointer;
