@@ -9,6 +9,10 @@ import { TranslationService } from '../translation.service';
 import { NotificationService } from '../notification-service.service';
 import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
+import { StoryService } from '../story.service';
+import { ProfileService } from '../profile.service';
+import { MessageService } from '../message.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-profile',
@@ -23,13 +27,18 @@ export class ProfileComponent implements OnInit {
   foundClassroom: Classroom;
   classroom: Classroom;
   statObj: StudentStats = new StudentStats();
+  modalClass : string = "hidden";
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
               private engagement: EngagementService,
               public ts : TranslationService,
               public ns: NotificationService,
-              public ss: StatsService,) { }
+              public ss: StatsService,
+              public storyService: StoryService,
+              public profileService : ProfileService,
+              public messageService: MessageService,
+              public userService: UserService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -101,6 +110,42 @@ export class ProfileComponent implements OnInit {
     this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
     let value: boolean = false;  
     this.auth.logout();
+  }
+
+/*
+* Delete user account and all data associated with the user
+*/
+  deleteAccount() {
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      this.leaveClassroom();
+      this.storyService.deleteAllStories(this.auth.getUserDetails().username).subscribe( (res) => {
+        console.log("All stories deleted");
+      });
+    }
+    if(this.auth.getUserDetails().role === "TEACHER") {
+      this.classroomService.deleteClassroomsForTeachers(this.auth.getUserDetails()._id).subscribe( (res) => {
+        console.log("All classrooms deleted");
+      })
+    }
+    
+    this.messageService.deleteAllMessages(this.auth.getUserDetails()._id).subscribe( (res) => {
+      console.log("All messages deleted");
+    });  
+    this.profileService.deleteProfile(this.auth.getUserDetails()._id).subscribe( (res) => {
+      console.log("Profile deleted");
+    });
+    this.userService.deleteUser(this.auth.getUserDetails().username).subscribe( (res) => {
+      console.log("User deleted");
+    });
+    this.auth.logout();
+  }
+  
+  showModal() {
+    this.modalClass = "visibleFade";
+  }
+
+  hideModal() {
+    this.modalClass = "hiddenFade";
   }
 
 }

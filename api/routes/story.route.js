@@ -111,6 +111,14 @@ storyRoutes.route('/delete/:id').get(function(req, res) {
     });
 });
 
+// Delete story by student username
+storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
+    Story.deleteMany({"author": req.params.author}, function(err, story) {
+        if(err) res.json(err);
+        else res.json("Successfully removed all stories for user");
+    });
+});
+
 storyRoutes.route('/feedback/:id').get(function(req, res) {
     Story.findById(req.params.id, (err, story) => {
         if(err) res.json(err);
@@ -155,6 +163,7 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
         if(story) {
             if(story.feedback.audioId) {
                 var audioId;
+                // get the audio id from the audio id set to the story
                 try {
                     audioId = new ObjectID(story.feedback.audioId);
                 } catch(err) {
@@ -163,13 +172,13 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
             
                 res.set('content-type', 'audio/mp3');
                 res.set('accept-ranges', 'bytes');
-
+                // get collection name for audio files
                 let bucket = new mongodb.GridFSBucket(db, {
                     bucketName: 'audioFeedback'
                 });
-            
+                // create a new stream of file data using the bucket name
                 let downloadStream = bucket.openDownloadStream(audioId);
-            
+                // write stream data to response if data is found
                 downloadStream.on('data', (chunk) => {
                     res.write(chunk);
                 });
@@ -177,7 +186,7 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
                 downloadStream.on('error', () => {
                     res.sendStatus(404);
                 });
-            
+                // close the stream after data sent to response
                 downloadStream.on('end', () => {
                     res.end();
                 });
@@ -202,18 +211,19 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
                 if (err) {
                     return res.status(400).json({ message: "Upload Request Validation Failed" });
                 }
-
+                // create new stream and push audio data
                 const readableTrackStream = new Readable();
                 readableTrackStream.push(req.file.buffer);
                 readableTrackStream.push(null);
-
+                // get bucket (collection) for storing audio file
                 let bucket = new mongodb.GridFSBucket(db, {
                     bucketName: 'audioFeedback'
                 });
-
+                // get audio file from collection and save id to story audio id
                 let uploadStream = bucket.openUploadStream("audio-feedback-for-story-" + story._id.toString());
                 story.feedback.audioId = uploadStream.id;
                 story.save();
+                // pipe data in stream to the audio file entry in the db 
                 readableTrackStream.pipe(uploadStream);
 
                 uploadStream.on('error', () => {
@@ -231,6 +241,9 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
     
 });
 
+/*
+* Synthesise a story given the story id 
+*/
 storyRoutes.route('/synthesise/:id').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
         if(story) {
@@ -239,16 +252,19 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
             if(story.dialect === 'donegal') dialectCode = 'ga_GD';
             if(story.dialect === 'kerry') dialectCode = 'ga_MU';
 
+            // create a form with the story text, dialect choice, html, and speed
             let form = {
                 Input: story.text,
                 Locale: dialectCode,
                 Format: 'html',
                 Speed: '1',
             };
-
+            
+            // turn form into a url query string
             let formData = querystring.stringify(form);
             let contentLength = formData.length;
-
+            
+            // make a request to abair passing in the form data
             request({
                 headers: {
                 'Host' : 'www.abair.tcd.ie',
@@ -261,15 +277,20 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
             }, function (err, resp, body) {
                 if(err) res.send(err);
                 if(body) {
+                    // audioContainer is chunk of text made up of paragraphs
                     let audioContainer = parse(body.toString()).querySelectorAll('.audio_paragraph');
                     let paragraphs = [];
                     let urls = [];
+                    // loop through every paragraph and fill array of sentences
                     for(let p of audioContainer) {
                         let sentences = [];
                         for(let s of p.childNodes) {
+                            // push the sentences
                             if(s.tagName === 'span') {
                                 sentences.push(s.toString());
-                            } else if(s.tagName === 'audio') {
+                            } 
+                            // push the audio ids for the sentences
+                            else if(s.tagName === 'audio') {
                                 urls.push(s.id);
                             }
                         }

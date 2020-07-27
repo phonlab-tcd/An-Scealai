@@ -76,6 +76,16 @@ classroomRoutes.route('/delete/:id').get((req, res) => {
     });
 });
 
+classroomRoutes.route('/deleteAllClassrooms/:teacherId').get((req, res) => {
+    Classroom.deleteMany({"teacherId" : req.params.teacherId}, (err) => {
+        if(err) {
+            res.json(err);
+        } else {
+            res.json("Successfully removed");
+        }
+    });
+});
+
 classroomRoutes.route('/getClassroomForCode/:code').get((req, res) => {
     Classroom.findOne({"code": req.params.code}, (err, classroom) => {
         if(err) {

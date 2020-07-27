@@ -27,4 +27,11 @@ export class ProfileService {
     return this.http.get(this.baseUrl + 'getForUser/' + userId);
   }
 
+/*
+* Delete a profile from the DB for a given user id
+*/
+  deleteProfile(userId) : Observable<any> {
+    return this.http.get(this.baseUrl + 'deleteProfile/' + userId);
+  }
+
 }

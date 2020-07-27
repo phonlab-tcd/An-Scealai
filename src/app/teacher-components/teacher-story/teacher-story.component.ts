@@ -54,7 +54,7 @@ export class TeacherStoryComponent implements OnInit {
     this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
       let p = res.profile;
       let country = p.country;
-      if(country == "United States of America" || country == "America") {
+      if(country == "United States of America" || country == "America" || country == "USA" || country == "United States") {
         this.isFromAmerica = true;
       }
       else {

@@ -63,6 +63,10 @@ export class TeacherClassroomComponent implements OnInit {
       this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
         this.classroom = res;
         console.log(this.classroom);
+        this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
+          this.messagesForNotifications = res;
+          this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);
+        });
         this.getStudents();
       });
     });
@@ -79,10 +83,6 @@ export class TeacherClassroomComponent implements OnInit {
         this.studentIds.push(res._id);
       });
     }
-    this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
-      this.messagesForNotifications = res;
-      this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.studentIds);
-    });
   }
 
 /*

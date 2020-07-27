@@ -25,4 +25,8 @@ export class UserService {
     return this.http.get(this.baseUrl + 'getAllUsers/');
   }
   
+  deleteUser(username: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'deleteUser/' + username);
+  }
+  
 }

@@ -87,13 +87,16 @@
               </div>
               <div class="infoBody">
                 <!-- activity cards -->
-                <div class="" *ngFor="let student of stats">
+                <div *ngFor="let student of stats">
                   <div class="eventCard eventContainer">
                       <div class="eventHeader">
                           <b>{{student.studentUsername}}</b>
                       </div>
+                      <!-- show error name with array of how many errors the student has made over time. Hover over for date -->
                       <div class="eventBody mainEventBody" *ngFor="let error of student.grammarErrors | keyvalue">
-                        <div>{{error.key}} : {{error.value}}</div>
+                        <div>{{error.key}} : 
+                          <a (mouseover)="dateToDisplay = student.timeStamps[error.key][i]" title="{{dateToDisplay | date:'MMMM dd, yyyy h:mm aa'}}" style="display:inline-flex" *ngFor="let item of error.value; let i = index; last as isLast"> {{item}} <i *ngIf="!isLast" style="padding:4px"class="fa fa-arrow-right"></i></a>
+                        </div>
                       </div>
                   </div>
                 </div>
@@ -115,7 +118,7 @@
                       <div> {{entry.key}} : {{entry.value}}</div>
                     </div>
                     <!-- pie chart test -->
-                    <div>
+                    <div class="chart">
                       <canvas id="statChart"> </canvas>
                     </div>
                 </div>
