@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { TranslationService } from '../../translation.service';
+
 
 @Component({
   selector: 'app-story',
@@ -15,7 +17,8 @@ export class StoryComponent implements OnInit {
               private http: HttpClient,
               protected sanitizer: DomSanitizer,
               private storyService: StoryService,
-              private router: Router) { }
+              private router: Router,
+              private ts: TranslationService) { }
 
   story : any;
   audioSource : SafeUrl;

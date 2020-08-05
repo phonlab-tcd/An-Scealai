@@ -100,7 +100,6 @@ export class AuthenticationService {
   }
 
   public login(user: TokenPayload): Observable<any> {
-    
     return this.request('post', 'login', user);
   }
 

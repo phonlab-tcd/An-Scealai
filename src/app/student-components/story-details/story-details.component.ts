@@ -16,7 +16,7 @@ export class StoryDetailsComponent implements OnInit {
               private router : Router,
               public ts : TranslationService) { }
 
-  story : Story;
+  story : Story = new Story();
 
 //get current story using id from route
   ngOnInit() {
@@ -47,7 +47,10 @@ export class StoryDetailsComponent implements OnInit {
 //uses story service to update story values and redirect to dashboard
   saveDetails() {
     this.storyService.updateStory(this.story, this.story.id).subscribe(res => {
-      this.router.navigateByUrl('/dashboard/' + this.story.id);
+      if(this.story.id) {
+        this.router.navigateByUrl('/dashboard/' + this.story.id);
+      }
+      
     });
   }
 

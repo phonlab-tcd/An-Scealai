@@ -426,3 +426,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     }
 
 }
+
+@media only screen and (max-width: 1000px) and (max-height: 750px) {
+  .userInfo {
+    font-size: 12px;
+  }
+  
+}

@@ -13,13 +13,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var tryCatch_1 = require("../util/tryCatch");
-var errorObject_1 = require("../util/errorObject");
-var OuterSubscriber_1 = require("../OuterSubscriber");
-var subscribeToResult_1 = require("../util/subscribeToResult");
+var innerSubscribe_1 = require("../innerSubscribe");
 function expand(project, concurrent, scheduler) {
     if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
-    if (scheduler === void 0) { scheduler = undefined; }
     concurrent = (concurrent || 0) < 1 ? Number.POSITIVE_INFINITY : concurrent;
     return function (source) { return source.lift(new ExpandOperator(project, concurrent, scheduler)); };
 }
@@ -64,17 +60,20 @@ var ExpandSubscriber = (function (_super) {
         var index = this.index++;
         if (this.active < this.concurrent) {
             destination.next(value);
-            var result = tryCatch_1.tryCatch(this.project)(value, index);
-            if (result === errorObject_1.errorObject) {
-                destination.error(errorObject_1.errorObject.e);
+            try {
+                var project = this.project;
+                var result = project(value, index);
+                if (!this.scheduler) {
+                    this.subscribeToProjection(result, value, index);
+                }
+                else {
+                    var state = { subscriber: this, result: result, value: value, index: index };
+                    var destination_1 = this.destination;
+                    destination_1.add(this.scheduler.schedule(ExpandSubscriber.dispatch, 0, state));
+                }
             }
-            else if (!this.scheduler) {
-                this.subscribeToProjection(result, value, index);
-            }
-            else {
-                var state = { subscriber: this, result: result, value: value, index: index };
-                var destination_1 = this.destination;
-                destination_1.add(this.scheduler.schedule(ExpandSubscriber.dispatch, 0, state));
+            catch (e) {
+                destination.error(e);
             }
         }
         else {
@@ -84,7 +83,7 @@ var ExpandSubscriber = (function (_super) {
     ExpandSubscriber.prototype.subscribeToProjection = function (result, value, index) {
         this.active++;
         var destination = this.destination;
-        destination.add(subscribeToResult_1.subscribeToResult(this, result, value, index));
+        destination.add(innerSubscribe_1.innerSubscribe(result, new innerSubscribe_1.SimpleInnerSubscriber(this)));
     };
     ExpandSubscriber.prototype._complete = function () {
         this.hasCompleted = true;
@@ -93,13 +92,11 @@ var ExpandSubscriber = (function (_super) {
         }
         this.unsubscribe();
     };
-    ExpandSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    ExpandSubscriber.prototype.notifyNext = function (innerValue) {
         this._next(innerValue);
     };
-    ExpandSubscriber.prototype.notifyComplete = function (innerSub) {
+    ExpandSubscriber.prototype.notifyComplete = function () {
         var buffer = this.buffer;
-        var destination = this.destination;
-        destination.remove(innerSub);
         this.active--;
         if (buffer && buffer.length > 0) {
             this._next(buffer.shift());
@@ -109,6 +106,6 @@ var ExpandSubscriber = (function (_super) {
         }
     };
     return ExpandSubscriber;
-}(OuterSubscriber_1.OuterSubscriber));
+}(innerSubscribe_1.SimpleOuterSubscriber));
 exports.ExpandSubscriber = ExpandSubscriber;
 //# sourceMappingURL=expand.js.map

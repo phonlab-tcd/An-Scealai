@@ -14,10 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Subject_1 = require("../Subject");
-var tryCatch_1 = require("../util/tryCatch");
-var errorObject_1 = require("../util/errorObject");
-var OuterSubscriber_1 = require("../OuterSubscriber");
-var subscribeToResult_1 = require("../util/subscribeToResult");
+var innerSubscribe_1 = require("../innerSubscribe");
 function repeatWhen(notifier) {
     return function (source) { return source.lift(new RepeatWhenOperator(notifier)); };
 }
@@ -40,11 +37,11 @@ var RepeatWhenSubscriber = (function (_super) {
         _this.sourceIsBeingSubscribedTo = true;
         return _this;
     }
-    RepeatWhenSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    RepeatWhenSubscriber.prototype.notifyNext = function () {
         this.sourceIsBeingSubscribedTo = true;
         this.source.subscribe(this);
     };
-    RepeatWhenSubscriber.prototype.notifyComplete = function (innerSub) {
+    RepeatWhenSubscriber.prototype.notifyComplete = function () {
         if (this.sourceIsBeingSubscribedTo === false) {
             return _super.prototype.complete.call(this);
         }
@@ -59,20 +56,20 @@ var RepeatWhenSubscriber = (function (_super) {
                 return _super.prototype.complete.call(this);
             }
             this._unsubscribeAndRecycle();
-            this.notifications.next();
+            this.notifications.next(undefined);
         }
     };
     RepeatWhenSubscriber.prototype._unsubscribe = function () {
         var _a = this, notifications = _a.notifications, retriesSubscription = _a.retriesSubscription;
         if (notifications) {
             notifications.unsubscribe();
-            this.notifications = null;
+            this.notifications = undefined;
         }
         if (retriesSubscription) {
             retriesSubscription.unsubscribe();
-            this.retriesSubscription = null;
+            this.retriesSubscription = undefined;
         }
-        this.retries = null;
+        this.retries = undefined;
     };
     RepeatWhenSubscriber.prototype._unsubscribeAndRecycle = function () {
         var _unsubscribe = this._unsubscribe;
@@ -83,13 +80,17 @@ var RepeatWhenSubscriber = (function (_super) {
     };
     RepeatWhenSubscriber.prototype.subscribeToRetries = function () {
         this.notifications = new Subject_1.Subject();
-        var retries = tryCatch_1.tryCatch(this.notifier)(this.notifications);
-        if (retries === errorObject_1.errorObject) {
+        var retries;
+        try {
+            var notifier = this.notifier;
+            retries = notifier(this.notifications);
+        }
+        catch (e) {
             return _super.prototype.complete.call(this);
         }
         this.retries = retries;
-        this.retriesSubscription = subscribeToResult_1.subscribeToResult(this, retries);
+        this.retriesSubscription = innerSubscribe_1.innerSubscribe(retries, new innerSubscribe_1.SimpleInnerSubscriber(this));
     };
     return RepeatWhenSubscriber;
-}(OuterSubscriber_1.OuterSubscriber));
+}(innerSubscribe_1.SimpleOuterSubscriber));
 //# sourceMappingURL=repeatWhen.js.map

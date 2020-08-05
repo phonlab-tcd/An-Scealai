@@ -1,8 +1,6 @@
-/** PURE_IMPORTS_START tslib,_Subject,_util_tryCatch,_util_errorObject,_OuterSubscriber,_util_subscribeToResult PURE_IMPORTS_END */
+/** PURE_IMPORTS_START tslib,_Subject,_OuterSubscriber,_util_subscribeToResult PURE_IMPORTS_END */
 import * as tslib_1 from "tslib";
 import { Subject } from '../Subject';
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
 import { OuterSubscriber } from '../OuterSubscriber';
 import { subscribeToResult } from '../util/subscribeToResult';
 export function windowWhen(closingSelector) {
@@ -28,10 +26,10 @@ var WindowSubscriber = /*@__PURE__*/ (function (_super) {
         _this.openWindow();
         return _this;
     }
-    WindowSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    WindowSubscriber.prototype.notifyNext = function (_outerValue, _innerValue, _outerIndex, _innerIndex, innerSub) {
         this.openWindow(innerSub);
     };
-    WindowSubscriber.prototype.notifyError = function (error, innerSub) {
+    WindowSubscriber.prototype.notifyError = function (error) {
         this._error(error);
     };
     WindowSubscriber.prototype.notifyComplete = function (innerSub) {
@@ -69,15 +67,17 @@ var WindowSubscriber = /*@__PURE__*/ (function (_super) {
         }
         var window = this.window = new Subject();
         this.destination.next(window);
-        var closingNotifier = tryCatch(this.closingSelector)();
-        if (closingNotifier === errorObject) {
-            var err = errorObject.e;
-            this.destination.error(err);
-            this.window.error(err);
+        var closingNotifier;
+        try {
+            var closingSelector = this.closingSelector;
+            closingNotifier = closingSelector();
         }
-        else {
-            this.add(this.closingNotification = subscribeToResult(this, closingNotifier));
+        catch (e) {
+            this.destination.error(e);
+            this.window.error(e);
+            return;
         }
+        this.add(this.closingNotification = subscribeToResult(this, closingNotifier));
     };
     return WindowSubscriber;
 }(OuterSubscriber));

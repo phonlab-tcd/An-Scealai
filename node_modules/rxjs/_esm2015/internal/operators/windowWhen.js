@@ -1,6 +1,4 @@
 import { Subject } from '../Subject';
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
 import { OuterSubscriber } from '../OuterSubscriber';
 import { subscribeToResult } from '../util/subscribeToResult';
 export function windowWhen(closingSelector) {
@@ -23,10 +21,10 @@ class WindowSubscriber extends OuterSubscriber {
         this.closingSelector = closingSelector;
         this.openWindow();
     }
-    notifyNext(outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    notifyNext(_outerValue, _innerValue, _outerIndex, _innerIndex, innerSub) {
         this.openWindow(innerSub);
     }
-    notifyError(error, innerSub) {
+    notifyError(error) {
         this._error(error);
     }
     notifyComplete(innerSub) {
@@ -61,15 +59,17 @@ class WindowSubscriber extends OuterSubscriber {
         }
         const window = this.window = new Subject();
         this.destination.next(window);
-        const closingNotifier = tryCatch(this.closingSelector)();
-        if (closingNotifier === errorObject) {
-            const err = errorObject.e;
-            this.destination.error(err);
-            this.window.error(err);
+        let closingNotifier;
+        try {
+            const { closingSelector } = this;
+            closingNotifier = closingSelector();
         }
-        else {
-            this.add(this.closingNotification = subscribeToResult(this, closingNotifier));
+        catch (e) {
+            this.destination.error(e);
+            this.window.error(e);
+            return;
         }
+        this.add(this.closingNotification = subscribeToResult(this, closingNotifier));
     }
 }
 //# sourceMappingURL=windowWhen.js.map

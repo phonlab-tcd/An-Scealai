@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { StatsService } from '../../stats.service';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-stats',
@@ -9,7 +10,7 @@ import { StatsService } from '../../stats.service';
 })
 export class StatsComponent implements OnInit {
 
-  constructor(private statsService : StatsService) { }
+  constructor(private statsService : StatsService, private ts: TranslationService) { }
 
   chart: any;
   graphGenerated : boolean = false;

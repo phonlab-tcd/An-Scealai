@@ -91,6 +91,32 @@
     z-index: -5;
 }
 
+.languageBtnContainer {
+  display: inline-flex;
+}
+
+.languageBtn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  padding: 0;
+  font-family: arial, sans-serif;
+  color: #069;
+  /*text-decoration: underline;*/
+  cursor: pointer;
+}
+
+.clickedLanguageBtn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  padding: 0;
+  font-family: arial, sans-serif;
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 620px) {
     .catJumpingImg {
         display: none;

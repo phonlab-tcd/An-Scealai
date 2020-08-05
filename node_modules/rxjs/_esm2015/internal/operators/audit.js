@@ -1,7 +1,4 @@
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
-import { OuterSubscriber } from '../OuterSubscriber';
-import { subscribeToResult } from '../util/subscribeToResult';
+import { SimpleOuterSubscriber, innerSubscribe, SimpleInnerSubscriber } from '../innerSubscribe';
 export function audit(durationSelector) {
     return function auditOperatorFunction(source) {
         return source.lift(new AuditOperator(durationSelector));
@@ -15,7 +12,7 @@ class AuditOperator {
         return source.subscribe(new AuditSubscriber(subscriber, this.durationSelector));
     }
 }
-class AuditSubscriber extends OuterSubscriber {
+class AuditSubscriber extends SimpleOuterSubscriber {
     constructor(destination, durationSelector) {
         super(destination);
         this.durationSelector = durationSelector;
@@ -25,18 +22,20 @@ class AuditSubscriber extends OuterSubscriber {
         this.value = value;
         this.hasValue = true;
         if (!this.throttled) {
-            const duration = tryCatch(this.durationSelector)(value);
-            if (duration === errorObject) {
-                this.destination.error(errorObject.e);
+            let duration;
+            try {
+                const { durationSelector } = this;
+                duration = durationSelector(value);
+            }
+            catch (err) {
+                return this.destination.error(err);
+            }
+            const innerSubscription = innerSubscribe(duration, new SimpleInnerSubscriber(this));
+            if (!innerSubscription || innerSubscription.closed) {
+                this.clearThrottle();
             }
             else {
-                const innerSubscription = subscribeToResult(this, duration);
-                if (!innerSubscription || innerSubscription.closed) {
-                    this.clearThrottle();
-                }
-                else {
-                    this.add(this.throttled = innerSubscription);
-                }
+                this.add(this.throttled = innerSubscription);
             }
         }
     }
@@ -44,16 +43,16 @@ class AuditSubscriber extends OuterSubscriber {
         const { value, hasValue, throttled } = this;
         if (throttled) {
             this.remove(throttled);
-            this.throttled = null;
+            this.throttled = undefined;
             throttled.unsubscribe();
         }
         if (hasValue) {
-            this.value = null;
+            this.value = undefined;
             this.hasValue = false;
             this.destination.next(value);
         }
     }
-    notifyNext(outerValue, innerValue, outerIndex, innerIndex) {
+    notifyNext() {
         this.clearThrottle();
     }
     notifyComplete() {

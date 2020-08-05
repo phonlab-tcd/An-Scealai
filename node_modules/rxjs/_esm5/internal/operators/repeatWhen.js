@@ -1,10 +1,7 @@
-/** PURE_IMPORTS_START tslib,_Subject,_util_tryCatch,_util_errorObject,_OuterSubscriber,_util_subscribeToResult PURE_IMPORTS_END */
+/** PURE_IMPORTS_START tslib,_Subject,_innerSubscribe PURE_IMPORTS_END */
 import * as tslib_1 from "tslib";
 import { Subject } from '../Subject';
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
-import { OuterSubscriber } from '../OuterSubscriber';
-import { subscribeToResult } from '../util/subscribeToResult';
+import { SimpleOuterSubscriber, innerSubscribe, SimpleInnerSubscriber } from '../innerSubscribe';
 export function repeatWhen(notifier) {
     return function (source) { return source.lift(new RepeatWhenOperator(notifier)); };
 }
@@ -26,11 +23,11 @@ var RepeatWhenSubscriber = /*@__PURE__*/ (function (_super) {
         _this.sourceIsBeingSubscribedTo = true;
         return _this;
     }
-    RepeatWhenSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    RepeatWhenSubscriber.prototype.notifyNext = function () {
         this.sourceIsBeingSubscribedTo = true;
         this.source.subscribe(this);
     };
-    RepeatWhenSubscriber.prototype.notifyComplete = function (innerSub) {
+    RepeatWhenSubscriber.prototype.notifyComplete = function () {
         if (this.sourceIsBeingSubscribedTo === false) {
             return _super.prototype.complete.call(this);
         }
@@ -45,20 +42,20 @@ var RepeatWhenSubscriber = /*@__PURE__*/ (function (_super) {
                 return _super.prototype.complete.call(this);
             }
             this._unsubscribeAndRecycle();
-            this.notifications.next();
+            this.notifications.next(undefined);
         }
     };
     RepeatWhenSubscriber.prototype._unsubscribe = function () {
         var _a = this, notifications = _a.notifications, retriesSubscription = _a.retriesSubscription;
         if (notifications) {
             notifications.unsubscribe();
-            this.notifications = null;
+            this.notifications = undefined;
         }
         if (retriesSubscription) {
             retriesSubscription.unsubscribe();
-            this.retriesSubscription = null;
+            this.retriesSubscription = undefined;
         }
-        this.retries = null;
+        this.retries = undefined;
     };
     RepeatWhenSubscriber.prototype._unsubscribeAndRecycle = function () {
         var _unsubscribe = this._unsubscribe;
@@ -69,13 +66,17 @@ var RepeatWhenSubscriber = /*@__PURE__*/ (function (_super) {
     };
     RepeatWhenSubscriber.prototype.subscribeToRetries = function () {
         this.notifications = new Subject();
-        var retries = tryCatch(this.notifier)(this.notifications);
-        if (retries === errorObject) {
+        var retries;
+        try {
+            var notifier = this.notifier;
+            retries = notifier(this.notifications);
+        }
+        catch (e) {
             return _super.prototype.complete.call(this);
         }
         this.retries = retries;
-        this.retriesSubscription = subscribeToResult(this, retries);
+        this.retriesSubscription = innerSubscribe(retries, new SimpleInnerSubscriber(this));
     };
     return RepeatWhenSubscriber;
-}(OuterSubscriber));
+}(SimpleOuterSubscriber));
 //# sourceMappingURL=repeatWhen.js.map

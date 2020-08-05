@@ -7,6 +7,7 @@ import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from '../../engagement.service';
 import { Event } from '../../event';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-user',
@@ -21,7 +22,8 @@ export class UserComponent implements OnInit {
               private storyService: StoryService,
               private router: Router,
               private classroomService: ClassroomService,
-              private engagement: EngagementService) { }
+              private engagement: EngagementService,
+              private ts: TranslationService) { }
 
   user: any;
   stories: Story[];

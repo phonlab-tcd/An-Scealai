@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { identifierModuleUrl } from '@angular/compiler';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-teachers',
@@ -21,7 +22,7 @@ export class TeachersComponent implements OnInit {
   copiedTextClass : String = "hidden";
   modalClass : String = "hidden";
 
-  constructor(private http: HttpClient, private router: Router,) { }
+  constructor(private http: HttpClient, private router: Router, private ts: TranslationService) { }
 
   ngOnInit() {
     this.getActiveTeacherCodes();

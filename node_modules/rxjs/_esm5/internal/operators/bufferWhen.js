@@ -1,10 +1,7 @@
-/** PURE_IMPORTS_START tslib,_Subscription,_util_tryCatch,_util_errorObject,_OuterSubscriber,_util_subscribeToResult PURE_IMPORTS_END */
+/** PURE_IMPORTS_START tslib,_Subscription,_innerSubscribe PURE_IMPORTS_END */
 import * as tslib_1 from "tslib";
 import { Subscription } from '../Subscription';
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
-import { OuterSubscriber } from '../OuterSubscriber';
-import { subscribeToResult } from '../util/subscribeToResult';
+import { SimpleOuterSubscriber, innerSubscribe, SimpleInnerSubscriber } from '../innerSubscribe';
 export function bufferWhen(closingSelector) {
     return function (source) {
         return source.lift(new BufferWhenOperator(closingSelector));
@@ -39,10 +36,10 @@ var BufferWhenSubscriber = /*@__PURE__*/ (function (_super) {
         _super.prototype._complete.call(this);
     };
     BufferWhenSubscriber.prototype._unsubscribe = function () {
-        this.buffer = null;
+        this.buffer = undefined;
         this.subscribing = false;
     };
-    BufferWhenSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    BufferWhenSubscriber.prototype.notifyNext = function () {
         this.openBuffer();
     };
     BufferWhenSubscriber.prototype.notifyComplete = function () {
@@ -64,19 +61,21 @@ var BufferWhenSubscriber = /*@__PURE__*/ (function (_super) {
             this.destination.next(buffer);
         }
         this.buffer = [];
-        var closingNotifier = tryCatch(this.closingSelector)();
-        if (closingNotifier === errorObject) {
-            this.error(errorObject.e);
+        var closingNotifier;
+        try {
+            var closingSelector = this.closingSelector;
+            closingNotifier = closingSelector();
         }
-        else {
-            closingSubscription = new Subscription();
-            this.closingSubscription = closingSubscription;
-            this.add(closingSubscription);
-            this.subscribing = true;
-            closingSubscription.add(subscribeToResult(this, closingNotifier));
-            this.subscribing = false;
+        catch (err) {
+            return this.error(err);
         }
+        closingSubscription = new Subscription();
+        this.closingSubscription = closingSubscription;
+        this.add(closingSubscription);
+        this.subscribing = true;
+        closingSubscription.add(innerSubscribe(closingNotifier, new SimpleInnerSubscriber(this)));
+        this.subscribing = false;
     };
     return BufferWhenSubscriber;
-}(OuterSubscriber));
+}(SimpleOuterSubscriber));
 //# sourceMappingURL=bufferWhen.js.map

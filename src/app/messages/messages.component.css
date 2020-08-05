@@ -157,19 +157,33 @@ label {
   text-align: left;
 }
 
+.date {
+  text-align: left;
+}
+
 .newMessageBody {
   display: inline-flex;
   width: 98%;
   height: 70%;
 }
 
-.textField {
+.textFieldNewMessage {
   width: 100%;
+  height: 350px;
   resize: none;
   z-index: 1;
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 4px;
+}
+
+/* get rid of red boarder for Firefox */
+.textFieldNewMessage:-moz-placeholder {
+    box-shadow:none !important;
+}
+
+.textFieldNewMessage:invalid {
+    box-shadow:none;
 }
 
 .bottomButtons {
@@ -199,15 +213,12 @@ label {
 }
 
 .resultCard:hover {
-    color:white;
-    background-color: #3b372b;
     cursor: pointer;
 }
 
 .clickedresultCard {
     color:white;
     background-color: #3b372b;
-    cursor: pointer;
 }
 
 .messageEntries {
@@ -218,7 +229,19 @@ label {
 
 .subjectNewMessage {
   display: flex;
+  width: 600px;
   margin-bottom: 10px;
+}
+
+/* get rid of red boarder for Firefox */
+.subjectNewMessage:-moz-placeholder {
+    box-shadow:none !important;
+}
+
+
+.subjectNewMessage:invalid {
+    box-shadow:none;
+    border-style: solid;
 }
 
 .messageList {
@@ -384,5 +407,51 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
     .headerIconBtn {
         font-size: 10pt;
+    }
+    
+    .messagesContainer {
+      width: 94%;
+    }
+    
+    .subject {
+      padding-right: 10px;
+    }
+    
+    .subjectNewMessage {
+      width: 160px;
+    }
+    
+    .date {
+      padding-left: 5px;
+      text-align: right;
+    }
+    
+    .resultCard {
+      padding-right: 5px;
+    }
+    
+    .bottomButtons {
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      padding-right: 40px;
+    }
+    
+    .audioReplay {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .messageContents {
+      padding-left: 10px;
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      width: 90%
+    }
+    
+    .newMessageContainer {
+      width: 90%;
+      border-radius: 10px;
     }
 }

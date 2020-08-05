@@ -152,7 +152,7 @@ messageRoutes.route('/messageAudio/:id').get((req, res) => {
                     res.end();
                 });
             } else {
-                res.status(404).json({message:"No audio feedback has been associated with this message"});
+                res.status(404).json({"message" :"No audio feedback has been associated with this message"});
             }
             
         } else {
@@ -179,10 +179,7 @@ messageRoutes.route('/deleteMessageAudio/:id').get((req, res) => {
               });
           
               let downloadStream = bucket.delete(audioId);
-              res.status(200).json({"message" : "Audio deleted successfully"});
-              
-          } else {
-              res.status(404).json({message:"No audio feedback has been associated with this message"});
+              res.status(200).json({"message" : "Audio deleted successfully"});  
           }
         } else {
             res.status(404).json({"message" : "Message does not exist"});
