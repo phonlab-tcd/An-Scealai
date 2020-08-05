@@ -26,5 +26,18 @@ export class LandingComponent implements OnInit {
       }
     }
   }
+  
+  setToEnglish() {
+    document.getElementById('gaeilge').classList.add('languageBtn');
+    document.getElementById('gaeilge').classList.remove('clickedLanguageBtn');
+    document.getElementById('english').classList.add('clickedLanguageBtn');
+    this.ts.setLanguage("en");
+  }
+  
+  setToIrish() {
+    document.getElementById('gaeilge').classList.add('clickedLanguageBtn');
+    document.getElementById('english').classList.remove('clickedLanguageBtn');
+    this.ts.setLanguage("ga");
+  }
 
 }

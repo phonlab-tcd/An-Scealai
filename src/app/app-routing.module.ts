@@ -17,7 +17,7 @@ import { NewStoryComponent } from './student-components/new-story/new-story.comp
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 
-import { RecordingContentsComponent } from './student-components/recording/recording-contents/recording-contents.component';
+import { RecordingComponent } from './student-components/recording/recording.component';
 import { MessagesComponent } from './messages/messages.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
@@ -59,7 +59,7 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'recordings', component: RecordingContentsComponent, canActivate: [AuthGuardService]},
+  { path: 'recordings', component: RecordingComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'admin',

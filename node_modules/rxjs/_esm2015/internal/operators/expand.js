@@ -1,8 +1,5 @@
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
-import { OuterSubscriber } from '../OuterSubscriber';
-import { subscribeToResult } from '../util/subscribeToResult';
-export function expand(project, concurrent = Number.POSITIVE_INFINITY, scheduler = undefined) {
+import { SimpleOuterSubscriber, innerSubscribe, SimpleInnerSubscriber } from '../innerSubscribe';
+export function expand(project, concurrent = Number.POSITIVE_INFINITY, scheduler) {
     concurrent = (concurrent || 0) < 1 ? Number.POSITIVE_INFINITY : concurrent;
     return (source) => source.lift(new ExpandOperator(project, concurrent, scheduler));
 }
@@ -16,7 +13,7 @@ export class ExpandOperator {
         return source.subscribe(new ExpandSubscriber(subscriber, this.project, this.concurrent, this.scheduler));
     }
 }
-export class ExpandSubscriber extends OuterSubscriber {
+export class ExpandSubscriber extends SimpleOuterSubscriber {
     constructor(destination, project, concurrent, scheduler) {
         super(destination);
         this.project = project;
@@ -42,17 +39,20 @@ export class ExpandSubscriber extends OuterSubscriber {
         const index = this.index++;
         if (this.active < this.concurrent) {
             destination.next(value);
-            let result = tryCatch(this.project)(value, index);
-            if (result === errorObject) {
-                destination.error(errorObject.e);
+            try {
+                const { project } = this;
+                const result = project(value, index);
+                if (!this.scheduler) {
+                    this.subscribeToProjection(result, value, index);
+                }
+                else {
+                    const state = { subscriber: this, result, value, index };
+                    const destination = this.destination;
+                    destination.add(this.scheduler.schedule(ExpandSubscriber.dispatch, 0, state));
+                }
             }
-            else if (!this.scheduler) {
-                this.subscribeToProjection(result, value, index);
-            }
-            else {
-                const state = { subscriber: this, result, value, index };
-                const destination = this.destination;
-                destination.add(this.scheduler.schedule(ExpandSubscriber.dispatch, 0, state));
+            catch (e) {
+                destination.error(e);
             }
         }
         else {
@@ -62,7 +62,7 @@ export class ExpandSubscriber extends OuterSubscriber {
     subscribeToProjection(result, value, index) {
         this.active++;
         const destination = this.destination;
-        destination.add(subscribeToResult(this, result, value, index));
+        destination.add(innerSubscribe(result, new SimpleInnerSubscriber(this)));
     }
     _complete() {
         this.hasCompleted = true;
@@ -71,13 +71,11 @@ export class ExpandSubscriber extends OuterSubscriber {
         }
         this.unsubscribe();
     }
-    notifyNext(outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    notifyNext(innerValue) {
         this._next(innerValue);
     }
-    notifyComplete(innerSub) {
+    notifyComplete() {
         const buffer = this.buffer;
-        const destination = this.destination;
-        destination.remove(innerSub);
         this.active--;
         if (buffer && buffer.length > 0) {
             this._next(buffer.shift());

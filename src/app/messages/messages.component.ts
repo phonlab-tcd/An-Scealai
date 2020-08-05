@@ -24,7 +24,7 @@ declare var MediaRecorder : any;
 })
 export class MessagesComponent implements OnInit {
   
-  //messages 
+  //message variables
   createNewMessage: boolean = false;
   students : User[] = [];
   receivedMessages: Message[] = [];
@@ -43,6 +43,14 @@ export class MessagesComponent implements OnInit {
   deleteMode: Boolean = false;
   toBeDeleted: string[] = [];
   isFromAmerica: boolean = false;
+  lastClicked : string = '';
+  config = {
+    toolbar :  [
+      [ 'bold', 'italic', 'underline', 'strike' ],
+      [{ 'list': 'ordered' }, { 'list': 'bullet'}],
+      ['link'],
+    ]
+  }
   
   //used for creating a new message
   message: Message = {
@@ -58,7 +66,7 @@ export class MessagesComponent implements OnInit {
     audioId: ''
   };
   
-  //audio files 
+  //audio file variables
   modalClass : string = "hidden";
   recording: boolean = false;
   audioSource : SafeUrl;
@@ -69,10 +77,8 @@ export class MessagesComponent implements OnInit {
   canSendAudio : boolean = false;
   showAudio: boolean = false;
   blob: any;
-
   errorText : string;
   registrationError : boolean;
-
   recorder;
   stream;
   chunks;
@@ -89,10 +95,16 @@ export class MessagesComponent implements OnInit {
               protected profileService: ProfileService,
               protected notificationService: NotificationService) { }
 
-  
+  /*
+  * Get classroom and student information for TEACHER, get teacher information for STUDENT 
+  * Get message inbox
+  * Set the date of the messages depending on the user's country
+  */  
   ngOnInit() {
     this.deleteMode = false;
     this.toBeDeleted = [];
+    this.chunks = [];
+    this.canSendAudio = false;
     
     if(this.auth.getUserDetails().role === "TEACHER") {
       this.isTeacher = true;
@@ -132,52 +144,60 @@ export class MessagesComponent implements OnInit {
   * Add audio file to DB if audio taken
   */
   sendMessage() {
-    this.message.id = uuid();
-    this.message.date = new Date();
-    this.message.seenByRecipient = false;
-    this.message.senderUsername = this.auth.getUserDetails().username;
-    let ids: string[] = [];
-    
-    if(this.isTeacher) {
-      this.message.senderId = this.teacherId;
-      if(this.message.recipientId === this.classroom._id) {
-        for(let id of this.classroom.studentIds) {
-          this.message.recipientId = id;
-          this.message.id = uuid();
-          ids.push(this.message.id);
+    //Add new message to DB
+    if(this.message.text) {
+      this.message.id = uuid();
+      this.message.date = new Date();
+      this.message.seenByRecipient = false;
+      this.message.senderUsername = this.auth.getUserDetails().username;
+      let ids: string[] = [];
+      
+      if(this.isTeacher) {
+        this.message.senderId = this.teacherId;
+        if(this.message.recipientId === this.classroom._id) {
+          for(let id of this.classroom.studentIds) {
+            this.message.recipientId = id;
+            this.message.id = uuid();
+            ids.push(this.message.id);
+            this.messageService.saveMessage(this.message);
+          }
+        }
+        else {
           this.messageService.saveMessage(this.message);
+          ids.push(this.message.id);
         }
       }
-      else {
+      
+      if(this.isStudent) {
+        this.message.senderId = this.studentId;
+        this.message.recipientId = this.teacherId;
         this.messageService.saveMessage(this.message);
         ids.push(this.message.id);
       }
-    }
-    
-    if(this.isStudent) {
-      this.message.senderId = this.studentId;
-      this.message.recipientId = this.teacherId;
-      this.messageService.saveMessage(this.message);
-      ids.push(this.message.id);
-    }
-    
-    //Add audio to DB if taken
-    if(this.canSendAudio) {
-      for(let id of ids) {
-        console.log("id: " + id);
-        this.messageService.getMessageById(id).subscribe((res) => {
-          this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
-            console.log("audio message sent to : " + id);
-            console.log(this.blob);
-            this.hideModal();
-          }, (err) => {
-            this.errorText = err.message;
-            this.registrationError = true;
-          });
-        })
+      //Add audio to DB if taken
+      if(this.canSendAudio) {
+        for(let id of ids) {
+          console.log("id: " + id);
+          this.messageService.getMessageById(id).subscribe((res) => {
+            this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
+              console.log("audio message sent to : " + id);
+              this.hideModal();
+            }, (err) => {
+              this.errorText = err.message;
+              this.registrationError = true;
+            });
+          })
+        }
       }
+      this.createNewMessage = false;
+      this.chunks = [];
+      this.audioSource = null;
+      this.canSendAudio = false;
     }
-    this.createNewMessage = false;
+    else {
+      alert("Message empty")
+    }
+
   }
   
   /*
@@ -238,6 +258,7 @@ export class MessagesComponent implements OnInit {
   * Loop through student ids in classroom object to get student objects
   */
     getStudents() {
+      this.students = [];
       for(let id of this.classroom.studentIds) {
         this.userService.getUserById(id).subscribe((res : User) => {
           this.students.push(res);
@@ -251,6 +272,9 @@ export class MessagesComponent implements OnInit {
   goBack() {
     if(this.createNewMessage) {
       this.createNewMessage = false;
+      this.chunks = [];
+      this.audioSource = null;
+      this.canSendAudio = false;
     }
     else {
       if(this.isTeacher) {
@@ -264,20 +288,34 @@ export class MessagesComponent implements OnInit {
   
   /*
   * Set the parameters for showing the message body
+  * Set the CSS class for a clicked message
+  * Update nav bar notifications at the top of the screen
   */
   showMessageBody(message: Message) {
     if(message) {
-      this.messageContent = message.text;
-      this.numberOfUnread--;
-      this.messageService.markAsOpened(message._id).subscribe(() => {
-        message.seenByRecipient = true;
-      });
+      let id = "message-" + message.id;
+      let messageElement = document.getElementById(id);
       
-      if(this.isTeacher) {
-        this.notificationService.removeTeacherMessage(message.senderId);
+      if(this.lastClicked != '') {
+        let previousMessage = document.getElementById(this.lastClicked);
+        previousMessage.classList.remove("clickedresultCard");
       }
-      if(this.isStudent) {
-        this.notificationService.removeMessage(message);
+      this.lastClicked = id;
+      messageElement.classList.add("clickedresultCard");
+      
+      this.messageContent = message.text;
+      
+      if(!message.seenByRecipient) {
+        this.numberOfUnread--;
+        if(this.isTeacher) {
+          this.notificationService.removeTeacherMessage(message.senderId);
+        }
+        if(this.isStudent) {
+          this.notificationService.removeMessage(message);
+        }
+        this.messageService.markAsOpened(message._id).subscribe(() => {
+          message.seenByRecipient = true;
+        });
       }
       
       if(message.audioId) {
@@ -295,8 +333,10 @@ export class MessagesComponent implements OnInit {
   */
   getMessageAudio(id: string) {
     this.messageService.getMessageAudio(id).subscribe((res) => {
-      console.log(res);
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      if(res) {
+        console.log(res);
+        this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      }
     });
   }
 
@@ -368,6 +408,7 @@ export class MessagesComponent implements OnInit {
   */
     saveAudio() {
       this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
+      this.modalClass = "hiddenFade";
       console.log(this.blob);
     }
     
@@ -379,7 +420,7 @@ export class MessagesComponent implements OnInit {
   // clear out audio source if it exists and close new messsage
     resetForm() {
       if(this.audioSource) {
-        this.audioSource = !this.audioSource;
+        this.audioSource = null;
         this.chunks = [];
       }
       this.createNewMessage = false;
@@ -392,32 +433,34 @@ export class MessagesComponent implements OnInit {
         this.recorder.stop();
         this.stream.getTracks().forEach(track => track.stop());
       }
-      this.chunks = [];
       this.recording = false;
       this.newRecording = false;
       this.showListenBack = false;
     }
     
   /* delete messages added to the to be deleted array
-  * adds delete event to event list 
   * deletes message using the message service 
+  * deletes associated audio files if there are any
   */
     toggleDeleteMode() {
       if(this.deleteMode && this.toBeDeleted.length > 0) {
         console.log("to be deleted: " + this.toBeDeleted);
         for(let id of this.toBeDeleted) {
           this.messageService.deleteMessageAudio(id).subscribe( (res) => {
-            console.log("Audio deleted: " + id);
+            if(res) {
+              console.log("Audio deleted: " + id);
+            }
           });
         
           this.messageService.deleteMessage(id).subscribe(
             res => {
               console.log('Deleted: ', id);
-              this.ngOnInit();
+              //this.ngOnInit();
             }
           );
-        
         }
+        this.lastClicked = '';
+        this.ngOnInit();
       } else if(this.deleteMode && this.toBeDeleted.length === 0) {
         this.deleteMode = false;
       } else {
@@ -435,9 +478,8 @@ export class MessagesComponent implements OnInit {
       }
     }
     
+  //reset the notifications at the nav bar on the top of the screen
     resetMessages() {
       this.notificationService.setNotifications();
     }
-    
-
 }

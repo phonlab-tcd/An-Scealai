@@ -185,6 +185,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .headerIconContainer {
     margin-left: auto;
     display: flex;
+    overflow-x: auto;
 }
 
 .headerIconBtn {
@@ -256,5 +257,4 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     .headerIconBtn {
         font-size: 10pt;
     }
-
 }

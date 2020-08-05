@@ -5,6 +5,7 @@ export class Event {
     userId: string;
     storyData: Object;
     date: Date;
+    addedToHistory: boolean;
 }
 
 export enum EventType {
@@ -18,4 +19,5 @@ export enum EventType {
     'LOGOUT' = 'LOGOUT',
     'VIEW-FEEDBACK' = 'VIEW-FEEDBACK',
     'CREATE-MESSAGE' = 'CREATE-MESSAGE',
+    'RECORD-STORY' = 'RECORD-STORY',
 }

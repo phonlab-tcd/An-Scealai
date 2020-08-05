@@ -197,6 +197,7 @@ export class DashboardComponent implements OnInit {
     this.feedbackVisible = false;
     this.popupVisible = false;
     this.grammarChecked = false;
+    this.dictionaryVisible = false;
     this.grammarLoading = true;
     this.tags = [];
     this.filteredTags.clear();

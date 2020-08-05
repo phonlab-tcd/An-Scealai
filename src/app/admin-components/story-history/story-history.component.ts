@@ -7,6 +7,7 @@ import { Event } from '../../event';
 import { Story } from '../../story';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import * as Diff from 'diff';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-story-history',
@@ -20,7 +21,8 @@ export class StoryHistoryComponent implements OnInit {
               private http: HttpClient,
               private storyService: StoryService,
               private router: Router,
-              private sanitizer: DomSanitizer) { }
+              private sanitizer: DomSanitizer,
+              private ts: TranslationService) { }
 
 
   events: Event[];

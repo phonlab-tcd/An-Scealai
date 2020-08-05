@@ -11,8 +11,8 @@
             {{ts.l.stories}} {{student?.username}}
           </span>
           <!-- filter by checkbox -->
-          <div class="filter"> Filter by: </div>
-          <div class="checkbox"> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> No feedback given ({{storiesWithoutFeedback.length}})</div>
+          <div class="filter"> {{ts.l.filter_by}}: </div>
+          <div class="checkbox"> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> {{ts.l.no_feedback_given}} ({{storiesWithoutFeedback.length}})</div>
         </div>
         <div class="classroomKey">
           <div class="title">{{ts.l.title}}</div>

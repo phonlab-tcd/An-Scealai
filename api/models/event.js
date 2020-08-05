@@ -15,11 +15,13 @@ let Event = new Schema({
             'LOGIN',
             'LOGOUT',
             'VIEW-FEEDBACK',
-            'CREATE-MESSAGE'
+            'CREATE-MESSAGE',
+            'RECORD-STORY',
         ],
     },
     storyData: Object,
     userId: String,
+    addedToHistory: Boolean,
 }, {
     collection: 'engagement'
 });

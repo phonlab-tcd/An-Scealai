@@ -1,6 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
+import { TranslationService } from '../../translation.service';
 
 @Component({
   selector: 'app-find-user',
@@ -9,7 +10,7 @@ import { UserService } from '../../user.service';
 })
 export class FindUserComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, public ts: TranslationService) { }
   
   ngOnInit() {
     this.getUserResults();

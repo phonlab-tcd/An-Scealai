@@ -30,7 +30,7 @@
         <div class="nav-links">
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
-            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">Admin Dashboard</a>
+            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
             <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
             <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
             <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
@@ -51,7 +51,7 @@
                     {{story.title}}
                 </div>
             </div>
-            <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">New Messages</div>
+            <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">{{ts.l.new_messages}}</div>
             <div class="notificationsBody">
                 <div *ngFor="let message of messagesForNotifications" class="notificationCard" (click)="goToMessages(message.senderId)">
                     {{message.subject}}
@@ -60,7 +60,7 @@
         </div>
         <!-- notification container for TEACHER messages if button clicked -->
         <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notifcationPopup">
-          <div class="notificationsHeader">New Messages</div>
+          <div class="notificationsHeader">{{ts.l.new_messages}}</div>
           <div class="notificationsBody" *ngFor="let message of teacherMessagesForNotifications | keyvalue">
               <div *ngIf="message.value > 0" class="notificationCard" (click)="goToMessages(message.key._id)">
                   {{message.key.title}} -- {{message.value}}

@@ -1,21 +1,21 @@
 <div class='container'>
   <div class='searchContainer'>
     <div class='searchHeader'>
-      All Users ({{numberOfUsers}})
+      {{ts.l.all_users}} ({{numberOfUsers}})
     </div>
     <!-- Filter by role -->
     <div class='searchResultsContainer'>
       <div class='filter'>
-        <div> Filter by: </div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="students"/> Students ({{allStudents.length}})</div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="teachers"/> Teachers ({{allTeachers.length}})</div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="admins"/> Admins ({{allAdmins.length}})</div>  
+        <div> {{ts.l.filter_by}}: </div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="students"/> {{ts.l.students}} ({{allStudents.length}})</div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="teachers"/> {{ts.l.teachers}} ({{allTeachers.length}})</div>
+        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="admins"/> {{ts.l.admins}} ({{allAdmins.length}})</div>  
       </div> 
       <!-- Search bar -->
       <div class="content" role="main">
         <div class="card">
           <div class="form-group">
-            <label for="search-text">Search User</label>
+            <label for="search-text">{{ts.l.search_user}}</label>
             <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
               [(ngModel)]="searchText" placeholder="Enter user to search" 
               autofocus>
@@ -24,7 +24,7 @@
       </div>
       
       <!-- List of users -->
-      Results
+      {{ts.l.results}}
       <div *ngIf="!students && !teachers && !admins">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults | appFilter: searchText" >
           <div class='resultName' appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">

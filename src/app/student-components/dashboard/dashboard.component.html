@@ -1,4 +1,3 @@
-
 <!-- Display the written story along with edit options -->
 <img src="assets/img/book.png" class="bookImg">
 <div class="page">
@@ -8,7 +7,7 @@
           <div class="modalText">{{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?</div>
           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
           <div>
-              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">Save</button>
+              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
           </div>
       </div>
     </div>
@@ -68,13 +67,13 @@
         <!-- display grammar error filter options -->
         <div class="selectErrorCheckbox" *ngIf="grammarSelected">
           <div *ngFor="let recipient of filteredTags | keyvalue">
-             <div><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
+             <div style="padding-left: 2px;padding-right: 2px;" ><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
           </div>
         </div>
-        
         <!-- display the story with error highlighting-->
         <div mwlTextInputHighlightContainer>
           <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea readonly></textarea>
+          <!-- an gramadoir -->
           <div *ngIf="grammarSelected">
             <div *ngFor="let recipient of filteredTags | keyvalue">
               <div *ngIf="checkBox.get(recipient.key)">
@@ -82,9 +81,10 @@
               </div>
             </div>
           </div>
+          <!-- broad/slender -->
           <div *ngIf="!grammarSelected">
             <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
-            </div>
+          </div>
         </div>
       </div>
       <!-- display story with feedback excluding audio feedback-->
@@ -103,7 +103,7 @@
       <!-- display dictionary-->
       <div class="textFieldContainer" *ngIf="dictionaryVisible && !feedbackVisible">
         <textarea class="dictionaryVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
-        <div class="dictionaryHeader"><div>Dictionary</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
+        <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
         <iframe class="dictionary" src="https://www.teanglann.ie/en"></iframe>
       </div>
       <!-- options button -->
@@ -117,7 +117,7 @@
       <div class="optionsBtn optionsPopupBtn" (click)="getFeedback()">{{ts.l.feedback}}<span class="notificationBtn" *ngIf="hasNewFeedback()">1</span></div>
       <div class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">{{ts.l.audio_check}}</div>
       <div class="optionsBtn optionsPopupBtn" (click)="runGramadoir()">{{ts.l.grammar_check}}</div>
-      <div class="optionsBtn optionsPopupBtn" (click)="showDictionary(); popupVisible = !popupVisible">Dictionary</div>
+      <div class="optionsBtn optionsPopupBtn" (click)="showDictionary();">{{ts.l.dictionary}}</div>
     </div>
     <!-- <app-chatbot></app-chatbot> -->
 </div>

@@ -10,8 +10,8 @@
   -o-background-size: cover;
   background-size: cover;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .page {
@@ -319,12 +319,6 @@ Some pseudo-classes used to highlight text
   background: #0088ff36;
   cursor: pointer;
 }
-
-/*
-
-    Loading spinner styles
-
-*/
 
 .lds-grid {
     display: inline-block;

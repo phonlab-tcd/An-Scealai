@@ -3,19 +3,19 @@
     <div class="classContainer">
       <!-- nav bar -->
         <div class="classHeader">
-          <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> Class Statistics
+          <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> {{ts.l.class_statistics}}
           <div class="headerIconContainer">
-            <div class="headerIconBtn" (click)="showErrorSelectionModal()"> Edit Grammar Errors <i class="fas fa-edit headerIcon"></i></div>
+            <div class="headerIconBtn" (click)="showErrorSelectionModal()"> {{ts.l.edit_grammar_errors}} <i class="fas fa-edit headerIcon"></i></div>
           </div>
         </div>
         <!-- Edit grammar error selection container (when option selected)-->
         <div class="{{errorModalClass}} modalContainer">
             <div class="modalContent" *ngIf="classroom">
-              <label> <input type="checkbox" name="options" (change)="selectAll($event)"/> Select all </label>
+              <label> <input type="checkbox" name="options" (change)="selectAll($event)"/> {{ts.l.select_all}} </label>
               <!-- containers for each set of grammar options -->
               <div class="grammarOptions">
                   <div>
-                    <div class="modalText"> General </div>
+                    <div class="modalText"> {{ts.l.general}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'GENERAL'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -23,7 +23,7 @@
                     </div>
                   </div>
                   <div>
-                    <div class="modalText"> Word Choice </div>
+                    <div class="modalText"> {{ts.l.word_choice}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'WORDCHOICE'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -31,7 +31,7 @@
                     </div>
                   </div>              
                   <div>
-                    <div class="modalText"> Unrecognised Word </div>
+                    <div class="modalText"> {{ts.l.Unrecognised_word}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'UNRECOGNISEDWORD'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -39,7 +39,7 @@
                     </div>
                   </div>                
                   <div>
-                    <div class="modalText"> Prefix </div>
+                    <div class="modalText"> {{ts.l.prefix}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'PREFIX'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -47,7 +47,7 @@
                     </div>
                   </div>              
                   <div>
-                    <div class="modalText"> Lenition </div>
+                    <div class="modalText"> {{ts.l.lenition}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'LENITION'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -55,7 +55,7 @@
                     </div>
                   </div>              
                   <div>
-                    <div class="modalText"> Eclipsis </div>
+                    <div class="modalText"> {{ts.l.eclipsis}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'ECLIPSIS'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -63,7 +63,7 @@
                     </div>
                   </div>              
                   <div>
-                    <div class="modalText"> Language Specific </div>
+                    <div class="modalText"> {{ts.l.language_specific}} </div>
                     <div *ngFor="let entry of listOfGrammarErrors" class="errorEntry">
                         <label *ngIf="entry.type == 'SPECIFICLANGUAGE'"> <input type="checkbox" name="options" value="{{entry.error}}" [(ngModel)]="entry.checked"/>
                             {{entry.error}} -- {{entry.description}}
@@ -83,7 +83,7 @@
           <div class="infoContainer">
             <div class="infoDisplay">
               <div class="infoHeader">
-                  Individual Student Statistics
+                  {{ts.l.individual_statistics}}
               </div>
               <div class="infoBody">
                 <!-- activity cards -->
@@ -107,19 +107,19 @@
           <div class="infoContainer">
             <div class="infoDisplay">
               <div class="infoHeader">
-                Classroom Statistics
+                {{ts.l.classroom_statistics}}
               </div>
               <div class="infoBody">
                 <div class="eventCard eventContainer">
                     <div class="eventHeader">
-                        <b>Total Grammar Errors</b>
+                        <b>{{ts.l.total_grammar_errors}}</b>
                     </div>
                     <div class="eventBody mainEventBody" *ngFor="let entry of totalStats | keyvalue">
                       <div> {{entry.key}} : {{entry.value}}</div>
                     </div>
                     <!-- pie chart test -->
                     <div class="chart">
-                      <canvas id="statChart"> </canvas>
+                      <canvas id="statChart" width="100%"> </canvas>
                     </div>
                 </div>
               </div>

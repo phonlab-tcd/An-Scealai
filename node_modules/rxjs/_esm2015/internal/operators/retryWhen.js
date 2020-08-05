@@ -1,8 +1,5 @@
 import { Subject } from '../Subject';
-import { tryCatch } from '../util/tryCatch';
-import { errorObject } from '../util/errorObject';
-import { OuterSubscriber } from '../OuterSubscriber';
-import { subscribeToResult } from '../util/subscribeToResult';
+import { SimpleOuterSubscriber, innerSubscribe, SimpleInnerSubscriber } from '../innerSubscribe';
 export function retryWhen(notifier) {
     return (source) => source.lift(new RetryWhenOperator(notifier, source));
 }
@@ -15,7 +12,7 @@ class RetryWhenOperator {
         return source.subscribe(new RetryWhenSubscriber(subscriber, this.notifier, this.source));
     }
 }
-class RetryWhenSubscriber extends OuterSubscriber {
+class RetryWhenSubscriber extends SimpleOuterSubscriber {
     constructor(destination, notifier, source) {
         super(destination);
         this.notifier = notifier;
@@ -28,15 +25,18 @@ class RetryWhenSubscriber extends OuterSubscriber {
             let retriesSubscription = this.retriesSubscription;
             if (!retries) {
                 errors = new Subject();
-                retries = tryCatch(this.notifier)(errors);
-                if (retries === errorObject) {
-                    return super.error(errorObject.e);
+                try {
+                    const { notifier } = this;
+                    retries = notifier(errors);
                 }
-                retriesSubscription = subscribeToResult(this, retries);
+                catch (e) {
+                    return super.error(e);
+                }
+                retriesSubscription = innerSubscribe(retries, new SimpleInnerSubscriber(this));
             }
             else {
-                this.errors = null;
-                this.retriesSubscription = null;
+                this.errors = undefined;
+                this.retriesSubscription = undefined;
             }
             this._unsubscribeAndRecycle();
             this.errors = errors;
@@ -49,15 +49,15 @@ class RetryWhenSubscriber extends OuterSubscriber {
         const { errors, retriesSubscription } = this;
         if (errors) {
             errors.unsubscribe();
-            this.errors = null;
+            this.errors = undefined;
         }
         if (retriesSubscription) {
             retriesSubscription.unsubscribe();
-            this.retriesSubscription = null;
+            this.retriesSubscription = undefined;
         }
-        this.retries = null;
+        this.retries = undefined;
     }
-    notifyNext(outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+    notifyNext() {
         const { _unsubscribe } = this;
         this._unsubscribe = null;
         this._unsubscribeAndRecycle();

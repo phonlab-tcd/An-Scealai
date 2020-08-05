@@ -9,6 +9,7 @@ import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
+import { QuillModule } from 'ngx-quill';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -43,7 +44,7 @@ import { TeacherStoryComponent } from './teacher-components/teacher-story/teache
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
-import { RecordingContentsComponent } from './student-components/recording/recording-contents/recording-contents.component';
+import { RecordingComponent } from './student-components/recording/recording.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
@@ -82,7 +83,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
     AdminClassroomComponent,
     SynthesisComponent,
     StoryHistoryComponent,
-    RecordingContentsComponent,
+    RecordingComponent,
     RegisterProfileComponent,
     StoryDetailsComponent,
     StatsComponent,
@@ -100,6 +101,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
     SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
+    QuillModule.forRoot()
   ],
   providers: [ 
     StoryService,

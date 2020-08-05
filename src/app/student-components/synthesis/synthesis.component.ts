@@ -114,6 +114,10 @@ export class SynthesisComponent implements OnInit {
     }, 1000);
   }
 
+/*
+* Play the audio of a word when it is clicked 
+* Method bound to event target in sentence/paragraphMode functions
+*/
   playWord(event) {
     let span = event.target;
     this.pauseAllAudio();
@@ -158,6 +162,9 @@ export class SynthesisComponent implements OnInit {
     });
   }
 
+/*
+* Set audioPlaying to false for all sentences/paragraphs
+*/
   pauseAllAudio() {
     if(this.a) {
       this.a.pause();
@@ -179,6 +186,9 @@ export class SynthesisComponent implements OnInit {
     }
   }
 
+/*
+* Play audio for each paragraph/sentence using the audio url and start highlighting
+*/
   playAudio(section) {
     this.pauseAllAudio();
     console.log(section.type);
@@ -189,19 +199,22 @@ export class SynthesisComponent implements OnInit {
       Highlighter.startHighlighting(section);
     } else if(section.type === "Sentence") {
       let sentenceElement = document.getElementById('sentence-' + section.index);
+      // calculate sentence start time
       if(!section.startTime) {
         section.startTime = sentenceElement.children[0].children[0].getAttribute("data-begin");
       }
+      // calculate sentence duration
       if(!section.duration) {
         section.duration = +sentenceElement.children[0].children[sentenceElement.children[0].childElementCount-1].getAttribute("data-begin")
         + +sentenceElement.children[0].children[sentenceElement.children[0].childElementCount-1].getAttribute("data-dur")
         - section.startTime;
       }
+      // set the audio player to start at the sentence start time
       this.a = new Audio(section.paragraph.audioUrl);
       this.a.currentTime = section.startTime;
       this.a.play();
       this.audioPlaying = true;
-      Highlighter.startHighlighting(section);
+      Highlighter.startHighlighting(section);Highlighter.startHighlighting(section);
       let t = setTimeout(()=> {
         this.a.pause();
         this.audioPlaying = false;
@@ -211,6 +224,9 @@ export class SynthesisComponent implements OnInit {
     
   }
 
+/*
+* Pause the audio player and stop highlighting
+*/
   stopAudio(section) {
     this.a.pause();
     this.audioPlaying = false;
@@ -254,6 +270,7 @@ class Highlighter {
     let isParagraph = section.type === "Paragraph";
     let isSentence = section.type === "Sentence";
 
+    // select all the span elements associated with each paragraph / sentence
     let spans, delay = 0;
     if(isParagraph) {
       let sectionElement = document.getElementById('paragraph-' + section.index);
@@ -272,6 +289,7 @@ class Highlighter {
       }
     });
 
+    // set and reset the css classes for each highlighted item
     spans.forEach((s, i) => {
       if(s.className != 'sentence_normal') {
         let t = setTimeout(() => {
