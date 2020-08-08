@@ -2,9 +2,9 @@
     <!-- Popup for deleting account -->
     <div class="{{modalClass}} modalContainer">
         <div class="modalContent">
-            <pre class="modalText">Are you sure you want to delete your account?</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">(This includes all saved stories and statistical data)</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">(This includes all personal and classroom data)</pre>
+            <pre class="modalText">{{ts.l.are_you_sure}}</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
             <div>
                 <button class="modalBtn createBtnGreen" (click)="deleteAccount()">{{ts.l.yes}}</button>
                 <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
@@ -52,7 +52,7 @@
         </div>
         <!-- delete account -->
         <div>
-          <button class="btn deleteAccountButton" (click)="showModal()"> Delete my account </button>
+          <button class="btn deleteAccountButton" (click)="showModal()"> {{ts.l.delete_my_account}} </button>
         </div>
         <!-- sign out and profile information -->
         <div class="btnContainer">

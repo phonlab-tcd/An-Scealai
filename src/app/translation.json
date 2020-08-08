@@ -425,10 +425,10 @@
             "username_no_special_chars" : "Ainm an úsáideora gan carachtair speisialta!",
             "click_new_story" : "Cliceáil 'Scéal Nua' thíos le do chéad scéal a scríobh!",
             "my_classrooms" : "Mo Sheomraí Ranga",
-            "teacher_account_code" : "Cód chuntais an mhúinteora",
+            "teacher_account_code" : "Cód chuntas an mhúinteora",
             "generate" : "Gin",
             "copied" : "Cóipeáilte",
-            "active_account_codes" : "Cuir na cóid cuntais i ngníomh",
+            "active_account_codes" : "Cód Cuntais Reatha",
             
             "search_user" : "Lorg Úsáideoir",
             "admin_dashboard" : "Deais an Riarthóra",
@@ -443,11 +443,11 @@
             "net_errors_corrected" : "Líon earráidí a ceartaíodhd",
             "author_admin" : "Údar",
             "history_of_title" : "Stair an teidil",
-            "history_of_story" : "Stair an teidil",
+            "history_of_story" : "Stair an scéil",
             "teacher_accounts" : "Cuntais na Múinteoirí",
-            "profile_summary" : "Achoimre ar phróifíl",
+            "profile_summary" : "Achoimre ar phróifíl do",
             "role" : "Ról",
-            "ISODate" : "ISODate",
+            "ISODate" : "Dáta ISO",
             "story_id" : "Comhartha aitheantais an scéil",
             "story_text" : "Téacs an scéil",
             
@@ -483,8 +483,8 @@
             
             "delete_my_account" : "Scrios mo chuntas",
             "are_you_sure" : "An bhfuil tú cinnte go bhfuil tú ag iarraidh do chuntas a scrios?",
-            "this_includes_story_data" : "Tá na scéalta agus na sonraí staitistiúla go léir san áireamh anseo",
-            "this_includes_personal_data" : "Tá na sonraí pearsanta agus na sonraí ranga go léir san áireamh anseo",
+            "this_includes_story_data" : " Tá na scéalta agus na sonraí staitistiúla go léir san áireamh leis seo",
+            "this_includes_personal_data" : "Tá na sonraí pearsanta agus na sonraí ranga go léir san áireamh leis seo",
             
             "user_guide" : "Treoir d'Úsáideoirí",
             "academic_paper" : "Foilseachán Acadúil",
