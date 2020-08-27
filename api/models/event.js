@@ -22,6 +22,16 @@ let Event = new Schema({
     storyData: Object,
     userId: String,
     addedToHistory: Boolean,
+    paragraphAudioIds: {
+        type: Map,
+        of: [String],
+        default: {}
+    },
+    sentenceAudioIds: {
+        type: Map,
+        of: String,
+        default: {}
+    },
 }, {
     collection: 'engagement'
 });

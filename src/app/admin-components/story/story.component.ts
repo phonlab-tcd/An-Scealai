@@ -18,7 +18,7 @@ export class StoryComponent implements OnInit {
               protected sanitizer: DomSanitizer,
               private storyService: StoryService,
               private router: Router,
-              private ts: TranslationService) { }
+              public ts: TranslationService) { }
 
   story : any;
   audioSource : SafeUrl;

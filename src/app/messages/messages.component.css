@@ -392,8 +392,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     cursor: pointer;    
 }
 
-
-@media (max-width:550px) {
+@media (max-width:320px) {
 
     .modalContent {
         margin-top: 10vh;
@@ -453,5 +452,182 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     .newMessageContainer {
       width: 90%;
       border-radius: 10px;
+    }
+    
+    .sendTo {
+      display: inline-flex;
+      margin-bottom: 10px;
+      font-size: 5px;
+      justify-content: space-between;
+    }
+    
+    .textFieldNewMessage {
+      width: 100%;
+      height: 100px;
+      resize: none;
+      z-index: 1;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+    }
+}
+
+@media (max-width:360px) {
+
+    .modalContent {
+        margin-top: 10vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .classHeader {
+        font-size: 10pt;
+    }
+
+    .headerIconBtn {
+        font-size: 10pt;
+    }
+    
+    .messagesContainer {
+      width: 94%;
+    }
+    
+    .subject {
+      padding-right: 10px;
+    }
+    
+    .subjectNewMessage {
+      width: 160px;
+    }
+    
+    .date {
+      padding-left: 5px;
+      text-align: right;
+    }
+    
+    .resultCard {
+      padding-right: 5px;
+    }
+    
+    .bottomButtons {
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      padding-right: 40px;
+    }
+    
+    .audioReplay {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .messageContents {
+      padding-left: 10px;
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      width: 90%
+    }
+    
+    .newMessageContainer {
+      width: 90%;
+      border-radius: 10px;
+    }
+    
+    .sendTo {
+      display: inline-flex;
+      margin-bottom: 10px;
+      font-size: 15px;
+      justify-content: space-between;
+    }
+    
+    .textFieldNewMessage {
+      width: 100%;
+      height: 100px;
+      resize: none;
+      z-index: 1;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+    }
+}
+
+@media (max-width:400px) {
+
+    .modalContent {
+        margin-top: 10vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .classHeader {
+        font-size: 10pt;
+    }
+
+    .headerIconBtn {
+        font-size: 10pt;
+    }
+    
+    .messagesContainer {
+      width: 94%;
+    }
+    
+    .subject {
+      padding-right: 10px;
+    }
+    
+    .subjectNewMessage {
+      width: 160px;
+    }
+    
+    .date {
+      padding-left: 5px;
+      text-align: right;
+    }
+    
+    .resultCard {
+      padding-right: 5px;
+    }
+    
+    .bottomButtons {
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      padding-right: 40px;
+    }
+    
+    .audioReplay {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .messageContents {
+      padding-left: 10px;
+      padding-top: 20px;
+      padding-right: 20px;
+      padding-bottom: 10px;
+      width: 90%
+    }
+    
+    .newMessageContainer {
+      width: 90%;
+      border-radius: 10px;
+    }
+    
+    .sendTo {
+      display: inline-flex;
+      margin-bottom: 10px;
+      font-size: 15px;
+      justify-content: space-between;
+    }
+    
+    .textFieldNewMessage {
+      width: 100%;
+      height: 250px;
+      resize: none;
+      z-index: 1;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
     }
 }

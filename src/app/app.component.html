@@ -33,6 +33,7 @@
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
             <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
             <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
+            <a routerLink="/resources" class="navBtn" (click)="changeCheck()">{{ts.l.resources}}</a>
             <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
             <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="navBtn rightNavBtn" (click)="changeCheck()">{{ts.l.sign_in}}</a>
             <!-- user buttons on right -->

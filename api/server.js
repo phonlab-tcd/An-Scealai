@@ -19,6 +19,7 @@ const albumRoute = require('./routes/album.route');
 const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
+const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -42,6 +43,7 @@ app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
+app.use('/recordings', recordingRoute);
 
 const port = process.env.PORT || 4000;
 

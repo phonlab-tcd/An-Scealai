@@ -1,0 +1,48 @@
+.container {
+    width: 600px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 50px;
+    margin-bottom: 30px;
+}
+
+.author {
+    font-style: normal;
+}
+
+.content {
+    text-align: left;
+}
+
+.headerTitle {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.storyImg {
+  width: 300px;
+  height: 200px;
+}
+
+@media only screen and (max-width: 700px) {
+    .container {
+        width: 95%;
+    }
+    .content {
+        font-size: 10pt;
+    }
+    .header {
+        font-size: 15pt;
+    }
+}

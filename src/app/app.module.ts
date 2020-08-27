@@ -51,8 +51,7 @@ import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { MessagesComponent } from './messages/messages.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
-
-
+import { ResourcesComponent } from './resources/resources.component';
 
 
 @NgModule({
@@ -91,7 +90,8 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
     HighlightDirective,
     FilterPipe,
     MessagesComponent,
-    TeacherStatsComponent
+    TeacherStatsComponent,
+    ResourcesComponent
   ],
   imports: [
     BrowserModule,

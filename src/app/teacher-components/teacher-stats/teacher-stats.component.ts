@@ -37,7 +37,7 @@ export class TeacherStatsComponent implements OnInit {
               private userService: UserService, private router: Router,
               private route: ActivatedRoute,
               private statsService : StatsService,
-              private ts: TranslationService) { }
+              public ts: TranslationService) { }
 
   ngOnInit() {
     this.getClassroom();
