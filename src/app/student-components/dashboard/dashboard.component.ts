@@ -59,13 +59,16 @@ export class DashboardComponent implements OnInit {
 */
   ngOnInit() {
     this.storySaved = true;
+    console.log("DASHBOARD REACHED");
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
       this.stories = stories;
+      console.log(this.stories);
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
         this.id = params['id'];
+        console.log("DASHBOARD ID:", this.id);
         // loop through the array of stories and check
         // if the id in the url matches one of them
         for(let story of this.stories) {
@@ -131,7 +134,6 @@ export class DashboardComponent implements OnInit {
     this.popupVisible = false;
     this.feedbackVisible = false;
     this.dictionaryVisible = true;
-    
   }
 
 /*
@@ -184,6 +186,11 @@ export class DashboardComponent implements OnInit {
 // route to synthesis 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story.id);
+  }
+  
+// route to synthesis 
+  goToRecording() {
+    this.router.navigateByUrl('/recordings/' + this.story.id);
   }
 
 /*

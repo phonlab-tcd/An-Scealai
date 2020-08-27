@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
 import { EngagementService } from './engagement.service';
+import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
@@ -19,7 +20,7 @@ export class StoryService {
 
   constructor(private http: HttpClient, private router: Router,
     private auth: AuthenticationService, private engagement: EngagementService,
-    private ts : TranslationService) { }
+    private ts : TranslationService, private recordingService: RecordingService) { }
 
   baseUrl: string = config.baseurl + "story/";
 
@@ -30,12 +31,15 @@ export class StoryService {
       date: date,
       dialect: dialect,
       text: text,
-      author: author
+      author: author,
+      lastUpdated: new Date()
     };
     console.log(storyObj);
     this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
+        //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+        //this.recordingService.addRecordingForLoggedInUser(storyObj);
         this.router.navigateByUrl('/dashboard/' + id);
       });
   }
@@ -97,5 +101,9 @@ export class StoryService {
 
   gramadoir(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
+  }
+  
+  synthesiseRecording(id: string) : Observable<any> {
+    return this.http.get(this.baseUrl + 'synthesiseRecording/' + id);
   }
 }

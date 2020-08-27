@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
+import { ResourcesComponent } from './resources/resources.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'landing', component: LandingComponent},
   { path: 'about', component: AboutComponent},
   { path: 'technology', component: TechnologyComponent},
+  { path: 'resources', component: ResourcesComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
@@ -59,7 +61,7 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'recordings', component: RecordingComponent, canActivate: [AuthGuardService]},
+  { path: 'recordings/:id', component: RecordingComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'admin',

@@ -519,7 +519,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .dictionaryVisibleTextfield {
   width: 90%;
-  height: 160px;
+  height: 280px;
   resize: none;
   z-index: 1;
   color: #261500;

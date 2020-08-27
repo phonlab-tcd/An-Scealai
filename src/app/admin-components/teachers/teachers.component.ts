@@ -22,7 +22,7 @@ export class TeachersComponent implements OnInit {
   copiedTextClass : String = "hidden";
   modalClass : String = "hidden";
 
-  constructor(private http: HttpClient, private router: Router, private ts: TranslationService) { }
+  constructor(private http: HttpClient, private router: Router, public ts: TranslationService) { }
 
   ngOnInit() {
     this.getActiveTeacherCodes();

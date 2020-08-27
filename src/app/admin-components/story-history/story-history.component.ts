@@ -22,8 +22,7 @@ export class StoryHistoryComponent implements OnInit {
               private storyService: StoryService,
               private router: Router,
               private sanitizer: DomSanitizer,
-              private ts: TranslationService) { }
-
+              public ts: TranslationService) { }
 
   events: Event[];
   highlightedTexts: string[] = [];

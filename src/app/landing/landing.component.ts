@@ -10,7 +10,7 @@ import { TranslationService } from '../translation.service';
 })
 export class LandingComponent implements OnInit {
 
-  constructor(private auth: AuthenticationService, private router: Router,
+  constructor(public auth: AuthenticationService, private router: Router,
     public ts : TranslationService) { }
 
   ngOnInit() {

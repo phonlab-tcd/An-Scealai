@@ -12,6 +12,7 @@ const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 
 let Story = require('../models/story');
+let Event = require('../models/event');
 
 let db;
 MongoClient.connect('mongodb://localhost:27017', (err, client) => {

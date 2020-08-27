@@ -10,7 +10,7 @@ import { TranslationService } from '../../translation.service';
 })
 export class StatsComponent implements OnInit {
 
-  constructor(private statsService : StatsService, private ts: TranslationService) { }
+  constructor(private statsService : StatsService, public ts: TranslationService) { }
 
   chart: any;
   graphGenerated : boolean = false;
