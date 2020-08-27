@@ -86,8 +86,8 @@
           </div>
           <!-- message body -->
           <div class="newMessageBody">
-            <quill-editor class="textFieldNewMessage" placeholder="" name="text" [modules]="config" [(ngModel)]="message.text" (input)="messageSent = false" required> </quill-editor>
-            <!-- <textarea class="textFieldNewMessage" name="text" value="{{messageText}}" [(ngModel)]="message.text" (input)="messageSent = false" required></textarea> -->
+            <!--<quill-editor class="textFieldNewMessage" placeholder="" name="text" [modules]="config" [(ngModel)]="message.text" (input)="messageSent = false" required> </quill-editor> -->
+            <textarea class="textFieldNewMessage" name="text" value="{{messageText}}" [(ngModel)]="message.text" (input)="messageSent = false" required></textarea> 
           </div>
           <!-- buttons -->
           <div class="bottomButtons">

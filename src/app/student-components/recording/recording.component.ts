@@ -17,7 +17,7 @@ declare var MediaRecorder : any;
 export class RecordingComponent implements OnInit {
 
   constructor(private auth: AuthenticationService,
-              private storyService: StoryService, private ts: TranslationService,
+              private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService) { }
   
