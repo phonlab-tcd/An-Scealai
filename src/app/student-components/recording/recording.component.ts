@@ -69,6 +69,8 @@ export class RecordingComponent implements OnInit {
     ngOnInit() {
       this.modalClass = "hidden";
       this.chunks = [];
+      this.newRecordingParagraph = [false];
+      this.newRecordingSentence = [false];
       this.getStory();
     }
     
@@ -95,10 +97,8 @@ export class RecordingComponent implements OnInit {
           this.recording = res[0];
           
           console.log("RECORDING", this.recording);
-          console.log("STORY", this.story);
           
           //add updating button if recording text doesn't match story text
-          console.log(this.recording["storyData"]["text"] + "======" + this.story.text);
           if(this.recording["storyData"]["text"] !== this.story.text) {
             this.needsUpdating = true;
           }
@@ -108,7 +108,7 @@ export class RecordingComponent implements OnInit {
         else {
           console.log("No recordings have been made yet for this story -- generating a new one");
           this.recordingService.addRecordingForLoggedInUser(this.story);
-          this.ngOnInit();
+          window.location.reload();
         }
       
       });
@@ -125,6 +125,7 @@ export class RecordingComponent implements OnInit {
   * Synthesise recording text using story service
   */
     synthesiseRecording() {
+      console.log("new one to be synthesised", this.recording);
       this.paragraphs = [];
       this.sentences = [];
       this.audioFinishedLoading = false;
@@ -448,6 +449,7 @@ export class RecordingComponent implements OnInit {
       
         for(let i = 0; i < this.paragraphBlobs.length; i++) {
           if(this.paragraphBlobs[i]) {
+            console.log("Send:", this.paragraphBlobs[i]);
             this.recordingService.updateRecordings(this.recording._id, i, "paragraph", this.paragraphBlobs[i]).subscribe();
           }
         }
@@ -471,9 +473,13 @@ export class RecordingComponent implements OnInit {
     }
   
   displayPreviousRecording() {
+    this.newRecordingParagraph = [false];
+    this.newRecordingSentence = [false];
+    this.paragraphAudioSources = [];
+    this.sentenceAudioSources = [];
     console.log("RECORDING ID:", this.recording._id);
+    this.audioFinishedLoading = false;
     this.synthesiseRecording();
-    
   }
   
 // change css class to show recording container
@@ -498,19 +504,25 @@ export class RecordingComponent implements OnInit {
   switchToHistoryMode() {
     this.recordingMode = false;
     this.historyMode = true;
-    this.recording = null;
     this.paragraphs = [];
     this.sentences = [];
+    this.newRecordingParagraph = [false];
+    this.newRecordingSentence = [false];
+    this.paragraphAudioSources = [];
+    this.sentenceAudioSources = [];
   }
   
   switchToRecordMode() {
-    this.recording = null;
     this.historyMode = false;
     this.recordingMode = true;
     this.audioFinishedLoading = false;
     this.recordingsFinishedLoading = false;
     this.paragraphs = [];
     this.sentences = [];
+    this.newRecordingParagraph = [false];
+    this.newRecordingSentence = [false];
+    this.paragraphAudioSources = [];
+    this.sentenceAudioSources = [];
     this.getRecording();
   }
 }

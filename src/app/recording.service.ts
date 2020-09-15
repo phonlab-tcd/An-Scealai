@@ -52,10 +52,12 @@ export class RecordingService {
   }
   
   updateHistoryStatus(id: string): Observable<any> {
+    console.log(this.baseUrl + "updateHistoryStatus/" + id);
     return this.http.post(this.baseUrl + "updateHistoryStatus/" + id, {});
   }
   
   synthesiseRecording(id: string) : Observable<any> {
+    console.log(this.baseUrl + "synthesiseRecording/" + id);
     return this.http.get(this.baseUrl + 'synthesiseRecording/' + id);
   }
   
