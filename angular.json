@@ -25,6 +25,8 @@
             "styles": [
               "src/styles.css",
               "node_modules/angular-text-input-highlight/text-input-highlight.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/quill/dist/quill.core.css"
             ],
             "scripts": [
               {
