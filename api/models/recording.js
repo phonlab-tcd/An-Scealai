@@ -8,7 +8,7 @@ let VoiceRecording = new Schema({
   addedToHistory: Boolean,
   paragraphAudioIds: {
       type: Map,
-      of: [String],
+      of: String,
       default: {}
   },
   sentenceAudioIds: {

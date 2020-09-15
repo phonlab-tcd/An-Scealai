@@ -65,7 +65,7 @@
                       <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                       <!-- recording button -->
                       <button *ngIf="recordingMode && !isRecording" class="recordBtn notRecordingBtn" type="button" (click)="prepRecording(p.index)"></button>
-                      <button [hidden]="recordingMode && !isRecording" [attr.id]="'p-' + p.index" class="recordBtn notRecordingBtn" (click)="stopRecording(p.index);" ></button>          
+                      <button [hidden]="(recordingMode && !isRecording) || historyMode" [attr.id]="'p-' + p.index" class="recordBtn notRecordingBtn" (click)="stopRecording(p.index);" ></button>          
                     </span>
                     <!-- if sentence option selected -->
                     <span *ngIf="sectionSplit==='sentence'">
@@ -103,7 +103,7 @@
                 </div>
                 <div *ngIf="recordingMode" style="padding-left: 40px">
                   <button *ngIf="needsUpdating" class="changeSplitBtn" (click)="showModal()"> Update Story </button>
-                  <button *ngIf="recordingHistory && recordingHistory.length > 0" class="changeSplitBtn" (click)="switchToHistoryMode()"> View History </button>
+                  <button *ngIf="recordingHistory && recordingHistory.length > 0" class="changeSplitBtn" (click)="switchToHistoryMode()"> View History </button> 
                 </div>
                 <div *ngIf="historyMode" style="padding-left: 40px">
                   <button class="changeSplitBtn" (click)="switchToRecordMode()"> Record Story </button>

@@ -59,7 +59,6 @@ export class DashboardComponent implements OnInit {
 */
   ngOnInit() {
     this.storySaved = true;
-    console.log("DASHBOARD REACHED");
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
@@ -68,7 +67,6 @@ export class DashboardComponent implements OnInit {
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
         this.id = params['id'];
-        console.log("DASHBOARD ID:", this.id);
         // loop through the array of stories and check
         // if the id in the url matches one of them
         for(let story of this.stories) {

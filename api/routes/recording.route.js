@@ -37,7 +37,6 @@ recordingRoutes.route('/addRecordingForUser/:id').post((req, res) => {
                 recording.addedToHistory = req.body.recording.addedToHistory;
                 recording.paragraphAudioIds = new Map();
                 recording.sentenceAudioIds = new Map();
-                console.log(recording);
                 recording.save().then(() => {
                     res.status(200).json("Recording added succesfully");
                 })
@@ -83,6 +82,7 @@ recordingRoutes.route('/updateHistoryStatus/:id').post((req, res) => {
     VoiceRecording.findById(req.params.id, (err, recording) => {
         if(err) res.json(err);
         if(recording) {
+          
             recording.addedToHistory = true;
             recording.save();
             res.status(200).json({"message" : "Recording added to history successfully"});
@@ -181,9 +181,11 @@ recordingRoutes.route('/getRecordedAudio/:id/:index/:type').get((req, res) => {
 
 // Update recordings  
 recordingRoutes.route('/updateRecordings/:id/:index/:type').post((req, res) => {
+  console.log("Function reached");
   VoiceRecording.findById(req.params.id, (err, recording) => {
       if(err) res.json(err);
       if(recording) {
+        console.log("RECORDING FOUND");
           const storage = multer.memoryStorage();
           const upload = multer({ storage: storage, limits: { fields: 1, fileSize: 6000000, files: 1, parts: 2 }});
           upload.single('audio')(req, res, (err) => {
@@ -240,6 +242,7 @@ recordingRoutes.route('/updateRecordings/:id/:index/:type').post((req, res) => {
               console.log(req.params.type);
               console.log("Paragraph ids", recording.paragraphAudioIds);
               console.log("sentence ids", recording.sentenceAudioIds);
+              recording.date = new Date();
               recording.update();
               recording.save();
               readableTrackStream.pipe(uploadStream);
