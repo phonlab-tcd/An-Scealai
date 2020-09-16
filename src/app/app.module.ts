@@ -9,7 +9,6 @@ import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
-import { QuillModule } from 'ngx-quill';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -101,7 +100,6 @@ import { ResourcesComponent } from './resources/resources.component';
     SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
-    QuillModule.forRoot()
   ],
   providers: [ 
     StoryService,
