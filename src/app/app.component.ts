@@ -10,6 +10,9 @@ import { NotificationService } from './notification-service.service';
 import { EngagementService } from './engagement.service';
 import { TranslationService } from './translation.service';
 import { MessageService } from './message.service';
+import { filter } from 'rxjs/operators';
+
+declare var gtag;
 
 @Component({
   selector: 'app-root',
@@ -34,6 +37,15 @@ export class AppComponent {
               private engagement: EngagementService, public ts : TranslationService) {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
+    });
+    
+    const navEndEvents = this._router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    );
+    navEndEvents.subscribe((event: NavigationEnd) => {
+      gtag('config', 'UA-178889778-1', {
+        'page_path' : event.urlAfterRedirects
+      });
     });
   }
 

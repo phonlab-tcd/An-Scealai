@@ -554,3 +554,6 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
   right: 300px;
   margin-top: 370px;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
