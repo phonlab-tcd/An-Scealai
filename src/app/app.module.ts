@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion'
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -51,6 +53,8 @@ import { FindUserComponent } from './admin-components/find-user/find-user.compon
 import { MessagesComponent } from './messages/messages.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { ResourcesComponent } from './resources/resources.component';
+
+
 
 
 @NgModule({
@@ -100,6 +104,8 @@ import { ResourcesComponent } from './resources/resources.component';
     SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
+    BrowserAnimationsModule,
+    MatExpansionModule
   ],
   providers: [ 
     StoryService,

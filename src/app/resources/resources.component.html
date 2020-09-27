@@ -3,19 +3,138 @@
     {{ts.l.resources}}
   </div>
   <div class="content">
-    <div class="headerTitle">Examples - LARA Stories</div><br>
-    <div><b> Mar a Baisteadh Fionn </b></div>
-    <a href="https://www.abair.tcd.ie/lara/mar_a_baisteadh_fionnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer">
-      <img src="assets/img/fionn01_colors.jpg" class="storyImg" alt="Mar a Baisteadh Fionn">
-    </a>
-    <br>
-    <br>
-    <div><b> Balor </b></div>
-    <a href="https://www.abair.tcd.ie/lara/balor2vocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer">
-      <img src="assets/img/1_balor.png" class="storyImg" alt="Balor">
-    </a>
-    <br>
-    <br>
-    <div> <a href="https://www.abair.tcd.ie/lara/fairceallach_fhinn_mhic_cumhaill_noposvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> Fairceallach Fhinn Mhic Cumhaill</a></div>
+    <div class="headerTitle"> {{ts.l.story_examples}} </div><br>
+    <div style="font-size: 15pt;"> {{ts.l.higher_level}} </div>
+    <!-- Gweedore (Ulster) stories-->
+    <div class="dialectTitle"> {{ts.l.gweedore}} </div>
+    <mat-accordion multi>
+      <!-- Balor -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/1_balor.png" class="storyImg" alt="Balor">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Balor
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.balor1}} </ul>
+          <ul> {{ts.l.balor2}} </ul>
+          <ul> {{ts.l.balor3}} </ul>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/balor2vocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Beatha na Féinne -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Beatha na Féinne">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Beatha na Féinne 
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.beathna_na_feinne1}} </ul>
+          <ul> {{ts.l.beathna_na_feinne2}}</ul>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/beatha-na-feinne_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Colorado -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Beatha na Féinne">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Colorado
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.colorado1}} </ul>
+          <ul> {{ts.l.colorado2}}</ul>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/colorado_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Druma Mór -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Beatha na Féinne">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Druma Mór
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.druma_mor1}}</ul>
+          <ul> {{ts.l.druma_mor2}} </ul>
+          <ul> <i> {{ts.l.druma_mor3}}</i> </ul>
+          <ul> {{ts.l.druma_mor4}} </ul>
+          <ul> {{ts.l.druma_mor5}} </ul>
+          <ul> {{ts.l.druma_mor6}}</ul>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/druma-mor_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      
+    </mat-accordion>
+    
+    <!-- Mumhan (Munster) stories-->
+    <div class="dialectTitle"> {{ts.l.mumhan}} </div>
+    <mat-accordion multi>
+      <!-- Mar a Baisteadh Fionn  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/fionn01_colors.jpg" class="storyImg" alt="Mar a Baisteadh Fionn">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Mar a Baisteadh Fionn
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.mar_a_baisteadh_fionn1}} </ul>
+          <ul> {{ts.l.mar_a_baisteadh_fionn2}} </ul>
+          <ul> {{ts.l.mar_a_baisteadh_fionn3}} </ul>
+          <ul> {{ts.l.mar_a_baisteadh_fionn4}} </ul>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/mar_a_baisteadh_fionnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Fairceallach Fhinn Mhic Chumhaill -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/Fairceallach.png" class="storyImg" alt="Fairceallach"> 
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+             Fairceallach Fhinn Mhic Chumhaill
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/fairceallach-fhinn-mhic-cumhaill_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Pósadh ar an mBlascaod Mór -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Beatha na Féinne">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Pósadh ar an mBlascaod Mór
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <ul> {{ts.l.posadh_ar_an_mblascaod_mor1}} </ul>
+          <ul> {{ts.l.posadh_ar_an_mblascaod_mor2}} </ul>
+        <mat-action-row>
+           <p class="viewStoryBtn"> Coming Soon </p>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    <!-- Chonamara stories-->
+    <div class="dialectTitle"> {{ts.l.chonamara}} </div>
+      <div> Coming Soon! </div>
   </div>
 </div>
