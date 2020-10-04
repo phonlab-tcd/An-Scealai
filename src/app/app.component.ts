@@ -31,6 +31,7 @@ export class AppComponent {
   wasInside : boolean = false;
   currentUser: string = '';
   teacherMessagesSum: number = 0;
+  currentLanguage: string = '';
 
   constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
               private storyService : StoryService, private notificationSerivce : NotificationService,
@@ -55,6 +56,8 @@ export class AppComponent {
 */
   ngOnInit() {
     this.ts.initLanguage();
+    this.currentLanguage = this.ts.getCurrentLanguage();
+    console.log(this.currentLanguage);
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
       this.storiesForNotifications = res;
       console.log(this.storiesForNotifications);
@@ -78,12 +81,6 @@ export class AppComponent {
     if(this.auth.isLoggedIn()){
       console.log(this.auth.getUserDetails().username);
     }
-    /*
-    this.notificationSerivce.getStories().subscribe((res: Story[]) => {
-      this.storiesForNotifications = res;
-      console.log(this.storiesForNotifications); 
-    });
-    */
   }
   
 /*
@@ -112,6 +109,16 @@ export class AppComponent {
   goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
+  }
+  
+  changeToEnglish() {
+    this.ts.setLanguage("en");
+    this.currentLanguage = "English";
+  }
+  
+  changeToIrish() {
+    this.ts.setLanguage("ga");
+    this.currentLanguage = "Gaeilge";
   }
 
 /*
