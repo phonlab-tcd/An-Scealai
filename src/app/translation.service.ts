@@ -55,6 +55,10 @@ export class TranslationService {
     }
     return null;
   }
+  
+  getCurrentLanguage() : string {
+    return this.l.name;
+  }
 
   updateUserLanguage(code : string) : Observable<any> {
     return this.http.post(this.baseUrl + "user/setLanguage/" + this.auth.getUserDetails()._id, {language : code});

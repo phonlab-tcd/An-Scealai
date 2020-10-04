@@ -70,6 +70,17 @@
   right: 20px;
 }
 
+.languageBtn {
+  background-color: #70a87f;
+  color: #FFFFFF;
+  font-size: 12pt;
+}
+
+.languageBtn:hover {
+  cursor: pointer;
+  color: #91ffa5;
+}
+
 .notificationBtn {
   margin-left: 5px;
   background-color: #bd2323;

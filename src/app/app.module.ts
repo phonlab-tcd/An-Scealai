@@ -9,6 +9,7 @@ import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -105,7 +106,8 @@ import { ResourcesComponent } from './resources/resources.component';
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgbDropdownModule
   ],
   providers: [ 
     StoryService,
