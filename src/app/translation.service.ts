@@ -57,7 +57,14 @@ export class TranslationService {
   }
   
   getCurrentLanguage() : string {
-    return this.l.name;
+    if(this.l) {
+      return this.l.name;
+    }
+    else {
+      this.setLanguage('ga');
+      return "Gaeilge";
+    }
+    
   }
 
   updateUserLanguage(code : string) : Observable<any> {
