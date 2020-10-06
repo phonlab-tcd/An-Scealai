@@ -29,6 +29,11 @@
     cursor: pointer;
 }
 
+.footer{
+  padding-bottom: 20px;
+}
+
+
 @media (max-width:550px) {
     .content {
         flex-direction: column;

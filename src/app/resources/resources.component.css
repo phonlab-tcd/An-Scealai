@@ -65,6 +65,7 @@
     background-color: #70a87f;
     color: white;
     border-radius: 4px;
+    text-decoration:none
 }
 
 .viewStoryBtn:hover {
