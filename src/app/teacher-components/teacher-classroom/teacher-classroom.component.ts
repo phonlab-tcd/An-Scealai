@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
+import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 
@@ -23,7 +24,8 @@ export class TeacherClassroomComponent implements OnInit {
               private router: Router,
               private userService: UserService,
               public ts : TranslationService,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private storyService : StoryService) { }
   
   classroom : Classroom;
   modalClass : string = "hidden";
@@ -36,6 +38,7 @@ export class TeacherClassroomComponent implements OnInit {
   newTitle: string;
   unreadMessages: number = 0;
   messagesForNotifications: Message[] = [];
+  numOfStories: Map<string, number> = new Map();
 
   ngOnInit() {
     this.getClassroom();
@@ -81,6 +84,10 @@ export class TeacherClassroomComponent implements OnInit {
       this.userService.getUserById(id).subscribe((res : User) => {
         this.students.push(res);
         this.studentIds.push(res._id);
+        this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
+          let count = Object.keys(stories).length;
+          this.numOfStories.set(res.username, count);
+        })
       });
     }
   }

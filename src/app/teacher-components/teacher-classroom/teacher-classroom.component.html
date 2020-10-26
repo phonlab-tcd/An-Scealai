@@ -53,7 +53,7 @@
       <div class="classBody">
         <div class="classroomCard" *ngFor="let student of students" (click)="goToStudent(student._id)">
           <div class="classroomTitle">{{student.username}}</div>
-          <i class="fas fa-arrow-right arrow"></i>
+          <i class="fas fa-arrow-right arrow"> {{numOfStories.get(student.username)}} </i>
         </div>
       </div>
     </div>

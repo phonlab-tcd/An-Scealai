@@ -134,17 +134,17 @@ border-radius: 5px;
 }
 
 .optionsPopupOld:after {
-content: '';
-position: absolute;
-top: 0px;
-right: 10px;
-width: 0;
-height: 0;
-border: 10px solid transparent;
-border-bottom-color: #437250;
-border-top: 0;
-margin-left: -10px;
-  margin-top: -10px;
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom-color: #437250;
+    border-top: 0;
+    margin-left: -10px;
+      margin-top: -10px;
 }
 
 .notificationsBody {

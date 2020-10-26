@@ -132,6 +132,7 @@ export class DashboardComponent implements OnInit {
     this.popupVisible = false;
     this.feedbackVisible = false;
     this.dictionaryVisible = true;
+    this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
   }
 
 /*
