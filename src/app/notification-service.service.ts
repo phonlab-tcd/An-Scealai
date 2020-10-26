@@ -12,13 +12,6 @@ import { ClassroomService } from './classroom.service';
   providedIn: 'root'
 })
 export class NotificationService {
-/*
-  private _messages: BehaviorSubject<Story[]>;
-  private dataStore: {
-    stories: Story[],
-    messages: Message[]
-  }
-  */
   stories: Story[] = [];
   messages: Message[] = [];
   teacherMessages: Map<Classroom, number> = new Map();
@@ -29,12 +22,6 @@ export class NotificationService {
 
   constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService,
               private classroomService: ClassroomService) {
-    //this.dataStore = { stories: [], messages: [] };
-    //this._messages = <BehaviorSubject<Story[]>>new BehaviorSubject([]);
-    /*
-    if(this.auth.isLoggedIn()) {
-      this.getNotifications();
-    }]*/
   }
 
   /*
@@ -79,38 +66,6 @@ export class NotificationService {
       });
     }
   }
-  
-/*
-* Fill dataStore stories array with stories where the student has not yet viewed the feedback
-*
-
-  getNotifications() {
-    this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
-      let stories = res;
-      for(let story of stories) {
-        if(story.feedback.seenByStudent === false) {
-          this.dataStore.stories.push(story);
-        }
-      }
-      this.loadObservable();
-    });
-  }
-/
-/*
-* Fill _stories array with data from dataStore
-
-  private loadObservable() {
-    this._messages.next(Object.assign({}, this.dataStore).stories);
-  }
-*/
-/*
-* Return the list of stories that have not viewed feedback
-
-  getStories() {
-    //return this._messages.asObservable();
-    //this.emitter.emit(this._messages.asObservable());
-  }
-  */
 
   /*
   * Remove a story from the feedback message array

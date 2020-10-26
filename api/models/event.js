@@ -17,6 +17,7 @@ let Event = new Schema({
             'VIEW-FEEDBACK',
             'CREATE-MESSAGE',
             'RECORD-STORY',
+            'USE-DICTIONARY'
         ],
     },
     storyData: Object,

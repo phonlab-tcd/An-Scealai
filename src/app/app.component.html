@@ -31,22 +31,28 @@
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
-            <a routerLink="/about" class="navBtn" (click)="changeCheck()">{{ts.l.about}}</a> 
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">{{ts.l.about}}</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.about_an_scealai}}</button>
+                <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
+              </div>
+            </div>
             <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
-            <a routerLink="/resources" class="navBtn" (click)="changeCheck()">{{ts.l.resources}}</a>
+            <a routerLink="/resources" class="navBtn" (click)="changeCheck()"> LARA </a>
             <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
             <!-- Change language dropdown and login button-->
             <div class="navBtn rightNavBtn">
-              <div ngbDropdown #myDrop="ngbDropdown">
-                <button class="btn languageBtn" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()" onclick="this.blur();">{{currentLanguage}}</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownManual">
-                  <button ngbDropdownItem (click)="changeToEnglish()"> English </button>
-                  <button ngbDropdownItem (click)="changeToIrish()"> Gaeilge </button>
+              <div ngbDropdown class="d-inline-block">
+                <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">{{currentLanguage}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem (click)="changeToEnglish()">English</button>
+                  <button ngbDropdownItem (click)="changeToIrish()">Gaeilge</button>
                 </div>
               </div>
               <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn languageBtn" (click)="changeCheck()" onclick="this.blur();">{{ts.l.sign_in}}</a>
               <div *ngIf="auth.isLoggedIn()" class="">
-                  <a routerLink="/profile" (click)="changeCheck()" class="btn languageBtn" onclick="this.blur();">{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
+                  <a routerLink="/profile" (click)="changeCheck()" class="btn languageBtn" >{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 && messagesForNotifications" (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications.length == 0 && messagesForNotifications.length > 0 " (click)="showNotifications()">{{messagesForNotifications.length}}</div>
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>

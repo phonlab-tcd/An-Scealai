@@ -9,6 +9,7 @@ import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
+import { MatCardModule } from '@angular/material/card'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -54,7 +55,7 @@ import { FindUserComponent } from './admin-components/find-user/find-user.compon
 import { MessagesComponent } from './messages/messages.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { ResourcesComponent } from './resources/resources.component';
-
+import { TeamComponent } from './team/team.component';
 
 
 
@@ -95,7 +96,8 @@ import { ResourcesComponent } from './resources/resources.component';
     FilterPipe,
     MessagesComponent,
     TeacherStatsComponent,
-    ResourcesComponent
+    ResourcesComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +109,8 @@ import { ResourcesComponent } from './resources/resources.component';
     TextInputHighlightModule,
     BrowserAnimationsModule,
     MatExpansionModule,
-    NgbDropdownModule
+    MatCardModule,
+    NgbDropdownModule,
   ],
   providers: [ 
     StoryService,

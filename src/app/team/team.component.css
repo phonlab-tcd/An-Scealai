@@ -1,0 +1,105 @@
+.container {
+    width: 900px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.content {
+    text-align: left;
+}
+
+.headerTitle {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: left;
+}
+
+.name {
+  font-size: 12pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dialectTitle {
+    font-size: 15pt;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 30px;
+}
+
+.storyBlock {
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.story {
+  padding-bottom: 20px;
+  padding-left: 30px;
+}
+
+.neasaImg {
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+}
+
+.maddieImg {
+  width: 200px;
+  height: 170px;
+  padding: 5px;
+  padding-right: 20px;
+}
+
+.oisinImg {
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  padding-left: 20px;
+}
+
+.annaImg {
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  padding-right: 20px;
+}
+
+.teamImg {
+  width: 500px;
+  height: 350px;
+  padding: 5px;
+}
+
+.developerCard {
+  display: flex;
+}
+
+.panelDescription {
+  font-size : 12pt;
+  font-weight: bold;
+}
+
+.viewStoryBtn {
+    padding: 7px;
+    background-color: #70a87f;
+    color: white;
+    border-radius: 4px;
+    text-decoration:none
+}
+
+.viewStoryBtn:hover {
+    cursor: pointer;
+}

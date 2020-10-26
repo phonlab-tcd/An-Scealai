@@ -5,6 +5,7 @@ import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { TeamComponent } from './team/team.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent},
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},
+  { path: 'team', component: TeamComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},

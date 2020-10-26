@@ -36,9 +36,7 @@ export class TeacherStudentComponent implements OnInit {
           this.userId = params['id'].toString();
           this.student = res;
           this.setClassroomId();
-          this.storyService
-          .getStoriesFor(this.student.username)
-          .subscribe((data: Story[]) => {
+          this.storyService.getStoriesFor(this.student.username).subscribe((data: Story[]) => {
             this.stories = data, this.filterFeedback(data);
           });
         });
