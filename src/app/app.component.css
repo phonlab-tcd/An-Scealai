@@ -81,6 +81,11 @@
   color: #91ffa5;
 }
 
+.userGuide {
+  color: black;
+  text-decoration: none;
+}
+
 .notificationBtn {
   margin-left: 5px;
   background-color: #bd2323;
