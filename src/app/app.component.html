@@ -31,16 +31,35 @@
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
             <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
+            <!-- about menu -->
             <div ngbDropdown class="d-inline-block">
               <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">{{ts.l.about}}</button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.about_an_scealai}}</button>
-                <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
+                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">An Scéalaí</button>
+                <button ngbDropdownItem (click)="changeCheck()"> <a href="../assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
+                <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>  
               </div>
             </div>
-            <a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a>
-            <a routerLink="/resources" class="navBtn" (click)="changeCheck()"> LARA </a>
-            <a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a>
+            <!-- technology menu -->
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">{{ts.l.technology}}</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()">{{ts.l.technology}}</button>
+                <!-- <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.other_CALL_projects}}</button> -->
+              </div>
+            </div>
+            <!-- LARA menu -->
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">LARA</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()">{{ts.l.irish_stories}}</button>
+                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
+              </div>
+            </div>
+            <!--<a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a> -->
+            <!--<a routerLink="/resources" class="navBtn" (click)="changeCheck()"> LARA </a>-->
+            <!--<a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a> -->
+            <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
             <!-- Change language dropdown and login button-->
             <div class="navBtn rightNavBtn">
               <div ngbDropdown class="d-inline-block">
