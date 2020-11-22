@@ -56,6 +56,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
+import { AboutLaraComponent } from './about-lara/about-lara.component';
 
 
 
@@ -97,7 +98,8 @@ import { TeamComponent } from './team/team.component';
     MessagesComponent,
     TeacherStatsComponent,
     ResourcesComponent,
-    TeamComponent
+    TeamComponent,
+    AboutLaraComponent
   ],
   imports: [
     BrowserModule,

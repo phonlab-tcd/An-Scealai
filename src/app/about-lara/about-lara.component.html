@@ -1,0 +1,137 @@
+<div class="container">
+  <div class="content">
+    <div class="headerTitle" innerHTML={{ts.l.LARA_title}}></div>
+  <div class="LARAforIrish">
+    <div style="font-weight:bold; font-size:15pt;"> {{ts.l.LARA_for_Irish_title}} </div>
+    <p innerHTML={{ts.l.LARA_for_Irish}}> </p>
+  </div>
+  
+  <mat-accordion multi>
+    <!-- What is LARA? -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'240px'">
+        <mat-panel-title>
+          <b>{{ts.l.what_is_LARA}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          <ul>
+            <li innerHTML={{ts.l.what_is_LARA_point1}}></li>
+            <li innerHTML={{ts.l.what_is_LARA_point2}}></li>
+            <li innerHTML={{ts.l.what_is_LARA_point3}}></li>
+          </ul>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <div> {{ts.l.what_is_LARA_body1}} </div> <br>
+        <div> {{ts.l.what_is_LARA_body2}} </div> <br>
+        <div> {{ts.l.what_is_LARA_body3}} </div>
+    </mat-expansion-panel>
+    <!-- For Whom? -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{ts.l.for_whom}}</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <div innerHTML={{ts.l.for_learners}}> </div> <br>
+        <div innerHTML={{ts.l.for_teachers}}> </div>
+        <ul>
+          <li> {{ts.l.for_teachers_point1}} </li>
+          <li> {{ts.l.for_teachers_point2}} </li>
+          <li> {{ts.l.for_teachers_point3}} </li>
+          <li> {{ts.l.for_teachers_point4}} </li>
+          <li> {{ts.l.for_teachers_point5}} </li>
+          <li> {{ts.l.for_teachers_point6}} </li>
+        </ul>
+        <div innerHTML={{ts.l.for_whom_body}}></div>
+    </mat-expansion-panel>
+    <!-- List of Stories available to date -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{ts.l.list_of_stories}}</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <ul>
+          <li> {{ts.l.list_story1}} </li>
+          <li> {{ts.l.list_story2}} </li>
+          <li> {{ts.l.list_story3}} </li>
+          <li> {{ts.l.list_story4}} </li>
+          <li> {{ts.l.list_story5}} </li>
+          <li> {{ts.l.list_story6}} </li>
+          <li> {{ts.l.list_story7}} </li>
+        </ul>
+    </mat-expansion-panel>
+    <!-- LARA features and functionality -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{ts.l.LARA_features_and_functionality}}</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <ul>
+          <li> {{ts.l.LARA_texts_include}} </li>
+          <ul>
+            <li innerHTML={{ts.l.LARA_features1_point1}}></li>
+            <li> {{ts.l.LARA_features1_point2}} </li>
+            <li> {{ts.l.LARA_features1_point3}} </li>
+            <li> {{ts.l.LARA_features1_point4}} </li>
+            <li> {{ts.l.LARA_features1_point5}} </li>
+            <ul innerHTML={{ts.l.LARA_features1_point5_points}}>
+            </ul>
+          </ul>
+          <li> {{ts.l.LARA_links_the_word}} </li>
+          <ul>
+            <li> {{ts.l.LARA_links_the_word_point1}} </li>
+          </ul>
+        </ul>
+    </mat-expansion-panel>
+    <!-- More information -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{ts.l.more_information}}</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <b>{{ts.l.on_the_background_of_LARA}}</b>
+        <ul>
+          <li innerHTML={{ts.l.background_point1}}></li>
+          <li innerHTML={{ts.l.background_point2}}></li>
+        </ul>
+        <div class="logos">
+          <img src="assets/img/callector_project.png" class="logoImg" style="padding-right: 10px" alt="Callector Project Logo">
+          <img src="assets/img/enet_collect.png" class="logoImg" style="padding-left: 10px" alt="enet Collect Logo">
+        </div>
+        <b> {{ts.l.on_the_research_background}}</b>
+        <ul>
+          <li innerHTML={{ts.l.on_the_research_background_point1}}></li>
+          <li innerHTML={{ts.l.on_the_research_background_point2}}></li>
+          <li>{{ts.l.on_the_research_background_point3}}</li>
+        </ul>
+        <b> {{ts.l.on_the_speech_and_technology}}</b>
+        <ul>
+          <li>{{ts.l.on_the_speech_and_technology_point1}}</li>
+          <li innerHTML={{ts.l.on_the_speech_and_technology_point2}}></li>
+          <li innerHTML={{ts.l.on_the_speech_and_technology_point3}}></li>
+        </ul>
+        <b> {{ts.l.sample_research_papers}}</b><br>
+        <br><b> LARA: </b>
+        <ul>
+          <li> {{ts.l.lara_paper1}}</li>
+          <li innerHTML={{ts.l.lara_paper2}}></li>
+        </ul> 
+        <b> {{ts.l.the_abair_initiative}}</b>
+        <ul>
+          <li> {{ts.l.abair_paper1}}</li>
+          <li> {{ts.l.abair_paper2}}</li>
+        </ul>
+        <b> {{ts.l.other_relavent_research}}</b>
+        <ul>
+          <li> {{ts.l.other_relavent_research1}}</li>
+        </ul>
+            
+    </mat-expansion-panel>
+    
+  </mat-accordion>
+  
+  
+</div>
