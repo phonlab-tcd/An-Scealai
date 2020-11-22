@@ -50,10 +50,10 @@
             </div>
             <!-- LARA menu -->
             <div ngbDropdown class="d-inline-block">
-              <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">LARA</button>
+              <button class="btn languageBtn" ngbDropdownToggle (focus)="myDrop.open()" onclick="this.blur();">LARA</button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()">{{ts.l.irish_stories}}</button>
-                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
+                <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
               </div>
             </div>
             <!--<a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a> -->

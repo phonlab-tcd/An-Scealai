@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
+import { AboutLaraComponent } from './about-lara/about-lara.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
@@ -49,6 +50,7 @@ import { StoryHistoryComponent } from './admin-components/story-history/story-hi
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
   { path: 'about', component: AboutComponent},
+  { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},
   { path: 'team', component: TeamComponent},
