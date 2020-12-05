@@ -303,7 +303,7 @@ export class DashboardComponent implements OnInit {
           }
         } 
       }
-      console.log(this.filteredTags);
+      console.log("Filtered tags: ", this.filteredTags);
       this.updateStats();
     });
   }
