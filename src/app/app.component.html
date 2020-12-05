@@ -11,7 +11,7 @@
               <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
           </div>
         </div>
-        <!-- not sure yet -->
+        <!-- not sure yet what this does -->
         <div class="nav-btn" (click)="changeCheck()">
             <label *ngIf="!checkVal">
                 <span></span>
@@ -69,9 +69,12 @@
                   <button ngbDropdownItem (click)="changeToIrish()">Gaeilge</button>
                 </div>
               </div>
+              <!-- sign in button -->
               <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn languageBtn" (click)="changeCheck()" onclick="this.blur();">{{ts.l.sign_in}}</a>
               <div *ngIf="auth.isLoggedIn()" class="">
+                  <!-- username button -->
                   <a routerLink="/profile" (click)="changeCheck()" class="btn languageBtn" >{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
+                  <!-- notifications circle -->
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 && messagesForNotifications" (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications.length == 0 && messagesForNotifications.length > 0 " (click)="showNotifications()">{{messagesForNotifications.length}}</div>
                   <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>
@@ -95,7 +98,7 @@
             </div>
         </div>
         <!-- notification container for TEACHER messages if button clicked -->
-        <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notifcationPopup">
+        <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notificationPopup">
           <div class="notificationsHeader">{{ts.l.new_messages}}</div>
           <div class="notificationsBody" *ngFor="let message of teacherMessagesForNotifications | keyvalue">
               <div *ngIf="message.value > 0" class="notificationCard" (click)="goToMessages(message.key._id)">

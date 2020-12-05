@@ -330,6 +330,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
             }, (err, resp, body) => {
                 if(err) res.send(err);
                 if(body) {
+                  console.log("Gramadoir body", body);
                     res.send(body);
                 } else {
                     res.sendStatus(404);

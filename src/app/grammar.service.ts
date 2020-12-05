@@ -44,7 +44,7 @@ export class GrammarService {
               tags.push(tag);
             })
             tagSets.vowelTags = tags;
-            console.log(tagSets);
+            console.log("Tagsets", tagSets);
             observer.next(tagSets);
             observer.complete();
           });

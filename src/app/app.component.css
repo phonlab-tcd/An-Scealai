@@ -107,7 +107,7 @@
   background-color: #d82727;
 }
 
-.notifcationPopup {
+.notificationPopup {
   position: absolute;
   top: 40px;
   right: 10px;
@@ -260,7 +260,7 @@ border-radius: 5px;
     overflow-y: auto;
   }
 
-  .notifcationPopup {
+  .notificationPopup {
     position: absolute;
     top: 220px;
     right: 0px;
