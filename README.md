@@ -23,20 +23,14 @@ $ npm install
 ```
 
 ## Running the App
-1) In the project root folder, /an-scealai, run the following command to start the Frontend server:
+1) In the project root folder, /an-scealai, run the following command to start the Angular frontend server:
 ```bash
-$ ng serve
+$ npm run frontend
 ```
 
-2) Run the Mongo Daemon with the following command:
+2) In another terminal window, run the following command to start the MongoDB backend:
 ```bash
-$ mongod
+$ npm run backend
 ```
 
-3) In the API folder, /an-scealai/api, run the following command to start the Backend server:
-```bash
-$ cd api/
-$ nodemon server.js
-```
-
-4) Navigate to http://localhost:4200/.
+3) Navigate to http://localhost:4200/.
