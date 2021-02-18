@@ -71,7 +71,7 @@
               </div>
               <!-- sign in button -->
               <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn languageBtn" (click)="changeCheck()" onclick="this.blur();">{{ts.l.sign_in}}</a>
-              <div *ngIf="auth.isLoggedIn()" class="">
+              <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
                   <!-- username button -->
                   <a routerLink="/profile" (click)="changeCheck()" class="btn languageBtn" >{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
                   <!-- notifications circle -->

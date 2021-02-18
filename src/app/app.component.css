@@ -70,6 +70,11 @@
   right: 20px;
 }
 
+.profileBtnContainer {
+  display: flex;
+  align-items: center;
+}
+
 .languageBtn {
   background-color: #70a87f;
   color: #FFFFFF;
@@ -127,29 +132,32 @@
 .optionsPopupOld {
   z-index: 10;
   width: 180px;
+  top: 40px;
+  right: 20px;
   position: fixed;
   margin-top: 25px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   background-color: #f7f2e7;
   -webkit-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
--moz-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
-border-radius: 5px;
+  -moz-box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
+  box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.61);
+  border-radius: 5px;
 }
 
 .optionsPopupOld:after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-bottom-color: #437250;
-    border-top: 0;
-    margin-left: -10px;
-      margin-top: -10px;
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 25px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #437250;
+  border-top: 0;
+  margin-left: -10px;
+  margin-top: -10px;
 }
 
 .notificationsBody {
