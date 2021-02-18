@@ -99,9 +99,9 @@
       </div>
       <!-- display dictionary-->
       <div class="textFieldContainer" *ngIf="dictionaryVisible && !feedbackVisible">
-        <textarea class="dictionaryVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
-        <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
-        <iframe class="dictionary" src="https://www.teanglann.ie/en"></iframe>
+        <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+        <div class="feedbackHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
+        <iframe class="feedbackTextarea dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
       </div>
       <!-- options button -->
       <div class="footerBtnContainer">

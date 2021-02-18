@@ -731,6 +731,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     align-items: column;
 }
 
+.dictionaryIframe {
+    width: 90%;
+}
+
 .lds-grid {
     display: inline-block;
     position: relative;
