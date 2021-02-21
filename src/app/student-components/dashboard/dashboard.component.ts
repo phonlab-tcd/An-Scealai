@@ -308,6 +308,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getSelectedTags(): HighlightTag[] {
+    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
+      if (this.checkBox.get(entry[0])) {
+        return entry[1];
+      } else {
+        return [];
+      }
+    });
+    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
+    return selectedTags;
+  }
+
 /*
 * Update the grammar error map of the stat object corresponding to the current student id
 */
