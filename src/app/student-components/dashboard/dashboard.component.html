@@ -64,7 +64,7 @@
         <!-- display grammar error filter options -->
         <div class="selectErrorCheckbox" *ngIf="grammarSelected">
           <div *ngFor="let recipient of filteredTags | keyvalue">
-             <div style="padding-left: 2px;padding-right: 2px;" ><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
+             <div style="margin:2px;" ><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
           </div>
         </div>
         <!-- display the story with error highlighting-->
@@ -72,11 +72,7 @@
           <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea readonly></textarea>
           <!-- an gramadoir -->
           <div *ngIf="grammarSelected">
-            <div *ngFor="let recipient of filteredTags | keyvalue">
-              <div *ngIf="checkBox.get(recipient.key)">
-                <mwl-text-input-highlight [tags]="recipient.value" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
-              </div>
-            </div>
+                <mwl-text-input-highlight [tags]="getSelectedTags()" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
           </div>
           <!-- broad/slender -->
           <div *ngIf="!grammarSelected">
