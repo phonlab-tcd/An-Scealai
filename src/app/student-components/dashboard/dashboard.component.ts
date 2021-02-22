@@ -308,6 +308,28 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  /**
+   * Gets an array of HighlighTags for which the associated grammar error category
+   * is selected according to the checkBox map.
+   * 
+   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
+   * HighlightTags for seimhiu.
+   */
+  getSelectedTags(): HighlightTag[] {
+    // Get only those filteredTags whose keys map to true in checkBox
+    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
+      // entry[0] is key, entry[1] is val.
+      if (this.checkBox.get(entry[0])) {
+        return entry[1];
+      } else {
+        return [];
+      }
+    });
+    // Flatten 2d array of HighlightTags
+    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
+    return selectedTags;
+  }
+
 /*
 * Update the grammar error map of the stat object corresponding to the current student id
 */
