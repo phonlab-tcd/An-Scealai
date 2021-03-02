@@ -34,7 +34,8 @@ export class RecordingComponent implements OnInit {
   
   //recording audio files variables
   modalClass : string = "hidden";
-  isRecording: boolean = false;
+  isRecordingParagraph: boolean[] = [];
+  isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
   newRecordingParagraph : boolean[] = [false];
@@ -266,7 +267,7 @@ export class RecordingComponent implements OnInit {
   /*
   * Create media object and record audio
   */
-    recordAudio(index:number, chunksArray: Array<any[]>) {
+    recordAudio(index:number, chunksArray: Array<any[]>, isRecording: boolean[]) {
       let media = {
         tag: 'audio',
         type: 'audio/mp3',
@@ -278,7 +279,7 @@ export class RecordingComponent implements OnInit {
         this.recorder = new MediaRecorder(this.stream);
         chunksArray[index] = [];
         this.recorder.start();
-        this.isRecording = true;
+        isRecording[index] = true;
         this.recorder.ondataavailable = e => {
           chunksArray[index].push(e.data);
           if(this.recorder.state == 'inactive') {
@@ -288,9 +289,9 @@ export class RecordingComponent implements OnInit {
       }).catch();
     }
 
-    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>) {
+    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, isRecording: boolean[]) {
       this.recorder.stop();
-      this.isRecording = false;
+      isRecording[index] = false;
       this.stream.getTracks().forEach(track => track.stop());
       setTimeout(() => {
         sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(chunksArray[index], {type: 'audio/mp3'})));
@@ -365,7 +366,6 @@ export class RecordingComponent implements OnInit {
       this.recorder.stop();
       this.stream.getTracks().forEach(track => track.stop());
     }
-    this.isRecording = false;
   }
   
   goToDashboard() {
