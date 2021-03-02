@@ -350,7 +350,6 @@ export class RecordingComponent implements OnInit {
           const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
           this.recordingService.create(recording).subscribe(res => {console.log(':)', res)})
         });
-        
       })
     }
   
