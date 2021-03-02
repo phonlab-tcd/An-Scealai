@@ -263,9 +263,14 @@ export class RecordingComponent implements OnInit {
       Highlighter.stopHighlighting(section);
     }
 
-  /*
-  * Create media object and record audio
-  */
+    /**
+     * Given some chunksArray (either paragraphChunks or sentenceChunks) and a
+     * sentence / paragraph index, populate that chunks array with audio data
+     * recorded through microphone.
+     * @param index - index for the paragraph / sentence being recorded
+     * @param chunksArray - array of any[], should be either paragraphChunks
+     * or sentenceChunks
+     */
     recordAudio(index:number, chunksArray: Array<any[]>) {
       let media = {
         tag: 'audio',
@@ -298,29 +303,17 @@ export class RecordingComponent implements OnInit {
       }, 1000);
     }
 
-  /*
-  * Playback the recorded audio
-  */
-    playbackAudio(index) {
-      console.log("chunks:", this.chunks);
-      if(this.sectionSplit === "paragraph") {
-        this.showListenBackParagraph[index] = false;
-        this.paragraphAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-        this.paragraphBlobs[index] = new Blob(this.chunks, {type: 'audio/mp3'});
-        this.newRecordingParagraph[index] = true;
-      }
-      else {
-        this.showListenBackSentence[index] = false;
-        this.sentenceAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-        this.sentenceBlobs[index] = new Blob(this.chunks, {type: 'audio/mp3'});
-        this.newRecordingSentence[index] = true;
-      }
-    }
-
-  /*
-  * Save updated audio to database
-  */
+    /**
+     * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
+     * as individual audio clips using recordingService.saveAudio.
+     * 
+     * Each clip is given an id on the database. These ids are mapped to
+     * by paragraph / sentence indices which are stored in Recording object,
+     * which is also saved to DB.
+     */
     saveRecordings() {
+      // Map paragraph chunks to promises that they will be saved to the DB.
+      // These promises can then all be resolved together
       const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
@@ -333,6 +326,8 @@ export class RecordingComponent implements OnInit {
 
       Promise.all(paragraph_promises).then(paragraphResponses => {
         Promise.all(sentence_promises).then(sentenceResponses => {
+          // Once an audio clip has been saved on DB, it will have an id which can be
+          // used to link it to a given paragraph / sentence.
           let paragraphIndices = [];
           let paragraphAudio = [];
           for (const res of paragraphResponses) {
@@ -347,6 +342,7 @@ export class RecordingComponent implements OnInit {
             sentenceAudio.push(res.fileId);
           }
 
+          // Recording object stores audio clip ids along with the indices of paragraphs / sentences they correspond to.
           const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
           this.recordingService.create(recording).subscribe(res => {console.log(':)', res)})
         });
