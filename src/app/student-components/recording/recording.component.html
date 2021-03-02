@@ -56,30 +56,44 @@
                     <!-- if paragraph option selected -->
                     <span *ngIf="sectionSplit==='paragraph'">
                       <!-- play / pause synthesiser -->
-                      <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
-                      <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                      <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-                      <!-- play / pause student recorded audio -->
-                      <audio *ngIf="paragraphAudioSources[p.index]" [attr.src]="paragraphAudioSources[p.index]" controls #audioTag class="audioPlayer"></audio>
-                      <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                      <!-- recording button -->
-                      <button *ngIf="!isRecording" class="recordBtn notRecordingBtn" type="button" (click)="recordAudio(p.index, paragraphChunks)"></button>
-                      <button *ngIf="isRecording" class="recordBtn notRecordingBtn" (click)="stopRecording(p.index, paragraphAudioSources, paragraphChunks);"></button>          
+                      <div class="textCard">
+                        <div class="cardBody">
+                          <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                          <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                          <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                          <!-- Recording button -->
+                          <button *ngIf="!isRecordingParagraph[p.index]" class="recordingBtn" (click)="recordAudio(p.index, paragraphChunks, isRecordingParagraph)"><i class="fas fa-microphone"></i></button>
+                          <button *ngIf="isRecordingParagraph[p.index]" class="notRecordingBtn blink" (click)="stopRecording(p.index, paragraphAudioSources, paragraphChunks, isRecordingParagraph);"><i class="fas fa-stop-circle"></i></button>
+                        </div>
+                        <hr class="dividerLine" *ngIf="paragraphAudioSources[p.index]">
+                        <!-- Audio player -->
+                        <div class="cardFooter" *ngIf="paragraphAudioSources[p.index]">
+                          <audio *ngIf="paragraphAudioSources[p.index]" [attr.src]="paragraphAudioSources[p.index]" controls #audioTag class="audioPlayer"></audio>
+                          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+                        </div>
+                        </div>
                     </span>
                     <!-- if sentence option selected -->
                     <span *ngIf="sectionSplit==='sentence'">
                       <!-- loop thorugh each sentence in the paragraph -->
                       <div *ngFor="let s of p.sentences" class="sentenceContainer">
                         <!-- play / pause synthesiser -->
-                        <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
-                        <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                        <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-                        <!-- play / pause student audio -->
-                        <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
-                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                        <!-- recording button -->
-                        <button *ngIf="!isRecording" class="recordBtn notRecordingBtn" type="button" (click)="recordAudio(s.index, sentenceChunks)"></button>
-                        <button *ngIf="isRecording" class="recordBtn notRecordingBtn" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks);"></button>          
+                        <div class="textCard">
+                          <div class="cardBody">
+                            <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
+                            <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                            <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                            <!-- Recording button -->
+                            <button *ngIf="!isRecordingSentence[s.index]" class="recordingBtn" type="button" (click)="recordAudio(s.index, sentenceChunks, isRecordingSentence)"><i class="fas fa-microphone"></i></button>
+                            <button *ngIf="isRecordingSentence[s.index]" class="notRecordingBtn blink" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks, isRecordingSentence);"><i class="fas fa-stop-circle"></i></button>          
+                            <hr class="dividerLine" *ngIf="sentenceAudioSources[s.index]">
+                            <!-- Audio player -->
+                            <div class="cardFooter" *ngIf="sentenceAudioSources[s.index]">
+                              <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
+                              <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+                            </div>
+                          </div>
+                        </div>     
                       </div>
                     </span>
                   </div>
