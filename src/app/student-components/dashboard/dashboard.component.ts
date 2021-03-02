@@ -189,7 +189,7 @@ export class DashboardComponent implements OnInit {
   
 // route to synthesis 
   goToRecording() {
-    this.router.navigateByUrl('/recordings/' + this.story.id);
+    this.router.navigateByUrl('/new-recording/' + this.story.id);
   }
 
 /*
