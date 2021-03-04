@@ -321,37 +321,38 @@ export class RecordingComponent implements OnInit {
   /*
   * Save updated audio to database
   */
-    saveRecordings() {
+    async saveRecordings() {
       const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
+
+      console.log('PP', paragraph_promises);
 
       const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
 
-      Promise.all(paragraph_promises).then(paragraphResponses => {
-        Promise.all(sentence_promises).then(sentenceResponses => {
-          let paragraphIndices = [];
-          let paragraphAudio = [];
-          for (const res of paragraphResponses) {
-            paragraphIndices.push(res.index);
-            paragraphAudio.push(res.fileId);
-          }
+      const paragraphResponses = await Promise.all(paragraph_promises);
+      const sentenceResponses = await Promise.all(sentence_promises);
 
-          let sentenceIndices = [];
-          let sentenceAudio = [];
-          for (const res of sentenceResponses) {
-            sentenceIndices.push(res.index);
-            sentenceAudio.push(res.fileId);
-          }
+      let paragraphIndices = [];
+      let paragraphAudio = [];
+      for (const res of paragraphResponses) {
+        paragraphIndices.push(res.index);
+        paragraphAudio.push(res.fileId);
+      }
 
-          const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
-          this.recordingService.create(recording).subscribe(res => {console.log(':)', res)})
-        });
-      })
+      let sentenceIndices = [];
+      let sentenceAudio = [];
+      for (const res of sentenceResponses) {
+        sentenceIndices.push(res.index);
+        sentenceAudio.push(res.fileId);
+      }
+
+      const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
+      this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
     }
   
 // change css class to show recording container
