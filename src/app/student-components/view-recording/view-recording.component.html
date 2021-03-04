@@ -17,22 +17,12 @@
         </div>
       </div>
       <div class="recordingStoryContainer" *ngIf="story">
-        <div *ngIf="recordingMode" class="recordingStoryHeader">
-          Listen, record, and compare
-        </div>
-        <div *ngIf="historyMode" class="recordingStoryHeader">
-          View Pronunciation History
+        <div class="recordingStoryHeader">
+          Listen and compare
         </div>
         <div class="textFieldContainer">
-          <div *ngIf="historyMode" class="historyToolbar">
-            <div class="selectStoryFilter">
-              <select  [(ngModel)]="recording" (ngModelChange)="displayPreviousRecording()">
-                <option *ngFor="let item of recordingHistory" [ngValue]="item">{{item.date | date:'dd/MM/yyyy h:mm aa'}} -- {{item.storyData.dialect}}</option>
-              </select>
-            </div>
-          </div>
           <!--Main container for story -->
-            <div [ngClass]="recordingMode ? 'textContainerSynth': 'historyTextContainerSynth'">
+            <div class="textContainerSynth">
               <!-- Display synthesising (loading) -->
               <div *ngIf="!audioFinishedLoading || !recordingsFinishedLoading" class="loaderContainer">
                   <b>{{ts.l.synthesising}}</b>
@@ -45,24 +35,41 @@
                     <!-- if paragraph option selected -->
                     <span *ngIf="sectionSplit==='paragraph'">
                       <!-- play / pause synthesiser -->
-                      <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
-                      <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                      <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-                      <!-- play / pause student recorded audio -->
-                      <audio *ngIf="paragraphToAudioSource[p.index]" [src]="paragraphToAudioSource[p.index]" controls #audioTag class="audioPlayer"></audio>
-                      <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>      
+                      <div class="textCard">
+                        <div class="cardBody">
+                          <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                          <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                          <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                        </div>
+                        <hr class="dividerLine" *ngIf="paragraphToAudioSource[p.index]">
+                        <!-- Audio player -->
+                        <div class="cardFooter" *ngIf="paragraphToAudioSource[p.index]">
+                          <!-- play / pause student recorded audio -->
+                          <audio *ngIf="paragraphToAudioSource[p.index]" [src]="paragraphToAudioSource[p.index]" controls #audioTag class="audioPlayer"></audio>
+                          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div> 
+                        </div>
+                      </div>
                     </span>
                     <!-- if sentence option selected -->
                     <span *ngIf="sectionSplit==='sentence'">
                       <!-- loop thorugh each sentence in the paragraph -->
                       <div *ngFor="let s of p.sentences" class="sentenceContainer">
                         <!-- play / pause synthesiser -->
-                        <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
-                        <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                        <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-                        <!-- play / pause student audio -->
-                        <audio *ngIf="sentenceToAudioSource[s.index]" [src]="sentenceToAudioSource[s.index]" controls #audioTag class="audioPlayer"></audio>
-                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>          
+                        <div class="textCard">
+                          <div class="cardBody">
+                            <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
+                            <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                            <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                          </div>
+                      
+                          <hr class="dividerLine" *ngIf="sentenceToAudioSource[s.index]">
+                          <!-- Audio player -->
+                          <div class="cardFooter" *ngIf="sentenceToAudioSource[s.index]">
+                            <!-- play / pause student audio -->
+                            <audio *ngIf="sentenceToAudioSource[s.index]" [src]="sentenceToAudioSource[s.index]" controls #audioTag class="audioPlayer"></audio>
+                            <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>          
+                          </div>
+                        </div>
                       </div>
                     </span>
                   </div>

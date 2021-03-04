@@ -86,12 +86,13 @@
                             <!-- Recording button -->
                             <button *ngIf="!isRecordingSentence[s.index]" class="recordingBtn" type="button" (click)="recordAudio(s.index, sentenceChunks, isRecordingSentence)"><i class="fas fa-microphone"></i></button>
                             <button *ngIf="isRecordingSentence[s.index]" class="notRecordingBtn blink" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks, isRecordingSentence);"><i class="fas fa-stop-circle"></i></button>          
-                            <hr class="dividerLine" *ngIf="sentenceAudioSources[s.index]">
-                            <!-- Audio player -->
-                            <div class="cardFooter" *ngIf="sentenceAudioSources[s.index]">
-                              <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
-                              <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                            </div>
+                          </div>
+                            
+                          <hr class="dividerLine" *ngIf="sentenceAudioSources[s.index]">
+                          <!-- Audio player -->
+                          <div class="cardFooter" *ngIf="sentenceAudioSources[s.index]">
+                            <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
+                            <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                           </div>
                         </div>     
                       </div>
