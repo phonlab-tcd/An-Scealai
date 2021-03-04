@@ -34,7 +34,8 @@ export class RecordingComponent implements OnInit {
   
   //recording audio files variables
   modalClass : string = "hidden";
-  isRecording: boolean = false;
+  isRecordingParagraph: boolean[] = [];
+  isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
   newRecordingParagraph : boolean[] = [false];
@@ -271,7 +272,7 @@ export class RecordingComponent implements OnInit {
      * @param chunksArray - array of any[], should be either paragraphChunks
      * or sentenceChunks
      */
-    recordAudio(index:number, chunksArray: Array<any[]>) {
+    recordAudio(index:number, chunksArray: Array<any[]>, isRecording: boolean[]) {
       let media = {
         tag: 'audio',
         type: 'audio/mp3',
@@ -283,7 +284,7 @@ export class RecordingComponent implements OnInit {
         this.recorder = new MediaRecorder(this.stream);
         chunksArray[index] = [];
         this.recorder.start();
-        this.isRecording = true;
+        isRecording[index] = true;
         this.recorder.ondataavailable = e => {
           chunksArray[index].push(e.data);
           if(this.recorder.state == 'inactive') {
@@ -293,9 +294,9 @@ export class RecordingComponent implements OnInit {
       }).catch();
     }
 
-    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>) {
+    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, isRecording: boolean[]) {
       this.recorder.stop();
-      this.isRecording = false;
+      isRecording[index] = false;
       this.stream.getTracks().forEach(track => track.stop());
       setTimeout(() => {
         sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(chunksArray[index], {type: 'audio/mp3'})));
@@ -311,7 +312,7 @@ export class RecordingComponent implements OnInit {
      * by paragraph / sentence indices which are stored in Recording object,
      * which is also saved to DB.
      */
-    saveRecordings() {
+    async saveRecordings() {
       // Map paragraph chunks to promises that they will be saved to the DB.
       // These promises can then all be resolved together
       const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
@@ -319,35 +320,32 @@ export class RecordingComponent implements OnInit {
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
 
+      console.log('PP', paragraph_promises);
+
       const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
 
-      Promise.all(paragraph_promises).then(paragraphResponses => {
-        Promise.all(sentence_promises).then(sentenceResponses => {
-          // Once an audio clip has been saved on DB, it will have an id which can be
-          // used to link it to a given paragraph / sentence.
-          let paragraphIndices = [];
-          let paragraphAudio = [];
-          for (const res of paragraphResponses) {
-            paragraphIndices.push(res.index);
-            paragraphAudio.push(res.fileId);
-          }
+      const paragraphResponses = await Promise.all(paragraph_promises);
+      const sentenceResponses = await Promise.all(sentence_promises);
 
-          let sentenceIndices = [];
-          let sentenceAudio = [];
-          for (const res of sentenceResponses) {
-            sentenceIndices.push(res.index);
-            sentenceAudio.push(res.fileId);
-          }
+      let paragraphIndices = [];
+      let paragraphAudio = [];
+      for (const res of paragraphResponses) {
+        paragraphIndices.push(res.index);
+        paragraphAudio.push(res.fileId);
+      }
 
-          // Recording object stores audio clip ids along with the indices of paragraphs / sentences they correspond to.
-          const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
-          this.recordingService.create(recording).subscribe(res => {console.log(':)', res)})
-        });
-        
-      })
+      let sentenceIndices = [];
+      let sentenceAudio = [];
+      for (const res of sentenceResponses) {
+        sentenceIndices.push(res.index);
+        sentenceAudio.push(res.fileId);
+      }
+
+      const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
+      this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
     }
   
 // change css class to show recording container
@@ -362,7 +360,6 @@ export class RecordingComponent implements OnInit {
       this.recorder.stop();
       this.stream.getTracks().forEach(track => track.stop());
     }
-    this.isRecording = false;
   }
   
   goToDashboard() {
