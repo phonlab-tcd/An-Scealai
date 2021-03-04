@@ -591,7 +591,7 @@
             "ISODate" : "Dáta ISO",
             "story_id" : "Comhartha aitheantais an scéil",
             "story_text" : "Téacs an scéil",
-            "story_history" : "Story History",
+            "story_history" : "Súil Siar",
             
             "messages" : "Teachtaireachtaí",
             "new_message" : "Teachtaireacht Nua",
@@ -645,7 +645,6 @@
             "neasa4_point2" : "na sainstruchtúir theanga atá sa Ghaeilge atá riachtanach chun foirm agus feidhm a chur i dtoll a chéile",
             "neasa4_point3" : "na slite is éifeachtaí atá ann chun seans a thabhairt d’fhoghlaimeoirí an teanga a chleachtadh agus líofacht a bhaint amach",
             "neasa4_point4" : "an timpeallacht is éifeachtaí a chruthú chun go bhfeidhmeoidh córais chliste teagaisc",
-            "neasa4_point5" : "the building of effective intelligent language learning environments and intelligent tutoring systems",
             "neasa5" : "Ba chuid é den phlean a bhain leis An Scéalaí ón tús ná faisnéis a bhailiú faoi fhoghlaim teangacha. Cé go bhfuil a dhearadh agus a thógáil fós idir lámha, ag an am céanna táimid ag an bpointe chun gur féidir linn grinndearcadh a dhéanamh ar an bpróiseas a bhaineann le foghlaim teangacha agus taighde atá fianaise-bhunaithe a dhéanamh air. Déanfar é seo trí:",
             "neasa5_point1" : "shamplaí de theanga na bhfoghlaimeoirí a bhailiú agus anailís a dhéanamh orthu",
             "neasa5_point2" : "chéimeanna éagsúla forbartha a mhapáil",
@@ -664,12 +663,12 @@
             "abair_bio" : "Tá an obair seo ar fad ar siúl i gcomhpháirt leis an tionscadal ABAIR.ie sa tSaotharlann Foghraíochta agus Urlabhra. Ní bheadh sí indéanta gan an tacaíocht ón bhfoireann sároillte teangeolaithe, ríomheolaithe agus innealtóirí urlabhra. Féach suíomh Gréasáin ABAIR <a href=\"https://www.abair.tcd.ie/ga/\" target=\"_blank\" rel=\"noopener noreferrer\">anseo</a>:",
             "abair_pic_description" : "An tSaotharlann Foghraíochta agus Urlabhra, Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide",
             
-            "story_examples" : "Story Examples - Irish texts available in LARA form",
+            "story_examples" : "Samplaí - scéalta Gaeilge i bhfoirm LARA",
             "higher_level" : "Ardleibhéal",
             "gweedore" : "Guth Ghaoth Dobhair",
             "mumhan" : "Guth na Mumhan",
             "chonamara" : "Guth Chonamara",
-            "view_story" : "View Story",
+            "view_story" : "Léigh an Scéal",
             
             "beathna_na_feinne1" : "Ba é Fionn Mac Cumhaill agus na Fianna na laochra ba mhó i mbéaloideas na hÉireann agus bhí leaganacha éagsúla de na heachtraí a bhain leo le fáil ar fud na tíre. D’fhág siad a rian ar stair na hÉireann mar eiseamláirí den uaisleacht, den chrógacht agus den neart. ‘Bráithreachas na bhFíníní’ a tugadh ar an eagraíocht réabhlóideach a bunaíodh i Meiriceá in 1858. Tá Fianna Fáil ann agus Fianna Éireann. Úsáidtear é mar bhriathar ‘ag fiannaíocht’ – ag insint scéalta fiannaíocht, nó ag insint scéalta gan dealramh (le searbhas).",
             "beathna_na_feinne2" : "Sa scéal seo bualann Naomh Pádraig le Caoilte, duine de na Fianna. De gháth is é Oisín a bhualann le Pádraig mar atá i Laoithe na Féinne a chuir An Seabhac in eagar. Tá cur síos sa sliocht seo ar an saol a bhí ag na Fianna agus tá codarsnacht idir sin agus an creideamh nua nó an Chríostaíocht. Tá cur síos anseo ar na nósanna seilge a bhí acu agus mar a chaith siad a gcuid bia. Tá cur síos maith ann ar na tréithe a bhain leis na Fianna agus mar a cláraíodh mar bhall de na Fianna tú. Gaiscíoch ab ea gach aon duine acu agus níl insint scéil ar a gcumas, a neart agus a gcrógacht.",
