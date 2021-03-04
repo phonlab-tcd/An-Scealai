@@ -236,6 +236,8 @@
             "select_all" : "select all",
             "dictionary" : "Dictionary",
             
+            "recordings" : "Recordings",
+            
             "genearl" : "General", 
             "word_choice" : "Word Choice",
             "Unrecognised_word" : "Unrecognised Word",
@@ -612,6 +614,8 @@
             "total_grammar_errors" : "Iomlán na nEarráidí Gramadaí",
             "select_all" : "Roghnaigh Gach Rud",
             "dictionary" : "Foclóir",
+            
+            "recordings" : "Taifeadtaí",
             
             "general" : "Ginearálta", 
             "word_choice" : "Rogha Focal",

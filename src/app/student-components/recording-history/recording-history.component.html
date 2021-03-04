@@ -1,0 +1,86 @@
+<!-- Select the synthesis option for a story -->
+<img src="assets/img/book.png" class="bookImg">
+<div class="page">
+  <div class="bookContainerSynth">
+    <!-- back button to return to story and save button to send recordings to db-->
+      <div class="recordingBookHeader" *ngIf="story">
+        <div (click)="goToViewRecording()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
+        <div></div>
+        <div [ngClass]="bookTitleHistory">{{story?.title}}</div>
+      </div>
+      <div class="recordingStoryContainer" *ngIf="story">
+        <div class="recordingStoryHeader">
+          View Pronunciation History
+        </div>
+        <div class="textFieldContainer">
+          <div class="historyToolbar">
+            <div class="selectStoryFilter">
+              <select  [(ngModel)]="currentRecording" (ngModelChange)="displayPreviousRecording()">
+                <option *ngFor="let item of recordings" [ngValue]="item">{{item.date | date:'dd/MM/yyyy h:mm aa'}} -- {{item.storyData.dialect}}</option>
+              </select>
+            </div>
+          </div>
+          <!--Main container for story -->
+            <div [ngClass]="historyTextContainerSynth">
+              <!-- Display synthesising (loading) -->
+              <div *ngIf="!audioFinishedLoading || !recordingsFinishedLoading" class="loaderContainer">
+                  <b>{{ts.l.synthesising}}</b>
+                  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </div>
+              <!-- When synthesis finished loading -->
+              <div *ngIf="audioFinishedLoading && recordingsFinishedLoading">
+                <!-- loop through each paragraph of text -->
+                  <div *ngFor="let p of paragraphs" class="paragraphContainer">
+                    <!-- if paragraph option selected -->
+                    <span *ngIf="sectionSplit==='paragraph'">
+                      <!-- play / pause synthesiser -->
+                      <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                      <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                      <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                      <!-- play / pause student recorded audio -->
+                      <audio *ngIf="paragraphAudioSources[p.index]" [attr.src]="paragraphAudioSources[p.index]" controls #audioTag class="audioPlayer"></audio>
+                      <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div> 
+                    </span>
+                    <!-- if sentence option selected -->
+                    <span *ngIf="sectionSplit==='sentence'">
+                      <!-- loop thorugh each sentence in the paragraph -->
+                      <div *ngFor="let s of p.sentences" class="sentenceContainer">
+                        <!-- play / pause synthesiser -->
+                        <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
+                        <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                        <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                        <!-- play / pause student audio -->
+                        <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
+                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>         
+                      </div>
+                    </span>
+                  </div>
+              </div>
+            </div>
+            <!-- Choose paragraph or Sentence buttons -->
+            <div *ngIf="audioFinishedLoading" class="footer">
+              <div class="btnContainer">
+                <div class="footerText">
+                  {{ts.l.listen_by}}
+                </div>
+                <div *ngIf="sectionSplit==='paragraph'">
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn" (click)="sentenceMode()">{{ts.l.sentence}}</button>
+                </div>
+                <div *ngIf="sectionSplit==='sentence'">
+                  <button class="changeSplitBtn" (click)="paragraphMode()">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
+                </div>
+                <div *ngIf="recordingMode" style="padding-left: 40px">
+                  <button *ngIf="needsUpdating" class="changeSplitBtn" (click)="showModal()"> Update Story </button>
+                  <button *ngIf="recordingHistory && recordingHistory.length > 0" class="changeSplitBtn" (click)="switchToHistoryMode()"> View History </button> 
+                </div>
+                <div *ngIf="historyMode" style="padding-left: 40px">
+                  <button class="changeSplitBtn" (click)="switchToRecordMode()"> Record Story </button>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
