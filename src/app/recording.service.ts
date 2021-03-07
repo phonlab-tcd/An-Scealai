@@ -7,6 +7,7 @@ import { Recording } from './recording';
 import { EventType } from './event';
 import { EngagementService } from './engagement.service';
 import config from '../abairconfig.json';
+import { v4 as uuid } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -16,49 +17,27 @@ export class RecordingService {
   constructor(private http: HttpClient, private auth: AuthenticationService, private engagement: EngagementService ) { }
 
   baseUrl: string = config.baseurl + 'recordings/';
-  
-  addRecordingForLoggedInUser(story: Object){
-    if(this.auth.isLoggedIn()) {
-      let recording: Recording = new Recording();
-      if(story) recording.storyData = story;
-      recording.userId = this.auth.getUserDetails()._id;
-      recording.addedToHistory = false;
-      return this.http.post(this.baseUrl + "addRecordingForUser/" + this.auth.getUserDetails()._id, {recording:recording}).subscribe( (res) => {
-        this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], story);
-      });
-    }
+
+  get(id: string) : Observable<any> {
+    return this.http.get(this.baseUrl + id);
   }
 
-  getRecordingsForStory(id: string, storyId: string): Observable<any> {
-    return this.http.get(this.baseUrl + "recordingsForStory/" + id + "/" + storyId);
-  }  
-  
-  getRecordedAudio(id: string, index: number, type: string): Observable<any> {
-    return this.http.get(this.baseUrl + "getRecordedAudio/" + id + '/' + index + '/' + type, {responseType: "blob"});
+  create(recording: Recording) : Observable<any> {
+    return this.http.post(this.baseUrl + "create/", recording);
   }
-  
-  getCurrentRecording(id: string, storyId: string): Observable<any> {
-    return this.http.get(this.baseUrl + "getCurrentRecording/" + id + '/' + storyId);
-  }
-  
-  updateRecordingText(id: string, storyText: string) {
-    return this.http.post(this.baseUrl + "updateRecordingText/" + id, {text: storyText});
-  }
-  
-  updateRecordings(id: string, index: number, type: string, audioBlob: Blob): Observable<any> {
-    let formData = new FormData();
+
+  saveAudio(storyId, audioBlob: Blob, index: string) : Observable<any> {
+    const formData = new FormData();
     formData.append('audio', audioBlob);
-    return this.http.post(this.baseUrl + "updateRecordings/" + id + '/' + index + '/' + type, formData);
+    return this.http.post(this.baseUrl + "saveAudio/" + storyId + "/" + index + "/" + uuid().toString(), formData);
+  }
+
+  getAudio(audioId: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "audio/" + audioId, {responseType: "blob"});
   }
   
-  updateHistoryStatus(id: string): Observable<any> {
-    console.log(this.baseUrl + "updateHistoryStatus/" + id);
-    return this.http.post(this.baseUrl + "updateHistoryStatus/" + id, {});
-  }
-  
-  synthesiseRecording(id: string) : Observable<any> {
-    console.log(this.baseUrl + "synthesiseRecording/" + id);
-    return this.http.get(this.baseUrl + 'synthesiseRecording/' + id);
+  getHistory(storyId: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "getHistory/" + storyId);
   }
   
 }
