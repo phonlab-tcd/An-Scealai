@@ -21,8 +21,6 @@ import { ChatbotComponent } from './student-components/chatbot/chatbot.component
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 
 import { RecordingComponent } from './student-components/recording/recording.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
-import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { MessagesComponent } from './messages/messages.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
@@ -67,9 +65,7 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'new-recording/:id', component: RecordingComponent, canActivate: [AuthGuardService]},
-  { path: 'recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
-  { path: 'recording-history/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
+  { path: 'recordings/:id', component: RecordingComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
