@@ -303,6 +303,14 @@ export class RecordingComponent implements OnInit {
       }, 1000);
     }
     
+    /**
+     * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
+     * as individual audio clips using recordingService.saveAudio.
+     * 
+     * Each clip is given an id on the database. These ids are mapped to
+     * by paragraph / sentence indices which are stored in Recording object,
+     * which is also saved to DB.
+     */
     async saveRecordings() {
       const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
@@ -340,59 +348,6 @@ export class RecordingComponent implements OnInit {
       const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
       this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
     }
-
-    /**
-     * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
-     * as individual audio clips using recordingService.saveAudio.
-     * 
-     * Each clip is given an id on the database. These ids are mapped to
-     * by paragraph / sentence indices which are stored in Recording object,
-     * which is also saved to DB.
-     */
-     /*
-    saveRecordings() {
-      // Map paragraph chunks to promises that they will be saved to the DB.
-      // These promises can then all be resolved together
-      const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
-        const blob = new Blob(chunks, {type: 'audio/mp3'});
-        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
-      });
-
-      const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
-        const blob = new Blob(chunks, {type: 'audio/mp3'});
-        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
-      });
-      
-      console.log("Made it to Promise.all");
-
-      Promise.all(paragraph_promises).then(paragraphResponses => {
-        console.log("Made it through first promise");
-        Promise.all(sentence_promises).then(sentenceResponses => {
-          console.log("Made it through the second promise");
-          // Once an audio clip has been saved on DB, it will have an id which can be
-          // used to link it to a given paragraph / sentence.
-          let paragraphIndices = [];
-          let paragraphAudio = [];
-          for (const res of paragraphResponses) {
-            paragraphIndices.push(res.index);
-            paragraphAudio.push(res.fileId);
-          }
-
-          let sentenceIndices = [];
-          let sentenceAudio = [];
-          for (const res of sentenceResponses) {
-            sentenceIndices.push(res.index);
-            sentenceAudio.push(res.fileId);
-          }
-
-          // Recording object stores audio clip ids along with the indices of paragraphs / sentences they correspond to.
-          const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
-          this.recordingService.create(recording).subscribe(res => {console.log(':)', res)})
-        });
-        
-      })
-    }
-  */
   
   goToHistory() {
     this.router.navigateByUrl('/recording-history/' + this.story.id);
