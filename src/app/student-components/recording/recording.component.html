@@ -101,7 +101,7 @@
                 </div>
                 <div *ngIf="recordingMode" style="padding-left: 40px">
                   <button *ngIf="needsUpdating" class="changeSplitBtn" (click)="showModal()"> Update Story </button>
-                  <button *ngIf="recordingHistory && recordingHistory.length > 0" class="changeSplitBtn" (click)="switchToHistoryMode()"> View History </button> 
+                  <button class="changeSplitBtn" [routerLink]="['/recording-history', story.id]"> View History </button> 
                 </div>
                 <div *ngIf="historyMode" style="padding-left: 40px">
                   <button class="changeSplitBtn" (click)="switchToRecordMode()"> Record Story </button>

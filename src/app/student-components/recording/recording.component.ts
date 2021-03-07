@@ -302,6 +302,44 @@ export class RecordingComponent implements OnInit {
         this.recordingSaved = false;
       }, 1000);
     }
+    
+    async saveRecordings() {
+      const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
+        const blob = new Blob(chunks, {type: 'audio/mp3'});
+        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
+      });
+      
+      console.log("p promises", paragraph_promises);
+ 
+      const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
+        const blob = new Blob(chunks, {type: 'audio/mp3'});
+        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
+      });
+      
+      console.log("s promises", sentence_promises);
+ 
+      const paragraphResponses = await Promise.all(paragraph_promises);
+      const sentenceResponses = await Promise.all(sentence_promises);
+      
+      console.log("promis.all gone through");
+ 
+      let paragraphIndices = [];
+      let paragraphAudio = [];
+      for (const res of paragraphResponses) {
+        paragraphIndices.push(res.index);
+        paragraphAudio.push(res.fileId);
+      }
+ 
+      let sentenceIndices = [];
+      let sentenceAudio = [];
+      for (const res of sentenceResponses) {
+        sentenceIndices.push(res.index);
+        sentenceAudio.push(res.fileId);
+      }
+ 
+      const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
+      this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
+    }
 
     /**
      * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
@@ -311,6 +349,7 @@ export class RecordingComponent implements OnInit {
      * by paragraph / sentence indices which are stored in Recording object,
      * which is also saved to DB.
      */
+     /*
     saveRecordings() {
       // Map paragraph chunks to promises that they will be saved to the DB.
       // These promises can then all be resolved together
@@ -323,9 +362,13 @@ export class RecordingComponent implements OnInit {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
+      
+      console.log("Made it to Promise.all");
 
       Promise.all(paragraph_promises).then(paragraphResponses => {
+        console.log("Made it through first promise");
         Promise.all(sentence_promises).then(sentenceResponses => {
+          console.log("Made it through the second promise");
           // Once an audio clip has been saved on DB, it will have an id which can be
           // used to link it to a given paragraph / sentence.
           let paragraphIndices = [];
@@ -349,6 +392,11 @@ export class RecordingComponent implements OnInit {
         
       })
     }
+  */
+  
+  goToHistory() {
+    this.router.navigateByUrl('/recording-history/' + this.story.id);
+  }
   
 // change css class to show recording container
   showModal() {

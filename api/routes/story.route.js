@@ -288,11 +288,11 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
                         let sentences = [];
                         for(let s of p.childNodes) {
                             // push the sentences
-                            if(s.rawTagName === 'span') {
+                            if(s.tagName === 'span') {
                                 sentences.push(s.toString());
                             } 
                             // push the audio ids for the sentences
-                            else if(s.rawTagName === 'audio') {
+                            else if(s.tagName === 'audio') {
                                 urls.push(s.id);
                             }
                         }
