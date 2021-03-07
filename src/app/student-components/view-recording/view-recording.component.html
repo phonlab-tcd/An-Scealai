@@ -4,7 +4,7 @@
   <div class="bookContainerSynth">
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
-        <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
+        <div [routerLink]="['/recording-history', story.id]" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> History </div> 
         <div></div>
         <div [ngClass]="recordingMode ? 'bookTitle': 'bookTitleHistory'">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
         <div *ngIf="recordingMode" class="recordingSaveIcon">

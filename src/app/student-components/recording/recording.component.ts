@@ -303,7 +303,7 @@ export class RecordingComponent implements OnInit {
         this.recordingSaved = false;
       }, 1000);
     }
-
+    
     /**
      * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
      * as individual audio clips using recordingService.saveAudio.
@@ -313,40 +313,46 @@ export class RecordingComponent implements OnInit {
      * which is also saved to DB.
      */
     async saveRecordings() {
-      // Map paragraph chunks to promises that they will be saved to the DB.
-      // These promises can then all be resolved together
       const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
-
-      console.log('PP', paragraph_promises);
-
+      
+      console.log("p promises", paragraph_promises);
+ 
       const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
-
+      
+      console.log("s promises", sentence_promises);
+ 
       const paragraphResponses = await Promise.all(paragraph_promises);
       const sentenceResponses = await Promise.all(sentence_promises);
-
+      
+      console.log("promis.all gone through");
+ 
       let paragraphIndices = [];
       let paragraphAudio = [];
       for (const res of paragraphResponses) {
         paragraphIndices.push(res.index);
         paragraphAudio.push(res.fileId);
       }
-
+ 
       let sentenceIndices = [];
       let sentenceAudio = [];
       for (const res of sentenceResponses) {
         sentenceIndices.push(res.index);
         sentenceAudio.push(res.fileId);
       }
-
+ 
       const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
       this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
     }
+  
+  goToHistory() {
+    this.router.navigateByUrl('/recording-history/' + this.story.id);
+  }
   
 // change css class to show recording container
   showModal() {

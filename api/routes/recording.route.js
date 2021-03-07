@@ -105,4 +105,16 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
     });
 })
 
+recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
+  VoiceRecording.find({"storyData.id":req.params.storyId}, (err, recordings) => {
+      if(err) {
+          res.status(400).json({"message" : err.message});
+      } else {
+          res.json(recordings);
+      }
+  });
+  
+});
+
+
 module.exports = recordingRoutes;
