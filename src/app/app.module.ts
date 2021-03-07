@@ -57,6 +57,8 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
+import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
+import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 
 
 
@@ -99,7 +101,9 @@ import { AboutLaraComponent } from './about-lara/about-lara.component';
     TeacherStatsComponent,
     ResourcesComponent,
     TeamComponent,
-    AboutLaraComponent
+    AboutLaraComponent,
+    RecordingHistoryComponent,
+    ViewRecordingComponent
   ],
   imports: [
     BrowserModule,

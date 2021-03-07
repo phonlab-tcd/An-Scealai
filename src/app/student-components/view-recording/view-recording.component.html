@@ -2,20 +2,9 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="page">
   <div class="bookContainerSynth">
-    <!--popup for update story option -->
-    <div class="{{modalClass}} modalContainer">
-        <div class="modalContent">
-            <pre class="modalText">Are you sure you want to update to the most current version?</pre>
-            <pre class="modalText">(This will reset current audio recording data)</pre>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="updateStory()">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
-            </div>
-        </div>
-    </div>
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
-        <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
+        <div [routerLink]="['/recording-history', story.id]" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> History </div> 
         <div></div>
         <div [ngClass]="recordingMode ? 'bookTitle': 'bookTitleHistory'">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
         <div *ngIf="recordingMode" class="recordingSaveIcon">
@@ -45,12 +34,12 @@
           <!--Main container for story -->
             <div [ngClass]="recordingMode ? 'textContainerSynth': 'historyTextContainerSynth'">
               <!-- Display synthesising (loading) -->
-              <div *ngIf="!audioFinishedLoading && !recordingsFinishedLoading" class="loaderContainer">
+              <div *ngIf="!audioFinishedLoading || !recordingsFinishedLoading" class="loaderContainer">
                   <b>{{ts.l.synthesising}}</b>
                   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
               </div>
               <!-- When synthesis finished loading -->
-              <div *ngIf="audioFinishedLoading">
+              <div *ngIf="audioFinishedLoading && recordingsFinishedLoading">
                 <!-- loop through each paragraph of text -->
                   <div *ngFor="let p of paragraphs" class="paragraphContainer">
                     <!-- if paragraph option selected -->
@@ -60,11 +49,8 @@
                       <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
                       <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
                       <!-- play / pause student recorded audio -->
-                      <audio *ngIf="paragraphAudioSources[p.index]" [attr.src]="paragraphAudioSources[p.index]" controls #audioTag class="audioPlayer"></audio>
-                      <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                      <!-- recording button -->
-                      <button *ngIf="!isRecording" class="recordBtn notRecordingBtn" type="button" (click)="recordAudio(p.index, paragraphChunks)"></button>
-                      <button *ngIf="isRecording" class="recordBtn notRecordingBtn" (click)="stopRecording(p.index, paragraphAudioSources, paragraphChunks);"></button>          
+                      <audio *ngIf="paragraphToAudioSource[p.index]" [src]="paragraphToAudioSource[p.index]" controls #audioTag class="audioPlayer"></audio>
+                      <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>      
                     </span>
                     <!-- if sentence option selected -->
                     <span *ngIf="sectionSplit==='sentence'">
@@ -75,11 +61,8 @@
                         <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
                         <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
                         <!-- play / pause student audio -->
-                        <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
-                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                        <!-- recording button -->
-                        <button *ngIf="!isRecording" class="recordBtn notRecordingBtn" type="button" (click)="recordAudio(s.index, sentenceChunks)"></button>
-                        <button *ngIf="isRecording" class="recordBtn notRecordingBtn" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks);"></button>          
+                        <audio *ngIf="sentenceToAudioSource[s.index]" [src]="sentenceToAudioSource[s.index]" controls #audioTag class="audioPlayer"></audio>
+                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>          
                       </div>
                     </span>
                   </div>
@@ -101,7 +84,7 @@
                 </div>
                 <div *ngIf="recordingMode" style="padding-left: 40px">
                   <button *ngIf="needsUpdating" class="changeSplitBtn" (click)="showModal()"> Update Story </button>
-                  <button class="changeSplitBtn" [routerLink]="['/recording-history', story.id]"> View History </button> 
+                  <button *ngIf="recordingHistory && recordingHistory.length > 0" class="changeSplitBtn" (click)="switchToHistoryMode()"> View History </button> 
                 </div>
                 <div *ngIf="historyMode" style="padding-left: 40px">
                   <button class="changeSplitBtn" (click)="switchToRecordMode()"> Record Story </button>

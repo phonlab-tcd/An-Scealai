@@ -278,8 +278,9 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
             }, function (err, resp, body) {
                 if(err) res.send(err);
                 if(body) {
+                    console.log(body);
                     // audioContainer is chunk of text made up of paragraphs
-                    let audioContainer = parse(body.toString()).querySelectorAll('.audio_paragraph');
+                    let audioContainer = parse(body).querySelectorAll('.audio_paragraph');
                     let paragraphs = [];
                     let urls = [];
                     // loop through every paragraph and fill array of sentences
@@ -297,6 +298,7 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
                         }
                         paragraphs.push(sentences);
                     }
+                    console.log('Paragraphs', paragraphs);
                     res.json({ html : paragraphs, audio : urls });
                 } else {
                     res.json({status: '404', message: 'No response from synthesiser'});
