@@ -9,7 +9,7 @@ export class Recording {
     sentenceAudioIds: string[];
     sentenceIndices: number[];
 
-    constructor(paragraphAudioIds, paragraphIndices, sentenceAudioIds, sentenceIndices, story) {
+    constructor(story, paragraphAudioIds=[], paragraphIndices=[], sentenceAudioIds=[], sentenceIndices=[]) {
         this.paragraphAudioIds = paragraphAudioIds;
         this.paragraphIndices = paragraphIndices;
         this.sentenceAudioIds = sentenceAudioIds;

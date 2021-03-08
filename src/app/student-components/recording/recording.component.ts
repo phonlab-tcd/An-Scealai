@@ -7,6 +7,7 @@ import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
+import { NullInjector } from '@angular/core/src/di/injector';
 declare var MediaRecorder : any;
 
 @Component({
@@ -76,24 +77,83 @@ export class RecordingComponent implements OnInit {
       this.getStory();
     }
     
+    /**
+     * - Get story from URL id
+     * - Load activeRecording if there is one,
+     * - Otherwise, make a new one, using this.archive()
+     */
     getStory() {
       this.story = null;
       this.route.params.subscribe(params => {
         this.storyService.getStory(params['id']).subscribe(
           story => {
             this.story = story;
-            this.synthesiseStory(story._id);
-          }
-        );
+            if (this.story.activeRecording) {
+              this.recordingService.get(this.story.activeRecording).subscribe(recording => {
+                this.synthesiseStory(recording.storyData);
+                this.loadAudio(recording);
+              });
+            } else {
+              console.log('This should be running');
+              this.synthesiseStory(this.story);
+              this.archive(this.story);
+            }
+          });
+      });
+    }
+
+    /**
+     * Archives story.activeRecording by making a new, blank
+     * up-to-date activeRecording for story.
+     * 
+     * @param story - story whose activeRecording will be updated
+     */
+    archive(story: Story) {
+      const newActiveRecording = new Recording(story);
+      this.recordingService.create(newActiveRecording).subscribe(res => {
+        if (res.recording) {
+          const newActiveRecordingId = res.recording._id;
+          console.log(newActiveRecordingId);
+          this.storyService.updateActiveRecording(story._id, newActiveRecordingId).subscribe(_ => {
+            this.story.activeRecording = newActiveRecordingId;
+            // Reset all recording / audio data
+            this.paragraphs = [];
+            this.sentences = [];
+            this.paragraphAudioSources = [];
+            this.paragraphChunks = [];
+            this.sentenceAudioSources = [];
+            this.sentenceChunks = [];
+            // Resynthesise with latest story text
+            this.getStory();
+          });
+        }
       })
+    }
+
+    /**
+     * Given some recording, gets audio data from the DB and saves it
+     * in SafeUrl arrays to be displayed in <audio>s on the .html page
+     * 
+     * @param recording - recording whose audio clips should be loaded
+     */
+    loadAudio(recording: Recording) {
+      for (let i=0; i<recording.paragraphIndices.length; ++i) {
+        this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
+          this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        });
+      }
+      for (let i=0; i<recording.sentenceIndices.length; ++i) {
+        this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
+          this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        });
+      }
     }
   
   /*
   * Synthesise recording text using story service
   */
-    synthesiseStory(storyId) {
-      console.log('storyId:', storyId);
-      this.storyService.synthesise(storyId).subscribe((res) => {
+    synthesiseStory(story) {
+      this.storyService.synthesiseObject(story).subscribe((res) => {
         // loop through the html of the synthesis response and create sentences/paragraph instances
         for(let p of res.html) {
           let paragraphStr: string = "";
@@ -317,37 +377,37 @@ export class RecordingComponent implements OnInit {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
-      
-      console.log("p promises", paragraph_promises);
  
       const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
         const blob = new Blob(chunks, {type: 'audio/mp3'});
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
-      
-      console.log("s promises", sentence_promises);
  
       const paragraphResponses = await Promise.all(paragraph_promises);
       const sentenceResponses = await Promise.all(sentence_promises);
-      
-      console.log("promis.all gone through");
  
       let paragraphIndices = [];
-      let paragraphAudio = [];
+      let paragraphAudioIds = [];
       for (const res of paragraphResponses) {
         paragraphIndices.push(res.index);
-        paragraphAudio.push(res.fileId);
+        paragraphAudioIds.push(res.fileId);
       }
  
       let sentenceIndices = [];
-      let sentenceAudio = [];
+      let sentenceAudioIds = [];
       for (const res of sentenceResponses) {
         sentenceIndices.push(res.index);
-        sentenceAudio.push(res.fileId);
+        sentenceAudioIds.push(res.fileId);
       }
  
-      const recording = new Recording(paragraphAudio, paragraphIndices, sentenceAudio, sentenceIndices, this.story);
-      this.recordingService.create(recording).subscribe(res => {console.log(':)', res)});
+      const trackData = {
+        paragraphAudioIds: paragraphAudioIds,
+        paragraphIndices: paragraphIndices,
+        sentenceIndices: sentenceIndices,
+        sentenceAudioIds: sentenceAudioIds
+      }
+
+      this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {console.log('Updated :)', res)});
     }
   
   goToHistory() {
