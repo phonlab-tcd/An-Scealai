@@ -24,7 +24,6 @@ MongoClient.connect('mongodb://localhost:27017', (err, client) => {
 
 recordingRoutes.route('/create').post((req, res) => {
     const recording = new VoiceRecording(req.body);
-    console.log('Recording:', recording);
     recording.save().then(_ => {
         res.status(200).json({"message" : "Recording created successfully", "recording": recording});
     }).catch(err => {
@@ -41,6 +40,34 @@ recordingRoutes.route('/:id').get(function(req, res) {
         }
     });
 });
+
+// Update the audio ids and indices for a given recording
+recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
+    VoiceRecording.findById(req.params.id, function(err, recording) {
+        if(err) res.json(err);
+        if(recording) {
+            
+            if(req.body.paragraphAudioIds) {
+                recording.paragraphAudioIds = req.body.paragraphAudioIds;
+            }
+            if(req.body.paragraphIndices) {
+                recording.paragraphIndices = req.body.paragraphIndices;
+            }
+            if(req.body.sentenceAudioIds) {
+                recording.sentenceAudioIds = req.body.sentenceAudioIds;
+            }
+            if(req.body.sentenceIndices) {
+                recording.sentenceIndices = req.body.sentenceIndices;
+            }
+            
+            recording.save().then(_ => {
+                res.json('Update complete');
+            }).catch(_ => {
+                res.status(400).send("Unable to update");
+            });
+        }
+    });
+})
 
 recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
     const storage = multer.memoryStorage();
