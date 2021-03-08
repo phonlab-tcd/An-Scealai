@@ -77,6 +77,11 @@ export class RecordingComponent implements OnInit {
       this.getStory();
     }
     
+    /**
+     * - Get story from URL id
+     * - Load activeRecording if there is one,
+     * - Otherwise, make a new one, using this.archive()
+     */
     getStory() {
       this.story = null;
       this.route.params.subscribe(params => {
@@ -97,6 +102,12 @@ export class RecordingComponent implements OnInit {
       });
     }
 
+    /**
+     * Archives story.activeRecording by making a new, blank
+     * up-to-date activeRecording for story.
+     * 
+     * @param story - story whose activeRecording will be updated
+     */
     archive(story: Story) {
       const newActiveRecording = new Recording(story);
       this.recordingService.create(newActiveRecording).subscribe(res => {
@@ -119,6 +130,12 @@ export class RecordingComponent implements OnInit {
       })
     }
 
+    /**
+     * Given some recording, gets audio data from the DB and saves it
+     * in SafeUrl arrays to be displayed in <audio>s on the .html page
+     * 
+     * @param recording - recording whose audio clips should be loaded
+     */
     loadAudio(recording: Recording) {
       for (let i=0; i<recording.paragraphIndices.length; ++i) {
         this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
