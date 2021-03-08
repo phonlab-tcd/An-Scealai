@@ -19,9 +19,6 @@
         <div></div>
         <div [ngClass]="recordingMode ? 'bookTitle': 'bookTitleHistory'">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
         <div *ngIf="recordingMode" class="recordingSaveIcon">
-          <div class="recordingUnsavedIcon" (click)="archive(story)">
-            Archive
-          </div>
           <div *ngIf="recordingSaved" class="recordingSavedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>
@@ -33,9 +30,6 @@
       <div class="recordingStoryContainer" *ngIf="story">
         <div *ngIf="recordingMode" class="recordingStoryHeader">
           Listen, record, and compare
-        </div>
-        <div *ngIf="historyMode" class="recordingStoryHeader">
-          View Pronunciation History
         </div>
         <div class="textFieldContainer">
           <div *ngIf="historyMode" class="historyToolbar">
@@ -117,14 +111,12 @@
                   <button class="changeSplitBtn" (click)="paragraphMode()">{{ts.l.paragraph}}</button>
                   <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
                 </div>
-                <div *ngIf="recordingMode" style="padding-left: 40px">
-                  <button *ngIf="needsUpdating" class="changeSplitBtn" (click)="showModal()"> Update Story </button>
-                  <button class="changeSplitBtn" [routerLink]="['/recording-history', story.id]"> View History </button> 
-                </div>
-                <div *ngIf="historyMode" style="padding-left: 40px">
-                  <button class="changeSplitBtn" (click)="switchToRecordMode()"> Record Story </button>
-                </div>
+                <button class="changeSplitBtn" style="margin-left:auto;" (click)="popupVisible = !popupVisible">{{ts.l.options}}</button>
               </div>
+            </div>
+            <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
+              <div class="recordingUnsavedIcon" (click)="archive(story)">Archive Recording <i class="fas fa-inbox"></i></div>
+              <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-history', story.id]">Go to Archive <i class="fas fa-arrow-right"></i></div>
             </div>
         </div>
       </div>
