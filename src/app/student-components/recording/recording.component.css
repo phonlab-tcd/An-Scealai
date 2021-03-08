@@ -183,7 +183,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 10px;
 }
 
-
 .recordingSaveIcon {
     color: #261500;
     border-style: none;
@@ -196,10 +195,43 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     color: #b3a995;
 }
 
+.optionsPopup {
+  z-index: 10;
+  position: absolute;
+  right: 0;
+  margin-top: 25px;
+  display: flex;
+  padding: 5px;
+  padding-top: 10px;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  border-radius: 5px 5px 5px 5px;
+}
+
+.optionsPopup:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 60px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #f1e9d8;
+  border-top: 0;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+
 .recordingUnsavedIcon {
     background-color: #70a87f;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
     border-radius: 5px;
     margin-top: -5px;
     color: white;
@@ -257,13 +289,15 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .changeSplitBtn {
   background-color: #70a87f;
   border-radius: 4px;
   margin-right: 5px;
+  font-size: 10pt;
   color: white;
 }
 
