@@ -19,6 +19,9 @@
         <div></div>
         <div [ngClass]="recordingMode ? 'bookTitle': 'bookTitleHistory'">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
         <div *ngIf="recordingMode" class="recordingSaveIcon">
+          <div class="recordingUnsavedIcon" (click)="saveRecordings(); archive(story)">
+            Archive
+          </div>
           <div *ngIf="recordingSaved" class="recordingSavedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>

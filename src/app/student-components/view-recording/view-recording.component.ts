@@ -36,13 +36,14 @@ export class ViewRecordingComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.recordingService.get(params['id']).subscribe((res: Recording) => {
         this.story = res.storyData;
-        this.synthesiseStory(this.story._id);
+        this.synthesiseStory(this.story);
         this.loadRecordings(res);
       });
     })
   }
 
   loadRecordings(recording: Recording) {
+    console.log('The recording!', recording);
     for (let i=0; i<recording.paragraphIndices.length; ++i) {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
         this.paragraphToAudioSource[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
@@ -56,9 +57,8 @@ export class ViewRecordingComponent implements OnInit {
     this.recordingsFinishedLoading = true;
   }
 
-  synthesiseStory(storyId) {
-    console.log('storyId:', storyId);
-    this.storyService.synthesise(storyId).subscribe((res) => {
+  synthesiseStory(story) {
+    this.storyService.synthesiseObject(story).subscribe((res) => {
       // loop through the html of the synthesis response and create sentences/paragraph instances
       for(let p of res.html) {
         let paragraphStr: string = "";
