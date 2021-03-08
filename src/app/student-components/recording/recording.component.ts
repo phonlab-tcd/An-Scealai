@@ -39,19 +39,13 @@ export class RecordingComponent implements OnInit {
   isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
-  newRecordingParagraph : boolean[] = [false];
-  newRecordingSentence : boolean[] = [false];
-  showListenBackParagraph : boolean[] = [false];
-  showListenBackSentence : boolean[] = [false];
-  canSendAudio : boolean = false;
-  audioSource: SafeUrl;
   recordingSaved: boolean = false;
-  recordingsFinishedLoading: boolean = false;
   
   //recording history variables
   recordingMode: boolean = true;
   historyMode: boolean = false;
   recordingHistory: Recording[] = [];
+  popupVisible = false;
 
   errorText : string;
   registrationError : boolean;
@@ -72,8 +66,6 @@ export class RecordingComponent implements OnInit {
     ngOnInit() {
       this.modalClass = "hidden";
       this.chunks = [];
-      this.newRecordingParagraph = [false];
-      this.newRecordingSentence = [false];
       this.getStory();
     }
     
@@ -123,6 +115,7 @@ export class RecordingComponent implements OnInit {
             this.paragraphChunks = [];
             this.sentenceAudioSources = [];
             this.sentenceChunks = [];
+            this.popupVisible = false;
             // Resynthesise with latest story text
             this.getStory();
           });
