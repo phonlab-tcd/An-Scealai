@@ -45,7 +45,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { NotificationService } from './notification-service.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { CanDeactivateGuard } from './can-deactivate.guard';
+import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 
@@ -61,13 +61,13 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
+  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
   { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'new-recording/:id', component: RecordingComponent, canActivate: [AuthGuardService]},
+  { path: 'new-recording/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
   { path: 'recording-history/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
