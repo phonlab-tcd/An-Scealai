@@ -31,11 +31,11 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading ">
         <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
       </div>
       <!-- display grammar loading -->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !dictionaryVisible && grammarLoading">
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
           <div class="textContainer">
               <div class="loaderContainer">
                   <b>{{ts.l.correcting_grammar}}</b>
@@ -81,23 +81,22 @@
         </div>
       </div>
       <!-- display story with feedback excluding audio feedback-->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId && !dictionaryVisible">
+      <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
         <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
         <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
       </div>
       <!-- display story with feedback including audio feedback -->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId && !dictionaryVisible">
+      <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
         <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
         <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
         <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
       </div>
       <!-- display dictionary-->
-      <div class="textFieldContainer" *ngIf="dictionaryVisible && !feedbackVisible">
-        <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
-        <div class="feedbackHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
-        <iframe class="feedbackTextarea dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+      <div class="dictionaryContainer" *ngIf="dictionaryVisible">
+        <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
+        <iframe class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
       </div>
       <!-- options button -->
       <div class="footerBtnContainer">
