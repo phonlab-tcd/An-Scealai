@@ -343,6 +343,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 100%;
 }
 
+.cardFooter {
+  display: flex;
+}
+
 .recordingBtn {
   background-color: #70a87f;
   color: white;
@@ -370,6 +374,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   padding: 4px;
   padding-left: 8px;
   padding-right: 8px;
+}
+
+.trashBtn {
+  background-color: rgb(190, 10, 10);
+  font-size: 12pt;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.trashBtn:hover {
+  background-color: rgb(119, 5, 5);
 }
 
 .blink {
