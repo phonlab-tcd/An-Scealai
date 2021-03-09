@@ -44,6 +44,7 @@ export class BookContentsComponent implements OnInit {
     .getStoriesForLoggedInUser()
     .subscribe((data: Story[]) => {
       this.stories = data;
+      this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
     });
     this.userId = this.auth.getUserDetails()._id;
     this.deleteMode = false;
