@@ -33,6 +33,9 @@ let Story = new Schema({
         audioId: {
             type: String
         }
+    },
+    activeRecording: {
+        type: String
     }
 }, {
     collection: 'story'

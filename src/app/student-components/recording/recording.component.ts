@@ -7,6 +7,8 @@ import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
+import { NullInjector } from '@angular/core/src/di/injector';
+import { Subject } from 'rxjs';
 declare var MediaRecorder : any;
 
 @Component({
@@ -21,8 +23,7 @@ export class RecordingComponent implements OnInit {
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService) { }
   
-  //synthesiser variabless
-  recording: Recording = new Recording();
+  //synthesiser variables
   story: Story = new Story();
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
@@ -33,24 +34,21 @@ export class RecordingComponent implements OnInit {
   audioTimeouts = [];
   needsUpdating: boolean = false;
   
-  //recording audio files variables
   modalClass : string = "hidden";
-  isRecording: boolean = false;
+  modalChoice: Subject<boolean> = new Subject<boolean>();
+
+
+  isRecordingParagraph: boolean[] = [];
+  isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
-  newRecordingParagraph : boolean[] = [false];
-  newRecordingSentence : boolean[] = [false];
-  showListenBackParagraph : boolean[] = [false];
-  showListenBackSentence : boolean[] = [false];
-  canSendAudio : boolean = false;
-  audioSource: SafeUrl;
-  recordingSaved: boolean = true;
-  recordingsFinishedLoading: boolean = false;
+  recordingSaved: boolean = false;
   
   //recording history variables
   recordingMode: boolean = true;
   historyMode: boolean = false;
   recordingHistory: Recording[] = [];
+  popupVisible = false;
 
   errorText : string;
   registrationError : boolean;
@@ -58,9 +56,11 @@ export class RecordingComponent implements OnInit {
   recorder;
   stream;
   chunks;
-  paragraphChunks;
   paragraphBlobs: any[] = [];
   sentenceBlobs: any[] = [];
+
+  paragraphChunks: {[key:number]:any[]} = [];
+  sentenceChunks: {[key:number]:any[]}  = [];
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
@@ -69,69 +69,87 @@ export class RecordingComponent implements OnInit {
     ngOnInit() {
       this.modalClass = "hidden";
       this.chunks = [];
-      this.newRecordingParagraph = [false];
-      this.newRecordingSentence = [false];
       this.getStory();
     }
     
+    /**
+     * - Get story from URL id
+     * - Load activeRecording if there is one,
+     * - Otherwise, make a new one, using this.archive()
+     */
     getStory() {
       this.story = null;
       this.route.params.subscribe(params => {
         this.storyService.getStory(params['id']).subscribe(
           story => {
             this.story = story;
-            this.getRecording();
-          }
-        );
+            if (this.story.activeRecording) {
+              this.recordingService.get(this.story.activeRecording).subscribe(recording => {
+                this.synthesiseStory(recording.storyData);
+                this.loadAudio(recording);
+              });
+            } else {
+              console.log('This should be running');
+              this.synthesiseStory(this.story);
+              this.archive(this.story);
+            }
+          });
+      });
+    }
+
+    /**
+     * Archives story.activeRecording by making a new, blank
+     * up-to-date activeRecording for story.
+     * 
+     * @param story - story whose activeRecording will be updated
+     */
+    archive(story: Story) {
+      const newActiveRecording = new Recording(story);
+      this.recordingService.create(newActiveRecording).subscribe(res => {
+        if (res.recording) {
+          const newActiveRecordingId = res.recording._id;
+          console.log(newActiveRecordingId);
+          this.storyService.updateActiveRecording(story._id, newActiveRecordingId).subscribe(_ => {
+            this.story.activeRecording = newActiveRecordingId;
+            // Reset all recording / audio data
+            this.paragraphs = [];
+            this.sentences = [];
+            this.paragraphAudioSources = [];
+            this.paragraphChunks = [];
+            this.sentenceAudioSources = [];
+            this.sentenceChunks = [];
+            this.popupVisible = false;
+            // Resynthesise with latest story text
+            this.getStory();
+          });
+        }
       })
     }
 
-  /* 
-  * Get current recording using recording service
-  * Get recording history for story
-  */
-    getRecording() {
-      this.recording = null;
-      this.recordingService.getCurrentRecording(this.auth.getUserDetails()._id, this.story.id).subscribe( (res) => {
-        if(res.length !== 0) {
-          this.recording = res[0];
-          
-          console.log("RECORDING", this.recording);
-          
-          //add updating button if recording text doesn't match story text
-          if(this.recording["storyData"]["text"] !== this.story.text) {
-            this.needsUpdating = true;
-          }
-          
-          this.synthesiseRecording();
-        }
-        else {
-          console.log("No recordings have been made yet for this story -- generating a new one");
-          this.recordingService.addRecordingForLoggedInUser(this.story);
-          window.location.reload();
-        }
-      
-      });
-      
-      this.recordingHistory = null;
-      this.recordingService.getRecordingsForStory(this.auth.getUserDetails()._id, this.story.id).subscribe((res) => {
-        console.log("Recording history", res);
-        this.recordingHistory = res;
-      });
-    
+    /**
+     * Given some recording, gets audio data from the DB and saves it
+     * in SafeUrl arrays to be displayed in <audio>s on the .html page
+     * 
+     * @param recording - recording whose audio clips should be loaded
+     */
+    loadAudio(recording: Recording) {
+      for (let i=0; i<recording.paragraphIndices.length; ++i) {
+        this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
+          this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        });
+      }
+      for (let i=0; i<recording.sentenceIndices.length; ++i) {
+        this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
+          this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        });
+      }
     }
   
   /*
   * Synthesise recording text using story service
   */
-    synthesiseRecording() {
-      console.log("new one to be synthesised", this.recording);
-      this.paragraphs = [];
-      this.sentences = [];
-      this.audioFinishedLoading = false;
-      this.recordingsFinishedLoading = false;
-      this.recordingService.synthesiseRecording(this.recording._id).subscribe((res) => {
-        console.log("1 is reached");
+    synthesiseStory(story) {
+      this.storyService.synthesiseObject(story).subscribe((res) => {
         // loop through the html of the synthesis response and create sentences/paragraph instances
         for(let p of res.html) {
           let paragraphStr: string = "";
@@ -145,13 +163,11 @@ export class RecordingComponent implements OnInit {
             paragraphObject.sentences.push(sentence);
             this.sentences.push(sentence);
           }
-          console.log("2 is reached");
           paragraphObject.responseHtml = this.sanitizer.bypassSecurityTrustHtml(paragraphStr);
           paragraphObject.audioPlaying = false;
           this.paragraphs.push(paragraphObject);
         }
         let j = 0;
-        console.log("3 is reached");
         // loop through the audio of the synthesis response and add to sentence/paragraph instances
         for(let i in res.audio) {
           this.paragraphs[i].audioUrl = res.audio[i];
@@ -161,39 +177,9 @@ export class RecordingComponent implements OnInit {
             ++j;
           }
         }
-        console.log("4 is reached");
         this.audioFinishedLoading = true;
         this.paragraphMode();
-        this.getRecordedAudio();
-      }); 
-    }
-    
-  /*
-  * Get audio recordings for each paragraph/sentence if they exist  
-  */
-    getRecordedAudio() {
-      //get the audio recording already saved in the database for the story
-      this.recordingsFinishedLoading = false;
-      this.paragraphAudioSources = [];
-      this.sentenceAudioSources = [];
-      for(let i = 0; i < this.paragraphs.length; i++) {
-        this.recordingService.getRecordedAudio(this.recording._id, i, "paragraph").subscribe((res) => {
-          console.log(res);
-          if(res) {
-            this.paragraphAudioSources[i] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-            this.newRecordingParagraph[i] = true;
-          }
-        }, (err) => {});
-      }
-      for(let i = 0; i < this.sentences.length; i++) {
-        this.recordingService.getRecordedAudio(this.recording._id, i, "sentence").subscribe((res) => {
-          if(res) {
-            this.sentenceAudioSources[i] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-            this.newRecordingSentence[i] = true;
-          }
-        }, (err) => {});
-      }
-      this.recordingsFinishedLoading = true;
+      });
     }
     
   /*
@@ -334,10 +320,15 @@ export class RecordingComponent implements OnInit {
       Highlighter.stopHighlighting(section);
     }
 
-  /*
-  * Create media object and record audio
-  */
-    recordAudio(index) {
+    /**
+     * Given some chunksArray (either paragraphChunks or sentenceChunks) and a
+     * sentence / paragraph index, populate that chunks array with audio data
+     * recorded through microphone.
+     * @param index - index for the paragraph / sentence being recorded
+     * @param chunksArray - array of any[], should be either paragraphChunks
+     * or sentenceChunks
+     */
+    recordAudio(index:number, chunksArray: Array<any[]>, isRecording: boolean[]) {
       let media = {
         tag: 'audio',
         type: 'audio/mp3',
@@ -347,183 +338,101 @@ export class RecordingComponent implements OnInit {
       navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
         this.stream = _stream;
         this.recorder = new MediaRecorder(this.stream);
-        this.startRecording(index);
+        chunksArray[index] = [];
+        this.recorder.start();
+        isRecording[index] = true;
         this.recorder.ondataavailable = e => {
-          this.chunks.push(e.data);
+          chunksArray[index].push(e.data);
           if(this.recorder.state == 'inactive') {
-
           };
         };
         console.log('got media successfully');
       }).catch();
     }
 
-  /*
-  * Call the recording audio function
-  */
-    prepRecording(index) {
-      this.pauseAllAudio();
-      this.recordAudio(index);
-    }
-
-  /*
-  * Set parameters for recording audio and start the process
-  */
-    startRecording(index) {
-      this.recordingSaved = false;
-      this.isRecording = true;
-      if(this.recordingSaved) {
-        this.recordingSaved = false;
-      }
-      let id = "";
-      
-      if(this.sectionSplit === "paragraph") {
-        id = "p-" + index;
-        this.newRecordingParagraph[index] = false;
-      }
-      else {
-        id = "s-" + index;
-        this.newRecordingSentence[index] = false;
-      }
-      
-      //change css of recording icon 
-      let element = document.getElementById(id); 
-      element.classList.remove("notRecordingBtn");
-      element.classList.add("Rec");
-      
-      this.chunks = [];
-      this.recorder.start();
-    }
-
-  /*
-  * Reset parameters for recording audio and stop the process 
-  */
-    stopRecording(index) {
-      let id = '';
-      if(this.sectionSplit === "paragraph") {
-        id = "p-" + index;
-        this.showListenBackParagraph[index] = true;
-      }
-      else {
-        id = "s-" + index;
-        this.showListenBackSentence[index] = true;
-      }
-      
-      let element = document.getElementById(id);
-      element.classList.add("notRecordingBtn");
-      element.classList.remove("Rec");
-      
+    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, isRecording: boolean[]) {
       this.recorder.stop();
-      this.isRecording = false;
-      
-      this.canSendAudio = true;
+      isRecording[index] = false;
       this.stream.getTracks().forEach(track => track.stop());
+      setTimeout(() => {
+        sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(chunksArray[index], {type: 'audio/mp3'})));
+        this.recordingSaved = false;
+      }, 500);
     }
-
-  /*
-  * Playback the recorded audio
-  */
-    playbackAudio(index) {
-      console.log("chunks:", this.chunks);
-      if(this.sectionSplit === "paragraph") {
-        this.showListenBackParagraph[index] = false;
-        this.paragraphAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-        this.paragraphBlobs[index] = new Blob(this.chunks, {type: 'audio/mp3'});
-        this.newRecordingParagraph[index] = true;
+    
+    /**
+     * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
+     * as individual audio clips using recordingService.saveAudio.
+     * 
+     * Each clip is given an id on the database. These ids are mapped to
+     * by paragraph / sentence indices which are stored in Recording object,
+     * which is also saved to DB.
+     */
+    async saveRecordings() {
+      const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
+        const blob = new Blob(chunks, {type: 'audio/mp3'});
+        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
+      });
+ 
+      const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
+        const blob = new Blob(chunks, {type: 'audio/mp3'});
+        return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
+      });
+ 
+      const paragraphResponses = await Promise.all(paragraph_promises);
+      const sentenceResponses = await Promise.all(sentence_promises);
+ 
+      let paragraphIndices = [];
+      let paragraphAudioIds = [];
+      for (const res of paragraphResponses) {
+        paragraphIndices.push(res.index);
+        paragraphAudioIds.push(res.fileId);
       }
-      else {
-        this.showListenBackSentence[index] = false;
-        this.sentenceAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-        this.sentenceBlobs[index] = new Blob(this.chunks, {type: 'audio/mp3'});
-        this.newRecordingSentence[index] = true;
+ 
+      let sentenceIndices = [];
+      let sentenceAudioIds = [];
+      for (const res of sentenceResponses) {
+        sentenceIndices.push(res.index);
+        sentenceAudioIds.push(res.fileId);
       }
-    }
+ 
+      const trackData = {
+        paragraphAudioIds: paragraphAudioIds,
+        paragraphIndices: paragraphIndices,
+        sentenceIndices: sentenceIndices,
+        sentenceAudioIds: sentenceAudioIds
+      }
 
-  /*
-  * Save updated audio to database
-  */
-    saveRecordings() {
-      if(this.canSendAudio) {
-        console.log("paragraphBlobs", this.paragraphBlobs);
-        console.log("sentenceBlobs", this.sentenceBlobs);
-      
-        for(let i = 0; i < this.paragraphBlobs.length; i++) {
-          if(this.paragraphBlobs[i]) {
-            console.log("Send:", this.paragraphBlobs[i]);
-            this.recordingService.updateRecordings(this.recording._id, i, "paragraph", this.paragraphBlobs[i]).subscribe();
-          }
-        }
-        for(let i = 0; i < this.sentenceBlobs.length; i++) {
-          if(this.sentenceBlobs[i]) {
-            this.recordingService.updateRecordings(this.recording._id, i, "sentence", this.sentenceBlobs[i]).subscribe();
-          }
-        }
+      this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
         this.recordingSaved = true;
-      }
-    }
-
-  /*
-  * Update recording history with current recordings and load most recent story
-  */
-    updateStory() {
-      this.recordingService.updateHistoryStatus(this.recording._id).subscribe();
-      this.recordingService.addRecordingForLoggedInUser(this.story);
-      this.needsUpdating = false;
-      this.ngOnInit();
+      });
     }
   
-  displayPreviousRecording() {
-    this.newRecordingParagraph = [false];
-    this.newRecordingSentence = [false];
-    this.paragraphAudioSources = [];
-    this.sentenceAudioSources = [];
-    console.log("RECORDING ID:", this.recording._id);
-    this.audioFinishedLoading = false;
-    this.synthesiseRecording();
+  goToHistory() {
+    this.router.navigateByUrl('/recording-history/' + this.story.id);
   }
   
-// change css class to show recording container
+  // set mmodalClass to visible fade 
   showModal() {
     this.modalClass = "visibleFade";
   }
 
-// change the css class to hide the recording container 
   hideModal() {
     this.modalClass = "hiddenFade";
-    if(this.recorder.state != 'inactive') {
-      this.recorder.stop();
-      this.stream.getTracks().forEach(track => track.stop());
-    }
-    this.isRecording = false;
+    this.modalChoice.next(false);
+  }
+
+  setModalChoice() {
+    this.modalChoice.next(true);
+  }
+
+  saveModal() {
+    this.saveRecordings();
+    this.modalChoice.next(true);
   }
   
   goToDashboard() {
     this.router.navigateByUrl('/dashboard/' + this.story.id);
-  }
-  
-  switchToHistoryMode() {
-    this.recordingMode = false;
-    this.historyMode = true;
-    this.paragraphs = [];
-    this.sentences = [];
-    this.newRecordingParagraph = [false];
-    this.newRecordingSentence = [false];
-    this.paragraphAudioSources = [];
-    this.sentenceAudioSources = [];
-  }
-  
-  switchToRecordMode() {
-    this.historyMode = false;
-    this.recordingMode = true;
-    this.audioFinishedLoading = false;
-    this.recordingsFinishedLoading = false;
-    this.paragraphs = [];
-    this.sentences = [];
-    this.newRecordingParagraph = [false];
-    this.newRecordingSentence = [false];
-    this.paragraphAudioSources = [];
-    this.sentenceAudioSources = [];
-    this.getRecording();
   }
 }
 

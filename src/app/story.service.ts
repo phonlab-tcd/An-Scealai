@@ -32,7 +32,8 @@ export class StoryService {
       dialect: dialect,
       text: text,
       author: author,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
+      activeRecording: null
     };
     console.log(storyObj);
     this.http.post(this.baseUrl + 'create', storyObj)
@@ -103,7 +104,11 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
   
-  synthesiseRecording(id: string) : Observable<any> {
-    return this.http.get(this.baseUrl + 'synthesiseRecording/' + id);
+  synthesiseObject(storyObject: Story) : Observable<any> {
+    return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
+  }
+
+  updateActiveRecording(storyId: string, recordingId: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateActiveRecording/' + storyId + '/', {activeRecording: recordingId});
   }
 }

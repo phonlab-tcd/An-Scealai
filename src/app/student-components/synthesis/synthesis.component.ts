@@ -31,8 +31,9 @@ export class SynthesisComponent implements OnInit {
 * Get paragaph and sentence data from the synthesiser 
 */
   ngOnInit() {
-    this.getStory().then(() => {
+    this.getStory().then((s) => {
       this.storyService.synthesise(this.story._id).subscribe((res) => {
+        console.log('res:', res);
         // loop through the html of the synthesis response and create sentences/paragraph instances
         for(let p of res.html) {
           let paragraphStr: string = "";
@@ -144,7 +145,7 @@ export class SynthesisComponent implements OnInit {
         this.getParamsFromUrl().then((params) => {
         this.storyService.getStory(params['id'].toString()).subscribe((res : Story) => {
           this.story = res;
-          resolve();
+          resolve(res);
         });
       });
     });
@@ -157,6 +158,7 @@ export class SynthesisComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
         params => {
+          console.log(params);
           resolve(params);
       });
     });
