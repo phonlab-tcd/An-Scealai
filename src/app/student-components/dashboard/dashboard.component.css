@@ -5,14 +5,14 @@
     margin-left: 10%;
     margin-top: 20px;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
 }
 
 .bookImg {
@@ -116,6 +116,23 @@ background-color: lightblue;
 .dictionary {
   width: 90%;
   height: 190px;
+}
+
+.dictionaryContainer {
+    position: absolute;
+    right: -320px;
+    top: 0px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
+}
+
+.dictionaryIframe {
+    height: 400px;
 }
 
 .saveBtn {
@@ -579,6 +596,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         margin-top: 30px;
     }
 
+    .dictionaryContainer {
+        height: 510px;
+    }
+
+    .dictionaryIframe {
+        height: 510px;
+    }
+
     .textField {
         height: 380px;
         margin-bottom: 10px;
@@ -626,6 +651,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         margin-top: 50px;
     }
 
+    .dictionaryContainer {
+        height: 600px;
+    }
+
+    .dictionaryIframe {
+        height: 600px;
+    }
+
     .textField {
         height: 470px;
     }
@@ -670,6 +703,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         left: 50%;
         margin-left: -490px;
         margin-top: 50px;
+    }
+
+    .dictionaryContainer {
+        height: 730px;
+    }
+
+    .dictionaryIframe {
+        height: 730px;
     }
 
     .textField {
@@ -721,19 +762,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .dictionaryHeader {
-    width: 90%;
-    margin-left: 5%;
     border-radius: 4px 4px 0px 0px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 5px;
     background-color: #70a87f;
     color: white;
     display: flex;
     align-items: column;
-}
-
-.dictionaryIframe {
-    width: 90%;
 }
 
 .lds-grid {
