@@ -8,6 +8,7 @@ import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
 import { NullInjector } from '@angular/core/src/di/injector';
+import { Subject } from 'rxjs';
 declare var MediaRecorder : any;
 
 @Component({
@@ -33,8 +34,10 @@ export class RecordingComponent implements OnInit {
   audioTimeouts = [];
   needsUpdating: boolean = false;
   
-  //recording audio files variables
   modalClass : string = "hidden";
+  modalChoice: Subject<boolean> = new Subject<boolean>();
+
+
   isRecordingParagraph: boolean[] = [];
   isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
@@ -354,7 +357,7 @@ export class RecordingComponent implements OnInit {
       setTimeout(() => {
         sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(chunksArray[index], {type: 'audio/mp3'})));
         this.recordingSaved = false;
-      }, 1000);
+      }, 500);
     }
     
     /**
@@ -400,25 +403,32 @@ export class RecordingComponent implements OnInit {
         sentenceAudioIds: sentenceAudioIds
       }
 
-      this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {console.log('Updated :)', res)});
+      this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
+        this.recordingSaved = true;
+      });
     }
   
   goToHistory() {
     this.router.navigateByUrl('/recording-history/' + this.story.id);
   }
   
-// change css class to show recording container
+  // set mmodalClass to visible fade 
   showModal() {
     this.modalClass = "visibleFade";
   }
 
-// change the css class to hide the recording container 
   hideModal() {
     this.modalClass = "hiddenFade";
-    if(this.recorder.state != 'inactive') {
-      this.recorder.stop();
-      this.stream.getTracks().forEach(track => track.stop());
-    }
+    this.modalChoice.next(false);
+  }
+
+  setModalChoice() {
+    this.modalChoice.next(true);
+  }
+
+  saveModal() {
+    this.saveRecordings();
+    this.modalChoice.next(true);
   }
   
   goToDashboard() {

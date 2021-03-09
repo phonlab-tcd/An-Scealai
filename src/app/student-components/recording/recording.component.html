@@ -4,14 +4,13 @@
   <div class="bookContainerSynth">
     <!--popup for update story option -->
     <div class="{{modalClass}} modalContainer">
-        <div class="modalContent">
-            <pre class="modalText">Are you sure you want to update to the most current version?</pre>
-            <pre class="modalText">(This will reset current audio recording data)</pre>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="updateStory()">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
-            </div>
-        </div>
+      <div class="modalContent">
+          <div class="modalText">{{ts.l.save_changes_made_to}} this recording?</div>
+          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          <div>
+              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
+          </div>
+      </div>
     </div>
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
