@@ -45,6 +45,7 @@ export class RecordingHistoryComponent implements OnInit {
       this.storyId = params['id'];
       this.recordingService.getHistory(this.storyId).subscribe(recordings => {
         this.recordings = recordings;
+        this.recordings.sort((a, b) => (a.date > b.date) ? -1 : 1)
         console.log("RECORDINGS: ", this.recordings);
       })
     });
