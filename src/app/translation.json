@@ -212,6 +212,7 @@
             "ISODate" : "ISODate",
             "story_id" : "Story id",
             "story_text" : "Story text",
+            "story_history" : "Story History",
             
             "messages" : "Messages",
             "new_message" : "New Message",
@@ -588,6 +589,7 @@
             "ISODate" : "Dáta ISO",
             "story_id" : "Comhartha aitheantais an scéil",
             "story_text" : "Téacs an scéil",
+            "story_history" : "Story History",
             
             "messages" : "Teachtaireachtaí",
             "new_message" : "Teachtaireacht Nua",

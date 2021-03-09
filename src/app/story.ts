@@ -12,4 +12,5 @@ export class Story {
         text: string;
         audioId: string;
     };
+    activeRecording: string;
 }

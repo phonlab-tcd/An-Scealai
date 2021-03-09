@@ -268,19 +268,20 @@ border-radius: 5px 5px 5px 5px;
     display: flex;
     width: 90%;
     margin-left: 5%;
-    padding: 5px;
+    padding-top: 2px;
+    padding-left: 5px;
 }
 
 .selectErrorCheckbox {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   text-align: left;
   background-color: #70a87f;
   display: flex;
+  color: white;
   width: 90%;
   margin-left: 5%;
-  padding: 5px;
 }
 
 .selectGrammarFilter {

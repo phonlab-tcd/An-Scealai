@@ -50,9 +50,9 @@
 
 .modalContainer {
     position: absolute;
-    margin-top: -10px;
+    margin-top: 0px;
     z-index: 100;
-    height: 520px;
+    height: 400px;
     width: 100%;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -183,7 +183,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 10px;
 }
 
-
 .recordingSaveIcon {
     color: #261500;
     border-style: none;
@@ -196,10 +195,43 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     color: #b3a995;
 }
 
+.optionsPopup {
+  z-index: 10;
+  position: absolute;
+  right: 0;
+  margin-top: 25px;
+  display: flex;
+  padding: 5px;
+  padding-top: 10px;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  border-radius: 5px 5px 5px 5px;
+}
+
+.optionsPopup:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 60px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #f1e9d8;
+  border-top: 0;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+
 .recordingUnsavedIcon {
     background-color: #70a87f;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
     border-radius: 5px;
     margin-top: -5px;
     color: white;
@@ -224,46 +256,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     font-size: 10pt;
     padding: 4px;
     padding-left: 8px;
-    padding-righT: 8px;
+    padding-right: 8px;
 }
 
 .playAudioBtn:hover {
     background-color: #437250;
     transition: 0.5s;
-}
-
-.recordBtn {
-  width: 15px;
-	height: 15px;
-	font-size: 0;
-	background-color: red;
-	border: 0;
-	border-radius: 15px;
-	margin: 18px;
-	outline: none;
-}
-
-.notRecordingBtn {
-	background-color: darkred;
-}
-
-.Rec{
-	animation-name: pulse;
-	animation-duration: 1.5s;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
-}
-
-@keyframes pulse{
-	0%{
-		box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
-	}
-	65%{
-		box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
-	}
-	90%{
-		box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
-	}
 }
 
 .loaderContainer {
@@ -291,13 +289,15 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .changeSplitBtn {
   background-color: #70a87f;
   border-radius: 4px;
   margin-right: 5px;
+  font-size: 10pt;
   color: white;
 }
 
@@ -325,6 +325,72 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .selectStoryFilter {
     font-size: 10pt;
     margin-left: 5px;
+}
+
+.textCard {
+  background-color: white;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+  box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+}
+
+.dividerLine {
+  border-top: 1px solid #707070;
+  width: 100%;
+}
+
+.recordingBtn {
+  background-color: #70a87f;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.recordingBtn:hover {
+  background-color: #437250;
+  transition: 0.5s;
+}
+
+.notRecordingBtn {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.blink {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  0% {
+    background-color:red;
+  }
+  50% {
+    background-color:rgb(119, 0, 0);
+  }
+  100% {
+    background-color:red;
+  }
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 35px;
 }
 
 @media only screen and (max-width: 350px) {
@@ -396,6 +462,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       margin-top: 20px;
   }
 
+  .modalContainer {
+    width: 620px;
+    height: 510px;
+  }
+
   .textContainerSynth {
       height: 390px;
   }
@@ -419,6 +490,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       margin-top: 30px;
   }
 
+  .modalContainer {
+    width: 800px;
+    height: 600px;
+  }
+
   .textContainerSynth {
       height: 480px;
   }
@@ -440,6 +516,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       left: 50%;
       margin-left: -490px;
       margin-top: 30px;
+  }
+
+  .modalContainer {
+    width: 980px;
+      height: 730px;
   }
 
   .textContainerSynth {
