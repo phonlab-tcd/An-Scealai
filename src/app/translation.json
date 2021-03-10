@@ -51,6 +51,9 @@
             "enter_code" : "Enter code",
             "sign_out" : "Sign out",
             
+            "recordings" : "Recordings",
+            "recording" : "Recording",
+            
             "leave" : "leave",
             "classroom" : "Classroom",
             "join_classroom" : "Join classroom",
@@ -432,6 +435,9 @@
             "classroom_code" : "Cód ranga",
             "enter_code" : "Cód anseo",
             "sign_out" : "Sínigh amach",
+            
+            "recordings" : "Taifeadtaí",
+            "recording" : "Taifeadadh",
     
             "personal_info" : "Eolas pearsanta",
             "gender" : "Gnéas",

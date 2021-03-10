@@ -5,7 +5,7 @@
     <!--popup for update story option -->
     <div class="{{modalClass}} modalContainer">
       <div class="modalContent">
-          <div class="modalText">{{ts.l.save_changes_made_to}} this recording?</div>
+          <div class="modalText">{{ts.l.save_changes_made_to}}?</div>
           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
           <div>
               <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
