@@ -359,6 +359,11 @@ export class RecordingComponent implements OnInit {
         this.recordingSaved = false;
       }, 500);
     }
+
+    deleteRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>) {
+      delete sources[index];
+      delete chunksArray[index];
+    }
     
     /**
      * Saves contents of this.paragraphChunks and this.sentenceChunks to DB
