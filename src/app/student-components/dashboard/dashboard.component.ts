@@ -298,7 +298,7 @@ export class DashboardComponent implements OnInit {
           else {
             values.push(tag);
             this.filteredTags.set(rule, values);
-            this.checkBox.set(rule, false);
+            this.checkBox.set(rule, true);
           }
         } 
       }
