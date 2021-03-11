@@ -340,12 +340,12 @@ function synthesiseStory(story) {
                     for(let s of p.childNodes) {
                         // push the sentences
                         // s.rawTagName <--> s.tagName if synthesis text not appearing
-                        if(s.rawTagName === 'span') {
+                        if(s.tagName === 'span') {
                             sentences.push(s.toString());
                         } 
                         // push the audio ids for the sentences
                         // s.rawTagName <--> s.tagName if synthesis text not appearing
-                        else if(s.rawTagName === 'audio') {
+                        else if(s.tagName === 'audio') {
                             urls.push(s.id);
                         }
                     }

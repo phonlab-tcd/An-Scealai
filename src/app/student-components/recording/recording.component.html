@@ -117,7 +117,7 @@
             </div>
             <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
               <div class="recordingUnsavedIcon" (click)="archive(story)">Archive Recording <i class="fas fa-inbox"></i></div>
-              <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-history', story.id]">Go to Archive <i class="fas fa-arrow-right"></i></div>
+              <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-archive', story.id]">Go to Archive <i class="fas fa-arrow-right"></i></div>
             </div>
         </div>
       </div>

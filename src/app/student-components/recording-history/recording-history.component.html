@@ -14,7 +14,7 @@
       <div *ngFor="let recording of recordings">
         <div class="contentSection">
           <!-- link the story to its dashboard -->
-          <a [routerLink]="['/recording', recording._id]" class="contentsLink">{{recording.storyData.title}}</a>
+          <a [routerLink]="['/view-recording', recording._id]" class="contentsLink">{{recording.storyData.title}}</a>
           <div *ngIf="isFromAmerica" class="contentsDate">{{recording.date | date : 'M/d/yy, h:mm' }}</div>
           <div *ngIf="!isFromAmerica" class="contentsDate">{{recording.date | date : 'd/M/yy, h:mm' }}</div>
         </div>
