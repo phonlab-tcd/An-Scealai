@@ -8,6 +8,7 @@ export class Recording {
     paragraphIndices: number[];
     sentenceAudioIds: string[];
     sentenceIndices: number[];
+    archived: boolean;
 
     constructor(story, paragraphAudioIds=[], paragraphIndices=[], sentenceAudioIds=[], sentenceIndices=[]) {
         this.paragraphAudioIds = paragraphAudioIds;
@@ -16,5 +17,6 @@ export class Recording {
         this.sentenceIndices = sentenceIndices;
         this.storyData = story;
         this.date = new Date();
+        this.archived = false;
     }
 }

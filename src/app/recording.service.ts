@@ -44,4 +44,8 @@ export class RecordingService {
     return this.http.get(this.baseUrl + "getHistory/" + storyId);
   }
   
+  updateArchiveStatus(recordingId: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "updateArchiveStatus/" + recordingId);
+  }
+  
 }

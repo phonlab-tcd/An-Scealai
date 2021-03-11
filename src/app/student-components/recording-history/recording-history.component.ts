@@ -60,9 +60,7 @@ export class RecordingHistoryComponent implements OnInit {
       else {
         this.isFromAmerica = false;
       }
-    
     });
-  
   }
   
   
