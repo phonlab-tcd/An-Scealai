@@ -237,6 +237,13 @@
             "dictionary" : "Dictionary",
             
             "recordings" : "Recordings",
+            "go_to_archive" : "Go to Archive",
+            "archive_recording" : "Archive Recording",
+            "archive" : "Archive",
+            "save_changes_made_to_this_recording" : "Save changes made to this recording?",
+            "recordings_archive" : "Recordings Archive",
+            "listen_record_compare" : "Listen, Record, and Compare",
+            "listen_and_compare" : "Listen and Compare",
             
             "genearl" : "General", 
             "word_choice" : "Word Choice",
@@ -617,6 +624,13 @@
             
             "recordings" : "Taifeadadh",
             "recording" : "Taifeadadh",
+            "go_to_archive" : "Téigh go Cartlann",
+            "archive_recording" : "Cuir Taifead sa Chartlann",
+            "archive" : "Cartlann",
+            "save_changes_made_to_this_recording" : "Sábháil athruithe a rinneadh don taifeadadh seo?",
+            "recordings_archive" : "Taifid sa Chartlann",
+            "listen_record_compare" : "Éist, Déan taifead agus Déan comparáid",
+            "listen_and_compare" : "Éist agus Déan Comparáid",
             
             "general" : "Ginearálta", 
             "word_choice" : "Rogha Focal",

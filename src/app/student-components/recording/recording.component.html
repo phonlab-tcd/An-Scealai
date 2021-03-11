@@ -28,7 +28,7 @@
       </div>
       <div class="recordingStoryContainer" *ngIf="story">
         <div *ngIf="recordingMode" class="recordingStoryHeader">
-          Listen, record, and compare
+          {{ts.l.listen_record_compare}}
         </div>
         <div class="textFieldContainer">
           <div *ngIf="historyMode" class="historyToolbar">
@@ -116,8 +116,8 @@
               </div>
             </div>
             <div class="optionsPopup" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
-              <div class="recordingUnsavedIcon" (click)="archive(story)">Archive Recording <i class="fas fa-inbox"></i></div>
-              <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-archive', story.id]">Go to Archive <i class="fas fa-arrow-right"></i></div>
+              <div class="recordingUnsavedIcon" (click)="archive(story)">{{ts.l.archive_recording}} <i class="fas fa-inbox"></i></div>
+              <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-archive', story.id]">{{ts.l.go_to_archive}} <i class="fas fa-arrow-right"></i></div>
             </div>
         </div>
       </div>

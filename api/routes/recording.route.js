@@ -46,8 +46,30 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
     VoiceRecording.findById(req.params.id, function(err, recording) {
         if(err) res.json(err);
         if(recording) {
+          
+          let bucket = new mongodb.GridFSBucket(db, {
+                  bucketName: 'voiceRecording'
+              });
+            
+              console.log("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
+              console.log("Request Paragraph indices: ", req.body.paragraphIndices);
+              
+              console.log("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
+              console.log("Stored Paragraph indices: ", recording.paragraphIndices);
+          
             
             if(req.body.paragraphAudioIds) {
+                /*
+                if(recording.paragraphAudioIds) {
+                  req.body.paragraphIndices.forEach(function(entry) {
+                    if(recording.paragraphIndices[entry]) {
+                      let audioId = recording.paragraphAudioIds[entry];
+                      bucket.delete(new ObjectID(audioId.toString()));
+                    }
+                  })
+                  
+                }
+                */
                 recording.paragraphAudioIds = req.body.paragraphAudioIds;
             }
             if(req.body.paragraphIndices) {
@@ -133,11 +155,23 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
 })
 
 recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
-  VoiceRecording.find({"storyData.id":req.params.storyId}, (err, recordings) => {
+  VoiceRecording.find({"storyData.id":req.params.storyId, "archived":true}, (err, recordings) => {
       if(err) {
           res.status(400).json({"message" : err.message});
       } else {
           res.json(recordings);
+      }
+  });
+  
+});
+
+recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
+  VoiceRecording.findById(req.params.recordingId, (err, recording) => {
+      if(err) {
+          res.status(400).json({"message" : err.message});
+      } else {
+          recording.archived = true;
+          recording.save();
       }
   });
   
