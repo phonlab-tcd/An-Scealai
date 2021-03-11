@@ -4,7 +4,7 @@
   <div class="bookContainerSynth">
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
-        <div [routerLink]="['/recording-archive', story.id]" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> History </div> 
+        <div [routerLink]="['/recording-archive', story.id]" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.archive}} </div> 
         <div></div>
         <div class="bookTitleHistory">{{story?.title}}</div>
         <div *ngIf="recordingMode" class="recordingSaveIcon">
@@ -18,7 +18,7 @@
       </div>
       <div class="recordingStoryContainer" *ngIf="story">
         <div class="recordingStoryHeader">
-          Listen and compare
+          {{ts.l.listen_and_compare}}
         </div>
         <div class="textFieldContainer">
           <!--Main container for story -->

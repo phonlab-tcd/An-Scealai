@@ -7,7 +7,8 @@ const VoiceRecording = new Schema({
   paragraphAudioIds: [String],
   paragraphIndices: [Number],
   sentenceAudioIds: [String],
-  sentenceIndices: [Number]
+  sentenceIndices: [Number],
+  archived: Boolean
 }, {
     collection: 'recordings'
 });

@@ -42,7 +42,7 @@ export class RecordingComponent implements OnInit {
   isRecordingSentence: boolean[] = [];
   paragraphAudioSources : SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
-  recordingSaved: boolean = false;
+  recordingSaved: boolean = true;
   
   //recording history variables
   recordingMode: boolean = true;
@@ -104,6 +104,8 @@ export class RecordingComponent implements OnInit {
      * @param story - story whose activeRecording will be updated
      */
     archive(story: Story) {
+      this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
+      
       const newActiveRecording = new Recording(story);
       this.recordingService.create(newActiveRecording).subscribe(res => {
         if (res.recording) {
@@ -361,6 +363,7 @@ export class RecordingComponent implements OnInit {
     }
 
     deleteRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>) {
+      this.recordingSaved = false;
       delete sources[index];
       delete chunksArray[index];
     }
@@ -412,10 +415,6 @@ export class RecordingComponent implements OnInit {
         this.recordingSaved = true;
       });
     }
-  
-  goToHistory() {
-    this.router.navigateByUrl('/recording-history/' + this.story.id);
-  }
   
   // set mmodalClass to visible fade 
   showModal() {

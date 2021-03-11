@@ -115,13 +115,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .myStoriesBtn {
-  display: inline;
-  border-style: none;
-  color: #261500;
-  width: 100px;
-  font-size: 12pt;
-  padding-top: 10px;
-  padding-left: 5%;
+    display: inline;
+    float: left;
+    border-style: none;
+    color: #261500;
+    font-size: 12pt;
+    padding-top: 10px;
 }
 
 .myStoriesBtn:hover {
