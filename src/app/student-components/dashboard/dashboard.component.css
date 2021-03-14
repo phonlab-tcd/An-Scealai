@@ -770,6 +770,29 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     align-items: column;
 }
 
+
+.dictionarySubHeader {
+    padding: 5px;
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+}
+
+.dictionaryName {
+  background-color: #70a87f;
+  font-size: 12px;
+  color: white;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.dictionaryName:hover {
+    color: #91ffa5;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 .lds-grid {
     display: inline-block;
     position: relative;
