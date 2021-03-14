@@ -45,9 +45,6 @@ export class RecordingComponent implements OnInit {
   recordingSaved: boolean = true;
   
   //recording history variables
-  recordingMode: boolean = true;
-  historyMode: boolean = false;
-  recordingHistory: Recording[] = [];
   popupVisible = false;
 
   errorText : string;
@@ -89,7 +86,7 @@ export class RecordingComponent implements OnInit {
                 this.loadAudio(recording);
               });
             } else {
-              console.log('This should be running');
+              console.log('No active recording for this story');
               this.synthesiseStory(this.story);
               this.archive(this.story);
             }
@@ -104,7 +101,10 @@ export class RecordingComponent implements OnInit {
      * @param story - story whose activeRecording will be updated
      */
     archive(story: Story) {
-      this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
+      
+      if(story.activeRecording) {
+        this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
+      }
       
       const newActiveRecording = new Recording(story);
       this.recordingService.create(newActiveRecording).subscribe(res => {

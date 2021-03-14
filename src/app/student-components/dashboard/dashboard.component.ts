@@ -45,6 +45,8 @@ export class DashboardComponent implements OnInit {
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
   classroomId: string;
+  selectTeanglann: boolean = true;
+  selectPotafocal: boolean = false;
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
