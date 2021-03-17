@@ -135,6 +135,7 @@ export class RecordingComponent implements OnInit {
      * @param recording - recording whose audio clips should be loaded
      */
     loadAudio(recording: Recording) {
+      this.audioFinishedLoading = false;
       for (let i=0; i<recording.paragraphIndices.length; ++i) {
         this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
           this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
