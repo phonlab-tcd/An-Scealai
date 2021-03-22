@@ -138,11 +138,13 @@ export class RecordingComponent implements OnInit {
       this.audioFinishedLoading = false;
       for (let i=0; i<recording.paragraphIndices.length; ++i) {
         this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
+          this.paragraphBlobs[i] = res;
           this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
         });
       }
       for (let i=0; i<recording.sentenceIndices.length; ++i) {
         this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
+          this.sentenceBlobs[i] = res;
           this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
         });
       }
@@ -353,20 +355,23 @@ export class RecordingComponent implements OnInit {
       }).catch();
     }
 
-    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, isRecording: boolean[]) {
+    stopRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, blobsArray: any[], isRecording: boolean[]) {
       this.recorder.stop();
       isRecording[index] = false;
       this.stream.getTracks().forEach(track => track.stop());
       setTimeout(() => {
-        sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(chunksArray[index], {type: 'audio/mp3'})));
+        const blob = new Blob(chunksArray[index], {type: 'audio/mp3'});
+        blobsArray[index] = blob;
+        sources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
         this.recordingSaved = false;
       }, 500);
     }
 
-    deleteRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>) {
+    deleteRecording(index: number, sources: SafeUrl[], chunksArray: Array<any[]>, blobsArray: any[]) {
       this.recordingSaved = false;
       delete sources[index];
       delete chunksArray[index];
+      delete blobsArray[index];
     }
     
     /**
@@ -378,13 +383,12 @@ export class RecordingComponent implements OnInit {
      * which is also saved to DB.
      */
     async saveRecordings() {
-      const paragraph_promises = Object.entries(this.paragraphChunks).map(async ([index, chunks]) => {
-        const blob = new Blob(chunks, {type: 'audio/mp3'});
+      console.log('Paragraph blobs', this.paragraphBlobs);
+      const paragraph_promises = Object.entries(this.paragraphBlobs).map(async ([index, blob]) => {
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
  
-      const sentence_promises = Object.entries(this.sentenceChunks).map(async ([index, chunks]) => {
-        const blob = new Blob(chunks, {type: 'audio/mp3'});
+      const sentence_promises = Object.entries(this.sentenceBlobs).map(async ([index, blob]) => {
         return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
       });
  

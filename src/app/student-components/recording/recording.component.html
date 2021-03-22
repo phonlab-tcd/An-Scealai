@@ -52,13 +52,13 @@
                           <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
                           <!-- Recording button -->
                           <button *ngIf="!isRecordingParagraph[p.index]" class="recordingBtn" (click)="recordAudio(p.index, paragraphChunks, isRecordingParagraph)"><i class="fas fa-microphone"></i></button>
-                          <button *ngIf="isRecordingParagraph[p.index]" class="notRecordingBtn blink" (click)="stopRecording(p.index, paragraphAudioSources, paragraphChunks, isRecordingParagraph);"><i class="fas fa-stop-circle"></i></button>
+                          <button *ngIf="isRecordingParagraph[p.index]" class="notRecordingBtn blink" (click)="stopRecording(p.index, paragraphAudioSources, paragraphChunks, paragraphBlobs, isRecordingParagraph);"><i class="fas fa-stop-circle"></i></button>
                         </div>
                         <hr class="dividerLine" *ngIf="paragraphAudioSources[p.index]">
                         <!-- Audio player -->
                         <div class="cardFooter" *ngIf="paragraphAudioSources[p.index]">
                           <audio *ngIf="paragraphAudioSources[p.index]" [attr.src]="paragraphAudioSources[p.index]" controls #audioTag class="audioPlayer"></audio>
-                          <button *ngIf="paragraphAudioSources[p.index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(p.index, paragraphAudioSources, paragraphChunks)"><i class="fas fa-trash-alt"></i></button>
+                          <button *ngIf="paragraphAudioSources[p.index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(p.index, paragraphAudioSources, paragraphChunks, paragraphBlobs)"><i class="fas fa-trash-alt"></i></button>
                           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                         </div>
                         </div>
@@ -75,14 +75,14 @@
                             <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
                             <!-- Recording button -->
                             <button *ngIf="!isRecordingSentence[s.index]" class="recordingBtn" type="button" (click)="recordAudio(s.index, sentenceChunks, isRecordingSentence)"><i class="fas fa-microphone"></i></button>
-                            <button *ngIf="isRecordingSentence[s.index]" class="notRecordingBtn blink" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks, isRecordingSentence);"><i class="fas fa-stop-circle"></i></button>          
+                            <button *ngIf="isRecordingSentence[s.index]" class="notRecordingBtn blink" (click)="stopRecording(s.index, sentenceAudioSources, sentenceChunks, sentenceBlobs, isRecordingSentence);"><i class="fas fa-stop-circle"></i></button>          
                           </div>
                             
                           <hr class="dividerLine" *ngIf="sentenceAudioSources[s.index]">
                           <!-- Audio player -->
                           <div class="cardFooter" *ngIf="sentenceAudioSources[s.index]">
                             <audio *ngIf="sentenceAudioSources[s.index]" [attr.src]="sentenceAudioSources[s.index]" id="audio" controls #audioTag class="audioPlayer"></audio>
-                            <button *ngIf="sentenceAudioSources[s.index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(s.index, sentenceAudioSources, sentenceChunks)"><i class="fas fa-trash-alt"></i></button>
+                            <button *ngIf="sentenceAudioSources[s.index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(s.index, sentenceAudioSources, sentenceChunks, sentenceBlobs)"><i class="fas fa-trash-alt"></i></button>
                             <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                           </div>
                         </div>     
