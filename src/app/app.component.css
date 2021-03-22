@@ -2,9 +2,18 @@
   box-sizing: border-box;
 }
 
+.page {
+  height: 94%;
+}
+
 .content {
   text-align: center;
   margin-top: 5vh;
+  margin-bottom: 5vh;
+  min-height: 93%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -186,6 +195,29 @@
   transition: 0.5s;
 }
 
+.footer {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background: white;
+  padding: 2px;
+  -webkit-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
+}
+
+.logoImg {
+  height: 6vh;
+}
+
+.separator {
+  width: 1px;
+  opacity: 0.5;
+  height: 6vh;
+  background-color: grey;
+}
 
 @media (max-width:750px) {
   .nav > .nav-btn {
@@ -244,7 +276,7 @@
     overflow-y: hidden;
     top: 50px;
     left: 0px;
-    webkit-box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
+    -webkit-box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
     -moz-box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
     box-shadow: 0px 17px 20px -2px rgba(0,0,0,0.31);
   }
@@ -302,6 +334,4 @@
   .optionsPopupOld:after {
     display: none;
   }
-
 }
-

@@ -6,7 +6,7 @@
     width: 300px;
     height: auto;
     left: 0px;
-    bottom:0px;
+    bottom: 6vh;
     position: fixed;
     z-index: -2;
 }
@@ -15,7 +15,7 @@
     width: 300px;
     height: auto;
     right: 0px;
-    bottom:0px;
+    bottom: 6vh;
     position: fixed;
     z-index: -2;
 }
@@ -23,7 +23,7 @@
 .catJumpingImg {
     width: 180px;
     height: auto;
-    bottom: 60px;
+    bottom: 80px;
     position: fixed;
     margin-left: -10%;
     z-index: -1;
@@ -127,7 +127,7 @@
     .catWalkingImg {
         width: 14%;
         height: auto;
-        bottom: 0px;
+        bottom: 4vh;
         position: fixed;
         display: block;
         margin-left: 42%;
