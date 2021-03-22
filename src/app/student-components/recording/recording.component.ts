@@ -75,6 +75,7 @@ export class RecordingComponent implements OnInit {
      * - Otherwise, make a new one, using this.archive()
      */
     getStory() {
+      console.log('Get story:', this.paragraphs);
       this.story = null;
       this.route.params.subscribe(params => {
         this.storyService.getStory(params['id']).subscribe(
@@ -86,8 +87,6 @@ export class RecordingComponent implements OnInit {
                 this.loadAudio(recording);
               });
             } else {
-              console.log('No active recording for this story');
-              this.synthesiseStory(this.story);
               this.archive(this.story);
             }
           });
@@ -121,8 +120,7 @@ export class RecordingComponent implements OnInit {
             this.sentenceAudioSources = [];
             this.sentenceChunks = [];
             this.popupVisible = false;
-            // Resynthesise with latest story text
-            this.getStory();
+            this.synthesiseStory(this.story);
           });
         }
       })
@@ -152,6 +150,7 @@ export class RecordingComponent implements OnInit {
   * Synthesise recording text using story service
   */
     synthesiseStory(story) {
+      this.audioFinishedLoading = false;
       this.storyService.synthesiseObject(story).subscribe((res) => {
         // loop through the html of the synthesis response and create sentences/paragraph instances
         for(let p of res.html) {
