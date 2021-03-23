@@ -47,15 +47,15 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
         if(err) res.json(err);
         if(recording) {
           
-          let bucket = new mongodb.GridFSBucket(db, {
-                  bucketName: 'voiceRecording'
-              });
+            let bucket = new mongodb.GridFSBucket(db, {
+                bucketName: 'voiceRecording'
+            });
             
-              console.log("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
-              console.log("Request Paragraph indices: ", req.body.paragraphIndices);
-              
-              console.log("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
-              console.log("Stored Paragraph indices: ", recording.paragraphIndices);
+            console.log("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
+            console.log("Request Paragraph indices: ", req.body.paragraphIndices);
+            
+            console.log("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
+            console.log("Stored Paragraph indices: ", recording.paragraphIndices);
           
             
             if(req.body.paragraphAudioIds) {
