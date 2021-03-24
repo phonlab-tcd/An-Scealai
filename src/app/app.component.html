@@ -36,7 +36,7 @@
               <button class="btn languageBtn" id="dropdownBasic1" ngbDropdownToggle (click)="myDrop1.open()" onclick="this.blur();">{{ts.l.about}}</button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">An Scéalaí</button>
-                <button ngbDropdownItem (click)="changeCheck()"> <a href="../assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
+                <button ngbDropdownItem (click)="changeCheck()"> <a href="/assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
                 <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>  
               </div>
             </div>
@@ -56,9 +56,6 @@
                 <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
               </div>
             </div>
-            <!--<a routerLink="/technology" class="navBtn" (click)="changeCheck()">{{ts.l.technology}}</a> -->
-            <!--<a routerLink="/resources" class="navBtn" (click)="changeCheck()"> LARA </a>-->
-            <!--<a href="../assets/pdf/User_guide.pdf" class="navBtn" download>{{ts.l.user_guide}}</a> -->
             <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
             <!-- Change language dropdown and login button-->
             <div class="navBtn rightNavBtn">
