@@ -288,11 +288,11 @@ Some pseudo-classes used to highlight text
 
 */
 
-.paragraphContainer ::ng-deep .spanText {
+.paragraphContainer ::ng-deep .highlightable {
     position: relative;
 }
 
-.paragraphContainer ::ng-deep .spanText::before {
+.paragraphContainer ::ng-deep .highlightable::before {
     content: '';
     height: 22px;
     width: 0%;
@@ -301,11 +301,11 @@ Some pseudo-classes used to highlight text
     transition: var(--trans);
 }
 
-.paragraphContainer ::ng-deep .spanTextHighlight::before {
+.paragraphContainer ::ng-deep .highlight::before {
     width: 100%;
 }
 
-.paragraphContainer ::ng-deep .spanTextNoHighlight::before {
+.paragraphContainer ::ng-deep .noHighlight::before {
     right: 0;
     width: 0%;
 }
