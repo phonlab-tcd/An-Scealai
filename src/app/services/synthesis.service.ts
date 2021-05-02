@@ -31,19 +31,23 @@ export class SynthesisService {
       for (const sentenceHtml of sentenceHtmlArray) {
         // sentenceSpan contains a span child for each word in the sentence
         const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
-        const sentence = new Sentence();
-        sentence.startTime = +sentenceSpan.children[0].getAttribute('data-begin');
+        const startTime = +sentenceSpan.children[0].getAttribute('data-begin');
         const lastSentenceChild = sentenceSpan.children[sentenceSpan.childElementCount-1]
-        sentence.duration = (+lastSentenceChild.getAttribute('data-begin') + +lastSentenceChild.getAttribute('data-dur')) - sentence.startTime;
-        sentence.audio = new Audio(synthesisResponse.audio[i]);
-        sentence.spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
-        sentence.spans.forEach(span => span.classList.add('highlightable'));
+        const duration = (+lastSentenceChild.getAttribute('data-begin') + +lastSentenceChild.getAttribute('data-dur')) - startTime;
+        const audio = new Audio(synthesisResponse.audio[i]);
+        
+        let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
+        spans.forEach(span => span.classList.add('highlightable'));
+
+        const sentence = new Sentence(audio, spans, startTime, duration);
         sentences.push(sentence);
         paragraphSentences.push(sentence);
       }
-      const paragraph = new Paragraph();
-      paragraph.audio = new Audio(synthesisResponse.audio[i]);
-      paragraph.spans = paragraphSentences.reduce((acc, sentence) => acc.concat(sentence.spans), []);
+      const audio = new Audio(synthesisResponse.audio[i]);
+      const spans = paragraphSentences.reduce((acc, sentence) => acc.concat(sentence.spans), []);
+      const lastParagraphSentence = paragraphSentences[paragraphSentences.length - 1];
+      const duration = lastParagraphSentence.startTime + lastParagraphSentence.duration;
+      const paragraph = new Paragraph(audio, spans, duration);
       paragraphs.push(paragraph);
     });
     return [paragraphs, sentences];
@@ -77,14 +81,22 @@ export abstract class Section {
   highlightTimeouts: NodeJS.Timer[] = [];
   pauseTimeout: NodeJS.Timer;
   spans: HTMLSpanElement[];
-  type: string;
+  startTime: number;
+  duration: number;
 
-  play(startTime: number, duration: number) {
-    this.audio.currentTime = startTime;
+  constructor(audio: HTMLAudioElement,  spans: HTMLSpanElement[], startTime: number, duration: number) {
+    this.audio = audio;
+    this.spans = spans;
+    this.startTime = startTime;
+    this.duration = duration;
+  }
+
+  play() {
+    this.audio.currentTime = this.startTime;
     this.audio.play();
     this.pauseTimeout = setTimeout(() => {
       this.stop();
-    }, duration * 1000);
+    }, this.duration * 1000);
   }
 
   stop() {
@@ -93,7 +105,7 @@ export abstract class Section {
     clearTimeout(this.pauseTimeout);
   }
 
-  highlight(startTime: number, duration: number) {
+  highlight() {
     let previousSpan: HTMLSpanElement;
     for (const s of this.spans) {
       // Each span will be highlighted halfway through its playback.
@@ -103,11 +115,11 @@ export abstract class Section {
         if (previousSpan) previousSpan.classList.add("noHighlight");
         s.classList.add("highlight");
         previousSpan = s;
-      }, ((+s.getAttribute("data-begin") * 1000)) + ((+s.getAttribute("data-dur") / 2) * 1000) - (startTime * 1000)));
+      }, ((+s.getAttribute("data-begin") * 1000)) + ((+s.getAttribute("data-dur") / 2) * 1000) - (this.startTime * 1000)));
     }
     this.highlightTimeouts.push(setTimeout(() => {
       this.removeHighlight();
-    }, duration * 1000));
+    }, this.duration * 1000));
   }
 
   removeHighlight() {
@@ -120,24 +132,12 @@ export abstract class Section {
 }
 
 export class Paragraph extends Section {
-  play() {
-    super.play(0, this.audio.duration);
-  }
-  highlight() {
-    super.highlight(0, this.audio.duration);
+  constructor(audio: HTMLAudioElement,  spans: HTMLSpanElement[], duration: number) {
+    super(audio, spans, 0, duration);
   }
 }
 
-export class Sentence extends Section {
-  startTime: number;
-  duration: number;
-  play() {
-    super.play(this.startTime, this.duration);
-  }
-  highlight() {
-    super.highlight(this.startTime, this.duration);
-  }
-}
+export class Sentence extends Section { }
 
 interface SynthesisResponse {
   audio: string[];
