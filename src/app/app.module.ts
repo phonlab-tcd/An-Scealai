@@ -59,6 +59,7 @@ import { TeamComponent } from './team/team.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 
 
@@ -103,7 +104,8 @@ import { ViewRecordingComponent } from './student-components/view-recording/view
     TeamComponent,
     AboutLaraComponent,
     RecordingHistoryComponent,
-    ViewRecordingComponent
+    ViewRecordingComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
