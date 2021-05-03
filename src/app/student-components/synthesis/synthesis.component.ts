@@ -56,7 +56,6 @@ export class SynthesisComponent implements OnInit {
   }
 
   playSection(section) {
-    console.log('PLAY SECTION:', section.audio)
     section.play();
     section.highlight();
   }
