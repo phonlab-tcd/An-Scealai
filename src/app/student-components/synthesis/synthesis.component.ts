@@ -55,7 +55,7 @@ export class SynthesisComponent implements OnInit {
     allSections.forEach(section => this.stopSection(section));
   }
 
-  playSection(section) {
+  playSection(section: Section) {
     section.play();
     section.highlight();
   }
