@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
 import { HttpClient } from '@angular/common/http';
+import { EngagementService } from '../engagement.service';
+import { EventType } from '../event';
 import config from '../../abairconfig.json';
 
 @Injectable({
@@ -8,7 +10,7 @@ import config from '../../abairconfig.json';
 })
 export class SynthesisService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private engagement: EngagementService) { }
 
   baseUrl = config.baseurl;
 
@@ -50,6 +52,7 @@ export class SynthesisService {
       const paragraph = new Paragraph(audio, spans, duration);
       paragraphs.push(paragraph);
     });
+    this.engagement.addEventForLoggedInUser(EventType['SYNTHESISE-STORY'], storyObject);
     return [paragraphs, sentences];
   }
 
@@ -91,6 +94,9 @@ export abstract class Section {
     this.duration = duration;
   }
 
+  /**
+   * Play the synthesis audio for this section
+   */
   play() {
     this.audio.currentTime = this.startTime;
     this.audio.play();
@@ -99,12 +105,19 @@ export abstract class Section {
     }, this.duration * 1000);
   }
 
+  /**
+   * Stop any synthesis audio that is playing for this section
+   */
   stop() {
     this.audio.pause();
     this.audio.currentTime = 0;
     clearTimeout(this.pauseTimeout);
   }
 
+  /**
+   * Highlight each word in this section in time with
+   * its synthesis audio.
+   */
   highlight() {
     let previousSpan: HTMLSpanElement;
     for (const s of this.spans) {
@@ -122,6 +135,9 @@ export abstract class Section {
     }, this.duration * 1000));
   }
 
+  /**
+   * Stop highlighting this section
+   */
   removeHighlight() {
     for (const s of this.spans) {
       s.classList.remove("highlight");
