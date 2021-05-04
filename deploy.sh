@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Pull latest code from git repo, overwriting local changes
-git reset --hard HEAD
+# Pull latest code from git repo
 git pull
 
 # String replace backend address in abairconfig.json
