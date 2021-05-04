@@ -23,9 +23,13 @@ $ npm install
 ```
 
 ## Running the App
-1) In the project root folder, /an-scealai, run the following command to start the Frontend server:
+1a) (Using global installation of Angular) In the project root folder, /an-scealai, run the following command to start the Frontend server:
 ```bash
 $ ng serve
+```
+1b) (Using local installation of Angular):
+```bash
+$ npm start
 ```
 
 2) Run the Mongo Daemon with the following command:
