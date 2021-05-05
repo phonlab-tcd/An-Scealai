@@ -262,6 +262,7 @@ export class MessagesComponent implements OnInit {
       for(let id of this.classroom.studentIds) {
         this.userService.getUserById(id).subscribe((res : User) => {
           this.students.push(res);
+          this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
         });
       }
     }
