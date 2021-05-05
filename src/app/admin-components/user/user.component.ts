@@ -8,6 +8,7 @@ import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from '../../engagement.service';
 import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
+import config from '../../../abairconfig.json';
 
 @Component({
   selector: 'app-user',
@@ -33,9 +34,11 @@ export class UserComponent implements OnInit {
   allEvents: Event[] = [];
   maximised : boolean = false;
 
+  baseUrl: string = config.baseurl;
+
   ngOnInit() {
     this.getUserId().then(params => {
-      this.http.get('http://localhost:4000/user/viewUser', {headers: {_id : params['id'].toString()}}).subscribe((res) => {
+      this.http.get(this.baseUrl + 'user/viewUser', {headers: {_id : params['id'].toString()}}).subscribe((res) => {
         this.user = res;
         if(this.user.role === 'STUDENT') {
           this.getStories();

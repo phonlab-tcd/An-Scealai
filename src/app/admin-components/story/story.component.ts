@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from '../../translation.service';
+import config from '../../../abairconfig.json';
 
 
 @Component({
@@ -22,10 +23,11 @@ export class StoryComponent implements OnInit {
 
   story : any;
   audioSource : SafeUrl;
+  baseUrl: string = config.baseurl;
   
   ngOnInit() {
     this.getParams().then(params => {
-      this.http.get('http://localhost:4000/story/viewStory/' + params['id'].toString()).subscribe((res) => {
+      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
         this.story = res[0];
         this.getFeedbackAudio();
       });
