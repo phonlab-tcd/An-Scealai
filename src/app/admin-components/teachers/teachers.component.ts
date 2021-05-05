@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { identifierModuleUrl } from '@angular/compiler';
 import { TranslationService } from '../../translation.service';
+import config from '../../../abairconfig.json';
 
 @Component({
   selector: 'app-teachers',
@@ -22,6 +23,8 @@ export class TeachersComponent implements OnInit {
   copiedTextClass : String = "hidden";
   modalClass : String = "hidden";
 
+  baseUrl: string = config.baseurl;
+
   constructor(private http: HttpClient, private router: Router, public ts: TranslationService) { }
 
   ngOnInit() {
@@ -35,7 +38,7 @@ export class TeachersComponent implements OnInit {
       code : this.teacherCode,
     };
     console.log(teacherCodeObj);
-    this.http.post('http://localhost:4000/teacherCode/create', teacherCodeObj)
+    this.http.post(this.baseUrl + 'teacherCode/create', teacherCodeObj)
       .subscribe(res => {
         console.log("Teacher code created!", res)
         this.getActiveTeacherCodes();
@@ -43,14 +46,14 @@ export class TeachersComponent implements OnInit {
   }
 
   getActiveTeacherCodes() {
-    this.http.get('http://localhost:4000/teacherCode/activeCodes').subscribe((res: TeacherCodeDetails[]) => {
+    this.http.get(this.baseUrl + 'teacherCode/activeCodes').subscribe((res: TeacherCodeDetails[]) => {
       this.activeTeacherCodes = res;
       console.log("teacher codes", this.activeTeacherCodes);
     });
   }
 
   getTeachers() {
-    this.http.get('http://localhost:4000/user/teachers').subscribe((res: Object[]) => {
+    this.http.get(this.baseUrl + 'user/teachers').subscribe((res: Object[]) => {
       this.teachers = res;
     }); 
   }
@@ -58,7 +61,7 @@ export class TeachersComponent implements OnInit {
   deleteTeacherCode() {
     if(this.codeToDelete != null) {
       console.log(this.codeToDelete);
-      this.http.get('http://localhost:4000/teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
+      this.http.get(this.baseUrl + 'teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
         this.getActiveTeacherCodes();
         this.hideModal();
       });

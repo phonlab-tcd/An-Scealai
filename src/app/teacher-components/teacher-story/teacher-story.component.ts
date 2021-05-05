@@ -7,6 +7,7 @@ import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
+import config from '../../../abairconfig.json';
 
 declare var MediaRecorder : any;
 
@@ -48,6 +49,8 @@ export class TeacherStoryComponent implements OnInit {
   stream;
   chunks;
 
+  baseUrl: string = config.baseurl;
+
   ngOnInit() {
     this.getStoryData();
     //set date format
@@ -69,7 +72,7 @@ export class TeacherStoryComponent implements OnInit {
 */
   getStoryData() {
     this.getParams().then(params => {
-      this.http.get('http://localhost:4000/story/viewStory/' + params['id'].toString()).subscribe((res) => {
+      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
         this.story = res[0];
         this.getFeedbackAudio();
         this.getAuthorPossessive();
