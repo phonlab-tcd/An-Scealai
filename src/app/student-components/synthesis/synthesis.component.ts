@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../story.service';
-import { Story } from '../../story';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { EventType } from '../../event';
-import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-synthesis',
@@ -17,8 +12,7 @@ import { Observable } from 'rxjs';
 export class SynthesisComponent implements OnInit {
 
   constructor(private storyService: StoryService, private route: ActivatedRoute,
-              private router: Router, private sanitizer: DomSanitizer,
-              private engagement: EngagementService, public ts : TranslationService,
+              private router: Router, public ts : TranslationService,
               private synthesis: SynthesisService) { }
  
   storyId: string;
