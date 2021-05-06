@@ -24,6 +24,7 @@ export class SynthesisService {
    * @returns - Paragraph and Sentence objects containing data for
    * synthesis of input story.
    */
+
   async synthesiseStory(storyObject: Story): Promise<[Paragraph[], Sentence[]]> {
     const synthesisResponse = await this.http.post(this.baseUrl + 'story/synthesiseObject/', {story: storyObject}).toPromise() as SynthesisResponse;
     const sentences: Sentence[] = [];

@@ -29,7 +29,8 @@ export class TeacherDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.classrooms = this.getClassrooms();
-    this.classrooms.sort((a, b) => (a.title < b.title) ? -1 : 1);
+    // TODO: Fix bug
+    // this.classrooms.sort((a, b) => (a.title < b.title) ? -1 : 1);
     this.ns.setNotifications();
   }
 
