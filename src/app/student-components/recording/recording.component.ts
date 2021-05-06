@@ -23,17 +23,19 @@ export class RecordingComponent implements OnInit {
               private router: Router, private recordingService: RecordingService,
               private synthesis: SynthesisService) { }
   
-  //synthesiser variables
+  // Synthesis variables
   story: Story = new Story();
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   chosenSections: Section[];
-  audioFinishedLoading: boolean = false;
-  a;
-  needsUpdating: boolean = false;
+
+  // Audio variables
   
-  modalClass : string = "hidden";
-  modalChoice: Subject<boolean> = new Subject<boolean>();
+  // NOTE: 'section' variables are pointers to corresponding variables
+  // for chosen section type (paragraph / sentence)
+  recorder;
+  stream;
+  chunks;
 
   isRecordingParagraph: boolean[] = [];
   isRecordingSentence: boolean[] = [];
@@ -43,18 +45,6 @@ export class RecordingComponent implements OnInit {
   sentenceAudioSources: SafeUrl[] = [];
   sectionAudioSources: SafeUrl[] = [];
 
-  recordingSaved: boolean = true;
-  
-  //recording history variables
-  popupVisible = false;
-
-  errorText : string;
-  registrationError : boolean;
-
-  recorder;
-  stream;
-  chunks;
-
   paragraphBlobs: any[] = [];
   sentenceBlobs: any[] = [];
   sectionBlobs: any[] = [];  
@@ -62,6 +52,15 @@ export class RecordingComponent implements OnInit {
   paragraphChunks: {[key:number]:any[]} = [];
   sentenceChunks: {[key:number]:any[]}  = [];
   sectionChunks: {[key:number]:any[]}  = [];
+
+  // UI variables
+  modalClass : string = "hidden";
+  modalChoice: Subject<boolean> = new Subject<boolean>();
+  recordingSaved: boolean = true;
+  popupVisible = false;
+  errorText : string;
+  registrationError : boolean;
+  audioFinishedLoading: boolean = false;
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
@@ -274,6 +273,7 @@ export class RecordingComponent implements OnInit {
     return this.chosenSections[0] instanceof Paragraph;
   }
 
+  // toggle paragraph / sentence mode
   changeSections(sections) {
     this.chosenSections = sections;
     const allSections = this.paragraphs.concat(this.sentences);
