@@ -36,6 +36,16 @@ $ npm start
 ```bash
 $ mongod
 ```
+If this doesn't work you may need root priveleges:
+```bash
+$ sudo mongod
+```
+If it still doesn't work, you may need to create a folder called `/data/db` or `C:\data\db` on Windows.
+This is where MongoDB will store files.
+```bash
+$ mkdir /data
+$ mkdir /data/db
+```
 
 3) In the API folder, /an-scealai/api, run the following command to start the Backend server:
 ```bash
