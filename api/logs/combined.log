@@ -1,0 +1,8 @@
+{"message":"server.handler.begun","level":"info"}
+{"message":"server.handler.failed","level":"info"}
+{"message":"server.handler.begun","level":"info"}
+{"message":"server.handler.failed","level":"info"}
+{"message":"server.handler.begun","level":"info"}
+{"message":"server.handler.failed","level":"info"}
+{"message":"server.handler.begun","level":"info"}
+{"message":"server.handler.failed","level":"error"}
