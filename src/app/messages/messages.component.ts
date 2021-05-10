@@ -106,12 +106,17 @@ export class MessagesComponent implements OnInit {
     this.chunks = [];
     this.canSendAudio = false;
     
-    if(this.auth.getUserDetails().role === "TEACHER") {
+    const userDetails = this.auth.getUserDetails();
+    
+    // Return if user not logged in to avoid calling null.role (which results in error)
+    if (!userDetails) return;
+
+    if(userDetails.role === "TEACHER") {
       this.isTeacher = true;
       this.getClassroom();
       this.teacherId = this.auth.getUserDetails()._id;
     }
-    if(this.auth.getUserDetails().role === "STUDENT") {
+    if(userDetails.role === "STUDENT") {
       this.studentId = this.auth.getUserDetails()._id;
       this.classroomService.getClassroomOfStudent(this.studentId).subscribe((res: Classroom) => {
         this.classroom = res;
@@ -126,7 +131,7 @@ export class MessagesComponent implements OnInit {
     }
     
     // get date format for user 
-    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    this.profileService.getForUser(userDetails._id).subscribe((res) => {
       let p = res.profile;
       let country = p.country;
       if(country == "United States of America" || country == "America" || country == "USA" || country == "United States") {

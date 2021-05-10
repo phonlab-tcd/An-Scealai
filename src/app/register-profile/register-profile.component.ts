@@ -232,7 +232,10 @@ export class RegisterProfileComponent implements OnInit {
   synthOpinion : string = this.synthOpinions[0];
 
   ngOnInit() {
-    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
         let p = res.profile;
         this.gender = p.gender;
@@ -259,14 +262,17 @@ export class RegisterProfileComponent implements OnInit {
       console.log("No previous profile data associated with user.");
     });
 
-    if(this.auth.getUserDetails().role === 'TEACHER') {
+    if(userDetails.role === 'TEACHER') {
       this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
     }
   }
 
   saveDetails() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
     let profile = {
-      userId : this.auth.getUserDetails()._id,
+      userId : userDetails._id,
       gender : this.gender,
       age : this.age,
       county : (!this.notFromIreland) ? this.county : null,
@@ -289,9 +295,9 @@ export class RegisterProfileComponent implements OnInit {
       synthOpinion : this.synthOpinion,
     };
     this.profileService.create(profile).subscribe((res) => {
-      if(this.auth.getUserDetails().role === 'STUDENT') {
+      if(userDetails.role === 'STUDENT') {
         this.router.navigateByUrl('/contents');
-      } else if(this.auth.getUserDetails().role === 'TEACHER') {
+      } else if(userDetails.role === 'TEACHER') {
         this.router.navigateByUrl('/teacher/dashboard');
       }
       
