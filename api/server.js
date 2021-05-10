@@ -4,9 +4,8 @@ const express = require('express'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
-    passport = require('passport');
-
-require('./config/passport');
+    passport = require('passport'),
+    logger = require('./logger');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -23,8 +22,8 @@ const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-    () => {console.log('Database is connected');},
-    (err) => { console.log('Can not connect to the database'+ err)}
+    () => {logger.info('Database is connected');},
+    (err) => { logger.error('Cannot connect to the database:' + err)}
 );
 
 const app = express();
