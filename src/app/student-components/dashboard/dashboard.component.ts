@@ -79,7 +79,10 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
-    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    this.classroomService.getClassroomOfStudent(userDetails._id).subscribe( (res) => {
       this.classroomId = res._id;
       console.log(this.classroomId);
     });
@@ -337,7 +340,9 @@ export class DashboardComponent implements OnInit {
   updateStats() {
     console.log("Update grammar errors");
     let updatedTimeStamp = new Date();
-    this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags, updatedTimeStamp).subscribe();
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe();
   }
 
 // set wasInside variable to true when user clicks
