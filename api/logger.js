@@ -1,17 +1,23 @@
 
 
 const winston = require('winston')
+const fs = require('fs')
+const path = require('path')
 
+
+const errorFile = path.join(__dirname, 'logs/error.log')
+const combinedFile = path.join(__dirname, 'logs/combined.log')
 
 // Create our logger object
 const logger = winston.createLogger({
   transports: [
     // This transport lets us log to the console
-    new winston.transports.Console(),
+    new winston.transports.Console({
+      winston.format),
     // This transport logs to the error file
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: errorFile, level: 'error' }),
     // This transport should be were everything gets sent
-    new winston.transports.File({ filename: 'logs/combined.log' }),
+    new winston.transports.File({ filename: combinedFile}),
   ]
 });
 
