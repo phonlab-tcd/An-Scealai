@@ -12,9 +12,14 @@
     </div>
     <div class="bookHeader">
       <div class="headerUpper">
-        <!-- back button to redirect to contents page -->
-        <div routerLink="/contents" class="myStoriesBtn"><i class="fa fa-chevron-left backArrow"></i>{{ts.l.contents}}</div>
-        <!-- save icon -->
+
+        <!-- BACK BUTTON TO LIST OF STUDENT'S STORIES -->
+        <div routerLink="/contents" class="myStoriesBtn">
+          <i class="fa fa-chevron-left backArrow"></i>
+          {{ts.l.contents}}
+        </div>
+
+        <!-- SAVE ICON  -->
         <div class="saveIcon">
           <div *ngIf="storySaved" class="savedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
@@ -24,28 +29,66 @@
           </div>
         </div>
       </div>
-      <!-- story title -->
-      <div class="bookTitle">{{story?.title}}<span *ngIf="!storySaved">*</span></div>
+
+      <!-- STORY TITLE -->
+      <div class="bookTitle">
+        <div>
+          {{story?.title}}
+          <span *ngIf="!storySaved">*</span>
+        </div>
+
+        <!-- CHANGE STORY DIALECT -->
+        <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
+          <option *ngFor="let d of dialects" [ngValue]="d.code">
+          {{d.name}}
+          </option>
+        </select>
+
+      </div>
+
+
       <div class="optionsBtnContainer">
-        <div class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story.id]">{{ts.l.edit}}<i class="fas fa-pencil-alt optionsBtnIcon"></i></div>
-        <div class="optionsBtn optionsPopupBtn" (click)="defaultMode(); getFeedback()">
+
+        <div class="toggleShowOptions" (click)="toggleShowOptions();">
+          <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+          <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+        </div>
+        <!-- EDIT STORY DETAILS -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          [routerLink]="['/story-details', story.id]">
+          {{ts.l.edit}}
+          <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+        </div>
+
+        <!-- FEEDBACK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="defaultMode(); getFeedback()">
           {{ts.l.feedback}}
           <i class="fas fa-comment-dots optionsBtnIcon"></i>
           <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
         </div>
-        <div class="optionsBtn optionsPopupBtn" (click)="defaultMode(); showDictionary();">
+
+        <!-- DICTIONARY -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="defaultMode(); showDictionary();">
           {{ts.l.dictionary}}
           <i class="fas fa-book optionsBtnIcon"></i>
         </div>
-        <div class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">
+
+        <!-- AUDIO CHECK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">
           {{ts.l.audio_check}}
           <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
-        <div class="optionsBtn optionsPopupBtn" (click)="defaultMode(); runGramadoir()">
+
+        <!-- GRAMMAR CHECK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="defaultMode(); runGramadoir()">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
-        <div class="optionsBtn optionsPopupBtn" (click)="goToRecording()">
+
+        <!-- RECORDINGS -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="goToRecording()">
           {{ts.l.recordings}}
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
@@ -129,7 +172,7 @@
           <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/"></iframe>
         </div>
       </div>
-      
+
     </div>
     <!-- <app-chatbot></app-chatbot> -->
   </div>

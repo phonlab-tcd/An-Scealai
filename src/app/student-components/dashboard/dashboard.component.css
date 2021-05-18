@@ -22,6 +22,8 @@
 }
 
 .bookTitle {
+    display: flex;
+    justify-content: space-between;
     color: #261500;
     font-size: 18pt;
     text-align: left;
@@ -51,6 +53,10 @@
     border-style: none;
     font-size: 11pt;
     padding: 5px;
+}
+
+.selectDialect {
+    font-size: 8pt;
 }
 
 .backArrow {

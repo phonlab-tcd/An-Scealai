@@ -21,13 +21,16 @@
           {{ts.l.listen_and_compare}}
         </div>
         <div class="textFieldContainer">
-          <!--Main container for story -->
+
+            <!--Main container for story -->
             <div class="textContainerSynth">
+
               <!-- Display synthesising (loading) -->
               <div *ngIf="!audioFinishedLoading || !recordingsFinishedLoading" class="loaderContainer">
                   <b>{{ts.l.synthesising}}</b>
                   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
               </div>
+              
               <!-- When synthesis finished loading -->
               <div *ngIf="audioFinishedLoading && recordingsFinishedLoading">
                 <!-- loop through each paragraph of text -->
