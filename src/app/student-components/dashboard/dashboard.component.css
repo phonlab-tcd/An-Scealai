@@ -117,21 +117,25 @@ background-color: lightblue;
   height: 190px;
 }
 
+.dictionaryModeContainer {
+    display: flex;
+}
+
 .dictionaryContainer {
-    position: absolute;
-    right: -320px;
-    top: 0px;
-    height: 400px;
+    height: var(--textfieldHeight);
+    width: var(--dictionaryWidth);
     display: flex;
     flex-direction: column;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    border-radius: 5px 5px 5px 5px;
 }
 
 .dictionaryIframe {
-    height: 400px;
+    height: var(--textfieldHeight);
+    width: 100%;
+}
+
+.dictionaryVisibleTextField {
+    height: var(--textfieldHeight);
+    width: calc(100% - var(--dictionaryWidth));
 }
 
 .saveBtn {
@@ -165,6 +169,7 @@ background-color: lightblue;
     z-index: 1;
     --feedbackHeight: 120px;
     --grammarMessageHeight: 80px;
+    --dictionaryWidth: 40%;
 }
 
 .tickIcon {
@@ -497,7 +502,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .dictionaryHeader {
-    border-radius: 4px 4px 0px 0px;
     padding: 5px;
     background-color: #70a87f;
     color: white;
