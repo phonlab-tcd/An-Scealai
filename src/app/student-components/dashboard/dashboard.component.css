@@ -1,9 +1,13 @@
+:root {
+}
+
 .bookContainer {
+    --bookContainerHeight: 80vh;
+    --bookContainerWidth: 95%;
     padding-top: 10px;
-    height: 400px;
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 20px;
+    height: var(--bookContainerHeight);
+    width: var(--bookContainerWidth);
+    margin-left: 2.5%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -26,6 +30,7 @@
 .bookTitle {
     color: #261500;
     font-size: 15pt;
+    text-align: left;
 }
 
 .titleItem {
@@ -34,22 +39,21 @@
 
 .myStoriesBtn {
     border-style: none;
-    color: #261500;
+    color: #b3a995;
     font-size: 11pt;
-    padding-left: 5%;
 }
 
 .myStoriesBtn:hover {
-    color: #c15a2e;
+    /* color: #c15a2e; */
+    color: #261500;
     text-decoration: none;
-    cursor: pointer;
+    cursor: pointer; 
 }
 
 .saveIcon {
     color: #261500;
     border-style: none;
     font-size: 11pt;
-    padding-right: 5%;
 }
 
 .backArrow {
@@ -59,6 +63,8 @@
 .bookHeader {
     display: flex;
     flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .headerUpper {
@@ -73,8 +79,8 @@
 }
 
 .textField {
-    width: 90%;
-    height: 290px;
+    width: 100%;
+    height: calc(var(--bookContainerHeight) - 120px);
     resize: none;
     z-index: 1;
     color: #261500;
@@ -179,6 +185,32 @@ background-color: lightblue;
     
 }
 
+.optionsBtnContainer {
+  display: flex;
+}
+
+.optionsBtnIcon {
+  margin-left: 5px;
+}
+
+.optionsBtn {
+    font-size: 14pt;
+    background-color: #e5bd3b;
+    border-style: none;
+    color: #464444;
+    font-size: 12pt;
+    margin: 0px;
+        margin-right: 40px;
+    border-radius: 2px 2px 2px 2px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background: #dfd9c800;
+        background-color: rgba(223, 217, 200, 0);
+
+}
+
+/*
 .optionsBtn {
     font-size: 14pt;
     background-color: #e5bd3b;
@@ -191,10 +223,10 @@ background-color: lightblue;
     align-items: center;
     padding: 5px;
 }
-
+*/
 .optionsBtn:hover {
-    background-color: #ad8f2b;
-    color: white;
+    background-color: #9ff9d791;
+    color: #35322f;
     cursor: pointer;
 }
 
@@ -547,6 +579,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   padding-top: 4px;
 }
 
+/*
 @media only screen and (min-width: 700px) {
     .bookImg {
         z-index: -10;
@@ -571,6 +604,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       height: 100px;
     }
 }
+
 @media only screen and (max-width: 1000px) and (max-height: 750px) {
   .dictionary {
     width: 90%;
@@ -740,6 +774,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       height: 100px;
     }
 }
+*/
 
 .feedbackTextareaAudio {
     height: 100px;
