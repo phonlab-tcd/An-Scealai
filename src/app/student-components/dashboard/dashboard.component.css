@@ -1,22 +1,16 @@
-:root {
-}
-
 .bookContainer {
     --bookContainerHeight: 80vh;
     --bookContainerWidth: 95%;
-    padding-top: 10px;
+    --textfieldHeight: calc(var(--bookContainerHeight) - 170px);
     height: var(--bookContainerHeight);
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
+    box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
     border-radius: 5px 5px 5px 5px;
+    border: solid 2px #827662b8;
 }
 
 .bookImg {
@@ -29,8 +23,9 @@
 
 .bookTitle {
     color: #261500;
-    font-size: 15pt;
+    font-size: 18pt;
     text-align: left;
+    padding: 5px;
 }
 
 .titleItem {
@@ -41,6 +36,7 @@
     border-style: none;
     color: #b3a995;
     font-size: 11pt;
+    padding: 5px;
 }
 
 .myStoriesBtn:hover {
@@ -54,6 +50,7 @@
     color: #261500;
     border-style: none;
     font-size: 11pt;
+    padding: 5px;
 }
 
 .backArrow {
@@ -63,8 +60,8 @@
 .bookHeader {
     display: flex;
     flex-direction: column;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 15px;
+    padding-bottom: 5px;
 }
 
 .headerUpper {
@@ -80,18 +77,14 @@
 
 .textField {
     width: 100%;
-    height: calc(var(--bookContainerHeight) - 120px);
+    height: var(--textfieldHeight);
     resize: none;
     z-index: 1;
     color: #261500;
     background: #f7f2e7;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 4px;
-}
-
-.text-highlight-element {
-    margin-left: 5%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
 }
 
 .text-input-highlight-container .text-highlight-element  {
@@ -170,6 +163,8 @@ background-color: lightblue;
 
 .storyContainer {
     z-index: 1;
+    --feedbackHeight: 120px;
+    --grammarMessageHeight: 80px;
 }
 
 .tickIcon {
@@ -187,6 +182,8 @@ background-color: lightblue;
 
 .optionsBtnContainer {
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .optionsBtnIcon {
@@ -206,26 +203,12 @@ background-color: lightblue;
     align-items: center;
     padding: 5px;
     background: #dfd9c800;
-        background-color: rgba(223, 217, 200, 0);
+    background-color: rgba(223, 217, 200, 0);
 
 }
 
-/*
-.optionsBtn {
-    font-size: 14pt;
-    background-color: #e5bd3b;
-    border-style: none;
-    color: white;
-    font-size: 12pt;
-    margin: 0px;
-    border-radius: 5px 5px 5px 5px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-}
-*/
 .optionsBtn:hover {
-    background-color: #9ff9d791;
+    background-color: #aeffc486;
     color: #35322f;
     cursor: pointer;
 }
@@ -243,15 +226,15 @@ background-color: lightblue;
     padding: 4px;
     padding-right: 0px;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
-}
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
+    }
 
 .optionsPopup:after {
 	content: '';
@@ -292,15 +275,13 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .textFieldGrammarCheck {
-    height: 160px;
+    height: calc(var(--textfieldHeight) - var(--grammarMessageHeight) - 90px);
 }
 
 .grammarMessageContainer {
-    height: 72px;
+    height: var(--grammarMessageHeight);
     border: 1px solid #999999;
     background: #f7f2e7;
-    width: 90%;
-    margin-left: 5%;
     text-align: left;
     padding: 4px;
     padding-left: 8px;
@@ -315,10 +296,10 @@ border-radius: 5px 5px 5px 5px;
     background-color: #70a87f;
     color: white;
     display: flex;
-    width: 90%;
-    margin-left: 5%;
-    padding-top: 2px;
-    padding-left: 5px;
+    padding-left: 20px;
+    height: 30px;
+    display: flex;
+    align-items: center;
 }
 
 .selectErrorCheckbox {
@@ -329,8 +310,6 @@ border-radius: 5px 5px 5px 5px;
   background-color: #70a87f;
   display: flex;
   color: white;
-  width: 90%;
-  margin-left: 5%;
 }
 
 .selectGrammarFilter {
@@ -376,14 +355,13 @@ border-radius: 5px 5px 5px 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    justify-content: center;
+    margin-top: calc(var(--textfieldHeight) / 3);
     color: #437250;
 }
 
 .textContainer {
-    width: 90%;
-    margin-left: 5%;
-    height: 290px;
+    height: var(--textfieldHeight);
     color: #261500;
     background-color: #f7f2e7;
     border: 1px solid #999999;
@@ -392,7 +370,6 @@ border-radius: 5px 5px 5px 5px;
     padding-right: 8px;
     padding-top: 4px;
     overflow: auto;
-    margin-bottom: 1vh;
 }
 
 .savedIcon {
@@ -438,19 +415,17 @@ border-radius: 5px 5px 5px 5px;
 
 .modalContainer {
     position: absolute;
-    margin-top: -10px;
     z-index: 100;
-    height: 400px;
-    width: 100%;
+    height: calc(var(--bookContainerHeight) - 4px);
+    width: calc(var(--bookContainerWidth) - 4px);
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modalContent {
-    margin-top: 80px;
-    width: 80%;
-    margin-left: 10%;
     padding: 25px;
     background-color: white;
     border-radius: 5px;
@@ -473,98 +448,21 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 15px;
 }
 
+.modalBtn:hover {
+    background: #474747;
+    color: white;
+}
+
 .modalText {
     font-size: 14pt;
 }
-/*
-@media only screen and (max-width: 400px) { 
-
-    .bookTitle {
-        font-size: 12pt;
-    }
-
-    .myStoriesBtn {
-        font-size: 10pt;
-    }
-
-    .savedIcon {
-        font-size: 10pt;
-    }
-
-}
-
-@media only screen and (max-width: 700px) { 
-    .bookImg {
-        display: none;
-        width: 5px;
-    }
-    .bookContentsContainer {
-        width: 100%;
-        padding-top: 10px;
-        z-index: 10;
-    }
-    .bookContainer {
-       width: 90%;
-       margin-left: 5%;
-    }
-
-    .modalContainer {
-        position: absolute;
-        margin-top: -10px;
-        z-index: 100;
-        height: 400px;
-        width: 90%;
-        border-radius: 5px;
-        background-color: rgba(0, 0, 0, 0.5);
-        text-align: center;
-    }
-    .optionsPopup {
-        z-index: 10;
-        margin-top: 25px;
-        display: flex;
-        padding-right: 0px;
-        max-width: 90%;
-        background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-        -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    border-radius: 5px 5px 5px 5px;
-    }
-    
-    .optionsPopup:after {
-        content: '';
-        position: absolute;
-        top: 0px;
-        left: 50px;
-        width: 0;
-        height: 0;
-        border: 10px solid transparent;
-        border-bottom-color: #f1e9d8;
-        border-top: 0;
-        margin-left: -10px;
-        margin-top: -10px;
-    }
-    
-    .optionsPopupBtn {
-        padding: 5px;
-        padding-top: 2px;
-        margin: 0px;
-        margin-right: 4px;
-        font-size: 10pt;
-    }
-}
-*/
 
 .feedbackVisibleTextfieldAudio {
     height: 130px;
 }
 
 .feedbackVisibleTextfield {
-    height: 100px;
+    height: calc(var(--textfieldHeight) - var(--feedbackHeight) - 35px);
 }
 
 .dictionaryVisibleTextfield {
@@ -579,221 +477,23 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   padding-top: 4px;
 }
 
-/*
-@media only screen and (min-width: 700px) {
-    .bookImg {
-        z-index: -10;
-        width: 630px;
-        left: 50%;
-        margin-left: -315px;
-    }
-
-    .bookContainer {
-        width: 490px;
-        position: fixed;
-        left: 50%;
-        margin-left: -245px;
-        margin-top: 30px;
-    }
-
-    .optionsPopupBtn {
-        margin-top: 0px;
-    }
-    .dictionary {
-      width: 90%;
-      height: 100px;
-    }
-}
-
-@media only screen and (max-width: 1000px) and (max-height: 750px) {
-  .dictionary {
-    width: 90%;
-    height: 100px;
-  }
-}
-
-@media only screen and (min-width: 1000px) and (min-height: 750px) {
-    .bookImg {
-        z-index: -10;
-        width: 800px;
-        height: 600px;
-        left: 50%;
-        margin-left: -400px;
-    }
-
-    .bookContainer {
-        width: 620px;
-        height: 510px;
-        position: fixed;
-        left: 50%;
-        margin-left: -310px;
-        margin-top: 30px;
-    }
-
-    .dictionaryContainer {
-        height: 510px;
-    }
-
-    .dictionaryIframe {
-        height: 510px;
-    }
-
-    .textField {
-        height: 380px;
-        margin-bottom: 10px;
-    }
-
-    .feedbackVisibleTextfield {
-        height: 190px;
-    }
-
-    .feedbackVisibleTextfieldAudio {
-        height: 160px;
-    }
-
-    .textFieldGrammarCheck {
-        height: 240px;
-    }
-
-    .textContainer {
-        height: 380px;
-    }
-    .modalContainer {
-        height:  510px;
-    }
-    .dictionary {
-      width: 90%;
-      height: 100px;
-    }
-}
-
-@media only screen and (min-width: 1400px) and (min-height: 900px) {
-    .bookImg {
-        z-index: -10;
-        width: 1000px;
-        height: 740px;
-        left: 50%;
-        margin-left: -500px;
-    }
-
-    .bookContainer {
-        width: 800px;
-        height: 600px;
-        position: fixed;
-        left: 50%;
-        margin-left: -400px;
-        margin-top: 50px;
-    }
-
-    .dictionaryContainer {
-        height: 600px;
-    }
-
-    .dictionaryIframe {
-        height: 600px;
-    }
-
-    .textField {
-        height: 470px;
-    }
-
-    .feedbackVisibleTextfield {
-        height: 275px;
-    }
-
-    .feedbackVisibleTextfieldAudio {
-        height: 245px;
-    }
-
-    .textFieldGrammarCheck {
-        height: 330px;
-    }
-
-    .textContainer {
-        height: 470px;
-    }
-    .modalContainer {
-        height:  600px;
-    }
-    .dictionary {
-      width: 90%;
-      height: 100px;
-    }
-}
-
-@media only screen and (min-width: 1900px) and (min-height: 1000px) {
-    .bookImg {
-        z-index: -10;
-        width: 1200px;
-        height: 850px;
-        left: 50%;
-        margin-left: -600px;
-    }
-
-    .bookContainer {
-        width: 980px;
-        height: 730px;
-        position: fixed;
-        left: 50%;
-        margin-left: -490px;
-        margin-top: 50px;
-    }
-
-    .dictionaryContainer {
-        height: 730px;
-    }
-
-    .dictionaryIframe {
-        height: 730px;
-    }
-
-    .textField {
-        height: 590px;
-    }
-
-    .feedbackVisibleTextfield {
-        height: 395px;
-    }
-
-    .feedbackVisibleTextfieldAudio {
-        height: 365px;
-    }
-
-    .textFieldGrammarCheck {
-        height: 470px;
-    }
-
-    .textContainer {
-        height: 590px;
-    }
-    .modalContainer {
-        height:  730px;
-    }
-    .dictionary {
-      width: 90%;
-      height: 100px;
-    }
-}
-*/
-
 .feedbackTextareaAudio {
     height: 100px;
 }
 
 .feedbackTextarea {
-    height: 160px;
+    height: var(--feedbackHeight);
 }
 
 .feedbackHeader {
-    width: 90%;
-    margin-left: 5%;
-    border-radius: 4px 4px 0px 0px;
-    padding-left: 8px;
-    padding-right: 8px;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 30px;
     background-color: #70a87f;
     color: white;
     display: flex;
-    align-items: column;
+    align-items: center;
 }
 
 .dictionaryHeader {

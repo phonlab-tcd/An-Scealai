@@ -39,7 +39,7 @@
         </div>
         <div class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">
           {{ts.l.audio_check}}
-          <i class="fas fa-assistive-listening-systems optionsBtnIcon"></i>
+          <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
         <div class="optionsBtn optionsPopupBtn" (click)="runGramadoir()">
           {{ts.l.grammar_check}}
@@ -105,16 +105,16 @@
       </div>
       <!-- display story with feedback excluding audio feedback-->
       <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
-        <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
         <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+        <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
       </div>
       <!-- display story with feedback including audio feedback -->
       <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
-        <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
         <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
         <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+        <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
       </div>
       <!-- display dictionary option-->
       <div class="dictionaryContainer" *ngIf="dictionaryVisible">
