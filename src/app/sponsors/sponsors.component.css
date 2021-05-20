@@ -1,0 +1,65 @@
+.container {
+    width: 900px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 50px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.textBlock {
+    padding: 20px;
+}
+
+.smallTextBlock {
+    padding: 10px;
+}
+
+.logoContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.logoImg {
+    height: 80px;
+    margin: 10px;
+}
+
+.cardLeft {
+    width: 60%;
+    margin-right: 5%;
+}
+
+.cardRight {
+    width: 35%;
+}
+
+.logoCardImg {
+    width: 100%;
+}
+
+.sponsorCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+}

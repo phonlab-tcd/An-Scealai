@@ -60,6 +60,7 @@ import { AboutLaraComponent } from './about-lara/about-lara.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { SponsorsComponent } from './sponsors/sponsors.component';
 
 
 
@@ -105,7 +106,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     AboutLaraComponent,
     RecordingHistoryComponent,
     ViewRecordingComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SponsorsComponent
   ],
   imports: [
     BrowserModule,

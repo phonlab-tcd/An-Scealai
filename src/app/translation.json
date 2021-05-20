@@ -389,7 +389,13 @@
             "what_year_are_you_in" : "What school year are you in?",
             "listen_by" : "Listen by",
             "paragraph" : "Paragraph",
-            "sentence" : "Sentence"
+            "sentence" : "Sentence",
+
+            "sponsors": "Sponsors",
+            "sponsor_abair": "",
+
+            "copyright": "Copyright © 2021 Phonetics and Speech Laboratory, Trinity College, Dublin, Ireland"
+
         },
         {
             "iso_code" : "ga",
@@ -776,7 +782,26 @@
             "what_year_are_you_in" : "Cén bhliain ina bhfuil tú?",
             "listen_by" : "Éist leis",
             "paragraph" : "An t-alt ar fad ",
-            "sentence" : "Abairt ar abairt"
+            "sentence" : "Abairt ar abairt",
+
+            "sponsors": "Tacaíocht",
+            "sponsor_abair": "Tá an leagan seo de An Scéalaí á fhorbairt mar chuid den tionscadal <a href=\"http://www.abair.tcd.ie\">ABAIR.ie</a>, á mhaoiniú ag an Roinn Turasóireachta, Cultúir, Ealaíon, Gaeltachta, Spóirt agus Meán agus páirt mhaoinithe ag an gCrannchur Náisiúnta. Is sa <a href=\"https://www.tcd.ie/slscs/clcs/psl/\">tSaotharlann Foghraíochta agus Urlabhra</a>, i gColáiste na Tríonóide atá sé lonnaithe.",
+            "thanks_to": "Ár mbuíochas le",
+            "sponsor_cogg": "<a href=\"https://www.cogg.ie/\">COGG</a> as maoiniú don tionscadal \"Corpas Cliste\", a eascróidh as An Scéalaí. Seo tionscadal a chuirfidh lenár dtuiscint ar shealbhú na Gaeilge agus ar thionchar na teicneolaíochta sa phróiseas sin.",
+            "like_to_highlight": "Ba mhaith linn ár mbuíochas a chur in iúl do",
+            "sponsor_cgd": "<a href=\"https://cgd.ie/\">Coláiste Ghaoth Dobhair</a>, do na múinteoirí agus do na mic léinn uile, as a bheith páirteach i staidéar píolótach ar scála mór i rith na bliana 2021. Tá an t-aiseolas atá faighte ag cur go mór leis an gcéad leagan eile de An Scéalaí.",
+            "interested_teachers": "*Ba mhaith linn teagmháil a dhéanamh le múinteoirí dara leibhéal a mbeadh suim acu An Scéalaí á úsáid le grúpaí sa Scoilbhliain 2021/22. Gach eolas ó Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie.",
+            "testimonials": "Teistiméireachtaí",
+            "to_come": "Le teacht",
+            "testimonial_1": "Sílim gurb é An Scéalaí an rud is áisiúla a chonaic mé ó thaobh foghlaim teangacha de riamh i mo shaol",
+            "testimonial_2": "Ní raibh mé in ann a chreidiúint cé chomh tapa agus chomh cruinn a bhí an córas in ann botúin sa téacs a aithint. Bhí sé mar a bheadh múinteoir suite an sin ós mo chomhair amach ag cabhrú liom.",
+            "testimonial_3": "Chabhraigh sé go háirithe le mo chuid gramadaí, agus na botúin a dhéanaim go rialta (le mo litriú nó leis an tuiseal ginideach de ghnáth)",
+            "testimonial_4": "Tá An Scéalaí go hiontach chun feabhas a chur ar do chuid gramadaí. Chomh maith leis sin, is aoibhinn liom an rogha \"seiceáil ó chluas\". Is maith liom é a úsáid chun líofacht mo chuid abairtí a sheiceáil.",
+            "testimonial_5": "Ceapaim gur acmhainn iontach é An Scéalaí chun cabhrú le daoine nach bhfuil muinín acu scríobh as Gaeilge.",
+            "testimonial_6": "Is saghas tabhartas ó Dhia é An Scéalaí dom!",
+            "testimonial_7": "Ceapaim gur acmhainn dochreidte é LARA. Bhí leibhéal na Gaeilge deacair sa scéal, ach bhí sé éasca a thuiscint le LARA.",
+        
+            "copyright": "Cóipcheart © 2021 An tSaotharlann Foghraíochta agus Urlabhra, Coláiste na Tríonóide, Baile Átha Cliath, Éire"
         }
     ]
 }
