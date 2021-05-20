@@ -1,3 +1,5 @@
+const logger = require('../logger.js');
+
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
@@ -16,7 +18,7 @@ module.exports.register = function(req, res) {
         return;
     }
 
-    console.log(req.body);
+    logger.info(req.body);
 
     var user = new User();
 

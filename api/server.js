@@ -4,8 +4,10 @@ const express = require('express'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
-    passport = require('passport'),
-    logger = require('./logger');
+    logger = require('./logger'),
+    passport = require('passport');
+
+require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -23,7 +25,7 @@ const recordingRoute = require('./routes/recording.route');
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => {logger.info('Database is connected');},
-    (err) => { logger.error('Cannot connect to the database:' + err)}
+    (err) => {logger.error('Can not connect to the database'+ err)}
 );
 
 const app = express();
@@ -86,7 +88,7 @@ app.use(function(err, req, res, next) {
 });
 
 const server = app.listen(port, function(){
-    console.log('Listening on port ' + port);
+    logger.info('Listening on port ' + port);
 });
 
 module.exports = app;
