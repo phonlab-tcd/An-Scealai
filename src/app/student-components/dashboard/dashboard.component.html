@@ -48,22 +48,23 @@
       </div>
 
 
-      <div class="optionsBtnContainer">
+      <div class="optionsBtnContainer" (click)="toggleOptions();">
 
-        <div class="toggleShowOptions" (click)="toggleShowOptions();">
+        <div class="toggleShowOptions optionsBtn">
           <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
           <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
         </div>
+
         <!-- EDIT STORY DETAILS -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          [routerLink]="['/story-details', story.id]">
+                                 [routerLink]="['/story-details', story.id]">
           {{ts.l.edit}}
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
 
         <!-- FEEDBACK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="defaultMode(); getFeedback()">
+                                 (click)="this.dontToggle=true; defaultMode(); getFeedback()">
           {{ts.l.feedback}}
           <i class="fas fa-comment-dots optionsBtnIcon"></i>
           <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
@@ -71,25 +72,28 @@
 
         <!-- DICTIONARY -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="defaultMode(); showDictionary();">
+                                 (click)="this.dontToggle=true; defaultMode(); showDictionary();">
           {{ts.l.dictionary}}
           <i class="fas fa-book optionsBtnIcon"></i>
         </div>
 
         <!-- AUDIO CHECK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="goToSynthesis()">
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; goToSynthesis()">
           {{ts.l.audio_check}}
           <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
 
         <!-- GRAMMAR CHECK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="defaultMode(); runGramadoir()">
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
         <!-- RECORDINGS -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="goToRecording()">
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; goToRecording()">
           {{ts.l.recordings}}
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
