@@ -37,12 +37,13 @@
           <span *ngIf="!storySaved">*</span>
         </div>
 
-        <!-- CHANGE STORY DIALECT -->
+        <!-- CHANGE STORY DIALECT --
         <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
           <option *ngFor="let d of dialects" [ngValue]="d.code">
           {{d.name}}
           </option>
         </select>
+        -->
 
       </div>
 
