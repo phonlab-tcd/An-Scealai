@@ -1,3 +1,6 @@
+const logger = require('../logger.js');
+
+
 var express = require('express');
 var userRoutes = express.Router();
 var jwt = require('express-jwt');

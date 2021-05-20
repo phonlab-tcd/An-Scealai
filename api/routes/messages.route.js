@@ -108,7 +108,10 @@ messageRoutes.route('/addMessageAudio/:id').post((req, res) => {
                 });
 
                 uploadStream.on('finish', () => {
-                    return res.status(201).json({ message: "File uploaded successfully, stored under Mongo"});
+                    return res.status(201).json(
+                      { 
+                        message: "File uploaded successfully, stored under Mongo"
+                      });
                 });
             });
         } else {
