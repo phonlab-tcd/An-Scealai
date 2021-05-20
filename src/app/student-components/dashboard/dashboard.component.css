@@ -191,10 +191,22 @@ background-color: lightblue;
     
 }
 
+.hidableOptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hidableOptions:hover {
+  background-color: #aeffc486;
+}
+
 .optionsBtnContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.optionsBtnContainer:hover {
+    background-color: #eaeaea87;
 }
 
 .optionsBtnIcon {

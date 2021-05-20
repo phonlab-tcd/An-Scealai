@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
   selectTeanglann: boolean = true;
   selectPotafocal: boolean = false;
   showOptions: boolean = false;
+  dontToggle: boolean = false;
   
   dialects = [
     {
@@ -388,8 +389,13 @@ export class DashboardComponent implements OnInit {
     this.modalChoice.next(true);
   }
 
-  toggleShowOptions() {
-    this.showOptions = !this.showOptions;
+  toggleOptions() {
+    console.log("setOptionsVisibleIfNot()\tshowOptions=",
+                this.showOptions,"\tdontToggle=",
+                this.dontToggle);
+    if(!this.dontToggle){
+      this.showOptions = !this.showOptions;
+    }
+    this.dontToggle = false;
   }
-
 }
