@@ -2,7 +2,7 @@
     --bookContainerHeight: 80vh;
     --bookContainerWidth: 95%;
     --textfieldHeight: calc(var(--bookContainerHeight) - 170px);
-    height: var(--bookContainerHeight);
+    height: calc(var(--bookContainerHeight/2));
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
@@ -206,7 +206,7 @@ background-color: lightblue;
   flex-wrap: wrap;
 }
 .optionsBtnContainer:hover {
-    background-color: #eaeaea87;
+    background-color: #ffd07587;
 }
 
 .optionsBtnIcon {
