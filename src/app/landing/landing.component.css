@@ -6,7 +6,7 @@
     width: 300px;
     height: auto;
     left: 0px;
-    bottom: 6vh;
+    bottom: 55px;
     position: fixed;
     z-index: -2;
 }
@@ -15,7 +15,7 @@
     width: 300px;
     height: auto;
     right: 0px;
-    bottom: 6vh;
+    bottom: 40px;
     position: fixed;
     z-index: -2;
 }
@@ -92,6 +92,39 @@
 }
 
 
+.footer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
+    width: 100%;
+    /*background: white;*/
+}
+
+.copyright {
+    text-align: left;
+    font-size: 8pt;
+    height: 15px;
+    opacity: 0.5;
+}
+
+.footerLogos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.logoImg {
+    height: 40px;
+}
+
+.separator {
+    width: 1px;
+    opacity: 0;
+    height: 40px;
+    background-color: grey;
+}
+
 @media only screen and (max-width: 620px) {
     .catJumpingImg {
         display: none;
@@ -111,6 +144,7 @@
 
     .bottomLeftImg {
         width: 55%;
+        bottom: 95px;
     }
 
     .landingTextContainer {
