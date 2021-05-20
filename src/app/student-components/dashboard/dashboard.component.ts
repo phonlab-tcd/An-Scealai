@@ -28,7 +28,6 @@ export class DashboardComponent implements OnInit {
   id: string;
   storyFound: boolean;
   storySaved: boolean;
-  popupVisible: boolean;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
@@ -41,7 +40,6 @@ export class DashboardComponent implements OnInit {
   grammarLoading: boolean = false;
   grammarSelected: boolean = true;
   modalClass : string = "hidden";
-  wasInside : boolean = false;
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
   classroomId: string;
@@ -131,7 +129,6 @@ export class DashboardComponent implements OnInit {
   }
   
   showDictionary() {
-    this.popupVisible = false;
     this.dictionaryVisible = true;
     this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
   }
@@ -142,7 +139,6 @@ export class DashboardComponent implements OnInit {
 * Add logged event for viewed feedback 
 */
   getFeedback() {
-    this.popupVisible = false;
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
@@ -175,6 +171,16 @@ export class DashboardComponent implements OnInit {
     this.feedbackVisible = false;
   }
 
+  /**
+   * Closes feedback, grammar checker, and dictionary windows,
+   * setting text editor to 'default' mode.
+   */
+  defaultMode() {
+    this.feedbackVisible = false;
+    this.grammarChecked = false;
+    this.dictionaryVisible = false;
+  }
+
 // return whether or not the student has viewed the feedback
   hasNewFeedback() : boolean {
     if(this.story && this.story.feedback && this.story.feedback.seenByStudent === false) {
@@ -202,7 +208,6 @@ export class DashboardComponent implements OnInit {
   runGramadoir() {
     this.saveStory();
     this.feedbackVisible = false;
-    this.popupVisible = false;
     this.grammarChecked = false;
     this.dictionaryVisible = false;
     this.grammarLoading = true;
@@ -338,21 +343,6 @@ export class DashboardComponent implements OnInit {
     console.log("Update grammar errors");
     let updatedTimeStamp = new Date();
     this.statsService.updateGrammarErrors(this.auth.getUserDetails()._id, this.filteredTags, updatedTimeStamp).subscribe();
-  }
-
-// set wasInside variable to true when user clicks
-  @HostListener('click')
-  clickInside() {
-    this.wasInside = true;
-  }
-
-// set popup to false if not wasInside 
-  @HostListener('document:click')
-  clickout() {
-    if (!this.wasInside) {
-      this.popupVisible = false;
-    }
-    this.wasInside = false;
   }
   
 // set mmodalClass to visible fade 
