@@ -1,0 +1,3 @@
+#!/bin/bash
+# Depends on `sshpass`
+ sshpass -p <PASSWORD> ssh <USERNAME>@phoneticsrv3.lcs.tcd.ie 
