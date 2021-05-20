@@ -6,7 +6,7 @@
     width: 300px;
     height: auto;
     left: 0px;
-    bottom: 40px;
+    bottom: 55px;
     position: fixed;
     z-index: -2;
 }
@@ -94,16 +94,24 @@
 
 .footer {
     position: absolute;
+    display: flex;
+    flex-direction: column;
     bottom: 0;
+    width: 100%;
+    /*background: white;*/
+}
+
+.copyright {
+    text-align: left;
+    font-size: 8pt;
+    height: 15px;
+    opacity: 0.5;
+}
+
+.footerLogos {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    width: 100%;
-    background: white;
-    padding: 2px;
-    -webkit-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
-    box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.1);
 }
 
 .logoImg {
@@ -112,7 +120,7 @@
 
 .separator {
     width: 1px;
-    opacity: 0.5;
+    opacity: 0;
     height: 40px;
     background-color: grey;
 }
@@ -136,6 +144,7 @@
 
     .bottomLeftImg {
         width: 55%;
+        bottom: 95px;
     }
 
     .landingTextContainer {
