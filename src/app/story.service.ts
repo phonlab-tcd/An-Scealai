@@ -5,6 +5,7 @@ import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
@@ -58,7 +59,10 @@ export class StoryService {
   }
 
   getStoriesForLoggedInUser() {
-    let author = this.auth.getUserDetails().username;
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return new EmptyObservable<Story[]>();
+
+    const author = userDetails.username;
     return this.http.get(this.baseUrl+author);
   }
 

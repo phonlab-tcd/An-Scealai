@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { MessageService } from './message.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { Message.Service } from './message.service';
-
-describe('Message.ServiceService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('MessageService', () => {
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [RouterTestingModule, HttpClientTestingModule],
+  }));
 
   it('should be created', () => {
-    const service: Message.ServiceService = TestBed.get(Message.ServiceService);
+    const service: MessageService = TestBed.get(MessageService);
     expect(service).toBeTruthy();
   });
 });

@@ -549,6 +549,18 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     cursor: pointer;
 }
 
+@media only screen and (max-width: 750px) {
+    .dictionaryModeContainer {
+        flex-direction: column-reverse;
+    }
+    .dictionaryContainer {
+        width: 100%;
+    }
+    .textField {
+        width: 100%;
+    }
+}
+
 
 .lds-grid {
     display: inline-block;

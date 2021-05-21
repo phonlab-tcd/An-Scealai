@@ -46,7 +46,10 @@ export class BookContentsComponent implements OnInit {
       this.stories = data;
       this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
     });
-    this.userId = this.auth.getUserDetails()._id;
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    this.userId = userDetails._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
     this.ns.setNotifications();

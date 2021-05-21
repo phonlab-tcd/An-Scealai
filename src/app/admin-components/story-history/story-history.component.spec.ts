@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { StoryHistoryComponent } from './story-history.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('StoryHistoryComponent', () => {
   let component: StoryHistoryComponent;
@@ -8,6 +9,7 @@ describe('StoryHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule],
       declarations: [ StoryHistoryComponent ]
     })
     .compileComponents();

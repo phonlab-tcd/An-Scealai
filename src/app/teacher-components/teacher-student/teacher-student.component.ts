@@ -32,11 +32,23 @@ export class TeacherStudentComponent implements OnInit {
   
     ngOnInit() {
       this.getUserId().then(params => {
-        this.http.get(this.baseUrl + 'user/viewUser', {headers: {_id : params['id'].toString()}}).subscribe((res) => {
+        this.http.get(
+          this.baseUrl + 'user/viewUser',
+          { 
+            headers: 
+              {
+              _id : params['id'].toString()
+              }
+          }
+        ).subscribe(
+        (res) => {
           this.userId = params['id'].toString();
           this.student = res;
           this.setClassroomId();
-          this.storyService.getStoriesFor(this.student.username).subscribe((data: Story[]) => {
+          this.storyService
+            .getStoriesFor(this.student.username)
+            .subscribe(
+              (data: Story[]) => {
             this.stories = data, this.filterFeedback(data);
           });
         });
