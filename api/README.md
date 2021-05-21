@@ -1,5 +1,16 @@
 
 
+When logging, these additional fields can be added to the log object where apllicable:
+
+```javascript
+logger.log({
+  level: "info", // or "error", "warn", "debug", etc.
+  message: "message",
+  responsecode: 400,
+  endpoint: "endpoint",
+  userid: "userid",
+});
+```
 
 ## WINSTON LOGGING
 
