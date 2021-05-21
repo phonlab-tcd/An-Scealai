@@ -16,6 +16,7 @@ const consoleFormat = winston.format.printf(
   return msg
 });
 
+
 const mongoTransport =  new winston.transports.MongoDB({
   level: "info", // info is the default
   db: 'mongodb://localhost:27017/an-scealai',
@@ -27,6 +28,8 @@ const mongoTransport =  new winston.transports.MongoDB({
     useUnifiedTopology: true, // not default
   }
 });
+
+console.log("1:\n",JSON.stringify(mongoTransport));
 
 // Create our logger object
 const logger = winston.createLogger({
@@ -43,12 +46,21 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: errorFile, level: 'error' }),
     // This transport should be were everything gets sent
     new winston.transports.File({ filename: combinedFile}),
-    mongoTransport,
   ],
 
   exceptionHandlers: [
     new winston.transports.File({ filename: uncaughtExceptionsFile }),
   ],
 });
+
+console.log("\n\n2:\n",JSON.stringify(mongoTransport));
+
+if(mongoTransport){
+  logger.add(mongoTransport);
+}
+else{
+  logger.error("Failed to create MongoDB transport for winston. Exiting process.");
+  process.exit(1);
+}
 
 module.exports = logger;
