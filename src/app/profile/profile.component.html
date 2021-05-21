@@ -1,4 +1,4 @@
-<div class="profileContainer">
+<div class="profileContainer" *ngIf="auth.getUserDetails()">
     <!-- Popup for deleting account -->
     <div class="{{modalClass}} modalContainer">
         <div class="modalContent">
