@@ -53,8 +53,11 @@ export class TeacherStoryComponent implements OnInit {
 
   ngOnInit() {
     this.getStoryData();
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
     //set date format
-    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    this.profileService.getForUser(userDetails._id).subscribe((res) => {
       let p = res.profile;
       let country = p.country;
       if(country == "United States of America" || country == "America" || country == "USA" || country == "United States") {

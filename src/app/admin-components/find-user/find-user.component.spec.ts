@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FindUserComponent } from './find-user.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FilterPipe } from '../../pipes/filter.pipe';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FindUserComponent', () => {
   let component: FindUserComponent;
@@ -8,7 +11,9 @@ describe('FindUserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FindUserComponent ]
+      schemas: [ NO_ERRORS_SCHEMA ],
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [ FindUserComponent, FilterPipe ]
     })
     .compileComponents();
   }));

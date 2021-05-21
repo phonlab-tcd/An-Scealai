@@ -35,7 +35,10 @@ export class TeacherDashboardComponent implements OnInit {
   }
 
   getClassrooms() : Observable<Classroom[]> {
-    return this.classroom.getClassroomsForTeacher(this.auth.getUserDetails()._id);
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    return this.classroom.getClassroomsForTeacher(userDetails._id);
   }
 
   goToClassroom(id : string) {
@@ -48,7 +51,10 @@ export class TeacherDashboardComponent implements OnInit {
   }
 
   createNewClassroom() {
-    this.newClassroom.teacherId = this.auth.getUserDetails()._id;
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    this.newClassroom.teacherId = userDetails._id;
     this.classroom.getAllCodes().subscribe((res: string[]) => {
       let newCode: string = this.getUniqueCode(res);
       this.newClassroom.code = newCode;

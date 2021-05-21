@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'src/app/classroom.service';
-import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
@@ -14,7 +13,6 @@ import { UserService } from '../../user.service';
 export class AdminClassroomComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-    private http: HttpClient,
     private classroomService: ClassroomService,
     private router: Router,
     private userService: UserService) { }
