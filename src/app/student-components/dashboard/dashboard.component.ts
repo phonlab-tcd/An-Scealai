@@ -21,6 +21,7 @@ import { ClassroomService } from '../../classroom.service';
   styleUrls: ['./dashboard.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
 export class DashboardComponent implements OnInit {
 
   story: Story = new Story();
@@ -45,7 +46,24 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectPotafocal: boolean = false;
-
+  showOptions: boolean = false;
+  dontToggle: boolean = false;
+  
+  dialects = [
+    {
+      code : "connemara",
+      name : this.ts.l.connacht
+    },
+    {
+      code : "kerry",
+      name : this.ts.l.munster
+    },
+    {
+      code : "donegal",
+      name : this.ts.l.ulster
+    }
+  ];
+  
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
@@ -79,17 +97,20 @@ export class DashboardComponent implements OnInit {
     });
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-
-    this.classroomService.getClassroomOfStudent(userDetails._id).subscribe( (res) => {
+    this.classroomService
+      .getClassroomOfStudent(
+        this.auth.getUserDetails()
+          ._id
+      ).subscribe( (res) => {
       this.classroomId = res._id;
       console.log(this.classroomId);
     });
-
   }
 
 /*
 * return the student's set of stories using the story service 
 */
+  
   getStories(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storyService.getStoriesForLoggedInUser().subscribe(
@@ -339,9 +360,9 @@ export class DashboardComponent implements OnInit {
     return selectedTags;
   }
 
-/*
-* Update the grammar error map of the stat object corresponding to the current student id
-*/
+  /*
+  * Update the grammar error map of the stat object corresponding to the current student id
+  */
   updateStats() {
     console.log("Update grammar errors");
     let updatedTimeStamp = new Date();
@@ -350,26 +371,35 @@ export class DashboardComponent implements OnInit {
     this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe();
   }
   
-// set mmodalClass to visible fade 
+  // set modalClass to visible fade 
   showModal() {
     this.modalClass = "visibleFade";
   }
 
-// set modalClass to hidden fade and next choice to false 
+  // set modalClass to hidden fade and next choice to false 
   hideModal() {
     this.modalClass = "hiddenFade";
     this.modalChoice.next(false);
   }
 
-// set next modal choice to true
+  // set next modal choice to true
   setModalChoice() {
     this.modalChoice.next(true);
   }
 
-// save story and set next modal choice to true 
+  // save story and set next modal choice to true 
   saveModal() {
     this.saveStory();
     this.modalChoice.next(true);
   }
 
+  toggleOptions() {
+    console.log("setOptionsVisibleIfNot()\tshowOptions=",
+                this.showOptions,"\tdontToggle=",
+                this.dontToggle);
+    if(!this.dontToggle){
+      this.showOptions = !this.showOptions;
+    }
+    this.dontToggle = false;
+  }
 }
