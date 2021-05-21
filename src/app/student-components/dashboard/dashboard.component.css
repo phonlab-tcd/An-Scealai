@@ -2,7 +2,7 @@
     --bookContainerHeight: 80vh;
     --bookContainerWidth: 95%;
     --textfieldHeight: calc(var(--bookContainerHeight) - 170px);
-    height: var(--bookContainerHeight);
+    height: calc(var(--bookContainerHeight/2));
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
@@ -22,6 +22,8 @@
 }
 
 .bookTitle {
+    display: flex;
+    justify-content: space-between;
     color: #261500;
     font-size: 18pt;
     text-align: left;
@@ -51,6 +53,10 @@
     border-style: none;
     font-size: 11pt;
     padding: 5px;
+}
+
+.selectDialect {
+    font-size: 8pt;
 }
 
 .backArrow {
@@ -185,10 +191,22 @@ background-color: lightblue;
     
 }
 
+.hidableOptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hidableOptions:hover {
+  background-color: #aeffc486;
+}
+
 .optionsBtnContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.optionsBtnContainer:hover {
+    background-color: #ffd07587;
 }
 
 .optionsBtnIcon {
