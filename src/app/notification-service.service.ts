@@ -30,7 +30,10 @@ export class NotificationService {
   * Emit data structures to the app component for constent updating
   */
   setNotifications() {
-    if(this.auth.getUserDetails().role == "STUDENT") {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    if(userDetails.role == "STUDENT") {
       this.messageService.getMessagesForLoggedInUser().subscribe((res : Message[]) => {
         this.messages = [];
         let messages = res;
@@ -52,8 +55,8 @@ export class NotificationService {
         this.storyEmitter.emit(this.stories);
       });
     }
-    if(this.auth.getUserDetails().role == "TEACHER") {
-      this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id).subscribe( (res) => {
+    if(userDetails.role == "TEACHER") {
+      this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         this.teacherMessages.clear();
         let classrooms = res;
         this.messageService.getMessagesForLoggedInUser().subscribe( (messages: Message[]) => {

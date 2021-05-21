@@ -7,6 +7,7 @@ import { AboutLaraComponent } from './about-lara/about-lara.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
+import { SponsorsComponent } from './sponsors/sponsors.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -56,6 +57,7 @@ const routes: Routes = [
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},
   { path: 'team', component: TeamComponent},
+  { path: 'sponsors', component: SponsorsComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},

@@ -1,4 +1,4 @@
-<div class="registerContainer">
+<div class="registerContainer" *ngIf="auth.getUserDetails()">
   <div class="formTitle">{{ts.l.my_info}}</div><br>
   <div class="formContainer">
     

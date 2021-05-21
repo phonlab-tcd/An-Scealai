@@ -116,25 +116,28 @@ export class ProfileComponent implements OnInit {
 * Delete user account and all data associated with the user
 */
   deleteAccount() {
-    if(this.auth.getUserDetails().role === "STUDENT") {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    if(userDetails.role === "STUDENT") {
       this.leaveClassroom();
-      this.storyService.deleteAllStories(this.auth.getUserDetails().username).subscribe( (res) => {
+      this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
         console.log("All stories deleted");
       });
     }
-    if(this.auth.getUserDetails().role === "TEACHER") {
-      this.classroomService.deleteClassroomsForTeachers(this.auth.getUserDetails()._id).subscribe( (res) => {
+    if(userDetails.role === "TEACHER") {
+      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
         console.log("All classrooms deleted");
       })
     }
     
-    this.messageService.deleteAllMessages(this.auth.getUserDetails()._id).subscribe( (res) => {
+    this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
       console.log("All messages deleted");
     });  
-    this.profileService.deleteProfile(this.auth.getUserDetails()._id).subscribe( (res) => {
+    this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
       console.log("Profile deleted");
     });
-    this.userService.deleteUser(this.auth.getUserDetails().username).subscribe( (res) => {
+    this.userService.deleteUser(userDetails.username).subscribe( (res) => {
       console.log("User deleted");
     });
     this.auth.logout();
