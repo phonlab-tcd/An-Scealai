@@ -12,8 +12,9 @@ const uncaughtExceptionsFile = path.join(__dirname, 'logs/uncaughtExceptions.log
 
 const consoleFormat = winston.format.printf(
   ({ level, message, timestamp, ..._metadata}) => {
-  let msg = `${timestamp} [${level}] : ${message} `;
-  return msg
+  let string_message = JSON.stringify(message);
+  let msg = `${timestamp} [${level}] : ${string_message} `;
+  return msg;
 });
 
 
@@ -29,7 +30,6 @@ const mongoTransport =  new winston.transports.MongoDB({
   }
 });
 
-console.log("1:\n",JSON.stringify(mongoTransport));
 
 // Create our logger object
 const logger = winston.createLogger({
@@ -62,5 +62,12 @@ else{
   logger.error("Failed to create MongoDB transport for winston. Exiting process.");
   process.exit(1);
 }
+
+
+logger.info({
+  message: { note: 'hello from a complex log, this is the message', more: 'this is irrelevant'},
+  endpoint: 'googly/boogly',
+  responsecode: '400',
+});
 
 module.exports = logger;
