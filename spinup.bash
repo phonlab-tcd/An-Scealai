@@ -4,14 +4,22 @@
 tmux new-session -s "mongo - ng - node" -d
 
 tmux send "mongod --config ./mongotest/mongotest.conf" C-m
-tmux rename-window "mongo"
+tmux rename-window "mongod"
 
-tmux new-window
+tmux split-window
+# This command requires tail and jq. jq is a json colorizer/formatter
+tmux send "tail -f ./mongotest/logs/log | jq" C-m
+tmux rename-window "outputs"
+
+tmux split-window 
 tmux send "npm start --prefix ngapp" C-m
-tmux rename-window "ngapp"
 
-tmux new-window
+tmux split-window
+tmux send "echo \"sleeping for 1 second\"" C-m
+# Requires sleep
+tmux send "sleep 1" C-m
 tmux send "npm start --prefix api" C-m
-tmux rename-window "api"
+
+tmux select-layout tiled
 
 tmux attach
