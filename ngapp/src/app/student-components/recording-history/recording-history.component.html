@@ -1,0 +1,25 @@
+<!-- List of archived recordings for a given story. Each recording links to view recording page-->
+<img src="assets/img/book.png" class="bookImg">
+<div class="bookContentsContainer">
+  <div class="contentsContainer">
+    <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.back}}</div> 
+    <div class="bookTitle">{{ts.l.recordings_archive}}</div>
+    <div class="contentsTitleContainer">
+      <div class="contentsLinkTitle">{{ts.l.recording}}</div>
+      <div class="contentsDateTitle">{{ts.l.date}}</div>
+    </div>
+    <!-- list recordings -->
+    <div class="contentsLinkContainer">
+        <!-- List each story -->
+      <div *ngFor="let recording of recordings">
+        <div class="contentSection">
+          <!-- link the story to its dashboard -->
+          <a [routerLink]="['/view-recording', recording._id]" class="contentsLink">{{recording.storyData.title}}</a>
+          <div *ngIf="isFromAmerica" class="contentsDate">{{recording.date | date : 'M/d/yy, h:mm' }}</div>
+          <div *ngIf="!isFromAmerica" class="contentsDate">{{recording.date | date : 'd/M/yy, h:mm' }}</div>
+        </div>
+        <hr/>
+      </div>
+    </div>      
+  </div>
+</div>

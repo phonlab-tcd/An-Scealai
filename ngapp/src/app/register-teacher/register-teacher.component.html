@@ -1,0 +1,46 @@
+<div class="registerContainer">
+  <div class="formTitle">{{ts.l.teacher_registration}}</div><br>
+  <div class="formContainer">
+    <form (submit)="register()">
+      <div class="form-group">
+        <div class="formLabel"><label>{{ts.l.username}}</label></div>
+        <input type="text" class="form-control inputField {{usernameClass}}"
+        name="username" [(ngModel)]="credentials.username" [formControl]="usernameInput">
+        <div class="usernameErrorText">{{usernameErrorText}}</div>
+      </div>
+      <div class="form-group">
+        <div class="formLabel"><label>{{ts.l.create_password}}</label></div>
+        <input type="password" class="form-control inputField" 
+        name="password" [(ngModel)]="credentials.password">
+      </div>
+      <div class="form-group">
+        <div class="formLabel"><label>{{ts.l.confirm_password}}</label></div>
+        <input type="password" class="form-control inputField"
+        name="password" [(ngModel)]="passwordConfirm">
+      </div>
+      <!-- div class="form-group">
+        <div class="formLabel"><label>{{ts.l.activation_code}}</label></div>
+        <input type="text" class="form-control inputField" name="code" [(ngModel)]="teacherCode">
+        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+      </div -->
+      <div class="form-group">
+        <div class="formLabel">{{ts.l.language}} :</div>
+        <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
+          <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
+          <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+        </div>
+        <div *ngIf="ts.inIrish()" class="languageButtonContainer">
+          <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
+          <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="termsOfUseContainer">
+          <div class="termsOfUseButton" (click)="toggleTerms()">*{{ts.l.agree_to_terms}}</div>
+          <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
+        </div>
+      </div>
+      <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
+    </form>
+  </div>
+</div>

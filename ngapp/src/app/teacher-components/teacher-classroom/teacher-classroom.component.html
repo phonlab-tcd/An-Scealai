@@ -1,0 +1,60 @@
+<!-- Displays selected classroom details -->
+<div class="contents">
+    <div class="{{modalClass}} modalContainer">
+      <!-- Edit classroom details container -->
+      <div class="modalContent" *ngIf="classroom">
+          <div class="modalText">{{ts.l.edit_classroom_title}}</div>
+          <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="newTitle">
+          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          <div>
+              <button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
+              <button class="modalBtn createBtnGreen" (click)="editTitle()">{{ts.l.save}}</button>
+          </div>
+      </div>
+    </div>
+    <!-- Share classroom code container -->
+    <div class="{{shareModalClass}} modalContainer">
+        <div class="modalContent" *ngIf="classroom">
+            <div class="modalText">{{ts.l.classroom_code}}</div>
+            <pre class="codeView">{{classroom.code}}</pre>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="hideShareModal()">{{ts.l.done}}</button>
+            </div>
+        </div>
+    </div>
+    <!--Delete classroom container -->
+    <div class="{{deleteModalClass}} modalContainer">
+        <div class="modalContent">
+          <div class="deleteModalText">{{ts.l.sure_you_want_to_delete_code}}</div>
+          <div>
+            <button class="modalBtn" (click)="hideDeleteModal()">{{ts.l.cancel}}</button>
+            <button class="modalBtn deleteRedBtn" (click)="deleteClassroom()">{{ts.l.delete}}</button>
+          </div>
+        </div>
+    </div>
+    <!-- Nav bar and students container-->
+    <div class="classContainer">
+      <!-- Nav bar -->
+      <div class="classHeader">
+        <div class="backArrow" routerLink="/teacher/dashboard"><i class="fas fa-arrow-left"></i></div>
+        {{classroom?.title}}
+        <div class="headerIconContainer">
+          <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToMessages()"> {{ts.l.messages}} <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>
+          <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToStats()">{{ts.l.stats}} <i class='fas fa-calculator'></i></div>
+          <div class="headerIconBtn" (click)="showShareModal()">{{ts.l.share_code}}<i class="fas fa-share-alt headerIcon"></i></div>
+          <div class="headerIconBtn" (click)="showModal()">{{ts.l.edit}} <i class="fas fa-edit headerIcon"></i></div>
+          <div class="headerIconBtn" (click)="showDeleteModal()">{{ts.l.delete}} <i class="fas fa-trash-alt headerIcon"></i></div>
+        </div>
+      </div>
+      <div class="classroomKey">
+        <div class="keyTitle">{{ts.l.student_username}}</div>
+      </div>
+      <!-- List of students -->
+      <div class="classBody">
+        <div class="classroomCard" *ngFor="let student of students" (click)="goToStudent(student._id)">
+          <div class="classroomTitle">{{student.username}}</div>
+          <i class="fas fa-arrow-right arrow"> {{numOfStories.get(student.username)}} </i>
+        </div>
+      </div>
+    </div>
+  </div>
