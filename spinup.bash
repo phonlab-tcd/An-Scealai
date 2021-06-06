@@ -1,14 +1,26 @@
 #! /bin/bash
-#
 
-tmux new-session -s "mongo - ng - node" -d
+tmux new-session -s "an-scealai" -d
+
+mongodpid=`pgrep mongod`
+echo $mongodpid
 
 tmux send "mongod --config ./mongotest/mongotest.conf" C-m
 tmux rename-window "mongod"
 
-tmux split-window
 # This command requires tail and jq. jq is a json colorizer/formatter
-tmux send "tail -f ./mongotest/logs/log | jq" C-m
+
+# Check if running jq returned 0 meaning it's installed
+jq --version | /dev/null
+has_jq=$?
+if [ $? == 0 ]; then
+  mongotailcmd="tail -f ./mongotest/logs/log | jq"
+else
+  mongotailcmd="tail -f ./mongotest/logs/log"
+fi
+
+tmux split-window
+tmux send "$mongotailcmd" C-m
 tmux rename-window "outputs"
 
 tmux split-window 
