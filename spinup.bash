@@ -1,9 +1,8 @@
 #! /bin/bash
 
-tmux new-session -s "an-scealai" -d
+# IT MIGHT BE NECESSARY TO KILL MONGOD NODE AND ANGULAR BEFORE RUNNING THIS SCRIPT
 
-mongodpid=`pgrep mongod`
-echo $mongodpid
+tmux new-session -s "an-scealai" -d
 
 tmux send "mongod --config ./mongotest/mongotest.conf" C-m
 tmux rename-window "mongod"
