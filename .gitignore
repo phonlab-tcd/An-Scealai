@@ -7,5 +7,5 @@ mongotest/db/**
 
 api/logs/**
 
-sshlogin
-login_to_phonetics
+/sshlogin
+/login_to_phonetics.sh
