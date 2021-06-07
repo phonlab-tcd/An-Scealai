@@ -8,4 +8,4 @@ mongotest/db/**
 api/logs/**
 
 sshlogin
-login
+login_to_phonetics
