@@ -2,10 +2,10 @@
 
 **/node_modules
 
-mongotest/logs/**
-mongotest/db/**
+/mongotest/logs/**
+/mongotest/db/**
 
-api/logs/**
+/api/logs/**
 
 /sshlogin
 /login_to_phonetics.sh
