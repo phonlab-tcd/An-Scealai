@@ -5,8 +5,8 @@ git pull
 git checkout master
 
 # Clean install node dependencies
-rm -r node_modules
-npm install
+rm -r ngapp/node_modules
+npm install --prefix ./ngapp
 rm -r api/node_modules
 npm install --prefix ./api
 
