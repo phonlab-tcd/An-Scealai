@@ -14,4 +14,4 @@ npm install --prefix ./api
 sed -i 's/http:\/\/localhost:4000\//https:\/\/www.abair.tcd.ie\/anscealaibackend\//' src/abairconfig.json
 
 # Build to dist/ directory with /scealai/ as base href
-ng build --prod --base-href /scealai/
+npm --prefix ngapp run build
