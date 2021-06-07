@@ -38,11 +38,11 @@
         </div>
 
         <!-- CHANGE STORY DIALECT --
-        <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
+          <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
           <option *ngFor="let d of dialects" [ngValue]="d.code">
           {{d.name}}
           </option>
-        </select>
+          </select>
         -->
 
       </div>
@@ -79,21 +79,21 @@
 
         <!-- AUDIO CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToSynthesis()">
+                                 (click)="this.dontToggle=true; goToSynthesis()">
           {{ts.l.audio_check}}
           <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
 
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
+                                 (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
         <!-- RECORDINGS -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToRecording()">
+                                 (click)="this.dontToggle=true; goToRecording()">
           {{ts.l.recordings}}
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
@@ -171,10 +171,21 @@
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
           <div class="dictionarySubHeader">
             <div class="dictionaryName" (click)="selectTeanglann = true; selectPotafocal = false; selectedDictionary = true;">Teanglann</div> |
-            <div class="dictionaryName" (click)="selectPotafocal = true; selectTeanglann = false;">Potafocal</div>
+            <div class="dictionaryName" (click)="selectPotafocal = true; selectTeanglann = false;">
+              {{ts.l.external}}
+            </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
-          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/"></iframe>
+          <div *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/">
+            <ul class="externalDictionaryList">
+              <li>
+                <a href="http://www.potafocal.com/beo" target="_blank">potafocal.com</a>
+              </li>
+              <li>
+                <a href="https://www.focloir.ie" target="_blank">focloir.ie</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
