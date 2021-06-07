@@ -111,7 +111,23 @@ export class AppComponent {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
   }
+
+  toggleLanguage(){
+    if(this.currentLanguage === "English"){
+      this.changeToIrish();
+    }
+    else {
+      this.changeToEnglish();
+    }
+  }
   
+  otherLanguage() : string{
+    if(this.currentLanguage === "English"){
+      return "Irish";
+    }
+    return "Béarla";
+  }
+
   changeToEnglish() {
     this.ts.setLanguage("en");
     this.currentLanguage = "English";

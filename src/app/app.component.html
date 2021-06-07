@@ -2,114 +2,116 @@
 <ng2-slim-loading-bar color="green"></ng2-slim-loading-bar>
 <div class="page">
   <!-- nav bar at the top of the page -->
-    <div class="nav">
-        <input type="checkbox" id="nav-check" [checked]="checkVal">
-        <!-- logo -->
-        <div class="nav-header">
-          <!-- redirect to the landing component for login / register -->
-          <div class="nav-title">
-              <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
-          </div>
-        </div>
-        <!-- not sure yet what this does -->
-        <div class="nav-btn" (click)="changeCheck()">
-            <label *ngIf="!checkVal">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
-            <div *ngIf="checkVal" class="closeMenu">
-                <div>
-                    <i class="fas fa-times closeMenuTimes"></i>
-                </div>
-            </div>
-            
-            <div class="notificationBtn menuNotificationBtn" *ngIf="!checkVal && storiesForNotifications && storiesForNotifications.length > 0" (click)="changeCheck()"></div>
-        </div>
-        <!-- links on the nav bar -->
-        <div class="nav-links">
-            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
-            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
-            <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
-            <!-- about menu -->
-            <div ngbDropdown class="d-inline-block" #myDrop1="ngbDropdown" placement="bottom">
-              <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();">{{ts.l.about}}</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">An Scéalaí</button>
-                <button ngbDropdownItem (click)="changeCheck()"> <a href="/assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
-                <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
-                <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
-              </div>
-            </div>
-            <!-- technology menu -->
-            <div ngbDropdown class="d-inline-block" #myDrop2="ngbDropdown">
-              <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();">{{ts.l.technology}}</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()">{{ts.l.technology}}</button>
-                <!-- <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.other_CALL_projects}}</button> -->
-              </div>
-            </div>
-            <!-- LARA menu -->
-            <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
-              <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">LARA</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()">{{ts.l.irish_stories}}</button>
-                <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
-              </div>
-            </div>
-            <div class="d-inline-block">
-              <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
-            </div>
-            <!-- Change language dropdown and login button-->
-            <div class="navBtn rightNavBtn">
-              <div ngbDropdown class="d-inline-block" #myDrop4="ngbDropdown" placement="bottom">
-                <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();">{{currentLanguage}}</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem (click)="changeToEnglish()">English</button>
-                  <button ngbDropdownItem (click)="changeToIrish()">Gaeilge</button>
-                </div>
-              </div>
-              <!-- sign in button -->
-              <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="changeCheck()" onclick="this.blur();">{{ts.l.sign_in}}</a>
-              <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
-                  <!-- username button -->
-                  <a routerLink="/profile" (click)="changeCheck()" class="btn navbarBtn" >{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
-                  <!-- notifications circle -->
-                  <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 && messagesForNotifications" (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
-                  <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications.length == 0 && messagesForNotifications.length > 0 " (click)="showNotifications()">{{messagesForNotifications.length}}</div>
-                  <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>
-              </div>
-            </div>
-          
-        </div>
-        <!-- notification container for STUDENTS if button clicked-->
-        <div *ngIf="notificationsShown && (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)" class="optionsPopupOld notifcationPopup">
-            <div *ngIf="storiesForNotifications.length > 0" class="notificationsHeader">{{ts.l.new_feedback}}</div>
-            <div class="notificationsBody">
-                <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
-                    {{story.title}}
-                </div>
-            </div>
-            <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">{{ts.l.new_messages}}</div>
-            <div class="notificationsBody">
-                <div *ngFor="let message of messagesForNotifications" class="notificationCard" (click)="goToMessages(message.senderId)">
-                    {{message.subject}}
-                </div>
-            </div>
-        </div>
-        <!-- notification container for TEACHER messages if button clicked -->
-        <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notificationPopup">
-          <div class="notificationsHeader">{{ts.l.new_messages}}</div>
-          <div class="notificationsBody" *ngFor="let message of teacherMessagesForNotifications | keyvalue">
-              <div *ngIf="message.value > 0" class="notificationCard" (click)="goToMessages(message.key._id)">
-                  {{message.key.title}} -- {{message.value}}
-              </div>
-          </div>
-        </div>
-        
+  <div class="nav">
+    <input type="checkbox" id="nav-check" [checked]="checkVal">
+    <!-- logo -->
+    <div class="nav-header">
+      <!-- redirect to the landing component for login / register -->
+      <div class="nav-title">
+        <a routerLink="/landing"><img src="assets/img/logo-navbar.png" class="logo"></a>
+      </div>
     </div>
-    <!-- add component here given a specific route -->
-    <div class="content">
-        <router-outlet></router-outlet>
+    <!-- not sure yet what this does -->
+    <div class="nav-btn" (click)="changeCheck()">
+      <label *ngIf="!checkVal">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      <div *ngIf="checkVal" class="closeMenu">
+        <div>
+          <i class="fas fa-times closeMenuTimes"></i>
+        </div>
+      </div>
+
+      <div class="notificationBtn menuNotificationBtn" *ngIf="!checkVal && storiesForNotifications && storiesForNotifications.length > 0" (click)="changeCheck()"></div>
     </div>
+    <!-- links on the nav bar -->
+    <div class="nav-links">
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()">{{ts.l.my_stories}}</a>
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.my_classrooms}}</a>
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()">{{ts.l.admin_dashboard}}</a>
+      <!-- about menu -->
+      <div ngbDropdown class="d-inline-block" #myDrop1="ngbDropdown" placement="bottom">
+        <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();">{{ts.l.about}}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">An Scéalaí</button>
+          <button ngbDropdownItem (click)="changeCheck()"> <a href="/assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
+          <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
+          <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
+        </div>
+      </div>
+      <!-- technology menu -->
+      <div ngbDropdown class="d-inline-block" #myDrop2="ngbDropdown">
+        <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();">{{ts.l.technology}}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()">{{ts.l.technology}}</button>
+          <!-- <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.other_CALL_projects}}</button> -->
+        </div>
+      </div>
+      <!-- LARA menu -->
+      <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
+        <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">LARA</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()">{{ts.l.irish_stories}}</button>
+          <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
+        </div>
+      </div>
+      <div class="d-inline-block">
+        <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
+      </div>
+      <!-- Change language dropdown and login button-->
+      <div class="navBtn rightNavBtn">
+        <div ngbDropdown class="d-inline-block" #myDrop4="ngbDropdown" placement="bottom">
+          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage();">{{otherLanguage()}}</button>
+          <!---
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="changeToEnglish()">English</button>
+            <button ngbDropdownItem (click)="changeToIrish()">Gaeilge</button>
+            </div>
+          -->
+        </div>
+        <!-- sign in button -->
+        <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="changeCheck()" onclick="this.blur();">{{ts.l.sign_in}}</a>
+        <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
+          <!-- username button -->
+          <a routerLink="/profile" (click)="changeCheck()" class="btn navbarBtn" >{{auth.getUserDetails()?.username}} <i class="fas fa-user"></i></a>
+          <!-- notifications circle -->
+          <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications && storiesForNotifications.length > 0 && messagesForNotifications" (click)="showNotifications()">{{storiesForNotifications.length + messagesForNotifications.length}}</div>
+          <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'STUDENT' && storiesForNotifications.length == 0 && messagesForNotifications.length > 0 " (click)="showNotifications()">{{messagesForNotifications.length}}</div>
+          <div class="notificationBtn" *ngIf="auth.getUserDetails().role === 'TEACHER' && teacherMessagesForNotifications && teacherMessagesSum > 0 " (click)="showNotifications()">{{teacherMessagesSum}}</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- notification container for STUDENTS if button clicked-->
+    <div *ngIf="notificationsShown && (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)" class="optionsPopupOld notifcationPopup">
+      <div *ngIf="storiesForNotifications.length > 0" class="notificationsHeader">{{ts.l.new_feedback}}</div>
+      <div class="notificationsBody">
+        <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
+          {{story.title}}
+        </div>
+      </div>
+      <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">{{ts.l.new_messages}}</div>
+      <div class="notificationsBody">
+        <div *ngFor="let message of messagesForNotifications" class="notificationCard" (click)="goToMessages(message.senderId)">
+          {{message.subject}}
+        </div>
+      </div>
+    </div>
+    <!-- notification container for TEACHER messages if button clicked -->
+    <div *ngIf="notificationsShown && auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" class="optionsPopupOld notificationPopup">
+      <div class="notificationsHeader">{{ts.l.new_messages}}</div>
+      <div class="notificationsBody" *ngFor="let message of teacherMessagesForNotifications | keyvalue">
+        <div *ngIf="message.value > 0" class="notificationCard" (click)="goToMessages(message.key._id)">
+          {{message.key.title}} -- {{message.value}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- add component here given a specific route -->
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
 </div>
