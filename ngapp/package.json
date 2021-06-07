@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "dev": "mongod --config ../mongotest/mongotest.conf & npm --prefix ../api start & ng serve",
-    "build": "ng build --prod --output-path ../dist --base-href /scealai/",
+    "build": "ng build --prod --output-path ./unpublished_dist --base-href /scealai/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
