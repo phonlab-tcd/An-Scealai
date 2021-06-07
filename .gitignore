@@ -2,7 +2,10 @@
 
 **/node_modules
 
-api/logs
+mongotest/logs/**
+mongotest/db/**
+
+api/logs/**
 
 sshlogin
 login
