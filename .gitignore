@@ -4,5 +4,5 @@
 
 api/logs
 
-sshlogin
-login
+/sshlogin
+/login_to_phonetics.sh
