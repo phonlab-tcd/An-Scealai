@@ -83,7 +83,6 @@ export class AppComponent {
       console.log(this.auth.getUserDetails().username);
     }
   }
-
 /*
 * Swap value of checkVal, if changed to false set notificationShown to false
 */
