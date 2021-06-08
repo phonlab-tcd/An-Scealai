@@ -11,6 +11,7 @@ studentStatsRoutes.route('/create').post(function (req, res) {
         res.status(200).json({'message': 'stat entry added successfully'});
     })
     .catch(err => {
+        console.log(err, new Date());
         res.status(400).send("unable to save to DB");
     });
 });
@@ -18,7 +19,10 @@ studentStatsRoutes.route('/create').post(function (req, res) {
 // Get all stat objects from given classroom 
 studentStatsRoutes.route('/getStatsByClassroom/:id').get((req, res) => {
     StudentStats.find({classroomId: req.params.id}, (err, stats) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err, new Date())
+          res.json(err);
+        }
         if(stats) res.json(stats);
     });
 });
@@ -27,7 +31,8 @@ studentStatsRoutes.route('/getStatsByClassroom/:id').get((req, res) => {
 studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
     if(err) {
-        res.status(400).json({"message" : err.message});
+      console.log(err, new Date())
+      es.status(400).json({"message" : err.message});
     } else {
       let data = stat.grammarErrors;
       res.json(data);
@@ -47,13 +52,16 @@ studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
 */
 studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(function (req, res) {
     StudentStats.findOne({"studentId": req.params.id}, function(err, stat) {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err, new Date());
+          res.json(err);
+        }
         if(stat === null) {
-            console.log("stat is null!");
+            console.log("stat is null!", new Date());
         } else {
           let newErrors = Object.entries(req.body);
           console.log(newErrors);
-          console.log(stat.grammarErrors);
+          //console.log(stat.grammarErrors);
           // loop through db errors
           for(let entry of stat.grammarErrors) {
             let originalAmount = entry[1];
@@ -63,8 +71,8 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
             for(let i = 0; i < newErrors.length; i++) {
               if(entry[0] === newErrors[i][1][0]) {
                 errorFound = true;
-                console.log("original amount: " + originalAmount[originalAmount.length -1]);
-                console.log("amount to add: " + newErrors[i][1][1].length);
+                //console.log("original amount: " + originalAmount[originalAmount.length -1]);
+                //console.log("amount to add: " + newErrors[i][1][1].length);
                 // Case 1
                 if(originalAmount[originalAmount.length -1] !== newErrors[i][1][1].length) {
                   originalAmount.push(newErrors[i][1][1].length);
@@ -102,9 +110,9 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
               console.log("new error entry added");
           }
           
-          console.log("Updated errors in db: ");
-          console.log(stat.grammarErrors);
-          console.log(stat.timeStamps);
+          //console.log("Updated errors in db: ");
+          //console.log(stat.grammarErrors);
+          //console.log(stat.timeStamps);
 
           stat.save().then(stat => {
               res.json('Update complete');
@@ -117,12 +125,24 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
 
 // Delete stat entry by student ID
 studentStatsRoutes.route('/delete/:id').get(function(req, res) {
-  console.log("Delete entry");
     StudentStats.findOneAndRemove({"studentId": req.params.id}, function(err, stat) {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err, new Date());
+          res.json(err);
+        }
         else res.json("Successfully removed");
     });
 });
 
+// Delete stat entry by classroom ID
+studentStatsRoutes.route('/deleteForClassroom/:id').get(function(req, res) {
+    StudentStats.deleteMany({"classroomId": req.params.id}, function(err, stat) {
+        if(err) {
+          console.log(err, new Date());
+          res.json(err);
+        }
+        else res.json("Successfully removed stats for classroom id");
+    });
+});
 
 module.exports = studentStatsRoutes;
