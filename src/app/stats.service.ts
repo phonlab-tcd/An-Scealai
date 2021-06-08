@@ -50,6 +50,10 @@ export class StatsService {
     return this.http.get(this.baseUrlStudents + 'delete/' + id);
   }
   
+  deleteStatsForClassroom(id: string): Observable<any>{
+    return this.http.get(this.baseUrlStudents + 'deleteForClassroom/' + id);
+  }
+  
 
 /*
 * Return an object containing grammar rule name, description, and classification

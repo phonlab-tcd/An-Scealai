@@ -1,5 +1,16 @@
 <!-- Dislay profile and activity summary for a given user -->
 <div class="content" *ngIf="user">
+  <!-- Popup for deleting account -->
+  <div class="{{modalClass}} modalContainer">
+      <div class="modalContent">
+          <pre class="modalText">{{ts.l.are_you_sure}}</pre>
+          <pre>{{ts.l.this_includes_story_data}}</pre>
+          <div>
+              <button class="modalBtn createBtnGreen" (click)="deleteAccount()">{{ts.l.yes}}</button>
+              <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
+          </div>
+      </div>
+  </div>
   <!-- User profile summary -->
   <div class="generateCodeTitle">{{ts.l.profile_summary}}: '{{user.username}}'</div>
   <div class="userInfoDisplay">
@@ -7,6 +18,10 @@
   </div>
   <div class="userInfoDisplay">
     <div class="userInfo"><b>{{ts.l.role}}:</b> <textarea readonly class="userInfoTextarea">{{user.role}}</textarea></div>
+  </div>
+  <!-- delete account -->
+  <div class="buttonContainer">
+    <button class="btn deleteAccountButton" (click)="showModal()"> {{ts.l.delete_my_account}} </button>
   </div>
   <!-- Main info container -->
   <div class="contentBody">
@@ -24,7 +39,7 @@
         </div>
       </div>
     </div>
-    <!-- Container to list stoires for STUDENT -->
+    <!-- Container to list stories for STUDENT -->
     <div class="teacherAccountsContainer" *ngIf="user?.role === 'STUDENT'">
       <div class="teacherAccountsDisplay">
         <div class="teacherAccountsHeader">
