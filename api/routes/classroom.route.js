@@ -20,7 +20,6 @@ classroomRoutes.route('/getAllCodes').get((req, res) => {
         } else {
             let codes = [];
             for(let classroom of classrooms) {
-                console.log("classroom", classroom);
                 if(classroom.code != null) {
                     codes.push(classroom.code);
                 }
@@ -58,7 +57,7 @@ classroomRoutes.route('/updateTitle/:id').post((req, res) => {
         if(classroom) {
             classroom.title = req.body.title;
             classroom.save().then(classroom => {
-                res.status(200).json("Updated successfully");
+                res.status(200).json("Updated classroom title successfully");
             }).catch(err => {
                 res.status(404).send(err);
             });
@@ -71,7 +70,7 @@ classroomRoutes.route('/delete/:id').get((req, res) => {
         if(err) {
             res.json(err);
         } else {
-            res.json("Successfully removed");
+            res.json("Successfully removed classroom");
         }
     });
 });
@@ -81,7 +80,7 @@ classroomRoutes.route('/deleteAllClassrooms/:teacherId').get((req, res) => {
         if(err) {
             res.json(err);
         } else {
-            res.json("Successfully removed");
+            res.json("Successfully removed all classrooms for teacher id");
         }
     });
 });
@@ -164,7 +163,7 @@ classroomRoutes.route('/setGrammarRules/:id').post((req, res) => {
       if(classroom) {
           classroom.grammarRules = req.body.grammarRules;
           classroom.save().then(classroom => {
-              res.status(200).json("Updated successfully");
+              res.status(200).json("Updated grammar rules successfully");
           }).catch(err => {
               res.status(404).send(err);
           });
