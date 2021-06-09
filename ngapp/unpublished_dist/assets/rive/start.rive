@@ -1,0 +1,65 @@
+> object getBotName javascript
+  return getBotName();
+< object
+
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
+> object getName javascript
+  return getName();
+< object
+
+> object loadFromChat javascript
+  loadFromChat(args[0]);
+  return "";
+< object
+
+> object isNameStored javascript
+  if(isNameStored()) return true;
+  else return false;
+< object
+
+> object chatSetup javascript
+  return chatSetup(args[0]);
+< object
+
+> object askName javascript
+  return askName();
+< object
+
+> object setKeepMessages javascript
+  keepMessages = args[0];
+  return "";
+< object
+
++ start
+- Please choose a dialect: <br>
+^ Connemara (male)  <input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
+^ Kerry (female)  <input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
+^ Donegal (female)  <input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>
+^ <button class="rive-button" onclick="next()">Next</button>
+
+/** <call>isNameStored</call> == true => <call>chatSetup failte</call>
+* <call>isNameStored</call> == false => <call>askName</call>*/
+
++ askname
+- <call>askName</call>
+
++ (_|_ is ainm dom)
+- <call>storeName <formal></call><call>chatSetup failte</call>
+
++ failte
+- Fáilte romhat isteach, a <call>getName</call>.\s
+^ Táim anseo chun cabhrú leat le roinnt pointí gramadaí.\s
+^ Anois, roghnaigh ábhar le do thoil:
+^ <br>\s
+^ <button class="rive-button" onclick="chatSetup('briathra neamhrialta')">Briathra Neamhrialta</button>
+^ <button class="rive-button">Grammar Topic </button>
+^ <button class="rive-button">Grammar Topic </button>
+
++ *
+- Tá brón orm cad a dúirt tú?
+
++ briathra neamhrialta
+- <call>setKeepMessages true</call><call>loadFromChat BriathraNeamhrialta</call>

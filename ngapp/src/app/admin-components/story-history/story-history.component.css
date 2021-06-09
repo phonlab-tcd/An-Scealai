@@ -1,0 +1,94 @@
+.header {
+    color: white;
+    background-color: #304e38;
+    width: 60%;
+    margin-left: 20%;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 12pt;
+    padding: 4px;
+    margin-top: 2vh;
+
+}
+
+.highlightIcon {
+    float: right;
+    margin-right: 8px;
+    margin-top: 5px;
+    color: #304e38;
+    opacity: 0.3;
+}
+
+.highlightIcon:hover {
+    color: #70a87f;
+    opacity: 1;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.iconHighlighted {
+    color: #70a87f;
+    opacity: 1;
+}
+
+.iconHighlighted:hover {
+    color: #304e38;
+    transition: 1s;
+}
+
+.storyContainer {
+    width: 60%;
+    margin-left: 20%;
+    background-color: #d1d1d1;
+    border-radius: 0px 0px 5px 5px;
+    height: 63vh;
+    padding: 8px;
+    padding-bottom: 0px;
+    overflow: auto;
+}
+
+.eventEntry {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.eventDate {
+    width: 50%;
+    background-color: white;
+    border-radius: 10px 0px 0px 10px
+}
+
+.eventType {
+    width: 50%;
+    background-color: #70a87f;
+    color: white;
+    border-radius: 0px 10px 10px 0px
+}
+
+.textEntry {
+    width: 100%;
+    text-align: left;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.entry {
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #777777;
+    border-radius: 5px;
+}
+
+:host ::ng-deep .highlightedGreen {
+    background-color: #aafdc0;
+}
+
+:host ::ng-deep .highlightedRed {
+    background-color: #fdaaaa;
+}
+
+:host ::ng-deep .notHighlighted {
+    background-color: none;
+}
