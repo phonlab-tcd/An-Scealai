@@ -50,6 +50,7 @@
             "classroom_code" : "Classroom code",
             "enter_code" : "Enter code",
             "sign_out" : "Sign out",
+            "word_count" : "Word Count",
             
             "leave" : "leave",
             "classroom" : "Classroom",
@@ -254,6 +255,7 @@
             "language_specific" : "Language Specific",
             
             "delete_my_account" : "Delete my account",
+            "delete_this_account" : "Delete this account",
             "are_you_sure" : "Are you sure you want to delete your account?",
             "this_includes_story_data" : "This includes all saved stories and statistical data",
             "this_includes_personal_data" : "This includes all personal and classroom data",
@@ -460,6 +462,7 @@
             "classroom_code" : "Cód ranga",
             "enter_code" : "Cód anseo",
             "sign_out" : "Sínigh amach",
+            "word_count" : "Líon Focal",
     
             "personal_info" : "Eolas pearsanta",
             "gender" : "Gnéas",
@@ -660,6 +663,7 @@
             "language_specific" : "Sainiúil don Teanga",
             
             "delete_my_account" : "Scrios mo chuntas",
+            "delete_this_account" : "Scrios an cuntas seo",
             "are_you_sure" : "An bhfuil tú cinnte go bhfuil tú ag iarraidh do chuntas a scrios?",
             "this_includes_story_data" : " Tá na scéalta agus na sonraí staitistiúla go léir san áireamh leis seo",
             "this_includes_personal_data" : "Tá na sonraí pearsanta agus na sonraí ranga go léir san áireamh leis seo",
