@@ -104,7 +104,9 @@
       <!-- display story before grammar checked (i.e. writing mode)-->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
         <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
-        <span> Word Count: {{wordCount}} </span>
+<div style="display: flex; align-items: center; justify-content: center; padding-bottom: 6px">
+  <span> Word Count: {{wordCount}} </span>
+</div>
       </div>
       <!-- display grammar loading -->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
