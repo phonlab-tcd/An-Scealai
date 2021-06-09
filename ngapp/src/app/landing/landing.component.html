@@ -1,0 +1,38 @@
+<div class="landingTextContainer">
+    <img src="assets/img/logo-landing.png" class="landingImg">
+    <p class="landingText">
+      {{ts.l.quote}}
+    </p>
+    <div class="landingText quoteAuthorText">{{ts.l.author}}</div>
+</div>
+  
+<div class="landingBtnsContainer" *ngIf="!auth.isLoggedIn()">
+  <button type="button" class="btn teacherRegisterBtn" routerLink="/register-teacher">{{ts.l.i_am_a_teacher}}</button><br>
+  <button type="button" class="btn studentRegisterBtn" routerLink="/register">{{ts.l.i_am_a_student}}</button>
+  <div class="loginTextContainer">{{ts.l.already_have_account}}<a routerLink="/login"> {{ts.l.sign_in}}</a></div>
+</div>
+  
+<img src="assets/img/main01.png" class="bottomLeftImg">
+<img src="assets/img/main02.png" class="bottomRightImg">
+<!-- img src="assets/img/main03.png" class="topRightImg" -->
+
+<div class="catContainer">
+  <img src="assets/img/main04.png" class="catJumpingImg">
+  <img src="assets/img/main05.png" class="catWalkingImg">
+</div>
+
+<!-- Footer containing logos -->
+<div class="footer">
+  <div class="copyright">{{ts.l.copyright}}</div>
+  <div class="footerLogos">
+    <img class="logoImg" src="assets/img/logo_abair.png">
+    <div class="separator"></div>
+    <img class="logoImg" src="assets/img/logo_S20.png">
+    <div class="separator"></div>
+    <img class="logoImg" src="assets/img/logo_dept_arts_culture.png">
+    <div class="separator"></div>
+    <img class="logoImg" src="assets/img/logo_cogg.png">
+    <div class="separator"></div>
+    <img class="logoImg" src="assets/img/logo_TCD.png">  
+  </div>
+</div>

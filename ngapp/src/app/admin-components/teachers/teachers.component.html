@@ -1,0 +1,38 @@
+<div class="{{modalClass}} modalContainer">
+  <div class="modalContent">
+    <div class="modalText">{{ts.l.sure_you_want_to_delete_code}}</div>
+    <button class="modalBtn deleteRedBtn" (click)="deleteTeacherCode()">{{ts.l.delete}}</button><button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
+  </div>
+</div>
+
+<div class="content">
+  <div class="generateCodeTitle"><div class="teacherCodeTitle">{{ts.l.teacher_account_code}}</div><div class="teacherCodeButton" (click)="generateCode()">{{ts.l.generate}}</div></div>
+  <div class="teacherCodeDisplay">
+    <textarea readonly class="teacherCodeTextarea">{{teacherCode}}</textarea>
+    <i class="far fa-copy copyIcon" (click)="copyToClipboard()"></i>
+    <div class="{{copiedTextClass}} copiedText">{{ts.l.copied}}!</div>
+  </div>
+  <div class="teacherAccountsContainer">
+    <div class="teacherAccountsDisplay">
+      <div class="teacherAccountsHeader">
+        {{ts.l.active_account_codes}}
+      </div>
+      <div class="teacherAccountsBody">
+        <div class="activeTeacherCodeContainer" *ngFor="let code of activeTeacherCodes">
+          {{code.code}} 
+          <i class="fa fa-times deleteBtn" aria-hidden="true" (click)="showModal(code.code)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="teacherAccountsDisplay">
+      <div class="teacherAccountsHeader">
+        {{ts.l.teacher_accounts}}
+      </div>
+      <div class="teacherAccountsBody">
+        <div class="activeTeacherCodeContainer whiteBtn" *ngFor="let teacher of teachers" (click)="goToUser(teacher._id)">
+          {{teacher.username}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

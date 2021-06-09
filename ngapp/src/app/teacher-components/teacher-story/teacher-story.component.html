@@ -1,0 +1,81 @@
+<!-- Displays the student's story for the teacher -->
+<div class="content">
+  <!-- Record audio message container -->
+    <div class="{{modalClass}} modalContainer">
+      <div class="modalContent">
+          <div class="modalText">{{ts.l.record_audio_message}}</div>
+          <!-- Start/stop recording audio or go back -->
+          <div class="recordBtnContainer">
+            <button *ngIf="!recording" (click)="prepRecording()" class="headerIconBtn">{{ts.l.record_audio}}</button>
+            <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
+            <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
+          </div>
+          <!-- Listen back to message -->
+          <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
+          <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          <!-- Cancel or send audio -->
+          <div class="modalBtnContainer">
+              <button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
+              <button class="modalBtn createBtnGreen" (click)="saveAudio()" *ngIf="canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
+              <div class="inactiveBtn" *ngIf="!canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></div>
+          </div>
+      </div>
+    </div>
+    <!-- View story and add feedback container -->
+    <div class="classContainer">
+      <!-- header story title and back arrow -->
+        <div class="classHeader">
+          <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
+          {{story?.title}}
+        </div>
+        <!-- story body and feedback details -->
+        <div class="classBody">
+          <!-- story text -->
+            <div class="storyTextContainer">
+              <div class="storyTextHeader">{{ts.l.text}}</div>
+              <div class="storyText">{{story?.text}}</div>
+            </div>
+            <!-- story information -->
+            <div class="storyInfoContainer">
+                <div class="storyTextHeader">{{ts.l.information}}</div>
+                <div class="storyInfoBody">
+                  <!--information details -->
+                    <div class="userInfo">{{ts.l.title}} <textarea readonly class="userInfoTextarea">{{story?.title}}</textarea></div>
+                    <div class="userInfo">{{ts.l.story_author}} <textarea readonly class="userInfoTextarea">{{story?.author}}</textarea></div>
+                    <div *ngIf="isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'MM/dd/yyyy, hh:mm aa'}}</textarea></div>
+                    <div *ngIf="!isFromAmerica" class="userInfo">{{ts.l.creation_date}} <textarea readonly class="userInfoTextarea">{{story?.date | date: 'dd/MM/yyyy, hh:mm aa'}}</textarea></div>
+                    <div class="userInfo">{{ts.l.dialect}} <textarea readonly class="userInfoTextarea">{{story?.dialect}}</textarea></div>
+                    <!-- feedback container -->
+                    <div class="feedbackContainer">
+                      <div class="feedbackHeaderTeacherStory">{{ts.l.feedback}}</div>
+                      <div class="feedbackBody" *ngIf="story">
+                          <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
+                        </div>
+                        <!-- seen by student section -->
+                      <div class="feedbackFooter">
+                        <div class="seenByStudent" *ngIf="story">
+                          <span *ngIf="story.feedback.seenByStudent">{{ts.l.seen_by}} {{story?.author}} <i class="fas fa-check"></i></span>
+                          <span *ngIf="!story.feedback.seenByStudent">{{ts.l.not_seen_by}} {{story?.author}}</span>
+                        </div>
+                        <!-- send feedback -->
+                        <div class="sendFeedbackBtn">
+                          <button *ngIf="!feedbackSent" class="headerIconBtn" (click)="sendFeedback()">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
+                          <button *ngIf="feedbackSent" class="headerIconBtn">{{ts.l.sent}} <i class="fas fa-check"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- audio player section -->
+                    <div class="feedbackBtnContainer">
+                      <div *ngIf="audioSource">
+                        <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+                      </div>
+                      <div>
+                          <button (click)="showModal()" class="headerIconBtn">{{ts.l.audio_message}}</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+</div>

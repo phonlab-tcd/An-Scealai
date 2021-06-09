@@ -1,0 +1,168 @@
+.bookContainerNewStory {
+    width: 80%;
+    height: 400px;
+    padding-top: 40px;
+    margin-left: 10%;
+    z-index: 10;
+}
+
+.bookImg {
+    z-index: -10;
+    width: 90%;
+    height: 500px;
+    position: fixed;
+    right: 5%;
+}
+
+.bookTitle {
+    color: #261500;
+    width: 80%;
+    padding-left: 5%;
+    padding-right: 25%;
+    display: inline-block;
+    font-size: 18pt;
+    margin-bottom: 20px;
+}
+
+.contentsContainer {
+    padding-top: 10px;
+    padding-left: 3%;
+    padding-right: 3%;
+    height: 390px;
+    width: 80%;
+    margin-left: 10%;
+    border-radius: 5px;
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.contentsBtnsContainer {
+    margin-top: 20px;
+}
+
+.createBtn {
+    font-size: 12pt;
+}
+
+.formGroup {
+    width: 60%;
+    margin-left: 20%;
+    margin-bottom: 20px;
+}
+
+.formLabel {
+    color: #261500;
+    float: left;
+}
+
+.titleInput {
+    border-radius: 4px;
+    width: 100%;
+}
+
+.dialectSelect {
+    width: 100%;
+}
+
+.backBtn {
+    display: inline-block;
+    border-style: none;
+    color: #261500;
+    font-size: 12pt;
+    width: 20%;
+}
+
+.backBtn:hover {
+    color: #c15a2e;
+    text-decoration: none;
+}
+
+.validationAlert {
+    color: red;
+    font-size: 12pt;
+}
+
+@media only screen and (max-width: 600px) { 
+    .bookImg {
+        display: none;
+    }
+    .bookContentsContainer {
+        width: 100%;
+        padding-top: 10px;
+        z-index: 10;
+    }
+    .bookContainerNewStory {
+       width: 90%;
+       margin-top: -20px;
+       margin-left: 5%;
+    }
+    .contentsContainer {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
+
+@media only screen and (max-width: 400px) { 
+    .bookImg {
+        display: none;
+    }
+    .bookContentsContainer {
+        width: 100%;
+        padding-top: 10px;
+        z-index: 10;
+    }
+    .bookContainerNewStory {
+       width: 90%;
+       margin-left: 5%;
+       margin-top: -20px;
+       padding-top: 0px;
+    }
+    .contentsContainer {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
+
+
+@media only screen and (min-width: 700px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        margin-left: -315px;
+    }
+
+    .bookContainerNewStory {
+        width: 490px;
+        position: fixed;
+        left: 50%;
+        margin-left: -245px;
+    }
+
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 800px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        margin-left: -315px;
+        margin-top: 100px;
+    }
+
+    .bookContainerNewStory {
+        width: 560px;
+        position: fixed;
+        left: 50%;
+        margin-left: -280px;
+        padding-top: 40px;
+        margin-top: 100px;
+    }
+
+}
