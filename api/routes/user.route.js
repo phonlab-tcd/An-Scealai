@@ -71,4 +71,21 @@ userRoutes.route('/deleteUser/:username').get(function(req, res) {
     });
 });
 
+// Update username by id 
+userRoutes.route('/updateUsername/:id').post((req, res) => {
+  console.log(req.body.username);
+    User.findById(req.params.id, (err, user) => {
+        if(user) {
+            console.log("new username: ", req.body.username);
+            user.username = req.body.username;
+            user.save().then(() => {
+              console.log("username now: ", user.username);
+                res.status(200).json("Username updated successfully");
+            }).catch(err => {
+                res.status(404).send(err);
+            })
+        }
+    });
+});
+
 module.exports = userRoutes;
