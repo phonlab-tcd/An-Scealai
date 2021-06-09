@@ -164,20 +164,20 @@ export class ProfileComponent implements OnInit {
             this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).subscribe( (res) => {
               console.log(res);
             });
+            
+            this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
+              console.log(res);
+            });
           }
+          
+          this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
+            console.log(res);
+          });
 
           this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe((res) => {
             console.log(res);
           });
 
-          this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-            console.log(res);
-          });
-
-          this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-            console.log(res);
-          });
-          
           this.auth.logout();
           
         }
