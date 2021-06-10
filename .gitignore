@@ -6,6 +6,7 @@
 /mongotest/db/**
 
 /api/logs/**
+/api/sendinblue.json
 
 /sshlogin
 /login_to_phonetics.sh
