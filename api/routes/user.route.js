@@ -81,9 +81,11 @@ userRoutes.route('/updateUsername/:id').post((req, res) => {
             user.save().then(() => {
               console.log("username now: ", user.username);
                 res.status(200).json("Username updated successfully");
-            }).catch(err => {
-                res.status(404).send(err);
+             }).catch(err => {
+                res.status(500).send(err);
             })
+        } else {
+            res.status(404).send(`User with _id ${req.params.id} could not be found`);
         }
     });
 });
