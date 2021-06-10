@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chai-arrays": "^2.2.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -19,7 +20,8 @@
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.5.1",
     "logger": "^0.0.1",
-    "mongoose": "^5.5.9",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.11",
     "multer": "^1.4.2",
     "node-html-parser": "^1.4.9",
     "passport": "^0.4.0",
@@ -34,6 +36,8 @@
     "winston-stackify": "^1.0.3"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0",
     "nodemon": "^1.19.4"
   }
 }

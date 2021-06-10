@@ -122,11 +122,20 @@
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
           <div class="dictionarySubHeader">
-            <div class="dictionaryName" (click)="selectTeanglann = true; selectPotafocal = false; selectedDictionary = true;">Teanglann</div> |
-            <div class="dictionaryName" (click)="selectPotafocal = true; selectTeanglann = false;">Potafocal</div>
+            <div class="dictionaryName"
+                 (click)="selectTeanglann = true;
+                          selectPotafocal = false; 
+                          selectedDictionary = true;">
+              Teanglann
+            </div> |
+            <div class="dictionaryName"
+                 (click)="selectPotafocal = true; 
+                          selectTeanglann = false;">
+              Potafocal
+            </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
-          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/"></iframe>
+          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
         </div>
       </div>
       
