@@ -27,6 +27,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
+import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -73,6 +74,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     LanguageComponent,
     LoginComponent,
     RegisterComponent,
+    ReportAnIssueComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
