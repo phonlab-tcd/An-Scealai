@@ -39,6 +39,8 @@
           <button ngbDropdownItem (click)="changeCheck()"> <a href="/assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
           <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
           <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
+          <!-- TODO add translation for Report Feedback -->
+          <button routerLink="/report_an_issue" ngbDropdownItem (click)="changeCheck()">Report An Issue</button>
         </div>
       </div>
       <!-- technology menu -->
