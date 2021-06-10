@@ -1,0 +1,64 @@
+<div class="profileContainer" *ngIf="auth.getUserDetails()">
+    <!-- Popup for deleting account -->
+    <div class="{{modalClass}} modalContainer">
+        <div class="modalContent">
+            <pre class="modalText">{{ts.l.are_you_sure}}</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="deleteAccount()">{{ts.l.yes}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
+            </div>
+        </div>
+    </div>
+    <!-- Profile options -->
+    <div class="formTitle">{{ts.l.profile}}</div><br>
+    <div *ngIf="!editMode" class="formBody">  
+      <div class="formContainer">
+        <!-- username details -->
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.username}} :</div>
+          <div class="userInfo"><i>{{auth.getUserDetails().username}}</i></div>
+        </div>
+        <!-- classroom details if STUDENT -->
+        <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
+          <div class="formLabel">{{ts.l.classroom}} :</div>
+          <div class="userInfo"><i>{{classroom.title}}</i></div>
+          <button class="btn leaveClassroomButton" (click)="leaveClassroom()">{{ts.l.leave}}</button>
+        </div>
+        <!-- join classroom option STUDENT -->
+        <div class="form-group-vertical" *ngIf="!classroom && auth.getUserDetails().role === 'STUDENT'">
+          <div class="form-group-section">
+            <div class="formLabel classroomCodeLabel">{{ts.l.classroom_code}} :</div>
+            <input type="text" class="form-control inputField"
+            placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
+          </div>
+          <div class="classroomMessages">
+            <div *ngIf="classroomCodeOutput" class="notFoundText classroomMessage">{{classroomCodeOutput}}</div>
+            <div *ngIf="foundClassroom" class="greenLink classroomMessage" (click)="joinClassroom()">{{ts.l.join_classroom}} '<b>{{foundClassroom.title}}</b>'?</div>
+          </div>
+        </div>
+        <!-- change language -->
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.language}} :</div>
+          <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
+            <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
+            <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+          </div>
+          <div *ngIf="ts.inIrish()" class="languageButtonContainer">
+            <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
+            <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+          </div>
+        </div>
+        <!-- delete account -->
+        <div>
+          <button class="btn deleteAccountButton" (click)="showModal()"> {{ts.l.delete_my_account}} </button>
+        </div>
+        <!-- sign out and profile information -->
+        <div class="btnContainer">
+          <button routerLink="/register-profile" class="btn logoutBtn">{{ts.l.my_info}}</button>
+          <button routerLink="/landing" class="btn logoutBtn" (click)="logout()">{{ts.l.sign_out}} <i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </div>
+    </div>
+</div>
