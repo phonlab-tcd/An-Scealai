@@ -15,10 +15,12 @@ let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  { useNewUrlParser: true, useUnifiedTopology: true},
+  (err, client) => {
   if (err) {
     console.log(
-      'MongoDB Connection Error. Please make sure that MongoDB is running.');
+      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
   db = client.db('an-scealai');

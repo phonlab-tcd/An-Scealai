@@ -1,3 +1,8 @@
+// user.route.js 
+//
+// endpoint prefix = '/user'
+
+
 const logger = require('../logger.js');
 
 
@@ -8,8 +13,8 @@ var jwt = require('express-jwt');
 let User = require('../models/user');
 
 var auth = jwt({
-    secret: 'sonJJxVqRC',
-    userProperty: 'payload'
+  secret: 'sonJJxVqRC',
+  userProperty: 'payload'
 });
 
 var ctrlProfile = require('../controllers/profile');
@@ -23,55 +28,77 @@ userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);
 
 userRoutes.route('/setLanguage/:id').post((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(user) {
-            user.language = req.body.language;
-            user.save().then(() => {
-                res.status(200).json("Language set successfully");
-            }).catch(err => {
-                resizeBy.status(400).send(err);
-            })
-        }
-    });
+  logger.info('setting language');
+  User.findById(req.params.id, (err1, user) => {
+    if(user) {
+      user.language = req.body.language;
+      user.save().then(() => {
+        res.status(200).json("Language set successfully");
+      }).catch(err2 => {
+        res.status(400).send(err2);
+        logger.log({
+          level: 'error',
+          responsecode: 400,
+          from: 'api',
+          endpoint:
+          '/user/setLanguage/'+req.params.id,
+          message: { error_message: err2 },
+          requestType: 'post',
+        });
+      })
+    }
+    else {
+      //IF user === null
+      res.status(404);
+      logger.log({
+        level: 'error',
+        message: { error_message: "USER NOT FOUND" },
+        from: 'api',
+        endpoint: '/user/setLanguage/' + req.params.id,
+        responsecode: 404,
+      });
+    }
+  });
 });
 
 userRoutes.route('/getLanguage/:id').get((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(user) {
-            res.json({"language" : user.language});
-        } else {
-            res.status(404).json("User not found");
-        }
-    });
+  User.findById(req.params.id, (err, user) => {
+    if(user) {
+      res.json({"language" : user.language});
+    } else {
+      res.status(404).json("User not found");
+    }
+  });
 });
 
 userRoutes.route('/getUserByUsername/:username').get((req, res) => {
-    User.find({"username" : req.params.username}, (err, user) => {
-        if(user) {
-            res.json(user);
-        } else {
-            res.status(404).json("User not found");
-        }
-    });
+  User.find({"username" : req.params.username}, (err, user) => {
+    if(user) {
+      res.json(user);
+    } else {
+      res.status(404).json("User not found");
+
+    }
+  });
 });
 
 // Endpoint to get all users from database
 userRoutes.route('/getAllUsers').get((req, res) => {
-    User.find({}, (err, users) => {
-        if(users) {
-            res.json(users);
-        } else {
-            res.status(404).json("No users exist on the database");
-        }
-    });
+  User.find({}, (err, users) => {
+    if(users) {
+      res.json(users);
+    } else {
+      res.status(404).json("No users exist on the database");
+    }
+  });
 });
 
 // Delete user by username
 userRoutes.route('/deleteUser/:username').get(function(req, res) {
-    User.findOneAndRemove({"username": req.params.username}, function(err, user) {
-        if(err) res.json(err);
-        else res.json("Successfully removed user");
-    });
+  User.findOneAndRemove({"username": req.params.username}, function(err, user) {
+    if(err) res.json(err);
+    else res.json("Successfully removed user");
+  });
 });
 
 module.exports = userRoutes;

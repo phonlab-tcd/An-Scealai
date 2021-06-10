@@ -1,35 +1,24 @@
-
-var winston = require('winston');
-var path = require('path');
+const winston = require('winston');
+const path = require('path');
+const mongodb = require('mongodb');
 // var stackify = require('stackify-logger');
 
-require('winston-mongodb');
 
+process.on('uncaughtException', err => {
+  console.error( "UNCAUGHT EXCEPTION" );
+  console.error( "[Inside 'uncaughtException' event] ", err);
+});
 
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
 const uncaughtExceptionsFile = path.join(__dirname, 'logs/uncaughtExceptions.log');
 
 const consoleFormat = winston.format.printf(
-  ({ level, message, timestamp, ..._metadata}) => {
-  let string_message = JSON.stringify(message);
-  let msg = `${timestamp} [${level}] : ${string_message} `;
-  return msg;
-});
-
-
-const mongoTransport =  new winston.transports.MongoDB({
-  level: "info", // info is the default
-  db: 'mongodb://localhost:27017/an-scealai',
-  collection: "log", // default
-  options: { // modified version of default
-    poolSize: 2, // default
-    useNewUrlParser: true, // default
-    // tryReconnect: true // default // not compatible with useUnifiedTopology: ture
-    useUnifiedTopology: true, // not default
-  }
-});
-
+  ({ level, message, timestamp, ... metadata}) => {
+    let string_message = JSON.stringify(message);
+    let msg = `${timestamp} [${level}] : ${string_message}`;
+    return msg;
+  })
 
 // Create our logger object
 const logger = winston.createLogger({
@@ -48,26 +37,49 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: combinedFile}),
   ],
 
+  levels:  { 
+    emerg: 0, 
+    alert: 1, 
+    crit: 2, 
+    error: 3, 
+    warning: 4, 
+    notice: 5, 
+    info: 6, 
+    debug: 7
+  },
+
   exceptionHandlers: [
     new winston.transports.File({ filename: uncaughtExceptionsFile }),
   ],
 });
 
-console.log("\n\n2:\n",JSON.stringify(mongoTransport));
+require('winston-mongodb');
 
-if(mongoTransport){
-  logger.add(mongoTransport);
-}
-else{
-  logger.error("Failed to create MongoDB transport for winston. Exiting process.");
-  process.exit(1);
-}
-
-
-logger.info({
-  message: { note: 'hello from a complex log, this is the message', more: 'this is irrelevant'},
-  endpoint: 'googly/boogly',
-  responsecode: '400',
-});
+var preconnectedDB = null;
+const client = mongodb.MongoClient.connect('mongodb://localhost:27017/scealai',
+  { useUnifiedTopology: true, useNewUrlParser: true})
+  .then( db => {
+    logger.info('Winston has connected to MongoDB');
+    const date = new Date();
+    const shortDate = date.toLocaleString('en-gb', {weekday: 'short' })
+      + date.toLocaleString('en-gb', { month: 'short' }) + date.getDate() + '_' +date.getHours() + ':' + date.getMinutes();
+    preconnectedDB = db;
+    var mongoTransport;
+    mongoTransport =  new winston.transports.MongoDB({
+      level: "info", // info is the default
+      db: preconnectedDB, // user: logger, pwd: logger, db: logger
+      collection: 'log', // default is 'log'
+      options: { // modified version of default
+        poolSize: 2, // default
+        useNewUrlParser: true, // default
+        // tryReconnect: true // default // not compatible with useUnifiedTopology: ture
+        useUnifiedTopology: true, // not default
+      }
+    });
+    logger.add(mongoTransport);
+  })
+  .catch( err => {
+    logger.error("FAILED TO CONNECT TO MONGODB. MONGODB TRANSPORT WILL NOT BE ADDED.", err.message);
+  }); 
 
 module.exports = logger;

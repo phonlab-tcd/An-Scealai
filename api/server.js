@@ -23,9 +23,9 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
+mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
     () => {logger.info('Database is connected');},
-    (err) => {logger.error('Can not connect to the database'+ err)}
+    (err) => {logger.error('Cannot connect to the database. ',err)}
 );
 
 const app = express();
@@ -70,6 +70,9 @@ app.use(function (err, req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
+        logger.error(
+          err
+        );
         res.render('error', {
             message: err.message,
             error: err
