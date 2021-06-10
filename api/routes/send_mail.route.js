@@ -37,47 +37,57 @@ else {
   */
 
 
-  mailRoutes.route('/report_issue_anon').post((req, res) => {
+  mailRoutes.route('/report_issue_anon').post(async (req, res) => {
 
     console.log("reporting an issue from an anonymous user");
     console.log(req.body);
 
     let emailBody;
+    let subject = req.body.subject || "USER ISSUE REPORT --- ANONYMOUS";
+
+    // Make sure the client has sent a message in the body
     if(req.body.message){
       emailBody = req.body.message
+
+      // Refuse to send an email with just an empty string
       if(emailBody === ""){
-        res.statusCode.json({ error: "Message body empty. Refusing to send email."});
-        res.send();
+        res.status(400).json({ error: "Message body empty. Refusing to send email."});
         return;
       }
     }
     else{
-      res.json({ error: "No message found in body of POST request to /mail/report_issue_anon"});
-      res.send();
-      return
+      res.json({ error: "No message found in body of POST request to /mail/report_issue_anon. Refusing to send empty email."});
+      return;
     }
 
-    if(! req.body.do_not_send){
-      const mailObj = {
-        from: "nrobinso@tcd.ie",
-        recipients: ["scealai.info@gmail.com"],
-        subject: "User issue report: anonymous",
-        message: emailBody,
-      };
-
-
-      sendEmail(mailObj).then((res2) => {
-        if(res2 === 'ok'){
-          console.log("email sent successfully from /mail/report_issue_anon endpoint");
-          res.statusCode(200).json({ ok: "The email seems to have been sent successfully"});
-        }
-      }).catch( err => {
-        res.json(err)
-        console.dir(err);
-      });
+    // If the req.body contains the do_not_send property, don't send an email 
+    console.log("Checking if the do_not_send property is present");
+    if(req.body.do_not_send){
+      res.json({ not_sending_email: 1});
+      return;
     }
 
-    res.send();
+    console.log("Constructing the mailObj");
+    const mailObj = {
+      from: "nrobinso@tcd.ie",
+      recipients: ["nrobinso@tcd.ie"],
+      subject: subject,
+      message: emailBody,
+    };
+
+    console.log("sending email");
+    console.log(sendEmail);
+
+    await sendEmail(mailObj).then((res2) => {
+      if(res2){
+        console.log(res2);
+        console.log("email sent successfully from /mail/report_issue_anon endpoint");
+        res.json({ ok: 1 });
+      }
+    }).catch( err => {
+      console.dir(err);
+      res.json({ error: "There was an error while trying to send the email" });
+    });
 
   });
 

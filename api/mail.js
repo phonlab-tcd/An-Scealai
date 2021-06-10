@@ -17,6 +17,8 @@ const nodemailer = require("nodemailer");
 
 const fs = require('fs');
 
+module.exports.sendEmail = "not yet created";
+
 try{
   console.log("Attempting to read sendinblue auth data from ./api/sendinblue.json");
   let rawdata = fs.readFileSync('sendinblue.json');
@@ -44,7 +46,6 @@ try{
         text: message,
       });
 
-      module.exports.sendEmail = sendEmail;
       return mailStatus;
 
     }catch(error){
@@ -53,8 +54,10 @@ try{
         `Something went wrong in the sendmail method. Error: ${error.message}`
       );
     }
-
   }
+
+  module.exports.sendEmail = sendEmail;
+
 }catch(err){
   console.error("Failed to create email transport in ./api/mail.js. Have you created sendinblue.json ?");
   console.error(err);
