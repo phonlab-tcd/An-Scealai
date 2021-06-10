@@ -4,5 +4,7 @@
 
 **/logs/*
 
+/api/sendinblue.json
+
 login
 sshlogin
