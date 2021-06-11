@@ -36,6 +36,7 @@ const logger = winston.createLogger({
   transports: [
     // This transport lets us log to the console
     new winston.transports.Console({
+      levol: 'silly',
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.timestamp(),
