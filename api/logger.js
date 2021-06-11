@@ -17,7 +17,8 @@ const combinedFile = path.join(__dirname, 'logs/combined.log');
 const uncaughtExceptionsFile = path.join(__dirname, 'logs/uncaughtExceptions.log');
 
 const consoleFormat = winston.format.printf(
-  ({ level, message, timestamp, ... metadata}) => {
+  ({ level, message, timestamp, ...metadata}) => {
+    // TODO log the rest parameters in metadata
     let string_message = JSON.stringify(message);
     let msg = `${timestamp} [${level}] : ${string_message}`;
     return msg;
