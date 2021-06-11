@@ -76,6 +76,7 @@ const client = mongodb.MongoClient.connect('mongodb://localhost:27017/scealai',
         useUnifiedTopology: true, // not default
       }
     });
+    logger.info("Adding MongoDB transport to logger");
     logger.add(mongoTransport);
   })
   .catch( err => {
