@@ -3,10 +3,13 @@ const path = require('path');
 const mongodb = require('mongodb');
 // var stackify = require('stackify-logger');
 
+// logger.error is console.error until the winston logger is created
+var logger ={ error: console.error };
 
+// TODO: I'm not sure if this line should be included
 process.on('uncaughtException', err => {
-  console.error( "UNCAUGHT EXCEPTION" );
-  console.error( "[Inside 'uncaughtException' event] ", err);
+  logger.error( "UNCAUGHT EXCEPTION" );
+  logger.error( "[Inside 'uncaughtException' event] ", err);
 });
 
 const errorFile = path.join(__dirname, 'logs/error.log');
@@ -21,7 +24,7 @@ const consoleFormat = winston.format.printf(
   })
 
 // Create our logger object
-const logger = winston.createLogger({
+logger = winston.createLogger({
   transports: [
     // This transport lets us log to the console
     new winston.transports.Console({
@@ -82,5 +85,16 @@ const client = mongodb.MongoClient.connect('mongodb://localhost:27017/scealai',
   .catch( err => {
     logger.error("FAILED TO CONNECT TO MONGODB. MONGODB TRANSPORT WILL NOT BE ADDED.", err.message);
   }); 
+
+
+// This should be deleted before merging the PR
+logger.emerg("this is just a test");
+logger.alert("this is just a test");
+logger.crit("this is just a test");
+logger.error("this is just a test");
+logger.warning("this is just a test");
+logger.notice("this is just a test");
+logger.info("this is just a test");
+logger.debug("this is just a test");
 
 module.exports = logger;
