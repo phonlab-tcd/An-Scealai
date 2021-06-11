@@ -1,2 +1,2 @@
-
-sed -i 's/https:\/\/www.abair.tcd.ie\/anscealaibackend\//http:\/\/localhost:4000\//' src/abairconfig.json
+rm ./src/abairconfig.json
+cp ./abairconfig_dev.json ./src/abairconfig.json
