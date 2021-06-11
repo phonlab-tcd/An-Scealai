@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
   modalClass : string = "hidden";
   updateMode: boolean = false;
   updatedUsername: string;
-  errorMessage: string = "hello";
+  errorMessage: string = "";
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
