@@ -108,7 +108,7 @@ export class TeacherStatsComponent implements OnInit {
     getStatsForStudents() {
       this.statsService.getStatsForClassroom(this.classroomId).subscribe( (res: StudentStats[]) => {
         this.stats = res;
-        this.stats.sort((a, b) => (a.studentUsername < b.studentUsername) ? -1 : 1);
+        this.stats.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         console.log(this.stats);
         this.getStatsForClass();
       });
