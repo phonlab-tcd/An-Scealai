@@ -32,7 +32,6 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
                 event.storyData = req.body.event.storyData;
                 event.userId = user._id;
                 event.date = new Date();
-                console.log(event);
                 event.save().then(() => {
                     res.status(200).json("Event added succesfully");
                 })

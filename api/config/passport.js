@@ -8,6 +8,7 @@ passport.use(new LocalStrategy(
     function(username, password, done) {
         User.findOne({ username: username}, function (err, user) {
             if(err) { 
+                console.log(err);
                 return done(err); 
             }
             // If user doesn't exist

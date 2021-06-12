@@ -123,25 +123,38 @@ export class ProfileComponent implements OnInit {
     if (!userDetails) return;
 
     if(userDetails.role === "STUDENT") {
-      this.leaveClassroom();
+      if(this.classroom)
+        this.leaveClassroom();
       this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
         console.log("All stories deleted");
       });
     }
     if(userDetails.role === "TEACHER") {
+      this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
+        for(let classroom of res) {
+          this.ss.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
+            console.log(res);
+          });
+        }
+      });
+      
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
-        console.log("All classrooms deleted");
-      })
+        console.log(res)
+      });
+      
     }
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-      console.log("All messages deleted");
+      //console.log("All messages deleted");
+      console.log(res);
     });  
     this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-      console.log("Profile deleted");
+      //console.log("Profile deleted");
+      console.log(res);
     });
     this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-      console.log("User deleted");
+      //console.log("User deleted");
+      console.log(res);
     });
     this.auth.logout();
   }

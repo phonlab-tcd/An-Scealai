@@ -3,6 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
+import { StatsService } from '../../stats.service';
+import { MessageService } from '../../message.service';
+import { ProfileService } from '../../profile.service';
+import { UserService } from '../../user.service';
 import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from '../../engagement.service';
@@ -24,7 +28,11 @@ export class UserComponent implements OnInit {
               private router: Router,
               private classroomService: ClassroomService,
               private engagement: EngagementService,
-              private ts: TranslationService) { }
+              private ts: TranslationService,
+              private statsService: StatsService,
+              private messageService: MessageService,
+              private profileService: ProfileService,
+              private userService: UserService) { }
 
   user: any;
   stories: Story[];
@@ -33,6 +41,7 @@ export class UserComponent implements OnInit {
   eventSelected = {};
   allEvents: Event[] = [];
   maximised : boolean = false;
+  modalClass : string = "hidden";
 
   baseUrl: string = config.baseurl;
 
@@ -162,5 +171,61 @@ export class UserComponent implements OnInit {
 
   goToClassroom(classroomId) {
     this.router.navigateByUrl('admin/classroom/' + classroomId);
+  }
+  
+  deleteAccount() {
+    if (!this.user) return;
+
+    if(this.user.role === 'STUDENT') {
+      this.classroomService.getClassroomOfStudent(this.user._id).subscribe((res) => {
+        if(res) {
+          this.classroomService.removeStudentFromClassroom(res._id, this.user._id).subscribe(res => {
+            console.log(res);
+          });
+        }
+      });
+      
+      this.statsService.deleteStats(this.user._id).subscribe( (res) => {
+        console.log(res);
+      });
+    
+      this.storyService.deleteAllStories(this.user.username).subscribe( (res) => {
+        console.log(res);
+      });
+    }
+    if(this.user.role === "TEACHER") {
+      if(this.classrooms) {
+        for(let classroom of this.classrooms) {
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
+            console.log(res);
+          });
+        }
+        
+      }
+      this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( (res) => {
+        console.log(res)
+      });  
+    }
+    
+    this.messageService.deleteAllMessages(this.user._id).subscribe( (res) => {
+      console.log(res);
+    });  
+    this.profileService.deleteProfile(this.user._id).subscribe( (res) => {
+      console.log(res);
+    });
+    this.userService.deleteUser(this.user.username).subscribe( (res) => {
+      console.log(res);
+    });
+    
+    this.router.navigateByUrl('admin/find-user');
+    
+  }
+  
+  showModal() {
+    this.modalClass = "visibleFade";
+  }
+
+  hideModal() {
+    this.modalClass = "hiddenFade";
   }
 }
