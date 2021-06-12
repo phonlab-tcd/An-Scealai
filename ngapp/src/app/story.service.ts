@@ -69,6 +69,10 @@ export class StoryService {
   updateStory(data, id) : Observable<any> {
     return this.http.post(this.baseUrl + 'update/' +id, data);
   }
+  
+  updateAuthor(oldAuthor, newAuthor): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
+  }
 
   deleteStory(id) {
     return this.http.get(this.baseUrl + 'delete/' + id);

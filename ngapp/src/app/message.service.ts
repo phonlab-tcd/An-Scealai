@@ -137,5 +137,12 @@ export class MessageService {
   deleteMessageAudio(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'deleteMessageAudio/' + id);
   }
+  
+  /*
+  * Update the sender username for a given account
+  */ 
+  updateSenderUsername(id: string, username: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateSenderUsername/' +id, {username: username});
+  }
 
 }

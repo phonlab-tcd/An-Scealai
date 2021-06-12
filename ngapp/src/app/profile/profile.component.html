@@ -1,6 +1,6 @@
 <div class="profileContainer" *ngIf="auth.getUserDetails()">
     <!-- Popup for deleting account -->
-    <div class="{{modalClass}} modalContainer">
+    <div *ngIf="!updateMode" class="{{modalClass}} modalContainer">
         <div class="modalContent">
             <pre class="modalText">{{ts.l.are_you_sure}}</pre>
             <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
@@ -11,6 +11,20 @@
             </div>
         </div>
     </div>
+    <!-- Popup for changing username -->
+    <div *ngIf="updateMode" class="{{modalClass}} modalContainer">
+        <div class="modalContent">
+            <div class="modalText"> Change username </div>
+            <div class="modalText"> (You will have to login again with your new username) </div><br>
+            <div class="modalText"> Current username: <i>{{auth.getUserDetails().username}}</i></div><br>
+            <div class="modalText"> New username: <input type="text" placeholder="Enter username" name="username" [(ngModel)]="updatedUsername"></div>
+            <div class="usernameErrorText"> {{errorMessage}} </div>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="updateUsername()">{{ts.l.save}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.cancel}}</button>
+            </div>
+        </div>
+    </div>
     <!-- Profile options -->
     <div class="formTitle">{{ts.l.profile}}</div><br>
     <div *ngIf="!editMode" class="formBody">  
@@ -18,7 +32,10 @@
         <!-- username details -->
         <div class="form-group">
           <div class="formLabel">{{ts.l.username}} :</div>
-          <div class="userInfo"><i>{{auth.getUserDetails().username}}</i></div>
+          <div class="userInfo">
+            <i>{{auth.getUserDetails().username}}</i>
+            <i class="fas fa-edit headerIconBtn" (click)="updateMode = true; errorMessage = ''; showModal()"></i>
+          </div>
         </div>
         <!-- classroom details if STUDENT -->
         <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
@@ -52,7 +69,7 @@
         </div>
         <!-- delete account -->
         <div>
-          <button class="btn deleteAccountButton" (click)="showModal()"> {{ts.l.delete_my_account}} </button>
+          <button class="btn deleteAccountButton" (click)="updateMode = false; showModal()"> {{ts.l.delete_my_account}} </button>
         </div>
         <!-- sign out and profile information -->
         <div class="btnContainer">

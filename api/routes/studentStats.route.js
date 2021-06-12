@@ -40,6 +40,23 @@ studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
   });
 });
 
+// Update username given student id 
+studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) {
+  StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
+    if(err) {
+        res.status(400).json({"message" : err.message});
+    } else {
+      stat.studentUsername = req.body.username;
+      stat.save().then(stat => {
+          res.status(200).json({'message': 'stat username updated successfully'});
+      })
+      .catch(err => {
+          res.status(400).send("unable to update stat username");
+      });
+    }
+  });
+});
+
 /*
 * Update a student's grammar error count and error time stamps given user id
 * Loop through each error currently recorded in the DB and see if the error matches
