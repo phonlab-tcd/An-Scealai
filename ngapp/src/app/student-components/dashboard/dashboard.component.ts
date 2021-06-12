@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
   selectPotafocal: boolean = false;
   showOptions: boolean = false;
   dontToggle: boolean = false;
+  words: string[] = [];
+  wordCount: number = 0;
   
   dialects = [
     {
@@ -90,6 +92,7 @@ export class DashboardComponent implements OnInit {
         for(let story of this.stories) {
           if(story.id === this.id) {
             this.story = story;
+            this.getWordCount();
             break;
           }
         }
@@ -185,9 +188,24 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-// Set story saved to false
+// Set story saved to false and call word count function
   storyEdited() {
     this.storySaved = false;
+    this.getWordCount();
+  }
+  
+// Get word count of story text
+  getWordCount() {
+    let str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+    this.words = [];
+    str.map((s) => {
+      let trimStr = s.trim();
+      if (trimStr.length > 0) {
+        this.words.push(trimStr);
+      }
+      
+    });
+    this.wordCount = this.words.length;
   }
 
 // set feedback window to false 

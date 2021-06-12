@@ -50,11 +50,16 @@ export class StatsService {
     return this.http.get(this.baseUrlStudents + 'delete/' + id);
   }
   
+
 /*
 * Update the username for a given student
 */
   updateStudentUsername(id: string, username: string): Observable<any> {
     return this.http.post(this.baseUrlStudents + 'updateStudentUsername/' +id, {username: username});
+  }
+
+  deleteStatsForClassroom(id: string): Observable<any> {
+    return this.http.get(this.baseUrlStudents + 'deleteForClassroom/' + id);
   }
   
 

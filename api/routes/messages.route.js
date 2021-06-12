@@ -92,7 +92,7 @@ messageRoutes.route('/delete/:id').get(function(req, res) {
 messageRoutes.route('/deleteAllMessages/:userId').get(function(req, res) {
     Message.deleteMany({"recipientId": req.params.userId}, function(err, message) {
         if(err) res.json(err);
-        else res.json("Successfully removed");
+        else res.json("Successfully removed all messages for user");
     });
 });
 
