@@ -116,6 +116,20 @@ storyRoutes.route('/update/:id').post(function (req, res) {
     });
 })
 
+// Update story author
+storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
+    Story.updateMany({"author": req.params.oldAuthor}, { $set: { "author": req.body.newAuthor } }, function(err, stories) {
+        if(err) res.json(err);
+        
+        if(stories === null) {
+            console.log("story is null!");
+        }
+        else {
+          res.json(stories);
+        }
+    });
+})
+
 // Delete story by ID
 storyRoutes.route('/delete/:id').get(function(req, res) {
     Story.findOneAndRemove({"id": req.params.id}, function(err, story) {
