@@ -23,6 +23,7 @@ MongoClient.connect('mongodb://localhost:27017', (err, client) => {
 });
 
 recordingRoutes.route('/create').post((req, res) => {
+    // TODO change to async await paradigm
     const recording = new VoiceRecording(req.body);
     recording.save().then(_ => {
         res.status(200).json({"message" : "Recording created successfully", "recording": recording});
@@ -96,7 +97,7 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
     });
 })
 
-recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
+recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => { // ?storyId=blah&index=blah&uuid=blah
     const storage = multer.memoryStorage();
     const upload = multer({ storage: storage, limits: { fields: 1, fileSize: 6000000, files: 1, parts: 2 }});
     upload.single('audio')(req, res, (err) => {
