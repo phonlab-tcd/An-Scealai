@@ -39,6 +39,8 @@
           <button ngbDropdownItem (click)="changeCheck()"> <a href="/assets/pdf/User_guide.pdf" class="userGuide" download>{{ts.l.user_guide}}</a></button>
           <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
           <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
+          <!-- TODO add translation for Report Feedback -->
+          <button routerLink="/report_an_issue" ngbDropdownItem (click)="changeCheck()">{{ts.l.report_an_issue}}</button>
         </div>
       </div>
       <!-- technology menu -->
@@ -63,7 +65,7 @@
       <!-- Change language dropdown and login button-->
       <div class="navBtn rightNavBtn">
         <div ngbDropdown class="d-inline-block" #myDrop4="ngbDropdown" placement="bottom">
-          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage();">{{otherLanguage()}}</button>
+          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage();">{{ts.l.other_language}}</button>
           <!---
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
             <button ngbDropdownItem (click)="changeToEnglish()">English</button>

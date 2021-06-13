@@ -120,13 +120,6 @@ export class AppComponent {
     }
   }
   
-  otherLanguage() : string{
-    if(this.currentLanguage === "English"){
-      return "Irish";
-    }
-    return "Béarla";
-  }
-
   changeToEnglish() {
     this.ts.setLanguage("en");
     this.currentLanguage = "English";
