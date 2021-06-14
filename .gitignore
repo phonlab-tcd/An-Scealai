@@ -2,6 +2,10 @@
 
 **/node_modules
 
+session.vim
+
+/api/sendinblue.json
+
 **/logs/*
 
 login
