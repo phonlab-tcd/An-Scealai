@@ -2,6 +2,8 @@
 
 **/node_modules
 
+session.vim
+
 /mongotest/logs/**
 /mongotest/db/**
 
