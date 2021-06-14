@@ -16,14 +16,16 @@ let User = require('../models/user');
 
 let db;
 const config = require('../DB');
-MongoClient.connect(config.DB,
-  { useNewUrlParser: true, useUnifiedTopology: true},
+const mongopassword = require('../DBsensitive').password;
+MongoClient.connect(config.DB, //config.user, mongopassword,
+  { user: config.user, password: mongopassword, useNewUrlParser: true, useUnifiedTopology: true},
   (err, client) => {
   if (err) {
     console.log(
       'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
+  logger.info("recording route is connected to MongoDB");
   db = client.db('an-scealai');
 });
 

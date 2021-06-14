@@ -4,6 +4,7 @@ const express = require('express'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
+    mongopassword = require('./DBsensitive').password;
     logger = require('./logger'),
     passport = require('passport');
 
@@ -24,7 +25,8 @@ const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
-mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
+console.log(mongopassword);
+mongoose.connect(config.DB, { user: config.user, pass: mongopassword, useNewUrlParser: true, useUnifiedTopology: true}).then(
     () => {logger.info('Database is connected');},
     (err) => {logger.error('Cannot connect to the database. ',err)}
 );

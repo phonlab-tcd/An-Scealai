@@ -5,6 +5,7 @@
 session.vim
 
 /api/sendinblue.json
+/api/DBsensitive.js
 
 **/logs/*
 
