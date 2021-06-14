@@ -26,4 +26,10 @@ describe('DashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
+  it('should return the corret word count', () => {
+    component.story.text = "This story has 5 words."
+    component.getWordCount();
+    expect(component.wordCount).toBe(5);
+  });
 });

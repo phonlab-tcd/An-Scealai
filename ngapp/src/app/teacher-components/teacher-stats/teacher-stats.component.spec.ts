@@ -26,4 +26,18 @@ describe('TeacherStatsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  /*
+  it('should calculate the total stats for the classroom', () => {
+    let test = new Map([["ANAITHNID", [3]], ["COMHFHOCAL", [2]], ["GRAM", [1,0,1]]]);
+    let test2 = new Map([["MOLADH", [3, 4]], ["COMHFHOCAL", [2]], ["URU", [1,2,3]]]);
+    component.stats = [ {_id: null, classroomId: null, studentId: null, studentUsername: null, timeStamps: null, grammarErrors: test }, 
+                        {_id: null, classroomId: null, studentId: null, studentUsername: null, timeStamps: null, grammarErrors: test2 } ];
+
+    //component.totalStats = new Map();
+    console.log("*****************************************************************************************************************************", component.stats);
+    component.getStatsForClass()
+    
+    expect(component.graphValues).toBe([3,4,1,4,3]);
+  });
+  */
 });

@@ -24,4 +24,12 @@ describe('BookContentsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
+  it('toggleDeleteMode() should change deleteMode to true then false', () => {
+    component.deleteMode = false;
+    component.toggleDeleteMode();
+    expect(component.deleteMode).toBe(true, 'on after click');
+    component.toggleDeleteMode();
+    expect(component.deleteMode).toBe(false, 'off after second click');
+  });
 });
