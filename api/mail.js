@@ -1,11 +1,9 @@
 
 
 const nodemailer = require("nodemailer");
-
+// Much of the following code was taken from this tutorial:
+// https://schadokar.dev/posts/how-to-send-email-in-nodejs/
 /**
- * Much of the following code was taken from this tutorial:
- * https://schadokar.dev/posts/how-to-send-email-in-nodejs/
- *
  * sendEmail
  * @param {Object} mailObj - Email meta data and body
  * @param {String} from - Email address of the sender
