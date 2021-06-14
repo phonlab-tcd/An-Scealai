@@ -15,9 +15,11 @@ let Story = require('../models/story');
 let Event = require('../models/event');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/', 
+  {useUnifiedTopology: true, useNewUrlParser: true},
+  (err, client) => {
   if (err) {
-    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+    console.log('MongoDB Connection Error in ./api/routes/story.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
   db = client.db('an-scealai');

@@ -1,3 +1,11 @@
+// user.route.js 
+//
+// endpoint prefix = '/user'
+
+
+const logger = require('../logger.js');
+
+
 var express = require('express');
 var userRoutes = express.Router();
 var jwt = require('express-jwt');
@@ -5,8 +13,8 @@ var jwt = require('express-jwt');
 let User = require('../models/user');
 
 var auth = jwt({
-    secret: 'sonJJxVqRC',
-    userProperty: 'payload'
+  secret: 'sonJJxVqRC',
+  userProperty: 'payload'
 });
 
 var ctrlProfile = require('../controllers/profile');
