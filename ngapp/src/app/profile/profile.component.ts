@@ -132,7 +132,7 @@ export class ProfileComponent implements OnInit {
     if(userDetails.role === "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
-          this.ss.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
             console.log(res);
           });
         }
