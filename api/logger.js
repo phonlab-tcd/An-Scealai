@@ -89,13 +89,13 @@ const client = mongodb.MongoClient.connect('mongodb://localhost:27017/scealai',
 
 
 // This should be deleted before merging the PR
-logger.emerg("this is just a test");
-logger.alert("this is just a test");
-logger.crit("this is just a test");
-logger.error("this is just a test");
-logger.warning("this is just a test");
-logger.notice("this is just a test");
-logger.info("this is just a test");
-logger.debug("this is just a test");
+//logger.emerg("this is just a test");
+//logger.alert("this is just a test");
+//logger.crit("this is just a test");
+//logger.error("this is just a test");
+//logger.warning("this is just a test");
+//logger.notice("this is just a test");
+//logger.info("this is just a test");
+//logger.debug("this is just a test");
 
 module.exports = logger;
