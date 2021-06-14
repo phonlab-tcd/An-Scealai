@@ -23,6 +23,7 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
     () => {logger.info('Database is connected');},
     (err) => {logger.error('Cannot connect to the database. ',err)}

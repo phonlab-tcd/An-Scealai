@@ -15,6 +15,7 @@ profileRoutes.route('/create').post((req, res) => {
 profileRoutes.route('/get/:id').get((req, res) => {
     Profile.findById(req.params.id, (err, profile) => {
         if(err) {
+            console.log(err);
             res.status(400).send("An error occurred while trying to find this profile");
         } else {
             if(profile) {
@@ -29,6 +30,7 @@ profileRoutes.route('/get/:id').get((req, res) => {
 profileRoutes.route('/getForUser/:id').get((req, res) => {
     Profile.findOne({"userId" : req.params.id}, (err, profile) => {
         if(err) {
+            console.log(err);
             res.status(400).send("An error occurred while trying to find this profile");
         } else {
             if(profile) {
@@ -43,8 +45,11 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
 // Delete profile by user ID
 profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
     Profile.findOneAndRemove({"userId": req.params.id}, function(err, profile) {
-        if(err) res.json(err);
-        else res.json("Successfully removed");
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
+        else res.json("Successfully removed profile");
     });
 });
 

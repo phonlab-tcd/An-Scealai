@@ -1,0 +1,196 @@
+<!-- Display the written story along with edit options -->
+<div class="page">
+  <div class="bookContainer">
+    <div class="{{modalClass}} modalContainer">
+      <div class="modalContent" *ngIf="story">
+        <div class="modalText">{{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?</div>
+        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+        <div>
+          <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
+        </div>
+      </div>
+    </div>
+    <div class="bookHeader">
+      <div class="headerUpper">
+
+        <!-- BACK BUTTON TO LIST OF STUDENT'S STORIES -->
+        <div routerLink="/contents" class="myStoriesBtn">
+          <i class="fa fa-chevron-left backArrow"></i>
+          {{ts.l.contents}}
+        </div>
+
+        <!-- SAVE ICON  -->
+        <div class="saveIcon">
+          <div *ngIf="storySaved" class="savedIcon">
+            {{ts.l.saved}} <i class="fas fa-check"></i>
+          </div>
+          <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
+            {{ts.l.save}} <i class="fas fa-save"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- STORY TITLE -->
+      <div class="storyTitle">
+        <div>
+          {{story?.title}}
+          <span *ngIf="!storySaved">*</span>
+        </div>
+
+        <!-- CHANGE STORY DIALECT --
+        <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
+          <option *ngFor="let d of dialects" [ngValue]="d.code">
+          {{d.name}}
+          </option>
+        </select>
+        -->
+
+      </div>
+
+
+      <div class="optionsBtnContainer" (click)="toggleOptions();">
+
+        <div class="toggleShowOptions optionsBtn">
+          <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+          <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+        </div>
+
+        <!-- EDIT STORY DETAILS -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+                                 [routerLink]="['/story-details', story.id]">
+          {{ts.l.edit}}
+          <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+        </div>
+
+        <!-- FEEDBACK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+                                 (click)="this.dontToggle=true; defaultMode(); getFeedback()">
+          {{ts.l.feedback}}
+          <i class="fas fa-comment-dots optionsBtnIcon"></i>
+          <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
+        </div>
+
+        <!-- DICTIONARY -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+                                 (click)="this.dontToggle=true; defaultMode(); showDictionary();">
+          {{ts.l.dictionary}}
+          <i class="fas fa-book optionsBtnIcon"></i>
+        </div>
+
+        <!-- AUDIO CHECK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; goToSynthesis()">
+          {{ts.l.audio_check}}
+          <i class="fas fa-volume-up optionsBtnIcon"></i>
+        </div>
+
+        <!-- GRAMMAR CHECK -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
+          {{ts.l.grammar_check}}
+          <i class="fas fa-spell-check optionsBtnIcon"></i>
+        </div>
+
+        <!-- RECORDINGS -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; goToRecording()">
+          {{ts.l.recordings}}
+          <i class="fas fa-microphone optionsBtnIcon"></i>
+        </div>
+      </div>
+    </div>
+    <!-- story contents -->
+    <div class="storyContainer" *ngIf="story">
+      <!-- display story before grammar checked (i.e. writing mode)-->
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
+        <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
+<div style="display: flex; align-items: center; justify-content: center; padding-bottom: 6px">
+  <span> {{ts.l.word_count}}: {{wordCount}} </span>
+</div>
+      </div>
+      <!-- display grammar loading -->
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
+        <div class="textContainer">
+          <div class="loaderContainer">
+            <b>{{ts.l.correcting_grammar}}</b>
+            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- display story container after grammar checked -->
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible && grammarChecked">
+        <!-- dipslay chosen tag window -->
+        <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times optionsBtnIcon"></i></div></div>
+        <div class="grammarMessageContainer {{grammarMessageClass}}">
+          <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
+          <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
+        </div>
+        <!-- display an gramadoir / vowel checker selection -->
+        <div class="grammarToolbar">
+          <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
+          <div class="selectGrammarFilter">
+            <select (change)="onChangeGrammarFilter($event.target.value)">
+              <option value="gramadoir">{{ts.l.gramadoir}}</option>
+              <option value="vowel">{{ts.l.broad_slender}}</option>
+            </select>
+          </div>
+        </div>
+        <!-- display grammar error filter options -->
+        <div class="selectErrorCheckbox" *ngIf="grammarSelected">
+          <div *ngFor="let recipient of filteredTags | keyvalue">
+            <div style="margin:2px;" ><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
+          </div>
+        </div>
+        <!-- display the story with error highlighting-->
+        <div mwlTextInputHighlightContainer>
+          <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea ></textarea>
+          <!-- an gramadoir -->
+          <div *ngIf="grammarSelected">
+            <mwl-text-input-highlight [tags]="getSelectedTags()" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
+          </div>
+          <!-- broad/slender -->
+          <div *ngIf="!grammarSelected">
+            <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
+          </div>
+        </div>
+      </div>
+      <!-- display story with feedback excluding audio feedback-->
+      <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
+        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+        <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+        <textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+      </div>
+      <!-- display story with feedback including audio feedback -->
+      <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
+        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
+        <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+        <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+        <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+      </div>
+      <!-- display dictionary option-->
+      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
+        <textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
+        <div class="dictionaryContainer">
+          <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
+          <div class="dictionarySubHeader">
+            <div class="dictionaryName"
+                 (click)="selectTeanglann = true;
+                          selectPotafocal = false; 
+                          selectedDictionary = true;">
+              Teanglann
+            </div> |
+            <div class="dictionaryName"
+                 (click)="selectPotafocal = true; 
+                          selectTeanglann = false;">
+              Potafocal
+            </div>
+          </div>
+          <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
+        </div>
+      </div>
+
+    </div>
+    <!-- <app-chatbot></app-chatbot> -->
+  </div>
+</div>

@@ -27,14 +27,20 @@ MongoClient.connect('mongodb://localhost:27017/',
 
 storyRoutes.route('/getStoryById/:id').get((req, res) => {
     Story.findOne({id: req.params.id}, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) res.json(story);
     });
 });
 
 storyRoutes.route('/getStoryByUnderscoreId/:id').get((req, res) => {
     Story.findOne({_id: req.params.id}, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) res.json(story);
     });
 });
@@ -50,7 +56,8 @@ storyRoutes.route('/create').post(function (req, res) {
 
     })
     .catch(err => {
-        res.status(400).send("unable to save to DB");
+        console.log(err);
+        res.status(400).send("unable to save story to DB");
     });
 });
 
@@ -59,6 +66,7 @@ storyRoutes.route('/:author').get(function (req, res) {
     Story.find({"author": req.params.author}, function (err, stories) {
     if(err) {
         console.log(err);
+        res.json(err)
     } else {
         res.json(stories);
     }
@@ -69,6 +77,7 @@ storyRoutes.route('/:author').get(function (req, res) {
 storyRoutes.route('/viewStory/:id').get(function(req, res) {
     Story.find({_id:req.params.id}, (err, story) => {
         if(err) {
+            console.log(err);
             res.status(400).json({"message" : err.message});
         } else {
             res.json(story);
@@ -79,7 +88,10 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
 // Update story by ID
 storyRoutes.route('/update/:id').post(function (req, res) {
     Story.findOne({"id": req.params.id}, function(err, story) {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story === null) {
             console.log("story is null!");
         } else {
@@ -100,8 +112,22 @@ storyRoutes.route('/update/:id').post(function (req, res) {
             story.save().then(story => {
                 res.json('Update complete');
             }).catch(err => {
-                res.status(400).send("Unable to update");
+                res.status(400).send("Unable to update story");
             });
+        }
+    });
+})
+
+// Update story author
+storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
+    Story.updateMany({"author": req.params.oldAuthor}, { $set: { "author": req.body.newAuthor } }, function(err, stories) {
+        if(err) res.json(err);
+        
+        if(stories === null) {
+            console.log("story is null!");
+        }
+        else {
+          res.json(stories);
         }
     });
 })
@@ -109,22 +135,31 @@ storyRoutes.route('/update/:id').post(function (req, res) {
 // Delete story by ID
 storyRoutes.route('/delete/:id').get(function(req, res) {
     Story.findOneAndRemove({"id": req.params.id}, function(err, story) {
-        if(err) res.json(err);
-        else res.json("Successfully removed");
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
+        else res.json("Successfully removed story");
     });
 });
 
 // Delete story by student username
 storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
     Story.deleteMany({"author": req.params.author}, function(err, story) {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         else res.json("Successfully removed all stories for user");
     });
 });
 
 storyRoutes.route('/feedback/:id').get(function(req, res) {
     Story.findById(req.params.id, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             res.json(story.feedback);
         } else {
@@ -135,7 +170,10 @@ storyRoutes.route('/feedback/:id').get(function(req, res) {
 
 storyRoutes.route('/addFeedback/:id').post((req, res) => {
     Story.findById(req.params.id, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             story.feedback.text = req.body.feedback;
             story.feedback.seenByStudent = false;
@@ -149,7 +187,10 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
 
 storyRoutes.route('/viewFeedback/:id').post((req, res) => {
     Story.findById(req.params.id, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             story.feedback.seenByStudent = true;
             story.save();
@@ -162,7 +203,10 @@ storyRoutes.route('/viewFeedback/:id').post((req, res) => {
 
 storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             if(story.feedback.audioId) {
                 var audioId;
@@ -206,7 +250,10 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
 
 storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
     Story.findById(req.params.id, (err, story) => {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             const storage = multer.memoryStorage();
             const upload = multer({ storage: storage, limits: { fields: 1, fileSize: 6000000, files: 1, parts: 2 }});
@@ -244,10 +291,11 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
 });
 
 storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
-    console.log('Ran');
     Story.findById(req.params.id, (err, story) => {
-        console.log('Found');
-        if (err) res.json(err);
+        if (err) {
+          console.log(err);
+          res.json(err);
+        }
         if(story) {
             if (req.body.activeRecording) {
                 story.activeRecording = req.body.activeRecording;
@@ -364,6 +412,7 @@ function synthesiseStory(story) {
 storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
         if(err) {
+            console.log(err);
             res.send(err);
         }
         if(story) {
@@ -377,7 +426,8 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
             request({headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                uri: 'https://cadhan.com/api/gramadoir/1.0',
+                //uri: 'https://cadhan.com/api/gramadoir/1.0',
+                uri: 'https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl',
                 body: formData,
                 method: 'POST'
             }, (err, resp, body) => {

@@ -18,8 +18,6 @@ module.exports.register = function(req, res) {
         return;
     }
 
-    logger.info(req.body);
-
     var user = new User();
 
     user.username = req.body.username;
@@ -29,7 +27,7 @@ module.exports.register = function(req, res) {
     user.role = req.body.role;
 
     user.save(function(err) {
-        console.log(user._id);
+        //console.log(user._id);
         if(err) { 
             console.log("Mongo error\nError code: ", err.code, "\n");
             if(err.code === 11000) {
@@ -61,6 +59,7 @@ module.exports.login = function(req, res) {
         var token;
 
         if(err) {
+            console.log(err)
             res.status(404).json(err);
             return;
         }

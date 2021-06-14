@@ -1,0 +1,10 @@
+<div class="classContainer">
+  <div class="classHeader">
+    {{classroom?.title}}
+  </div>
+  <div class="classBody">
+    <div class="classroomCard" *ngFor="let student of students" (click)="goToStudent(student._id)">
+      <div>{{student.username}}</div>
+    </div>
+  </div>
+</div>

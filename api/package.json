@@ -1,10 +1,11 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "The backend API for An Scéalaí.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "chai-arrays": "^2.2.0",
+    "bson": "^4.4.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -21,13 +23,16 @@
     "jsonwebtoken": "^8.5.1",
     "logger": "^0.0.1",
     "mongodb": "^3.6.9",
-    "mongoose": "^5.12.11",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.13",
     "multer": "^1.4.2",
     "node-html-parser": "^1.4.9",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "stackify": "^1.0.17",
     "stackify-logger": "^3.0.11",
+    "read": "^1.0.7",
+    "request": "^2.88.2",
     "stream": "0.0.2",
     "util": "^0.12.1",
     "uuid": "^3.3.2",
