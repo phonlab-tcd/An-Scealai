@@ -15,7 +15,8 @@ let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017/',
+const config = require('../DB');
+MongoClient.connect(config.DB,
   { useNewUrlParser: true, useUnifiedTopology: true},
   (err, client) => {
   if (err) {

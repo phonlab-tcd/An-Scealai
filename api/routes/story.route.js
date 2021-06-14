@@ -10,12 +10,13 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const config = require('../DB');
 
 let Story = require('../models/story');
 let Event = require('../models/event');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017/', 
+MongoClient.connect(config.DB, 
   {useUnifiedTopology: true, useNewUrlParser: true},
   (err, client) => {
   if (err) {
