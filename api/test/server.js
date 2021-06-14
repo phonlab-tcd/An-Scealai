@@ -6,9 +6,9 @@ chai.use(assertArrays);
 var request = require("request");
 
 
-describe("API Server", function(){
-  describe("Story Routes", function() {
-    describe("/story/getStoryById/:id", function() {
+describe("API Server", () => {
+  describe("Story Routes", () => {
+    describe("/story/getStoryById/:id", () => {
       let url123 = `http://localhost:4000/story/getStoryById/123`;
       it("should search the database for a story with id 123", function(done){
         request({
