@@ -1,10 +1,10 @@
 const express = require('express'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
-    mongoose = require('mongoose'),
-    config = require('./DB'),
-    passport = require('passport');
+  path = require('path'),
+  bodyParser = require('body-parser'),
+  cors = require('cors'),
+  mongoose = require('mongoose'),
+  config = require('./DB'),
+  passport = require('passport');
 
 require('./config/passport');
 
@@ -21,18 +21,64 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
+// Swagger API Documentation Setup
+const swaggerJSDoc = require('swagger-jsdoc');
+
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Express API for An Scéalaí',
+    version: '1.0.0',
+  },
+  contact: {
+    email: 'scealai.info@gmail.com',
+  },
+  servers: [
+    {
+      url: 'http://localhost:4000',
+      description: 'Development server',
+    },
+    {
+      url: 'https://www.abair.tcd.ie/anscealaibackend',
+      description: 'Public API',
+    }
+  ]
+};
+
+const options = {
+  swaggerDefinition,
+  // Paths to files containing OpenAPI definitions
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+const swaggerUi = require('swagger-ui-express');
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-    () => {console.log('Database is connected');},
-    (err) => { console.log('Can not connect to the database'+ err)}
+  () => {console.log('Database is connected');},
+  (err) => { console.log('Can not connect to the database'+ err)}
 );
 
 const app = express();
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
+/**
+ * @swagger
+ * /docs:
+ *  summary: Powered by SwaggerUI
+ */
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+/**
+ * @swagger
+ * /story:
+ *  summary: Specified in ./api/routes/story.route.js
+ */
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
 app.use('/teacherCode', teacherCodeRoute);
@@ -50,9 +96,9 @@ const port = process.env.PORT || 4000;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
@@ -68,27 +114,27 @@ app.use(function (err, req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 const server = app.listen(port, function(){
-    console.log('Listening on port ' + port);
+  console.log('Listening on port ' + port);
 });
 
 module.exports = app;

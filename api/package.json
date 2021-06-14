@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build_docs": "jsdoc  ./routes/story.route.js --destination autodocs"
   },
   "keywords": [],
   "author": "",
@@ -29,10 +30,13 @@
     "read": "^1.0.7",
     "request": "^2.88.2",
     "stream": "0.0.2",
+    "swagger-jsdoc": "5.0.1",
+    "swagger-ui-express": "^4.1.6",
     "util": "^0.12.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "jsdoc": "~3.6.7",
     "nodemon": "^1.19.4"
   }
 }
