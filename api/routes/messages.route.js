@@ -10,7 +10,9 @@ const ObjectID = require('mongodb').ObjectID;
 let Message = require('../models/message');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  {useNewUrlParser: true, useUnifiedTopology: true},
+  (err, client) => {
   if (err) {
     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
     process.exit(1);
@@ -126,7 +128,10 @@ messageRoutes.route('/addMessageAudio/:id').post((req, res) => {
                 });
 
                 uploadStream.on('finish', () => {
-                    return res.status(201).json({ message: "File uploaded successfully, stored under Mongo"});
+                    return res.status(201).json(
+                      { 
+                        message: "File uploaded successfully, stored under Mongo"
+                      });
                 });
             });
         } else {

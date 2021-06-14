@@ -9,14 +9,18 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const logger = require('../logger.js');
 
 let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  { useNewUrlParser: true, useUnifiedTopology: true},
+  (err, client) => {
   if (err) {
-    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+    console.log(
+      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
   db = client.db('an-scealai');
@@ -56,11 +60,11 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
                 bucketName: 'voiceRecording'
             });
             
-            console.log("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
-            console.log("Request Paragraph indices: ", req.body.paragraphIndices);
+            logger.info("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
+            logger.info("Request Paragraph indices: ", req.body.paragraphIndices);
             
-            console.log("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
-            console.log("Stored Paragraph indices: ", recording.paragraphIndices);
+            logger.info("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
+            logger.info("Stored Paragraph indices: ", recording.paragraphIndices);
           
             
             if(req.body.paragraphAudioIds) {

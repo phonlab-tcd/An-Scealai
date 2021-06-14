@@ -4,6 +4,11 @@
 
 session.vim
 
+/api/sendinblue.json
+
+**/logs/*
+
+
 /mongotest/logs/**
 /mongotest/db/**
 
