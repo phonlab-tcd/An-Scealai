@@ -31,6 +31,7 @@ recordingRoutes.route('/create').post((req, res) => {
     recording.save().then(_ => {
         res.status(200).json({"message" : "Recording created successfully", "recording": recording});
     }).catch(err => {
+        console.log(err);
         res.status(400).send("Unable to save to DB");
     });
 });
@@ -38,6 +39,7 @@ recordingRoutes.route('/create').post((req, res) => {
 recordingRoutes.route('/:id').get(function(req, res) {
     VoiceRecording.findById(req.params.id, (err, recording) => {
         if(err) {
+            console.log(err);
             res.status(400).json({"message" : err.message});
         } else {
             res.json(recording);
@@ -48,7 +50,10 @@ recordingRoutes.route('/:id').get(function(req, res) {
 // Update the audio ids and indices for a given recording
 recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
     VoiceRecording.findById(req.params.id, function(err, recording) {
-        if(err) res.json(err);
+        if(err) {
+          console.log(err);
+          res.json(err);
+        }
         if(recording) {
           
             let bucket = new mongodb.GridFSBucket(db, {
@@ -100,6 +105,7 @@ recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
     const upload = multer({ storage: storage, limits: { fields: 1, fileSize: 6000000, files: 1, parts: 2 }});
     upload.single('audio')(req, res, (err) => {
         if (err) {
+            console.log(err);
             return res.status(400).json({ message: "Upload Request Validation Failed" });
         }
         // create new stream and push audio data
@@ -133,6 +139,7 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
     try {
         audioId = new ObjectID(req.params.id);
     } catch(err) {
+        console.log(err);
         return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
     }
 
@@ -161,6 +168,7 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
 recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
   VoiceRecording.find({"storyData.id":req.params.storyId, "archived":true}, (err, recordings) => {
       if(err) {
+          console.log(err);
           res.status(400).json({"message" : err.message});
       } else {
           res.json(recordings);
@@ -172,6 +180,7 @@ recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
 recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
   VoiceRecording.findById(req.params.recordingId, (err, recording) => {
       if(err) {
+          console.log(err);
           res.status(400).json({"message" : err.message});
       } else {
           recording.archived = true;

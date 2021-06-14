@@ -8,5 +8,11 @@ session.vim
 
 **/logs/*
 
-login
-sshlogin
+
+/mongotest/logs/**
+/mongotest/db/**
+
+/api/logs/**
+
+/sshlogin
+/login_to_phonetics.sh
