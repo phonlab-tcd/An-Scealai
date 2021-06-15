@@ -6,7 +6,6 @@ mongoose.model('User');
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.dir(User);
     User.findOne({ username: username}, function (err, user) {
       if(err) { 
         console.log(err);
