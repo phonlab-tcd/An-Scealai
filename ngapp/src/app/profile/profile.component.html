@@ -14,10 +14,10 @@
     <!-- Popup for changing username -->
     <div *ngIf="updateMode" class="{{modalClass}} modalContainer">
         <div class="modalContent">
-            <div class="modalText"> Change username </div>
-            <div class="modalText"> (You will have to login again with your new username) </div><br>
-            <div class="modalText"> Current username: <i>{{auth.getUserDetails().username}}</i></div><br>
-            <div class="modalText"> New username: <input type="text" placeholder="Enter username" name="username" [(ngModel)]="updatedUsername"></div>
+            <div class="modalText"> {{ts.l.change_username}} </div>
+            <div class="modalText"> ({{ts.l.you_will_have_to_login}}) </div><br>
+            <div class="modalText"> {{ts.l.current_username}}: <i>{{auth.getUserDetails().username}}</i></div><br>
+            <div class="modalText"> {{ts.l.new_username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="updatedUsername"></div>
             <div class="usernameErrorText"> {{errorMessage}} </div>
             <div>
                 <button class="modalBtn createBtnGreen" (click)="updateUsername()">{{ts.l.save}}</button>
