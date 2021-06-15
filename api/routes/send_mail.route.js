@@ -46,28 +46,23 @@ else {
     let subject = req.body.subject || "USER ISSUE REPORT --- ANONYMOUS";
 
     // Make sure the client has sent a message in the body
-    if(req.body.message){
-      emailBody = req.body.message
+    if(!req.body.message){
+      res.status(400).json({message: "ERROR: Refusing to send email with no message"});
+    }
 
-      // Refuse to send an email with just an empty string
-      if(emailBody === ""){
-        res.status(400).json({ error: "Message body empty. Refusing to send email."});
-        return;
-      }
-    }
-    else{
-      res.json({ error: "No message found in body of POST request to /mail/report_issue_anon. Refusing to send empty email."});
-      return;
-    }
+    emailBody = req.body.message
+
+    return;
 
     // If the req.body contains the do_not_send property, don't send an email 
-    console.log("Checking if the do_not_send property is present");
+    //console.log("Checking if the do_not_send property is present");
     if(req.body.do_not_send){
-      res.json({ not_sending_email: 1});
+      res.status(200)
+        .json({ message: "You asked not to actually send an email."});
       return;
     }
 
-    console.log("Constructing the mailObj");
+    //console.log("Constructing the mailObj");
     const mailObj = {
       from: "nrobinso@tcd.ie",
       recipients: ["nrobinso@tcd.ie"],
@@ -78,17 +73,16 @@ else {
     console.log("sending email");
     console.log(sendEmail);
 
-    await sendEmail(mailObj).then((res2) => {
-      if(res2){
-        console.log(res2);
-        console.log("email sent successfully from /mail/report_issue_anon endpoint");
-        res.json({ ok: 1 });
-      }
-    }).catch( err => {
+    const nodemailerResponse = await sendEmail(mailObj).catch( err => {
       console.dir(err);
-      res.json({ error: "There was an error while trying to send the email" });
+      res.status(400);
+      return;
+      // res.json({ message: "ERROR: There was an error while trying to send the email" });
     });
 
+    console.log(nodemailerResponse);
+    console.log("email sent successfully from /mail/report_issue_anon endpoint");
+    res.status(200).json({ message: "Email sent successfully." });
   });
 
   module.exports = mailRoutes;
