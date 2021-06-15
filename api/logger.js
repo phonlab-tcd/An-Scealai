@@ -60,7 +60,7 @@ logger = winston.createLogger({
 require('winston-mongodb');
 
 var preconnectedDB = null;
-const client = mongodb.MongoClient.connect('mongodb://localhost:27017/scealai',
+const client = mongodb.MongoClient.connect('mongodb://localhost:27017/an-scealai',
   { useUnifiedTopology: true, useNewUrlParser: true})
   .then( db => {
     logger.info('Winston has connected to MongoDB');
