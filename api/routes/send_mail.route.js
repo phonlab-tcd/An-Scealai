@@ -48,11 +48,10 @@ else {
     // Make sure the client has sent a message in the body
     if(!req.body.message){
       res.status(400).json({message: "ERROR: Refusing to send email with no message"});
+      return;
     }
 
     emailBody = req.body.message
-
-    return;
 
     // If the req.body contains the do_not_send property, don't send an email 
     //console.log("Checking if the do_not_send property is present");
