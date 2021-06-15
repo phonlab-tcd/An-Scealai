@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Story = new Schema({
-    id: {
-        type: String
-    },
     title: {
         type: String
     },
@@ -21,6 +18,9 @@ let Story = new Schema({
         type: String
     },
     author: {
+        type: String
+    },
+    studentId: {
         type: String
     },
     feedback: {

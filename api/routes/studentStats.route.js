@@ -102,7 +102,6 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
                 const index = newErrors.indexOf(newErrors[i]);
                 if (index > -1) {
                   newErrors.splice(index, 1);
-                  console.log("entry deleted");
                 }
               }
             }

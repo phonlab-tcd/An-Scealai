@@ -166,7 +166,7 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
 })
 
 recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
-  VoiceRecording.find({"storyData.id":req.params.storyId, "archived":true}, (err, recordings) => {
+  VoiceRecording.find({"storyData._id":req.params.storyId, "archived":true}, (err, recordings) => {
       if(err) {
           console.log(err);
           res.status(400).json({"message" : err.message});

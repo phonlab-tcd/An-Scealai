@@ -25,7 +25,7 @@ export class GrammarService {
     return Observable.create((observer: Observer<any>) => {
       let tagSets : TagSet = new TagSet;
       // get a story object given an id
-      this.storyService.getStoryBy_id(id).subscribe((story: Story) => {
+      this.storyService.getStory(id).subscribe((story: Story) => {
         // get grammar tags for the story object
         this.getGramadoirTags(id).subscribe((res : HighlightTag[]) => {
           let tags : HighlightTag[] = [];
@@ -36,7 +36,7 @@ export class GrammarService {
           tagSets.gramadoirTags = tags;
           tags = [];
           //get story object
-          this.storyService.getStoryBy_id(id).subscribe((story: Story) => {
+          this.storyService.getStory(id).subscribe((story: Story) => {
             //set the vowel tags
             let vowelTags = this.getVowelAgreementTags(story.text);
             vowelTags.forEach((tag) => {
