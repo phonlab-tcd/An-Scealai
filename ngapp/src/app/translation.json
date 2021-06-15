@@ -56,6 +56,12 @@
             "sign_out" : "Sign out",
             "word_count" : "Word Count",
             
+            "change_username" : "Change Username",
+            "you_will_have_to_login": "You will have to login again with your new username",
+            "current_username" : "Current username",
+            "new_username" : "New username",
+            "enter_username" : "Enter username",
+            
             "leave" : "leave",
             "classroom" : "Classroom",
             "join_classroom" : "Join classroom",
@@ -471,6 +477,12 @@
             "enter_code" : "Cód anseo",
             "sign_out" : "Sínigh amach",
             "word_count" : "Líon Focal",
+            
+            "change_username" : "Athraigh ainm úsáideora",
+            "you_will_have_to_login": "Logáil isteach arís le d'ainm úsáideora nua",
+            "current_username" : "Ainm úsáideora reatha",
+            "new_username" : "Ainm úsáideora nua",
+            "enter_username" : "Scríobh isteach d'ainm úsáideora",
     
             "personal_info" : "Eolas pearsanta",
             "gender" : "Gnéas",
