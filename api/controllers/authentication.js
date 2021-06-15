@@ -58,6 +58,7 @@ module.exports.login = function(req, res) {
     passport.authenticate('local', function(err, user, info) {
         var token;
 
+        console.log("From passport.authenticate in ./controller/authentication.js user =", user );
         if(err) {
             console.log(err)
             res.status(404).json(err);
