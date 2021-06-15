@@ -29,9 +29,9 @@ export class NewStoryComponent implements OnInit {
   }
 
   addNewStory(title, dialect) {
-    let id = uuid();
     let date = new Date();
     let username = this.auth.getUserDetails().username;
-    this.storyService.saveStory(id, title, date, dialect, "", username);
+    let studentId = this.auth.getUserDetails()._id;
+    this.storyService.saveStory(studentId, title, date, dialect, "", username);
   }
 }

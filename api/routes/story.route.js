@@ -26,22 +26,17 @@ MongoClient.connect('mongodb://localhost:27017/',
 });
 
 storyRoutes.route('/getStoryById/:id').get((req, res) => {
-    Story.findOne({id: req.params.id}, (err, story) => {
+    Story.findById(req.params.id, (err, story) => {
         if(err) {
-          console.log(err);
-          res.json(err);
+            console.log(err);
+            res.status(400).send("An error occurred while trying to find this profile");
+        } else {
+            if(story) {
+                res.status(200).json(story);
+            } else {
+                res.status(404).send("Story with given ID not found");
+            }
         }
-        if(story) res.json(story);
-    });
-});
-
-storyRoutes.route('/getStoryByUnderscoreId/:id').get((req, res) => {
-    Story.findOne({_id: req.params.id}, (err, story) => {
-        if(err) {
-          console.log(err);
-          res.json(err);
-        }
-        if(story) res.json(story);
     });
 });
 
@@ -52,8 +47,7 @@ storyRoutes.route('/create').post(function (req, res) {
     story.feedback.text = null;
     story.feedback.audioId = null;
     story.save().then(story => {
-        res.status(200).json({'story': 'story added successfully'});
-
+        res.status(200).json({'story': 'story added successfully', 'id': story._id});
     })
     .catch(err => {
         console.log(err);
@@ -87,7 +81,7 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
 
 // Update story by ID
 storyRoutes.route('/update/:id').post(function (req, res) {
-    Story.findOne({"id": req.params.id}, function(err, story) {
+    Story.findById(req.params.id, function(err, story) {
         if(err) {
           console.log(err);
           res.json(err);
@@ -134,7 +128,7 @@ storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
 
 // Delete story by ID
 storyRoutes.route('/delete/:id').get(function(req, res) {
-    Story.findOneAndRemove({"id": req.params.id}, function(err, story) {
+    Story.findOneAndRemove({_id: req.params.id}, function(err, story) {
         if(err) {
           console.log(err);
           res.json(err);
@@ -411,6 +405,7 @@ function synthesiseStory(story) {
 
 storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
     Story.findById(req.params.id, (err, story) => {
+      console.log("story: ", story);
         if(err) {
             console.log(err);
             res.send(err);
@@ -433,7 +428,6 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
             }, (err, resp, body) => {
                 if(err) res.send(err);
                 if(body) {
-                  console.log("Gramadoir body", body);
                     res.send(body);
                 } else {
                     res.sendStatus(404);
