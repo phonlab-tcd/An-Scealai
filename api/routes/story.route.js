@@ -27,9 +27,13 @@ MongoClient.connect('mongodb://localhost:27017', (err, client) => {
 /**
  *  @swagger
  *  /user/getStoryById/{id}:
- *    get:
+ *    get:  
  *      summary: Search the MongoDB scealai database using Mongo's `.findOne` with the given id.
- *      description: If MongoDB returns an error that error is returned in the response encoded in json format. If a story with the given id exists the story is sent in the response encoded as json.
+ *      description:  If MongoDB returns an error that error 
+ *                    is returned in the response encoded in json format.
+ *                    If a story with the given id exists 
+ *                    the story is sent in the 
+ *                    response encoded as json.
  *      responses:
  *        200:
  *          description: A json object containing an id and a story.
@@ -383,6 +387,7 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
 storyRoutes.route('/synthesise/:id').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if(story) {
+      // TODO: Let's convert this to async await
       synthesiseStory(story).then(synthesis => {
         if (synthesis) {
           res.json(synthesis);
