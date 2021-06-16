@@ -30,12 +30,10 @@ storyRoutes.route('/getStoryById/:id').get((req, res) => {
         if(err) {
             console.log(err);
             res.status(400).send("An error occurred while trying to find this profile");
-        } else {
-            if(story) {
-                res.status(200).json(story);
-            } else {
-                res.status(404).send("Story with given ID not found");
-            }
+if(!story) {
+    res.status(404).send("Story with given ID not found");
+}
+res.status(200).json(story);             
         }
     });
 });
