@@ -58,7 +58,7 @@ export class AppComponent {
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
-    console.log(this.currentLanguage);
+    console.log("Language in use:", this.currentLanguage);
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
       this.storiesForNotifications = res;
       console.log(this.storiesForNotifications);
@@ -80,7 +80,7 @@ export class AppComponent {
     });
     
     if(this.auth.isLoggedIn()){
-      console.log(this.auth.getUserDetails().username);
+      console.log("Currently logged in as:", this.auth.getUserDetails().username);
     }
   }
 /*

@@ -14,26 +14,26 @@ export class ClassroomService {
   constructor(private http: HttpClient,
               private user: UserService) { }
 
-  baseUrl: string = config.baseurl + "classroom/";
+  baseUrl: string = config.baseurl + 'classroom/';
 
-  createClassroom(classroom: Classroom) : Observable<any>  {
-    return this.http.post(this.baseUrl + "create", classroom);
+  createClassroom(classroom: Classroom): Observable<any>  {
+    return this.http.post(this.baseUrl + 'create', classroom);
   }
 
-  getClassroomsForTeacher(teacherId: string) : Observable<any> {
-    return this.http.get(this.baseUrl + "forTeacher/" + teacherId);
-  }
-  
-  deleteClassroomsForTeachers(teacherId: string) : Observable<any> {
-    return this.http.get(this.baseUrl + "deleteAllClassrooms/" + teacherId);
+  getClassroomsForTeacher(teacherId: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'forTeacher/' + teacherId);
   }
 
-  getClassroom(id: string) : Observable<any> {
+  deleteClassroomsForTeachers(teacherId: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'deleteAllClassrooms/' + teacherId);
+  }
+
+  getClassroom(id: string): Observable<any> {
     return this.http.get(this.baseUrl + id);
   }
 
-  addStudentToClassroom(classroomId: string, studentId: string) : Observable<any> {
-    return this.http.post(this.baseUrl + "addStudent/" + classroomId, {"studentId":studentId}); 
+  addStudentToClassroom(classroomId: string, studentId: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'addStudent/' + classroomId, {'studentId':studentId}); 
   }
 
   removeStudentFromClassroom(classroomId: string, studentId: string) : Observable<any> {

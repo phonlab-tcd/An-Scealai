@@ -105,8 +105,9 @@ export class DashboardComponent implements OnInit {
         this.auth.getUserDetails()
           ._id
       ).subscribe( (res) => {
-      this.classroomId = res._id;
-      console.log(this.classroomId);
+        console.log("Repsonse to .getClassroomOfStudent:", res);
+        this.classroomId = res._id;
+        console.log(this.classroomId);
     });
   }
 
