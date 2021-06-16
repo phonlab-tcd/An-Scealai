@@ -61,6 +61,7 @@ export class ClassroomService {
   }
 
   getClassroomOfStudent(studentId: string) : Observable<any>  {
+    // TODO res is null
     return this.http.get(this.baseUrl + 'getClassroomForStudent/' + studentId);
   }
 
