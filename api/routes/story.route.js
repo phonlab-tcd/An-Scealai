@@ -325,7 +325,7 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
                 }
             });
         } else {
-            res.json({status: '404', message: 'Story not found'});
+            res.status(404).json({status: '404', message: 'Story not found'});
         }
     });
 });

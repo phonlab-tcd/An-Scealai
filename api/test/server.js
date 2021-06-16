@@ -71,5 +71,23 @@ describe("API Server", () => {
         });
       });
     });
+    
+    describe("GET /story/synthesise/:id", () => {
+      it("should respond with 404 for the non-existent id: 000", (done) => {
+        request({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          uri: "http://localhost:4000/story/synthesise/:id",
+          method: "GET",
+        }, (err, response, body) => {
+          console.log(response.statusCode);
+          expect(response.statusCode).equal(404);
+          done();
+        });
+
+
+      });
+    });
   });
 });
