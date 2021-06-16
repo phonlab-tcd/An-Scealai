@@ -320,6 +320,6 @@ export class RecordingComponent implements OnInit {
   }
   
   goToDashboard() {
-    this.router.navigateByUrl('/dashboard/' + this.story.id);
+    this.router.navigateByUrl('/dashboard/' + this.story._id);
   }
 }
