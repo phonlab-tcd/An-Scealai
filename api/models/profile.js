@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let Profile = new Schema({
     userId : String,
+    email: String,
     gender : String,
     age : String,
     county : String,

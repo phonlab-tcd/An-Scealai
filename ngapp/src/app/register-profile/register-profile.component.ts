@@ -18,6 +18,8 @@ export class RegisterProfileComponent implements OnInit {
 
   input : string;
   showError : boolean;
+  
+  email : string = "";
 
   genders : string[] = [
     this.ts.l.male,
@@ -238,6 +240,7 @@ export class RegisterProfileComponent implements OnInit {
     this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
         let p = res.profile;
+        this.email = p.email;
         this.gender = p.gender;
         this.age = p.age;
         this.county = p.county;
@@ -273,6 +276,7 @@ export class RegisterProfileComponent implements OnInit {
 
     let profile = {
       userId : userDetails._id,
+      email: this.email,
       gender : this.gender,
       age : this.age,
       county : (!this.notFromIreland) ? this.county : null,
