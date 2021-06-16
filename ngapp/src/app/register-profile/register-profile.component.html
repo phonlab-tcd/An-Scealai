@@ -9,6 +9,11 @@
         <div class="group-set-body">
           <!-- Select gender -->
           <div class="form-group">
+            <p class="formLabel">Email</p>
+            <input type="email" class="form-control inputField" id="email" [(ngModel)]="email" required />
+          </div>
+          <!-- Select gender -->
+          <div class="form-group">
             <p class="formLabel">{{ts.l.gender}}</p>
             <select class="selectOptions" [(ngModel)]="gender">
               <option *ngFor="let g of genders" [value]="g">{{g}}</option>
@@ -51,7 +56,7 @@
             <!-- School name TEACHER-->
           <div *ngIf="auth.getUserDetails().role === 'TEACHER'" class="form-group">
             <p class="formLabel">{{ts.l.school_name}}</p>
-            <input type="text" class="form-control" id="school-name" [(ngModel)]="schoolName" placeholder={{schoolName}}>
+            <input type="text" class="form-control inputField" id="school-name" [(ngModel)]="schoolName">
           </div>
           <!-- Check box STUDENET attend secondary -->
           <div *ngIf="auth.getUserDetails().role === 'STUDENT'" class="form-group">
