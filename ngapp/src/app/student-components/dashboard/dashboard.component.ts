@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   teacherSelectedErrors: String[] = [];
   classroomId: string;
   selectTeanglann: boolean = true;
-  selectPotafocal: boolean = false;
+  selectExternalLinks: boolean = false;
   showOptions: boolean = false;
   dontToggle: boolean = false;
   words: string[] = [];
