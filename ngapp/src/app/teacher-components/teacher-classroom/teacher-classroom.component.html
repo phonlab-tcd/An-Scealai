@@ -42,7 +42,7 @@
           <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToMessages()"> {{ts.l.messages}} <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>
           <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToStats()">{{ts.l.stats}} <i class='fas fa-calculator'></i></div>
           <div class="headerIconBtn" (click)="showShareModal()">{{ts.l.share_code}}<i class="fas fa-share-alt headerIcon"></i></div>
-          <div class="headerIconBtn" (click)="showModal()">{{ts.l.edit}} <i class="fas fa-edit headerIcon"></i></div>
+          <div class="headerIconBtn" (click)="showModal()">{{ts.l.edit_classroom_title}} <i class="fas fa-edit headerIcon"></i></div>
           <div class="headerIconBtn" (click)="showDeleteModal()">{{ts.l.delete}} <i class="fas fa-trash-alt headerIcon"></i></div>
         </div>
       </div>

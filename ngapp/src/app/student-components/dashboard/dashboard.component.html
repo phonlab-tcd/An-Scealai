@@ -57,7 +57,7 @@
 
         <!-- EDIT STORY DETAILS -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
-          {{ts.l.edit}}
+          {{ts.l.edit_title_or_dialect}}
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
 
@@ -174,18 +174,26 @@
           <div class="dictionarySubHeader">
             <div class="dictionaryName"
                  (click)="selectTeanglann = true;
-                          selectPotafocal = false; 
+                          selectExternalLinks = false; 
                           selectedDictionary = true;">
               Teanglann
             </div> |
             <div class="dictionaryName"
-                 (click)="selectPotafocal = true; 
+                 (click)="selectExternalLinks = true; 
                           selectTeanglann = false;">
-              Potafocal
+              {{ts.l.external_link}}
             </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+          <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
+            <ul>
+              <li><a href="http://www.potafocal.com/beo/" target="_blank">potafocal.com</a></li>
+              <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
+            </ul>
+          </div>
+          <!--
           <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
+          -->
         </div>
       </div>
 
