@@ -17,6 +17,7 @@ npm install --prefix ./api
 # Build to ngapp/unpublished_dist/ directory with /scealai/ as base href
 npm --prefix ngapp run build_prod
 
+# $? is the exit code of the last run programe. If the build exit code is not 0, cancel deployment.
 if [ $? != 0 ] ; then
   echo "I think the build failed. Exiting deployment."
   exit 1
