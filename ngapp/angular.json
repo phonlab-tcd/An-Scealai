@@ -86,7 +86,13 @@
               "browserTarget": "an-scealai:build:production"
             },
             "dev": {
-              "browserTarget": "an-scealai:build:dev"
+              "browserTarget": "an-scealai:build:dev",
+              "fileReplacements": [
+                {
+                  "replace": "src/abairconfig.json",
+                  "with": "configuration/dev/abairconfig.json"
+                }
+              ]
             }
           }
         },
