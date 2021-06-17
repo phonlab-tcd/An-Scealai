@@ -11,7 +11,9 @@ let Event = require('../models/event');
 let User = require('../models/user');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  {useNewUrlParser: true, useUnifiedTopology:true},
+  (err, client) => {
   if (err) {
     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
     process.exit(1);
@@ -32,7 +34,6 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
                 event.storyData = req.body.event.storyData;
                 event.userId = user._id;
                 event.date = new Date();
-                console.log(event);
                 event.save().then(() => {
                     res.status(200).json("Event added succesfully");
                 })

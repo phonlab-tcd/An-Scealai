@@ -10,11 +10,13 @@ tmux rename-window "mongod"
 # This command requires tail and jq. jq is a json colorizer/formatter
 
 # Check if running jq returned 0 meaning it's installed
-jq --version | /dev/null
+jq --version > /dev/null
 has_jq=$?
 if [ $? == 0 ]; then
+  # format mongod output with jq
   mongotailcmd="tail -f ./mongotest/logs/log | jq"
 else
+  # don't filter the output of mongod
   mongotailcmd="tail -f ./mongotest/logs/log"
 fi
 

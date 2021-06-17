@@ -25,14 +25,14 @@ export class StoryService {
 
   baseUrl: string = config.baseurl + "story/";
 
-  saveStory(id, title, date, dialect, text, author) {
+  saveStory(studentId, title, date, dialect, text, author) {
     const storyObj = {
-      id: id,
       title: title,
       date: date,
       dialect: dialect,
       text: text,
       author: author,
+      studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
     };
@@ -42,7 +42,7 @@ export class StoryService {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
         //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
         //this.recordingService.addRecordingForLoggedInUser(storyObj);
-        this.router.navigateByUrl('/dashboard/' + id);
+        this.router.navigateByUrl('/dashboard/' + res["id"]);
       });
   }
 
@@ -52,10 +52,6 @@ export class StoryService {
 
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
-  }
-
-  getStoryBy_id(id: string) : Observable<any> {
-    return this.http.get(this.baseUrl + 'getStoryByUnderscoreId/' + id);
   }
 
   getStoriesForLoggedInUser() {
@@ -68,6 +64,10 @@ export class StoryService {
 
   updateStory(data, id) : Observable<any> {
     return this.http.post(this.baseUrl + 'update/' +id, data);
+  }
+  
+  updateAuthor(oldAuthor, newAuthor): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
   }
 
   deleteStory(id) {

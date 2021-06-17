@@ -11,6 +11,7 @@ import { EngagementService } from './engagement.service';
 import { TranslationService } from './translation.service';
 import { MessageService } from './message.service';
 import { filter } from 'rxjs/operators';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 
 declare var gtag;
 
@@ -82,7 +83,6 @@ export class AppComponent {
       console.log(this.auth.getUserDetails().username);
     }
   }
-  
 /*
 * Swap value of checkVal, if changed to false set notificationShown to false
 */
@@ -109,6 +109,15 @@ export class AppComponent {
   goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
+  }
+
+  toggleLanguage(){
+    if(this.currentLanguage === "English"){
+      this.changeToIrish();
+    }
+    else {
+      this.changeToEnglish();
+    }
   }
   
   changeToEnglish() {

@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "dev": "mongod --config ../mongotest/mongotest.conf & npm --prefix ../api start & ng serve",
-    "build": "ng build --prod --output-path ./unpublished_dist --base-href /scealai/",
+    "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ./api start & ng serve",
+    "build_prod": "ng build --prod --base-href /scealai/ --output-path unpublished_dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

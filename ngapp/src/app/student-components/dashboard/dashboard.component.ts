@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
   selectPotafocal: boolean = false;
   showOptions: boolean = false;
   dontToggle: boolean = false;
+  words: string[] = [];
+  wordCount: number = 0;
   
   dialects = [
     {
@@ -88,8 +90,9 @@ export class DashboardComponent implements OnInit {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         for(let story of this.stories) {
-          if(story.id === this.id) {
+          if(story._id === this.id) {
             this.story = story;
+            this.getWordCount();
             break;
           }
         }
@@ -185,9 +188,24 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-// Set story saved to false
+// Set story saved to false and call word count function
   storyEdited() {
     this.storySaved = false;
+    this.getWordCount();
+  }
+  
+// Get word count of story text
+  getWordCount() {
+    let str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+    this.words = [];
+    str.map((s) => {
+      let trimStr = s.trim();
+      if (trimStr.length > 0) {
+        this.words.push(trimStr);
+      }
+      
+    });
+    this.wordCount = this.words.length;
   }
 
 // set feedback window to false 
@@ -215,12 +233,12 @@ export class DashboardComponent implements OnInit {
 
 // route to synthesis 
   goToSynthesis() {
-    this.router.navigateByUrl('/synthesis/' + this.story.id);
+    this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
   
 // route to synthesis 
   goToRecording() {
-    this.router.navigateByUrl('/record-story/' + this.story.id);
+    this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
 /*
@@ -238,7 +256,9 @@ export class DashboardComponent implements OnInit {
     this.tags = [];
     this.filteredTags.clear();
     this.chosenTag = null;
+    console.log(this.story._id);
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
+      console.log("checking grammar for: ", this.story._id);
       this.tagSets = res;
       this.tags = this.tagSets.gramadoirTags;
       this.filterTags();

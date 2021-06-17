@@ -10,6 +10,7 @@ import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
+import { StatsService } from '../../stats.service';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -25,7 +26,8 @@ export class TeacherClassroomComponent implements OnInit {
               private userService: UserService,
               public ts : TranslationService,
               private messageService: MessageService,
-              private storyService : StoryService) { }
+              private storyService : StoryService,
+              private statsService : StatsService) { }
   
   classroom : Classroom;
   modalClass : string = "hidden";
@@ -83,7 +85,8 @@ export class TeacherClassroomComponent implements OnInit {
     for(let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe((res : User) => {
         this.students.push(res);
-        this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
+        //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
+        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         this.studentIds.push(res._id);
         this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
           let count = Object.keys(stories).length;
@@ -110,7 +113,9 @@ export class TeacherClassroomComponent implements OnInit {
 */
   deleteClassroom() {
     this.classroomService.delete(this.classroom._id).subscribe((res) => {
-      this.router.navigateByUrl('/landing');
+      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((res) => {
+        this.router.navigateByUrl('/landing');
+      })  
     });
   }
 

@@ -52,6 +52,18 @@ export class StatsService {
   
 
 /*
+* Update the username for a given student
+*/
+  updateStudentUsername(id: string, username: string): Observable<any> {
+    return this.http.post(this.baseUrlStudents + 'updateStudentUsername/' +id, {username: username});
+  }
+
+  deleteStatsForClassroom(id: string): Observable<any> {
+    return this.http.get(this.baseUrlStudents + 'deleteForClassroom/' + id);
+  }
+  
+
+/*
 * Return an object containing grammar rule name, description, and classification
 */
   listErrors(): { error: string, description: string, type: string, checked: boolean }[]  {

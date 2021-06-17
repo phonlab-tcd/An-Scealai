@@ -16,11 +16,11 @@
       <div *ngFor="let story of stories">
         <div class="contentSection">
           <!-- delete check box if deleteMode -->
-          <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story.id)">
+          <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
           <!-- link the story to its dashboard -->
-          <a [routerLink]="['/dashboard', story.id]" class="contentsLink">{{story.title}}</a>
-          <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm' }}</div>
-          <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm' }}</div>
+          <a [routerLink]="['/dashboard', story._id]" class="contentsLink">{{story.title}}</a>
+          <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm a' }}</div>
+          <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm a' }}</div>
         </div>
         <hr/>
       </div>

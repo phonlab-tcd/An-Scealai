@@ -4,6 +4,7 @@ const express = require('express'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
+    logger = require('./logger'),
     passport = require('passport');
 
 require('./config/passport');
@@ -22,9 +23,10 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-    () => {console.log('Database is connected');},
-    (err) => { console.log('Can not connect to the database'+ err)}
+mongoose.set('useFindAndModify', false);
+mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
+    () => {logger.info('Database is connected');},
+    (err) => {logger.error('Cannot connect to the database. ',err)}
 );
 
 const app = express();
@@ -69,6 +71,9 @@ app.use(function (err, req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
+        logger.error(
+          err
+        );
         res.render('error', {
             message: err.message,
             error: err
@@ -87,7 +92,7 @@ app.use(function(err, req, res, next) {
 });
 
 const server = app.listen(port, function(){
-    console.log('Listening on port ' + port);
+    logger.info('Listening on port ' + port);
 });
 
 module.exports = app;

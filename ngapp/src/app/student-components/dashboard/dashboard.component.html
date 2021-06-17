@@ -56,8 +56,7 @@
         </div>
 
         <!-- EDIT STORY DETAILS -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-                                 [routerLink]="['/story-details', story.id]">
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
           {{ts.l.edit}}
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
@@ -104,6 +103,9 @@
       <!-- display story before grammar checked (i.e. writing mode)-->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
         <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
+<div style="display: flex; align-items: center; justify-content: center; padding-bottom: 6px">
+  <span> {{ts.l.word_count}}: {{wordCount}} </span>
+</div>
       </div>
       <!-- display grammar loading -->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
@@ -189,6 +191,7 @@
               </li>
             </ul>
           </div>
+
         </div>
       </div>
 

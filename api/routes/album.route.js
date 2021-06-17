@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const logger = require('../logger');
 const albumRoutes = express.Router();
 const querystring = require('querystring');
 const request = require('request');
@@ -15,21 +16,37 @@ albumRoutes.route('/create').post((req, res) => {
     album.date = new Date();
     album.save().then(album => {
         res.status(200).json({"message" : "album created successfully", 
-                                            "album" : album})
+                                            "album" : album});
     }).catch(err => {
         res.status(400).send("Unable to save to DB");
+
+        logger.log({
+          level: 'error',
+          endpoint: '/create',
+          responsecode: 400,
+          from: 'api',
+          message: { error_message: err },
+        });
     })
 });
 
 albumRoutes.route('/getById/:id').get((req, res) => {
-    Album.findById(req.params.id, (err, album) => {
-        if(err) res.json(err);
-        if(album) {
-            res.status(200).json(album);
-        } else {
-            res.status(404).json("Album not found");
-        }
-    });
+  Album.findById(req.params.id, (err, album) => {
+    if(err) res.json(err);
+    if(album) {
+      res.status(200).json(album);
+    } else {
+      res.status(404).json("Album not found");
+      logger.log({
+        level: 'error',
+        endpoint: '/getById/:id',
+        id: ( req.params.id ? req.params.id : 'id does not exist' ),
+        responsecode: 400,
+        from: 'api',
+        message: { error_message: err },
+      });
+    }
+  });
 });
 
 albumRoutes.route('/getForUser/:id').get((req, res) => {
@@ -69,7 +86,7 @@ async function makeRecordings(text) {
         recording.text = p;
         recordings.push(recording);
     }
-    console.log(recordings);
+    logger.debug(recordings);
 }
 
 function synthesise(text) {

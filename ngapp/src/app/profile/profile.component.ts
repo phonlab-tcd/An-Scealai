@@ -28,17 +28,20 @@ export class ProfileComponent implements OnInit {
   classroom: Classroom;
   statObj: StudentStats = new StudentStats();
   modalClass : string = "hidden";
+  updateMode: boolean = false;
+  updatedUsername: string;
+  errorMessage: string = "";
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
               private engagement: EngagementService,
               public ts : TranslationService,
               public ns: NotificationService,
-              public ss: StatsService,
               public storyService: StoryService,
               public profileService : ProfileService,
               public messageService: MessageService,
-              public userService: UserService) { }
+              public userService: UserService,
+              public statsService: StatsService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -74,7 +77,7 @@ export class ProfileComponent implements OnInit {
         this.statObj.studentId = this.auth.getUserDetails()._id;
         this.statObj.studentUsername = this.auth.getUserDetails().username;
         this.statObj.classroomId = this.classroom._id;
-        this.ss.addNewStatEntry(this.statObj).subscribe();
+        this.statsService.addNewStatEntry(this.statObj).subscribe();
       }
     });
   }
@@ -93,7 +96,7 @@ export class ProfileComponent implements OnInit {
     this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
       this.classroom = null;
     });
-    this.ss.deleteStats(this.auth.getUserDetails()._id).subscribe( (res) => {
+    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe( (res) => {
       console.log("stat entry deleted");
     });
   }
@@ -120,27 +123,83 @@ export class ProfileComponent implements OnInit {
     if (!userDetails) return;
 
     if(userDetails.role === "STUDENT") {
-      this.leaveClassroom();
+      if(this.classroom)
+        this.leaveClassroom();
       this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
         console.log("All stories deleted");
       });
     }
     if(userDetails.role === "TEACHER") {
+      this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
+        for(let classroom of res) {
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
+            console.log(res);
+          });
+        }
+      });
+      
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
-        console.log("All classrooms deleted");
-      })
+        console.log(res)
+      });
+      
     }
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-      console.log("All messages deleted");
+      //console.log("All messages deleted");
+      console.log(res);
     });  
     this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-      console.log("Profile deleted");
+      //console.log("Profile deleted");
+      console.log(res);
     });
     this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-      console.log("User deleted");
+      //console.log("User deleted");
+      console.log(res);
     });
     this.auth.logout();
+  }
+  
+  /*
+  * Update account username and all data associated with it
+  */
+  updateUsername() {
+    if(this.updatedUsername){
+      
+      this.userService.getUserByUsername(this.updatedUsername).subscribe((res) => {
+        if(res.length != 0) {
+          this.errorMessage = "Username already exists";
+          this.updatedUsername = "";
+        }
+        else {
+
+          if(this.auth.getUserDetails().role === "STUDENT") {
+            console.log("oldUsername: ", this.auth.getUserDetails().username)
+            this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).subscribe( (res) => {
+              console.log(res);
+            });
+            
+            this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
+              console.log(res);
+            });
+          }
+          
+          this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
+            console.log(res);
+          });
+
+          this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe((res) => {
+            console.log(res);
+          });
+
+          this.auth.logout();
+          
+        }
+      });
+
+    }
+    else {
+      this.errorMessage = "Please input a new username";
+    }
   }
   
   showModal() {

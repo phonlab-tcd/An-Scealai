@@ -18,6 +18,7 @@ teacherCodeRoutes.route('/activeCodes').get(function (req, res) {
     TeacherCode.find(function(err, teacherCodes) {
     if(err) {
         console.log(err);
+        res.json(err);
     } else {
         res.json(teacherCodes);
     }
@@ -42,7 +43,7 @@ teacherCodeRoutes.route('/isActiveCode/:code').get(function (req, res) {
 teacherCodeRoutes.route('/delete/:code').get(function(req, res) {
     TeacherCode.findOneAndRemove({"code":req.params.code}, function(err, code) {
         if(err || code === null) {
-            console.log("err");
+            console.log(err);
             res.status(400);
             res.json({"message" : "Error activating account"});
         } else {

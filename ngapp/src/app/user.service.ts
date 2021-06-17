@@ -29,4 +29,8 @@ export class UserService {
     return this.http.get(this.baseUrl + 'deleteUser/' + username);
   }
   
+  updateUsername(id: string, username: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateUsername/' + id, {username: username});
+  }
+  
 }
