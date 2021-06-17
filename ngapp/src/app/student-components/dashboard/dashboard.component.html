@@ -38,11 +38,11 @@
         </div>
 
         <!-- CHANGE STORY DIALECT --
-        <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
+          <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
           <option *ngFor="let d of dialects" [ngValue]="d.code">
           {{d.name}}
           </option>
-        </select>
+          </select>
         -->
 
       </div>
@@ -78,21 +78,21 @@
 
         <!-- AUDIO CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToSynthesis()">
+                                 (click)="this.dontToggle=true; goToSynthesis()">
           {{ts.l.audio_check}}
           <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
 
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
+                                 (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
         <!-- RECORDINGS -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToRecording()">
+                                 (click)="this.dontToggle=true; goToRecording()">
           {{ts.l.recordings}}
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
@@ -186,6 +186,7 @@
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
           <iframe *ngIf="selectExternalLinks" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
+
         </div>
       </div>
 
