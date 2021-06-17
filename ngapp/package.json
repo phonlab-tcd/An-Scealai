@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "rm src/abairconfig.json && cp abairconfig_dev.json src/abairconfig.json && ng serve",
-    "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ./api start & ng serve",
-    "build_prod": "rm src/abairconfig.json && cp abairconfig_prod.json src/abairconfig.json && ng build --prod --base-href /scealai/ --output-path unpublished_dist",
+    "start": "serve --configuration dev",
+    "build_prod": "ng build --configuration production --base-href /scealai/ --output-path unpublished_dist",
+    "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & ng serve --configuration dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

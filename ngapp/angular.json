@@ -46,7 +46,7 @@
                 },
                 {
                   "replace": "src/abairconfig.json",
-                  "with": "src/abairconfig.prod.json"
+                  "with": "configuration/prod/abairconfig.json"
                 }
               ],
               "optimization": true,
@@ -65,6 +65,14 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/abairconfig.json",
+                  "with": "configuration/dev/abairconfig.json"
+                }
+              ]
             }
           }
         },
@@ -76,6 +84,9 @@
           "configurations": {
             "production": {
               "browserTarget": "an-scealai:build:production"
+            },
+            "dev": {
+              "browserTarget": "an-scealai:build:dev"
             }
           }
         },
