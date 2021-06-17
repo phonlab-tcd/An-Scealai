@@ -1,6 +1,7 @@
-/dist/
+dist
 
 **/node_modules
+session.vim
 
 session.vim
 
@@ -13,6 +14,7 @@ session.vim
 /mongotest/db/**
 
 /api/logs/**
+/api/sendinblue.json
 
 /sshlogin
 /login_to_phonetics.sh
