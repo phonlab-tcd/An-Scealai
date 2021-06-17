@@ -246,6 +246,7 @@
             "total_grammar_errors" : "Total Grammar Errors",
             "select_all" : "select all",
             "dictionary" : "Dictionary",
+            "external_link": "External link",
             
             "recordings" : "Recordings",
             "go_to_archive" : "Go to Archive",
@@ -663,6 +664,7 @@
             "total_grammar_errors" : "Iomlán na nEarráidí Gramadaí",
             "select_all" : "Roghnaigh Gach Rud",
             "dictionary" : "Foclóir",
+            "external_link": "Nasc seachtrach",
             
             "recordings" : "Taifeadadh",
             "recording" : "Taifeadadh",
