@@ -194,39 +194,36 @@ recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
 recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
     VoiceRecording.find({"storyData._id" : req.params.id}, (err, recordings) => {
         if(err) 
-          return res.json(err);
-        if(recordings) {
-          
-          let bucket = new mongodb.GridFSBucket(db, {
-              bucketName: 'voiceRecording'
-          });
-        
-          recordings.forEach(recording => {    
-            recording.paragraphAudioIds.forEach(paragraphAudioId => {
-                bucket.delete(new ObjectID(paragraphAudioId), (err) => {
-                  if(err) {
-                    //console.log("File does not exist");
-                    res.status(404).json("File does not exist");
-                  }
-                });
-            });
-      
-            recording.sentenceAudioIds.forEach(sentenceAudioId => {
-                bucket.delete(new ObjectID(sentenceAudioId), (err) => {
-                  if(err) {
-                      //console.log("File does not exist");
-                      res.status(404).json("File does not exist");
-                  }
-                });
-            });
-          });
-          
-          res.json("Successfully deleted all audio recordiings for story");
-        } 
-        else {
-            res.status(404).json({"message" : "Voice Recording does not exist"});
+          res.status(400).json(err);
+        if(!recordings) {
+          res.status(404).json({"message" : "Voice Recording does not exist"});
         }
-
+          
+        let bucket = new mongodb.GridFSBucket(db, {
+            bucketName: 'voiceRecording'
+        });
+      
+        recordings.forEach(recording => {    
+          recording.paragraphAudioIds.forEach(paragraphAudioId => {
+              bucket.delete(new ObjectID(paragraphAudioId), (err) => {
+                if(err) {
+                  //console.log("File does not exist");
+                  res.status(404).json("Paragraph audio file does not exist");
+                }
+              });
+          });
+    
+          recording.sentenceAudioIds.forEach(sentenceAudioId => {
+              bucket.delete(new ObjectID(sentenceAudioId), (err) => {
+                if(err) {
+                    //console.log("File does not exist");
+                    res.status(404).json("Sentence audio file does not exist");
+                }
+              });
+          });
+        });
+        
+        res.status(200).json("Successfully deleted all audio recordiings for story"); 
     });
 });
 
