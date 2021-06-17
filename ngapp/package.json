@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "serve --configuration dev",
+    "start": "ng serve --configuration dev",
     "build_prod": "ng build --configuration production --base-href /scealai/ --output-path unpublished_dist",
     "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & ng serve --configuration dev",
     "test": "ng test",
