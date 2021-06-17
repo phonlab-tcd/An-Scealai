@@ -138,13 +138,22 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
 
 classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
     Classroom.findOne({ studentIds: { $all: [req.params.studentId] } }, (err, classroom) => {
+        console.debug({
+          err: err,
+          classroom: classroom,
+        });
         if(classroom) {
             logger.info({classroom: classroom});
             res.json(classroom);
-        } else {
+        } else if (err) {
             //res.json({message: "No classrooms were found", status: 404});
-            logger.error({endpoint: "/classroom/getClassroomForStudent/:studentId"});
+            logger.error({
+              endpoint: "/classroom/getClassroomForStudent/:studentId",
+              err: err
+            });
             res.json(err);
+        } else {
+          res.status(404).json({message: `No classroom found for student with studentId: ${req.params.studentId}`});
         }
     })
 });
