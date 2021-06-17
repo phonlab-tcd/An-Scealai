@@ -174,18 +174,18 @@
           <div class="dictionarySubHeader">
             <div class="dictionaryName"
                  (click)="selectTeanglann = true;
-                          selectPotafocal = false; 
+                          selectExternalLinks = false; 
                           selectedDictionary = true;">
               Teanglann
             </div> |
             <div class="dictionaryName"
-                 (click)="selectPotafocal = true; 
+                 (click)="selectExternalLinks = true; 
                           selectTeanglann = false;">
               Potafocal
             </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
-          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
+          <iframe *ngIf="selectExternalLinks" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
         </div>
       </div>
 
