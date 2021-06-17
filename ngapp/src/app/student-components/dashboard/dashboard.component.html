@@ -172,25 +172,20 @@
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
           <div class="dictionarySubHeader">
-            <div class="dictionaryName" (click)="selectTeanglann = true; selectPotafocal = false; selectedDictionary = true;">Teanglann</div> |
-            <div class="dictionaryName" (click)="selectPotafocal = true; selectTeanglann = false;">
-              {{ts.l.external_link}}
+            <div class="dictionaryName"
+                 (click)="selectTeanglann = true;
+                          selectExternalLinks = false; 
+                          selectedDictionary = true;">
+              Teanglann
+            </div> |
+            <div class="dictionaryName"
+                 (click)="selectExternalLinks = true; 
+                          selectTeanglann = false;">
+              Potafocal
             </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
-          <!--
-          <iframe sandbox="" *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/"></iframe>
-          -->
-          <div *ngIf="selectPotafocal" class="dictionaryIframe" src="http://www.potafocal.com/beo/">
-            <ul class="externalDictionaryList">
-              <li>
-                <a href="http://www.potafocal.com/beo" target="_blank">potafocal.com</a>
-              </li>
-              <li>
-                <a href="https://www.focloir.ie" target="_blank">focloir.ie</a>
-              </li>
-            </ul>
-          </div>
+          <iframe *ngIf="selectExternalLinks" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
 
         </div>
       </div>
