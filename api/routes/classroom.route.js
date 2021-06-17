@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const classroomRoutes = express.Router();
 
+const logger = require('../logger');
+
 let Classroom = require('../models/classroom');
 
 classroomRoutes.route('/create').post((req, res) => {
@@ -137,9 +139,11 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
 classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
     Classroom.findOne({ studentIds: { $all: [req.params.studentId] } }, (err, classroom) => {
         if(classroom) {
+            logger.info({classroom: classroom});
             res.json(classroom);
         } else {
             //res.json({message: "No classrooms were found", status: 404});
+            logger.error({endpoint: "/classroom/getClassroomForStudent/:studentId"});
             res.json(err);
         }
     })
