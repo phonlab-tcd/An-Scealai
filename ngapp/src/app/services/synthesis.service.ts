@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import config from '../../abairconfig.json';
@@ -10,10 +11,29 @@ import config from '../../abairconfig.json';
 })
 export class SynthesisService {
 
-  constructor(private http: HttpClient, private engagement: EngagementService) { }
+  constructor(
+    private http: HttpClient,
+    private engagement: EngagementService) { }
 
   baseUrl = config.baseurl;
 
+
+  public abairApi2Request(
+    storyObject: Story,
+    audioEncoding: string,
+    voice: string,
+    speed: string       ): Observable<AbairApi2JsonResponse> {
+    
+    return this.http.get( 
+      'https://www.abair.tcd.ie/api2/synthesise',
+      {
+        input: storyObject.text,
+        audoEncoding: audioEncoding,
+        voice: voice,
+        speed: speed,
+      }).toPromise();
+
+  }
   /**
    * Gets synthesis data for storyObject from
    * the backend, which comes in the form of HTML data.
@@ -154,6 +174,14 @@ export class Paragraph extends Section {
 }
 
 export class Sentence extends Section { }
+
+
+interface AbairApi2Json {
+ audioContent: string; 
+}
+interface AbairApi2RequestBody {
+  input: string;
+}
 
 interface SynthesisResponse {
   audio: string[];
