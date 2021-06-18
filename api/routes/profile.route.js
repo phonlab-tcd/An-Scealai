@@ -29,16 +29,21 @@ profileRoutes.route('/get/:id').get((req, res) => {
 
 profileRoutes.route('/getForUser/:id').get((req, res) => {
     Profile.findOne({"userId" : req.params.id}, (err, profile) => {
+      console.log("this function is read");
         if(err) {
-            console.log(err);
-            res.status(400).send("An error occurred while trying to find this profile");
-        } else {
-            if(profile) {
-                res.status(200).json({"profile" : profile});
-            } else {
-                res.status(404).send("Profile with given ID not found");
-            }
+          console.log(err);
+          res.status(400).send("An error occurred while trying to find this profile");
         }
+        if(!profile) {
+          console.log(profile)
+          res.status(404).send("Profile with given ID not found");  
+        }
+        else {
+          console.log(profile)
+          res.status(200).json({"profile" : profile});
+        }
+        
+        
     });
 });
 

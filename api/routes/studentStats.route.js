@@ -45,15 +45,19 @@ studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) 
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
     if(err) {
         res.status(400).json({"message" : err.message});
-    } else {
-      stat.studentUsername = req.body.username;
-      stat.save().then(stat => {
-          res.status(200).json({'message': 'stat username updated successfully'});
-      })
-      .catch(err => {
-          res.status(400).send("unable to update stat username");
-      });
+    } 
+    
+    if(!stat) {
+      res.status(404).json({"message" : "stat not found"});
     }
+    
+    stat.studentUsername = req.body.username;
+    stat.save().then(stat => {
+        res.status(200).json({'message': 'stat username updated successfully'});
+    })
+    .catch(err => {
+        res.status(400).send("unable to update stat username");
+    });
   });
 });
 
