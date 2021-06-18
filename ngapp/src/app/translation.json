@@ -72,6 +72,7 @@
             "confirm_password" : "Confirm Password",
     
             "personal_info" : "Personal Information",
+            "profile_instructions" : "We are asking you to complete the following questionnaire for research purposes, in order to facilitate international comparisons between different language acquisition patterns.",
             "gender" : "Gender",
             "male" : "Male",
             "female" : "Female",
@@ -117,7 +118,7 @@
             "how_well_understand_spoken" : "How well do you understand spoken Irish?",
             "whats_cefr_level" : "What's your CEFR level?",
             "how_often_speak" : "How often do you speak Irish?",
-            "who_speak_with" : "Who do you normally speak Irish with?",
+            "who_speak_with" : "Whom do you normally speak Irish with?",
             "watch_irish_media" : "Do you watch or listen to Irish language media?",
             "read_irish" : "Do you read in Irish?",
             "write_irish" : "Do you write in Irish?",
@@ -485,6 +486,7 @@
             "enter_username" : "Scríobh isteach d'ainm úsáideora",
     
             "personal_info" : "Eolas pearsanta",
+            "profile_instructions" : "Táimid ag iarraidh ort an ceistneoir seo a líonadh ar mhaithe le taighde a cheadóidh comparáidí idirnáisiúnta le teangacha éagsúla.",
             "gender" : "Gnéas",
             "male" : "Fireann",
             "female" : "Baineann",
