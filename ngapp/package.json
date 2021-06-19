@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "rm src/abairconfig.json && cp abairconfig_dev.json src/abairconfig.json && ng serve",
-    "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ./api start & npm --prefix ./ngapp",
+    "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & npm",
     "build_prod": "rm src/abairconfig.json && cp abairconfig_prod.json src/abairconfig.json && ng build --prod --base-href /scealai/ --output-path unpublished_dist",
     "test": "ng test",
     "lint": "ng lint",
