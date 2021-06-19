@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from '../engagement.service';
 import { TranslationService } from '../translation.service';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { StoryService } from '../story.service';
 
 
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private auth: AuthenticationService, private router: Router,
               private engagement: EngagementService, public ts : TranslationService, 
-              public _loadingBar: SlimLoadingBarService,
+              //public _loadingBar: SlimLoadingBarService,
               private storyService : StoryService) {}
 
   ngOnInit() {

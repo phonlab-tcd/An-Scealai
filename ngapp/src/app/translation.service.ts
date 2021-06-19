@@ -3,7 +3,7 @@ import translation from './translation.json';
 import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
 import config from '../abairconfig.json';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
