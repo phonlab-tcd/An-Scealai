@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -14,7 +14,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
-      providers: [SlimLoadingBarService],
+      providers: []//SlimLoadingBarService],
     }).compileComponents();
   }));
 

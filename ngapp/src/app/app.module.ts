@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
@@ -116,7 +116,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    SlimLoadingBarModule,
+    //SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,

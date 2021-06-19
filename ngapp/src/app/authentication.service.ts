@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators/map';
+import { Observable ,  throwError, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { throwError, Subject } from 'rxjs';
 import config from '../abairconfig.json';
 
 export interface UserDetails {
