@@ -36,13 +36,15 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    console.log(storyObj);
+    console.log(storyObj)
     this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
-        //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        //this.recordingService.addRecordingForLoggedInUser(storyObj);
-        this.router.navigateByUrl('/dashboard/' + res["id"]);
+        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+
+        // TODO should res['id'] really be using a string literal to reference a property?
+        this.router.navigateByUrl('/dashboard/' + res['id']);
       });
   }
 

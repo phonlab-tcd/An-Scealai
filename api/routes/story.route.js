@@ -32,6 +32,12 @@ storyRoutes.route('/getStoryById/:id').get((req, res) => {
       res.status(400).json("An error occurred while trying to find this profile");
       return;
     }
+    console.log('hello');
+    logger.info({
+      endpoint: "/story/getStoryById/:id",
+      id: req.params.id,
+      story: story
+    });
     if(!story) {
       res.status(404).json("Story with given ID not found");
       return;

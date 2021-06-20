@@ -21,12 +21,13 @@ const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
+const synthesisRoute = require('./routes/synthesis.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
     () => {logger.info('Database is connected');},
-    (err) => {logger.error('Cannot connect to the database. ',err)}
+    (err) => {logger.error('Cannot connect to the database. ', err)}
 );
 
 const app = express();
@@ -46,6 +47,7 @@ app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/recordings', recordingRoute);
+app.use('/synthesis', synthesisRoute);
 
 const port = process.env.PORT || 4000;
 

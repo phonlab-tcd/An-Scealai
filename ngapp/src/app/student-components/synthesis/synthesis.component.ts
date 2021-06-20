@@ -11,15 +11,23 @@ import { SynthesisService, Paragraph, Sentence, Section } from '../../services/s
 })
 export class SynthesisComponent implements OnInit {
 
-  constructor(private storyService: StoryService, private route: ActivatedRoute,
-              private router: Router, public ts : TranslationService,
+  constructor(private storyService: StoryService,
+              private route: ActivatedRoute,
+              private router: Router,
+              public ts: TranslationService,
               private synthesis: SynthesisService) { }
- 
+
   storyId: string;
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   chosenSections: Section[];
-  audioFinishedLoading: boolean = false;
+  audioFinishedLoading = false;
+
+  synthesisResponse: {
+    audioContent: string
+  };
+
+  synthesisObserver;
 
   ngOnInit() {
     this.storyId = this.route.snapshot.paramMap.get('id');
@@ -31,9 +39,34 @@ export class SynthesisComponent implements OnInit {
         this.audioFinishedLoading = true;
       });
     });
+
+    this.synthesisResponse = {
+      audioContent: 'Nothing fetched yet'
+    };
   }
 
-  //--- UI Manipulation ---//
+  // New Synthesis Functions API v2
+
+  async synthesise() {
+    this.synthesisObserver = this.synthesis.abairAPIv2Synthesise('Dia is Muire duit');
+    console.log(this.synthesisObserver);
+    /*
+    .subscribe(
+      (data) => {
+        console.log(`Observer got a next value [${count}]]: ` + data),
+        count++;
+        this.synthesisResponse += data;
+      },
+      (err) => console.error('Observer got an error: ' + err),
+      () => {
+        console.log('Observer got a complete notification');
+      }
+    );
+   */
+    console.log('end of synthesise function');
+  }
+
+  // --- UI Manipulation ---//
 
   isSentenceMode() {
     return this.chosenSections[0] instanceof Sentence;

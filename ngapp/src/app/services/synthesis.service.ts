@@ -3,41 +3,71 @@ import { Story } from '../story';
 import { HttpClient } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
+import { Observable } from 'rxjs';
 import config from '../../abairconfig.json';
+
+interface APIv2Response {
+  audioContent: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SynthesisService {
 
-  constructor(private http: HttpClient, private engagement: EngagementService) { }
+  constructor(
+    private http: HttpClient,
+    private engagement: EngagementService) { }
 
   baseUrl = config.baseurl;
+
+
+  public abairAPIv2Synthesise( text: string ): string {
+    let collected = '';
+    this.http.get(this.baseUrl + 'synthesis/api2?text=dia duit')
+      .subscribe(
+        d => {
+          console.log('Got data: ' + d);
+          collected += d;
+        },
+        err => console.error(err),
+        () => console.log('Fetched all audio data for: ' + text)
+      );
+
+
+      return "NYI";
+  }
 
   /**
    * Gets synthesis data for storyObject from
    * the backend, which comes in the form of HTML data.
    * Then parses that HTML data to populate Paragraph
    * and Sentence objects.
-   * 
+   *
    * @param storyObject - Story to be synthesised
    * @returns - Paragraph and Sentence objects containing data for
    * synthesis of input story.
    */
   async synthesiseStory(storyObject: Story): Promise<[Paragraph[], Sentence[]]> {
-    const synthesisResponse = await this.http.post(this.baseUrl + 'story/synthesiseObject/', {story: storyObject}).toPromise() as SynthesisResponse;
+    const synthesisResponse =
+      await this.http.post(
+        this.baseUrl + 'story/synthesiseObject/',
+        {story: storyObject})
+        .toPromise() as SynthesisResponse;
+
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];
     synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
-      let paragraphSentences: Sentence[] = [];
+      const paragraphSentences: Sentence[] = [];
       for (const sentenceHtml of sentenceHtmlArray) {
         // sentenceSpan contains a span child for each word in the sentence
         const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
         const startTime = +sentenceSpan.children[0].getAttribute('data-begin');
-        const lastSentenceChild = sentenceSpan.children[sentenceSpan.childElementCount-1]
+        const lastSentenceChild =
+          sentenceSpan.children[sentenceSpan.childElementCount - 1]
         const duration = (+lastSentenceChild.getAttribute('data-begin') + +lastSentenceChild.getAttribute('data-dur')) - startTime;
         const audio = new Audio(synthesisResponse.audio[i]);
-        
+
         let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
         spans.forEach(span => span.classList.add('highlightable'));
 
