@@ -7,20 +7,19 @@ const mongodb = require('mongodb');
 var logger ={ error: console.error };
 
 // TODO: I'm not sure if this line should be included
-process.on('uncaughtException', err => {
-  logger.error( "UNCAUGHT EXCEPTION" );
-  logger.error( "[Inside 'uncaughtException' event] ", err);
-});
+// process.on('uncaughtException', err => {
+//   logger.error( { message: "UNCAUGHT EXCEPTION [Inside 'uncaughtException' event] ", error: err});
+// });
 
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
 const uncaughtExceptionsFile = path.join(__dirname, 'logs/uncaughtExceptions.log');
 
 const consoleFormat = winston.format.printf(
-  ({ level, message, timestamp, ...metadata}) => {
+  ({ level, message, error, timestamp, ...metadata}) => {
     // TODO log the rest parameters in metadata
     let string_message = JSON.stringify(message);
-    let msg = `${timestamp} [${level}] : ${string_message}`;
+    let msg = `${timestamp} [${level}] : ${string_message} : ${JSON.stringify(error)}`;
     return msg;
   })
 
@@ -51,10 +50,11 @@ logger = winston.createLogger({
     info: 6, 
     debug: 7
   },
-
+  /*
   exceptionHandlers: [
     new winston.transports.File({ filename: uncaughtExceptionsFile }),
   ],
+  */
 });
 
 require('winston-mongodb');
