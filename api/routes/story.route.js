@@ -10,6 +10,7 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const logger = require('../logger');
 
 let Story = require('../models/story');
 let Event = require('../models/event');
@@ -32,7 +33,6 @@ storyRoutes.route('/getStoryById/:id').get((req, res) => {
       res.status(400).json("An error occurred while trying to find this profile");
       return;
     }
-    console.log('hello');
     logger.info({
       endpoint: "/story/getStoryById/:id",
       id: req.params.id,
@@ -378,7 +378,7 @@ function synthesiseStory(story) {
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
-      if(err) res.send(err);
+      if(err) resp.send(err);
       if(body) {
         // audioContainer is chunk of text made up of paragraphs
         let audioContainer = parse(body).querySelectorAll('.audio_paragraph');

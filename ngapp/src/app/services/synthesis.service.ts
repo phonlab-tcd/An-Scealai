@@ -10,6 +10,44 @@ interface APIv2Response {
   audioContent: string;
 }
 
+const abairAPIv2Voices = [
+  'ga_UL_anb_nnmnkwii',
+  'ga_UL',
+  'ga_UL_anb_exthts',
+  'ga_CO',
+  'ga_CO_hts',
+  'ga_CO_pmg_nnmnkwii',
+  'ga_MU_nnc_exthts',
+  'ga_MU_nnc_nnmnkwii',
+  'ga_MU_cmg_nnmnkwii'
+];
+
+enum AbairAPIv2Voice {
+  'ga_UL_anb_nnmnkwii',
+  'ga_UL',
+  'ga_UL_anb_exthts',
+  'ga_CO',
+  'ga_CO_hts',
+  'ga_CO_pmg_nnmnkwii',
+  'ga_MU_nnc_exthts',
+  'ga_MU_nnc_nnmnkwii',
+  'ga_MU_cmg_nnmnkwii'
+}
+
+enum AbairAPIv2AudioEncoding {
+  'LINEAR16',
+  'MP3',
+  // TODO, get the proper name for the OGG type
+  'OGG'
+}
+
+interface SynthRequestObject {
+  input: string;
+  voice: AbairAPIv2Voice;
+  speed: number;
+  audioEncoding: AbairAPIv2AudioEncoding;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +59,30 @@ export class SynthesisService {
 
   baseUrl = config.baseurl;
 
+
+  synthesiseText(requestObject: SynthRequestObject): Observable<object> {
+
+    let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
+
+    if ( requestObject.input) {
+      url = url + encodeURIComponent(requestObject.input);
+    }
+
+    if ( requestObject.voice && abairAPIv2Voices.includes(requestObject.voice.toString()) ) {
+      url = url + '&voice=' + encodeURIComponent(requestObject.voice);
+    }
+
+    if (requestObject.speed) {
+      url = url + '&speed=' + encodeURIComponent(requestObject.speed);
+    }
+    if (requestObject.audioEncoding) {
+      url = url + '&audioEncoding=' + encodeURIComponent(requestObject.audioEncoding);
+    }
+
+    return this.http.get(url, {
+                 observe: 'body'
+    });
+  }
 
   public abairAPIv2Synthesise( text: string ): string {
     let collected = '';
