@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-synthesis',
   templateUrl: './synthesis.component.html',
@@ -15,7 +18,8 @@ export class SynthesisComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               public ts: TranslationService,
-              private synthesis: SynthesisService) { }
+              private synthesis: SynthesisService,
+              private http: HttpClient) { }
 
   storyId: string;
   paragraphs: Paragraph[] = [];
@@ -48,6 +52,28 @@ export class SynthesisComponent implements OnInit {
   // New Synthesis Functions API v2
 
   async synthesise() {
+    const text = 'Dia is Muire duit';
+    const uri = `https://www.abair.tcd.ie/api2/synthesise?input=${encodeURIComponent(text)}`;
+    const abairGetResponse = this.http.get(uri,
+      {
+        observe: 'body',
+    }).subscribe(
+      data => console.log('GET Got data: ', data),
+      error => console.error('GET Error: ', error),
+      () => console.log('Completed GET request.')
+    );
+
+    const abairPutResponse = this.http.put(uri, {
+      observe: 'body',
+    }).subscribe(
+      data => console.log('PUT Got data: ', data),
+      error => console.error('PUT Error: ', error),
+      () => console.log('Completed PUT request.')
+    );
+
+    console.log('GET: ', abairGetResponse);
+    console.log('PUT: ', abairPutResponse);
+
     this.synthesisObserver = this.synthesis.abairAPIv2Synthesise('Dia is Muire duit');
     console.log(this.synthesisObserver);
     /*
