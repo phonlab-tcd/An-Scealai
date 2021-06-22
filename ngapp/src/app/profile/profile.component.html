@@ -1,6 +1,6 @@
 <div class="profileContainer" *ngIf="auth.getUserDetails()">
     <!-- Popup for deleting account -->
-    <div *ngIf="!updateMode" class="{{modalClass}} modalContainer">
+    <div *ngIf="!updateMode && !updatePasswordMode" class="{{modalClass}} modalContainer">
         <div class="modalContent">
             <pre class="modalText">{{ts.l.are_you_sure}}</pre>
             <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
@@ -25,6 +25,20 @@
             </div>
         </div>
     </div>
+    <!-- Popup for changing password -->
+    <div *ngIf="updatePasswordMode" class="{{modalClass}} modalContainer">
+        <div class="modalContent">
+            <div class="modalText"> Change password </div>
+            <div class="modalText"> ({{ts.l.you_will_have_to_login}}) </div><br>
+            <div class="modalText"> New password: <input type="password" name="password" [(ngModel)]="newPassword"></div><br>
+            <div class="modalText"> Confirm password: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
+            <div class="usernameErrorText"> {{errorMessage}} </div>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="updatePassword()">{{ts.l.save}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.cancel}}</button>
+            </div>
+        </div>
+    </div>
     <!-- Profile options -->
     <div class="formTitle">{{ts.l.profile}}</div><br>
     <div *ngIf="!editMode" class="formBody">  
@@ -35,6 +49,13 @@
           <div class="userInfo">
             <i>{{auth.getUserDetails().username}}</i>
             <i class="fas fa-edit headerIconBtn" (click)="updateMode = true; errorMessage = ''; showModal()"></i>
+          </div>
+        </div>
+        <!-- password details -->
+        <div class="form-group">
+          <div class="formLabel">Change password :</div>
+          <div class="userInfo">
+            <i class="fas fa-edit headerIconBtn" (click)="updatePasswordMode=true;updateMode=false;errorMessage = '';showModal()"></i>
           </div>
         </div>
         <!-- classroom details if STUDENT -->

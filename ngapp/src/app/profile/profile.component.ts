@@ -29,8 +29,11 @@ export class ProfileComponent implements OnInit {
   statObj: StudentStats = new StudentStats();
   modalClass : string = "hidden";
   updateMode: boolean = false;
+  updatePasswordMode: boolean = false;
   updatedUsername: string;
   errorMessage: string = "";
+  newPassword: string;
+  newPasswordConfirm: string;
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
@@ -202,12 +205,38 @@ export class ProfileComponent implements OnInit {
     }
   }
   
+  updatePassword() {
+    console.log("function called");
+    if(this.newPassword && this.newPasswordConfirm) {
+      if(this.newPassword === this.newPasswordConfirm) {
+        if(this.newPassword.length < 5) {
+          this.errorMessage = this.ts.l.passwords_5_char_long;
+        }
+        else {
+          this.errorMessage = "";
+          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((res) => {
+            console.log(res);
+          });
+          this.auth.logout();
+        }
+      }
+      else {
+        this.errorMessage = "Passwords do not match";
+      }
+    }
+    else {
+      this.errorMessage = "Please input a new password and confirm";
+    }
+  }
+  
   showModal() {
     this.modalClass = "visibleFade";
   }
 
   hideModal() {
     this.modalClass = "hiddenFade";
+    this.updateMode = false;
+    this.updatePasswordMode = false;
   }
 
 }
