@@ -7,10 +7,10 @@ const mongodb = require('mongodb');
 var logger ={ error: console.error };
 
 // TODO: I'm not sure if this line should be included
-process.on('uncaughtException', err => {
-  logger.error( "UNCAUGHT EXCEPTION" );
-  logger.error( "[Inside 'uncaughtException' event] ", err);
-});
+// process.on('uncaughtException', err => {
+//   logger.error( "UNCAUGHT EXCEPTION" );
+//   logger.error( "[Inside 'uncaughtException' event] ", err);
+// });
 
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
