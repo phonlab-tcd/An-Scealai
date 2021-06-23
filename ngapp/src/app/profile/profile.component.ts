@@ -221,7 +221,7 @@ export class ProfileComponent implements OnInit {
         }
       }
       else {
-        this.errorMessage = "Passwords do not match";
+        this.errorMessage = this.ts.l.passwords_must_match;
       }
     }
     else {
