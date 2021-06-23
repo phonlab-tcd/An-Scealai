@@ -162,53 +162,29 @@ export class ProfileComponent implements OnInit {
   /*
   * Update account username and all data associated with it
   */
-  updateUsername() {
-    if(this.updatedUsername){
-      
-      this.userService.getUserByUsername(this.updatedUsername).subscribe((res) => {
-        if(res.length != 0) {
-          this.errorMessage = "Username already exists";
-          this.updatedUsername = "";
-        }
-        else {
-
-          if(this.auth.getUserDetails().role === "STUDENT") {
-            console.log("oldUsername: ", this.auth.getUserDetails().username)
-            this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).subscribe( (res) => {
-              console.log(res);
-            });
-            
-            this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
-              if(res) {
-                console.log(res);
-                console.log("username: ", this.auth.getUserDetails()._id);
-                this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-                  console.log(res);
-                  this.auth.logout();
-                });
-              }
-            });
-          }
-          
-          this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-            console.log(res);
-          });
-
-          this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe((res) => {
-            console.log(res);
-          });
-          
-          if(this.auth.getUserDetails().role === "TEACHER") {
-              this.auth.logout();
-          }
-          
-        }
-      });
-
-    }
-    else {
+  async updateUsername() {
+    if (!this.updatedUsername){
       this.errorMessage = "Please input a new username";
+      return
     }
+      
+    const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
+    
+    if (studentsWithThisUsername.length > 0) {
+      this.errorMessage = "Username already exists";
+      this.updatedUsername = "";
+      return
+    }
+
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
+      await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise();
+      await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+    }
+    
+    await this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+    await this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise()
+    this.auth.logout();
   }
   
   showModal() {
