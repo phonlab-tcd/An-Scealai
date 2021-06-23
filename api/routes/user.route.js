@@ -117,14 +117,13 @@ userRoutes.route('/updateUsername/:id').post((req, res) => {
 
 
 // Update account with random password, send user an email
-userRoutes.route('/sendNewPassword').post((req, res) => {
-    console.log(req.body.username);
-    User.find({"username": req.body.username}, (err, user) => {
+userRoutes.route('/sendNewPassword/').post((req, res) => {
+    User.findOne({"username": req.body.username}, (err, user) => {
         if(user) {
-          console.log(user)
-          let randomPassword = "123456"
+            var randomPassword = "abcdefg12345";
             user.salt = crypto.randomBytes(16).toString('hex');
             user.hash = crypto.pbkdf2Sync(randomPassword, user.salt, 1000, 64, 'sha512').toString('hex');
+            console.log("change password to: ", randomPassword);
             user.save().then(() => {
                 res.status(200).json("Password updated successfully");
              }).catch(err => {

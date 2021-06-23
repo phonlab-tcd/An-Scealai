@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
     if(this.usernameForgotPassword) {
       console.log(this.usernameForgotPassword);
       this.userService.sendNewPassword(this.usernameForgotPassword).subscribe((res) => {
+        console.log("this is read");
         console.log(res);
       });
       this.errorMessage = "";
