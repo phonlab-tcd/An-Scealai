@@ -27,6 +27,22 @@ studentStatsRoutes.route('/getStatsByClassroom/:id').get((req, res) => {
     });
 });
 
+// Update username given student id 
+studentStatsRoutes.route('/getStatsForStudent/:id').get(function (req, res) {
+  StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
+    if(err) {
+      console.log(err);
+        res.status(400).json({"message" : err.message});
+    } else {
+      if(!stat) {
+        res.status(404).json("Stat with given student ID not found");
+        return;
+      }
+      res.status(200).json(stat);
+    }
+  });
+});
+
 // Get the grammar erorr map given the student id
 studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
@@ -44,6 +60,7 @@ studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
 studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) {
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
     if(err) {
+      console.log(err);
         res.status(400).json({"message" : err.message});
     } else {
       stat.studentUsername = req.body.username;
