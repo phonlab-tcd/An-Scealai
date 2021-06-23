@@ -6,6 +6,7 @@ import { EngagementService } from '../engagement.service';
 import { TranslationService } from '../translation.service';
 //import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { StoryService } from '../story.service';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -24,12 +25,16 @@ export class LoginComponent implements OnInit {
 
   loginError: boolean;
   errorText: String;
+  forgotPassword: boolean = false;
+  modalClass : string = "hidden";
+  usernameForgotPassword: string;
+  errorMessage: string = "";
   
 
   constructor(private auth: AuthenticationService, private router: Router,
               private engagement: EngagementService, public ts : TranslationService, 
               //public _loadingBar: SlimLoadingBarService,
-              private storyService : StoryService) {}
+              private storyService : StoryService, private userService: UserService) {}
 
   ngOnInit() {
     this.loginError = false;
@@ -46,6 +51,29 @@ export class LoginComponent implements OnInit {
       }
     });
     
+  }
+  
+  showModal() {
+    this.modalClass = "visibleFade";
+  }
+
+  hideModal() {
+    this.modalClass = "hiddenFade";
+  }
+  
+  sendNewPassword() {
+    if(this.usernameForgotPassword) {
+      console.log(this.usernameForgotPassword);
+      this.userService.sendNewPassword(this.usernameForgotPassword).subscribe((res) => {
+        console.log(res);
+      });
+      this.errorMessage = "";
+      this.usernameForgotPassword = "";
+      this.forgotPassword = false;
+    }
+    else {
+      this.errorMessage = "Please input your username"
+    }
   }
 
 }
