@@ -90,8 +90,8 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
           console.log(err, new Date());
           res.json(err);
         }
-        if(stat === null) {
-            console.log("stat is null!", new Date());
+        if(!stat) {
+            res.status(404).json("Stat with given student ID not found");
         } else {
           let newErrors = Object.entries(req.body);
           console.log(newErrors);
