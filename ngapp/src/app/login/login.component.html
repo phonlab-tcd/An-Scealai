@@ -1,6 +1,18 @@
 <div class="registerContainer">
     <div class="formTitle">{{ts.l.sign_in}}</div><br>
     <div class="formContainer">
+      <!-- Popup for forgetting password -->
+      <div *ngIf="forgotPassword" class="{{modalClass}} modalContainer">
+          <div class="modalContent">
+              <pre class="modalText">Please input your username and we will send you an email with a new password.</pre><br>
+              <div class="modalText"> {{ts.l.username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="usernameForgotPassword"></div>
+              <div class="usernameErrorText"> {{errorMessage}} </div>
+              <div>
+                  <button class="modalBtn createBtnGreen" (click)="sendNewPassword()">{{ts.l.send}}</button>
+                  <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.cancel}}</button>
+              </div>
+          </div>
+      </div>
       <form (submit)="login()">
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.username}}</label></div>
@@ -11,6 +23,7 @@
           <div class="formLabel"><label>{{ts.l.password}}</label></div>
           <input type="password" class="form-control inputField" 
           placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
+          <div class="forgotPassword" (click)="forgotPassword=true;errorMessage='';showModal()"> Forgot password </div><br>
           <div *ngIf="loginError" class="errorMessage">{{errorText}}</div>
         </div>
         <button type="submit" class="btn loginBtn">{{ts.l.sign_in}}</button>
