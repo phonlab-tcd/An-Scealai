@@ -31,7 +31,7 @@
             <div class="modalText"> Change password </div>
             <div class="modalText"> ({{ts.l.you_will_have_to_login}}) </div><br>
             <div class="modalText"> New password: <input type="password" name="password" [(ngModel)]="newPassword"></div><br>
-            <div class="modalText"> Confirm password: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
+            <div class="modalText"> {{ts.l.confirm_password}}: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
             <div class="usernameErrorText"> {{errorMessage}} </div>
             <div>
                 <button class="modalBtn createBtnGreen" (click)="updatePassword()">{{ts.l.save}}</button>
@@ -52,12 +52,14 @@
           </div>
         </div>
         <!-- password details -->
+        <!--
         <div class="form-group">
           <div class="formLabel">Change password :</div>
           <div class="userInfo">
             <i class="fas fa-edit headerIconBtn" (click)="updatePasswordMode=true;updateMode=false;errorMessage = '';showModal()"></i>
           </div>
         </div>
+        -->
         <!-- classroom details if STUDENT -->
         <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="formLabel">{{ts.l.classroom}} :</div>
@@ -88,9 +90,15 @@
             <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
           </div>
         </div>
-        <!-- delete account -->
-        <div>
-          <button class="btn deleteAccountButton" (click)="updateMode = false; showModal()"> {{ts.l.delete_my_account}} </button>
+        <div class="accountButtonContainer">
+          <!-- delete account -->
+          <div>
+            <button class="btn deleteAccountButton" (click)="updateMode = false; showModal()"> {{ts.l.delete_my_account}} </button>
+          </div>
+          <!-- Change password -->
+          <div>
+            <button class="btn passwordButton" (click)="updatePasswordMode=true;updateMode=false;errorMessage='';showModal()"> Change password </button>
+          </div>
         </div>
         <!-- sign out and profile information -->
         <div class="btnContainer">
