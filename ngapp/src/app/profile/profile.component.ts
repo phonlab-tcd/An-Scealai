@@ -178,8 +178,15 @@ export class ProfileComponent implements OnInit {
               console.log(res);
             });
             
-            this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-              console.log(res);
+            this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
+              if(res) {
+                console.log(res);
+                console.log("username: ", this.auth.getUserDetails()._id);
+                this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
+                  console.log(res);
+                  this.auth.logout();
+                });
+              }
             });
           }
           
@@ -190,8 +197,10 @@ export class ProfileComponent implements OnInit {
           this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe((res) => {
             console.log(res);
           });
-
-          this.auth.logout();
+          
+          if(this.auth.getUserDetails().role === "TEACHER") {
+              this.auth.logout();
+          }
           
         }
       });

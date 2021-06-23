@@ -36,6 +36,13 @@ export class StatsService {
   }
   
 /*
+* Return array of stats object for given student
+*/
+  getStatsForStudent(id: string): Observable<any> {
+    return this.http.get(this.baseUrlStudents + 'getStatsForStudent/' + id);
+  }
+  
+/*
 * Update the grammar error map for the stat object of a given student
 */
   updateGrammarErrors(id: string, data, updatedTimeStamp: Date): Observable<any> {
