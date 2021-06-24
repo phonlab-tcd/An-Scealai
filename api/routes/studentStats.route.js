@@ -62,6 +62,9 @@ studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) 
     if(err) {
       console.log(err);
         res.status(400).json({"message" : err.message});
+    }
+    if(!stat) {
+      res.status(404).json("Stat does not exist for student id")
     } else {
       stat.studentUsername = req.body.username;
       stat.save().then(stat => {
