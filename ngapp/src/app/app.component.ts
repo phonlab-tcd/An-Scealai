@@ -11,7 +11,7 @@ import { EngagementService } from './engagement.service';
 import { TranslationService } from './translation.service';
 import { MessageService } from './message.service';
 import { filter } from 'rxjs/operators';
-// import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 
 declare var gtag;
 
