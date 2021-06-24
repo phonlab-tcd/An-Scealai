@@ -178,8 +178,11 @@ export class ProfileComponent implements OnInit {
 
     if(this.auth.getUserDetails().role === "STUDENT") {
       await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
-      await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise();
-      await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+      const stats = await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise()
+        .catch(err => console.log(`${this.auth.getUserDetails().username} doesn't have any associated studentStats!`));
+      if (stats) {
+        await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+      }
     }
     
     await this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
