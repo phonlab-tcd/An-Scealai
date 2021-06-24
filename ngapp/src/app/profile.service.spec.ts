@@ -9,7 +9,7 @@ describe('ProfileService', () => {
   }));
 
   it('should be created', () => {
-    const service: ProfileService = TestBed.get(ProfileService);
+    const service: ProfileService = TestBed.inject(ProfileService);
     expect(service).toBeTruthy();
   });
 });
