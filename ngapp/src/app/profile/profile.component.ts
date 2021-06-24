@@ -171,7 +171,7 @@ export class ProfileComponent implements OnInit {
     const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
     
     if (studentsWithThisUsername.length > 0) {
-      this.errorMessage = "Username already exists";
+      this.errorMessage = this.ts.l.username_in_use;
       this.updatedUsername = "";
       return
     }
