@@ -10,7 +10,7 @@ import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatCardModule } from '@angular/material/card'
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -122,7 +122,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatCardModule,
-    NgbDropdownModule,
+    // NgbDropdownModule,
   ],
   providers: [ 
     StoryService,
