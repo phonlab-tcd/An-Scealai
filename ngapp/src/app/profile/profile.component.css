@@ -134,6 +134,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
+    color: white;
 }
 
 .headerIconBtn:hover {
