@@ -24,7 +24,6 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
-    "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "@types/dom-mediacapture-record": "^1.0.1",
     "angular": "^1.8.2",
     "angular-text-input-highlight": "^1.4.0",
