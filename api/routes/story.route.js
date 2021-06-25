@@ -199,9 +199,8 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if(err) {
       console.log(err);
-      res.json(err);
-    }
-    if(story) {
+      res.status(500).json(err);
+    } else if(story) {
       if(story.feedback.audioId) {
         var audioId;
         // get the audio id from the audio id set to the story
