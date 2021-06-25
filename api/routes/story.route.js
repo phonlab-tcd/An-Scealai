@@ -196,18 +196,25 @@ storyRoutes.route('/viewFeedback/:id').post((req, res) => {
 });
 
 storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
+  let resObj = { errors:null };
+
   Story.findById(req.params.id, (err, story) => {
     if(err) {
       console.log(err);
-      res.status(500).json(err);
-    } else if(story) {
+      res.status(500);
+      resObj.errors.findById = err;
+    }
+
+    if(story) {
       if(story.feedback.audioId) {
         var audioId;
         // get the audio id from the audio id set to the story
         try {
           audioId = new ObjectID(story.feedback.audioId);
-        } catch(err) {
-          return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
+        } catch(audioIdErr) {
+          res.status(400);
+          resObj.errors.audioId = audioIdErr;
+            // "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" ; 
         }
 
         res.set('content-type', 'audio/mp3');
@@ -223,21 +230,27 @@ storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
           res.write(chunk);
         });
 
-        downloadStream.on('error', () => {
-          res.sendStatus(404);
+        downloadStream.on('error', (downloadStreamError) => {
+          res.status(500);
+          resObj.errors.downloadStream = downloadStreamError;
         });
         // close the stream after data sent to response
         downloadStream.on('end', () => {
-          res.end();
+          //res.end();
         });
-      } else {
-        //res.status(404).json({"message" : "No audio feedback has been associated with this story"});
-        res.json(null);
-      }
+      } 
+
+      // else {
+      //   //res.status(404).json({"message" : "No audio feedback has been associated with this story"});
+      //   //res.json(null);
+      // }
 
     } else {
-      res.status(404).json({"message" : "Story does not exist"});
+      res.status(404);
+      resObj.errors.story = "Story does not exist";
     }
+
+    res.json(resObj);
   });
 })
 
