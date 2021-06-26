@@ -13,6 +13,7 @@ const { parse, stringify } = require('node-html-parser');
 
 let Story = require('../models/story');
 let Event = require('../models/event');
+const APIError = require('../utils/APIError');
 
 let db;
 MongoClient.connect('mongodb://localhost:27017/', 
@@ -25,19 +26,16 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
-storyRoutes.route('/getStoryById/:id').get((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.status(400).json("An error occurred while trying to find this profile");
-      return;
+storyRoutes.route('/getStoryById/:id').get(async (req, res, next) => {
+  try {
+    const story = await Story.findById(req.params.id);
+    if (!story) {
+      throw new APIError(`Story with id ${req.params.id} not found.`, 404);
     }
-    if(!story) {
-      res.status(404).json("Story with given ID not found");
-      return;
-    }
-    res.status(200).json(story);             
-  });
+    res.status(200).json(story);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Create new story

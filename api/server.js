@@ -22,6 +22,8 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
+const errorHandler = require('./utils/errorHandler');
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
@@ -49,50 +51,9 @@ app.use('/recordings', recordingRoute);
 
 const port = process.env.PORT || 4000;
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// error handlers
-
-// [SH] Catch unauthorised errors
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401);
-    res.json({"message" : err.name + ": " + err.message});
-  }
-});
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        logger.error(
-          err
-        );
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-const server = app.listen(port, function(){
+app.listen(port, function(){
     logger.info('Listening on port ' + port);
 });
+app.use(errorHandler);
 
 module.exports = app;
