@@ -9,14 +9,18 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const logger = require('../logger.js');
 
 let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  { useNewUrlParser: true, useUnifiedTopology: true},
+  (err, client) => {
   if (err) {
-    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+    console.log(
+      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
   db = client.db('an-scealai');
@@ -56,11 +60,11 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
                 bucketName: 'voiceRecording'
             });
             
-            console.log("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
-            console.log("Request Paragraph indices: ", req.body.paragraphIndices);
+            logger.info("Request Paragraph audio ids: ", req.body.paragraphAudioIds);
+            logger.info("Request Paragraph indices: ", req.body.paragraphIndices);
             
-            console.log("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
-            console.log("Stored Paragraph indices: ", recording.paragraphIndices);
+            logger.info("\nStored Paragraph audio ids: ", recording.paragraphAudioIds);
+            logger.info("Stored Paragraph indices: ", recording.paragraphIndices);
           
             
             if(req.body.paragraphAudioIds) {
@@ -162,7 +166,7 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
 })
 
 recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
-  VoiceRecording.find({"storyData.id":req.params.storyId, "archived":true}, (err, recordings) => {
+  VoiceRecording.find({"storyData._id":req.params.storyId, "archived":true}, (err, recordings) => {
       if(err) {
           console.log(err);
           res.status(400).json({"message" : err.message});
@@ -185,6 +189,53 @@ recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
   });
   
 });
+
+// Delete audio recordings for story
+recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
+    VoiceRecording.find({"storyData._id" : req.params.id}, (err, recordings) => {
+        if(err) 
+          res.status(400).json(err);
+        if(!recordings) {
+          res.status(404).json({"message" : "Voice Recording does not exist"});
+        }
+          
+        let bucket = new mongodb.GridFSBucket(db, {
+            bucketName: 'voiceRecording'
+        });
+      
+        recordings.forEach(recording => {    
+          recording.paragraphAudioIds.forEach(paragraphAudioId => {
+              bucket.delete(new ObjectID(paragraphAudioId), (err) => {
+                if(err) {
+                  //console.log("File does not exist");
+                  res.status(404).json("Paragraph audio file does not exist");
+                }
+              });
+          });
+    
+          recording.sentenceAudioIds.forEach(sentenceAudioId => {
+              bucket.delete(new ObjectID(sentenceAudioId), (err) => {
+                if(err) {
+                    //console.log("File does not exist");
+                    res.status(404).json("Sentence audio file does not exist");
+                }
+              });
+          });
+        });
+        
+        res.status(200).json("Successfully deleted all audio recordiings for story"); 
+    });
+});
+
+// Delete all messages with recipient id
+recordingRoutes.route('/deleteStoryRecording/:id').get(function(req, res) {
+    VoiceRecording.deleteMany({"storyData._id": req.params.id}, function(err, recordings) {
+        if(err) res.json(err);
+        else res.json("Successfully removed all voice recording objects for story");
+    });
+});
+
+
 
 
 module.exports = recordingRoutes;

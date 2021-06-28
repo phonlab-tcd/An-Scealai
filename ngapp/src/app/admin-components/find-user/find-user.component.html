@@ -12,8 +12,8 @@
         <div class="checkbox-line"><input type="checkbox"[(ngModel)]="admins"/> {{ts.l.admins}} ({{allAdmins.length}})</div>  
       </div> 
       <!-- Search bar -->
-      <div class="content" role="main">
-        <div class="card">
+      <div role="main">
+        <div>
           <div class="form-group">
             <label for="search-text">{{ts.l.search_user}}</label>
             <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
@@ -27,33 +27,33 @@
       {{ts.l.results}}
       <div *ngIf="!students && !teachers && !admins">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults | appFilter: searchText" >
-          <div class='resultName' appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
+          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
-          <div class='resultRole'>{{user.role}}</div>
+          <div>{{user.role}}</div>
         </div>
       </div>
       
       <div *ngIf="students">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allStudents | appFilter: searchText">
-          <div class='resultName' appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
+          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
-          <div class='resultRole'>{{user.role}}</div>
+          <div>{{user.role}}</div>
         </div>
       </div>
       
       <div *ngIf="teachers">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allTeachers | appFilter: searchText">
-          <div class='resultName' appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
+          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
-          <div class='resultRole'>{{user.role}}</div>
+          <div>{{user.role}}</div>
         </div>
       </div>
       
       <div *ngIf="admins">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allAdmins | appFilter: searchText">
-          <div class='resultName' appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
+          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
-          <div class='resultRole'>{{user.role}}</div>
+          <div>{{user.role}}</div>
         </div>
       </div>
     </div>

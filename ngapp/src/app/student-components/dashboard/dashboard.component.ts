@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
   teacherSelectedErrors: String[] = [];
   classroomId: string;
   selectTeanglann: boolean = true;
-  selectPotafocal: boolean = false;
+  selectExternalLinks: boolean = false;
   showOptions: boolean = false;
   dontToggle: boolean = false;
   words: string[] = [];
@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         for(let story of this.stories) {
-          if(story.id === this.id) {
+          if(story._id === this.id) {
             this.story = story;
             this.getWordCount();
             break;
@@ -233,12 +233,12 @@ export class DashboardComponent implements OnInit {
 
 // route to synthesis 
   goToSynthesis() {
-    this.router.navigateByUrl('/synthesis/' + this.story.id);
+    this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
   
 // route to synthesis 
   goToRecording() {
-    this.router.navigateByUrl('/record-story/' + this.story.id);
+    this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
 /*
@@ -256,7 +256,9 @@ export class DashboardComponent implements OnInit {
     this.tags = [];
     this.filteredTags.clear();
     this.chosenTag = null;
+    console.log(this.story._id);
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
+      console.log("checking grammar for: ", this.story._id);
       this.tagSets = res;
       this.tags = this.tagSets.gramadoirTags;
       this.filterTags();

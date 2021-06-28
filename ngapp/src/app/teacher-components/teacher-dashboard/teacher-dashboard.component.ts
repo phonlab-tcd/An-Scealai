@@ -55,6 +55,7 @@ export class TeacherDashboardComponent implements OnInit {
     if (!userDetails) return;
 
     this.newClassroom.teacherId = userDetails._id;
+    this.newClassroom.date = new Date();
     this.classroom.getAllCodes().subscribe((res: string[]) => {
       let newCode: string = this.getUniqueCode(res);
       this.newClassroom.code = newCode;

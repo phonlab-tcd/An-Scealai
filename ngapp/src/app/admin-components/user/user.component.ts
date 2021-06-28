@@ -12,6 +12,7 @@ import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from '../../engagement.service';
 import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
+import { RecordingService } from '../../recording.service';
 import config from '../../../abairconfig.json';
 
 @Component({
@@ -32,7 +33,8 @@ export class UserComponent implements OnInit {
               private statsService: StatsService,
               private messageService: MessageService,
               private profileService: ProfileService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private recordingService: RecordingService) { }
 
   user: any;
   stories: Story[];
@@ -187,6 +189,17 @@ export class UserComponent implements OnInit {
       
       this.statsService.deleteStats(this.user._id).subscribe( (res) => {
         console.log(res);
+      });
+      
+      this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
+        for(let story of res) {
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
+            console.log('Deleted audio recordings for: ', story._id);
+          });
+          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
+            console.log("Deleted recording object for ", story._id);
+          })
+        }
       });
     
       this.storyService.deleteAllStories(this.user.username).subscribe( (res) => {

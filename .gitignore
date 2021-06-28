@@ -1,6 +1,14 @@
-dist/
+dist
 
 **/node_modules
+session.vim
+
+session.vim
+
+/api/sendinblue.json
+
+**/logs/*
+
 
 session.vim
 

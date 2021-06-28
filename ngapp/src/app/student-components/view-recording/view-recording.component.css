@@ -59,37 +59,6 @@ background-size: cover;
   text-align: center;
 }
 
-.modalContent {
-  margin-top: 80px;
-  width: 80%;
-  margin-left: 10%;
-  padding: 25px;
-  background-color: white;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.modalBtn {
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: #d1d1d1;
-  border: none;
-  border-radius: 5px;
-  margin: 5px;
-  margin-top: 15px;
-}
-
-.modalText {
-  font-size: 14pt;
-  white-space: normal;
-}
-
 .bookTitle {
   color: #261500; 
   padding-right: 10%;
