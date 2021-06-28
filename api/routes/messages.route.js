@@ -10,7 +10,9 @@ const ObjectID = require('mongodb').ObjectID;
 let Message = require('../models/message');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/',
+  {useNewUrlParser: true, useUnifiedTopology: true},
+  (err, client) => {
   if (err) {
     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
     process.exit(1);
@@ -62,6 +64,24 @@ messageRoutes.route('/markAsOpened/:id').post((req, res) => {
     });
 });
 
+// Update sender usernames for given user
+messageRoutes.route('/updateSenderUsername/:id').post(function (req, res) {
+  Message.find({"senderId": req.params.id}, function(err, messages){
+    if(err) {
+        res.status(400).json({"message" : err.message});
+    } 
+    else {
+      for(let message of messages) {
+        message.senderUsername = req.body.username;
+        message.save().catch(err => {
+            res.status(400).send("Unable to update");
+        });
+      }
+      res.json("Successfully updated message sender username");
+    }
+  });
+});
+
 // Delete message by ID
 messageRoutes.route('/delete/:id').get(function(req, res) {
     Message.findOneAndRemove({"id": req.params.id}, function(err, message) {
@@ -108,7 +128,10 @@ messageRoutes.route('/addMessageAudio/:id').post((req, res) => {
                 });
 
                 uploadStream.on('finish', () => {
-                    return res.status(201).json({ message: "File uploaded successfully, stored under Mongo"});
+                    return res.status(201).json(
+                      { 
+                        message: "File uploaded successfully, stored under Mongo"
+                      });
                 });
             });
         } else {

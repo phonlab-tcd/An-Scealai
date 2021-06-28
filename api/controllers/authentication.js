@@ -1,3 +1,5 @@
+const logger = require('../logger.js');
+
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');

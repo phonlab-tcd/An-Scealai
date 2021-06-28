@@ -1,3 +1,11 @@
+// user.route.js 
+//
+// endpoint prefix = '/user'
+
+
+const logger = require('../logger.js');
+
+
 var express = require('express');
 var userRoutes = express.Router();
 var jwt = require('express-jwt');
@@ -5,8 +13,8 @@ var jwt = require('express-jwt');
 let User = require('../models/user');
 
 var auth = jwt({
-    secret: 'sonJJxVqRC',
-    userProperty: 'payload'
+  secret: 'sonJJxVqRC',
+  userProperty: 'payload'
 });
 
 var ctrlProfile = require('../controllers/profile');
@@ -84,6 +92,25 @@ userRoutes.route('/deleteUser/:username').get(function(req, res) {
           res.send(err);
         }
         else res.json("Successfully removed user");
+    });
+});
+
+// Update username by id 
+userRoutes.route('/updateUsername/:id').post((req, res) => {
+  console.log(req.body.username);
+    User.findById(req.params.id, (err, user) => {
+        if(user) {
+            console.log("new username: ", req.body.username);
+            user.username = req.body.username;
+            user.save().then(() => {
+              console.log("username now: ", user.username);
+                res.status(200).json("Username updated successfully");
+             }).catch(err => {
+                res.status(500).send(err);
+            })
+        } else {
+            res.status(404).send(`User with _id ${req.params.id} could not be found`);
+        }
     });
 });
 

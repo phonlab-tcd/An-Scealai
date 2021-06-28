@@ -40,7 +40,7 @@
           <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
           <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
           <!-- TODO add translation for Report Feedback -->
-          <button routerLink="/report_an_issue" ngbDropdownItem (click)="changeCheck()">Report An Issue</button>
+          <button routerLink="/report_an_issue" ngbDropdownItem (click)="changeCheck()">{{ts.l.report_an_issue}}</button>
         </div>
       </div>
       <!-- technology menu -->
@@ -65,7 +65,7 @@
       <!-- Change language dropdown and login button-->
       <div class="navBtn rightNavBtn">
         <div ngbDropdown class="d-inline-block" #myDrop4="ngbDropdown" placement="bottom">
-          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage();">{{otherLanguage()}}</button>
+          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage();">{{ts.l.other_language}}</button>
           <!---
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
             <button ngbDropdownItem (click)="changeToEnglish()">English</button>
@@ -90,7 +90,7 @@
     <div *ngIf="notificationsShown && (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)" class="optionsPopupOld notifcationPopup">
       <div *ngIf="storiesForNotifications.length > 0" class="notificationsHeader">{{ts.l.new_feedback}}</div>
       <div class="notificationsBody">
-        <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story.id)">
+        <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story._id)">
           {{story.title}}
         </div>
       </div>
