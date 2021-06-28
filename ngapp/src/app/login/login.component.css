@@ -70,7 +70,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     margin-left: -40px;
     margin-top: -20px;
     width: 600px;
-    height: 400px;
+    height: 500px;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
     text-align: center;
@@ -107,11 +107,18 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     font-size: 12pt;
     white-space: normal;
     color: black;
+    text-align: left;
+    padding: 10px;
 }
 
 .modalBtn:hover {
     background-color: #707070;
     color: white;
+}
+
+.forgotPasswordInput {
+  display: flex;
+  flex-direction: column;
 }
 
 .hidden {

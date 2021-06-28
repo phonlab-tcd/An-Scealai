@@ -5,8 +5,10 @@
       <div *ngIf="forgotPassword" class="{{modalClass}} modalContainer">
           <div class="modalContent">
               <pre class="modalText">Please input your username and email, and we will send you an email with a new password.</pre><br>
-              <div class="modalText"> {{ts.l.username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="usernameForgotPassword"></div>
-              <div class="modalText"> Email: <input type="text" placeholder="Ener email" name="email" [(ngModel)]="emailForgotPassword"></div>
+              <div class="forgotPasswordInput">
+                <div class="modalText"> {{ts.l.username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="usernameForgotPassword"></div>
+                <div class="modalText"> Email: <input type="text" placeholder="Enter email" name="email" [(ngModel)]="emailForgotPassword"></div>
+              </div>
               <div class="usernameErrorText"> {{errorMessage}} </div>
               <div>
                   <button class="modalBtn createBtnGreen" (click)="sendNewPassword()">{{ts.l.send}}</button>
