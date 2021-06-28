@@ -3,7 +3,15 @@
 // endpoint prefix = '/user'
 
 
-const logger = require('../logger.js');
+const logger = require('../logger');
+
+const mail = require('../mail');
+if(mail.couldNotCreate){
+  logger.info(
+    "Could not create mail transporter which is required by the send_mail route. Refusing to continue.");
+  process.exit(1);
+}
+
 var crypto = require('crypto');
 
 
