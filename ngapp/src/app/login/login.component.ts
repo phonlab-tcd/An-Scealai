@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   forgotPassword: boolean = false;
   modalClass : string = "hidden";
   usernameForgotPassword: string;
+  emailForgotPassword: string;
   errorMessage: string = "";
   
 
@@ -64,7 +65,7 @@ export class LoginComponent implements OnInit {
   sendNewPassword() {
     if(this.usernameForgotPassword) {
       console.log(this.usernameForgotPassword);
-      this.userService.sendNewPassword(this.usernameForgotPassword).subscribe((res) => {
+      this.userService.sendNewPassword(this.usernameForgotPassword, this.emailForgotPassword).subscribe((res) => {
         console.log("this is read");
         console.log(res);
       });
