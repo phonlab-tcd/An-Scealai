@@ -4,6 +4,7 @@
 
 
 const logger = require('../logger');
+const generator = require('generate-password');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -128,7 +129,10 @@ userRoutes.route('/updateUsername/:id').post((req, res) => {
 userRoutes.route('/sendNewPassword/').post((req, res) => {
     User.findOne({"username": req.body.username}, (err, user) => {
         if(user) {
-            var randomPassword = "abcdefg12345";
+            var randomPassword = generator.generate({
+              length: 10,
+              numbers: true
+            });
             user.salt = crypto.randomBytes(16).toString('hex');
             user.hash = crypto.pbkdf2Sync(randomPassword, user.salt, 1000, 64, 'sha512').toString('hex');
             console.log("change password to: ", randomPassword);
