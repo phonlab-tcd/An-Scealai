@@ -30,7 +30,10 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
-              "node_modules/angular-text-input-highlight/text-input-highlight.css"
+              "node_modules/angular-text-input-highlight/text-input-highlight.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
             ],
             "scripts": [
               {
