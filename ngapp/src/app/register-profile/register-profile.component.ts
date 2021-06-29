@@ -19,18 +19,24 @@ export class RegisterProfileComponent implements OnInit {
   //input : string;
   showError : boolean;
   
+<<<<<<< Updated upstream
   email : string;
+=======
+  email : string = "";
+>>>>>>> Stashed changes
 
   genders : string[] = [
-    this.ts.l.male,
-    this.ts.l.female,
-    this.ts.l.non_binary,
-    this.ts.l.prefer_not_say
+    "",
+    "Male",
+    "Female",
+    "Non-binary",
+    "Prefer not to say"
   ];
 
   gender : string = this.genders[0];
 
   ages : string[] = [
+    "",
     "6-9",
     "10-19",
     "20-29",
@@ -45,6 +51,7 @@ export class RegisterProfileComponent implements OnInit {
   age : string = this.ages[0];
 
   counties : string[] = [
+    "",
     "Baile Átha Cliath",
     "Contae Átha Cliath",
     "Contae an Chabháin",
@@ -88,16 +95,21 @@ export class RegisterProfileComponent implements OnInit {
   country : string;
 
   schools : string[] = [
-    this.ts.l.english_school,
-    this.ts.l.gaelscoil,
-    this.ts.l.gaeltacht_school,
-    this.ts.l.school_not_in_ireland,
+    "",
+    "English school",
+    "Gaelscoil",
+    "Gaeltacht school",
+    "I did not attend school in Ireland"
   ];
   
   studentSchoolType: string = this.schools[0];
   
   
   studentSchoolLevels: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am a primary school pupil",
     "I am a secondary school pupil",
     "I am a 3rd level student in Ireland",
@@ -109,17 +121,29 @@ export class RegisterProfileComponent implements OnInit {
   studentSchoolLevel: string;
   
   primaryYears: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am in 1st class",
     "I am in 2nd class",
     "I am in 3rd class",
     "I am in 4th class",
     "I am in 5th class",
+<<<<<<< Updated upstream
     "I am in 6th class",
+=======
+    "I am in 6th class"
+>>>>>>> Stashed changes
   ];
   
   primaryYear: string;
   
   secondaryYears: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am in 1st year",
     "I am in 2nd year",
     "I am in 3rd year",
@@ -131,6 +155,10 @@ export class RegisterProfileComponent implements OnInit {
   secondaryYear: string;
   
   thirdLevelOptions: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am studying Irish",
     "I am studying Education Primary (with Irish as a major component)",
     "I am studying Education Primary (with Irish as a minor component)",
@@ -141,6 +169,10 @@ export class RegisterProfileComponent implements OnInit {
   thirdLevelOption: string;
   
   thirdLevelYears: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am in 1st year",
     "I am in 2nd year",
     "I am in 3rd year of a 4 year course",
@@ -154,6 +186,10 @@ export class RegisterProfileComponent implements OnInit {
   otherStudies: string;
   
   usaOptions: string[] = [
+<<<<<<< Updated upstream
+=======
+    "",
+>>>>>>> Stashed changes
     "I am taking an Irish class at a University",
     "I am not enrolled in an Irish language class at a University"
   ];
@@ -178,29 +214,32 @@ export class RegisterProfileComponent implements OnInit {
   teacherSchoolName: string;
 
   nativeSpeakerStatuses : string[] = [
-    this.ts.l.yes,
-    this.ts.l.no,
-    this.ts.l.bilingual_native,
-    this.ts.l.bilingual_other,
+    "",
+    "Yes",
+    "No",
+    "Bilingual (native)",
+    "Bilingual (other)"
   ];
 
   nativeSpeakerStatus : string = this.nativeSpeakerStatuses[0];
 
   dialectPreferences : string[] = [
-    this.ts.l.gaeilge_uladh,
-    this.ts.l.gaeilge_chonnacht,
-    this.ts.l.gaolainn_na_mumhan,
-    this.ts.l.other,
+    "",
+    "Gaeilge Uladh",
+    "Gaeilge Chonnact",
+    "Gaolainn na Mumhan",
+    "Other"
   ];
 
   dialectPreference : string = this.dialectPreferences[0];
 
   spokenComprehensionLevels : string[] = [
-    this.ts.l.comprehension_level_1,
-    this.ts.l.comprehension_level_2,
-    this.ts.l.comprehension_level_3,
-    this.ts.l.comprehension_level_4,
-    this.ts.l.comprehension_level_5,
+    "",
+    "A few words when spoken slowly",
+    "A few simple phrases when spoken slowly",
+    "Parts of the conversation",
+    "Most of the conversation when spoken clearly",
+    "Almost everything when spoken at a normal pace"
   ];
 
   spokenComprehensionLevel : string = this.spokenComprehensionLevels[0];
@@ -212,20 +251,27 @@ export class RegisterProfileComponent implements OnInit {
   fatherNativeTongue: string;
   
   motherNativeTongue: string;
+<<<<<<< Updated upstream
+=======
+  
+  otherLanguageProficiency: string;
+>>>>>>> Stashed changes
 
   howOftenOptions : string[] = [
-    this.ts.l.every_day,
-    this.ts.l.every_week,
-    this.ts.l.few_times_a_month,
-    this.ts.l.hardly_ever,
+    "",
+    "Every day",
+    "Every week but not every day",
+    "A few times a month",
+    "Hardly ever",
   ];
 
   speakingFrequency : string = this.howOftenOptions[0];
 
   speakWithOptions : string[] = [
-    this.ts.l.learners_and_natives,
-    this.ts.l.natives,
-    this.ts.l.learners,
+    "",
+    "Learners and native speakers",
+    "Native speakers",
+    "Learners",
   ];
 
   speakWith : string = this.speakWithOptions[0];
@@ -291,11 +337,12 @@ export class RegisterProfileComponent implements OnInit {
   }
 
   synthOpinions : string[] = [
-    this.ts.l.synth_opinion_1,
-    this.ts.l.synth_opinion_2,
-    this.ts.l.synth_opinion_3,
-    this.ts.l.synth_opinion_4,
-    this.ts.l.synth_opinion_5,
+    "",
+    "I don't like them",
+    "They're okay, but I prefer a human voice",
+    "I don't care if it is a computer or person",
+    "Sometimes synthetic voices just fit",
+    "Sometimes synthetic voices are better suited",
   ];
 
   synthOpinion : string = this.synthOpinions[0];
@@ -340,6 +387,10 @@ export class RegisterProfileComponent implements OnInit {
         this.otherLanguages = p.otherLanguages,
         this.fatherNativeTongue = p.fatherNativeTongue,
         this.motherNativeTongue = p.motherNativeTongue,
+<<<<<<< Updated upstream
+=======
+        this.otherLanguageProficiency = p.otherLanguageProficiency,
+>>>>>>> Stashed changes
         this.speakingFrequency = p.speakingFrequency;
         this.speakWith = p.speakWith;
         this.irishMedia = p.irishMedia;
@@ -352,11 +403,14 @@ export class RegisterProfileComponent implements OnInit {
     }, (err) => {
       console.log("No previous profile data associated with user.");
     });
+<<<<<<< Updated upstream
 /*
     if(userDetails.role === 'TEACHER') {
       this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
     }
     */
+=======
+>>>>>>> Stashed changes
     
   }
 
@@ -397,6 +451,10 @@ export class RegisterProfileComponent implements OnInit {
       otherLanguages: (this.otherLanguages) ? this.otherLanguages : null,
       fatherNativeTongue: (this.fatherNativeTongue) ? this.fatherNativeTongue : null,
       motherNativeTongue: this.motherNativeTongue,
+<<<<<<< Updated upstream
+=======
+      otherLanguageProficiency : this.otherLanguageProficiency,
+>>>>>>> Stashed changes
       speakingFrequency : this.speakingFrequency,
       speakWith : this.speakWith,
       irishMedia : this.irishMedia,
@@ -412,8 +470,10 @@ export class RegisterProfileComponent implements OnInit {
 
     this.profileService.create(profile).subscribe((res) => {
       if(userDetails.role === 'STUDENT') {
+        console.log(res)
         this.router.navigateByUrl('/contents');
       } else if(userDetails.role === 'TEACHER') {
+        console.log(res)
         this.router.navigateByUrl('/teacher/dashboard');
       }
       

@@ -103,6 +103,14 @@
     align-items: flex-start;
 }
 
+.ng-valid[required], .ng-valid.required {
+  border-left: 5px solid #42A948;
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+}
+
 @media only screen and (max-width: 700px) {
     .registerContainer {
         width: 90%;
