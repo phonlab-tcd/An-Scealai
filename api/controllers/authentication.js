@@ -30,9 +30,33 @@ module.exports.verify = async (req, res) => {
   }
 
   const user = await User.findOne({username: req.query.username, email: req.query.email})
-    .catch(err => {});
+    .catch(err => {
+      logger.error({
+        error: err,
+        endpoint: '/user/verify'
+      });
+    });
+  
+  if(!user){
+    return res.status(404).json(`User with username: ${req.query.username} and email: ${req.query.email} does not exist.`);
+  }
 
-  console.log("user:",user);
+  if(user.confirmationCode === req.query.confirmationCode){
+    const updatedUser = 
+      await User.findOneAndUpdate({
+        // Find
+        username: req.query.username, 
+        email: req.query.email}, 
+        // Update
+        {status: 'Active'}, 
+        // Options
+        {new: true});
+    console.dir("User Activated: ", updatedUser);
+    return res.status(200).send('<h1>Success</h1><p>Your account has been verified.</p><ul>' +
+      `<li>username: ${updatedUser.username}</li>` +
+      `<li>verified email: ${updatedUser.email}</li>` +
+      '</ul><p>');
+  }
 
 
   res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
