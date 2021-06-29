@@ -285,7 +285,7 @@
           <div *ngIf="irishWritingChecked()" class="form-group">
             <p class="formLabel">{{ts.l.how_often}}</p>
             <select class="selectOptions" [(ngModel)]="howOftenWriting" name="howOftenWriting">
-              <option *ngFor="let hoo of howOftenOptions;" [ngValue]="hoo">{{ts.l.how_often_options_list[i]}}</option>
+              <option *ngFor="let hoo of howOftenOptions; let i=index;" [ngValue]="hoo">{{ts.l.how_often_options_list[i]}}</option>
             </select>
           </div>
         </div>

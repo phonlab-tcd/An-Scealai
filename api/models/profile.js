@@ -37,10 +37,7 @@ let Profile = new Schema({
     otherLanguages: String,
     fatherNativeTongue: String,
     motherNativeTongue: String,
-<<<<<<< Updated upstream
-=======
     otherLanguageProficiency: String,
->>>>>>> Stashed changes
     speakingFrequency : String,
     speakWith : String,
     irishMedia : {
