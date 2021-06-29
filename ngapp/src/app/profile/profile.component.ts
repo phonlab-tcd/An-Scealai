@@ -10,9 +10,11 @@ import { NotificationService } from '../notification-service.service';
 import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
 import { StoryService } from '../story.service';
+import { Story } from '../story';
 import { ProfileService } from '../profile.service';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
+import { RecordingService } from '../recording.service';
 
 @Component({
   selector: 'app-profile',
@@ -41,7 +43,8 @@ export class ProfileComponent implements OnInit {
               public profileService : ProfileService,
               public messageService: MessageService,
               public userService: UserService,
-              public statsService: StatsService) { }
+              public statsService: StatsService,
+              public recordingService: RecordingService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -125,10 +128,27 @@ export class ProfileComponent implements OnInit {
     if(userDetails.role === "STUDENT") {
       if(this.classroom)
         this.leaveClassroom();
+        
+      this.storyService.getStoriesFor(userDetails.username).subscribe( (res: Story[]) => {
+        for(let story of res) {
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
+            console.log(res);
+          });
+          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
+            console.log(res);
+          })
+        }
+      });
+      
       this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
-        console.log("All stories deleted");
+        console.log(res);
+      });
+      
+      this.statsService.deleteStats(userDetails._id).subscribe( (res) => {
+        console.log(res);
       });
     }
+    
     if(userDetails.role === "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
@@ -141,19 +161,15 @@ export class ProfileComponent implements OnInit {
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
         console.log(res)
       });
-      
     }
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-      //console.log("All messages deleted");
       console.log(res);
     });  
     this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-      //console.log("Profile deleted");
       console.log(res);
     });
     this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-      //console.log("User deleted");
       console.log(res);
     });
     this.auth.logout();

@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
-  showOptions: boolean = false;
+  showOptions: boolean = true;
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;

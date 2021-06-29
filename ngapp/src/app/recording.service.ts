@@ -48,4 +48,12 @@ export class RecordingService {
     return this.http.get(this.baseUrl + "updateArchiveStatus/" + recordingId);
   }
   
+  deleteStoryRecordingAudio(storyId: string): Observable<any> {
+    return this.http.get(this.baseUrl + "deleteStoryRecordingAudio/" + storyId);
+  }
+  
+  deleteStoryRecording(storyId: string): Observable<any> {
+    return this.http.get(this.baseUrl + "deleteStoryRecording/" + storyId);
+  }
+  
 }
