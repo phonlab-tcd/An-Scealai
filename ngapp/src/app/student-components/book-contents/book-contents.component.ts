@@ -11,6 +11,7 @@ import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
+import { RecordingService } from '../../recording.service';
 
 @Component({
   selector: 'app-book-contents',
@@ -22,7 +23,7 @@ export class BookContentsComponent implements OnInit {
   stories: Story[] = [];
   deleteMode: Boolean;
   editMode : boolean;
-  toBeDeleted: String[] = [];
+  toBeDeleted: string[] = [];
   userId: string = '';
   messagesForNotifications : Message[] = [];
   unreadMessages: number = 0;
@@ -32,7 +33,7 @@ export class BookContentsComponent implements OnInit {
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService, private router: Router,
     private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService,
-    private ns: NotificationService) { }
+    private ns: NotificationService, private recordingService: RecordingService) { }
 
 /*
 * Set story array of stories for logged in user
@@ -98,12 +99,19 @@ export class BookContentsComponent implements OnInit {
     if(this.deleteMode && this.toBeDeleted.length > 0) {
       for(let id of this.toBeDeleted) {
         this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], {_id: id});
+        
+        this.recordingService.deleteStoryRecordingAudio(id).subscribe((res) => {
+          console.log(res);
+        });
+        this.recordingService.deleteStoryRecording(id).subscribe( (res) => {
+          console.log(res);
+        })
         this.storyService.deleteStory(id).subscribe(
           res => {
             console.log('Deleted: ', id);
             this.ngOnInit();
           }
-        )
+        );
       }
     } else if(this.deleteMode && this.toBeDeleted.length === 0) {
       this.deleteMode = false;
@@ -118,7 +126,7 @@ export class BookContentsComponent implements OnInit {
   }
 
 //add story to be deleted to an array given the story id as a paramter
-  toggleDelete(id: String) {
+  toggleDelete(id: string) {
     if(this.toBeDeleted.includes(id)) {
       var indexToRemove = this.toBeDeleted.indexOf(id);
       this.toBeDeleted.splice(indexToRemove, 1);
