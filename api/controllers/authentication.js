@@ -62,6 +62,77 @@ module.exports.verify = async (req, res) => {
   res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
 }
 
+module.exports.verifyOldAccount = async (req, res) => {
+  if (!req.body.username){
+    return res.status(400).json("username required to verify account email address");
+  }
+  if (!req.body.email){
+    return res.status(400).json("email required to verify account email address");
+  }
+  if (!req.body.password){
+    return res.status(400).json("password required to verify account email address");
+  }
+
+  const user = await User.findOne({username: req.body.username});
+  
+  if (user.status === 'Active'){
+    if (user.email) {
+      return res.status(400).json(`User: ${user.username} is already verified with the email address: ${user.email}. If you think this is a mistake please let us know at scealai.info@gmail.com`);
+    }
+    logger.warning(`User: ${user.usernam} was Active but had no assoctiated email address. Resetting to Pending`);
+    const { makePendingError, userMadePending } =
+      await User.findOneAndUpdate(
+        // Find
+        {username: user.username },
+        // Update
+        {status: 'Pending'},
+        // Options
+        {new:true});
+    if ( makePendingError ) {
+      logger.error({endpoint: '/user/verifyOldAccount', error: makePendingError});
+    }
+    if ( !userMadePending ) {
+      logger.error({endpoint: '/user/verifyOldAccount', message: 'There was an error while trying to set the users status to pending' });
+    }
+  }
+  
+  user.email = req.body.email;
+
+  user.confirmationCode = jwt.sign({email: req.body.email},'sonJJxVqRC');
+
+  await user.save()
+    .catch(err => {
+      logger.error({endpoint: '/user/verifyOldAccount', error: err });
+    });
+
+  const activationLink = `${req.body.baseurl}user/verify?username=${encodeURIComponent(req.body.username)}&email=${encodeURIComponent(req.body.email)}&confirmationCode=${encodeURIComponent(user.confirmationCode)}`
+
+  const mailObj = {
+    from: 'scealai.info@gmail.com',
+    recipients: [req.body.email],
+    subject: 'Verify account email -- An Scéalaí',
+    message:
+    `Dear ${req.body.username},\n\
+    Please use this link to verify your email address for An Scéalaí:\n\
+    ${activationLink}\n\
+    Once you have verified your email you will be able to log in again.\n\
+    \n\
+    Kindly,\n\
+    \n\
+    The An Scéalaí team`,
+  }
+
+  const mailRes = mail.sendEmail(mailObj);
+  if(!mailRes){
+    return res.status(500).json('Something went wrong.');
+  }
+  if(mailRes.rejected.length !== 0){
+    return res.status(500).json('Failed to send verification email'); 
+  }
+
+  return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
+}
+
 module.exports.register = (req, res) => {
 
   if(!req.body.username || !req.body.password || !req.body.email) {
@@ -138,13 +209,16 @@ module.exports.register = (req, res) => {
 
 module.exports.login = function(req, res) {
     
+    console.log('processing login request for:',req.body);
+
     if(!req.body.username || !req.body.password) {
-        sendJSONresponse(res, 400, {
-            "message": "Username and password required"
+      return res
+        .status(400)
+        .json({
+          "message": "Username and password required"
         });
-        return;
     }
-    
+
     passport.authenticate('local', function(err, user, info) {
         var token;
 

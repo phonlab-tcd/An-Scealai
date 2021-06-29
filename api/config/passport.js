@@ -6,8 +6,8 @@ var User = require('../models/user');
 mongoose.model('User');
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username}, function (err, user) {
+  async (username, password, done) => {
+    User.findOne({ username: username}, async (err, user) => {
       if(err) { 
         console.log(err);
         return done(err); 
@@ -27,7 +27,13 @@ passport.use(new LocalStrategy(
 
       if(!user.status){
         logger.warning(`user: ${username} has not had their email validated`);
-        User.findOneAndUpdate({username: username}, {status: 'Pending'}, (updateUserErr, updatedUser) => {
+        await User.findOneAndUpdate(
+          // Find
+          {username: username},
+          // Update
+          {status: 'Pending'},
+          // Callback
+          (updateUserErr, updatedUser) => {
           if(updateUserErr){
             logger.error(updateUserErr)
           }
@@ -43,7 +49,14 @@ passport.use(new LocalStrategy(
       }
 
       if(user.status === 'Pending'){
-        return done(null, false, {user: username, message: `User ${username} does not have a verified email. Email must be verified to log in.`}, user);
+        console.log(user);
+        return done(
+          null, 
+          false,
+          {
+            userStatus: 'Pending',
+            user: username, 
+            message: `User ${username} does not have a verified email. Email must be verified to log in.`});
       }
 
       // If everything is correct, return user object
