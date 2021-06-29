@@ -73,6 +73,7 @@
     
             "personal_info" : "Personal Information",
             "profile_instructions" : "We are asking you to complete the following questionnaire for research purposes, in order to facilitate international comparisons between different language acquisition patterns.",
+            "email" : "Email",
             "gender" : "Gender",
             "gender_list" : ["","Male","Female","Non-Binary","Prefer not to say"],
             "male" : "Male",
@@ -83,6 +84,7 @@
             "county" : "County",
             "not_from_ireland" : "I'm not from the Republic of Ireland or Northern Ireland",
             "country" : "Country",
+            "current_studies" : "Current studies",
             "type_of_school" : "What type of school did you go to / are you going to?",
             "schools_list" : ["", "English school", "Gaelscoil", "Gaeltacht school", "I did not attend school in Ireland"],
             "english_school" : "English school",
@@ -116,6 +118,7 @@
               "I am in 5th year",
               "I am in 6th year"
             ],
+            "what_are_you_studying" : "What are you studying?",
             "third_level_options_list" : [
               "",
               "I am studying Irish",
@@ -136,10 +139,15 @@
               "I am taking an Irish class at a University",
               "I am not enrolled in an Irish language class at a University"
             ],
+            "please_specify" : "Please specify",
+            "specify_where" : "Specify where",
+            "attending_gaeltacht_immersion_course" : "I am currently attending a Gaeltacht immersion course",
+            "studies" : "Studies",
             "primary" : "Primary",
             "secondary" : "Secondary",
             "third_level" : "3rd level",
             "gaeltacht_immersion_course" : "Gaeltacht immersion course",
+            "school_type_where_you_teach" : "School type where you teach",
             "yes" : "Yes",
             "no" : "No",
             "bilingual_native" : "Bilingual (native)",
@@ -196,6 +204,11 @@
             "learners_and_natives" : "Learners and native speakers",
             "natives" : "Native speakers",
             "learners" : "Learners",
+            "list_languages_spoken": "List languages spoken at home/average use of each",
+            "father_native_tongue" : "Father's native tongue",
+            "mother_native_tongue" : "Mother's native tongue",
+            "years_of_irish_school" : "How many years of Irish at school/university?",
+            "list_other_foreign_languages" : "List other foreign languages you speak in decreasing order of proficiency",
             "synth_opinion_list" : [
               "",
               "I don't like them",
@@ -583,6 +596,7 @@
     
             "personal_info" : "Eolas pearsanta",
             "profile_instructions" : "Táimid ag iarraidh ort an ceistneoir seo a líonadh ar mhaithe le taighde a cheadóidh comparáidí idirnáisiúnta le teangacha éagsúla.",
+            "email" : "Email",
             "gender" : "Gnéas",
             "gender_list" : ["","Fireann","Baineann","Uilíoch","B'fhearr liom gan a rá"],
             "male" : "Fireann",
@@ -591,6 +605,7 @@
             "county" : "Contae",
             "not_from_ireland" : "Ní as Poblacht na hÉireann ná as Tuaisceart Éireann mé",
             "country" : "Tír",
+            "current_studies" : "Current studies",
             "type_of_school" : "Cén cineál scoile ar fhreastail / a bhfuil tú ag freastal uirthi?",
             "schools_list" : ["", "Scoil Bhéarla", "Gaelscoil", "Scoil Gaeltachta", "Ní fhreastail mé ar scoil in Éirinn"],
             "english_school" : "Scoil Bhéarla",
@@ -624,6 +639,7 @@
               "I am in 5th year",
               "I am in 6th year"
             ],
+            "what_are_you_studying" : "What are you studying?",
             "third_level_options_list" : [
               "",
               "I am studying Irish",
@@ -644,10 +660,15 @@
               "I am taking an Irish class at a University",
               "I am not enrolled in an Irish language class at a University"
             ],
+            "please_specify" : "Please specify",
+            "specify_where" : "Specify where",
+            "attending_gaeltacht_immersion_course" : "I am currently attending a Gaeltacht immersion course",
+            "studies" : "Studies",
             "primary" : "Primary",
             "secondary" : "Secondary",
             "third_level" : "3rd level",
             "gaeltacht_immersion_course" : "Gaeltacht immersion course",
+            "school_type_where_you_teach" : "School type where you teach",
             "yes" : "Sea",
             "no" : "Ní hea",
             "bilingual_native" : "Dátheangach (cainteoir dúchais)",
@@ -704,6 +725,11 @@
             "learners_and_natives" : "Foghlaimeoirí agus cainteoirí dúchais",
             "natives" : "Cainteoirí dúchais",
             "learners" : "Foghlaimeoirí",
+            "list_languages_spoken": "List languages spoken at home/average use of each",
+            "father_native_tongue" : "Father's native tongue",
+            "mother_native_tongue" : "Mother's native tongue",
+            "years_of_irish_school" : "How many years of Irish at school/university?",
+            "list_other_foreign_languages" : "List other foreign languages you speak in decreasing order of proficiency",
             "synth_opinion_list" : [
               "",
               "Ní maith liom iad",
