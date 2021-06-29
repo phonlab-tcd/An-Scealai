@@ -5,7 +5,6 @@ const profileRoutes = express.Router();
 let Profile = require('../models/profile');
 
 profileRoutes.route('/create').post((req, res) => {
-  console.log("body: ", req.body)
     Profile.updateOne({userId : req.body.userId}, req.body, {upsert : true}).then(upsertDetails => {
         res.status(200).send(upsertDetails);
     }).catch(err => {
@@ -30,7 +29,6 @@ profileRoutes.route('/get/:id').get((req, res) => {
 
 profileRoutes.route('/getForUser/:id').get((req, res) => {
     Profile.findOne({"userId" : req.params.id}, (err, profile) => {
-      console.log("this function is read");
         if(err) {
           console.log(err);
           res.status(400).send("An error occurred while trying to find this profile");
