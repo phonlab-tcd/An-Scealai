@@ -13,6 +13,11 @@
     margin-left: 20%;
 }
 
+.inputFieldYears {
+    width: 15%;
+    margin-left: 40%;
+}
+
 .formContainer {
     width: 500px;
     display: inline-block;
@@ -79,6 +84,15 @@
     border-radius: 0px 0px 5px 5px;
     padding: 10px;
     margin-bottom: 10px;
+}
+
+.group-set-body-instructions {
+    background-color: white;
+    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 12pt;
 }
 
 .checkbox-group {

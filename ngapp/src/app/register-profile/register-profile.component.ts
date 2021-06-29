@@ -16,8 +16,10 @@ export class RegisterProfileComponent implements OnInit {
               private router : Router,
               public ts : TranslationService) { }
 
-  input : string;
+  //input : string;
   showError : boolean;
+  
+  email : string;
 
   genders : string[] = [
     this.ts.l.male,
@@ -91,18 +93,89 @@ export class RegisterProfileComponent implements OnInit {
     this.ts.l.gaeltacht_school,
     this.ts.l.school_not_in_ireland,
   ];
-
-  school : string = this.schools[0];
-
-  attendSecondary : boolean = false;
   
-  schoolName : string = "";
-
-  schoolYears : number[] = [
-    1, 2, 3, 4, 5, 6
+  studentSchoolType: string = this.schools[0];
+  
+  
+  studentSchoolLevels: string[] = [
+    "I am a primary school pupil",
+    "I am a secondary school pupil",
+    "I am a 3rd level student in Ireland",
+    "I am studying Irish in the USA",
+    "I am studying Irish outside of Ireland or USA",
+    "I am a postgraduate student"
   ];
-
-  schoolYear : number = this.schoolYears[0];
+  
+  studentSchoolLevel: string;
+  
+  primaryYears: string[] = [
+    "I am in 1st class",
+    "I am in 2nd class",
+    "I am in 3rd class",
+    "I am in 4th class",
+    "I am in 5th class",
+    "I am in 6th class",
+  ];
+  
+  primaryYear: string;
+  
+  secondaryYears: string[] = [
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year",
+    "I am in 4th year",
+    "I am in 5th year",
+    "I am in 6th year",
+  ];
+  
+  secondaryYear: string;
+  
+  thirdLevelOptions: string[] = [
+    "I am studying Irish",
+    "I am studying Education Primary (with Irish as a major component)",
+    "I am studying Education Primary (with Irish as a minor component)",
+    "I am studying Education as a Postgraduate student",
+    "Other"
+  ];
+  
+  thirdLevelOption: string;
+  
+  thirdLevelYears: string[] = [
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year of a 4 year course",
+    "I am in final year"
+  ];
+  
+  thirdLevelYear: string;
+  
+  postgradYear: string;
+  
+  otherStudies: string;
+  
+  usaOptions: string[] = [
+    "I am taking an Irish class at a University",
+    "I am not enrolled in an Irish language class at a University"
+  ];
+  
+  usaOption: string;
+  
+  otherCountryOfStudy: string;
+  
+  otherPostgradStudies: string;
+  
+  immersionCourse: boolean = false;
+  
+  teacherSchoolTypes = {
+    primary: false,
+    secondary: false,
+    thirdLevel : false,
+    gaeltacht : false
+  };
+  
+  teacherPrimaryType: string;
+  teacherSecondaryType: string;
+  teacherSchoolName: string;
 
   nativeSpeakerStatuses : string[] = [
     this.ts.l.yes,
@@ -132,17 +205,13 @@ export class RegisterProfileComponent implements OnInit {
 
   spokenComprehensionLevel : string = this.spokenComprehensionLevels[0];
 
-  cefrLevels : string[] = [
-    this.ts.l.unknown,
-    "A1",
-    "A2",
-    "B1",
-    "B2",
-    "C1",
-    "C2",
-  ];
-
-  cefrLevel : string = this.cefrLevels[0];
+  yearsOfIrish: number;
+  
+  otherLanguages: string;
+  
+  fatherNativeTongue: string;
+  
+  motherNativeTongue: string;
 
   howOftenOptions : string[] = [
     this.ts.l.every_day,
@@ -234,21 +303,43 @@ export class RegisterProfileComponent implements OnInit {
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
+    console.log(userDetails._id);
 
     this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
         let p = res.profile;
+        this.email = p.email;
         this.gender = p.gender;
         this.age = p.age;
         this.county = p.county;
         this.notFromIreland = p.notFromIreland;
         this.country = p.country;
-        this.school = p.school;
-        this.schoolName = p.schoolName;
+        
+        this.studentSchoolType = p.studentSchoolType,
+        this.studentSchoolLevel = p.studentSchoolLevel,
+        this.primaryYear = p.primaryYear,
+        this.secondaryYear = p.secondaryYear,
+        this.thirdLevelOption = p.thirdLevelOption,
+        this.thirdLevelYear = p.thirdLevelYear,
+        this.postgradYear = p.postgradYear,
+        this.otherStudies = p.otherStudies,
+        this.usaOption = p.usaOption,
+        this.otherCountryOfStudy = p.otherCountryOfStudy,
+        this.otherPostgradStudies = p.otherPostgradStudies,
+        this.immersionCourse = p.immersionCourse,
+        
+        this.teacherPrimaryType = p.teacherPrimaryType,
+        this.teacherSecondaryType = p.teacherSecondaryType,
+        this.teacherSchoolTypes = p.teacherSchoolTypes,
+        this.teacherSchoolName = p.teacherSchoolName,
+
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
         this.spokenComprehensionLevel = p.spokenComprehensionLevel;
-        this.cefrLevel = p.cefrLevel;
+        this.yearsOfIrish = p.yearsOfIrish,
+        this.otherLanguages = p.otherLanguages,
+        this.fatherNativeTongue = p.fatherNativeTongue,
+        this.motherNativeTongue = p.motherNativeTongue,
         this.speakingFrequency = p.speakingFrequency;
         this.speakWith = p.speakWith;
         this.irishMedia = p.irishMedia;
@@ -261,10 +352,12 @@ export class RegisterProfileComponent implements OnInit {
     }, (err) => {
       console.log("No previous profile data associated with user.");
     });
-
+/*
     if(userDetails.role === 'TEACHER') {
       this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
     }
+    */
+    
   }
 
   saveDetails() {
@@ -273,17 +366,37 @@ export class RegisterProfileComponent implements OnInit {
 
     let profile = {
       userId : userDetails._id,
+      email: this.email,
       gender : this.gender,
       age : this.age,
       county : (!this.notFromIreland) ? this.county : null,
       notFromIreland : this.notFromIreland,
       country : (this.notFromIreland) ? this.country : "Ireland",
-      school : this.school,
-      schoolName : this.schoolName,
+      
+      studentSchoolType: this.studentSchoolType,
+      studentSchoolLevel: this.studentSchoolLevel,
+      primaryYear: (this.primaryYear) ? this.primaryYear : null,
+      secondaryYear: (this.secondaryYear) ? this.secondaryYear : null,
+      thirdLevelOption: (this.thirdLevelOption) ? this.thirdLevelOption : null,
+      thirdLevelYear: (this.thirdLevelYear) ? this.thirdLevelYear : null,
+      postgradYear: (this.postgradYear) ? this.postgradYear : null,
+      otherStudies: (this.otherStudies) ? this.otherStudies : null,
+      usaOption: (this.usaOption) ? this.usaOption : null, 
+      otherCountryOfStudy: (this.otherCountryOfStudy) ? this.otherCountryOfStudy : null, 
+      otherPostgradStudies: (this.otherPostgradStudies) ? this.otherPostgradStudies : null, 
+      immersionCourse: this.immersionCourse,
+      
+      teacherPrimaryType: (this.teacherPrimaryType) ? this.teacherPrimaryType : null,
+      teacherSecondaryType: (this.teacherSecondaryType) ? this.teacherSecondaryType : null,
+      teacherSchoolTypes: this.teacherSchoolTypes,
+      teacherSchoolName: this.teacherSchoolName,
+      
       nativeSpeakerStatus : this.nativeSpeakerStatus,
-      dialectPreference : this.dialectPreference,
       spokenComprehensionLevel : this.spokenComprehensionLevel,
-      cefrLevel : this.cefrLevel,
+      yearsOfIrish: (this.yearsOfIrish) ? this.yearsOfIrish : null, 
+      otherLanguages: (this.otherLanguages) ? this.otherLanguages : null,
+      fatherNativeTongue: (this.fatherNativeTongue) ? this.fatherNativeTongue : null,
+      motherNativeTongue: this.motherNativeTongue,
       speakingFrequency : this.speakingFrequency,
       speakWith : this.speakWith,
       irishMedia : this.irishMedia,
@@ -294,6 +407,9 @@ export class RegisterProfileComponent implements OnInit {
       howOftenWriting : this.howOftenWriting,
       synthOpinion : this.synthOpinion,
     };
+    
+    console.log(profile);
+
     this.profileService.create(profile).subscribe((res) => {
       if(userDetails.role === 'STUDENT') {
         this.router.navigateByUrl('/contents');
@@ -301,7 +417,8 @@ export class RegisterProfileComponent implements OnInit {
         this.router.navigateByUrl('/teacher/dashboard');
       }
       
-    })
+    });
+
   }
 
 }
