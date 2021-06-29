@@ -9,7 +9,6 @@ var logger ={ error: console.error };
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', err => {
   logger.error( "UNCAUGHT EXCEPTION" );
-  logger.error( "[Inside 'uncaughtException' event] ");
   console.dir(err);
 });
 
