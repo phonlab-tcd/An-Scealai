@@ -10,6 +10,11 @@
           <div class="usernameErrorText">{{usernameErrorText}}</div>
         </div>
         <div class="form-group">
+          <div class="formLabel"><label>TODO Email</label></div>
+          <input type="text" class="form-control inputField"
+          name="email" [(ngModel)]="credentials.email">
+        </div>
+        <div class="form-group">
           <div class="formLabel"><label>{{ts.l.create_password}}</label></div>
           <input type="password" class="form-control inputField" 
           name="password" [(ngModel)]="credentials.password">

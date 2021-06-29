@@ -9,6 +9,11 @@ let userSchema = new mongoose.Schema({
         index: true,
         unique: true,
     },
+    email: {
+      type: String,
+      required: true,
+      default: null,
+    },
     role: {
         type: String,
         enum: ['ADMIN', 'TEACHER', 'STUDENT'],
