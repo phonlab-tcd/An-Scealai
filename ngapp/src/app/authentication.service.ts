@@ -22,6 +22,13 @@ export interface TokenPayload {
   password: string;
   role: string;
 }
+export interface RegistrationTokenPayload {
+  baseurl: string; // 'http://localhost:4000/' | 'https://www.abair.tcd.ie/anscealaibackend/';
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+}
 
 @Injectable({
   providedIn: 'root'

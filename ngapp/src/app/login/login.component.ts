@@ -24,18 +24,21 @@ export class LoginComponent implements OnInit {
   };
 
   loginError: boolean;
-  errorText: String;
-  forgotPassword: boolean = false;
-  modalClass : string = "hidden";
+  errorText: string;
+  forgotPassword = false;
+  modalClass: 'hiddenFade' | 'visibleFade';
   usernameForgotPassword: string;
   emailForgotPassword: string;
-  errorMessage: string = "";
-  
+  errorMessage = '';
 
-  constructor(private auth: AuthenticationService, private router: Router,
-              private engagement: EngagementService, public ts : TranslationService, 
-              //public _loadingBar: SlimLoadingBarService,
-              private storyService : StoryService, private userService: UserService) {}
+  constructor(
+    private auth: AuthenticationService,
+    private router: Router,
+    private engagement: EngagementService,
+    public ts: TranslationService, 
+    // public _loadingBar: SlimLoadingBarService,
+    private storyService: StoryService,
+    private userService: UserService) {}
 
   ngOnInit() {
     this.loginError = false;
@@ -47,9 +50,9 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl('/landing');
     }, (err) => {
       if(err.status === 400) {
-        this.errorText = err.error.message;
         this.loginError = true;
       }
+      this.errorText = err.error.message;
     });
     
   }
