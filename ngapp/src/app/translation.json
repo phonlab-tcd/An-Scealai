@@ -134,6 +134,13 @@
               "I am in 3rd year of a 4 year course",
               "I am in final year"
             ],
+            "third_level_years_list_short" : [
+              "",
+              "I am in 1st year",
+              "I am in 2nd year",
+              "I am in 3rd year",
+              "I am in final year"
+            ],
             "usa_options_list" : [
               "",
               "I am taking an Irish class at a University",
@@ -653,6 +660,13 @@
               "I am in 1st year",
               "I am in 2nd year",
               "I am in 3rd year of a 4 year course",
+              "I am in final year"
+            ],
+            "third_level_years_list_short" : [
+              "",
+              "I am in 1st year",
+              "I am in 2nd year",
+              "I am in 3rd year",
               "I am in final year"
             ],
             "usa_options_list" : [

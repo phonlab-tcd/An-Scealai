@@ -101,7 +101,7 @@
           <div *ngIf="thirdLevelOption === thirdLevelOptions[2] || thirdLevelOption === thirdLevelOptions[3]" class="form-group">
             <p class="formLabel"> {{ts.l.what_year_are_you_in}} </p>
             <select class="selectOptions" [(ngModel)]="thirdLevelYear" name="thirdLevelYear">
-              <option *ngFor="let year of thirdLevelYears; let i=index" [ngValue]="year">{{ts.l.third_level_years_list[i]}}</option>
+              <option *ngFor="let year of thirdLevelYears; let i=index" [ngValue]="year">{{ts.l.third_level_years_list_short[i]}}</option>
             </select>
           </div>
           <div *ngIf="thirdLevelOption === thirdLevelOptions[4]" class="form-group">
