@@ -148,13 +148,21 @@ export class RegisterProfileComponent implements OnInit {
   
   thirdLevelOption: string;
   
-  thirdLevelYears: string[] = [
+  thirdLevelYearsShort: string[] = [
     "",
     "I am in 1st year",
     "I am in 2nd year",
     "I am in 3rd year of a 4 year course",
     "I am in final year"
   ];
+  
+  thirdLevelYears: string[] = [
+    "",
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year",
+    "I am in final year"
+  ]
   
   thirdLevelYear: string;
   
