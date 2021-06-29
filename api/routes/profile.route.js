@@ -5,6 +5,7 @@ const profileRoutes = express.Router();
 let Profile = require('../models/profile');
 
 profileRoutes.route('/create').post((req, res) => {
+  console.log("body: ", req.body)
     Profile.updateOne({userId : req.body.userId}, req.body, {upsert : true}).then(upsertDetails => {
         res.status(200).send(upsertDetails);
     }).catch(err => {
