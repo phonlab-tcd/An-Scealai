@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+  test;
   
   dialects = [
     {
@@ -65,6 +66,30 @@ export class DashboardComponent implements OnInit {
       name : this.ts.l.ulster
     }
   ];
+  
+  quillToolbar = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      [{ 'direction': 'rtl' }],                         // text direction
+
+      [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+
+      ['clean'],                                         // remove formatting button
+
+      /*['link', 'image', 'video']        */                 // link and image, video
+    ]
+  };
   
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
@@ -190,6 +215,7 @@ export class DashboardComponent implements OnInit {
 
 // Set story saved to false and call word count function
   storyEdited() {
+    console.log(this.test);
     this.storySaved = false;
     this.getWordCount();
   }
