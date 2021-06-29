@@ -9,7 +9,7 @@ const generator = require('generate-password');
 const mail = require('../mail');
 if(mail.couldNotCreate){
   logger.info(
-    "Could not create mail transporter which is required by the send_mail route. Refusing to continue.");
+    "Could not create mail transporter which is required by the user route. Refusing to continue.");
   process.exit(1);
 }
 

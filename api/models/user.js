@@ -20,7 +20,16 @@ let userSchema = new mongoose.Schema({
         default: 'en'
     },
     hash: String,
-    salt: String
+    salt: String,
+    status: {
+      type: String,
+      enum: ['Pending','Active'],
+      default: 'Pending',
+    },
+    confirmationCode: {
+      type: String,
+      unique: true,
+    }
 });
 
 userSchema.methods.setPassword = function(password){
