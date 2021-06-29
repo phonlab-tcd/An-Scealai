@@ -329,7 +329,6 @@ export class RegisterProfileComponent implements OnInit {
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    console.log(userDetails._id);
 
     this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
