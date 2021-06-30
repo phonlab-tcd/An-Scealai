@@ -1,5 +1,5 @@
 <!-- register with username and password -->
-<div class="registerContainer">
+<div class="registerContainer" *ngIf="!waitingForEmailVerification">
     <div class="formTitle">{{ts.l.register}}</div><br>
     <div class="formContainer">
       <form (submit)="register()">
@@ -10,7 +10,7 @@
           <div class="usernameErrorText">{{usernameErrorText}}</div>
         </div>
         <div class="form-group">
-          <div class="formLabel"><label>TODO Email</label></div>
+          <div class="formLabel"><label>{{ts.l.email}}</label></div>
           <input type="text" class="form-control inputField"
           name="email" [(ngModel)]="credentials.email">
         </div>
@@ -45,4 +45,13 @@
         <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
       </form>
     </div>
+</div>
+
+<div class="registerContainer" *ngIf="waitingForEmailVerification">
+  <div class="formTitle">TODO Click login once you've registered your email.</div><br>
+  <div class="formContainer">
+    <p>{{frozenCredentials.username}}</p>
+    <p>{{frozenCredentials.email}}</p>
+    <button (click)="login()">Login</button>
+  </div>
 </div>
