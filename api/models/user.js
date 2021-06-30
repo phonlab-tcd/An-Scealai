@@ -60,4 +60,10 @@ userSchema.methods.generateJwt = function() {
     }, "sonJJxVqRC"); // 5ecret
 };
 
+userSchema.methods.generateActivationLink = function (baseurl) {
+  console.dir(this);
+  this.confirmationCode = jwt.sign({username: this.username, email: this.email},'sonJJxVqRC');
+  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&confirmationCode=${this.confirmationCode}`;
+}
+
 module.exports = mongoose.model('User', userSchema);

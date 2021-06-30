@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     this.loginError = false;
   }
 
-  verifyOldAccount() {
+  async verifyOldAccount() {
     if(this.userToVerify !== this.credentials.username){
       console.log("this.userToVerify !=== this.credentials.username");
       this.errorText = 'Username changed. Starting from scratch.';
@@ -57,15 +57,20 @@ export class LoginComponent implements OnInit {
       this.userToVerify = null;
       return;
     }
-    
+
     const reqObj: VerifyEmailRequest = {
       username: this.credentials.username,
       email: this.emailToVerify,
+      password: this.credentials.password,
+      // TODO is role necessary for this request?
       role: this.credentials.role,
       baseurl: config.baseurl,
-    }; 
+    };
+
+    console.log('Requesting email verification.');
     const verify = this.auth.verifyOldAccount(reqObj).subscribe(
       (data) => {
+        console.log('Got response for verifyOldAccount endpoint');
         console.dir(data);
       },
       (error) => {
@@ -74,6 +79,8 @@ export class LoginComponent implements OnInit {
       () => {
         console.log('Completed verifyOldAccount request')
       });
+
+    console.log('verify = ', verify);
   }
 
   login() {
@@ -83,19 +90,18 @@ export class LoginComponent implements OnInit {
     }
     this.auth.login(this.credentials).subscribe(
     (res) => {
-      console.log(res.userStatus); 
+      console.dir('res:',res);
       this.engagement.addEventForLoggedInUser(EventType.LOGIN);
       this.router.navigateByUrl('/landing');
     }, 
     (err) => {
+      console.dir('err.error:',err.error);
       if (err.error.userStatus === 'Pending') {
+        console.log('User status is Pending');
         this.errorText = 'Please provide and verify an email address to continue.';
         this.userHasNotBeenVerified = true;
-        this.userToVerify = err.error.user;
-        console.dir(this);
-        return;
+        this.userToVerify = err.error.username;
       }
-      console.dir(err);
       if(err.status === 400) {
         this.loginError = true;
       }
