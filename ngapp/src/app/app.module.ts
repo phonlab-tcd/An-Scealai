@@ -62,7 +62,6 @@ import { RecordingHistoryComponent } from './student-components/recording-histor
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
-import { VerificationPendingComponent } from './verification-pending/verification-pending.component';
 
 
 
@@ -111,7 +110,6 @@ import { VerificationPendingComponent } from './verification-pending/verificatio
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
-    VerificationPendingComponent
   ],
   imports: [
     BrowserModule,

@@ -21,6 +21,8 @@ export class RegisterComponent implements OnInit {
     role: 'STUDENT',
   };
 
+  frozenCredentials: RegistrationTokenPayload = null;
+
   registrationError: boolean;
   errorText: string;
   passwordConfirm: string;
@@ -29,6 +31,9 @@ export class RegisterComponent implements OnInit {
   usernameClass: string;
   usernameErrorText: string;
   checkeUsername: string;
+
+
+  waitingForEmailVerification = false;
 
   constructor(
     private auth: AuthenticationService,
@@ -55,12 +60,30 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  login(){
+    
+    this.auth.login(this.frozenCredentials).subscribe(
+      (data) => {
+        console.log('got data for login request:',data);
+        this.engagement.addEventForLoggedInUser(EventType.REGISTER);
+        this.ts.setLanguage(this.ts.l.iso_code);
+        this.router.navigateByUrl('register-profile');
+      },
+      err => {
+
+      },
+      () => {
+        console.log('Completed login request for', this.frozenCredentials.username);
+      }
+    );
+  }
+
   register() {
     if (this.checkDetails()) {
       this.auth.register(this.credentials).subscribe(() => {
-        this.engagement.addEventForLoggedInUser(EventType.REGISTER);
-        this.ts.setLanguage(this.ts.l.iso_code);
-        this.router.navigateByUrl('/verification-pending');
+        // Copy credentials to frozenCredentials
+        this.frozenCredentials = JSON.parse(JSON.stringify(this.credentials)); 
+        this.waitingForEmailVerification = true;
       }, (err: any) => {
         if (err.status === 400) {
           this.errorText = err.error.message;
