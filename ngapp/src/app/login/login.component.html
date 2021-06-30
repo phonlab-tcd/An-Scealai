@@ -34,7 +34,7 @@
         </div>
 
         <!-- Verify the user's email address if they have not yet been verified -->
-        <div class="form-group" *ngIf="this.userHasNotBeenVerified">
+        <div class="form-group" *ngIf="userHasNotBeenVerified && !verificationEmailHasBeenSent">
           <div class="formLabel"><label>TODO Email</label></div>
           <input 
                type="text"
@@ -46,7 +46,11 @@
           <button (click)="verifyOldAccount" class="btn loginBtn">Verify email address</button>
         </div>
 
-        <button type="submit" class="btn loginBtn" *ngIf="!userHasNotBeenVerified">{{ts.l.sign_in}}</button>
+        <button type="submit" class="btn loginBtn" *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
+        <div *ngIf="verificationEmailHasBeenSent">
+          TODO
+          We have sent you an email. Click the link in the email to verify your email address. Once you've done that you will be able to log in again.
+        </div>
       </form>
     </div>
 </div>
