@@ -36,6 +36,8 @@ export class LoginComponent implements OnInit {
   userHasNotBeenVerified = false;
   userToVerify: string = null;
 
+  verificationEmailHasBeenSent = false;
+
   constructor(
     private auth: AuthenticationService,
     private router: Router,
@@ -68,22 +70,25 @@ export class LoginComponent implements OnInit {
     };
 
     console.log('Requesting email verification.');
-    const verify = this.auth.verifyOldAccount(reqObj).subscribe(
+    this.auth.verifyOldAccount(reqObj).subscribe(
       (data) => {
         console.log('Got response for verifyOldAccount endpoint');
         console.dir(data);
       },
       (error) => {
         console.dir(error);
+        this.verificationEmailHasBeenSent = false;
       },
       () => {
         console.log('Completed verifyOldAccount request')
+        this.verificationEmailHasBeenSent = true;
       });
-
-    console.log('verify = ', verify);
   }
 
   login() {
+    // If the user hits the sign in button we are starting again from scratch
+    this.verificationEmailHasBeenSent = false;
+
     if(this.userHasNotBeenVerified){
       this.verifyOldAccount();
       return;
