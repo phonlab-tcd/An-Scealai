@@ -18,6 +18,97 @@ var sendJSONresponse = function(res, status, content) {
 };
 
 
+async function sendVerificationEmail (username, password, email, baseurl) {
+  logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
+  // Authenticate User
+  let getUserErr, user = null;
+  await User.findOne({ username: username }, (err, userFound) => {
+    logger.info({
+      message: 'verifying user' + userFound.toString() });
+    getUserErr = err;
+    user = userFound;
+  });
+
+  if (getUserErr) {
+    logger.error(getUserErr);
+    return {
+      error: getUserErr,
+      success: null,
+    };
+  }
+
+  if (!user) {
+    logger.error('User not found');
+    return {
+      error: 'User not found',
+      success: null,
+    }
+  }
+
+  // Require valid password
+  if( !user.validPassword(password) ) {
+    logger.error('Invalid password');
+    return {
+      error: 'Invalid password',
+      success: null,
+    }
+  }
+        
+  user.email = email;
+
+  const activationLink = user
+    .generateActivationLink(baseurl);
+
+  await user.save();
+
+  console.log("Confirmation Code:", user.confirmationCode);
+
+  mailObj = {
+    from: 'scealai.info@gmail.com',
+    recipients: [email],
+    subject: 'An Scéalaí account verification',
+    message: 
+    `Dear ${user.username},\n\
+      Please use this link to verify your email address for An Scéalaí:\n\n\
+      ${activationLink}\n\n\
+      Once you have verified your email you will be able to log in again.\n\
+      \n\
+      Kindly,\n\
+      \n\
+      The An Scéalaí team`,
+  }
+
+  let sendEmailErr, sendEmailRes = null;
+  sendEmailRes = await mail.sendEmail(mailObj)
+    .catch(err => {
+      sendEmailErr = err;
+    });
+
+  console.log('sendEmailRes:',sendEmailRes);
+
+  if (sendEmailErr) {
+    logger.error({
+      file: './api/controllers/authentication.js',
+      functionName: 'sendVerificationEmail',
+      error: sendEmailErr,
+    });
+    return {
+      error: sendEmailErr,
+      success: null };
+  }
+
+  if ( sendEmailRes.rejected.length !== 0) {
+    return {
+      error: new Error('The following recipients were rejected: ', sendEmailRes.rejected),
+      success: null};
+  }
+
+  return { 
+    error: null, 
+    success: sendEmailRes };
+}
+
+// Set a user's status to Active when they click on the activation link
 module.exports.verify = async (req, res) => {
   if (!req.query.username){
     return res.status(400).json("username required to verify account email address");
@@ -63,74 +154,84 @@ module.exports.verify = async (req, res) => {
 }
 
 module.exports.verifyOldAccount = async (req, res) => {
-  if (!req.body.username){
-    return res.status(400).json("username required to verify account email address");
-  }
-  if (!req.body.email){
-    return res.status(400).json("email required to verify account email address");
-  }
-  if (!req.body.password){
-    return res.status(400).json("password required to verify account email address");
-  }
-
-  const user = await User.findOne({username: req.body.username});
-  
-  if (user.status === 'Active'){
-    if (user.email) {
-      return res.status(400).json(`User: ${user.username} is already verified with the email address: ${user.email}. If you think this is a mistake please let us know at scealai.info@gmail.com`);
+  try {
+    // API CALL REQUIREMENTS
+    if (!req.body.username){
+      return res.status(400).json("username required to verify account email address");
     }
-    logger.warning(`User: ${user.usernam} was Active but had no assoctiated email address. Resetting to Pending`);
-    const { makePendingError, userMadePending } =
+    if (!req.body.email){
+      return res.status(400).json("email required to verify account email address");
+    }
+    if (!req.body.password){
+      return res.status(400).json("password required to verify account email address");
+    }
+    if (!req.body.baseurl) {
+      return res.status(400).json('req.body.baseurl is required to be either http://localhost:4000/ or https://www.abair.tcd.ie/anscealaibackend/'); 
+    }
+
+    logger.info('Beginning verification of ' + req.body.username);
+
+    const user = await User.findOne({username: req.body.username})
+      .catch(error => {
+        return res.status(404).json({
+          message: 'There was an error while trying to find a user with username: ' + req.body.username,
+          error: error,
+        });
+      });
+
+    if (user.status === 'Active'){
+      if (user.email) {
+        return res.status(400).json(`User: ${user.username} is already verified with the email address: ${user.email}. If you think this is a mistake please let us know at scealai.info@gmail.com`);
+      }
+      logger.warning(`User: ${user.usernam} was Active but had no assoctiated email address. Resetting to Pending`);
+      let makePendingError, userMadePending = null;
       await User.findOneAndUpdate(
         // Find
         {username: user.username },
         // Update
         {status: 'Pending'},
         // Options
-        {new:true});
-    if ( makePendingError ) {
-      logger.error({endpoint: '/user/verifyOldAccount', error: makePendingError});
+        {new:true})
+        .catch( err => makePendingError = err)
+        .then(res => userMadePending = res);
+      if ( makePendingError ) {
+        logger.error({endpoint: '/user/verifyOldAccount', error: makePendingError});
+      }
+      if ( !userMadePending ) {
+        logger.error({endpoint: '/user/verifyOldAccount', message: 'There was an error while trying to set the users status to pending' });
+        res
+          .status(500)
+          .json({
+            file: './api/controllers/authentication.js',
+            functionName: 'verifyOldAccount',
+            message: 'There was an error on our server. We failed to update your status to Pending.',
+          });
+      }
     }
-    if ( !userMadePending ) {
-      logger.error({endpoint: '/user/verifyOldAccount', message: 'There was an error while trying to set the users status to pending' });
+
+
+    const { error: mailError, success: mailRes } = sendVerificationEmail(req.body.username, req.body.password, req.body.email, req.body.baseurl);
+    console.log('mailError', mailError);
+    console.log('mailRes:', mailRes);
+    if (mailError) {
+      return res.status(500)
+        .json({
+          message: 'An error occurred while trying to send a verification email.',
+          error: mailError,
+        });
     }
+
+    return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
+
+  } catch (error) {
+
+    return res.status(500)
+      .json({message: 'An unknown error occurred',
+        file: '.api/controllers/authentication.js',
+        functionName: 'verifyOldAccount',
+        error: error,
+      });
   }
-  
-  user.email = req.body.email;
-
-  user.confirmationCode = jwt.sign({email: req.body.email},'sonJJxVqRC');
-
-  await user.save()
-    .catch(err => {
-      logger.error({endpoint: '/user/verifyOldAccount', error: err });
-    });
-
-  const activationLink = `${req.body.baseurl}user/verify?username=${encodeURIComponent(req.body.username)}&email=${encodeURIComponent(req.body.email)}&confirmationCode=${encodeURIComponent(user.confirmationCode)}`
-
-  const mailObj = {
-    from: 'scealai.info@gmail.com',
-    recipients: [req.body.email],
-    subject: 'Verify account email -- An Scéalaí',
-    message:
-    `Dear ${req.body.username},\n\
-    Please use this link to verify your email address for An Scéalaí:\n\
-    ${activationLink}\n\
-    Once you have verified your email you will be able to log in again.\n\
-    \n\
-    Kindly,\n\
-    \n\
-    The An Scéalaí team`,
-  }
-
-  const mailRes = mail.sendEmail(mailObj);
-  if(!mailRes){
-    return res.status(500).json('Something went wrong.');
-  }
-  if(mailRes.rejected.length !== 0){
-    return res.status(500).json('Failed to send verification email'); 
-  }
-
-  return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
 }
 
 module.exports.register = (req, res) => {
@@ -207,10 +308,8 @@ module.exports.register = (req, res) => {
   });
 };
 
-module.exports.login = function(req, res) {
+module.exports.login = (req, res) => {
     
-    console.log('processing login request for:',req.body);
-
     if(!req.body.username || !req.body.password) {
       return res
         .status(400)
@@ -219,8 +318,7 @@ module.exports.login = function(req, res) {
         });
     }
 
-    passport.authenticate('local', function(err, user, info) {
-        var token;
+    passport.authenticate('local', (err, user, info) => {
 
         if(err) {
             console.log(err)
@@ -228,14 +326,27 @@ module.exports.login = function(req, res) {
             return;
         }
 
-        if(user) {
-            token = user.generateJwt();
-            res.status(200);
-            res.json({
-                "token" : token
+      if(user) {
+        if(!user.status){
+          throw new Error('User,',user,'has no status property');
+        }
+        if(user.status === 'Pending'){
+          return res.status(300).json({ 
+            userStatus: 'Pending',
+            username: user.username,
+            email: ( user.email ? user.email : null ) });
+        } else if (user.status === 'Active') {
+          const token = user.generateJwt();
+          return res
+            .status(200)
+            .json({
+              token: token
             });
         } else {
-            res.status(400).json(info);
+          throw new Error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
         }
+      } else {
+        res.status(400).json(info);
+      }
     })(req, res);
 };

@@ -26,6 +26,8 @@ export interface TokenPayload {
 export interface VerifyEmailRequest {
   username: string;
   email: string;
+  password: string;
+  // TODO is role necessary for this request?
   role: string;
   baseurl: string;
 }
@@ -122,8 +124,8 @@ export class AuthenticationService {
     return request;
   }
 
-  public verifyOldAccount(user: VerifyEmailRequest): Observable<any> {
-    return this.http.post(this.baseUrl + 'verifyOldAccount', user);
+  public verifyOldAccount(requestObj: VerifyEmailRequest): Observable<any> {
+    return this.http.post(this.baseUrl + 'verifyOldAccount', requestObj);
   }
 
   public register(user: TokenPayload | RegistrationTokenPayload): Observable<any> {

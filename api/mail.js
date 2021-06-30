@@ -46,7 +46,7 @@ try{
 
       return mailStatus;
 
-    }catch(error){
+    } catch(error) {
       console.error(error);
       throw new Error(
         `Something went wrong in the sendmail method. Error: ${error.message}`
@@ -56,7 +56,7 @@ try{
 
   module.exports.sendEmail = sendEmail;
 
-}catch(err){
+} catch(err) {
   console.error("Failed to create email transport in ./api/mail.js. Have you created sendinblue.json ?");
   console.error(err);
   module.exports.sendEmail = null;

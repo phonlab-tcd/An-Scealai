@@ -37,7 +37,7 @@ userRoutes.get('/teachers', ctrlProfile.getTeachers);
 userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
-userRoutes.get('/verifyOldAccount', ctrlAuth.verifyOldAccount);
+userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 
 userRoutes.route('/setLanguage/:id').post((req, res) => {
     User.findById(req.params.id, (err, user) => {

@@ -25,6 +25,7 @@ passport.use(new LocalStrategy(
         });
       }
 
+      // TODO do this in one fell swoop for the entire database and delete this code
       if(!user.status){
         logger.warning(`user: ${username} has not had their email validated`);
         await User.findOneAndUpdate(
@@ -42,12 +43,15 @@ passport.use(new LocalStrategy(
               message:`user: ${username} has been updated to have status: 'Pending'`,
               updatedUser: updatedUser,
             });
+            // Return the updated user to the login function in ./api/controllers/authentication
+            user = updatedUser;
           } else {
             logger.error(`Failed to give user: ${username} the status 'Pending'`);
           }
         });
       }
 
+      /*
       if(user.status === 'Pending'){
         console.log(user);
         return done(
@@ -58,6 +62,7 @@ passport.use(new LocalStrategy(
             user: username, 
             message: `User ${username} does not have a verified email. Email must be verified to log in.`});
       }
+      */
 
       // If everything is correct, return user object
       return done(null, user);
