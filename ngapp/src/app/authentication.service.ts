@@ -56,6 +56,8 @@ export class AuthenticationService {
   private token: string;
   public getLoggedInName: any = new Subject();
 
+  public pendingUserPayload: LoginTokenPayload = null;
+
   constructor(
     private http: HttpClient,
     private router: Router, ) { }
@@ -133,8 +135,17 @@ export class AuthenticationService {
   }
 
   public login(user: TokenPayload | LoginTokenPayload): Observable<any> {
-    return this.http.post( this.baseUrl + 'login', user );
-    // return this.request('post', 'login', user);
+    return this.http.post(
+      this.baseUrl + 'login',
+      user)
+      .pipe(
+        map((data: TokenResponse) => {
+          if (data.token) {
+            this.saveToken(data.token);
+          }
+          return data;
+        })
+      );
   }
 
   public profile(): Observable<any> {
