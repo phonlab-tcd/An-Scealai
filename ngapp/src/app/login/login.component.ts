@@ -42,6 +42,8 @@ export class LoginComponent implements OnInit {
   userToVerify: string = null;
   verificationEmailHasBeenSent = false;
 
+  waitingForEmailVerification = false;
+
   constructor(
     private auth: AuthenticationService,
     private router: Router,
@@ -56,7 +58,7 @@ export class LoginComponent implements OnInit {
   }
 
   async verifyOldAccount() {
-    this.frozenCredentials = {...this.credentials};
+    this.frozenCredentials = Object.assign({}, this.credentials);
     if (this.userToVerify !== this.credentials.username) {
       console.log('this.userToVerify !== this.credentials.username');
       this.errorText = 'Username changed. Starting from scratch.';
@@ -78,6 +80,7 @@ export class LoginComponent implements OnInit {
     this.auth.verifyOldAccount(reqObj).subscribe(
       (data) => {
         console.log('Got response for verifyOldAccount endpoint');
+        this.waitingForEmailVerification = true;
         console.dir(data);
       },
       (error) => {

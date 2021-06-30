@@ -54,3 +54,13 @@
       </form>
     </div>
 </div>
+
+<div class="registerContainer" *ngIf="waitingForEmailVerification">
+  <div class="formTitle">{{ts.l.verification}}</div><br>
+  <div class="formContainer">
+    <p>{{ts.l.username}}: {{frozenCredentials.username}}</p>
+    <p>{{ts.l.email_address}}: {{frozenCredentials.email}}</p>
+    <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}</div>
+    <button (click)="login()">Login</button>
+  </div>
+</div>
