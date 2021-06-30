@@ -56,7 +56,7 @@ userSchema.methods.generateJwt = function() {
         username: this.username,
         role: this.role,
         language: this.language,
-        exp: parseInt(expiry.getTime() / 1000),
+        exp: parseInt(expiry.getTime() / 1000 /* convert milliseconds to seconds */),
     }, "sonJJxVqRC"); // 5ecret
 };
 
