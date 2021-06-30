@@ -1,0 +1,146 @@
+.loginBtn {
+    background-color: #cc670a;
+}
+
+.loginBtn:hover {
+    background-color: #af5503;
+}
+
+.inputField {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.forgotPassword {
+  float: left;
+  padding-left: 12%;
+  font-size: 12px;
+  color: #0000EE;
+}
+
+.forgotPassword:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.usernameErrorText {
+    font-size: 12pt;
+    color: red;
+    margin-top: 4px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.formContainer {
+    width: 400px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    color: #261500;
+    background-color: #e6e8ed;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
+
+.registerContainer {
+    width: 400px;
+    display: inline-block;
+    background-color: #cc670a;
+    color: white;
+    border-radius: 10px;
+
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+-moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.formLabel {
+    text-align: left;
+    margin-left: 10%;
+}
+
+.modalContainer {
+    position: absolute;
+    z-index: 5;
+    margin-left: -40px;
+    margin-top: -20px;
+    width: 600px;
+    height: 400px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    margin-top: 5vh;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 25px;
+    padding: 60px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+-moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #d1d1d1;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+}
+
+.modalText {
+    font-size: 12pt;
+    white-space: normal;
+    color: black;
+}
+
+.modalBtn:hover {
+    background-color: #707070;
+    color: white;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
+@media only screen and (max-width: 700px) {
+    .registerContainer {
+        width: 90%;
+    }
+    .formContainer {
+        width: 100%;
+    }
+}

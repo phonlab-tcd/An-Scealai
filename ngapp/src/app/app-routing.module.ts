@@ -50,6 +50,7 @@ import { SynthesisComponent } from './student-components/synthesis/synthesis.com
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import {VerificationPendingComponent} from './verification-pending/verification-pending.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -76,6 +77,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'verification-pending', component: VerificationPendingComponent },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],

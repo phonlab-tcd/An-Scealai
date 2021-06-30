@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
       this.auth.register(this.credentials).subscribe(() => {
         this.engagement.addEventForLoggedInUser(EventType.REGISTER);
         this.ts.setLanguage(this.ts.l.iso_code);
-        this.router.navigateByUrl('/register-profile');
+        this.router.navigateByUrl('/verification-pending');
       }, (err: any) => {
         if (err.status === 400) {
           this.errorText = err.error.message;

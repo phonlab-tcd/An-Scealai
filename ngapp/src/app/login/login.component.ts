@@ -24,25 +24,29 @@ export class LoginComponent implements OnInit {
     role: '',
   };
 
+  frozenCredentials: TokenPayload = null;
+
   loginError: boolean;
   errorText: string;
+
   forgotPassword = false;
   modalClass: 'hiddenFade' | 'visibleFade';
+
   usernameForgotPassword: string;
   emailForgotPassword: string;
-  errorMessage = '';
-  emailToVerify = null;
 
+  errorMessage = '';
+
+  emailToVerify = null;
   userHasNotBeenVerified = false;
   userToVerify: string = null;
-
   verificationEmailHasBeenSent = false;
 
   constructor(
     private auth: AuthenticationService,
     private router: Router,
     private engagement: EngagementService,
-    public ts: TranslationService, 
+    public ts: TranslationService,
     // public _loadingBar: SlimLoadingBarService,
     private storyService: StoryService,
     private userService: UserService) {}
@@ -52,8 +56,9 @@ export class LoginComponent implements OnInit {
   }
 
   async verifyOldAccount() {
-    if(this.userToVerify !== this.credentials.username){
-      console.log("this.userToVerify !=== this.credentials.username");
+    this.frozenCredentials = {...this.credentials};
+    if (this.userToVerify !== this.credentials.username) {
+      console.log('this.userToVerify !== this.credentials.username');
       this.errorText = 'Username changed. Starting from scratch.';
       this.userHasNotBeenVerified = false;
       this.userToVerify = null;
@@ -61,11 +66,11 @@ export class LoginComponent implements OnInit {
     }
 
     const reqObj: VerifyEmailRequest = {
-      username: this.credentials.username,
+      username: this.frozenCredentials.username,
       email: this.emailToVerify,
-      password: this.credentials.password,
+      password: this.frozenCredentials.password,
       // TODO is role necessary for this request?
-      role: this.credentials.role,
+      role: this.frozenCredentials.role,
       baseurl: config.baseurl,
     };
 
@@ -80,8 +85,11 @@ export class LoginComponent implements OnInit {
         this.verificationEmailHasBeenSent = false;
       },
       () => {
-        console.log('Completed verifyOldAccount request')
+        console.log('Completed verifyOldAccount request');
         this.verificationEmailHasBeenSent = true;
+        // Shallow copy frozen credentials to auth service.
+        this.auth.pendingUserPayload = {baseurl: config.baseurl, ...this.frozenCredentials};
+        this.router.navigateByUrl('verification-pending');
       });
   }
 
@@ -89,33 +97,31 @@ export class LoginComponent implements OnInit {
     // If the user hits the sign in button we are starting again from scratch
     this.verificationEmailHasBeenSent = false;
 
-    if(this.userHasNotBeenVerified){
+    if (this.userHasNotBeenVerified) {
       this.verifyOldAccount();
       return;
     }
     this.auth.login(this.credentials).subscribe(
-    (res) => {
-      console.dir('res:',res);
-      this.engagement.addEventForLoggedInUser(EventType.LOGIN);
-      this.router.navigateByUrl('/landing');
-    }, 
-    (err) => {
-      console.dir('err.error:',err.error);
-      if (err.error.userStatus === 'Pending') {
-        console.log('User status is Pending');
-        this.errorText = 'Please provide and verify an email address to continue.';
-        this.userHasNotBeenVerified = true;
-        this.userToVerify = err.error.username;
-      }
-      if(err.status === 400) {
-        this.loginError = true;
-      }
-      this.errorText = err.error.message;
-    },
-    () => {
-      console.log('completed login for:', this.credentials.username);
-    });
-    
+      () => {
+        this.engagement.addEventForLoggedInUser(EventType.LOGIN);
+        this.router.navigateByUrl('/landing');
+      },
+      (err) => {
+        console.dir('err.error:', err.error);
+        if (err.error.userStatus === 'Pending') {
+          console.log('User status is Pending');
+          this.errorText = 'Please provide and verify an email address to continue.';
+          this.userHasNotBeenVerified = true;
+          this.userToVerify = err.error.username;
+          this.errorText = err.error.message;
+        } else if (err.status === 400) {
+          this.loginError = true;
+          this.errorText = err.error.message;
+        }
+      },
+      () => {
+        console.log('completed login for:', this.credentials.username);
+      });
   }
   
   showModal() {
