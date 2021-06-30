@@ -318,35 +318,35 @@ module.exports.login = (req, res) => {
         });
     }
 
-    passport.authenticate('local', (err, user, info) => {
+  passport.authenticate('local', (err, user, info) => {
+    if(err) {
+      console.log(err)
+      res.status(404).json(err);
+      return;
+    }
 
-        if(err) {
-            console.log(err)
-            res.status(404).json(err);
-            return;
-        }
-
-      if(user) {
-        if(!user.status){
-          throw new Error('User,',user,'has no status property');
-        }
-        if(user.status === 'Pending'){
-          return res.status(300).json({ 
-            userStatus: 'Pending',
-            username: user.username,
-            email: ( user.email ? user.email : null ) });
-        } else if (user.status === 'Active') {
-          const token = user.generateJwt();
-          return res
-            .status(200)
-            .json({
-              token: token
-            });
-        } else {
-          throw new Error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
-        }
-      } else {
-        res.status(400).json(info);
+    if(user) {
+      if(!user.status){
+        throw new Error('User,',user,'has no status property');
       }
-    })(req, res);
+      if(user.status === 'Pending'){
+        return res.status(200).json({ 
+          userStatus: 'Pending',
+          username: user.username,
+          email: ( user.email ? user.email : null ) });
+      } else if (user.status === 'Active') {
+        logger.info('User authenticated and status is Active. Sending json web token.');
+        const token = user.generateJwt();
+        return res
+          .status(200)
+          .json({
+            token: token
+          });
+      } else {
+        throw new Error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
+      }
+    } else {
+      res.status(400).json(info);
+    }
+  })(req, res);
 };
