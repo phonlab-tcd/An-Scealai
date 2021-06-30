@@ -32,6 +32,7 @@ export class RegisterComponent implements OnInit {
   usernameErrorText: string;
   checkeUsername: string;
 
+  loginErrorText: string = null;
 
   waitingForEmailVerification = false;
 
@@ -70,7 +71,8 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('register-profile');
       },
       err => {
-
+        console.error(err);
+        this.loginErrorText = err.error.message;
       },
       () => {
         console.log('Completed login request for', this.frozenCredentials.username);

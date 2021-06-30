@@ -330,10 +330,13 @@ module.exports.login = (req, res) => {
         throw new Error('User,',user,'has no status property');
       }
       if(user.status === 'Pending'){
-        return res.status(200).json({ 
-          userStatus: 'Pending',
-          username: user.username,
-          email: ( user.email ? user.email : null ) });
+        return res
+          .status(400)
+          .json({ 
+            message: 'The email address for ' + req.body.username + ' has not yet been verified.',
+            userStatus: 'Pending',
+            username: user.username,
+            email: ( user.email ? user.email : null ) });
       } else if (user.status === 'Active') {
         logger.info('User authenticated and status is Active. Sending json web token.');
         const token = user.generateJwt();
