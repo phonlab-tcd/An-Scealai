@@ -50,7 +50,6 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
-  test;
   
   dialects = [
     {
@@ -71,22 +70,17 @@ export class DashboardComponent implements OnInit {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
       ['blockquote', 'code-block'],
-
       [{ 'header': 1 }, { 'header': 2 }],               // custom button values
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
       [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
       [{ 'direction': 'rtl' }],                         // text direction
-
       [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
       [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
       [{ 'font': [] }],
       [{ 'align': [] }],
-
       ['clean'],                                         // remove formatting button
-
       /*['link', 'image', 'video']        */                 // link and image, video
     ]
   };
@@ -117,7 +111,7 @@ export class DashboardComponent implements OnInit {
         for(let story of this.stories) {
           if(story._id === this.id) {
             this.story = story;
-            this.getWordCount();
+            this.getWordCount(this.story.text);
             break;
           }
         }
@@ -125,13 +119,11 @@ export class DashboardComponent implements OnInit {
     });
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    this.classroomService
-      .getClassroomOfStudent(
-        this.auth.getUserDetails()
-          ._id
-      ).subscribe( (res) => {
-      this.classroomId = res._id;
-      console.log(this.classroomId);
+    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
+      if(res) {
+        this.classroomId = res._id;
+        console.log(this.classroomId);
+      }
     });
   }
 
@@ -215,14 +207,13 @@ export class DashboardComponent implements OnInit {
 
 // Set story saved to false and call word count function
   storyEdited() {
-    console.log(this.test);
+    console.log(this.story.text);
     this.storySaved = false;
-    this.getWordCount();
   }
   
 // Get word count of story text
-  getWordCount() {
-    let str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+  getWordCount(text) {
+    let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s) => {
       let trimStr = s.trim();
