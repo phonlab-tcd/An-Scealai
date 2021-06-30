@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from '../engagement.service';
 import { TranslationService } from '../translation.service';
-//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-import { StoryService } from '../story.service';
+// import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+// import { StoryService } from '../story.service';
 import { UserService } from '../user.service';
 import config from '../../abairconfig.json';
 
@@ -24,7 +24,13 @@ export class LoginComponent implements OnInit {
     role: '',
   };
 
-  frozenCredentials: TokenPayload = null;
+  frozenCredentials: VerifyEmailRequest = {
+    username: null,
+    password: null,
+    role: null,
+    baseurl: config.baseurl,
+    email: null,
+  };
 
   loginError: boolean;
   errorText: string;
@@ -43,6 +49,7 @@ export class LoginComponent implements OnInit {
   verificationEmailHasBeenSent = false;
 
   waitingForEmailVerification = false;
+  waitingErrorText = null;
 
   constructor(
     private auth: AuthenticationService,
@@ -50,7 +57,7 @@ export class LoginComponent implements OnInit {
     private engagement: EngagementService,
     public ts: TranslationService,
     // public _loadingBar: SlimLoadingBarService,
-    private storyService: StoryService,
+    // private storyService: StoryService,
     private userService: UserService) {}
 
   ngOnInit() {
@@ -58,7 +65,11 @@ export class LoginComponent implements OnInit {
   }
 
   async verifyOldAccount() {
-    this.frozenCredentials = Object.assign({}, this.credentials);
+    this.frozenCredentials.username = this.credentials.username;
+    this.frozenCredentials.role = this.credentials.role;
+    this.frozenCredentials.password = this.credentials.password;
+    this.frozenCredentials.email = this.emailToVerify;
+
     if (this.userToVerify !== this.credentials.username) {
       console.log('this.userToVerify !== this.credentials.username');
       this.errorText = 'Username changed. Starting from scratch.';
@@ -67,17 +78,9 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const reqObj: VerifyEmailRequest = {
-      username: this.frozenCredentials.username,
-      email: this.emailToVerify,
-      password: this.frozenCredentials.password,
-      // TODO is role necessary for this request?
-      role: this.frozenCredentials.role,
-      baseurl: config.baseurl,
-    };
 
     console.log('Requesting email verification.');
-    this.auth.verifyOldAccount(reqObj).subscribe(
+    this.auth.verifyOldAccount(this.frozenCredentials).subscribe(
       (data) => {
         console.log('Got response for verifyOldAccount endpoint');
         this.waitingForEmailVerification = true;
@@ -92,11 +95,25 @@ export class LoginComponent implements OnInit {
         this.verificationEmailHasBeenSent = true;
         // Shallow copy frozen credentials to auth service.
         this.auth.pendingUserPayload = {baseurl: config.baseurl, ...this.frozenCredentials};
-        this.router.navigateByUrl('verification-pending');
+        this.waitingForEmailVerification = true;
       });
   }
 
   login() {
+    //
+    if (this.waitingForEmailVerification) {
+      this.auth.login(this.frozenCredentials).subscribe(
+        () => {
+          this.router.navigateByUrl('register-profile');
+        },
+        (err) => {
+          this.waitingErrorText = err.error.message;
+        },
+        () => {
+          console.log('Completed login Observable for:', this.frozenCredentials.username);
+        });
+      return;
+    }
     // If the user hits the sign in button we are starting again from scratch
     this.verificationEmailHasBeenSent = false;
 
@@ -126,28 +143,30 @@ export class LoginComponent implements OnInit {
         console.log('completed login for:', this.credentials.username);
       });
   }
-  
+
   showModal() {
-    this.modalClass = "visibleFade";
+    this.modalClass = 'visibleFade';
   }
 
   hideModal() {
-    this.modalClass = "hiddenFade";
+    this.modalClass = 'hiddenFade';
   }
-  
+
   sendNewPassword() {
-    if(this.usernameForgotPassword) {
+    if (this.usernameForgotPassword) {
       console.log(this.usernameForgotPassword);
-      this.userService.sendNewPassword(this.usernameForgotPassword, this.emailForgotPassword).subscribe((res) => {
-        console.log("this is read");
-        console.log(res);
-      });
-      this.errorMessage = "";
-      this.usernameForgotPassword = "";
+      this.userService.sendNewPassword(
+        this.usernameForgotPassword,
+        this.emailForgotPassword).subscribe(
+        (res) => {
+          console.log('this is read');
+          console.log(res);
+        });
+      this.errorMessage = '';
+      this.usernameForgotPassword = '';
       this.forgotPassword = false;
-    }
-    else {
-      this.errorMessage = "Please input your username"
+    } else {
+      this.errorMessage = 'Please input your username';
     }
   }
 
