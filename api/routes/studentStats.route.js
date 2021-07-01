@@ -150,7 +150,7 @@ studentStatsRoutes.route('/delete/:id').get(function(req, res) {
           console.log(err, new Date());
           res.json(err);
         }
-        else res.json("Successfully removed");
+        else res.json("Successfully removed stat for studentId");
     });
 });
 

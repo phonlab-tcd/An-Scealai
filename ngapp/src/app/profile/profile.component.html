@@ -1,19 +1,18 @@
 <div class="profileContainer" *ngIf="auth.getUserDetails()">
-    <!-- Popup for deleting account -->
-    <div *ngIf="!updateMode" class="{{modalClass}} modalContainer">
-        <div class="modalContent">
+  <!-- Popups -->
+    <div class="{{modalClass}} modalContainer">
+      <!-- Popup for deleting account -->
+        <div *ngIf="deleteAccountMode" class="modalContent">
             <pre class="modalText">{{ts.l.are_you_sure}}</pre>
             <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
             <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
             <div>
-                <button class="modalBtn createBtnGreen" (click)="deleteAccount()">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
+                <button class="modalBtn createBtnGreen" (click)="deleteAccount(); update">{{ts.l.yes}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal(); deleteAccountMode=false;">{{ts.l.no}}</button>
             </div>
         </div>
-    </div>
-    <!-- Popup for changing username -->
-    <div *ngIf="updateMode" class="{{modalClass}} modalContainer">
-        <div class="modalContent">
+        <!-- Popup for changing username -->
+        <div *ngIf="updateUsernameMode" class="modalContent">
             <div class="modalText"> {{ts.l.change_username}} </div>
             <div class="modalText"> ({{ts.l.you_will_have_to_login}}) </div><br>
             <div class="modalText"> {{ts.l.current_username}}: <i>{{auth.getUserDetails().username}}</i></div><br>
@@ -21,10 +20,21 @@
             <div class="usernameErrorText"> {{errorMessage}} </div>
             <div>
                 <button class="modalBtn createBtnGreen" (click)="updateUsername()">{{ts.l.save}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.cancel}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateUsernameMode=false;">{{ts.l.cancel}}</button>
+            </div>
+        </div>
+        <!-- Popup for changing email -->
+        <div *ngIf="updateEmailMode" class="modalContent">
+            <pre class="modalText">Update email</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
+            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
+            <div>
+                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.yes}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.no}}</button>
             </div>
         </div>
     </div>
+
     <!-- Profile options -->
     <div class="formTitle">{{ts.l.profile}}</div><br>
     <div *ngIf="!editMode" class="formBody">  
@@ -34,7 +44,14 @@
           <div class="formLabel">{{ts.l.username}} :</div>
           <div class="userInfo">
             <i>{{auth.getUserDetails().username}}</i>
-            <i class="fas fa-edit headerIconBtn" (click)="updateMode = true; errorMessage = ''; showModal()"></i>
+            <i class="fas fa-edit headerIconBtn" (click)="updateUsernameMode=true; errorMessage=''; showModal()"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.email}} :</div>
+          <div class="userInfo">
+            <i>{{auth.getUserDetails().email}}</i>
+            <i class="fas fa-edit headerIconBtn" (click)="updateEmailMode=true; errorMessage=''; showModal()"></i>
           </div>
         </div>
         <!-- classroom details if STUDENT -->
@@ -69,7 +86,7 @@
         </div>
         <!-- delete account -->
         <div>
-          <button class="btn deleteAccountButton" (click)="updateMode = false; showModal()"> {{ts.l.delete_my_account}} </button>
+          <button class="btn deleteAccountButton" (click)="deleteAccountMode=true; showModal()"> {{ts.l.delete_my_account}} </button>
         </div>
         <!-- sign out and profile information -->
         <div class="btnContainer">

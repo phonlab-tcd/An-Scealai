@@ -30,7 +30,9 @@ export class ProfileComponent implements OnInit {
   classroom: Classroom;
   statObj: StudentStats = new StudentStats();
   modalClass : string = "hidden";
-  updateMode: boolean = false;
+  updateUsernameMode: boolean = false;
+  updateEmailMode: boolean = false;
+  deleteAccountMode: boolean = false;
   updatedUsername: string;
   errorMessage: string = "";
 

@@ -368,6 +368,7 @@ export class RegisterProfileComponent implements OnInit {
         this.fatherNativeTongue = p.fatherNativeTongue,
         this.motherNativeTongue = p.motherNativeTongue,
         this.otherLanguageProficiency = p.otherLanguageProficiency,
+        
         this.speakingFrequency = p.speakingFrequency;
         this.speakWith = p.speakWith;
         this.irishMedia = p.irishMedia;
