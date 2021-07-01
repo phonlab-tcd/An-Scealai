@@ -62,7 +62,7 @@ const routes: Routes = [
   { path: 'report_an_issue', component: ReportAnIssueComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
+  { path: 'register/:role', component: RegisterComponent},
   { path: 'register-teacher', component: RegisterTeacherComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },

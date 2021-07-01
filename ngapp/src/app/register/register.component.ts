@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, RegistrationTokenPayload } from '../authentication.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
@@ -13,6 +13,13 @@ import config from '../../abairconfig.json';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  constructor(
+    private route: ActivatedRoute,
+    private auth: AuthenticationService,
+    private router: Router,
+    private engagement: EngagementService,
+    public ts: TranslationService) { }
+
   credentials: RegistrationTokenPayload = {
     baseurl: config.baseurl,
     username: '',
@@ -36,13 +43,19 @@ export class RegisterComponent implements OnInit {
 
   waitingForEmailVerification = false;
 
-  constructor(
-    private auth: AuthenticationService,
-    private router: Router,
-    private engagement: EngagementService,
-    public ts: TranslationService) { }
 
   ngOnInit() {
+    this.route.params.subscribe(
+      params => {
+        console.log(params);
+        if (params.role && (params.role === 'TEACHER' || params.role === 'STUDENT')) {
+          this.credentials.role = params.role;
+        }
+      },
+      error => {
+        console.error(error);
+      });
+
     this.registrationError = false;
     this.usernameClass = '';
     this.usernameErrorText = '';

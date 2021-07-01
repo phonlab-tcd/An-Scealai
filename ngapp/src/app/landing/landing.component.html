@@ -7,8 +7,8 @@
 </div>
   
 <div class="landingBtnsContainer" *ngIf="!auth.isLoggedIn()">
-  <button type="button" class="btn teacherRegisterBtn" routerLink="/register-teacher">{{ts.l.i_am_a_teacher}}</button><br>
-  <button type="button" class="btn studentRegisterBtn" routerLink="/register">{{ts.l.i_am_a_student}}</button>
+  <button type="button" class="btn teacherRegisterBtn" routerLink="/register/TEACHER">{{ts.l.i_am_a_teacher}}</button><br>
+  <button type="button" class="btn studentRegisterBtn" routerLink="/register/STUDENT">{{ts.l.i_am_a_student}}</button>
   <div class="loginTextContainer">{{ts.l.already_have_account}}<a routerLink="/login"> {{ts.l.sign_in}}</a></div>
 </div>
   
