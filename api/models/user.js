@@ -9,6 +9,11 @@ let userSchema = new mongoose.Schema({
         index: true,
         unique: true,
     },
+    email: {
+      type: String,
+      required: true,
+      default: null,
+    },
     role: {
         type: String,
         enum: ['ADMIN', 'TEACHER', 'STUDENT'],
@@ -20,7 +25,16 @@ let userSchema = new mongoose.Schema({
         default: 'en'
     },
     hash: String,
-    salt: String
+    salt: String,
+    status: {
+      type: String,
+      enum: ['Pending','Active'],
+      default: 'Pending',
+    },
+    confirmationCode: {
+      type: String,
+      unique: true,
+    }
 });
 
 userSchema.methods.setPassword = function(password){
@@ -42,8 +56,14 @@ userSchema.methods.generateJwt = function() {
         username: this.username,
         role: this.role,
         language: this.language,
-        exp: parseInt(expiry.getTime() / 1000),
+        exp: parseInt(expiry.getTime() / 1000 /* convert milliseconds to seconds */),
     }, "sonJJxVqRC"); // 5ecret
 };
+
+userSchema.methods.generateActivationLink = function (baseurl) {
+  console.dir(this);
+  this.confirmationCode = jwt.sign({username: this.username, email: this.email},'sonJJxVqRC');
+  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&confirmationCode=${this.confirmationCode}`;
+}
 
 module.exports = mongoose.model('User', userSchema);

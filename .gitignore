@@ -10,6 +10,8 @@ session.vim
 **/logs/*
 
 
+session.vim
+
 /mongotest/logs/**
 /mongotest/db/**
 
@@ -18,3 +20,4 @@ session.vim
 
 /sshlogin
 /login_to_phonetics.sh
+/login
