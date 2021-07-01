@@ -206,7 +206,6 @@ export class ProfileComponent implements OnInit {
   }
   
   updatePassword() {
-    console.log("function called");
     if(this.newPassword && this.newPasswordConfirm) {
       if(this.newPassword === this.newPasswordConfirm) {
         if(this.newPassword.length < 5) {
