@@ -27,6 +27,22 @@ studentStatsRoutes.route('/getStatsByClassroom/:id').get((req, res) => {
     });
 });
 
+// Update username given student id 
+studentStatsRoutes.route('/getStatsForStudent/:id').get(function (req, res) {
+  StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
+    if(err) {
+      console.log(err);
+        res.status(400).json({"message" : err.message});
+    } else {
+      if(!stat) {
+        res.status(404).json("Stat with given student ID not found");
+        return;
+      }
+      res.status(200).json(stat);
+    }
+  });
+});
+
 // Get the grammar erorr map given the student id
 studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
@@ -44,11 +60,19 @@ studentStatsRoutes.route('/getErrors/:id').get(function (req, res) {
 studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) {
   StudentStats.findOne({"studentId": req.params.id}, function(err, stat){
     if(err) {
+      console.log(err);
         res.status(400).json({"message" : err.message});
-    } 
-    
+    }
     if(!stat) {
-      res.status(404).json({"message" : "stat not found"});
+      res.status(404).json("Stat does not exist for student id")
+    } else {
+      stat.studentUsername = req.body.username;
+      stat.save().then(stat => {
+          res.status(200).json({'message': 'stat username updated successfully'});
+      })
+      .catch(err => {
+          res.status(400).send("unable to update stat username");
+      });
     }
     
     stat.studentUsername = req.body.username;
@@ -77,8 +101,8 @@ studentStatsRoutes.route('/updateGrammarErrors/:id/:updatedTimeStamp').post(func
           console.log(err, new Date());
           res.json(err);
         }
-        if(stat === null) {
-            console.log("stat is null!", new Date());
+        if(!stat) {
+            res.status(404).json("Stat with given student ID not found");
         } else {
           let newErrors = Object.entries(req.body);
           console.log(newErrors);

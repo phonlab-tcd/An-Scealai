@@ -3,7 +3,7 @@ dist
 **/node_modules
 session.vim
 
-session.vim
+.DS_Store
 
 /api/sendinblue.json
 
