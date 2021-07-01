@@ -149,6 +149,11 @@
             "please_specify" : "Please specify",
             "specify_where" : "Specify where",
             "attending_gaeltacht_immersion_course" : "I am currently attending a Gaeltacht immersion course",
+            "immersion_list" : [
+              "",
+              "Yes",
+              "No"
+            ],
             "studies" : "Studies",
             "primary" : "Primary",
             "secondary" : "Secondary",
@@ -169,12 +174,12 @@
             "dialect_preference_list" : [
               "",
               "Gaeilge Uladh",
-              "Gaeilge Chonnact",
+              "Gaeilge Chonnacht",
               "Gaolainn na Mumhan",
               "Other"
             ],
             "gaeilge_uladh" : "Gaeilge Uladh",
-            "gaeilge_chonnacht" : "Gaeilge Chonnact",
+            "gaeilge_chonnacht" : "Gaeilge Chonnacht",
             "gaolainn_na_mumhan" : "Gaolainn na Mumhan",
             "other" : "Other",
             "spoken_comprehension_level_list" : [
@@ -234,7 +239,7 @@
             "how_well_understand_spoken" : "How well do you understand spoken Irish?",
             "whats_cefr_level" : "What's your CEFR level?",
             "how_often_speak" : "How often do you speak Irish?",
-            "who_speak_with" : "Whom do you normally speak Irish with?",
+            "who_speak_with" : "With whom do you normally speak Irish?",
             "watch_irish_media" : "Do you watch or listen to Irish language media?",
             "read_irish" : "Do you read in Irish?",
             "write_irish" : "Do you write in Irish?",
@@ -603,7 +608,7 @@
     
             "personal_info" : "Eolas pearsanta",
             "profile_instructions" : "Táimid ag iarraidh ort an ceistneoir seo a líonadh ar mhaithe le taighde a cheadóidh comparáidí idirnáisiúnta le teangacha éagsúla.",
-            "email" : "Email",
+            "email" : "Seoladh rphoist",
             "gender" : "Gnéas",
             "gender_list" : ["","Fireann","Baineann","Uilíoch","B'fhearr liom gan a rá"],
             "male" : "Fireann",
@@ -612,7 +617,7 @@
             "county" : "Contae",
             "not_from_ireland" : "Ní as Poblacht na hÉireann ná as Tuaisceart Éireann mé",
             "country" : "Tír",
-            "current_studies" : "Current studies",
+            "current_studies" : "Leibhéal scolaíochta",
             "type_of_school" : "Cén cineál scoile ar fhreastail / a bhfuil tú ag freastal uirthi?",
             "schools_list" : ["", "Scoil Bhéarla", "Gaelscoil", "Scoil Gaeltachta", "Ní fhreastail mé ar scoil in Éirinn"],
             "english_school" : "Scoil Bhéarla",
@@ -621,68 +626,73 @@
             "school_not_in_ireland" : "Ní fhreastail mé ar scoil in Éirinn",
             "student_school_level_list" : [
               "",
-              "I am a primary school pupil",
-              "I am a secondary school pupil",
-              "I am a 3rd level student in Ireland",
-              "I am studying Irish in the USA",
-              "I am studying Irish outside of Ireland or USA",
-              "I am a postgraduate student"
+              "Is dalta bunscoile mé",
+              "Is dalta iar-bhunscoile mé",
+              "Is mac léinn tríú leibhéal mé in Éirinn",
+              "Táim ag déanamh staidéar ar an nGaeile i Stáit Aontaithe Mheirceá",
+              "Táim ag déanamh staidéir ar an nGaeilge taobh amuigh d’Éirinn agus de Stáit Aontaithe Mheirceá",
+              "Is mac léinn iarchéime mé"
             ],
             "primary_years_list" : [
               "",
-              "I am in 1st class",
-              "I am in 2nd class",
-              "I am in 3rd class",
-              "I am in 4th class",
-              "I am in 5th class",
-              "I am in 6th class"
+              "Táim i Rang a haon",
+              "Táim i Rang a dó",
+              "Táim i Rang a trí",
+              "Táim i Rang a ceathair",
+              "Táim i Rang a cúig",
+              "Táim i Rang a sé"
             ],
             "secondary_years_list" : [
               "",
-              "I am in 1st year",
-              "I am in 2nd year",
-              "I am in 3rd year",
-              "I am in 4th year",
-              "I am in 5th year",
-              "I am in 6th year"
+              "Táim i mBliain a 1 ",
+              "Táim i mBliain a 2",
+              "Táim i mBliain a 3r",
+              "Táim i mBliain a 4",
+              "Táim i mBliain a 5",
+              "Táim i mBliain a 6"
             ],
-            "what_are_you_studying" : "What are you studying?",
+            "what_are_you_studying" : "Cad é do phríomh-ábhar staidéir?",
             "third_level_options_list" : [
               "",
-              "I am studying Irish",
-              "I am studying Education Primary (with Irish as a major component)",
-              "I am studying Education Primary (with Irish as a minor component)",
-              "I am studying Education as a Postgraduate student",
-              "Other"
+              "Tá céim sa Ghaeilge ar siúl agam",
+              "Táim ag gabháil de chéim san Oideachas agus an Ghaeilge mar mhór-ábhar agam",
+              "Táim ag gabháil de chéim san Oideachas agus an Ghaeilge mar mhion-ábhar agam",
+              "Tá ag gabháil de chéim san Oideachas mar iar-chéimí",
+              "Eile"
             ],
             "third_level_years_list" : [
               "",
-              "I am in 1st year",
-              "I am in 2nd year",
-              "I am in 3rd year of a 4 year course",
-              "I am in final year"
+              "Táim sa chéad bhliain",
+              "Táim sa dara bliain",
+              "Táim sa tríú bliain de chúrsa ceithre bliana",
+              "Táim sa bhliain dheireanach den chéim"
             ],
             "third_level_years_list_short" : [
               "",
-              "I am in 1st year",
-              "I am in 2nd year",
-              "I am in 3rd year",
-              "I am in final year"
+              "Táim sa chéad bhliain",
+              "Táim sa dara bliain",
+              "Táim sa tríú bliain",
+              "Táim sa bhliain dheireanach den chéim"
             ],
             "usa_options_list" : [
               "",
-              "I am taking an Irish class at a University",
-              "I am not enrolled in an Irish language class at a University"
+              "Déanaim rang Gaeilge san Ollscoil",
+              "Níl mé cláraithe do ranganna Gaeilge in aon Ollscoil"
             ],
-            "please_specify" : "Please specify",
-            "specify_where" : "Specify where",
-            "attending_gaeltacht_immersion_course" : "I am currently attending a Gaeltacht immersion course",
-            "studies" : "Studies",
-            "primary" : "Primary",
-            "secondary" : "Secondary",
-            "third_level" : "3rd level",
-            "gaeltacht_immersion_course" : "Gaeltacht immersion course",
-            "school_type_where_you_teach" : "School type where you teach",
+            "please_specify" : "Luaigh",
+            "specify_where" : "Luaigh an áit",
+            "attending_gaeltacht_immersion_course" : "Táim ag freastal ar chúrsa Gaeltachta faoi láthair",
+            "immersion_list" : [
+              "",
+              "Tá",
+              "Níl"
+            ],
+            "studies" : "Ábhar staidéir",
+            "primary" : "Bunscoil",
+            "secondary" : "Iar-bhunscoil",
+            "third_level" : "Cúrsa 3ú leibhéal",
+            "gaeltacht_immersion_course" : "Cúrsa Gaeltachta",
+            "school_type_where_you_teach" : "An áit ina bhfuil tú ag múineadh",
             "yes" : "Sea",
             "no" : "Ní hea",
             "bilingual_native" : "Dátheangach (cainteoir dúchais)",
@@ -697,12 +707,12 @@
             "dialect_preference_list" : [
               "",
               "Gaeilge Uladh",
-              "Gaeilge Chonnact",
+              "Gaeilge Chonnacht",
               "Gaolainn na Mumhan",
               "Eile"
             ],
             "gaeilge_uladh" : "Gaeilge Uladh",
-            "gaeilge_chonnacht" : "Gaeilge Chonnact",
+            "gaeilge_chonnacht" : "Gaeilge Chonnacht",
             "gaolainn_na_mumhan" : "Gaolainn na Mumhan",
             "other" : "Eile",
             "comprehension_level_1" : "Cúpla focal má labhraítear go mall",
@@ -739,11 +749,11 @@
             "learners_and_natives" : "Foghlaimeoirí agus cainteoirí dúchais",
             "natives" : "Cainteoirí dúchais",
             "learners" : "Foghlaimeoirí",
-            "list_languages_spoken": "List languages spoken at home/average use of each",
-            "father_native_tongue" : "Father's native tongue",
-            "mother_native_tongue" : "Mother's native tongue",
-            "years_of_irish_school" : "How many years of Irish at school/university?",
-            "list_other_foreign_languages" : "List other foreign languages you speak in decreasing order of proficiency",
+            "list_languages_spoken": "Déan liosta de na teangacha a úsáideann do theaghlach/gnáth-ráta úsáide atá ag gach ceann",
+            "father_native_tongue" : "Teanga dhúchas d’athar",
+            "mother_native_tongue" : "Teanga dhúchas do mháthar",
+            "years_of_irish_school" : "An mó bliain atá caite agat leis an nGaeilge ar scoil/Ollscoil?",
+            "list_other_foreign_languages" : "Déan liosta de theangacha eile atá agat in ord do líofachta (ag tosú leis an gceann is líofa agat).",
             "synth_opinion_list" : [
               "",
               "Ní maith liom iad",

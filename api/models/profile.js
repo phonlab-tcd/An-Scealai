@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 let Profile = new Schema({
     userId : String,
-    email: String,
     gender : String,
     age : String,
     county : String,
@@ -20,10 +19,9 @@ let Profile = new Schema({
     usaOption: String,
     otherCountryOfStudy: String,
     otherPostgradStudies: String,
-    immersionCourse: Boolean,
+    immersionCourse: String,
     teacherPrimaryType: String,
     teacherSecondaryType: String,
-    teacherSchoolName: String,
     teacherSchoolTypes: {
       primary: Boolean,
       secondary: Boolean,
