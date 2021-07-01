@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable ,  throwError, Subject } from 'rxjs';
+import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from '../abairconfig.json';
@@ -23,15 +23,44 @@ export interface TokenPayload {
   role: string;
 }
 
+export interface VerifyEmailRequest {
+  username: string;
+  email: string;
+  password: string;
+  // TODO is role necessary for this request?
+  role: string;
+  baseurl: string;
+}
+
+export interface LoginTokenPayload {
+  baseurl: string; // 'http://localhost:4000/' | 'https://www.abair.tcd.ie/anscealaibackend';
+  username: string;
+  password: string;
+  role: string;
+}
+
+export interface RegistrationTokenPayload {
+  baseurl: string; // 'http://localhost:4000/' | 'https://www.abair.tcd.ie/anscealaibackend/';
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  baseUrl : string = config.baseurl + 'user/';
-  private token: string;
-  public getLoggedInName : any = new Subject();
 
-  constructor(private http: HttpClient, private router: Router,) { }
+  baseUrl: string = config.baseurl + 'user/';
+  private token: string;
+  public getLoggedInName: any = new Subject();
+
+  public pendingUserPayload: LoginTokenPayload = null;
+
+  constructor(
+    private http: HttpClient,
+    private router: Router, ) { }
 
   private saveToken(token: string): void {
     localStorage.setItem('scealai-token', token);
@@ -39,7 +68,7 @@ export class AuthenticationService {
   }
 
   private getToken(): string {
-    if(!this.token) {
+    if (!this.token) {
       this.token = localStorage.getItem('scealai-token');
     }
     return this.token;
@@ -47,36 +76,39 @@ export class AuthenticationService {
 
   public getUserDetails(): UserDetails {
     const token = this.getToken();
-    let payload;
-    if(token) {
-      
+    let payload: any;
+    if (token) {
+
       payload = token.split('.')[1];
       payload = window.atob(payload);
-      
+
       this.getLoggedInName.next(JSON.parse(payload).username);
-      
+
       return JSON.parse(payload);
-      
+
     } else {
       return null;
     }
-    
   }
 
   public isLoggedIn(): boolean {
     const user = this.getUserDetails();
-    
-    if(user) {
+
+    if (user) {
       return user.exp > Date.now() / 1000;
     } else {
       return false;
     }
   }
 
-  private request(method: 'post'|'get', type: 'login'|'register'|'registerTeacher'|'profile', user?: TokenPayload): Observable<any> {
-    let base;
+  private request(
+    method: 'post'|'get',
+    type: 'register'|'registerTeacher'|'profile',
+    user?: TokenPayload | LoginTokenPayload | RegistrationTokenPayload): Observable<any> {
 
-    if(method === 'post') {
+    let base: Observable<any>;
+
+    if (method === 'post') {
       base = this.http.post(this.baseUrl + type, user);
     } else {
       base = this.http.get(this.baseUrl + '${type}', { headers: { Authorization: 'Bearer ${this.getToken()}'}});
@@ -84,7 +116,7 @@ export class AuthenticationService {
 
     const request = base.pipe(
       map((data: TokenResponse) => {
-        if(data.token) {
+        if (data.token) {
           this.saveToken(data.token);
         }
         return data;
@@ -94,12 +126,26 @@ export class AuthenticationService {
     return request;
   }
 
-  public register(user: TokenPayload): Observable<any> {
+  public verifyOldAccount(requestObj: VerifyEmailRequest): Observable<any> {
+    return this.http.post(this.baseUrl + 'verifyOldAccount', requestObj);
+  }
+
+  public register(user: TokenPayload | RegistrationTokenPayload): Observable<any> {
     return this.request('post', 'register', user);
   }
 
-  public login(user: TokenPayload): Observable<any> {
-    return this.request('post', 'login', user);
+  public login(user: TokenPayload | LoginTokenPayload): Observable<any> {
+    return this.http.post(
+      this.baseUrl + 'login',
+      user)
+      .pipe(
+        map((data: TokenResponse) => {
+          if (data.token) {
+            this.saveToken(data.token);
+          }
+          return data;
+        })
+      );
   }
 
   public profile(): Observable<any> {
@@ -110,9 +156,6 @@ export class AuthenticationService {
     this.token = '';
     window.localStorage.removeItem('scealai-token');
     this.router.navigateByUrl('/landing');
-    //location.reload();
+    // location.reload();
   }
-  
-
-
 }

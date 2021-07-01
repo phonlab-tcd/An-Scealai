@@ -1,23 +1,42 @@
 <!-- register with username and password -->
-<div class="registerContainer">
+<div class="registerContainer" *ngIf="!waitingForEmailVerification">
     <div class="formTitle">{{ts.l.register}}</div><br>
     <div class="formContainer">
       <form (submit)="register()">
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.username}}</label></div>
-          <input type="text" class="form-control inputField {{usernameClass}}"
-          name="username" [(ngModel)]="credentials.username" [formControl]="usernameInput">
+          <input
+              type="text"
+              class="form-control inputField {{usernameClass}}"
+              name="username"
+              [(ngModel)]="credentials.username"
+              [formControl]="usernameInput">
           <div class="usernameErrorText">{{usernameErrorText}}</div>
         </div>
         <div class="form-group">
+          <div class="formLabel"><label>{{ts.l.email_address}}</label></div>
+          <input 
+               type="text" 
+               class="form-control inputField"
+               name="email" 
+               placeholder="mise@gmail.com"
+               [(ngModel)]="credentials.email">
+        </div>
+        <div class="form-group">
           <div class="formLabel"><label>{{ts.l.create_password}}</label></div>
-          <input type="password" class="form-control inputField" 
-          name="password" [(ngModel)]="credentials.password">
+          <input
+              type="password"
+              class="form-control inputField" 
+              name="password"
+              [(ngModel)]="credentials.password">
         </div>
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.confirm_password}}</label></div>
-          <input type="password" class="form-control inputField"
-          name="password" [(ngModel)]="passwordConfirm">
+          <input 
+               type="password" 
+               class="form-control inputField"
+               name="password" 
+               [(ngModel)]="passwordConfirm">
           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
         </div>
         <div class="form-group">
@@ -40,4 +59,14 @@
         <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
       </form>
     </div>
+</div>
+
+<div class="registerContainer" *ngIf="waitingForEmailVerification">
+  <div class="formTitle">{{ts.l.verification}}</div><br>
+  <div class="formContainer">
+    <p>{{ts.l.username}}: {{frozenCredentials.username}}</p>
+    <p>{{ts.l.email_address}}: {{frozenCredentials.email}}</p>
+    <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}</div>
+    <button (click)="login()">Login</button>
+  </div>
 </div>

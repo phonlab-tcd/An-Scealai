@@ -109,7 +109,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     RecordingHistoryComponent,
     ViewRecordingComponent,
     SafeHtmlPipe,
-    SponsorsComponent
+    SponsorsComponent,
   ],
   imports: [
     BrowserModule,
