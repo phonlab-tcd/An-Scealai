@@ -18,8 +18,6 @@ export class RegisterProfileComponent implements OnInit {
 
   //input : string;
   showError : boolean;
-  
-  email : string = "";
 
   genders : string[] = [
     "",
@@ -176,13 +174,20 @@ export class RegisterProfileComponent implements OnInit {
     "I am not enrolled in an Irish language class at a University"
   ];
   
+  
   usaOption: string;
   
   otherCountryOfStudy: string;
   
   otherPostgradStudies: string;
   
-  immersionCourse: boolean = false;
+  immersionOptions: string[] = [
+    "",
+    "Yes",
+    "No"
+  ]
+  
+  immersionCourse: String = this.immersionOptions[0];
   
   teacherSchoolTypes = {
     primary: false,
@@ -193,7 +198,6 @@ export class RegisterProfileComponent implements OnInit {
   
   teacherPrimaryType: string;
   teacherSecondaryType: string;
-  teacherSchoolName: string;
 
   nativeSpeakerStatuses : string[] = [
     "",
@@ -333,7 +337,6 @@ export class RegisterProfileComponent implements OnInit {
     this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
         let p = res.profile;
-        this.email = p.email;
         this.gender = p.gender;
         this.age = p.age;
         this.county = p.county;
@@ -353,10 +356,9 @@ export class RegisterProfileComponent implements OnInit {
         this.otherPostgradStudies = p.otherPostgradStudies,
         this.immersionCourse = p.immersionCourse,
         
-        this.teacherPrimaryType = p.teacherPrimaryType,
-        this.teacherSecondaryType = p.teacherSecondaryType,
-        this.teacherSchoolTypes = p.teacherSchoolTypes,
-        this.teacherSchoolName = p.teacherSchoolName,
+        this.teacherPrimaryType = (p.teacherPrimaryType) ? p.teacherPrimaryType : this.teacherPrimaryType,
+        this.teacherSecondaryType = (p.teacherSecondaryType) ? p.teacherSecondaryType : this.teacherSecondaryType,
+        this.teacherSchoolTypes = (p.teacherSchoolTypes) ? p.teacherSchoolTypes: this.teacherSchoolTypes,
 
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
@@ -369,6 +371,7 @@ export class RegisterProfileComponent implements OnInit {
         this.speakingFrequency = p.speakingFrequency;
         this.speakWith = p.speakWith;
         this.irishMedia = p.irishMedia;
+        this.irishReading = p.irishReading;
         this.irishWriting = p.irishWriting;
         this.howOftenMedia = p.howOftenMedia;
         this.howOftenReading = p.howOftenReading;
@@ -387,7 +390,6 @@ export class RegisterProfileComponent implements OnInit {
 
     let profile = {
       userId : userDetails._id,
-      email: this.email,
       gender : this.gender,
       age : this.age,
       county : (!this.notFromIreland) ? this.county : null,
@@ -410,7 +412,6 @@ export class RegisterProfileComponent implements OnInit {
       teacherPrimaryType: (this.teacherPrimaryType) ? this.teacherPrimaryType : null,
       teacherSecondaryType: (this.teacherSecondaryType) ? this.teacherSecondaryType : null,
       teacherSchoolTypes: this.teacherSchoolTypes,
-      teacherSchoolName: this.teacherSchoolName,
       
       nativeSpeakerStatus : this.nativeSpeakerStatus,
       dialectPreference : this.dialectPreference,

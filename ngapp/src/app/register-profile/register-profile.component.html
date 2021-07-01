@@ -14,10 +14,10 @@
         </div>
         <div class="group-set-body">
           <!-- Select email -->
-          <div class="form-group">
+          <!--<div class="form-group">
             <p class="formLabel">{{ts.l.email}}</p>
             <input type="email" class="form-control inputField" id="email" [(ngModel)]="email" name="email" required email #emailReference>
-          </div>
+          </div>-->
           <!-- Select gender -->
           <div class="form-group">
             <p class="formLabel">{{ts.l.gender}}</p>
@@ -49,14 +49,14 @@
           <!-- Select country if not from Ireland -->
           <div *ngIf="notFromIreland" class="form-group">
             <p class="formLabel">{{ts.l.country}}</p>
-            <input type="text" class="form-control inputField" [(ngModel)]="country" name="country" required>
+            <input type="text" class="form-control inputField" [(ngModel)]="country" name="country">
           </div>
           
           
           <!-- Current Studies -->
           <div class="form-group" *ngIf="auth.getUserDetails().role === 'STUDENT'">
             <p class="formLabel"> {{ts.l.current_studies}}:</p>
-            <select class="selectOptions" [(ngModel)]="studentSchoolLevel" name="studentSchoolLevel">
+            <select class="selectOptions" [(ngModel)]="studentSchoolLevel" name="studentSchoolLevel" required>
               <option *ngFor="let level of studentSchoolLevels; let i=index" [ngValue]="level">{{ts.l.student_school_level_list[i]}}</option>
             </select>
           </div>
@@ -114,7 +114,7 @@
           </div>
           <div *ngIf="thirdLevelOption === thirdLevelOptions[5]" class="form-group">
             <p class="formLabel"> {{ts.l.please_specify}}: </p>
-            <input class="form-control inputField" id="other" [(ngModel)]="otherStudies" required name="otherStudies">
+            <input class="form-control inputField" id="other" [(ngModel)]="otherStudies" name="otherStudies">
           </div>
           <!-- Studying in the USA -->
           <div *ngIf="studentSchoolLevel === studentSchoolLevels[4]" class="form-group">
@@ -126,17 +126,18 @@
           <!-- Studying outside USA or Ireland -->
           <div *ngIf="studentSchoolLevel === studentSchoolLevels[5]" class="form-group">
             <p class="formLabel"> {{ts.l.specify_where}}:  </p>
-            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherCountryOfStudy" required name="otherCountryOfStudy">
+            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherCountryOfStudy" name="otherCountryOfStudy">
           </div>
           <!-- Postgrad student -->
           <div *ngIf="studentSchoolLevel === studentSchoolLevels[6]" class="form-group">
             <p class="formLabel"> {{ts.l.studies}}:  </p>
-            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherPostgradStudies" required name="otherPostgradStudies">
+            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherPostgradStudies" name="otherPostgradStudies">
           </div>
           <div class="form-group" *ngIf="auth.getUserDetails().role === 'STUDENT'" >
-            <p class="formLabel">
-              <input type="checkbox" [(ngModel)]="immersionCourse" name="immersionCourse"> {{ts.l.attending_gaeltacht_immersion_course}}
-            </p>
+            <p class="formLabel">{{ts.l.attending_gaeltacht_immersion_course}}</p>
+            <select class="selectOptions" [(ngModel)]="immersionCourse" name="immersionCourse" required>
+              <option *ngFor="let o of immersionOptions; let i=index" [value]="o">{{ts.l.immersion_list[i]}}</option>
+            </select>
           </div>
           
           <!-- Check box for teacher schools -->
@@ -145,14 +146,14 @@
             <div class="checkbox-group">
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.primary" name="teacherPrimary"> {{ts.l.primary}} </div>
               <div *ngIf="teacherSchoolTypes.primary" class="form-group">
-                <p class="formLabel">{{ts.l.type_of_school}}</p>
+                <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
                 <select class="selectOptions" [(ngModel)]="teacherPrimaryType" name="teacherPrimaryType">
                   <option *ngFor="let s of schools; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
                 </select>
               </div>
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.secondary" name="teacherSecondary"> {{ts.l.secondary}} </div>
               <div *ngIf="teacherSchoolTypes.secondary" class="form-group">
-                <p class="formLabel">{{ts.l.type_of_school}}</p>
+                <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
                 <select class="selectOptions" [(ngModel)]="teacherSecondaryType" name="teacherSecondaryType">
                   <option *ngFor="let s of schools; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
                 </select>
@@ -162,10 +163,10 @@
             </div>
           </div>
           <!-- School name TEACHER-->
-          <div *ngIf="auth.getUserDetails().role === 'TEACHER'" class="form-group">
+        <!--<div *ngIf="auth.getUserDetails().role === 'TEACHER'" class="form-group">
             <p class="formLabel">{{ts.l.school_name}}</p>
             <input type="text" class="fform-control inputField" id="school-name" [(ngModel)]="teacherSchoolName" placeholder={{teacherSchoolName}} name="teacherSchoolName" >
-          </div>
+          </div>-->
         </div>
       </div>
       
@@ -178,48 +179,48 @@
           <!-- Select native speaker option-->
           <div class="form-group">
             <p class="formLabel">{{ts.l.native_speaker}}</p>
-            <select class="selectOptions" [(ngModel)]="nativeSpeakerStatus" name="nativeSpeakerStatus">
+            <select class="selectOptions" [(ngModel)]="nativeSpeakerStatus" name="nativeSpeakerStatus" required>
               <option *ngFor="let nss of nativeSpeakerStatuses; let i=index" [ngValue]="nss">{{ts.l.native_speaker_status_list[i]}}</option>
             </select>
           </div>
           <!-- Select dialect option -->
           <div class="form-group">
             <p class="formLabel">{{ts.l.which_dialect}}</p>
-            <select class="selectOptions" [(ngModel)]="dialectPreference" name="dialectPreference">
+            <select class="selectOptions" [(ngModel)]="dialectPreference" name="dialectPreference" required>
               <option *ngFor="let dp of dialectPreferences; let i=index" [ngValue]="dp">{{ts.l.dialect_preference_list[i]}}</option>
             </select>
           </div>
           <!-- Select aural comprehension STUDENT/ADMIN -->
           <div class="form-group" *ngIf="auth.getUserDetails().role !== 'TEACHER'">
             <p class="formLabel">{{ts.l.how_well_understand_spoken}}</p>
-            <select class="selectOptions" [(ngModel)]="spokenComprehensionLevel" name="spokenComprehensionLevel">
+            <select class="selectOptions" [(ngModel)]="spokenComprehensionLevel" name="spokenComprehensionLevel" required>
               <option *ngFor="let scl of spokenComprehensionLevels; let i=index" [ngValue]="scl">{{ts.l.spoken_comprehension_level_list[i]}}</option>
             </select>
           </div>
           <!-- Other languages spoken at home-->
           <div class="form-group">
             <p class="formLabel"> {{ts.l.list_languages_spoken}}</p>
-            <input class="form-control inputField" id="otherLanguages" [(ngModel)]="otherLanguages" name="otherLanguages">
+            <input class="form-control inputField" id="otherLanguages" [(ngModel)]="otherLanguages" name="otherLanguages" required>
           </div>
           <!-- Father's native tongue-->
           <div class="form-group">
             <p class="formLabel"> {{ts.l.father_native_tongue}}: </p>
-            <input class="form-control inputField" id="father" [(ngModel)]="fatherNativeTongue" name="fatherNativeTongue" required>
+            <input class="form-control inputField" id="father" [(ngModel)]="fatherNativeTongue" name="fatherNativeTongue">
           </div>
           <!-- Mother's native tongue-->
           <div class="form-group">
             <p class="formLabel">{{ts.l.mother_native_tongue}}: </p>
-            <input type="text" class="form-control inputField" id="mother" [(ngModel)]="motherNativeTongue" name="motherNativeTongue" required>
+            <input type="text" class="form-control inputField" id="mother" [(ngModel)]="motherNativeTongue" name="motherNativeTongue">
           </div>
           <!-- Years of Irish STUDENT/ADMIN -->
           <div class="form-group">
             <p class="formLabel"> {{ts.l.years_of_irish_school}}</p>
-            <input class="form-control inputFieldYears" id="yearsOfIrish" type="number" name="yearsOfIrish" min="0" [(ngModel)]="yearsOfIrish" >
+            <input class="form-control inputFieldYears" id="yearsOfIrish" type="number" name="yearsOfIrish" min="0" [(ngModel)]="yearsOfIrish" required>
           </div>
           <!-- Other language proficiency  -->
           <div class="form-group">
             <p class="formLabel"> {{ts.l.list_other_foreign_languages}}</p>
-            <input class="form-control inputField" id="otherLanguageProficiency" [(ngModel)]="otherLanguageProficiency" name="otherLanguageProficiency">
+            <input class="form-control inputField" id="otherLanguageProficiency" [(ngModel)]="otherLanguageProficiency" name="otherLanguageProficiency" required>
           </div>
         </div>
       </div>
@@ -233,14 +234,14 @@
           <!-- Select how often you speak Irish-->
           <div class="form-group">
             <p class="formLabel">{{ts.l.how_often_speak}}</p>
-            <select class="selectOptions" [(ngModel)]="speakingFrequency" name="speakingFrequency">
+            <select class="selectOptions" [(ngModel)]="speakingFrequency" name="speakingFrequency" required>
               <option *ngFor="let hoo of howOftenOptions; let i=index" [ngValue]="hoo">{{ts.l.how_often_options_list[i]}}</option>
             </select>
           </div>
           <!-- Select who you speak Irish with-->
           <div class="form-group">
             <p class="formLabel">{{ts.l.who_speak_with}}</p>
-            <select class="selectOptions" [(ngModel)]="speakWith" name="speakWith">
+            <select class="selectOptions" [(ngModel)]="speakWith" name="speakWith" required>
               <option *ngFor="let sw of speakWithOptions; let i=index" [ngValue]="sw">{{ts.l.who_speak_with_list[i]}}</option>
             </select>
           </div>
@@ -313,7 +314,7 @@
           <div class="form-group">
             <p class="formLabel"><i>{{ts.l.synthetic_voices_info}}</i></p>
             <p class="formLabel">{{ts.l.synthetic_voices_opinion}}</p>
-            <select class="selectOptions" [(ngModel)]="synthOpinion" name="synthOpinion">
+            <select class="selectOptions" [(ngModel)]="synthOpinion" name="synthOpinion" required>
               <option *ngFor="let so of synthOpinions; let i=index" [ngValue]="so">{{ts.l.synth_opinion_list[i]}}</option>
             </select>
           </div>
