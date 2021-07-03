@@ -19,56 +19,43 @@ var sendJSONresponse = function(res, status, content) {
 
 
 async function sendVerificationEmail (username, password, email, baseurl) {
-  logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
-  // Authenticate User
-  let getUserErr, user = null;
-  await User.findOne({ username: username }, (err, userFound) => {
-    logger.info({
-      message: 'verifying user' + userFound.toString() });
-    getUserErr = err;
-    user = userFound;
-  });
+  return new Promise(async (resolve, reject) => {
 
-  if (getUserErr) {
-    logger.error(getUserErr);
-    return {
-      error: getUserErr,
-      success: null,
-    };
-  }
+    logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
 
-  if (!user) {
-    logger.error('User not found');
-    return {
-      error: 'User not found',
-      success: null,
+    // Authenticate User
+    const user = await User.findOne({ username: username })
+      .catch(
+        err => {
+          logger.error(err);
+          reject(err);
+        });
+
+    // Require valid password
+    if( !user.validPassword(password) ) {
+      logger.error('Invalid password');
+      reject({
+        messageToUser: 'INVALID PASSWORD'
+      });
     }
-  }
 
-  // Require valid password
-  if( !user.validPassword(password) ) {
-    logger.error('Invalid password');
-    return {
-      error: 'Invalid password',
-      success: null,
-    }
-  }
-        
-  user.email = email;
+    user.email = email;
 
-  const activationLink = user
-    .generateActivationLink(baseurl);
+    const activationLink = user
+      .generateActivationLink(baseurl);
 
-  await user.save();
+    // Update user's email and verification code on the db
+    await user.save()
+      .catch(err => {
+        reject(err);
+      });
 
-  console.log("Confirmation Code:", user.confirmationCode);
-
-  mailObj = {
-    from: 'scealai.info@gmail.com',
-    recipients: [email],
-    subject: 'An Scéalaí account verification',
-    message: 
-    `Dear ${user.username},\n\
+    mailObj = {
+      from: 'scealai.info@gmail.com',
+      recipients: [email],
+      subject: 'An Scéalaí account verification',
+      message: 
+      `Dear ${user.username},\n\
       Please use this link to verify your email address for An Scéalaí:\n\n\
       ${activationLink}\n\n\
       Once you have verified your email you will be able to log in again.\n\
@@ -76,37 +63,28 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       Kindly,\n\
       \n\
       The An Scéalaí team`,
-  }
+    }
 
-  let sendEmailErr, sendEmailRes = null;
-  sendEmailRes = await mail.sendEmail(mailObj)
-    .catch(err => {
-      sendEmailErr = err;
+    const sendEmailRes = await mail.sendEmail(mailObj)
+      .catch(err => {
+        logger.error({
+          file: './api/controllers/authentication.js',
+          functionName: 'sendVerificationEmail',
+          error: err,
+        });
+        reject(err); 
+      });
+
+    if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
+      reject({
+        messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
+      });
+    }
+    resolve({
+      messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
     });
-
-  console.log('sendEmailRes:',sendEmailRes);
-
-  if (sendEmailErr) {
-    logger.error({
-      file: './api/controllers/authentication.js',
-      functionName: 'sendVerificationEmail',
-      error: sendEmailErr,
-    });
-    return {
-      error: sendEmailErr,
-      success: null };
-  }
-
-  if ( sendEmailRes.rejected.length !== 0) {
-    return {
-      error: new Error('The following recipients were rejected: ', sendEmailRes.rejected),
-      success: null};
-  }
-
-  return { 
-    error: null, 
-    success: sendEmailRes };
-}
+  });
+} // end sendVerificationEmail
 
 // Set a user's status to Active when they click on the activation link
 module.exports.verify = async (req, res) => {
@@ -116,8 +94,8 @@ module.exports.verify = async (req, res) => {
   if (!req.query.email){
     return res.status(400).json("email required to verify account email address");
   }
-  if (!req.query.confirmationCode){
-    return res.status(400).json("confirmatioCode required to verify account email address");
+  if (!req.query.verificationCode){
+    return res.status(400).json("verificationCode required to verify account email address");
   }
 
   const user = await User.findOne({username: req.query.username, email: req.query.email})
@@ -132,7 +110,7 @@ module.exports.verify = async (req, res) => {
     return res.status(404).json(`User with username: ${req.query.username} and email: ${req.query.email} does not exist.`);
   }
 
-  if(user.confirmationCode === req.query.confirmationCode){
+  if (user.verification.code === req.query.verificationCode) {
     const updatedUser = 
       await User.findOneAndUpdate({
         // Find
@@ -210,7 +188,8 @@ module.exports.verifyOldAccount = async (req, res) => {
     }
 
 
-    const { error: mailError, success: mailRes } = sendVerificationEmail(req.body.username, req.body.password, req.body.email, req.body.baseurl);
+    const { error: mailError, success: mailRes } = await sendVerificationEmail(req.body.username, req.body.password, req.body.email, req.body.baseurl);
+
     console.log('mailError', mailError);
     console.log('mailRes:', mailRes);
     if (mailError) {
@@ -253,7 +232,6 @@ module.exports.register = (req, res) => {
 
   user.role = req.body.role;
 
-  user.confirmationCode = jwt.sign({email: req.body.email},'sonJJxVqRC');
 
   user.save(async (err) => {
     //console.log(user._id);
@@ -268,25 +246,24 @@ module.exports.register = (req, res) => {
     
     if(!req.body.baseurl){
       logger.warning('Property basurl missing from registration request. Using default (dev server)');
-      req.body.baseurl = 'http://localhost:4000';
+      req.body.baseurl = 'http://localhost:4000/';
     }
-    const activationLink = `${req.body.baseurl}user/verify?username=${encodeURIComponent(req.body.username)}&email=${encodeURIComponent(req.body.email)}&confirmationCode=${encodeURIComponent(user.confirmationCode)}`;
-
-    const mailObj = {
-      from: 'scealai.info@gmail.com',
-      recipients: [req.body.email],
-      subject: 'Verify your account -- An Scéalaí',
-      message: `Dear ${req.body.username},\n\
-          Please click on the this <a href="${activationLink}">link</a> to activate your An Scéalaí account.\n\
-          Activation link: ${activationLink}\n\
-          Once your account has been activated you can return to the login page to log in.`,
-    };
     
-    let mailRes  = await mail.sendEmail(mailObj);
+    const mailRes =
+      await sendVerificationEmail(
+        user.username, 
+        req.body.password, 
+        user.email,
+        req.body.baseurl)
+        .catch(err => {
+          logger.error(err);
+        });
 
-    console.log(mailRes);
+    console.log('mailError:', mailError);
+    console.log('mailRes:', mailRes);
+
     // Make sure the email wasn't rejected
-    if (mailRes.rejected.length  !== 0){
+    if (mailRes.rejected.length && mailRes.rejected.length  !== 0) {
       logger.error({
         message: 'Failed to send verification email while registering',
         user: req.body.username,

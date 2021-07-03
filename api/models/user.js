@@ -2,7 +2,12 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
-let userSchema = new mongoose.Schema({
+const verificationSchema = new mongoose.Schema({
+  code: String,
+  date: Date,
+});
+
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -31,9 +36,13 @@ let userSchema = new mongoose.Schema({
       enum: ['Pending','Active'],
       default: 'Pending',
     },
-    confirmationCode: {
-      type: String,
+    verification: {
+      type: verificationSchema,
       unique: true,
+      default: {
+        code: null,
+        date: null,
+      },
     }
 });
 
@@ -61,9 +70,13 @@ userSchema.methods.generateJwt = function() {
 };
 
 userSchema.methods.generateActivationLink = function (baseurl) {
-  console.dir(this);
-  this.confirmationCode = jwt.sign({username: this.username, email: this.email},'sonJJxVqRC');
-  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&confirmationCode=${this.confirmationCode}`;
+  // Make sure this.verification exists
+  if ( ! this.verification ) {
+    this.verification = {};
+  }
+  this.verification.code = jwt.sign({username: this.username, email: this.email},'sonJJxVqRC');
+  this.verification.date = new Date();
+  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&verificationCode=${this.verification.code}`;
 }
 
 module.exports = mongoose.model('User', userSchema);
