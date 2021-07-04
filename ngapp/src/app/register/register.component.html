@@ -64,9 +64,15 @@
 <div class="registerContainer" *ngIf="waitingForEmailVerification">
   <div class="formTitle">{{ts.l.verification}}</div><br>
   <div class="formContainer">
-    <p>{{ts.l.username}}: {{frozenCredentials.username}}</p>
-    <p>{{ts.l.email_address}}: {{frozenCredentials.email}}</p>
-    <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}</div>
-    <button (click)="login()">Login</button>
+    <p
+        class="formLabel">{{ts.l.verify_email_prose}}</p>
+    <p
+        class="formLabel">{{ts.l.username}}: <strong>{{frozenCredentials.username}}</strong></p>
+    <p
+        class="formLabel">{{ts.l.email_address}}: <strong>{{frozenCredentials.email}}</strong></p>
+    <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}<br></div>
+    <button 
+      class="btn loginBtn"
+      (click)="login()">{{ts.l.sign_in}}</button>
   </div>
 </div>

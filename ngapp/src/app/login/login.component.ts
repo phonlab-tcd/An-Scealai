@@ -51,6 +51,9 @@ export class LoginComponent implements OnInit {
   waitingForEmailVerification = false;
   waitingErrorText = null;
 
+  resetPasswordOkText = null;
+  resetPasswordErrText = null;
+
   constructor(
     private auth: AuthenticationService,
     private router: Router,
@@ -153,6 +156,8 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword() {
+    this.resetPasswordOkText = null;
+    this.resetPasswordErrText = null;
     const name = this.usernameForgotPassword;
     if (name) {
       console.log('Requesting password reset for', name);
@@ -160,10 +165,12 @@ export class LoginComponent implements OnInit {
         okRes => {
           console.log('ok');
           console.dir(okRes);
+          this.resetPasswordOkText = okRes.messageToUser;
         },
         errRes => {
           console.log('err');
           console.dir(errRes);
+          this.resetPasswordErrText = errRes.error.messageToUser;
         },
         () => {
           console.log('Completed request to reset password for', name);

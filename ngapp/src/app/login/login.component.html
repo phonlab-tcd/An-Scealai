@@ -50,7 +50,10 @@
                <button (click)="verifyOldAccount" class="btn loginBtn">{{ts.l.verify_email_address}}</button>
         </div>
 
-        <button type="submit" class="btn loginBtn" *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
+        <button
+            type="submit"
+            class="btn loginBtn"
+            *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
       </form>
     </div>
 </div>
@@ -59,11 +62,15 @@
 <div class="registerContainer" *ngIf="waitingForEmailVerification">
   <div class="formTitle">{{ts.l.verification}}</div><br>
   <div class="formContainer">
-    <p>We have sent you an email. Click the link in the email to verify your email address. Once you've done that you will be able to log in again.</p>
-    <p>{{ts.l.username}}: {{frozenCredentials.username}}</p>
-    <p>{{ts.l.email_address}}: {{frozenCredentials.email}}</p>
+    <p class="formLabel">
+    {{ts.l.verify_email_prose}}
+    </p>
+    <p class="formLabel">{{ts.l.username}}: <strong>{{frozenCredentials.username}}</strong></p>
+    <p class="formLabel">{{ts.l.email_address}}: <strong>{{frozenCredentials.email}}</strong></p>
     <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}</div>
-    <button (click)="login()">Login</button>
+    <button 
+      class="btn loginBtn"
+      (click)="login()">{{ts.l.sign_in}}</button>
     <p *ngIf="waitingErrorText" class="errorMessage">{{waitingErrorText}}</p>
   </div>
 </div>
@@ -102,5 +109,13 @@
       {{ts.l.cancel}}
       <i class="fa fa-times"></i>
     </button>
+  </div>
+  <div
+      class="errorMessage">
+    {{ resetPasswordErrText }}
+  </div>
+  <div
+      class="">
+    {{ resetPasswordOkText }}
   </div>
 </div>
