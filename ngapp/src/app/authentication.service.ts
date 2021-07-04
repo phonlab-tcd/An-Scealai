@@ -130,6 +130,14 @@ export class AuthenticationService {
     return this.http.post(this.baseUrl + 'verifyOldAccount', requestObj);
   }
 
+  public resetPassword(username: string): Observable<any> {
+    return this.http.post(
+      this.baseUrl + `resetPassword`, {
+        username: username,
+        baseurl: config.baseurl,
+      });
+  }
+
   public register(user: TokenPayload | RegistrationTokenPayload): Observable<any> {
     return this.request('post', 'register', user);
   }

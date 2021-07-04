@@ -17,6 +17,125 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
+pendingRegEx = /^Pending$/;
+activeRegEx = /^Active$/;
+
+module.exports.generateNewPassword = async (req, res) => {
+
+  if( !req.query.username || !req.query.email || !req.query.code ){
+    return res.status(400).json("Please provide username, email and code in url params!");
+  }
+
+
+  // Authenticate User
+  const user = await User.findOne({ username: req.query.username, email: req.query.email })
+    .catch(
+      err => {
+        logger.error(err);
+      });
+
+  if( !user ){
+    return res.status(400).json("Username and email not found.");
+  }
+
+  if ( !user.status || user.status !== 'Active' ) {
+    res.status(400).json('User status must be active to reset password');
+  }
+
+  if ( !user.resetPassword || !user.resetPassword.code || req.query.code !== user.resetPassword.code) {
+    return res.status(400).json("Codes do not match. Refusing to change password.");
+  }
+
+  const new_password = user.generateNewPassword();
+  user.setPassword(new_password);
+
+  user.save().catch(err => { logger.error(err); });
+
+  mailObj = {
+    from: 'scealai.info@gmail.com',
+    recipients: req.query.email,
+    subject: 'New Password -- An Scéalaí',
+    body: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${new_password}`
+  }
+
+  const mailRes = mail.sendEmail(mailObj);
+
+  res.status(200).send(`<h1>Password reset successfully</h1><ul><li>username:${req.query.username}</li><li>password:${new_password}</li></ul>`);
+
+}
+
+module.exports.resetPassword = async (req, res) => {
+  if ( !req.body.username ) {
+    return res.status(400).json("Please provide a username in the query parameters.");
+  }
+
+  if ( !req.body.baseurl ) {
+    logger.warning("baseurl not provided. defaulting to dev server: http://localhost:4000/");
+    req.body.baseurl = 'http://localhost:4000/';
+  }
+  
+  let findErr = null;
+  const user = await User.findOne({username: req.body.username})
+    .catch(err => {
+      findErr = err; 
+    });
+  if (findErr || !user) {
+    return res.status(400).json("Could not find user with username: " + req.body.username);
+  }
+
+  if ( 
+    !user.status 
+    || user.status.match(pendingRegEx)
+    || !user.status.match(activeRegEx)
+    || !user.email ) {
+    return res.status(400).json("User has not been verified. Cannot reset password.");
+  }
+  
+  const resetPasswordLink = 
+    user.generateResetPasswordLink(req.body.baseurl);
+
+  // Update user's email and verification code on the db
+  await user.save()
+    .catch(err => {
+      logger.error(err);
+    });
+
+  const mailObj = {
+    from: 'scealai.info@gmail.com',
+    recipients: [user.email],
+    subject: 'An Scéalaí account verification',
+    message: 
+    `Dear ${user.username},\n\
+      Please use this link to generate a new password for your account:\n\n\
+      ${resetPasswordLink}\n\n\
+      \n\
+      Kindly,\n\
+      \n\
+      The An Scéalaí team`,
+  }
+
+  const sendEmailRes = await mail.sendEmail(mailObj)
+    .catch(err => {
+      logger.error({
+        file: './api/controllers/authentication.js',
+        functionName: 'resetPassword',
+        error: err,
+      });
+      logger.error(err); 
+    });
+
+  if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
+    return res(500).json({
+      messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
+    });
+  }
+
+  return res.status(200).json({
+    messageToUser: `An email has been sent to ${sendEmailRes.accepted} to reset their password.`,
+    sentTo: user.email,
+  });
+}
+
 
 async function sendVerificationEmail (username, password, email, baseurl) {
   return new Promise(async (resolve, reject) => {
@@ -120,7 +239,7 @@ module.exports.verify = async (req, res) => {
         {status: 'Active'}, 
         // Options
         {new: true});
-    console.dir("User Activated: ", updatedUser);
+    console.dir(updatedUser);
     return res.status(200).send('<h1>Success</h1><p>Your account has been verified.</p><ul>' +
       `<li>username: ${updatedUser.username}</li>` +
       `<li>verified email: ${updatedUser.email}</li>` +
@@ -213,13 +332,21 @@ module.exports.verifyOldAccount = async (req, res) => {
   }
 }
 
-module.exports.register = (req, res) => {
+module.exports.register = async (req, res) => {
+  let resObj = {
+    message: '',
+    errors: {},
+  };
 
+  // REQUIREMENTS
   if(!req.body.username || !req.body.password || !req.body.email) {
-    sendJSONresponse(res, 400, {
-      "message": "Username, password and email required."
+    return res(400).json({
+      message: "Username, password and email required."
     });
-    return;
+  }
+  if(!req.body.baseurl){
+    logger.warning('Property basurl missing from registration request. Using default (dev server)');
+    req.body.baseurl = 'http://localhost:4000/';
   }
 
   var user = new User();
@@ -232,101 +359,90 @@ module.exports.register = (req, res) => {
 
   user.role = req.body.role;
 
-
-  user.save(async (err) => {
-    //console.log(user._id);
-    if(err) { 
-      logger.error("Mongo error\nError code: ", err.code);
-      if(err.code === 11000) {
+  let saveErr = null;
+  await user.save().catch(err => { saveErr = err });
+  if(saveErr) { 
+    logger.error(saveErr);
+    resObj.errors.saveError = saveErr;
+    if(saveErr.code){
+      logger.error("Mongo error. Error code: " + saveErr.code);
+      if (saveErr.code === 11000) {
         return res.status(400).json({
-          "message": "Username taken, please choose another"
+          message: "Username taken, please choose another"
         });
       } 
-    };
-    
-    if(!req.body.baseurl){
-      logger.warning('Property basurl missing from registration request. Using default (dev server)');
-      req.body.baseurl = 'http://localhost:4000/';
     }
-    
-    const mailRes =
-      await sendVerificationEmail(
-        user.username, 
-        req.body.password, 
-        user.email,
-        req.body.baseurl)
-        .catch(err => {
-          logger.error(err);
-        });
+  }
 
-    console.log('mailError:', mailError);
-    console.log('mailRes:', mailRes);
-
-    // Make sure the email wasn't rejected
-    if (mailRes.rejected.length && mailRes.rejected.length  !== 0) {
-      logger.error({
-        message: 'Failed to send verification email while registering',
-        user: req.body.username,
-        email: req.body.email,
-        mailObj: mailObj,
-        mailRes: mailRes,
-      });
-      return sendJSONresponse(res, 400, {
-        message: `Failed to send verification email to: ${req.body.email} ${JSON.stringify(mailRes)}`,
-      });
-    }
-
-    var token;
-    token = user.generateJwt();
-    res.status(200);
-    res.json({
-      "token" : token
+  await sendVerificationEmail(
+    user.username, 
+    req.body.password, 
+    user.email,
+    req.body.baseurl)
+    .catch(err => {
+      logger.error(err);
+      if (err.messageToUser) {
+        resObj.message += err.messageToUser + '\n';
+      }
     });
-  });
+
+  resObj.token = user.generateJwt();
+  return res.status(200).json(resObj);
 };
 
-module.exports.login = (req, res) => {
-    
-    if(!req.body.username || !req.body.password) {
-      return res
-        .status(400)
-        .json({
-          "message": "Username and password required"
-        });
-    }
 
-  passport.authenticate('local', (err, user, info) => {
+
+module.exports.login = function(req, res) {
+  let resObj = {
+    userStatus: null,
+    message: '',
+    errors: [],
+  }
+
+  if(!req.body.username || !req.body.password) {
+    return res
+      .status(400)
+      .json({"message": "Username and password required"});
+  }
+
+  // AUTHENTICATE
+  passport.authenticate('local', function(err, user, info) {
     if(err) {
-      console.log(err)
-      res.status(404).json(err);
-      return;
+      logger.error(err);
+      resObj.errors.push(err);
     }
 
-    if(user) {
-      if(!user.status){
-        throw new Error('User,',user,'has no status property');
-      }
-      if(user.status === 'Pending'){
-        return res
-          .status(400)
-          .json({ 
-            message: 'The email address for ' + req.body.username + ' has not yet been verified.',
-            userStatus: 'Pending',
-            username: user.username,
-            email: ( user.email ? user.email : null ) });
-      } else if (user.status === 'Active') {
-        logger.info('User authenticated and status is Active. Sending json web token.');
-        const token = user.generateJwt();
-        return res
-          .status(200)
-          .json({
-            token: token
-          });
-      } else {
-        throw new Error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
-      }
-    } else {
-      res.status(400).json(info);
+    if(!user){
+      resObj.message += info.message + '\n';
+      return res.status(400).json(resObj);
     }
+
+    if(!user.validStatus()){
+      logger.error('User,' + user.username + 'has an invalid no status property');
+      resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
+      user.status = 'Pending';
+      user.save().catch(err => { logger.error(err); resObj.errors.push(err);});
+    }
+
+    console.log(user.status);
+    if(user.status.match(pendingRegEx)){
+      resObj.message += 'The email address for ' + req.body.username + ' has not yet been verified.'
+      resObj.userStatus = user.status;
+      return res.status(400).json(resObj);
+    }
+    else if (user.status.match(activeRegEx)) {
+      logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
+      resObj.token = user.generateJwt();
+      return res
+        .status(200)
+        .json(resObj);
+    } 
+
+    // ELSE
+    // TODO throw new Error()
+    logger.error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
+    return res.status(500).json(resObj);
+
   })(req, res);
+  // DON'T PUT ANYTHING AFTER passport.authenticate CALLBACK
 };
