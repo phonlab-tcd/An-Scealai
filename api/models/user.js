@@ -2,9 +2,24 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
+const generate_password = require('generate-password');
+
 const verificationSchema = new mongoose.Schema({
-  code: String,
-  date: Date,
+  code: {
+    type: String,
+  },
+  date: {
+    type: Date,
+  }
+});
+
+const resetPasswordSchema = new mongoose.Schema({
+  code: {
+    type: String,
+  },
+  date: {
+    type: Date,
+  }
 });
 
 const userSchema = new mongoose.Schema({
@@ -43,6 +58,10 @@ const userSchema = new mongoose.Schema({
         code: null,
         date: null,
       },
+    },
+    resetPassword: {
+      type: resetPasswordSchema,
+      unique: true,
     }
 });
 
@@ -52,9 +71,16 @@ userSchema.methods.setPassword = function(password){
 };
 
 userSchema.methods.validPassword = function(password) {
-    var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
-    return this.hash === hash;
+    return this.hash === crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
 };
+
+userSchema.methods.validStatus = function() {
+  if (!this.status) {
+    return false;
+  }
+  const allowableStatus = /^(Active|Pending)$/;
+  return this.status.match(allowableStatus);
+}
 
 userSchema.methods.generateJwt = function() {
     var expiry = new Date();
@@ -68,6 +94,23 @@ userSchema.methods.generateJwt = function() {
         exp: parseInt(expiry.getTime() / 1000 /* convert milliseconds to seconds */),
     }, "sonJJxVqRC"); // 5ecret
 };
+
+userSchema.methods.generateNewPassword = function () {
+  return generate_password.generate({
+    length: 10,
+    numbers: true
+  });
+}
+
+userSchema.methods.generateResetPasswordLink = function (baseurl) {
+  if ( ! this.resetPassword ) {
+    this.resetPassword = {};
+  }
+
+  this.resetPassword.code = jwt.sign({username: this.username, email: this.email}, 'sonJJxVqRC');
+  this.resetPassword.date = new Date();
+  return `${baseurl}user/generateNewPassword?username=${this.username}&email=${this.email}&code=${this.resetPassword.code}`;
+}
 
 userSchema.methods.generateActivationLink = function (baseurl) {
   // Make sure this.verification exists

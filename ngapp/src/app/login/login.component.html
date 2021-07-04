@@ -1,12 +1,12 @@
-<div class="registerContainer" *ngIf="!waitingForEmailVerification">
+<div class="registerContainer" *ngIf="!waitingForEmailVerification && !forgotPassword">
     <div class="formTitle">{{ts.l.sign_in}}</div><br>
     <div class="formContainer">
       <!-- Popup for forgetting password -->
       <div *ngIf="forgotPassword" class="{{modalClass}} modalContainer">
           <div class="modalContent">
-              <pre class="modalText">Please input your username and email, and we will send you an email with a new password.</pre><br>
-              <div class="modalText"> {{ts.l.username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="usernameForgotPassword"></div>
-              <div class="modalText"> Email: <input type="text" placeholder="Ener email" name="email" [(ngModel)]="emailForgotPassword"></div>
+              <p class="modalText" style="justify-content: left";>{{ts.l.forgot_password_prose}}</p><br>
+              <!-- RESET PASSWORD WITH PRE VERIFIED EMAIL ADDRESS -->
+              <!-- <div class="modalText">{{ts.l.email}}<input type="text" placeholder="mise@gmail.com" name="email" [(ngModel)]="emailForgotPassword"></div> -->
               <div class="usernameErrorText"> {{errorMessage}} </div>
               <div>
                   <button class="modalBtn createBtnGreen" (click)="sendNewPassword()">{{ts.l.send}}</button>
@@ -21,29 +21,33 @@
           <input
               type="text"
               class="form-control inputField"
-              placeholder="Enter username"
+              placeholder="{{ts.l.enter_username}}"
               name="username"
               [(ngModel)]="credentials.username">
         </div>
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.password}}</label></div>
-          <input type="password" class="form-control inputField" 
-          placeholder="Enter password" name="password" [(ngModel)]="credentials.password">
-          <div class="forgotPassword" (click)="forgotPassword=true;errorMessage='';showModal()"> Forgot password </div><br>
+          <input
+              type="password"
+              class="form-control inputField" 
+              placeholder="{{ts.l.enter_password}}"
+              name="password"
+              [(ngModel)]="credentials.password">
+          <div class="forgotPassword" (click)="forgotPassword=true;errorMessage='';showModal()">{{ts.l.forgot_password}}</div><br>
           <div *ngIf="loginError" class="errorMessage">{{errorText}}</div>
         </div>
 
         <!-- Verify the user's email address if they have not yet been verified -->
         <div class="form-group" *ngIf="userHasNotBeenVerified && !verificationEmailHasBeenSent">
-          <div class="formLabel"><label>TODO Email</label></div>
+          <div class="formLabel"><label>{{ts.l.email}}</label></div>
           <input 
                type="text"
                name="email"
                class="form-control inputField"
-               placeholder="Enter email"
+               placeholder="mise@gmail.com"
                name="email"
                [(ngModel)]="emailToVerify"><br>
-          <button (click)="verifyOldAccount" class="btn loginBtn">Verify email address</button>
+               <button (click)="verifyOldAccount" class="btn loginBtn">{{ts.l.verify_email_address}}</button>
         </div>
 
         <button type="submit" class="btn loginBtn" *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
@@ -61,5 +65,42 @@
     <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}</div>
     <button (click)="login()">Login</button>
     <p *ngIf="waitingErrorText" class="errorMessage">{{waitingErrorText}}</p>
+  </div>
+</div>
+
+<!-- FORM TO RESET PASSWORD -->
+<div class="registerContainer" *ngIf="forgotPassword">
+  <div 
+     class="formTitle">
+    {{ts.l.reset_password}}
+    <div 
+     class="closeForgotPasswordBtn" 
+     style="margin-left: auto;"
+     (click)="forgotPassword = false;">
+    </div>
+  </div><br>
+  <div class="formContainer">
+    <p
+        class="formLabel"
+        style="text-align: justify;">{{ts.l.forgot_password_prose}}
+    <a href="mailto:scealai.info@gmail.com" target="_blank">scealai.info@gmail.com</a>
+    </p>
+    <input
+        class="form-control inputField"
+        type="text"
+        placeholder="{{ts.l.enter_username}}"
+        name="username"
+        [(ngModel)]="usernameForgotPassword">
+    <button
+        class="modalBtn createBtnGreen"
+        (click)="resetPassword();">
+      {{ts.l.send}}
+    </button>
+    <button
+        class="modalBtn createBtnGreen"
+        (click)="forgotPassword = false;">
+      {{ts.l.cancel}}
+      <i class="fa fa-times"></i>
+    </button>
   </div>
 </div>

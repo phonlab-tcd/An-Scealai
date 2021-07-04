@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          this.waitingErrorText = err.error.message;
+          this.waitingErrorText = err.message;
         },
         () => {
           console.log('Completed login Observable for:', this.frozenCredentials.username);
@@ -122,21 +122,21 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.auth.login(this.credentials).subscribe(
-      () => {
+      (res) => {
+        console.dir(res);
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         this.router.navigateByUrl('/landing');
       },
       (err) => {
-        console.dir('err.error:', err.error);
+        this.errorText = err.error.message;
         if (err.error.userStatus === 'Pending') {
           console.log('User status is Pending');
           this.errorText = 'Please provide and verify an email address to continue.';
+          // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
-          this.userToVerify = err.error.username;
-          this.errorText = err.error.message;
+          this.userToVerify = this.credentials.username;
         } else if (err.status === 400) {
           this.loginError = true;
-          this.errorText = err.error.message;
         }
       },
       () => {
@@ -150,6 +150,26 @@ export class LoginComponent implements OnInit {
 
   hideModal() {
     this.modalClass = 'hiddenFade';
+  }
+
+  resetPassword() {
+    const name = this.usernameForgotPassword;
+    if (name) {
+      console.log('Requesting password reset for', name);
+      this.auth.resetPassword(this.usernameForgotPassword).subscribe(
+        okRes => {
+          console.log('ok');
+          console.dir(okRes);
+        },
+        errRes => {
+          console.log('err');
+          console.dir(errRes);
+        },
+        () => {
+          console.log('Completed request to reset password for', name);
+        }
+      );
+    }
   }
 
   sendNewPassword() {

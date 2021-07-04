@@ -38,6 +38,8 @@ userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
+userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
+userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
 userRoutes.route('/setLanguage/:id').post((req, res) => {
     User.findById(req.params.id, (err, user) => {
