@@ -112,6 +112,9 @@ export class DashboardComponent implements OnInit {
           if(story._id === this.id) {
             this.story = story;
             this.getWordCount(this.story.text);
+            if(this.story.htmlText == null) {
+              this.story.htmlText = this.story.text;
+            }
             break;
           }
         }
@@ -162,6 +165,7 @@ export class DashboardComponent implements OnInit {
       params => {
         let updateData = {
           text : this.story.text,
+          htmlText: this.story.htmlText,
           lastUpdated : new Date(),
         };
         this.storyService.updateStory(updateData, params['id']).subscribe();
@@ -206,8 +210,10 @@ export class DashboardComponent implements OnInit {
   }
 
 // Set story saved to false and call word count function
-  storyEdited() {
+  storyEdited(text) {
     console.log(this.story.text);
+    console.log(text);
+    this.story.text = text;
     this.storySaved = false;
   }
   
