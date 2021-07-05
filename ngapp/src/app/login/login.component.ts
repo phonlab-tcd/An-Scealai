@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
   emailForgotPassword: string;
 
   errorMessageKeys = [];
+  errorMessageKey = '';
 
   emailToVerify = null;
   userHasNotBeenVerified = false;
@@ -111,7 +112,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          this.waitingErrorTextKeys.append( err.error.messageKeys);
+          this.waitingErrorTextKeys.push(err.error.messageKeys);
         },
         () => {
           console.log('Completed login Observable for:', this.frozenCredentials.username);
@@ -181,7 +182,7 @@ export class LoginComponent implements OnInit {
   }
 
   sendNewPassword() {
-    this.errorMessage = [];
+    this.errorMessageKey = '';
     if ( this.usernameForgotPassword ) {
       console.log(this.usernameForgotPassword);
       this.userService.sendNewPassword(
@@ -194,7 +195,8 @@ export class LoginComponent implements OnInit {
       this.usernameForgotPassword = '';
       this.forgotPassword = false;
     } else {
-      this.errorMessageKeys.push('Please input your username');
+      this.errorMessageKey = 'Please input your username';
+      // this.errorMessageKeys.push('Please input your username');
     }
   }
 

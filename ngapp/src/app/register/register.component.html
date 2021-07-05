@@ -10,7 +10,7 @@
               class="form-control inputField {{usernameClass}}"
               name="username"
               [formControl]="usernameInput">
-          <div *ngFor="usernameErrorTextKey of usernameErrorTextKeys" class="usernameErrorText">{{ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}</div>
+          <div  class="usernameErrorText">{{ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}</div>
         </div>
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.email_address}}</label></div>

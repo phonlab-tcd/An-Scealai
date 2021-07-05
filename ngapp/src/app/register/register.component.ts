@@ -89,9 +89,9 @@ export class RegisterComponent implements OnInit {
       err => {
         console.error(err);
         if ( this.ts.l[ err.error.message ] ) {
-          this.loginErrorText = this.ts.l[err.error.message];
+          this.loginErrorTextKey = err.error.message;
         } else {
-          this.loginErrorText = err.error.message;
+          this.loginErrorTextKey = err.error.message;
         }
       },
       () => {
