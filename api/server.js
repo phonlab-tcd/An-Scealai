@@ -1,11 +1,11 @@
-const express = require('express'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
-    mongoose = require('mongoose'),
-    config = require('./DB'),
-    logger = require('./logger'),
-    passport = require('passport');
+const express = require('express');
+// const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const config = require('./DB');
+const logger = require('./logger');
+const passport = require('passport');
 
 require('./config/passport');
 
@@ -25,9 +25,15 @@ const mailRoute = require('./routes/send_mail.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
-mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
-    () => {logger.info('Database is connected');},
-    (err) => {logger.error('Cannot connect to the database. ',err)}
+mongoose.connect(config.DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true}).then(
+    () => {
+      logger.info('Database is connected');
+    },
+    (err) => {
+      logger.error('Cannot connect to the database. ', err);
+    },
 );
 
 const app = express();
@@ -52,45 +58,46 @@ app.use('/mail', mailRoute);
 const port = process.env.PORT || 4000;
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use( function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
 
 // [SH] Catch unauthorised errors
-app.use(function (err, req, res, next) {
+app.use( function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401);
-    res.json({"message" : err.name + ": " + err.message});
+    res.json({
+      'message': err.name + ': ' + err.message});
   }
 });
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        logger.error(
-          err
-        );
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    logger.error(
+        err,
+    );
+    res.render('error', {
+      message: err.message,
+      error: err,
     });
+  });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {},
+  });
 });
 
 const server = app.listen(port, function(){

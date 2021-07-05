@@ -21,21 +21,23 @@ pendingRegEx = /^Pending$/;
 activeRegEx = /^Active$/;
 
 module.exports.generateNewPassword = async (req, res) => {
-
-  if( !req.query.username || !req.query.email || !req.query.code ){
-    return res.status(400).json("Please provide username, email and code in url params!");
+  if ( !req.query.username || !req.query.email || !req.query.code ) {
+    return res
+        .status(400)
+        .json('Please provide username, email and code in url params!');
   }
 
 
   // Authenticate User
-  const user = await User.findOne({ username: req.query.username, email: req.query.email })
-    .catch(
-      err => {
+  const user = await User.findOne({
+    username: req.query.username,
+    email: req.query.email})
+      .catch((err) => {
         logger.error(err);
       });
 
-  if( !user ){
-    return res.status(400).json("Username and email not found.");
+  if ( !user ) {
+    return res.status(400).json('Username and email not found.');
   }
 
   if ( !user.status || user.status !== 'Active' ) {
