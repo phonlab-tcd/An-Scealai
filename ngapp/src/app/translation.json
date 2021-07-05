@@ -66,6 +66,11 @@
       "current_username" : "Current username",
       "new_username" : "New username",
       "enter_username" : "Enter username",
+      
+      "change_password" : "Change password",
+      "you_will_have_to_login_password" : "You will have to login again with your new password",
+      "new_password" : "New password",
+      "please_input_a_new_password_confirm" : "Please input a new password and confirm",
 
       "leave" : "leave",
       "classroom" : "Classroom",
@@ -620,6 +625,11 @@
       "current_username" : "Ainm úsáideora reatha",
       "new_username" : "Ainm úsáideora nua",
       "enter_username" : "Scríobh isteach d'ainm úsáideora",
+      
+      "change_password" : "Athraigh do phasfhocal",
+      "you_will_have_to_login_password" : "Beidh ort logáil isteach arís le do phasfhocal nua",
+      "new_password" : "Pasfhocal nua",
+      "please_input_a_new_password_confirm" : "Cuir isteach an pasfhocal nua agus deimhnigh",
 
       "personal_info" : "Eolas pearsanta",
       "profile_instructions" : "Táimid ag iarraidh ort an ceistneoir seo a líonadh ar mhaithe le taighde a cheadóidh comparáidí idirnáisiúnta le teangacha éagsúla.",

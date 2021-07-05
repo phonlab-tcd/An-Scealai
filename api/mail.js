@@ -48,9 +48,7 @@ try{
 
     } catch(error) {
       console.error(error);
-      throw new Error(
-        `Something went wrong in the sendmail method. Error: ${error.message}`
-      );
+      throw error;
     }
   }
 

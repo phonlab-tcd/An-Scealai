@@ -113,16 +113,20 @@ module.exports.resetPassword = async (req, res) => {
       \n\
       The An Scéalaí team`,
   }
-
-  const sendEmailRes = await mail.sendEmail(mailObj)
-    .catch(err => {
-      logger.error({
-        file: './api/controllers/authentication.js',
-        functionName: 'resetPassword',
-        error: err,
+  
+  try {
+    const sendEmailRes = await mail.sendEmail(mailObj)
+      .catch(err => {
+        logger.error({
+          file: './api/controllers/authentication.js',
+          functionName: 'resetPassword',
+          error: err,
+        });
+        logger.error(err); 
       });
-      logger.error(err); 
-    });
+  } catch (err) {
+
+  }
 
   if (!sendEmailRes) {
     return res.status(500).json({
@@ -190,22 +194,33 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       The An Scéalaí team`,
     }
 
+    let sendEmailErr = null;
     const sendEmailRes = await mail.sendEmail(mailObj)
       .catch(err => {
-        logger.error({
-          file: './api/controllers/authentication.js',
-          functionName: 'sendVerificationEmail',
-          error: err,
-        });
-        reject(err); 
+        sendEmailErr = JSON.parse(JSON.stringify(err));
       });
 
+    if (sendEmailErr) {
+      logger.error({
+        file: './api/controllers/authentication.js',
+        functionName: 'sendVerificationEmail',
+        error: sendEmailErr,
+      });
+      return reject(sendEmailErr); 
+    }
+
+    if (!sendEmailRes) {
+      return reject({
+        messageToUser: `It seems the verification email failed to send`,
+      });
+    }
+
     if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-      reject({
+      return reject({
         messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
       });
     }
-    resolve({
+    return resolve({
       messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
     });
   });
@@ -311,21 +326,28 @@ module.exports.verifyOldAccount = async (req, res) => {
           });
       }
     }
+  
+    try {
+      const mailRes = 
+        await sendVerificationEmail(
+          req.body.username,
+          req.body.password, 
+          req.body.email, 
+          req.body.baseurl);
 
+      console.log('mailRes:', mailRes);
+      
+      // IF ALL GOES WELL
+      return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
 
-    const { error: mailError, success: mailRes } = await sendVerificationEmail(req.body.username, req.body.password, req.body.email, req.body.baseurl);
-
-    console.log('mailError', mailError);
-    console.log('mailRes:', mailRes);
-    if (mailError) {
+    } catch (mailErr) {
+      logger.error('mailError', mailError);
       return res.status(500)
         .json({
           message: 'An error occurred while trying to send a verification email.',
           error: mailError,
         });
     }
-
-    return res.status(200).json({messageKey: 'user_activation_pending'});
 
   } catch (error) {
 
@@ -427,7 +449,9 @@ module.exports.login = function(req, res) {
       logger.error('User,' + user.username + 'has an invalid no status property');
       resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
       user.status = 'Pending';
-      user.save().catch(err => { logger.error(err); resObj.errors.push(err);});
+      user.save().catch(err => { 
+        logger.error(JSON.parse(JSON.stringify(err)));
+        resObj.errors.push(JSON.stringify(err));});
     }
 
     console.log(user.status);
