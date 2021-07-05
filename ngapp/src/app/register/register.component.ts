@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
   frozenCredentials: RegistrationTokenPayload = null;
 
   registrationError: boolean;
-  errorText: string;
+  errorTextKey: string;
   passwordConfirm: string;
   termsVisible: boolean;
   usernameInput: FormControl;
@@ -63,10 +63,10 @@ export class RegisterComponent implements OnInit {
     this.usernameInput.valueChanges.subscribe((text) => {
       if (text.match(' ')) {
         this.usernameClass = 'usernameInputRed';
-        this.usernameErrorText = 'Your username shouldn\'t contain spaces';
+        this.usernameErrorTextKey = 'username_no_spaces' // 'Your username shouldn\'t contain spaces';
       } else if (!text.match('^[A-Za-z0-9]*$')) {
         this.usernameClass = 'usernameInputRed';
-        this.usernameErrorText = 'Your username shouldn\'t contain special characters (this includes fadas unfortunately!)';
+        this.usernameErrorTextKey = 'username_no_special_chars'; // 'Your username shouldn\'t contain special characters (this includes fadas unfortunately!)';
       } else {
         this.usernameClass = '';
         this.usernameErrorText = '';
@@ -74,18 +74,21 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  login(){
-    
+  login() {
     this.auth.login(this.frozenCredentials).subscribe(
       (data) => {
-        console.log('got data for login request:',data);
+        console.log('got data for login request:', data);
         this.engagement.addEventForLoggedInUser(EventType.REGISTER);
         this.ts.setLanguage(this.ts.l.iso_code);
         this.router.navigateByUrl('register-profile');
       },
       err => {
         console.error(err);
-        this.loginErrorText = err.error.message;
+        if ( this.ts.l[ err.error.message ] ) {
+          this.loginErrorText = this.ts.l[err.error.message];
+        } else {
+          this.loginErrorText = err.error.message;
+        }
       },
       () => {
         console.log('Completed login request for', this.frozenCredentials.username);
@@ -101,7 +104,7 @@ export class RegisterComponent implements OnInit {
         this.waitingForEmailVerification = true;
       }, (err: any) => {
         if (err.status === 400) {
-          this.errorText = err.error.message;
+          this.errorTextKey = err.error.message;
           this.registrationError = true;
         }
       });
@@ -110,7 +113,7 @@ export class RegisterComponent implements OnInit {
 
   checkDetails(): boolean {
     if (this.credentials.password !== this.passwordConfirm) {
-      this.errorText = this.ts.l.passwords_must_match;
+      this.errorTextKey = 'passwords_must_match';
       this.registrationError = true;
       return false;
     }
@@ -118,17 +121,17 @@ export class RegisterComponent implements OnInit {
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     console.log('Testing email address for validity:', this.credentials.email);
     if (! emailRegex.test(this.credentials.email)) {
-      this.errorText = 'TODO. The email address you specified is not of a correct format, i.e. <personal_info>@<domain>.';
+      this.errorTextKey = 'email_format_error';
       this.registrationError = true;
       return false;
     }
     if (this.credentials.password.length < 5) {
-      this.errorText = this.ts.l.passwords_5_char_long;
+      this.errorTextKey = 'passwords_5_char_long';
       this.registrationError = true;
       return false;
     }
     if (!this.credentials.username.match('^[A-Za-z0-9]+$')) {
-      this.errorText = this.ts.l.username_no_special_chars;
+      this.errorTextKey = 'username_no_special_chars';
       this.registrationError = true;
       return false;
     }

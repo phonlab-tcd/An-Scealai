@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   usernameForgotPassword: string;
   emailForgotPassword: string;
 
-  errorMessage = '';
+  errorMessageKeys = [];
 
   emailToVerify = null;
   userHasNotBeenVerified = false;
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
   verificationEmailHasBeenSent = false;
 
   waitingForEmailVerification = false;
-  waitingErrorText = null;
+  waitingErrorTextKeys = [];
 
   resetPasswordOkText = null;
   resetPasswordErrText = null;
@@ -105,12 +105,13 @@ export class LoginComponent implements OnInit {
   login() {
     //
     if (this.waitingForEmailVerification) {
+      this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(
         () => {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          this.waitingErrorText = err.message;
+          this.waitingErrorTextKeys.append( err.error.messageKeys);
         },
         () => {
           console.log('Completed login Observable for:', this.frozenCredentials.username);
@@ -180,7 +181,8 @@ export class LoginComponent implements OnInit {
   }
 
   sendNewPassword() {
-    if (this.usernameForgotPassword) {
+    this.errorMessage = [];
+    if ( this.usernameForgotPassword ) {
       console.log(this.usernameForgotPassword);
       this.userService.sendNewPassword(
         this.usernameForgotPassword,
@@ -189,11 +191,10 @@ export class LoginComponent implements OnInit {
           console.log('this is read');
           console.log(res);
         });
-      this.errorMessage = '';
       this.usernameForgotPassword = '';
       this.forgotPassword = false;
     } else {
-      this.errorMessage = 'Please input your username';
+      this.errorMessageKeys.push('Please input your username');
     }
   }
 

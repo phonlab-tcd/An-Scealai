@@ -7,7 +7,7 @@
               <p class="modalText" style="justify-content: left";>{{ts.l.forgot_password_prose}}</p><br>
               <!-- RESET PASSWORD WITH PRE VERIFIED EMAIL ADDRESS -->
               <!-- <div class="modalText">{{ts.l.email}}<input type="text" placeholder="mise@gmail.com" name="email" [(ngModel)]="emailForgotPassword"></div> -->
-              <div class="usernameErrorText"> {{errorMessage}} </div>
+              <div *ngFor="let errorMessageKey of errorMessageKeys" class="usernameErrorText"> {{ts.l[errorMessageKey] ? ts.l[errrMessageKey] : errorMessageKey}} </div>
               <div>
                   <button class="modalBtn createBtnGreen" (click)="sendNewPassword()">{{ts.l.send}}</button>
                   <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.cancel}}</button>
