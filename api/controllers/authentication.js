@@ -199,35 +199,37 @@ async function sendVerificationEmail (username, password, email, baseurl) {
     }
 
     let sendEmailErr = null;
-    const sendEmailRes = await mail.sendEmail(mailObj)
-      .catch(err => {
-        sendEmailErr = JSON.parse(JSON.stringify(err));
-      });
+    try {
+      const sendEmailRes = await mail.sendEmail(mailObj);
+      if (!sendEmailRes) {
+        return reject({
+          status: 404,
+          messageToUser: `It seems the verification email failed to send`,
+        });
+      }
 
-    if (sendEmailErr) {
+      if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
+        return reject({
+          messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
+        });
+      }
+      return resolve({
+        messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
+      });
+    } catch (err) {
       logger.error({
         file: './api/controllers/authentication.js',
         functionName: 'sendVerificationEmail',
-        error: sendEmailErr,
+        error: err,
       });
-      return reject(sendEmailErr); 
+      if (err.rejectedErrors) {
+        return reject({
+          messageToUser: err.rejectedErrors[0].response,
+        });
+      }
+      return reject(err);
     }
-
-    if (!sendEmailRes) {
-      return reject({
-        messageToUser: `It seems the verification email failed to send`,
-      });
-    }
-
-    if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-      return reject({
-        messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
-      });
-    }
-    return resolve({
-      messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
-    });
-  });
+  }); // end Promise constructor
 } // end sendVerificationEmail
 
 // Set a user's status to Active when they click on the activation link
@@ -278,91 +280,109 @@ module.exports.verify = async (req, res) => {
 module.exports.verifyOldAccount = async (req, res) => {
   try {
     // API CALL REQUIREMENTS
-    if (!req.body.username || !req.body.email || !req.body.password){
+    if (!req.body.username || !req.body.email || !req.body.password) {
       return res.status(400).json({
-        messageKeys: ['username_password_and_email_required'], // "username required to verify account email address");
+        messageKeys: ['username_password_and_email_required'],
       });
     }
     if (!req.body.baseurl) {
       logger.warning('baseurl not provided to verifyOldAccount. Defaulting to dev server: http://localhost:4000/');
-      req.body.baseurl = 'http://localhost:4000/'
+      req.body.baseurl = 'http://localhost:4000/';
     }
 
     logger.info('Beginning verification of ' + req.body.username);
 
     const user = await User.findOne({username: req.body.username})
-      .catch(error => {
-        return res.status(404).json({
-          messageKeys: ['There was an error while trying to find a user with username: ' + req.body.username],
-          error: error,
+        .catch((error) => {
+          return res.status(404).json({
+            messageKeys:
+            ['There was an error while trying to find a user with username: ' +
+              req.body.username],
+            error: error,
+          });
         });
-      });
 
-    if (user.status === 'Active'){
+    if (user.status === 'Active') {
       if (user.email) {
-        return res.status(400).json(`User: ${user.username} is already verified with the email address: ${user.email}. If you think this is a mistake please let us know at scealai.info@gmail.com`);
+        return res
+            .status(400)
+            .json(
+                `User: ${user.username} is already verified with \
+                the email address: ${user.email}. \
+                If you think this is a mistake please \
+                let us know at scealai.info@gmail.com`);
       }
       // if !user.email && user.status === 'Active'
-      logger.warning(`User: ${user.usernam} was Active but had no assoctiated email address. Resetting to Pending`);
+      logger.warning(
+          `User: ${user.usernam} was Active but \
+          had no assoctiated email address. \
+          Resetting to Pending`);
       try {
         const user = await User.findOneAndUpdate(
-          // Find
-          {username: user.username },
-          // Update
-          {status: 'Pending'},
-          // Options
-          {new:true});
+            // Find
+            {username: user.username},
+            // Update
+            {status: 'Pending'},
+            // Options
+            {new: true});
         if ( !user ) {
           logger.error({
             endpoint: '/user/verifyOldAccount',
-            message: 'There was an error while trying to set the users status to pending'
+            message:
+              'There was an error while trying to set the users status to pending',
           });
           return res
-            .status(500)
-            .json({
-              file: './api/controllers/authentication.js',
-              functionName: 'verifyOldAccount',
-              messageKeys: ['There was an error on our server. We failed to update your status to Pending.'],
-            });
+              .status(500)
+              .json({
+                file: './api/controllers/authentication.js',
+                functionName: 'verifyOldAccount',
+                messageKeys:
+                ['There was an error on our server. We failed to update your status to Pending.'],
+              });
         }
       } catch (err) {
         logger.error({
           endpoint: '/user/verifyOldAccount',
-          error: err
+          error: err,
         });
       }
     }
-  
+
     try {
-      const mailRes = 
+      const mailRes =
         await sendVerificationEmail(
-          req.body.username,
-          req.body.password, 
-          req.body.email, 
-          req.body.baseurl);
+            req.body.username,
+            req.body.password,
+            req.body.email,
+            req.body.baseurl);
 
       console.log('mailRes:', mailRes);
-      
+
       // IF ALL GOES WELL
       return res.status(200).json({
-        messageKeys: ['User activation pending. Please check your email inbox']
+        messageKeys: ['User activation pending. Please check your email inbox'],
       });
-
     } catch (mailErr) {
       logger.error('mailError', mailError);
-      return res.status(500)
-        .json({
-          messageKeys: ['An error occurred while trying to send a verification email.'],
-          error: mailError,
-        });
+      return res
+          .status(500)
+          .json({
+            messageKeys: ['An error occurred while trying to send a verification email.'],
+            error: mailError,
+          });
     }
   } catch (error) {
-    return res.status(500)
-      .json({messageKeys: ['An unknown error occurred'],
-        file: '.api/controllers/authentication.js',
-        functionName: 'verifyOldAccount',
-        error: error,
-      });
+    const messageKeys = ['An unknown error occurred'];
+    if (error.messageToUser) {
+      messageKeys.push(error.messageToUser);
+    }
+    return res
+        .status(500)
+        .json({messageKeys: messageKeys,
+          file: '.api/controllers/authentication.js',
+          functionName: 'verifyOldAccount',
+          error: error,
+        });
   }
 }
 
