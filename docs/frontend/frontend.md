@@ -99,7 +99,7 @@ constructor(...
   }
 ```
 
-* the function ```ngOnInit``` is run every time the component is loaded and is normally the first function declared in the component.
+* the Angular function ```ngOnInit``` is run every time the component is loaded and is normally the first function declared in the component.
 ```ts
   ngOnInit() {
     ...
@@ -115,8 +115,8 @@ constructor(...
 ```
 
   
-#### Create and add a new services
-* Services are files that contain function calls to the backend.  They serve as a middleman to send and receive data between the backend and the components.  If a service file contains functions that are called from a particular component, the name of the service file matches the name of the component: ```component-name.service.ts```.
+#### Create and add new services
+* Services are files that contain function calls to the backend.  They serve as a middleman to send and receive data between the backend and the component, or to simply perform calculations that are used by multiple components.  If a service file contains functions that pertain to a particular component, the name of the service file matches the name of the component: ```component-name.service.ts```.
 
 * Service files contain functions that make a call to the backend to send and retrieve data.  Components use the service object declared in the constructor to call on the service functions and wait for their response.  The service functions return observables that the components can subscribe to.
   
@@ -134,33 +134,115 @@ getItems() : Observable<any> {
 }
 ```
 
-* Service files contain a ```baseUrl``` that defines the path to the route which contains the endpoints needed in the service.  For example, an ```item.service.ts``` would need to connect to endpoints defined in an ```item``` route.  The ```baseUrl``` would then be defined as:
+* Service files contain a ```baseUrl``` that defines the base path to the backend route which contains the endpoints needed in the service.  For example, the service ```item.service.ts``` would need to connect to endpoints defined in an ```item``` route.  The ```baseUrl``` would then be defined as:
 ```ts 
 baseUrl: string = config.baseurl + "item/";
 ```
 
-* This ```baseUrl``` can then be used as a base for calling all the different ```item``` endpoints.  Each call to an endpoint adds the additional endpoint route information necessary for calling a specific endpoint.  For example, this is added as a string after the ```baseUrl``` in the ```this.http.get()``` call.
+* This ```baseUrl``` can then be used as a base for calling all the different ```item``` endpoints.  Each call to an endpoint adds the additional endpoint route information necessary for calling a specific endpoint.  For example, this is added as a string after the ```baseUrl``` in the ```this.http.get()``` call.  The final route would look like ```.../item/getItems```
 ```ts 
 this.http.get(this.baseUrl + 'getItems');
 ```
 
-* Sometimes an endpoint needs more information in order to retrieve the correct data, such as an id.  These values can be passed through the parameters of the function and added to the route url.
+* Sometimes an endpoint needs more information in order to retrieve the correct data, such as an object id.  These values can be passed through the parameters of the function and added to the route url.
 ```ts 
 getItemById(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'getItemById/' + id);
 }
 ```
 
-* For a post request, the service is sending data to the backend instead of simply retrieving.  This data can be passed through the function parameters and then added as a parameter to the http request.
+* For a post request, the service is sending data to the backend instead of simply retrieving it.  This data can be passed through the function parameters and then added as an additional parameter to the http request function.
 ```ts
 saveItem(item): Observable<any> {
     return this.http.post(this.baseUrl + "saveItem/", {item: item});
 }
 ```
 
+## UI Logic and component manipulation
+#### Component file relations
+* Components use all their different corresponding files to create a reactive component.  
+* Variables are declared in the ```component-name.ts``` file, and their values are displayed using the ```component-name.html``` file.
+* Variable values can be accessed by using curly bracket notation, or 2-way binding ```{{ }}```.  When values are updated in the TypeScript file, their view is automatically updated in the html file.
 
-Services / calling endpoints
-UI logic
+  ```component-name.ts```
+  ```ts
+  name: string = "Programmer"
+  ```
+  ```component-name.html```
+  ```HTML
+  <div> Hello {{ name }} ! </div>
+  ```
+  webpage display:
+  ```
+  Hello Programmer !
+  ```
+
+#### ng Structures
+###### ngFor
+* Angular provides several different ways to access and manipulate data in a html file.  The command ```ngFor```can be used to dynamically loop through a list or array of variables and create html elements for them.  This example creates a ```<div>``` element for each ```item``` in the array ```itemList```
+```HTML
+<div *ngFor="let item of itemList">
+    {{item}} 
+</div>
+```
+
+* Although ```ngFor``` acts like a for-each loop, an index variable can also be introduced to use as a reference.
+```HTML
+<div *ngFor="let item of itemList; let i=index">
+    {{item}} 
+    {{anotherList[i]}}
+</div>
+```
+
+* ```ngFor``` can also be nested within each other in order to iterate through 2D arrays or lists.
+
+
+###### ngIf 
+* ```ngIf``` can be used to show/hide an html element depending on the status of a variable.  If the equation is true, the element is displayed, and if it is false the element is hidden.
+
+  TypeScript file:
+  ```ts 
+  isStudent: boolean = true;
+  isTeacher: boolean = false;
+  ````
+  HTML file:
+  ```HTML
+  <div *ngIf="isStudent">
+      <div> Hello student! </div>
+  </div>
+  <div *ngIf="isTeacher">
+      <div> Hello teacher! </div>
+  </div>
+  ```
+  Display:
+  ```
+  Hello student!
+  ```
+
+
+###### ngModel
+* ```ngModel``` is an attribute that ties data from the HTML to a variable in the TypeScript file.  For example, for an input box, the user input taken from the ```<input>``` element is stored in the varible ```newTitle```, which is defined in the TypeScript file.  Every time its value is updated from the user's end, its value gets updated in the TypeScript file as well.  This way users can directly manipulate variable values.
+```html
+<input type="text" name="title" [(ngModel)]="newTitle">
+```
+
+###### Pipes
+* Pipes are defined in Angular and can be used to format the output of variables on the HTML page, such as alphabetical order, all lower case, etc.  Different types of pipes can be found here.  In this example, the displayed variable is an ISODate type, which is not as easy to read from a user's point of view.  To change the display, a ```|``` and a specific date format are added after the variable name, but still within the curly braces of 2-way binding.
+```html
+<div class="contentsDate"> {{story.lastUpdated | date : 'd/m/yy, h:mm a' }} </div>
+```
+
+###### Key/Value iteration
+* For iterating through multivalued variables, such as objects, a key/value pipe can be used to access the keys and values of a list of objects.
+```html
+<div *ngFor="let message of teacherMessages | keyvalue">
+    <div (click)="goToMessages(message.key._id)">
+      {{message.key.title}} -- {{message.value}}
+    </div>
+</div>
+```
+
+
 Handling endpoint errors
 Testing
 CSS
