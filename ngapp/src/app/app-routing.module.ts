@@ -11,7 +11,6 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
@@ -62,8 +61,7 @@ const routes: Routes = [
   { path: 'report_an_issue', component: ReportAnIssueComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
-  { path: 'register-teacher', component: RegisterTeacherComponent},
+  { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
   { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
