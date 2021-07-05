@@ -134,6 +134,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
+    color: white;
 }
 
 .headerIconBtn:hover {
@@ -228,6 +229,22 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     transition: 0.5s;
 }
 
+
+.passwordButton {
+  background-color: #70a87f;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 9px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.passwordButton:hover {
+    background-color: #437250;
+    transition: 0.5s;
+}
+
 .centerForm {
     justify-content: center;
 }
@@ -249,6 +266,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .btnContainer {
     display: flex;
     justify-content: space-around;
+    padding-top: 15px;
 }
 
 .languageButtonContainer {
@@ -272,6 +290,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .languageButtonSelected {
     background-color: #437250;
+}
+
+.accountButtonContainer {
+  display: flex;
+  margin-left: 20%;
 }
 
 @media only screen and (max-width: 700px) {

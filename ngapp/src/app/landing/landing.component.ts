@@ -14,6 +14,7 @@ export class LandingComponent implements OnInit {
     public ts : TranslationService) { }
 
   ngOnInit() {
+    console.log('isLoggedIn():',this.auth.isLoggedIn());
     if(this.auth.isLoggedIn()) {  
       if(this.auth.getUserDetails().role === 'STUDENT') {
         this.router.navigateByUrl('/contents');

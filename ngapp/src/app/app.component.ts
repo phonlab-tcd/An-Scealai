@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { StoryService } from './story.service';
@@ -34,7 +34,9 @@ export class AppComponent {
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
 
-  constructor(private _loadingBar: SlimLoadingBarService, private _router: Router, public auth: AuthenticationService,
+  constructor(
+    //private _loadingBar: SlimLoadingBarService, 
+              private _router: Router, public auth: AuthenticationService,
               private storyService : StoryService, private notificationSerivce : NotificationService,
               private engagement: EngagementService, public ts : TranslationService) {
     this._router.events.subscribe((event: Event) => {
@@ -134,6 +136,7 @@ export class AppComponent {
 * Change loading bar status based on current event
 */
   private navigationInterceptor(event: Event): void {
+    /*
     if (event instanceof NavigationStart) {
       this._loadingBar.start();
     }
@@ -146,6 +149,7 @@ export class AppComponent {
     if (event instanceof NavigationError) {
       this._loadingBar.stop();
     }
+   */
   }
 
 // Keep track of where the user clicks

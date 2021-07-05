@@ -388,7 +388,9 @@ export class DashboardComponent implements OnInit {
     let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe();
+    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
+      console.log(res);
+    });
   }
   
   // set modalClass to visible fade 
