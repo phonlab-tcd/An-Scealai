@@ -82,6 +82,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.errorMsgKeys = [];
 
     console.log('Requesting email verification.');
     this.auth.verifyOldAccount(this.frozenCredentials).subscribe(
@@ -93,6 +94,7 @@ export class LoginComponent implements OnInit {
       (error) => {
         console.dir(error);
         this.verificationEmailHasBeenSent = false;
+        this.errorMsgKeys = error.error.messageKeys;
       },
       () => {
         console.log('Completed verifyOldAccount request');
