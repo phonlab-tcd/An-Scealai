@@ -102,13 +102,15 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.checkDetails()) {
-      this.auth.register(this.credentials).subscribe(() => {
+      this.auth.register(this.credentials).subscribe(
+        (ok) => {
         // Copy credentials to frozenCredentials
-        this.frozenCredentials = JSON.parse(JSON.stringify(this.credentials)); 
+        this.frozenCredentials = JSON.parse(JSON.stringify(this.credentials));
         this.waitingForEmailVerification = true;
+        this.errorTextKey = ok.messageKey;
       }, (err: any) => {
         if (err.status === 400) {
-          this.errorTextKey = err.error.message;
+          this.errorTextKey = err.error.messageKey;
           this.registrationError = true;
         }
       });

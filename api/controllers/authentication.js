@@ -366,15 +366,14 @@ module.exports.verifyOldAccount = async (req, res) => {
 
 module.exports.register = async (req, res) => {
   let resObj = {
-    message: '',
-    errors: {},
+    messageKeys: [],
+    errors: [],
   };
 
   // REQUIREMENTS
   if(!req.body.username || !req.body.password || !req.body.email) {
-    return res(400).json({
-      message: "Username, password and email required."
-    });
+    resObj.messageKeys.push("username_password_and_email_required");
+    return res(400).json(resObj);
   }
   if(!req.body.baseurl){
     logger.warning('Property basurl missing from registration request. Using default (dev server)');
@@ -391,34 +390,35 @@ module.exports.register = async (req, res) => {
 
   user.role = req.body.role;
 
-  let saveErr = null;
-  await user.save().catch(err => { saveErr = err });
-  if(saveErr) { 
-    logger.error(saveErr);
-    resObj.errors.saveError = saveErr;
-    if(saveErr.code){
-      logger.error("Mongo error. Error code: " + saveErr.code);
-      if (saveErr.code === 11000) {
+  try {
+    await user.save();
+  } catch (err) {
+    resObj.errors.push(err);
+    logger.error(err);
+    if(err.code){
+      logger.error("Mongo error. Error code: " + err.code);
+      if (err.code === 11000) {
         return res.status(400).json({
-          message: "username_taken_msg"
+          messageKey: "username_taken_msg"
         });
       } 
     }
   }
 
-  await sendVerificationEmail(
-    user.username, 
-    req.body.password, 
-    user.email,
-    req.body.baseurl)
-    .catch(err => {
-      logger.error(err);
-      if (err.messageToUser) {
-        resObj.message += err.messageToUser + '\n';
-      }
-    });
+  try {
+    await sendVerificationEmail(
+      user.username, 
+      req.body.password, 
+      user.email,
+      req.body.baseurl);
+  } catch (err) {
+    resObj.errors.push(err.messageToUser);
+    return res.status(500).json(resObj);
+  }
 
-  return res.status(200).json({ messageKey:'verification_email_sent' });
+  return res.status(200).json({
+    messageKey:'verification_email_sent'
+  });
 };
 
 
