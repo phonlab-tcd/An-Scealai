@@ -4,8 +4,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import config from '../../abairconfig.json';
+
+
+type UsernameMessageKey = 'username_no_spaces' | 'username_no_special_chars';
 
 @Component({
   selector: 'app-register',
@@ -36,10 +39,10 @@ export class RegisterComponent implements OnInit {
   termsVisible: boolean;
   usernameInput: FormControl;
   usernameClass: string;
-  usernameErrorText: string;
+  usernameErrorTextKeys: UsernameMessageKey[];
   checkeUsername: string;
 
-  loginErrorText: string = null;
+  loginErrorTextKey: string = null;
 
   waitingForEmailVerification = false;
 
@@ -58,18 +61,19 @@ export class RegisterComponent implements OnInit {
 
     this.registrationError = false;
     this.usernameClass = '';
-    this.usernameErrorText = '';
+    this.usernameErrorTextKeys = [];
     this.usernameInput = new FormControl();
     this.usernameInput.valueChanges.subscribe((text) => {
+      this.credentials.username = text;
       if (text.match(' ')) {
         this.usernameClass = 'usernameInputRed';
-        this.usernameErrorTextKey = 'username_no_spaces' // 'Your username shouldn\'t contain spaces';
+        this.usernameErrorTextKeys.push('username_no_spaces') // 'Your username shouldn\'t contain spaces';
       } else if (!text.match('^[A-Za-z0-9]*$')) {
         this.usernameClass = 'usernameInputRed';
-        this.usernameErrorTextKey = 'username_no_special_chars'; // 'Your username shouldn\'t contain special characters (this includes fadas unfortunately!)';
+        this.usernameErrorTextKeys.push('username_no_special_chars')// 'Your username shouldn\'t contain special characters (this includes fadas unfortunately!)';
       } else {
         this.usernameClass = '';
-        this.usernameErrorText = '';
+        this.usernameErrorTextKeys = [];
       }
     });
   }
