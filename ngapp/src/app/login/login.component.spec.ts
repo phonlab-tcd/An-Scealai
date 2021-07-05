@@ -3,7 +3,7 @@ import { LoginComponent } from './login.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -14,7 +14,7 @@ describe('LoginComponent', () => {
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [RouterTestingModule, HttpClientTestingModule],
       declarations: [ LoginComponent ],
-      providers: [SlimLoadingBarService]
+      providers: [] //SlimLoadingBarService]
     })
     .compileComponents();
   }));

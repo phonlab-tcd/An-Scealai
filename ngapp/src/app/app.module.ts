@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+//import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
@@ -26,7 +26,6 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
-import { RegisterTeacherComponent } from './register-teacher/register-teacher.component';
 import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
@@ -83,7 +82,6 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     AdminPanelComponent,
     TeachersComponent,
     AdminDashboardComponent,
-    RegisterTeacherComponent,
     UserComponent,
     StoryComponent,
     TeacherDashboardComponent,
@@ -109,14 +107,14 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     RecordingHistoryComponent,
     ViewRecordingComponent,
     SafeHtmlPipe,
-    SponsorsComponent
+    SponsorsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    SlimLoadingBarModule,
+    //SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,

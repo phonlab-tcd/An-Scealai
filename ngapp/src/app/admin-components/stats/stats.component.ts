@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { StatsService } from '../../stats.service';
 import { TranslationService } from '../../translation.service';

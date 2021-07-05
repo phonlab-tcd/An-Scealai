@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable, Observer ,  of } from 'rxjs';
 import { StoryService } from './story.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip } from 'rxjs/operators';
