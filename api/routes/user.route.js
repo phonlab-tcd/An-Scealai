@@ -127,6 +127,24 @@ userRoutes.route('/updateUsername/:id').post((req, res) => {
 });
 
 
+// Update password by id 
+userRoutes.route('/updatePassword/:id').post((req, res) => {
+    User.findById(req.params.id, (err, user) => {
+        if(user) {
+            user.salt = crypto.randomBytes(16).toString('hex');
+            user.hash = crypto.pbkdf2Sync(req.body.password, user.salt, 1000, 64, 'sha512').toString('hex');
+            user.save().then(() => {
+                res.status(200).json("Password updated successfully");
+             }).catch(err => {
+                res.status(500).send(err);
+            })
+        } else {
+            res.status(404).send(`User with _id ${req.params.id} could not be found`);
+        }
+    });
+});
+
+
 // Update account with random password, send user an email
 userRoutes.route('/sendNewPassword/').post((req, res) => {
     User.findOne({"username": req.body.username}, (err, user) => {
