@@ -32,9 +32,12 @@ export class ProfileComponent implements OnInit {
   modalClass : string = "hidden";
   updateUsernameMode: boolean = false;
   updateEmailMode: boolean = false;
+  updatePasswordMode: boolean = false;
   deleteAccountMode: boolean = false;
   updatedUsername: string;
   errorMessage: string = "";
+  newPassword: string;
+  newPasswordConfirm: string;
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService, 
@@ -208,12 +211,36 @@ export class ProfileComponent implements OnInit {
     this.auth.logout();
   }
   
+  updatePassword() {
+    if(this.newPassword && this.newPasswordConfirm) {
+      if(this.newPassword === this.newPasswordConfirm) {
+        if(this.newPassword.length < 5) {
+          this.errorMessage = this.ts.l.passwords_5_char_long;
+        }
+        else {
+          this.errorMessage = "";
+          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((res) => {
+            console.log(res);
+          });
+          this.auth.logout();
+        }
+      }
+      else {
+        this.errorMessage = this.ts.l.passwords_must_match;
+      }
+    }
+    else {
+      this.errorMessage = "Please input a new password and confirm";
+    }
+  }
+  
   showModal() {
     this.modalClass = "visibleFade";
   }
 
   hideModal() {
     this.modalClass = "hiddenFade";
+    this.updatePasswordMode = false;
   }
 
 }
