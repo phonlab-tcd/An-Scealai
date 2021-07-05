@@ -16,19 +16,21 @@ export class RegisterProfileComponent implements OnInit {
               private router : Router,
               public ts : TranslationService) { }
 
-  input : string;
+  //input : string;
   showError : boolean;
 
   genders : string[] = [
-    this.ts.l.male,
-    this.ts.l.female,
-    this.ts.l.non_binary,
-    this.ts.l.prefer_not_say
+    "",
+    "Male",
+    "Female",
+    "Non-binary",
+    "Prefer not to say"
   ];
 
   gender : string = this.genders[0];
 
   ages : string[] = [
+    "",
     "6-9",
     "10-19",
     "20-29",
@@ -43,6 +45,7 @@ export class RegisterProfileComponent implements OnInit {
   age : string = this.ages[0];
 
   counties : string[] = [
+    "",
     "Baile Átha Cliath",
     "Contae Átha Cliath",
     "Contae an Chabháin",
@@ -86,77 +89,172 @@ export class RegisterProfileComponent implements OnInit {
   country : string;
 
   schools : string[] = [
-    this.ts.l.english_school,
-    this.ts.l.gaelscoil,
-    this.ts.l.gaeltacht_school,
-    this.ts.l.school_not_in_ireland,
+    "",
+    "English school",
+    "Gaelscoil",
+    "Gaeltacht school",
+    "I did not attend school in Ireland"
   ];
-
-  school : string = this.schools[0];
-
-  attendSecondary : boolean = false;
   
-  schoolName : string = "";
-
-  schoolYears : number[] = [
-    1, 2, 3, 4, 5, 6
+  studentSchoolType: string = this.schools[0];
+  
+  
+  studentSchoolLevels: string[] = [
+    "",
+    "I am a primary school pupil",
+    "I am a secondary school pupil",
+    "I am a 3rd level student in Ireland",
+    "I am studying Irish in the USA",
+    "I am studying Irish outside of Ireland or USA",
+    "I am a postgraduate student"
   ];
-
-  schoolYear : number = this.schoolYears[0];
+  
+  studentSchoolLevel: string;
+  
+  primaryYears: string[] = [
+    "",
+    "I am in 1st class",
+    "I am in 2nd class",
+    "I am in 3rd class",
+    "I am in 4th class",
+    "I am in 5th class",
+    "I am in 6th class"
+  ];
+  
+  primaryYear: string;
+  
+  secondaryYears: string[] = [
+    "",
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year",
+    "I am in 4th year",
+    "I am in 5th year",
+    "I am in 6th year",
+  ];
+  
+  secondaryYear: string;
+  
+  thirdLevelOptions: string[] = [
+    "",
+    "I am studying Irish",
+    "I am studying Education Primary (with Irish as a major component)",
+    "I am studying Education Primary (with Irish as a minor component)",
+    "I am studying Education as a Postgraduate student",
+    "Other"
+  ];
+  
+  thirdLevelOption: string;
+  
+  thirdLevelYearsShort: string[] = [
+    "",
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year of a 4 year course",
+    "I am in final year"
+  ];
+  
+  thirdLevelYears: string[] = [
+    "",
+    "I am in 1st year",
+    "I am in 2nd year",
+    "I am in 3rd year",
+    "I am in final year"
+  ]
+  
+  thirdLevelYear: string;
+  
+  postgradYear: string;
+  
+  otherStudies: string;
+  
+  usaOptions: string[] = [
+    "",
+    "I am taking an Irish class at a University",
+    "I am not enrolled in an Irish language class at a University"
+  ];
+  
+  
+  usaOption: string;
+  
+  otherCountryOfStudy: string;
+  
+  otherPostgradStudies: string;
+  
+  immersionOptions: string[] = [
+    "",
+    "Yes",
+    "No"
+  ]
+  
+  immersionCourse: String = this.immersionOptions[0];
+  
+  teacherSchoolTypes = {
+    primary: false,
+    secondary: false,
+    thirdLevel : false,
+    gaeltacht : false
+  };
+  
+  teacherPrimaryType: string;
+  teacherSecondaryType: string;
 
   nativeSpeakerStatuses : string[] = [
-    this.ts.l.yes,
-    this.ts.l.no,
-    this.ts.l.bilingual_native,
-    this.ts.l.bilingual_other,
+    "",
+    "Yes",
+    "No",
+    "Bilingual (native)",
+    "Bilingual (other)"
   ];
 
   nativeSpeakerStatus : string = this.nativeSpeakerStatuses[0];
 
   dialectPreferences : string[] = [
-    this.ts.l.gaeilge_uladh,
-    this.ts.l.gaeilge_chonnacht,
-    this.ts.l.gaolainn_na_mumhan,
-    this.ts.l.other,
+    "",
+    "Gaeilge Uladh",
+    "Gaeilge Chonnact",
+    "Gaolainn na Mumhan",
+    "Other"
   ];
 
   dialectPreference : string = this.dialectPreferences[0];
 
   spokenComprehensionLevels : string[] = [
-    this.ts.l.comprehension_level_1,
-    this.ts.l.comprehension_level_2,
-    this.ts.l.comprehension_level_3,
-    this.ts.l.comprehension_level_4,
-    this.ts.l.comprehension_level_5,
+    "",
+    "A few words when spoken slowly",
+    "A few simple phrases when spoken slowly",
+    "Parts of the conversation",
+    "Most of the conversation when spoken clearly",
+    "Almost everything when spoken at a normal pace"
   ];
 
   spokenComprehensionLevel : string = this.spokenComprehensionLevels[0];
 
-  cefrLevels : string[] = [
-    this.ts.l.unknown,
-    "A1",
-    "A2",
-    "B1",
-    "B2",
-    "C1",
-    "C2",
-  ];
-
-  cefrLevel : string = this.cefrLevels[0];
+  yearsOfIrish: number;
+  
+  otherLanguages: string;
+  
+  fatherNativeTongue: string;
+  
+  motherNativeTongue: string;
+  
+  otherLanguageProficiency: string;
 
   howOftenOptions : string[] = [
-    this.ts.l.every_day,
-    this.ts.l.every_week,
-    this.ts.l.few_times_a_month,
-    this.ts.l.hardly_ever,
+    "",
+    "Every day",
+    "Every week but not every day",
+    "A few times a month",
+    "Hardly ever",
   ];
 
   speakingFrequency : string = this.howOftenOptions[0];
 
   speakWithOptions : string[] = [
-    this.ts.l.learners_and_natives,
-    this.ts.l.natives,
-    this.ts.l.learners,
+    "",
+    "Learners and native speakers",
+    "Native speakers",
+    "Learners",
   ];
 
   speakWith : string = this.speakWithOptions[0];
@@ -222,11 +320,12 @@ export class RegisterProfileComponent implements OnInit {
   }
 
   synthOpinions : string[] = [
-    this.ts.l.synth_opinion_1,
-    this.ts.l.synth_opinion_2,
-    this.ts.l.synth_opinion_3,
-    this.ts.l.synth_opinion_4,
-    this.ts.l.synth_opinion_5,
+    "",
+    "I don't like them",
+    "They're okay, but I prefer a human voice",
+    "I don't care if it is a computer or person",
+    "Sometimes synthetic voices just fit",
+    "Sometimes synthetic voices are better suited",
   ];
 
   synthOpinion : string = this.synthOpinions[0];
@@ -243,15 +342,37 @@ export class RegisterProfileComponent implements OnInit {
         this.county = p.county;
         this.notFromIreland = p.notFromIreland;
         this.country = p.country;
-        this.school = p.school;
-        this.schoolName = p.schoolName;
+        
+        this.studentSchoolType = p.studentSchoolType,
+        this.studentSchoolLevel = p.studentSchoolLevel,
+        this.primaryYear = p.primaryYear,
+        this.secondaryYear = p.secondaryYear,
+        this.thirdLevelOption = p.thirdLevelOption,
+        this.thirdLevelYear = p.thirdLevelYear,
+        this.postgradYear = p.postgradYear,
+        this.otherStudies = p.otherStudies,
+        this.usaOption = p.usaOption,
+        this.otherCountryOfStudy = p.otherCountryOfStudy,
+        this.otherPostgradStudies = p.otherPostgradStudies,
+        this.immersionCourse = p.immersionCourse,
+        
+        this.teacherPrimaryType = (p.teacherPrimaryType) ? p.teacherPrimaryType : this.teacherPrimaryType,
+        this.teacherSecondaryType = (p.teacherSecondaryType) ? p.teacherSecondaryType : this.teacherSecondaryType,
+        this.teacherSchoolTypes = (p.teacherSchoolTypes) ? p.teacherSchoolTypes: this.teacherSchoolTypes,
+
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
         this.spokenComprehensionLevel = p.spokenComprehensionLevel;
-        this.cefrLevel = p.cefrLevel;
+        this.yearsOfIrish = p.yearsOfIrish,
+        this.otherLanguages = p.otherLanguages,
+        this.fatherNativeTongue = p.fatherNativeTongue,
+        this.motherNativeTongue = p.motherNativeTongue,
+        this.otherLanguageProficiency = p.otherLanguageProficiency,
+        
         this.speakingFrequency = p.speakingFrequency;
         this.speakWith = p.speakWith;
         this.irishMedia = p.irishMedia;
+        this.irishReading = p.irishReading;
         this.irishWriting = p.irishWriting;
         this.howOftenMedia = p.howOftenMedia;
         this.howOftenReading = p.howOftenReading;
@@ -261,10 +382,7 @@ export class RegisterProfileComponent implements OnInit {
     }, (err) => {
       console.log("No previous profile data associated with user.");
     });
-
-    if(userDetails.role === 'TEACHER') {
-      this.schools[3] = this.ts.l.school_not_in_ireland_teacher;
-    }
+    
   }
 
   saveDetails() {
@@ -278,12 +396,32 @@ export class RegisterProfileComponent implements OnInit {
       county : (!this.notFromIreland) ? this.county : null,
       notFromIreland : this.notFromIreland,
       country : (this.notFromIreland) ? this.country : "Ireland",
-      school : this.school,
-      schoolName : this.schoolName,
+      
+      studentSchoolType: this.studentSchoolType,
+      studentSchoolLevel: this.studentSchoolLevel,
+      primaryYear: (this.primaryYear) ? this.primaryYear : null,
+      secondaryYear: (this.secondaryYear) ? this.secondaryYear : null,
+      thirdLevelOption: (this.thirdLevelOption) ? this.thirdLevelOption : null,
+      thirdLevelYear: (this.thirdLevelYear) ? this.thirdLevelYear : null,
+      postgradYear: (this.postgradYear) ? this.postgradYear : null,
+      otherStudies: (this.otherStudies) ? this.otherStudies : null,
+      usaOption: (this.usaOption) ? this.usaOption : null, 
+      otherCountryOfStudy: (this.otherCountryOfStudy) ? this.otherCountryOfStudy : null, 
+      otherPostgradStudies: (this.otherPostgradStudies) ? this.otherPostgradStudies : null, 
+      immersionCourse: this.immersionCourse,
+      
+      teacherPrimaryType: (this.teacherPrimaryType) ? this.teacherPrimaryType : null,
+      teacherSecondaryType: (this.teacherSecondaryType) ? this.teacherSecondaryType : null,
+      teacherSchoolTypes: this.teacherSchoolTypes,
+      
       nativeSpeakerStatus : this.nativeSpeakerStatus,
       dialectPreference : this.dialectPreference,
       spokenComprehensionLevel : this.spokenComprehensionLevel,
-      cefrLevel : this.cefrLevel,
+      yearsOfIrish: (this.yearsOfIrish) ? this.yearsOfIrish : null, 
+      otherLanguages: (this.otherLanguages) ? this.otherLanguages : null,
+      fatherNativeTongue: (this.fatherNativeTongue) ? this.fatherNativeTongue : null,
+      motherNativeTongue: this.motherNativeTongue,
+      otherLanguageProficiency : this.otherLanguageProficiency,
       speakingFrequency : this.speakingFrequency,
       speakWith : this.speakWith,
       irishMedia : this.irishMedia,
@@ -294,14 +432,20 @@ export class RegisterProfileComponent implements OnInit {
       howOftenWriting : this.howOftenWriting,
       synthOpinion : this.synthOpinion,
     };
+    
+    console.log(profile);
+
     this.profileService.create(profile).subscribe((res) => {
       if(userDetails.role === 'STUDENT') {
+        console.log(res)
         this.router.navigateByUrl('/contents');
       } else if(userDetails.role === 'TEACHER') {
+        console.log(res)
         this.router.navigateByUrl('/teacher/dashboard');
       }
       
-    })
+    });
+
   }
 
 }

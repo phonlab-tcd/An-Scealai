@@ -3,12 +3,14 @@ dist
 **/node_modules
 session.vim
 
-session.vim
+.DS_Store
 
 /api/sendinblue.json
 
 **/logs/*
 
+
+session.vim
 
 /mongotest/logs/**
 /mongotest/db/**
@@ -18,3 +20,4 @@ session.vim
 
 /sshlogin
 /login_to_phonetics.sh
+/login

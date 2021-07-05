@@ -1,3 +1,4 @@
+const logger = require('../logger');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
@@ -5,25 +6,31 @@ var User = require('../models/user');
 mongoose.model('User');
 
 passport.use(new LocalStrategy(
+
   function(username, password, done) {
-    User.findOne({ username: username}, function (err, user) {
+    User.findOne({ username: username}, function(err, user) {
+
       if(err) { 
-        console.log(err);
+        logger.error(err);
         return done(err); 
       }
+
       // If user doesn't exist
       if(!user) {
         return done(null, false, {
           message: 'Username not found'
         });
       }
+
       // If password is wrong
       if(!user.validPassword(password)) {
         return done(null, false, {
           message: 'Incorrect password'
         });
       }
+
       // If everything is correct, return user object
+      logger.info('Successfully authenticated user:' + username);
       return done(null, user);
     });
   }

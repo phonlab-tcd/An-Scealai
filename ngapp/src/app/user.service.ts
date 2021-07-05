@@ -37,4 +37,8 @@ export class UserService {
     return this.http.post(this.baseUrl + 'updatePassword/' + id, {password: password});
   }
   
+  sendNewPassword(username: string, email: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'sendNewPassword/', {username: username, email: email});
+  }
+  
 }
