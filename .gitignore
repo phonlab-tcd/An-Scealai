@@ -9,7 +9,7 @@ session.vim
 
 **/logs/*
 
-./ngapp/build_prod_local/
+ngapp/build_prod_local/
 
 session.vim
 
