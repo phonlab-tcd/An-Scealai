@@ -69,6 +69,7 @@ export class LoginComponent implements OnInit {
   }
 
   async verifyOldAccount() {
+
     this.frozenCredentials.username = this.credentials.username;
     this.frozenCredentials.role = this.credentials.role;
     this.frozenCredentials.password = this.credentials.password;
@@ -104,7 +105,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    //
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(
@@ -168,6 +168,7 @@ export class LoginComponent implements OnInit {
           console.log('ok');
           console.dir(okRes);
           this.resetPasswordOkKeys = okRes.messageKeys;
+          this.resetPasswordOkKeys.push(`[${okRes.sentTo}]`);
         },
         errRes => {
           console.log('err');
@@ -176,28 +177,7 @@ export class LoginComponent implements OnInit {
         },
         () => {
           console.log('Completed request to reset password for', name);
-        }
-      );
-    }
-  }
-
-  sendNewPassword() {
-    this.errorMessageKey = '';
-    if ( this.usernameForgotPassword ) {
-      console.log(this.usernameForgotPassword);
-      this.userService.sendNewPassword(
-        this.usernameForgotPassword,
-        this.emailForgotPassword).subscribe(
-        (res) => {
-          console.log('this is read');
-          console.log(res);
         });
-      this.usernameForgotPassword = '';
-      this.forgotPassword = false;
-    } else {
-      this.errorMessageKey = 'Please input your username';
-      // this.errorMessageKeys.push('Please input your username');
     }
   }
-
 }
