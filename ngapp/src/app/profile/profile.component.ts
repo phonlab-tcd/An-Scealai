@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   modalClass : string = "hidden";
   updateUsernameMode: boolean = false;
   updateEmailMode: boolean = false;
+  updatePasswordMode: boolean = false;
   deleteAccountMode: boolean = false;
   updatedUsername: string;
   errorMessage: string = "";
@@ -239,7 +240,6 @@ export class ProfileComponent implements OnInit {
 
   hideModal() {
     this.modalClass = "hiddenFade";
-    this.updateMode = false;
     this.updatePasswordMode = false;
   }
 
