@@ -184,22 +184,33 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       The An Scéalaí team`,
     }
 
+    let sendEmailErr = null;
     const sendEmailRes = await mail.sendEmail(mailObj)
       .catch(err => {
-        logger.error({
-          file: './api/controllers/authentication.js',
-          functionName: 'sendVerificationEmail',
-          error: err,
-        });
-        reject(err); 
+        sendEmailErr = err;
       });
 
+    if (sendEmailErr) {
+      logger.error({
+        file: './api/controllers/authentication.js',
+        functionName: 'sendVerificationEmail',
+        error: sendEmailErr,
+      });
+      return reject(sendEmailErr); 
+    }
+
+    if (!sendEmailRes) {
+      return reject({
+        messageToUser: `It seems the verification email failed to send`,
+      });
+    }
+
     if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-      reject({
+      return reject({
         messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
       });
     }
-    resolve({
+    return resolve({
       messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
     });
   });
