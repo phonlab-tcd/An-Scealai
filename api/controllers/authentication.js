@@ -319,7 +319,7 @@ module.exports.verifyOldAccount = async (req, res) => {
         });
     }
 
-    return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
+    return res.status(200).json({messageKey: 'user_activation_pending'});
 
   } catch (error) {
 
@@ -368,7 +368,7 @@ module.exports.register = async (req, res) => {
       logger.error("Mongo error. Error code: " + saveErr.code);
       if (saveErr.code === 11000) {
         return res.status(400).json({
-          message: "Username taken, please choose another"
+          message: "username_taken_msg"
         });
       } 
     }
@@ -386,8 +386,7 @@ module.exports.register = async (req, res) => {
       }
     });
 
-  resObj.token = user.generateJwt();
-  return res.status(200).json(resObj);
+  return res.status(200).json({ messageKey:'verification_email_sent' });
 };
 
 
@@ -395,14 +394,15 @@ module.exports.register = async (req, res) => {
 module.exports.login = function(req, res) {
   let resObj = {
     userStatus: null,
-    message: '',
+    messageKeys: [],
     errors: [],
   }
 
   if(!req.body.username || !req.body.password) {
+    resObj.messageKeys.push('username_and_password_required');
     return res
       .status(400)
-      .json({"message": "Username and password required"});
+      .json(resObj);
   }
 
   // AUTHENTICATE
@@ -413,7 +413,7 @@ module.exports.login = function(req, res) {
     }
 
     if(!user){
-      resObj.message += info.message + '\n';
+      resObj.messageKeys.push(info.message);
       return res.status(400).json(resObj);
     }
 
@@ -426,7 +426,7 @@ module.exports.login = function(req, res) {
 
     console.log(user.status);
     if(user.status.match(pendingRegEx)){
-      resObj.message += 'The email address for ' + req.body.username + ' has not yet been verified.'
+      resObj.messageKeys.push('email_not_verified')
       resObj.userStatus = user.status;
       return res.status(400).json(resObj);
     }

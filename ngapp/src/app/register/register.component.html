@@ -11,7 +11,7 @@
               name="username"
               [(ngModel)]="credentials.username"
               [formControl]="usernameInput">
-          <div class="usernameErrorText">{{usernameErrorText}}</div>
+          <div class="usernameErrorText">{{ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}</div>
         </div>
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.email_address}}</label></div>
@@ -37,7 +37,7 @@
                class="form-control inputField"
                name="password" 
                [(ngModel)]="passwordConfirm">
-          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+          <div *ngIf="registrationError" class="errorMessage">{{ ts.l[errorTextKey] ? ts.l[errorTextKey] : errorTextKey }}</div>
         </div>
         <div class="form-group">
           <div class="formLabel">{{ts.l.language}} :</div>
@@ -70,7 +70,7 @@
         class="formLabel">{{ts.l.username}}: <strong>{{frozenCredentials.username}}</strong></p>
     <p
         class="formLabel">{{ts.l.email_address}}: <strong>{{frozenCredentials.email}}</strong></p>
-    <div *ngIf="loginErrorText" class="errorMessage">{{loginErrorText}}<br></div>
+    <div *ngIf="loginErrorText" class="errorMessage">{{ts.l[loginErrorText]}}<br></div>
     <button 
       class="btn loginBtn"
       (click)="login()">{{ts.l.sign_in}}</button>

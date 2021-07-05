@@ -18,14 +18,14 @@ passport.use(new LocalStrategy(
       // If user doesn't exist
       if(!user) {
         return done(null, false, {
-          message: 'Username not found'
+          message: 'username_not_found'
         });
       }
 
       // If password is wrong
       if(!user.validPassword(password)) {
         return done(null, false, {
-          message: 'Incorrect password'
+          message: 'incorrect_password'
         });
       }
 
