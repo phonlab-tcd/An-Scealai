@@ -38,7 +38,7 @@ const consoleFormat = winston.format.printf(
     let string_message = JSON.stringify(message);
     let metaDataMsg = '';
     for(let d in metadata){
-      metaDataMsg += JSON.strinfiy(d) + ' : ';
+      metaDataMsg += JSON.stringify(d) + ' : ';
     }
     metaDataMsg += 'END';
     let msg = `${timestamp} [${level}] : ${string_message}`;
