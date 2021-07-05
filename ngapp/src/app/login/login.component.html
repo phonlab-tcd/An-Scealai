@@ -80,7 +80,11 @@
     <button 
       class="btn loginBtn"
       (click)="login()">{{ts.l.sign_in}}</button>
-    <p *ngIf="waitingErrorText" class="errorMessage">{{waitingErrorText}}</p>
+    <div
+      *ngFor="let msg of waitingErrorTextKeys"
+      class="errorMessage">
+      {{ ts.l[msg] ? ts.l[msg] : msg }}
+    </div>
   </div>
 </div>
 
@@ -121,7 +125,8 @@
 
     <!-- DISPLAY ERROR OR OK MESSAGES -->
     <div
-        *ngFor="let err of resetPasswordErrKeys" class="errorMessage">
+        *ngFor="let err of resetPasswordErrKeys"
+        class="errorMessage">
       {{ ts.l[err] ? ts.l[err] : err }}
     </div>
     <div

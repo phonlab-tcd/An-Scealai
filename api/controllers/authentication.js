@@ -278,17 +278,14 @@ module.exports.verify = async (req, res) => {
 module.exports.verifyOldAccount = async (req, res) => {
   try {
     // API CALL REQUIREMENTS
-    if (!req.body.username){
-      return res.status(400).json("username required to verify account email address");
-    }
-    if (!req.body.email){
-      return res.status(400).json("email required to verify account email address");
-    }
-    if (!req.body.password){
-      return res.status(400).json("password required to verify account email address");
+    if (!req.body.username || !req.body.email || !req.body.password){
+      return res.status(400).json({
+        messageKeys: ['username_password_and_email_required'], // "username required to verify account email address");
+      });
     }
     if (!req.body.baseurl) {
-      return res.status(400).json('req.body.baseurl is required to be either http://localhost:4000/ or https://www.abair.tcd.ie/anscealaibackend/'); 
+      logger.warning('baseurl not provided to verifyOldAccount. Defaulting to dev server: http://localhost:4000/');
+      req.body.baseurl = 'http://localhost:4000/'
     }
 
     logger.info('Beginning verification of ' + req.body.username);
@@ -296,7 +293,7 @@ module.exports.verifyOldAccount = async (req, res) => {
     const user = await User.findOne({username: req.body.username})
       .catch(error => {
         return res.status(404).json({
-          message: 'There was an error while trying to find a user with username: ' + req.body.username,
+          messageKeys: ['There was an error while trying to find a user with username: ' + req.body.username],
           error: error,
         });
       });
@@ -305,29 +302,34 @@ module.exports.verifyOldAccount = async (req, res) => {
       if (user.email) {
         return res.status(400).json(`User: ${user.username} is already verified with the email address: ${user.email}. If you think this is a mistake please let us know at scealai.info@gmail.com`);
       }
+      // if !user.email && user.status === 'Active'
       logger.warning(`User: ${user.usernam} was Active but had no assoctiated email address. Resetting to Pending`);
-      let makePendingError, userMadePending = null;
-      await User.findOneAndUpdate(
-        // Find
-        {username: user.username },
-        // Update
-        {status: 'Pending'},
-        // Options
-        {new:true})
-        .catch( err => makePendingError = err)
-        .then(res => userMadePending = res);
-      if ( makePendingError ) {
-        logger.error({endpoint: '/user/verifyOldAccount', error: makePendingError});
-      }
-      if ( !userMadePending ) {
-        logger.error({endpoint: '/user/verifyOldAccount', message: 'There was an error while trying to set the users status to pending' });
-        res
-          .status(500)
-          .json({
-            file: './api/controllers/authentication.js',
-            functionName: 'verifyOldAccount',
-            message: 'There was an error on our server. We failed to update your status to Pending.',
+      try {
+        const user = await User.findOneAndUpdate(
+          // Find
+          {username: user.username },
+          // Update
+          {status: 'Pending'},
+          // Options
+          {new:true});
+        if ( !user ) {
+          logger.error({
+            endpoint: '/user/verifyOldAccount',
+            message: 'There was an error while trying to set the users status to pending'
           });
+          return res
+            .status(500)
+            .json({
+              file: './api/controllers/authentication.js',
+              functionName: 'verifyOldAccount',
+              messageKeys: ['There was an error on our server. We failed to update your status to Pending.'],
+            });
+        }
+      } catch (err) {
+        logger.error({
+          endpoint: '/user/verifyOldAccount',
+          error: err
+        });
       }
     }
   
@@ -342,21 +344,21 @@ module.exports.verifyOldAccount = async (req, res) => {
       console.log('mailRes:', mailRes);
       
       // IF ALL GOES WELL
-      return res.status(200).json({message: 'User activation pending. Please check your email inbox'});
+      return res.status(200).json({
+        messageKeys: ['User activation pending. Please check your email inbox']
+      });
 
     } catch (mailErr) {
       logger.error('mailError', mailError);
       return res.status(500)
         .json({
-          message: 'An error occurred while trying to send a verification email.',
+          messageKeys: ['An error occurred while trying to send a verification email.'],
           error: mailError,
         });
     }
-
   } catch (error) {
-
     return res.status(500)
-      .json({message: 'An unknown error occurred',
+      .json({messageKeys: ['An unknown error occurred'],
         file: '.api/controllers/authentication.js',
         functionName: 'verifyOldAccount',
         error: error,

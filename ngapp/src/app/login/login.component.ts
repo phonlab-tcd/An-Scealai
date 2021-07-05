@@ -15,7 +15,6 @@ import config from '../../abairconfig.json';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit {
 
   credentials: TokenPayload = {
@@ -112,7 +111,9 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          this.waitingErrorTextKeys.push(err.error.messageKeys);
+          for (const msg of err.error.messageKeys) {
+            this.waitingErrorTextKeys.push(msg);
+          }
         },
         () => {
           console.log('Completed login Observable for:', this.frozenCredentials.username);
