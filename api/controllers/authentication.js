@@ -66,7 +66,9 @@ module.exports.generateNewPassword = async (req, res) => {
 
 module.exports.resetPassword = async (req, res) => {
   if ( !req.body.username ) {
-    return res.status(400).json("Please provide a username in the query parameters.");
+    return res.status(400).json({
+      messageKeys: ["Please provide a username in the query parameters."],
+    });
   }
 
   if ( !req.body.baseurl ) {
@@ -74,13 +76,18 @@ module.exports.resetPassword = async (req, res) => {
     req.body.baseurl = 'http://localhost:4000/';
   }
   
-  let findErr = null;
-  const user = await User.findOne({username: req.body.username})
-    .catch(err => {
-      findErr = err; 
+  try {
+    var user = await User.findOne({username: req.body.username});
+  } catch (err) {
+    return res.status(400).json({
+      messageKeys: ["Could not find user with username: " + req.body.username],
     });
-  if (findErr || !user) {
-    return res.status(400).json("Could not find user with username: " + req.body.username);
+  }
+
+  if ( !user ) {
+    return res.status(404).json({
+      messageKeys: ['username_not_found'],
+    });
   }
 
   if ( 
@@ -88,7 +95,9 @@ module.exports.resetPassword = async (req, res) => {
     || user.status.match(pendingRegEx)
     || !user.status.match(activeRegEx)
     || !user.email ) {
-    return res.status(400).json("User has not been verified. Cannot reset password.");
+    return res.status(400).json({
+      messageKeys: ["user_not_verified_cannot_reset_password"],
+    });
   }
   
   const resetPasswordLink = 
@@ -115,35 +124,30 @@ module.exports.resetPassword = async (req, res) => {
   }
   
   try {
-    const sendEmailRes = await mail.sendEmail(mailObj)
-      .catch(err => {
-        logger.error({
-          file: './api/controllers/authentication.js',
-          functionName: 'resetPassword',
-          error: err,
-        });
-        logger.error(err); 
+    const sendEmailRes = await mail.sendEmail(mailObj);
+    if (!sendEmailRes) {
+      return res.status(500).json({
+        messageKeys: [`There seems to have been error while trying to send an email to ${user.email}`],
       });
+    }
+
+    if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
+      return res.status(500).json({
+        messageKeys: [`Failed to send verification email to ${sendEmailRes.rejected}.`],
+      });
+    }
+
+    return res.status(200).json({
+      messageKeys: [`email_sent`],
+      sentTo: user.email,
+    });
   } catch (err) {
-
-  }
-
-  if (!sendEmailRes) {
     return res.status(500).json({
-      messageToUser: `There seems to have been error while trying to send an email to ${user.email}`,
+      messageKeys: [err.message]
     });
+
   }
 
-  if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-    return res.status(500).json({
-      messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
-    });
-  }
-
-  return res.status(200).json({
-    messageToUser: `An email has been sent to ${sendEmailRes.accepted} to reset their password.`,
-    sentTo: user.email,
-  });
 }
 
 
