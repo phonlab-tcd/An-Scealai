@@ -222,9 +222,10 @@ async function sendVerificationEmail (username, password, email, baseurl) {
         functionName: 'sendVerificationEmail',
         error: err,
       });
-      if (err.rejectedErrors) {
+      if (err.response) {
+        console.log(err.response);
         return reject({
-          messageToUser: err.rejectedErrors[0].response,
+          messageToUser: err.response,
         });
       }
       return reject(err);
@@ -279,11 +280,16 @@ module.exports.verify = async (req, res) => {
 
 module.exports.verifyOldAccount = async (req, res) => {
   try {
+    const resObj = {
+      messageKeys: [],
+      errors: [],
+    };
     // API CALL REQUIREMENTS
     if (!req.body.username || !req.body.email || !req.body.password) {
-      return res.status(400).json({
-        messageKeys: ['username_password_and_email_required'],
-      });
+      resObj.messageKeys.push(
+          'username_password_and_email_required',
+      );
+      return res.status(400).json(resObj);
     }
     if (!req.body.baseurl) {
       logger.warning('baseurl not provided to verifyOldAccount. Defaulting to dev server: http://localhost:4000/');
@@ -363,16 +369,20 @@ module.exports.verifyOldAccount = async (req, res) => {
         messageKeys: ['User activation pending. Please check your email inbox'],
       });
     } catch (mailErr) {
-      logger.error('mailError', mailError);
+      console.dir(mailErr);
+      logger.error('mailErr', mailErr);
+      resObj.messageKeys.push(
+          'An error occurred while trying to send a verification email.');
+      if (mailErr.messageToUser) {
+        resObj.messageKeys.push(mailErr.messageToUser);
+      }
       return res
           .status(500)
-          .json({
-            messageKeys: ['An error occurred while trying to send a verification email.'],
-            error: mailError,
-          });
+          .json(resObj);
     }
   } catch (error) {
     const messageKeys = ['An unknown error occurred'];
+    console.dir(error);
     if (error.messageToUser) {
       messageKeys.push(error.messageToUser);
     }
@@ -384,7 +394,7 @@ module.exports.verifyOldAccount = async (req, res) => {
           error: error,
         });
   }
-}
+};
 
 module.exports.register = async (req, res) => {
   let resObj = {
