@@ -124,8 +124,14 @@ module.exports.resetPassword = async (req, res) => {
       logger.error(err); 
     });
 
+  if (!sendEmailRes) {
+    return res.status(500).json({
+      messageToUser: `There seems to have been error while trying to send an email to ${user.email}`,
+    });
+  }
+
   if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-    return res(500).json({
+    return res.status(500).json({
       messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
     });
   }
