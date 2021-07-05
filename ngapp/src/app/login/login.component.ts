@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   };
 
   loginError: boolean;
-  errorText: string;
+  errorMsgKeys: string[];
 
   forgotPassword = false;
   modalClass: 'hiddenFade' | 'visibleFade';
@@ -52,8 +52,8 @@ export class LoginComponent implements OnInit {
   waitingForEmailVerification = false;
   waitingErrorTextKeys = [];
 
-  resetPasswordOkText = null;
-  resetPasswordErrText = null;
+  resetPasswordOkKeys = null;
+  resetPasswordErrKeys = null;
 
   constructor(
     private auth: AuthenticationService,
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
 
     if (this.userToVerify !== this.credentials.username) {
       console.log('this.userToVerify !== this.credentials.username');
-      this.errorText = 'Username changed. Starting from scratch.';
+      this.errorMsgKeys = ['username_changed_starting_from_scratch'];
       this.userHasNotBeenVerified = false;
       this.userToVerify = null;
       return;
@@ -133,10 +133,10 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/landing');
       },
       (err) => {
-        this.errorText = err.error.message;
+        this.errorMsgKeys = err.error.messageKeys;
         if (err.error.userStatus === 'Pending') {
           console.log('User status is Pending');
-          this.errorText = 'Please provide and verify an email address to continue.';
+          this.errorMsgKeys.push('Please provide and verify an email address to continue.');
           // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
@@ -158,21 +158,21 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword() {
-    this.resetPasswordOkText = null;
-    this.resetPasswordErrText = null;
+    console.log('making request to reset password');
+    this.resetPasswordOkKeys = [];
+    this.resetPasswordErrKeys = [];
     const name = this.usernameForgotPassword;
     if (name) {
-      console.log('Requesting password reset for', name);
-      this.auth.resetPassword(this.usernameForgotPassword).subscribe(
+      this.auth.resetPassword(name).subscribe(
         okRes => {
           console.log('ok');
           console.dir(okRes);
-          this.resetPasswordOkText = okRes.messageToUser;
+          this.resetPasswordOkKeys = okRes.messageKeys;
         },
         errRes => {
           console.log('err');
           console.dir(errRes);
-          this.resetPasswordErrText = errRes.error.messageToUser;
+          this.resetPasswordErrKeys = errRes.error.messageKeys;
         },
         () => {
           console.log('Completed request to reset password for', name);
