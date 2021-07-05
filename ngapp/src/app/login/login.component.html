@@ -33,8 +33,17 @@
               placeholder="{{ts.l.enter_password}}"
               name="password"
               [(ngModel)]="credentials.password">
-          <div class="forgotPassword" (click)="forgotPassword=true;errorMessage='';showModal()">{{ts.l.forgot_password}}</div><br>
-          <div *ngFor="let errorMsgKey of errorMsgKeys" class="errorMessage">{{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey}}</div>
+          <div 
+              class="forgotPassword" 
+              (click)="forgotPassword=true;errorMessage='';showModal()">
+            {{ts.l.forgot_password}}
+          </div><br>
+          <div 
+               *ngFor="let errorMsgKey of errorMsgKeys" 
+               class="errorMessage"
+               style="margin-left: 10%; margin-right: 10%;">
+            {{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey}}
+          </div>
         </div>
 
         <!-- Verify the user's email address if they have not yet been verified -->

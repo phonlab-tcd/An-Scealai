@@ -136,7 +136,6 @@ export class LoginComponent implements OnInit {
         this.errorMsgKeys = err.error.messageKeys;
         if (err.error.userStatus === 'Pending') {
           console.log('User status is Pending');
-          this.errorMsgKeys.push('Please provide and verify an email address to continue.');
           // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
