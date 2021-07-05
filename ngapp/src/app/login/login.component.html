@@ -34,7 +34,7 @@
               name="password"
               [(ngModel)]="credentials.password">
           <div class="forgotPassword" (click)="forgotPassword=true;errorMessage='';showModal()">{{ts.l.forgot_password}}</div><br>
-          <div *ngIf="loginError" class="errorMessage">{{errorText}}</div>
+          <div *ngFor="let errorMsgKey of errorMsgKeys" class="errorMessage">{{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey}}</div>
         </div>
 
         <!-- Verify the user's email address if they have not yet been verified -->
@@ -109,13 +109,16 @@
       {{ts.l.cancel}}
       <i class="fa fa-times"></i>
     </button>
-  </div>
-  <div
-      class="errorMessage">
-    {{ resetPasswordErrText }}
-  </div>
-  <div
-      class="">
-    {{ resetPasswordOkText }}
+
+    <!-- DISPLAY ERROR OR OK MESSAGES -->
+    <div
+        *ngFor="let err of resetPasswordErrKeys" class="errorMessage">
+      {{ ts.l[err] ? ts.l[err] : err }}
+    </div>
+    <div
+        *ngFor="let ok of resetPasswordOkKeys"
+        class="">
+      {{ ts.l[ok] ? ts.l[ok] : ok }}
+    </div>
   </div>
 </div>
