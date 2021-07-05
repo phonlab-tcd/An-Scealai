@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
   verificationEmailHasBeenSent = false;
 
   waitingForEmailVerification = false;
-  waitingErrorText = null;
+  waitingErrorText: string = null;
 
   resetPasswordOkText = null;
   resetPasswordErrText = null;
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          this.waitingErrorText = err.message;
+          this.waitingErrorText = err.error.message;
         },
         () => {
           console.log('Completed login Observable for:', this.frozenCredentials.username);
