@@ -193,6 +193,11 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = "Please input a new username";
       return
     }
+    
+    if (!this.updatedUsername.match('^[A-Za-z0-9]+$')) {
+      this.errorMessage = this.ts.l.username_no_special_chars;
+      return;
+    }
       
     const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
     
