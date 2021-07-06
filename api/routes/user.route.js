@@ -109,21 +109,41 @@ userRoutes.route('/deleteUser/:username').get(function(req, res) {
     });
 });
 
-// Update username by id 
+
+const validUsernameRegEx = /^[a-z0-9]+$/i;
+
+// Update username by id
 userRoutes.route('/updateUsername/:id').post((req, res) => {
+  if ( !req.body.username ) {
+    return res.status(400).send(
+        'req.body.username is required');
+  }
+  if (!req.body.username.match(validUsernameRegEx) ) {
+    return res.status(400).send(
+        `${req.body.username} is an invalide username.` +
+        `Valid characters are: a-z, A-Z, 0-9`);
+  }
   console.log(req.body.username);
-    User.findById(req.params.id, (err, user) => {
-        if(user) {
-            user.username = req.body.username;
-            user.save().then(() => {
-                res.status(200).json("Username updated successfully");
-             }).catch(err => {
-                res.status(500).send(err);
-            })
-        } else {
-            res.status(404).send(`User with _id ${req.params.id} could not be found`);
-        }
-    });
+  // Validate Username
+  User.findById(req.params.id, async (err, user) => {
+    if (err) {
+      logger.error(err);
+      return res.status(500).send(err);
+    }
+    if (user) {
+      user.username = req.body.username;
+      try {
+        await user.save(); // .then(() => {
+        return res.status(200).json('Username updated successfully');
+      } catch (err) {
+        return res.status(500).send(err);
+      }
+    } else {
+      return res
+          .status(404)
+          .send(`User with _id ${req.params.id} could not be found`);
+    }
+  });
 });
 
 
