@@ -19,6 +19,7 @@ var sendJSONresponse = function(res, status, content) {
 
 pendingRegEx = /^Pending$/;
 activeRegEx = /^Active$/;
+// /<pattern>/i => ignore case
 validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
