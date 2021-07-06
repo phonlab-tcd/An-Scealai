@@ -75,6 +75,7 @@
       "you_will_have_to_login_password" : "You will have to login again with your new password",
       "new_password" : "New password",
       "please_input_a_new_password_confirm" : "Please input a new password and confirm",
+      "please_input_a_new_username" : "Please input a new username",
 
       "leave" : "leave",
       "classroom" : "Classroom",
@@ -641,6 +642,7 @@
       "you_will_have_to_login_password" : "Beidh ort logáil isteach arís le do phasfhocal nua",
       "new_password" : "Pasfhocal nua",
       "please_input_a_new_password_confirm" : "Cuir isteach an pasfhocal nua agus deimhnigh",
+      "please_input_a_new_username" : "Cuir isteach ainm úsáideora nua, le do thoil",
 
       "personal_info" : "Eolas pearsanta",
       "profile_instructions" : "Táimid ag iarraidh ort an ceistneoir seo a líonadh ar mhaithe le taighde a cheadóidh comparáidí idirnáisiúnta le teangacha éagsúla.",

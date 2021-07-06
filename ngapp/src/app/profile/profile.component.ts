@@ -190,8 +190,13 @@ export class ProfileComponent implements OnInit {
   */
   async updateUsername() {
     if (!this.updatedUsername){
-      this.errorMessage = "Please input a new username";
+      this.errorMessage = this.ts.l.please_input_a_new_username;
       return
+    }
+    
+    if (!this.updatedUsername.match('^[A-Za-z0-9]+$')) {
+      this.errorMessage = this.ts.l.username_no_special_chars;
+      return;
     }
       
     const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
@@ -232,7 +237,7 @@ export class ProfileComponent implements OnInit {
         this.errorMessage = this.ts.l.passwords_must_match;
       }
     } else {
-      this.errorMessage = 'Please input a new password and confirm';
+      this.errorMessage = this.ts.l.please_input_a_new_password_confirm;
     }
   }
 
