@@ -396,6 +396,83 @@ module.exports.verifyOldAccount = async (req, res) => {
   }
 };
 
+module.exports.updateEmail = async (req, res) => {
+  console.log("request username: ", req.body.username);
+  console.log("request email: ", req.body.email);
+  console.log("request url: ", req.body.baseUrl);
+  return new Promise(async (resolve, reject) => {
+
+    logger.info(`beginning updateEmail(${req.body.username}, password, ${req.body.email}, ${req.body.baseUrl})`);
+
+    // Authenticate User
+    const user = await User.findOne({ username: req.body.username })
+      .catch(
+        err => {
+          logger.error(err);
+          reject(err);
+        });
+
+    user.email = req.body.email;
+
+    const activationLink = user
+      .generateActivationLink(req.body.baseUrl);
+
+    // Update user's email and verification code on the db
+    await user.save()
+      .catch(err => {
+        reject(err);
+      });
+
+    mailObj = {
+      from: 'scealai.info@gmail.com',
+      recipients: [req.body.email],
+      subject: 'An Scéalaí account verification',
+      message: 
+      `Dear ${user.username},\n\
+      Please use this link to verify your updated email address for An Scéalaí:\n\n\
+      ${activationLink}\n\n\
+      Once you have verified your email you will be able to log in again.\n\
+      \n\
+      Kindly,\n\
+      \n\
+      The An Scéalaí team`,
+    }
+
+    let sendEmailErr = null;
+    try {
+      const sendEmailRes = await mail.sendEmail(mailObj);
+      if (!sendEmailRes) {
+        return reject({
+          status: 404,
+          messageToUser: `It seems the verification email failed to send`,
+        });
+      }
+
+      if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
+        return reject({
+          messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
+        });
+      }
+      return resolve({
+        messageToUser: `A verification email has been sent to ${sendEmailRes.accepted}.`,
+      });
+    } catch (err) {
+      logger.error({
+        file: './api/controllers/authentication.js',
+        functionName: 'updateEmail',
+        error: err,
+      });
+      if (err.response) {
+        console.log(err.response);
+        return reject({
+          messageToUser: err.response,
+        });
+      }
+      return reject(err);
+    }
+  }); // end Promise constructor
+};
+
 module.exports.register = async (req, res) => {
   let resObj = {
     messageKeys: [],

@@ -15,6 +15,7 @@ import { ProfileService } from '../profile.service';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
 import { RecordingService } from '../recording.service';
+import config from '../../abairconfig.json';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,7 @@ export class ProfileComponent implements OnInit {
   errorMessage = '';
   newPassword: string;
   newPasswordConfirm: string;
+  updatedEmail: string;
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService,
@@ -234,6 +236,20 @@ export class ProfileComponent implements OnInit {
     } else {
       this.errorMessage = 'Please input a new password and confirm';
     }
+  }
+  
+  updateEmail() {
+    if(this.updatedEmail) {
+      this.auth.updateEmail(this.auth.getUserDetails().username, this.updatedEmail, config.baseurl).subscribe(res => {
+        console.log(res);
+      });
+      this.auth.getUserDetails();
+    }
+    else {
+      this.errorMessage = 'Please input a new email';
+    }
+    this.hideModal();
+    
   }
 
   showModal() {

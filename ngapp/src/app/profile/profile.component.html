@@ -8,7 +8,7 @@
             <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
             <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
             <div>
-                <button class="modalBtn createBtnGreen" (click)="deleteAccount(); update">{{ts.l.yes}}</button>
+                <button class="modalBtn createBtnGreen" (click)="deleteAccount();">{{ts.l.yes}}</button>
                 <button class="modalBtn createBtnGreen" (click)="hideModal(); deleteAccountMode=false;">{{ts.l.no}}</button>
             </div>
         </div>
@@ -27,10 +27,10 @@
         <!-- Popup for changing email -->
         <div *ngIf="updateEmailMode" class="modalContent">
             <pre class="modalText">Update email</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
+            <div class="modalText"> New email: <input type="text" placeholder="Enter email" name="email" [(ngModel)]="updatedEmail"></div>
+            <div class="usernameErrorText"> {{errorMessage}} </div>
             <div>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.yes}}</button>
+                <button class="modalBtn createBtnGreen" (click)="updateEmail();">{{ts.l.yes}}</button>
                 <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.no}}</button>
             </div>
         </div>
@@ -61,14 +61,14 @@
             <i class="fas fa-edit headerIconBtn" (click)="updateUsernameMode=true; errorMessage=''; showModal()"></i>
           </div>
         </div>
-        <!-- update email
-        <div class="form-group">
+        <!-- email details -->
+        <div *ngIf="auth.getUserDetails().email" class="form-group">
           <div class="formLabel">{{ts.l.email}} :</div>
           <div class="userInfo">
             <i>{{auth.getUserDetails().email}}</i>
             <i class="fas fa-edit headerIconBtn" (click)="updateEmailMode=true; errorMessage=''; showModal()"></i>
           </div>
-        </div>-->
+        </div>
         <!-- classroom details if STUDENT -->
         <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="formLabel">{{ts.l.classroom}} :</div>

@@ -8,6 +8,7 @@ import config from '../abairconfig.json';
 export interface UserDetails {
   _id: string;
   username: string;
+  email: string;
   exp: number;
   iat: number;
   role: string;
@@ -21,6 +22,7 @@ export interface TokenPayload {
   username: string;
   password: string;
   role: string;
+  email: string;
 }
 
 export interface VerifyEmailRequest {
@@ -78,8 +80,7 @@ export class AuthenticationService {
     const token = this.getToken();
     let payload: any;
     if (token) {
-
-      payload = token.split('.')[1];
+      payload = token.split('.')[1];    
       payload = window.atob(payload);
 
       this.getLoggedInName.next(JSON.parse(payload).username);
@@ -128,6 +129,10 @@ export class AuthenticationService {
 
   public verifyOldAccount(requestObj: VerifyEmailRequest): Observable<any> {
     return this.http.post(this.baseUrl + 'verifyOldAccount', requestObj);
+  }
+  
+  public updateEmail(username, email, url): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateEmail', {username: username, email: email, baseUrl: url});
   }
 
   public resetPassword(username: string): Observable<any> {

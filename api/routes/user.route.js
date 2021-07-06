@@ -38,6 +38,7 @@ userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
+userRoutes.post('/updateEmail', ctrlAuth.updateEmail);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 

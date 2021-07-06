@@ -3,4 +3,5 @@ export class User {
     username: string;
     role: string;
     language : string;
+    email: string;
 }

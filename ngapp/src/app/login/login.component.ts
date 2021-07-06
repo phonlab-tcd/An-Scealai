@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
     username: '',
     password: '',
     role: '',
+    email: '',
   };
 
   frozenCredentials: VerifyEmailRequest = {
