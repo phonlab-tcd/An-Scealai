@@ -190,7 +190,7 @@ export class ProfileComponent implements OnInit {
   */
   async updateUsername() {
     if (!this.updatedUsername){
-      this.errorMessage = "Please input a new username";
+      this.errorMessage = this.ts.l.please_input_a_new_username;
       return
     }
     
@@ -237,7 +237,7 @@ export class ProfileComponent implements OnInit {
         this.errorMessage = this.ts.l.passwords_must_match;
       }
     } else {
-      this.errorMessage = 'Please input a new password and confirm';
+      this.errorMessage = this.ts.l.please_input_a_new_password_confirm;
     }
   }
 
