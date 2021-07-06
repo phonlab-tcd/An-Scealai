@@ -138,7 +138,7 @@ export class RegisterComponent implements OnInit {
       this.errorTextKeys.push('username_no_special_chars');
       this.registrationError = true;
     }
-    return (this.errorTextKeys === []);
+    return (this.errorTextKeys.length === 0);
   }
 
   toggleTerms() {
