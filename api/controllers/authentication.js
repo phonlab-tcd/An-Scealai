@@ -19,6 +19,7 @@ var sendJSONresponse = function(res, status, content) {
 
 pendingRegEx = /^Pending$/;
 activeRegEx = /^Active$/;
+validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
 
@@ -397,22 +398,29 @@ module.exports.verifyOldAccount = async (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
-  let resObj = {
+  const resObj = {
     messageKeys: [],
     errors: [],
   };
 
   // REQUIREMENTS
-  if(!req.body.username || !req.body.password || !req.body.email) {
-    resObj.messageKeys.push("username_password_and_email_required");
+  if (!req.body.username || !req.body.password || !req.body.email) {
+    resObj.messageKeys.push('username_password_and_email_required');
     return res.status(400).json(resObj);
   }
-  if(!req.body.baseurl){
-    logger.warning('Property basurl missing from registration request. Using default (dev server)');
+  if (!req.body.baseurl) {
+    logger.warning(
+        'Property basurl missing from registration request.' +
+        'Using default (dev server).');
     req.body.baseurl = 'http://localhost:4000/';
   }
 
-  var user = new User();
+  if (!req.body.username.match(validUsernameRegEx)) {
+    resObj.messageKeys.push('invalid_username_no_special_chars');
+    return res.status(400).json(resObj);
+  }
+
+  const user = new User();
 
   user.username = req.body.username;
 
@@ -427,36 +435,38 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     resObj.errors.push(err);
     logger.error(err);
-    if(err.code){
-      logger.error("Mongo error. Error code: " + err.code);
+    if (err.code) {
+      logger.error('Mongo error. Error code: ' + err.code);
       if (err.code === 11000) {
-        return res.status(400).json({
-          messageKey: "username_taken_msg"
-        });
-      } 
+        resObj.messageKeys.push('username_taken_msg');
+        return res
+            .status(400)
+            .json(resObj);
+      }
     }
   }
 
   try {
     await sendVerificationEmail(
-      user.username, 
-      req.body.password, 
-      user.email,
-      req.body.baseurl);
+        user.username,
+        req.body.password,
+        user.email,
+        req.body.baseurl);
   } catch (err) {
-    resObj.errors.push(err.messageToUser);
+    resObj.errors.push(err);
+    if (err.messageToUser) {
+      resObj.messageKeys.push(err.messageToUser);
+    }
     return res.status(500).json(resObj);
   }
 
-  return res.status(200).json({
-    messageKey:'verification_email_sent'
-  });
+  resObj.push('verification_email_sent');
+  return res.status(200).json(resObj);
 };
 
 
-
 module.exports.login = function(req, res) {
-  let resObj = {
+  const resObj = {
     userStatus: null,
     messageKeys: [],
     errors: [],

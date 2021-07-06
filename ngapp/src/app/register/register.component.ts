@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
   frozenCredentials: RegistrationTokenPayload = null;
 
   registrationError: boolean;
-  errorTextKey: string;
+  errorTextKeys: string[] = [];
   passwordConfirm: string;
   termsVisible: boolean;
   usernameInput: FormControl;
@@ -107,10 +107,10 @@ export class RegisterComponent implements OnInit {
         // Copy credentials to frozenCredentials
         this.frozenCredentials = JSON.parse(JSON.stringify(this.credentials));
         this.waitingForEmailVerification = true;
-        this.errorTextKey = ok.messageKey;
+        this.errorTextKeys = ok.messageKeys;
       }, (err: any) => {
         if (err.status === 400) {
-          this.errorTextKey = err.error.messageKey;
+          this.errorTextKeys = err.error.messageKeys;
           this.registrationError = true;
         }
       });
@@ -118,30 +118,27 @@ export class RegisterComponent implements OnInit {
   }
 
   checkDetails(): boolean {
+    this.errorTextKeys = [];
     if (this.credentials.password !== this.passwordConfirm) {
-      this.errorTextKey = 'passwords_must_match';
+      this.errorTextKeys.push('passwords_must_match');
       this.registrationError = true;
-      return false;
     }
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     console.log('Testing email address for validity:', this.credentials.email);
     if (! emailRegex.test(this.credentials.email)) {
-      this.errorTextKey = 'email_format_error';
+      this.errorTextKeys.push('email_format_error');
       this.registrationError = true;
-      return false;
     }
     if (this.credentials.password.length < 5) {
-      this.errorTextKey = 'passwords_5_char_long';
+      this.errorTextKeys.push('passwords_5_char_long');
       this.registrationError = true;
-      return false;
     }
     if (!this.credentials.username.match('^[A-Za-z0-9]+$')) {
-      this.errorTextKey = 'username_no_special_chars';
+      this.errorTextKeys.push('username_no_special_chars');
       this.registrationError = true;
-      return false;
     }
-    return true;
+    return (this.errorTextKeys === []);
   }
 
   toggleTerms() {
