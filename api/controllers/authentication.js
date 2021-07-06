@@ -405,7 +405,7 @@ module.exports.register = async (req, res) => {
   // REQUIREMENTS
   if(!req.body.username || !req.body.password || !req.body.email) {
     resObj.messageKeys.push("username_password_and_email_required");
-    return res(400).json(resObj);
+    return res.status(400).json(resObj);
   }
   if(!req.body.baseurl){
     logger.warning('Property basurl missing from registration request. Using default (dev server)');
