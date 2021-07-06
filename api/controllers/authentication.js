@@ -398,6 +398,7 @@ module.exports.verifyOldAccount = async (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
+  console.dir(req);
   const resObj = {
     messageKeys: [],
     errors: [],
@@ -460,7 +461,7 @@ module.exports.register = async (req, res) => {
     return res.status(500).json(resObj);
   }
 
-  resObj.push('verification_email_sent');
+  resObj.messageKeys.push('verification_email_sent');
   return res.status(200).json(resObj);
 };
 
