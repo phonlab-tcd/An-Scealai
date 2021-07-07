@@ -14,6 +14,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import { AbairAPIv2Voice, AbairAPIv2AudioEncoding, SynthRequestObject, SynthesisService } from '../../services/synthesis.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+  audio = null;
 
   dialects = [
     {
@@ -67,6 +69,7 @@ export class DashboardComponent implements OnInit {
   ];
 
   constructor(private storyService: StoryService,
+              private synth: SynthesisService,
               private route: ActivatedRoute,
               private auth: AuthenticationService,
               protected sanitizer: DomSanitizer,
@@ -74,15 +77,36 @@ export class DashboardComponent implements OnInit {
               private router: Router,
               private engagement: EngagementService,
               private grammar: GrammarService,
-              public ts: TranslationService, 
+              public ts: TranslationService,
               public statsService: StatsService,
-              public classroomService: ClassroomService,) {}
+              public classroomService: ClassroomService,
+             ) {}
 
+  play() {
+    console.log('audioUrl:', this.audio.src());
+    console.dir(this.audio);
+    if (this.audio && this.audio.play) {
+      this.audio.currentTime = 0;
+      this.audio.play();
+    }
+  }
 /*
 * set the stories array of all the student's stories
 * and the current story being edited given its id from url
 */
   ngOnInit() {
+    this.synth.synthesiseText({
+      input: 'Dia dhuit, a chara!',
+      voice: 'ga_UL_anb_nnmnkwii',
+      audioEncoding: 'MP3',
+      speed: 1,
+    }).then(
+      (audioUrl) => {
+        console.log('audioUrl:', audioUrl);
+        this.audio = new Audio(audioUrl);
+        console.dir(this.audio);
+      });
+
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
