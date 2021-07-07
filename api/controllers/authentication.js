@@ -260,17 +260,20 @@ module.exports.verify = async (req, res) => {
   }
 
   if (user.verification.code === req.query.verificationCode) {
-    const updatedUser = 
-      await User.findOneAndUpdate({
-        // Find
+    const user = 
+      await User.findOne({
         username: req.query.username, 
-        email: req.query.email}, 
-        // Update
-        {status: 'Active'}, 
-        // Options
-        {new: true});
-    console.dir(updatedUser);
-    return res.status(200).send('<h1>Success</h1><p>Your account has been verified.</p><ul>' +
+        email: req.query.email,
+      });
+
+    console.dir(user);
+    user.status = 'Active';
+    user.save();
+
+    return res
+        .status(200)
+        .send(
+      '<h1>Success</h1><p>Your account has been verified.</p><ul>' +
       `<li>username: ${updatedUser.username}</li>` +
       `<li>verified email: ${updatedUser.email}</li>` +
       '</ul><p>');
@@ -325,14 +328,10 @@ module.exports.verifyOldAccount = async (req, res) => {
           `User: ${user.usernam} was Active but \
           had no assoctiated email address. \
           Resetting to Pending`);
+
       try {
-        const user = await User.findOneAndUpdate(
-            // Find
-            {username: user.username},
-            // Update
-            {status: 'Pending'},
-            // Options
-            {new: true});
+        const user = await User.findOne({username: user.username});
+
         if ( !user ) {
           logger.error({
             endpoint: '/user/verifyOldAccount',
@@ -348,6 +347,9 @@ module.exports.verifyOldAccount = async (req, res) => {
                 ['There was an error on our server. We failed to update your status to Pending.'],
               });
         }
+
+        user.email = req.body.email;
+        user.save();
       } catch (err) {
         logger.error({
           endpoint: '/user/verifyOldAccount',
