@@ -258,25 +258,22 @@ module.exports.verify = async (req, res) => {
   }
 
   if (user.verification.code === req.query.verificationCode) {
-    const updatedUser = 
-      await User.findOneAndUpdate({
-        // Find
-        username: req.query.username, 
-        email: req.query.email}, 
-        // Update
-        {status: 'Active'}, 
-        // Options
-        {new: true});
-    console.dir(updatedUser);
-    return res.status(200).send('<h1>Success</h1><p>Your account has been verified.</p><ul>' +
-      `<li>username: ${updatedUser.username}</li>` +
-      `<li>verified email: ${updatedUser.email}</li>` +
-      '</ul><p>');
+    user.status = 'Active';
+
+    await user.save();
+
+    return res
+        .status(200)
+        .send(
+            '<h1>Success</h1><p>Your account has been verified.</p><ul>' +
+            `<li>username: ${updatedUser.username}</li>` +
+            `<li>verified email: ${updatedUser.email}</li>` +
+            '</ul><p>');
   }
 
 
   res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
-}
+};
 
 module.exports.verifyOldAccount = async (req, res) => {
   try {
@@ -308,6 +305,10 @@ module.exports.verifyOldAccount = async (req, res) => {
           });
         });
 
+    if (!user) {
+      return res.status(40).josn('User not found');
+    }
+
     if (user.status === 'Active') {
       if (user.email) {
         return res
@@ -324,28 +325,17 @@ module.exports.verifyOldAccount = async (req, res) => {
           had no assoctiated email address. \
           Resetting to Pending`);
       try {
-        const user = await User.findOneAndUpdate(
-            // Find
-            {username: user.username},
-            // Update
-            {status: 'Pending'},
-            // Options
-            {new: true});
-        if ( !user ) {
-          logger.error({
-            endpoint: '/user/verifyOldAccount',
-            message:
-              'There was an error while trying to set the users status to pending',
-          });
-          return res
-              .status(500)
-              .json({
-                file: './api/controllers/authentication.js',
-                functionName: 'verifyOldAccount',
-                messageKeys:
-                ['There was an error on our server. We failed to update your status to Pending.'],
-              });
-        }
+        user.status = 'Pending';
+        await user.save();
+        return res
+            .status(500)
+            .json({
+              file: './api/controllers/authentication.js',
+              functionName: 'verifyOldAccount',
+              messageKeys:
+              ['There was an error on our server. ' +
+               'We failed to update your status to Pending.'],
+            });
       } catch (err) {
         logger.error({
           endpoint: '/user/verifyOldAccount',
