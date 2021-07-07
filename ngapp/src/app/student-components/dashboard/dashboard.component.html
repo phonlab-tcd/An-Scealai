@@ -104,7 +104,7 @@
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
-        <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
+        <textarea #myTextArea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited(); autoGrowTextArea();" spellcheck="false"></textarea>
       </div>
 
       <!-- display grammar loading -->

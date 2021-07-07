@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
+import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2, ViewChild } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
@@ -53,17 +53,19 @@ export class DashboardComponent implements OnInit {
   wordCount: number = 0;
   audio = null;
 
+  @ViewChild('myTextArea', {static: false}) myTextArea: any;
+
   dialects = [
     {
-      code : "connemara",
+      code : 'connemara',
       name : this.ts.l.connacht
     },
     {
-      code : "kerry",
+      code : 'kerry',
       name : this.ts.l.munster
     },
     {
-      code : "donegal",
+      code : 'donegal',
       name : this.ts.l.ulster
     }
   ];
@@ -82,6 +84,12 @@ export class DashboardComponent implements OnInit {
               public classroomService: ClassroomService,
              ) {}
 
+  autoGrowTextArea() {
+    if (this.myTextArea.scrollHeight > this.myTextArea.clientHeight) {
+      this.myTextArea.style.height = this.myTextArea.scrollHeight + 'px';
+    }
+  }
+
   play() {
     console.log('audioUrl:', this.audio.src);
     console.dir(this.audio);
@@ -89,10 +97,11 @@ export class DashboardComponent implements OnInit {
       this.audio.play();
     }
   }
-/*
-* set the stories array of all the student's stories
-* and the current story being edited given its id from url
-*/
+
+  /*
+  * set the stories array of all the student's stories
+  * and the current story being edited given its id from url
+  */
   ngOnInit() {
     this.synth.synthesiseText({
       input: 'Dia dhuit, a chara!',
@@ -127,116 +136,125 @@ export class DashboardComponent implements OnInit {
       });
     });
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      return;
+    }
     this.classroomService
       .getClassroomOfStudent(
         this.auth.getUserDetails()
           ._id
       ).subscribe( (res) => {
-      this.classroomId = res._id;
-      console.log(this.classroomId);
+        if (res && res._id) {
+          this.classroomId = res._id;
+          console.log(this.classroomId);
+        }
     });
   }
 
-/*
-* return the student's set of stories using the story service 
-*/
-  
+  /*
+  * return the student's set of stories using the story service
+  */
+
   getStories(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.storyService.getStoriesForLoggedInUser().subscribe(
         (stories: Story[]) => {
           resolve(stories);
+        },
+        (err) => {
+          reject(err);
         }
-      )
+      );
     });
   }
 
-/*
-* return the story id using the routing parameters
-*/
+  /*
+  * return the story id using the routing parameters
+  */
   getStoryId(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
         params => {
           resolve(params);
-      });
+        },
+        (err) => {
+          reject(err);
+        });
     });
   }
 
-/*
-* Update story data (text and date) using story service 
-* Add logged event for saved story  using engagement service
-*/
+  /*
+  * Update story data (text and date) using story service
+  * Add logged event for saved story  using engagement service
+  */
   saveStory() {
     this.route.params.subscribe(
       params => {
-        let updateData = {
+        const updateData = {
           text : this.story.text,
           lastUpdated : new Date(),
         };
-        this.storyService.updateStory(updateData, params['id']).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
+        this.storyService.updateStory(updateData, params.id).subscribe();
+        this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
         this.storySaved = true;
-        console.log("Story saved");
+        console.log('Story saved');
       }
-    )
-  }
-  
-  showDictionary() {
-    this.dictionaryVisible = true;
-    this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
+    );
   }
 
-/*
-* Get audio feedback with function call 
-* Set feedback status to seen by student and remove story from not yet seen array
-* Add logged event for viewed feedback 
-*/
+  showDictionary() {
+    this.dictionaryVisible = true;
+    this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
+  }
+
+  /*
+  * Get audio feedback with function call
+  * Set feedback status to seen by student and remove story from not yet seen array
+  * Add logged event for viewed feedback
+  */
   getFeedback() {
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if(this.story.feedback.text != "") {
+    if (this.story.feedback.text !== '') {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser(EventType["VIEW-FEEDBACK"], this.story);
+      this.engagement.addEventForLoggedInUser(EventType['VIEW-FEEDBACK'], this.story);
     });
   }
 
-/*
-* set the url for the audio source feedback 
-*/
+  /*
+  * set the url for the audio source feedback
+  */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
-// Set story saved to false and call word count function
+  // Set story saved to false and call word count function
   storyEdited() {
     this.storySaved = false;
     this.getWordCount();
   }
-  
-// Get word count of story text
+
+  // Get word count of story text
   getWordCount() {
-    let str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+    const str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
     this.words = [];
     str.map((s) => {
-      let trimStr = s.trim();
+      const trimStr = s.trim();
       if (trimStr.length > 0) {
         this.words.push(trimStr);
       }
-      
     });
     this.wordCount = this.words.length;
   }
 
-// set feedback window to false 
+  // set feedback window to false 
   closeFeedback() {
     this.feedbackVisible = false;
   }
