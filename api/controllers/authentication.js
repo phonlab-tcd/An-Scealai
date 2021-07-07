@@ -322,34 +322,16 @@ module.exports.verifyOldAccount = async (req, res) => {
                 the email address: ${user.email}. \
                 If you think this is a mistake please \
                 let us know at scealai.info@gmail.com`);
-      }
-      // if !user.email && user.status === 'Active'
-      logger.warning(
+      } else {
+        user.status = 'Pending';
+        await user.save();
+        // if !user.email && user.status === 'Active'
+        logger.warning(
           `User: ${user.usernam} was Active but \
           had no assoctiated email address. \
           Resetting to Pending`);
 
-      try {
-        const user = await User.findOne({username: user.username});
-
-        if ( !user ) {
-          logger.error({
-            endpoint: '/user/verifyOldAccount',
-            message:
-              'There was an error while trying to set the users status to pending',
-          });
-          return res
-              .status(500)
-              .json({
-                file: './api/controllers/authentication.js',
-                functionName: 'verifyOldAccount',
-                messageKeys:
-                ['There was an error on our server. We failed to update your status to Pending.'],
-              });
-        }
-
-        user.email = req.body.email;
-        user.save();
+      }
       } catch (err) {
         logger.error({
           endpoint: '/user/verifyOldAccount',
