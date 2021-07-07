@@ -54,6 +54,7 @@ export class ProfileComponent implements OnInit {
               public recordingService: RecordingService) { }
 
   ngOnInit() {
+    this.auth.getUserDetails();
     this.editMode = false;
     this.codeInput = new FormControl();
     this.getClassroom();

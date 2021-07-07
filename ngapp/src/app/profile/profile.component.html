@@ -26,12 +26,13 @@
         </div>
         <!-- Popup for changing email -->
         <div *ngIf="updateEmailMode" class="modalContent">
-            <pre class="modalText">Update email</pre>
-            <div class="modalText"> New email: <input type="text" placeholder="Enter email" name="email" [(ngModel)]="updatedEmail"></div>
+            <pre class="modalText">{{ts.l.update_email}}</pre>
+            <pre class="modalText">{{ts.l.verify_email_prose}}</pre>
+            <div class="modalText"> {{ts.l.new_email}}: <input type="text" placeholder="Enter email" name="email" [(ngModel)]="updatedEmail"></div>
             <div class="usernameErrorText"> {{errorMessage}} </div>
             <div>
-                <button class="modalBtn createBtnGreen" (click)="updateEmail();">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.no}}</button>
+                <button class="modalBtn createBtnGreen" (click)="updateEmail();">{{ts.l.save}}</button>
+                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.cancel}}</button>
             </div>
         </div>
         <!-- Popup for changing password -->
