@@ -99,15 +99,14 @@
         </div>
       </div>
     </div>
+
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
         <textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>
-<div style="display: flex; align-items: center; justify-content: center; padding-bottom: 6px">
-  <span> {{ts.l.word_count}}: {{wordCount}} </span>
-</div>
       </div>
+
       <!-- display grammar loading -->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
         <div class="textContainer">
@@ -117,6 +116,7 @@
           </div>
         </div>
       </div>
+
       <!-- display story container after grammar checked -->
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible && grammarChecked">
         <!-- dipslay chosen tag window -->
@@ -167,6 +167,7 @@
         <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         <textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
       </div>
+
       <!-- display dictionary option-->
       <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
         <textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>
@@ -182,7 +183,7 @@
             <div class="dictionaryName"
                  (click)="selectExternalLinks = true; 
                           selectTeanglann = false;">
-              {{ts.l.external_link}}
+              {{ts.l.external_links}}
             </div>
           </div>
           <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
@@ -196,6 +197,11 @@
           <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
           -->
         </div>
+      </div>
+      
+      <!-- Word Count -->
+      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
+        <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
 
     </div>

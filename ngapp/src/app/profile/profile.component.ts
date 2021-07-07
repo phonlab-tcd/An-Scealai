@@ -10,9 +10,11 @@ import { NotificationService } from '../notification-service.service';
 import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
 import { StoryService } from '../story.service';
+import { Story } from '../story';
 import { ProfileService } from '../profile.service';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
+import { RecordingService } from '../recording.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,42 +29,50 @@ export class ProfileComponent implements OnInit {
   foundClassroom: Classroom;
   classroom: Classroom;
   statObj: StudentStats = new StudentStats();
-  modalClass : string = "hidden";
-  updateMode: boolean = false;
+  modalClass: 'hidden' | 'hiddenFade' | 'visibleFade' = 'hidden';
+  updateUsernameMode = false;
+  updateEmailMode = false;
+  updatePasswordMode = false;
+  deleteAccountMode = false;
   updatedUsername: string;
-  errorMessage: string = "";
+  errorMessage = '';
+  newPassword: string;
+  newPasswordConfirm: string;
 
   constructor(public auth: AuthenticationService,
-              private classroomService: ClassroomService, 
+              private classroomService: ClassroomService,
               private engagement: EngagementService,
-              public ts : TranslationService,
+              public ts: TranslationService,
               public ns: NotificationService,
               public storyService: StoryService,
-              public profileService : ProfileService,
+              public profileService: ProfileService,
               public messageService: MessageService,
               public userService: UserService,
-              public statsService: StatsService) { }
+              public statsService: StatsService,
+              public recordingService: RecordingService) { }
 
   ngOnInit() {
     this.editMode = false;
     this.codeInput = new FormControl();
     this.getClassroom();
-    this.codeInput.valueChanges.subscribe((code) => {
-      if(code.length > 0) {
-        this.classroomService.getClassroomFromCode(code).subscribe((res) => {
-          console.log(res);
-          if(res.found) {
-            this.classroomCodeOutput = null;
-            this.foundClassroom = res.classroom;
-          } else {
-            this.foundClassroom = null;
-            this.classroomCodeOutput = res.message;
-          }
-        })
-      } else {
-        this.classroomCodeOutput = null;
-      }
-    });
+    this.codeInput.valueChanges.subscribe(
+      (code) => {
+        if (code.length > 0) {
+          this.classroomService.getClassroomFromCode(code).subscribe(
+            (res) => {
+              console.log(res);
+              if (res.found) {
+                this.classroomCodeOutput = null;
+                this.foundClassroom = res.classroom;
+              } else {
+                this.foundClassroom = null;
+                this.classroomCodeOutput = res.message;
+              }
+            });
+        } else {
+          this.classroomCodeOutput = null;
+        }
+      });
   }
 
 /*
@@ -71,7 +81,7 @@ export class ProfileComponent implements OnInit {
 */
   joinClassroom() {
     this.classroomService.addStudentToClassroom(this.foundClassroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
-      if(res.status === 200) {
+      if (res.status === 200) {
         this.classroom = this.foundClassroom;
         this.foundClassroom = null;
         this.statObj.studentId = this.auth.getUserDetails()._id;
@@ -96,13 +106,14 @@ export class ProfileComponent implements OnInit {
     this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
       this.classroom = null;
     });
-    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe( (res) => {
-      console.log("stat entry deleted");
-    });
+    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe(
+      (res) => {
+        console.log('stat entry deleted');
+      });
   }
 
   toggleEditMode() {
-    if(this.editMode) {
+    if (this.editMode) {
       this.editMode = false;
     } else {
       this.editMode = true;
@@ -111,24 +122,43 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
-    let value: boolean = false;  
     this.auth.logout();
   }
 
-/*
-* Delete user account and all data associated with the user
-*/
+  /*
+   * Delete user account and all data associated with the user
+   */
   deleteAccount() {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      return;
+    }
 
-    if(userDetails.role === "STUDENT") {
-      if(this.classroom)
+    if (userDetails.role === "STUDENT") {
+      if (this.classroom) {
         this.leaveClassroom();
+      }
+
+      this.storyService.getStoriesFor(userDetails.username).subscribe( (res: Story[]) => {
+        for(let story of res) {
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
+            console.log(res);
+          });
+          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
+            console.log(res);
+          })
+        }
+      });
+      
       this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
-        console.log("All stories deleted");
+        console.log(res);
+      });
+      
+      this.statsService.deleteStats(userDetails._id).subscribe( (res) => {
+        console.log(res);
       });
     }
+    
     if(userDetails.role === "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
@@ -141,19 +171,15 @@ export class ProfileComponent implements OnInit {
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
         console.log(res)
       });
-      
     }
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-      //console.log("All messages deleted");
       console.log(res);
     });  
     this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-      //console.log("Profile deleted");
       console.log(res);
     });
     this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-      //console.log("User deleted");
       console.log(res);
     });
     this.auth.logout();
@@ -162,52 +188,65 @@ export class ProfileComponent implements OnInit {
   /*
   * Update account username and all data associated with it
   */
-  updateUsername() {
-    if(this.updatedUsername){
-      
-      this.userService.getUserByUsername(this.updatedUsername).subscribe((res) => {
-        if(res.length != 0) {
-          this.errorMessage = "Username already exists";
-          this.updatedUsername = "";
-        }
-        else {
-
-          if(this.auth.getUserDetails().role === "STUDENT") {
-            console.log("oldUsername: ", this.auth.getUserDetails().username)
-            this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).subscribe( (res) => {
-              console.log(res);
-            });
-            
-            this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-              console.log(res);
-            });
-          }
-          
-          this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe( (res) => {
-            console.log(res);
-          });
-
-          this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe((res) => {
-            console.log(res);
-          });
-
-          this.auth.logout();
-          
-        }
-      });
-
+  async updateUsername() {
+    if (!this.updatedUsername){
+      this.errorMessage = this.ts.l.please_input_a_new_username;
+      return
     }
-    else {
-      this.errorMessage = "Please input a new username";
+    
+    if (!this.updatedUsername.match('^[A-Za-z0-9]+$')) {
+      this.errorMessage = this.ts.l.username_no_special_chars;
+      return;
+    }
+      
+    const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
+    
+    if (studentsWithThisUsername.length > 0) {
+      this.errorMessage = this.ts.l.username_in_use;
+      this.updatedUsername = "";
+      return
+    }
+
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
+      const stats = await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise()
+        .catch(err => console.log(`${this.auth.getUserDetails().username} doesn't have any associated studentStats!`));
+      if (stats) {
+        await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+      }
+    }
+    
+    await this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+    await this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise()
+    this.auth.logout();
+  }
+
+  updatePassword() {
+    if (this.newPassword && this.newPasswordConfirm) {
+      if (this.newPassword === this.newPasswordConfirm) {
+        if (this.newPassword.length < 5) {
+          this.errorMessage = this.ts.l.passwords_5_char_long;
+        } else {
+          this.errorMessage = '';
+          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((res) => {
+            console.log(res);
+          });
+          this.auth.logout();
+        }
+      } else {
+        this.errorMessage = this.ts.l.passwords_must_match;
+      }
+    } else {
+      this.errorMessage = this.ts.l.please_input_a_new_password_confirm;
     }
   }
-  
+
   showModal() {
-    this.modalClass = "visibleFade";
+    this.modalClass = 'visibleFade';
   }
 
   hideModal() {
-    this.modalClass = "hiddenFade";
+    this.modalClass = 'hiddenFade';
+    this.updatePasswordMode = false;
   }
-
 }

@@ -190,5 +190,52 @@ recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
   
 });
 
+// Delete audio recordings for story
+recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
+    VoiceRecording.find({"storyData._id" : req.params.id}, (err, recordings) => {
+        if(err) 
+          res.status(400).json(err);
+        if(!recordings) {
+          res.status(404).json({"message" : "Voice Recording does not exist"});
+        }
+          
+        let bucket = new mongodb.GridFSBucket(db, {
+            bucketName: 'voiceRecording'
+        });
+      
+        recordings.forEach(recording => {    
+          recording.paragraphAudioIds.forEach(paragraphAudioId => {
+              bucket.delete(new ObjectID(paragraphAudioId), (err) => {
+                if(err) {
+                  //console.log("File does not exist");
+                  res.status(404).json("Paragraph audio file does not exist");
+                }
+              });
+          });
+    
+          recording.sentenceAudioIds.forEach(sentenceAudioId => {
+              bucket.delete(new ObjectID(sentenceAudioId), (err) => {
+                if(err) {
+                    //console.log("File does not exist");
+                    res.status(404).json("Sentence audio file does not exist");
+                }
+              });
+          });
+        });
+        
+        res.status(200).json("Successfully deleted all audio recordiings for story"); 
+    });
+});
+
+// Delete all messages with recipient id
+recordingRoutes.route('/deleteStoryRecording/:id').get(function(req, res) {
+    VoiceRecording.deleteMany({"storyData._id": req.params.id}, function(err, recordings) {
+        if(err) res.json(err);
+        else res.json("Successfully removed all voice recording objects for story");
+    });
+});
+
+
+
 
 module.exports = recordingRoutes;

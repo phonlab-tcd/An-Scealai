@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
-  showOptions: boolean = false;
+  showOptions: boolean = true;
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
@@ -417,7 +417,9 @@ export class DashboardComponent implements OnInit {
     let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe();
+    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
+      console.log(res);
+    });
   }
   
   // set modalClass to visible fade 
