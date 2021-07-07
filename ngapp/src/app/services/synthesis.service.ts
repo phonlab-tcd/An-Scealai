@@ -22,26 +22,24 @@ const abairAPIv2Voices = [
   'ga_MU_cmg_nnmnkwii'
 ];
 
-enum AbairAPIv2Voice {
-  'ga_UL_anb_nnmnkwii',
-  'ga_UL',
-  'ga_UL_anb_exthts',
-  'ga_CO',
-  'ga_CO_hts',
-  'ga_CO_pmg_nnmnkwii',
-  'ga_MU_nnc_exthts',
-  'ga_MU_nnc_nnmnkwii',
-  'ga_MU_cmg_nnmnkwii'
-}
+export type AbairAPIv2Voice =
+  'ga_UL_anb_nnmnkwii' |
+  'ga_UL' |
+  'ga_UL_anb_exthts' |
+  'ga_CO' |
+  'ga_CO_hts' |
+  'ga_CO_pmg_nnmnkwii' |
+  'ga_MU_nnc_exthts' |
+  'ga_MU_nnc_nnmnkwii' |
+  'ga_MU_cmg_nnmnkwii';
 
-enum AbairAPIv2AudioEncoding {
-  'LINEAR16',
-  'MP3',
+export type AbairAPIv2AudioEncoding =
+  'LINEAR16' |
+  'MP3' |
   // TODO, get the proper name for the OGG type
-  'OGG'
-}
+  'OGG';
 
-interface SynthRequestObject {
+export interface SynthRequestObject {
   input: string;
   voice: AbairAPIv2Voice;
   speed: number;
@@ -60,44 +58,56 @@ export class SynthesisService {
   baseUrl = config.baseurl;
 
 
-  synthesiseText(requestObject: SynthRequestObject): Observable<object> {
+  synthesiseText(requestObject: SynthRequestObject): Promise<any> {
 
-    let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
+    return new Promise(async (resolve, reject) => {
+      let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
 
-    if ( requestObject.input) {
-      url = url + encodeURIComponent(requestObject.input);
-    }
+      if ( requestObject.input) {
+        url = url + encodeURIComponent(requestObject.input);
+      }
 
-    if ( requestObject.voice && abairAPIv2Voices.includes(requestObject.voice.toString()) ) {
-      url = url + '&voice=' + encodeURIComponent(requestObject.voice);
-    }
+      if ( requestObject.voice && abairAPIv2Voices.includes(requestObject.voice.toString()) ) {
+        url = url + '&voice=' + encodeURIComponent(requestObject.voice);
+      }
 
-    if (requestObject.speed) {
-      url = url + '&speed=' + encodeURIComponent(requestObject.speed);
-    }
-    if (requestObject.audioEncoding) {
-      url = url + '&audioEncoding=' + encodeURIComponent(requestObject.audioEncoding);
-    }
+      if (requestObject.speed) {
+        url = url + '&speed=' + encodeURIComponent(requestObject.speed);
+      }
+      if (requestObject.audioEncoding) {
+        url = url + '&audioEncoding=' + encodeURIComponent(requestObject.audioEncoding);
+      }
 
-    return this.http.get(url, {
-                 observe: 'body'
+      let blobUrl = null;
+
+      await this.http.get(url, {
+        observe: 'body'
+      }).subscribe(
+      (obj: { audioContent: string }) => {
+        const type = requestObject.audioEncoding.toString().toLowerCase();
+        const audioURI = 'data:' + type + ';base64, ' + obj.audioContent;
+        const BASE64_MARKER = ';base64, ';
+        const base64Index = audioURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+        const base64 = audioURI.substring(base64Index);
+        const raw = window.atob(base64);
+        const rawLength = raw.length;
+        const array = new Uint8Array(new ArrayBuffer(rawLength));
+
+        for (let i = 0; i < rawLength; i++) {
+          array[i] = raw.charCodeAt(i);
+        }
+
+        const blob = new Blob(
+          [array], {type});
+
+        blobUrl = URL.createObjectURL(blob);
+        console.log('blobUrl:', blobUrl);
+        resolve(blobUrl);
+      },
+      (err) => {
+        reject(err);
+      });
     });
-  }
-
-  public abairAPIv2Synthesise( text: string ): string {
-    let collected = '';
-    this.http.get(this.baseUrl + 'synthesis/api2?text=dia duit')
-      .subscribe(
-        d => {
-          console.log('Got data: ' + d);
-          collected += d;
-        },
-        err => console.error(err),
-        () => console.log('Fetched all audio data for: ' + text)
-      );
-
-
-      return "NYI";
   }
 
   /**
@@ -114,8 +124,10 @@ export class SynthesisService {
     const synthesisResponse =
       await this.http.post(
         this.baseUrl + 'story/synthesiseObject/',
-        {story: storyObject})
-        .toPromise() as SynthesisResponse;
+        {story: storyObject},
+      ).toPromise() as SynthesisResponse;
+
+    console.dir(synthesisResponse);
 
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];

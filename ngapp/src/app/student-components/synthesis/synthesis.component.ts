@@ -73,23 +73,6 @@ export class SynthesisComponent implements OnInit {
 
     console.log('GET: ', abairGetResponse);
     console.log('PUT: ', abairPutResponse);
-
-    this.synthesisObserver = this.synthesis.abairAPIv2Synthesise('Dia is Muire duit');
-    console.log(this.synthesisObserver);
-    /*
-    .subscribe(
-      (data) => {
-        console.log(`Observer got a next value [${count}]]: ` + data),
-        count++;
-        this.synthesisResponse += data;
-      },
-      (err) => console.error('Observer got an error: ' + err),
-      () => {
-        console.log('Observer got a complete notification');
-      }
-    );
-   */
-    console.log('end of synthesise function');
   }
 
   // --- UI Manipulation ---//
