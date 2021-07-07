@@ -5,6 +5,12 @@ import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import config from '../../abairconfig.json';
 
+module SynthesisService {
+  export type API_2_Voice = 
+    '' |
+    ''
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,6 +60,11 @@ export class SynthesisService {
     });
     this.engagement.addEventForLoggedInUser(EventType['SYNTHESISE-STORY'], storyObject);
     return [paragraphs, sentences];
+  }
+
+  api2_synthesise_post(req){
+    if ( !req.
+    return this.http.post()
   }
 
   /**
