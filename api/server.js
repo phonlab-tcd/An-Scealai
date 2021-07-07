@@ -22,6 +22,7 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const synthesisRoute = require('./routes/synthesis.route');
+const mailRoute = require('./routes/send_mail.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
@@ -48,6 +49,7 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/recordings', recordingRoute);
 app.use('/synthesis', synthesisRoute);
+app.use('/mail', mailRoute);
 
 const port = process.env.PORT || 4000;
 
