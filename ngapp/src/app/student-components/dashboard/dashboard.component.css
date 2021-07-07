@@ -84,7 +84,8 @@
 
 .textField {
     width: 100%;
-    height: var(--textfieldHeight);
+    min-height: var(--textfieldHeight);
+    height: auto;
     resize: none;
     z-index: 1;
     color: #261500;

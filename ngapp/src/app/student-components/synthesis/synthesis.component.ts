@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
-import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import {  SynthesisService,
+          Paragraph,
+          Sentence,
+          Section,
+          AbairAPIv2AudioEncoding,
+          AbairAPIv2Voice,
+        } from '../../services/synthesis.service';
 
 
 import { HttpClient } from '@angular/common/http';
