@@ -83,10 +83,9 @@ export class DashboardComponent implements OnInit {
              ) {}
 
   play() {
-    console.log('audioUrl:', this.audio.src());
+    console.log('audioUrl:', this.audio.src);
     console.dir(this.audio);
     if (this.audio && this.audio.play) {
-      this.audio.currentTime = 0;
       this.audio.play();
     }
   }
