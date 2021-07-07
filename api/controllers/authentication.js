@@ -266,8 +266,8 @@ module.exports.verify = async (req, res) => {
         .status(200)
         .send(
             '<h1>Success</h1><p>Your account has been verified.</p><ul>' +
-            `<li>username: ${updatedUser.username}</li>` +
-            `<li>verified email: ${updatedUser.email}</li>` +
+            `<li>username: ${user.username}</li>` +
+            `<li>verified email: ${user.email}</li>` +
             '</ul><p>');
   }
 
