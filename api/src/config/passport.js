@@ -1,4 +1,4 @@
-const logger = require('../dist/logger');
+const logger = require('../logger');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');

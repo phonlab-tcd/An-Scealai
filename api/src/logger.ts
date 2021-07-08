@@ -123,3 +123,4 @@ const client = mongodb.MongoClient.connect('mongodb://localhost:27017/an-scealai
 //logger.debug("this is just a test");
 
 module.exports = logger;
+export =  logger;

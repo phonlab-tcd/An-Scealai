@@ -1,10 +1,10 @@
+const logger = require('./logger');
 const express = require('express'),
     path = require('path'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
-    logger = require('./dist/logger'),
     passport = require('passport');
 
 require('./config/passport');
@@ -53,8 +53,8 @@ const port = process.env.PORT || 4000;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
+    var err = new Error('404 Not Found');
+    res.status(404);
     next(err);
 });
 

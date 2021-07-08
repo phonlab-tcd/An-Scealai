@@ -1,5 +1,6 @@
 dist
 
+
 **/node_modules
 session.vim
 
@@ -18,6 +19,7 @@ session.vim
 
 /api/logs/**
 /api/sendinblue.json
+/api/ts/sendingblue.json
 
 /sshlogin
 /login_to_phonetics.sh
