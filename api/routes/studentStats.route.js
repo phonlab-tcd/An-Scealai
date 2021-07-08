@@ -64,7 +64,7 @@ studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) 
         res.status(400).json({"message" : err.message});
     }
     if(!stat) {
-      res.status(404).json("Stat does not exist for student id")
+      res.status(404).json("Stat does not exist for student id");
     } else {
       stat.studentUsername = req.body.username;
       stat.save().then(stat => {
@@ -74,14 +74,6 @@ studentStatsRoutes.route('/updateStudentUsername/:id').post(function (req, res) 
           res.status(400).send("unable to update stat username");
       });
     }
-    
-    stat.studentUsername = req.body.username;
-    stat.save().then(stat => {
-        res.status(200).json({'message': 'stat username updated successfully'});
-    })
-    .catch(err => {
-        res.status(400).send("unable to update stat username");
-    });
   });
 });
 
