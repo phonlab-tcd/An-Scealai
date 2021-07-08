@@ -1,10 +1,10 @@
-const winston = require('winston');
+import * as logger from 'winston';
 const path = require('path');
 const mongodb = require('mongodb');
-// var stackify = require('stackify-logger');
+
+const transports: any = logger.transports;
 
 // logger.error is console.error until the winston logger is created
-var logger ={ error: console.error };
 
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', err => {
@@ -14,9 +14,10 @@ process.on('uncaughtException', err => {
 
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
-const uncaughtExceptionsFile = path.join(__dirname, 'logs/uncaughtExceptions.log');
+const uncaughtExceptionsFile =
+  path.join(__dirname, 'logs/uncaughtExceptions.log');
 
-const enumerateErrorFormat = winston.format(info => {
+const enumerateErrorFormat = logger.format((info: any) => {
   if (info.message instanceof Error) {
     info.message = Object.assign({
       message: info.message.message,
@@ -32,7 +33,7 @@ const enumerateErrorFormat = winston.format(info => {
   return info;
 });
 
-const consoleFormat = winston.format.printf(
+const consoleFormat = logger.format.printf(
   ({ level, message, timestamp, ...metadata}) => {
     // TODO log the rest parameters in metadata
     let string_message = JSON.stringify(message);
@@ -46,23 +47,24 @@ const consoleFormat = winston.format.printf(
   })
 
 // Create our logger object
-logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    enumerateErrorFormat()),
+logger.configure({
+  format: logger.format.combine(
+    logger.format.timestamp(),
+    // enumerateErrorFormat()),
+  ),
   transports: [
     // This transport lets us log to the console
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.timestamp(),
+    new logger.transports.Console({
+      format: logger.format.combine(
+        logger.format.colorize(),
+        logger.format.timestamp(),
         consoleFormat
       )
     }),
     // This transport logs to the error file
-    new winston.transports.File({ filename: errorFile, level: 'error' }),
+    new logger.transports.File({ filename: errorFile, level: 'error' }),
     // This transport should be were everything gets sent
-    new winston.transports.File({ filename: combinedFile}),
+    new logger.transports.File({ filename: combinedFile}),
   ],
 
   levels:  { 
@@ -77,7 +79,7 @@ logger = winston.createLogger({
   },
 
   exceptionHandlers: [
-    new winston.transports.File({ filename: uncaughtExceptionsFile }),
+    new logger.transports.File({ filename: uncaughtExceptionsFile }),
   ],
 });
 
@@ -87,13 +89,12 @@ var preconnectedDB = null;
 const client = mongodb.MongoClient.connect('mongodb://localhost:27017/an-scealai',
   { useUnifiedTopology: true, useNewUrlParser: true})
   .then( db => {
-    logger.info('Winston has connected to MongoDB');
     const date = new Date();
     const shortDate = date.toLocaleString('en-gb', {weekday: 'short' })
       + date.toLocaleString('en-gb', { month: 'short' }) + date.getDate() + '_' +date.getHours() + ':' + date.getMinutes();
     preconnectedDB = db;
     var mongoTransport;
-    mongoTransport =  new winston.transports.MongoDB({
+    mongoTransport =  new transports.MongoDB({
       level: "info", // info is the default
       db: preconnectedDB, // user: logger, pwd: logger, db: logger
       collection: 'log', // default is 'log'
@@ -104,7 +105,6 @@ const client = mongodb.MongoClient.connect('mongodb://localhost:27017/an-scealai
         useUnifiedTopology: true, // not default
       }
     });
-    logger.info("Adding MongoDB transport to logger");
     logger.add(mongoTransport);
   })
   .catch( err => {

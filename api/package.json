@@ -2,11 +2,12 @@
   "name": "api",
   "version": "1.0.0",
   "description": "The backend API for An Scéalaí.",
-  "main": "index.js",
+  "main": "./js/server.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "nodemon server.js",
+    "start": "npm run compile && nodemon ./server.js",
     "tsc:init": "tsc --init",
+    "compile": "tsc",
     "buffer": "echo 'a pointless script that lets me put in a trailing comma'"
   },
   "keywords": [],
@@ -45,6 +46,7 @@
     "winston-stackify": "^1.0.3"
   },
   "devDependencies": {
+    "@types/winston": "^2.4.4",
     "chai": "^4.3.4",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",

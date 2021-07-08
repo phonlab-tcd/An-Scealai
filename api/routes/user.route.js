@@ -3,7 +3,7 @@
 // endpoint prefix = '/user'
 
 
-const logger = require('../logger');
+const logger = require('../dist/logger');
 const generator = require('generate-password');
 
 const mail = require('../mail');

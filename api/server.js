@@ -4,7 +4,7 @@ const express = require('express'),
     cors = require('cors'),
     mongoose = require('mongoose'),
     config = require('./DB'),
-    logger = require('./logger'),
+    logger = require('./dist/logger'),
     passport = require('passport');
 
 require('./config/passport');
