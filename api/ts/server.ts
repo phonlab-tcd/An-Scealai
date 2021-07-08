@@ -1,13 +1,12 @@
-const express = require('express'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
-    mongoose = require('mongoose'),
-    config = require('./DB'),
-    logger = require('./logger'),
-    passport = require('passport');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const config = require('../DB');
+const logger = require('../logger');
+const passport = require('passport');
 
-require('./config/passport');
+require('../config/passport');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -25,9 +24,15 @@ const mailRoute = require('./routes/send_mail.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
-mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
-    () => {logger.info('Database is connected');},
-    (err) => {logger.error('Cannot connect to the database. ',err)}
+mongoose.connect(config.DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true}).then(
+    () => {
+      logger.info('Database is connected');
+    },
+    (err: Error) => {
+      logger.error('Cannot connect to the database. ', err)
+    },
 );
 
 const app = express();
@@ -54,7 +59,7 @@ const port = process.env.PORT || 4000;
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
-    err.status = 404;
+    err.message = 404 + err.message;
     next(err);
 });
 

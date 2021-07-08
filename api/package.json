@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "nodemon server.js"
+    "start": "npm run start:dev",
+    "start:dev": "nodemon build/server.js",
+    "lint": "eslint . --ext .ts",
+    "buffer": "echo \"a useless script that lets me put in a trailing comma\""
   },
   "keywords": [],
   "author": "",
@@ -43,6 +46,8 @@
     "winston-stackify": "^1.0.3"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
     "chai": "^4.3.4",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
