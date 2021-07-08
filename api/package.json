@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "tsc:init": "tsc --init",
+    "buffer": "echo 'a pointless script that lets me put in a trailing comma'"
   },
   "keywords": [],
   "author": "",
