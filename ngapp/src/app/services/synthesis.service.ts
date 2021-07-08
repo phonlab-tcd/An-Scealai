@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import config from '../../abairconfig.json';
 
-module SynthesisService {
-  export type API_2_Voice = 
-    '' |
-    ''
-}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SynthesisService {
 
@@ -20,12 +17,39 @@ export class SynthesisService {
 
   baseUrl = config.baseurl;
 
+  public api2encodings =
+    [ 'MP3',
+      'WAV',
+      'OGG'];
+
+  public api2voices = 
+    [ 'ga_UL_anb_nnmnkwii',
+      'ga_UL',
+      'ga_UL_anb_exthts',
+      'ga_CO',
+      'ga_CO_hts',
+      'ga_CO_pmg_nnmnkwii',
+      'ga_MU_nnc_exthts',
+      'ga_MU_nnc_nnmnkwii',
+      'ga_MU_cmg_nnmnkwii'];
+
+
+  public dialectToVoice(name: 'connemara' | 'ulster' | 'munster'): API_2_Voice {
+    if (name === 'connemara') {
+      return 'ga_CO_pmg_nnmnkwii' as API_2_Voice;
+    }
+    if (name === 'ulster') {
+      return 'ga_UL_anb_nnmnkwii' as API_2_Voice;
+    }
+    return 'ga_MU_nnc_nnmnkwii' as API_2_Voice;
+  }
+
   /**
    * Gets synthesis data for storyObject from
    * the backend, which comes in the form of HTML data.
    * Then parses that HTML data to populate Paragraph
    * and Sentence objects.
-   * 
+   *
    * @param storyObject - Story to be synthesised
    * @returns - Paragraph and Sentence objects containing data for
    * synthesis of input story.
@@ -62,9 +86,61 @@ export class SynthesisService {
     return [paragraphs, sentences];
   }
 
-  api2_synthesise_post(req){
-    if ( !req.
-    return this.http.post()
+  encodeParams(obj) {
+    if (!obj) {
+      return '';
+    }
+    const keys = Object.keys(obj);
+    if (keys.length === 0) {
+      return '';
+    }
+    let uri = '?';
+    for (const key of keys) {
+      if (obj[key]) {
+        uri += '&' + key + '=' + encodeURIComponent(obj[key]);
+      }
+    }
+    return uri;
+  }
+
+  api2_synthesise_post(req: {
+      input: string,
+      speed: number,
+      voice: API_2_Voice,
+      audioEncoding: API_2_Audio_Encoding,
+  }): Observable<any> {
+      // HttpParams encodes our url query params for us
+      // const params = new HttpParams();
+      // params.set('synthinput', input);
+      // params.set('voice', voice);
+      // params.set('speed', speed);
+      // params.set('audioEncoding', audioEncoding);
+      console.log('synthesise text:', req);
+      const uri = 'https://www.abair.tcd.ie/api2/synthesise' + this.encodeParams(req);
+      console.log(uri);
+      return this.http.get(uri, {observe: 'body'})
+      .pipe(
+        map((val: { audioContent: string; }) => {
+          console.dir(val);
+          return URL.createObjectURL(
+            new Blob(
+              this.base64ToBlobPartsWrapped(val.audioContent)
+            )
+          );
+        })
+      );
+    }
+
+  // StackOverflow
+  // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+  base64ToBlobPartsWrapped(d: string) {
+    const byteChars = atob(d);
+    const byteNumbers = new Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) {
+      byteNumbers[i] = byteChars.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return [byteArray];
   }
 
   /**
@@ -151,11 +227,12 @@ export abstract class Section {
    */
   removeHighlight() {
     for (const s of this.spans) {
-      s.classList.remove("highlight");
-      s.classList.remove("noHighlight");
+      s.classList.remove('highlight');
+      s.classList.remove('noHighlight');
     }
     this.highlightTimeouts.forEach(t => clearTimeout(t));
   }
+
 }
 
 export class Paragraph extends Section {
@@ -168,5 +245,22 @@ export class Sentence extends Section { }
 
 interface SynthesisResponse {
   audio: string[];
-  html: Array<string[]>
+  html: Array<string[]>;
 }
+
+export type API_2_Voice =
+  'ga_UL_anb_nnmnkwii' |
+  'ga_UL' |
+  'ga_UL_anb_exthts' |
+  'ga_CO' |
+  'ga_CO_hts' |
+  'ga_CO_pmg_nnmnkwii' |
+  'ga_MU_nnc_exthts' |
+  'ga_MU_nnc_nnmnkwii' |
+  'ga_MU_cmg_nnmnkwii';
+
+
+export type API_2_Audio_Encoding =
+  'MP3' |
+  'WAV' |
+  'OGG';
