@@ -19,7 +19,7 @@ session.vim
 
 /api/logs/**
 /api/sendinblue.json
-/api/ts/sendingblue.json
+/api/dist/sendingblue.json
 
 /sshlogin
 /login_to_phonetics.sh
