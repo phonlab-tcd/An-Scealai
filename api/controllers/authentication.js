@@ -231,7 +231,7 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       }
       return reject(err);
     }
-  }); // end Promise constructor 
+  }); // end Promise constructor
 } // end sendVerificationEmail
 
 // Set a user's status to Active when they click on the activation link
