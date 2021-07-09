@@ -26,7 +26,6 @@ export class TeacherStudentComponent implements OnInit {
     storiesWithoutFeedback: Story[] = [];
     userId: string;
     classroomId: string;
-    classroomDate;
     viewNoFeedback: boolean = false;
 
     baseUrl: string = config.baseurl;
