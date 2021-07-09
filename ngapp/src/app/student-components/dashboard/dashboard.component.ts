@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   stories: Story[];
   id: string;
   storyFound: boolean;
-  storySaved: boolean;
+  storySaved: boolean = true;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit {
   quillToolbar = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-      ['blockquote', 'code-block'],
+      ['blockquote'/*, 'code-block'*/],
       [{ 'header': 1 }, { 'header': 2 }],               // custom button values
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
@@ -108,6 +108,7 @@ export class DashboardComponent implements OnInit {
         this.id = params['id'];
         // loop through the array of stories and check
         // if the id in the url matches one of them
+        // if no html version exists yet, create one from the plain text
         for(let story of this.stories) {
           if(story._id === this.id) {
             this.story = story;
@@ -213,8 +214,8 @@ export class DashboardComponent implements OnInit {
   storyEdited(text) {
     this.story.text = text;
     this.storySaved = false;
-    console.log("text: ", this.story.text);
-    console.log("html: ", this.story.htmlText);
+    //console.log("text: ", this.story.text);
+    //console.log("html: ", this.story.htmlText);
     
   }
   
