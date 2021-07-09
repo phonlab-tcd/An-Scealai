@@ -67,6 +67,20 @@ storyRoutes.route('/:author').get(function (req, res) {
   });
 });
 
+// Get stories by a given author after a certain date from DB
+storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
+  Story.find({"author": req.params.author, date: {$gte: req.params.date}}, function (err, stories) {
+    if(err) {
+      console.log(err);
+      res.json(err)
+    } else {
+      console.log("function read");
+      console.log("stories: ", stories);
+      res.json(stories);
+    }
+  });
+});
+
 // Get story with a given ID from DB
 storyRoutes.route('/viewStory/:id').get(function(req, res) {
   Story.find({_id:req.params.id}, (err, story) => {
