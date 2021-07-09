@@ -7,6 +7,7 @@ if(mail.couldNotCreate){
 
 // Used to generate confirmation code to confirm email address
 var jwt = require('jsonwebtoken');
+const path = require('path');
 
 var passport = require('passport');
 var mongoose = require('mongoose');
@@ -230,7 +231,7 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       }
       return reject(err);
     }
-  }); // end Promise constructor
+  }); // end Promise constructor 
 } // end sendVerificationEmail
 
 // Set a user's status to Active when they click on the activation link
@@ -264,11 +265,7 @@ module.exports.verify = async (req, res) => {
 
     return res
         .status(200)
-        .send(
-            '<h1>Success</h1><p>Your account has been verified.</p><ul>' +
-            `<li>username: ${user.username}</li>` +
-            `<li>verified email: ${user.email}</li>` +
-            '</ul><p>');
+        .sendFile(path.join(__dirname, '../views/account_verification.html'));
   }
 
 
