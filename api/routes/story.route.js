@@ -74,8 +74,6 @@ storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, re
       console.log(err);
       res.json(err)
     } else {
-      console.log("function read");
-      console.log("stories: ", stories);
       res.json(stories);
     }
   });
