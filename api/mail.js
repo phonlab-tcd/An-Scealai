@@ -13,13 +13,14 @@ const nodemailer = require("nodemailer");
  */
 
 
+const path = require('path');
 const fs = require('fs');
 
 module.exports.sendEmail = "not yet created";
 
 try{
   console.log("Attempting to read sendinblue auth data from ./api/sendinblue.json");
-  let rawdata = fs.readFileSync('sendinblue.json');
+  let rawdata = fs.readFileSync(path.join(__dirname,'sendinblue.json'));
   let sendinblueData = JSON.parse(rawdata);
 
   const sendEmail = async (mailObj) => {
