@@ -61,6 +61,10 @@ export class StoryService {
     const author = userDetails.username;
     return this.http.get(this.baseUrl+author);
   }
+  
+  getStoriesForClassroom(author: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  }
 
   updateStory(data, id) : Observable<any> {
     return this.http.post(this.baseUrl + 'update/' +id, data);
