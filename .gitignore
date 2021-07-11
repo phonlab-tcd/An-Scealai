@@ -5,6 +5,8 @@ session.vim
 
 session.vim
 
+ngapp/build_prod_local
+
 /api/sendinblue.json
 
 **/logs/*
