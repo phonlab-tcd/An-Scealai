@@ -26,13 +26,18 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
+
+function handleGetStoryById(req, res) {
+  const story = await Story.findById(req.params.id);
+  if (!story) {
+    throw new APIError(`Story with id ${req.params.id} not found.`, 404);
+  }
+  res.status(200).json(story);
+}
+
 storyRoutes.route('/getStoryById/:id').get(async (req, res, next) => {
   try {
-    const story = await Story.findById(req.params.id);
-    if (!story) {
-      throw new APIError(`Story with id ${req.params.id} not found.`, 404);
-    }
-    res.status(200).json(story);
+    handleGetStoryById(req, res);
   } catch (error) {
     next(error);
   }
