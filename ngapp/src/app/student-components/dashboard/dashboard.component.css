@@ -96,14 +96,23 @@
 
 .ql-editor {
   background-color: #f7f2e7;
-  width: 100%;
-  height: var(--textfieldHeight);
+  /* ~44px is the height of the toolbar */
+  height: calc(var(--textfieldHeight) - 44px);
   z-index: 1;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
   font-size: 14pt;
   font-family: "Times New Roman", Times, serif;
+}
+
+quill-editor {
+    width: 100%;
+}
+
+.quill-editor-dict {
+    /* dictionary view adds another toolbar worth of height */
+  height: calc(var(--textfieldHeight) - 44px);
 }
 
 .text-input-highlight-container .text-highlight-element  {

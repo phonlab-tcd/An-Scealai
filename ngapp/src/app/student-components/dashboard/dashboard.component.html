@@ -178,7 +178,7 @@
       <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
         <!--<textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor class="quill-editor-dict" [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
         
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
