@@ -2,10 +2,13 @@
   "name": "api",
   "version": "1.0.0",
   "description": "The backend API for An Scéalaí.",
-  "main": "index.js",
+  "main": "./dist/server.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "nodemon server.js"
+    "start": "nodemon ./dist/server.js",
+    "tsc:init": "tsc --init",
+    "compile": "tsc",
+    "buffer": "echo 'a pointless script that lets me put in a trailing comma'"
   },
   "keywords": [],
   "author": "",
@@ -47,6 +50,7 @@
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "mocha": "^8.4.0",
-    "nodemon": "^2.0.9"
+    "nodemon": "^2.0.9",
+    "typescript": "^4.3.5"
   }
 }

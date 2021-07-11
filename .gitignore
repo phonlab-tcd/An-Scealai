@@ -16,7 +16,7 @@ session.vim
 /mongotest/logs/**
 /mongotest/db/**
 
-/api/logs/**
+/api/dist/logs/**
 /api/sendinblue.json
 
 /sshlogin

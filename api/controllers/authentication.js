@@ -17,8 +17,8 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
 
 module.exports.generateNewPassword = async (req, res) => {
 
