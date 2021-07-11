@@ -9,7 +9,7 @@ describe('GrammarService', () => {
   }));
 
   it('should be created', () => {
-    const service: GrammarService = TestBed.get(GrammarService);
+    const service: GrammarService = TestBed.inject(GrammarService);
     expect(service).toBeTruthy();
   });
 });
