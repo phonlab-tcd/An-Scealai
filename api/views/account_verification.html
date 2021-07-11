@@ -91,7 +91,7 @@
                     'en': 'Username',
                 },
                 'emailLabel': {
-                    'ga': 'Ríomhsheoladh',
+                    'ga': 'Seoladh ríomhphoist',
                     'en': 'Email',
                 },
                 'signIn': {
@@ -109,7 +109,9 @@
             get('#username').value = username;
             get('#email').value = email;
 
-            Object.keys(textContent).forEach(key => get(`#${key}`).innerHTML = textContent[key][language]);
+            const setLanguage = (lang) => Object.keys(textContent).forEach(key => get(`#${key}`).innerHTML = textContent[key][lang]);
+
+            setLanguage(language);
         </script>
     </body>
 </html>
