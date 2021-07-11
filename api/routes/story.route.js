@@ -16,7 +16,7 @@ let Event = require('../models/event');
 const APIError = require('../utils/APIError');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017/', 
+MongoClient.connect('mongodb://localhost:27017/',
   {useUnifiedTopology: true, useNewUrlParser: true},
   (err, client) => {
     if (err) {
@@ -26,22 +26,49 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
+const handle = {
+  get: {},
+  post: {},
+};
 
-function handleGetStoryById(req, res) {
+
+handle.get['getStoryById/:id'] = async (req, res) => {
   const story = await Story.findById(req.params.id);
   if (!story) {
     throw new APIError(`Story with id ${req.params.id} not found.`, 404);
   }
-  res.status(200).json(story);
-}
+  console.log('sending story:');
+  console.dir(story);
+  return res.status(200).json(story);
+};
 
-storyRoutes.route('/getStoryById/:id').get(async (req, res, next) => {
-  try {
-    handleGetStoryById(req, res);
-  } catch (error) {
-    next(error);
-  }
-});
+// Get story by a given author from DB
+handle.get['/:author'] = async (req, res) => {
+  await Story.find({
+    'author': req.params.author,
+  },
+  function(err, stories) {
+    if (err) {
+      console.log(err);
+      throw new APIError(
+          'Could not retrieve stories with author: ' + req.params.author,
+          404);
+    } else {
+      res.json(stories);
+    }
+  });
+};
+
+for ( const endpointSuffix of Object.getOwnPropertyNames(handle.get) ) {
+  storyRoutes.route(endpointSuffix).get(async (req, res, next) => {
+    try {
+      logger.info(req);
+      await handle.get[endpointSuffix](req, res);
+    } catch (error) {
+      next(error);
+    }
+  });
+}
 
 // Create new story
 storyRoutes.route('/create').post(function (req, res) {
@@ -58,17 +85,6 @@ storyRoutes.route('/create').post(function (req, res) {
     });
 });
 
-// Get story by a given author from DB
-storyRoutes.route('/:author').get(function (req, res) {
-  Story.find({"author": req.params.author}, function (err, stories) {
-    if(err) {
-      console.log(err);
-      res.json(err)
-    } else {
-      res.json(stories);
-    }
-  });
-});
 
 // Get story with a given ID from DB
 storyRoutes.route('/viewStory/:id').get(function(req, res) {

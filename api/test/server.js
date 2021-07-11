@@ -6,26 +6,26 @@ chai.use(assertArrays);
 var request = require("request");
 
 
-describe("API Server", () => {
-  describe("Story Routes", () => {
-    describe("/story/getStoryById/:id", () => {
-      let url123 = `http://localhost:4000/story/getStoryById/123`;
-      it("should search the database for a story with id 123", function(done){
+describe('API Server', () => {
+  describe('Story Routes', () => {
+    describe('/story/getStoryById/:id', () => {
+      const url123 = `http://localhost:4000/story/getStoryById/123`;
+      it('should search the database for a story with id 123', function(done) {
         request({
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json' 
           },
           uri: url123
         }, function(error, response, body) {
-          console.log(response.statusCode);
-          console.log(body);
-          expect(response.statusCode).to.equal(404);
+          expect(response.statusCode).to.be.ok;
+          expect(400).to.equal(response.statusCode);
           done();
         });
       });
 
-      let url2 = `http://localhost:4000/story/getStoryById/41492094-7c40-4ca8-8289-ab3894b66b61`;
-      it("should search the database for a story with id 41492094-7c40-4ca8-8289-ab3894b66b61",
+      const url2 = `http://localhost:4000/story/getStoryById/60d9d0e0ab6f246248fc794e`;
+      it('should search the database for a story with id 60d9d0e0ab6f246248fc794e',
         function(done){
           request(
             {
@@ -34,8 +34,6 @@ describe("API Server", () => {
               },
               uri: url2
             }, function(error, response, body) {
-              console.log(response.statusCode);
-              console.log(body);
               expect(response.statusCode).to.equal(200);
               done();
             }
@@ -44,12 +42,12 @@ describe("API Server", () => {
       );
     });
 
-    describe("/story/:author", function() {
-      let urlNeimhin = "http://localhost:4000/story/neimhin";
-      it("should find all of neimhin's stories", function(done) {
+    describe('/story/:author', function() {
+      const urlNeimhin = 'http://localhost:4000/story/neimhin';
+      it('should find all of neimhin\'s stories', function(done) {
         request({
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           uri: urlNeimhin
         }, function(error, response, body) {
@@ -58,15 +56,15 @@ describe("API Server", () => {
         });
       });
 
-      let url = "http://localhost:4000/story/notauser";
-      it("should not find any stories for notauser", function(done) {
+      let url = 'http://localhost:4000/story/notauser';
+      it('should not find any stories for notauser', function(done) {
         request({
           headers: {
             'Content-Type': 'application/json'
           },
           uri: url
         }, function(error, response, body) {
-          expect(response.statusCode).to.equal(404);
+          expect(response.body).to.equal('[]');
           done();
         });
       });
