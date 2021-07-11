@@ -152,7 +152,7 @@ module.exports.resetPassword = async (req, res) => {
 }
 
 
-async function sendVerificationEmail (username, password, email, baseurl) {
+async function sendVerificationEmail (username, password, email, baseurl, language) {
   return new Promise(async (resolve, reject) => {
 
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
@@ -176,7 +176,7 @@ async function sendVerificationEmail (username, password, email, baseurl) {
     user.email = email;
 
     const activationLink = user
-      .generateActivationLink(baseurl);
+      .generateActivationLink(baseurl, language);
 
     // Update user's email and verification code on the db
     await user.save()
@@ -184,11 +184,18 @@ async function sendVerificationEmail (username, password, email, baseurl) {
         reject(err);
       });
 
-    mailObj = {
-      from: 'scealai.info@gmail.com',
-      recipients: [email],
-      subject: 'An Scéalaí account verification',
-      message: 
+    const emailMessage = (language === 'ga') ? 
+      // as gaeilge 
+      `A ${user.username}, a chara,\n\
+      Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, le do thoil:\n\n\
+      ${activationLink}\n\n\
+      A luaithe is a dheimhníonn tú do sheoladh rphoist beidh tú in ann logáil isteach arís.\n\
+      \n\
+      Le gach dea-ghuí,\n\
+      \n\
+      Foireann An Scéalaí`
+      :
+      // in english
       `Dear ${user.username},\n\
       Please use this link to verify your email address for An Scéalaí:\n\n\
       ${activationLink}\n\n\
@@ -196,7 +203,13 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       \n\
       Kindly,\n\
       \n\
-      The An Scéalaí team`,
+      The An Scéalaí team`;
+
+    mailObj = {
+      from: 'scealai.info@gmail.com',
+      recipients: [email],
+      subject: 'An Scéalaí account verification',
+      message: emailMessage,
     }
 
     let sendEmailErr = null;
@@ -341,13 +354,18 @@ module.exports.verifyOldAccount = async (req, res) => {
       }
     }
 
+    // todo: remove
+    console.log('verifyOldAccount language', req.body.language);
+
     try {
       const mailRes =
         await sendVerificationEmail(
-            req.body.username,
-            req.body.password,
-            req.body.email,
-            req.body.baseurl);
+          req.body.username,
+          req.body.password,
+          req.body.email,
+          req.body.baseurl,
+          req.body.language,
+        );
 
       console.log('mailRes:', mailRes);
 
@@ -429,7 +447,9 @@ module.exports.register = async (req, res) => {
       user.username, 
       req.body.password, 
       user.email,
-      req.body.baseurl);
+      req.body.baseurl,
+      req.body.language,
+    );
   } catch (err) {
     resObj.errors.push(err.messageToUser);
     return res.status(500).json(resObj);

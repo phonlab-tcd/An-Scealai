@@ -18,6 +18,11 @@
             .item {
                 margin: 5px;
             }
+            .messageContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
             .detailsContainer {
                 padding-top: 10px;
                 padding-bottom: 10px;
@@ -55,25 +60,56 @@
     </head>
     <body>
         <div class="main">
-            <div class="header item">Success!</div>
-            <div class="item">
-                <div>You have successfully verified your account with An Scéalaí.</div>
-                <div>You can now sign in with the link below or on the homepage.</div>
+            <div class="header item" id='success'></div>
+            <div class="messageContainer item">
+                <div id='message1'></div>
+                <div id='message2'></div>
             </div>
             <div class="detailsContainer item">
-                <div class="detail">Username: <input id="username" class="detailInput" readonly></div>
-                <div class="detail">Email: <input id="email" class="detailInput" readonly></div>
+                <div class="detail"><span id='usernameLabel'></span>: <input id="username" class="detailInput" readonly></div>
+                <div class="detail"><span id='emailLabel'></span>: <input id="email" class="detailInput" readonly></div>
             </div>
-            <a class="signInButton item" href="https://www.abair.tcd.ie/scealai/#/login">Sign in</a>
+            <a class="signInButton item" id='signIn' href="https://www.abair.tcd.ie/scealai/#/login"></a>
         </div>
         <script>
+            const textContent = {
+                // each key here matches an element id in the HTML above.
+                'success': {
+                    'ga': 'Thar barr!',
+                    'en': 'Success!',
+                },
+                'message1': {
+                    'ga': 'Tá do chuntas leis An Scéalaí deimhnithe agat.',
+                    'en': 'You have successfully verified your account with An Scéalaí.',
+                },
+                'message2': {
+                    'ga': 'Is féidir síniú isteach leis na sonraí seo thíos nó síniú isteach ar an leathanach baile.',
+                    'en': 'You can now sign in with the link below or on the homepage.',
+                },
+                'usernameLabel': {
+                    'ga': 'Ainm Úsáideora',
+                    'en': 'Username',
+                },
+                'emailLabel': {
+                    'ga': 'Ríomhsheoladh',
+                    'en': 'Email',
+                },
+                'signIn': {
+                    'ga': 'Sínigh isteach',
+                    'en': 'Sign in',
+                }
+            }
+
             const get = (selector) => document.querySelector(selector);
             const url = new URL(window.location.href);
             const username = url.searchParams.get('username');
             const email = url.searchParams.get('email');
-
+            const language = url.searchParams.get('language');
+            
             get('#username').value = username;
             get('#email').value = email;
+
+            Object.keys(textContent).forEach(key => get(`#${key}`).innerHTML = textContent[key][language]);
         </script>
     </body>
 </html>
