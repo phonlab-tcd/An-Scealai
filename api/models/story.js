@@ -17,6 +17,9 @@ let Story = new Schema({
     text: {
         type: String
     },
+    htmlText: {
+        type: String
+    },
     author: {
         type: String
     },

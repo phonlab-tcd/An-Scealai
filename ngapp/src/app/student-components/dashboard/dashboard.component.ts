@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   stories: Story[];
   id: string;
   storyFound: boolean;
-  storySaved: boolean;
+  storySaved: boolean = true;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
@@ -66,6 +66,25 @@ export class DashboardComponent implements OnInit {
     }
   ];
   
+  quillToolbar = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote'/*, 'code-block'*/],
+      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      //[{ 'direction': 'rtl' }],                         // text direction
+      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],                                         // remove formatting button
+      //['link', 'image', 'video']                        // link and image, video
+    ]
+  };
+  
   constructor(private storyService: StoryService, private route: ActivatedRoute,
     private auth: AuthenticationService, protected sanitizer: DomSanitizer,
     private notifications: NotificationService, private router: Router,
@@ -89,10 +108,14 @@ export class DashboardComponent implements OnInit {
         this.id = params['id'];
         // loop through the array of stories and check
         // if the id in the url matches one of them
+        // if no html version exists yet, create one from the plain text
         for(let story of this.stories) {
           if(story._id === this.id) {
             this.story = story;
-            this.getWordCount();
+            this.getWordCount(this.story.text);
+            if(this.story.htmlText == null) {
+              this.story.htmlText = this.story.text;
+            }
             break;
           }
         }
@@ -100,13 +123,11 @@ export class DashboardComponent implements OnInit {
     });
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    this.classroomService
-      .getClassroomOfStudent(
-        this.auth.getUserDetails()
-          ._id
-      ).subscribe( (res) => {
-      this.classroomId = res._id;
-      console.log(this.classroomId);
+    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
+      if(res) {
+        this.classroomId = res._id;
+        console.log(this.classroomId);
+      }
     });
   }
 
@@ -145,6 +166,7 @@ export class DashboardComponent implements OnInit {
       params => {
         let updateData = {
           text : this.story.text,
+          htmlText: this.story.htmlText,
           lastUpdated : new Date(),
         };
         this.storyService.updateStory(updateData, params['id']).subscribe();
@@ -189,14 +211,17 @@ export class DashboardComponent implements OnInit {
   }
 
 // Set story saved to false and call word count function
-  storyEdited() {
+  storyEdited(text) {
+    this.story.text = text;
     this.storySaved = false;
-    this.getWordCount();
+    //console.log("text: ", this.story.text);
+    //console.log("html: ", this.story.htmlText);
+    
   }
   
 // Get word count of story text
-  getWordCount() {
-    let str = this.story.text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+  getWordCount(text) {
+    let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s) => {
       let trimStr = s.trim();
