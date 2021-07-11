@@ -19,7 +19,7 @@ describe('API Server', () => {
           uri: url123
         }, function(error, response, body) {
           expect(response.statusCode).to.be.ok;
-          expect(400).to.equal(response.statusCode);
+          expect(404).to.equal(response.statusCode);
           done();
         });
       });
@@ -64,7 +64,7 @@ describe('API Server', () => {
           },
           uri: url
         }, function(error, response, body) {
-          expect(response.body).to.equal('[]');
+          expect(response.body).to.equal('{}');
           done();
         });
       });

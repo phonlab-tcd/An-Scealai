@@ -46,11 +46,12 @@ var nodemailer = require("nodemailer");
  * @param {String} subject - Subject of the email
  * @param {String} message - message
  */
+var path = require('path');
 var fs = require('fs');
 module.exports.sendEmail = "not yet created";
 try {
     console.log("Attempting to read sendinblue auth data from ./api/sendinblue.json");
-    var rawdata = fs.readFileSync('sendinblue.json');
+    var rawdata = fs.readFileSync(path.join(__dirname, 'sendinblue.json'));
     var sendinblueData_1 = JSON.parse(rawdata);
     var sendEmail = function (mailObj) { return __awaiter(void 0, void 0, void 0, function () {
         var from, recipients, subject, message, transporter, mailStatus, error_1;
