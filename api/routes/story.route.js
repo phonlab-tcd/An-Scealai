@@ -26,6 +26,10 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
+const getStoryById = require('../commands/getStoryById');
+storyRoutes.route('/getStoryById/:id').get(getStoryById.execute);
+
+/*
 const handle = {
   get: {},
   post: {},
@@ -69,6 +73,7 @@ for ( const endpointSuffix of Object.getOwnPropertyNames(handle.get) ) {
     }
   });
 }
+*/
 
 // Create new story
 storyRoutes.route('/create').post(function (req, res) {
