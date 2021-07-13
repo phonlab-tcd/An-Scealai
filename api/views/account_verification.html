@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: "Open Sans";
+            }
+            .main {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 60px;
+            }
+            .header {
+                font-size: 28pt;
+            }
+            .item {
+                margin: 5px;
+            }
+            .messageContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .detailsContainer {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-left: 20px;
+                padding-right: 20px;
+                background: #e6e8ed;
+                border-radius: 5px;
+                
+            }
+            .detail {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .detailInput {
+                padding: 5px;
+                border: none;
+                border-radius: 4px;
+            }
+            .signInButton {
+                padding-bottom: 6px;
+                padding-top: 5px;
+                padding-left: 20px;
+                padding-right: 20px;
+                text-decoration: none;
+                color: white;
+                background: #cc670a;
+                border-radius: 30px;
+                font-size: 14pt;
+            }
+            .signInButton:hover {
+                background: #8a4608;
+            }
+        </style>
+        <title>An Scéalaí Account Verified</title>
+    </head>
+    <body>
+        <div class="main">
+            <div class="header item" id='success'></div>
+            <div class="messageContainer item">
+                <div id='message1'></div>
+                <div id='message2'></div>
+            </div>
+            <div class="detailsContainer item">
+                <div class="detail"><span id='usernameLabel'></span>: <input id="username" class="detailInput" readonly></div>
+                <div class="detail"><span id='emailLabel'></span>: <input id="email" class="detailInput" readonly></div>
+            </div>
+            <a class="signInButton item" id='signIn' href="https://www.abair.tcd.ie/scealai/#/login"></a>
+        </div>
+        <script>
+            const textContent = {
+                // each key here matches an element id in the HTML above.
+                'success': {
+                    'ga': 'Thar barr!',
+                    'en': 'Success!',
+                },
+                'message1': {
+                    'ga': 'Tá do chuntas leis An Scéalaí deimhnithe agat.',
+                    'en': 'You have successfully verified your account with An Scéalaí.',
+                },
+                'message2': {
+                    'ga': 'Is féidir síniú isteach leis na sonraí seo thíos nó síniú isteach ar an leathanach baile.',
+                    'en': 'You can now sign in with the link below or on the homepage.',
+                },
+                'usernameLabel': {
+                    'ga': 'Ainm Úsáideora',
+                    'en': 'Username',
+                },
+                'emailLabel': {
+                    'ga': 'Seoladh ríomhphoist',
+                    'en': 'Email',
+                },
+                'signIn': {
+                    'ga': 'Sínigh isteach',
+                    'en': 'Sign in',
+                }
+            }
+
+            const get = (selector) => document.querySelector(selector);
+            const url = new URL(window.location.href);
+            const username = url.searchParams.get('username');
+            const email = url.searchParams.get('email');
+            const language = url.searchParams.get('language');
+            
+            get('#username').value = username;
+            get('#email').value = email;
+
+            const setLanguage = (lang) => Object.keys(textContent).forEach(key => get(`#${key}`).innerHTML = textContent[key][lang]);
+
+            setLanguage(language);
+        </script>
+    </body>
+</html>
