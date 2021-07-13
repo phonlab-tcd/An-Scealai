@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const storyRoutes = express.Router();
 const multer = require('multer');
 const { Readable } = require('stream');
 const mongodb = require('mongodb');
@@ -26,16 +25,17 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
+const makeEndpoints = require('../utils/makeEndpoints');
 const getStoryById = require('../commands/getStoryById');
-storyRoutes.route('/getStoryById/:id').get(getStoryById.execute);
+
+const storyRoutes = makeEndpoints({
+  get: {
+    '/getStoryById/:id': getStoryById,
+  },
+  post: {},
+});
 
 /*
-const handle = {
-  get: {},
-  post: {},
-};
-
-
 handle.get['getStoryById/:id'] = async (req, res) => {
   const story = await Story.findById(req.params.id);
   if (!story) {
@@ -465,3 +465,4 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 })
 
 module.exports = storyRoutes;
+
