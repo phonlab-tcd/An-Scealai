@@ -78,8 +78,10 @@ export class TeacherStoryComponent implements OnInit {
       this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
         this.story = res[0];
         if(this.story.htmlText == null) {
+          console.log("htmlText is null");
           this.story.htmlText = this.story.text;
         }
+        console.log("not null: ", this.story.htmlText);
         this.getFeedbackAudio();
         this.getAuthorPossessive();
         this.getUserId();
