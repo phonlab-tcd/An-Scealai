@@ -58,6 +58,11 @@ border-radius: 5px 5px 5px 5px;
     color: #261500;
     text-align: left;
     width: 50%;
+    text-decoration: none;
+}
+
+.contentsLink:hover {
+    text-decoration: underline;
 }
 
 .contentsDate {
