@@ -8,6 +8,63 @@ var request = require("request");
 
 describe("API Server", () => {
   describe("Story Routes", () => {
+    describe("/story/getStoriesForClassroom/:author/:date", () => {
+
+      let url = `http://localhost:4000/story/getStoriesForClassroom/notAnAuthor/notADate`;
+      it('should respond with statusCode 400 since notADate cannot be cast to a date. url: ' + url, function(done){
+        request({
+          headers: {
+            'Content-Type': 'application/json' 
+          },
+          uri: url
+        }, function(error, response, body) {
+          console.dir(response.statusCode);
+          console.dir(body);
+          expect(response.statusCode).to.equal(400);
+          done();
+        });
+      });
+
+      // db.story.find({
+      //  author: "neimhin",
+      //  date: {$gte: ISODate("2020-07-11T21:00:00.139Z")}})
+      // // gives 8 documents
+      url = `http://localhost:4000/story/getStoriesForClassroom/neimhin/${encodeURIComponent('2020-07-11T21:00:00.139Z')}`;
+      it('should respond with at least one story by neimhin ' +
+        'url: ' + url, function(done) {
+        request({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          uri: url,
+        }, function(error, response, body) {
+          console.dir(response.statusCode);
+          console.dir(body);
+          expect(response.statusCode).to.equal(200);
+          expect(JSON.parse(body).length).to.be.greaterThan(1);
+          done();
+        });
+      });
+ 
+      url = `http://localhost:4000/story/getStoriesForClassroom/notAnAuthor/${new Date()}`;
+      it(
+          'should respond with an empty list ' +
+          'since there have been no stories created after right now. ' +
+          'url: ' + url,
+          function(done) {
+            request({
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              uri: url,
+            }, function(error, response, body) {
+              // expect body to be the string '[]'
+              expect(body.match(/[]/));
+              done();
+            });
+          });
+    });
+
     describe("/story/getStoryById/:id", () => {
       let url123 = `http://localhost:4000/story/getStoryById/123`;
       it("should search the database for a story with id 123", function(done){
@@ -17,8 +74,6 @@ describe("API Server", () => {
           },
           uri: url123
         }, function(error, response, body) {
-          console.log(response.statusCode);
-          console.log(body);
           expect(response.statusCode).to.equal(404);
           done();
         });
@@ -34,8 +89,6 @@ describe("API Server", () => {
               },
               uri: url2
             }, function(error, response, body) {
-              console.log(response.statusCode);
-              console.log(body);
               expect(response.statusCode).to.equal(200);
               done();
             }
