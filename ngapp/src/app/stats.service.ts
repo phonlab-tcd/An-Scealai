@@ -18,6 +18,10 @@ export class StatsService {
   getSynthesisData() : Observable<any> {
     return this.http.get(this.baseUrl + 'synthesisFixes');
   }
+  
+  getProfileData() : Observable<any> {
+    return this.http.get(this.baseUrl + 'getProfileData');
+  }
 
 // *********************** Student stats ************************************
 

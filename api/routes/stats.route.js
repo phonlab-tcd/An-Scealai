@@ -6,6 +6,7 @@ const request = require('request');
 
 let Event = require('../models/event');
 let Story = require('../models/story');
+let Profile = require('../models/profile');
 
 statsRoutes.route('/synthesisFixes').get((req, res) => {
     getTexts().then(data => {
@@ -141,5 +142,23 @@ function mapToObj(inputMap) {
 
     return obj;
 }
+
+statsRoutes.route('/getProfileData').get((req, res) => {
+  Profile.find({}, (err, profiles) => {
+      if(err) {
+        console.log(err);
+        res.status(400).send("An error occurred while trying to find DB profiles");
+      }
+      if(!profiles) {
+        res.status(404).send("Profiles were not found");  
+      }
+      else {
+        console.log(profiles)
+        res.status(200).json(profiles);
+      }
+  });
+    
+});
+
 
 module.exports = statsRoutes;

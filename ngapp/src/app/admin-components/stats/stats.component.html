@@ -1,15 +1,25 @@
-<div class="titleText">
-  {{ts.l.synthesis_breakdown}}
-</div>
-<div *ngIf="!graphGenerated" class="loaderContainer">
+<div *ngIf="!statsLoaded" class="loaderContainer">
   <b>{{ts.l.compiling_data}}</b>
   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-  <div>(This may take a while!)</div>
 </div>
-<div class="bodyContainer">
+<div *ngIf="statsLoaded" class="bodyContainer">
+  <div class="titleText">
+    {{ts.l.statistics}}
+  </div>
+  <select (change)="statsSelection($event.target.value)" name="profileStats">
+    <option value=""></option>
+    <option value="profileSelected">Profile</option>
+    <option value="grammarSelected">Grammar</option>
+  </select>
+  <div *ngIf="graphGenerated">Profile Data</div>
+  <div class="chart-container">
+    <canvas id="statChart" width="100%"> {{chart}}</canvas> 
+  </div>
+  <!--
   <div *ngIf="graphGenerated">{{ts.l.net_errors_corrected}}: {{netErrors}}</div>
   <div class="chart-container">
     <canvas id="canvas"></canvas>    
   </div>
+  -->
 </div>
 

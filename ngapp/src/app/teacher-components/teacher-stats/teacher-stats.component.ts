@@ -149,8 +149,10 @@ export class TeacherStatsComponent implements OnInit {
     }
     
     createChart(labels, values) {
-      
-      this.myChart = new Chart('statChart', {  
+      console.log("labels: ", labels);
+      console.log("values: ", values);
+      let ctx = document.getElementById("statChart");
+      this.myChart = new Chart(ctx, {  
         type: 'doughnut',  
         data: {  
           labels: labels,  

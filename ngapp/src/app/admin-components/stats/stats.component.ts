@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart } from 'node_modules/chart.js';
 import { StatsService } from '../../stats.service';
 import { TranslationService } from '../../translation.service';
 
@@ -13,16 +13,17 @@ export class StatsComponent implements OnInit {
   constructor(private statsService : StatsService, public ts: TranslationService) { }
 
   chart: any;
-  graphGenerated : boolean = false;
+  statsLoaded : boolean = true;
   netErrors : number = 0;
+  selectedStat: string;
+  profiles;
+  graphGenerated: boolean = false;
 
   ngOnInit() {
-
+    /*
     this.statsService.getSynthesisData().subscribe((data) => {
-
       let labelArray = [];
       let dataArray = [];
-
       for (const key of Object.keys(data)) {
         this.netErrors += data[key];
         if(data[key] > 0) {
@@ -30,32 +31,59 @@ export class StatsComponent implements OnInit {
           dataArray.push(data[key]);
         }
       }
-
       this.generateChart(labelArray, dataArray);
     });
+    */
+  }
+  
+  statsSelection(type: string) {
+    switch(type) {  
+      case "profileSelected": { 
+          console.log("profileSelected")
+          this.getProfileData();
+          break;
+       }
+       case "grammarSelected": { 
+         console.log("grammarSelected")
+         break;
+      }
+    }
+  }
+  
+  async getProfileData() {
+    this.statsLoaded = false;
+    console.log("getting profile data");
+    this.profiles = await this.statsService.getProfileData().toPromise();
+    this.statsLoaded = true;
 
-     
+    let ages = new Map<string, number>()
+
+    for(let i = 0; i < this.profiles.length; i++) {
+      if(ages.get(this.profiles[i]["age"]) >= 0) {
+        ages.set(this.profiles[i]["age"], ages.get(this.profiles[i]["age"]) + 1);
+      }
+      else {
+        ages.set(this.profiles[i]["age"], 0);
+      }
+    }
+    console.log(ages.keys());
+    console.log(ages.values());
+    this.generateChart(Array.from(ages.keys()), Array.from(ages.values()));
+    
   }
 
   generateChart(labelArray, dataArray) {
-    this.graphGenerated = true;
-    this.chart = new Chart('canvas', {  
+    console.log("label array: ", labelArray);
+    console.log("data array: ", dataArray);
+    const canvas = document.getElementById('statChart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
+    this.chart = new Chart(ctx, {  
       type: 'doughnut',  
       data: {  
         labels: labelArray,  
         datasets: [  
           {  
             data: dataArray,   
-            backgroundColor: [  
-              "#003f5c",
-              "#2f4b7c",  
-              "#665191",  
-              "#a05195",  
-              "#d45087",  
-              "#f95d6a",  
-              "#ff7c43",  
-              "#ffa600", 
-            ],  
             fill: true  
           }  
         ]  
@@ -76,6 +104,8 @@ export class StatsComponent implements OnInit {
       responsive: true,
       maintainAspectRatio: false
     }); 
+    this.graphGenerated = true;
   }
+
 
 }
