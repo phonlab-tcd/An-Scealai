@@ -31,6 +31,7 @@ export class StoryService {
       date: date,
       dialect: dialect,
       text: text,
+      htmlText: text,
       author: author,
       studentId: studentId,
       lastUpdated: new Date(),
