@@ -9,7 +9,7 @@ describe('RoleGuardService', () => {
   }));
 
   it('should be created', () => {
-    const service: RoleGuardService = TestBed.get(RoleGuardService);
+    const service: RoleGuardService = TestBed.inject(RoleGuardService);
     expect(service).toBeTruthy();
   });
 });
