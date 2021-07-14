@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# build the angular app and copy it over to the live location
+
 # Pull latest code from git repo
 # Maybe we should hold off on pulling automatically until we have a good test suite
 #git pull
