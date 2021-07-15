@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
     role: null,
     baseurl: config.baseurl,
     email: null,
+    language: 'ga', // gaeilge by default
   };
 
   loginError: boolean;
@@ -73,6 +74,7 @@ export class LoginComponent implements OnInit {
     this.frozenCredentials.role = this.credentials.role;
     this.frozenCredentials.password = this.credentials.password;
     this.frozenCredentials.email = this.emailToVerify;
+    this.frozenCredentials.language = this.ts.inIrish() ? 'ga' : 'en';
 
     if (this.userToVerify !== this.credentials.username) {
       console.log('this.userToVerify !== this.credentials.username');

@@ -99,6 +99,9 @@ storyRoutes.route('/update/:id').post(function (req, res) {
       if(req.body.text) {
         story.text = req.body.text;
       }
+      if(req.body.htmlText) {
+        story.htmlText = req.body.htmlText;
+      }
       if(req.body.lastUpdated) {
         story.lastUpdated = req.body.lastUpdated;
       }
@@ -355,7 +358,16 @@ function synthesiseStory(story) {
   if(story.dialect === 'kerry') dialectCode = 'ga_MU';
 
   // create a form with the story text, dialect choice, html, and speed
+  /*
+  console.log(story.text);
+  let test8 = story.text.replace(/<br>/g, "\n");
+  let test9 = test8.replace(/(<([^>]+)>)/gm,'');
+  console.log("\nnew format: ", test8);
+  console.log("\nnew format: ", test9);
+  */
+
   let form = {
+    //Input: test9,
     Input: story.text,
     Locale: dialectCode,
     Format: 'html',
@@ -417,6 +429,15 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
       res.send(err);
     }
     if(story) {
+      /*
+      console.log("original text: ", story.text);
+      let test8 = story.text.replace(/<br>/g, "\n");
+      let test9 = test8.replace(/(<([^>]+)>)/ig, '');
+      let test10 = test9.replace(/\n/g, " ");
+      console.log("test8: ", test8);
+      console.log("test9: ", test9);
+      console.log("test10: ", test10);
+      */
       let form = {
         teacs: story.text.replace(/\n/g, " "),
         teanga: req.params.lang,
