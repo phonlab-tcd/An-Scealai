@@ -111,14 +111,14 @@ userSchema.methods.generateResetPasswordLink = function (baseurl) {
   return `${baseurl}user/generateNewPassword?username=${this.username}&email=${this.email}&code=${this.resetPassword.code}`;
 }
 
-userSchema.methods.generateActivationLink = function (baseurl) {
+userSchema.methods.generateActivationLink = function (baseurl, language) {
   // Make sure this.verification exists
   if ( ! this.verification ) {
     this.verification = {};
   }
   this.verification.code = jwt.sign({username: this.username, email: this.email},'sonJJxVqRC');
   this.verification.date = new Date();
-  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&verificationCode=${this.verification.code}`;
+  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&language=${language}&verificationCode=${this.verification.code}`;
 }
 
 module.exports = mongoose.model('User', userSchema);
