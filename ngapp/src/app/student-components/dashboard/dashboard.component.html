@@ -212,31 +212,17 @@
       <!-- Word Count -->
       <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
-        <button
-            style="float: right;"
-            (click)="synthesiseQuillText()">synth</button>
-        <button
-            style="float: right;"
-            (click)="playQuillText()">play</button>
       </div>
 
     </div>
     <!-- the ngIf here causes the chiled component to init only after synthesisSubject is defined -->
-    <ngx-audio-player
-      style="width: 100%;"
-      [playlist]="msaapPlaylist"
-      [displayTitle]="msaapDisplayTitle"
-      [autoPlay]="false"
-      muted="muted"
-      [displayPlaylist]="msaapDisplayPlayList"
-      [pageSizeOptions]="pageSizeOptions"
-      (trackEnded)="onEnded($event)"
-      [displayVolumeControls]="msaapDisplayVolumeControls"
-      [displayRepeatControls]="msaapDisplayRepeatControls"
-      [disablePositionSlider]="msaapDisablePositionSlider"
-      [displayArtist]="msaapDisplayArtist"
-      [displayDuration]="msaapDisplayDuration"
-      [expanded]="true"></ngx-audio-player>
-      <!-- <app-chatbot></app-chatbot> -->
+    <ul>
+      <li *ngFor="let synth of audioSources; let i = index;">
+        {{synth.date.toLocaleTimeString()}}
+        <audio controls >
+          <source src="{{synth.url}}">
+        </audio>
+      </li>
+    </ul>
   </div>
 </div>
