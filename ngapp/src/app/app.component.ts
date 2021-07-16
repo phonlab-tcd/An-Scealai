@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+// import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { StoryService } from './story.service';

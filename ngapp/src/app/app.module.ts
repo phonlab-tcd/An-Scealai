@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
+import { NgxAudioPlayerModule } from 'ngx-audio-player';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -33,6 +34,7 @@ import { BookContentsComponent } from './student-components/book-contents/book-c
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
+import { SynthesisSnapshotComponent } from './student-components/synthesis-snapshot/synthesis-snapshot.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -110,6 +112,7 @@ import { QuillModule } from 'ngx-quill';
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
+    SynthesisSnapshotComponent,
   ],
   imports: [
     BrowserModule,
@@ -124,6 +127,7 @@ import { QuillModule } from 'ngx-quill';
     MatCardModule,
     NgbModule,
     NgbDropdownModule,
+    NgxAudioPlayerModule,
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',

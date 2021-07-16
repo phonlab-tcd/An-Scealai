@@ -1,7 +1,20 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2, ViewChild } from '@angular/core';
+import {
+  ComponentFactoryResolver,
+  ComponentFactory,
+  Component,
+  OnInit,
+  // HostListener,
+  ViewEncapsulation,
+  // Renderer2,
+  ViewChild } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  // NavigationEnd,
+  // NavigationStart,
+  } from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
@@ -14,7 +27,16 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import { AbairAPIv2Voice, AbairAPIv2AudioEncoding, SynthRequestObject, SynthesisService } from '../../services/synthesis.service';
+import {
+  AbairAPIv2Voice,
+  AbairAPIv2AudioEncoding,
+  SynthRequestObject,
+  SynthesisService,
+  } from '../../services/synthesis.service';
+import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapshot.component';
+import { Track } from 'ngx-audio-player';
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -29,31 +51,62 @@ export class DashboardComponent implements OnInit {
   stories: Story[];
   id: string;
   storyFound: boolean;
-  storySaved: boolean = true;
+  storySaved = true;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
-  grammarChecked: boolean = false;
+  grammarChecked = false;
   tags: HighlightTag[] = [];
-  tagSets : TagSet;
+  tagSets: TagSet;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading: boolean = false;
-  grammarSelected: boolean = true;
-  modalClass : string = "hidden";
+  grammarLoading = false;
+  grammarSelected = true;
+  modalClass: ('hidden' | 'hiddenFade' | 'visibleFade') = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
-  teacherSelectedErrors: String[] = [];
+  teacherSelectedErrors: string[] = [];
   classroomId: string;
-  selectTeanglann: boolean = true;
-  selectExternalLinks: boolean = false;
-  showOptions: boolean = true;
-  dontToggle: boolean = false;
+  selectTeanglann = true;
+  selectExternalLinks = false;
+  showOptions = true;
+  dontToggle = false;
   words: string[] = [];
-  wordCount: number = 0;
-  audio = null;
+  wordCount = 0;
 
-  @ViewChild('myTextArea', {static: false}) myTextArea: any;
+  audio: HTMLAudioElement;
+
+  frozenHtmlText: string;
+
+  msaapPlaylist: Track[] = [];
+  msaapDisplayTitle = true;
+  muted = false;
+  msaapDisplayPlayList = true;
+  pageSizeOptions = true;
+  msaapDisplayVolumeControls = true;
+  msaapDisplayRepeatControls = true;
+  msaapDisablePositionSlider = true;
+  msaapDisplayArtist = false;
+  msaapDisplayDuration = true;
+
+  quillToolbar = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote'/*, 'code-block'*/],
+      // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ list: 'ordered'}, { list: 'bullet' }],
+      // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      // [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      // [{ 'direction': 'rtl' }],                         // text direction
+      // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+      ['clean'],                                         // remove formatting button
+      // ['link', 'image', 'video']                        // link and image, video
+    ]
+  };
 
   dialects = [
     {
@@ -69,26 +122,16 @@ export class DashboardComponent implements OnInit {
       name : this.ts.l.ulster
     }
   ];
-  
-  quillToolbar = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-      ['blockquote'/*, 'code-block'*/],
-      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-      //[{ 'direction': 'rtl' }],                         // text direction
-      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['clean'],                                         // remove formatting button
-      //['link', 'image', 'video']                        // link and image, video
-    ]
-  };
-  
+  // synthesisSnapshot: SynthesisSnapshotComponent;
+
+  @ViewChild('myTextArea', {static: false}) myTextArea: any;
+
+  @ViewChild('synthesisSnapshotContainer', {static: false}) synthesisSnapshotContainer: SynthesisSnapshotComponent;
+
+  onEnded(event: any){
+    console.log('ENDED', event);
+  }
+
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
               private route: ActivatedRoute,
@@ -101,7 +144,14 @@ export class DashboardComponent implements OnInit {
               public ts: TranslationService,
               public statsService: StatsService,
               public classroomService: ClassroomService,
+              private componentFactoryResolver: ComponentFactoryResolver,
              ) {}
+
+  play() {
+    if ( this.audio instanceof Audio ) {
+      this.audio.play();
+    }
+  }
 
   autoGrowTextArea() {
     if (this.myTextArea.scrollHeight > this.myTextArea.clientHeight) {
@@ -109,12 +159,41 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  play() {
-    console.log('audioUrl:', this.audio.src);
-    console.dir(this.audio);
-    if (this.audio && this.audio.play) {
+  async synthesiseQuillText() {
+    const componentFactory: ComponentFactory<SynthesisSnapshotComponent> =
+      this.componentFactoryResolver
+          .resolveComponentFactory(
+              SynthesisSnapshotComponent);
+    console.log('synth');
+    /* SyntRequestObect
+     *
+     */
+    const blob = await this.synth.synthesiseText({
+      input: this.synth.convertToPlain(this.story.htmlText),
+      voice: this.synth.voice(this.story.dialect as ('connemara' | 'kerry' | 'donegal')),
+      speed: 1,
+      audioEncoding: 'MP3' as AbairAPIv2AudioEncoding,
+    } as SynthRequestObject);
+
+    const url: string = URL.createObjectURL(blob);
+    this.audio = new Audio(url);
+    this.sanitizer.bypassSecurityTrustUrl(url);
+    this.msaapPlaylist.push({
+      title: new Date().toLocaleTimeString(),
+      link: url,
+    });
+    console.log('finished synthesis request');
+  }
+
+  playQuillText() {
+    console.log('playQuillText');
+    if ( this.audio instanceof Audio) {
       this.audio.play();
     }
+  }
+
+  cloneString(s: string) {
+    return ('' + s).slice(0);
   }
 
   /*
@@ -142,17 +221,20 @@ export class DashboardComponent implements OnInit {
       console.log(this.stories);
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
-        this.id = params['id'];
+        this.id = params.id;
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
-        for(let story of this.stories) {
-          if(story._id === this.id) {
+        // TODO Woah that's gotta be slow (Neimhin 15 July 2021)
+        for (const story of this.stories) {
+          if (story._id === this.id) {
             this.story = story;
             this.getWordCount(this.story.text);
-            if(this.story.htmlText == null) {
+            if (!this.story.htmlText) {
               this.story.htmlText = this.story.text;
             }
+            this.frozenHtmlText = this.cloneString(this.story.htmlText);
+            this.synthesiseQuillText();
             break;
           }
         }
@@ -221,6 +303,7 @@ export class DashboardComponent implements OnInit {
         this.storyService.updateStory(updateData, params.id).subscribe();
         this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
         this.storySaved = true;
+        this.frozenHtmlText = this.cloneString(this.story.htmlText);
         console.log('Story saved');
       }
     );
