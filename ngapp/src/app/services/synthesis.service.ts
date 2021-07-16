@@ -57,6 +57,35 @@ export class SynthesisService {
 
   baseUrl = config.baseurl;
 
+  updateSynthesis: Observable<string>;
+
+  voice(dialect: 'connemara' | 'kerry' | 'donegal') {
+    switch (dialect) {
+      case 'connemara':
+        return 'ga_CO_pmg_nnmnkwii' as AbairAPIv2Voice;
+      case 'kerry':
+        return 'ga_MU_nnc_nnmnkwii' as AbairAPIv2Voice;
+      default: // donegal
+        return 'ga_UL_anb_nnmnkwii' as AbairAPIv2Voice;
+    }
+  }
+
+  // TODO this is troublesome
+  convertToPlain(html: string){
+    // Create a new div element
+    const tempDivElement = document.createElement('div');
+
+    // Set the HTML content with the given value
+    tempDivElement.innerHTML = html;
+
+    // Retrieve the text property of the element
+    return tempDivElement.textContent || tempDivElement.innerText || '';
+  }
+
+  synthesiseHtml(requestObject: SynthRequestObject): Promise<any> {
+    requestObject.input = this.convertToPlain(requestObject.input);
+    return this.synthesiseText(requestObject);
+  }
 
   synthesiseText(requestObject: SynthRequestObject): Promise<any> {
 
@@ -65,6 +94,8 @@ export class SynthesisService {
 
       if ( requestObject.input) {
         url = url + encodeURIComponent(requestObject.input);
+      } else {
+        reject('input required');
       }
 
       if ( requestObject.voice && abairAPIv2Voices.includes(requestObject.voice.toString()) ) {
@@ -78,9 +109,7 @@ export class SynthesisService {
         url = url + '&audioEncoding=' + encodeURIComponent(requestObject.audioEncoding);
       }
 
-      let blobUrl = null;
-
-      await this.http.get(url, {
+      this.http.get(url, {
         observe: 'body'
       }).subscribe(
       (obj: { audioContent: string }) => {
@@ -97,12 +126,7 @@ export class SynthesisService {
           array[i] = raw.charCodeAt(i);
         }
 
-        const blob = new Blob(
-          [array], {type});
-
-        blobUrl = URL.createObjectURL(blob);
-        console.log('blobUrl:', blobUrl);
-        resolve(blobUrl);
+        resolve(new Blob([array], {type}));
       },
       (err) => {
         reject(err);
