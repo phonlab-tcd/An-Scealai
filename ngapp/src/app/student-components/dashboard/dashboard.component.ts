@@ -37,6 +37,10 @@ import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapsh
 import { Track } from 'ngx-audio-player';
 
 
+interface Synthesis {
+  url: string;
+  date: Date;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -74,7 +78,7 @@ export class DashboardComponent implements OnInit {
   words: string[] = [];
   wordCount = 0;
 
-  audio: HTMLAudioElement;
+  audioSources: Synthesis[] = [];
 
   frozenHtmlText: string;
 
@@ -147,12 +151,6 @@ export class DashboardComponent implements OnInit {
               private componentFactoryResolver: ComponentFactoryResolver,
              ) {}
 
-  play() {
-    if ( this.audio instanceof Audio ) {
-      this.audio.play();
-    }
-  }
-
   autoGrowTextArea() {
     if (this.myTextArea.scrollHeight > this.myTextArea.clientHeight) {
       this.myTextArea.style.height = this.myTextArea.scrollHeight + 'px';
@@ -160,40 +158,21 @@ export class DashboardComponent implements OnInit {
   }
 
   async synthesiseQuillText() {
-    const componentFactory: ComponentFactory<SynthesisSnapshotComponent> =
-      this.componentFactoryResolver
-          .resolveComponentFactory(
-              SynthesisSnapshotComponent);
     console.log('synth');
-    /* SyntRequestObect
-     *
-     */
-    const blob = await this.synth.synthesiseText({
-      input: this.synth.convertToPlain(this.story.htmlText),
+    const date = new Date();
+    const url = await this.synth.synthesiseHtml({
+      input: this.story.htmlText,
       voice: this.synth.voice(this.story.dialect as ('connemara' | 'kerry' | 'donegal')),
       speed: 1,
       audioEncoding: 'MP3' as AbairAPIv2AudioEncoding,
-    } as SynthRequestObject);
-
-    const url: string = URL.createObjectURL(blob);
-    this.audio = new Audio(url);
-    this.sanitizer.bypassSecurityTrustUrl(url);
-    this.msaapPlaylist.push({
-      title: new Date().toLocaleTimeString(),
-      link: url,
+    } as SynthRequestObject).catch( (err) => {
+      console.error(err);
     });
-    console.log('finished synthesis request');
-  }
 
-  playQuillText() {
-    console.log('playQuillText');
-    if ( this.audio instanceof Audio) {
-      this.audio.play();
-    }
-  }
-
-  cloneString(s: string) {
-    return ('' + s).slice(0);
+    this.audioSources.unshift({
+      url,
+      date});
+    console.log('finished synth started:', date);
   }
 
   /*
@@ -208,9 +187,7 @@ export class DashboardComponent implements OnInit {
       speed: 1,
     }).then(
       (audioUrl) => {
-        console.log('audioUrl:', audioUrl);
-        this.audio = new Audio(audioUrl);
-        console.dir(this.audio);
+        this.audioSources.unshift(audioUrl);
       });
 
     this.storySaved = true;
@@ -233,7 +210,6 @@ export class DashboardComponent implements OnInit {
             if (!this.story.htmlText) {
               this.story.htmlText = this.story.text;
             }
-            this.frozenHtmlText = this.cloneString(this.story.htmlText);
             this.synthesiseQuillText();
             break;
           }
@@ -293,6 +269,7 @@ export class DashboardComponent implements OnInit {
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
+    this.synthesiseQuillText();
     this.route.params.subscribe(
       params => {
         const updateData = {
@@ -303,7 +280,6 @@ export class DashboardComponent implements OnInit {
         this.storyService.updateStory(updateData, params.id).subscribe();
         this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
         this.storySaved = true;
-        this.frozenHtmlText = this.cloneString(this.story.htmlText);
         console.log('Story saved');
       }
     );

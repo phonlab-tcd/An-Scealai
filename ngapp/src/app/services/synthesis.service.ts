@@ -57,8 +57,6 @@ export class SynthesisService {
 
   baseUrl = config.baseurl;
 
-  updateSynthesis: Observable<string>;
-
   voice(dialect: 'connemara' | 'kerry' | 'donegal') {
     switch (dialect) {
       case 'connemara':
@@ -113,20 +111,9 @@ export class SynthesisService {
         observe: 'body'
       }).subscribe(
       (obj: { audioContent: string }) => {
-        const type = requestObject.audioEncoding.toString().toLowerCase();
-        const audioURI = 'data:' + type + ';base64, ' + obj.audioContent;
-        const BASE64_MARKER = ';base64, ';
-        const base64Index = audioURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-        const base64 = audioURI.substring(base64Index);
-        const raw = window.atob(base64);
-        const rawLength = raw.length;
-        const array = new Uint8Array(new ArrayBuffer(rawLength));
-
-        for (let i = 0; i < rawLength; i++) {
-          array[i] = raw.charCodeAt(i);
-        }
-
-        resolve(new Blob([array], {type}));
+        const type = 'audio/' + requestObject.audioEncoding.toString().toLowerCase();
+        const audioURI = 'data:' + type + ';base64,' + obj.audioContent;
+        return resolve(audioURI);
       },
       (err) => {
         reject(err);
