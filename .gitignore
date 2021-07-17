@@ -5,6 +5,10 @@ session.vim
 
 .DS_Store
 
+ngapp/build_prod_local
+
+ngapp/build_prod_local
+
 /api/sendinblue.json
 
 **/logs/*

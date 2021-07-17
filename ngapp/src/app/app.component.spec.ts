@@ -10,7 +10,7 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [ NO_ERRORS_SCHEMA ],
-      imports: [NgbModule, RouterTestingModule, HttpClientTestingModule],
+      imports: [NgbModule, RouterTestingModule, HttpClientTestingModule],// 
       declarations: [
         AppComponent
       ],

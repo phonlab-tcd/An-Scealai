@@ -61,6 +61,8 @@ import { RecordingHistoryComponent } from './student-components/recording-histor
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { QuillModule } from 'ngx-quill';
 
 
 
@@ -120,7 +122,14 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatCardModule,
+    NgbModule,
     NgbDropdownModule,
+    QuillModule.forRoot({
+      customOptions: [{
+        import: 'formats/font',
+        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
+      }]
+    })
   ],
   providers: [ 
     StoryService,
