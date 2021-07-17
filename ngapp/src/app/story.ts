@@ -5,6 +5,7 @@ export class Story {
     lastUpdated: Date;
     dialect: string;
     text: string;
+    htmlText: string;
     author: string;
     studentId: string;
     feedback: {
