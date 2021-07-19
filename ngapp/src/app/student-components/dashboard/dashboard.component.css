@@ -142,7 +142,7 @@ background-color: lightblue;
 }
 
 .dictionary {
-  width: 90%;
+  width: 100%;
   height: 190px;
 }
 
@@ -151,8 +151,7 @@ background-color: lightblue;
 }
 
 .dictionaryContainer {
-    height: var(--textfieldHeight);
-    width: var(--dictionaryWidth);
+    width: 100%;
     display: flex;
     flex-direction: column;
 }

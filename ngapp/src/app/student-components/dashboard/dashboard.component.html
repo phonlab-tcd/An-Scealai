@@ -99,14 +99,56 @@
       </div>
     </div>
 
+    <div class="textFieldContainer" *ngIf="feedbackVisible">
+      <div class="feedbackHeader">
+        <div>{{ts.l.feedback}}</div>
+          <div class="closeFeedbackBtn" (click)="closeFeedback()">
+            <i class="fa fa-times">
+            </i>
+          </div>
+      </div>
+      <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+      <audio
+          *ngIf="audioSource"
+          [src]="audioSource"
+          id="audio"
+          controls
+          #audioTag
+          class="audioPlayer"></audio>
+    </div>
+
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
+      <div class="textFieldContainer">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
-        
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+      <!-- Word Count -->
+
+      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
+        <span> {{ts.l.word_count}}: {{wordCount}} </span>
+      </div>
          
+      </div>
+      <div *ngIf="showOptions" >
+        <audio
+            *ngFor="let synth of audioSources; let i = index;"
+            style="width: 100%;"
+            controls >
+            <p>
+          Your browser does not support the
+          <code>audio</code> element. Here is a
+          <a href="{{synth.url}}">link to the audio</a>
+          instead.
+            </p>
+            <source src="{{synth.url}}">
+        </audio>
       </div>
 
       <!-- display grammar loading -->
@@ -156,30 +198,10 @@
           </div>
         </div>
       </div>
-      <!-- display story with feedback excluding audio feedback-->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
-        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
-        <!--<textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
-        
-      </div>
-      <!-- display story with feedback including audio feedback -->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
-        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
-        <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
-        <!--<textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
-        
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
-        
-      </div>
 
       <!-- display dictionary option-->
-      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
+      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !grammarChecked && !grammarLoading">
         <!--<textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
-        
-        <quill-editor class="quill-editor-dict" [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
         
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
@@ -209,20 +231,7 @@
         </div>
       </div>
       
-      <!-- Word Count -->
-      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
-        <span> {{ts.l.word_count}}: {{wordCount}} </span>
-      </div>
 
     </div>
-    <!-- the ngIf here causes the chiled component to init only after synthesisSubject is defined -->
-    <ul>
-      <li *ngFor="let synth of audioSources; let i = index;">
-        {{synth.date.toLocaleTimeString()}}
-        <audio controls >
-          <source src="{{synth.url}}">
-        </audio>
-      </li>
-    </ul>
   </div>
 </div>

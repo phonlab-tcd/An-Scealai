@@ -39,11 +39,15 @@ export type AbairAPIv2AudioEncoding =
   // TODO, get the proper name for the OGG type
   'OGG';
 
+type Dialect = ('connemara' | 'kerry' | 'donegal');
+
+
 export interface SynthRequestObject {
   input: string;
-  voice: AbairAPIv2Voice;
-  speed: number;
-  audioEncoding: AbairAPIv2AudioEncoding;
+  voice?: AbairAPIv2Voice; // voice takes precedence over dialect. If a valid voice is given, ignore the dialect
+  dialect?: ('connemara' | 'kerry' | 'donegal');
+  speed?: number;
+  audioEncoding?: AbairAPIv2AudioEncoding;
 }
 
 @Injectable({
@@ -80,38 +84,50 @@ export class SynthesisService {
     return tempDivElement.textContent || tempDivElement.innerText || '';
   }
 
-  synthesiseHtml(requestObject: SynthRequestObject): Promise<any> {
-    requestObject.input = this.convertToPlain(requestObject.input);
-    return this.synthesiseText(requestObject);
+  synthesiseHtml(input, ... theRest): Promise<any> {
+    input = this.convertToPlain(input);
+    return this.synthesiseText(input, ... theRest );
   }
 
-  synthesiseText(requestObject: SynthRequestObject): Promise<any> {
+  synthesiseText(
+    input: string,
+    dialect: Dialect = 'connemara',
+    voice: AbairAPIv2Voice = null,
+    audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
+    speed: number = 1,
+    ): Promise<any> {
+
+    console.log('synthesising:', input);
 
     return new Promise(async (resolve, reject) => {
       let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
 
-      if ( requestObject.input) {
-        url = url + encodeURIComponent(requestObject.input);
+      if ( !input) {
+        return reject('input required');
+      }
+
+      url = url + encodeURIComponent(input);
+
+      if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
+        // use given voice
       } else {
-        reject('input required');
+        // get voice for given dialect
+        voice = this.voice(dialect);
       }
 
-      if ( requestObject.voice && abairAPIv2Voices.includes(requestObject.voice.toString()) ) {
-        url = url + '&voice=' + encodeURIComponent(requestObject.voice);
-      }
+      url = url + '&voice=' + encodeURIComponent(voice);
 
-      if (requestObject.speed) {
-        url = url + '&speed=' + encodeURIComponent(requestObject.speed);
-      }
-      if (requestObject.audioEncoding) {
-        url = url + '&audioEncoding=' + encodeURIComponent(requestObject.audioEncoding);
-      }
+      url = url + '&speed=' + encodeURIComponent(speed);
+
+      url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
+      
+      console.log(url);
 
       this.http.get(url, {
         observe: 'body'
       }).subscribe(
       (obj: { audioContent: string }) => {
-        const type = 'audio/' + requestObject.audioEncoding.toString().toLowerCase();
+        const type = 'audio/' + audioEncoding.toString().toLowerCase();
         const audioURI = 'data:' + type + ';base64,' + obj.audioContent;
         return resolve(audioURI);
       },
