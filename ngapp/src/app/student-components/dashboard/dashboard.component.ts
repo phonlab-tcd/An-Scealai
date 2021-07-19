@@ -35,12 +35,17 @@ import {
   } from '../../services/synthesis.service';
 import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapshot.component';
 import { Track } from 'ngx-audio-player';
+import { QuillEditorComponent } from 'ngx-quill';
+import { Quill } from 'quill';
 
 
 interface Synthesis {
   url: string;
   date: Date;
+  html: string;
 }
+
+type SynthesisLineByLine = Synthesis[];
 
 @Component({
   selector: 'app-dashboard',
@@ -82,17 +87,6 @@ export class DashboardComponent implements OnInit {
 
   frozenHtmlText: string;
 
-  msaapPlaylist: Track[] = [];
-  msaapDisplayTitle = true;
-  muted = false;
-  msaapDisplayPlayList = true;
-  pageSizeOptions = true;
-  msaapDisplayVolumeControls = true;
-  msaapDisplayRepeatControls = true;
-  msaapDisablePositionSlider = true;
-  msaapDisplayArtist = false;
-  msaapDisplayDuration = true;
-
   quillToolbar = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -128,13 +122,10 @@ export class DashboardComponent implements OnInit {
   ];
   // synthesisSnapshot: SynthesisSnapshotComponent;
 
-  @ViewChild('myTextArea', {static: false}) myTextArea: any;
+  @ViewChild('quill-editor', {static: false}) quillEditor: any;
 
   @ViewChild('synthesisSnapshotContainer', {static: false}) synthesisSnapshotContainer: SynthesisSnapshotComponent;
 
-  onEnded(event: any){
-    console.log('ENDED', event);
-  }
 
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
@@ -151,25 +142,32 @@ export class DashboardComponent implements OnInit {
               private componentFactoryResolver: ComponentFactoryResolver,
              ) {}
 
-  autoGrowTextArea() {
-    if (this.myTextArea.scrollHeight > this.myTextArea.clientHeight) {
-      this.myTextArea.style.height = this.myTextArea.scrollHeight + 'px';
+  async synthesiseQuillTextLineByLine() {
+    const quills = document.getElementsByTagName('quill-editor');
+    if (quills.length > 1 || quills.length < 1) {
+      console.error('number of quill editors on page:', quills.length);
     }
+    const quill = quills[0];
+    if ( quill instanceof Quill) {
+    const lines = quill.getLines();
+    }
+
   }
 
   async synthesiseQuillText() {
     console.log('synth');
+    console.log(this.story.htmlText);
     const date = new Date();
-    const url = await this.synth.synthesiseHtml({
-      input: this.story.htmlText,
-      voice: this.synth.voice(this.story.dialect as ('connemara' | 'kerry' | 'donegal')),
-      speed: 1,
-      audioEncoding: 'MP3' as AbairAPIv2AudioEncoding,
-    } as SynthRequestObject).catch( (err) => {
+    const url = await this.synth.synthesiseHtml(
+      this.story.htmlText,
+      this.story.dialect as ('connemara' | 'kerry' | 'donegal'),
+    ).catch( (err) => {
       console.error(err);
     });
 
     this.audioSources.unshift({
+      // TODO this is a reference and the value is mutable
+      html: this.story.htmlText,
       url,
       date});
     console.log('finished synth started:', date);
@@ -180,16 +178,6 @@ export class DashboardComponent implements OnInit {
   * and the current story being edited given its id from url
   */
   ngOnInit() {
-    this.synth.synthesiseText({
-      input: 'Dia dhuit, a chara!',
-      voice: 'ga_UL_anb_nnmnkwii',
-      audioEncoding: 'MP3',
-      speed: 1,
-    }).then(
-      (audioUrl) => {
-        this.audioSources.unshift(audioUrl);
-      });
-
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
