@@ -89,14 +89,12 @@ export class SynthesisService {
     speed: number = 1,
     ): Promise<any> {
 
-    console.log('synthesising:', input);
-
     return new Promise(async (resolve, reject) => {
-      let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
-
-      if ( !input) {
+      if (!input) {
         return reject('input required');
       }
+
+      let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
 
       url = url + encodeURIComponent(input);
 
@@ -112,9 +110,8 @@ export class SynthesisService {
       url = url + '&speed=' + encodeURIComponent(speed);
 
       url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
-      
-      console.log(url);
 
+      console.log(url);
       this.http.get(url, {
         observe: 'body'
       }).subscribe(
@@ -145,8 +142,6 @@ export class SynthesisService {
         this.baseUrl + 'story/synthesiseObject/',
         {story: storyObject},
       ).toPromise() as SynthesisResponse;
-
-    console.dir(synthesisResponse);
 
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];

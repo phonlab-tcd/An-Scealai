@@ -38,7 +38,8 @@ import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapsh
 import { Track } from 'ngx-audio-player';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Quill } from 'quill';
-import {TextProcessingService} from 'src/app/services/text-processing.service';
+import { TextProcessingService } from 'src/app/services/text-processing.service';
+import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
 
 
 interface SynthesisedSentence {
@@ -92,6 +93,9 @@ export class DashboardComponent implements OnInit {
 
   audioSources = [];
 
+  sentences: string[];
+  htmlDataIsReady = false;
+
   quillToolbar = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -144,7 +148,6 @@ export class DashboardComponent implements OnInit {
               public ts: TranslationService,
               public statsService: StatsService,
               public classroomService: ClassroomService,
-              private componentFactoryResolver: ComponentFactoryResolver,
               private textProcessor: TextProcessingService,
              ) {}
 
@@ -156,8 +159,8 @@ export class DashboardComponent implements OnInit {
         this.textProcessor.convertHtmlToPlainText(
           // Reference the ngModel'd quill editor input text
           this.story.htmlText));
+    console.log('dashboard sentences', sentences);
 
-    console.log(sentences);
 
     const newSynthesis: SynthesisSentenceBySentence = {
       date: new Date(),
@@ -172,7 +175,6 @@ export class DashboardComponent implements OnInit {
       newSynthesis.sentences.push(thisSentence);
       this.synth.synthesiseText(sentences[i], this.story.dialect as Dialect)
           .then(url => {
-            console.log(sentences[i], url);
             thisSentence.url  = url;
           });
     }
@@ -197,7 +199,6 @@ export class DashboardComponent implements OnInit {
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
       this.stories = stories;
-      console.log(this.stories);
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
         this.id = params.id;
@@ -212,7 +213,11 @@ export class DashboardComponent implements OnInit {
             if (!this.story.htmlText) {
               this.story.htmlText = this.story.text;
             }
-            this.synthesiseQuillTextSentenceBySentence();
+            this.sentences =
+              this.textProcessor
+                  .convertHtmlTextToArrayOfSentences(
+                      this.story.htmlText);
+            this.htmlDataIsReady = true;
             break;
           }
         }
@@ -229,7 +234,6 @@ export class DashboardComponent implements OnInit {
         .subscribe( (res) => {
         if (res && res._id) {
           this.classroomId = res._id;
-          console.log(this.classroomId);
         }
     });
   }
@@ -283,7 +287,6 @@ export class DashboardComponent implements OnInit {
         this.storyService.updateStory(updateData, params.id).subscribe();
         this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
         this.storySaved = true;
-        console.log('Story saved');
       }
     );
   }
@@ -325,8 +328,6 @@ export class DashboardComponent implements OnInit {
   storyEdited(text) {
     this.story.text = text;
     this.storySaved = false;
-    //console.log("text: ", this.story.text);
-    //console.log("html: ", this.story.htmlText);
     
   }
   
@@ -391,9 +392,7 @@ export class DashboardComponent implements OnInit {
     this.tags = [];
     this.filteredTags.clear();
     this.chosenTag = null;
-    console.log(this.story._id);
     this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
-      console.log("checking grammar for: ", this.story._id);
       this.tagSets = res;
       this.tags = this.tagSets.gramadoirTags;
       this.filterTags();
@@ -488,7 +487,6 @@ export class DashboardComponent implements OnInit {
           }
         } 
       }
-      console.log("Filtered tags: ", this.filteredTags);
       this.updateStats();
     });
   }
@@ -519,7 +517,6 @@ export class DashboardComponent implements OnInit {
   * Update the grammar error map of the stat object corresponding to the current student id
   */
   updateStats() {
-    console.log("Update grammar errors");
     let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
@@ -551,9 +548,6 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleOptions() {
-    console.log("setOptionsVisibleIfNot()\tshowOptions=",
-                this.showOptions,"\tdontToggle=",
-                this.dontToggle);
     if(!this.dontToggle){
       this.showOptions = !this.showOptions;
     }

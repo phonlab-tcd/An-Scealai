@@ -1,5 +1,14 @@
 <!-- Display the written story along with edit options -->
 <div class="page">
+  <app-synthesis-player
+      *ngIf="htmlDataIsReady"
+      [dialect]="story.dialect"
+      [sentences]="sentences">
+      <!--
+    *ngIf="htmlDataToBeSynthesised"
+    htmlDataToBeSynthesised="htmlDataToBeSynthesised">
+      -->
+  </app-synthesis-player>
   <div class="bookContainer">
     <div class="{{modalClass}} modalContainer">
       <div class="modalContent" *ngIf="story">
@@ -137,14 +146,14 @@
          
       </div>
       <div *ngFor="let synth of audioSources; let i = index; let last = last;">
-        <div *ngFor="let sentence of synth.sentences; let sentenceNumber = index;">
+        <div *ngFor="let sentence of synth.sentences; let sentenceNumber = index; let lastSentence = last;">
           <div style="float: left; padding: 0; padding-left: 8px;">
             {{sentence.sentence}}
           </div>
         <br>
         <div
             *ngIf="sentence.url === 'waiting'">
-          <div class="synthesisLoading">
+          <div class="synthesisLoading" style="margin-left: 20px; margin-top: 5px;">
           </div>
         </div>
         <audio
@@ -162,8 +171,13 @@
           </audio>
           <br>
           <hr 
-            *ngIf="!last"
+            *ngIf="!lastSentence"
             style="size: 1px">
+        </div>
+        <div
+            *ngIf="!last">
+          <hr style="size: 1px">
+          <hr style="size: 1px">
         </div>
       </div>
 
