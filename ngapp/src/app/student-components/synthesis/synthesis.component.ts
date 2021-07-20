@@ -2,16 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
-import {  SynthesisService,
-          Paragraph,
-          Sentence,
-          Section,
-          AbairAPIv2AudioEncoding,
-          AbairAPIv2Voice,
-        } from '../../services/synthesis.service';
-
-
-import { HttpClient } from '@angular/common/http';
+import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 
 @Component({
   selector: 'app-synthesis',
@@ -20,24 +11,15 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SynthesisComponent implements OnInit {
 
-  constructor(private storyService: StoryService,
-              private route: ActivatedRoute,
-              private router: Router,
-              public ts: TranslationService,
-              private synthesis: SynthesisService,
-              private http: HttpClient) { }
-
+  constructor(private storyService: StoryService, private route: ActivatedRoute,
+              private router: Router, public ts : TranslationService,
+              private synthesis: SynthesisService) { }
+ 
   storyId: string;
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   chosenSections: Section[];
-  audioFinishedLoading = false;
-
-  synthesisResponse: {
-    audioContent: string
-  };
-
-  synthesisObserver;
+  audioFinishedLoading: boolean = false;
 
   ngOnInit() {
     this.storyId = this.route.snapshot.paramMap.get('id');
@@ -49,39 +31,9 @@ export class SynthesisComponent implements OnInit {
         this.audioFinishedLoading = true;
       });
     });
-
-    this.synthesisResponse = {
-      audioContent: 'Nothing fetched yet'
-    };
   }
 
-  // New Synthesis Functions API v2
-
-  async synthesise() {
-    const text = 'Dia is Muire duit';
-    const uri = `https://www.abair.tcd.ie/api2/synthesise?input=${encodeURIComponent(text)}`;
-    const abairGetResponse = this.http.get(uri,
-      {
-        observe: 'body',
-    }).subscribe(
-      data => console.log('GET Got data: ', data),
-      error => console.error('GET Error: ', error),
-      () => console.log('Completed GET request.')
-    );
-
-    const abairPutResponse = this.http.put(uri, {
-      observe: 'body',
-    }).subscribe(
-      data => console.log('PUT Got data: ', data),
-      error => console.error('PUT Error: ', error),
-      () => console.log('Completed PUT request.')
-    );
-
-    console.log('GET: ', abairGetResponse);
-    console.log('PUT: ', abairPutResponse);
-  }
-
-  // --- UI Manipulation ---//
+  //--- UI Manipulation ---//
 
   isSentenceMode() {
     return this.chosenSections[0] instanceof Sentence;

@@ -4,56 +4,48 @@
   <div class="paragraphContainer"></div>
   <div class="bookContainerSynth">
     <!-- back button to return to story -->
-    <div class="bookHeader">
-      <div (click)="goToDashboard()" class="myStoriesBtn">
-        <i class="fa fa-chevron-left"></i>{{ts.l.story}}
+      <div class="bookHeader">
+        <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div>
+        <div></div>
       </div>
-      <div></div>
-    </div>
-    <div class="storyContainer">
-      <div class="storyHeader">
-        {{ts.l.listen_and_correct}}
-      </div>
-      <div class="textFieldContainer">
-        <!--Main container for story -->
-        <div class="textContainerSynth">
-          <!-- Display synthesising (loading) -->
-          <div *ngIf="!audioFinishedLoading" class="loaderContainer">
-            <b>{{ts.l.synthesising}}</b>
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-          </div>
-          <!-- When synthesis finished loading -->
-          <div *ngIf="audioFinishedLoading">
-            <div *ngFor="let section of chosenSections" class="paragraphContainer">
-              <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml"></span>
-              <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-              <button *ngIf="section.audio.paused" (click)="playSection(section)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-            </div>
-          </div>
+      <div class="storyContainer">
+        <div class="storyHeader">
+          {{ts.l.listen_and_correct}}
         </div>
-        <!-- Choose paragraph or Sentence buttons -->
-        <div class="footer">
-          <div class="btnContainer" *ngIf="audioFinishedLoading">
-            <div class="footerText">
-              {{ts.l.listen_by}}
+        <div class="textFieldContainer">
+          <!--Main container for story -->
+            <div class="textContainerSynth">
+              <!-- Display synthesising (loading) -->
+              <div *ngIf="!audioFinishedLoading" class="loaderContainer">
+                  <b>{{ts.l.synthesising}}</b>
+                  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </div>
+              <!-- When synthesis finished loading -->
+              <div *ngIf="audioFinishedLoading">
+                  <div *ngFor="let section of chosenSections" class="paragraphContainer">
+                    <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml"></span>
+                    <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                    <button *ngIf="section.audio.paused" (click)="playSection(section)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                  </div>
+              </div>
             </div>
-            <div *ngIf="isParagraphMode()">
-              <button class="changeSplitBtn selectedBtn">{{ts.l.paragraph}}</button>
-              <button class="changeSplitBtn" (click)="changeSections(sentences)">{{ts.l.sentence}}</button>
+            <!-- Choose paragraph or Sentence buttons -->
+            <div class="footer">
+              <div class="btnContainer" *ngIf="audioFinishedLoading">
+                <div class="footerText">
+                  {{ts.l.listen_by}}
+                </div>
+                <div *ngIf="isParagraphMode()">
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn" (click)="changeSections(sentences)">{{ts.l.sentence}}</button>
+                </div>
+                <div *ngIf="isSentenceMode()">
+                  <button class="changeSplitBtn" (click)="changeSections(paragraphs)">{{ts.l.paragraph}}</button>
+                  <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
+                </div>
+              </div>
             </div>
-            <div *ngIf="isSentenceMode()">
-              <button class="changeSplitBtn" (click)="changeSections(paragraphs)">{{ts.l.paragraph}}</button>
-              <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h2>Experimental</h2>
-          <p>{{this.synthesisResponse.audioContent}}</p>
-          <button (click)="this.synthesise();">Synthesise</button>
         </div>
       </div>
-    </div>
   </div>
 </div>

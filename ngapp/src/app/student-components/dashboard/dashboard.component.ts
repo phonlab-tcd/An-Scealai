@@ -31,21 +31,28 @@ import {
   AbairAPIv2Voice,
   AbairAPIv2AudioEncoding,
   SynthRequestObject,
+  Dialect,
   SynthesisService,
   } from '../../services/synthesis.service';
 import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapshot.component';
 import { Track } from 'ngx-audio-player';
 import { QuillEditorComponent } from 'ngx-quill';
 import { Quill } from 'quill';
+import {TextProcessingService} from 'src/app/services/text-processing.service';
 
 
-interface Synthesis {
+interface SynthesisedSentence {
   url: string;
-  date: Date;
-  html: string;
+  sentence: string;
 }
 
-type SynthesisLineByLine = Synthesis[];
+type SynthesisSentenceBySentence = {
+  date: Date,
+  // The synthesised sentences should be in the order they appear in the text.
+  // I don't think this can't be enforced with static type checking.
+  // (Neimhin Mon 19 July 2021)
+  sentences: SynthesisedSentence[],
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -83,9 +90,7 @@ export class DashboardComponent implements OnInit {
   words: string[] = [];
   wordCount = 0;
 
-  audioSources: Synthesis[] = [];
-
-  frozenHtmlText: string;
+  audioSources = [];
 
   quillToolbar = {
     toolbar: [
@@ -140,37 +145,46 @@ export class DashboardComponent implements OnInit {
               public statsService: StatsService,
               public classroomService: ClassroomService,
               private componentFactoryResolver: ComponentFactoryResolver,
+              private textProcessor: TextProcessingService,
              ) {}
 
-  async synthesiseQuillTextLineByLine() {
-    const quills = document.getElementsByTagName('quill-editor');
-    if (quills.length > 1 || quills.length < 1) {
-      console.error('number of quill editors on page:', quills.length);
-    }
-    const quill = quills[0];
-    if ( quill instanceof Quill) {
-    const lines = quill.getLines();
+  async synthesiseQuillTextSentenceBySentence() {
+    const sentences =
+      // Split the html into an array of sentences (based on English). Won't work perfectly
+      this.textProcessor.sentences(
+        // Convert the html to plain text
+        this.textProcessor.convertHtmlToPlainText(
+          // Reference the ngModel'd quill editor input text
+          this.story.htmlText));
+
+    console.log(sentences);
+
+    const newSynthesis: SynthesisSentenceBySentence = {
+      date: new Date(),
+      sentences: [],
     }
 
+    for (let i = 0; i < sentences.length; i++) {
+      const thisSentence: SynthesisedSentence = {
+        url: 'waiting',
+        sentence: sentences[i],
+      };
+      newSynthesis.sentences.push(thisSentence);
+      this.synth.synthesiseText(sentences[i], this.story.dialect as Dialect)
+          .then(url => {
+            console.log(sentences[i], url);
+            thisSentence.url  = url;
+          });
+    }
+
+    this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
   }
 
-  async synthesiseQuillText() {
-    console.log('synth');
-    console.log(this.story.htmlText);
-    const date = new Date();
-    const url = await this.synth.synthesiseHtml(
-      this.story.htmlText,
-      this.story.dialect as ('connemara' | 'kerry' | 'donegal'),
-    ).catch( (err) => {
-      console.error(err);
-    });
-
-    this.audioSources.unshift({
-      // TODO this is a reference and the value is mutable
-      html: this.story.htmlText,
-      url,
-      date});
-    console.log('finished synth started:', date);
+  stringifySynth(i: number) {
+    if (this.audioSources[i]) {
+      return JSON.stringify(this.audioSources[i]);
+    }
+    return 'not defined';
   }
 
   /*
@@ -198,7 +212,7 @@ export class DashboardComponent implements OnInit {
             if (!this.story.htmlText) {
               this.story.htmlText = this.story.text;
             }
-            this.synthesiseQuillText();
+            this.synthesiseQuillTextSentenceBySentence();
             break;
           }
         }
@@ -257,7 +271,8 @@ export class DashboardComponent implements OnInit {
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
-    this.synthesiseQuillText();
+    console.dir(this.audioSources);
+    this.synthesiseQuillTextSentenceBySentence();
     this.route.params.subscribe(
       params => {
         const updateData = {
