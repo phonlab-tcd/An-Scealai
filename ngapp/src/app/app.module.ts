@@ -65,6 +65,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 
 
 
@@ -113,13 +114,14 @@ import { QuillModule } from 'ngx-quill';
     SafeHtmlPipe,
     SponsorsComponent,
     SynthesisSnapshotComponent,
+    SynthesisPlayerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    //SlimLoadingBarModule,
+    // SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,
@@ -135,12 +137,14 @@ import { QuillModule } from 'ngx-quill';
       }]
     })
   ],
-  providers: [ 
+  providers: [
     StoryService,
     UserService,
     {provide : LocationStrategy , useClass: HashLocationStrategy}
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent,
+  ],
   entryComponents: [ChatbotComponent],
 })
 export class AppModule {

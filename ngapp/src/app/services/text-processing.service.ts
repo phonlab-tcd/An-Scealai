@@ -13,7 +13,13 @@ export class TextProcessingService {
   constructor() {
   }
 
+  convertHtmlTextToArrayOfSentences(html: string): string[] {
+    console.log(html);
+    return this.sentences(this.convertHtmlToPlainText(html));
+  }
+
   sentences(text: string) {
+    console.log(text);
     return nlp.string.sentences(text);
   }
 
@@ -27,9 +33,5 @@ export class TextProcessingService {
 
     // Retrieve the text property of the element
     return tempDivElement.textContent || tempDivElement.innerText || '';
-  }
-
-  stupidSplitPlainTextIntoSentences() {
-
   }
 }
