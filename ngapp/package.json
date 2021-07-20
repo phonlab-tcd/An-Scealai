@@ -29,6 +29,7 @@
     "@ng-bootstrap/ng-bootstrap": "^9.1.3",
     "@popperjs/core": "^2.9.2",
     "@types/dom-mediacapture-record": "^1.0.1",
+    "@types/quill": "^2.0.9",
     "angular": "^1.8.2",
     "angular-text-input-highlight": "^1.4.3",
     "bootstrap": "^5.0.2",
@@ -49,6 +50,9 @@
     "quill": "^1.3.7",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
+    "wink-eng-lite-web-model": "^1.2.1",
+    "wink-nlp": "^1.7.2",
+    "wink-nlp-utils": "^2.0.6",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

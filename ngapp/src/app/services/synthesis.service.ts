@@ -5,6 +5,7 @@ import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { Observable } from 'rxjs';
 import config from '../../abairconfig.json';
+import {TextProcessingService} from './text-processing.service';
 
 interface APIv2Response {
   audioContent: string;
@@ -39,7 +40,7 @@ export type AbairAPIv2AudioEncoding =
   // TODO, get the proper name for the OGG type
   'OGG';
 
-type Dialect = ('connemara' | 'kerry' | 'donegal');
+export type Dialect = ('connemara' | 'kerry' | 'donegal');
 
 
 export interface SynthRequestObject {
@@ -57,7 +58,9 @@ export class SynthesisService {
 
   constructor(
     private http: HttpClient,
-    private engagement: EngagementService) { }
+    private engagement: EngagementService,
+    private textProcessor: TextProcessingService,
+  ) { }
 
   baseUrl = config.baseurl;
 
@@ -72,20 +75,9 @@ export class SynthesisService {
     }
   }
 
-  // TODO this is troublesome
-  convertToPlain(html: string){
-    // Create a new div element
-    const tempDivElement = document.createElement('div');
-
-    // Set the HTML content with the given value
-    tempDivElement.innerHTML = html;
-
-    // Retrieve the text property of the element
-    return tempDivElement.textContent || tempDivElement.innerText || '';
-  }
 
   synthesiseHtml(input, ... theRest): Promise<any> {
-    input = this.convertToPlain(input);
+    input = this.textProcessor.convertHtmlToPlainText(input);
     return this.synthesiseText(input, ... theRest );
   }
 

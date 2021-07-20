@@ -136,19 +136,35 @@
       </div>
          
       </div>
-      <div *ngIf="showOptions" >
+      <div *ngFor="let synth of audioSources; let i = index; let last = last;">
+        <div *ngFor="let sentence of synth.sentences; let sentenceNumber = index;">
+          <div style="float: left; padding: 0; padding-left: 8px;">
+            {{sentence.sentence}}
+          </div>
+        <br>
+        <div
+            *ngIf="sentence.url === 'waiting'">
+          <div class="synthesisLoading">
+          </div>
+        </div>
         <audio
-            *ngFor="let synth of audioSources; let i = index;"
+            *ngIf="sentence.url !== 'waiting'"
             style="width: 100%;"
             controls >
-            <p>
-          Your browser does not support the
-          <code>audio</code> element. Here is a
-          <a href="{{synth.url}}">link to the audio</a>
-          instead.
+            <source
+                src="{{sentence.url}}">
+            <p> <!-- Message to display if the user's browser doesn't support the audio tag -->
+              Your browser does not support the
+              <code>audio</code> element. Here is a
+              <a href="{{sentence.url}}">link to the audio</a>
+              instead.
             </p>
-            <source src="{{synth.url}}">
-        </audio>
+          </audio>
+          <br>
+          <hr 
+            *ngIf="!last"
+            style="size: 1px">
+        </div>
       </div>
 
       <!-- display grammar loading -->
@@ -156,7 +172,8 @@
         <div class="textContainer">
           <div class="loaderContainer">
             <b>{{ts.l.correcting_grammar}}</b>
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div class="rds-grid">
+              <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
           </div>
         </div>
       </div>
