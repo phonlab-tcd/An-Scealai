@@ -13,7 +13,7 @@ type SentenceAndAudioUrl = {
   template:
     `
     <div *ngFor="let s of sentencesAndAudioUrls; let i = index;">
-      <p>
+      <p class="text-start">
         {{s.sentence}}
 
       <ng-container
