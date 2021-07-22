@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "rm src/abairconfig.json && cp abairconfig_dev.json src/abairconfig.json && ng serve",
     "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & npm",
-    "build_prod": "rm src/abairconfig.json && cp abairconfig_prod.json src/abairconfig.json && ng build --prod --base-href /scealai/ --output-path unpublished_dist",
-    "build_prod_local": "rm src/abairconfig.json && cp abairconfig_prod.json src/abairconfig.json && ng build --prod --output-path build_prod_local",
+    "build_prod": "ng build --prod --base-href /scealai/ --output-path unpublished_dist",
+    "build_prod_local": "ng build --prod --output-path build_prod_local",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
