@@ -41,7 +41,6 @@
     "highlight-within-textarea": "^2.0.5",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
-    "ngx-audio-player": "^11.0.4",
     "ngx-quill": "^14.1.2",
     "npm": "^7.18.1",
     "path": "^0.12.7",

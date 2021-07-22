@@ -153,6 +153,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     console.dir(this.quillEditor);
     console.log(Object.getOwnPropertyNames(this.quillEditor).filter(item => typeof this.quillEditor[item] === 'function'));
     console.dir(this.quillEditor.textChangeHandler);
+    console.dir(this.quillEditor().getLines());
   }
 
   async synthesiseQuillTextSentenceBySentence() {
