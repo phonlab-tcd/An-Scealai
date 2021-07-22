@@ -133,6 +133,7 @@
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
 
         <quill-editor
+            #myQuillEditor
             [modules]="quillToolbar"
             placeholder=""
             [preserveWhitespace]="true"
