@@ -151,6 +151,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     console.log('ngAfterViewInit');
     console.dir(this.quillEditor);
+    console.log(Object.getOwnPropertyNames(this.quillEditor).filter(item => typeof this.quillEditor[item] === 'function'));
+    console.dir(this.quillEditor.textChangeHandler);
   }
 
   async synthesiseQuillTextSentenceBySentence() {
