@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "rm src/abairconfig.json && cp abairconfig_dev.json src/abairconfig.json && ng serve",
+    "start": "ng serve",
     "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & npm",
     "build_prod": "ng build --prod --base-href /scealai/ --output-path unpublished_dist",
     "build_prod_local": "ng build --prod --output-path build_prod_local",
