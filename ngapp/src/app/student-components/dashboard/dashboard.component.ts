@@ -6,7 +6,8 @@ import {
   // HostListener,
   ViewEncapsulation,
   // Renderer2,
-  ViewChild } from '@angular/core';
+  ViewChild,
+  AfterViewInit} from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
@@ -62,7 +63,7 @@ type SynthesisSentenceBySentence = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
   story: Story = new Story();
   stories: Story[];
@@ -129,12 +130,8 @@ export class DashboardComponent implements OnInit {
       name : this.ts.l.ulster
     }
   ];
-  // synthesisSnapshot: SynthesisSnapshotComponent;
 
-  @ViewChild('quill-editor', {static: false}) quillEditor: any;
-
-  @ViewChild('synthesisSnapshotContainer', {static: false}) synthesisSnapshotContainer: SynthesisSnapshotComponent;
-
+  @ViewChild('myQuillEditor') quillEditor: any;
 
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
@@ -150,6 +147,11 @@ export class DashboardComponent implements OnInit {
               public classroomService: ClassroomService,
               private textProcessor: TextProcessingService,
              ) {}
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit');
+    console.dir(this.quillEditor);
+  }
 
   async synthesiseQuillTextSentenceBySentence() {
     const sentences =

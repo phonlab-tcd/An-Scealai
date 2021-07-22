@@ -111,7 +111,6 @@ export class SynthesisService {
 
       url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
 
-      console.log(url);
       this.http.get(url, {
         observe: 'body'
       }).subscribe(

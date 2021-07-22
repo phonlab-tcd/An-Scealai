@@ -14,12 +14,10 @@ export class TextProcessingService {
   }
 
   convertHtmlTextToArrayOfSentences(html: string): string[] {
-    console.log(html);
     return this.sentences(this.convertHtmlToPlainText(html));
   }
 
   sentences(text: string) {
-    console.log(text);
     return nlp.string.sentences(text);
   }
 
