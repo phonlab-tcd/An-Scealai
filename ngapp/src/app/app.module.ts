@@ -13,7 +13,6 @@ import { MatCardModule } from '@angular/material/card'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
-import { NgxAudioPlayerModule } from 'ngx-audio-player';
 
 import { StoryService } from './story.service';
 import { UserService } from './user.service';
@@ -129,7 +128,6 @@ import { SynthesisPlayerComponent } from './student-components/synthesis-player/
     MatCardModule,
     NgbModule,
     NgbDropdownModule,
-    NgxAudioPlayerModule,
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',
