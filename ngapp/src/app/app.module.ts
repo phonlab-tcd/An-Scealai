@@ -33,7 +33,6 @@ import { BookContentsComponent } from './student-components/book-contents/book-c
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { SynthesisSnapshotComponent } from './student-components/synthesis-snapshot/synthesis-snapshot.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -112,7 +111,6 @@ import { SynthesisPlayerComponent } from './student-components/synthesis-player/
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
-    SynthesisSnapshotComponent,
     SynthesisPlayerComponent,
   ],
   imports: [
