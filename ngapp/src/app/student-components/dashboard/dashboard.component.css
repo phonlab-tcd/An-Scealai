@@ -401,7 +401,7 @@ background-color: lightblue;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: calc(var(--textfieldHeight) / 3);
+    margin-top: 20px;
     color: #437250;
 }
 
