@@ -63,6 +63,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 
 
 
@@ -110,6 +111,7 @@ import { QuillModule } from 'ngx-quill';
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
+    GrammarCheckerComponent,
   ],
   imports: [
     BrowserModule,
