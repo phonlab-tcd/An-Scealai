@@ -35,10 +35,8 @@ import {
   Dialect,
   SynthesisService,
   } from '../../services/synthesis.service';
-import {SynthesisSnapshotComponent} from '../synthesis-snapshot/synthesis-snapshot.component';
-import { Track } from 'ngx-audio-player';
 import { QuillEditorComponent } from 'ngx-quill';
-import { Quill } from 'quill';
+import * as Quill from 'quill';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
 
@@ -132,6 +130,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ];
 
   @ViewChild('myQuillEditor') quillEditor: any;
+  divQuill: any;
 
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
@@ -153,7 +152,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     console.dir(this.quillEditor);
     console.log(Object.getOwnPropertyNames(this.quillEditor).filter(item => typeof this.quillEditor[item] === 'function'));
     console.dir(this.quillEditor.textChangeHandler);
-    console.dir(this.quillEditor().getLines());
+
+    this.divQuill = new Quill('#myDivQuill', { theme: 'snow'});
+  }
+
+  printLines(){
+    for (const obj of this.divQuill.getLines()) {
+      console.dir(obj.children.head.text);
+    }
   }
 
   async synthesiseQuillTextSentenceBySentence() {

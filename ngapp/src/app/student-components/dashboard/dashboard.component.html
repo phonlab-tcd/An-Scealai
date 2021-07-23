@@ -132,6 +132,11 @@
       <div class="textFieldContainer">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
 
+        <button (click)="printLines()">printLines</button>
+        <div
+            id="myDivQuill">
+          <p>Hello World!</p>
+        </div>
         <quill-editor
             #myQuillEditor
             [modules]="quillToolbar"
