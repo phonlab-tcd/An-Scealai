@@ -14,6 +14,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -46,8 +47,12 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
+  
+  // OPTIONS (to show or not to show)
   showOptions: boolean = true;
   dontToggle: boolean = false;
+
+  // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
   
@@ -121,14 +126,23 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+
+    // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
-      if(res) {
-        this.classroomId = res._id;
-        console.log(this.classroomId);
-      }
-    });
+    if (!userDetails) {
+      return;
+    }
+    this.classroomService
+        .getClassroomOfStudent(
+          userDetails._id)
+        .subscribe(
+          (res) => {
+            if (res) {
+              this.classroomId = res._id;
+              console.log(this.classroomId);
+            }
+          }
+        );
   }
 
 /*
@@ -157,11 +171,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* Update story data (text and date) using story service 
-* Add logged event for saved story  using engagement service
-*/
+  /*
+  * Update story data (text and date) using story service
+  * Add logged event for saved story  using engagement service
+  */
   saveStory() {
+    if (this.story === undefined) {
+      throw new Error('Tried to save story but this.story is undefined');
+    }
     this.route.params.subscribe(
       params => {
         let updateData = {

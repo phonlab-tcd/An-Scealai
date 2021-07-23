@@ -167,76 +167,13 @@
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
 
-      <!-- display grammar loading -->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
-        <div class="textContainer">
-          <div class="loaderContainer">
-            <b>{{ts.l.correcting_grammar}}</b>
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-          </div>
-        </div>
-      </div>
+      <app-grammar-checker
+          *ngIf="story.text"
+          [statsService]="statsService"
+          [classroomService]="classroomService"
+          [text]="story.text">
+      </app-grammar-checker>
 
-      <!-- display story container after grammar checked -->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible && grammarChecked">
-        <!-- dipslay chosen tag window -->
-        <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times optionsBtnIcon"></i></div></div>
-        <div class="grammarMessageContainer {{grammarMessageClass}}">
-          <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
-          <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
-        </div>
-        <!-- display an gramadoir / vowel checker selection -->
-        <div class="grammarToolbar">
-          <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
-          <div class="selectGrammarFilter">
-            <select (change)="onChangeGrammarFilter($event.target.value)">
-              <option value="gramadoir">{{ts.l.gramadoir}}</option>
-              <option value="vowel">{{ts.l.broad_slender}}</option>
-            </select>
-          </div>
-        </div>
-        <!-- display grammar error filter options -->
-        <div class="selectErrorCheckbox" *ngIf="grammarSelected">
-          <div *ngFor="let recipient of filteredTags | keyvalue">
-            <div style="margin:2px;" >
-              <input
-                  [ngModel]="checkBox.get(recipient.key)"
-                  (ngModelChange)="checkBox.set(recipient.key, $event)"
-                  type="checkbox">
-              {{recipient.key | lowercase}} ({{recipient.value.length}})
-            </div> 
-          </div>
-        </div>
-        <!-- display the story with error highlighting-->
-        <div mwlTextInputHighlightContainer>
-          <textarea
-              mwlTextInputElement
-              contenteditable="false"
-              class="textField textFieldGrammarCheck"
-              [(ngModel)]="story.text"
-              #inputTextarea ></textarea>
-          <!-- an gramadoir -->
-          <div *ngIf="grammarSelected">
-            <mwl-text-input-highlight
-                [tags]="getSelectedTags()"
-                [textInputElement]="inputTextarea"
-                (tagClick)="chooseGrammarTag($event.tag)"
-                (tagMouseEnter)="addTagHoverClass($event.target)"
-                (tagMouseLeave)="removeTagHoverClass($event.target)">
-            </mwl-text-input-highlight>
-          </div>
-          <!-- broad/slender -->
-          <div *ngIf="!grammarSelected">
-            <mwl-text-input-highlight
-                [tags]="tags"
-                [textInputElement]="inputTextarea"
-                (tagClick)="chooseGrammarTag($event.tag)"
-                (tagMouseEnter)="addTagHoverClass($event.target)"
-                (tagMouseLeave)="removeTagHoverClass($event.target)">
-            </mwl-text-input-highlight>
-          </div>
-        </div>
-      </div>
     </div>
     <!-- <app-chatbot></app-chatbot> -->
   </div>
