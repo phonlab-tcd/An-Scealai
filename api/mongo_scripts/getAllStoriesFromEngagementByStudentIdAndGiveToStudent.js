@@ -88,20 +88,17 @@ main = async () => {
    
     console.dir(storyIds);
 
-    let createdStories = 0;
     try {
       for (const id of Object.keys(storyIds)) {
         try {
           const stories = await Engagement.find({"storyData._id": id})
-          console.dir(stories);
-          const latestStory = mostRecentStory(stories);
-          const doc = new Story(latestStory.storyData);
-          delete doc._id;
-          doc.author = o.user.username;
-          doc.studentId = o.user._id.toString();
-          console.dir(doc);
-          await doc.save();
-          createdStories++;
+          const latestStory = mostRecentStory(stories).storyData
+ 	  console.dir(latestStory);
+          delete latestStory._id;
+          latestStory.author = o.user.username;
+          latestStory.studentId = o.user._id.toString();
+	  latestStory.title = 'RECOVERED: ' + latestStory.title;
+          await Story.create(latestStory);
           console.count('Story Created');
         } catch(error) {
           throw error;
@@ -110,8 +107,6 @@ main = async () => {
     } catch (error) {
       throw error;
     }
-    
-    console.log('Created Stories:', createdStories);
   } catch (error) {
     throw error;
   }
