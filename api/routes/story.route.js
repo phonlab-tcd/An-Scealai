@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const storyRoutes = express.Router();
 const multer = require('multer');
 const { Readable } = require('stream');
 const mongodb = require('mongodb');
@@ -10,6 +9,8 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const makeEndpoints = require('../utils/makeEndpoints');
+const getStoryById = require('../endpointsFunctions/story/getStoryById');
 
 let Story = require('../models/story');
 let Event = require('../models/event');
@@ -25,19 +26,10 @@ MongoClient.connect('mongodb://localhost:27017/',
     db = client.db('an-scealai');
   });
 
-storyRoutes.route('/getStoryById/:id').get((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.status(400).json("An error occurred while trying to find this profile");
-      return;
-    }
-    if(!story) {
-      res.status(404).json("Story with given ID not found");
-      return;
-    }
-    res.status(200).json(story);             
-  });
+const storyRoutes = makeEndpoints({
+  get: {
+    '/getStoryById/:id': getStoryById,
+  }
 });
 
 // Create new story
