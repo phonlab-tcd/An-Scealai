@@ -90,12 +90,19 @@ export class DashboardComponent implements OnInit {
     ]
   };
   
-  constructor(private storyService: StoryService, private route: ActivatedRoute,
-    private auth: AuthenticationService, protected sanitizer: DomSanitizer,
-    private notifications: NotificationService, private router: Router,
-    private engagement: EngagementService, private grammar: GrammarService,
-    public ts : TranslationService, public statsService: StatsService,
-    public classroomService: ClassroomService,) {}
+  constructor(
+    private storyService: StoryService,
+    private route: ActivatedRoute,
+    private auth: AuthenticationService,
+    protected sanitizer: DomSanitizer,
+    private notifications: NotificationService,
+    private router: Router,
+    private engagement: EngagementService,
+    private grammar: GrammarService,
+    public ts: TranslationService,
+    public statsService: StatsService,
+    public classroomService: ClassroomService,
+  ) {}
 
 /*
 * set the stories array of all the student's stories 

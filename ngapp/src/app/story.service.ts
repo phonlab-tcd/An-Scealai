@@ -105,7 +105,11 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'synthesise/' + id);
   }
 
-  gramadoir(text: string): Observable<any> {
+  gramadoirViaBackend(id: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
+  }
+
+  gramadoirDirect(text: string): Observable<any> {
     return this
       .http
       .post('https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl', {
