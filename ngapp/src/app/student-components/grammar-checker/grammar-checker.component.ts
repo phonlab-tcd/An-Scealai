@@ -1,4 +1,6 @@
-import { EngagementService } from 'src/app/engagement.service';
+// src/app/student-components/grammar-checker/grammar-checker.component.ts
+import { EngagementService} from 'src/app/engagement.service';
+import { EventType } from 'src/app/event';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { StatsService } from 'src/app/stats.service';
 import { ClassroomService } from 'src/app/classroom.service';
@@ -6,6 +8,7 @@ import { HighlightTag, } from 'angular-text-input-highlight';
 import { Component, OnInit, Input } from '@angular/core';
 import { GrammarService, GrammarTag, TagSet  } from 'src/app/grammar.service';
 import { TranslationService } from 'src/app/translation.service';
+import { Story } from 'src/app/story';
 
 @Component({
   selector: 'app-grammar-checker',
@@ -14,7 +17,8 @@ import { TranslationService } from 'src/app/translation.service';
 })
 export class GrammarCheckerComponent implements OnInit {
 
-  @Input() text: string;
+  @Input() story: Story;
+  @Input() classroomId: string;
 
   grammarLoading = true;
   grammarChecked = false;
@@ -24,7 +28,8 @@ export class GrammarCheckerComponent implements OnInit {
   teacherSelectedErrors: string[] = [];
   chosenTag: GrammarTag;
   tagSets: TagSet;
-  grammarSelected: boolean = true;
+  grammarSelected = true;
+  checkBox: Map<string, boolean> = new Map();
 
   constructor(
     private grammar: GrammarService,
@@ -52,14 +57,14 @@ export class GrammarCheckerComponent implements OnInit {
     this.filteredTags.clear();
     this.chosenTag = null;
     this.grammar
-        .checkGrammar(this.text).subscribe(
+        .checkGrammar(this.story._id).subscribe(
           (res: TagSet) => {
             this.tagSets = res;
             this.tags = this.tagSets.gramadoirTags;
             this.filterTags();
             this.grammarLoading = false;
             this.grammarChecked = true;
-            this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
+            this.engagement.addEventForLoggedInUser(EventType['GRAMMAR-CHECK-STORY'], this.story);
       });
   }
 
