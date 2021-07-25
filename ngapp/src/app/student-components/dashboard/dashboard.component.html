@@ -85,7 +85,7 @@
 
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
+          (click)="this.dontToggle=true; defaultMode(); grammarChecker.hideEntireGrammarChecker=false;">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
@@ -168,6 +168,7 @@
       </div>
 
       <app-grammar-checker
+          #grammarChecker
           *ngIf="story.text"
           [statsService]="statsService"
           [classroomService]="classroomService"

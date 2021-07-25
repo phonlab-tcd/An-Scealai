@@ -13,7 +13,9 @@ import { Story } from 'src/app/story';
 @Component({
   selector: 'app-grammar-checker',
   templateUrl: './grammar-checker.component.html',
-  styleUrls: ['./grammar-checker.component.css']
+  // TODO WRITE LESS CSS
+  styleUrls: [
+  ],
 })
 export class GrammarCheckerComponent implements OnInit {
 
@@ -30,6 +32,7 @@ export class GrammarCheckerComponent implements OnInit {
   tagSets: TagSet;
   grammarSelected = true;
   checkBox: Map<string, boolean> = new Map();
+  hideEntireGrammarChecker = true;
 
   constructor(
     private grammar: GrammarService,
@@ -149,15 +152,53 @@ export class GrammarCheckerComponent implements OnInit {
   /*
   * Set tags to vowel tags or grammar tags based on event value
   */
-  onChangeGrammarFilter(eventValue : any) {
+  onChangeGrammarFilter(eventValue: any) {
     this.chosenTag = null;
-    if(eventValue == 'vowel') {
+    if (eventValue === 'vowel') {
       this.tags = this.tagSets.vowelTags;
       this.grammarSelected = false;
     }
-    if(eventValue == 'gramadoir') {
+    if (eventValue === 'gramadoir') {
       this.tags = this.tagSets.gramadoirTags;
       this.grammarSelected = true;
     }
+  }
+
+  /**
+   * Gets an array of HighlighTags for which the associated grammar error category
+   * is selected according to the checkBox map.
+   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
+   * HighlightTags for seimhiu.
+   */
+  getSelectedTags(): HighlightTag[] {
+    // Get only those filteredTags whose keys map to true in checkBox
+    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
+      // entry[0] is key, entry[1] is val.
+      if (this.checkBox.get(entry[0])) {
+        return entry[1];
+      } else {
+        return [];
+      }
+    });
+    // Flatten 2d array of HighlightTags
+    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
+    return selectedTags;
+  }
+
+  // set the css class to hover over the tag
+  addTagHoverClass(tagElement: HTMLInputElement) {
+    tagElement.classList.remove('tagNotHover');
+    tagElement.classList.add('tagHover');
+  }
+
+  // set the css class to not hover over the tag
+  removeTagHoverClass(tagElement: HTMLInputElement) {
+    tagElement.classList.remove('tagHover');
+    tagElement.classList.add('tagNotHover');
+  }
+
+  // set chosen tag to tag passed in parameters
+  chooseGrammarTag(tag: HighlightTag) {
+    this.chosenTag = new GrammarTag(tag.data);
   }
 }
