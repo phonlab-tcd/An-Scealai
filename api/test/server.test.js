@@ -4,7 +4,7 @@ describe("API Server", () => {
   describe("Story Routes", () => {
     describe("/version", () => {
       let url = `http://localhost:4000/version`;
-      it(`should send package.json which should have a valid 'version' field`, (done) => {
+      it(`should send package.json which should have a valid 'version' field`, () => {
         request({
           headers: {
             'Content-Type': 'application/json',
@@ -14,8 +14,7 @@ describe("API Server", () => {
         }, (error, res, body) => {
           const parsed = JSON.parse(body);
           console.log(Object.keys(parsed));
-          expect(parsed.version instanceof String);
-          done();
+          expect(parsed.version instanceof String).toBe(true);
         });
       });
     });
