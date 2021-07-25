@@ -1,7 +1,17 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewEncapsulation,
+  ViewChild,
+  Renderer2 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  NavigationEnd,
+  NavigationStart } from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
@@ -24,6 +34,8 @@ import { GrammarCheckerComponent } from 'src/app/student-components/grammar-chec
 })
 
 export class DashboardComponent implements OnInit {
+
+  @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
 
   story: Story = new Story();
   stories: Story[];
@@ -290,12 +302,12 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-/*
-* Set boolean variables for checking data / grammar window in interface
-* Check grammar using grammar service 
-* Set grammar tags using grammar service subscription and filter them by rule
-* Add logged event for checked grammar
-*/
+  /*
+  * Set boolean variables for checking data / grammar window in interface
+  * Check grammar using grammar service 
+  * Set grammar tags using grammar service subscription and filter them by rule
+  * Add logged event for checked grammar
+  */
   runGramadoir() {
     this.saveStory();
     this.feedbackVisible = false;
@@ -317,9 +329,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* Set tags to vowel tags or grammar tags based on event value
-*/
+  /*
+  * Set tags to vowel tags or grammar tags based on event value
+  */
   onChangeGrammarFilter(eventValue : any) {
     this.chosenTag = null;
     if(eventValue == 'vowel') {
@@ -332,36 +344,36 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-// set chosen tag to tag passed in parameters
+  // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
     this.chosenTag = new GrammarTag(tag.data);
   }
 
-// reset checked grammar to false, set tags array and chosen tag to null
+  // reset checked grammar to false, set tags array and chosen tag to null
   closeGrammar() {
     this.grammarChecked = false;
     this.tags = [];
     this.chosenTag = null;
   }
 
-// set the css class to hover over the tag
+  // set the css class to hover over the tag
   addTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagNotHover");
     tagElement.classList.add("tagHover");
   }
 
-// set the css class to not hover over the tag
+  // set the css class to not hover over the tag
   removeTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagHover");
     tagElement.classList.add("tagNotHover");
   }
 
-/*
-* filter the grammar tags using a map
-* key: rule name 
-* value: array of tags that match the rule
-* sets checkBox map value to false (value) for each rule (key)
-*/
+  /*
+  * filter the grammar tags using a map
+  * key: rule name 
+  * value: array of tags that match the rule
+  * sets checkBox map value to false (value) for each rule (key)
+  */
   filterTags() {
     this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
       this.teacherSelectedErrors = res;

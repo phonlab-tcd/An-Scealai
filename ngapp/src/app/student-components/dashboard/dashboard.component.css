@@ -320,6 +320,7 @@ background-color: lightblue;
 }
 
 .textFieldGrammarCheck {
+    color: black;
     height: calc(var(--textfieldHeight) - var(--grammarMessageHeight) - 90px);
 }
 
