@@ -8,6 +8,23 @@ var request = require("request");
 
 describe("API Server", () => {
   describe("Story Routes", () => {
+    describe("/version", () => {
+      let url = `http://localhost:4000/version`;
+      it(`should send package.json which should have a valid 'version' field`, (done) => {
+        request({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'GET', 
+          uri: url,
+        }, (error, res, body) => {
+          const parsed = JSON.parse(body);
+          console.log(Object.keys(parsed));
+          expect(parsed.version instanceof String);
+          done();
+        });
+      });
+    });
     describe("/story/getStoryById/:id", () => {
       let url123 = `http://localhost:4000/story/getStoryById/123`;
       it("should search the database for a story with id 123", function(done){
