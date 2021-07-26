@@ -11,7 +11,12 @@ const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 
+const abairBaseUrl = require('../abair_base_url');
+
 const logger = require('../logger');
+
+logger.info('abairBaseUrl: ' + abairBaseUrl);
+console.log('abairBaseUrl: ' + abairBaseUrl);
 
 let Story = require('../models/story');
 let Event = require('../models/event');
@@ -387,7 +392,8 @@ function synthesiseStory(story) {
         'Content-Length': contentLength,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      // uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      uri: abairBaseUrl + '/webreader/synthesis',
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
@@ -451,7 +457,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         // uri: 'https://cadhan.com/api/gramadoir/1.0',
-        uri: require('../gramadoir_url.js'),
+        uri: abairBaseUrl + '/cgi-bin/api-gramadoir-1.0.pl',
         body: formData,
         method: 'POST',
       }, (err, resp, body) => {
