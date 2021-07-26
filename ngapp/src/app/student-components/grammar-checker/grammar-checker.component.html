@@ -1,4 +1,13 @@
 <div [hidden]="hideEntireGrammarChecker">
+  <div class="feedbackHeader">
+    <div>{{ts.l.grammar_checker}} </div>
+    <div
+        class="closeFeedbackBtn"
+        (click)="hideEntireGrammarChecker = true;">
+      <i class="fa fa-times optionsBtnIcon"></i>
+    </div>
+  </div>
+
   <!-- display grammar loading -->
   <div class="textFieldContainer"  *ngIf="!grammarChecked && grammarLoading">
     <div class="textContainer">
@@ -16,14 +25,6 @@
   <!-- display story container after grammar checked -->
   <div class="textFieldContainer"  *ngIf="grammarChecked">
     <!-- dipslay chosen tag window -->
-    <div class="feedbackHeader">
-      <div>{{ts.l.grammar_checker}} </div>
-      <div
-          class="closeFeedbackBtn"
-          (click)="hideEntireGrammarChecker = true;">
-        <i class="fa fa-times optionsBtnIcon"></i>
-      </div>
-    </div>
     <div class="grammarMessageContainer {{grammarMessageClass}}">
       <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
       <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>

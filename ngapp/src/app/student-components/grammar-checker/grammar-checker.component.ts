@@ -36,7 +36,8 @@ export class GrammarCheckerComponent implements OnInit {
 
   constructor(
     private grammar: GrammarService,
-    private ts: TranslationService,
+    // ts is public so that it can be accessed in the html template
+    public ts: TranslationService,
     private statsService: StatsService,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
