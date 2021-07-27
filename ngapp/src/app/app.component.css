@@ -8,8 +8,6 @@
 
 .content {
   text-align: center;
-  margin-top: 5vh;
-  margin-bottom: 5vh;
   min-height: 93%;
   display: flex;
   flex-direction: column;
@@ -45,9 +43,6 @@
   padding-top: 2.5px;
   background-color: #70a87f;
   position: relative;
-  -webkit-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.31);
-  -moz-box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.31);
-  box-shadow: 0px -3px 32px 10px rgba(0,0,0,0.31);
 }
 
 .nav > .nav-header {

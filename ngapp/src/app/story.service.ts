@@ -11,6 +11,7 @@ import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
+import { HighlightTag } from 'angular-text-input-highlight';
 
 export type GramadoirResponse = {
   text: string;
@@ -113,7 +114,7 @@ export class StoryService {
   gramadoirViaBackend(id: string): Observable<any> {
     return this
       .http
-      .get<GramadoirResponse>(
+      .get<any>(
         // URL
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }

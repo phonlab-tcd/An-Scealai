@@ -351,7 +351,7 @@ export class DashboardComponent implements OnInit {
 
   handleGrammarCheckerOptionClick() {
     this.dontToggle = true;
-    if (!this.grammarChecker.gramadoirSubscription) {
+    if (!this.grammarChecker.gramadoirSubscription && this.story.text != this.grammarChecker.checkedText) {
       this.saveStory();
     }
     this.defaultMode();

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer ,  of } from 'rxjs';
-import { StoryService } from './story.service';
+import { Observable, Observer,  of } from 'rxjs';
+import { StoryService, GramadoirResponse } from './story.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip } from 'rxjs/operators';
 import { Story } from './story';
@@ -41,10 +41,10 @@ export class GrammarService {
   getGramadoirTags(id: string): Observable<GramadoirResponse> {
     return Observable.create((observer: Observer<any>) => {
       this.storyService.gramadoirViaBackend(id).subscribe(
-        (res: GramadoirResponse) => {
+        (res) => {
         const tags: HighlightTag[] = [];
         console.dir(res);
-        JSON.parse(res.grammarTags).forEach(g => {
+        res.grammarTags.forEach(g => {
           const tag: HighlightTag = {
             indices: {
               start: +g.fromx + 1,

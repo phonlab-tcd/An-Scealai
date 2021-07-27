@@ -11,7 +11,7 @@ import { EngagementService} from 'src/app/engagement.service';
 import { EventType } from 'src/app/event';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { StatsService } from 'src/app/stats.service';
-import { StoryService } from 'src/app/story.service';
+import { StoryService, GramadoirResponse } from 'src/app/story.service';
 import { ClassroomService } from 'src/app/classroom.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
 import { GrammarService, GrammarTag, TagSet  } from 'src/app/grammar.service';
