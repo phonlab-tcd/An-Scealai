@@ -32,6 +32,12 @@ export class GrammarCheckerComponent implements OnInit {
   @Input() classroomId: string;
   @Input() storySaved: boolean;
 
+  checkedText = '';
+
+  changeCount = 0;
+  changeThreshold = 50;
+
+
   numberOfGramadoirRequestsRunning = 0;
 
   grammarLoading = true;
@@ -61,7 +67,17 @@ export class GrammarCheckerComponent implements OnInit {
     private engagement: EngagementService,
    ) { }
 
+  shouldRunGramadoir() {
+    if (this.changeCount > this.changeThreshold) {
+      this.changeCount = 0;
+      return true;
+    }
+    this.changeCount++;
+    return false;
+  }
+
   ngOnInit(): void {
+    this.runGramadoir();
   }
 
   /*
@@ -79,11 +95,9 @@ export class GrammarCheckerComponent implements OnInit {
     this.gramadoirSubscription?.unsubscribe();
     this.gramadoirSubscription = this.grammar
         .getGramadoirTags(this.story._id).subscribe(
-          (res: HighlightTag[]) => {
-            this.tagSets.gramadoirTags = [];
-            this.tagSets.vowelTags = [];
-            this.tags = [];
-            this.tagSets.gramadoirTags = res;
+          (res: GramadoirResponse) => {
+            this.checkedText = res.text;
+            this.tagSets.gramadoirTags = res.grammarTags;
             this.tags = this.tagSets.gramadoirTags;
             this.filterTags();
             this.grammarLoading = false;
@@ -94,7 +108,8 @@ export class GrammarCheckerComponent implements OnInit {
             console.error(error);
           },
           () => {
-            console.log('COMPLETED GRAMADOIR REQUEST');
+            console.count('COMPLETED GRAMADOIR REQUEST');
+            this.gramadoirSubscription = null;
           });
     this.tagSets.vowelTags = this.grammar.getVowelAgreementTags(this.story.text);
   }

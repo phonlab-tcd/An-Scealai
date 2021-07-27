@@ -84,8 +84,9 @@
         </div>
 
         <!-- GRAMMAR CHECK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); grammarChecker.hideEntireGrammarChecker = !grammarChecker.hideEntireGrammarChecker">
+        <div *ngIf="showOptions"
+             class="optionsBtn optionsPopupBtn"
+             (click)="handleGrammarCheckerOptionClick();">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
@@ -193,7 +194,7 @@
       </div>
       
       <!-- Word Count -->
-      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
+      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px; padding-top: 0; margin-top: 0;">
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
 

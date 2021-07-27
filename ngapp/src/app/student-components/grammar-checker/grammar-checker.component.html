@@ -1,4 +1,6 @@
-<div [hidden]="hideEntireGrammarChecker">
+<div
+    [hidden]="hideEntireGrammarChecker"
+    style="resize: both; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">
   <div class="feedbackHeader">
     <div>{{ts.l.grammar_checker}} </div>
     <div
@@ -29,7 +31,7 @@
       <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
     </div>
 
-    <!-- display an gramadoir / vowel checker selection -->
+    <!-- display an gramadoir / vowel checker selection 
     <div class="grammarToolbar">
       <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
       <div class="selectGrammarFilter">
@@ -39,6 +41,7 @@
         </select>
       </div>
     </div>
+    -->
 
     <!-- display grammar error filter options -->
     <div class="selectErrorCheckbox" *ngIf="grammarSelected">
@@ -59,8 +62,8 @@
           style="color: black;"
           mwlTextInputElement
           readonly
-          class="textField textFieldGrammarCheck"
-          [(ngModel)]="story.text"
+          style="width: 100%;"
+          [(ngModel)]="checkedText"
           #inputTextarea ></textarea>
 
       <!-- an gramadoir -->
