@@ -25,6 +25,7 @@ import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import { Quill } from 'quill';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,14 +46,9 @@ export class DashboardComponent implements OnInit {
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
-  grammarChecked: boolean = false;
-  tags: HighlightTag[] = [];
-  tagSets : TagSet;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading: boolean = false;
-  grammarSelected: boolean = true;
   modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
@@ -191,26 +187,30 @@ export class DashboardComponent implements OnInit {
   }
 
   /*
-  * Update story data (text and date) using story service
+  * Update story data (text htmlText and date) using story service
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
     if (this.story === undefined) {
       throw new Error('Tried to save story but this.story is undefined');
     }
-    this.route.params.subscribe(
-      params => {
-        let updateData = {
-          text : this.story.text,
-          htmlText: this.story.htmlText,
-          lastUpdated : new Date(),
-        };
-        this.storyService.updateStory(updateData, params['id']).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
-        this.storySaved = true;
-        console.log("Story saved");
-      }
-    )
+
+    const updateData = {
+      text : this.story.text,
+      htmlText: this.story.htmlText,
+      lastUpdated : new Date(),
+    };
+
+    this.storyService.updateStory(updateData, this.story._id).subscribe(
+      () => {},
+      (error) => { throw error; },
+      () => {
+        console.log('RUNNING GRAMMAR CHECKER');
+        this.grammarChecker.runGramadoir();
+      });
+    this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
+    this.storySaved = true;
+    console.log('Story saved');
   }
   
   showDictionary() {
@@ -246,16 +246,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-// Set story saved to false and call word count function
-  storyEdited(text) {
-    this.story.text = text;
+  // Set story saved to false
+  storyEdited(quill) {
+    console.log(typeof quill);
+    this.story.text = quill.text;
     this.storySaved = false;
-    //console.log("text: ", this.story.text);
-    //console.log("html: ", this.story.htmlText);
-    
+    this.saveStory();
+    // console.log("text: ", this.story.text);
+    // console.log("html: ", this.story.htmlText);
   }
   
-// Get word count of story text
+  // Get word count of story text
   getWordCount(text) {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
@@ -280,7 +281,6 @@ export class DashboardComponent implements OnInit {
    */
   defaultMode() {
     this.feedbackVisible = false;
-    this.grammarChecked = false;
     this.dictionaryVisible = false;
   }
 
@@ -300,145 +300,6 @@ export class DashboardComponent implements OnInit {
 // route to synthesis 
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
-  }
-
-  /*
-  * Set boolean variables for checking data / grammar window in interface
-  * Check grammar using grammar service 
-  * Set grammar tags using grammar service subscription and filter them by rule
-  * Add logged event for checked grammar
-  */
-  runGramadoir() {
-    this.saveStory();
-    this.feedbackVisible = false;
-    this.grammarChecked = false;
-    this.dictionaryVisible = false;
-    this.grammarLoading = true;
-    this.tags = [];
-    this.filteredTags.clear();
-    this.chosenTag = null;
-    console.log(this.story._id);
-    this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
-      console.log("checking grammar for: ", this.story._id);
-      this.tagSets = res;
-      this.tags = this.tagSets.gramadoirTags;
-      this.filterTags();
-      this.grammarLoading = false;
-      this.grammarChecked = true;
-      this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
-    });
-  }
-
-  /*
-  * Set tags to vowel tags or grammar tags based on event value
-  */
-  onChangeGrammarFilter(eventValue : any) {
-    this.chosenTag = null;
-    if(eventValue == 'vowel') {
-      this.tags = this.tagSets.vowelTags;
-      this.grammarSelected = false;
-    }
-    if(eventValue == 'gramadoir') {
-      this.tags = this.tagSets.gramadoirTags;
-      this.grammarSelected = true;
-    }
-  }
-
-  // set chosen tag to tag passed in parameters
-  chooseGrammarTag(tag: HighlightTag) {
-    this.chosenTag = new GrammarTag(tag.data);
-  }
-
-  // reset checked grammar to false, set tags array and chosen tag to null
-  closeGrammar() {
-    this.grammarChecked = false;
-    this.tags = [];
-    this.chosenTag = null;
-  }
-
-  // set the css class to hover over the tag
-  addTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagNotHover");
-    tagElement.classList.add("tagHover");
-  }
-
-  // set the css class to not hover over the tag
-  removeTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagHover");
-    tagElement.classList.add("tagNotHover");
-  }
-
-  /*
-  * filter the grammar tags using a map
-  * key: rule name 
-  * value: array of tags that match the rule
-  * sets checkBox map value to false (value) for each rule (key)
-  */
-  filterTags() {
-    this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
-      this.teacherSelectedErrors = res;
-      //loop through tags of errors found in the story
-      for(let tag of this.tags) {
-        let values: HighlightTag[] = [];
-        let rule: string = tag.data.ruleId.substring(22);
-        
-        let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
-        rule = rx[0];
-      
-        // check against errors that the teacher provides
-        if(this.teacherSelectedErrors.length > 0) {
-          if(this.teacherSelectedErrors.indexOf(rule) !== -1) {
-            if(this.filteredTags.has(rule)) {
-              values = this.filteredTags.get(rule);
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-            }
-            else {
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-              this.checkBox.set(rule, false);
-            }    
-          }
-        }
-        // otherwise check against all grammar errors 
-        else {
-          if(this.filteredTags.has(rule)) {
-            values = this.filteredTags.get(rule);
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-          }
-          else {
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-            this.checkBox.set(rule, true);
-          }
-        } 
-      }
-      console.log("Filtered tags: ", this.filteredTags);
-      this.updateStats();
-    });
-  }
-
-  /**
-   * Gets an array of HighlighTags for which the associated grammar error category
-   * is selected according to the checkBox map.
-   * 
-   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
-   * HighlightTags for seimhiu.
-   */
-  getSelectedTags(): HighlightTag[] {
-    // Get only those filteredTags whose keys map to true in checkBox
-    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
-      // entry[0] is key, entry[1] is val.
-      if (this.checkBox.get(entry[0])) {
-        return entry[1];
-      } else {
-        return [];
-      }
-    });
-    // Flatten 2d array of HighlightTags
-    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
-    return selectedTags;
   }
 
   /*

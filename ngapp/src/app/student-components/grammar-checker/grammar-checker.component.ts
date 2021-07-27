@@ -1,14 +1,23 @@
 // src/app/student-components/grammar-checker/grammar-checker.component.ts
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  } from '@angular/core';
+
 import { EngagementService} from 'src/app/engagement.service';
 import { EventType } from 'src/app/event';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { StatsService } from 'src/app/stats.service';
+import { StoryService } from 'src/app/story.service';
 import { ClassroomService } from 'src/app/classroom.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
-import { Component, OnInit, Input } from '@angular/core';
 import { GrammarService, GrammarTag, TagSet  } from 'src/app/grammar.service';
 import { TranslationService } from 'src/app/translation.service';
 import { Story } from 'src/app/story';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-grammar-checker',
@@ -21,15 +30,22 @@ export class GrammarCheckerComponent implements OnInit {
 
   @Input() story: Story;
   @Input() classroomId: string;
+  @Input() storySaved: boolean;
+
+  numberOfGramadoirRequestsRunning = 0;
 
   grammarLoading = true;
   grammarChecked = false;
+  gramadoirSubscription: Subscription;
 
   filteredTags: Map<string, HighlightTag[]> = new Map();
   tags: HighlightTag[] = [];
   teacherSelectedErrors: string[] = [];
   chosenTag: GrammarTag;
-  tagSets: TagSet;
+  tagSets: TagSet = {
+    gramadoirTags: [],
+    vowelTags: [],
+  };
   grammarSelected = true;
   checkBox: Map<string, boolean> = new Map();
   hideEntireGrammarChecker = true;
@@ -39,13 +55,13 @@ export class GrammarCheckerComponent implements OnInit {
     // ts is public so that it can be accessed in the html template
     public ts: TranslationService,
     private statsService: StatsService,
+    private storyService: StoryService,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
     private engagement: EngagementService,
    ) { }
 
   ngOnInit(): void {
-    this.runGramadoir();
   }
 
   /*
@@ -54,22 +70,33 @@ export class GrammarCheckerComponent implements OnInit {
   * Set grammar tags using grammar service subscription and filter them by rule
   * Add logged event for checked grammar
   */
-  runGramadoir() {
+  async runGramadoir() {
     this.grammarChecked = false;
     this.grammarLoading = true;
-    this.tags = [];
     this.filteredTags.clear();
     this.chosenTag = null;
-    this.grammar
-        .checkGrammar(this.story._id).subscribe(
-          (res: TagSet) => {
-            this.tagSets = res;
+
+    this.gramadoirSubscription?.unsubscribe();
+    this.gramadoirSubscription = this.grammar
+        .getGramadoirTags(this.story._id).subscribe(
+          (res: HighlightTag[]) => {
+            this.tagSets.gramadoirTags = [];
+            this.tagSets.vowelTags = [];
+            this.tags = [];
+            this.tagSets.gramadoirTags = res;
             this.tags = this.tagSets.gramadoirTags;
             this.filterTags();
             this.grammarLoading = false;
             this.grammarChecked = true;
             this.engagement.addEventForLoggedInUser(EventType['GRAMMAR-CHECK-STORY'], this.story);
-      });
+          },
+          (error) => {
+            console.error(error);
+          },
+          () => {
+            console.log('COMPLETED GRAMADOIR REQUEST');
+          });
+    this.tagSets.vowelTags = this.grammar.getVowelAgreementTags(this.story.text);
   }
 
   /*
@@ -82,21 +109,19 @@ export class GrammarCheckerComponent implements OnInit {
     this.classroomService.getGrammarRules(
       this.classroomId)
         .subscribe(
-          (res) => {  
+          (res) => {
             this.teacherSelectedErrors = res;
 
             // loop through tags of errors found in the story
-            for(let tag of this.tags) {
+            for (const tag of this.tags) {
               let values: HighlightTag[] = [];
               let rule: string = tag.data.ruleId.substring(22);
-              
-              let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
+              const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
               rule = rx[0];
-            
               // check against errors that the teacher provides
-              if(this.teacherSelectedErrors.length > 0) {
-                if(this.teacherSelectedErrors.indexOf(rule) !== -1) {
-                  if(this.filteredTags.has(rule)) {
+              if (this.teacherSelectedErrors.length > 0) {
+                if (this.teacherSelectedErrors.indexOf(rule) !== -1) {
+                  if (this.filteredTags.has(rule)) {
                     values = this.filteredTags.get(rule);
                     values.push(tag);
                     this.filteredTags.set(rule, values);
@@ -105,10 +130,10 @@ export class GrammarCheckerComponent implements OnInit {
                     values.push(tag);
                     this.filteredTags.set(rule, values);
                     this.checkBox.set(rule, false);
-                  }    
+                  }
                 }
               }
-              // otherwise check against all grammar errors 
+              // otherwise check against all grammar errors
               else {
                 if(this.filteredTags.has(rule)) {
                   values = this.filteredTags.get(rule);
@@ -165,6 +190,13 @@ export class GrammarCheckerComponent implements OnInit {
     }
   }
 
+  dontStartHighlightOnASpace(entry: HighlightTag[]): HighlightTag[]{
+    const matchArray = this.story.text.slice(entry[0].indices.start).match(/^\s+/);
+    const match = (matchArray ? matchArray[0] : '');
+    entry[0].indices.start = entry[0].indices.start + match.length;
+    return entry;
+  }
+
   /**
    * Gets an array of HighlighTags for which the associated grammar error category
    * is selected according to the checkBox map.
@@ -173,14 +205,18 @@ export class GrammarCheckerComponent implements OnInit {
    */
   getSelectedTags(): HighlightTag[] {
     // Get only those filteredTags whose keys map to true in checkBox
-    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
-      // entry[0] is key, entry[1] is val.
-      if (this.checkBox.get(entry[0])) {
-        return entry[1];
-      } else {
-        return [];
-      }
-    });
+    const selectedTagsLists =
+      Array.from(this.filteredTags.entries())
+          .map(
+            (entry) => {
+              // entry[0] is key, entry[1] is val.
+              if (this.checkBox.get(entry[0])) {
+                return this.dontStartHighlightOnASpace(entry[1]);
+              } else {
+                return [];
+              }
+            }
+          );
     // Flatten 2d array of HighlightTags
     const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
     return selectedTags;

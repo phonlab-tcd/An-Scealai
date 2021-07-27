@@ -8,7 +8,6 @@
     </div>
   </div>
 
-  <!-- display grammar loading -->
   <div class="textFieldContainer"  *ngIf="!grammarChecked && grammarLoading">
     <div class="textContainer">
       <div class="loaderContainer">
@@ -23,9 +22,9 @@
   </div>
   
   <!-- display story container after grammar checked -->
-  <div class="textFieldContainer"  *ngIf="grammarChecked">
+  <div class="textFieldContainer" *ngIf="grammarChecked">
     <!-- dipslay chosen tag window -->
-    <div class="grammarMessageContainer {{grammarMessageClass}}">
+    <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
       <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
       <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
     </div>
@@ -74,8 +73,7 @@
             (tagMouseLeave)="removeTagHoverClass($event.target)">
         </mwl-text-input-highlight>
       </div>
-
-      <!-- broad/slender -->
+      <!-- an gramadoir -->
       <div *ngIf="!grammarSelected">
         <mwl-text-input-highlight
             [tags]="tags"

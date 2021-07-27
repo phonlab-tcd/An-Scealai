@@ -85,7 +85,7 @@
 
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); grammarChecker.hideEntireGrammarChecker=false;">
+          (click)="this.dontToggle=true; defaultMode(); grammarChecker.hideEntireGrammarChecker = !grammarChecker.hideEntireGrammarChecker">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
@@ -105,16 +105,34 @@
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
          
       </div>
 
       <!-- display story with feedback excluding audio feedback-->
       <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+        <textarea
+            class="textField feedbackTextarea"
+            placeholder="{{ts.l.no_feedback_provided}}" 
+            readonly
+            value="{{story?.feedback.text}}">
+        </textarea>
+
         <!--<textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
         
       </div>
       <!-- display story with feedback including audio feedback -->
@@ -124,15 +142,27 @@
         <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         <!--<textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
-        
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
       </div>
 
       <!-- display dictionary option-->
-      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
+      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible">
         <!--<textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
         
-        <quill-editor class="quill-editor-dict" [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            class="quill-editor-dict"
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
         
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
@@ -170,8 +200,7 @@
       <app-grammar-checker
           #grammarChecker
           *ngIf="story.text"
-          [statsService]="statsService"
-          [classroomService]="classroomService"
+          [storySaved]=storySaved
           [classroomId]="classroomId"
           [story]="story"
           >
