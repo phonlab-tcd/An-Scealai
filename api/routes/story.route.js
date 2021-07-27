@@ -388,7 +388,7 @@ function synthesiseStory(story) {
     // make a request to abair passing in the form data
     request({
       headers: {
-        'Host' : 'www.abair.tcd.ie',
+        'Host' : 'www.abair.ie',
         'Content-Length': contentLength,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
