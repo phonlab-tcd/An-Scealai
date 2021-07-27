@@ -205,12 +205,12 @@ export class DashboardComponent implements OnInit {
       () => {},
       (error) => { throw error; },
       () => {
-        console.log('RUNNING GRAMMAR CHECKER');
+        console.count('RUNNING GRAMMAR CHECKER');
         this.grammarChecker.runGramadoir();
       });
     this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
     this.storySaved = true;
-    console.log('Story saved');
+    console.count('Story saved');
   }
   
   showDictionary() {
@@ -251,7 +251,9 @@ export class DashboardComponent implements OnInit {
     console.log(typeof quill);
     this.story.text = quill.text;
     this.storySaved = false;
-    this.saveStory();
+    if (this.grammarChecker.shouldRunGramadoir()) {
+      this.saveStory();
+    }
     // console.log("text: ", this.story.text);
     // console.log("html: ", this.story.htmlText);
   }
@@ -345,5 +347,15 @@ export class DashboardComponent implements OnInit {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
+  }
+
+  handleGrammarCheckerOptionClick() {
+    this.dontToggle = true;
+    if (!this.grammarChecker.gramadoirSubscription) {
+      this.saveStory();
+    }
+    this.defaultMode();
+    this.grammarChecker.hideEntireGrammarChecker =
+      !this.grammarChecker.hideEntireGrammarChecker;
   }
 }

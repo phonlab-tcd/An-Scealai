@@ -5,6 +5,8 @@ import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip } from 'rxjs/operators';
 import { Story } from './story';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,13 +22,13 @@ export class GrammarService {
   /*
   * Set grammar and vowel tags of TagSet object 
   */
-  checkGrammar(id: string, storyText: string): Observable<any> {
+  checkGrammar(id: string, storyText: string): Observable<GramadoirResponse> {
     return Observable.create(
-      (observer: Observer<any>) => {
+      (observer: Observer<GramadoirResponse>) => {
         // get grammar tags for the story object
         this.getGramadoirTags(id)
             .subscribe(
-              (res: HighlightTag[]) => {
+              (res) => {
                 observer.next(res);
                 observer.complete();
               });
@@ -36,22 +38,26 @@ export class GrammarService {
 /*
 * Get grammar tag data from an gramadoir
 */
-  getGramadoirTags(id: string) : Observable<any> {
+  getGramadoirTags(id: string): Observable<GramadoirResponse> {
     return Observable.create((observer: Observer<any>) => {
-      this.storyService.gramadoirViaBackend(id).subscribe((res) => {
-        let tags : HighlightTag[] = [];
-        res.forEach(g => {
-          let tag : HighlightTag = {
+      this.storyService.gramadoirViaBackend(id).subscribe(
+        (res: GramadoirResponse) => {
+        const tags: HighlightTag[] = [];
+        console.dir(res);
+        JSON.parse(res.grammarTags).forEach(g => {
+          const tag: HighlightTag = {
             indices: {
-              start: +g.fromx,
-              end: +g.tox+1,
+              start: +g.fromx + 1,
+              end: +g.tox + 1,
             },
             cssClass: GrammarTag.getCssClassFromRule(g.ruleId),
             data: g
           };
           tags.push(tag);
         });
-        observer.next(tags);
+        observer.next({
+          text: res.text,
+          grammarTags: tags});
         observer.complete();
       });
     });

@@ -12,6 +12,11 @@ import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
 
+export type GramadoirResponse = {
+  text: string;
+  grammarTags: HighlightTag[];
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -106,7 +111,11 @@ export class StoryService {
   }
 
   gramadoirViaBackend(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
+    return this
+      .http
+      .get<GramadoirResponse>(
+        // URL
+        this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
 
   gramadoirDirect(text: string): Observable<any> {
