@@ -447,9 +447,15 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
         body: formData,
         method: 'POST'
       }, (err, resp, body) => {
-        if(err) res.send(err);
-        if(body) {
-          res.send(body);
+        if (err) {
+          return res.status(
+            err.statusCode ? err.statusCode : 500)
+              .send(err);
+        } else if (body) {
+          return res.json({
+            text: story.text,
+            grammarTags: body,
+          });
         } else {
           res.sendStatus(404);
         }
