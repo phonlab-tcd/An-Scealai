@@ -443,7 +443,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
         //uri: 'https://cadhan.com/api/gramadoir/1.0',
-        uri: 'https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl',
+        uri: 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl',
         body: formData,
         method: 'POST'
       }, (err, resp, body) => {
