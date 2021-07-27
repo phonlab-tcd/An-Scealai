@@ -20,21 +20,14 @@ export class GrammarService {
   /*
   * Set grammar and vowel tags of TagSet object 
   */
-  checkGrammar(id: string): Observable<any> {
+  checkGrammar(id: string, storyText: string): Observable<any> {
     return Observable.create(
       (observer: Observer<any>) => {
-        const tagSets: TagSet = new TagSet();
         // get grammar tags for the story object
         this.getGramadoirTags(id)
             .subscribe(
               (res: HighlightTag[]) => {
-                tagSets.gramadoirTags = res;
-
-                const vowelTags = this.getVowelAgreementTags(id);
-
-                tagSets.vowelTags = vowelTags;
-                console.log('Tagsets', tagSets);
-                observer.next(tagSets);
+                observer.next(res);
                 observer.complete();
               });
       });
@@ -62,6 +55,11 @@ export class GrammarService {
         observer.complete();
       });
     });
+  }
+
+  async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
+    const story = await this.storyService.getStory(id).toPromise();
+    return this.getVowelAgreementTags(story.text);
   }
   
   /*
@@ -198,8 +196,8 @@ export class GrammarService {
 
 */
 export class TagSet {
-  gramadoirTags : HighlightTag[];
-  vowelTags : HighlightTag[];
+  gramadoirTags: HighlightTag[];
+  vowelTags: HighlightTag[];
 }
 
 /*
