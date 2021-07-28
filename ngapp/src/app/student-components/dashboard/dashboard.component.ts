@@ -194,19 +194,14 @@ export class DashboardComponent implements OnInit {
       throw new Error('Tried to save story but this.story is undefined');
     }
 
-    const updateData = {
-      text : this.story.text,
-      htmlText: this.story.htmlText,
-      lastUpdated : new Date(),
-    };
 
-    this.storyService.updateStory(updateData, this.story._id).subscribe(
-      () => {},
-      (error) => { throw error; },
-      () => {
-        console.count('STORY SAVED');
-      });
-    this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
+    this.storyService
+        .updateStory(this.story)
+        .toPromise()
+        .then(
+          () => {
+            console.count('STORY SAVED');
+          });
     this.storySaved = true;
     console.count('Story saved');
   }

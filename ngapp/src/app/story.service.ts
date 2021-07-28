@@ -12,10 +12,6 @@ import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
 
-export type GramadoirResponse = {
-  text: string;
-  grammarTags: HighlightTag[];
-};
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +20,16 @@ export class StoryService {
 
   chosenStory: Story;
 
-  constructor(private http: HttpClient, private router: Router,
-    private auth: AuthenticationService, private engagement: EngagementService,
-    private ts : TranslationService, private recordingService: RecordingService) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private auth: AuthenticationService,
+    private engagement: EngagementService,
+    private ts: TranslationService,
+    private recordingService: RecordingService
+  ) { }
 
-  baseUrl: string = config.baseurl + "story/";
+  baseUrl: string = config.baseurl + 'story/';
 
   saveStory(studentId, title, date, dialect, text, author) {
     const storyObj = {
@@ -62,14 +63,25 @@ export class StoryService {
 
   getStoriesForLoggedInUser() {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return new Observable<Story[]>();
+    if (!userDetails) {
+      return new Observable<Story[]>();
+    }
 
     const author = userDetails.username;
-    return this.http.get(this.baseUrl+author);
+    return this.http.get(this.baseUrl + author);
   }
 
-  updateStory(data, id) : Observable<any> {
-    return this.http.post(this.baseUrl + 'update/' +id, data);
+  updateStory(story: Story): Observable<any> {
+    this.engagement
+        .addEventForLoggedInUser(
+          EventType['SAVE-STORY'],
+          story);
+
+    return this.http.post(this.baseUrl + 'update/' + story._id, {
+      text : story.text,
+      htmlText: story.htmlText,
+      lastUpdated : new Date(),
+    });
   }
   
   updateAuthor(oldAuthor, newAuthor): Observable<any> {
@@ -113,7 +125,7 @@ export class StoryService {
   gramadoirViaBackend(id: string): Observable<any> {
     return this
       .http
-      .get<GramadoirResponse>(
+      .get(
         // URL
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
