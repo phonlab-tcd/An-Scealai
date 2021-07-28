@@ -87,15 +87,12 @@ export class GrammarCheckerComponent implements OnInit {
   * Add logged event for checked grammar
   */
   async runGramadoir() {
-    this.grammarChecked = false;
-    this.grammarLoading = true;
-    this.filteredTags.clear();
-    this.chosenTag = null;
 
     this.gramadoirSubscription?.unsubscribe();
     this.gramadoirSubscription = this.grammar
         .getGramadoirTags(this.story._id).subscribe(
-          (res: GramadoirResponse) => {
+          (res) => {
+            this.filteredTags.clear();
             this.checkedText = res.text;
             this.tagSets.gramadoirTags = res.grammarTags;
             this.tags = this.tagSets.gramadoirTags;
@@ -111,7 +108,20 @@ export class GrammarCheckerComponent implements OnInit {
             console.count('COMPLETED GRAMADOIR REQUEST');
             this.gramadoirSubscription = null;
           });
-    this.tagSets.vowelTags = this.grammar.getVowelAgreementTags(this.story.text);
+    // CANCEL GRAMMAR CHECKER IF TEXT HASN'T CHANGED
+    if (this.story.text === this.checkedText) {
+      this.gramadoirSubscription.unsubscribe();
+      this.grammarChecked = false;
+      this.grammarLoading = true;
+      setTimeout(() => {
+        this.grammarChecked = true;
+        this.grammarLoading = false;
+      }, 100);
+    } else {
+      this.grammarChecked = false;
+      this.grammarLoading = true;
+      this.tagSets.vowelTags = this.grammar.getVowelAgreementTags(this.story.text);
+    }
   }
 
   /*
