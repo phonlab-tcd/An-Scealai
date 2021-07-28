@@ -1,6 +1,6 @@
 <div
     [hidden]="hideEntireGrammarChecker"
-    style="resize: both; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">
+    style="resize: vertical; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">
   <div class="feedbackHeader">
     <div>{{ts.l.grammar_checker}} </div>
     <div
@@ -32,7 +32,11 @@
     </div>
 
     <div class="grammarToolbar">
-      <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
+      <div>
+        <i class="fa fa-redo-alt refreshGrammar"
+           (click)="runGramadoir()">
+        </i>
+      </div>
       <div class="selectGrammarFilter">
         <select (change)="onChangeGrammarFilter($event.target.value)">
           <option value="gramadoir">{{ts.l.gramadoir}}</option>
@@ -60,7 +64,7 @@
           style="color: black;"
           mwlTextInputElement
           readonly
-          style="width: 100%;"
+          style="width: 100%; height: 42vh;"
           [(ngModel)]="checkedText"
           #inputTextarea ></textarea>
 
