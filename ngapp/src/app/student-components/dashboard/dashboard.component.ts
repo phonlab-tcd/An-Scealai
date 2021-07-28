@@ -51,9 +51,6 @@ export class DashboardComponent implements OnInit {
   words: string[] = [];
   wordCount: number = 0;
 
-
-  numberOfTimesStoryHasBeenEdited = 0;
-  
   dialects = [
     {
       code : "connemara",
@@ -213,21 +210,15 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-// Set story saved to false and call word count function
+  // Set story.text to most recent version of editor text and then switch to storyEditedAlt
+  // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
   storyEdited(text) {
-    if (this.numberOfTimesStoryHasBeenEdited === 0 && this.story.text) {
-      this.numberOfTimesStoryHasBeenEdited++;
-      this.story.text = text;
-      return;
-    }
-    this.numberOfTimesStoryHasBeenEdited++;
     this.story.text = text;
-    this.storySaved = false;
 
-    // Optimisation. Ater the first real edit we can simplify this funciton.
     this.storyEdited = this.storyEditedAlt;
   }
 
+  // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
     this.story.text = text;
     this.storySaved = false;
