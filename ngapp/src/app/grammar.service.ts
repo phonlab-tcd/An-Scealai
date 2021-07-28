@@ -47,7 +47,7 @@ export class GrammarService {
         JSON.parse(res.grammarTags).forEach(g => {
           const tag: HighlightTag = {
             indices: {
-              start: +g.fromx + 1,
+              start: +g.fromx,
               end: +g.tox + 1,
             },
             cssClass: GrammarTag.getCssClassFromRule(g.ruleId),
