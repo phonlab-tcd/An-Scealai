@@ -6,7 +6,6 @@ import { catchError, skip } from 'rxjs/operators';
 import { Story } from './story';
 
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,14 +16,16 @@ export class GrammarService {
   consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
-  constructor(private storyService: StoryService, ) { }
+  constructor(
+    private storyService: StoryService,
+  ) { }
 
   /*
-  * Set grammar and vowel tags of TagSet object 
+  * Set grammar and vowel tags of TagSet object
   */
-  checkGrammar(id: string, storyText: string): Observable<GramadoirResponse> {
+  checkGrammar(id: string, storyText: string): Observable<any> {
     return Observable.create(
-      (observer: Observer<GramadoirResponse>) => {
+      (observer: Observer<any>) => {
         // get grammar tags for the story object
         this.getGramadoirTags(id)
             .subscribe(
@@ -38,10 +39,10 @@ export class GrammarService {
 /*
 * Get grammar tag data from an gramadoir
 */
-  getGramadoirTags(id: string): Observable<GramadoirResponse> {
+  getGramadoirTags(id: string): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
       this.storyService.gramadoirViaBackend(id).subscribe(
-        (res: GramadoirResponse) => {
+        (res) => {
         const tags: HighlightTag[] = [];
         console.dir(res);
         JSON.parse(res.grammarTags).forEach(g => {
