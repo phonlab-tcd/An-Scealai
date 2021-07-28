@@ -1,11 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, Observer,  of } from 'rxjs';
 import { StoryService, GramadoirResponse } from './story.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip } from 'rxjs/operators';
 import { Story } from './story';
+import { TranslationService } from 'src/app/translation.service';
+import config from 'src/abairconfig.json';
 
 
+type GramadoirTag = {
+  contextOffset: number;
+  msg: string;
+  toy: number;
+  tox: number;
+  fromx: number;
+  fromy: number;
+  ruleId: string;
+  errortext: string;
+  errorlength: number;
+  context: string;
+};
+
+type ProcessedGramadoirResponse = {
+  text: string;
+  grammarTags: HighlightTag[];
+};
+
+type BackendGramadoirResponse = {
+  text: string;
+  grammarTags: string;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +42,18 @@ export class GrammarService {
   consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
-  constructor(private storyService: StoryService, ) { }
+  constructor(
+    private storyService: StoryService,
+    private http: HttpClient,
+    private ts: TranslationService,
+  ) { }
 
   /*
-  * Set grammar and vowel tags of TagSet object 
+  * Set grammar and vowel tags of TagSet object
   */
-  checkGrammar(id: string, storyText: string): Observable<GramadoirResponse> {
+  checkGrammar(id: string): Observable<ProcessedGramadoirResponse> {
     return Observable.create(
-      (observer: Observer<GramadoirResponse>) => {
+      (observer: any) => {
         // get grammar tags for the story object
         this.getGramadoirTags(id)
             .subscribe(
@@ -35,16 +64,42 @@ export class GrammarService {
       });
   }
 
+  gramadoirViaBackend(id: string): Observable<any> {
+    return this
+      .http
+      .get(
+        // URL
+        config.baseurl +
+        'story/gramadoir/' +
+        id + '/' +
+        this.ts.l.iso_code);
+  }
+
+  gramadoirDirect(text: string): Observable<any> {
+    return this
+      .http
+      .post('https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        observe: 'body',
+        params: {
+          teacs: text.replace(/\n/g, ' '),
+          teanga: this.ts.l.iso_code,
+        },
+      });
+  }
+
 /*
 * Get grammar tag data from an gramadoir
 */
-  getGramadoirTags(id: string): Observable<GramadoirResponse> {
+  getGramadoirTags(id: string): Observable<ProcessedGramadoirResponse> {
     return Observable.create((observer: Observer<any>) => {
-      this.storyService.gramadoirViaBackend(id).subscribe(
-        (res) => {
+      this.gramadoirViaBackend(id).subscribe(
+        (res: Object) => {
         const tags: HighlightTag[] = [];
         console.dir(res);
-        res.grammarTags.forEach(g => {
+        JSON.parse(res.grammarTags).forEach(g => {
           const tag: HighlightTag = {
             indices: {
               start: +g.fromx + 1,
