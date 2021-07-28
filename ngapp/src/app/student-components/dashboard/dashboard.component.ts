@@ -154,7 +154,6 @@ export class DashboardComponent implements OnInit {
           (res) => {
             if (res) {
               this.classroomId = res._id;
-              console.log(this.classroomId);
             }
           }
         );
@@ -205,17 +204,16 @@ export class DashboardComponent implements OnInit {
       () => {},
       (error) => { throw error; },
       () => {
-        console.count('RUNNING GRAMMAR CHECKER');
-        this.grammarChecker.runGramadoir();
+        console.count('STORY SAVED');
       });
     this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
     this.storySaved = true;
     console.count('Story saved');
   }
-  
+
   showDictionary() {
     this.dictionaryVisible = true;
-    this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
+    this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
 /*
@@ -228,12 +226,12 @@ export class DashboardComponent implements OnInit {
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if(this.story.feedback.text != "") {
+    if (this.story.feedback.text != "") {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser(EventType["VIEW-FEEDBACK"], this.story);
+      this.engagement.addEventForLoggedInUser(EventType['VIEW-FEEDBACK'], this.story);
     });
   }
 
@@ -248,14 +246,11 @@ export class DashboardComponent implements OnInit {
 
   // Set story saved to false
   storyEdited(quill) {
-    console.log(typeof quill);
     this.story.text = quill.text;
     this.storySaved = false;
     if (this.grammarChecker.shouldRunGramadoir()) {
       this.saveStory();
     }
-    // console.log("text: ", this.story.text);
-    // console.log("html: ", this.story.htmlText);
   }
   
   // Get word count of story text
@@ -263,16 +258,15 @@ export class DashboardComponent implements OnInit {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s) => {
-      let trimStr = s.trim();
+      const trimStr = s.trim();
       if (trimStr.length > 0) {
         this.words.push(trimStr);
       }
-      
     });
     this.wordCount = this.words.length;
   }
 
-// set feedback window to false 
+  // set feedback window to false
   closeFeedback() {
     this.feedbackVisible = false;
   }
@@ -287,19 +281,22 @@ export class DashboardComponent implements OnInit {
   }
 
 // return whether or not the student has viewed the feedback
-  hasNewFeedback() : boolean {
-    if(this.story && this.story.feedback && this.story.feedback.seenByStudent === false) {
+  hasNewFeedback(): boolean {
+    if (
+      this.story &&
+      this.story.feedback &&
+      !this.story.feedback.seenByStudent) {
       return true;
     }
     return false;
   }
 
-// route to synthesis 
+  // route to synthesis 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
-  
-// route to synthesis 
+
+  // route to synthesis 
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
@@ -308,23 +305,26 @@ export class DashboardComponent implements OnInit {
   * Update the grammar error map of the stat object corresponding to the current student id
   */
   updateStats() {
-    console.log("Update grammar errors");
-    let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
-      console.log(res);
-    });
-  }
-  
-  // set modalClass to visible fade 
-  showModal() {
-    this.modalClass = "visibleFade";
+    if (!userDetails) {
+      return;
+    }
+    this.statsService
+        .updateGrammarErrors(
+          userDetails._id,
+          this.filteredTags,
+          new Date())
+        .subscribe();
   }
 
-  // set modalClass to hidden fade and next choice to false 
+  // set modalClass to visible fade
+  showModal() {
+    this.modalClass = 'visibleFade';
+  }
+
+  // set modalClass to hidden fade and next choice to false
   hideModal() {
-    this.modalClass = "hiddenFade";
+    this.modalClass = 'hiddenFade';
     this.modalChoice.next(false);
   }
 
@@ -333,17 +333,14 @@ export class DashboardComponent implements OnInit {
     this.modalChoice.next(true);
   }
 
-  // save story and set next modal choice to true 
+  // save story and set next modal choice to true
   saveModal() {
     this.saveStory();
     this.modalChoice.next(true);
   }
 
   toggleOptions() {
-    console.log("setOptionsVisibleIfNot()\tshowOptions=",
-                this.showOptions,"\tdontToggle=",
-                this.dontToggle);
-    if(!this.dontToggle){
+    if (!this.dontToggle) {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
@@ -351,9 +348,6 @@ export class DashboardComponent implements OnInit {
 
   handleGrammarCheckerOptionClick() {
     this.dontToggle = true;
-    if (!this.grammarChecker.gramadoirSubscription) {
-      this.saveStory();
-    }
     this.defaultMode();
     this.grammarChecker.hideEntireGrammarChecker =
       !this.grammarChecker.hideEntireGrammarChecker;

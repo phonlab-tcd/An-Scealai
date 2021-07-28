@@ -25,13 +25,12 @@
   
   <!-- display story container after grammar checked -->
   <div class="textFieldContainer" *ngIf="grammarChecked">
-    <!-- dipslay chosen tag window -->
+    <!-- display chosen tag window -->
     <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
       <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
       <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
     </div>
 
-    <!-- display an gramadoir / vowel checker selection 
     <div class="grammarToolbar">
       <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
       <div class="selectGrammarFilter">
@@ -41,7 +40,6 @@
         </select>
       </div>
     </div>
-    -->
 
     <!-- display grammar error filter options -->
     <div class="selectErrorCheckbox" *ngIf="grammarSelected">
