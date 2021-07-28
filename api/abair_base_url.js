@@ -1,1 +1,1 @@
-module.exports = 'http://www.abair.ovh';
+module.exports = 'http://www.abair.ie';
