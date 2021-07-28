@@ -50,6 +50,9 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+
+
+  numberOfTimesStoryHasBeenEdited = 0;
   
   dialects = [
     {
@@ -212,14 +215,25 @@ export class DashboardComponent implements OnInit {
 
 // Set story saved to false and call word count function
   storyEdited(text) {
+    if (this.numberOfTimesStoryHasBeenEdited === 0 && this.story.text) {
+      this.numberOfTimesStoryHasBeenEdited++;
+      this.story.text = text;
+      return;
+    }
+    this.numberOfTimesStoryHasBeenEdited++;
     this.story.text = text;
     this.storySaved = false;
-    //console.log("text: ", this.story.text);
-    //console.log("html: ", this.story.htmlText);
-    
+
+    // Optimisation. Ater the first real edit we can simplify this funciton.
+    this.storyEdited = this.storyEditedAlt;
   }
-  
-// Get word count of story text
+
+  storyEditedAlt(text) {
+    this.story.text = text;
+    this.storySaved = false;
+  }
+
+  // Get word count of story text
   getWordCount(text) {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
