@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
         for(let story of this.stories) {
           if(story._id === this.id) {
             this.story = story;
-            this.getWordCount(this.story.text);
+            this.updateWordCount(this.story.text);
             if(this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
@@ -220,17 +220,13 @@ export class DashboardComponent implements OnInit {
   }
   
 // Get word count of story text
-  getWordCount(text) {
-    let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
-    this.words = [];
-    str.map((s) => {
-      let trimStr = s.trim();
-      if (trimStr.length > 0) {
-        this.words.push(trimStr);
-      }
-      
-    });
-    this.wordCount = this.words.length;
+  updateWordCount(text) {
+    const regex = /[^a-z0-9]+/i;
+    /* OTHER OPTIONS
+    const regex = /[\s]+/
+    const regex = /[\s\.\!\?]/
+    */
+    this.wordCount = this.story.text.split(regex).length;
   }
 
 // set feedback window to false 
