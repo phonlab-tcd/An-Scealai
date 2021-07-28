@@ -222,12 +222,23 @@ export class DashboardComponent implements OnInit {
   // Get word count of story text
   updateWordCount(text) {
     // don't use . as word boundary
-    const regex = /[^a-z0-9\.]+/i;
+    const regex = /[^a-z0-9]+/igm;
     /* OTHER OPTIONS
     const regex = /[\s]+/
     const regex = /[\s\.\!\?]/
     */
-    this.wordCount = this.story.text.slice(1).split(regex).length - 1;
+    // The quill editor always ends in \n so
+    // we remove the last character for the case when
+    // the editor looks empty
+    
+    const first_word_index = this.story.text.search(/[a-z0-9]/i);
+    const testText = this.story.text.slice(first_word_index).trimEnd();
+    if (!testText) {
+      return this.wordCount = 0;
+    }
+    const words = testText.split(regex);
+    console.log(words);
+    this.wordCount = words.length;
   }
 
 // set feedback window to false 
