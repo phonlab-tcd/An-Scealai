@@ -11,25 +11,37 @@ const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 
+const abairBaseUrl = require('../abair_base_url');
+
+const logger = require('../logger');
+
+logger.info('abairBaseUrl: ' + abairBaseUrl);
+console.log('abairBaseUrl: ' + abairBaseUrl);
+
 let Story = require('../models/story');
 let Event = require('../models/event');
 
 let db;
-MongoClient.connect('mongodb://localhost:27017/', 
-  {useUnifiedTopology: true, useNewUrlParser: true},
-  (err, client) => {
-    if (err) {
-      console.log('MongoDB Connection Error in ./api/routes/story.route.js . Please make sure that MongoDB is running.');
-      process.exit(1);
-    }
-    db = client.db('an-scealai');
-  });
+MongoClient.connect('mongodb://localhost:27017/', {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+},
+(err, client) => {
+  if (err) {
+    logger.error(
+        'MongoDB Connection Error in ./api/routes/story.route.js .' +
+        ' Please make sure that MongoDB is running.');
+    process.exit(1);
+  }
+  db = client.db('an-scealai');
+});
 
 storyRoutes.route('/getStoryById/:id').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.status(400).json("An error occurred while trying to find this profile");
+    if (err) {
+      logger.error(err);
+      res.status(400).json(
+        "An error occurred while trying to find this profile");
       return;
     }
     if(!story) {
@@ -376,11 +388,12 @@ function synthesiseStory(story) {
     // make a request to abair passing in the form data
     request({
       headers: {
-        'Host' : 'www.abair.tcd.ie',
+        'Host' : 'www.abair.ie',
         'Content-Length': contentLength,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      // uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      uri: abairBaseUrl + '/webreader/synthesis',
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
@@ -417,12 +430,12 @@ function synthesiseStory(story) {
 
 storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    console.log("story: ", story);
-    if(err) {
+    console.log('story: ', story);
+    if (err) {
       console.log(err);
-      res.send(err);
+      return res.send(err);
     }
-    if(story) {
+    if (story) {
       /*
       console.log("original text: ", story.text);
       let test8 = story.text.replace(/<br>/g, "\n");
@@ -432,20 +445,21 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
       console.log("test9: ", test9);
       console.log("test10: ", test10);
       */
-      let form = {
-        teacs: story.text.replace(/\n/g, " "),
+      const form = {
+        teacs: story.text.replace(/\n/g, ' '),
         teanga: req.params.lang,
       };
 
-      let formData = querystring.stringify(form);
+      const formData = querystring.stringify(form);
 
-      request({headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-        //uri: 'https://cadhan.com/api/gramadoir/1.0',
-        uri: 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl',
+      request({
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        // uri: 'https://cadhan.com/api/gramadoir/1.0',
+        uri: abairBaseUrl + '/cgi-bin/api-gramadoir-1.0.pl',
         body: formData,
-        method: 'POST'
+        method: 'POST',
       }, (err, resp, body) => {
         if (err) {
           return res.status(
@@ -457,14 +471,13 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
             grammarTags: body,
           });
         } else {
-          res.sendStatus(404);
+          return res.send(resp);
         }
       });
-
     } else {
-      res.sendStatus(404).send("Story not found.");
+      res.status(404).send('Story not found.');
     }
   });
-})
+});
 
 module.exports = storyRoutes;
