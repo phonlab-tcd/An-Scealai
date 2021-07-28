@@ -219,14 +219,15 @@ export class DashboardComponent implements OnInit {
     
   }
   
-// Get word count of story text
+  // Get word count of story text
   updateWordCount(text) {
-    const regex = /[^a-z0-9]+/i;
+    // don't use . as word boundary
+    const regex = /[^a-z0-9\.]+/i;
     /* OTHER OPTIONS
     const regex = /[\s]+/
     const regex = /[\s\.\!\?]/
     */
-    this.wordCount = this.story.text.split(regex).length;
+    this.wordCount = this.story.text.slice(1).split(regex).length - 1;
   }
 
 // set feedback window to false 
