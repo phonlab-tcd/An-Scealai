@@ -46,12 +46,15 @@ export class StoryDetailsComponent implements OnInit {
 
   //uses story service to update story values and redirect to dashboard
   saveDetails() {
-    this.storyService.updateStory(this.story, this.story._id).subscribe(_res => {
-      if(this.story._id) {
-        this.router.navigateByUrl('/dashboard/' + this.story._id);
-      }
-      
-    });
+    this.storyService
+        .updateStory(this.story)
+        .subscribe({
+          complete: () => {
+            if (this.story._id) {
+              this.router.navigateByUrl('/dashboard/' + this.story._id);
+            }
+          },
+        });
   }
 
 }
