@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
-import { SynthesisBankService } from 'src/app/student-components/synthesis-bank.service';
+import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 
 type SentenceAndAudioUrl = {
   sentence: string;
@@ -54,7 +54,6 @@ export class SynthesisPlayerComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.synthBank.getAudioUrlOfSentence('hello');
     for (const sentence of this.sentences) {
       const newAudio = {
         sentence,
@@ -62,11 +61,31 @@ export class SynthesisPlayerComponent implements OnInit {
         audioUrl: null,
       };
       this.sentencesAndAudioUrls.push(newAudio);
-      this.synth.synthesiseText(sentence, this.dialect as Dialect).then(
-        (url) => {
-          newAudio.audioUrl = url;
-          newAudio.waiting = false;
-        });
+
+      // Create promise of new synthesis
+      const newSynthSubscription =
+        this.synth
+            .synthesiseText(
+              sentence,
+              this.dialect as Dialect)
+            .subscribe(
+              (audioUrl) => {
+                newAudio.audioUrl = audioUrl;
+                newAudio.waiting = false;
+              });
+
+      const storedUrl =
+        this.synthBank
+            .getAudioUrlOfSentence(
+              sentence,
+              this.dialect as Dialect);
+              
+
+      if (storedUrl && newAudio.waiting) {
+        newSynthSubscription.unsubscribe();
+        newAudio.audioUrl = storedUrl;
+        newAudio.waiting = false;
+      }
     }
   }
 
