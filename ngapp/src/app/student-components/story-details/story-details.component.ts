@@ -47,7 +47,7 @@ export class StoryDetailsComponent implements OnInit {
   //uses story service to update story values and redirect to dashboard
   saveDetails() {
     this.storyService
-        .updateStory(this.story)
+        .updateStoryTitleAndDialect(this.story)
         .subscribe({
           complete: () => {
             if (this.story._id) {
