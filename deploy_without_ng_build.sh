@@ -4,8 +4,8 @@
 # Not sure if we should delete node_modules before installing.
 rm -rf ngapp/node_modules
 rm -rf api/node_modules
-npm install --prefix ./ngapp
 npm install --prefix ./api
+npm install --prefix ./ngapp
 
 # Use current date in name of backup folder
 CURRENT_DATE=`date +"%d_%m_%Y_%T"`
