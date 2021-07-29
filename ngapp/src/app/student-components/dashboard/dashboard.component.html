@@ -132,11 +132,6 @@
       <div class="textFieldContainer">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
 
-        <button (click)="printLines()">printLines</button>
-        <div
-            id="myDivQuill">
-          <p>Hello World!</p>
-        </div>
         <quill-editor
             #myQuillEditor
             [modules]="quillToolbar"
@@ -144,13 +139,14 @@
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
             (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
-      <!-- Word Count -->
 
-      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
-        <span> {{ts.l.word_count}}: {{wordCount}} </span>
+        <!-- WORD COUNT -->
+        <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
+          <span> {{ts.l.word_count}}: {{wordCount}} </span>
+        </div>
       </div>
-         
-      </div>
+      
+
       <div *ngFor="let synth of audioSources; let i = index; let last = last;">
         <div *ngFor="let sentence of synth.sentences; let sentenceNumber = index; let lastSentence = last;">
           <div style="float: left; padding: 0; padding-left: 8px;">

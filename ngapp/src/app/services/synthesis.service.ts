@@ -3,9 +3,15 @@ import { Story } from '../story';
 import { HttpClient } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Observer } from 'rxjs';
+import {
+  map,
+  tap } from 'rxjs/operators';
 import config from '../../abairconfig.json';
 import {TextProcessingService} from './text-processing.service';
+import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 
 interface APIv2Response {
   audioContent: string;
@@ -60,6 +66,7 @@ export class SynthesisService {
     private http: HttpClient,
     private engagement: EngagementService,
     private textProcessor: TextProcessingService,
+    private synthBank: SynthesisBankService,
   ) { }
 
   baseUrl = config.baseurl;
@@ -87,42 +94,49 @@ export class SynthesisService {
     voice: AbairAPIv2Voice = null,
     audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
     speed: number = 1,
-    ): Promise<any> {
+    ): Observable<any> {
+    if (!input) {
+      throw new Error('input required');
+    }
 
-    return new Promise(async (resolve, reject) => {
-      if (!input) {
-        return reject('input required');
+    let url = 'https://www.abair.ie/api2/synthesise?input=';
+
+    url = url + encodeURIComponent(input);
+
+    if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
+      // use given voice
+    } else {
+      // get voice for given dialect
+      voice = this.voice(dialect);
+    }
+
+    url = url + '&voice=' + encodeURIComponent(voice);
+
+    url = url + '&speed=' + encodeURIComponent(speed);
+
+    url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
+
+    this.http.get(url, {
+      observe: 'body',
+      headers: {
+        crossorigin: 'anonymous',
       }
-
-      let url = 'https://www.abair.tcd.ie/api2/synthesise?input=';
-
-      url = url + encodeURIComponent(input);
-
-      if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
-        // use given voice
-      } else {
-        // get voice for given dialect
-        voice = this.voice(dialect);
-      }
-
-      url = url + '&voice=' + encodeURIComponent(voice);
-
-      url = url + '&speed=' + encodeURIComponent(speed);
-
-      url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
-
-      this.http.get(url, {
-        observe: 'body'
-      }).subscribe(
+    }).pipe(
+    map(
       (obj: { audioContent: string }) => {
         const type = 'audio/' + audioEncoding.toString().toLowerCase();
         const audioURI = 'data:' + type + ';base64,' + obj.audioContent;
-        return resolve(audioURI);
-      },
-      (err) => {
-        reject(err);
-      });
-    });
+        return audioURI;
+      }),
+    tap((data) => {
+      this.synthBank
+          .storeAudioUrlOfSentence(
+            input,
+            dialect,
+            audioEncoding,
+            data);
+    })
+    );
   }
 
   /**

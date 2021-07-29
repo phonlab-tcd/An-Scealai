@@ -61,7 +61,7 @@ type SynthesisSentenceBySentence = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit {
 
   story: Story = new Story();
   stories: Story[];
@@ -147,21 +147,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               private textProcessor: TextProcessingService,
              ) {}
 
-  ngAfterViewInit() {
-    console.log('ngAfterViewInit');
-    console.dir(this.quillEditor);
-    console.log(Object.getOwnPropertyNames(this.quillEditor).filter(item => typeof this.quillEditor[item] === 'function'));
-    console.dir(this.quillEditor.textChangeHandler);
-
-    this.divQuill = new Quill('#myDivQuill', { theme: 'snow'});
-  }
-
-  printLines(){
-    for (const obj of this.divQuill.getLines()) {
-      console.dir(obj.children.head.text);
-    }
-  }
-
   async synthesiseQuillTextSentenceBySentence() {
     const sentences =
       // Split the html into an array of sentences (based on English). Won't work perfectly
@@ -170,7 +155,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.textProcessor.convertHtmlToPlainText(
           // Reference the ngModel'd quill editor input text
           this.story.htmlText));
-    console.log('dashboard sentences', sentences);
 
 
     const newSynthesis: SynthesisSentenceBySentence = {
@@ -286,7 +270,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
-    console.dir(this.audioSources);
     this.synthesiseQuillTextSentenceBySentence();
     this.route.params.subscribe(
       params => {
@@ -339,7 +322,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   storyEdited(text) {
     this.story.text = text;
     this.storySaved = false;
-    
+    this.storyService.gramadoirDirect(this.story.text)
+        .subscribe({
+          next: (tags) => {
+            console.dir(tags);
+          }
+        });
   }
   
 // Get word count of story text
@@ -532,7 +520,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
     this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
-      console.log(res);
     });
   }
   
