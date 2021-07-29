@@ -123,6 +123,8 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
         if(classroom) {
             let index = classroom.studentIds.indexOf(req.body.studentId);
             if(index !== -1) {
+                // remove the id at index
+                // [ ... id[n], id[index], id[n+2], ... ] => [ ... id[n], id[n+2], ... ]
                 classroom.studentIds.splice(index, 1);
                 classroom.save();
                 res.status(200).json("Student removed successfully");
