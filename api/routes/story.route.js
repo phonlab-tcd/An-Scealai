@@ -14,8 +14,6 @@ const logger = require('../logger');
 
 const abairBaseUrl = require('../abair_base_url');
 
-const logger = require('../logger');
-
 logger.info('abairBaseUrl: ' + abairBaseUrl);
 console.log('abairBaseUrl: ' + abairBaseUrl);
 
