@@ -71,6 +71,10 @@ export class StoryService {
     return this.http.get(this.baseUrl + author);
   }
 
+  updateStoryTitleAndDialect(story: Story): Observable<any> {
+    return this.http.post(this.baseUrl + 'update/' + story._id, story);
+  }
+
   updateStory(story: Story): Observable<any> {
     this.engagement
         .addEventForLoggedInUser(
