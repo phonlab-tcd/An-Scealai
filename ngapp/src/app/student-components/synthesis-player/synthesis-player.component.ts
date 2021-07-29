@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
+import { SynthesisBankService } from 'src/app/student-components/synthesis-bank.service';
 
 type SentenceAndAudioUrl = {
   sentence: string;
@@ -49,9 +50,11 @@ export class SynthesisPlayerComponent implements OnInit {
 
   constructor(
     private synth: SynthesisService,
+    private synthBank: SynthesisBankService,
     ) { }
 
   ngOnInit(): void {
+    this.synthBank.getAudioUrlOfSentence('hello');
     for (const sentence of this.sentences) {
       const newAudio = {
         sentence,
