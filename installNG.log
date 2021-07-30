@@ -1,0 +1,27 @@
+
+> core-js@3.6.4 postinstall /home/neimhin/sceal/ngapp/node_modules/@angular-devkit/build-angular/node_modules/core-js
+> node -e "try{require('./postinstall')}catch(e){}"
+
+[96mThank you for using core-js ([94m https://github.com/zloirock/core-js [96m) for polyfilling JavaScript standard library![0m
+
+[96mThe project needs your help! Please consider supporting of core-js on Open Collective or Patreon: [0m
+[96m>[94m https://opencollective.com/core-js [0m
+[96m>[94m https://www.patreon.com/zloirock [0m
+
+[96mAlso, the author of core-js ([94m https://github.com/zloirock [96m) is looking for a good job -)[0m
+
+
+> @angular/cli@11.2.14 postinstall /home/neimhin/sceal/ngapp/node_modules/@angular/cli
+> node ./bin/postinstall/script.js
+
+
+> core-js@2.6.12 postinstall /home/neimhin/sceal/ngapp/node_modules/core-js
+> node -e "try{require('./postinstall')}catch(e){}"
+
+added 1942 packages from 1286 contributors and audited 1949 packages in 75.831s
+
+99 packages are looking for funding
+  run `npm fund` for details
+
+found 50 vulnerabilities (48 moderate, 2 high)
+  run `npm audit fix` to fix them, or `npm audit` for details

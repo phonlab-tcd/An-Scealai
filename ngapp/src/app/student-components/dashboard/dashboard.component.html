@@ -1,6 +1,7 @@
 <!-- Display the written story along with edit options -->
 <div class="page">
   <app-synthesis-player
+      #mySynthesisPlayer
       *ngIf="htmlDataIsReady"
       [dialect]="story.dialect"
       [sentences]="sentences">
@@ -138,7 +139,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+            (onContentChanged)="storyEdited($event);"></quill-editor>
 
         <!-- WORD COUNT -->
         <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
