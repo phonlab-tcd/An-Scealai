@@ -14,7 +14,9 @@ export class SynthesisBankService {
 
   storeAudioUrlOfSentence(sentence: string, dialect: string, encoding: string = 'MP3', data: string) {
     const key = this.generateKey(sentence, dialect, encoding);
-    return sessionStorage.setItem(key, data);
+    if (!sessionStorage.getItem(key)) {
+      return sessionStorage.setItem(key, data);
+    }
   }
 
   generateKey(sentence: string, dialect: string, encoding: string) {

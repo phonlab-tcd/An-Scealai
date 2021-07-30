@@ -20,7 +20,7 @@ import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
@@ -35,24 +35,13 @@ import {
   Dialect,
   SynthesisService,
   } from '../../services/synthesis.service';
-import { QuillEditorComponent } from 'ngx-quill';
 import * as Quill from 'quill';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
+import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 
 
-interface SynthesisedSentence {
-  url: string;
-  sentence: string;
-}
 
-type SynthesisSentenceBySentence = {
-  date: Date,
-  // The synthesised sentences should be in the order they appear in the text.
-  // I don't think this can't be enforced with static type checking.
-  // (Neimhin Mon 19 July 2021)
-  sentences: SynthesisedSentence[],
-};
 
 @Component({
   selector: 'app-dashboard',
@@ -130,7 +119,7 @@ export class DashboardComponent implements OnInit {
   ];
 
   @ViewChild('myQuillEditor') quillEditor: any;
-  divQuill: any;
+  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
 
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
@@ -145,37 +134,9 @@ export class DashboardComponent implements OnInit {
               public statsService: StatsService,
               public classroomService: ClassroomService,
               private textProcessor: TextProcessingService,
+              private synthBank: SynthesisBankService,
              ) {}
 
-  async synthesiseQuillTextSentenceBySentence() {
-    const sentences =
-      // Split the html into an array of sentences (based on English). Won't work perfectly
-      this.textProcessor.sentences(
-        // Convert the html to plain text
-        this.textProcessor.convertHtmlToPlainText(
-          // Reference the ngModel'd quill editor input text
-          this.story.htmlText));
-
-
-    const newSynthesis: SynthesisSentenceBySentence = {
-      date: new Date(),
-      sentences: [],
-    }
-
-    for (let i = 0; i < sentences.length; i++) {
-      const thisSentence: SynthesisedSentence = {
-        url: 'waiting',
-        sentence: sentences[i],
-      };
-      newSynthesis.sentences.push(thisSentence);
-      this.synth.synthesiseText(sentences[i], this.story.dialect as Dialect)
-          .then(url => {
-            thisSentence.url  = url;
-          });
-    }
-
-    this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
-  }
 
   stringifySynth(i: number) {
     if (this.audioSources[i]) {
@@ -208,10 +169,6 @@ export class DashboardComponent implements OnInit {
             if (!this.story.htmlText) {
               this.story.htmlText = this.story.text;
             }
-            this.sentences =
-              this.textProcessor
-                  .convertHtmlTextToArrayOfSentences(
-                      this.story.htmlText);
             this.htmlDataIsReady = true;
             break;
           }
@@ -236,33 +193,15 @@ export class DashboardComponent implements OnInit {
   /*
   * return the student's set of stories using the story service
   */
-
   getStories(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storyService.getStoriesForLoggedInUser().subscribe(
-        (stories: Story[]) => {
-          resolve(stories);
-        },
-        (err) => {
-          reject(err);
-        }
-      );
-    });
+    return this.storyService.getStoriesForLoggedInUser().toPromise();
   }
 
   /*
   * return the story id using the routing parameters
   */
   getStoryId(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.route.params.subscribe(
-        params => {
-          resolve(params);
-        },
-        (err) => {
-          reject(err);
-        });
-    });
+    return this.route.params.toPromise();
   }
 
   /*
@@ -270,7 +209,6 @@ export class DashboardComponent implements OnInit {
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
-    this.synthesiseQuillTextSentenceBySentence();
     this.route.params.subscribe(
       params => {
         const updateData = {
@@ -318,20 +256,29 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-// Set story saved to false and call word count function
-  storyEdited(text) {
-    this.story.text = text;
+  updateSyntheses(quill: any) {
+    const lines = quill.editor.getLines();
+    console.log('LINES:', lines);
+    this.sentences = lines.flatMap(this.textProcessor.sentences);
+    console.log('SENTENCES:', this.sentences);
+    this.synthesisPlayer.refresh();
+  }
+
+  // Set story saved to false and call word count function
+  storyEdited(quill) {
+    console.count('STORY EDITED');
+    this.story.text = quill.text;
     this.storySaved = false;
-    this.storyService.gramadoirDirect(this.story.text)
-        .subscribe({
-          next: (tags) => {
-            console.dir(tags);
-          }
-        });
+    this.getWordCount(this.story.text);
+    this.updateSyntheses(quill);
   }
   
 // Get word count of story text
   getWordCount(text) {
+    if (!text && text !== '') {
+      this.wordCount = 0;
+      throw new Error('text falsey in getWordCount');
+    }
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s) => {
@@ -366,22 +313,22 @@ export class DashboardComponent implements OnInit {
     return false;
   }
 
-// route to synthesis 
+  // route to synthesis 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
   
-// route to synthesis 
+  // route to synthesis 
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-/*
-* Set boolean variables for checking data / grammar window in interface
-* Check grammar using grammar service 
-* Set grammar tags using grammar service subscription and filter them by rule
-* Add logged event for checked grammar
-*/
+  /*
+  * Set boolean variables for checking data / grammar window in interface
+  * Check grammar using grammar service 
+  * Set grammar tags using grammar service subscription and filter them by rule
+  * Add logged event for checked grammar
+  */
   runGramadoir() {
     this.saveStory();
     this.feedbackVisible = false;

@@ -83,7 +83,7 @@ export class SynthesisService {
   }
 
 
-  synthesiseHtml(input, ... theRest): Promise<any> {
+  synthesiseHtml(input, ... theRest): Observable<any> {
     input = this.textProcessor.convertHtmlToPlainText(input);
     return this.synthesiseText(input, ... theRest );
   }
@@ -116,7 +116,7 @@ export class SynthesisService {
 
     url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
 
-    this.http.get(url, {
+    return this.http.get(url, {
       observe: 'body',
       headers: {
         crossorigin: 'anonymous',
