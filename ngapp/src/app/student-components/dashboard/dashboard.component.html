@@ -96,7 +96,7 @@
         </div>
 
         <!-- GRAMMAR CHECK -->
-        <div *ngIf="showOptions && viewInitialised"
+        <div *ngIf="showOptions"
              class="optionsBtn optionsPopupBtn"
              (click)="handleGrammarCheckerOptionClick();">
           {{ts.l.grammar_check}}
@@ -135,7 +135,6 @@
         placeholder=""
         [preserveWhitespace]="true"
         [(ngModel)]="story.htmlText"
-        (onEditorCreated)="initialiseText($event.text);"
         (onContentChanged)="storyEdited($event);">
     </quill-editor>
 
@@ -209,10 +208,11 @@
 
       <app-synthesis-player
           #mySynthesisPlayer
-          *ngIf="viewInitialised"
+          *ngIf="sentences"
           [dialect]="story.dialect"
           [sentences]="sentences">
       </app-synthesis-player>
+
     </div>
   </div>
 </div>

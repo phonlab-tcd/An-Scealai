@@ -31,6 +31,7 @@ import { SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import { Quill } from 'quill';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,11 +40,10 @@ import { GrammarCheckerComponent } from 'src/app/student-components/grammar-chec
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit, AfterViewInit{
+export class DashboardComponent implements OnInit{
 
   @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
   @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
-  viewInitialised = false;
 
   ngxQuill: any;
 
@@ -192,11 +192,6 @@ export class DashboardComponent implements OnInit, AfterViewInit{
         );
   }
 
-  ngAfterViewInit() {
-    this.viewInitialised = true;
-    this.cd.detectChanges();
-  }
-
   /*
   * return the student's set of stories using the story service
   */
@@ -275,35 +270,45 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   }
 
   // Set story saved to false
+  // THIS FUNCTION IS ONLY CALLED ONCE AND THEN SUBSTITUTED
   storyEdited(quill) {
     this.story.text = quill.text;
 
-    /*
-    this.sentences = quill.editor
-        .getLines()
-        .map(this.textProcessor.sentences)
-        .flat();
-       */
+    this.getWordCount(quill.text);
+
+    this.synthesisRefresh(quill.editor);
 
     if (this.grammarChecker?.shouldRunGramadoir()) {
       this.saveStory();
     }
+
     this.storyEdited = this.storyEditedAlt;
   }
 
   storyEditedAlt(quill) {
     this.storySaved = false;
+
     this.story.text = quill.text;
-    this.sentences = quill.editor
-        .getLines()
-        .map(this.textProcessor.sentences)
-        .flat();
+
+    this.getWordCount(quill.text);
+
+    this.synthesisRefresh(quill);
 
     if (this.grammarChecker?.shouldRunGramadoir()) {
       this.saveStory();
     }
   }
-  
+
+  synthesisRefresh(editor: Quill) {
+    const lines = (editor).getLines().map((s) => {
+         return s.children.head.text;
+    });
+    this.sentences = lines
+        .flatMap(this.textProcessor.sentences as (arg0: string) => string[]);
+
+    // this.synthesisPlayer?.refresh();
+  }
+
   // Get word count of story text
   getWordCount(text) {
     if (!text && text !== '') {
