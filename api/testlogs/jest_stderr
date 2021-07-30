@@ -1,0 +1,70 @@
+PASS routes/story.test.js
+PASS endpointsFunctions/story/getStoryById.test.js
+FAIL test/server.test.js (10.738 s)
+  ● Console
+
+    console.dir
+      [ undefined, undefined, undefined ]
+
+      at test/server.test.js:24:23
+
+  ● API Server › Story Routes › /story/getStoryById/:id › should search the database for a story with id 123
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test."
+
+      31 |     describe('/story/getStoryById/:id', () => {
+      32 |       const url123 = `http://localhost:4000/story/getStoryById/123`;
+    > 33 |       it('should search the database for a story with id 123',
+         |       ^
+      34 |           async () => {
+      35 |             await axios.get(url123, {
+      36 |               headers: {
+
+      at test/server.test.js:33:7
+      at test/server.test.js:31:5
+      at test/server.test.js:4:3
+      at Object.<anonymous> (test/server.test.js:3:1)
+
+  ● API Server › Story Routes › /story/getStoryById/:id › should search the database for a story with id 41492094-7c40-4ca8-8289-ab3894b66b61
+
+    thrown: "Exceeded timeout of 5000 ms for a test.
+    Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test."
+
+      43 |
+      44 |       const url2 = `http://localhost:4000/story/getStoryById/41492094-7c40-4ca8-8289-ab3894b66b61`;
+    > 45 |       it(
+         |       ^
+      46 |           'should search the database for ' +
+      47 |           'a story with id 41492094-7c40-4ca8-8289-ab3894b66b61',
+      48 |           async () => {
+
+      at test/server.test.js:45:7
+      at test/server.test.js:31:5
+      at test/server.test.js:4:3
+      at Object.<anonymous> (test/server.test.js:3:1)
+
+  ● API Server › Story Routes › /story/:author › should not find any stories for notauser
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 200
+
+      76 |           },
+      77 |         }).then(function(response) {
+    > 78 |           expect(response.status).toBe(404);
+         |                                   ^
+      79 |         });
+      80 |       });
+      81 |     });
+
+      at test/server.test.js:78:35
+      at Object.<anonymous> (test/server.test.js:73:9)
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks.
+Test Suites: 1 failed, 2 passed, 3 total
+Tests:       3 failed, 5 passed, 8 total
+Snapshots:   0 total
+Time:        11.469 s
+Ran all test suites.

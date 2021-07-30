@@ -4,13 +4,19 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
-    "start": "nodemon server.js"
+    "test": "npm run spinup_test_db && npm run spinup_test_backend && jest --all --useStderr=FALSE > >(tee testlogs/jest_stdout) 2> >(tee testlogs/jest_stderr >&2) && mongod --shutdown --dbpath mockDB/db && kill $(cat testlogs/nodemon.pid)",
+    "jest_stderr_issue": "firefox https://github.com/facebook/jest/issues/5064",
+    "jest_help": "jest --help",
+    "start": "nodemon server.js",
+    "wipe_mock_db": "rm -r mockDB/db/**",
+    "spinup_test_db": "mongod --config mongotest.conf 1> testlogs/mongod_stdout 2> testlogs/mongod_stderr &",
+    "spinup_test_backend": "TEST=TRUE DB=test MONGO_PORT=27020 nodemon server.js & echo $! > testlogs/nodemon.pid"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "bson": "^4.4.0",
     "chai-arrays": "^2.2.0",

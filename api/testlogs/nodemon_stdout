@@ -1,0 +1,16 @@
+[33m[nodemon] 2.0.9[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+Attempting to read sendinblue auth data from ./api/sendinblue.json
+2021-07-30T11:38:14.334Z [[32minfo[39m] : "Listening on port 4000"
+2021-07-30T11:38:14.375Z [[32minfo[39m] : "Database is connected"
+2021-07-30T11:38:44.030Z [[31merror[39m] : "FAILED TO CONNECT TO MONGODB. MONGODB TRANSPORT WILL NOT BE ADDED."
+MongoDB Connection Error in ./api/routes/story.route.js . Please make sure that MongoDB is running.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Attempting to read sendinblue auth data from ./api/sendinblue.json
+2021-07-30T11:40:17.467Z [[32minfo[39m] : "Listening on port 4000"
+2021-07-30T11:40:17.491Z [[32minfo[39m] : "Database is connected"

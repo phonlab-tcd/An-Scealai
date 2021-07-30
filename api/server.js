@@ -22,6 +22,13 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
+if (process.env.TEST === 'TRUE') {
+  config.DB = 'mongodb://localhost:' +
+    (process.env.MONGO_PORT || '27020') +
+    '/' +
+    (process.env.DB || 'test');
+}
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
