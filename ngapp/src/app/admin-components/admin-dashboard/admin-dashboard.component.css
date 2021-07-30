@@ -1,12 +1,18 @@
 .content {
-    display: flex;
     padding: 10%;
-    padding-top: 5vh;
+    padding-top: 25vh;
     align-items: center;
     justify-content: center;
     overflow: auto;
     flex-wrap: wrap;
     height: 72vh;
+}
+
+.buttonRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 .btnContainer {

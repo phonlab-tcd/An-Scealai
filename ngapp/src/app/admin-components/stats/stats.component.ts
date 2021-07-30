@@ -53,7 +53,7 @@ export class StatsComponent implements OnInit {
   async getProfileData() {
     this.statsLoaded = false;
     console.log("getting profile data");
-    this.profiles = await this.statsService.getProfileData().toPromise();
+    //this.profiles = await this.statsService.getProfileDataByDate().toPromise();
     this.statsLoaded = true;
 
     let ages = new Map<string, number>()

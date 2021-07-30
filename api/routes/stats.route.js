@@ -7,6 +7,7 @@ const request = require('request');
 let Event = require('../models/event');
 let Story = require('../models/story');
 let Profile = require('../models/profile');
+let User = require('../models/user');
 
 statsRoutes.route('/synthesisFixes').get((req, res) => {
     getTexts().then(data => {
@@ -28,6 +29,11 @@ statsRoutes.route('/synthesisFixes').get((req, res) => {
             })
         }
     });
+});
+
+
+statsRoutes.route('/test').get((req, res) => {
+    console.log("TEST********************************");
 });
 
 function countErrors(data, dataSet) {
@@ -143,21 +149,40 @@ function mapToObj(inputMap) {
     return obj;
 }
 
-statsRoutes.route('/getProfileData').get((req, res) => {
-  Profile.find({}, (err, profiles) => {
-      if(err) {
-        console.log(err);
-        res.status(400).send("An error occurred while trying to find DB profiles");
-      }
-      if(!profiles) {
-        res.status(404).send("Profiles were not found");  
-      }
-      else {
-        console.log(profiles)
-        res.status(200).json(profiles);
-      }
+
+statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) => {
+  console.log("function read");
+  Users.find({"status":"Active", "verification.date": {'$gte': req.params.startDate, '$lte': req.params.endDate}}, (err, users) => {
+    if(err) {
+      console.log(err);
+      res.status(400).send("An error occurred while trying to find users by date");
+    }
+    if(!users) {
+      res.status(404).send("Users in this date range were not found");  
+    }
+    else {
+      let ids = [];
+      users.forEach(user => {
+        ids.push(user["userId"]);
+      })
+      console.log(ids);
+      /*
+      Profile.find({}, (err, profiles) => {
+          if(err) {
+            console.log(err);
+            res.status(400).send("An error occurred while trying to find DB profiles");
+          }
+          if(!profiles) {
+            res.status(404).send("Profiles were not found");  
+          }
+          else {
+            console.log(profiles)
+            res.status(200).json(profiles);
+          }
+      });
+      */
+    }  
   });
-    
 });
 
 

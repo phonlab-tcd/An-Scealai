@@ -19,8 +19,14 @@ export class StatsService {
     return this.http.get(this.baseUrl + 'synthesisFixes');
   }
   
-  getProfileData() : Observable<any> {
-    return this.http.get(this.baseUrl + 'getProfileData');
+  getProfileDataByDate(startDate: string, endDate: string) : Observable<any> {
+    console.log("Function read");
+    return this.http.get(this.baseUrl + 'getProfileDataByDate/' + startDate + "/" + endDate);
+  }
+  
+  statTest(): Observable<any> {
+    console.log("test function read");
+    return this.http.get(this.baseUrl + 'test');
   }
 
 // *********************** Student stats ************************************
