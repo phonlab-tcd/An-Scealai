@@ -33,6 +33,12 @@ export class SynthesisPlayerComponent implements OnInit {
 
   ngOnInit(): void {
     console.count('SYNTHESIS PLAYER COMPONENT CREATED');
+    this.synthesiseMySentences();
+  }
+
+  refresh() {
+    this.unsubscribeAll(this.sentencesAndAudioUrls);
+    this.synthesiseMySentences();
   }
 
   unsubscribeAll(oldSentencesAndUrls: SentenceAndAudioUrl[]) {
@@ -52,6 +58,7 @@ export class SynthesisPlayerComponent implements OnInit {
 
       this.sentencesAndAudioUrls.push(newAudio);
 
+      /*
       const sentenceKey = this.synthBank
             .generateKey(
                 sentence,
@@ -61,11 +68,12 @@ export class SynthesisPlayerComponent implements OnInit {
       const storedUrl =
         this.storedUrls[sentenceKey];
 
-      if (storedUrl ) {
+      if (storedUrl) {
         newAudio.audioUrl = storedUrl;
         newAudio.waiting = false;
         continue;
       }
+      */
 
       newAudio.subscription =
         this.synth
@@ -76,7 +84,6 @@ export class SynthesisPlayerComponent implements OnInit {
               (audioUrl) => {
                 newAudio.audioUrl = audioUrl;
                 newAudio.waiting = false;
-                this.storedUrls[sentenceKey] = audioUrl;
               });
     }
   }
