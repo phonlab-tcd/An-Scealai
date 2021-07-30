@@ -23,6 +23,9 @@ session.vim
 /api/logs/**
 /api/sendinblue.json
 
+/api/mockDB/db/**
+/api/mockDB/log
+
 /sshlogin
 /login_to_phonetics.sh
 /login
