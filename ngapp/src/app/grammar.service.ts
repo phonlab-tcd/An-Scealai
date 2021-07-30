@@ -5,81 +5,74 @@ import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip } from 'rxjs/operators';
 import { Story } from './story';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class GrammarService {
-  
+
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
   consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
-  constructor(private storyService: StoryService, ) { }
+  constructor(
+    private storyService: StoryService,
+  ) { }
 
-/*
-* Set grammar and vowel tags of TagSet object 
-*/
-  checkGrammar(id: string) : Observable<any> {
-    return Observable.create((observer: Observer<any>) => {
-      let tagSets : TagSet = new TagSet;
-      // get a story object given an id
-      this.storyService.getStory(id).subscribe((story: Story) => {
+  /*
+  * Set grammar and vowel tags of TagSet object
+  */
+  checkGrammar(id: string, storyText: string): Observable<any> {
+    return Observable.create(
+      (observer: Observer<any>) => {
         // get grammar tags for the story object
-        this.getGramadoirTags(id).subscribe((res : HighlightTag[]) => {
-          let tags : HighlightTag[] = [];
-          // push grammar tags
-          res.forEach((tag) => {
-            tags.push(tag);
-          });
-          tagSets.gramadoirTags = tags;
-          tags = [];
-          //get story object
-          this.storyService.getStory(id).subscribe((story: Story) => {
-            //set the vowel tags
-            let vowelTags = this.getVowelAgreementTags(story.text);
-            vowelTags.forEach((tag) => {
-              // push vowel tags
-              tags.push(tag);
-            })
-            tagSets.vowelTags = tags;
-            console.log("Tagsets", tagSets);
-            observer.next(tagSets);
-            observer.complete();
-          });
-        });
+        this.getGramadoirTags(id)
+            .subscribe(
+              (res) => {
+                observer.next(res);
+                observer.complete();
+              });
       });
-    });
   }
 
 /*
 * Get grammar tag data from an gramadoir
 */
-  getGramadoirTags(id: string) : Observable<any> {
+  getGramadoirTags(id: string): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
-      this.storyService.gramadoir(id).subscribe((res) => {
-        let tags : HighlightTag[] = [];
-        res.forEach(g => {
-          let tag : HighlightTag = {
+      this.storyService.gramadoirViaBackend(id).subscribe(
+        (res) => {
+        const tags: HighlightTag[] = [];
+        console.dir(res);
+        JSON.parse(res.grammarTags).forEach(g => {
+          const tag: HighlightTag = {
             indices: {
               start: +g.fromx,
-              end: +g.tox+1,
+              end: +g.tox + 1,
             },
             cssClass: GrammarTag.getCssClassFromRule(g.ruleId),
             data: g
           };
           tags.push(tag);
         });
-        observer.next(tags);
+        observer.next({
+          text: res.text,
+          grammarTags: tags});
         observer.complete();
       });
     });
   }
+
+  async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
+    const story = await this.storyService.getStory(id).toPromise();
+    return this.getVowelAgreementTags(story.text);
+  }
   
-/*
-* Takes in a story text and return an array of vowel tags showing slender/broad 
-* errors around consonants of words in the text
-*/
+  /*
+  * Takes in a story text and return an array of vowel tags showing slender/broad 
+  * errors around consonants of words in the text
+  */
   getVowelAgreementTags(text: string) : HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);
@@ -210,8 +203,8 @@ export class GrammarService {
 
 */
 export class TagSet {
-  gramadoirTags : HighlightTag[];
-  vowelTags : HighlightTag[];
+  gramadoirTags: HighlightTag[];
+  vowelTags: HighlightTag[];
 }
 
 /*

@@ -1,0 +1,19 @@
+  checkGrammar(text: string): Observable<any> {
+    return Observable.create(
+      (observer: Observer<any>) => {
+        const tagSets: TagSet = new TagSet();
+          // get grammar tags for the story object
+          this.getGramadoirTags(id)
+              .subscribe(
+              (res: HighlightTag[]) => {
+                tagSets.gramadoirTags = res;
+
+                const vowelTags = this.getVowelAgreementTags(text);
+
+                tagSets.vowelTags = vowelTags;
+                console.log('Tagsets', tagSets);
+                observer.next(tagSets);
+                observer.complete();
+              });
+      });
+  }
