@@ -1,21 +1,17 @@
 import {
-  ComponentFactoryResolver,
-  ComponentFactory,
   Component,
   OnInit,
-  // HostListener,
+  HostListener,
   ViewEncapsulation,
-  // Renderer2,
   ViewChild,
-  AfterViewInit} from '@angular/core';
+  Renderer2 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
   ActivatedRoute,
   Router,
-  // NavigationEnd,
-  // NavigationStart,
-  } from '@angular/router';
+  NavigationEnd,
+  NavigationStart } from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
@@ -28,20 +24,12 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import {
-  AbairAPIv2Voice,
-  AbairAPIv2AudioEncoding,
-  SynthRequestObject,
-  Dialect,
-  SynthesisService,
-  } from '../../services/synthesis.service';
-import * as Quill from 'quill';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
+import { SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 
-
-
+import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -52,6 +40,8 @@ import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 
 export class DashboardComponent implements OnInit {
 
+  @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+
   story: Story = new Story();
   stories: Story[];
   id: string;
@@ -60,22 +50,21 @@ export class DashboardComponent implements OnInit {
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
-  grammarChecked = false;
-  tags: HighlightTag[] = [];
-  tagSets: TagSet;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading = false;
-  grammarSelected = true;
-  modalClass: ('hidden' | 'hiddenFade' | 'visibleFade') = 'hidden';
+  modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: string[] = [];
   classroomId: string;
-  selectTeanglann = true;
-  selectExternalLinks = false;
-  showOptions = true;
-  dontToggle = false;
+  selectTeanglann: boolean = true;
+  selectExternalLinks: boolean = false;
+  
+  // OPTIONS (to show or not to show)
+  showOptions: boolean = true;
+  dontToggle: boolean = false;
+
+  // WORD COUNT
   words: string[] = [];
   wordCount = 0;
 
@@ -117,7 +106,26 @@ export class DashboardComponent implements OnInit {
       name : this.ts.l.ulster
     }
   ];
-
+  
+  quillToolbar = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote'/*, 'code-block'*/],
+      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      //[{ 'direction': 'rtl' }],                         // text direction
+      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],                                         // remove formatting button
+      //['link', 'image', 'video']                        // link and image, video
+    ]
+  };
+  
   @ViewChild('myQuillEditor') quillEditor: any;
   @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
 
@@ -176,18 +184,21 @@ export class DashboardComponent implements OnInit {
       });
     });
 
+    // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
       return;
     }
     this.classroomService
-      .getClassroomOfStudent(
-        userDetails._id)
-        .subscribe( (res) => {
-        if (res && res._id) {
-          this.classroomId = res._id;
-        }
-    });
+        .getClassroomOfStudent(
+          userDetails._id)
+        .subscribe(
+          (res) => {
+            if (res) {
+              this.classroomId = res._id;
+            }
+          }
+        );
   }
 
   /*
@@ -205,22 +216,22 @@ export class DashboardComponent implements OnInit {
   }
 
   /*
-  * Update story data (text and date) using story service
+  * Update story data (text htmlText and date) using story service
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
-    this.route.params.subscribe(
-      params => {
-        const updateData = {
-          text : this.story.text,
-          htmlText: this.story.htmlText,
-          lastUpdated : new Date(),
-        };
-        this.storyService.updateStory(updateData, params.id).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
-        this.storySaved = true;
-      }
-    );
+    if (this.story === undefined) {
+      throw new Error('Tried to save story but this.story is undefined');
+    }
+
+    this.storyService
+        .updateStory(this.story)
+        .toPromise()
+        .then(
+          () => {
+            console.count('STORY SAVED');
+          });
+    this.storySaved = true;
   }
 
   showDictionary() {
@@ -238,7 +249,7 @@ export class DashboardComponent implements OnInit {
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if (this.story.feedback.text !== '') {
+    if (this.story.feedback.text != "") {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
@@ -256,24 +267,16 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  updateSyntheses(quill: any) {
-    const lines = quill.editor.getLines();
-    console.log('LINES:', lines);
-    this.sentences = lines.flatMap(this.textProcessor.sentences);
-    console.log('SENTENCES:', this.sentences);
-    this.synthesisPlayer.refresh();
-  }
-
-  // Set story saved to false and call word count function
+  // Set story saved to false
   storyEdited(quill) {
-    console.count('STORY EDITED');
     this.story.text = quill.text;
     this.storySaved = false;
-    this.getWordCount(this.story.text);
-    this.updateSyntheses(quill);
+    if (this.grammarChecker.shouldRunGramadoir()) {
+      this.saveStory();
+    }
   }
   
-// Get word count of story text
+  // Get word count of story text
   getWordCount(text) {
     if (!text && text !== '') {
       this.wordCount = 0;
@@ -290,7 +293,7 @@ export class DashboardComponent implements OnInit {
     this.wordCount = this.words.length;
   }
 
-  // set feedback window to false 
+  // set feedback window to false
   closeFeedback() {
     this.feedbackVisible = false;
   }
@@ -301,13 +304,15 @@ export class DashboardComponent implements OnInit {
    */
   defaultMode() {
     this.feedbackVisible = false;
-    this.grammarChecked = false;
     this.dictionaryVisible = false;
   }
 
 // return whether or not the student has viewed the feedback
-  hasNewFeedback() : boolean {
-    if(this.story && this.story.feedback && this.story.feedback.seenByStudent === false) {
+  hasNewFeedback(): boolean {
+    if (
+      this.story &&
+      this.story.feedback &&
+      !this.story.feedback.seenByStudent) {
       return true;
     }
     return false;
@@ -317,167 +322,36 @@ export class DashboardComponent implements OnInit {
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
-  
+
   // route to synthesis 
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
   /*
-  * Set boolean variables for checking data / grammar window in interface
-  * Check grammar using grammar service 
-  * Set grammar tags using grammar service subscription and filter them by rule
-  * Add logged event for checked grammar
-  */
-  runGramadoir() {
-    this.saveStory();
-    this.feedbackVisible = false;
-    this.grammarChecked = false;
-    this.dictionaryVisible = false;
-    this.grammarLoading = true;
-    this.tags = [];
-    this.filteredTags.clear();
-    this.chosenTag = null;
-    this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
-      this.tagSets = res;
-      this.tags = this.tagSets.gramadoirTags;
-      this.filterTags();
-      this.grammarLoading = false;
-      this.grammarChecked = true;
-      this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
-    });
-  }
-
-/*
-* Set tags to vowel tags or grammar tags based on event value
-*/
-  onChangeGrammarFilter(eventValue : any) {
-    this.chosenTag = null;
-    if(eventValue == 'vowel') {
-      this.tags = this.tagSets.vowelTags;
-      this.grammarSelected = false;
-    }
-    if(eventValue == 'gramadoir') {
-      this.tags = this.tagSets.gramadoirTags;
-      this.grammarSelected = true;
-    }
-  }
-
-// set chosen tag to tag passed in parameters
-  chooseGrammarTag(tag: HighlightTag) {
-    this.chosenTag = new GrammarTag(tag.data);
-  }
-
-// reset checked grammar to false, set tags array and chosen tag to null
-  closeGrammar() {
-    this.grammarChecked = false;
-    this.tags = [];
-    this.chosenTag = null;
-  }
-
-// set the css class to hover over the tag
-  addTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagNotHover");
-    tagElement.classList.add("tagHover");
-  }
-
-// set the css class to not hover over the tag
-  removeTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagHover");
-    tagElement.classList.add("tagNotHover");
-  }
-
-/*
-* filter the grammar tags using a map
-* key: rule name 
-* value: array of tags that match the rule
-* sets checkBox map value to false (value) for each rule (key)
-*/
-  filterTags() {
-    this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
-      this.teacherSelectedErrors = res;
-      //loop through tags of errors found in the story
-      for(let tag of this.tags) {
-        let values: HighlightTag[] = [];
-        let rule: string = tag.data.ruleId.substring(22);
-        
-        let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
-        rule = rx[0];
-      
-        // check against errors that the teacher provides
-        if(this.teacherSelectedErrors.length > 0) {
-          if(this.teacherSelectedErrors.indexOf(rule) !== -1) {
-            if(this.filteredTags.has(rule)) {
-              values = this.filteredTags.get(rule);
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-            }
-            else {
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-              this.checkBox.set(rule, false);
-            }    
-          }
-        }
-        // otherwise check against all grammar errors 
-        else {
-          if(this.filteredTags.has(rule)) {
-            values = this.filteredTags.get(rule);
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-          }
-          else {
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-            this.checkBox.set(rule, true);
-          }
-        } 
-      }
-      this.updateStats();
-    });
-  }
-
-  /**
-   * Gets an array of HighlighTags for which the associated grammar error category
-   * is selected according to the checkBox map.
-   * 
-   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
-   * HighlightTags for seimhiu.
-   */
-  getSelectedTags(): HighlightTag[] {
-    // Get only those filteredTags whose keys map to true in checkBox
-    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
-      // entry[0] is key, entry[1] is val.
-      if (this.checkBox.get(entry[0])) {
-        return entry[1];
-      } else {
-        return [];
-      }
-    });
-    // Flatten 2d array of HighlightTags
-    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
-    return selectedTags;
-  }
-
-  /*
   * Update the grammar error map of the stat object corresponding to the current student id
   */
   updateStats() {
-    let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
-    });
-  }
-  
-  // set modalClass to visible fade 
-  showModal() {
-    this.modalClass = "visibleFade";
+    if (!userDetails) {
+      return;
+    }
+    this.statsService
+        .updateGrammarErrors(
+          userDetails._id,
+          this.filteredTags,
+          new Date())
+        .subscribe();
   }
 
-  // set modalClass to hidden fade and next choice to false 
+  // set modalClass to visible fade
+  showModal() {
+    this.modalClass = 'visibleFade';
+  }
+
+  // set modalClass to hidden fade and next choice to false
   hideModal() {
-    this.modalClass = "hiddenFade";
+    this.modalClass = 'hiddenFade';
     this.modalChoice.next(false);
   }
 
@@ -486,16 +360,23 @@ export class DashboardComponent implements OnInit {
     this.modalChoice.next(true);
   }
 
-  // save story and set next modal choice to true 
+  // save story and set next modal choice to true
   saveModal() {
     this.saveStory();
     this.modalChoice.next(true);
   }
 
   toggleOptions() {
-    if(!this.dontToggle){
+    if (!this.dontToggle) {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
+  }
+
+  handleGrammarCheckerOptionClick() {
+    this.dontToggle = true;
+    this.defaultMode();
+    this.grammarChecker.hideEntireGrammarChecker =
+      !this.grammarChecker.hideEntireGrammarChecker;
   }
 }

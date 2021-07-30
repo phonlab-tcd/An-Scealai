@@ -17,9 +17,9 @@
 
 
 .bookContainer {
-    --bookContainerHeight: 80vh;
+    --bookContainerHeight: 60vh;
     --bookContainerWidth: 95%;
-    --textfieldHeight: calc(var(--bookContainerHeight) - 170px);
+    --textfieldHeight: calc(var(--bookContainerHeight));
     height: calc(var(--bookContainerHeight/2));
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
@@ -116,13 +116,14 @@
 .ql-editor {
   background-color: #f7f2e7;
   /* ~44px is the height of the toolbar */
-  height: calc(var(--textfieldHeight) - 44px);
+  height: calc(var(--textfieldHeight));
   z-index: 1;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
   font-size: 14pt;
   font-family: "Times New Roman", Times, serif;
+  resize: vertical;
 }
 
 quill-editor {
@@ -338,7 +339,8 @@ background-color: lightblue;
 }
 
 .textFieldGrammarCheck {
-    height: calc(var(--textfieldHeight) - var(--grammarMessageHeight) - 90px);
+    color: black;
+    height: 40vh;
 }
 
 .grammarMessageContainer {
@@ -402,12 +404,10 @@ background-color: lightblue;
 
 .tagHover {
     opacity: 0.8;
-    transition: 0.5s;
 }
 
 .tagNotHover {
     opacity: 0.4;
-    transition: 0.5s;
 }
 
 .refreshGrammar:hover {
@@ -419,7 +419,7 @@ background-color: lightblue;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: calc(var(--textfieldHeight) / 3);
+    margin-top: 20px;
     color: #437250;
 }
 
