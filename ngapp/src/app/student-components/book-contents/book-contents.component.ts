@@ -42,13 +42,16 @@ export class BookContentsComponent implements OnInit {
   ngOnInit() {
     // get stories for the user
     this.storyService
-    .getStoriesForLoggedInUser()
-    .subscribe((data: Story[]) => {
-      this.stories = data;
-      this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
-    });
+        .getStoriesForLoggedInUser()
+        .then((data: Story[]) => {
+          this.stories = data;
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
+        });
+
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      return;
+    }
 
     this.userId = userDetails._id;
     this.deleteMode = false;
