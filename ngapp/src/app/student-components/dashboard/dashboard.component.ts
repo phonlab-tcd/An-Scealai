@@ -4,7 +4,9 @@ import {
   HostListener,
   ViewEncapsulation,
   ViewChild,
-  Renderer2 } from '@angular/core';
+  AfterViewInit,
+  Renderer2, 
+  ChangeDetectorRef} from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
@@ -28,7 +30,6 @@ import { TextProcessingService } from 'src/app/services/text-processing.service'
 import { SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
-
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 
 @Component({
@@ -38,9 +39,15 @@ import { GrammarCheckerComponent } from 'src/app/student-components/grammar-chec
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit{
 
   @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
+  viewInitialised = false;
+
+  ngxQuill: any;
+
+  sentences: string[];
 
   story: Story = new Story();
   stories: Story[];
@@ -53,7 +60,7 @@ export class DashboardComponent implements OnInit {
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  modalClass : string = "hidden";
+  modalClass: string = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: string[] = [];
   classroomId: string;
@@ -70,7 +77,6 @@ export class DashboardComponent implements OnInit {
 
   audioSources = [];
 
-  sentences: string[];
   htmlDataIsReady = false;
 
   quillToolbar = {
@@ -106,28 +112,6 @@ export class DashboardComponent implements OnInit {
       name : this.ts.l.ulster
     }
   ];
-  
-  quillToolbar = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-      ['blockquote'/*, 'code-block'*/],
-      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-      //[{ 'direction': 'rtl' }],                         // text direction
-      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['clean'],                                         // remove formatting button
-      //['link', 'image', 'video']                        // link and image, video
-    ]
-  };
-  
-  @ViewChild('myQuillEditor') quillEditor: any;
-  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
 
   constructor(private storyService: StoryService,
               private synth: SynthesisService,
@@ -143,6 +127,7 @@ export class DashboardComponent implements OnInit {
               public classroomService: ClassroomService,
               private textProcessor: TextProcessingService,
               private synthBank: SynthesisBankService,
+              private cd: ChangeDetectorRef,
              ) {}
 
 
@@ -162,16 +147,16 @@ export class DashboardComponent implements OnInit {
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
+      console.dir(stories);
       this.stories = stories;
       // Get the story id from the URL in the same way
-      this.getStoryId().then(params => {
-        this.id = params.id;
+      this.getStoryId().then(id => {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
         // TODO Woah that's gotta be slow (Neimhin 15 July 2021)
         for (const story of this.stories) {
-          if (story._id === this.id) {
+          if (story._id === id) {
             this.story = story;
             this.getWordCount(this.story.text);
             if (!this.story.htmlText) {
@@ -181,8 +166,14 @@ export class DashboardComponent implements OnInit {
             break;
           }
         }
+        }).catch(error => {
+          this.story.text = JSON.stringify(error);
+          throw error;
+      }).catch(error => {
+        this.story.text = JSON.stringify(error);
       });
     });
+
 
     // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
@@ -201,18 +192,28 @@ export class DashboardComponent implements OnInit {
         );
   }
 
+  ngAfterViewInit() {
+    this.viewInitialised = true;
+    this.cd.detectChanges();
+  }
+
   /*
   * return the student's set of stories using the story service
   */
-  getStories(): Promise<any> {
-    return this.storyService.getStoriesForLoggedInUser().toPromise();
+  getStories(): Promise<Story[]> {
+    return this.storyService.getStoriesForLoggedInUser();
   }
 
   /*
   * return the story id using the routing parameters
   */
   getStoryId(): Promise<any> {
-    return this.route.params.toPromise();
+    return new Promise((resolve, reject) => {
+      this.route.params.subscribe(
+        params => {
+          resolve(params.id);
+      });
+    });
   }
 
   /*
@@ -230,8 +231,10 @@ export class DashboardComponent implements OnInit {
         .then(
           () => {
             console.count('STORY SAVED');
+            this.grammarChecker?.runGramadoir();
           });
     this.storySaved = true;
+
   }
 
   showDictionary() {
@@ -267,11 +270,36 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  initialiseText(text: string) {
+    this.story.text = text;
+  }
+
   // Set story saved to false
   storyEdited(quill) {
     this.story.text = quill.text;
+
+    /*
+    this.sentences = quill.editor
+        .getLines()
+        .map(this.textProcessor.sentences)
+        .flat();
+       */
+
+    if (this.grammarChecker?.shouldRunGramadoir()) {
+      this.saveStory();
+    }
+    this.storyEdited = this.storyEditedAlt;
+  }
+
+  storyEditedAlt(quill) {
     this.storySaved = false;
-    if (this.grammarChecker.shouldRunGramadoir()) {
+    this.story.text = quill.text;
+    this.sentences = quill.editor
+        .getLines()
+        .map(this.textProcessor.sentences)
+        .flat();
+
+    if (this.grammarChecker?.shouldRunGramadoir()) {
       this.saveStory();
     }
   }
@@ -376,7 +404,9 @@ export class DashboardComponent implements OnInit {
   handleGrammarCheckerOptionClick() {
     this.dontToggle = true;
     this.defaultMode();
-    this.grammarChecker.hideEntireGrammarChecker =
-      !this.grammarChecker.hideEntireGrammarChecker;
+    if (this.grammarChecker) {
+      this.grammarChecker.hideEntireGrammarChecker =
+        !this.grammarChecker.hideEntireGrammarChecker;
+    }
   }
 }

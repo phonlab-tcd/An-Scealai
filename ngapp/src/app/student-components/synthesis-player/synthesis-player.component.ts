@@ -13,33 +13,7 @@ type SentenceAndAudioUrl = {
 
 @Component({
   selector: 'app-synthesis-player',
-  template:
-    `
-    <div *ngFor="let s of sentencesAndAudioUrls; let i = index;">
-      <p class="text-start">
-        {{s.sentence}}
-
-      <ng-container
-        *ngIf="s.waiting; then waiting; else ready">
-      </ng-container>
-
-      <ng-template #waiting>
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-      </ng-template>
-
-      <ng-template #ready>
-        <br>
-        <audio controls>
-          <source src="{{s.audioUrl}}">
-        </audio>
-      </ng-template>
-    </div>
-    `,
-  // templateUrl: './synthesis-player.component.html',
+  templateUrl: './synthesis-player.component.html',
   styleUrls: ['./synthesis-player.component.css']
 })
 export class SynthesisPlayerComponent implements OnInit {
@@ -58,14 +32,7 @@ export class SynthesisPlayerComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    console.dir(this.sentences);
-    // this.synthesiseMySentences();
-  }
-
-  refresh() {
-    console.dir(this.sentences);
-    // this.unsubscribeAll(this.sentencesAndAudioUrls);
-    // this.synthesiseMySentences();
+    console.count('SYNTHESIS PLAYER COMPONENT CREATED');
   }
 
   unsubscribeAll(oldSentencesAndUrls: SentenceAndAudioUrl[]) {
@@ -132,43 +99,41 @@ type SynthesisSentenceBySentence = {
 
 function  synthesiseQuillTextSentenceBySentence(lines: string[]) {
 
-    const sentences: string[] = lines.flatMap(this.textProcessor.sentences);
-    const d = this.story.dialect as Dialect;
+  const sentences: string[] = lines.flatMap(this.textProcessor.sentences);
+  const d = this.story.dialect as Dialect;
 
-    const newSynthesis: SynthesisSentenceBySentence = {
-      date: new Date(),
-      sentences: [],
-    };
+  const newSynthesis: SynthesisSentenceBySentence = {
+    date: new Date(),
+    sentences: [],
+  };
 
-    for (const sentence of sentences) {
+  for (const sentence of sentences) {
 
-      // BEGIN THE HTTP REQUEST TO SYNTHESISE A NEW SENTENCE
-      const thisSentence = {
-        url: null,
-        sentence,
-        waiting: true,
-        subscription: this.synth
-                          .synthesiseText(
-                              sentence,
-                              d)
-                          .subscribe({
-                            next: url => {
-                              thisSentence.url  = url;
-                              thisSentence.waiting = false;
-                            }
-                          }),
-      } as SynthesisedSentence;
-      newSynthesis.sentences.push(thisSentence);
+    // BEGIN THE HTTP REQUEST TO SYNTHESISE A NEW SENTENCE
+    const thisSentence = {
+      url: null,
+      sentence,
+      waiting: true,
+      subscription: this.synth
+                        .synthesiseText(sentence, d)
+                        .subscribe({
+                          next: (url: string) => {
+                            thisSentence.url = url;
+                            thisSentence.waiting = false;
+                          }
+                        }),
+    } as SynthesisedSentence;
+    newSynthesis.sentences.push(thisSentence);
 
-      // IF WE ALREADY HAVE THE SYNTHESIS IN STORAGE, CANCEL THE HTTP REQUEST
-      const storageUrl = this.synthBank.getAudioUrlOfSentence(sentence, d, 'MP3');
-      if (storageUrl && thisSentence.waiting) {
-        thisSentence.subscription.unsubscribe();
-        thisSentence.url = storageUrl;
-        thisSentence.waiting = false;
-        delete thisSentence.subscription;
-      }
+    // IF WE ALREADY HAVE THE SYNTHESIS IN STORAGE, CANCEL THE HTTP REQUEST
+    const storageUrl = this.synthBank.getAudioUrlOfSentence(sentence, d, 'MP3');
+    if (storageUrl && thisSentence.waiting) {
+      thisSentence.subscription.unsubscribe();
+      thisSentence.url = storageUrl;
+      thisSentence.waiting = false;
+      delete thisSentence.subscription;
     }
-
-    this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
   }
+
+  this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
+}
