@@ -22,7 +22,7 @@ describe('getStoryById endpoint function', () => {
     mockingoose(Story).toReturn(fakeStory, 'findOne');
     const mockReq = {
       params: {
-        id: fakeStory._id
+        id: '111111111111111111111111'
       }
     };
     const mockRes = makeFakeRes();
