@@ -14,7 +14,6 @@
       "schematics": {},
       "architect": {
         "build": {
-          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -79,6 +78,7 @@
           }
         },
         "serve": {
+          "defaultConfiguration": "development",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "an-scealai:build"
