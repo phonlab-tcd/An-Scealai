@@ -272,6 +272,8 @@ export class DashboardComponent implements OnInit{
   // Set story saved to false
   // THIS FUNCTION IS ONLY CALLED ONCE AND THEN SUBSTITUTED
   storyEdited(quill) {
+    this.storySaved = false;
+
     this.story.text = quill.text;
 
     this.getWordCount(quill.text);
@@ -281,12 +283,9 @@ export class DashboardComponent implements OnInit{
     if (this.grammarChecker?.shouldRunGramadoir()) {
       this.saveStory();
     }
-
-    this.storyEdited = this.storyEditedAlt;
   }
 
   storyEditedAlt(quill) {
-    this.storySaved = false;
 
     this.story.text = quill.text;
 
@@ -300,13 +299,16 @@ export class DashboardComponent implements OnInit{
   }
 
   synthesisRefresh(editor: Quill) {
-    const lines = (editor).getLines().map((s) => {
+    const lines = editor.getLines().map((s) => {
          return s.children.head.text;
     });
-    this.sentences = lines
-        .flatMap(this.textProcessor.sentences as (arg0: string) => string[]);
 
-    // this.synthesisPlayer?.refresh();
+    this.sentences = lines
+        .flatMap(this.textProcessor.sentences);
+
+    console.log('SENTENCES:', this.sentences);
+
+    this.synthesisPlayer?.refresh();
   }
 
   // Get word count of story text
