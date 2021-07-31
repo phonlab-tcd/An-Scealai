@@ -37,14 +37,7 @@ export class SynthesisPlayerComponent implements OnInit {
   }
 
   refresh() {
-    this.unsubscribeAll(this.sentencesAndAudioUrls);
     this.synthesiseMySentences();
-  }
-
-  unsubscribeAll(oldSentencesAndUrls: SentenceAndAudioUrl[]) {
-    for (const old of oldSentencesAndUrls) {
-      old.subscription?.unsubscribe();
-    }
   }
 
   synthesiseMySentences(): void {
