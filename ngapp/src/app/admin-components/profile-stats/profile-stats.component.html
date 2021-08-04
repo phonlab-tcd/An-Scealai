@@ -1,0 +1,521 @@
+<div class="content">
+  <div class="header"> Profile Statistics </div>
+  <div class="datePicker">
+    <mat-form-field appearance="fill">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+    <div class="submitButton" (click)="getProfileData()">Get Data</div>
+  </div>
+
+</div>
+
+<div *ngIf="displayProfiles" class="profileNumber"> Profiles Found: {{profiles.length}} </div>
+
+<!-- Personal Information -->
+<div *ngIf="displayProfiles">
+  <div class="profileHeader"> {{ts.l.personal_info}} </div>
+  <mat-accordion multi class="displayData">
+    <!-- Gender -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.gender}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Gender of users
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let gender of totalGender | keyvalue">
+        <div> {{gender.key}} : {{gender.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Age -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.age}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Age of users
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let age of totalAges | keyvalue">
+        <div> {{age.key}} : {{age.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Country -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.country}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Country of users not from Ireland
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="sideBySide">
+        <div>
+          <div *ngFor="let option of totalNotFromIreland | keyvalue">
+            <div> Total users not from Ireland : {{option.value}} </div>
+          </div>
+        </div>
+        <div>
+          <div *ngFor="let country of totalCountries | keyvalue">
+            <div> {{country.key}} : {{country.value}} </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- County -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.county}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          County of users from Ireland
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let county of totalCounties | keyvalue">
+        <div> {{county.key}} : {{county.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Current Studies -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Student School Level </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Which level/type of schooling users are in
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let school of totalStudentSchoolLevel | keyvalue">
+        <div> {{school.key}} : {{school.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Primary Year -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Primary Year </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Wich year of primary school users are in
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let year of totalPrimaryYear | keyvalue">
+        <div> {{year.key}} : {{year.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Secondary Year -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Secondary Year </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Wich year of secondary school users are in
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let year of totalSecondaryYear | keyvalue">
+        <div> {{year.key}} : {{year.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Primary/Secondary school type -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> School Type </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Wich type of primary/secondary school students attend
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let type of totalStudentSchoolType | keyvalue">
+        <div> {{type.key}} : {{type.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Third Level School Types -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Third Level Studies </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What third level students are currently studying
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalThirdLevelOption | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Other third level studies -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Other Studies </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Other third level studies that are not listed
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let level of totalOtherStudies | keyvalue">
+        <div> {{level.key}} : {{level.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Third Level Year -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Third Level Year </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What year third level students are currently in
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let year of totalThirdLevelYear | keyvalue">
+        <div> {{year.key}} : {{year.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Third Level Year -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> USA School </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What students are currently in the USA
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalUsaOption | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Other Postgrad studies -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Postgrad Studies </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What postgrad students are currently studying
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalOtherPostgradStudies | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Immersion Course -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Immersion Course </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Whether or not students are attending an Irish immersion course
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalImmersionCourse | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Teacher School Types -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Teacher School Types </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What level of schools teachers work in 
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalTeacherSchoolTypes | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Teacher Primary Type -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Teacher Primary School </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What type of primary school teachers work in 
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalTeacherPrimaryType | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Teacher Secondary Type -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Teacher Secondary School </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          What type of secondary school teachers work in 
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let option of totalTeacherSecondaryType | keyvalue">
+        <div> {{option.key}} : {{option.value}} </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<!-- Language Competence -->
+<div *ngIf="displayProfiles">
+  <div class="profileHeader"> {{ts.l.language_competence}} </div>
+  <mat-accordion multi class="displayData">
+    <!-- Native Speaker Status -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.native_speaker}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Status of native speakers
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let status of totalNativeSpeakerStatus | keyvalue">
+        <div> {{status.key}} : {{status.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Dialect Preference -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>{{ts.l.dialect}}</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Dialect preference of users
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let dialect of totalDialectPreferences | keyvalue">
+        <div> {{dialect.key}} : {{dialect.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Spoken Comprehension Level -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Spoken Comprehension Level</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Spoken comprehension level of users
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let level of totalSpokenComprehensionLevel | keyvalue">
+        <div> {{level.key}} : {{level.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Other Languages Spoken at Home -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Other Languages</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Other languages spoken at home and percentage of use
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let language of totalOtherLanguages | keyvalue">
+        <div> {{language.key}} : {{language.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Father Native Tongue -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Father Native Tongue </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Native tongue of father
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let language of totalFatherNativeTongue | keyvalue">
+        <div> {{language.key}} : {{language.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Mother Native Tongue -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Mother Native Tongue </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Native tongue of mother
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let language of totalMotherNativeTongue | keyvalue">
+        <div> {{language.key}} : {{language.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Years of Irish -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Years of Irish </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          The number of years students have been studying Irish
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let year of totalYearsOfIrish | keyvalue">
+        <div> {{year.key}} : {{year.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Other language proficiency -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Other Language Proficiency </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Other languages that users speak/are proficient in
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let language of totalOtherLanguageProficiency | keyvalue">
+        <div> {{language.key}} : {{language.value}} </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<!-- Exposure to Irish -->
+<div *ngIf="displayProfiles">
+  <div class="profileHeader"> {{ts.l.exposure_to_irish}} </div>
+  <mat-accordion multi class="displayData">
+    <!-- Speaking Frequency -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Speaking Frequency</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Frequency users speak Irish
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let frequency of totalSpeakingFrequency | keyvalue">
+        <div> {{frequency.key}} : {{frequency.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Speak With -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Speak With</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          With whom users normally speak Irish 
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let who of totalSpeakWith | keyvalue">
+        <div> {{who.key}} : {{who.value}} </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Irish Media -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Irish Media</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Types of Irish media that users use and how ofthen they use it
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="sideBySide">
+        <div>
+          Type:
+          <div *ngFor="let media of totalIrishMedia | keyvalue">
+            <div> {{media.key}} : {{media.value}} </div>
+          </div>
+        </div>
+        <div>
+          How often:
+          <div *ngFor="let time of totalHowOftenMedia | keyvalue">
+            <div> {{time.key}} : {{time.value}} </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Irish Reading -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Irish Reading</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Types of Irish reading that users do and how ofthen they use it
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="sideBySide">
+        <div>
+          Type:
+          <div *ngFor="let reading of totalIrishReading | keyvalue">
+            <div> {{reading.key}} : {{reading.value}} </div>
+          </div>
+        </div>
+        <div>
+          How often:
+          <div *ngFor="let time of totalHowOftenReading | keyvalue">
+            <div> {{time.key}} : {{time.value}} </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Irish Media -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b>Irish Writing</b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          Types of Irish writing that users do and how ofthen they use it
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="sideBySide">
+        <div>
+          Type:
+          <div *ngFor="let writing of totalIrishWriting | keyvalue">
+            <div> {{writing.key}} : {{writing.value}} </div>
+          </div>
+        </div>
+        <div>
+          How often:
+          <div *ngFor="let time of totalHowOftenWriting | keyvalue">
+            <div> {{time.key}} : {{time.value}} </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Synth Opinion -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          <b> Synth Opinion </b>
+        </mat-panel-title>
+        <mat-panel-description class="panelDescription">
+          User opinion on synthetic voices
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngFor="let opinion of totalSynthOpinion | keyvalue">
+        <div> {{opinion.key}} : {{opinion.value}} </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+  
+

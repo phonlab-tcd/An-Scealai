@@ -18,6 +18,13 @@ export class StatsService {
   getSynthesisData() : Observable<any> {
     return this.http.get(this.baseUrl + 'synthesisFixes');
   }
+  
+  getProfileDataByDate(startDate: string, endDate: string): Observable<any> {
+    console.log("start date: ", startDate);
+    console.log("end date: ", endDate);
+    return this.http.get(this.baseUrl + 'getProfileDataByDate/' + startDate + "/" + endDate);
+  }
+
 
 // *********************** Student stats ************************************
 

@@ -35,6 +35,7 @@ import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
+import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
@@ -116,6 +117,10 @@ const routes: Routes = [
       {
         path: 'find-user',
         component: FindUserComponent,
+      },
+      {
+        path: 'profile-stats',
+        component: ProfileStatsComponent,
       }
     ]
   },
