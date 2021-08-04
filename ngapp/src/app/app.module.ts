@@ -10,6 +10,9 @@ import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatCardModule } from '@angular/material/card'
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -63,6 +66,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 
 
 
@@ -110,6 +114,7 @@ import { QuillModule } from 'ngx-quill';
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
+    ProfileStatsComponent,
   ],
   imports: [
     BrowserModule,
@@ -122,6 +127,9 @@ import { QuillModule } from 'ngx-quill';
     BrowserAnimationsModule,
     MatExpansionModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({
@@ -134,6 +142,8 @@ import { QuillModule } from 'ngx-quill';
   providers: [ 
     StoryService,
     UserService,
+    MatDatepickerModule,
+    MatNativeDateModule,
     {provide : LocationStrategy , useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent],

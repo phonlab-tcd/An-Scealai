@@ -1,0 +1,63 @@
+.content {
+    width: 100%;
+    padding: 3vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+  width: 900px;
+  background-color: white;
+  border-radius: 4px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.profileNumber {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.header {
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.datePicker {
+  padding-top: 10px;
+}
+
+.submitButton {
+    background-color: #70a87f;
+    color: white;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.submitButton:hover {
+    cursor: pointer;
+    background-color: #304e38;
+}
+
+.displayData {
+  padding: 20px;
+}
+
+.profileHeader {
+  text-align: center;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
+.sideBySide {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 30%;
+}
