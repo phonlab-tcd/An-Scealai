@@ -33,6 +33,7 @@ export class GrammarCheckerComponent implements OnInit {
   @Input() storySaved: boolean;
 
   checkedText = '';
+  timeThatCheckedTextWasChecked: Date;
 
   changeCount = 0;
   changeThreshold = 50;
@@ -58,7 +59,6 @@ export class GrammarCheckerComponent implements OnInit {
     // ts is public so that it can be accessed in the html template
     public ts: TranslationService,
     private statsService: StatsService,
-    private storyService: StoryService,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
     private engagement: EngagementService,
@@ -91,6 +91,7 @@ export class GrammarCheckerComponent implements OnInit {
           (res) => {
             this.filteredTags.clear();
             this.checkedText = res.text;
+            this.timeThatCheckedTextWasChecked = new Date();
             this.tagSets.gramadoirTags = res.grammarTags;
             this.tags = this.tagSets.gramadoirTags;
             this.filterTags();
