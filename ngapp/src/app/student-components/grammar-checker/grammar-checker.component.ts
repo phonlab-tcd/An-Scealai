@@ -37,9 +37,6 @@ export class GrammarCheckerComponent implements OnInit {
   changeCount = 0;
   changeThreshold = 50;
 
-
-  numberOfGramadoirRequestsRunning = 0;
-
   grammarLoading = true;
   grammarChecked = false;
   gramadoirSubscription: Subscription;
@@ -108,18 +105,20 @@ export class GrammarCheckerComponent implements OnInit {
             console.count('COMPLETED GRAMADOIR REQUEST');
             this.gramadoirSubscription = null;
           });
+
+    // DISPLAY GRAMMAR LOADING SPINNER
+    this.grammarChecked = false;
+    this.grammarLoading = true;
+
     // CANCEL GRAMMAR CHECKER IF TEXT HASN'T CHANGED
     if (this.story.text === this.checkedText) {
       this.gramadoirSubscription.unsubscribe();
-      this.grammarChecked = false;
-      this.grammarLoading = true;
+      // WAIT 100 MILISECONDS SO THAT THE USER SEES THAT THEIR CLICK WAS ACKNOWLEDGED
       setTimeout(() => {
         this.grammarChecked = true;
         this.grammarLoading = false;
       }, 100);
     } else {
-      this.grammarChecked = false;
-      this.grammarLoading = true;
       this.tagSets.vowelTags = this.grammar.getVowelAgreementTags(this.story.text);
     }
   }
