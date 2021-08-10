@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer ,  of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Observer,  of } from 'rxjs';
 import { StoryService } from './story.service';
 import { HighlightTag } from 'angular-text-input-highlight';
-import { catchError, skip } from 'rxjs/operators';
+import { catchError, skip, map } from 'rxjs/operators';
 import { Story } from './story';
+import config from 'src/abairconfig.json';
 
+type updateStoryAndCheckGrammarResponse = {
+  savedStory: Story | false;
+  storyWithIdNotFound?: string;
+  saveStoryError?: Error;
+  irishGrammarTags: string;
+  englishGrammarTags: string;
+  irishGramadoirError?: Error;
+  englishGramadoirError?: Error;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +29,7 @@ export class GrammarService {
 
   constructor(
     private storyService: StoryService,
+    private http: HttpClient,
   ) { }
 
   /*
@@ -36,9 +48,48 @@ export class GrammarService {
       });
   }
 
-/*
-* Get grammar tag data from an gramadoir
-*/
+  updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
+    irishGrammarTags: HighlightTag[],
+    englishGrammarTags: HighlightTag[],
+  }> {
+    return this.http.post(config.baseurl + 'story/updateStoryCheckGrammar', {
+      body: story,
+      headers: {
+
+      }
+    }).pipe(
+      map((res: updateStoryAndCheckGrammarResponse) => {
+        const tags: {
+          irishGrammarTags: HighlightTag[],
+          englishGrammarTags: HighlightTag[],
+        } = {
+          irishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.irishGrammarTags),
+          englishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.englishGrammarTags),
+        };
+        return tags;
+      }),
+    );
+  }
+
+
+  convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
+    const highlightTags = [];
+    JSON.parse(tags).forEach((tag: any) => {
+      highlightTags.push({
+        indices: {
+          start: tag.fromx as number,
+          end: tag.tox as number + 1,
+        },
+        cssClass: GrammarTag.getCssClassFromRule(tag.ruleId),
+        data: tag,
+      } as HighlightTag);
+    });
+    return highlightTags;
+  }
+
+  /*
+  * Get grammar tag data from an gramadoir
+  */
   getGramadoirTags(id: string): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
       this.storyService.gramadoirViaBackend(id).subscribe(
