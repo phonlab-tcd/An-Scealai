@@ -9,7 +9,7 @@ import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 
-declare var MediaRecorder : any;
+declare var MediaRecorder: any;
 
 @Component({
   selector: 'app-recording',

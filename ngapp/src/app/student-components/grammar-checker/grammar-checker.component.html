@@ -27,9 +27,22 @@
   <div class="textFieldContainer" *ngIf="grammarChecked">
     <!-- display chosen tag window -->
     <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
-      <span *ngIf="ts.l.iso_code === 'ga' && chosenTagIrish">{{chosenTagIrish?.message}}</span>
-      <span *ngIf="ts.l.iso_code === 'en' && chosenTagEnglish">{{chosenTagEnglish?.message}}</span>
-      <span *ngIf="!chosenTagIrish && !chosenTagEnglish" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
+      <!-- GRAMADOIR IRISH -->
+      <span *ngIf="chosenTag && chosenTag.type === 'gramadoir' && ts.l.iso_code === 'ga'">
+        {{chosenTag?.messageIrish}}
+      </span>
+      <!-- GRAMADOIR ENGLISH -->
+      <span *ngIf="chosenTag && chosenTag.type === 'gramadoir' && ts.l.iso_code === 'en'">
+        {{chosenTag?.messageEnglish}}
+      </span>
+      <!-- VOWEL AGREEMENT ENGLISH OR IRISH -->
+      <span *ngIf="chosenTag && chosenTag.type === 'vowelAgreement'">
+        {{ ts.l[chosenTag.message] ? ts.l[chosenTag.message] : chosenTag.message }}
+      </span>
+      <!-- PLACEHOLDER -->
+      <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">
+        {{ts.l.choose_an_error}}
+      </span>
     </div>
 
     <div class="grammarToolbar">

@@ -8,14 +8,19 @@ import { UserService } from '../user.service';
 import { TranslationService } from '../translation.service';
 import { ClassroomService } from 'src/app/classroom.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';
 import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
 import { NotificationService } from '../notification-service.service';
+// import { v4 as uuid } from 'uuid';
+import { UUID } from 'angular2-uuid';
 
-declare var MediaRecorder : any;
+function uuid(){
+  return UUID.UUID();
+}
+
+declare var MediaRecorder: any;
 
 @Component({
   selector: 'app-messages',
