@@ -347,4 +347,10 @@ export class DashboardComponent implements OnInit {
     this.grammarChecker.hideEntireGrammarChecker =
       !this.grammarChecker.hideEntireGrammarChecker;
   }
+  
+  storySavedByGrammarChecker(story: Story) {
+    if (this.story.htmlText === story.htmlText) {
+      this.storySaved = true;
+    }
+  }
 }
