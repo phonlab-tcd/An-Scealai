@@ -49,7 +49,7 @@ export class GrammarService {
   }
 
   updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
-    text: string,
+    savedStory: any,
     tags: HighlightTag[],
   }> {
     console.dir(story);
@@ -76,7 +76,7 @@ export class GrammarService {
           text = res.savedStory.text as string;
         }
         return {
-          text,
+          savedStory: res.savedStory,
           tags
         };
       }),

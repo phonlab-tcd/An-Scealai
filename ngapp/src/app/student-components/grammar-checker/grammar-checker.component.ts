@@ -3,6 +3,8 @@ import {
   Component,
   OnInit,
   Input,
+  Output,
+  EventEmitter,
   } from '@angular/core';
 
 import { EngagementService} from 'src/app/engagement.service';
@@ -28,6 +30,9 @@ export class GrammarCheckerComponent implements OnInit {
   @Input() story: Story;
   @Input() classroomId: string;
   @Input() storySaved: boolean;
+
+  @Output()
+  savedStory = new EventEmitter<Story>();
 
   checkedText = '';
   timeThatCheckedTextWasChecked: Date;
@@ -92,7 +97,12 @@ export class GrammarCheckerComponent implements OnInit {
         .subscribe(
           (res) => {
             this.filteredTags.clear();
-            this.checkedText = res.text;
+            if (res.savedStory) {
+              this.savedStory.emit(res.savedStory);
+              this.checkedText = res.savedStory.text;
+            } else {
+              this.checkedText = 'an error occurred while trying to save the story';
+            }
             this.timeThatCheckedTextWasChecked = new Date();
             this.tagSets.gramadoirTags = res.tags;
             this.tags = res.tags;
