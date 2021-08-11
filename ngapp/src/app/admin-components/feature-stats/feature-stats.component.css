@@ -35,11 +35,6 @@
     cursor: pointer;
 }
 
-.profileNumber {
-  text-align: left;
-  padding-left: 20px;
-}
-
 .header {
   font-size: 16pt;
   font-weight: bold;
@@ -75,13 +70,21 @@
   font-size: 14pt;
 }
 
-.sideBySide {
+.featureName {
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.featureValue {
+  font-size: 14pt;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.card {
   display: flex;
-  justify-content: flex-end;
-  padding-right: 30%;
+  flex-direction: row;
+  padding: 10px;
+  text-align: center;
 }
-
-mat-panel-description.panelDescription {
-  flex-grow: 0;
-}
-

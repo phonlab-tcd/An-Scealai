@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { StatsService } from '../../stats.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TranslationService } from '../../translation.service';
+import { EngagementService } from '../../engagement.service';
+import { EventType } from '../../event';
 
 
 @Component({
@@ -17,8 +19,13 @@ export class ProfileStatsComponent implements OnInit {
   });
   
   profiles: any[] = [];
-  displayProfiles: boolean = false;
+  previousProfiles: any[] = [];
+  profileToDisplay: any[] = [];
+  displayAllProfiles: boolean = false;
+  displaySelectedProfile: boolean = false;
+  selectDateRange: boolean = true;
   
+  //hold counts for different types of entries
   ageCount: string[] = [];
   countriesCount: string[] = [];
   countiesCount: string[] = [];
@@ -57,7 +64,7 @@ export class ProfileStatsComponent implements OnInit {
   usaOptionCount: string[] = [];
   yearsOfIrishCount: string[] = [];
   
-  
+  //hold total counts for unique entry types
   totalAges = {};
   totalCountries = {};
   totalCounties = {};
@@ -95,28 +102,31 @@ export class ProfileStatsComponent implements OnInit {
   totalThirdLevelYear = {};
   totalUsaOption = {};
   totalYearsOfIrish = {};
-
   
-  constructor(private statsService : StatsService, public ts: TranslationService) { }
+  constructor(private statsService : StatsService, public ts: TranslationService, private engagement: EngagementService) { }
 
   ngOnInit(): void {
-
-    
+    this.engagement.getPreviousAnalysisData("PROFILE-STATS").subscribe( (res) => {
+      this.previousProfiles = res;
+      console.log(this.previousProfiles);
+    });
   }
   
-  getProfileData() {
+  async getProfileData() {
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
     
-    this.statsService.getProfileDataByDate(startDate, endDate).subscribe( (res) => {
-      this.profiles = res;
-      console.log(this.profiles);
-      this.calculateStats();
-    });
-    
+    return new Promise( (resolve, reject) => {
+      this.statsService.getProfileDataByDate(startDate, endDate).subscribe( async (res) => {
+        this.profiles = res;
+        console.log(this.profiles);
+        await this.calculateStats();
+        resolve();
+      });
+    }); 
   }
   
-  calculateStats() {
+  async calculateStats() {
     this.profiles.forEach( profile => {
       if (profile[0] !== undefined) {
         if (profile[0].age !== undefined) this.ageCount.push(profile[0].age);
@@ -168,7 +178,6 @@ export class ProfileStatsComponent implements OnInit {
             if(profile[0].teacherSchoolTypes[key]) this.teacherSchoolTypesCount.push(key);
           }
         }
-        
         if (profile[0].thirdLevelOption) this.thirdLevelOptionCount.push(profile[0].thirdLevelOption);
         if (profile[0].thirdLevelYear) this.thirdLevelYearCount.push(profile[0].thirdLevelYear);
         if (profile[0].usaOption) this.usaOptionCount.push(profile[0].usaOption);
@@ -213,16 +222,68 @@ export class ProfileStatsComponent implements OnInit {
     this.totalThirdLevelYear = this.getTotals(this.thirdLevelYearCount);
     this.totalUsaOption = this.getTotals(this.usaOptionCount);
     this.totalYearsOfIrish = this.getTotals(this.yearsOfIrishCount);
-
-    this.displayProfiles = true;
-
+    return;
   }
   
   getTotals(array): Object {
     let count = {};
     array.forEach(val => count[val] = (count[val] || 0) + 1);
     return count;
-    
+  }
+  
+  async addNewProfileData() {
+    if(this.previousProfiles.length > 0) {
+      console.log("Previous profile exists in DB");
+    }
+    else {
+      await this.getProfileData();
+      console.log("get data");
+      let profile = {
+        "age": this.totalAges,
+        "country": this.totalCountries,
+        "county": this.totalCounties,
+        "dialectPreference": this.totalDialectPreferences,
+        "gender": this.totalGender,
+        "fatherNativeTongue": this.totalFatherNativeTongue,
+        "irishMedia": this.totalIrishMedia,
+        "howOftenMedia": this.totalHowOftenMedia,
+        "irishReading": this.totalIrishReading,
+        "howOftenReading": this.totalHowOftenReading,
+        "irishWriting": this.totalIrishWriting,
+        "howOftenWriting": this.totalHowOftenWriting,
+        "immersionCourse": this.totalImmersionCourse,
+        "motherNativeTongue": this.totalMotherNativeTongue,
+        "nativeSpeakerStatus": this.totalNativeSpeakerStatus,
+        "notFromIreland": this.totalNotFromIreland,
+        "otherCountryOfStudy": this.totalOtherCountryOfStudy,
+        "otherLanguageProficiency": this.totalOtherLanguageProficiency,
+        "otherLanguages": this.totalOtherLanguages,
+        "otherPostgradStudies": this.totalOtherPostgradStudies,
+        "otherStudies": this.totalOtherStudies,
+        "postgradYear": this.totalPostgradYear,
+        "primaryYear": this.totalPrimaryYear,
+        "secondaryYear": this.totalSecondaryYear,
+        "speakWith": this.totalSpeakWith,
+        "speakingFrequency": this.totalSpeakingFrequency,
+        "spokenComprehensionLevel": this.totalSpokenComprehensionLevel,
+        "studentSchoolLevel": this.totalStudentSchoolLevel,
+        "studentSchoolType": this.totalStudentSchoolType,
+        "synthOpinion": this.totalSynthOpinion,
+        "teacherPrimaryType": this.totalTeacherPrimaryType,
+        "teacherSecondaryType": this.totalTeacherSecondaryType,
+        "teacherSchoolTypes": this.totalTeacherSchoolTypes,
+        "thirdLevelOption": this.totalThirdLevelOption,
+        "thirdLevelYear": this.totalThirdLevelYear,
+        "usaOption": this.totalUsaOption,
+        "totalYearsOfIrish": this.totalYearsOfIrish
+      }
+      this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
+    }
+
+  }
+  
+  setProfileToDisplay(profile) {
+    this.profileToDisplay = profile.statsData;
   }
 
 }
