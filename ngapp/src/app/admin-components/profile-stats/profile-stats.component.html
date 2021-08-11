@@ -1,6 +1,10 @@
+<div class="header"> Profile Statistics </div>
+<div class="dataOptions">
+  <div class="option" (click)="selectDateRange = true; displayAllProfiles = false;"> Date Range</div> |
+  <div class="option" (click)="selectDateRange = false; displayAllProfiles = false;"> Previous Data </div>
+</div>
 <div class="content">
-  <div class="header"> Profile Statistics </div>
-  <div class="datePicker">
+  <div class="datePicker" *ngIf="selectDateRange">
     <mat-form-field appearance="fill">
       <mat-label>Enter a date range</mat-label>
       <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -13,15 +17,25 @@
       <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
-    <div class="submitButton" (click)="getProfileData()">Get Data</div>
+    <div> (No date range entered = retrieve all data) </div><br>
+    <div class="submitButton" (click)="getProfileData(); this.displayAllProfiles = true;">Get Data</div>
   </div>
-
+  
+  <div class="datePicker" *ngIf="!selectDateRange">
+    <div *ngIf="previousProfiles">
+      <div *ngFor="let profile of previousProfiles">
+        <div class="submitButton" (click)="setProfileToDisplay(profile); displaySelectedProfile = true; displayAllProfiles = false;"> {{profile.date | date : 'd/M/yy, h:mm a'}} </div>
+      </div>
+    </div>
+    <br>
+    <div class="submitButton" (click)="addNewProfileData()">Add Data Log</div>
+  </div>
 </div>
 
-<div *ngIf="displayProfiles" class="profileNumber"> Profiles Found: {{profiles.length}} </div>
+<div *ngIf="displayAllProfiles || displaySelectedProfile" class="profileNumber"> Profiles Found: {{profiles.length}} </div>
 
 <!-- Personal Information -->
-<div *ngIf="displayProfiles">
+<div *ngIf="displayAllProfiles || displaySelectedProfile">
   <div class="profileHeader"> {{ts.l.personal_info}} </div>
   <mat-accordion multi class="displayData">
     <!-- Gender -->
@@ -34,8 +48,15 @@
           Gender of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let gender of totalGender | keyvalue">
-        <div> {{gender.key}} : {{gender.value}} </div>
+      <div *ngIf="displayAllProfiles">
+        <div *ngFor="let gender of totalGender | keyvalue">
+          <div> {{gender.key}} : {{gender.value}} </div>
+        </div>
+      </div>
+      <div *ngIf="displaySelectedProfile">
+        <div *ngFor="let gender of profileToDisplay.gender | keyvalue">
+          <div> {{gender.key}} : {{gender.value}} </div>
+        </div>
       </div>
     </mat-expansion-panel>
     <!-- Age -->
@@ -48,8 +69,15 @@
           Age of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let age of totalAges | keyvalue">
-        <div> {{age.key}} : {{age.value}} </div>
+      <div *ngIf="displayAllProfiles">
+        <div *ngFor="let age of totalAges | keyvalue">
+          <div> {{age.key}} : {{age.value}} </div>
+        </div>
+      </div>
+      <div *ngIf="displaySelectedProfile">
+        <div *ngFor="let age of profileToDisplay.age | keyvalue">
+          <div> {{age.key}} : {{age.value}} </div>
+        </div>
       </div>
     </mat-expansion-panel>
     <!-- Country -->
@@ -62,18 +90,35 @@
           Country of users not from Ireland
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div class="sideBySide">
-        <div>
-          <div *ngFor="let option of totalNotFromIreland | keyvalue">
-            <div> Total users not from Ireland : {{option.value}} </div>
+      <div *ngIf="displayAllProfiles">
+        <div class="sideBySide">
+          <div>
+            <div *ngFor="let option of totalNotFromIreland | keyvalue">
+              <div> Total users not from Ireland : {{option.value}} </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <div *ngFor="let country of totalCountries | keyvalue">
-            <div> {{country.key}} : {{country.value}} </div>
+          <div>
+            <div *ngFor="let country of totalCountries | keyvalue">
+              <div> {{country.key}} : {{country.value}} </div>
+            </div>
           </div>
         </div>
       </div>
+      <div *ngIf="displaySelectedProfile">
+        <div class="sideBySide">
+          <div>
+            <div *ngFor="let option of profileToDisplay.notFromIreland | keyvalue">
+              <div> Total users not from Ireland : {{option.value}} </div>
+            </div>
+          </div>
+          <div>
+            <div *ngFor="let country of profileToDisplay.country | keyvalue">
+              <div> {{country.key}} : {{country.value}} </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </mat-expansion-panel>
     <!-- County -->
     <mat-expansion-panel>
@@ -275,7 +320,7 @@
 </div>
 
 <!-- Language Competence -->
-<div *ngIf="displayProfiles">
+<div *ngIf="displayAllProfiles || displaySelectedProfile">
   <div class="profileHeader"> {{ts.l.language_competence}} </div>
   <mat-accordion multi class="displayData">
     <!-- Native Speaker Status -->
@@ -394,7 +439,7 @@
 </div>
 
 <!-- Exposure to Irish -->
-<div *ngIf="displayProfiles">
+<div *ngIf="displayAllProfiles || displaySelectedProfile">
   <div class="profileHeader"> {{ts.l.exposure_to_irish}} </div>
   <mat-accordion multi class="displayData">
     <!-- Speaking Frequency -->

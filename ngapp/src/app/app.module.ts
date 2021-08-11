@@ -67,6 +67,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
+import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 
 
 
@@ -115,6 +116,7 @@ import { ProfileStatsComponent } from './admin-components/profile-stats/profile-
     SafeHtmlPipe,
     SponsorsComponent,
     ProfileStatsComponent,
+    FeatureStatsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,60 @@
+<div class="header"> Scéalaí Features Statistics </div>
+<div class="dataOptions">
+  <div class="option" (click)="selectDateRange = true; displayAllFeatures= false;"> Date Range</div> |
+  <div class="option" (click)="selectDateRange = false; displayAllFeatures = false;"> Previous Data </div>
+</div>
+<div class="content">
+  <div class="datePicker" *ngIf="selectDateRange">
+    <mat-form-field appearance="fill">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+    <div> (No date range entered = retrieve all data) </div><br>
+    <div class="submitButton" (click)="getFeatureData(); this.displayAllFeatures = true;">Get Data</div>
+  </div>
+  
+  <div class="datePicker" *ngIf="!selectDateRange">
+    <div *ngIf="previousFeatures">
+      <div *ngFor="let feature of previousFeatures" style="padding:10px">
+        <div class="submitButton" (click)="setFeatureToDisplay(feature); displaySelectedFeature = true; displayAllFeatures = false;"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
+      </div>
+    </div>
+    <br>
+    <hr>
+    <div class="submitButton" (click)="addNewFeatureData()">Add Data Log</div>
+  </div>
+</div>
+
+<div *ngIf="displayAllFeatures">
+  <mat-card *ngFor="let stat of totalFeatureCounts | keyvalue">
+    <div class="card">
+    <mat-card-content>
+      <div class="featureName"><b>{{stat.key}} : </b></div>
+    </mat-card-content>
+    <mat-card-content>
+      <div class="featureValue">{{stat.value}}</div>
+    </mat-card-content>
+    </div>
+  </mat-card>
+</div>
+
+<div *ngIf="displaySelectedFeature">
+  <mat-card *ngFor="let stat of featureToDisplay | keyvalue">
+    <div class="card">
+    <mat-card-content>
+      <div class="featureName"><b>{{stat.key}} : </b></div>
+    </mat-card-content>
+    <mat-card-content>
+      <div class="featureValue">{{stat.value}}</div>
+    </mat-card-content>
+    </div>
+  </mat-card>
+</div>

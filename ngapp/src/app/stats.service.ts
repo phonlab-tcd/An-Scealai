@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StudentStats } from './studentStats';
+import { AuthenticationService } from './authentication.service';
 import config from '../abairconfig.json';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class StatsService {
   baseUrl:string = config.baseurl + 'stats/';
   baseUrlStudents:string = config.baseurl + 'studentStats/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthenticationService) { }
   
 // *********************** Admin stats ************************************
   getSynthesisData() : Observable<any> {
@@ -23,6 +24,17 @@ export class StatsService {
     console.log("start date: ", startDate);
     console.log("end date: ", endDate);
     return this.http.get(this.baseUrl + 'getProfileDataByDate/' + startDate + "/" + endDate);
+  }
+  
+  getFeatureDataByDate(startDate: string, endDate: string): Observable<any> {
+    console.log("start date: ", startDate);
+    console.log("end date: ", endDate);
+    return this.http.get(this.baseUrl + 'getFeatureDataByDate/' + startDate + "/" + endDate);
+  }
+  
+  getFeatureDataSinceLog(date): Observable<any> {
+    console.log("Date: ", date);
+    return this.http.get(this.baseUrl + 'getFeatureDataSinceLog/' + date.toString());
   }
 
 
