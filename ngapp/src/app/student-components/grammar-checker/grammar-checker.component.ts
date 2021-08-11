@@ -3,15 +3,12 @@ import {
   Component,
   OnInit,
   Input,
-  Output,
-  EventEmitter,
   } from '@angular/core';
 
 import { EngagementService} from 'src/app/engagement.service';
 import { EventType } from 'src/app/event';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { StatsService } from 'src/app/stats.service';
-import { StoryService } from 'src/app/story.service';
 import { ClassroomService } from 'src/app/classroom.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
 import { GrammarService, GrammarTag, TagSet  } from 'src/app/grammar.service';
@@ -43,11 +40,13 @@ export class GrammarCheckerComponent implements OnInit {
   gramadoirSubscription: Subscription;
 
   filteredTags: Map<string, HighlightTag[]> = new Map();
-  tags: HighlightTag[] = [];
+  tags: HighlightTag[];
   teacherSelectedErrors: string[] = [];
-  chosenTag: GrammarTag;
+  chosenTagIrish: GrammarTag;
+  chosenTagEnglish: GrammarTag;
   tagSets: TagSet = {
-    gramadoirTags: [],
+    englishGramadoirTags: [],
+    irishGramadoirTags: [],
     vowelTags: [],
   };
   grammarSelected = true;
@@ -74,7 +73,9 @@ export class GrammarCheckerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.runGramadoir();
+    if (this.story) {
+      this.runGramadoir();
+    }
   }
 
   /*
@@ -84,16 +85,20 @@ export class GrammarCheckerComponent implements OnInit {
   * Add logged event for checked grammar
   */
   async runGramadoir() {
-
+    // PUT BACKEND REQUEST IN THE QUEUE
     this.gramadoirSubscription?.unsubscribe();
-    this.gramadoirSubscription = this.grammar
-        .getGramadoirTags(this.story._id).subscribe(
+    this.gramadoirSubscription =
+      this
+        .grammar
+        .updateStoryAndGetGrammarTagsAsHighlightTags(this.story)
+        .subscribe(
           (res) => {
             this.filteredTags.clear();
             this.checkedText = res.text;
             this.timeThatCheckedTextWasChecked = new Date();
-            this.tagSets.gramadoirTags = res.grammarTags;
-            this.tags = this.tagSets.gramadoirTags;
+            this.tagSets.englishGramadoirTags = res.tags.englishGrammarTags;
+            this.tagSets.irishGramadoirTags = res.tags.irishGrammarTags;
+            this.tags = res.tags.englishGrammarTags;
             this.filterTags();
             this.grammarLoading = false;
             this.grammarChecked = true;
@@ -139,8 +144,9 @@ export class GrammarCheckerComponent implements OnInit {
 
             // loop through tags of errors found in the story
             for (const tag of this.tags) {
+              console.dir(tag);
               let values: HighlightTag[] = [];
-              let rule: string = tag.data.ruleId.substring(22);
+              let rule: string = tag.data.grammarInfo.ruleId.substring(22);
               const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
               rule = rx[0];
               // check against errors that the teacher provides
@@ -160,7 +166,7 @@ export class GrammarCheckerComponent implements OnInit {
               }
               // otherwise check against all grammar errors
               else {
-                if(this.filteredTags.has(rule)) {
+                if (this.filteredTags.has(rule)) {
                   values = this.filteredTags.get(rule);
                   values.push(tag);
                   this.filteredTags.set(rule, values);
@@ -170,9 +176,9 @@ export class GrammarCheckerComponent implements OnInit {
                   this.filteredTags.set(rule, values);
                   this.checkBox.set(rule, true);
                 }
-              } 
+              }
             }
-            console.log("Filtered tags: ", this.filteredTags);
+            console.log('Filtered tags: ', this.filteredTags);
             this.updateStats();
     });
   }
@@ -204,13 +210,14 @@ export class GrammarCheckerComponent implements OnInit {
   * Set tags to vowel tags or grammar tags based on event value
   */
   onChangeGrammarFilter(eventValue: any) {
-    this.chosenTag = null;
+    this.chosenTagIrish = null;
+    this.chosenTagEnglish = null;
     if (eventValue === 'vowel') {
       this.tags = this.tagSets.vowelTags;
       this.grammarSelected = false;
     }
     if (eventValue === 'gramadoir') {
-      this.tags = this.tagSets.gramadoirTags;
+      this.tags = this.tagSets.englishGramadoirTags;
       this.grammarSelected = true;
     }
   }
@@ -261,6 +268,22 @@ export class GrammarCheckerComponent implements OnInit {
 
   // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
-    this.chosenTag = new GrammarTag(tag.data);
+    if (tag.data.vowelAgreement) {
+      this.chosenTagIrish = new GrammarTag(tag.data.grammarInfo);
+      this.chosenTagEnglish = new GrammarTag(tag.data.grammarInfo);
+    }
+    this.chosenTagIrish =
+      new GrammarTag(
+        this.tagSets
+            .irishGramadoirTags[tag.data.index]
+            .data
+            .grammarInfo);
+
+    this.chosenTagEnglish =
+      new GrammarTag(
+        this.tagSets
+            .englishGramadoirTags[tag.data.index]
+            .data
+            .grammarInfo);
   }
 }

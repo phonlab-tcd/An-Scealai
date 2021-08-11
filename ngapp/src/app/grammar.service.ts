@@ -49,41 +49,70 @@ export class GrammarService {
   }
 
   updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
-    irishGrammarTags: HighlightTag[],
-    englishGrammarTags: HighlightTag[],
+    text: string,
+    tags: {
+      irishGrammarTags: HighlightTag[],
+      englishGrammarTags: HighlightTag[],
+    }
   }> {
-    return this.http.post(config.baseurl + 'story/updateStoryCheckGrammar', {
-      body: story,
-      headers: {
-
-      }
-    }).pipe(
-      map((res: updateStoryAndCheckGrammarResponse) => {
+    console.dir(story);
+    return this.http.post(
+      config.baseurl + 'story/updateStoryAndCheckGrammar',
+      story,
+      {
+        headers: {
+        'Content-Type': 'application/json',
+        }
+      }).pipe(
+      map((res: {
+        savedStory: any;
+        grammarTagsIrish: any;
+        grammarTagsEnglish: any;
+      }) => {
+        console.log('GRAMADOIR RESPONSE:');
+        console.dir(res);
         const tags: {
           irishGrammarTags: HighlightTag[],
           englishGrammarTags: HighlightTag[],
         } = {
-          irishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.irishGrammarTags),
-          englishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.englishGrammarTags),
+          irishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.grammarTagsIrish),
+          englishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.grammarTagsEnglish),
         };
-        return tags;
+
+        let text = 'story was not saved correctly';
+        if (res.savedStory) {
+          text = res.savedStory.text as string;
+        }
+        return {
+          text,
+          tags
+        };
       }),
     );
   }
 
 
   convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
-    const highlightTags = [];
-    JSON.parse(tags).forEach((tag: any) => {
+    const highlightTags: HighlightTag[] = [];
+    const parsed = JSON.parse(tags);
+    console.log(parsed);
+    parsed.forEach((tag: any, index: number) => {
       highlightTags.push({
         indices: {
-          start: tag.fromx as number,
-          end: tag.tox as number + 1,
+          // interprent fromx as a number
+          start: + tag.fromx,
+          // interprent tox as a number
+          end: + tag.tox + 1,
         },
         cssClass: GrammarTag.getCssClassFromRule(tag.ruleId),
-        data: tag,
-      } as HighlightTag);
+        data: {
+          index,
+          grammarInfo: tag,
+        },
+      });
     });
+    console.count('HIGHLIGHT TAGS');
+    console.log(highlightTags);
     return highlightTags;
   }
 
@@ -119,7 +148,7 @@ export class GrammarService {
     const story = await this.storyService.getStory(id).toPromise();
     return this.getVowelAgreementTags(story.text);
   }
-  
+
   /*
   * Takes in a story text and return an array of vowel tags showing slender/broad 
   * errors around consonants of words in the text
@@ -153,7 +182,10 @@ export class GrammarService {
               // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[vowelIndex]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
-                ruleId: 'VOWEL',
+                vowelAgreement: true,
+                grammarInfo: {
+                  ruleId: 'VOWEL',
+                },
               },
             };
             // set tag for second vowel
@@ -165,7 +197,10 @@ export class GrammarService {
               // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[i]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
-                ruleId: 'VOWEL',
+                vowelAgreement: true,
+                grammarInfo: {
+                  ruleId: 'VOWEL',
+                },
               },
             };
             tags.push(firstVowelTag);
@@ -254,7 +289,8 @@ export class GrammarService {
 
 */
 export class TagSet {
-  gramadoirTags: HighlightTag[];
+  englishGramadoirTags: HighlightTag[];
+  irishGramadoirTags: HighlightTag[];
   vowelTags: HighlightTag[];
 }
 
