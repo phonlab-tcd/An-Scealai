@@ -50,10 +50,7 @@ export class GrammarService {
 
   updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
     text: string,
-    tags: {
-      irishGrammarTags: HighlightTag[],
-      englishGrammarTags: HighlightTag[],
-    }
+    tags: HighlightTag[],
   }> {
     console.dir(story);
     return this.http.post(
@@ -71,13 +68,8 @@ export class GrammarService {
       }) => {
         console.log('GRAMADOIR RESPONSE:');
         console.dir(res);
-        const tags: {
-          irishGrammarTags: HighlightTag[],
-          englishGrammarTags: HighlightTag[],
-        } = {
-          irishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.grammarTagsIrish),
-          englishGrammarTags: this.convertJsonGramadoirTagsToHighlightTags(res.grammarTagsEnglish),
-        };
+        const tags: HighlightTag[] =
+          this.collateEnglishAndIrishGramadoirResponses(res.grammarTagsEnglish, res.grammarTagsIrish);
 
         let text = 'story was not saved correctly';
         if (res.savedStory) {
@@ -91,6 +83,30 @@ export class GrammarService {
     );
   }
 
+  collateEnglishAndIrishGramadoirResponses(english: string, irish: string): HighlightTag[] {
+    const englishTags = JSON.parse(english);
+    const irishTags = JSON.parse(irish);
+    const highlightTags: HighlightTag[] = [];
+
+    englishTags.forEach((tag, index) => {
+      highlightTags.push({
+        indices: {
+          // interprent fromx as a number
+          start: + tag.fromx,
+          // interprent tox as a number
+          end: + tag.tox + 1,
+        },
+        cssClass: GrammarTag.getCssClassFromRule(tag.ruleId),
+        data: {
+          gramadoir: true,
+          english: tag,
+          irish: irishTags[index],
+        },
+      });
+    });
+
+    return highlightTags;
+  }
 
   convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
     const highlightTags: HighlightTag[] = [];
@@ -183,9 +199,7 @@ export class GrammarService {
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[vowelIndex]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
                 vowelAgreement: true,
-                grammarInfo: {
-                  ruleId: 'VOWEL',
-                },
+                ruleId: 'VOWEL',
               },
             };
             // set tag for second vowel
@@ -198,9 +212,7 @@ export class GrammarService {
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[i]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
                 vowelAgreement: true,
-                grammarInfo: {
-                  ruleId: 'VOWEL',
-                },
+                ruleId: 'VOWEL',
               },
             };
             tags.push(firstVowelTag);
@@ -289,8 +301,7 @@ export class GrammarService {
 
 */
 export class TagSet {
-  englishGramadoirTags: HighlightTag[];
-  irishGramadoirTags: HighlightTag[];
+  gramadoirTags: HighlightTag[];
   vowelTags: HighlightTag[];
 }
 
@@ -298,23 +309,28 @@ export class TagSet {
 * **************** Grammar Tag Class ************************
 */
 export class GrammarTag {
+  type;
   message: string;
+  messageEnglish: string;
+  messageIrish: string;
   rule: string;
 
-  constructor(tagData: any) {
-    this.rule = tagData.ruleId;
-    console.log("rule", this.rule);
-    
+  constructor(type: 'vowelAgreement' | 'gramadoir', englishTag: any, irishTag: any = null) {
+    this.type = type;
+    this.rule = englishTag.ruleId;
+
     this.message = GrammarTag.getMessageFromRule(this.rule);
-    if(!this.message) {
-      this.message = tagData.msg;
+
+    if (type === 'gramadoir') {
+      this.messageEnglish = englishTag.msg;
+      this.messageIrish = irishTag.msg;
     }
   }
 
-/*
-* Takes in a rule specifing a grammar concept and returns a message explaining the error
-*/
-  static getMessageFromRule(rule: string) : string {
+  /*
+  * Takes in a rule specifing a grammar concept and returns a message explaining the error
+  */
+  static getMessageFromRule(rule: string): string {
     /*
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
       return "Séimhiu missing";
@@ -324,9 +340,10 @@ export class GrammarTag {
     }
     */
     // etc.
-    if(rule === 'VOWEL') {
-      return "These vowels should be in agreement according to the Leathan/Caol rule."
+    if (rule === 'VOWEL') {
+      return 'vowels_should_agree';
     }
+    return null;
   }
 
 /*
