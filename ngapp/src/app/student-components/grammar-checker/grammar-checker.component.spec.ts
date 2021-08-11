@@ -55,7 +55,7 @@ describe('GrammarCheckerComponent', () => {
 
     expect(testHostComponent.grammarCheckerComponent).toBeTruthy();
 
-    expect(testHostComponent.grammarCheckerComponent.fileteredTags.length >= 1).toBeTruthy();
+    expect(testHostComponent.grammarCheckerComponent.filteredTags).toBeTruthy();
 
     /*
     expect(
