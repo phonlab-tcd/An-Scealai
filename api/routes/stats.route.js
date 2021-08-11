@@ -14,6 +14,9 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) =>
   if(req.params.startDate !== "empty" && req.params.endDate !== "empty") {
     conditions = {"status":"Active", "verification.date": {'$gte': req.params.startDate, '$lte': req.params.endDate}};
   }
+  else if (req.params.startDate !== "empty" && req.params.endDate === "empty") {
+    conditions = {"status":"Active", "verification.date": {'$gt': req.params.startDate}};
+  }
   else {
     conditions = {"status":"Active"};
   }

@@ -18,7 +18,7 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
     <div> (No date range entered = retrieve all data) </div><br>
-    <div class="submitButton" (click)="getFeatureData(); this.displayAllFeatures = true;">Get Data</div>
+    <div class="submitButton" (click)="getFeatureData(); displayAllFeatures = true; displaySelectedFeature = false;">Get Data</div>
   </div>
   
   <div class="datePicker" *ngIf="!selectDateRange">
@@ -31,6 +31,11 @@
     <hr>
     <div class="submitButton" (click)="addNewFeatureData()">Add Data Log</div>
   </div>
+</div>
+
+<div *ngIf="!dataLoaded" class="loaderContainer">
+  <b>{{ts.l.compiling_data}}</b>
+  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 </div>
 
 <div *ngIf="displayAllFeatures">

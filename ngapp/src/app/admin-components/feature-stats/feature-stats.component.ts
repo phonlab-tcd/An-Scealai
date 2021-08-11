@@ -23,6 +23,7 @@ export class FeatureStatsComponent implements OnInit {
   displayAllFeatures: boolean = false;
   displaySelectedFeature: boolean = false;
   selectDateRange: boolean = true;
+  dataLoaded: boolean = true;
   
   //hold total counts for unique entry types
   totalFeatureCounts = {};
@@ -38,6 +39,7 @@ export class FeatureStatsComponent implements OnInit {
   }
   
   async getFeatureData() {
+    this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
     
@@ -45,6 +47,7 @@ export class FeatureStatsComponent implements OnInit {
       this.statsService.getFeatureDataByDate(startDate, endDate).subscribe( async (res) => {
         this.features = res;
         await this.calculateStats();
+        this.dataLoaded = true;
         resolve();
       });
     }); 
@@ -90,7 +93,6 @@ export class FeatureStatsComponent implements OnInit {
           });
     
           console.log("New feature log", feature);
-          console.log(feature);
           this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
           this.featureToDisplay = feature;
           this.displaySelectedFeature = true;
