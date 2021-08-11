@@ -105,6 +105,8 @@ storyRoutes
     .route('/updateStoryAndCheckGrammar')
     .post(async (req, res) => {
       const storyUpdate = new Story(req.body);
+      console.log(req.body.body);
+      console.log(storyUpdate);
       const validationError = storyUpdate.validateSync();
       if (validationError) {
         return res.status(400).json({
@@ -119,7 +121,7 @@ storyRoutes
       // UPDATE STORY ASYNCHRONOUSLY
       // AND MAKE GRAMADOIR REQUESTS WHILE THAT'S HAPPENING
       const updateStoryPromise =
-        Story.findByIdAndUpdate(req.body.storyId, storyUpdate, {new: true});
+        Story.findByIdAndUpdate(req.body._id, storyUpdate, {new: true});
 
       const grammarTagsEnglishPromise =
         requestGrammarTags(storyUpdate.text, 'en');
@@ -136,7 +138,7 @@ storyRoutes
           }) || false;
 
       if (!responseObject.savedStory) {
-        responseObject.storyWithIdNotFound = req.body.storyId;
+        responseObject.storyWithIdNotFound = req.body._id;
       }
 
       responseObject.grammarTagsEnglish =
@@ -564,7 +566,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
  *    language code to of the language to describe the errors in. 'ga' or 'en'.
  *
  * @return {Promise} - resolves to an array of grammar tags.
- *    rejects to a request error.
+e*    rejects to a request error.
  */
 function requestGrammarTags(text, language) {
   return new Promise( (resolve, reject) => {
