@@ -42,11 +42,9 @@ export class GrammarCheckerComponent implements OnInit {
   filteredTags: Map<string, HighlightTag[]> = new Map();
   tags: HighlightTag[];
   teacherSelectedErrors: string[] = [];
-  chosenTagIrish: GrammarTag;
-  chosenTagEnglish: GrammarTag;
+  chosenTag: GrammarTag;
   tagSets: TagSet = {
-    englishGramadoirTags: [],
-    irishGramadoirTags: [],
+    gramadoirTags: [],
     vowelTags: [],
   };
   grammarSelected = true;
@@ -96,9 +94,8 @@ export class GrammarCheckerComponent implements OnInit {
             this.filteredTags.clear();
             this.checkedText = res.text;
             this.timeThatCheckedTextWasChecked = new Date();
-            this.tagSets.englishGramadoirTags = res.tags.englishGrammarTags;
-            this.tagSets.irishGramadoirTags = res.tags.irishGrammarTags;
-            this.tags = res.tags.englishGrammarTags;
+            this.tagSets.gramadoirTags = res.tags;
+            this.tags = res.tags;
             this.filterTags();
             this.grammarLoading = false;
             this.grammarChecked = true;
@@ -146,7 +143,7 @@ export class GrammarCheckerComponent implements OnInit {
             for (const tag of this.tags) {
               console.dir(tag);
               let values: HighlightTag[] = [];
-              let rule: string = tag.data.grammarInfo.ruleId.substring(22);
+              let rule: string = tag.data.english.ruleId.substring(22);
               const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
               rule = rx[0];
               // check against errors that the teacher provides
@@ -210,14 +207,13 @@ export class GrammarCheckerComponent implements OnInit {
   * Set tags to vowel tags or grammar tags based on event value
   */
   onChangeGrammarFilter(eventValue: any) {
-    this.chosenTagIrish = null;
-    this.chosenTagEnglish = null;
+    this.chosenTag = null;
     if (eventValue === 'vowel') {
       this.tags = this.tagSets.vowelTags;
       this.grammarSelected = false;
     }
     if (eventValue === 'gramadoir') {
-      this.tags = this.tagSets.englishGramadoirTags;
+      this.tags = this.tagSets.gramadoirTags;
       this.grammarSelected = true;
     }
   }
@@ -269,21 +265,11 @@ export class GrammarCheckerComponent implements OnInit {
   // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
     if (tag.data.vowelAgreement) {
-      this.chosenTagIrish = new GrammarTag(tag.data.grammarInfo);
-      this.chosenTagEnglish = new GrammarTag(tag.data.grammarInfo);
+      this.chosenTag = new GrammarTag('vowelAgreement', tag.data);
+      return;
     }
-    this.chosenTagIrish =
-      new GrammarTag(
-        this.tagSets
-            .irishGramadoirTags[tag.data.index]
-            .data
-            .grammarInfo);
 
-    this.chosenTagEnglish =
-      new GrammarTag(
-        this.tagSets
-            .englishGramadoirTags[tag.data.index]
-            .data
-            .grammarInfo);
+    this.chosenTag =
+      new GrammarTag('gramadoir', tag.data.english, tag.data.irish);
   }
 }
