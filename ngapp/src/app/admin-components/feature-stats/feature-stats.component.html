@@ -1,9 +1,11 @@
 <div class="header"> Scéalaí Features Statistics </div>
+<!-- Toggle between date picker and feature logs -->
 <div class="dataOptions">
   <div class="option" (click)="selectDateRange = true; displayAllFeatures= false;"> Date Range</div> |
   <div class="option" (click)="selectDateRange = false; displayAllFeatures = false;"> Previous Data </div>
 </div>
 <div class="content">
+  <!-- Date picker -->
   <div class="datePicker" *ngIf="selectDateRange">
     <mat-form-field appearance="fill">
       <mat-label>Enter a date range</mat-label>
@@ -13,14 +15,13 @@
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
-
       <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
     <div> (No date range entered = retrieve all data) </div><br>
     <div class="submitButton" (click)="getFeatureData(); displayAllFeatures = true; displaySelectedFeature = false;">Get Data</div>
   </div>
-  
+  <!-- List of previous feature logs -->
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousFeatures">
       <div *ngFor="let feature of previousFeatures" style="padding:10px">
@@ -33,12 +34,14 @@
   </div>
 </div>
 
+<!-- Loading panel -->
 <div *ngIf="!dataLoaded" class="loaderContainer">
   <b>{{ts.l.compiling_data}}</b>
   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 </div>
 
-<div *ngIf="displayAllFeatures">
+<!-- Display all feature data loaded from the Database -->
+<div *ngIf="dataLoaded && displayAllFeatures">
   <mat-card *ngFor="let stat of totalFeatureCounts | keyvalue">
     <div class="card">
     <mat-card-content>
@@ -51,7 +54,8 @@
   </mat-card>
 </div>
 
-<div *ngIf="displaySelectedFeature">
+<!-- Display feature data from a selected previous log -->
+<div *ngIf="dataLoaded && displaySelectedFeature">
   <mat-card *ngFor="let stat of featureToDisplay | keyvalue">
     <div class="card">
     <mat-card-content>

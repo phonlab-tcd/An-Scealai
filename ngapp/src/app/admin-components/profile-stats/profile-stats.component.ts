@@ -24,8 +24,10 @@ export class ProfileStatsComponent implements OnInit {
   displayAllProfiles: boolean = false;
   displaySelectedProfile: boolean = false;
   selectDateRange: boolean = true;
+  dataLoaded: boolean = true;
   
-  //hold counts for different types of entries
+  // hold counts for different types of entries
+  // each array cooresponds to one profile question
   ageCount: string[] = [];
   countriesCount: string[] = [];
   countiesCount: string[] = [];
@@ -64,7 +66,7 @@ export class ProfileStatsComponent implements OnInit {
   usaOptionCount: string[] = [];
   yearsOfIrishCount: string[] = [];
   
-  //hold total counts for unique entry types
+  // hold total counts for unique entry types in the count arrays
   totalAges = {};
   totalCountries = {};
   totalCounties = {};
@@ -105,14 +107,22 @@ export class ProfileStatsComponent implements OnInit {
   
   constructor(private statsService : StatsService, public ts: TranslationService, private engagement: EngagementService) { }
 
+  /* 
+  * See if there are already profile data logs in the database
+  */
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("PROFILE-STATS").subscribe( (res) => {
       this.previousProfiles = res;
-      console.log("Previous Profiles: ", this.previousProfiles);
+      this.previousProfiles = this.previousProfiles.sort((a, b) => b.date - a.date);
     });
   }
   
+  /*
+  * Get all profiles from users that have activated accounts in the date range specified
+  * If no date range specified, get profiles from all activated accounts
+  */
   async getProfileData() {
+    this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
     
@@ -121,11 +131,16 @@ export class ProfileStatsComponent implements OnInit {
         this.profiles = res;
         console.log("Profiles returned for given dates: ", this.profiles);
         await this.calculateStats();
+        this.dataLoaded = true;
         resolve();
       });
     }); 
   }
   
+  /*
+  * For each profile, add the answer to each question in its cooresponding array
+  * For each array, count the number of times unique answers appear
+  */
   async calculateStats() {
     this.profiles.forEach( profile => {
       if (profile[0] !== undefined) {
@@ -225,16 +240,26 @@ export class ProfileStatsComponent implements OnInit {
     return;
   }
   
+  /*
+  * Return an object containing the counts of how many times the same items show up in an array. 
+  * ex: [1, 2, 2, 3, 4, 4] => {1:1, 2:2, 3:1, 4:2}
+  */
   getTotals(array): Object {
     let count = {};
     array.forEach(val => count[val] = (count[val] || 0) + 1);
     return count;
   }
   
+  /*
+  * Create a log of total profile data from a certain period of time and save it to the engagement collection of the DB 
+  * If no log yet exists, the first one is made of all profile data available.  If a previous log does exist, the new data 
+  * is calculated up from the previous log to speed up calculations
+  */
   async addNewProfileData() {
     let profile = {};
     this.displayAllProfiles = false;
     
+    // Previous log exists
     if(this.previousProfiles.length > 0) {
       console.log("Previous profile exists in DB");
       let mostRecentLog = this.previousProfiles[this.previousProfiles.length-1];
@@ -255,8 +280,6 @@ export class ProfileStatsComponent implements OnInit {
           profile["age"] = profileValues;
           
           profileValues = mostRecentLog.statsData["country"];
-          console.log("Total ages: ", this.totalCountries);
-          console.log("Ages last logged: ",mostRecentLog.statsData["country"]);
           Object.entries(this.totalCountries).forEach(([key, value]) => {
             if(mostRecentLog.statsData["country"][key])
               profileValues[key] = value + mostRecentLog.statsData["country"][key];
@@ -580,7 +603,7 @@ export class ProfileStatsComponent implements OnInit {
           });
           profile["totalYearsOfIrish"] = profileValues;
 
-          //this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
+          this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
           this.profileToDisplay = profile;
           console.log("Profile to display: ", this.profileToDisplay);
           this.displaySelectedProfile = true;
@@ -588,6 +611,7 @@ export class ProfileStatsComponent implements OnInit {
         });
       }); 
     }
+    // Previous log does not exist, create one from all data
     else {
       await this.getProfileData();
       profile = {
@@ -631,9 +655,9 @@ export class ProfileStatsComponent implements OnInit {
       }
       this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
     }
-
   }
   
+  /* Set the html to display specific profile calculations */
   setProfileToDisplay(profile) {
     this.profileToDisplay = profile.statsData;
   }

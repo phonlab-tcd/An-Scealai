@@ -1,9 +1,11 @@
 <div class="header"> Profile Statistics </div>
+<!-- Toggle between date picker and feature logs -->
 <div class="dataOptions">
   <div class="option" (click)="selectDateRange = true; displayAllProfiles = false;"> Date Range</div> |
   <div class="option" (click)="selectDateRange = false; displayAllProfiles = false;"> Previous Data </div>
 </div>
 <div class="content">
+    <!-- Date picker -->
   <div class="datePicker" *ngIf="selectDateRange">
     <mat-form-field appearance="fill">
       <mat-label>Enter a date range</mat-label>
@@ -20,7 +22,7 @@
     <div> (No date range entered = retrieve all data) </div><br>
     <div class="submitButton" (click)="getProfileData(); this.displayAllProfiles = true;">Get Data</div>
   </div>
-  
+    <!-- List of previous feature logs -->
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousProfiles">
       <div *ngFor="let profile of previousProfiles">
@@ -32,10 +34,16 @@
   </div>
 </div>
 
-<div *ngIf="displayAllProfiles || displaySelectedProfile" class="profileNumber"> Profiles Found: {{profiles.length}} </div>
+<!-- Loading panel -->
+<div *ngIf="!dataLoaded" class="loaderContainer">
+  <b>{{ts.l.compiling_data}}</b>
+  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+<div *ngIf="(displayAllProfiles || displaySelectedProfile) && dataLoaded" class="profileNumber"> Profiles Found: {{profiles.length}} </div>
 
 <!-- Personal Information -->
-<div *ngIf="displayAllProfiles || displaySelectedProfile">
+<div *ngIf="(displayAllProfiles || displaySelectedProfile) && dataLoaded">
   <div class="profileHeader"> {{ts.l.personal_info}} </div>
   <mat-accordion multi class="displayData">
     <!-- Gender -->
@@ -417,7 +425,7 @@
 </div>
 
 <!-- Language Competence -->
-<div *ngIf="displayAllProfiles || displaySelectedProfile">
+<div *ngIf="(displayAllProfiles || displaySelectedProfile) && dataLoaded">
   <div class="profileHeader"> {{ts.l.language_competence}} </div>
   <mat-accordion multi class="displayData">
     <!-- Native Speaker Status -->
@@ -592,7 +600,7 @@
 </div>
 
 <!-- Exposure to Irish -->
-<div *ngIf="displayAllProfiles || displaySelectedProfile">
+<div *ngIf="(displayAllProfiles || displaySelectedProfile) && dataLoaded">
   <div class="profileHeader"> {{ts.l.exposure_to_irish}} </div>
   <mat-accordion multi class="displayData">
     <!-- Speaking Frequency -->

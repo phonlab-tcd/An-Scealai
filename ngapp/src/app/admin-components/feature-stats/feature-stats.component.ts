@@ -25,19 +25,23 @@ export class FeatureStatsComponent implements OnInit {
   selectDateRange: boolean = true;
   dataLoaded: boolean = true;
   
-  //hold total counts for unique entry types
+  // hold total counts for unique feature types
   totalFeatureCounts = {};
-
 
   constructor(private statsService : StatsService, public ts: TranslationService, private engagement: EngagementService) { }
 
+  /* See if previous feature data logs are stored in the database */
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("FEATURE-STATS").subscribe( (res) => {
       this.previousFeatures = res;
-      console.log(this.previousFeatures);
+      this.previousFeatures = this.previousFeatures.sort((a, b) => b.date - a.date);
     });
   }
   
+  /*
+  * Get all events from the engagement collection in the DB that occured in the date range specified
+  * If no date range specified, get all events in the DB
+  */
   async getFeatureData() {
     this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
@@ -53,6 +57,10 @@ export class FeatureStatsComponent implements OnInit {
     }); 
   }
   
+  /*
+  * For each feature (event), add the type of event to an array
+  * Count the number of times each unique type shows up in the array
+  */
   async calculateStats() {
     let types = [];
     this.features.forEach(feature => {
@@ -65,16 +73,26 @@ export class FeatureStatsComponent implements OnInit {
     return;
   }
   
+  /*
+  * Return an object containing the counts of how many times the same items show up in an array. 
+  * ex: [1, 2, 2, 3, 4, 4] => {1:1, 2:2, 3:1, 4:2}
+  */
   getTotals(array): Object {
     let count = {};
     array.forEach(val => count[val] = (count[val] || 0) + 1);
     return count;
   }
   
+  /*
+  * Create a log of total feature data from a certain period of time and save it to the engagement collection of the DB 
+  * If no log yet exists, the first one is made of all feature data available.  If a previous log does exist, the new data 
+  * is calculated up from the previous log to speed up calculations
+  */
   async addNewFeatureData() {
     let feature = {};
     this.displayAllFeatures = false;
     
+    // previous feature log exists
     if(this.previousFeatures.length > 0) {
       console.log("Previous feature data exists in DB");
       let mostRecentLog = this.previousFeatures[this.previousFeatures.length-1];
@@ -100,6 +118,7 @@ export class FeatureStatsComponent implements OnInit {
         });
       }); 
     }
+    // previous feature log does not exist
     else {
       await this.getFeatureData();
       feature = {
@@ -114,7 +133,9 @@ export class FeatureStatsComponent implements OnInit {
         "DELETE-STORY": this.totalFeatureCounts["DELETE-STORY"],
         "REGISTER": this.totalFeatureCounts["REGISTER"],
         "CREATE-MESSAGE": this.totalFeatureCounts["CREATE-MESSAGE"],
-        "RECORD-STORY": this.totalFeatureCounts["RECORD-STORY"]
+        "RECORD-STORY": this.totalFeatureCounts["RECORD-STORY"],
+        "FEATURE-STATS": this.totalFeatureCounts["FEATURE-STATS"],
+        "PROFILE-STATS": this.totalFeatureCounts["PROFILE-STATS"]
       }
       console.log(feature);
       this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
