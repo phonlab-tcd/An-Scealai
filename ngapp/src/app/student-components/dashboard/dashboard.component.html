@@ -62,11 +62,12 @@
         </div>
         
         <!-- DOWNLOAD -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; downloadStory()">
+        <a *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          target="_blank"
+          href="http://localhost:4000/story/downloadStory/{{story._id}}">
           Download
           <i class="fas fa-download optionsBtnIcon"></i>
-        </div>
+        </a>
 
         <!-- FEEDBACK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
