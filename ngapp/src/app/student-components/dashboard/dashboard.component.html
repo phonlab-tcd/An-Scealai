@@ -60,6 +60,13 @@
           {{ts.l.edit_title_or_dialect}}
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
+        
+        <!-- DOWNLOAD -->
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; downloadStory()">
+          Download
+          <i class="fas fa-download optionsBtnIcon"></i>
+        </div>
 
         <!-- FEEDBACK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"

@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+  pdf: any;
 
   dialects = [
     {
@@ -236,6 +237,30 @@ export class DashboardComponent implements OnInit {
       
     });
     this.wordCount = this.words.length;
+  }
+  
+  //download story
+  downloadStory() {
+    console.log(this.story._id);
+    this.storyService.downloadStory(this.story._id).subscribe(res => {
+      console.log(res);
+      
+      /*
+      var downloadLink = document.createElement('a')
+      downloadLink.target = '_blank'
+      downloadLink.download = 'new_pdf_haha.pdf'
+      var blob = new Blob([res], { type: 'application/pdf' })
+      var URL = window.URL || window.webkitURL
+      var downloadUrl = URL.createObjectURL(blob)
+      downloadLink.href = downloadUrl
+      document.body.append(downloadLink) // THIS LINE ISN'T NECESSARY
+      downloadLink.click()
+      document.body.removeChild(downloadLink);  // THIS LINE ISN'T NECESSARY
+      URL.revokeObjectURL(downloadUrl);
+      
+      //window.open(URL.createObjectURL(res.output("blob")));
+      */
+    })
   }
 
 // set feedback window to false 

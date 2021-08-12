@@ -10,6 +10,10 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const pandoc = require('node-pandoc');
+var pdf = require('html-pdf');
+var fs = require('fs');
+var wkhtmltopdf = require('wkhtmltopdf');
 
 const abairBaseUrl = require('../abair_base_url');
 
@@ -160,6 +164,68 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
       res.json(err);
     }
     else res.json("Successfully removed all stories for user");
+  });
+});
+
+storyRoutes.route('/downloadStory/:id').get(function(req, res) {
+  Story.findById(req.params.id, (err, story) => {
+    if(err) {
+      console.log(err);
+      res.json(err);
+    }
+    if(story) {
+      console.log(story.htmlText);
+      /* wkhtmltopdf example
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename=some_file.pdf',
+      });
+      
+      wkhtmltopdf('<h1>Test</h1><p>Hello world</p>').pipe(res);
+      */
+      
+      //Pandoc example
+    
+      var src = story.htmlText;
+      var args = '--pdf-engine=wkhtmltopdf -o story.pdf';
+      // Set your callback function
+      var callback = function (err, result) {
+        if (err) console.error('Oh Nos: ',err);
+        // Without the -o arg, the converted value will be returned.
+        return console.log(result), result;
+      };
+       
+      // Call pandoc
+      pandoc(src, args, callback);
+      
+      
+      // html-pdf example
+      /*
+      var options = { format: 'Letter', "border": { "top": "1in",
+                                                    "right": "1in",
+                                                    "bottom": "1in",
+                                                    "left": "1in"}, };
+      
+      
+      pdf.create(story.htmlText, options).toStream(function(err, stream){
+        if (err) return console.log(err);
+        res.set('Content-type', 'application/pdf');
+        
+        //stream.pipe(fs.createWriteStream('./story.pdf'));
+        //res.type('pdf');
+        
+        stream.pipe(res);
+        console.log(res);
+        res.end();
+        //stream.pipe(res);
+        //res.status(200).json({"message" : "PDF created", "pdf": stream});
+        //res.end();
+      });
+      */
+      //res.json(story.feedback);
+    } else {
+      res.status(404).json({"message" : "Story does not exist"});
+    }
   });
 });
 
