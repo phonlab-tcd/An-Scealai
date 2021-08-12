@@ -52,6 +52,8 @@ export class DashboardComponent implements OnInit {
   wordCount: number = 0;
   pdf: any;
 
+  downloadStoryFormat = 'pdf';
+
   dialects = [
     {
       code : "connemara",

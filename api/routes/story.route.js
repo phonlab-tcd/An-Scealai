@@ -168,7 +168,9 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
   });
 });
 
-storyRoutes.route('/downloadStory/:id').get(function(req, res) {
+
+storyRoutes.route('/downloadStory/:id/:format').get(function(req, res) {
+  console.dir(req.params);
   logger.info({
     endpoint: '/story/downloadStory',
     id: req.params.id,
@@ -184,7 +186,7 @@ storyRoutes.route('/downloadStory/:id').get(function(req, res) {
             message: 'Story does not exist',
           });
     } else {
-      const filename = path.join(__dirname, './story.pdf');
+      const filename = path.join(__dirname, `./story.${req.params.format}`);
 
       logger.info({
         msg: 'CREATING PDF',
@@ -192,12 +194,14 @@ storyRoutes.route('/downloadStory/:id').get(function(req, res) {
         story: story,
       });
 
-      const engineOption = '--pdf-engine=xelatex'; // --pdf-engine=wkhtmltopdf
+      const pdfEngine = '--pdf-engine=xelatex'; // --pdf-engine=wkhtmltopdf
+
       // Pandoc example
       pandoc(
           story.htmlText, // src
           // Without the -o arg, the converted value will be returned.
-          `--from html ${engineOption} -o ${filename}`, // args
+          //${req.params.format === 'pdf' ? pdfEngine : ''}
+          `--from html -o ${filename}`, // args
           function(err, result) { // callback
             if (err) {
               return res.json('pandoc exited with status code ' + err);
