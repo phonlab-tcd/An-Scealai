@@ -48,6 +48,13 @@ export class GrammarService {
       });
   }
 
+  /*
+{
+    "savedStory": false,
+    "grammarTagsEnglish": "[{\"errorlength\":\"5\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"fromx\":\"4\",\"tox\":\"8\",\"fromy\":\"0\",\"msg\":\"Non-standard form of /duit/\",\"contextoffset\":\"4\",\"errortext\":\"dhuit\",\"context\":\"Dia dhuit\"}]",
+    "grammarTagsIrish": "[{\"tox\":\"8\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"context\":\"Dia dhuit\",\"fromy\":\"0\",\"errorlength\":\"5\",\"fromx\":\"4\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"toy\":\"0\"}]"
+}
+  */
   updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
     savedStory: any,
     tags: HighlightTag[],
