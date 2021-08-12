@@ -171,90 +171,50 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
 storyRoutes.route('/downloadStory/:id').get(function(req, res) {
   logger.info({
     endpoint: '/story/downloadStory',
-    id: req.params.id
+    id: req.params.id,
   });
+
   Story.findById(req.params.id, async (err, story) => {
-    if(err) {
+    if (err) {
       console.log(err);
       return res.json(err);
-    }
-    if (story) {
-      logger.info({msg: 'CREATING PDF OF STORY', story: story});
-      console.log(story.htmlText);
-      /* wkhtmltopdf example
-      res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename=some_file.pdf',
-      });
-      wkhtmltopdf('<h1>Test</h1><p>Hello world</p>').pipe(res);
-      */
-
-      const filename = path.join(__dirname, './story.pdf');
-      logger.info('Writing pdf to: ' + filename);
-      const engineOptionn = '' // --pdf-engine=wkhtmltopdf 
-      // Pandoc example
-    
-      var src = story.htmlText;
-      var args = `-o ${filename}`;
-      // Set your callback function
-       
-      // Call pandoc
-      pandoc(src, args, function (err, result) {
-        if (err) {
-          return res.json('pandoc exited with status code ' + err);
-        }
-        // Without the -o arg, the converted value will be returned.
-        res.sendFile(filename, (err) => {
-          logger.error({
-            endpoint: '/story/downloadStory',
-            error: err,
+    } else if (!story) {
+      res .status(404)
+          .json({
+            message: 'Story does not exist',
           });
-        });
-      });
-
-      /*
-      // html-pdf example
-      var options = {
-        format: 'Letter',
-        "border": {
-          "top": "1in",
-          "right": "1in",
-          "bottom": "1in",
-          "left": "1in"
-        },
-      };
-
-
-      
-      pdf
-        .create(story.htmlText, options)
-        .toFile(filename, function(err, stream){
-        if (err) {
-          return res.status(400).json(err);
-        }
-        // res.set('Content-Type', 'application/pdf');
-        // res.set('Content-Type', 'application/json');
-        
-        stream.pipe(fs.createWriteStream('./story.pdf'));
-        //res.type('pdf');
-        
-        // stream.pipe(res);
-        // console.log(res);
-        // res.end();
-        // stream.pipe(res);
-        // res.status(200).json({"message" : "PDF created", "pdf": stream});
-        // res.end();
-        logger.info('file sent');
-        res.sendFile(filename, (err) => {
-          if (err) {
-            logger.error(err);
-          }
-        });
-        //res.sendFile(path.join(__dirname, './story.pdf'));
-      });
-      */
     } else {
-      res.status(404).json({"message" : "Story does not exist"});
+      const filename = path.join(__dirname, './story.pdf');
+
+      logger.info({
+        msg: 'CREATING PDF',
+        filename: filename,
+        story: story,
+      });
+
+      const engineOption = '--pdf-engine=xelatex'; // --pdf-engine=wkhtmltopdf
+      // Pandoc example
+      pandoc(
+          story.htmlText, // src
+          // Without the -o arg, the converted value will be returned.
+          `--from html ${engineOption} -o ${filename}`, // args
+          function(err, result) { // callback
+            if (err) {
+              return res.json('pandoc exited with status code ' + err);
+            }
+            logger.info({
+              endpoint: '/story/downloadStory',
+              pandocResult: result,
+            });
+            res.sendFile(filename, (err) => {
+              if (err) {
+                logger.error({
+                  endpoint: '/story/downloadStory',
+                  error: err,
+                });
+              }
+            });
+      });
     }
   });
 });
