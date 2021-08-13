@@ -43,7 +43,7 @@
             ]
           },
           "configurations": {
-            "dev": {
+            "development": {
               "aot": true,
               "optimization": false,
               "outputHashing": "all",
