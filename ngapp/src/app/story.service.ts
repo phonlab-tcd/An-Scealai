@@ -137,7 +137,7 @@ export class StoryService {
   gramadoirDirect(text: string): Observable<any> {
     return this
       .http
-      .post('https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl', {
+      .post('https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl', {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },

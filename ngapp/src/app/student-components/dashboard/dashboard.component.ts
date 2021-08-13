@@ -55,6 +55,8 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
+
+  gramadoirResponse: string;
   
   // OPTIONS (to show or not to show)
   showOptions: boolean = true;
@@ -117,6 +119,11 @@ export class DashboardComponent implements OnInit {
 * and the current story being edited given its id from url 
 */
   ngOnInit() {
+    this.storyService
+        .gramadoirDirect('dia dhuit mo cara')
+        .subscribe((res) => {
+          this.gramadoirResponse = res;
+        });
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
