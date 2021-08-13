@@ -22,6 +22,7 @@ session.vim
 
 /api/logs/**
 /api/sendinblue.json
+/api/routes/storiesForDownload/**
 
 /sshlogin
 /login_to_phonetics.sh

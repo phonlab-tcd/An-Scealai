@@ -1,20 +1,22 @@
 const express = require('express');
-const app = express();
 const storyRoutes = express.Router();
 const multer = require('multer');
-const { Readable } = require('stream');
+const {
+  Readable,
+} = require('stream');
 const mongodb = require('mongodb');
-const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
-const { parse, stringify } = require('node-html-parser');
-const pandoc = require('node-pandoc');
-var pdf = require('html-pdf');
+const {
+  parse, stringify
+} = require('node-html-parser');
+const pandoc = require('node-pandoc-promise');
 const path = require('path');
-var fs = require('fs');
-var wkhtmltopdf = require('wkhtmltopdf');
+const fs = require('fs');
+
+console.dir(pandoc);
 
 const abairBaseUrl = require('../abair_base_url');
 
@@ -169,59 +171,77 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
 });
 
 
-storyRoutes.route('/downloadStory/:id/:format').get(function(req, res) {
-  console.dir(req.params);
-  logger.info({
-    endpoint: '/story/downloadStory',
-    id: req.params.id,
-  });
+storyRoutes
+    .route('/downloadStory/:id/:format')
+    .get(async (req, res) => {
+      try{
+        logger.info({
+          endpoint: '/story/downloadStory',
+          params: req.params,
+        });
 
-  Story.findById(req.params.id, async (err, story) => {
-    if (err) {
-      console.log(err);
-      return res.json(err);
-    } else if (!story) {
-      res .status(404)
-          .json({
-            message: 'Story does not exist',
+        const story =
+          await Story.findById(req.params.id);
+
+        if (!story) {
+          return res.status(404)
+              .json({
+                message: 'Story does not exist',
+              });
+        }
+
+        // GENERATE A FILENAME <story._id>.<format>
+        const filename =
+          path.join(
+              __dirname,
+              `storiesForDownload/${story._id}.${req.params.format}`);
+
+        logger.info({
+          msg: 'CREATING ' + req.params.format,
+          filename: filename,
+          story: story,
+        });
+
+        // Pandoc example
+        const pandocErr  =
+          await pandoc(
+              story.htmlText, // src
+              ['--from', 'html', '-o', filename]); // args
+
+        if (pandocErr) {
+          return res.json({
+            pandocError: pandocErr,
           });
-    } else {
-      const filename = path.join(__dirname, `./story.${req.params.format}`);
+        }
 
-      logger.info({
-        msg: 'CREATING PDF',
-        filename: filename,
-        story: story,
-      });
 
-      const pdfEngine = '--pdf-engine=xelatex'; // --pdf-engine=wkhtmltopdf
-
-      // Pandoc example
-      pandoc(
-          story.htmlText, // src
-          // Without the -o arg, the converted value will be returned.
-          //${req.params.format === 'pdf' ? pdfEngine : ''}
-          `--from html -o ${filename}`, // args
-          function(err, result) { // callback
-            if (err) {
-              return res.json('pandoc exited with status code ' + err);
-            }
-            logger.info({
+        // SEND THE FILE CREATED WITH PANDOC
+        res.sendFile(filename, (sendFileErr) => {
+          if (sendFileErr) {
+            logger.error({
               endpoint: '/story/downloadStory',
-              pandocResult: result,
+              while: 'sending the file:' + filename,
+              error: sendFileErr,
             });
-            res.sendFile(filename, (err) => {
-              if (err) {
-                logger.error({
-                  endpoint: '/story/downloadStory',
-                  error: err,
-                });
-              }
-            });
-      });
-    }
-  });
-});
+          }
+
+          // DELETE THE FILE AFTER IT HAS BEEN SENT
+          fs.unlink(filename, (err) => {
+            if(err) {
+              logger.error({
+                endpoint: '/story/downloadStory',
+                while: 'trying to delete file:' + filename,
+                error: err,
+              });
+            }
+          });
+        });
+
+      } catch (error) {
+        logger.error(error);
+        return res.json(error);
+      }
+    });
 
 storyRoutes.route('/feedback/:id').get(function(req, res) {
   Story.findById(req.params.id, (err, story) => {

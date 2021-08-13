@@ -69,7 +69,7 @@
             style="text-decoration: none;"
             class="optionsBtn optionsPopupBtn"
             target="_blank"
-            href="http://localhost:4000/story/downloadStory/{{story._id}}/{{downloadStoryFormat}}">
+            href="{{downloadStoryUrl()}}">
             Download
             <i class="fas fa-download optionsBtnIcon"></i>
           </a>
@@ -86,8 +86,10 @@
             <option>txt</option>
             <option>html</option>
             <option>json</option>
-            <option>epub</option>
-            <option>gfm</option>
+            <!--
+              <option>epub</option>
+              <option>gfm</option>
+            -->
             <option>latex</option>
           </select>
         </div>

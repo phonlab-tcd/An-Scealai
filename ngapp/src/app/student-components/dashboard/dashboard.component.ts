@@ -14,6 +14,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -480,5 +481,9 @@ export class DashboardComponent implements OnInit {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
+  }
+
+  downloadStoryUrl() {
+    return `${config.baseurl}story/downloadStory/${this.story._id}/${this.downloadStoryFormat}`;
   }
 }
