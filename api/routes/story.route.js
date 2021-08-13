@@ -1,85 +1,65 @@
 const express = require('express');
-const app = express();
-const storyRoutes = express.Router();
 const multer = require('multer');
-const { Readable } = require('stream');
+const {Readable} = require('stream');
 const mongodb = require('mongodb');
-const mongoose = require('mongoose');
-const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
-const { parse, stringify } = require('node-html-parser');
+const {parse} = require('node-html-parser');
+const makeEndpoints = require('../utils/makeEndpoints');
 
-const abairBaseUrl = require('../abair_base_url');
+// ENDPOINT HANDLERS
+const getStoryById =
+  require('../endpointsFunctions/story/getStoryById');
+const updateStoryAndCheckGrammar =
+  require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
 
-const logger = require('../logger');
+const Story = require('../models/story');
 
-logger.info('abairBaseUrl: ' + abairBaseUrl);
-console.log('abairBaseUrl: ' + abairBaseUrl);
-
-let Story = require('../models/story');
-let Event = require('../models/event');
-
-let db;
-MongoClient.connect('mongodb://localhost:27017/', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-},
-(err, client) => {
-  if (err) {
-    logger.error(
-        'MongoDB Connection Error in ./api/routes/story.route.js .' +
-        ' Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
+const storyRoutes = makeEndpoints({
+  get: {
+    '/getStoryById/:id': getStoryById,
+  },
+  post: {
+    '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
+    '/updatStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+  },
 });
-
-storyRoutes.route('/getStoryById/:id').get((req, res) => {
-  // TEST CASE
-  if (req.params.id === 'test_id') {
-    const testStory = new Story({
-      text: 'Tá chúpla botúin inseo',
-    });
-    return res.status(300).json(testStory);
-  }
-
-  Story.findById(req.params.id, (err, story) => {
-    if (err) {
-      logger.error(err);
-      res.status(400).json(
-        "An error occurred while trying to find this profile");
-      return;
-    }
-    if(!story) {
-      res.status(404).json("Story with given ID not found");
-      return;
-    }
-    res.status(200).json(story);             
-  });
-});
-
 
 
 // Create new story
-storyRoutes.route('/create').post(function (req, res) {
-  let story = new Story(req.body);
+storyRoutes.route('/create').post(function(req, res) {
+  const story = new Story(req.body);
   story.feedback.seenByStudent = null;
   story.feedback.text = null;
   story.feedback.audioId = null;
-  story.save().then(story => {
-    res.status(200).json({'story': 'story added successfully', 'id': story._id});
-  })
-    .catch(err => {
-      console.log(err);
-      res.status(400).send("unable to save story to DB");
+  story.save().then((story) => {
+    res.status(200).json({
+      story: 'story added successfully',
+      id: story._id,
     });
+  })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send('unable to save story to DB');
+      });
 });
 
 // Get story by a given author from DB
 storyRoutes.route('/:author').get(function (req, res) {
   Story.find({"author": req.params.author}, function (err, stories) {
+    if(err) {
+      console.log(err);
+      res.json(err)
+    } else {
+      res.json(stories);
+    }
+  });
+});
+
+// Get stories by a given author after a certain date from DB
+storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
+  Story.find({"author": req.params.author, date: {$gte: req.params.date}}, function (err, stories) {
     if(err) {
       console.log(err);
       res.json(err)
@@ -101,68 +81,6 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
   });
 });
 
-storyRoutes
-    .route('/updateStoryAndCheckGrammar')
-    .post(async (req, res) => {
-      const storyUpdate = new Story(req.body);
-      console.log(req.body.body);
-      console.log(storyUpdate);
-      const validationError = storyUpdate.validateSync();
-      if (validationError) {
-        return res.status(400).json({
-          validationError: validationError,
-        });
-      }
-
-      // DON'T UPDATE THE STORY'S _id
-      delete storyUpdate._doc._id;
-      delete storyUpdate._doc.storyId;
-
-      // UPDATE STORY ASYNCHRONOUSLY
-      // AND MAKE GRAMADOIR REQUESTS WHILE THAT'S HAPPENING
-      const updateStoryPromise =
-        Story.findByIdAndUpdate(req.body._id, storyUpdate, {new: true});
-
-      const grammarTagsEnglishPromise =
-        requestGrammarTags(storyUpdate.text, 'en');
-
-      const grammarTagsIrishPromise =
-        requestGrammarTags(storyUpdate.text, 'ga');
-
-      // START BUILDING UP THE RESPONSE OBJECT
-      const responseObject = {};
-
-      responseObject.savedStory =
-          await updateStoryPromise.catch((error) => {
-            responseObject.saveStoryError = error;
-          }) || false;
-
-      if (!responseObject.savedStory) {
-        responseObject.storyWithIdNotFound = req.body._id;
-      }
-
-      responseObject.grammarTagsEnglish =
-        await grammarTagsEnglishPromise.catch((error) => {
-          responseObject.englishGramadoirError = error;
-        }) || false;
-
-      responseObject.grammarTagsIrish =
-        await grammarTagsIrishPromise.catch((error) => {
-          responseObject.irishGramadoirError = error;
-        }) || false;
-
-      let status = 200;
-
-      if (responseObject.saveStoryError) {
-        status = 404;
-      } else if (responseObject.englishGramadoirError) {
-        status = englishGramadoirError.status;
-      } else if (responseObject.irishGramadoirError) {
-        status = irishGramadoirError.status;
-      }
-
-      return res.status(status || 500).json(responseObject);
-    });
 
 // Update story by ID
 storyRoutes
@@ -263,22 +181,6 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
       story.feedback.seenByStudent = false;
       story.save();
       res.status(200).json({"message" : "Feedback added successfully"});
-    } else {
-      res.status(404).json({"message" : "Story does not exist"});
-    }
-  });
-});
-
-storyRoutes.route('/viewFeedback/:id').post((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.json(err);
-    }
-    if(story) {
-      story.feedback.seenByStudent = true;
-      story.save();
-      res.status(200).json({"message" : "Feedback viewed successfully"});
     } else {
       res.status(404).json({"message" : "Story does not exist"});
     }
@@ -555,44 +457,5 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
   });
 });
 
-/** @description - Get a promise which resolves to a
- *    list of tags describing grammar errors in the given text.
- * The grammar tags are written in the language passed in.
- *
- * @param {string} text - The Irish
- *    language text which will be checked for errors.
- *
- * @param {'ga' | 'en'} language - The iso
- *    language code to of the language to describe the errors in. 'ga' or 'en'.
- *
- * @return {Promise} - resolves to an array of grammar tags.
-e*    rejects to a request error.
- */
-function requestGrammarTags(text, language) {
-  return new Promise( (resolve, reject) => {
-    const form = {
-      teacs: text.replace(/\n/g, ' '),
-      teanga: language,
-    };
-
-    const formData = querystring.stringify(form);
-
-    request({
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      // uri: 'https://cadhan.com/api/gramadoir/1.0',
-      uri: abairBaseUrl + '/cgi-bin/api-gramadoir-1.0.pl',
-      body: formData,
-      method: 'POST',
-    }, (err, resp, grammarTags) => {
-      if (err) {
-        return reject(err);
-      } else {
-        return resolve(grammarTags);
-      }
-    });
-    });
-}
 
 module.exports = storyRoutes;
