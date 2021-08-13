@@ -47,8 +47,6 @@ export class DashboardComponent implements OnInit{
 
   ngxQuill: any;
 
-  sentences: string[];
-
   story: Story = new Story();
   stories: Story[];
   id: string;
@@ -147,7 +145,6 @@ export class DashboardComponent implements OnInit{
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
-      console.dir(stories);
       this.stories = stories;
       // Get the story id from the URL in the same way
       this.getStoryId().then(id => {
@@ -225,7 +222,6 @@ export class DashboardComponent implements OnInit{
         .toPromise()
         .then(
           () => {
-            console.count('STORY SAVED');
             this.grammarChecker?.runGramadoir();
           });
     this.storySaved = true;
@@ -271,43 +267,34 @@ export class DashboardComponent implements OnInit{
 
   // Set story saved to false
   // THIS FUNCTION IS ONLY CALLED ONCE AND THEN SUBSTITUTED
-  storyEdited(quill) {
+  storyEdited(ngxQuill) {
     this.storySaved = false;
 
-    this.story.text = quill.text;
+    this.story.text = ngxQuill.text;
 
-    this.getWordCount(quill.text);
+    this.getWordCount(ngxQuill.text);
 
-    this.synthesisRefresh(quill.editor);
-
-    if (this.grammarChecker?.shouldRunGramadoir()) {
-      this.saveStory();
-    }
-  }
-
-  storyEditedAlt(quill) {
-
-    this.story.text = quill.text;
-
-    this.getWordCount(quill.text);
-
-    this.synthesisRefresh(quill);
+    this.synthesisRefresh(ngxQuill);
 
     if (this.grammarChecker?.shouldRunGramadoir()) {
       this.saveStory();
     }
   }
 
-  synthesisRefresh(editor: Quill) {
-    const lines = editor.getLines().map((s) => {
-         return s.children.head.text;
-    });
+  storyEditedAlt(ngxQuill) {
 
-    this.sentences = lines
-        .flatMap(this.textProcessor.sentences);
+    this.story.text = ngxQuill.text;
 
-    console.log('SENTENCES:', this.sentences);
+    this.getWordCount(ngxQuill.text);
 
+    this.synthesisRefresh(ngxQuill);
+
+    if (this.grammarChecker?.shouldRunGramadoir()) {
+      this.saveStory();
+    }
+  }
+
+  synthesisRefresh(ngxQuill) {
     this.synthesisPlayer?.refresh();
   }
 

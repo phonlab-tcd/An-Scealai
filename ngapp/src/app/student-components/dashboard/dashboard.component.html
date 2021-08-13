@@ -135,6 +135,7 @@
         placeholder=""
         [preserveWhitespace]="true"
         [(ngModel)]="story.htmlText"
+        (onEditorCreated)="synthesisRefresh($event)"
         (onContentChanged)="storyEdited($event);">
     </quill-editor>
 
@@ -208,9 +209,9 @@
 
       <app-synthesis-player
           #mySynthesisPlayer
-          *ngIf="sentences"
+          *ngIf="story.text"
           [dialect]="story.dialect"
-          [sentences]="sentences">
+          [text]="story.text">
       </app-synthesis-player>
 
     </div>
