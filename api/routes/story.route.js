@@ -36,6 +36,14 @@ MongoClient.connect('mongodb://localhost:27017/', {
 });
 
 storyRoutes.route('/getStoryById/:id').get((req, res) => {
+  // TEST CASE
+  if (req.params.id === 'test_id') {
+    const testStory = new Story({
+      text: 'Tá chúpla botúin inseo',
+    });
+    return res.status(300).json(testStory);
+  }
+
   Story.findById(req.params.id, (err, story) => {
     if (err) {
       logger.error(err);
@@ -55,6 +63,8 @@ storyRoutes.route('/getStoryById/:id').get((req, res) => {
     res.status(200).json(story);             
   });
 });
+
+
 
 // Create new story
 storyRoutes.route('/create').post(function (req, res) {
@@ -95,41 +105,106 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
   });
 });
 
+storyRoutes
+    .route('/updateStoryAndCheckGrammar')
+    .post(async (req, res) => {
+      const storyUpdate = new Story(req.body);
+      console.log(req.body.body);
+      console.log(storyUpdate);
+      const validationError = storyUpdate.validateSync();
+      if (validationError) {
+        return res.status(400).json({
+          validationError: validationError,
+        });
+      }
+
+      // DON'T UPDATE THE STORY'S _id
+      delete storyUpdate._doc._id;
+      delete storyUpdate._doc.storyId;
+
+      // UPDATE STORY ASYNCHRONOUSLY
+      // AND MAKE GRAMADOIR REQUESTS WHILE THAT'S HAPPENING
+      const updateStoryPromise =
+        Story.findByIdAndUpdate(req.body._id, storyUpdate, {new: true});
+
+      const grammarTagsEnglishPromise =
+        requestGrammarTags(storyUpdate.text, 'en');
+
+      const grammarTagsIrishPromise =
+        requestGrammarTags(storyUpdate.text, 'ga');
+
+      // START BUILDING UP THE RESPONSE OBJECT
+      const responseObject = {};
+
+      responseObject.savedStory =
+          await updateStoryPromise.catch((error) => {
+            responseObject.saveStoryError = error;
+          }) || false;
+
+      if (!responseObject.savedStory) {
+        responseObject.storyWithIdNotFound = req.body._id;
+      }
+
+      responseObject.grammarTagsEnglish =
+        await grammarTagsEnglishPromise.catch((error) => {
+          responseObject.englishGramadoirError = error;
+        }) || false;
+
+      responseObject.grammarTagsIrish =
+        await grammarTagsIrishPromise.catch((error) => {
+          responseObject.irishGramadoirError = error;
+        }) || false;
+
+      let status = 200;
+
+      if (responseObject.saveStoryError) {
+        status = 404;
+      } else if (responseObject.englishGramadoirError) {
+        status = englishGramadoirError.status;
+      } else if (responseObject.irishGramadoirError) {
+        status = irishGramadoirError.status;
+      }
+
+      return res.status(status || 500).json(responseObject);
+    });
+
 // Update story by ID
-storyRoutes.route('/update/:id').post(function (req, res) {
-  Story.findById(req.params.id, function(err, story) {
-    if(err) {
-      console.log(err);
-      res.json(err);
-    }
-    if(story === null) {
-      console.log("story is null!");
-    } else {
+storyRoutes
+    .route('/update/:id')
+    .post((req, res) => {
+      Story.findById(req.params.id, function(err, story) {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        if (story === null) {
+          console.log('story is null!');
+        } else {
+          if (req.body.text) {
+            story.text = req.body.text;
+          }
+          if (req.body.htmlText) {
+            story.htmlText = req.body.htmlText;
+          }
+          if (req.body.lastUpdated) {
+            story.lastUpdated = req.body.lastUpdated;
+          }
+          if (req.body.dialect) {
+            story.dialect = req.body.dialect;
+          }
+          if (req.body.title) {
+            story.title = req.body.title;
+          }
 
-      if(req.body.text) {
-        story.text = req.body.text;
-      }
-      if(req.body.htmlText) {
-        story.htmlText = req.body.htmlText;
-      }
-      if(req.body.lastUpdated) {
-        story.lastUpdated = req.body.lastUpdated;
-      }
-      if(req.body.dialect) {
-        story.dialect = req.body.dialect;
-      }
-      if(req.body.title) {
-        story.title = req.body.title;
-      }
-
-      story.save().then(story => {
-        res.json('Update complete');
-      }).catch(err => {
-        res.status(400).send("Unable to update story");
+          story.save().then( (story) => {
+            res.json('Update complete');
+          }).catch( (err) => {
+            res.status(400).json(err);
+          });
+        }
+        // TODO This endpoint can hang here
       });
-    }
-  });
-})
+});
 
 // Update story author
 storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
@@ -483,5 +558,45 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
     }
   });
 });
+
+/** @description - Get a promise which resolves to a
+ *    list of tags describing grammar errors in the given text.
+ * The grammar tags are written in the language passed in.
+ *
+ * @param {string} text - The Irish
+ *    language text which will be checked for errors.
+ *
+ * @param {'ga' | 'en'} language - The iso
+ *    language code to of the language to describe the errors in. 'ga' or 'en'.
+ *
+ * @return {Promise} - resolves to an array of grammar tags.
+e*    rejects to a request error.
+ */
+function requestGrammarTags(text, language) {
+  return new Promise( (resolve, reject) => {
+    const form = {
+      teacs: text.replace(/\n/g, ' '),
+      teanga: language,
+    };
+
+    const formData = querystring.stringify(form);
+
+    request({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      // uri: 'https://cadhan.com/api/gramadoir/1.0',
+      uri: abairBaseUrl + '/cgi-bin/api-gramadoir-1.0.pl',
+      body: formData,
+      method: 'POST',
+    }, (err, resp, grammarTags) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(grammarTags);
+      }
+    });
+    });
+}
 
 module.exports = storyRoutes;
