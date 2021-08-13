@@ -73,7 +73,6 @@ request body:
     savedStory: any,
     tags: HighlightTag[],
   }> {
-    console.dir(story);
     return this.http.post(
       config.baseurl + 'story/updateStoryAndCheckGrammar',
       story,
@@ -87,8 +86,6 @@ request body:
         grammarTagsIrish: any;
         grammarTagsEnglish: any;
       }) => {
-        console.log('GRAMADOIR RESPONSE:');
-        console.dir(res);
         const tags: HighlightTag[] =
           this.collateEnglishAndIrishGramadoirResponses(res.grammarTagsEnglish, res.grammarTagsIrish);
 
@@ -132,7 +129,6 @@ request body:
   convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
     const highlightTags: HighlightTag[] = [];
     const parsed = JSON.parse(tags);
-    console.log(parsed);
     parsed.forEach((tag: any, index: number) => {
       highlightTags.push({
         indices: {
@@ -148,8 +144,6 @@ request body:
         },
       });
     });
-    console.count('HIGHLIGHT TAGS');
-    console.log(highlightTags);
     return highlightTags;
   }
 
@@ -161,7 +155,6 @@ request body:
       this.storyService.gramadoirViaBackend(id).subscribe(
         (res) => {
         const tags: HighlightTag[] = [];
-        console.dir(res);
         JSON.parse(res.grammarTags).forEach(g => {
           const tag: HighlightTag = {
             indices: {
@@ -278,8 +271,6 @@ request body:
       arr = this.replaceAt(arr, match.index, '#'.repeat(5));
       regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
       match = regex.exec(arr);
-      console.log("matched " + val);
-      console.log("indexes", indexes);
     }
     
     return indexes;

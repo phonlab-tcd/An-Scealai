@@ -4,13 +4,6 @@ import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 import { Subscription } from 'rxjs';
 
-type SentenceAndAudioUrl = {
-  sentence: string;
-  waiting: boolean;
-  audioUrl: string;
-  subscription?: Subscription;
-};
-
 @Component({
   selector: 'app-synthesis-player',
   templateUrl: './synthesis-player.component.html',
@@ -19,11 +12,10 @@ type SentenceAndAudioUrl = {
 export class SynthesisPlayerComponent implements OnInit {
   creationDate: Date;
 
-  sentencesAndAudioUrls: SentenceAndAudioUrl[] = [];
+  audioUrl: string;
+  subscription: Subscription;
 
-  storedUrls = {};
-
-  @Input() sentences: string[];
+  @Input() text: string;
   @Input() dialect: Dialect;
 
   constructor(
@@ -33,52 +25,25 @@ export class SynthesisPlayerComponent implements OnInit {
 
   ngOnInit(): void {
     console.count('SYNTHESIS PLAYER COMPONENT CREATED');
-    this.synthesiseMySentences();
+    this.synthesiseText();
   }
 
   refresh() {
-    this.synthesiseMySentences();
+    this.synthesiseText();
   }
 
-  synthesiseMySentences(): void {
-    this.sentencesAndAudioUrls = [];
-    for (const sentence of this.sentences) {
-      const newAudio = {
-        sentence,
-        waiting: true,
-        audioUrl: null,
-      } as SentenceAndAudioUrl;
-
-      this.sentencesAndAudioUrls.push(newAudio);
-
-      /*
-      const sentenceKey = this.synthBank
-            .generateKey(
-                sentence,
-                this.dialect as Dialect,
-                'MP3');
-
-      const storedUrl =
-        this.storedUrls[sentenceKey];
-
-      if (storedUrl) {
-        newAudio.audioUrl = storedUrl;
-        newAudio.waiting = false;
-        continue;
-      }
-      */
-
-      newAudio.subscription =
+  synthesiseText(): void {
+    this.subscription?.unsubscribe();
+    this.subscription =
         this.synth
             .synthesiseText(
-              sentence,
+              this.text.replace(/[\.!?\n]+/g, ' -- ').replace(/[\s]+/g, ' '),
               this.dialect as Dialect)
             .subscribe(
               (audioUrl) => {
-                newAudio.audioUrl = audioUrl;
-                newAudio.waiting = false;
+                console.log('GOT AUDIOURL:', audioUrl);
+                this.audioUrl = audioUrl;
               });
-    }
   }
 }
 

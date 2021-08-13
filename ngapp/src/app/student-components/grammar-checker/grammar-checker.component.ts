@@ -115,7 +115,6 @@ export class GrammarCheckerComponent implements OnInit {
             console.error(error);
           },
           () => {
-            console.count('COMPLETED GRAMADOIR REQUEST');
             this.gramadoirSubscription = null;
           });
 
@@ -151,7 +150,6 @@ export class GrammarCheckerComponent implements OnInit {
 
             // loop through tags of errors found in the story
             for (const tag of this.tags) {
-              console.dir(tag);
               let values: HighlightTag[] = [];
               let rule: string = tag.data.english.ruleId.substring(22);
               const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
@@ -185,7 +183,6 @@ export class GrammarCheckerComponent implements OnInit {
                 }
               }
             }
-            console.log('Filtered tags: ', this.filteredTags);
             this.updateStats();
     });
   }
@@ -194,7 +191,6 @@ export class GrammarCheckerComponent implements OnInit {
   * Update the grammar error map of the stat object corresponding to the current student id
   */
   updateStats() {
-    console.log('Update grammar errors');
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
 
@@ -209,7 +205,6 @@ export class GrammarCheckerComponent implements OnInit {
             updatedTimeStamp,
         ).subscribe(
         (res) => {
-          console.log(res);
         });
   }
 
