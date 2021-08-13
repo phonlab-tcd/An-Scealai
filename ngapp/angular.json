@@ -14,7 +14,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "defaultConfiguration": "development",
+          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -44,7 +44,7 @@
             ]
           },
           "configurations": {
-            "development": {
+            "dev": {
               "aot": true,
               "optimization": false,
               "outputHashing": "all",
@@ -90,7 +90,7 @@
           }
         },
         "serve": {
-          "defaultConfiguration": "development",
+          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "an-scealai:build"
@@ -98,6 +98,12 @@
           "configurations": {
             "production": {
               "browserTarget": "an-scealai:build:production"
+            },
+            "dev": {
+              "aot": true,
+              "optimization": false,
+              "sourceMap": true,
+              "vendorChunk": true
             }
           }
         },
