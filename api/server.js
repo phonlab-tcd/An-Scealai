@@ -25,12 +25,26 @@ const mailRoute = require('./routes/send_mail.route');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
+
 // use the URL for the test DB if it has been set, otherwise use the normal DB.
-const dbURL = process.env.TEST_MONGO_URL || (config.DB_URL_PREFIX + config.DB_NAME);
-mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true}).then(
-    () => {logger.info('Database is connected');},
-    (err) => {logger.error('Cannot connect to the database. ',err)}
-);
+const dbURL =
+  process.env.TEST_MONGO_URL ||
+  (config.DB_AUTH_DETAILS + config.DB_URL_PREFIX + config.DB_NAME);
+
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(
+    () => {
+      logger.info('Database is connected');
+    },
+    (err) => {
+      logger.error({
+        msg: 'Cannot connect to the database. ',
+        while: 'trying to connect to mongodb with mongoose',
+        error: err,
+      });
+    });
 
 const app = express();
 app.use(bodyParser.json());
