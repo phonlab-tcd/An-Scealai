@@ -115,13 +115,14 @@ mongodb.MongoClient.connect(dbURL,
       preconnectedDB = db;
       const mongoTransport = new winston.transports.MongoDB({
         level: 'info', // info is the default
-        db: preconnectedDB, // user: logger, pwd: logger, db: logger
+        db: preconnectedDB,
         collection: 'log', // default is 'log'
         options: { // modified version of default
           poolSize: 2, // default
           useNewUrlParser: true, // default
           useUnifiedTopology: true, // not default
         },
+        handleExceptions: true,
       });
       logger.info('Adding MongoDB transport to logger');
       logger.add(mongoTransport);
@@ -134,14 +135,14 @@ mongodb.MongoClient.connect(dbURL,
 
 
 // This should be deleted before merging the PR
-logger.emerg('this is just a test');
-logger.alert('this is just a test');
-logger.crit('this is just a test');
-logger.error('this is just a test');
-logger.warning('this is just a test');
-logger.notice('this is just a test');
-logger.info('this is just a test');
-logger.debug('this is just a test');
-throw new Error('test error');
+// logger.emerg('this is just a test');
+// logger.alert('this is just a test');
+// logger.crit('this is just a test');
+// logger.error('this is just a test');
+// logger.warning('this is just a test');
+// logger.notice('this is just a test');
+// logger.info('this is just a test');
+// logger.debug('this is just a test');
+// throw new Error('test error');
 
 module.exports = logger;
