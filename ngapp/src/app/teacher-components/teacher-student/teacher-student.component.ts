@@ -27,6 +27,7 @@ export class TeacherStudentComponent implements OnInit {
     userId: string;
     classroomId: string;
     viewNoFeedback: boolean = false;
+    dateDescending: boolean = false;
 
     baseUrl: string = config.baseurl;
   
@@ -81,6 +82,26 @@ export class TeacherStudentComponent implements OnInit {
             resolve(params);
         });
       });
+    }
+    
+    sortStories() {
+      this.dateDescending = !this.dateDescending;
+      if(this.viewNoFeedback){
+        if(this.dateDescending) {
+          this.storiesWithoutFeedback.sort((a, b) => (a.date > b.date) ? -1 : 1);
+        }
+        else {
+          this.storiesWithoutFeedback.sort((a, b) => (a.date > b.date) ? 1 : -1);
+        }
+      }
+      else {
+        if(this.dateDescending) {
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
+        }
+        else {
+          this.stories.sort((a, b) => (a.date > b.date) ? 1 : -1);
+        }  
+      }
     }
   
     goToStory(storyId) {

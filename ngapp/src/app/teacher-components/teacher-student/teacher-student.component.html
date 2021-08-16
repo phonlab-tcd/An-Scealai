@@ -16,7 +16,11 @@
         </div>
         <div class="classroomKey">
           <div class="title">{{ts.l.title}}</div>
-          <div> {{ts.l.last_updated}} </div> <div> </div>
+          <div class="lastUpdated"> 
+            <div> {{ts.l.last_updated}} </div>
+            <i *ngIf="dateDescending" class="fas fa-angle-down sortIcon" (click)="sortStories()"></i> 
+            <i *ngIf="!dateDescending" class="fas fa-angle-up sortIcon" (click)="sortStories()"></i> 
+          </div><div> </div>
         </div>
         <!-- list of stories -->
         <div class="classBody" *ngIf="!viewNoFeedback">

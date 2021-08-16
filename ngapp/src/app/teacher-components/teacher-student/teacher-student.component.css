@@ -188,3 +188,19 @@
     color:#ff9100;
     transition: color, 0.5s;
 }
+
+.lastUpdated {
+  display: flex;
+  flex-direction: row;
+}
+
+.sortIcon {
+  padding-left:10px;
+  padding-top: 5px;
+}
+
+.sortIcon:hover {
+  cursor: pointer;
+  color:#ff9100;
+  transition: color, 0.5s;
+}
