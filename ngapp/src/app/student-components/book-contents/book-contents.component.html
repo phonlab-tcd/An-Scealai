@@ -7,18 +7,29 @@
       <div class="contentsLinkTitle">{{ts.l.title}}</div>
       <div class="contentsDateTitle">{{ts.l.last_updated}}</div>
     </div>
+    <!-- Search bar -->
+    <div role="main">
+      <div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
+            [(ngModel)]="searchText" placeholder="Search story title or content">
+        </div>
+      </div>
+    </div>
     <!-- create new story message if no stories -->
     <div class="contentsLinkContainer">
       <div *ngIf="stories.length === 0" class="newStoryMessage">
         {{ts.l.click_new_story}}
       </div>
         <!-- List each story -->
-      <div *ngFor="let story of stories">
+      <div *ngFor="let story of stories | appFilter: searchText">
         <div class="contentSection">
           <!-- delete check box if deleteMode -->
           <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
           <!-- link the story to its dashboard -->
-          <a [routerLink]="['/dashboard', story._id]" class="contentsLink">{{story.title}}</a>
+          <div appHighlight [searchedWord]="searchText" [content]="story.title" [classToApply]="'font-weight-bold'" [setTitle]="'true'" 
+          [routerLink]="['/dashboard', story._id]" class="contentsLink"> 
+          {{story.title}}</div>
           <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm a' }}</div>
           <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm a' }}</div>
         </div>

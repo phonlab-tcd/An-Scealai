@@ -7,7 +7,7 @@
 .bookImg {
     z-index: -10;
     width: 90%;
-    height: 500px;
+    height: 550px;
     position: fixed;
     right: 5%;
 }
@@ -23,7 +23,7 @@
 .contentsContainer {
     padding-left: 3%;
     padding-right: 3%;
-    height: 390px;
+    height: 450px;
     width: 80%;
     margin-left: 10%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
