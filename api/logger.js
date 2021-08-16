@@ -1,7 +1,6 @@
 const winston = require('winston');
 const path = require('path');
 const mongodb = require('mongodb');
-const mongoConfig = require('./DB');
 // var stackify = require('stackify-logger');
 
 // logger.error is console.error until the winston logger is created
@@ -99,13 +98,7 @@ logger = winston.createLogger({
 });
 
 require('winston-mongodb');
-
-// use the URL for the test DB if it has been set, otherwise use the normal DB.
-const dbURL =
-  process.env.TEST_MONGO_URL ||
-  ( mongoConfig.DB_AUTH_DETAILS +
-    mongoConfig.DB_URL_PREFIX +
-    mongoConfig.DB_NAME );
+const dbURL = require('./utils/dbUrl');
 
 let preconnectedDB = null;
 mongodb.MongoClient.connect(dbURL,
