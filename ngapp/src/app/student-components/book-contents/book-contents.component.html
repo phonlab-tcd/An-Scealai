@@ -1,6 +1,6 @@
 <!-- List of stories with delete and add new story button. Each story links to dashboard page-->
-<img src="assets/img/book.png" class="bookImg">
-<div class="bookContentsContainer">
+<!--<img src="assets/img/book.png" class="bookImg">-->
+<div class="bookContainer">
   <div class="contentsContainer">
     <div class="bookContentsTitle">{{ts.l.my_stories}}</div>
     <div class="contentsTitleContainer">
@@ -12,7 +12,7 @@
       <div>
         <div class="form-group">
           <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
-            [(ngModel)]="searchText" placeholder="Search story title or content">
+            [(ngModel)]="searchText" placeholder="{{ts.l.search_story_title_or_content}}">
         </div>
       </div>
     </div>
