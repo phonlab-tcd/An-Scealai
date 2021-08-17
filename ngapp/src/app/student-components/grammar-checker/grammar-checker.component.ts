@@ -23,6 +23,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './grammar-checker.component.html',
   // TODO WRITE LESS CSS
   styleUrls: [
+    './grammar-checker.component.css',
+    '../../app.component.css',
   ],
 })
 export class GrammarCheckerComponent implements OnInit {
