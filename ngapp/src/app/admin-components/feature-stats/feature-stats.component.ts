@@ -19,14 +19,12 @@ export class FeatureStatsComponent implements OnInit {
   
   features: any[] = [];
   previousFeatures: any[] = [];
-  featureToDisplay: any;
-  displayAllFeatures: boolean = false;
-  displaySelectedFeature: boolean = false;
   selectDateRange: boolean = true;
   dataLoaded: boolean = true;
   
   // hold total counts for unique feature types
   totalFeatureCounts = {};
+  sortedFeatureCounts: any[] = [];
 
   constructor(private statsService : StatsService, public ts: TranslationService, private engagement: EngagementService) { }
 
@@ -70,6 +68,8 @@ export class FeatureStatsComponent implements OnInit {
     });
     this.totalFeatureCounts = this.getTotals(types);
     console.log(this.totalFeatureCounts);
+    this.sortData(this.totalFeatureCounts);
+
     return;
   }
   
@@ -90,7 +90,6 @@ export class FeatureStatsComponent implements OnInit {
   */
   async addNewFeatureData() {
     let feature = {};
-    this.displayAllFeatures = false;
     
     // previous feature log exists
     if(this.previousFeatures.length > 0) {
@@ -112,8 +111,7 @@ export class FeatureStatsComponent implements OnInit {
     
           console.log("New feature log", feature);
           this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
-          this.featureToDisplay = feature;
-          this.displaySelectedFeature = true;
+          this.sortData(feature);
           resolve();
         });
       }); 
@@ -139,13 +137,22 @@ export class FeatureStatsComponent implements OnInit {
       }
       console.log(feature);
       this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
-      this.featureToDisplay = feature;
-      this.displaySelectedFeature = true;
+      this.sortData(feature);
     }
+    this.ngOnInit();
   }
   
-  setFeatureToDisplay(feature) {
-    this.featureToDisplay = feature.statsData;
+  sortData(data) {
+    this.sortedFeatureCounts = [];
+    for (var x in data ) {
+        this.sortedFeatureCounts.push([x, data[x]]);
+    }
+
+    this.sortedFeatureCounts.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+    console.log(this.sortedFeatureCounts)
+    
   }
 
 }
