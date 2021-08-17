@@ -3,7 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const config = require('./DB');
 const logger = require('./logger');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
@@ -23,11 +22,10 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 
+const dbURL = require('./utils/dbUrl');
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
-
-// use the URL for the test DB if it has been set, otherwise use the normal DB.
-const dbURL = require('./utils/dbUrl');
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
@@ -62,6 +60,7 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/recordings', recordingRoute);
 app.use('/mail', mailRoute);
+app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
 

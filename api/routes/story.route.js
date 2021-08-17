@@ -7,7 +7,12 @@ const querystring = require('querystring');
 const request = require('request');
 const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
-const getStoryById = require('../endpointsFunctions/story/getStoryById');
+
+// ENDPOINT HANDLERS
+const getStoryById =
+  require('../endpointsFunctions/story/getStoryById');
+const updateStoryAndCheckGrammar =
+  require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
 
 const Story = require('../models/story');
 
@@ -18,23 +23,27 @@ const storyRoutes = makeEndpoints({
   },
   post: {
     '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
+    '/updatStoryAndCheckGrammar': updateStoryAndCheckGrammar,
   },
 });
 
 
 // Create new story
 storyRoutes.route('/create').post(function(req, res) {
-  let story = new Story(req.body);
+  const story = new Story(req.body);
   story.feedback.seenByStudent = null;
   story.feedback.text = null;
   story.feedback.audioId = null;
-  story.save().then(story => {
-    res.status(200).json({'story': 'story added successfully', 'id': story._id});
-  })
-    .catch(err => {
-      console.log(err);
-      res.status(400).send("unable to save story to DB");
+  story.save().then((story) => {
+    res.status(200).json({
+      story: 'story added successfully',
+      id: story._id,
     });
+  })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send('unable to save story to DB');
+      });
 });
 
 // Get story by a given author from DB
@@ -73,41 +82,44 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
   });
 });
 
+
 // Update story by ID
-storyRoutes.route('/update/:id').post(function (req, res) {
-  Story.findById(req.params.id, function(err, story) {
-    if(err) {
-      console.log(err);
-      res.json(err);
-    }
-    if(story === null) {
-      console.log("story is null!");
-    } else {
+storyRoutes
+    .route('/update/:id')
+    .post((req, res) => {
+      Story.findById(req.params.id, function(err, story) {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        if (story === null) {
+          console.log('story is null!');
+        } else {
+          if (req.body.text) {
+            story.text = req.body.text;
+          }
+          if (req.body.htmlText) {
+            story.htmlText = req.body.htmlText;
+          }
+          if (req.body.lastUpdated) {
+            story.lastUpdated = req.body.lastUpdated;
+          }
+          if (req.body.dialect) {
+            story.dialect = req.body.dialect;
+          }
+          if (req.body.title) {
+            story.title = req.body.title;
+          }
 
-      if(req.body.text) {
-        story.text = req.body.text;
-      }
-      if(req.body.htmlText) {
-        story.htmlText = req.body.htmlText;
-      }
-      if(req.body.lastUpdated) {
-        story.lastUpdated = req.body.lastUpdated;
-      }
-      if(req.body.dialect) {
-        story.dialect = req.body.dialect;
-      }
-      if(req.body.title) {
-        story.title = req.body.title;
-      }
-
-      story.save().then(story => {
-        res.json('Update complete');
-      }).catch(err => {
-        res.status(400).send("Unable to update story");
+          story.save().then( (story) => {
+            res.json('Update complete');
+          }).catch( (err) => {
+            res.status(400).json(err);
+          });
+        }
+        // TODO This endpoint can hang here
       });
-    }
-  });
-})
+});
 
 // Update story author
 storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
@@ -307,11 +319,12 @@ function synthesiseStory(story) {
     // make a request to abair passing in the form data
     request({
       headers: {
-        'Host' : 'www.abair.tcd.ie',
+        'Host' : 'www.abair.ie',
         'Content-Length': contentLength,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      // uri: 'https://www.abair.tcd.ie/webreader/synthesis',
+      uri: abairBaseUrl + '/webreader/synthesis',
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
@@ -348,12 +361,12 @@ function synthesiseStory(story) {
 
 storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    console.log("story: ", story);
-    if(err) {
+    console.log('story: ', story);
+    if (err) {
       console.log(err);
-      res.send(err);
+      return res.send(err);
     }
-    if(story) {
+    if (story) {
       /*
       console.log("original text: ", story.text);
       let test8 = story.text.replace(/<br>/g, "\n");
@@ -363,33 +376,40 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
       console.log("test9: ", test9);
       console.log("test10: ", test10);
       */
-      let form = {
-        teacs: story.text.replace(/\n/g, " "),
+      const form = {
+        teacs: story.text.replace(/\n/g, ' '),
         teanga: req.params.lang,
       };
 
-      let formData = querystring.stringify(form);
+      const formData = querystring.stringify(form);
 
-      request({headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-        //uri: 'https://cadhan.com/api/gramadoir/1.0',
-        uri: 'https://www.abair.tcd.ie/cgi-bin/api-gramadoir-1.0.pl',
+      request({
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        // uri: 'https://cadhan.com/api/gramadoir/1.0',
+        uri: abairBaseUrl + '/cgi-bin/api-gramadoir-1.0.pl',
         body: formData,
-        method: 'POST'
+        method: 'POST',
       }, (err, resp, body) => {
-        if(err) res.send(err);
-        if(body) {
-          res.send(body);
+        if (err) {
+          return res.status(
+            err.statusCode ? err.statusCode : 500)
+              .send(err);
+        } else if (body) {
+          return res.json({
+            text: story.text,
+            grammarTags: body,
+          });
         } else {
-          res.sendStatus(404);
+          return res.send(resp);
         }
       });
-
     } else {
-      res.sendStatus(404).send("Story not found.");
+      res.status(404).send('Story not found.');
     }
   });
-})
+});
+
 
 module.exports = storyRoutes;
