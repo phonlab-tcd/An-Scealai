@@ -24,6 +24,8 @@ const mailRoute = require('./routes/send_mail.route');
 
 const dbURL = require('./utils/dbUrl');
 
+// throw new Error('test error'); // use this to test where uncaughtExceptions get logged
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
