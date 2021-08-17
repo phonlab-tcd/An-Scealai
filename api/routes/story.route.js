@@ -23,7 +23,7 @@ const storyRoutes = makeEndpoints({
   },
   post: {
     '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updatStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
   },
 });
 
