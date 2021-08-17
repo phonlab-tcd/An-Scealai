@@ -1,8 +1,8 @@
 <div class="header"> Scéalaí Features Statistics </div>
 <!-- Toggle between date picker and feature logs -->
 <div class="dataOptions">
-  <div class="option" (click)="selectDateRange = true; displayAllFeatures= false;"> Date Range</div> |
-  <div class="option" (click)="selectDateRange = false; displayAllFeatures = false;"> Previous Data </div>
+  <div class="option" (click)="selectDateRange = true"> Date Range</div> |
+  <div class="option" (click)="selectDateRange = false"> Previous Data </div>
 </div>
 <div class="content">
   <!-- Date picker -->
@@ -19,13 +19,13 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
     <div> (No date range entered = retrieve all data) </div><br>
-    <div class="submitButton" (click)="getFeatureData(); displayAllFeatures = true; displaySelectedFeature = false;">Get Data</div>
+    <div class="submitButton" (click)="getFeatureData()">Get Data</div>
   </div>
   <!-- List of previous feature logs -->
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousFeatures">
       <div *ngFor="let feature of previousFeatures" style="padding:10px">
-        <div class="submitButton" (click)="setFeatureToDisplay(feature); displaySelectedFeature = true; displayAllFeatures = false;"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
+        <div class="submitButton" (click)="sortData(feature.statsData);"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
       </div>
     </div>
     <br>
@@ -40,29 +40,15 @@
   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 </div>
 
-<!-- Display all feature data loaded from the Database -->
-<div *ngIf="dataLoaded && displayAllFeatures">
-  <mat-card *ngFor="let stat of totalFeatureCounts | keyvalue">
+<!-- Display feature data -->
+<div *ngIf="dataLoaded">
+  <mat-card *ngFor="let stat of sortedFeatureCounts">
     <div class="card">
     <mat-card-content>
-      <div class="featureName"><b>{{stat.key}} : </b></div>
+      <div class="featureName"><b>{{stat[0]}} : </b></div>
     </mat-card-content>
     <mat-card-content>
-      <div class="featureValue">{{stat.value}}</div>
-    </mat-card-content>
-    </div>
-  </mat-card>
-</div>
-
-<!-- Display feature data from a selected previous log -->
-<div *ngIf="dataLoaded && displaySelectedFeature">
-  <mat-card *ngFor="let stat of featureToDisplay | keyvalue">
-    <div class="card">
-    <mat-card-content>
-      <div class="featureName"><b>{{stat.key}} : </b></div>
-    </mat-card-content>
-    <mat-card-content>
-      <div class="featureValue">{{stat.value}}</div>
+      <div class="featureValue">{{stat[1]}}</div>
     </mat-card-content>
     </div>
   </mat-card>
