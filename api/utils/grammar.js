@@ -2,6 +2,8 @@
 const request = require('request');
 const abairBaseUrl = require('../abair_base_url');
 const logger = require('../logger');
+// querystring is native to node.js
+const querystring = require('querystring');
 
 /** @description - Get a promise which resolves to a
  *    list of tags describing grammar errors in the given text.
