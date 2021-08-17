@@ -9,5 +9,3 @@ module.exports =
     config.DB_HOSTNAME +
     config.DB_NAME );
 
-
-logger.info('dbUrl: ' + module.exports);
