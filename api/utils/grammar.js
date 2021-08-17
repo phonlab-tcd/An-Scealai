@@ -1,6 +1,8 @@
 
 const request = require('request');
 
+const abairBaseUrl = require('../abair_base_url');
+
 /** @description - Get a promise which resolves to a
  *    list of tags describing grammar errors in the given text.
  * The grammar tags are written in the language passed in.

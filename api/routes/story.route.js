@@ -429,6 +429,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 
       const formData = querystring.stringify(form);
 
+      logger.info('formData: ' + formData);
       request({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
