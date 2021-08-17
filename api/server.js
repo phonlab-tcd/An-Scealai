@@ -29,7 +29,11 @@ mongoose.set('useFindAndModify', false);
 // use the URL for the test DB if it has been set, otherwise use the normal DB.
 const dbURL =
   process.env.TEST_MONGO_URL ||
-  (config.DB_AUTH_DETAILS + config.DB_URL_PREFIX + config.DB_NAME);
+  (
+    config.DB_URL_PREFIX +
+    config.DB_AUTH_DETAILS +
+    config.DB_HOSTNAME +
+    config.DB_NAME);
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
