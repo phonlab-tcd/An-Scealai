@@ -114,16 +114,18 @@ export class DashboardComponent implements OnInit {
     public classroomService: ClassroomService,
   ) {}
 
-/*
-* set the stories array of all the student's stories 
-* and the current story being edited given its id from url 
-*/
+  /*
+  * set the stories array of all the student's stories 
+  * and the current story being edited given its id from url 
+  */
   ngOnInit() {
+    // TEST CORS
     // this.storyService
     //     .gramadoirDirect('dia dhuit mo cara')
     //     .subscribe((res) => {
     //       this.gramadoirResponse = res;
     //     });
+
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
