@@ -3,7 +3,7 @@ const path = require('path');
 const mongodb = require('mongodb');
 // var stackify = require('stackify-logger');
 // logger.error is console.error until the winston logger is created
-var logger = {error: console.error};
+let logger = {error: console.error};
 
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', (err) => {
@@ -11,33 +11,16 @@ process.on('uncaughtException', (err) => {
   console.dir(err);
 });
 
-
 const timeFormat = 'DD-MM-YYYY HH:mm:ss';
 
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
 
-const enumerateErrorFormat = winston.format((info) => {
-  if (info.message instanceof Error) {
-    info.message = Object.assign({
-      message: info.message.message,
-      stack: info.message.stack,
-    }, info.message);
-  }
-  if (info instanceof Error) {
-    return Object.assign({
-      message: info.message,
-      stack: info.stack,
-    }, info);
-  }
-  return info;
-});
-
 const consoleFormat = winston.format.printf(
     ({level, message, timestamp, ...metadata}) => {
       // TODO log the rest parameters in metadata
       const stringMessage = JSON.stringify(message);
-      let msg = `${timestamp} [${level}] : ${stringMessage}`;
+      const msg = `${timestamp} [${level}] : ${stringMessage}`;
       return msg;
     });
 
