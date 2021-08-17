@@ -274,12 +274,38 @@ export class GrammarCheckerComponent implements OnInit {
 
   // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
+    console.dir(tag);
     if (tag.data.vowelAgreement) {
+      console.count('VOWEL AGREEMENT');
       this.chosenTag = new GrammarTag('vowelAgreement', tag.data);
       return;
     }
 
     this.chosenTag =
       new GrammarTag('gramadoir', tag.data.english, tag.data.irish);
+  }
+
+  chosenTagIsVowelAgreement() {
+    return (this.chosenTag ? false : this.chosenTag?.type === 'vowelAgreement');
+  }
+
+  getGramadoirMessage() {
+    if (!this.chosenTag) {
+      return 'ERROR: GrammarTag is ' + this.chosenTag;
+    }
+
+    switch (this.chosenTag.type) {
+      case 'gramadoir':
+        switch (this.ts.l.iso_code){
+          case 'en':
+            return this.chosenTag.messageEnglish;
+          case 'ga':
+            return this.chosenTag.messageIrish;
+        }
+      case 'vowelAgreement':
+        return (this.ts.l[this.chosenTag.message] ?
+                this.ts.l[this.chosenTag.message] :
+                this.chosenTag.message);
+    }
   }
 }
