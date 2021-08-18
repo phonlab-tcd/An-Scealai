@@ -78,6 +78,10 @@ export class StoryService {
   updateStoryTitleAndDialect(story: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'update/' + story._id, story);
   }
+  
+  getStoriesForClassroom(author: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  }
 
   updateStory(story: Story): Observable<any> {
     this.engagement

@@ -88,10 +88,18 @@ export class TeacherClassroomComponent implements OnInit {
         //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
         this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         this.studentIds.push(res._id);
-        this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
-          let count = Object.keys(stories).length;
-          this.numOfStories.set(res.username, count);
-        })
+        if(this.classroom.date) {
+          this.storyService.getStoriesForClassroom(res.username, this.classroom.date).subscribe( (stories) => {
+            let count = Object.keys(stories).length;
+            this.numOfStories.set(res.username, count);
+          });
+        }
+        else {
+          this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
+            let count = Object.keys(stories).length;
+            this.numOfStories.set(res.username, count);
+          });
+        }
       });
     }
   }
