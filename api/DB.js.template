@@ -1,0 +1,7 @@
+module.exports = {
+  DB_NAME: 'an-scealai',
+  DB_URL_PREFIX: 'mongodb://localhost:27017',
+  DB_AUTH_DETAILS: '<username>:<password>@',
+  // if not using authentication use empty string for auth details:
+  // DB_AUTH_DETAILS: '',
+};
