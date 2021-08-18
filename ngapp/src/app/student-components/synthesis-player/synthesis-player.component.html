@@ -1,5 +1,38 @@
-<audio controls>
-    <source
-        *ngIf="audioUrl"
-        src="{{audioUrl}}">
-</audio>
+<div
+    style="width: 100% - 20px; margin: 10px; background-color: #14ff004a; border: 1px;"
+    [hidden]="hideEntireSynthesisPlayer">
+  <!--
+  <audio 
+    preload="auto"
+    *ngIf="audioUrl; else audioLoading"
+    controls>
+      <source
+          src="{{audioUrl}}">
+  </audio>
+  <ng-template #audioLoading>
+      <div
+       class="spinner-grow">
+      </div>
+  </ng-template>
+  -->
+  <div
+      *ngFor="let line of lines; let i = index;"
+      class="flex-container"
+      (click)="playAudio(i)">
+      <p
+          style="">
+       {{line}}
+      </p>
+      <audio 
+         *ngIf="audioBuffers[i].url; else loading"
+         controls>
+           <source src="{{audioBuffers[i].url}}">
+      </audio>
+      <ng-template #loading>
+          <div
+           class="spinner-grow">
+          </div>
+      </ng-template>
+
+  <div>
+</div>

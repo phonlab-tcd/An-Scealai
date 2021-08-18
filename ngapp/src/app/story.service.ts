@@ -43,7 +43,6 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    console.log(storyObj)
     this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
@@ -71,7 +70,6 @@ export class StoryService {
 
     const author = userDetails.username;
     const url = this.baseUrl + author;
-    console.count(url);
     return this.http.get(url).toPromise() as Promise<Story[]>;
   }
 

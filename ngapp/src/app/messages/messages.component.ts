@@ -182,10 +182,8 @@ export class MessagesComponent implements OnInit {
       //Add audio to DB if taken
       if(this.canSendAudio) {
         for(let id of ids) {
-          console.log("id: " + id);
           this.messageService.getMessageById(id).subscribe((res) => {
             this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
-              console.log("audio message sent to : " + id);
               this.hideModal();
             }, (err) => {
               this.errorText = err.message;
@@ -340,7 +338,6 @@ export class MessagesComponent implements OnInit {
   getMessageAudio(id: string) {
     this.messageService.getMessageAudio(id).subscribe((res) => {
       if(res) {
-        console.log(res);
         this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       }
     });
@@ -366,7 +363,6 @@ export class MessagesComponent implements OnInit {
 
           };
         };
-        console.log('got media successfully');
       }).catch();
       
     }
@@ -405,7 +401,6 @@ export class MessagesComponent implements OnInit {
   */
     playbackAudio() {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-      console.log(this.chunks);
       this.newRecording = true;
     }
 
@@ -415,7 +410,6 @@ export class MessagesComponent implements OnInit {
     saveAudio() {
       this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
       this.modalClass = "hiddenFade";
-      console.log(this.blob);
     }
     
   // change css class to show recording container
@@ -450,17 +444,14 @@ export class MessagesComponent implements OnInit {
   */
     toggleDeleteMode() {
       if(this.deleteMode && this.toBeDeleted.length > 0) {
-        console.log("to be deleted: " + this.toBeDeleted);
         for(let id of this.toBeDeleted) {
           this.messageService.deleteMessageAudio(id).subscribe( (res) => {
             if(res) {
-              console.log("Audio deleted: " + id);
             }
           });
         
           this.messageService.deleteMessage(id).subscribe(
             res => {
-              console.log('Deleted: ', id);
               //this.ngOnInit();
             }
           );

@@ -23,6 +23,9 @@ const recordingRoute = require('./routes/recording.route');
 
 const dbURL = require('./utils/dbUrl');
 
+// use this to test where uncaughtExceptions get logged
+// throw new Error('test error');
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 

@@ -23,6 +23,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './grammar-checker.component.html',
   // TODO WRITE LESS CSS
   styleUrls: [
+    './grammar-checker.component.css',
+    '../../app.component.css',
   ],
 })
 export class GrammarCheckerComponent implements OnInit {
@@ -112,7 +114,6 @@ export class GrammarCheckerComponent implements OnInit {
             this.engagement.addEventForLoggedInUser(EventType['GRAMMAR-CHECK-STORY'], this.story);
           },
           (error) => {
-            console.error(error);
           },
           () => {
             this.gramadoirSubscription = null;
@@ -276,5 +277,29 @@ export class GrammarCheckerComponent implements OnInit {
 
     this.chosenTag =
       new GrammarTag('gramadoir', tag.data.english, tag.data.irish);
+  }
+
+  chosenTagIsVowelAgreement() {
+    return (this.chosenTag ? false : this.chosenTag?.type === 'vowelAgreement');
+  }
+
+  getGramadoirMessage() {
+    if (!this.chosenTag) {
+      return 'ERROR: GrammarTag is ' + this.chosenTag;
+    }
+
+    switch (this.chosenTag.type) {
+      case 'gramadoir':
+        switch (this.ts.l.iso_code){
+          case 'en':
+            return this.chosenTag.messageEnglish;
+          case 'ga':
+            return this.chosenTag.messageIrish;
+        }
+      case 'vowelAgreement':
+        return (this.ts.l[this.chosenTag.message] ?
+                this.ts.l[this.chosenTag.message] :
+                this.chosenTag.message);
+    }
   }
 }
