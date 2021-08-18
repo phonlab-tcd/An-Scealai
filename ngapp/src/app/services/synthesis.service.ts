@@ -99,6 +99,15 @@ export class SynthesisService {
       throw new Error('input required');
     }
 
+    const storedUrl =
+      this.synthBank.getAudioUrlOfSentence(input, dialect);
+    if (storedUrl) {
+      return new Observable((subscriber) => {
+        subscriber.next(storedUrl);
+        subscriber.complete();
+      });
+    }
+
     let url = 'https://www.abair.ie/api2/synthesise?input=';
 
     url = url + encodeURIComponent(input);
@@ -116,21 +125,15 @@ export class SynthesisService {
 
     url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
 
-
-    console.log('SYNTHESIS URL:', url);
-
     return this.http.get(url, {
       observe: 'body',
       headers: {
         crossorigin: 'anonymous',
       }
     }).pipe(
-    map(
-      (obj: { audioContent: string }) => {
-        const type = 'audio/' + audioEncoding.toString().toLowerCase();
-        const audioURI = 'data:' + type + ';base64,' + obj.audioContent;
-        return audioURI;
-      }),
+    map((data: {audioContent: string}) => {
+      return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
+    }),
     tap((data) => {
       this.synthBank
           .storeAudioUrlOfSentence(
@@ -140,6 +143,10 @@ export class SynthesisService {
             data);
     })
     );
+  }
+
+  prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
+    return 'data:audio/' + encoding + ';base64,' + base64AudioData;
   }
 
   /**

@@ -51,7 +51,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(
       params => {
-        console.log(params);
         if (params.role && (params.role === 'TEACHER' || params.role === 'STUDENT')) {
           this.credentials.role = params.role;
         }
@@ -82,7 +81,6 @@ export class RegisterComponent implements OnInit {
   login() {
     this.auth.login(this.frozenCredentials).subscribe(
       (data) => {
-        console.log('got data for login request:', data);
         this.engagement.addEventForLoggedInUser(EventType.REGISTER);
         this.ts.setLanguage(this.ts.l.iso_code);
         this.router.navigateByUrl('register-profile');
@@ -96,7 +94,6 @@ export class RegisterComponent implements OnInit {
         }
       },
       () => {
-        console.log('Completed login request for', this.frozenCredentials.username);
       }
     );
   }
@@ -104,7 +101,6 @@ export class RegisterComponent implements OnInit {
   register() {
     if (this.checkDetails()) {
       this.credentials.language = this.ts.inIrish() ? 'ga' : 'en';
-      console.log('cred_language', this.credentials.language);
       this.auth.register(this.credentials).subscribe(
         (ok) => {
         // Copy credentials to frozenCredentials
@@ -128,7 +124,6 @@ export class RegisterComponent implements OnInit {
     }
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log('Testing email address for validity:', this.credentials.email);
     if (! emailRegex.test(this.credentials.email)) {
       this.errorTextKey = 'email_format_error';
       this.registrationError = true;

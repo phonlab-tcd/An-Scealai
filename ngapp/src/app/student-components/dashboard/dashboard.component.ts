@@ -66,6 +66,10 @@ export class DashboardComponent implements OnInit{
   selectExternalLinks: boolean = false;
 
   gramadoirResponse: string;
+
+  GRAMMAR_CHECK = 0;
+  AUDIO_CHECK = 1;
+  DICTIONARY = 3;
   
   // OPTIONS (to show or not to show)
   showOptions: boolean = true;
@@ -143,11 +147,13 @@ export class DashboardComponent implements OnInit{
   * and the current story being edited given its id from url
   */
   ngOnInit() {
-    this.storyService
-        .gramadoirDirect('dia dhuit mo cara')
-        .subscribe((res) => {
-          this.gramadoirResponse = res;
-        });
+    // TEST CORS
+    // this.storyService
+    //     .gramadoirDirect('dia dhuit mo cara')
+    //     .subscribe((res) => {
+    //       this.gramadoirResponse = res;
+    //     });
+
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
@@ -402,15 +408,35 @@ export class DashboardComponent implements OnInit{
     this.dontToggle = false;
   }
 
-  handleGrammarCheckerOptionClick() {
+  handleOptionClick(type: number) {
     this.dontToggle = true;
-    this.defaultMode();
-    if (this.grammarChecker) {
-      this.grammarChecker.hideEntireGrammarChecker =
-        !this.grammarChecker.hideEntireGrammarChecker;
+    switch (type) {
+      case this.GRAMMAR_CHECK:
+        {
+          this.defaultMode();
+          if (this.grammarChecker) {
+            this.grammarChecker.hideEntireGrammarChecker =
+              !this.grammarChecker.hideEntireGrammarChecker;
+          }
+        }
+        break;
+      case this.AUDIO_CHECK:
+        {
+          if (this.synthesisPlayer) {
+            this.synthesisPlayer.hideEntireSynthesisPlayer =
+              ! this.synthesisPlayer.hideEntireSynthesisPlayer;
+          }
+        }
+        break;
+      case this.DICTIONARY:
+        {
+          this.defaultMode();
+          this.dictionaryVisible = !this.dictionaryVisible;
+        }
+        break;
     }
   }
-  
+
   storySavedByGrammarChecker(story: Story) {
     if (this.story.htmlText === story.htmlText) {
       this.storySaved = true;

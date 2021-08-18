@@ -168,7 +168,6 @@ export class RecordingComponent implements OnInit {
    * or sentenceChunks
    */
   recordAudio(index:number) {
-    console.log('Record audio:', index);
     let media = {
       tag: 'audio',
       type: 'audio/mp3',
@@ -217,7 +216,6 @@ export class RecordingComponent implements OnInit {
    * which is also saved to DB.
    */
   async saveRecordings() {
-    console.log('Paragraph blobs', this.paragraphBlobs);
     const paragraph_promises = Object.entries(this.paragraphBlobs).map(async ([index, blob]) => {
       return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
     });

@@ -2,8 +2,16 @@
   box-sizing: border-box;
 }
 
+.placeHolderText {
+  color: #999999;
+}
+
 .page {
   height: 94%;
+}
+
+.clickableText:hover {
+  background-color: rgba(250, 10, 10, 200);
 }
 
 .content {

@@ -146,7 +146,6 @@ export class TeacherStoryComponent implements OnInit {
 
         };
       };
-      console.log('got media successfully');
     }).catch();
   }
 

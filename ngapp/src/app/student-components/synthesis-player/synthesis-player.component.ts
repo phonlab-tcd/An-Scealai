@@ -7,13 +7,25 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-synthesis-player',
   templateUrl: './synthesis-player.component.html',
-  styleUrls: ['./synthesis-player.component.css']
+  styleUrls: [
+    './synthesis-player.component.css',
+    '../../app.component.css',
+   ]
 })
 export class SynthesisPlayerComponent implements OnInit {
   creationDate: Date;
+  hideEntireSynthesisPlayer = true;
 
   audioUrl: string;
   subscription: Subscription;
+  lines: string[] = [];
+  audioBuffers: {
+    // source: AudioBufferSourceNode;
+    // buffer: AudioBuffer;
+    url: string;
+    // audioElement: any; // TODO
+    // audioContext: AudioContext;
+    subscription: Subscription}[] = [];
 
   @Input() text: string;
   @Input() dialect: Dialect;
@@ -24,7 +36,6 @@ export class SynthesisPlayerComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    console.count('SYNTHESIS PLAYER COMPONENT CREATED');
     this.synthesiseText();
   }
 
@@ -32,7 +43,40 @@ export class SynthesisPlayerComponent implements OnInit {
     this.synthesiseText();
   }
 
+  splitTextIntoLines() {
+    for (const buf of this.audioBuffers) {
+      buf.subscription.unsubscribe();
+    }
+    this.lines = [];
+    this.audioBuffers = [];
+    this.text?.split('\n')
+        .filter(Boolean)
+        .forEach((line, index) => {
+          this.lines.push(line);
+          const newBuffer = {
+            url: null,
+            subscription: null,
+          };
+
+          newBuffer.subscription = this.synth
+                .synthesiseText(
+                  line.replace(/[\.!?\n]+/g, ' -- ')
+                      .replace(/[\s]+/g, ' '),
+                  this.dialect as Dialect
+                )
+                .subscribe((audioUrl) => {
+                  newBuffer.url = audioUrl;
+                });
+
+          this.audioBuffers.push(newBuffer);
+        });
+  }
+ 
+  rebuildAudioUrl() {
+  }
+
   synthesiseText(): void {
+    /*
     this.subscription?.unsubscribe();
     this.subscription =
         this.synth
@@ -40,10 +84,21 @@ export class SynthesisPlayerComponent implements OnInit {
               this.text.replace(/[\.!?\n]+/g, ' -- ').replace(/[\s]+/g, ' '),
               this.dialect as Dialect)
             .subscribe(
-              (audioUrl) => {
-                console.log('GOT AUDIOURL:', audioUrl);
-                this.audioUrl = audioUrl;
+              (audioData) => {
+                this.audioUrl = this.synth.prependAudioUrlPrefix(audioData, 'mp3');
               });
+    */
+
+    this.splitTextIntoLines();
+  }
+
+  _base64ToArrayBuffer(base64) {
+    const binaryString = window.atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 }
 
@@ -101,4 +156,5 @@ function  synthesiseQuillTextSentenceBySentence(lines: string[]) {
   }
 
   this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
+  
 }

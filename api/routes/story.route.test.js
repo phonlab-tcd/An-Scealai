@@ -74,4 +74,15 @@ describe('story routes', () => {
           .expect(400);
     });
   });
+
+  describe('/story/feedbackAudio/:id', () => {
+    it('requires a valid id param', async () => {
+      return request
+          .get('/story/feedbackAudio/badId')
+          .expect(400)
+          .then((response) => {
+            expect(response.body.invalidObjectId).toBe('badId');
+          });
+    });
+  });
 });

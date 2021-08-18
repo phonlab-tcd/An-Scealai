@@ -85,15 +85,17 @@
         </div>
 
         <!-- DICTIONARY -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-                                 (click)="this.dontToggle=true; defaultMode(); showDictionary();">
+        <div *ngIf="showOptions"
+             class="optionsBtn optionsPopupBtn"
+             (click)="handleOptionClick(DICTINARY);">
           {{ts.l.dictionary}}
           <i class="fas fa-book optionsBtnIcon"></i>
         </div>
 
         <!-- AUDIO CHECK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToSynthesis()">
+        <div *ngIf="showOptions"
+             class="optionsBtn optionsPopupBtn"
+             (click)="handleOptionClick(AUDIO_CHECK);">
           {{ts.l.audio_check}}
           <i class="fas fa-volume-up optionsBtnIcon"></i>
         </div>
@@ -101,7 +103,7 @@
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions"
              class="optionsBtn optionsPopupBtn"
-             (click)="handleGrammarCheckerOptionClick();">
+             (click)="handleOptionClick(GRAMMAR_CHECK);">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
@@ -113,24 +115,6 @@
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
       </div>
-    </div>
-
-    <div class="textFieldContainer" *ngIf="feedbackVisible">
-      <div class="feedbackHeader">
-        <div>{{ts.l.feedback}}</div>
-          <div class="closeFeedbackBtn" (click)="closeFeedback()">
-            <i class="fa fa-times">
-            </i>
-          </div>
-      </div>
-      <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
-      <audio
-          *ngIf="audioSource"
-          [src]="audioSource"
-          id="audio"
-          controls
-          #audioTag
-          class="audioPlayer"></audio>
     </div>
 
     <quill-editor

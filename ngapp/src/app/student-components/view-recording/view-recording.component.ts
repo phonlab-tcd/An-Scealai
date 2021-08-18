@@ -43,7 +43,6 @@ export class ViewRecordingComponent implements OnInit {
   }
 
   loadRecordings(recording: Recording) {
-    console.log('The recording!', recording);
     for (let i=0; i<recording.paragraphIndices.length; ++i) {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
         this.paragraphToAudioSource[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
@@ -166,7 +165,6 @@ export class ViewRecordingComponent implements OnInit {
   */
   playAudio(section) {
     this.pauseAllAudio();
-    console.log(section.type);
     if(section.type === "Paragraph") {
       this.a = new Audio(section.audioUrl);
       this.a.play();
@@ -216,7 +214,6 @@ export class ViewRecordingComponent implements OnInit {
     this.pauseAllAudio();
     this.a = new Audio(span.getAttribute("audio-url"));
     let time = span.getAttribute("data-begin");
-    console.log(time, time-0.1);
     let duration = span.getAttribute("data-dur");
     this.a.currentTime = time;
     this.a.play();

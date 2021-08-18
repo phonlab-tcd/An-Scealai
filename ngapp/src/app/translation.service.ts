@@ -28,7 +28,6 @@ export class TranslationService {
   setLanguage(code : string) {
     if(this.auth.isLoggedIn()) {
       this.updateUserLanguage(code).subscribe((res) => {
-        console.log(res);
         this.getUserLanguageCode().subscribe((res) => {
           this.l = this.getLanguageFromCode(res.language);
         })

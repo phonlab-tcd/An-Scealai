@@ -79,10 +79,11 @@ const Story = require('../models/story');
 const storyRoutes = makeEndpoints({
   get: {
     '/getStoryById/:id': getStoryById,
+    '/feedbackAudio/:id': require('../endpointsFunctions/story/feedbackAudio'),
   },
   post: {
     '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updatStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
   },
 });
 
@@ -245,53 +246,6 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
     }
   });
 });
-
-storyRoutes.route('/feedbackAudio/:id').get((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.json(err);
-    }
-    if(story) {
-      if(story.feedback.audioId) {
-        var audioId;
-        // get the audio id from the audio id set to the story
-        try {
-          audioId = new ObjectID(story.feedback.audioId);
-        } catch(err) {
-          return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
-        }
-
-        res.set('content-type', 'audio/mp3');
-        res.set('accept-ranges', 'bytes');
-        // get collection name for audio files
-        let bucket = new mongodb.GridFSBucket(db, {
-          bucketName: 'audioFeedback'
-        });
-        // create a new stream of file data using the bucket name
-        let downloadStream = bucket.openDownloadStream(audioId);
-        // write stream data to response if data is found
-        downloadStream.on('data', (chunk) => {
-          res.write(chunk);
-        });
-
-        downloadStream.on('error', () => {
-          res.sendStatus(404);
-        });
-        // close the stream after data sent to response
-        downloadStream.on('end', () => {
-          res.end();
-        });
-      } else {
-        //res.status(404).json({"message" : "No audio feedback has been associated with this story"});
-        res.json(null);
-      }
-
-    } else {
-      res.status(404).json({"message" : "Story does not exist"});
-    }
-  });
-})
 
 storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
@@ -488,6 +442,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 
       const formData = querystring.stringify(form);
 
+      logger.info('formData: ' + formData);
       request({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
