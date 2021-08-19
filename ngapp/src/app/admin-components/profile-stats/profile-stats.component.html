@@ -361,7 +361,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header >
         <mat-panel-title>
-          <b> Father Native Tongue </b>
+          <b> {{ts.l.father_native_tongue}} </b>
         </mat-panel-title>
         <mat-panel-description class="panelDescription">
           Native tongue of father
@@ -375,7 +375,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header >
         <mat-panel-title>
-          <b> Mother Native Tongue </b>
+          <b> {{ts.l.mother_native_tongue}} </b>
         </mat-panel-title>
         <mat-panel-description class="panelDescription">
           Native tongue of mother
@@ -395,7 +395,7 @@
           The number of years students have been studying Irish
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let year of profileToDisplay.totalYearsOfIrish | keyvalue">
+      <div *ngFor="let year of profileToDisplay.yearsOfIrish | keyvalue">
         <div> {{year.key}} years : {{year.value}} </div>
       </div>
     </mat-expansion-panel>
