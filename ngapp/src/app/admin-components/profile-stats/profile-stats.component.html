@@ -24,9 +24,9 @@
   </div>
     <!-- List of previous feature logs -->
   <div class="datePicker" *ngIf="!selectDateRange">
-    <div *ngIf="previousProfiles">
-      <div *ngFor="let profile of previousProfiles">
-        <div class="submitButton" (click)="setProfileToDisplay(profile.statsData)"> {{profile.date | date : 'd/M/yy, h:mm a'}} </div>
+    <div *ngIf="previousLogs">
+      <div *ngFor="let log of previousLogs">
+        <div class="submitButton" (click)="setDataToDisplay(log.statsData)"> {{log.date | date : 'd/M/yy, h:mm a'}} </div>
       </div>
     </div>
     <br>
@@ -40,7 +40,7 @@
   <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 </div>
 
-<div *ngIf="dataLoaded" class="profileNumber"> Profiles Found: {{profileToDisplay.length}} </div>
+<div *ngIf="dataLoaded && selectDateRange" class="profileNumber"> Profiles Found: {{numProfilesFound}}</div>
 
 <!-- Personal Information -->
 <div *ngIf="dataLoaded">
@@ -56,8 +56,8 @@
           Gender of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-        <div *ngFor="let gender of profileToDisplay.gender | keyvalue">
-          <div> {{gender.key}} : {{gender.value}} </div>
+        <div *ngFor="let gender of dataToDisplay.gender | keyvalue">
+          <div class="data"> {{gender.key}} : {{gender.value}} </div>
         </div>
     </mat-expansion-panel>
     <!-- Age -->
@@ -70,8 +70,8 @@
           Age of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let age of profileToDisplay.age | keyvalue">
-        <div> {{age.key}} : {{age.value}} </div>
+      <div *ngFor="let age of dataToDisplay.age | keyvalue">
+        <div class="data"> {{age.key}} : {{age.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Country -->
@@ -86,12 +86,12 @@
       </mat-expansion-panel-header>
       <div class="sideBySide">
         <div>
-          <div *ngFor="let option of profileToDisplay.notFromIreland | keyvalue">
+          <div *ngFor="let option of dataToDisplay.notFromIreland | keyvalue">
             <div> Total users not from Ireland : {{option.value}} </div>
           </div>
         </div>
         <div>
-          <div *ngFor="let country of profileToDisplay.country | keyvalue">
+          <div *ngFor="let country of dataToDisplay.country | keyvalue">
             <div> {{country.key}} : {{country.value}} </div>
           </div>
         </div>
@@ -107,8 +107,8 @@
           County of users from Ireland
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let county of profileToDisplay.county | keyvalue">
-        <div> {{county.key}} : {{county.value}} </div>
+      <div *ngFor="let county of dataToDisplay.county | keyvalue">
+        <div class="data"> {{county.key}} : {{county.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Current Studies -->
@@ -121,8 +121,8 @@
           Which level/type of schooling users are in
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let school of profileToDisplay.studentSchoolLevel | keyvalue">
-        <div> {{school.key}} : {{school.value}} </div>
+      <div *ngFor="let school of dataToDisplay.studentSchoolLevel | keyvalue">
+        <div class="data"> {{school.key}} : {{school.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Primary Year -->
@@ -135,8 +135,8 @@
           Wich year of primary school users are in
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let year of profileToDisplay.primaryYear | keyvalue">
-        <div> {{year.key}} : {{year.value}} </div>
+      <div *ngFor="let year of dataToDisplay.primaryYear | keyvalue">
+        <div class="data"> {{year.key}} : {{year.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Secondary Year -->
@@ -149,8 +149,8 @@
           Wich year of secondary school users are in
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let year of profileToDisplay.secondaryYear | keyvalue">
-        <div> {{year.key}} : {{year.value}} </div>
+      <div *ngFor="let year of dataToDisplay.secondaryYear | keyvalue">
+        <div class="data"> {{year.key}} : {{year.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Primary/Secondary school type -->
@@ -163,8 +163,8 @@
           Wich type of primary/secondary school students attend
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let type of profileToDisplay.studentSchoolType | keyvalue">
-        <div> {{type.key}} : {{type.value}} </div>
+      <div *ngFor="let type of dataToDisplay.studentSchoolType | keyvalue">
+        <div class="data"> {{type.key}} : {{type.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Third Level School Types -->
@@ -177,8 +177,8 @@
           What third level students are currently studying
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.thirdLevelOption | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.thirdLevelOption | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Other third level studies -->
@@ -191,8 +191,8 @@
           Other third level studies that are not listed
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let level of profileToDisplay.otherStudies | keyvalue">
-        <div> {{level.key}} : {{level.value}} </div>
+      <div *ngFor="let level of dataToDisplay.otherStudies | keyvalue">
+        <div class="data"> {{level.key}} : {{level.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Third Level Year -->
@@ -205,8 +205,8 @@
           What year third level students are currently in
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let year of profileToDisplay.thirdLevelYear | keyvalue">
-        <div> {{year.key}} : {{year.value}} </div>
+      <div *ngFor="let year of dataToDisplay.thirdLevelYear | keyvalue">
+        <div class="data"> {{year.key}} : {{year.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Third Level Year -->
@@ -219,8 +219,8 @@
           What students are currently in the USA
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.usaOption | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.usaOption | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Other Postgrad studies -->
@@ -233,8 +233,8 @@
           What postgrad students are currently studying
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.otherPostgradStudies | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.otherPostgradStudies | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Immersion Course -->
@@ -247,8 +247,8 @@
           Whether or not students are attending an Irish immersion course
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.immersionCourse | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.immersionCourse | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Teacher School Types -->
@@ -261,8 +261,8 @@
           What level of schools teachers work in 
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.teacherSchoolTypes | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.teacherSchoolTypes | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Teacher Primary Type -->
@@ -275,8 +275,8 @@
           What type of primary school teachers work in 
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.teacherPrimaryType | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.teacherPrimaryType | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Teacher Secondary Type -->
@@ -289,8 +289,8 @@
           What type of secondary school teachers work in 
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let option of profileToDisplay.teacherSecondaryType | keyvalue">
-        <div> {{option.key}} : {{option.value}} </div>
+      <div *ngFor="let option of dataToDisplay.teacherSecondaryType | keyvalue">
+        <div class="data"> {{option.key}} : {{option.value}} </div>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
@@ -311,8 +311,8 @@
           Status of native speakers
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let status of profileToDisplay.nativeSpeakerStatus | keyvalue">
-        <div> {{status.key}} : {{status.value}} </div>
+      <div *ngFor="let status of dataToDisplay.nativeSpeakerStatus | keyvalue">
+        <div class="data"> {{status.key}} : {{status.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Dialect Preference -->
@@ -325,8 +325,8 @@
           Dialect preference of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let dialect of profileToDisplay.dialectPreference | keyvalue">
-        <div> {{dialect.key}} : {{dialect.value}} </div>
+      <div *ngFor="let dialect of dataToDisplay.dialectPreference | keyvalue">
+        <div class="data"> {{dialect.key}} : {{dialect.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Spoken Comprehension Level -->
@@ -339,8 +339,8 @@
           Spoken comprehension level of users
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let level of profileToDisplay.spokenComprehensionLevel | keyvalue">
-        <div> {{level.key}} : {{level.value}} </div>
+      <div *ngFor="let level of dataToDisplay.spokenComprehensionLevel | keyvalue">
+        <div class="data"> {{level.key}} : {{level.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Other Languages Spoken at Home -->
@@ -353,8 +353,8 @@
           Other languages spoken at home and percentage of use
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let language of profileToDisplay.otherLanguages | keyvalue">
-        <div> {{language.key}} : {{language.value}} </div>
+      <div *ngFor="let language of dataToDisplay.otherLanguages | keyvalue">
+        <div class="data"> {{language.key}} : {{language.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Father Native Tongue -->
@@ -367,8 +367,8 @@
           Native tongue of father
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let language of profileToDisplay.fatherNativeTongue | keyvalue">
-        <div> {{language.key}} : {{language.value}} </div>
+      <div *ngFor="let language of dataToDisplay.fatherNativeTongue | keyvalue">
+        <div class="data"> {{language.key}} : {{language.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Mother Native Tongue -->
@@ -381,8 +381,8 @@
           Native tongue of mother
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let language of profileToDisplay.motherNativeTongue | keyvalue">
-        <div> {{language.key}} : {{language.value}} </div>
+      <div *ngFor="let language of dataToDisplay.motherNativeTongue | keyvalue">
+        <div class="data"> {{language.key}} : {{language.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Years of Irish -->
@@ -395,8 +395,8 @@
           The number of years students have been studying Irish
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let year of profileToDisplay.yearsOfIrish | keyvalue">
-        <div> {{year.key}} years : {{year.value}} </div>
+      <div *ngFor="let year of dataToDisplay.yearsOfIrish | keyvalue">
+        <div class="data"> {{year.key}} years : {{year.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Other language proficiency -->
@@ -409,8 +409,8 @@
           Other languages that users speak/are proficient in
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let language of profileToDisplay.otherLanguageProficiency | keyvalue">
-        <div> {{language.key}} : {{language.value}} </div>
+      <div *ngFor="let language of dataToDisplay.otherLanguageProficiency | keyvalue">
+        <div class="data"> {{language.key}} : {{language.value}} </div>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
@@ -430,8 +430,8 @@
           Frequency users speak Irish
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let frequency of profileToDisplay.speakingFrequency | keyvalue">
-        <div> {{frequency.key}} : {{frequency.value}} </div>
+      <div *ngFor="let frequency of dataToDisplay.speakingFrequency | keyvalue">
+        <div class="data"> {{frequency.key}} : {{frequency.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Speak With -->
@@ -444,8 +444,8 @@
           With whom users normally speak Irish 
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let who of profileToDisplay.speakWith | keyvalue">
-        <div> {{who.key}} : {{who.value}} </div>
+      <div *ngFor="let who of dataToDisplay.speakWith | keyvalue">
+        <div class="data"> {{who.key}} : {{who.value}} </div>
       </div>
     </mat-expansion-panel>
     <!-- Irish Media -->
@@ -455,19 +455,19 @@
           <b>Irish Media</b>
         </mat-panel-title>
         <mat-panel-description class="panelDescription">
-          Types of Irish media that users use and how ofthen they use it
+          Types of Irish media that users use and how often they use it
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="sideBySide">
         <div>
-          Type:
-          <div *ngFor="let media of profileToDisplay.irishMedia | keyvalue">
+          <div class="dataLabel"> Type: </div>
+          <div *ngFor="let media of dataToDisplay.irishMedia | keyvalue">
             <div> {{media.key}} : {{media.value}} </div>
           </div>
         </div>
         <div>
-          How often:
-          <div *ngFor="let time of profileToDisplay.howOftenMedia | keyvalue">
+          <div class="dataLabel"> How often: </div>
+          <div *ngFor="let time of dataToDisplay.howOftenMedia | keyvalue">
             <div> {{time.key}} : {{time.value}} </div>
           </div>
         </div>
@@ -485,14 +485,14 @@
       </mat-expansion-panel-header>
       <div class="sideBySide">
         <div>
-          Type:
-          <div *ngFor="let reading of profileToDisplay.irishReading | keyvalue">
+          <div class="dataLabel"> Type: </div>
+          <div *ngFor="let reading of dataToDisplay.irishReading | keyvalue">
             <div> {{reading.key}} : {{reading.value}} </div>
           </div>
         </div>
         <div>
-          How often:
-          <div *ngFor="let time of profileToDisplay.howOftenReading | keyvalue">
+          <div class="dataLabel"> How often: </div>
+          <div *ngFor="let time of dataToDisplay.howOftenReading | keyvalue">
             <div> {{time.key}} : {{time.value}} </div>
           </div>
         </div>
@@ -510,14 +510,14 @@
       </mat-expansion-panel-header>
       <div class="sideBySide">
         <div>
-          Type:
-          <div *ngFor="let writing of profileToDisplay.irishWriting | keyvalue">
+          <div class="dataLabel"> Type: </div>
+          <div *ngFor="let writing of dataToDisplay.irishWriting | keyvalue">
             <div> {{writing.key}} : {{writing.value}} </div>
           </div>
         </div>
         <div>
-          How often:
-          <div *ngFor="let time of profileToDisplay.howOftenWriting | keyvalue">
+          <div class="dataLabel"> How often: </div>
+          <div *ngFor="let time of dataToDisplay.howOftenWriting | keyvalue">
             <div> {{time.key}} : {{time.value}} </div>
           </div>
         </div>
@@ -533,8 +533,8 @@
           User opinion on synthetic voices
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div *ngFor="let opinion of profileToDisplay.synthOpinion | keyvalue">
-        <div> {{opinion.key}} : {{opinion.value}} </div>
+      <div *ngFor="let opinion of dataToDisplay.synthOpinion | keyvalue">
+        <div class="data"> {{opinion.key}} : {{opinion.value}} </div>
       </div>
     </mat-expansion-panel>
   </mat-accordion>

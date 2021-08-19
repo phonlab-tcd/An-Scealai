@@ -77,8 +77,21 @@
 
 .sideBySide {
   display: flex;
-  justify-content: flex-end;
-  padding-right: 30%;
+  justify-content: space-around;
+  padding-left: 30%;
+  padding-right: 20%;
+  text-align: left;
+}
+
+.dataLabel {
+  font-size: 12pt;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.data {
+  text-align: left;
+  padding-left: 40%;
 }
 
 mat-panel-description.panelDescription {
