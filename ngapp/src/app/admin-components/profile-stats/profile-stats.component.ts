@@ -18,102 +18,20 @@ export class ProfileStatsComponent implements OnInit {
     end: new FormControl()
   });
   
-  profiles: any[] = [];
   previousProfiles: any[] = [];
-  profileToDisplay: any;
-  displayAllProfiles: boolean = false;
-  displaySelectedProfile: boolean = false;
+  profileToDisplay: any = {};
   selectDateRange: boolean = true;
   dataLoaded: boolean = true;
-  
-  // hold counts for different types of entries
-  // each array cooresponds to one profile question
-  ageCount: string[] = [];
-  countriesCount: string[] = [];
-  countiesCount: string[] = [];
-  dialectPreferencesCount: string[] = [];
-  genderCount: string[] = [];
-  fatherNativeTongueCount: string[] = [];
-  irishMediaCount: string[] = [];
-  howOftenMediaCount: string[] = [];
-  irishReadingCount: string[] = [];
-  howOftenReadingCount: string[] = [];
-  irishWritingCount: string[] = [];
-  howOftenWritingCount: string[] = [];
-  immersionCourseCount: string[] = [];
-  motherNativeTongueCount: string[] = [];
-  nativeSpeakerStatusCount: string[] = [];
-  notFromIrelandCount: string[] = [];
-  otherCountryOfStudyCount: string[] = [];
-  otherLanguageProficiencyCount: string[] = [];
-  otherLanguagesCount: string[] = [];
-  otherPostgradStudiesCount: string[] = [];
-  otherStudiesCount: string[] = [];
-  postgradYearCount: string[] = [];
-  primaryYearCount: string[] = [];
-  secondaryYearCount: string[] = [];
-  speakWithCount: string[] = [];
-  speakingFrequencyCount: string[] = [];
-  spokenComprehensionLevelCount: string[] = [];
-  studentSchoolLevelCount: string[] = [];
-  studentSchoolTypeCount: string[] = [];
-  synthOpinionCount: string[] = [];
-  teacherPrimaryTypeCount: string[] = [];
-  teacherSecondaryTypeCount: string[] = [];
-  teacherSchoolTypesCount: string[] = [];
-  thirdLevelOptionCount: string[] = [];
-  thirdLevelYearCount: string[] = [];
-  usaOptionCount: string[] = [];
-  yearsOfIrishCount: string[] = [];
-  
-  // hold total counts for unique entry types in the count arrays
-  totalAges = {};
-  totalCountries = {};
-  totalCounties = {};
-  totalDialectPreferences = {};
-  totalGender = {};
-  totalFatherNativeTongue = {}
-  totalIrishMedia = {}
-  totalHowOftenMedia = {};
-  totalIrishReading = {};
-  totalHowOftenReading = {};
-  totalIrishWriting = {};
-  totalHowOftenWriting = {};
-  totalImmersionCourse = {};
-  totalMotherNativeTongue = {};
-  totalNativeSpeakerStatus = {};
-  totalNotFromIreland = {};
-  totalOtherCountryOfStudy = {};
-  totalOtherLanguageProficiency = {};
-  totalOtherLanguages = {};
-  totalOtherPostgradStudies = {};
-  totalOtherStudies = {};
-  totalPostgradYear = {};
-  totalPrimaryYear = {};
-  totalSecondaryYear = {};
-  totalSpeakWith = {};
-  totalSpeakingFrequency = {};
-  totalSpokenComprehensionLevel = {};
-  totalStudentSchoolLevel = {};
-  totalStudentSchoolType = {};
-  totalSynthOpinion = {};
-  totalTeacherPrimaryType = {};
-  totalTeacherSecondaryType = {};
-  totalTeacherSchoolTypes = {};
-  totalThirdLevelOption = {};
-  totalThirdLevelYear = {};
-  totalUsaOption = {};
-  totalYearsOfIrish = {};
   
   constructor(private statsService : StatsService, public ts: TranslationService, private engagement: EngagementService) { }
 
   /* 
-  * See if there are already profile data logs in the database
+  * Set array of any profile data logs in the database
   */
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("PROFILE-STATS").subscribe( (res) => {
-      this.previousProfiles = res;
-      this.previousProfiles = this.previousProfiles.sort((a, b) => b.date - a.date);
+      this.previousProfiles = res.sort((a, b) => b.date - a.date);
+      //this.previousProfiles = this.previousProfiles.sort((a, b) => b.date - a.date);
     });
   }
   
@@ -128,9 +46,8 @@ export class ProfileStatsComponent implements OnInit {
     
     return new Promise( (resolve, reject) => {
       this.statsService.getProfileDataByDate(startDate, endDate).subscribe( async (res) => {
-        this.profiles = res;
-        console.log("Profiles returned for given dates: ", this.profiles);
-        await this.calculateStats();
+        console.log("Profiles returned for given dates: ", res);
+        await this.calculateStats(res);
         this.dataLoaded = true;
         resolve();
       });
@@ -141,102 +58,109 @@ export class ProfileStatsComponent implements OnInit {
   * For each profile, add the answer to each question in its cooresponding array
   * For each array, count the number of times unique answers appear
   */
-  async calculateStats() {
-    this.profiles.forEach( profile => {
-      if (profile[0] !== undefined) {
-        if (profile[0].age !== undefined) this.ageCount.push(profile[0].age);
-        if (profile[0].country) this.countriesCount.push(profile[0].country);
-        if (profile[0].county) this.countiesCount.push(profile[0].county);
-        if (profile[0].dialectPreference) this.dialectPreferencesCount.push(profile[0].dialectPreference);
-        if (profile[0].gender) this.genderCount.push(profile[0].gender);
-        if (profile[0].fatherNativeTongue) this.fatherNativeTongueCount.push(profile[0].fatherNativeTongue);
-        if (profile[0].irishMedia) {
-          for(let key in profile[0].irishMedia) {
-            if(profile[0].irishMedia[key]) this.irishMediaCount.push(key);
+  async calculateStats(profiles) {
+    let totals = {};
+    profiles.forEach( profile => {
+      profile = profile[0];
+      if (profile !== undefined) {
+        if(profile.age) {if (!totals["age"]) totals["age"] = []; totals["age"].push(profile.age);}
+        if(profile.country) {if (!totals["country"]) totals["country"] = []; totals["country"].push(profile.country);}
+        if(profile.county) {if (!totals["county"]) totals["county"] = []; totals["county"].push(profile.county);}
+        if(profile.dialectPreference) {if (!totals["dialectPreference"]) totals["dialectPreference"] = []; totals["dialectPreference"].push(profile.dialectPreference);}
+        if(profile.gender) {if (!totals["gender"]) totals["gender"] = []; totals["gender"].push(profile.gender);}
+        if(profile.fatherNativeTongue) {if (!totals["fatherNativeTongue"]) totals["fatherNativeTongue"] = []; totals["fatherNativeTongue"].push(profile.fatherNativeTongue);}
+        if (profile.irishMedia) {
+          if (!totals["irishMedia"]) totals["irishMedia"] = [];
+          for(let key in profile.irishMedia) {
+            if(profile.irishMedia[key]) totals["irishMedia"].push(key);
           }
         }
-        if (profile[0].howOftenMedia) this.howOftenMediaCount.push(profile[0].howOftenMedia);
-        if (profile[0].irishReading) {
-          for(let key in profile[0].irishReading) {
-            if(profile[0].irishReading[key]) this.irishReadingCount.push(key);
+        if(profile.howOftenMedia) {if (!totals["howOftenMedia"]) totals["howOftenMedia"] = []; totals["howOftenMedia"].push(profile.howOftenMedia);}
+        if (profile.irishReading) {
+          if (!totals["irishReading"]) totals["irishReading"] = [];
+          for(let key in profile.irishMedia) {
+            if(profile.irishReading[key]) totals["irishReading"].push(key);
           }
         }
-        if (profile[0].howOftenReading) this.howOftenReadingCount.push(profile[0].howOftenReading);
-        if (profile[0].irishWriting) {
-          for(let key in profile[0].irishWriting) {
-            if(profile[0].irishWriting[key]) this.irishWritingCount.push(key);
+        if(profile.howOftenReading) {if (!totals["howOftenReading"]) totals["howOftenReading"] = []; totals["howOftenReading"].push(profile.howOftenReading);}
+        if (profile.irishWriting) {
+          if (!totals["irishWriting"]) totals["irishWriting"] = [];
+          for(let key in profile.irishWriting) {
+            if(profile.irishWriting[key]) totals["irishWriting"].push(key);
           }
         }
-        if (profile[0].howOftenWriting) this.howOftenWritingCount.push(profile[0].howOftenWriting);
-        if (profile[0].immersionCourse) this.immersionCourseCount.push(profile[0].immersionCourse);
-        if (profile[0].motherNativeTongue) this.motherNativeTongueCount.push(profile[0].motherNativeTongue);
-        if (profile[0].nativeSpeakerStatus) this.nativeSpeakerStatusCount.push(profile[0].nativeSpeakerStatus);
-        if (profile[0].notFromIreland) this.notFromIrelandCount.push(profile[0].notFromIreland);
-        if (profile[0].otherCountryOfStudy) this.otherCountryOfStudyCount.push(profile[0].otherCountryOfStudy);
-        if (profile[0].otherLanguageProficiency) this.otherLanguageProficiencyCount.push(profile[0].otherLanguageProficiency);
-        if (profile[0].otherLanguages) this.otherLanguagesCount.push(profile[0].otherLanguages);
-        if (profile[0].otherPostgradStudies) this.otherPostgradStudiesCount.push(profile[0].otherPostgradStudies);
-        if (profile[0].otherStudies) this.otherStudiesCount.push(profile[0].otherStudies);
-        if (profile[0].postgradYear) this.postgradYearCount.push(profile[0].postgradYear);
-        if (profile[0].primaryYear) this.primaryYearCount.push(profile[0].primaryYear);
-        if (profile[0].secondaryYear) this.secondaryYearCount.push(profile[0].secondaryYear);
-        if (profile[0].speakWith) this.speakWithCount.push(profile[0].speakWith);
-        if (profile[0].speakingFrequency) this.speakingFrequencyCount.push(profile[0].speakingFrequency);
-        if (profile[0].spokenComprehensionLevel) this.spokenComprehensionLevelCount.push(profile[0].spokenComprehensionLevel);
-        if (profile[0].studentSchoolLevel) this.studentSchoolLevelCount.push(profile[0].studentSchoolLevel);
-        if (profile[0].studentSchoolType) this.studentSchoolTypeCount.push(profile[0].studentSchoolType);
-        if (profile[0].synthOpinion) this.synthOpinionCount.push(profile[0].synthOpinion);
-        if (profile[0].teacherPrimaryType) this.teacherPrimaryTypeCount.push(profile[0].teacherPrimaryType);
-        if (profile[0].teacherSecondaryType) this.teacherSecondaryTypeCount.push(profile[0].teacherSecondaryType);
-        if (profile[0].teacherSchoolTypes) {
-          for(let key in profile[0].teacherSchoolTypes) {
-            if(profile[0].teacherSchoolTypes[key]) this.teacherSchoolTypesCount.push(key);
+        if(profile.howOftenWriting) {if (!totals["howOftenWriting"]) totals["howOftenWriting"] = []; totals["howOftenWriting"].push(profile.howOftenWriting);}
+        if(profile.immersionCourse) {if (!totals["immersionCourse"]) totals["immersionCourse"] = []; totals["immersionCourse"].push(profile.immersionCourse);}
+        if(profile.motherNativeTongue) {if (!totals["motherNativeTongue"]) totals["motherNativeTongue"] = []; totals["motherNativeTongue"].push(profile.motherNativeTongue);}
+        if(profile.nativeSpeakerStatus) {if (!totals["nativeSpeakerStatus"]) totals["nativeSpeakerStatus"] = []; totals["nativeSpeakerStatus"].push(profile.nativeSpeakerStatus);}
+        if(profile.notFromIreland) {if (!totals["notFromIreland"]) totals["notFromIreland"] = []; totals["notFromIreland"].push(profile.notFromIreland);}
+        if(profile.otherCountryOfStudy) {if (!totals["otherCountryOfStudy"]) totals["otherCountryOfStudy"] = []; totals["otherCountryOfStudy"].push(profile.otherCountryOfStudy);}
+        if(profile.otherLanguageProficiency) {if (!totals["otherLanguageProficiency"]) totals["otherLanguageProficiency"] = []; totals["otherLanguageProficiency"].push(profile.otherLanguageProficiency);}
+        if(profile.otherLanguages) {if (!totals["otherLanguages"]) totals["otherLanguages"] = []; totals["otherLanguages"].push(profile.otherLanguages);}
+        if(profile.otherPostgradStudies) {if (!totals["otherPostgradStudies"]) totals["otherPostgradStudies"] = []; totals["otherPostgradStudies"].push(profile.otherPostgradStudies);}
+        if(profile.otherStudies) {if (!totals["otherStudies"]) totals["otherStudies"] = []; totals["otherStudies"].push(profile.otherStudies);}
+        if(profile.postgradYear) {if (!totals["postgradYear"]) totals["postgradYear"] = []; totals["postgradYear"].push(profile.postgradYear);}
+        if(profile.primaryYear) {if (!totals["primaryYear"]) totals["primaryYear"] = []; totals["primaryYear"].push(profile.primaryYear);}
+        if(profile.secondaryYear) {if (!totals["secondaryYear"]) totals["secondaryYear"] = []; totals["secondaryYear"].push(profile.secondaryYear);}
+        if(profile.speakWith) {if (!totals["speakWith"]) totals["speakWith"] = []; totals["speakWith"].push(profile.speakWith);}
+        if(profile.speakingFrequency) {if (!totals["speakingFrequency"]) totals["speakingFrequency"] = []; totals["speakingFrequency"].push(profile.speakingFrequency);}
+        if(profile.spokenComprehensionLevel) {if (!totals["spokenComprehensionLevel"]) totals["spokenComprehensionLevel"] = []; totals["spokenComprehensionLevel"].push(profile.spokenComprehensionLevel);}
+        if(profile.studentSchoolLevel) {if (!totals["studentSchoolLevel"]) totals["studentSchoolLevel"] = []; totals["studentSchoolLevel"].push(profile.studentSchoolLevel);}
+        if(profile.studentSchoolType) {if (!totals["studentSchoolType"]) totals["studentSchoolType"] = []; totals["studentSchoolType"].push(profile.studentSchoolType);}
+        if(profile.synthOpinion) {if (!totals["synthOpinion"]) totals["synthOpinion"] = []; totals["synthOpinion"].push(profile.synthOpinion);}
+        if(profile.teacherPrimaryType) {if (!totals["teacherPrimaryType"]) totals["teacherPrimaryType"] = []; totals["teacherPrimaryType"].push(profile.teacherPrimaryType);}
+        if(profile.teacherSecondaryType) {if (!totals["teacherSecondaryType"]) totals["teacherSecondaryType"] = []; totals["teacherSecondaryType"].push(profile.teacherSecondaryType);}
+        if (profile.teacherSchoolTypes) {
+          if (!totals["teacherSchoolTypes"]) totals["teacherSchoolTypes"] = [];
+          for(let key in profile.teacherSchoolTypes) {
+            if(profile.teacherSchoolTypes[key]) totals["teacherSchoolTypes"].push(key);
           }
         }
-        if (profile[0].thirdLevelOption) this.thirdLevelOptionCount.push(profile[0].thirdLevelOption);
-        if (profile[0].thirdLevelYear) this.thirdLevelYearCount.push(profile[0].thirdLevelYear);
-        if (profile[0].usaOption) this.usaOptionCount.push(profile[0].usaOption);
-        if (profile[0].yearsOfIrish) this.yearsOfIrishCount.push(profile[0].yearsOfIrish);
+        if(profile.thirdLevelOption) {if (!totals["thirdLevelOption"]) totals["thirdLevelOption"] = []; totals["thirdLevelOption"].push(profile.thirdLevelOption);}
+        if(profile.thirdLevelYear) {if (!totals["thirdLevelYear"]) totals["thirdLevelYear"] = []; totals["thirdLevelYear"].push(profile.thirdLevelYear);}
+        if(profile.usaOption) {if (!totals["usaOption"]) totals["usaOption"] = []; totals["usaOption"].push(profile.usaOption);}
+        if(profile.yearsOfIrish) {if (!totals["yearsOfIrish"]) totals["yearsOfIrish"] = []; totals["yearsOfIrish"].push(profile.yearsOfIrish);}
       }
     });
-    
-    this.totalAges = this.getTotals(this.ageCount);
-    this.totalCountries = this.getTotals(this.countriesCount);
-    this.totalCounties = this.getTotals(this.countiesCount);
-    this.totalDialectPreferences = this.getTotals(this.dialectPreferencesCount);
-    this.totalGender = this.getTotals(this.genderCount);
-    this.totalFatherNativeTongue = this.getTotals(this.fatherNativeTongueCount);
-    this.totalIrishMedia = this.getTotals(this.irishMediaCount);
-    this.totalHowOftenMedia = this.getTotals(this.howOftenMediaCount);
-    this.totalIrishReading = this.getTotals(this.irishReadingCount);
-    this.totalHowOftenReading = this.getTotals(this.howOftenReadingCount);
-    this.totalIrishWriting = this.getTotals(this.irishWritingCount);
-    this.totalHowOftenWriting = this.getTotals(this.howOftenWritingCount);
-    this.totalImmersionCourse = this.getTotals(this.immersionCourseCount);
-    this.totalMotherNativeTongue = this.getTotals(this.motherNativeTongueCount);
-    this.totalNativeSpeakerStatus = this.getTotals(this.nativeSpeakerStatusCount);
-    this.totalNotFromIreland = this.getTotals(this.notFromIrelandCount);
-    this.totalOtherCountryOfStudy = this.getTotals(this.otherCountryOfStudyCount);
-    this.totalOtherLanguageProficiency = this.getTotals(this.otherLanguageProficiencyCount);
-    this.totalOtherLanguages = this.getTotals(this.otherLanguagesCount);
-    this.totalOtherPostgradStudies = this.getTotals(this.otherPostgradStudiesCount);
-    this.totalOtherStudies = this.getTotals(this.otherStudiesCount);
-    this.totalPostgradYear = this.getTotals(this.postgradYearCount);
-    this.totalPrimaryYear = this.getTotals(this.primaryYearCount);
-    this.totalSecondaryYear = this.getTotals(this.secondaryYearCount);
-    this.totalSpeakWith = this.getTotals(this.speakWithCount);
-    this.totalSpeakingFrequency = this.getTotals(this.speakingFrequencyCount);
-    this.totalSpokenComprehensionLevel = this.getTotals(this.spokenComprehensionLevelCount);
-    this.totalStudentSchoolLevel = this.getTotals(this.studentSchoolLevelCount);
-    this.totalStudentSchoolType = this.getTotals(this.studentSchoolTypeCount);
-    this.totalSynthOpinion = this.getTotals(this.synthOpinionCount);
-    this.totalTeacherPrimaryType = this.getTotals(this.teacherPrimaryTypeCount);
-    this.totalTeacherSecondaryType = this.getTotals(this.teacherSecondaryTypeCount);
-    this.totalTeacherSchoolTypes = this.getTotals(this.teacherSchoolTypesCount);
-    this.totalThirdLevelOption = this.getTotals(this.thirdLevelOptionCount);
-    this.totalThirdLevelYear = this.getTotals(this.thirdLevelYearCount);
-    this.totalUsaOption = this.getTotals(this.usaOptionCount);
-    this.totalYearsOfIrish = this.getTotals(this.yearsOfIrishCount);
+    let profile = {};
+    console.log("totals: ", totals);
+    profile["age"] = this.getTotals(totals["age"]);
+    profile["country"] = this.getTotals(totals["country"]);
+    profile["county"] = this.getTotals(totals["county"]);
+    profile["dialectPreference"] = this.getTotals(totals["dialectPreference"]);
+    profile["gender"] = this.getTotals(totals["gender"]);
+    profile["fatherNativeTongue"] = this.getTotals(totals["fatherNativeTongue"]);
+    profile["irishMedia"] = this.getTotals(totals["irishMedia"]);
+    profile["howOftenMedia"] = this.getTotals(totals["howOftenMedia"]);
+    profile["irishReading"] = this.getTotals(totals["irishReading"]);
+    profile["howOftenReading"] = this.getTotals(totals["howOftenReading"]);
+    profile["irishWriting"] = this.getTotals(totals["irishWriting"]);
+    profile["howOftenWriting"] = this.getTotals(totals["howOftenWriting"]);
+    profile["immersionCourse"] = this.getTotals(totals["immersionCourse"]);
+    profile["nativeSpeakerStatus"] = this.getTotals(totals["nativeSpeakerStatus"]);
+    profile["notFromIreland"] = this.getTotals(totals["notFromIreland"]);
+    profile["otherCountryOfStudy"] = this.getTotals(totals["otherCountryOfStudy"]);
+    profile["otherLanguageProficiency"] = this.getTotals(totals["otherLanguageProficiency"]);
+    profile["otherLanguages"] = this.getTotals(totals["otherLanguages"]);
+    profile["otherPostgradStudies"] = this.getTotals(totals["otherPostgradStudies"]);
+    profile["otherStudies"] = this.getTotals(totals["otherStudies"]);
+    profile["postgradYear"] = this.getTotals(totals["postgradYear"]);
+    profile["primaryYear"] = this.getTotals(totals["primaryYear"]);
+    profile["secondaryYear"] = this.getTotals(totals["secondaryYear"]);
+    profile["speakWith"] = this.getTotals(totals["speakWith"]);
+    profile["speakingFrequency"] = this.getTotals(totals["speakingFrequency"]);
+    profile["spokenComprehensionLevel"] = this.getTotals(totals["spokenComprehensionLevel"]);
+    profile["studentSchoolLevel"] = this.getTotals(totals["studentSchoolLevel"]);
+    profile["studentSchoolType"] = this.getTotals(totals["studentSchoolType"]);
+    profile["synthOpinion"] = this.getTotals(totals["synthOpinion"]);
+    profile["teacherPrimaryType"] = this.getTotals(totals["teacherPrimaryType"]);
+    profile["teacherSecondaryType"] = this.getTotals(totals["teacherSecondaryType"]);
+    profile["teacherSchoolTypes"] = this.getTotals(totals["teacherSchoolTypes"]);
+    profile["thirdLevelOption"] = this.getTotals(totals["thirdLevelOption"]);
+    profile["usaOption"] = this.getTotals(totals["usaOption"]);
+    profile["yearsOfIrish"] = this.getTotals(totals["yearsOfIrish"]);
+
+    this.setProfileToDisplay(profile);
     return;
   }
   
@@ -246,7 +170,9 @@ export class ProfileStatsComponent implements OnInit {
   */
   getTotals(array): Object {
     let count = {};
-    array.forEach(val => count[val] = (count[val] || 0) + 1);
+    if(array) {
+      array.forEach(val => count[val] = (count[val] || 0) + 1);
+    }
     return count;
   }
   
@@ -256,10 +182,8 @@ export class ProfileStatsComponent implements OnInit {
   * is calculated up from the previous log to speed up calculations
   */
   async addNewProfileData() {
-    let profile = {};
-    this.displayAllProfiles = false;
-    
     // Previous log exists
+    this.dataLoaded = false;
     if(this.previousProfiles.length > 0) {
       console.log("Previous profile exists in DB");
       let mostRecentLog = this.previousProfiles[this.previousProfiles.length-1];
@@ -267,11 +191,49 @@ export class ProfileStatsComponent implements OnInit {
       
       new Promise( (resolve, reject) => {
         this.statsService.getProfileDataByDate(mostRecentLog.date, "empty").subscribe( async (res) => {
-          this.profiles = res;
-          await this.calculateStats();
-
+          await this.calculateStats(res);
+          
+          let profile = {};
+          
+          Object.keys(this.profileToDisplay).forEach(field => {
+            let profileValues = mostRecentLog.statsData[field];
+            console.log("Field: ", field);
+            //console.log("previous log values: ", mostRecentLog.statsData[field], ": ", profileValues);
+            //console.log(this.profileToDisplay[field]);
+            Object.entries(this.profileToDisplay[field]).forEach(([key, value]) => {
+              //console.log("Key: ", key, "\tValue: ", value);
+              if (mostRecentLog.statsData[field]) {
+                if(mostRecentLog.statsData[field][key]){
+                  let amount = (value + mostRecentLog.statsData[field][key]);
+                  profileValues[key] = amount;
+                  console.log(amount);
+                  console.log("[",key, "] ", profileValues[key], "= ", value, " + ", mostRecentLog.statsData[field][key]);
+                }
+                else {
+                  console.log("previous log does not have: ", key, " : ", value);
+                  profileValues[key] = value;
+                }
+              }
+                
+              else {
+                console.log("the key: ", key, " the value: ", value);
+                profileValues[key] = value
+              }
+                
+              /*
+              if(mostRecentLog.statsData[field][key])
+                profileValues[key] = value + mostRecentLog.statsData[field][key];
+              else 
+                profileValues[key] = value;
+                */
+            });
+            profile[field] = profileValues;
+            
+          });
+          console.log(profile);
+          /*
           let profileValues = mostRecentLog.statsData["age"];
-          Object.entries(this.totalAges).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["age"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["age"][key])
               profileValues[key] = value + mostRecentLog.statsData["age"][key];
             else 
@@ -280,7 +242,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["age"] = profileValues;
           
           profileValues = mostRecentLog.statsData["country"];
-          Object.entries(this.totalCountries).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["country"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["country"][key])
               profileValues[key] = value + mostRecentLog.statsData["country"][key];
             else 
@@ -289,7 +251,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["country"] = profileValues;
           
           profileValues = mostRecentLog.statsData["county"];
-          Object.entries(this.totalCounties).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["county"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["county"][key])
               profileValues[key] = value + mostRecentLog.statsData["county"][key];
             else 
@@ -298,7 +260,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["county"] = profileValues;
           
           profileValues = mostRecentLog.statsData["dialectPreference"];
-          Object.entries(this.totalDialectPreferences).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["dialectPreference"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["dialectPreference"][key])
               profileValues[key] = value + mostRecentLog.statsData["dialectPreference"][key];
             else 
@@ -307,7 +269,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["dialectPreference"] = profileValues;
           
           profileValues = mostRecentLog.statsData["gender"];
-          Object.entries(this.totalGender).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["gender"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["gender"][key])
               profileValues[key] = value + mostRecentLog.statsData["gender"][key];
             else 
@@ -316,7 +278,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["gender"] = profileValues;
           
           profileValues = mostRecentLog.statsData["fatherNativeTongue"];
-          Object.entries(this.totalFatherNativeTongue).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["fatherNativeTongue"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["fatherNativeTongue"][key])
               profileValues[key] = value + mostRecentLog.statsData["fatherNativeTongue"][key];
             else 
@@ -325,7 +287,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["fatherNativeTongue"] = profileValues;
           
           profileValues = mostRecentLog.statsData["irishMedia"];
-          Object.entries(this.totalIrishMedia).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["irishMedia"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["irishMedia"][key])
               profileValues[key] = value + mostRecentLog.statsData["irishMedia"][key];
             else 
@@ -334,7 +296,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["irishMedia"] = profileValues;
           
           profileValues = mostRecentLog.statsData["howOftenMedia"];
-          Object.entries(this.totalHowOftenMedia).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["howOftenMedia"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["howOftenMedia"][key])
               profileValues[key] = value + mostRecentLog.statsData["howOftenMedia"][key];
             else 
@@ -343,7 +305,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["howOftenMedia"] = profileValues;
           
           profileValues = mostRecentLog.statsData["irishReading"];
-          Object.entries(this.totalIrishReading).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["irishReading"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["irishReading"][key])
               profileValues[key] = value + mostRecentLog.statsData["irishReading"][key];
             else 
@@ -352,7 +314,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["irishReading"] = profileValues;
           
           profileValues = mostRecentLog.statsData["howOftenReading"];
-          Object.entries(this.totalHowOftenReading).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["howOftenReading"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["howOftenReading"][key])
               profileValues[key] = value + mostRecentLog.statsData["howOftenReading"][key];
             else 
@@ -361,7 +323,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["howOftenReading"] = profileValues;
           
           profileValues = mostRecentLog.statsData["irishWriting"];
-          Object.entries(this.totalIrishWriting).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["irishWriting"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["irishWriting"][key])
               profileValues[key] = value + mostRecentLog.statsData["irishWriting"][key];
             else 
@@ -370,7 +332,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["irishWriting"] = profileValues;
           
           profileValues = mostRecentLog.statsData["howOftenWriting"];
-          Object.entries(this.totalHowOftenWriting).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["howOftenWriting"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["howOftenWriting"][key])
               profileValues[key] = value + mostRecentLog.statsData["howOftenWriting"][key];
             else 
@@ -379,7 +341,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["howOftenWriting"] = profileValues;
           
           profileValues = mostRecentLog.statsData["immersionCourse"];
-          Object.entries(this.totalImmersionCourse).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["immersionCourse"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["immersionCourse"][key])
               profileValues[key] = value + mostRecentLog.statsData["immersionCourse"][key];
             else 
@@ -388,7 +350,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["immersionCourse"] = profileValues;
           
           profileValues = mostRecentLog.statsData["motherNativeTongue"];
-          Object.entries(this.totalMotherNativeTongue).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["motherNativeTongue"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["motherNativeTongue"][key])
               profileValues[key] = value + mostRecentLog.statsData["motherNativeTongue"][key];
             else 
@@ -397,7 +359,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["motherNativeTongue"] = profileValues;
           
           profileValues = mostRecentLog.statsData["nativeSpeakerStatus"];
-          Object.entries(this.totalNativeSpeakerStatus).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["nativeSpeakerStatus"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["nativeSpeakerStatus"][key])
               profileValues[key] = value + mostRecentLog.statsData["nativeSpeakerStatus"][key];
             else 
@@ -406,7 +368,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["nativeSpeakerStatus"] = profileValues;
           
           profileValues = mostRecentLog.statsData["notFromIreland"];
-          Object.entries(this.totalNotFromIreland).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["notFromIreland"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["notFromIreland"][key])
               profileValues[key] = value + mostRecentLog.statsData["notFromIreland"][key];
             else 
@@ -415,7 +377,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["notFromIreland"] = profileValues;
           
           profileValues = mostRecentLog.statsData["otherCountryOfStudy"];
-          Object.entries(this.totalOtherCountryOfStudy).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["otherCountryOfStudy"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["otherCountryOfStudy"][key])
               profileValues[key] = value + mostRecentLog.statsData["otherCountryOfStudy"][key];
             else 
@@ -424,7 +386,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["otherCountryOfStudy"] = profileValues;
           
           profileValues = mostRecentLog.statsData["otherLanguageProficiency"];
-          Object.entries(this.totalOtherLanguageProficiency).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["otherLanguageProficiency"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["otherLanguageProficiency"][key])
               profileValues[key] = value + mostRecentLog.statsData["otherLanguageProficiency"][key];
             else 
@@ -433,7 +395,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["otherLanguageProficiency"] = profileValues;
           
           profileValues = mostRecentLog.statsData["otherLanguages"];
-          Object.entries(this.totalOtherLanguages).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["otherLanguages"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["otherLanguages"][key])
               profileValues[key] = value + mostRecentLog.statsData["otherLanguages"][key];
             else 
@@ -442,7 +404,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["otherLanguages"] = profileValues;
           
           profileValues = mostRecentLog.statsData["otherPostgradStudies"];
-          Object.entries(this.totalOtherPostgradStudies).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["otherPostgradStudies"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["otherPostgradStudies"][key])
               profileValues[key] = value + mostRecentLog.statsData["otherPostgradStudies"][key];
             else 
@@ -451,7 +413,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["otherPostgradStudies"] = profileValues;
           
           profileValues = mostRecentLog.statsData["otherStudies"];
-          Object.entries(this.totalOtherStudies).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["otherStudies"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["otherStudies"][key])
               profileValues[key] = value + mostRecentLog.statsData["otherStudies"][key];
             else 
@@ -460,7 +422,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["otherStudies"] = profileValues;
           
           profileValues = mostRecentLog.statsData["postgradYear"];
-          Object.entries(this.totalPostgradYear).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["postgradYear"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["postgradYear"][key])
               profileValues[key] = value + mostRecentLog.statsData["postgradYear"][key];
             else 
@@ -469,7 +431,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["postgradYear"] = profileValues;
           
           profileValues = mostRecentLog.statsData["primaryYear"];
-          Object.entries(this.totalPrimaryYear).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["primaryYear"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["primaryYear"][key])
               profileValues[key] = value + mostRecentLog.statsData["primaryYear"][key];
             else 
@@ -478,7 +440,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["primaryYear"] = profileValues;
           
           profileValues = mostRecentLog.statsData["secondaryYear"];
-          Object.entries(this.totalSecondaryYear).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["secondaryYear"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["secondaryYear"][key])
               profileValues[key] = value + mostRecentLog.statsData["secondaryYear"][key];
             else 
@@ -487,7 +449,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["secondaryYear"] = profileValues;
           
           profileValues = mostRecentLog.statsData["speakWith"];
-          Object.entries(this.totalSpeakWith).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["speakWith"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["speakWith"][key])
               profileValues[key] = value + mostRecentLog.statsData["speakWith"][key];
             else 
@@ -496,7 +458,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["speakWith"] = profileValues;
           
           profileValues = mostRecentLog.statsData["speakingFrequency"];
-          Object.entries(this.totalSpeakingFrequency).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["speakingFrequency"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["speakingFrequency"][key])
               profileValues[key] = value + mostRecentLog.statsData["speakingFrequency"][key];
             else 
@@ -505,7 +467,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["speakingFrequency"] = profileValues;
           
           profileValues = mostRecentLog.statsData["spokenComprehensionLevel"];
-          Object.entries(this.totalSpokenComprehensionLevel).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["spokenComprehensionLevel"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["spokenComprehensionLevel"][key])
               profileValues[key] = value + mostRecentLog.statsData["spokenComprehensionLevel"][key];
             else 
@@ -514,7 +476,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["spokenComprehensionLevel"] = profileValues;
           
           profileValues = mostRecentLog.statsData["studentSchoolLevel"];
-          Object.entries(this.totalStudentSchoolLevel).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["studentSchoolLevel"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["studentSchoolLevel"][key])
               profileValues[key] = value + mostRecentLog.statsData["studentSchoolLevel"][key];
             else 
@@ -523,7 +485,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["studentSchoolLevel"] = profileValues;
           
           profileValues = mostRecentLog.statsData["studentSchoolType"];
-          Object.entries(this.totalStudentSchoolType).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["studentSchoolType"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["studentSchoolType"][key])
               profileValues[key] = value + mostRecentLog.statsData["studentSchoolType"][key];
             else 
@@ -532,7 +494,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["studentSchoolType"] = profileValues;
           
           profileValues = mostRecentLog.statsData["synthOpinion"];
-          Object.entries(this.totalSynthOpinion).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["synthOpinion"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["synthOpinion"][key])
               profileValues[key] = value + mostRecentLog.statsData["synthOpinion"][key];
             else 
@@ -541,7 +503,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["synthOpinion"] = profileValues;
           
           profileValues = mostRecentLog.statsData["teacherPrimaryType"];
-          Object.entries(this.totalTeacherPrimaryType).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["teacherPrimaryType"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["teacherPrimaryType"][key])
               profileValues[key] = value + mostRecentLog.statsData["teacherPrimaryType"][key];
             else 
@@ -550,7 +512,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["teacherPrimaryType"] = profileValues;
           
           profileValues = mostRecentLog.statsData["teacherSecondaryType"];
-          Object.entries(this.totalTeacherSecondaryType).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["teacherSecondaryType"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["teacherSecondaryType"][key])
               profileValues[key] = value + mostRecentLog.statsData["teacherSecondaryType"][key];
             else 
@@ -559,7 +521,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["teacherSecondaryType"] = profileValues;
           
           profileValues = mostRecentLog.statsData["teacherSchoolTypes"];
-          Object.entries(this.totalTeacherSchoolTypes).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["teacherSchoolTypes"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["teacherSchoolTypes"][key])
               profileValues[key] = value + mostRecentLog.statsData["teacherSchoolTypes"][key];
             else 
@@ -568,7 +530,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["teacherSchoolTypes"] = profileValues;
           
           profileValues = mostRecentLog.statsData["thirdLevelOption"];
-          Object.entries(this.totalThirdLevelOption).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["thirdLevelOption"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["thirdLevelOption"][key])
               profileValues[key] = value + mostRecentLog.statsData["thirdLevelOption"][key];
             else 
@@ -577,7 +539,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["thirdLevelOption"] = profileValues;
           
           profileValues = mostRecentLog.statsData["thirdLevelYear"];
-          Object.entries(this.totalThirdLevelYear).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["thirdLevelYear"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["thirdLevelYear"][key])
               profileValues[key] = value + mostRecentLog.statsData["thirdLevelYear"][key];
             else 
@@ -586,7 +548,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["thirdLevelYear"] = profileValues;
           
           profileValues = mostRecentLog.statsData["usaOption"];
-          Object.entries(this.totalUsaOption).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["usaOption"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["usaOption"][key])
               profileValues[key] = value + mostRecentLog.statsData["usaOption"][key];
             else 
@@ -595,7 +557,7 @@ export class ProfileStatsComponent implements OnInit {
           profile["usaOption"] = profileValues;
           
           profileValues = mostRecentLog.statsData["totalYearsOfIrish"];
-          Object.entries(this.totalYearsOfIrish).forEach(([key, value]) => {
+          Object.entries(this.profileToDisplay["totalYearsOfIrish"]).forEach(([key, value]) => {
             if(mostRecentLog.statsData["totalYearsOfIrish"][key])
               profileValues[key] = value + mostRecentLog.statsData["totalYearsOfIrish"][key];
             else 
@@ -606,7 +568,7 @@ export class ProfileStatsComponent implements OnInit {
           this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
           this.profileToDisplay = profile;
           console.log("Profile to display: ", this.profileToDisplay);
-          this.displaySelectedProfile = true;
+          */
           resolve();
         });
       }); 
@@ -614,52 +576,15 @@ export class ProfileStatsComponent implements OnInit {
     // Previous log does not exist, create one from all data
     else {
       await this.getProfileData();
-      profile = {
-        "age": this.totalAges,
-        "country": this.totalCountries,
-        "county": this.totalCounties,
-        "dialectPreference": this.totalDialectPreferences,
-        "gender": this.totalGender,
-        "fatherNativeTongue": this.totalFatherNativeTongue,
-        "irishMedia": this.totalIrishMedia,
-        "howOftenMedia": this.totalHowOftenMedia,
-        "irishReading": this.totalIrishReading,
-        "howOftenReading": this.totalHowOftenReading,
-        "irishWriting": this.totalIrishWriting,
-        "howOftenWriting": this.totalHowOftenWriting,
-        "immersionCourse": this.totalImmersionCourse,
-        "motherNativeTongue": this.totalMotherNativeTongue,
-        "nativeSpeakerStatus": this.totalNativeSpeakerStatus,
-        "notFromIreland": this.totalNotFromIreland,
-        "otherCountryOfStudy": this.totalOtherCountryOfStudy,
-        "otherLanguageProficiency": this.totalOtherLanguageProficiency,
-        "otherLanguages": this.totalOtherLanguages,
-        "otherPostgradStudies": this.totalOtherPostgradStudies,
-        "otherStudies": this.totalOtherStudies,
-        "postgradYear": this.totalPostgradYear,
-        "primaryYear": this.totalPrimaryYear,
-        "secondaryYear": this.totalSecondaryYear,
-        "speakWith": this.totalSpeakWith,
-        "speakingFrequency": this.totalSpeakingFrequency,
-        "spokenComprehensionLevel": this.totalSpokenComprehensionLevel,
-        "studentSchoolLevel": this.totalStudentSchoolLevel,
-        "studentSchoolType": this.totalStudentSchoolType,
-        "synthOpinion": this.totalSynthOpinion,
-        "teacherPrimaryType": this.totalTeacherPrimaryType,
-        "teacherSecondaryType": this.totalTeacherSecondaryType,
-        "teacherSchoolTypes": this.totalTeacherSchoolTypes,
-        "thirdLevelOption": this.totalThirdLevelOption,
-        "thirdLevelYear": this.totalThirdLevelYear,
-        "usaOption": this.totalUsaOption,
-        "totalYearsOfIrish": this.totalYearsOfIrish
-      }
-      this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], profile);
+      this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], this.profileToDisplay);
     }
+    this.dataLoaded = true;
   }
   
   /* Set the html to display specific profile calculations */
   setProfileToDisplay(profile) {
-    this.profileToDisplay = profile.statsData;
+    this.profileToDisplay = profile;
+    console.log("Profile to display: ", this.profileToDisplay);
   }
 
 }

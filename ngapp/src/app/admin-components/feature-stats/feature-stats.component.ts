@@ -68,7 +68,7 @@ export class FeatureStatsComponent implements OnInit {
     });
     this.totalFeatureCounts = this.getTotals(types);
     console.log(this.totalFeatureCounts);
-    this.sortData(this.totalFeatureCounts);
+    await this.sortData(this.totalFeatureCounts);
 
     return;
   }
@@ -111,7 +111,7 @@ export class FeatureStatsComponent implements OnInit {
     
           console.log("New feature log", feature);
           this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
-          this.sortData(feature);
+          await this.sortData(feature);
           resolve();
         });
       }); 
@@ -137,12 +137,12 @@ export class FeatureStatsComponent implements OnInit {
       }
       console.log(feature);
       this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
-      this.sortData(feature);
+      await this.sortData(feature);
     }
     this.ngOnInit();
   }
   
-  sortData(data) {
+  async sortData(data) {
     this.sortedFeatureCounts = [];
     for (var x in data ) {
         this.sortedFeatureCounts.push([x, data[x]]);
@@ -151,8 +151,7 @@ export class FeatureStatsComponent implements OnInit {
     this.sortedFeatureCounts.sort(function(a, b) {
         return b[1] - a[1];
     });
-    console.log(this.sortedFeatureCounts)
-    
+    console.log(this.sortedFeatureCounts);
   }
 
 }
