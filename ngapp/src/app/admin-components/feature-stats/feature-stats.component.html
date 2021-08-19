@@ -18,7 +18,7 @@
       <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
-    <div> (No date range entered = retrieve all data) </div><br>
+    <div> (No date range entered retrieves all data from the DB) </div><br>
     <div class="submitButton" (click)="getFeatureData()">Get Data</div>
   </div>
   <!-- List of previous feature logs -->
