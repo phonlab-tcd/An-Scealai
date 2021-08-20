@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
   ViewChild,
   Renderer2 } from '@angular/core';
-import { StoryService } from '../../story.service';
+import { LANGUAGE, StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
   ActivatedRoute,
@@ -19,7 +19,6 @@ import { HighlightTag, } from 'angular-text-input-highlight';
 import { Subject } from 'rxjs';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
-import { GrammarService, GrammarTag, TagSet } from '../../grammar.service';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
@@ -48,7 +47,6 @@ export class DashboardComponent implements OnInit {
   audioSource: SafeUrl;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
-  chosenTag: GrammarTag;
   modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
@@ -56,7 +54,6 @@ export class DashboardComponent implements OnInit {
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
 
-  gramadoirResponse: string;
   
   // OPTIONS (to show or not to show)
   showOptions: boolean = true;
@@ -108,7 +105,6 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
-    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
@@ -119,13 +115,6 @@ export class DashboardComponent implements OnInit {
   * and the current story being edited given its id from url 
   */
   ngOnInit() {
-    // TEST CORS
-    // this.storyService
-    //     .gramadoirDirect('dia dhuit mo cara')
-    //     .subscribe((res) => {
-    //       this.gramadoirResponse = res;
-    //     });
-
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
@@ -182,9 +171,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* return the story id using the routing parameters
-*/
+  /*
+  * return the story id using the routing parameters
+  */
   getStoryId(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
@@ -316,7 +305,7 @@ export class DashboardComponent implements OnInit {
     this.statsService
         .updateGrammarErrors(
           userDetails._id,
-          this.filteredTags,
+          this.grammarChecker.filteredTags,
           new Date())
         .subscribe();
   }
