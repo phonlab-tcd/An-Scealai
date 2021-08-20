@@ -138,21 +138,6 @@ export class StoryService {
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
 
-  gramadoirDirect(text: string): Observable<any> {
-    return this
-      .http
-      // .post('https://cadhan.com/api/gramadoir/1.0', {
-      .post('https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl', {
-         observe: 'body',
-         headers: {
-           'Content-Type': 'application/x-www-form-urlencoded',
-         },
-         body: {
-           teacs: 'mistake',
-           teanga: 'ga',
-         },
-       });
-  }
 
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});

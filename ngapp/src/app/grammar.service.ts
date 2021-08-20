@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Observer,  of } from 'rxjs';
 import { StoryService } from './story.service';
+import { TranslationService } from 'src/app/translation.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { catchError, skip, map } from 'rxjs/operators';
-import { Story } from './story';
+import { Story } from 'src/app/story';
+import { EngagementService } from 'src/app/engagement.service';
+import { EventType } from 'src/app/event';
 import config from 'src/abairconfig.json';
 
 type updateStoryAndCheckGrammarResponse = {
@@ -17,10 +20,31 @@ type updateStoryAndCheckGrammarResponse = {
   englishGramadoirError?: Error;
 };
 
+// "[{\"msg\":\"Non-standard form of /duit/\",\"context\":\"Dia dhuit\",\"errortext\":\"dhuit\",\"errorlength\":\"5\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"tox\":\"8\",\"toy\":\"0\",\"fromx\":\"4\",\"fromy\":\"0\",\"contextoffset\":\"4\"}]",
+type gramadoirTag = {
+  fromy: string;
+  fromx: string;
+  toy: string;
+  tox: string;
+  ruleId: string;
+  msg: string;
+  contex: string;
+  contextoffset: string;
+  errortext: string;
+  errorlength: string;
+};
+
+export enum LANGUAGE {
+  ENGLISH = 0,
+  IRISH = 1,
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class GrammarService {
+
+  gramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
 
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
@@ -30,6 +54,8 @@ export class GrammarService {
   constructor(
     private storyService: StoryService,
     private http: HttpClient,
+    private ts: TranslationService,
+    private engagement: EngagementService,
   ) { }
 
   /*
@@ -48,65 +74,59 @@ export class GrammarService {
       });
   }
 
-  /*j
-   *{
-    "savedStory": false,
-    "storyWithIdNotFound": "000000000000000000000000",
-    "grammarTagsEnglish": "[{\"msg\":\"Non-standard form of /duit/\",\"context\":\"Dia dhuit\",\"errortext\":\"dhuit\",\"errorlength\":\"5\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"tox\":\"8\",\"toy\":\"0\",\"fromx\":\"4\",\"fromy\":\"0\",\"contextoffset\":\"4\"}]",
-    "grammarTagsIrish": "[{\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"fromy\":\"0\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"fromx\":\"4\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"context\":\"Dia dhuit\",\"errorlength\":\"5\",\"tox\":\"8\"}]"
-}
+  getGramadoirTagsEnglishAndIrishAsHighlightTags(checkedText: string, story: Story):
+    { controller: AbortController; tags: Promise<HighlightTag[]> }{
+      this.engagement.addEventForLoggedInUser(EventType['GRAMMAR-CHECK-STORY'], story);
+      const controller = new AbortController();
+      const englishPromise =
+        this.gramadoirDirect(
+          checkedText,
+          'en',
+          controller.signal);
 
-request body:
-{
-    "text": "Dia dhuit",
-    "htmlText": "<h1>Dia dhuit</h1>",
-    "_id": "000000000000000000000000",
-    "lastUpdated": "2021-08-10T16:03:44.967Z"
- x}
-{
-    "savedStory": false,
-    "grammarTagsEnglish": "[{\"errorlength\":\"5\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"fromx\":\"4\",\"tox\":\"8\",\"fromy\":\"0\",\"msg\":\"Non-standard form of /duit/\",\"contextoffset\":\"4\",\"errortext\":\"dhuit\",\"context\":\"Dia dhuit\"}]",
-    "grammarTagsIrish": "[{\"tox\":\"8\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"context\":\"Dia dhuit\",\"fromy\":\"0\",\"errorlength\":\"5\",\"fromx\":\"4\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"toy\":\"0\"}]"
-}
-  */
-  updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
-    savedStory: any,
-    tags: HighlightTag[],
-  }> {
-    console.dir(story);
-    return this.http.post(
-      config.baseurl + 'story/updateStoryAndCheckGrammar',
-      story,
-      {
-        headers: {
-        'Content-Type': 'application/json',
-        }
-      }).pipe(
-      map((res: {
-        savedStory: any;
-        grammarTagsIrish: any;
-        grammarTagsEnglish: any;
-      }) => {
-        console.log('GRAMADOIR RESPONSE:');
-        console.dir(res);
-        const tags: HighlightTag[] =
-          this.collateEnglishAndIrishGramadoirResponses(res.grammarTagsEnglish, res.grammarTagsIrish);
+      const irishPromise =
+        this.gramadoirDirect(
+          checkedText,
+          'ga',
+          controller.signal);
 
-        let text = 'story was not saved correctly';
-        if (res.savedStory) {
-          text = res.savedStory.text as string;
-        }
-        return {
-          savedStory: res.savedStory,
-          tags
-        };
-      }),
-    );
+      return {
+        controller,
+        tags: this.collateEnglishAndIrishGramadoirResponses(englishPromise, irishPromise),
+      };
   }
 
-  collateEnglishAndIrishGramadoirResponses(english: string, irish: string): HighlightTag[] {
-    const englishTags = JSON.parse(english);
-    const irishTags = JSON.parse(irish);
+  async collateEnglishAndIrishGramadoirResponses(
+    englishP: Promise<gramadoirTag[]>,
+    irishP: Promise<gramadoirTag[]>): Promise<HighlightTag[]> {
+
+    let englishTags: gramadoirTag[];
+    let irishTags: gramadoirTag[];
+
+    let letsQuit = false;
+    try {
+      irishTags = await irishP;
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        letsQuit = true;
+      } else {
+        throw err;
+      }
+    }
+
+    try {
+      englishTags = await englishP;
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        letsQuit = true;
+      } else {
+        throw err;
+      }
+    }
+
+    if (letsQuit) {
+      return [];
+    }
     const highlightTags: HighlightTag[] = [];
 
     englishTags.forEach((tag, index) => {
@@ -181,6 +201,37 @@ request body:
     });
   }
 
+  gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 'ga') {
+    return `teacs=${encodeURIComponent(input)}&teanga=${language}`;
+  }
+
+  async gramadoirDirect(text: string, language: 'en' | 'ga', signal: AbortSignal): Promise<gramadoirTag[]> {
+    const res = await fetch(this.gramadoirUrl, {
+         headers: {
+           'Content-Type': 'application/x-www-form-urlencoded',
+         },
+         method: 'POST',
+         signal,
+         body: this.gramadoirXWwwFormUrlencodedRequestData(text.replace(/\n/g, ' '), language)
+       });
+
+    if (res.ok) {
+      return res.json();
+    }
+
+    throw new Error(res.statusText);
+  }
+
+  gramadoirDirectObservable(input: string, language: 'en' | 'ga'): Observable<any> {
+    return this.http.post(
+        this.gramadoirUrl,
+        this.gramadoirXWwwFormUrlencodedRequestData(input, language),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }
+        });
+  }
   async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
     const story = await this.storyService.getStory(id).toPromise();
     return this.getVowelAgreementTags(story.text);
@@ -317,14 +368,6 @@ request body:
 
 }
 
-/*
-** **************** Tag Set Class **************************
-
-*/
-export class TagSet {
-  gramadoirTags: HighlightTag[];
-  vowelTags: HighlightTag[];
-}
 
 /*
 * **************** Grammar Tag Class ************************

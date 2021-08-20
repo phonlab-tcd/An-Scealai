@@ -6,6 +6,10 @@
   color: #999999;
 }
 
+.invisibleBackground {
+  background-color: rgba(0,0,0,0);
+}
+
 .page {
   height: 94%;
 }

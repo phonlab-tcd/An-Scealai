@@ -336,15 +336,6 @@ background-color: lightblue;
 }
 
 
-.grammarToolbar {
-    background-color: #70a87f;
-    color: white;
-    display: flex;
-    padding-left: 20px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-}
 
 .selectErrorCheckbox {
   display: flex;

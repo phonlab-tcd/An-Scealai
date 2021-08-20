@@ -1,7 +1,4 @@
 <!-- Display the written story along with edit options -->
-<div>
-  {{gramadoirResponse}}
-</div>
 <div class="page">
   <div class="bookContainer">
     <div class="{{modalClass}} modalContainer">
@@ -204,7 +201,6 @@
       <app-grammar-checker
           #grammarChecker
           *ngIf="story.text"
-          [storySaved]=storySaved
           [classroomId]="classroomId"
           [story]="story"
           >
