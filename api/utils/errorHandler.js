@@ -1,4 +1,7 @@
-const {APIError, API500Error} = require('./APIError');
+const {
+  API404Error,
+  APIError,
+  API500Error} = require('./APIError');
 const logger = require('../logger');
 
 /**
@@ -9,10 +12,13 @@ const logger = require('../logger');
  * handling rules for each type of error.
  */
 function errorHandler(err, req, res, next) {
-  logger.alert({errorHandler: {err, req, res}});
+  logger.alert({errorHandler: {err}});
 
   if (!(err instanceof APIError)) {
       return res.send(err);
+  }
+  if (err instanceof API404Error ) {
+    return res.status(404).send(err);
   }
   if (err instanceof API500Error) {
       // Notify us
