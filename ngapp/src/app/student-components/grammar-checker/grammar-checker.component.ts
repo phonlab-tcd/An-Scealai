@@ -143,7 +143,7 @@ export class GrammarCheckerComponent implements OnInit {
   }
 
   putFocusOnGrammarTextArea() {
-    if (this.grammarCheckerTetxtArea) {
+    if (this.grammarCheckerTextArea) {
       this.grammarCheckerTextArea.nativeElement.scrollTo(0, 0);
       this.grammarCheckerTextArea.nativeElement.focus();
       this.putFocusOnGrammarTextArea = this.putFocusOnGrammarTextAreaAlt;
