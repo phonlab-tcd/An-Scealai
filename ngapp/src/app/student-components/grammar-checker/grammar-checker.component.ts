@@ -272,7 +272,7 @@ export class GrammarCheckerComponent implements OnInit {
   }
 
   dontStartHighlightOnASpace(entry: HighlightTag[]): HighlightTag[]{
-    const matchArray = this.story.text.slice(entry[0].indices.start).match(/^\s+/);
+    const matchArray = this.checkedText.slice(entry[0].indices.start).match(/^\s+/);
     const match = (matchArray ? matchArray[0] : '');
     entry[0].indices.start = entry[0].indices.start + match.length;
     return entry;

@@ -238,15 +238,15 @@ export class DashboardComponent implements OnInit {
 
   // Set story.text to most recent version of editor text and then switch to storyEditedAlt
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
-  storyEdited(text) {
-    this.story.text = text;
+  storyEdited(quillStory) {
+    this.story.text = quillStory.text;
 
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
-  storyEditedAlt(text) {
-    this.story.text = text;
+  storyEditedAlt(quillStory) {
+    this.story.text = quillStory.text;
     this.storySaved = false;
   }
 
