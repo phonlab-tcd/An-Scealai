@@ -174,7 +174,7 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
 storyRoutes
     .route('/downloadStory/:id/:format')
     .get(async (req, res) => {
-      try{
+      try {
         logger.info({
           endpoint: '/story/downloadStory',
           params: req.params,
@@ -203,7 +203,7 @@ storyRoutes
         });
 
         // Pandoc example
-        const pandocErr  =
+        const pandocErr =
           await pandoc(
               story.htmlText, // src
               ['--from', 'html', '-o', filename]); // args
@@ -214,7 +214,6 @@ storyRoutes
           });
         }
 
-
         // SEND THE FILE CREATED WITH PANDOC
         res.sendFile(filename, (sendFileErr) => {
           if (sendFileErr) {
@@ -224,10 +223,9 @@ storyRoutes
               error: sendFileErr,
             });
           }
-
           // DELETE THE FILE AFTER IT HAS BEEN SENT
           fs.unlink(filename, (err) => {
-            if(err) {
+            if (err) {
               logger.error({
                 endpoint: '/story/downloadStory',
                 while: 'trying to delete file:' + filename,
@@ -236,7 +234,6 @@ storyRoutes
             }
           });
         });
-
       } catch (error) {
         logger.error(error);
         return res.json(error);
