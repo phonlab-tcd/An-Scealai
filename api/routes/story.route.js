@@ -7,6 +7,7 @@ const querystring = require('querystring');
 const request = require('request');
 const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
+const abairBaseUrl = require('../abair_base_url');
 
 // ENDPOINT HANDLERS
 const getStoryById =
