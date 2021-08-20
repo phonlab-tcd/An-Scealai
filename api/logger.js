@@ -19,8 +19,7 @@ const combinedFile = path.join(__dirname, 'logs/combined.log');
 const consoleFormat = winston.format.printf(
     ({level, message, timestamp, ...metadata}) => {
       // TODO log the rest parameters in metadata
-      const stringMessage = JSON.stringify(message);
-      const msg = `${timestamp} [${level}] : ${stringMessage}`;
+      const msg = `${timestamp} [${level}] : ${JSON.stringify(message)}`;
       return msg;
     });
 
