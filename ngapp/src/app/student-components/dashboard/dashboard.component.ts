@@ -1,11 +1,10 @@
 import {
   Component,
   OnInit,
-  HostListener,
   ViewEncapsulation,
   ViewChild,
   Renderer2 } from '@angular/core';
-import { LANGUAGE, StoryService } from '../../story.service';
+import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
   ActivatedRoute,

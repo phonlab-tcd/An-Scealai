@@ -94,7 +94,6 @@ export class GrammarCheckerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.grammarCheckerTextArea = document.getElementById('grammarCheckerTextArea');
     if (this.story) {
       this.runGramadoir();
     }
