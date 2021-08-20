@@ -60,6 +60,39 @@
           {{ts.l.edit_title_or_dialect}}
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
+        
+        <!-- DOWNLOAD -->
+        <div 
+            *ngIf="showOptions"
+            style="display: flex;">
+          <a 
+            style="text-decoration: none;"
+            class="optionsBtn optionsPopupBtn"
+            target="_blank"
+            href="{{downloadStoryUrl()}}">
+            Download
+            <i class="fas fa-download optionsBtnIcon"></i>
+          </a>
+          <select 
+               #downloadFormatOption
+               style="border-end-end-radius: 0; background: rgba(0,0,0,0);"
+               [(ngModel)]="downloadStoryFormat"
+               (click)="dontToggle=true">
+            <option>.pdf</option>
+            <option>.docx</option>
+            <option>.odt</option>
+            <option>.pptx</option>
+            <option>.md</option>
+            <option>.txt</option>
+            <option>.html</option>
+            <option>.json</option>
+            <!--
+              <option>epub</option>
+              <option>gfm</option>
+            -->
+            <option>.latex</option>
+          </select>
+        </div>
 
         <!-- FEEDBACK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
@@ -111,7 +144,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)">
         </quill-editor>
          
       </div>

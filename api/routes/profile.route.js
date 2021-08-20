@@ -34,11 +34,11 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
           res.status(400).send("An error occurred while trying to find this profile");
         }
         if(!profile) {
-          console.log(profile)
+          //console.log(profile)
           res.status(404).send("Profile with given ID not found");  
         }
         else {
-          console.log(profile)
+          //console.log(profile)
           res.status(200).json({"profile" : profile});
         }
         

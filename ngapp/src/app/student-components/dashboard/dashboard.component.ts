@@ -23,6 +23,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import config from 'src/abairconfig.json';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import { Quill } from 'quill';
 
@@ -62,7 +63,10 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
-  
+  pdf: any;
+
+  downloadStoryFormat = '.pdf';
+
   dialects = [
     {
       code : "connemara",
@@ -209,43 +213,53 @@ export class DashboardComponent implements OnInit {
     this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
-/*
-* Get audio feedback with function call 
-* Set feedback status to seen by student and remove story from not yet seen array
-* Add logged event for viewed feedback 
-*/
+  /*
+  * Get audio feedback with function call
+  * Set feedback status to seen by student
+  * and remove story from not yet seen array
+  * Add logged event for viewed feedback.
+  */
   getFeedback() {
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if (this.story.feedback.text != "") {
+    if (this.story.feedback.text !== '') {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser(EventType['VIEW-FEEDBACK'], this.story);
+      this.engagement
+          .addEventForLoggedInUser(
+            EventType['VIEW-FEEDBACK'],
+            this.story);
     });
   }
 
-/*
-* set the url for the audio source feedback 
-*/
+  /*
+  * set the url for the audio source feedback
+  */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
-  // Set story saved to false
-  storyEdited(quill) {
-    this.story.text = quill.text;
-    this.storySaved = false;
-    if (this.grammarChecker.shouldRunGramadoir()) {
-      this.saveStory();
-    }
+  // Set story.text to most recent version
+  // of editor text and then switch to storyEditedAlt
+  // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
+  storyEdited(text) {
+    this.story.text = text;
+
+    this.storyEdited = this.storyEditedAlt;
   }
-  
+
+  // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
+  storyEditedAlt(text) {
+    this.story.text = text;
+    this.storySaved = false;
+  }
+
   // Get word count of story text
   getWordCount(text) {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
@@ -257,6 +271,30 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.wordCount = this.words.length;
+  }
+  
+  //download story
+  downloadStory() {
+    console.log(this.story._id);
+    this.storyService.downloadStory(this.story._id).subscribe(res => {
+      console.log(res);
+      
+      /*
+      var downloadLink = document.createElement('a')
+      downloadLink.target = '_blank'
+      downloadLink.download = 'new_pdf_haha.pdf'
+      var blob = new Blob([res], { type: 'application/pdf' })
+      var URL = window.URL || window.webkitURL
+      var downloadUrl = URL.createObjectURL(blob)
+      downloadLink.href = downloadUrl
+      document.body.append(downloadLink) // THIS LINE ISN'T NECESSARY
+      downloadLink.click()
+      document.body.removeChild(downloadLink);  // THIS LINE ISN'T NECESSARY
+      URL.revokeObjectURL(downloadUrl);
+      
+      //window.open(URL.createObjectURL(res.output("blob")));
+      */
+    })
   }
 
   // set feedback window to false
@@ -339,13 +377,20 @@ export class DashboardComponent implements OnInit {
     this.dontToggle = false;
   }
 
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
+  }
+
   handleGrammarCheckerOptionClick() {
     this.dontToggle = true;
     this.defaultMode();
     this.grammarChecker.hideEntireGrammarChecker =
       !this.grammarChecker.hideEntireGrammarChecker;
   }
-  
+
   storySavedByGrammarChecker(story: Story) {
     if (this.story.htmlText === story.htmlText) {
       this.storySaved = true;
