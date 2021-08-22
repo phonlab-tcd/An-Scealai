@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
-  
+
   dialects = [
     {
       code : "connemara",
@@ -246,15 +246,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Set story saved to false
-  storyEdited(quill) {
-    this.story.text = quill.text;
-    this.storySaved = false;
-    if (this.grammarChecker.shouldRunGramadoir()) {
-      this.saveStory();
-    }
+  // Set story.text to most recent version of editor text and then switch to storyEditedAlt
+  // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
+  storyEdited(text) {
+    this.story.text = text;
+
+    this.storyEdited = this.storyEditedAlt;
   }
-  
+
+  // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
+  storyEditedAlt(text) {
+    this.story.text = text;
+    this.storySaved = false;
+  }
+
   // Get word count of story text
   getWordCount(text) {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
