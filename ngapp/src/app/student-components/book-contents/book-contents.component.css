@@ -26,7 +26,7 @@
     height: 390px;
     width: 80%;
     margin-left: 10%;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    background: url("src/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
