@@ -44,8 +44,8 @@ export class BookContentsComponent implements OnInit {
     // get stories for the user
     this.storyService
     .getStoriesForLoggedInUser()
-    .subscribe((data: Story[]) => {
-      this.stories = data;
+    .subscribe((data) => {
+      this.stories = data.map(storyData => new Story().fromJSON(storyData));
       this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
     });
     const userDetails = this.auth.getUserDetails();

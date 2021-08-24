@@ -55,12 +55,12 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
-  getStoriesForLoggedInUser() {
+  getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return new Observable<Story[]>();
 
     const author = userDetails.username;
-    return this.http.get(this.baseUrl+author);
+    return this.http.get<Story[]>(this.baseUrl+author);
   }
 
   updateStory(data, id) : Observable<any> {
