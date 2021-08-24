@@ -31,8 +31,8 @@ export class FeatureStatsComponent implements OnInit {
   /* See if previous feature data logs are stored in the database */
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("FEATURE-STATS").subscribe( (res) => {
-      this.previousFeatures = res;
-      this.previousFeatures = this.previousFeatures.sort((a, b) => b.date - a.date);
+      this.previousFeatures = res.sort((a, b) => b.date - a.date);
+      //this.previousFeatures = this.previousFeatures.sort((a, b) => b.date - a.date);
     });
   }
   
@@ -79,7 +79,8 @@ export class FeatureStatsComponent implements OnInit {
   */
   getTotals(array): Object {
     let count = {};
-    array.forEach(val => count[val] = (count[val] || 0) + 1);
+    if(array)
+      array.forEach(val => count[val] = (count[val] || 0) + 1);
     return count;
   }
   

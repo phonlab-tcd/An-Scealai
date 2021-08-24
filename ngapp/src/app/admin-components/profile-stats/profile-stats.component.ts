@@ -65,6 +65,7 @@ export class ProfileStatsComponent implements OnInit {
   */
   async calculateStats(profiles) {
     let totals = {};
+    console.log("PROFILES TO CALCULATE: ", profiles);
     profiles.forEach( profile => {
       profile = profile[0];
       if (profile !== undefined) {
@@ -176,22 +177,22 @@ export class ProfileStatsComponent implements OnInit {
   */
   async getTotals(array): Promise<Object> {
     let count = {};
-    if(array) {
+    if(array)
       array.forEach(val => count[val] = (count[val] || 0) + 1);
-    }
     return count;
   }
   
   /*
   * Create a log of total profile data from a certain period of time and save it to the engagement collection of the DB 
   * If no log yet exists, the first one is made of all profile data available.  If a previous log does exist, the new data 
-  * is calculated up from the previous log to speed up calculations
+  * is calculated from the previous log to speed up calculations
   */
   async addNewProfileData() {
     this.dataLoaded = false;
     // Previous log exists
     if(this.previousLogs.length > 0) {
       let mostRecentLog = this.previousLogs[this.previousLogs.length-1];
+      console.log(this.previousLogs);
       console.log("Last log: ", mostRecentLog);
       
       new Promise( (resolve, reject) => {
@@ -217,25 +218,27 @@ export class ProfileStatsComponent implements OnInit {
               if (mostRecentLog.statsData[field]) {
                 //last log contains the given field and key
                 if(mostRecentLog.statsData[field][key]){
-                  console.log("[", field, "][", key, "]", (value + mostRecentLog.statsData[field][key]), " = ", value, " + ", mostRecentLog.statsData[field][key]);
+                  //console.log("[", field, "][", key, "]", (value + mostRecentLog.statsData[field][key]), " = ", value, " + ", mostRecentLog.statsData[field][key]);
                   fieldValues[key] = (value + mostRecentLog.statsData[field][key]);
                 }
                 // last log does not have the key for given field
                 else {
-                  console.log("Last log did not have the key [", key, "] for [", field, "]");
+                  //console.log("Last log did not have the key [", key, "] for [", field, "]");
                   fieldValues[key] = value;
                 }
               }
               //last log does not have the given field
               else {
-                console.log("Last log did not have the field [", field, "]");
+                //console.log("Last log did not have the field [", field, "]");
                 fieldValues[key] = value;
               }
             });
             dataToLog[field] = fieldValues;
           });
           console.log("Profile to log: ", dataToLog);
+          this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], dataToLog);
           this.setDataToDisplay(dataToLog);
+          this.ngOnInit();
           resolve();
         });
       }); 
@@ -250,9 +253,14 @@ export class ProfileStatsComponent implements OnInit {
   }
   
   /* Set the html to display specific profile calculations */
-  setDataToDisplay(profile) {
-    this.dataToDisplay = profile;
+  setDataToDisplay(data) {
+    this.dataLoaded = false;
+    this.dataToDisplay = {};
+    this.dataToDisplay = data;
+    console.log("Data sent to function: ", data);
     console.log("Profile to display: ", this.dataToDisplay);
+    console.log("previous profiles: ", this.previousLogs.length);
+    this.dataLoaded = true;
   }
 
 }
