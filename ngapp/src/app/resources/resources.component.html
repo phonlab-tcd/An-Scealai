@@ -4,6 +4,7 @@
   </div>
   <div class="content">
     <div class="headerTitle"> {{ts.l.story_examples}} </div><br>
+    <div class="headerTitle"> {{ts.l.story_bank_growing}} </div><br><br>
     <div style="font-size: 15pt;"> {{ts.l.higher_level}} </div>
     <!-- Gweedore (Ulster) stories-->
     <div class="dialectTitle"> {{ts.l.gweedore}} </div>
@@ -136,8 +137,118 @@
       </mat-expansion-panel>
     </mat-accordion>
     
-    <!-- Chonamara stories-->
-    <!-- <div class="dialectTitle"> {{ts.l.chonamara}} </div>
-      <div> Coming Soon! </div> -->
+    <!-- Leaving Cert stories-->
+    <div class="dialectTitle"> {{ts.l.leaving_cert_stories}} </div>
+    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> Sign in to view more stories! </div>
+    <mat-accordion multi *ngIf="auth.isLoggedIn()">
+      <!-- Oisín i dTír na nÓg  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Oisín i dTír na nÓg
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.mar_a_baisteadh_fionn1}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn2}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn3}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn4}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/oisin_i_dtir_na_nogvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Dís -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Fairceallach Fhinn Mhic Chumhaill"> 
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+             Dís
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.fairceallach1}} </div> <br>
+          <div> {{ts.l.fairceallach2}} </div> <br>
+          <div> {{ts.l.fairceallach3}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/disvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Gnáthrud -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            An Gnáthrud
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/an-gnathrudvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Hurlamboc -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Hurlamboc
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/hurlamabocvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Seal i Neipeal -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Seal i Neipeal
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
+          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/seal-i-neipealvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    <!-- Other stories-->
+    <div class="dialectTitle"> {{ts.l.other_stories}} </div>
+    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> Sign in to view more stories! </div>
+    <mat-accordion multi *ngIf="auth.isLoggedIn()">
+      <!-- An Prionsa Beag  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            An Prionsa Beag
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.mar_a_baisteadh_fionn1}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn2}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn3}} </div> <br>
+          <div> {{ts.l.mar_a_baisteadh_fionn4}} </div>
+        <mat-action-row>
+          <a class="viewStoryBtn" href="https://abair.ie/lara/an-prionsa-beagvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
   </div>
 </div>
