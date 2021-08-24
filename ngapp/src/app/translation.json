@@ -451,9 +451,12 @@
       "abair_pic_description" : "The team at the Phonetics and Speech Lab., School of Linguistic, Speech and Communication Sciences, TCD",
 
       "story_examples" : "Story Examples - Irish texts available in LARA form",
+      "story_bank_growing": "The story bank is growing. Create an account with An Scéalaí to find out more stories",
       "higher_level" : "Higher Level",
       "gweedore" : "Voice of Gweedore",
       "mumhan" : "Voice of Mumhan",
+      "leaving_cert_stories": "Leaving Certificate Common Prose",
+      "other_stories": "Other Stories",
       "chonamara" : "Voice of Chonamara",
       "view_story" : "View Story",
 
@@ -1016,9 +1019,12 @@
       "abair_pic_description" : "An tSaotharlann Foghraíochta agus Urlabhra, Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide",
 
       "story_examples" : "Samplaí - scéalta Gaeilge i bhfoirm LARA",
+      "story_bank_growing": "Tá an banc scéalta ag fás. Cruthaigh cuntas le An Scéalaí le teacht ar tuilleadh scéalta",
       "higher_level" : "Ardleibhéal",
       "gweedore" : "Guth Ghaoth Dobhair",
       "mumhan" : "Guth na Mumhan",
+      "leaving_cert_stories": "Prós Comónta Ainmnithe don Ardteistiméireacht",
+      "other_stories": "Scéalta Eile",
       "chonamara" : "Guth Chonamara",
       "view_story" : "Léigh an Scéal",
 
