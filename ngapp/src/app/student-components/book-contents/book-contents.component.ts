@@ -29,6 +29,7 @@ export class BookContentsComponent implements OnInit {
   unreadMessages: number = 0;
   isFromAmerica: boolean = false;
   isEnrolled: boolean = false;
+  searchText: string = '';
 
   constructor(private storyService: StoryService, private auth: AuthenticationService,
     private engagement: EngagementService, public ts : TranslationService, private router: Router,

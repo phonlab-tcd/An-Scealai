@@ -21,8 +21,12 @@ export class FilterPipe implements PipeTransform {
     }
     searchText = searchText.toLocaleLowerCase();
 
+    // used in admin find-user component and student book-contents component
+    // it.username for admin, it.title for student
     return items.filter(it => {
-      return it.username.toLocaleLowerCase().includes(searchText);
+      if(it.username)
+        return it.username.toLocaleLowerCase().includes(searchText);
+      return it.title.toLocaleLowerCase().includes(searchText) || it.text.toLocaleLowerCase().includes(searchText);
     });
   }
 }
