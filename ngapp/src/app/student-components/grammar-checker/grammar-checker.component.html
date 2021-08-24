@@ -72,7 +72,6 @@
     </div>
 
 
-
     <div mwlTextInputHighlightContainer
          >
       <textarea
@@ -86,6 +85,13 @@
 
       <!-- an gramadoir -->
       <div *ngIf="isGramadoirMode()">
+        <button 
+          (click)="syncrhoniseGramadoir()">
+          {{  ts.l['synchronise'] ?
+              ts.l['synchronise'] :
+              'Synchronise'
+              }}
+        </button>
         <mwl-text-input-highlight
             [tags]="getSelectedTags()"
             [textInputElement]="inputTextarea"
@@ -105,6 +111,13 @@
       </div>
       <!-- vowel Agreement -->
       <div *ngIf="isVowelMode()">
+        <button
+            (click)="synchroniseVowelAgreementChecker()">
+          {{  ts.l['synchronise'] ?
+              ts.l['synchronise'] :
+              'Synchronise'
+              }}
+        </button>
         <mwl-text-input-highlight
             [tags]="tagSets[FILTER.VOWEL]"
             [textInputElement]="inputTextarea"

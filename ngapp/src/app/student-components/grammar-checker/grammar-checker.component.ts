@@ -360,4 +360,12 @@ export class GrammarCheckerComponent implements OnInit {
   isVowelMode() {
     return this.selectedFilter === this.FILTER.VOWEL;
   }
+  
+  syncroniseGramadoir() {
+    return;
+  }
+
+  synchroniseVowelAgreementChecker(){
+    return;  
+  }
 }
