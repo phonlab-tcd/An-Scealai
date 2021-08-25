@@ -14,11 +14,11 @@
   </div>
 
   <div class="grammarToolbar">
-    <div>
-      <i class="fa fa-redo-alt refreshGrammar"
-         (click)="synchroniseGramadoir(); synchroniseVowelAgreementChecker();">
-      </i>
-    </div>
+      <div>
+        <i class="fa fa-redo-alt refreshGrammar"
+           (click)="synchroniseGramadoir(); synchroniseVowelAgreementChecker();">
+        </i>
+      </div>
     <div class="selectGrammarFilter">
       <button
           (click)="onChangeGrammarFilter(this.FILTER.GRAMADOIR)"
@@ -153,9 +153,10 @@
         <button
             style="height: 40px;"
             (click)="synchroniseVowelAgreementChecker()">
-          {{  ts.l['synchronise'] ?
-              ts.l['synchronise'] :
-              'Synchronise vowel agreement tags'
+              {{ 
+                ts.l['synchronise'] ?
+                ts.l['synchronise'] :
+                'Synchronise vowel agreement tags'
               }}
         </button>
       </div>
