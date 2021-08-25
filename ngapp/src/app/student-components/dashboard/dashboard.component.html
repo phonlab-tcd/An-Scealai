@@ -111,7 +111,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text); this.grammarChecker?.dbg()">
+            (onContentChanged)="storyEdited($event); getWordCount($event.text); this.grammarChecker?.debounceGramadoir()">
         </quill-editor>
          
       </div>
