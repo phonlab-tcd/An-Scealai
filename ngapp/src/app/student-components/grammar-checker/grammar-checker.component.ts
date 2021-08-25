@@ -18,6 +18,7 @@ import { TranslationService } from 'src/app/translation.service';
 import { Story } from 'src/app/story';
 import { Subscription } from 'rxjs';
 import { LoadingComponent } from 'src/app/loading/loading.component';
+import * as _ from 'lodash';
 
 function cloneString(str: string) {
   return (' ' + str).slice(1);
@@ -61,8 +62,6 @@ export class GrammarCheckerComponent implements
   };
   timeThatCheckedTextWasChecked: Date;
 
-  currentDebounceId = 0;
-
   mostRecentGramadoirRunId = 0;
   mostRecentVowelRunId = 0;
 
@@ -96,17 +95,10 @@ export class GrammarCheckerComponent implements
     private engagement: EngagementService,
    ) { }
 
-  debounceGramadoir() {
-    this.currentDebounceId++;
-    const myDebounceId = this.currentDebounceId;
-    setTimeout(() => {
-      if (myDebounceId === this.currentDebounceId) {
-        console.count('SYNCHRONISING GRAMMAR CHECKERS');
-        this.synchroniseGramadoir();
-        this.synchroniseVowelAgreementChecker();
-      }
-    }, 500);
-  }
+  debounceGramadoir = _.debounce(() => {
+    this.synchroniseGramadoir();
+    this.synchroniseVowelAgreementChecker();
+  }, 500);  
 
   ngAfterViewInit(): void {
     this.synchroniseGramadoir();
