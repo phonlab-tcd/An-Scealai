@@ -1,10 +1,10 @@
 // src/app/student-components/grammar-checker/grammar-checker.component.ts
 import {
   Component,
-  OnInit,
   Input,
   ViewChild,
   ElementRef,
+  AfterViewInit,
   } from '@angular/core';
 
 import { EngagementService} from 'src/app/engagement.service';
@@ -17,7 +17,11 @@ import { GrammarService, GrammarTag } from 'src/app/grammar.service';
 import { TranslationService } from 'src/app/translation.service';
 import { Story } from 'src/app/story';
 import { Subscription } from 'rxjs';
+import { LoadingComponent } from 'src/app/loading/loading.component';
 
+function cloneString(str: string) {
+  return (' ' + str).slice(1);
+}
 
 enum FILTER
 {
@@ -39,7 +43,9 @@ type TagSet = Record<FILTER, HighlightTag[]>;
     '../../app.component.css',
   ],
 })
-export class GrammarCheckerComponent implements OnInit {
+export class GrammarCheckerComponent implements
+    AfterViewInit
+{
 
   FILTER = FILTER;
 
@@ -49,14 +55,18 @@ export class GrammarCheckerComponent implements OnInit {
   @ViewChild('grammarCheckerTextArea')
   grammarCheckerTextArea: ElementRef<HTMLTextAreaElement>;
 
-  checkedText = '';
+  checkedText = {
+    [FILTER.GRAMADOIR]: '',
+    [FILTER.VOWEL]: '',
+  };
   timeThatCheckedTextWasChecked: Date;
 
-  changeCount = 0;
-  changeThreshold = 50;
+
+  currentDebounceId = 0;
 
   grammarLoading = true;
-  grammarChecked = false;
+
+  vowelLoading = true;
 
   selectedFilter = this.FILTER.GRAMADOIR;
 
@@ -84,60 +94,65 @@ export class GrammarCheckerComponent implements OnInit {
     private engagement: EngagementService,
    ) { }
 
-  shouldRunGramadoir() {
-    if (this.changeCount > this.changeThreshold) {
-      this.changeCount = 0;
-      return true;
-    }
-    this.changeCount++;
-    return false;
+  debounceGramadoir() {
+    this.currentDebounceId++;
+    const myDebounceId = this.currentDebounceId;
+    setTimeout(() => {
+      if (myDebounceId === this.currentDebounceId) {
+        console.count('SYNCHRONISING GRAMMAR CHECKERS');
+        this.synchroniseGramadoir();
+        this.synchroniseVowelAgreementChecker();
+      }
+    }, 500);
   }
 
-  ngOnInit(): void {
-    if (this.story) {
-      this.runGramadoir();
-    }
+  ngAfterViewInit(): void {
+    this.synchroniseGramadoir();
+    this.synchroniseVowelAgreementChecker();
   }
 
   /*
-  * Set boolean variables for checking data / grammar window in interface
+  * Set boolean variables for
+  * checking data / grammar window
+  * in interface
   * Check grammar using grammar service
-  * Set grammar tags using grammar service subscription and filter them by rule
+  * Set grammar tags using grammar
+  * service subscription and filter them by rule
   * Add logged event for checked grammar
   */
   runGramadoir() {
     this.putFocusOnGrammarTextArea();
     // PUT BACKEND REQUEST IN THE QUEUE
-    const checkingText = (' ' + this.story.text).slice(1);
+    const checkingText = cloneString(this.story.text);
     const tagsHandle = this
       .grammar
       .getGramadoirTagsEnglishAndIrishAsHighlightTags(checkingText, this.story);
 
     // DISPLAY GRAMMAR LOADING SPINNER
-    this.grammarChecked = false;
     this.grammarLoading = true;
 
     // CANCEL GRAMMAR CHECKER IF TEXT HASN'T CHANGED
-    if (!this.gramadoirErrorMessage && checkingText === this.checkedText) {
+    if (!this.gramadoirErrorMessage && checkingText === this.checkedText[FILTER.GRAMADOIR]) {
+      const backupFilteredTags = this.filteredTags;
+      this.filteredTags = new Map();
       tagsHandle.tags.catch((error) => {
         this.gramadoirErrorMessage = error.name + ': ' + error.message;
       });
       tagsHandle.controller.abort();
       // WAIT 100 MILISECONDS SO THAT THE USER SEES THAT THEIR CLICK WAS ACKNOWLEDGED
       setTimeout(() => {
-        this.grammarChecked = true;
+        this.filteredTags = backupFilteredTags;
         this.grammarLoading = false;
-      }, 200);
+      }, 100);
       // NO NEED TO CALCULATE VOWEL AGREEMENT AGAIN SINCE TEXT HASN'T CHANGED
     } else {
 
+      this.filteredTags.clear();
       tagsHandle.tags.then(
           this.graciouslyReceiveGramadoirHighlightTags,
           this.graciouslyHandleGramadoirError);
 
-      this.checkedText = checkingText;
-      this.tagSets[FILTER.VOWEL] = this.grammar.getVowelAgreementTags(checkingText);
-      this.tags = this.tagSets[this.selectedFilter];
+      this.checkedText[FILTER.GRAMADOIR] = checkingText;
     }
   }
 
@@ -156,7 +171,6 @@ export class GrammarCheckerComponent implements OnInit {
 
   graciouslyHandleGramadoirError(error: any) {
     this.grammarLoading = false;
-    this.grammarChecked = true;
     this.gramadoirErrorMessage = error.message;
     window.alert(`There was an error while running ` +
                  `the grammar checker. You may need ` +
@@ -169,7 +183,6 @@ export class GrammarCheckerComponent implements OnInit {
   graciouslyReceiveGramadoirHighlightTags = (tags: HighlightTag[]) => {
     // SHOW THE TAGS
     this.grammarLoading = false;
-    this.grammarChecked = true;
 
     // NOTE RECEPTION TIME
     this.timeThatCheckedTextWasChecked = new Date();
@@ -191,7 +204,6 @@ export class GrammarCheckerComponent implements OnInit {
   * sets checkBox map value to false (value) for each rule (key)
   */
   filterTags() {
-    this.filteredTags.clear();
     this.classroomService.getGrammarRules(
       this.classroomId)
         .subscribe(
@@ -271,13 +283,6 @@ export class GrammarCheckerComponent implements OnInit {
     this.selectedFilter = eventValue;
   }
 
-  dontStartHighlightOnASpace(entry: HighlightTag[]): HighlightTag[]{
-    const matchArray = this.checkedText.slice(entry[0].indices.start).match(/^\s+/);
-    const match = (matchArray ? matchArray[0] : '');
-    entry[0].indices.start = entry[0].indices.start + match.length;
-    return entry;
-  }
-
   /**
    * Gets an array of HighlighTags for which the associated grammar error category
    * is selected according to the checkBox map.
@@ -292,7 +297,7 @@ export class GrammarCheckerComponent implements OnInit {
             (entry) => {
               // entry[0] is key, entry[1] is val.
               if (this.checkBox.get(entry[0])) {
-                return this.dontStartHighlightOnASpace(entry[1]);
+                return entry[1];
               } else {
                 return [];
               }
@@ -360,12 +365,40 @@ export class GrammarCheckerComponent implements OnInit {
   isVowelMode() {
     return this.selectedFilter === this.FILTER.VOWEL;
   }
-  
-  syncroniseGramadoir() {
-    return;
+
+  async synchroniseGramadoir() {
+    this.runGramadoir();
   }
 
-  synchroniseVowelAgreementChecker(){
-    return;  
+  async synchroniseVowelAgreementChecker(){
+    this.vowelLoading= true;
+    this.tagSets[FILTER.VOWEL] = [];
+    const syncStarted = new Date();
+
+    this.checkedText[FILTER.VOWEL] =
+      cloneString(this.story.text);
+
+    const newTags  =
+      this.grammar
+          .getVowelAgreementTags(
+              this.checkedText[FILTER.VOWEL]);
+
+    try{
+      const timeElapsed =
+        new Date().valueOf() - syncStarted.valueOf();
+
+      const remainingWait =
+        timeElapsed >= 100 ? 0 : 100 - timeElapsed;
+
+      setTimeout(() => {
+        this.vowelLoading = false;
+        this.tagSets[FILTER.VOWEL] = newTags;
+      }, remainingWait);
+    }
+    catch (error) {
+      console.error(error);
+      this.tagSets[FILTER.VOWEL] = newTags;
+      this.vowelLoading = false;
+    }
   }
 }
