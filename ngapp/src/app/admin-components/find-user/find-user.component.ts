@@ -34,7 +34,9 @@ export class FindUserComponent implements OnInit {
    */
   getUserResults() {
     this.userService.getAllUsers().subscribe((users: any) => {
-      this.userResults = users, this.numberOfUsers = this.userResults.length, this.filterArray(users);
+      this.userResults = users.map(userData => new User().fromJSON(userData));
+      this.numberOfUsers = this.userResults.length;
+      this.filterArray(users);
     });
   }
   
