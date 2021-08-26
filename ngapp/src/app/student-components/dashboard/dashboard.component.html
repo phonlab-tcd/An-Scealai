@@ -96,6 +96,11 @@
           {{ts.l.recordings}}
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
+
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; highlightQuill()">
+          highlight quill
+        </div>
       </div>
     </div>
 
@@ -105,7 +110,15 @@
       <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+          [modules]="quillToolbar"
+          placeholder=""
+          [preserveWhitespace]="true"
+          [(ngModel)]="story.htmlText" 
+          (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"
+          (onEditorCreated)="createdQuill($event)"
+        >
+        </quill-editor>
          
       </div>
 

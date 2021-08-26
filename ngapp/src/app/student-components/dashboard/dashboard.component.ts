@@ -14,6 +14,13 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import Quill from 'quill';
+
+const Parchment = Quill.import('parchment');
+const gramadoirTagAttributor = new Parchment.Attributor.Attribute('gramadoir-tag', 'data-gramadoir-tag', { 
+  scope: Parchment.Scope.INLINE
+});
+Quill.register(gramadoirTagAttributor);
 
 @Component({
   selector: 'app-dashboard',
@@ -50,6 +57,7 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+  quillEditor: Quill;
 
   dialects = [
     {
@@ -155,6 +163,17 @@ export class DashboardComponent implements OnInit {
           resolve(params);
       });
     });
+  }
+
+  createdQuill(quillEditorInstance) {
+    console.dir(quillEditorInstance);
+    console.dir(quillEditorInstance.getLines());
+    this.quillEditor = quillEditorInstance;
+  }
+
+  highlightQuill() {
+    if (!this.quillEditor) return;
+    this.quillEditor.formatText(1, 5, 'gramadoir-tag', 'seimhiu');
   }
 
 /*
