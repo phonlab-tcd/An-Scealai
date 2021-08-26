@@ -347,6 +347,14 @@ background-color: lightblue;
     align-items: center;
 }
 
+.grammarTag > .grammarMessage {
+    visibility: hidden;
+}
+
+.grammarTag:hover > .grammarMessage {
+    visibility: visible;
+}
+
 .selectErrorCheckbox {
   display: flex;
   flex-wrap: wrap;
