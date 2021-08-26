@@ -98,8 +98,13 @@
         </div>
 
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; highlightQuill()">
-          highlight quill
+          (click)="this.dontToggle=true; simulateGramadoir()">
+          simulate gramadoir
+        </div>
+
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; highlight()">
+          highlight
         </div>
       </div>
     </div>
