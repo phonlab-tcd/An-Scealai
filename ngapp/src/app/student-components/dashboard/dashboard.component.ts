@@ -171,9 +171,27 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = quillEditorInstance;
   }
 
-  highlightQuill() {
+  simulateGramadoir() {
     if (!this.quillEditor) return;
     this.quillEditor.formatText(1, 5, 'gramadoir-tag', 'seimhiu');
+  }
+
+  highlight() {
+    /*
+
+    To remove attr / span:
+      this.quillEditor.formatText(1, 5, {'gramadoir-tag': null});
+    */
+
+    const gramadoirTags = document.querySelectorAll('[data-gramadoir-tag]');
+    gramadoirTags.forEach(elem => {
+      elem.classList.add('grammarTag');
+      const popup = document.createElement('span');
+      popup.classList.add('grammarMessage');
+      popup.style.position = 'absolute';
+      popup.innerText = 'This is a seimhiu error!';
+      elem.appendChild(popup);
+    });
   }
 
 /*
