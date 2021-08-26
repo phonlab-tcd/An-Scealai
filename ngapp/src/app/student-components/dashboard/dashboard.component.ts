@@ -25,6 +25,7 @@ import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import { Quill } from 'quill';
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -38,9 +39,13 @@ export class DashboardComponent implements OnInit {
 
   story: Story = new Story();
   stories: Story[];
-  id: string;
+
   storyFound: boolean;
-  storySaved: boolean = true;
+  storySaved = true;
+  saveStoryDebounceId = 0;
+  saveStoryErrorMessage = null;
+
+  id: string;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
@@ -61,6 +66,7 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
+
 
   dialects = [
     {
@@ -139,6 +145,9 @@ export class DashboardComponent implements OnInit {
       });
     });
 
+
+
+
     // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
@@ -156,6 +165,18 @@ export class DashboardComponent implements OnInit {
         );
   }
 
+  saveStoryDebounceCallback(myId: number, finishedWritingTime: Date) {
+    if (myId === this.saveStoryDebounceId) {
+      this.saveStory();
+    }
+  }
+
+  debounceSaveStory() {
+    this.saveStoryDebounceId++;
+    const myId = this.saveStoryDebounceId;
+    const finishedWritingTime = new Date();
+    setTimeout(() => {this.saveStoryDebounceCallback(myId, finishedWritingTime)}, 1000);
+  }
 /*
 * return the student's set of stories using the story service 
 */
@@ -197,10 +218,14 @@ export class DashboardComponent implements OnInit {
         .toPromise()
         .then(
           () => {
+            this.storySaved = true;
             console.count('STORY SAVED');
+            this.saveStoryErrorMessage = null;
+          },
+          (error) => {
+            console.error(error);
+            this.saveStoryErrorMessage = error.message; 
           });
-    this.storySaved = true;
-    console.count('Story saved');
   }
 
   showDictionary() {
@@ -240,13 +265,18 @@ export class DashboardComponent implements OnInit {
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
   storyEdited(quillStory) {
     this.story.text = quillStory.text;
-
+    this.getWordCount(quillStory.text);
+    this.grammarChecker?.debounceGramadoir();
+    this.debounceSaveStory();
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(quillStory) {
     this.story.text = quillStory.text;
+    this.getWordCount(quillStory.text);
+    this.grammarChecker?.debounceGramadoir();
+    this.debounceSaveStory();
     this.storySaved = false;
   }
 

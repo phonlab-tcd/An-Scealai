@@ -22,10 +22,16 @@
         <!-- SAVE ICON  -->
         <div class="saveIcon">
           <div *ngIf="storySaved" class="savedIcon">
-            {{ts.l.saved}} <i class="fas fa-check"></i>
+            {{ts.l.saved}}
+            <i class="fas fa-check"></i>
           </div>
-          <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
-            {{ts.l.save}} <i class="fas fa-save"></i>
+          <div *ngIf="!storySaved" class="savedIcon">
+            <i class="fas fa-save">
+            </i>
+            {{ts.l.saving ? ts.l.saving : 'Saving...'}}
+          </div>
+          <div *ngIf="saveStoryErrorMessage" class="errorMessage">
+            {{saveStoryErrorMessage}}
           </div>
         </div>
       </div>
@@ -111,7 +117,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text); this.grammarChecker?.debounceGramadoir()">
+            (onContentChanged)="storyEdited($event);">
         </quill-editor>
          
       </div>
@@ -132,7 +138,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event);">
         </quill-editor>
         
       </div>
@@ -148,7 +154,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event);">
         </quill-editor>
       </div>
 
@@ -162,7 +168,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event);">
         </quill-editor>
         
         <div class="dictionaryContainer">
