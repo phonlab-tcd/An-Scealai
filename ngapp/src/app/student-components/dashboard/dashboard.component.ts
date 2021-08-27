@@ -17,10 +17,10 @@ import { ClassroomService } from '../../classroom.service';
 import Quill from 'quill';
 
 const Parchment = Quill.import('parchment');
-const gramadoirTagAttributor = new Parchment.Attributor.Attribute('gramadoir-tag', 'data-gramadoir-tag', { 
+const gramadoirTag = new Parchment.Attributor.Attribute('gramadoir-tag', 'data-gramadoir-tag', { 
   scope: Parchment.Scope.INLINE
 });
-Quill.register(gramadoirTagAttributor);
+Quill.register(gramadoirTag);
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -173,38 +173,61 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = quillEditorInstance;
   }
 
-  simulateGramadoir() {
+  displayGrammarErrors() {
     if (!this.quillEditor) return;
-    this.quillEditor.formatText(0, 5, 'gramadoir-tag', 'seimhiu');
+
+    // Imaginary array of grammar checker errors (the API response)
+    // We probably want to have these stored as a local variable
+    //  that's updated regularly by the debounce function as users
+    //  type their strories.
+    const grammarCheckerErrors = [
+      {
+        start: 1,
+        length: 4,
+        type: 'seimhiu'
+      },
+      {
+        start: 10,
+        length: 5,
+        type: 'uru'
+      }
+    ];
+
+    const editorElem = document.querySelector('.ql-editor') as HTMLElement;
+
+    grammarCheckerErrors.forEach(error => {
+      // Add highlighting to error text
+      this.quillEditor.formatText(error.start, error.length, 'gramadoir-tag', error.type);
+      
+      // Get the HTMLElement for the span just created by the formatText
+      const allTagElems = document.querySelectorAll('[data-gramadoir-tag]');
+      const tagElem = allTagElems[allTagElems.length - 1];
+
+      // Create a customised quill tooltip containing a message about the grammar error
+      const bounds = this.quillEditor.getBounds(error.start, error.length)
+      const tooltip = new Tooltip(this.quillEditor);
+      tooltip.root.classList.add('custom-tooltip');
+      tooltip.root.innerText = this.getUserFriendlyGramadoirMap[error.type];
+
+      // Add hover UI logic to the grammar error span element
+      tagElem.addEventListener("mouseover", () => {
+        tooltip.show();
+        tooltip.position(bounds);
+        // Ensure that tooltip isn't cut off by the right edge of the editor
+        const rightOverflow = (tooltip.root.offsetLeft + tooltip.root.offsetWidth) - editorElem.offsetWidth;
+        tooltip.root.style.left = (rightOverflow > 0) ? `${tooltip.root.offsetLeft - rightOverflow}px` : tooltip.root.style.left;
+        // Ensure that tooltip isn't cut off by the left edge of the editor
+        tooltip.root.style.left = (tooltip.root.offsetLeft < 0) ? `${tooltip.root.offsetLeft - tooltip.root.offsetLeft}px` : tooltip.root.style.left;
+      });
+      tagElem.addEventListener("mouseout", () => {
+        tooltip.hide();
+      });
+    });
   }
 
-  highlight() {
-    /*
-
-    To remove attr / span:
-      this.quillEditor.formatText(1, 5, {'gramadoir-tag': null});
-    */
-
-    const gramadoirTag = document.querySelector('[data-gramadoir-tag]');
-    const editorElem = document.querySelector('.ql-editor') as HTMLElement;
-    // getBounds takes (position, length) of highlighted word
-
-    const bounds = this.quillEditor.getBounds(0, 5)
-    const tooltip = new Tooltip(this.quillEditor);
-    tooltip.root.classList.add('custom-tooltip');
-    tooltip.root.innerText = 'Some grammar message !';
-    gramadoirTag.addEventListener("mouseover", ()=>{
-      tooltip.show();
-      tooltip.position(bounds);
-      // Ensure that tooltip isn't cut off by the right edge of the editor
-      const rightOverflow = (tooltip.root.offsetLeft + tooltip.root.offsetWidth) - editorElem.offsetWidth;
-      tooltip.root.style.left = (rightOverflow > 0) ? `${tooltip.root.offsetLeft - rightOverflow}px` : tooltip.root.style.left;
-      // Ensure that tooltip isn't cut off by the left edge of the editor
-      tooltip.root.style.left = (tooltip.root.offsetLeft < 0) ? `${tooltip.root.offsetLeft - tooltip.root.offsetLeft}px` : tooltip.root.style.left;
-    });
-    gramadoirTag.addEventListener("mouseout", ()=>{
-      tooltip.hide();
-    });
+  getUserFriendlyGramadoirMap: {[type: string]: string} = {
+    'seimhiu': 'This is a seimhiu!',
+    'uru': 'This, on the other hand, is an uru!'
   }
 
 /*
