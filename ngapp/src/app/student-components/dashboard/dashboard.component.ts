@@ -22,6 +22,8 @@ const gramadoirTagAttributor = new Parchment.Attributor.Attribute('gramadoir-tag
 });
 Quill.register(gramadoirTagAttributor);
 
+const Tooltip = Quill.import('ui/tooltip');
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -173,7 +175,8 @@ export class DashboardComponent implements OnInit {
 
   simulateGramadoir() {
     if (!this.quillEditor) return;
-    this.quillEditor.formatText(1, 5, 'gramadoir-tag', 'seimhiu');
+    this.quillEditor.formatText(0, 5, 'background', 'red');
+    this.quillEditor.formatText(0, 5, 'gramadoir-tag', 'seimhiu');
   }
 
   highlight() {
@@ -183,14 +186,25 @@ export class DashboardComponent implements OnInit {
       this.quillEditor.formatText(1, 5, {'gramadoir-tag': null});
     */
 
-    const gramadoirTags = document.querySelectorAll('[data-gramadoir-tag]');
-    gramadoirTags.forEach(elem => {
-      elem.classList.add('grammarTag');
-      const popup = document.createElement('span');
-      popup.classList.add('grammarMessage');
-      popup.style.position = 'absolute';
-      popup.innerText = 'This is a seimhiu error!';
-      elem.appendChild(popup);
+    const gramadoirTag = document.querySelector('[data-gramadoir-tag]');
+    const editorElem = document.querySelector('.ql-editor') as HTMLElement;
+    // getBounds takes (position, length) of highlighted word
+
+    const bounds = this.quillEditor.getBounds(0, 5)
+    const tooltip = new Tooltip(this.quillEditor);
+    tooltip.root.classList.add('custom-tooltip');
+    tooltip.root.innerText = 'Some grammar message !';
+    gramadoirTag.addEventListener("mouseover", ()=>{
+      tooltip.show();
+      tooltip.position(bounds);
+      // Ensure that tooltip isn't cut off by the right edge of the editor
+      const rightOverflow = (tooltip.root.offsetLeft + tooltip.root.offsetWidth) - editorElem.offsetWidth;
+      tooltip.root.style.left = (rightOverflow > 0) ? `${tooltip.root.offsetLeft - rightOverflow}px` : tooltip.root.style.left;
+      // Ensure that tooltip isn't cut off by the left edge of the editor
+      tooltip.root.style.left = (tooltip.root.offsetLeft < 0) ? `${tooltip.root.offsetLeft - tooltip.root.offsetLeft}px` : tooltip.root.style.left;
+    });
+    gramadoirTag.addEventListener("mouseout", ()=>{
+      tooltip.hide();
     });
   }
 
