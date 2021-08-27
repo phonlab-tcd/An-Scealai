@@ -108,6 +108,7 @@ export class StoryService {
   gramadoir(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
+
   
   synthesiseObject(storyObject: Story) : Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
