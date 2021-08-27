@@ -101,6 +101,10 @@
           (click)="this.dontToggle=true; displayGrammarErrors()">
           simulate gramadoir
         </div>
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; getLines()">
+          get lines
+        </div>
       </div>
     </div>
 
