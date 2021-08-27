@@ -175,7 +175,6 @@ export class DashboardComponent implements OnInit {
 
   simulateGramadoir() {
     if (!this.quillEditor) return;
-    this.quillEditor.formatText(0, 5, 'background', 'red');
     this.quillEditor.formatText(0, 5, 'gramadoir-tag', 'seimhiu');
   }
 
