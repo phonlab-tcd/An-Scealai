@@ -359,8 +359,15 @@ background-color: lightblue;
     content: none !important;
 }
 
+/* Gramadoir error tag colour coding */
+
 span[data-gramadoir-tag="seimhiu"] {
     background-color: #64b678;
+    border-radius: 4px;
+}
+
+span[data-gramadoir-tag="uru"] {
+    background-color: #9164b6;
     border-radius: 4px;
 }
 
