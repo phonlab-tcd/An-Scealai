@@ -359,6 +359,11 @@ background-color: lightblue;
     content: none !important;
 }
 
+span[data-gramadoir-tag="seimhiu"] {
+    background-color: #64b678;
+    border-radius: 4px;
+}
+
 .selectErrorCheckbox {
   display: flex;
   flex-wrap: wrap;
