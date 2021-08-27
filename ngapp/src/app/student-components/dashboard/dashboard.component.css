@@ -355,6 +355,10 @@ background-color: lightblue;
     visibility: visible;
 }
 
+.custom-tooltip::before {
+    content: none !important;
+}
+
 .selectErrorCheckbox {
   display: flex;
   flex-wrap: wrap;
