@@ -23,6 +23,7 @@ import {
   GrammarTag,
   TagSet,
   GramadoirTag,
+  GramadoirRuleId,
 } from '../../grammar.service';
 
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
@@ -41,13 +42,9 @@ Quill.register(gramadoirTag);
 type QuillHighlightTag = {
   start: number;
   length: number;
-  type: QuillHighlightType;
+  type: GramadoirRuleId;
   message: string;
 };
-
-const QUILL_HIGHLIGHT_TYPE_VALUES = ['CAIGHDEAN', 'default'] as const; // Add more valid types here
-// Makes a union type using the values from the array above, see: https://www.typescriptlang.org/docs/handbook/2/indexeda
-type QuillHighlightType = typeof QUILL_HIGHLIGHT_TYPE_VALUES[number];
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -199,18 +196,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  createdQuill(quillEditorInstance) {
-    this.quillEditor = quillEditorInstance;
-  }
-
-  getQuillHighlightTypeFromRuleId = (ruleId: string): QuillHighlightType => 
-    QUILL_HIGHLIGHT_TYPE_VALUES.find(validType => ruleId === validType) || 'default';
-
-  getUserFriendlyGramadoirMessage: {[type: string]: string} = {
-    'CAIGHDEAN': 'non-standard usage'
-    // Add more messages here
-  }
-
   async displayGrammarErrors() {
     if (!this.quillEditor) return;
 
@@ -230,7 +215,7 @@ export class DashboardComponent implements OnInit {
                 ({
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
-                  type: this.getQuillHighlightTypeFromRuleId(tag.ruleId),
+                  type: this.grammar.string2GramadoirRuleId(tag.ruleId),
                   message: tag.msg,
                 }) as QuillHighlightTag
               )
@@ -253,7 +238,7 @@ export class DashboardComponent implements OnInit {
       const tooltip = new Tooltip(this.quillEditor);
       tooltip.root.classList.add('custom-tooltip');
       tooltip.root.innerText =
-        this.getUserFriendlyGramadoirMessage[error.type] || error.message; // Prefer user friendly message
+        this.grammar.userFriendlyGramadoirMessage[error.type] || error.message; // Prefer user friendly message
 
       // Add hover UI logic to the grammar error span element
       tagElem.addEventListener('mouseover', () => {

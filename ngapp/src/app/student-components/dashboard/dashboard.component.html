@@ -102,10 +102,6 @@
           simulate gramadoir
         </div>
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; clearHighlights()">
-          clear highlights
-        </div>
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
           (click)="this.dontToggle=true; getLines()">
           get lines
         </div>
@@ -124,7 +120,7 @@
           [preserveWhitespace]="true"
           [(ngModel)]="story.htmlText" 
           (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"
-          (onEditorCreated)="createdQuill($event)"
+          (onEditorCreated)="quillEditor = $event"
         >
         </quill-editor>
          
