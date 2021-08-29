@@ -347,14 +347,6 @@ background-color: lightblue;
     align-items: center;
 }
 
-.grammarTag > .grammarMessage {
-    visibility: hidden;
-}
-
-.grammarTag:hover > .grammarMessage {
-    visibility: visible;
-}
-
 .custom-tooltip::before {
     content: none !important;
 }
@@ -366,20 +358,14 @@ span[data-gramadoir-tag] {
 }
 
 span[data-gramadoir-tag="default"] {
-    background-color: #68b6fa; /* light blue */
-}
-
-span[data-gramadoir-tag="seimhiu"] {
-    background-color: #64b678;
-}
-
-span[data-gramadoir-tag="uru"] {
-    background-color: #9164b6;
+    background-color: #aed9ff; /* light blue */
 }
 
 span[data-gramadoir-tag="CAIGHDEAN"] {
-    background-color: #ffce38; /* yellow */
+    background-color: #ffdc71; /* yellow */
 }
+
+/* Add more here */
 
 .selectErrorCheckbox {
   display: flex;
