@@ -23,6 +23,10 @@ export type GramadoirTag = {
   errorlength: string;
 };
 
+const GRAMADOIR_RULE_ID_VALUES = ['CAIGHDEAN', 'default'] as const; // Add more valid types here
+// Makes a union type using the values from the array above, see: https://www.typescriptlang.org/docs/handbook/2/indexeda
+export type GramadoirRuleId = typeof GRAMADOIR_RULE_ID_VALUES[number];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +42,14 @@ export class GrammarService {
     private storyService: StoryService,
     private http: HttpClient,
   ) { }
+
+  string2GramadoirRuleId = (str: string): GramadoirRuleId => 
+    GRAMADOIR_RULE_ID_VALUES.find(validType => str === validType) || 'default';
+
+  userFriendlyGramadoirMessage: {[ruleId: string]: string} = {
+    'CAIGHDEAN': 'non-standard usage',
+    // Add more messages here
+  };
 
   /*
   * Set grammar and vowel tags of TagSet object
