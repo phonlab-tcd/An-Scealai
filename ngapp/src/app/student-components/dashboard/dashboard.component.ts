@@ -41,9 +41,13 @@ Quill.register(gramadoirTag);
 type QuillHighlightTag = {
   start: number;
   length: number;
-  type: string;
+  type: QuillHighlightType;
   message: string;
 };
+
+const QUILL_HIGHLIGHT_TYPE_VALUES = ['CAIGHDEAN', 'default'] as const; // Add more valid types here
+// Makes a union type using the values from the array above, see: https://www.typescriptlang.org/docs/handbook/2/indexeda
+type QuillHighlightType = typeof QUILL_HIGHLIGHT_TYPE_VALUES[number];
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -199,27 +203,19 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = quillEditorInstance;
   }
 
+  getQuillHighlightTypeFromRuleId = (ruleId: string): QuillHighlightType => 
+    QUILL_HIGHLIGHT_TYPE_VALUES.find(validType => ruleId === validType) || 'default';
 
-  getQuillHighlightTypeFromRuleId(ruleId: string): QuillHighlightType {
-    const matches = ruleId.match(/(CAIGHDEAN)/);
-    const match = matches ? matches[0] : null;
-    switch (match) {
-      case 'CAIGHDEAN':
-        return 'CAIGHDEAN';
-      default:
-        return 'default';
-    }
-
+  getUserFriendlyGramadoirMessage: {[type: string]: string} = {
+    'CAIGHDEAN': 'non-standard usage'
+    // Add more messages here
   }
 
   async displayGrammarErrors() {
     if (!this.quillEditor) return;
 
-    this.quillEditor.formatText(
-      0,
-      this.story.text.length,
-      'gramadoir-tag',
-      null);
+    // Clear existing highlights
+    this.quillEditor.formatText(0, this.quillEditor.getLength(), {'gramadoir-tag': null});
 
     // Imaginary array of grammar checker errors (the API response)
     // We probably want to have these stored as a local variable
@@ -229,41 +225,23 @@ export class DashboardComponent implements OnInit {
       await this.grammar
           .gramadoirDirectObservable(this.story.text.replace(/\n/g, ' '), 'en')
           .pipe(
-            map((tagData: GramadoirTag[]) => {
-              return tagData.map((tag) => {
-                return {
+            map((tagData: GramadoirTag[]) => 
+              tagData.map(tag => 
+                ({
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
                   type: this.getQuillHighlightTypeFromRuleId(tag.ruleId),
                   message: tag.msg,
-                } as QuillHighlightTag;
-              });
-            }),
+                }) as QuillHighlightTag
+              )
+            ),
           ).toPromise();
 
-    /* DUMMY DATA
-    [
-      {
-        start: 1,
-        length: 4,
-        type: 'seimhiu'
-      },
-      {
-        start: 10,
-        length: 5,
-        type: 'uru'
-      }
-    ];
-   */
-
-    const editorElem =
-      this.quillEditor.editor;
-      // This is equivalent to:
-      // document.querySelector('.ql-editor') as HTMLElement;
+    const editorElem = this.quillEditor.root;
 
     grammarCheckerErrors.forEach(error => {
       // Add highlighting to error text
-      this.quillEditor.formatText(error.start, error.length, 'gramadoir-tag', error.type);
+      this.quillEditor.formatText(error.start, error.length, {'gramadoir-tag': error.type});
       
       // Get the HTMLElement for the span just created by the formatText
       const allTagElems = document.querySelectorAll('[data-gramadoir-tag]');
@@ -275,14 +253,13 @@ export class DashboardComponent implements OnInit {
       const tooltip = new Tooltip(this.quillEditor);
       tooltip.root.classList.add('custom-tooltip');
       tooltip.root.innerText =
-        error.message || this.getUserFriendlyGramadoirMap[error.type];
+        this.getUserFriendlyGramadoirMessage[error.type] || error.message; // Prefer user friendly message
 
       // Add hover UI logic to the grammar error span element
       tagElem.addEventListener('mouseover', () => {
         tooltip.show();
         tooltip.position(bounds);
         
-        console.dir(tooltip);
         // Ensure that tooltip isn't cut off by the right edge of the editor
         const rightOverflow =
           (tooltip.root.offsetLeft + tooltip.root.offsetWidth) -
@@ -290,25 +267,19 @@ export class DashboardComponent implements OnInit {
 
         tooltip.root.style.left =
           (rightOverflow > 0) ?
-          `${tooltip.root.offsetLeft - rightOverflow}px` :
+          `${(tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
           tooltip.root.style.left;
 
         // Ensure that tooltip isn't cut off by the left edge of the editor
         tooltip.root.style.left =
           (tooltip.root.offsetLeft < 0) ?
-          `${tooltip.root.offsetLeft - tooltip.root.offsetLeft}px` :
+          `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
       });
       tagElem.addEventListener('mouseout', () => {
         tooltip.hide();
       });
     });
-  }
-
-  getUserFriendlyGramadoirMap: {[type: string]: string} = {
-    'seimhiu': 'This is a seimhiu!',
-    'uru': 'This, on the other hand, is an uru!',
-    'CAIGHDEAN': 'non-standard usage'
   }
 
 /*
