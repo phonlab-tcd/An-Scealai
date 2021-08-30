@@ -47,7 +47,10 @@ type QuillHighlightTag = {
   start: number;
   length: number;
   type: GramadoirRuleId;
-  message: string;
+  messages: {
+    en: string;
+    ga: string;
+  };
 };
 
 const Tooltip = Quill.import('ui/tooltip');
@@ -240,7 +243,7 @@ export class DashboardComponent implements OnInit {
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
                   type: this.grammar.string2GramadoirRuleId(tag.ruleId),
-                  message: tag.msg,
+                  messages: { en: tag.msg},
                 }) as QuillHighlightTag
               )
             ),
@@ -250,10 +253,14 @@ export class DashboardComponent implements OnInit {
 
     const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
 
+    grammarCheckerErrors.forEach((e, i) => {
+      e.messages.ga = grammarCheckerErrorsIrish[i].msg;
+    });
+
     grammarCheckerErrors.forEach((error, errorIndex) => {
       // Add highlighting to error text
       this.quillEditor.formatText(error.start, error.length, {'gramadoir-tag': error.type});
-      
+
       // Get the HTMLElement for the span just created by the formatText
       const allTagElems = document.querySelectorAll('[data-gramadoir-tag]');
       const tagElem = allTagElems[allTagElems.length - 1];
@@ -263,17 +270,21 @@ export class DashboardComponent implements OnInit {
       const bounds = this.quillEditor.getBounds(error.start, error.length)
       const tooltip = new Tooltip(this.quillEditor);
       tooltip.root.classList.add('custom-tooltip');
-      tooltip.root.innerHTML =
-        this.grammar.userFriendlyGramadoirMessage[error.type] || // Prefer user friendly message
-        ( ( grammarCheckerErrorsIrish[errorIndex]?.msg ?
-            grammarCheckerErrorsIrish[errorIndex]?.msg + '<hr>' : '' ) +
-         error.message  );
 
       // Add hover UI logic to the grammar error span element
       tagElem.addEventListener('mouseover', () => {
+        const userFriendlyMsgs =
+          this.grammar
+              .userFriendlyGramadoirMessage[error.type];
+
+        tooltip.root.innerHTML =
+          // Prefer user friendly message
+          userFriendlyMsgs ?
+          userFriendlyMsgs[this.ts.l.iso_code] :
+          error.messages[this.ts.l.iso_code];
         tooltip.show();
         tooltip.position(bounds);
-        
+
         // Ensure that tooltip isn't cut off by the right edge of the editor
         const rightOverflow =
           (tooltip.root.offsetLeft + tooltip.root.offsetWidth) -
