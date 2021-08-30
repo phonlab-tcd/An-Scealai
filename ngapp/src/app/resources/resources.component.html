@@ -139,7 +139,7 @@
     
     <!-- Leaving Cert stories-->
     <div class="dialectTitle"> {{ts.l.leaving_cert_stories}} </div>
-    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> Sign in to view more stories! </div>
+    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
       <!-- Oisín i dTír na nÓg  -->
       <mat-expansion-panel>
@@ -151,10 +151,9 @@
             Oisín i dTír na nÓg
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.mar_a_baisteadh_fionn1}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn2}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn3}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn4}} </div>
+          <div> {{ts.l.oisin_i_dTir_na_nOg1}} </div> <br>
+          <div> {{ts.l.oisin_i_dTir_na_nOg2}} </div> <br>
+          <div> {{ts.l.oisin_i_dTir_na_nOg3}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/oisin_i_dtir_na_nogvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
@@ -165,13 +164,13 @@
           <mat-panel-title>
             <img src="assets/img/logo-S.png" class="storyImg" alt="Fairceallach Fhinn Mhic Chumhaill"> 
           </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-             Dís
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Dís</div>
+            <div>le Siobhán Ní Shúilleabháin</div>
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.fairceallach1}} </div> <br>
-          <div> {{ts.l.fairceallach2}} </div> <br>
-          <div> {{ts.l.fairceallach3}} </div>
+          <div> {{ts.l.dis1}} </div> <br>
+          <div> {{ts.l.dis2}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/disvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
@@ -182,12 +181,12 @@
           <mat-panel-title>
             <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
           </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-            An Gnáthrud
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>An Gnáthrud</div>
+            <div>le Deirdre Ní Ghrianna</div>
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+          <div> {{ts.l.an_gnathrud}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/an-gnathrudvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
@@ -198,12 +197,12 @@
           <mat-panel-title>
             <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
           </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-            Hurlamboc
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Hurlamboc</div>
+            <div>le hÉilís Ní Dhuibhne</div>
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+          <div> {{ts.l.hurlamboc}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/hurlamabocvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
@@ -214,12 +213,12 @@
           <mat-panel-title>
             <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
           </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-            Seal i Neipeal
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Seal i Neipeal</div>
+            <div>le Cathal Ó Searcaigh</div>
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor1}} </div> <br>
-          <div> {{ts.l.posadh_ar_an_mblascaod_mor2}} </div>
+          <div> {{ts.l.seal_i_neipeal}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/seal-i-neipealvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
@@ -228,7 +227,7 @@
     
     <!-- Other stories-->
     <div class="dialectTitle"> {{ts.l.other_stories}} </div>
-    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> Sign in to view more stories! </div>
+    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
       <!-- An Prionsa Beag  -->
       <mat-expansion-panel>
@@ -240,10 +239,6 @@
             An Prionsa Beag
           </mat-panel-description>
         </mat-expansion-panel-header>
-          <div> {{ts.l.mar_a_baisteadh_fionn1}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn2}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn3}} </div> <br>
-          <div> {{ts.l.mar_a_baisteadh_fionn4}} </div>
         <mat-action-row>
           <a class="viewStoryBtn" href="https://abair.ie/lara/an-prionsa-beagvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>

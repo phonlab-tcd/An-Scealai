@@ -60,6 +60,11 @@
   padding-top: 70px;
 }
 
+.panelFlex {
+  display:flex;
+  flex-direction: column;
+}
+
 .viewStoryBtn {
     padding: 7px;
     background-color: #70a87f;
