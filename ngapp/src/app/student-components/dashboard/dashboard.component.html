@@ -85,8 +85,16 @@
 
         <!-- GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
-          {{ts.l.grammar_check}}
+          (click)="this.dontToggle=true;">
+          <span *ngIf="grammarTagsHidden; else HideGrammarTags"
+              (click)="showGrammarTags();">
+            TODO Show grammar suggestions
+          </span>
+          <ng-template #HideGrammarTags>
+            <span (click)="hideGrammarTags();">
+              TODO Hide grammar suggestions
+            </span>
+          </ng-template>
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
