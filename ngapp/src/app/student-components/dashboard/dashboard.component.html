@@ -119,7 +119,7 @@
           placeholder=""
           [preserveWhitespace]="true"
           [(ngModel)]="story.htmlText" 
-          (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"
+          (onContentChanged)="storyEdited($event.text); getWordCount($event.text);"
           (onEditorCreated)="quillEditor = $event"
         >
         </quill-editor>

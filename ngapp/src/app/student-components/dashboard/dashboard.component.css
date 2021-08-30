@@ -361,6 +361,14 @@ span[data-gramadoir-tag="default"] {
     background-color: #aed9ff; /* light blue */
 }
 
+span[data-gramadoir-tag="SEIMHIU"] {
+    background-color: #a6dfc2; /* light green */
+}
+
+span[data-gramadoir-tag="CLAOCHLU"] {
+    background-color: #d1c3eb; /* light purple */
+}
+
 span[data-gramadoir-tag="CAIGHDEAN"] {
     background-color: #ffdc71; /* yellow */
 }
