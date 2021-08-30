@@ -33,9 +33,13 @@ import { ClassroomService } from '../../classroom.service';
 import Quill from 'quill';
 
 const Parchment = Quill.import('parchment');
-const gramadoirTag = new Parchment.Attributor.Attribute('gramadoir-tag', 'data-gramadoir-tag', { 
-  scope: Parchment.Scope.INLINE
-});
+const gramadoirTag =
+  new Parchment.Attributor.Attribute(
+    'gramadoir-tag',
+    'data-gramadoir-tag', {
+      scope: Parchment.Scope.INLINE
+    });
+
 Quill.register(gramadoirTag);
 
 
@@ -196,11 +200,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  clearAllGramadoirTags() {
+    this.quillEditor.formatText(
+      0, // from the very beginning of the text
+      this.quillEditor.getLength(), // to the very end of the text
+      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+    );
+  }
+
   async displayGrammarErrors() {
-    if (!this.quillEditor) return;
+    if (!this.quillEditor) { return; }  // my tslint server keeps
+                                        // asking me to brace these guys
 
     // Clear existing highlights
-    this.quillEditor.formatText(0, this.quillEditor.getLength(), {'gramadoir-tag': null});
+    this.clearAllGramadoirTags();
 
     // Imaginary array of grammar checker errors (the API response)
     // We probably want to have these stored as a local variable
@@ -208,10 +221,13 @@ export class DashboardComponent implements OnInit {
     // type their strories.
     const grammarCheckerErrors =
       await this.grammar
-          .gramadoirDirectObservable(this.story.text.replace(/\n/g, ' '), 'en')
+          .gramadoirDirectObservable(
+            this.story.text.replace(/\n/g, ' '),  // convert text to single line
+                                                  // (no paragraphs/new lines)
+            this.ts.l.iso_code)
           .pipe(
-            map((tagData: GramadoirTag[]) => 
-              tagData.map(tag => 
+            map((tagData: GramadoirTag[]) =>
+              tagData.map(tag =>
                 ({
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
