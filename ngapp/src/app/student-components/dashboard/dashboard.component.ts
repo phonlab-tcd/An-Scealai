@@ -14,7 +14,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
 import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 
@@ -31,6 +31,7 @@ import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import Quill from 'quill';
+
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -92,6 +93,7 @@ export class DashboardComponent implements OnInit {
   wordCount: number = 0;
 
   quillEditor: Quill;
+  textUpdated: Subject<string> = new Subject<string>();
 
   dialects = [
     {
@@ -127,7 +129,7 @@ export class DashboardComponent implements OnInit {
     ]
   };
   
-  constructor(
+  constructor (
     private storyService: StoryService,
     private route: ActivatedRoute,
     private auth: AuthenticationService,
@@ -138,7 +140,13 @@ export class DashboardComponent implements OnInit {
     private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
-    public classroomService: ClassroomService, ) {}
+    public classroomService: ClassroomService,
+  ) {
+    this.textUpdated.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+    ).subscribe(async () => await this.displayGrammarErrors());
+  }
 
 /*
 * set the stories array of all the student's stories 
@@ -209,19 +217,16 @@ export class DashboardComponent implements OnInit {
       this.quillEditor.getLength(), // to the very end of the text
       {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
     );
+    // remove any remaining custom-tooltips from the DOM.
+    //  -> without doing this, a tooltip can live on past its
+    //     corresponding highlight tag if the user stays hovering
+    //     on the highlight tag while the grammar error is fixed.
+    document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
   }
 
   async displayGrammarErrors() {
     if (!this.quillEditor) { return; }  // my tslint server keeps
                                         // asking me to brace these guys
-
-    // Clear existing highlights
-    this.clearAllGramadoirTags();
-
-    // Imaginary array of grammar checker errors (the API response)
-    // We probably want to have these stored as a local variable
-    // that's updated regularly by the debounce function as users
-    // type their strories.
 
     // convert text to single line
     // (no paragraphs/new lines)
@@ -250,6 +255,7 @@ export class DashboardComponent implements OnInit {
           ).toPromise();
 
     const editorElem = this.quillEditor.root;
+    this.clearAllGramadoirTags();
 
     const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
 
@@ -305,6 +311,7 @@ export class DashboardComponent implements OnInit {
         tooltip.hide();
       });
     });
+    console.log('grammar updated');
   }
 
 /*
@@ -369,6 +376,9 @@ export class DashboardComponent implements OnInit {
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
+    if (text !== this.story.text) {
+      this.textUpdated.next(text);
+    }
     this.story.text = text;
     this.storySaved = false;
   }

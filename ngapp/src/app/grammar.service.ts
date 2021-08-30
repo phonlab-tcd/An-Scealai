@@ -23,7 +23,7 @@ export type GramadoirTag = {
   errorlength: string;
 };
 
-const GRAMADOIR_RULE_ID_VALUES = ['CAIGHDEAN', 'default'] as const; // Add more valid types here
+const GRAMADOIR_RULE_ID_VALUES = ['CAIGHDEAN', 'SEIMHIU', 'CLAOCHLU', 'default'] as const; // Add more valid types here
 // Makes a union type using the values from the array above, see: https://www.typescriptlang.org/docs/handbook/2/indexeda
 export type GramadoirRuleId = typeof GRAMADOIR_RULE_ID_VALUES[number];
 
@@ -44,7 +44,7 @@ export class GrammarService {
   ) { }
 
   string2GramadoirRuleId = (str: string): GramadoirRuleId => 
-    GRAMADOIR_RULE_ID_VALUES.find(validType => str === validType) || 'default';
+    GRAMADOIR_RULE_ID_VALUES.find(validType => str.includes(validType)) || 'default';
 
   userFriendlyGramadoirMessage: {[ruleId: string]: { en: string; ga: string; } } = {
     CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
