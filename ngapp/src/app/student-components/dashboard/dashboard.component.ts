@@ -34,9 +34,13 @@ import Quill from 'quill';
 
 
 const Parchment = Quill.import('parchment');
-const gramadoirTag = new Parchment.Attributor.Attribute('gramadoir-tag', 'data-gramadoir-tag', { 
-  scope: Parchment.Scope.INLINE
-});
+const gramadoirTag =
+  new Parchment.Attributor.Attribute(
+    'gramadoir-tag',
+    'data-gramadoir-tag', {
+      scope: Parchment.Scope.INLINE
+    });
+
 Quill.register(gramadoirTag);
 
 
@@ -204,25 +208,39 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  clearQuillHighlights() {
-    if (!this.quillEditor) return;
-    this.quillEditor.formatText(0, this.quillEditor.getLength(), {'gramadoir-tag': null});
+  clearAllGramadoirTags() {
+    this.quillEditor.formatText(
+      0, // from the very beginning of the text
+      this.quillEditor.getLength(), // to the very end of the text
+      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+    );
+    // remove any remaining custom-tooltips from the DOM.
+    //  -> without doing this, a tooltip can live on past its
+    //     corresponding highlight tag if the user stays hovering
+    //     on the highlight tag while the grammar error is fixed.
     document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
   }
 
   async displayGrammarErrors() {
-    if (!this.quillEditor) return;
+    if (!this.quillEditor) { return; }  // my tslint server keeps
+                                        // asking me to brace these guys
 
-    // Imaginary array of grammar checker errors (the API response)
-    // We probably want to have these stored as a local variable
-    // that's updated regularly by the debounce function as users
-    // type their strories.
+    // convert text to single line
+    // (no paragraphs/new lines)
+    const gramadoirInputText = this.story.text.replace(/\n/g, ' ');
+
+    const gramadoirPromiseIrish =
+      this.grammar.gramadoirDirectObservable(gramadoirInputText , 'ga')
+      .toPromise();
+
     const grammarCheckerErrors =
       await this.grammar
-          .gramadoirDirectObservable(this.story.text.replace(/\n/g, ' '), 'en')
+          .gramadoirDirectObservable(
+            gramadoirInputText,
+            'en')
           .pipe(
-            map((tagData: GramadoirTag[]) => 
-              tagData.map(tag => 
+            map((tagData: GramadoirTag[]) =>
+              tagData.map(tag =>
                 ({
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
@@ -234,9 +252,11 @@ export class DashboardComponent implements OnInit {
           ).toPromise();
 
     const editorElem = this.quillEditor.root;
-    this.clearQuillHighlights();
+    this.clearAllGramadoirTags();
 
-    grammarCheckerErrors.forEach(error => {
+    const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
+
+    grammarCheckerErrors.forEach((error, errorIndex) => {
       // Add highlighting to error text
       this.quillEditor.formatText(error.start, error.length, {'gramadoir-tag': error.type});
       
@@ -249,8 +269,11 @@ export class DashboardComponent implements OnInit {
       const bounds = this.quillEditor.getBounds(error.start, error.length)
       const tooltip = new Tooltip(this.quillEditor);
       tooltip.root.classList.add('custom-tooltip');
-      tooltip.root.innerText =
-        this.grammar.userFriendlyGramadoirMessage[error.type] || error.message; // Prefer user friendly message
+      tooltip.root.innerHTML =
+        this.grammar.userFriendlyGramadoirMessage[error.type] || // Prefer user friendly message
+        ( ( grammarCheckerErrorsIrish[errorIndex]?.msg ?
+            grammarCheckerErrorsIrish[errorIndex]?.msg + '<hr>' : '' ) +
+         error.message  );
 
       // Add hover UI logic to the grammar error span element
       tagElem.addEventListener('mouseover', () => {
