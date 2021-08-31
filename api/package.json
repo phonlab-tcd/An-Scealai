@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "start_prod": "DB=an-scealai PORT=4000 node server.js",
+    "start_qa": "DB=qa PORT=4002 node server.js"
   },
   "keywords": [],
   "author": "",
