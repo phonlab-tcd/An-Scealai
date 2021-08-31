@@ -14,6 +14,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -50,6 +51,8 @@ export class DashboardComponent implements OnInit {
   dontToggle: boolean = false;
   words: string[] = [];
   wordCount: number = 0;
+
+  downloadStoryFormat = '.pdf';
 
   dialects = [
     {
@@ -298,9 +301,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* Set tags to vowel tags or grammar tags based on event value
-*/
+  /*
+  * Set tags to vowel tags or grammar tags based on event value
+  */
   onChangeGrammarFilter(eventValue : any) {
     this.chosenTag = null;
     if(eventValue == 'vowel') {
@@ -313,36 +316,36 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-// set chosen tag to tag passed in parameters
+  // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
     this.chosenTag = new GrammarTag(tag.data);
   }
 
-// reset checked grammar to false, set tags array and chosen tag to null
+  // reset checked grammar to false, set tags array and chosen tag to null
   closeGrammar() {
     this.grammarChecked = false;
     this.tags = [];
     this.chosenTag = null;
   }
 
-// set the css class to hover over the tag
+  // set the css class to hover over the tag
   addTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagNotHover");
     tagElement.classList.add("tagHover");
   }
 
-// set the css class to not hover over the tag
+  // set the css class to not hover over the tag
   removeTagHoverClass(tagElement: HTMLInputElement) {
     tagElement.classList.remove("tagHover");
     tagElement.classList.add("tagNotHover");
   }
 
-/*
-* filter the grammar tags using a map
-* key: rule name 
-* value: array of tags that match the rule
-* sets checkBox map value to false (value) for each rule (key)
-*/
+  /*
+  * filter the grammar tags using a map
+  * key: rule name 
+  * value: array of tags that match the rule
+  * sets checkBox map value to false (value) for each rule (key)
+  */
   filterTags() {
     this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
       this.teacherSelectedErrors = res;
@@ -386,6 +389,13 @@ export class DashboardComponent implements OnInit {
       console.log("Filtered tags: ", this.filteredTags);
       this.updateStats();
     });
+  }
+
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
   }
 
   /**

@@ -10,6 +10,9 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
+const path = require('path');
+const fs = require('fs'); // file system
+const pandoc = require('node-pandoc-promise');
 
 const abairBaseUrl = require('../abair_base_url');
 
@@ -320,6 +323,75 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   });
 });
 
+storyRoutes
+    .route('/downloadStory/:id/:format')
+    .get(async (req, res) => {
+      try {
+        logger.info({
+          endpoint: '/story/downloadStory',
+          params: req.params,
+        });
+
+        const story =
+          await Story.findById(req.params.id);
+
+        if (!story) {
+          return res.status(404)
+              .json({
+                message: 'Story does not exist',
+              });
+        }
+
+        // GENERATE A FILENAME <story._id>.<format>
+        const filename =
+          path.join(
+              __dirname,
+              `storiesForDownload/${story._id}.${req.params.format}`);
+
+        logger.info({
+          msg: 'CREATING ' + req.params.format,
+          filename: filename,
+          story: story,
+        });
+
+        // Pandoc example
+        const pandocErr =
+          await pandoc(
+              story.htmlText, // src
+              ['--from', 'html', '-o', filename]); // args
+
+        if (pandocErr) {
+          return res.json({
+            pandocError: pandocErr,
+          });
+        }
+
+        // SEND THE FILE CREATED WITH PANDOC
+        res.sendFile(filename, (sendFileErr) => {
+          if (sendFileErr) {
+            logger.error({
+              endpoint: '/story/downloadStory',
+              while: 'sending the file:' + filename,
+              error: sendFileErr,
+            });
+          }
+          // DELETE THE FILE AFTER IT HAS BEEN SENT
+          fs.unlink(filename, (err) => {
+            if (err) {
+              logger.error({
+                endpoint: '/story/downloadStory',
+                while: 'trying to delete file:' + filename,
+                error: err,
+              });
+            }
+          });
+        });
+      } catch (error) {
+        console.dir(error);
+        logger.error(error);
+        return res.json(error);
+      }
+    });
 /*
  * Synthesise a story given the story id 
  */
