@@ -4,13 +4,20 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --reporter spec",
-    "start": "nodemon server.js --ignore routes/storiesForDownload/"
+    "start": "nodemon server.js --ignore routes/storiesForDownload/",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "@shelf/jest-mongodb",
+    "setupFiles": [
+      "<rootDir>/utils/test-setup.js"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "bson": "^4.4.0",
     "chai-arrays": "^2.2.0",
@@ -25,6 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "logger": "^0.0.1",
+    "mongo-unit": "^2.0.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.13",
     "multer": "^1.4.2",
@@ -47,10 +55,14 @@
     "wkhtmltopdf": "^0.4.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
+    "@jest-mock/express": "^1.4.2",
+    "@shelf/jest-mongodb": "^2.0.1",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
+    "jest": "^27.0.6",
     "mocha": "^8.4.0",
-    "nodemon": "^2.0.9"
+    "mockingoose": "^2.15.2",
+    "nodemon": "^2.0.9",
+    "supertest": "^6.1.4"
   }
 }

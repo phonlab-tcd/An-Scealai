@@ -45,12 +45,7 @@ export class TeacherStudentComponent implements OnInit {
           this.userId = params['id'].toString();
           this.student = res;
           this.setClassroomId();
-          this.storyService
-            .getStoriesFor(this.student.username)
-            .subscribe(
-              (data: Story[]) => {
-            this.stories = data, this.filterFeedback(data);
-          });
+          
         });
       });
     }
@@ -63,9 +58,19 @@ export class TeacherStudentComponent implements OnInit {
       }
     }
     
-    setClassroomId() {
+    setClassroomId(){
       this.classroomService.getClassroomOfStudent(this.userId).subscribe((res) => {
         this.classroomId = res._id;
+        if(res.date) {
+          this.storyService.getStoriesForClassroom(this.student.username, res.date).subscribe((data: Story[]) => {
+            this.stories = data, this.filterFeedback(data);
+          });
+        }
+        else {
+          this.storyService.getStoriesFor(this.student.username).subscribe((data: Story[]) => {
+            this.stories = data, this.filterFeedback(data);
+          });
+        }
       });
     }
   
