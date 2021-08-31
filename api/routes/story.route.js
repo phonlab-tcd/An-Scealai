@@ -7,6 +7,10 @@ const querystring = require('querystring');
 const request = require('request');
 const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
+const logger = require('../logger');
+const path = require('path');
+const pandoc = require('node-pandoc-promise');
+const fs = require('fs');
 
 // ENDPOINT HANDLERS
 const getStoryById =
@@ -222,6 +226,7 @@ storyRoutes
           });
         });
       } catch (error) {
+        console.dir(error);
         logger.error(error);
         return res.json(error);
       }
