@@ -93,7 +93,7 @@
         <a
           *ngFor="let story of storiesForNotifications"
           class="notificationCard"
-          target="_blank"
+          target="_self"
           routerLink="{{'/dashboard/' + story._id}}"
           >
             {{story.title}}
