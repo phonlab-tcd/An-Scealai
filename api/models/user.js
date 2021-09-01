@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema({
   resetPassword: {
     type: resetPasswordSchema,
     unique: true,
+    default: {
+      code: null,
+      date: null,
+    },
   },
 });
 
@@ -135,7 +139,7 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
-userSchema.methods.generateActivationLink = function(baseurl) {
+userSchema.methods.generateActivationLink = function(baseurl, language) {
   // Make sure this.verification exists
   if ( ! this.verification ) {
     this.verification = {};
@@ -147,7 +151,11 @@ userSchema.methods.generateActivationLink = function(baseurl) {
 
   this.verification.date = new Date();
 
-  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&language=${language}&verificationCode=${this.verification.code}`;
+  return `${baseurl}user/verify?` +
+      `username=${this.username}` +
+      `&email=${this.email}` +
+      `&language=${language}` +
+      `&verificationCode=${this.verification.code}`;
 }
 
 module.exports = mongoose.model('User', userSchema);

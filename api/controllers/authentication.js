@@ -212,9 +212,8 @@ async function sendVerificationEmail (username, password, email, baseurl, langua
       recipients: [email],
       subject: 'An Scéalaí account verification',
       message: emailMessage,
-    }
+    };
 
-    let sendEmailErr = null;
     try {
       const sendEmailRes = await mail.sendEmail(mailObj);
       if (!sendEmailRes) {
@@ -423,7 +422,7 @@ module.exports.register = async (req, res) => {
   }
 
   if (!req.body.username.match(validUsernameRegEx)) {
-    resObj.messageKeys.push('invalid_username_no_special_chars');
+    resObj.messageKeys.push('username_no_special_chars');
     return res.status(400).json(resObj);
   }
 
@@ -467,7 +466,6 @@ module.exports.register = async (req, res) => {
     return res.status(500).json(resObj);
   }
 
-  resObj.messageKeys.push('verification_email_sent');
   return res.status(200).json(resObj);
 };
 
