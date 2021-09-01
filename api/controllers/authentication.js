@@ -154,7 +154,7 @@ module.exports.resetPassword = async (req, res) => {
 }
 
 
-async function sendVerificationEmail (username, password, email, baseurl, language) {
+async function sendVerificationEmail(username, password, email, baseurl, language) {
   return new Promise(async (resolve, reject) => {
 
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
@@ -457,7 +457,9 @@ module.exports.register = async (req, res) => {
         user.username,
         req.body.password,
         user.email,
-        req.body.baseurl);
+        req.body.baseurl,
+        req.body.language || 'en',
+    );
   } catch (err) {
     logger.error(err);
     resObj.errors.push(err);
