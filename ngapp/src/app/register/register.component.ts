@@ -66,10 +66,11 @@ export class RegisterComponent implements OnInit {
     this.usernameInput = new FormControl();
     this.usernameInput.valueChanges.subscribe((text) => {
       this.credentials.username = text;
+      console.log(text);
       if (text.match(' ')) {
         this.usernameClass = 'usernameInputRed';
         this.usernameErrorTextKeys.push('username_no_spaces') // 'Your username shouldn\'t contain spaces';
-      } else if (!text.match('^[A-Za-z0-9]*$')) {
+      } else if (!text.match(/^[A-Za-z0-9]+$/)) {
         this.usernameClass = 'usernameInputRed';
         this.usernameErrorTextKeys.push('username_no_special_chars')// 'Your username shouldn\'t contain special characters (this includes fadas unfortunately!)';
       } else {
