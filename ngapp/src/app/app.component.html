@@ -90,9 +90,14 @@
     <div *ngIf="notificationsShown && (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)" class="optionsPopupOld notifcationPopup">
       <div *ngIf="storiesForNotifications.length > 0" class="notificationsHeader">{{ts.l.new_feedback}}</div>
       <div class="notificationsBody">
-        <div *ngFor="let story of storiesForNotifications" class="notificationCard" (click)="goToStory(story._id)">
-          {{story.title}}
-        </div>
+        <a
+          *ngFor="let story of storiesForNotifications"
+          class="notificationCard"
+          target="_blank"
+          routerLink="{{'/dashboard/' + story._id}}"
+          >
+            {{story.title}}
+        </a>
       </div>
       <div class="notificationsHeader" *ngIf="notificationsShown && messagesForNotifications.length > 0">{{ts.l.new_messages}}</div>
       <div class="notificationsBody">
