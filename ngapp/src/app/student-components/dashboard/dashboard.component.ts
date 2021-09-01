@@ -471,7 +471,7 @@ export class DashboardComponent implements OnInit {
       await this.saveStory();
       this.modalChoice.next(true);
     } catch (error) {
-      window.alert('You\'re story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.'); 
+      window.alert('Your story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.'); 
       this.hideModal();
     }
   }
