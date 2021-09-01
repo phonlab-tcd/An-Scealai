@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
     role: 'STUDENT',
+    language: 'ga',
   };
 
   frozenCredentials: RegistrationTokenPayload = null;
@@ -102,6 +103,8 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.checkDetails()) {
+      this.credentials.language = this.ts.inIrish() ? 'ga' : 'en';
+      console.log('cred_language', this.credentials.language);
       this.auth.register(this.credentials).subscribe(
         (ok) => {
         // Copy credentials to frozenCredentials

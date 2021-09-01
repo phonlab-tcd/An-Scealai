@@ -30,6 +30,7 @@ export interface VerifyEmailRequest {
   // TODO is role necessary for this request?
   role: string;
   baseurl: string;
+  language: 'ga' | 'en';
 }
 
 export interface LoginTokenPayload {
@@ -45,6 +46,7 @@ export interface RegistrationTokenPayload {
   email: string;
   password: string;
   role: string;
+  language: 'en' | 'ga'; // english | gaeilge
 }
 
 @Injectable({

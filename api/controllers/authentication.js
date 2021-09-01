@@ -7,6 +7,7 @@ if(mail.couldNotCreate){
 
 // Used to generate confirmation code to confirm email address
 var jwt = require('jsonwebtoken');
+const path = require('path');
 
 var passport = require('passport');
 var mongoose = require('mongoose');
@@ -153,7 +154,7 @@ module.exports.resetPassword = async (req, res) => {
 }
 
 
-async function sendVerificationEmail (username, password, email, baseurl) {
+async function sendVerificationEmail (username, password, email, baseurl, language) {
   return new Promise(async (resolve, reject) => {
 
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
@@ -177,7 +178,7 @@ async function sendVerificationEmail (username, password, email, baseurl) {
     user.email = email;
 
     const activationLink = user
-      .generateActivationLink(baseurl);
+      .generateActivationLink(baseurl, language);
 
     // Update user's email and verification code on the db
     await user.save()
@@ -185,11 +186,18 @@ async function sendVerificationEmail (username, password, email, baseurl) {
         reject(err);
       });
 
-    mailObj = {
-      from: 'scealai.info@gmail.com',
-      recipients: [email],
-      subject: 'An Scéalaí account verification',
-      message: 
+    const emailMessage = (language === 'ga') ? 
+      // as gaeilge 
+      `A ${user.username}, a chara,\n\
+      Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, le do thoil:\n\n\
+      ${activationLink}\n\n\
+      A luaithe is a dheimhníonn tú do sheoladh rphoist beidh tú in ann logáil isteach arís.\n\
+      \n\
+      Le gach dea-ghuí,\n\
+      \n\
+      Foireann An Scéalaí`
+      :
+      // in english
       `Dear ${user.username},\n\
       Please use this link to verify your email address for An Scéalaí:\n\n\
       ${activationLink}\n\n\
@@ -197,7 +205,13 @@ async function sendVerificationEmail (username, password, email, baseurl) {
       \n\
       Kindly,\n\
       \n\
-      The An Scéalaí team`,
+      The An Scéalaí team`;
+
+    mailObj = {
+      from: 'scealai.info@gmail.com',
+      recipients: [email],
+      subject: 'An Scéalaí account verification',
+      message: emailMessage,
     }
 
     let sendEmailErr = null;
@@ -260,25 +274,18 @@ module.exports.verify = async (req, res) => {
   }
 
   if (user.verification.code === req.query.verificationCode) {
-    const updatedUser = 
-      await User.findOneAndUpdate({
-        // Find
-        username: req.query.username, 
-        email: req.query.email}, 
-        // Update
-        {status: 'Active'}, 
-        // Options
-        {new: true});
-    console.dir(updatedUser);
-    return res.status(200).send('<h1>Success</h1><p>Your account has been verified.</p><ul>' +
-      `<li>username: ${updatedUser.username}</li>` +
-      `<li>verified email: ${updatedUser.email}</li>` +
-      '</ul><p>');
+    user.status = 'Active';
+
+    await user.save();
+
+    return res
+        .status(200)
+        .sendFile(path.join(__dirname, '../views/account_verification.html'));
   }
 
 
   res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
-}
+};
 
 module.exports.verifyOldAccount = async (req, res) => {
   try {
@@ -310,6 +317,10 @@ module.exports.verifyOldAccount = async (req, res) => {
           });
         });
 
+    if (!user) {
+      return res.status(40).josn('User not found');
+    }
+
     if (user.status === 'Active') {
       if (user.email) {
         return res
@@ -326,28 +337,17 @@ module.exports.verifyOldAccount = async (req, res) => {
           had no assoctiated email address. \
           Resetting to Pending`);
       try {
-        const user = await User.findOneAndUpdate(
-            // Find
-            {username: user.username},
-            // Update
-            {status: 'Pending'},
-            // Options
-            {new: true});
-        if ( !user ) {
-          logger.error({
-            endpoint: '/user/verifyOldAccount',
-            message:
-              'There was an error while trying to set the users status to pending',
-          });
-          return res
-              .status(500)
-              .json({
-                file: './api/controllers/authentication.js',
-                functionName: 'verifyOldAccount',
-                messageKeys:
-                ['There was an error on our server. We failed to update your status to Pending.'],
-              });
-        }
+        user.status = 'Pending';
+        await user.save();
+        return res
+            .status(500)
+            .json({
+              file: './api/controllers/authentication.js',
+              functionName: 'verifyOldAccount',
+              messageKeys:
+              ['There was an error on our server. ' +
+               'We failed to update your status to Pending.'],
+            });
       } catch (err) {
         logger.error({
           endpoint: '/user/verifyOldAccount',
@@ -356,13 +356,18 @@ module.exports.verifyOldAccount = async (req, res) => {
       }
     }
 
+    // todo: remove
+    console.log('verifyOldAccount language', req.body.language);
+
     try {
       const mailRes =
         await sendVerificationEmail(
-            req.body.username,
-            req.body.password,
-            req.body.email,
-            req.body.baseurl);
+          req.body.username,
+          req.body.password,
+          req.body.email,
+          req.body.baseurl,
+          req.body.language,
+        );
 
       console.log('mailRes:', mailRes);
 

@@ -1,8 +1,8 @@
 {
   "name": "api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The backend API for An Scéalaí.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha --reporter spec",
     "start": "nodemon server.js"

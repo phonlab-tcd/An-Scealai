@@ -41,7 +41,7 @@
     </div>
     
     <!-- Write new message container -->
-    <form #messageForm="ngForm" (ngSubmit)="sendMessage(); messageForm.reset();" class="newMessageContainer" *ngIf="createNewMessage" ngNativeValidate>
+    <form #messageForm="ng-form" (ngSubmit)="sendMessage(); messageForm.reset();" class="newMessageContainer" *ngIf="createNewMessage" ngNativeValidate>
       
       <!-- Record audio message container (fades in/out depending on class) -->
          <div class="{{modalClass}} modalContainer">
