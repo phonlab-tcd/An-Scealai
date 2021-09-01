@@ -101,6 +101,10 @@
           (click)="this.dontToggle=true; displayGrammarErrors()">
           simulate gramadoir
         </div>
+        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+          (click)="this.dontToggle=true; getLines()">
+          get lines
+        </div>
       </div>
     </div>
 
@@ -115,8 +119,8 @@
           placeholder=""
           [preserveWhitespace]="true"
           [(ngModel)]="story.htmlText" 
-          (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"
-          (onEditorCreated)="createdQuill($event)"
+          (onContentChanged)="storyEdited($event.text); getWordCount($event.text);"
+          (onEditorCreated)="quillEditor = $event"
         >
         </quill-editor>
          
