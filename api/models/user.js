@@ -147,10 +147,7 @@ userSchema.methods.generateActivationLink = function(baseurl) {
 
   this.verification.date = new Date();
 
-  return `${baseurl}user/verify` +
-    `?username=${this.username}` +
-    `&email=${this.email}` +
-    `&verificationCode=${this.verification.code}`;
-};
+  return `${baseurl}user/verify?username=${this.username}&email=${this.email}&language=${language}&verificationCode=${this.verification.code}`;
+}
 
 module.exports = mongoose.model('User', userSchema);
