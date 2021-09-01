@@ -459,6 +459,7 @@ module.exports.register = async (req, res) => {
         user.email,
         req.body.baseurl);
   } catch (err) {
+    logger.error(err);
     resObj.errors.push(err);
     if (err.messageToUser) {
       resObj.messageKeys.push(err.messageToUser);
