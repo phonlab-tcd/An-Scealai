@@ -367,15 +367,6 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
       return res.send(err);
     }
     if (story) {
-      /*
-      console.log("original text: ", story.text);
-      let test8 = story.text.replace(/<br>/g, "\n");
-      let test9 = test8.replace(/(<([^>]+)>)/ig, '');
-      let test10 = test9.replace(/\n/g, " ");
-      console.log("test8: ", test8);
-      console.log("test9: ", test9);
-      console.log("test10: ", test10);
-      */
       const form = {
         teacs: story.text.replace(/\n/g, ' '),
         teanga: req.params.lang,
