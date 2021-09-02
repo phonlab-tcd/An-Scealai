@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
 
   story: Story = new Story();
   stories: Story[];
+  saveStoryDebounceId = 0;
   id: string;
   storyFound: boolean;
   storySaved: boolean = true;
@@ -92,10 +93,10 @@ export class DashboardComponent implements OnInit {
     public ts : TranslationService, public statsService: StatsService,
     public classroomService: ClassroomService,) {}
 
-/*
-* set the stories array of all the student's stories 
-* and the current story being edited given its id from url 
-*/
+  /*
+  * set the stories array of all the student's stories 
+  * and the current story being edited given its id from url 
+  */
   ngOnInit() {
     this.storySaved = true;
     // Get the stories from the storyService and run
@@ -157,26 +158,50 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* Update story data (text and date) using story service 
-* Add logged event for saved story  using engagement service
-*/
-  saveStory() {
-    this.route.params.subscribe(
-      params => {
-        let updateData = {
-          text : this.story.text,
-          htmlText: this.story.htmlText,
-          lastUpdated : new Date(),
-        };
-        this.storyService.updateStory(updateData, params['id']).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
-        this.storySaved = true;
-        console.log("Story saved");
-      }
-    )
+  /*
+  * Update story data (text and date) using story service 
+  * Add logged event for saved story  using engagement service
+  */
+  saveStory(finishedWritingTime: Date) {
+    const updateData = {
+      text : this.story.text,
+      htmlText: this.story.htmlText,
+      lastUpdated: finishedWritingTime,
+    };
+    this.storyService
+        .updateStory(updateData, this.story._id)
+        .toPromise()
+        .then(
+          () => {
+            this.storySaved = true;
+          },
+          (error) => {
+            window.alert(
+                `There was an error while trying to save` +
+                `the story:\n\n${error.message || JSON.stringify(error)}`);
+          }
+        );
+
+    this.engagement
+        .addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
+
+    console.log("Story saved");
   }
-  
+
+  debounceSaveStory() {
+    this.saveStoryDebounceId++;
+    const myId = this.saveStoryDebounceId;
+    const finishedWritingTime = new Date();
+    setTimeout(() => {
+      this.saveStoryDebounceCallback(myId, finishedWritingTime);
+    }, 1000);
+  }
+
+  saveStoryDebounceCallback(myId: number, finishedWritingTime: Date) {
+    if (myId === this.saveStoryDebounceId) {
+      this.saveStory(finishedWritingTime);
+    }
+  }
   showDictionary() {
     this.dictionaryVisible = true;
     this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
@@ -214,13 +239,14 @@ export class DashboardComponent implements OnInit {
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
   storyEdited(text) {
     this.story.text = text;
-
+    this.debounceSaveStory();
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
     this.story.text = text;
+    this.debounceSaveStory();
     this.storySaved = false;
   }
 
@@ -278,7 +304,6 @@ export class DashboardComponent implements OnInit {
 * Add logged event for checked grammar
 */
   runGramadoir() {
-    this.saveStory();
     this.feedbackVisible = false;
     this.grammarChecked = false;
     this.dictionaryVisible = false;
@@ -441,7 +466,7 @@ export class DashboardComponent implements OnInit {
 
   // save story and set next modal choice to true 
   saveModal() {
-    this.saveStory();
+    this.saveStory(new Date());
     this.modalChoice.next(true);
   }
 
