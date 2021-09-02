@@ -1,4 +1,7 @@
 <!-- Display the written story along with edit options -->
+<div>
+  {{gramadoirResponse}}
+</div>
 <div class="page">
   <div class="bookContainer">
     <div class="{{modalClass}} modalContainer">
@@ -84,8 +87,9 @@
         </div>
 
         <!-- GRAMMAR CHECK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; defaultMode(); runGramadoir()">
+        <div *ngIf="showOptions"
+             class="optionsBtn optionsPopupBtn"
+             (click)="handleGrammarCheckerOptionClick();">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
@@ -102,66 +106,37 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && !grammarLoading && !dictionaryVisible">
+      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible">
         <!--<textarea mwlTextInputElement class="textField" [(ngModel)]="story.text" (input)="storyEdited()" spellcheck="false"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
          
       </div>
 
-      <!-- display grammar loading -->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !grammarChecked && grammarLoading">
-        <div class="textContainer">
-          <div class="loaderContainer">
-            <b>{{ts.l.correcting_grammar}}</b>
-            <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- display story container after grammar checked -->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible && grammarChecked">
-        <!-- dipslay chosen tag window -->
-        <div class="feedbackHeader"><div>{{ts.l.grammar_checker}} </div> <div class="closeFeedbackBtn" (click)="closeGrammar()"><i class="fa fa-times optionsBtnIcon"></i></div></div>
-        <div class="grammarMessageContainer {{grammarMessageClass}}">
-          <span *ngIf="chosenTag">{{chosenTag?.message}}</span>
-          <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">{{ts.l.choose_an_error}}</span>
-        </div>
-        <!-- display an gramadoir / vowel checker selection -->
-        <div class="grammarToolbar">
-          <div><i class="fa fa-redo-alt refreshGrammar" (click)="runGramadoir()"></i></div>
-          <div class="selectGrammarFilter">
-            <select (change)="onChangeGrammarFilter($event.target.value)">
-              <option value="gramadoir">{{ts.l.gramadoir}}</option>
-              <option value="vowel">{{ts.l.broad_slender}}</option>
-            </select>
-          </div>
-        </div>
-        <!-- display grammar error filter options -->
-        <div class="selectErrorCheckbox" *ngIf="grammarSelected">
-          <div *ngFor="let recipient of filteredTags | keyvalue">
-            <div style="margin:2px;" ><input [ngModel]="checkBox.get(recipient.key)" (ngModelChange)="checkBox.set(recipient.key, $event)" type="checkbox"/> {{recipient.key | lowercase}} ({{recipient.value.length}})</div> 
-          </div>
-        </div>
-        <!-- display the story with error highlighting-->
-        <div mwlTextInputHighlightContainer>
-          <textarea mwlTextInputElement class="textField textFieldGrammarCheck" [(ngModel)]="story.text" (input)="storyEdited()" #inputTextarea ></textarea>
-          <!-- an gramadoir -->
-          <div *ngIf="grammarSelected">
-            <mwl-text-input-highlight [tags]="getSelectedTags()" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
-          </div>
-          <!-- broad/slender -->
-          <div *ngIf="!grammarSelected">
-            <mwl-text-input-highlight [tags]="tags" [textInputElement]="inputTextarea" (tagClick)="chooseGrammarTag($event.tag)" (tagMouseEnter)="addTagHoverClass($event.target)" (tagMouseLeave)="removeTagHoverClass($event.target)"></mwl-text-input-highlight>
-          </div>
-        </div>
-      </div>
       <!-- display story with feedback excluding audio feedback-->
       <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
         <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea class="textField feedbackTextarea" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
+        <textarea
+            class="textField feedbackTextarea"
+            placeholder="{{ts.l.no_feedback_provided}}" 
+            readonly
+            value="{{story?.feedback.text}}">
+        </textarea>
+
         <!--<textarea class="textField feedbackVisibleTextfield" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
         
       </div>
       <!-- display story with feedback including audio feedback -->
@@ -171,15 +146,27 @@
         <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
         <!--<textarea class="textField feedbackVisibleTextfieldAudio" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
         
-        <quill-editor [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
-        
+        <quill-editor
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
       </div>
 
       <!-- display dictionary option-->
-      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible && !grammarChecked && !grammarLoading">
+      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible">
         <!--<textarea class="textField dictionaryVisibleTextField" value="{{story?.text}}" [(ngModel)]="story.text" (input)="storyEdited()"></textarea>-->
         
-        <quill-editor class="quill-editor-dict" [modules]="quillToolbar" placeholder="" [preserveWhitespace]="true" [(ngModel)]="story.htmlText" (onContentChanged)="storyEdited($event.text); getWordCount($event.text)"></quill-editor>
+        <quill-editor
+            class="quill-editor-dict"
+            [modules]="quillToolbar"
+            placeholder=""
+            [preserveWhitespace]="true"
+            [(ngModel)]="story.htmlText"
+            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+        </quill-editor>
         
         <div class="dictionaryContainer">
           <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
@@ -210,9 +197,18 @@
       </div>
       
       <!-- Word Count -->
-      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px;">
+      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px; padding-top: 0; margin-top: 0;">
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
+
+      <app-grammar-checker
+          #grammarChecker
+          *ngIf="story.text"
+          [storySaved]=storySaved
+          [classroomId]="classroomId"
+          [story]="story"
+          >
+      </app-grammar-checker>
 
     </div>
     <!-- <app-chatbot></app-chatbot> -->
