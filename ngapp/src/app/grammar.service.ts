@@ -43,8 +43,9 @@ export class GrammarService {
     private http: HttpClient,
   ) { }
 
-  string2GramadoirRuleId = (str: string): GramadoirRuleId => 
-    GRAMADOIR_RULE_ID_VALUES.find(validType => str.includes(validType)) || 'default';
+  string2GramadoirRuleId = (str: string): GramadoirRuleId =>
+    GRAMADOIR_RULE_ID_VALUES.find(validType => str.includes(validType)) ||
+    'default'
 
   userFriendlyGramadoirMessage: {[ruleId: string]: { en: string; ga: string; } } = {
     CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
