@@ -342,11 +342,15 @@ storyRoutes
               });
         }
 
+	console.dir(story);
+
         // GENERATE A FILENAME <story._id>.<format>
         const filename =
           path.join(
               __dirname,
               `storiesForDownload/${story._id}.${req.params.format}`);
+	
+	console.log(filename);
 
         logger.info({
           msg: 'CREATING ' + req.params.format,
@@ -357,7 +361,7 @@ storyRoutes
         // Pandoc example
         const pandocErr =
           await pandoc(
-              story.htmlText, // src
+              story.htmlText || story.text, // src
               ['--from', 'html', '-o', filename]); // args
 
         if (pandocErr) {
@@ -374,6 +378,7 @@ storyRoutes
               while: 'sending the file:' + filename,
               error: sendFileErr,
             });
+	    return res.send(sendFileErr);
           }
           // DELETE THE FILE AFTER IT HAS BEEN SENT
           fs.unlink(filename, (err) => {

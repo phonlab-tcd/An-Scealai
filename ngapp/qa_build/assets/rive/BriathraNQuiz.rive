@@ -1,0 +1,238 @@
+> object getName javascript
+  return getName();
+< object
+
+> object startLevel javascript
+  if(args[0] == 1) chatSetup("startl1");
+  if(args[0] == 2) chatSetup("startl2");
+  if(args[0] == 3) chatSetup("startl3");
+  return "";
+< object
+
+> object getRandomQuestion javascript
+  if(quizVerb == "abair") return getRandomQuestion(abairQuiz);
+  else if(quizVerb == "tar") return getRandomQuestion(tarQuiz);
+  else if(quizVerb == "faigh") return getRandomQuestion(faighQuiz);
+  else if(quizVerb == "bí") return getRandomQuestion(biQuiz);
+  else if(quizVerb == "tabhair") return getRandomQuestion(tabhairQuiz);
+  else if(quizVerb == "clois") return getRandomQuestion(cloisQuiz);
+  else if(quizVerb == "teigh") return getRandomQuestion(teighQuiz);
+  else if(quizVerb == "dean") return getRandomQuestion(deanQuiz);
+  else if(quizVerb == "beir") return getRandomQuestion(beirQuiz);
+  else if(quizVerb == "feic") return getRandomQuestion(feicQuiz);
+  else if(quizVerb == "ith") return getRandomQuestion(ithQuiz);
+< object
+
+> object getRandomReply javascript
+  return getRandomReply();
+< object
+
+> object changeProgress javascript
+  return changeProgress(args[0]);
+< object
+
+> object getProgress javascript
+  return getProgress();
+< object
+
+> object getWrongCount javascript
+  return wrongCount;
+< object
+
+> object resetProgress javascript
+  return resetProgress();
+< object
+
+> object chatSetup javascript
+  if(args[1] == "nowait") return chatSetup(args[0]);
+  setTimeout(function(){
+    return chatSetup(args[0]);
+  }, 2500);
+  return "";
+< object
+
+> object checkAnswer javascript
+  var ans = args[0];
+  if(args[1] != null) ans += " " + args[1];
+  //console.log("ans: " + ans);
+  //console.log("current ans: " + currentQuestion.answer);
+  if(ans == currentQuestion.answer){
+    //console.log("true");
+    return true;
+  }
+  else if(ans == answer2){
+    console.log("true");
+    return true;
+  }
+  else return false;
+< object
+
+> object answeringQuestions javascript
+  //console.log(answeringQuestions);
+  return answeringQuestions;
+< object
+
+> object setAnsweringQuestions javascript
+  answeringQuestions = args[0];
+  if(answeringQuestions == true){
+    wrongCount = 0;
+  }
+  return "";
+< object
+
+> object loadFromChat javascript
+  loadFromChat(args[0], args[1]);
+  return "";
+< object
+
+> object setKeepMessages javascript
+  keepMessages = args[0];
+  return "";
+< object
+
+> object levelComplete javascript
+  if(args[0] == "false") isLevelComplete = false;
+  if(isLevelComplete == true){
+    chatSetup("levelcomplete")
+  }
+  console.log("isLevelComplete: " + isLevelComplete);
+  //console.log("isQuizComplete: " + isQuizComplete);
+  return "";
+< object
+
+> object getCrioch javascript
+  return getCrioch();
+< object
+
+> object getLink javascript
+  return getLink();
+< object
+
+> object triailAris javascript
+  return triailAris();
+< object
+
+> object quizComplete javascript
+  if(args[0] == "false") isQuizComplete = false;
+  if(isQuizComplete == true) chatSetup("quizcomplete");
+  console.log("isQuizComplete: " + isQuizComplete);
+  return ""
+< object
+
+> object quiz javascript
+  if(args[0] == "false"){
+    quiz = false;
+    isQuizComplete = false;
+  }
+  else {
+    quiz = args[0];
+    quizScore = 0;
+  }
+  return "";
+< object
+
+> object getQuizScore javascript
+  return quizScore;
+< object
+
+> object getQuizProgress javascript
+  return quizProgress;
+< object
+
+> object quizVerb javascript
+  return quizVerb;
+< object
+
+> object getQuizVerbTense javascript
+  if(args[0] == "AC"){
+    return quizVerb + quizVerbAC;
+  }
+  else if(args[0] == "AL"){
+    return quizVerb + quizVerbAL;
+  }
+  else if(args[0] == "AF"){
+    return quizVerb + quizVerbAF;
+  }
+  else if(args[0] == "MC"){
+    return quizVerb + quizVerbMC;
+  }
+< object
+
+> object loadFromQuiz javascript
+  console.log(quizVerb);
+  if(args[0] == "AC"){
+    loadFromChat(quizVerb + "AC", "chaite");
+  }
+  else if(args[0] == "AL"){
+    loadFromChat(quizVerb + "AL");
+  }
+  else if(args[0] == "AF"){
+    loadFromChat(quizVerb + "AF");
+  }
+  else if(args[0] == "MC"){
+    loadFromChat(quizVerb + "MC");
+  }
+  return "";
+< object
+
++ start
+- An bhfuil tú ag iarraidh cleachtadh a dhéanamh ar an mbriathar <b><i><call>quizVerb</call></i></b>, a <call>getName</call>? Tá gach foirm den bhriathar anseo.
+
++ (ta|tá|ba mhaith|sea)
+- <call>chatSetup cleachtadh nowait</call>
+
++ (nil|níl|níor mhaith)
+- Ar mhaith leat an briathar '<call>quizVerb</call>' a dhéanamh: <br>
+^ <button class="rive-button2" onclick="chatSetup('chaite')">Aimsir Chaite</button><br>
+^ <button class="rive-button2" onclick="chatSetup('laithreach')">Aimsir Laithreach</button><br>
+^ <button class="rive-button2" onclick="chatSetup('fhaistineach')">Aimsir Fháistineach</button><br>
+^ <button class="rive-button2" onclick="chatSetup('coinniollach')">Modh Coinniollach</button><br>
+^ Mura bhfuil ansin téann tú ar ais go dtí an leathanach baile mar sin.
+
++ (aimsir chaite|chaite)
+- <call>setKeepMessages true</call><call>loadFromQuiz AC</call>
+
++ (aimsir laithreach|laithreach)
+- <call>setKeepMessages true</call><call>loadFromQuiz AL</call>
+
++ (fháistineach|fhaistineach|aimsir fháistineach)
+- <call>setKeepMessages true</call><call>loadFromQuiz AF</call>
+
++ (modh coinniollach|coinniollach)
+- <call>setKeepMessages true</call><call>loadFromQuiz MC</call>
+
++ cleachtadh
+- Clóscríobh “scor” má theastaíonn uait riamh stop a chur leis an tráth na gceist.<br><br>
+^ <call>quiz true</call><call>getRandomQuestion</call><br><call>setAnsweringQuestions true</call><call>resetProgress</call>\s
+
++ *
+* <call>answeringQuestions</call> == false =>  Tá brón orm cad a dúirt tú?
+* <call>getWrongCount</call> > 3 => <call>getLink</call><call>chatSetup continue</call>
+* <call>checkAnswer <star></call> == true =><call>changeProgress +</call><call>quizComplete</call><call>getRandomReply</call><call>getQuizScore</call>
+^ <call>getRandomQuestion</call>
+* <call>checkAnswer <star></call> == false => Mícheart. <call>quizComplete</call><call>triailAris</call><br><call>changeProgress</call>
+^ <call>getQuizScore</call><br><call>getRandomQuestion abairQuiz</call>
+
++ (quit|scor)
+* <call>getQuizScore</call> <= 5 => omg you only lasted <call>getQuizProgress</call> of the questions. <call>chatSetup crioch</call>
+* <call>getQuizScore</call> <= 10 => well done for lasting <call>getQuizProgress</call> questions. <call>chatSetup crioch</call>
+* <call>getQuizScore</call> <= 20 => you are amazing for doing <call>getQuizProgress</call> questions. <call>chatSetup crioch</call>
+
++ quizcomplete
+- Tá an cleachtadh críochnaithe agat. Maith thú, a <call>getName</call>! <call>chatSetup crioch</call>
+^ <call>setAnsweringQuestions false</call>
+^ <call>quiz false</call>
+
++ continue
+- Ar mhaith leat leanúint ar aghaidh?
+
++ (ta|tá|ba mhaith|sea)
+% ar mhaith leat leanúint ar aghaidh
+- <call>chatSetup cleachtadh</call>
+
++ (nil|níl|níor mhaith)
+% ar mhaith leat leanúint ar aghaidh
+- <call>chatSetup crioch nowait</call>
+
++ crioch
+- <call>getCrioch</call><call>quiz false</call>
