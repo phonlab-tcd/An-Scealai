@@ -22,6 +22,9 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 
+
+logger.info('DB url: ' + config.DB);
+
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
