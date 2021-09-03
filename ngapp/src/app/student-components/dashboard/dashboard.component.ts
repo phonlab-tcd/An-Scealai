@@ -48,6 +48,8 @@ type QuillHighlightTag = {
   start: number;
   length: number;
   type: GramadoirRuleId;
+  tooltip: typeof Tooltip;
+  color: string;
   messages: {
     en: string;
     ga: string;
@@ -159,11 +161,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /*
-  * set the stories array of all the student's stories 
-  * and the current story being edited given its id from url 
+  /* set the stories array of all the student's stories 
+  *  and the current story being edited given its id from url
   */
   ngOnInit() {
+    console.log('typeof Tooltip', typeof Tooltip);
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
@@ -249,6 +251,7 @@ export class DashboardComponent implements OnInit {
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
                   type: this.grammar.string2GramadoirRuleId(tag.ruleId),
+                  tooltip: null,
                   messages: { en: tag.msg},
                 }) as QuillHighlightTag
               )
@@ -266,54 +269,48 @@ export class DashboardComponent implements OnInit {
     });
 
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
+    
+    this.applyGramadoirTagFormatting();
 
-    grammarCheckerErrors.forEach((error, errorIndex) => {
+    /*
+    grammarCheckerErrors.forEach((error: QuillHighlightTag, errorIndex) => {
       this.quillEditor
           .formatText(
               error.start,
               error.length,
-              {'gramadoir-tag': error.type}
+              {'gramadoir-tag': error.type, 'background': error.color}
           );
-
-      // Get the HTMLElement for the span just created by the formatText
-      const allTagElems = document.querySelectorAll('[data-gramadoir-tag]');
-      const popup = allTagElems[allTagElems.length - 1];
-
-      // Create a customised quill tooltip containing
-      // a message about the grammar error
-      const bounds = this.quillEditor.getBounds(error.start, error.length);
-      const tooltip = new Tooltip(this.quillEditor);
-      tooltip.root.classList.add('custom-tooltip');
-
-      // Add hover UI logic to the grammar error span element
-      popup.addEventListener('mouseover', () => {
-        this.mouseOverTagElem(this, error, tooltip, bounds);
-      });
-
-      popup.addEventListener('mouseout', () => {
-        tooltip.hide();
-      });
     });
+
+    // Get the HTMLElement for the span just created by the formatText
+    document
+        .querySelectorAll('[data-gramadoir-tag]')
+        .forEach((tagElement, index) => {
+      const error = grammarCheckerErrors[index];
+      this.createGrammarPopup(error, tagElement);
+    });
+    */
+
     if (this.grammarTagsHidden) {
       this.hideGrammarTags();
     }
     console.log('grammar updated');
   }
 
-  createGrammarPopup(error, popup) {
+  createGrammarPopup(error, tagElement) {
     // Create a customised quill tooltip containing
     // a message about the grammar error
     const bounds = this.quillEditor.getBounds(error.start, error.length);
-    const tooltip = new Tooltip(this.quillEditor);
-    tooltip.root.classList.add('custom-tooltip');
+    error.tooltip = new Tooltip(this.quillEditor);
+    error.tooltip.root.classList.add('custom-tooltip');
 
     // Add hover UI logic to the grammar error span element
-    popup.addEventListener('mouseover', () => {
-      this.mouseOverTagElem(this, error, tooltip, bounds);
+    tagElement.addEventListener('mouseover', () => {
+      this.mouseOverTagElem(this, error, bounds);
     });
 
-    popup.addEventListener('mouseout', () => {
-      tooltip.hide();
+    tagElement.addEventListener('mouseout', () => {
+      error.tooltip.hide();
     });
   }
 
@@ -368,43 +365,38 @@ export class DashboardComponent implements OnInit {
   mouseOverTagElem(
     that: DashboardComponent,
     error: QuillHighlightTag,
-    tooltip: any,
     bounds: any,
   )
   {
     console.count('MOUSOVER');
-    if (that.grammarTagsHidden) {
-      tooltip.hide();
-      return;
-    }
     const userFriendlyMsgs =
       that.grammar
           .userFriendlyGramadoirMessage[error.type];
 
-    tooltip.root.innerHTML =
+    error.tooltip.root.innerHTML =
       // Prefer user friendly message
       userFriendlyMsgs ?
       userFriendlyMsgs[that.ts.l.iso_code] :
       error.messages[that.ts.l.iso_code];
-    console.count('tooltip.show()');
-    tooltip.show();
-    tooltip.position(bounds);
+    console.count('error.tooltip.show()');
+    error.tooltip.show();
+    error.tooltip.position(bounds);
 
     // Ensure that tooltip isn't cut off by the right edge of the editor
     const rightOverflow =
-      (tooltip.root.offsetLeft + tooltip.root.offsetWidth) -
+      (error.tooltip.root.offsetLeft + error.tooltip.root.offsetWidth) -
       that.quillEditor.root.offsetWidth;
 
-    tooltip.root.style.left =
+    error.tooltip.root.style.left =
       (rightOverflow > 0) ?
-      `${(tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
-      tooltip.root.style.left;
+      `${(error.tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
+      error.tooltip.root.style.left;
 
     // Ensure that tooltip isn't cut off by the left edge of the editor
-    tooltip.root.style.left =
-      (tooltip.root.offsetLeft < 0) ?
-      `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
-      tooltip.root.style.left;
+    error.tooltip.root.style.left =
+      (error.tooltip.root.offsetLeft < 0) ?
+      `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
+      error.tooltip.root.style.left;
   }
 
   /*
@@ -471,9 +463,7 @@ export class DashboardComponent implements OnInit {
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
     this.storySaved = false;
-    if (text !== this.story.text) {
-      this.textUpdated.next(text);
-    }
+    this.textUpdated.next(text);
     this.story.text = text;
   }
 
