@@ -48,6 +48,8 @@ type QuillHighlightTag = {
   start: number;
   length: number;
   type: GramadoirRuleId;
+  tooltip: typeof Tooltip;
+  color: string;
   messages: {
     en: string;
     ga: string;
@@ -81,6 +83,9 @@ export class DashboardComponent implements OnInit {
   chosenTag: GrammarTag;
   grammarLoading: boolean = false;
   grammarSelected: boolean = true;
+  grammarTagsHidden = true;
+  mostRecentGramadoirInput: string = null;
+  currentGramadoirHighlightTags: QuillHighlightTag[] = null;
   modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
@@ -145,14 +150,22 @@ export class DashboardComponent implements OnInit {
     this.textUpdated.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-    ).subscribe(async () => await this.displayGrammarErrors());
+    ).subscribe(async () => {
+      const textToCheck = this.story.text.replace(/\n/g, ' ');
+      if (textToCheck !== this.mostRecentGramadoirInput) {
+        this.updateGrammarErrors(textToCheck);
+      }
+      if (!this.grammarTagsHidden) {
+        this.applyGramadoirTagFormatting();
+      }
+    });
   }
 
-/*
-* set the stories array of all the student's stories 
-* and the current story being edited given its id from url 
-*/
+  /* set the stories array of all the student's stories 
+  *  and the current story being edited given its id from url
+  */
   ngOnInit() {
+    console.log('typeof Tooltip', typeof Tooltip);
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
@@ -211,35 +224,25 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  clearAllGramadoirTags() {
-    this.quillEditor.formatText(
-      0, // from the very beginning of the text
-      this.quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
-    );
-    // remove any remaining custom-tooltips from the DOM.
-    //  -> without doing this, a tooltip can live on past its
-    //     corresponding highlight tag if the user stays hovering
-    //     on the highlight tag while the grammar error is fixed.
-    document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
-  }
 
-  async displayGrammarErrors() {
-    if (!this.quillEditor) { return; }  // my tslint server keeps
-                                        // asking me to brace these guys
+  async updateGrammarErrors(text: string) {
+    // my tslint server keeps
+    // asking me to brace these guys
+    if (!this.quillEditor) { return; }
 
     // convert text to single line
     // (no paragraphs/new lines)
-    const gramadoirInputText = this.story.text.replace(/\n/g, ' ');
+    // const gramadoirInputText = text; // this.story.text.replace(/\n/g, ' ');
+    this.mostRecentGramadoirInput = text; // gramadoirInputText;
 
     const gramadoirPromiseIrish =
-      this.grammar.gramadoirDirectObservable(gramadoirInputText , 'ga')
+      this.grammar.gramadoirDirectObservable(text, 'ga')
       .toPromise();
 
     const grammarCheckerErrors =
       await this.grammar
           .gramadoirDirectObservable(
-            gramadoirInputText,
+            text,
             'en')
           .pipe(
             map((tagData: GramadoirTag[]) =>
@@ -248,6 +251,7 @@ export class DashboardComponent implements OnInit {
                   start: + tag.fromx,
                   length: + tag.tox + 1 - tag.fromx,
                   type: this.grammar.string2GramadoirRuleId(tag.ruleId),
+                  tooltip: null,
                   messages: { en: tag.msg},
                 }) as QuillHighlightTag
               )
@@ -255,6 +259,7 @@ export class DashboardComponent implements OnInit {
           ).toPromise();
 
     const editorElem = this.quillEditor.root;
+
     this.clearAllGramadoirTags();
 
     const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
@@ -263,61 +268,141 @@ export class DashboardComponent implements OnInit {
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
 
-    grammarCheckerErrors.forEach((error, errorIndex) => {
-      // Add highlighting to error text
-      this.quillEditor.formatText(error.start, error.length, {'gramadoir-tag': error.type});
+    this.currentGramadoirHighlightTags = grammarCheckerErrors;
+    
+    this.applyGramadoirTagFormatting();
 
-      // Get the HTMLElement for the span just created by the formatText
-      const allTagElems = document.querySelectorAll('[data-gramadoir-tag]');
-      const tagElem = allTagElems[allTagElems.length - 1];
-
-      // Create a customised quill tooltip containing
-      // a message about the grammar error
-      const bounds = this.quillEditor.getBounds(error.start, error.length)
-      const tooltip = new Tooltip(this.quillEditor);
-      tooltip.root.classList.add('custom-tooltip');
-
-      // Add hover UI logic to the grammar error span element
-      tagElem.addEventListener('mouseover', () => {
-        const userFriendlyMsgs =
-          this.grammar
-              .userFriendlyGramadoirMessage[error.type];
-
-        tooltip.root.innerHTML =
-          // Prefer user friendly message
-          userFriendlyMsgs ?
-          userFriendlyMsgs[this.ts.l.iso_code] :
-          error.messages[this.ts.l.iso_code];
-        tooltip.show();
-        tooltip.position(bounds);
-
-        // Ensure that tooltip isn't cut off by the right edge of the editor
-        const rightOverflow =
-          (tooltip.root.offsetLeft + tooltip.root.offsetWidth) -
-          editorElem.offsetWidth;
-
-        tooltip.root.style.left =
-          (rightOverflow > 0) ?
-          `${(tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
-          tooltip.root.style.left;
-
-        // Ensure that tooltip isn't cut off by the left edge of the editor
-        tooltip.root.style.left =
-          (tooltip.root.offsetLeft < 0) ?
-          `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
-          tooltip.root.style.left;
-      });
-      tagElem.addEventListener('mouseout', () => {
-        tooltip.hide();
-      });
+    /*
+    grammarCheckerErrors.forEach((error: QuillHighlightTag, errorIndex) => {
+      this.quillEditor
+          .formatText(
+              error.start,
+              error.length,
+              {'gramadoir-tag': error.type, 'background': error.color}
+          );
     });
+
+    // Get the HTMLElement for the span just created by the formatText
+    document
+        .querySelectorAll('[data-gramadoir-tag]')
+        .forEach((tagElement, index) => {
+      const error = grammarCheckerErrors[index];
+      this.createGrammarPopup(error, tagElement);
+    });
+    */
+
+    if (this.grammarTagsHidden) {
+      this.hideGrammarTags();
+    }
     console.log('grammar updated');
   }
 
-/*
-* Update story data (text and date) using story service 
-* Add logged event for saved story  using engagement service
-*/
+  createGrammarPopup(error, tagElement) {
+    // Create a customised quill tooltip containing
+    // a message about the grammar error
+    const bounds = this.quillEditor.getBounds(error.start, error.length);
+    error.tooltip = new Tooltip(this.quillEditor);
+    error.tooltip.root.classList.add('custom-tooltip');
+
+    // Add hover UI logic to the grammar error span element
+    tagElement.addEventListener('mouseover', () => {
+      this.mouseOverTagElem(this, error, bounds);
+    });
+
+    tagElement.addEventListener('mouseout', () => {
+      error.tooltip.hide();
+    });
+  }
+
+  clearAllGramadoirTags() {
+    this.clearGramadoirTagFormatting();
+    // remove any remaining custom-tooltips from the DOM.
+    //  -> without doing this, a tooltip can live on past its
+    //     corresponding highlight tag if the user stays hovering
+    //     on the highlight tag while the grammar error is fixed.
+    document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+  }
+
+  applyGramadoirTagFormatting() {
+    if (!this.currentGramadoirHighlightTags) { return; }
+
+    this.currentGramadoirHighlightTags
+        .forEach((error) => {
+          // Add highlighting to error text
+          this.quillEditor
+              .formatText(
+                  error.start,
+                  error.length,
+                  {'gramadoir-tag': error.type}
+              );
+        });
+
+    const popups = document.querySelectorAll('[data-gramadoir-tag]');
+
+    this.currentGramadoirHighlightTags.forEach((error, i) => {
+      this.createGrammarPopup(error, popups[i]);
+    });
+  }
+
+  clearGramadoirTagFormatting() {
+    this.quillEditor.formatText(
+      0, // from the very beginning of the text
+      this.quillEditor.getLength(), // to the very end of the text
+      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+    );
+  }
+
+  hideGrammarTags(){
+    this.grammarTagsHidden = true;
+    this.clearGramadoirTagFormatting();
+  }
+
+  showGrammarTags(){
+    this.grammarTagsHidden = false;
+    this.applyGramadoirTagFormatting();
+  }
+
+  mouseOverTagElem(
+    that: DashboardComponent,
+    error: QuillHighlightTag,
+    bounds: any,
+  )
+  {
+    console.count('MOUSOVER');
+    const userFriendlyMsgs =
+      that.grammar
+          .userFriendlyGramadoirMessage[error.type];
+
+    error.tooltip.root.innerHTML =
+      // Prefer user friendly message
+      userFriendlyMsgs ?
+      userFriendlyMsgs[that.ts.l.iso_code] :
+      error.messages[that.ts.l.iso_code];
+    console.count('error.tooltip.show()');
+    error.tooltip.show();
+    error.tooltip.position(bounds);
+
+    // Ensure that tooltip isn't cut off by the right edge of the editor
+    const rightOverflow =
+      (error.tooltip.root.offsetLeft + error.tooltip.root.offsetWidth) -
+      that.quillEditor.root.offsetWidth;
+
+    error.tooltip.root.style.left =
+      (rightOverflow > 0) ?
+      `${(error.tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
+      error.tooltip.root.style.left;
+
+    // Ensure that tooltip isn't cut off by the left edge of the editor
+    error.tooltip.root.style.left =
+      (error.tooltip.root.offsetLeft < 0) ?
+      `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
+      error.tooltip.root.style.left;
+  }
+
+  /*
+  * Update story data (text and date) using story service
+  * Add logged event for saved story  using engagement service
+  */
   saveStory() {
     this.route.params.subscribe(
       params => {
@@ -370,17 +455,16 @@ export class DashboardComponent implements OnInit {
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
   storyEdited(text) {
     this.story.text = text;
+    this.textUpdated.next(text);
 
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
-    if (text !== this.story.text) {
-      this.textUpdated.next(text);
-    }
-    this.story.text = text;
     this.storySaved = false;
+    this.textUpdated.next(text);
+    this.story.text = text;
   }
 
   // Get word count of story text
