@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema({
     resetPassword: {
       type: resetPasswordSchema,
       unique: true,
+      default: {
+        code: null,
+        date: null,
+      },
     }
 });
 
