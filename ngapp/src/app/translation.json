@@ -461,6 +461,9 @@
       "chonamara" : "Voice of Chonamara",
       "view_story" : "View Story",
       "sign_in_to_view_more" : "Sign in to view more stories!",
+      "more_resources" : "More resources",
+      "simple_versions_old_stories" : "Simple versions of old stories",
+      "published_courtesy_of_an_gum": "Published with the courtesy of An Gúm",
 
       "beathna_na_feinne1" : "Ba é Fionn Mac Cumhaill agus na Fianna na laochra ba mhó i mbéaloideas na hÉireann agus bhí leaganacha éagsúla de na heachtraí a bhain leo le fáil ar fud na tíre. D’fhág siad a rian ar stair na hÉireann mar eiseamláirí den uaisleacht, den chrógacht agus den neart. ‘Bráithreachas na bhFíníní’ a tugadh ar an eagraíocht réabhlóideach a bunaíodh i Meiriceá in 1858. Tá Fianna Fáil ann agus Fianna Éireann. Úsáidtear é mar bhriathar ‘ag fiannaíocht’ – ag insint scéalta fiannaíocht, nó ag insint scéalta gan dealramh (le searbhas).",
       "beathna_na_feinne2" : "Sa scéal seo bualann Naomh Pádraig le Caoilte, duine de na Fianna. De gháth is é Oisín a bhualann le Pádraig mar atá i Laoithe na Féinne a chuir An Seabhac in eagar. Tá cur síos sa sliocht seo ar an saol a bhí ag na Fianna agus tá codarsnacht idir sin agus an creideamh nua nó an Chríostaíocht. Tá cur síos anseo ar na nósanna seilge a bhí acu agus mar a chaith siad a gcuid bia. Tá cur síos maith ann ar na tréithe a bhain leis na Fianna agus mar a cláraíodh mar bhall de na Fianna tú. Gaiscíoch ab ea gach aon duine acu agus níl insint scéil ar a gcumas, a neart agus a gcrógacht.",
@@ -1044,6 +1047,9 @@
       "chonamara" : "Guth Chonamara",
       "view_story" : "Léigh an Scéal",
       "sign_in_to_view_more" : "Sínigh isteach le tuilleadh scéalta a léamh!",
+      "more_resources" : "Acmhainní breise",
+      "simple_versions_old_stories" : "Leaganacha simplí de sheanscéalta",
+      "published_courtesy_of_an_gum": "Foilsithe anseo le caoinchead ó An Gúm",
 
       "beathna_na_feinne1" : "Ba é Fionn Mac Cumhaill agus na Fianna na laochra ba mhó i mbéaloideas na hÉireann agus bhí leaganacha éagsúla de na heachtraí a bhain leo le fáil ar fud na tíre. D’fhág siad a rian ar stair na hÉireann mar eiseamláirí den uaisleacht, den chrógacht agus den neart. ‘Bráithreachas na bhFíníní’ a tugadh ar an eagraíocht réabhlóideach a bunaíodh i Meiriceá in 1858. Tá Fianna Fáil ann agus Fianna Éireann. Úsáidtear é mar bhriathar ‘ag fiannaíocht’ – ag insint scéalta fiannaíocht, nó ag insint scéalta gan dealramh (le searbhas).",
       "beathna_na_feinne2" : "Sa scéal seo bualann Naomh Pádraig le Caoilte, duine de na Fianna. De gháth is é Oisín a bhualann le Pádraig mar atá i Laoithe na Féinne a chuir An Seabhac in eagar. Tá cur síos sa sliocht seo ar an saol a bhí ag na Fianna agus tá codarsnacht idir sin agus an creideamh nua nó an Chríostaíocht. Tá cur síos anseo ar na nósanna seilge a bhí acu agus mar a chaith siad a gcuid bia. Tá cur síos maith ann ar na tréithe a bhain leis na Fianna agus mar a cláraíodh mar bhall de na Fianna tú. Gaiscíoch ab ea gach aon duine acu agus níl insint scéil ar a gcumas, a neart agus a gcrógacht.",
