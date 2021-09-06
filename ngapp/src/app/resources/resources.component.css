@@ -90,6 +90,10 @@
   place-content: space-between;
 }
 
+.dialectContainer {
+  display:flex;
+}
+
 .footer {
     display: flex;
     flex-direction: column;
