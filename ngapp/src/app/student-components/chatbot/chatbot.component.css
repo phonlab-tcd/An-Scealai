@@ -1,0 +1,706 @@
+#chimp{
+    position: absolute;
+    width: 30%;
+    height: 35%;
+    right: 7%;
+    top: 12%;
+  }
+
+  #botaudio{
+    display: block;
+  }
+  
+  .bot-bg-modal{
+    overflow-y: hidden;
+      position:absolute;
+    font-family: sans-serif;
+    width: 55%;
+    height: 85%;
+    top: 12%;
+    left: 50px;
+    transition: 0.5s;
+    background-color: #70a87f;
+    border-radius: 8px;
+    padding: 25px;
+    padding-left: 0px;
+    padding-right: 0px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+  
+  .bot-title{
+    font-size: 24px;
+    color: white;
+    position: absolute;
+    margin-top: -3%;
+    margin-left: 42%;
+  }
+  
+  .chatlogs{
+    margin-top: 3%;
+    height: 87%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scroll-behavior: auto;
+    padding: 5px;
+    background:#F4F6F6;
+    opacity: 1;
+  }
+  
+  .chatlogs::-webkit-scrollbar{
+    width: 10px;
+  }
+  
+  .chatlogs::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .1);
+  }
+  
+  /* Dialogue and Photos */
+  .bot-message-photo, .user-message-photo{
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background: #FEF9E7;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: 0%;
+  }
+  
+  .user-message-photo{
+    margin-left: 91%;
+  }
+  
+  #bot-img, #user-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .user-message, .bot-message{
+    width: 75%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-top: 1%;
+  }
+  
+  .user-message{
+    background: #58D68D;
+    margin-left: 17%;
+  }
+  
+  .bot-message{
+    background: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    margin-left: 8%;
+  }
+  
+  .bot-message-ind{
+    position: absolute;
+    background: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    margin-left: 8%;
+    width: 7%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-top: 1%;
+    margin-left: 8%;
+  }
+  
+  /* Input */
+  .chatform{
+    margin-top: 1.5%;
+    display: flex;
+    padding-left: 10px;
+  }
+  
+  .chatform #bot-message-button, #choose-dialect, #open-record{
+    width: 10%;
+    font-size: 15px;
+    padding: 7px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ccc;
+    right: 24%;
+    position: absolute;
+  }
+  
+  #choose-dialect{
+    right: 2%;
+    width: 15%;
+    padding: 0px;
+    font-size: small;
+    background-color: #F39C12;
+  }
+  
+  #open-record{
+    right: 18%;
+    width: 5%;
+  }
+  
+  .chatform #bot-message-button:hover, #choose-dialect:hover, #open-record:hover{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.20), 0 17px 50px 0 rgba(0,0,0,0.15);
+    cursor: pointer;
+  }
+  
+  #bot-user_input{
+    height: 35px;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 5px;
+    width: 64.5%;
+    border: none;
+  }
+  
+  
+  /* New Contents Design */
+  #new-contents{
+    position: absolute;
+    border-radius: 8px;
+    width: 30%;
+    height: 45%;
+    right: 7%;
+    bottom: 3.5%;
+    padding: 6px;
+    font-family: Helvetica;
+    background: #FBFCFC;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    overflow-y: hidden;
+  }
+  
+  #topics{
+    font-size: 20px;
+    margin-left: 30%;
+  }
+  
+  .choose-scealai, .choose-personal, .choose-community{
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 40%;
+    height: 20%;
+    margin-top: 4%;
+    left: 28%;
+    color: white;
+    background-color: #F39C12;
+    position: absolute;
+  }
+
+  #login-rec{
+    position: relative;
+    width: 80%;
+    border-radius: 4px;
+    background-color: #16A085;
+    padding: 5px;
+    left: 9.5%;
+    top: 15%;
+  }
+  
+  .choose-community:hover, .choose-personal:hover, .choose-scealai:hover{
+    cursor: pointer;
+    font-style: italic;
+  }
+  
+  .choose-personal{
+    margin-top: 22%;
+  }
+  
+  .choose-community{
+    margin-top: 40%;
+  }
+  
+  .contents-button{
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 30%;
+    height: 23%;
+    margin-top: 3%;
+    left: 3%;
+    color: white;
+    background-color: #1E8449;
+    position: absolute;
+  }
+  
+  .contents-button:hover{
+    cursor: pointer; 
+    font-style: italic;
+  }
+
+  #personal-topics-title{
+    position: absolute;
+  }
+  
+  /* Personal Topics */
+  .personal-topics, .community-topics, .scealai-topics{
+    position: absolute;
+    border-radius: 8px;
+    width: 55%;
+    height: 55%;
+    right: 23%;
+    top: 20%;
+    padding: 6px;
+    background: #FBFCFC;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    z-index: 5;
+    display: none;
+    opacity: 0;
+    transition: 0.5s;
+    overflow-y: scroll;
+    scroll-behavior: auto;
+  }
+  
+  .personal-topics::-webkit-scrollbar, .community-topics::-webkit-scrollbar, .scealai-topics::-webkit-scrollbar{
+    width: 10px;
+  }
+  
+  .personal-topics::-webkit-scrollbar-thumb, .community-topics::-webkit-scrollbar-thumb, .scealai-topics::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .1);
+  }
+
+  .personal-topics{
+    display: none;
+  }
+
+  #personal-container{
+    position: relative;
+    top: -5%;
+    width: 100%;
+    height: 100%;
+  }
+
+  .personal-topics #student, .personal-topics #teacher{
+    position: relative;
+    width: 25%;
+    height: 12%;
+    left: 10%;
+    border-radius: 5px;
+    background-color: #F4D03F;
+    outline: none;
+    border: none;
+    text-align: center;
+    border: 2px solid #76D7C4;
+  }
+
+  .personal-topics #student p, .personal-topics #teacher p{
+    position: relative;
+    top: 5px;
+  }
+
+  .personal-topics #student:hover, .personal-topics #teacher:hover{
+    cursor: pointer;
+  }
+
+  .personal-topics #student{
+    top: 12%;
+  }
+
+  .personal-topics #teacher{
+    left: 60%;
+    width: 30%;
+    background-color: #FBFCFC;
+  }
+  
+  .community-topics{
+    display: none;
+  }
+  
+  #popup-background, #bg-background{
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    background-color: black;
+    z-index: 5;
+    position: absolute;
+    opacity: 0;
+    transition: 0.5s;
+    display: none;
+  }
+  
+  #open-script, #delete-script{
+    background-color: #F5B041;
+    outline: none;
+    border: none;
+    position: absolute;
+    border-radius: 5px;
+    width: 10%;
+    height: 10%;
+    bottom: 5%;
+    right: 1%;
+    font-size: small;
+    display: none;
+  }
+
+  #delete-script:hover, #open-script:hover{
+    cursor: pointer;
+    font-style: italic;
+  }
+
+  #delete-script{
+    margin-right: 13%;
+  }
+  
+  .close-topics{
+    position: absolute;
+    right: 1.5%;
+    top: 2%;
+  }
+  
+  .close-topics:hover{
+    cursor: pointer;
+  }
+  
+  
+  /*Audio & Dialects*/
+  #bot-audio, #recording-prompt{
+    position: absolute;
+    border-radius: 3px;
+    width: 40%;
+    height: 50%;
+    right: 30%;
+    top: 27%;
+    padding: 6px;
+    background: #FBFCFC;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    z-index: 5;
+    display: none;
+    opacity: 0;
+  }
+  
+  #recording-prompt{
+    display: none;
+    opacity: 0;
+    width: 48%;
+    height: 45%;
+    right: 25%;
+  }
+  
+  #start-record, #stop-record{
+    width: 33%;
+    height: 23%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-size: small; 
+    position: absolute;
+    left: 12%;
+    top: 25%;
+  }
+  
+  #start-record:hover, #stop-record:hover, #cancel-recording:hover{
+    cursor: pointer;
+    font-style: italic;
+  }
+  
+  #stop-record{
+    left: 55%;
+  }
+  
+  .fa-circle{
+   color: red;
+  }
+  
+  
+  #recording-message{
+    position: absolute;
+    border-radius: 5px;
+    background-color: #CACFD2;
+    bottom: 15%;
+    left: 12%;
+    display: none;
+    padding: 5px;
+    animation: blinker 1.2s linear infinite;
+  }
+  
+  #record-title{
+    position: absolute;
+    left: 23%;
+    font-weight: bold;
+  }
+  
+  #recording-player{
+    position: relative;
+    margin-top: 45%;
+    display: none;
+  }
+  
+  #cancel-recording{
+    position: absolute;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: #E74C3C;
+    font-size: smaller;
+    bottom: 3%;
+    right: 3%;
+  }
+  
+  @keyframes blinker{
+    50%{
+      opacity: 0;
+    }
+  }
+  
+  .audio-checkbox, #this-dialect{
+    font-size: 15px;
+    position: absolute;
+    right: 2%;
+    top: 1.5%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #F4F6F6;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  #this-dialect{
+    left: 2%;
+    width: 27%;
+  }
+  
+  #dialect-CM, #dialect-GD, #dialect-MU, #dialect-UL, #dialect-CO, #dialect-MU-DNN{
+    width: 50%;
+    height: 20%;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    outline: none;
+    border: none;
+    color:white;
+    background-color: #AF7AC5;
+  }
+
+  #dialect-UL, #dialect-CO, #dialect-MU-DNN{
+    display: none;
+    background-color: #2980B9;
+  }
+  
+  #close-audio{
+    position: absolute;
+    right: 4%;
+    bottom: 2%;
+    font-size: small;
+    background-color:lightgray;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  #dialect-CM:hover, #dialect-GD:hover, #dialect-MU:hover{
+    cursor: pointer;
+    font-style: italic;
+  }
+  
+  #dialect-GD, #dialect-CO{
+    top: 45%;
+  }
+  
+  #dialect-MU, #dialect-MU-DNN{
+    top: 70%;
+  }
+  
+  #dialects{
+    width: 100%;
+    height: 25%;
+  }
+  
+  #select-HTS{
+    font-size: large;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    width: 35%;
+    position: absolute;
+    left: 8%;
+    border-radius: 5px;
+    background-color: #F5B041;
+  }
+  
+  #select-DNN{
+    font-size: large;
+    color: black;
+    right: 8%;
+    text-align: center;
+    font-weight: bold;
+    width: 35%;
+    border-radius: 5px;
+    position: absolute;
+  }
+  
+  #select-DNN:hover, #select-HTS:hover, #close-audio:hover{
+    cursor: pointer;
+  }
+
+  .tooltip-text{
+    font-size: small;
+    font-weight: normal;
+    visibility: hidden;
+    width: 130px;
+    background-color: #F0F3F4;
+    
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 140%;
+    left: 50%;
+    margin-left: -65px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tooltip-text::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #F0F3F4 transparent transparent transparent;
+  }
+
+  #select-HTS:hover .tooltip-text, #select-DNN:hover .tooltip-text{
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Typing Indicator */
+  .typing-indicator{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .typing-indicator .chat-message{
+    width: 60px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+  }
+  
+  
+  @media only screen and (min-width: 785px) and (max-width: 1040px){
+    .bot-title{
+      font-size: 22px;
+      top: 4%;
+      left: -1%;
+    }
+    .audio-checkbox{
+      font-size: smaller;
+      top: 1%;
+    }
+    #this-dialect{
+      font-size: small;
+      width: 30%;
+      top: 1%;
+    }
+    .chatlogs{
+        height: 90%;
+    }
+    #choose-dialect{
+      font-size: 12px;
+    }
+    #open-record{
+      font-size: small;
+    }
+    .contents-button{
+      width: 40%;
+      left: 5%;
+    }
+    #bot-audio{
+      width: 55%;
+      right: 23%;
+    }
+    #dialect-CM{
+      font-size: 13px;
+    }
+    #topics{
+      margin-left: 22%;
+    }
+    .choose-scealai, .choose-personal, .choose-community{
+      width: 50%;
+      height: 20%;
+      left: 23%;
+    }
+    .choose-personal{
+      margin-top: 28%;
+    }
+    .choose-community{
+      margin-top: 52%;
+    }
+  }
+  
+  @media only screen and (min-width: 500px) and (max-width: 784px){
+    #recording-prompt{
+      width: 55%;
+      right: 26%;
+    }
+    #recording-player{
+      width: 90%;
+      left:  5%;
+    }
+    .bot-title{
+      font-size: 22px;
+      top: 3%;
+      left: -7%;
+    }
+    #bot-audio{
+      width: 55%;
+      right: 23%;
+    }
+    .audio-checkbox{
+      top: 1%;
+      font-size: smaller;
+    }
+    #this-dialect{
+      font-size: small;
+      width: 30%;
+      top: 1%;
+    }
+    .chatlogs{
+        height: 91%;
+    }
+    #choose-dialect{
+      font-size: 12px;
+    }
+    #open-record{
+      font-size: small;
+    }
+    .contents-button{
+      width: 40%;
+      left: 5%;
+    }
+    #topics{
+      margin-left: 20%;
+    }
+    .choose-scealai, .choose-personal, .choose-community{
+      width: 50%;
+      height: 20%;
+      left: 23%;
+    }
+    .choose-personal{
+      margin-top: 33%;
+    }
+    .choose-community{
+      margin-top: 63%;
+    }
+  }

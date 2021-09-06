@@ -64,6 +64,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
+import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 
 
 
@@ -112,6 +113,7 @@ import { GrammarCheckerComponent } from './student-components/grammar-checker/gr
     SafeHtmlPipe,
     SponsorsComponent,
     GrammarCheckerComponent,
+    CreateQuizComponent,
   ],
   imports: [
     BrowserModule,
@@ -143,7 +145,7 @@ import { GrammarCheckerComponent } from './student-components/grammar-checker/gr
 })
 export class AppModule {
   constructor(private injector: Injector) {
-    const chatbotElement = createCustomElement(ChatbotComponent, {injector});
-    customElements.define('app-chatbot', chatbotElement);
+    //const chatbotElement = createCustomElement(ChatbotComponent, {injector});
+    //customElements.define('app-chatbot', chatbotElement);
   }
  }

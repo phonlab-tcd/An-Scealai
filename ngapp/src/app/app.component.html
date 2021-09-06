@@ -59,6 +59,16 @@
           <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
         </div>
       </div>
+      
+      <!--Taidhgín-->
+      <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
+        <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">Taidhgín</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/taidhgin" ngbDropdownItem (click)="changeCheck()">Taidhgín Bot</button>
+          <button routerLink="/create-quiz" ngbDropdownItem (click)="changeCheck()">Create your own quiz</button>
+        </div>
+      </div>
+
       <div class="d-inline-block">
         <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
       </div>
