@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  HostListener,
   ViewEncapsulation,
   ViewChild,
   Renderer2 } from '@angular/core';
@@ -24,7 +23,6 @@ import { EngagementService } from '../../engagement.service';
 import {
   GrammarService,
   GrammarTag,
-  TagSet,
   GramadoirTag,
   GramadoirRuleId,
 } from '../../grammar.service';
@@ -174,7 +172,8 @@ export class DashboardComponent implements OnInit {
   }
 
   /* set the stories array of all the student's stories 
-  *  and the current story being edited given its id from url
+  * set the stories array of all the student's stories 
+  * and the current story being edited given its id from url 
   */
   ngOnInit() {
     this.storySaved = true;
@@ -231,9 +230,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* return the story id using the routing parameters
-*/
+  /*
+  * return the story id using the routing parameters
+  */
   getStoryId(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
@@ -485,15 +484,18 @@ export class DashboardComponent implements OnInit {
   storyEdited(text) {
     this.story.text = text;
     this.textUpdated.next(text);
+    this.getWordCount(text);
 
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(text) {
-    this.storySaved = false;
-    this.textUpdated.next(text);
     this.story.text = text;
+    this.textUpdated.next(text);
+    this.getWordCount(text);
+
+    this.storySaved = false;
   }
 
   downloadStoryUrl() {
@@ -505,7 +507,7 @@ export class DashboardComponent implements OnInit {
 
   // Get word count of story text
   getWordCount(text) {
-    let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+    const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
     this.words = [];
     str.map((s) => {
       const trimStr = s.trim();
@@ -535,7 +537,7 @@ export class DashboardComponent implements OnInit {
     if (
       this.story &&
       this.story.feedback &&
-      !this.story.feedback.seenByStudent) {
+      this.story.feedback.seenByStudent === false) {
       return true;
     }
     return false;
@@ -565,7 +567,7 @@ export class DashboardComponent implements OnInit {
     this.statsService
         .updateGrammarErrors(
           userDetails._id,
-          this.filteredTags,
+          this.grammarChecker.filteredTags,
           updatedTimeStamp)
         .subscribe();
   }
@@ -593,7 +595,7 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleOptions() {
-    if(!this.dontToggle){
+    if  (!this.dontToggle){
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
@@ -605,7 +607,7 @@ export class DashboardComponent implements OnInit {
     this.grammarChecker.hideEntireGrammarChecker =
       !this.grammarChecker.hideEntireGrammarChecker;
   }
-  
+
   storySavedByGrammarChecker(story: Story) {
     if (this.story.htmlText === story.htmlText) {
       this.storySaved = true;

@@ -1,7 +1,4 @@
 <!-- Display the written story along with edit options -->
-<div>
-  {{gramadoirResponse}}
-</div>
 <div class="page">
   <div class="bookContainer">
     <div class="{{modalClass}} modalContainer">
@@ -169,7 +166,10 @@
           placeholder=""
           [preserveWhitespace]="true"
           [(ngModel)]="story.htmlText" 
-          (onContentChanged)="storyEdited($event.text); getWordCount($event.text);"
+          (onContentChanged)="
+              storyEdited($event.text);
+              getWordCount($event.text);
+              this.grammarChecker?.debounceGramadoir()"
           (onEditorCreated)="quillEditor = $event"
         >
         </quill-editor>
@@ -192,7 +192,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)">
         </quill-editor>
         
       </div>
@@ -208,7 +208,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)">
         </quill-editor>
       </div>
 
@@ -222,7 +222,7 @@
             placeholder=""
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
-            (onContentChanged)="storyEdited($event); getWordCount($event.text)">
+            (onContentChanged)="storyEdited($event.text); getWordCount($event.text)">
         </quill-editor>
         
         <div class="dictionaryContainer">
@@ -260,8 +260,7 @@
 
       <app-grammar-checker
           #grammarChecker
-          *ngIf="story.text"
-          [storySaved]=storySaved
+          *ngIf="story.text || story.text === ''"
           [classroomId]="classroomId"
           [story]="story"
           >

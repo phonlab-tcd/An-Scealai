@@ -335,19 +335,7 @@ background-color: lightblue;
     font-size: 10pt;
 }
 
-.grammarMessagePlaceholder {
-    color: #999999;
-}
 
-.grammarToolbar {
-    background-color: #70a87f;
-    color: white;
-    display: flex;
-    padding-left: 20px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-}
 
 .custom-tooltip::before {
     content: none !important;
@@ -619,6 +607,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     width: 64px;
     height: 64px;
   }
+
   .lds-grid div {
     position: absolute;
     width: 13px;
@@ -672,6 +661,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     left: 45px;
     animation-delay: -1.6s;
   }
+
   @keyframes lds-grid {
     0%, 100% {
       opacity: 1;

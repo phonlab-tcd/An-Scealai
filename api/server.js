@@ -27,7 +27,8 @@ const mailRoute = require('./routes/send_mail.route');
 
 const dbURL = require('./utils/dbUrl');
 
-// throw new Error('test error'); // use this to test where uncaughtExceptions get logged
+// use this to test where uncaughtExceptions get logged
+// throw new Error('test error');
 
 
 logger.info('DB url: ' + dbURL);
