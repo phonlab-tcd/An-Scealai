@@ -2,6 +2,7 @@
   "languages" : [
     {
       "iso_code" : "en",
+      "vowels_should_agree": "These vowels should be in agreement according to the Leathan/Caol rule." ,
       "name" : "English",
       "english" : "English",
       "irish" : "Irish",
@@ -572,6 +573,7 @@
     },
     {
       "iso_code" : "ga",
+      "vowels_should_agree": "Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan / Caol.",
       "name" : "Gaeilge",
       "english" : "Béarla",
       "irish" : "Gaeilge",
