@@ -1,9 +1,12 @@
+
+// Best to initialize the logger first
+const logger = require('./logger');
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const logger = require('./logger');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
@@ -27,7 +30,7 @@ const dbURL = require('./utils/dbUrl');
 // throw new Error('test error'); // use this to test where uncaughtExceptions get logged
 
 
-logger.info('DB url: ' + config.DB);
+logger.info('DB url: ' + dbURL);
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

@@ -34,6 +34,7 @@ import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import config from 'src/abairconfig.json';
 import Quill, {Delta} from 'quill';
 
 
@@ -95,6 +96,8 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
+
+  downloadStoryFormat = '.pdf';
 
   gramadoirResponse: string;
   
@@ -419,23 +422,28 @@ export class DashboardComponent implements OnInit {
   * Add logged event for saved story  using engagement service
   */
   saveStory() {
-    this.route.params.subscribe(
-      params => {
-        // remove and re-apply formatting to ensure that grammar highlights aren't saved to DB
-        this.clearGramadoirTagFormatting();
-        const unhighlightedHtmlText = this.story.htmlText;
-        this.applyGramadoirTagFormatting();
+    // remove and re-apply formatting to ensure that
+    // grammar highlights aren't saved to DB
+    this.clearGramadoirTagFormatting();
+    const unhighlightedHtmlText = this.story.htmlText;
+    this.applyGramadoirTagFormatting();
 
-        let updateData = {
-          text : this.story.text,
-          htmlText: unhighlightedHtmlText,
-          lastUpdated : new Date(),
-        };
-        this.storyService.updateStory(updateData, params['id']).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
-        this.storySaved = true;
-      }
-    )
+    const updateData = {
+      text : this.story.text,
+      htmlText: unhighlightedHtmlText,
+      lastUpdated : new Date(),
+    };
+
+    this.storyService
+        .updateStory(updateData, this.story._id)
+        .subscribe({
+          complete: () => this.storySaved = true,
+        });
+
+    this.engagement
+        .addEventForLoggedInUser(
+            EventType['SAVE-STORY'],
+            this.story);
   }
 
   showDictionary() {
@@ -443,11 +451,12 @@ export class DashboardComponent implements OnInit {
     this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
-/*
-* Get audio feedback with function call 
-* Set feedback status to seen by student and remove story from not yet seen array
-* Add logged event for viewed feedback 
-*/
+  /*
+   *  Get audio feedback with function call
+   *  Set feedback status to seen by student
+   *  and remove story from not yet seen array
+   *  Add logged event for viewed feedback
+   */
   getFeedback() {
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
@@ -485,6 +494,13 @@ export class DashboardComponent implements OnInit {
     this.storySaved = false;
     this.textUpdated.next(text);
     this.story.text = text;
+  }
+
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
   }
 
   // Get word count of story text
@@ -541,24 +557,17 @@ export class DashboardComponent implements OnInit {
   * to the current student id
   */
   updateStats() {
-<<<<<<< HEAD
-    let updatedTimeStamp = new Date();
+    const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
-    });
-=======
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      return;
-    }
+
+    if (!userDetails) { return; }
+
     this.statsService
         .updateGrammarErrors(
           userDetails._id,
           this.filteredTags,
-          new Date())
+          updatedTimeStamp)
         .subscribe();
->>>>>>> master
   }
 
   // set modalClass to visible fade
@@ -584,11 +593,7 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleOptions() {
-<<<<<<< HEAD
     if(!this.dontToggle){
-=======
-    if (!this.dontToggle) {
->>>>>>> master
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;

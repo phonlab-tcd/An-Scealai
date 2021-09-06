@@ -67,18 +67,7 @@ export class GrammarService {
   * Set grammar and vowel tags of TagSet object
   */
   checkGrammar(id: string): Observable<any> {
-    return Observable.create((observer: Observer<any>) => {
-      let tagSets: TagSet = new TagSet;
-      // get a story object given an id
-      this.storyService.getStory(id).subscribe((story: Story) => {
-        // get grammar tags for the story object
-        this.getGramadoirTags(id)
-            .subscribe(
-              (res) => {
-                observer.next(res);
-                observer.complete();
-              });
-      });
+    return this.getGramadoirTags(id);
   }
 
   /*j
