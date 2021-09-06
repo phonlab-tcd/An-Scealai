@@ -1,12 +1,11 @@
-const express = require('express'),
-    path = require('path'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
-    mongoose = require('mongoose'),
-    config = require('./DB'),
-    logger = require('./logger'),
-    passport = require('passport');
-
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const logger = require('./logger');
+const passport = require('passport');
+const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
@@ -21,16 +20,32 @@ const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
+const mailRoute = require('./routes/send_mail.route');
+
+const dbURL = require('./utils/dbUrl');
+
+// throw new Error('test error'); // use this to test where uncaughtExceptions get logged
 
 
 logger.info('DB url: ' + config.DB);
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
-mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
-    () => {logger.info('Database is connected');},
-    (err) => {logger.error('Cannot connect to the database. ',err)}
-);
+
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(
+    () => {
+      logger.info('Database is connected');
+    },
+    (err) => {
+      logger.error({
+        msg: 'Cannot connect to the database. ',
+        while: 'trying to connect to mongodb with mongoose',
+        error: err,
+      });
+    });
 
 const app = express();
 app.use(bodyParser.json());
@@ -49,56 +64,12 @@ app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/recordings', recordingRoute);
-
-const mailRoute = require('./routes/send_mail.route');
 app.use('/mail', mailRoute);
-
-const versionRoute = require('./routes/version.route');
-app.use('/version', versionRoute);
+app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// error handlers
-
-// [SH] Catch unauthorised errors
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401);
-    res.json({"message" : err.name + ": " + err.message});
-  }
-});
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        logger.error(
-          err
-        );
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+app.use(errorHandler);
 
 const server = app.listen(port, function(){
     logger.info('Listening on port ' + port);

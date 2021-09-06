@@ -7,8 +7,19 @@ import {
 import { Observable, Observer ,  of } from 'rxjs';
 import { StoryService } from './story.service';
 import { HighlightTag } from 'angular-text-input-highlight';
-import { catchError, skip } from 'rxjs/operators';
+import { catchError, skip, map } from 'rxjs/operators';
 import { Story } from './story';
+import config from 'src/abairconfig.json';
+
+type updateStoryAndCheckGrammarResponse = {
+  savedStory: Story | false;
+  storyWithIdNotFound?: string;
+  saveStoryError?: Error;
+  irishGrammarTags: string;
+  englishGrammarTags: string;
+  irishGramadoirError?: Error;
+  englishGramadoirError?: Error;
+};
 
 export type GramadoirTag = {
   fromy: string;
@@ -61,30 +72,94 @@ export class GrammarService {
       // get a story object given an id
       this.storyService.getStory(id).subscribe((story: Story) => {
         // get grammar tags for the story object
-        this.getGramadoirTags(id).subscribe((res : HighlightTag[]) => {
-          let tags : HighlightTag[] = [];
-          // push grammar tags
-          res.forEach((tag) => {
-            tags.push(tag);
-          });
-          tagSets.gramadoirTags = tags;
-          tags = [];
-          //get story object
-          this.storyService.getStory(id).subscribe((story: Story) => {
-            //set the vowel tags
-            let vowelTags = this.getVowelAgreementTags(story.text);
-            vowelTags.forEach((tag) => {
-              // push vowel tags
-              tags.push(tag);
-            })
-            tagSets.vowelTags = tags;
-            console.log("Tagsets", tagSets);
-            observer.next(tagSets);
-            observer.complete();
-          });
-        });
+        this.getGramadoirTags(id)
+            .subscribe(
+              (res) => {
+                observer.next(res);
+                observer.complete();
+              });
+      });
+  }
+
+  /*j
+   *{
+    "savedStory": false,
+    "storyWithIdNotFound": "000000000000000000000000",
+    "grammarTagsEnglish": "[{\"msg\":\"Non-standard form of /duit/\",\"context\":\"Dia dhuit\",\"errortext\":\"dhuit\",\"errorlength\":\"5\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"tox\":\"8\",\"toy\":\"0\",\"fromx\":\"4\",\"fromy\":\"0\",\"contextoffset\":\"4\"}]",
+    "grammarTagsIrish": "[{\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"fromy\":\"0\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"fromx\":\"4\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"context\":\"Dia dhuit\",\"errorlength\":\"5\",\"tox\":\"8\"}]"
+}
+
+request body:
+{
+    "text": "Dia dhuit",
+    "htmlText": "<h1>Dia dhuit</h1>",
+    "_id": "000000000000000000000000",
+    "lastUpdated": "2021-08-10T16:03:44.967Z"
+ x}
+{
+    "savedStory": false,
+    "grammarTagsEnglish": "[{\"errorlength\":\"5\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"fromx\":\"4\",\"tox\":\"8\",\"fromy\":\"0\",\"msg\":\"Non-standard form of /duit/\",\"contextoffset\":\"4\",\"errortext\":\"dhuit\",\"context\":\"Dia dhuit\"}]",
+    "grammarTagsIrish": "[{\"tox\":\"8\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"context\":\"Dia dhuit\",\"fromy\":\"0\",\"errorlength\":\"5\",\"fromx\":\"4\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"toy\":\"0\"}]"
+}
+  */
+  updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
+    savedStory: any,
+    tags: HighlightTag[],
+  }> {
+    console.dir(story);
+    return this.http.post(
+      config.baseurl + 'story/updateStoryAndCheckGrammar',
+      story,
+      {
+        headers: {
+        'Content-Type': 'application/json',
+        }
+      }).pipe(
+      map((res: {
+        savedStory: any;
+        grammarTagsIrish: any;
+        grammarTagsEnglish: any;
+      }) => {
+        console.log('GRAMADOIR RESPONSE:');
+        console.dir(res);
+        const tags: HighlightTag[] =
+          this.collateEnglishAndIrishGramadoirResponses(res.grammarTagsEnglish, res.grammarTagsIrish);
+
+        let text = 'story was not saved correctly';
+        if (res.savedStory) {
+          text = res.savedStory.text as string;
+        }
+        return {
+          savedStory: res.savedStory,
+          tags
+        };
+      }),
+    );
+  }
+
+  collateEnglishAndIrishGramadoirResponses(english: string, irish: string): HighlightTag[] {
+    const englishTags = JSON.parse(english);
+    const irishTags = JSON.parse(irish);
+    const highlightTags: HighlightTag[] = [];
+
+    englishTags.forEach((tag, index) => {
+      highlightTags.push({
+        indices: {
+          // interprent fromx as a number
+          start: + tag.fromx,
+          // interprent tox as a number
+          end: + tag.tox + 1,
+        },
+        cssClass: GrammarTag.getCssClassFromRule(tag.ruleId),
+        data: {
+          gramadoir: true,
+          english: tag,
+          irish: irishTags[index],
+        },
       });
     });
+
+    return highlightTags;
   }
 
 
@@ -123,34 +198,67 @@ export class GrammarService {
         });
   }
 
+  convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
+    const highlightTags: HighlightTag[] = [];
+    const parsed = JSON.parse(tags);
+    console.log(parsed);
+    parsed.forEach((tag: any, index: number) => {
+      highlightTags.push({
+        indices: {
+          // interprent fromx as a number
+          start: + tag.fromx,
+          // interprent tox as a number
+          end: + tag.tox + 1,
+        },
+        cssClass: GrammarTag.getCssClassFromRule(tag.ruleId),
+        data: {
+          index,
+          grammarInfo: tag,
+        },
+      });
+    });
+    console.count('HIGHLIGHT TAGS');
+    console.log(highlightTags);
+    return highlightTags;
+  }
+
   /*
   * Get grammar tag data from an gramadoir
   */
-  getGramadoirTags(id: string) : Observable<any> {
+  getGramadoirTags(id: string): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
-      this.storyService.gramadoir(id).subscribe((res) => {
-        let tags : HighlightTag[] = [];
-        res.forEach(g => {
-          let tag : HighlightTag = {
+      this.storyService.gramadoirViaBackend(id).subscribe(
+        (res) => {
+        const tags: HighlightTag[] = [];
+        console.dir(res);
+        JSON.parse(res.grammarTags).forEach(g => {
+          const tag: HighlightTag = {
             indices: {
               start: +g.fromx,
-              end: +g.tox+1,
+              end: +g.tox + 1,
             },
             cssClass: GrammarTag.getCssClassFromRule(g.ruleId),
             data: g
           };
           tags.push(tag);
         });
-        observer.next(tags);
+        observer.next({
+          text: res.text,
+          grammarTags: tags});
         observer.complete();
       });
     });
   }
-  
-/*
-* Takes in a story text and return an array of vowel tags showing slender/broad 
-* errors around consonants of words in the text
-*/
+
+  async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
+    const story = await this.storyService.getStory(id).toPromise();
+    return this.getVowelAgreementTags(story.text);
+  }
+
+  /*
+  * Takes in a story text and return an array of vowel tags showing slender/broad 
+  * errors around consonants of words in the text
+  */
   getVowelAgreementTags(text: string) : HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);
@@ -180,6 +288,7 @@ export class GrammarService {
               // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[vowelIndex]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
+                vowelAgreement: true,
                 ruleId: 'VOWEL',
               },
             };
@@ -192,6 +301,7 @@ export class GrammarService {
               // set vowel css to either slender/broad
               cssClass: GrammarTag.getCssClassFromRule(this.isCaol(text[i]) ? 'VOWEL-CAOL' : 'VOWEL-LEATHAN'),
               data: {
+                vowelAgreement: true,
                 ruleId: 'VOWEL',
               },
             };
@@ -281,31 +391,36 @@ export class GrammarService {
 
 */
 export class TagSet {
-  gramadoirTags : HighlightTag[];
-  vowelTags : HighlightTag[];
+  gramadoirTags: HighlightTag[];
+  vowelTags: HighlightTag[];
 }
 
 /*
 * **************** Grammar Tag Class ************************
 */
 export class GrammarTag {
+  type;
   message: string;
+  messageEnglish: string;
+  messageIrish: string;
   rule: string;
 
-  constructor(tagData: any) {
-    this.rule = tagData.ruleId;
-    console.log("rule", this.rule);
-    
+  constructor(type: 'vowelAgreement' | 'gramadoir', englishTag: any, irishTag: any = null) {
+    this.type = type;
+    this.rule = englishTag.ruleId;
+
     this.message = GrammarTag.getMessageFromRule(this.rule);
-    if(!this.message) {
-      this.message = tagData.msg;
+
+    if (type === 'gramadoir') {
+      this.messageEnglish = englishTag.msg;
+      this.messageIrish = irishTag.msg;
     }
   }
 
-/*
-* Takes in a rule specifing a grammar concept and returns a message explaining the error
-*/
-  static getMessageFromRule(rule: string) : string {
+  /*
+  * Takes in a rule specifing a grammar concept and returns a message explaining the error
+  */
+  static getMessageFromRule(rule: string): string {
     /*
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
       return "Séimhiu missing";
@@ -315,9 +430,10 @@ export class GrammarTag {
     }
     */
     // etc.
-    if(rule === 'VOWEL') {
-      return "These vowels should be in agreement according to the Leathan/Caol rule."
+    if (rule === 'VOWEL') {
+      return 'vowels_should_agree';
     }
+    return null;
   }
 
 /*

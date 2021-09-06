@@ -12,8 +12,8 @@ export class TranslationService {
 
   constructor(private auth : AuthenticationService, private http : HttpClient) { }
 
-  l : any = '';
-  baseUrl : string = config.baseurl;
+  l: any = '';
+  baseUrl: string = config.baseurl;
 
   initLanguage() {
     if(this.auth.isLoggedIn()) {
