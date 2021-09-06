@@ -1,0 +1,252 @@
+#class-code-input{
+    display: none;
+}
+#container, #submit-container, #about-container{
+    width: 65%;
+    height: 80%;
+    background-color: #70a87f;
+    top: 14%;
+    left: 17%;
+    position: absolute;
+    border-radius: 4px;
+    padding: 5px;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+#submit-container{
+    z-index: 5;
+    display: flex;
+    top: -300%;
+    transition: 0.5s;
+}
+
+#about-container{
+    z-index: 5;
+    display: block;
+    transition: 0.5s;
+    top: -300%;
+}
+
+#about-container #info{
+    width: 80%;
+    height: 80%;
+    background: #F1E6D3;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    top: 5%;
+    left: 10%;
+    position: relative;
+    overflow-y: scroll;
+}
+
+#about-container #info::-webkit-scrollbar{
+    width: 10px;
+}
+  
+#about-container #info::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .1);
+}
+
+#about-container #description{
+    position:relative;
+    width: 90%;
+    left: 5%;
+}
+
+#submit-messages{
+    position: relative;
+    background: #ECF0F1;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    width: 70%;
+    height: 80%;
+    border-radius: 8px;
+    padding: 5px;
+    top: 8%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#cancel-submit, #ask-download{
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #E74C3C;
+    width: 8%;
+    height: 8%;
+    position: absolute;
+    left: 2%;
+    bottom: 3%;
+}
+
+#cancel-submit:hover{
+    cursor: pointer;
+    background-color: #C0392B;
+}
+
+#ask-download{
+    background-color: #F5B041;
+    top: 37%;
+    left: 5%;
+    width: 35%;
+    height: 18%;
+    display: none;
+}
+
+#ask-download:hover{
+    background-color: #F39C12;
+    cursor: pointer;
+}
+
+#saved-message, #ask-publish, #save-prompt, #thank-message{
+    border-radius: 5px;
+    position: absolute;
+    padding: 5px;
+    background: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+}
+
+#saved-message{
+    top: 30%;
+    width: 50%;
+    right: 5%;
+    display: none;
+}
+
+#thank-message{
+    top: 8%;
+    width: 50%;
+    right: 5%;
+}
+
+#save-prompt{
+    top: 8%;
+    width: 35%;
+    text-align: center;
+    left: 5%;
+}
+
+#save-prompt #yes-publish, #save-prompt #no-publish{
+    position: relative;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2%;
+    left: -19%;
+}
+
+#ask-publish{
+    bottom: 10%;
+    left: 5%;
+    width: 35%;
+    display: none;
+}
+
+#yes-publish, #no-publish{
+    position: relative;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin-left: 35%;
+    margin-top: 2%;
+}
+
+#no-publish{
+    margin-left: 5%;
+
+}
+
+#no-publish:hover, #yes-publish:hover{
+    font-style: italic;
+}
+
+#quiz-name{
+    position: absolute;
+    left: 38%;
+    top: 6%;
+}
+#questions, #answers{
+    padding: 5px;
+    overflow-y: scroll;
+    position: absolute;
+    border-radius: 5px;
+    width: 40%;
+    height: 65%;
+    left: 5%;
+    bottom: 18%;
+    background: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    white-space: nowrap;
+}
+#questions::-webkit-scrollbar, #answers::-webkit-scrollbar{
+    width: 10px;
+  }
+  
+#questions::-webkit-scrollbar-thumb, #answers::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .1);
+  }
+#answers{
+    left: 55%;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+#done, #add-question, #about-button{
+    position: absolute;
+    bottom: 3%;
+    right: 5%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: aquamarine;
+    width: 10%;
+    height: 10%;
+}
+
+#add-question{
+    width: 20%;
+    left: 5%;
+}
+
+#about-button{
+    bottom: 86%;
+    right: 85%;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+#done:hover, #add-question:hover, #about-button:hover{
+    font-style: italic;
+}
+
+.Q{
+    position: relative;
+    margin-top: 5%;
+    margin-left: 5%;
+} 
+
+#remind-message{
+    width: 25%;
+    position: absolute;
+    bottom: 5%;
+    right: 20%;
+    display: none;
+    border-radius: 5px;
+    background-color: #E74C3C;
+    padding: 5px;
+}
+
+@media only screen and (min-width: 700px) and (max-width: 1000px){
+    #container, #submit-container{
+        width: 80%;
+        left: 9%;
+    }
+    #add-question{
+        width: 30%;
+    }
+}
