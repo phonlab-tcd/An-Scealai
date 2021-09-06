@@ -8,6 +8,7 @@ const request = require('request');
 
 const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
+const abairBaseUrl = require('../abair_base_url');
 
 // ENDPOINT HANDLERS
 const getStoryById =
@@ -24,7 +25,7 @@ const storyRoutes = makeEndpoints({
   },
   post: {
     '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updatStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
   },
 });
 
@@ -449,6 +450,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 
       const formData = querystring.stringify(form);
 
+      logger.info('formData: ' + formData);
       request({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

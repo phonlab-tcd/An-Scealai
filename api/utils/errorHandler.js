@@ -1,4 +1,8 @@
-const {APIError, API500Error} = require('./APIError');
+const {
+  API404Error,
+  APIError,
+  API500Error} = require('./APIError');
+const logger = require('../logger');
 
 /**
  * An express middleware for handling the different
@@ -8,14 +12,19 @@ const {APIError, API500Error} = require('./APIError');
  * handling rules for each type of error.
  */
 function errorHandler(err, req, res, next) {
-    if (!(err instanceof APIError)) {
-        return res.send(err);
-    }
-    if (err instanceof API500Error) {
-        // Notify us
-    }
-    // Handle other status codes in whatever ways we want
-    return res.status(err.status).json(err.message);
+  logger.alert({errorHandler: {err}});
+
+  if (!(err instanceof APIError)) {
+      return res.send(err);
+  }
+  if (err instanceof API404Error ) {
+    return res.status(404).send(err);
+  }
+  if (err instanceof API500Error) {
+      // Notify us
+  }
+  // Handle other status codes in whatever ways we want
+  return res.status(err.status).json(err.message);
 }
 
 module.exports = errorHandler;

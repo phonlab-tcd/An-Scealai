@@ -131,20 +131,6 @@ export class StoryService {
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
 
-  gramadoirDirect(text: string): Observable<any> {
-    return this
-      .http
-      .post('https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl', {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        observe: 'body',
-        params: {
-          teacs: text.replace(/\n/g, ' '),
-          teanga: this.ts.l.iso_code,
-        },
-      });
-  }
 
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
