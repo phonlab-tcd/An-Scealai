@@ -1,3 +1,4 @@
+const logger = require('../logger');
 const express = require('express');
 const app = express();
 const chatbotRoute = express.Router();
@@ -12,7 +13,7 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 
 // Require Chatbot model in our routes module
-let Models = require('../models/Chatbot');
+let Models = require('../models/chatbot');
 let classModel = require('../models/classroom');
 var spellings;
 
@@ -29,6 +30,7 @@ let endQuiz = "\n\n> object endOfQuiz javascript\nendOfQuiz();\nreturn '';\n< ob
 //Create-Quiz Framwork
 //builds script content as string & stores in the db
 chatbotRoute.route('/SaveScript').post(function(req, res){
+  logger.info({endpoint: '/SaveScript'});
   let content = req.body;
   let topicName = content['topic-name'];
   let userId = content['userId'];
@@ -86,7 +88,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
     if(content[key].length > 1){
       trigger += "(";
       for(let ans of content[key]){
-        trigger += ans.toLowerCase().replace(regex, '') + "|"
+        trigger += ans.toLowerCase().replace(regex, '') + "|";
       }
       trigger = trigger.slice(0, -1);
       trigger += ")";
