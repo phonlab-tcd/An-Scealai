@@ -342,26 +342,27 @@ background-color: lightblue;
 }
 
 /* Gramadoir error tag colour coding */
-
+/*
 span[data-gramadoir-tag] {
   border-radius: 4px;
 }
 
 span[data-gramadoir-tag="default"] {
-    background-color: #aed9ff; /* light blue */
+    background-color: #aed9ff; 
 }
 
 span[data-gramadoir-tag="SEIMHIU"] {
-    background-color: #a6dfc2; /* light green */
+    background-color: #a6dfc2;
 }
 
 span[data-gramadoir-tag="CLAOCHLU"] {
-    background-color: #d1c3eb; /* light purple */
+    background-color: #d1c3eb;
 }
 
 span[data-gramadoir-tag="CAIGHDEAN"] {
-    background-color: #ffdc71; /* yellow */
+    background-color: #ffdc71;
 }
+*/
 
 /* Add more here */
 
