@@ -78,14 +78,14 @@ function createDownloadLink(blob){
   send.onclick = function(){
     sendRecording(blob);
   }
-  $('#recording-prompt').append(send);
+  $('#recording-promptbackendUrl + ').append(send);
 }
 
 function sendRecording(blob){
   var req = new XMLHttpRequest();
   var form = new FormData();
   form.append("file", blob);
-  req.open("POST", "http://localhost:4000/Chatbot/sendRecordedAnswer", true);
+  req.open("POST", backendUrl + "/Chatbot/sendRecordedAnswer", true);
   req.send(form);
   req.onload = function(){
     console.log(this.response);
