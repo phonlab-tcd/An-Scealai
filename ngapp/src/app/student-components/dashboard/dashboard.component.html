@@ -118,15 +118,21 @@
         <!-- INLINE GRAMMAR CHECK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
           (click)="this.dontToggle=true;">
-          <span *ngIf="grammarTagsHidden; else HideGrammarTags"
-              (click)="showGrammarTags();">
-            TODO Show grammar suggestions
+          <span
+            *ngIf="grammarTagsHidden; else HideGrammarTags"
+            (click)="showGrammarTags();">
+              {{  ts.l.show_grammar_suggestions ?
+                  ts.l.show_grammar_suggestions :
+                  'show_grammar_suggestions' }}
           </span>
           <ng-template #HideGrammarTags>
             <span (click)="hideGrammarTags();">
-              TODO Hide grammar suggestions
+              {{  ts.l.hide_grammar_suggestions ?
+                  ts.l.hide_grammar_suggestions :
+                  'hide_grammar_suggestions' }}
             </span>
           </ng-template>
+          <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
         <!-- POPOUT GRAMMAR CHECK -->
@@ -144,14 +150,6 @@
           <i class="fas fa-microphone optionsBtnIcon"></i>
         </div>
 
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; displayGrammarErrors()">
-          simulate gramadoir
-        </div>
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; getLines()">
-          get lines
-        </div>
       </div>
     </div>
 
@@ -168,7 +166,6 @@
           [(ngModel)]="story.htmlText" 
           (onContentChanged)="
               storyEdited($event);
-              getWordCount($event);
               this.grammarChecker?.debounceGramadoir()"
           (onEditorCreated)="quillEditor = $event"
         >
@@ -193,8 +190,7 @@
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
             (onContentChanged)="
-                storyEdited($event);
-                getWordCount($event);">
+                storyEdited($event);">
         </quill-editor>
         
       </div>
@@ -211,8 +207,7 @@
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
             (onContentChanged)="
-              storyEdited($event);
-              getWordCount($event);">
+              storyEdited($event);">
         </quill-editor>
       </div>
 
@@ -227,8 +222,7 @@
             [preserveWhitespace]="true"
             [(ngModel)]="story.htmlText"
             (onContentChanged)="
-                storyEdited($event);
-                getWordCount($event);">
+                storyEdited($event);">
         </quill-editor>
         
         <div class="dictionaryContainer">

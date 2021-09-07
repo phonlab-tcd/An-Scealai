@@ -7,8 +7,6 @@ import {
   AfterViewInit,
   } from '@angular/core';
 
-import { EngagementService} from 'src/app/engagement.service';
-import { EventType } from 'src/app/event';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { StatsService } from 'src/app/stats.service';
 import { ClassroomService } from 'src/app/classroom.service';
@@ -16,9 +14,7 @@ import { HighlightTag, } from 'angular-text-input-highlight';
 import { GrammarService, GrammarTag } from 'src/app/grammar.service';
 import { TranslationService } from 'src/app/translation.service';
 import { Story } from 'src/app/story';
-import { Subscription } from 'rxjs';
-import { LoadingComponent } from 'src/app/loading/loading.component';
-import * as _ from 'lodash';
+import debounce from 'lodash/debounce';
 
 function cloneString(str: string) {
   return (' ' + str).slice(1);
@@ -92,13 +88,12 @@ export class GrammarCheckerComponent implements
     private statsService: StatsService,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
-    private engagement: EngagementService,
    ) { }
 
-  debounceGramadoir = _.debounce(() => {
+  debounceGramadoir = debounce(() => {
     this.synchroniseGramadoir();
     this.synchroniseVowelAgreementChecker();
-  }, 500);  
+  }, 500);
 
   ngAfterViewInit(): void {
     this.synchroniseGramadoir();
@@ -198,7 +193,6 @@ export class GrammarCheckerComponent implements
 
             // loop through tags of errors found in the story
             for (const tag of this.tagSets[FILTER.GRAMADOIR]) {
-              console.dir(tag);
               let values: HighlightTag[] = [];
               let rule: string = tag.data.english.ruleId.substring(22);
               const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
@@ -232,7 +226,6 @@ export class GrammarCheckerComponent implements
                 }
               }
             }
-            console.log('Filtered tags: ', this.filteredTags);
             this.updateStats();
     });
   }
@@ -241,7 +234,6 @@ export class GrammarCheckerComponent implements
   * Update the grammar error map of the stat object corresponding to the current student id
   */
   updateStats() {
-    console.log('Update grammar errors');
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
 
@@ -254,10 +246,7 @@ export class GrammarCheckerComponent implements
             userDetails._id,
             this.filteredTags,
             updatedTimeStamp,
-        ).subscribe(
-        (res) => {
-          console.log(res);
-        });
+        ).subscribe();
   }
 
   /*
@@ -308,9 +297,7 @@ export class GrammarCheckerComponent implements
 
   // set chosen tag to tag passed in parameters
   chooseGrammarTag(tag: HighlightTag) {
-    console.dir(tag);
     if (tag.data.vowelAgreement) {
-      console.count('VOWEL AGREEMENT');
       this.chosenTag = new GrammarTag('vowelAgreement', tag.data);
       return;
     }
@@ -358,7 +345,6 @@ export class GrammarCheckerComponent implements
     this.grammarLoading = true;
     await this.runGramadoir();
     if (myGramadoirRunId === this.mostRecentGramadoirRunId) {
-      console.count('RESETTING grammarLoading TO FALSE');
       this.grammarLoading = false;
     }
   }
@@ -366,7 +352,7 @@ export class GrammarCheckerComponent implements
   async synchroniseVowelAgreementChecker(){
     this.mostRecentVowelRunId++;
     const myVowelRunId = this.mostRecentVowelRunId;
-    this.vowelLoading= true;
+    this.vowelLoading = true;
     this.tagSets[FILTER.VOWEL] = [];
     const syncStarted = new Date();
 
@@ -393,7 +379,6 @@ export class GrammarCheckerComponent implements
       }, remainingWait);
     }
     catch (error) {
-      console.error(error);
       this.tagSets[FILTER.VOWEL] = newTags;
       this.vowelLoading = false;
     }

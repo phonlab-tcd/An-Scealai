@@ -97,16 +97,15 @@ export class QuillHighlightService {
                   error.length,
                   {
                     'gramadoir-tag': error.type,
-                    background: 'pink',
-                    'border-radius': '2px',
-                  }
+                  },
+                  'api'
               );
         });
 
-    const popups = document.querySelectorAll('[data-gramadoir-tag]');
+    const gramadoirSpans = document.querySelectorAll('[data-gramadoir-tag]');
 
     this.currentGramadoirHighlightTags.forEach((error, i) => {
-      this.createGrammarPopup(quillEditor, error, popups[i]);
+      this.createGrammarPopup(quillEditor, error, gramadoirSpans[i]);
     });
   }
 
@@ -119,7 +118,7 @@ export class QuillHighlightService {
     document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
   }
 
-  clearGramadoirTagFormatting(quillEditor: Quill) {
+  private clearGramadoirTagFormatting(quillEditor: Quill) {
     quillEditor.formatText(
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
@@ -150,7 +149,6 @@ export class QuillHighlightService {
     bounds: any,
   )
   {
-    console.count('MOUSOVER');
     const userFriendlyMsgs =
       this.grammar
           .userFriendlyGramadoirMessage[error.type];
@@ -160,7 +158,6 @@ export class QuillHighlightService {
       userFriendlyMsgs ?
       userFriendlyMsgs[this.ts.l.iso_code] :
       error.messages[this.ts.l.iso_code];
-    console.count('error.tooltip.show()');
     error.tooltip.show();
     error.tooltip.position(bounds);
 
