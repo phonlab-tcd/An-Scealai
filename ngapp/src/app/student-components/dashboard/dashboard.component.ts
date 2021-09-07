@@ -2,38 +2,35 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  ViewChild,
-  Renderer2 } from '@angular/core';
+  ViewChild } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
   ActivatedRoute,
   Router,
-  NavigationEnd,
-  NavigationStart } from '@angular/router';
+} from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 
 import {
-  GrammarService,
   GrammarTag,
-  GramadoirTag,
   GramadoirRuleId,
 } from '../../grammar.service';
 
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
+// import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import config from 'src/abairconfig.json';
-import Quill, {Delta} from 'quill';
+import Quill from 'quill';
+import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 
 
 const Parchment = Quill.import('parchment');
@@ -46,6 +43,7 @@ const gramadoirTag =
 
 Quill.register(gramadoirTag);
 
+const Tooltip = Quill.import('ui/tooltip');
 
 type QuillHighlightTag = {
   start: number;
@@ -59,7 +57,6 @@ type QuillHighlightTag = {
   };
 };
 
-const Tooltip = Quill.import('ui/tooltip');
 
 @Component({
   selector: 'app-dashboard',
@@ -76,75 +73,76 @@ export class DashboardComponent implements OnInit {
   stories: Story[];
   id: string;
   storyFound: boolean;
-  storySaved: boolean = true;
+  storySaved = true;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading: boolean = false;
-  grammarSelected: boolean = true;
+  grammarLoading = false;
+  grammarSelected = true;
   grammarTagsHidden = true;
   mostRecentGramadoirInput: string = null;
   currentGramadoirHighlightTags: QuillHighlightTag[] = null;
-  modalClass : string = "hidden";
+  modalClass = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
-  teacherSelectedErrors: String[] = [];
+  teacherSelectedErrors: string[] = [];
   classroomId: string;
-  selectTeanglann: boolean = true;
-  selectExternalLinks: boolean = false;
+  selectTeanglann = true;
+  selectExternalLinks = false;
 
   downloadStoryFormat = '.pdf';
 
   gramadoirResponse: string;
 
   // OPTIONS (to show or not to show)
-  showOptions: boolean = true;
-  dontToggle: boolean = false;
+  showOptions = true;
+  dontToggle = false;
 
   // WORD COUNT
   words: string[] = [];
-  wordCount: number = 0;
+  wordCount = 0;
 
   quillEditor: Quill;
   textUpdated: Subject<string> = new Subject<string>();
 
   dialects = [
     {
-      code : "connemara",
+      code : 'connemara',
       name : this.ts.l.connacht
     },
     {
-      code : "kerry",
+      code : 'kerry',
       name : this.ts.l.munster
     },
     {
-      code : "donegal",
+      code : 'donegal',
       name : this.ts.l.ulster
     }
   ];
-  
+
   quillToolbar = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
       ['blockquote'/*, 'code-block'*/],
-      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-      //[{ 'direction': 'rtl' }],                         // text direction
-      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      //  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ list: 'ordered'}, { list: 'bullet' }],
+      //  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      //  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      //  [{ 'direction': 'rtl' }],                         // text direction
+      //  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
       ['clean'],                                         // remove formatting button
-      //['link', 'image', 'video']                        // link and image, video
+      //  ['link', 'image', 'video']                        // link and image, video
     ]
   };
-  
+
   constructor(
+    private quillHighlightService: QuillHighlightService,
     private storyService: StoryService,
     private route: ActivatedRoute,
     private auth: AuthenticationService,
@@ -152,7 +150,6 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
-    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
@@ -163,17 +160,19 @@ export class DashboardComponent implements OnInit {
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if (textToCheck !== this.mostRecentGramadoirInput) {
-        this.updateGrammarErrors(textToCheck);
+        this.quillHighlightService
+            .updateGrammarErrors(this.quillEditor, textToCheck);
       }
       if (!this.grammarTagsHidden) {
-        this.applyGramadoirTagFormatting();
+        this.quillHighlightService
+            .applyGramadoirTagFormatting(this.quillEditor);
       }
     });
   }
 
-  /* set the stories array of all the student's stories 
-  * set the stories array of all the student's stories 
-  * and the current story being edited given its id from url 
+  /* set the stories array of all the student's stories
+  * set the stories array of all the student's stories w
+  * and the current story being edited given its id from url
   */
   ngOnInit() {
     this.storySaved = true;
@@ -183,15 +182,15 @@ export class DashboardComponent implements OnInit {
       this.stories = stories;
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
-        this.id = params['id'];
+        this.id = params.id;
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
-        for(let story of this.stories) {
-          if(story._id === this.id) {
+        for (const story of this.stories) {
+          if (story._id === this.id) {
             this.story = story;
             this.getWordCount(this.story.text);
-            if(this.story.htmlText == null) {
+            if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
             break;
@@ -216,222 +215,56 @@ export class DashboardComponent implements OnInit {
           });
   }
 
-/*
-* return the student's set of stories using the story service 
-*/
-  
+  // return the student's set of
+  // stories using the story service
   getStories(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.storyService.getStoriesForLoggedInUser().subscribe(
-        (stories: Story[]) => {
-          resolve(stories);
-        }
-      )
+      this.storyService
+          .getStoriesForLoggedInUser()
+          .subscribe({
+            next: (stories: Story[]) => {
+              resolve(stories);
+            },
+            error: (error: Error) => {
+              reject(error);
+            },
+          });
     });
   }
 
-  /*
-  * return the story id using the routing parameters
-  */
+  // return the url params (which contains the id,
+  // presuming dashboard component is only
+  // used on a url with a story id) using
+  // the routing parameters
   getStoryId(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.route.params.subscribe(
-        params => {
-          resolve(params);
-      });
+        params => resolve(params),
+        error => reject(error)
+      );
     });
-  }
-
-  async updateGrammarErrors(text: string) {
-    // my tslint server keeps
-    // asking me to brace these guys
-    if (!this.quillEditor) { return; }
-
-    // convert text to single line
-    // (no paragraphs/new lines)
-    // const gramadoirInputText = text; // this.story.text.replace(/\n/g, ' ');
-    this.mostRecentGramadoirInput = text; // gramadoirInputText;
-
-    const gramadoirPromiseIrish =
-      this.grammar.gramadoirDirectObservable(text, 'ga')
-      .toPromise();
-
-    const grammarCheckerErrors =
-      await this.grammar
-          .gramadoirDirectObservable(
-            text,
-            'en')
-          .pipe(
-            map((tagData: GramadoirTag[]) =>
-              tagData.map(tag =>
-                ({
-                  start: + tag.fromx,
-                  length: + tag.tox + 1 - tag.fromx,
-                  type: this.grammar.string2GramadoirRuleId(tag.ruleId),
-                  tooltip: null,
-                  messages: { en: tag.msg},
-                }) as QuillHighlightTag
-              )
-            ),
-          ).toPromise();
-
-    const editorElem = this.quillEditor.root;
-
-    this.clearAllGramadoirTags();
-
-    const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
-
-    grammarCheckerErrors.forEach((e, i) => {
-      e.messages.ga = grammarCheckerErrorsIrish[i].msg;
-    });
-
-    this.currentGramadoirHighlightTags = grammarCheckerErrors;
-    
-    this.applyGramadoirTagFormatting();
-
-    /*
-    grammarCheckerErrors.forEach((error: QuillHighlightTag, errorIndex) => {
-      this.quillEditor
-          .formatText(
-              error.start,
-              error.length,
-              {'gramadoir-tag': error.type, 'background': error.color}
-          );
-    });
-
-    // Get the HTMLElement for the span just created by the formatText
-    document
-        .querySelectorAll('[data-gramadoir-tag]')
-        .forEach((tagElement, index) => {
-      const error = grammarCheckerErrors[index];
-      this.createGrammarPopup(error, tagElement);
-    });
-    */
-
-    if (this.grammarTagsHidden) {
-      this.hideGrammarTags();
-    }
-    console.log('grammar updated');
-  }
-
-  createGrammarPopup(error, tagElement) {
-    // Create a customised quill tooltip containing
-    // a message about the grammar error
-    const bounds = this.quillEditor.getBounds(error.start, error.length);
-    error.tooltip = new Tooltip(this.quillEditor);
-    error.tooltip.root.classList.add('custom-tooltip');
-
-    // Add hover UI logic to the grammar error span element
-    tagElement.addEventListener('mouseover', () => {
-      this.mouseOverTagElem(this, error, bounds);
-    });
-
-    tagElement.addEventListener('mouseout', () => {
-      error.tooltip.hide();
-    });
-  }
-
-  clearAllGramadoirTags() {
-    this.clearGramadoirTagFormatting();
-    // remove any remaining custom-tooltips from the DOM.
-    //  -> without doing this, a tooltip can live on past its
-    //     corresponding highlight tag if the user stays hovering
-    //     on the highlight tag while the grammar error is fixed.
-    document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
-  }
-
-  applyGramadoirTagFormatting() {
-    if (!this.currentGramadoirHighlightTags || this.grammarTagsHidden) { return; }
-
-    this.currentGramadoirHighlightTags
-        .forEach((error) => {
-          // Add highlighting to error text
-          this.quillEditor
-              .formatText(
-                  error.start,
-                  error.length,
-                  { 
-                    'gramadoir-tag': error.type,
-                    'background': 'pink',
-                    'border-radius': '2px',
-                  }
-              );
-        });
-
-    const popups = document.querySelectorAll('[data-gramadoir-tag]');
-
-    this.currentGramadoirHighlightTags.forEach((error, i) => {
-      this.createGrammarPopup(error, popups[i]);
-    });
-    console.log('delta', this.quillEditor.getContents());
-    console.log('html', this.quillEditor.root.innerHTML);
-  }
-
-  clearGramadoirTagFormatting() {
-    this.quillEditor.formatText(
-      0, // from the very beginning of the text
-      this.quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
-    );
   }
 
   hideGrammarTags(){
-    this.grammarTagsHidden = true;
-    this.clearGramadoirTagFormatting();
+    this.quillHighlightService
+        .clearGramadoirTagFormatting(this.quillEditor);
   }
 
   showGrammarTags(){
-    this.grammarTagsHidden = false;
-    this.applyGramadoirTagFormatting();
+    this.quillHighlightService
+        .applyGramadoirTagFormatting(this.quillEditor);
   }
 
-  mouseOverTagElem(
-    that: DashboardComponent,
-    error: QuillHighlightTag,
-    bounds: any,
-  )
-  {
-    console.count('MOUSOVER');
-    const userFriendlyMsgs =
-      that.grammar
-          .userFriendlyGramadoirMessage[error.type];
-
-    error.tooltip.root.innerHTML =
-      // Prefer user friendly message
-      userFriendlyMsgs ?
-      userFriendlyMsgs[that.ts.l.iso_code] :
-      error.messages[that.ts.l.iso_code];
-    console.count('error.tooltip.show()');
-    error.tooltip.show();
-    error.tooltip.position(bounds);
-
-    // Ensure that tooltip isn't cut off by the right edge of the editor
-    const rightOverflow =
-      (error.tooltip.root.offsetLeft + error.tooltip.root.offsetWidth) -
-      that.quillEditor.root.offsetWidth;
-
-    error.tooltip.root.style.left =
-      (rightOverflow > 0) ?
-      `${(error.tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
-      error.tooltip.root.style.left;
-
-    // Ensure that tooltip isn't cut off by the left edge of the editor
-    error.tooltip.root.style.left =
-      (error.tooltip.root.offsetLeft < 0) ?
-      `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
-      error.tooltip.root.style.left;
-  }
-
-  /*
-  * Update story data (text and date) using story service
-  * Add logged event for saved story  using engagement service
-  */
+  // Update story data (text and date) using story service
+  // Add logged event for saved story  using engagement service
   saveStory() {
     // remove and re-apply formatting to ensure that
     // grammar highlights aren't saved to DB
-    this.clearGramadoirTagFormatting();
+    this.quillHighlightService
+        .clearGramadoirTagFormatting(this.quillEditor);
     const unhighlightedHtmlText = this.story.htmlText;
-    this.applyGramadoirTagFormatting();
+    this.quillHighlightService
+        .applyGramadoirTagFormatting(this.quillEditor);
 
     const updateData = {
       text : this.story.text,
@@ -456,18 +289,16 @@ export class DashboardComponent implements OnInit {
     this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
-  /*
-   *  Get audio feedback with function call
-   *  Set feedback status to seen by student
-   *  and remove story from not yet seen array
-   *  Add logged event for viewed feedback
-   */
+  // Get audio feedback with function call
+  // Set feedback status to seen by student
+  // and remove story from not yet seen array
+  // Add logged event for viewed feedback
   getFeedback() {
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if (this.story.feedback.text != "") {
+    if (this.story.feedback.text !== '') {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
@@ -477,7 +308,7 @@ export class DashboardComponent implements OnInit {
   }
 
 /*
-* set the url for the audio source feedback 
+* set the url for the audio source feedback
 */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
@@ -487,7 +318,7 @@ export class DashboardComponent implements OnInit {
 
   // Set story.text to most recent version of editor text and then switch to storyEditedAlt
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
-  storyEdited(q) {
+  storyEdited(q: any) {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
@@ -496,7 +327,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
-  storyEditedAlt(q) {
+  storyEditedAlt(q: any) {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
@@ -512,10 +343,10 @@ export class DashboardComponent implements OnInit {
   }
 
   // Get word count of story text
-  getWordCount(text) {
+  getWordCount(text: string) {
     const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
     this.words = [];
-    str.map((s) => {
+    str.map((s: string) => {
       const trimStr = s.trim();
       if (trimStr.length > 0) {
         this.words.push(trimStr);
@@ -549,12 +380,12 @@ export class DashboardComponent implements OnInit {
     return false;
   }
 
-  // route to synthesis 
+  // route to synthesis
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
 
-  // route to synthesis 
+  // route to synthesis
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
