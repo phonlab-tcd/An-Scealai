@@ -8,13 +8,12 @@ import {
   GramadoirTag } from 'src/app/grammar.service';
 
 const Tooltip = Quill.import('ui/tooltip');
-const exampleTooltip = new Tooltip();
 
 export type QuillHighlightTag = {
   start: number;
   length: number;
   type: GramadoirRuleId;
-  tooltip: typeof exampleTooltip;
+  tooltip: any;
   color: string;
   messages: {
     en: string;
