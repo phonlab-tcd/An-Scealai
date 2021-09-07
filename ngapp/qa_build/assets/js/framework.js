@@ -154,7 +154,7 @@ function done(){
     console.log(result);  
     if(name != ''){
       //store questions & answers on the backend to be pulled again from the bot
-      request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/SaveScript', true);
+      request.open('POST', 'http://localhost:4000/Chatbot/SaveScript', true);
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify(result));
       request.onload = function(){
@@ -190,7 +190,7 @@ function sendVerification(){
   $('#saved-message').text('Your script will be verified.');
   $('#saved-message').css('display', 'block');
   var request = new XMLHttpRequest();
-  request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/sendScriptVerification', true);
+  request.open('POST', 'http://localhost:4000/Chatbot/sendScriptVerification', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({user: user._id, name: currentFilename}));
   request.onload = function(){
@@ -206,7 +206,7 @@ function showReminder(text){
 
 function downloadNewScript(){
   var request = new XMLHttpRequest();
-  request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/getScriptForDownload', true);
+  request.open('POST', 'http://localhost:4000/Chatbot/getScriptForDownload', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({user: user._id, name: currentFilename}));
   request.onload = function(){
@@ -231,7 +231,7 @@ function deleteScript(){
   console.log('to delete: ' + toDelete);
 
   var request = new XMLHttpRequest();
-  request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/deleteScript', true);
+  request.open('POST', 'http://localhost:4000/Chatbot/deleteScript', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({name: toDelete, user: user._id}));
   request.onload = function(){
@@ -264,7 +264,7 @@ var personal_buttons = [];
 var currentScripts = [];
 function getPersonalScripts(){
   var request = new XMLHttpRequest();
-  request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/getScripts', true);
+  request.open('POST', 'http://localhost:4000/Chatbot/getScripts', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({name: user.username, id: user._id}));
   request.onload = function(){
@@ -302,7 +302,7 @@ function openScript(){
 function getTeacherScripts(){
   console.log('user');
   var request = new XMLHttpRequest();
-  request.open('GET', 'www.abair.ie/qa/anscealaibackend/Classroom/getClassroomForStudent/' + user._id, true);
+  request.open('GET', 'http://localhost:4000/Classroom/getClassroomForStudent/' + user._id, true);
   request.send();
   request.onload = function(){
     console.log(JSON.parse(this.response));

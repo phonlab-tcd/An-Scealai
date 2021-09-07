@@ -133,7 +133,7 @@ function callAudio(testString, id){
     currentDialect = 'MU'; 
   }
   var messageBubble = {text: testString, dialect: currentDialect};
-  request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/getAudio', true);
+  request.open('POST', 'http://localhost:4000/Chatbot/getAudio', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify(messageBubble));
   request.onload = function(){
@@ -151,7 +151,7 @@ function callAudio(testString, id){
 function testDNN(text, id){
   if(currentDialect != ''){
     var messageBubble = {text: text, dialect: currentDialect};
-    request.open('POST', 'www.abair.ie/qa/anscealaibackend/Chatbot/getDNNAudio', true);
+    request.open('POST', 'http://localhost:4000/Chatbot/getDNNAudio', true);
     request.setRequestHeader("Content-type", "application/json");
     request.send(JSON.stringify(messageBubble));
     request.onload = function(){
