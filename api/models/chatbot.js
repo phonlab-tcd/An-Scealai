@@ -89,4 +89,4 @@ module.exports = {
   AudioBubble: AudioBubbleModel,
   PersonalScript: PersonalScriptModel,
   CommunityScript: CommunityScriptModel,
-
+}
