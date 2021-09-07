@@ -26,6 +26,7 @@ import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import { Quill } from 'quill';
+import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -65,6 +66,8 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
+
+  downloadStoryFormat = '.pdf';
 
   dialects = [
     {
@@ -308,20 +311,11 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-  /*
-  * Update the grammar error map of the stat object corresponding to the current student id
-  */
-  updateStats() {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      return;
-    }
-    this.statsService
-        .updateGrammarErrors(
-          userDetails._id,
-          this.filteredTags,
-          new Date())
-        .subscribe();
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
   }
 
   // set modalClass to visible fade

@@ -64,6 +64,38 @@
           <i class="fas fa-pencil-alt optionsBtnIcon"></i>
         </div>
 
+        <!-- DOWNLOAD -->
+        <div 
+            *ngIf="showOptions"
+            style="display: flex;"
+            (click)="dontToggle=true">
+          <a 
+            style="text-decoration: none;"
+            class="optionsBtn optionsPopupBtn"
+            target="_blank"
+            href="{{downloadStoryUrl()}}">
+            Download
+            <i class="fas fa-download optionsBtnIcon"></i>
+          </a>
+          <select 
+               #downloadFormatOption
+               style="border-end-end-radius: 0; background: rgba(0,0,0,0);"
+               [(ngModel)]="downloadStoryFormat">
+            <option>.pdf</option>
+            <option>.docx</option>
+            <option>.odt</option>
+            <option>.pptx</option>
+            <option>.md</option>
+            <option>.txt</option>
+            <option>.html</option>
+            <option>.json</option>
+            <!--
+              <option>epub</option>
+              <option>gfm</option>
+            -->
+            <option>.latex</option>
+          </select>
+        </div>
         <!-- FEEDBACK -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
                                  (click)="this.dontToggle=true; defaultMode(); getFeedback()">
