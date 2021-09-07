@@ -197,7 +197,7 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
       Models.PersonalScript.findOne(req.body, function(err, script){ 
         console.log(script);
         let writetofile = fs.createWriteStream(filename, {flags: 'a'});
-        writetofile.write(script.content);
+        writetofile.write(script.questionsandanswers);
         res.json({status: 200, message: 'file ready to download'});
       });
     } 
@@ -402,12 +402,12 @@ chatbotRoute.route('/sendScriptVerification').post(function(req, res){
   var mailObj = {};
   console.log(req.body);
   Models.PersonalScript.findOne(req.body, function(err, script){ 
-    console.log(script);
+    //console.log(script);
     mailObj = {
       from: "gilsenci@tcd.ie",
       recipients: ["ciaragil98@gmail.com"],
       subject: 'Taidhgín Script Verification',
-      message: "User: " + script.user + "\nVerify Script: \n <button>Test Button</button>\n\n" + script.questionsandanswers,
+      message: "User: " + script.user + "\nVerify Script: \n\n" + script.questionsandanswers,
     };
     sendEmail(mailObj).then((response) => {
       console.log(response);
@@ -420,7 +420,7 @@ chatbotRoute.route('/sendScriptVerification').post(function(req, res){
 
 const sendEmail = async (mailObj) => {
   let dir = __dirname.substr(0, __dirname.length-6);
-  let data = fs.readFileSync(path.join(dir, 'sendinbluekey.json'));
+  let data = fs.readFileSync(path.join(dir, 'sendinblue.json'));
   let sendinblue_key = JSON.parse(data);
 
   //code from: https://schadokar.dev/posts/how-to-send-email-in-nodejs/  
