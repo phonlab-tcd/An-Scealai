@@ -32,7 +32,6 @@ import config from 'src/abairconfig.json';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 
-
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
@@ -246,11 +245,13 @@ export class DashboardComponent implements OnInit {
   }
 
   hideGrammarTags(){
+    this.grammarTagsHidden = true;
     this.quillHighlightService
         .clearGramadoirTagFormatting(this.quillEditor);
   }
 
   showGrammarTags(){
+    this.grammarTagsHidden = false;
     this.quillHighlightService
         .applyGramadoirTagFormatting(this.quillEditor);
   }
