@@ -15,19 +15,17 @@ var slender_names = [];
 
 
 function setup(file){
-  if(window.location.href == 'http://localhost:4200/#/taidhgin' || window.location.href == 'http://localhost:4200/bunscoil'){
-    videoPlayer = document.getElementById('chimp');
-    audioPlayer = document.getElementById("botaudio");
-    audioCheckbox = document.querySelector(".audioCheckbox");
+  videoPlayer = document.getElementById('chimp');
+  audioPlayer = document.getElementById("botaudio");
+  audioCheckbox = document.querySelector(".audioCheckbox");
 
-    //file = 'TestA5';
-    bot = new RiveScript({utf8: true});    
-    bot.loadFile("assets/rive/" + file + ".rive").then( () => {
-      bot.sortReplies();
-      currentFile = 'start';
-      chatSetup("start", false, false);
-    });
-  }  
+  //file = 'TestA5';
+  bot = new RiveScript({utf8: true});    
+  bot.loadFile("assets/rive/" + file + ".rive").then( () => {
+    bot.sortReplies();
+    currentFile = 'start';
+    chatSetup("start", false, false);
+  });  
 }
 
 function load(fileId, start, content_id){
@@ -231,17 +229,15 @@ let currentDialectButton = null;
 function dialectSelection(dialect){
   $('.audioCheckbox').prop('checked', true);
 
-  if(currentEngine == 'DNN' && currentDialect != ''){
-    currentDialectButton.style.backgroundColor = '#2980B9';
-    currentDialectButton.style.fontWeight = '';
-  } 
-  else if(currentEngine == 'HTS' && currentDialect != ''){
-    currentDialectButton.style.backgroundColor = '#CD5FEA';
+  //set color
+  if(currentDialect != ''){
+    currentDialectButton.style.backgroundColor = '#1ABC9C';
     currentDialectButton.style.fontWeight = '';
   }
   currentDialect = dialect.substr(8, dialect.length);
   console.log(currentDialect);
 
+  //set text
   if(currentDialect == 'MU-DNN') currentDialect = 'MU';
   
   if(currentEngine == 'HTS'){
@@ -250,11 +246,13 @@ function dialectSelection(dialect){
     else $('#this-dialect').text("Dialect: Kerry - HTS");
   }
   else{
-    $('#this-dialect').text("Dialect: " + currentDialect + " - DNN");
+    if(currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
+    else if(currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
+    else $('#this-dialect').text("Dialect: Kerry - DNN");
   }
 
   currentDialectButton = document.getElementById(dialect);
-  currentDialectButton.style.backgroundColor = '#1ABC9C';
+  currentDialectButton.style.backgroundColor = '#117A65';
   currentDialectButton.style.fontWeight = 'bold';
 }
 
