@@ -69,6 +69,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
 
   story: Story = new Story();
+  mostRecentAttemptToSaveStory = new Date();
   stories: Story[];
   id: string;
   storyFound: boolean;
@@ -261,7 +262,13 @@ export class DashboardComponent implements OnInit {
 
   // Update story data (text and date) using story service
   // Add logged event for saved story  using engagement service
-  saveStory() {
+  async saveStory() {
+    const saveAttempt = new Date();
+    this.mostRecentAttemptToSaveStory = saveAttempt;
+
+    if (! this.story._id) {
+      return window.alert('Cannot save story. The id is not known');
+    }
     // remove and re-apply formatting to ensure that
     // grammar highlights aren't saved to DB
     this.quillHighlightService
@@ -278,16 +285,31 @@ export class DashboardComponent implements OnInit {
       lastUpdated : new Date(),
     };
 
-    this.storyService
+    const saveStoryPromise = this
+        .storyService
         .updateStory(updateData, this.story._id)
-        .subscribe({
-          complete: () => this.storySaved = true,
-        });
+        .toPromise();
 
-    this.engagement
-        .addEventForLoggedInUser(
-            EventType['SAVE-STORY'],
-            this.story);
+    const engagementPromise = this
+        .engagement
+        .addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
+
+    try {
+      await saveStoryPromise;
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+        this.storySaved = true;
+      }
+    } catch (error) {
+      window.alert(error.message || JSON.stringify(error));
+      throw error;
+    }
+
+    try {
+      await engagementPromise;
+    } catch (error) {
+      window.alert(error.message || JSON.stringify(error));
+    }
+    return;
   }
 
   showDictionary() {
@@ -433,9 +455,14 @@ export class DashboardComponent implements OnInit {
   }
 
   // save story and set next modal choice to true
-  saveModal() {
-    this.saveStory();
-    this.modalChoice.next(true);
+  async saveModal() {
+    try {
+      await this.saveStory();
+      this.modalChoice.next(true);
+    } catch (error) {
+      window.alert('Your story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.');
+      this.hideModal();
+    }
   }
 
   toggleOptions() {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Event, EventType } from './event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';  
+import { AuthenticationService } from './authentication.service';
 import { Story } from './story';
 import config from '../abairconfig.json';
 
@@ -15,13 +15,13 @@ export class EngagementService {
 
   baseUrl: string = config.baseurl + 'engagement/';
 
-  addEventForLoggedInUser(type: EventType, story?: Object){
-    if(this.auth.isLoggedIn()) {
-      let event: Event = new Event();
+  async addEventForLoggedInUser(type: EventType, story?: Story){
+    if  (this.auth.isLoggedIn()) {
+      const event: Event = new Event();
       event.type = type;
-      if(story) event.storyData = story;
+      if (story) { event.storyData = story; }
       event.userId = this.auth.getUserDetails()._id;
-      return this.http.post(this.baseUrl + "addEventForUser/" + this.auth.getUserDetails()._id, {event:event}).subscribe();
+      return this.http.post(this.baseUrl + 'addEventForUser/' + this.auth.getUserDetails()._id, {event}).toPromise();
     }
   }
 
