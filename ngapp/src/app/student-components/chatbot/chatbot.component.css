@@ -253,15 +253,14 @@
     display: none;
     opacity: 0;
     transition: 0.5s;
-    overflow-y: scroll;
-    scroll-behavior: auto;
+    
   }
   
-  .personal-topics::-webkit-scrollbar, .community-topics::-webkit-scrollbar, .scealai-topics::-webkit-scrollbar{
+  #personal-container::-webkit-scrollbar, .community-topics::-webkit-scrollbar, .scealai-topics::-webkit-scrollbar{
     width: 10px;
   }
   
-  .personal-topics::-webkit-scrollbar-thumb, .community-topics::-webkit-scrollbar-thumb, .scealai-topics::-webkit-scrollbar-thumb{
+  #personal-container::-webkit-scrollbar-thumb, .community-topics::-webkit-scrollbar-thumb, .scealai-topics::-webkit-scrollbar-thumb{
     border-radius: 5px;
     background: rgba(0, 0, 0, .1);
   }
@@ -270,11 +269,25 @@
     display: none;
   }
 
+  .personal-topics #to-create{
+    position: absolute;
+    border-radius: 5px;
+    left: 36%;
+    margin-top: 0.8%;
+    width: 4%;
+    height: 8%;
+    font-size: smaller;
+    border: none;
+    outline: none;
+  }
+
   #personal-container{
     position: relative;
-    top: -5%;
+    top: 1%;
     width: 100%;
-    height: 100%;
+    height: 70%;
+    overflow-y: scroll;
+    scroll-behavior: auto;
   }
 
   .personal-topics #student, .personal-topics #teacher{
@@ -477,12 +490,11 @@
     outline: none;
     border: none;
     color:white;
-    background-color: #AF7AC5;
+    background-color: #1ABC9C;
   }
 
   #dialect-UL, #dialect-CO, #dialect-MU-DNN{
     display: none;
-    background-color: #2980B9;
   }
   
   #close-audio{

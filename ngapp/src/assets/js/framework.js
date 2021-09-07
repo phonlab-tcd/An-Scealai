@@ -375,6 +375,7 @@ function showPersonal(role){
   if(role == 'student'){
     $('.personal-topics #teacher').css('background-color', '#FBFCFC');
     $('.personal-topics #student').css('background-color', '#F4D03F');
+    $('#delete-script').prop('disabled', false);
   }
   else{
     $('.personal-topics #student').css('background-color', '#FBFCFC');
@@ -389,6 +390,8 @@ function showPersonal(role){
     else button.style.display = 'none';
 
     if(role == 'student' && id.includes('teacherquiz')) button.style.display = 'none';
+    $('#delete-script').css('display', 'none');
+    $('#open-script').css('display', 'none');
   }
 }
 
