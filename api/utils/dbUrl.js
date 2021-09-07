@@ -1,5 +1,4 @@
 const config = require('../DB');
-const logger = require('../logger');
 // use the URL for the test DB if it has been set, otherwise use the normal DB.
 module.exports =
   process.env.TEST_MONGO_URL ||
