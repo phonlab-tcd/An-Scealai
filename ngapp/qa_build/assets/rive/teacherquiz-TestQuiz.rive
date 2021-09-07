@@ -1,0 +1,79 @@
+> object chatSetup javascript
+if(args[1] == 'nowait') return chatSetup(args[0]);
+setTimeout(function(){
+  return chatSetup(args[0], args[1]);
+}, 2500);
+return '';
+< object
+
+> object addScore javascript
+addScore();
+return '';
+< object
+
+> object endOfQuiz javascript
+endOfQuiz();
+return '';
+< object
+
++ start
+- Question1
+
++ *
+% ceart calladdscorecallan chéad cheist eilebrbrquestion1
+- Mícheart! <call>chatSetup ans1w</call>
+
++ ans1w
+- Question2
+
++ ans1
+% ceart calladdscorecallan chéad cheist eilebrbrquestion1
+- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question2
+
++ *
+% ceart calladdscorecallan chéad cheist eilebrbrquestion2
+- Mícheart! <call>chatSetup ans2w</call>
+
++ ans2w
+- Question3
+
++ ans2
+% ceart calladdscorecallan chéad cheist eilebrbrquestion2
+- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question3
+
++ *
+% ceart calladdscorecallan chéad cheist eilebrbrquestion3
+- Mícheart! <call>chatSetup ans3w</call>
+
++ ans3w
+- Question4
+
++ ans3
+% ceart calladdscorecallan chéad cheist eilebrbrquestion3
+- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question4
+
++ *
+% ceart calladdscorecallan chéad cheist eilebrbrquestion4
+- Mícheart! <call>chatSetup ans4w</call>
+
++ ans4w
+- Question5
+
++ ans4
+% ceart calladdscorecallan chéad cheist eilebrbrquestion4
+- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question5
+
++ *
+% ceart calladdscorecallan chéad cheist eilebrbrquestion5
+- Mícheart! <call>chatSetup finish</call>
+
++ ans5
+% ceart calladdscorecallan chéad cheist eilebrbrquestion5
+- <call>addScore</call><call>chatSetup finish</call>
+
++ finish 
+- <call>endOfQuiz</call>
+
++ tryagain
+- <button class="rive-button" onclick='tryAgain("TestQuiz")'>Try Quiz again?</button>
+^ <button class='rive-button' onclick='showAnswers()'>Show Answers?</button>
