@@ -10,7 +10,6 @@ function chatSetupQuiz(verb){
   quizVerb = verb;
   if(verb == "bi") verb = "bí";
   else if(verb == "teigh") verb = "téigh";
-  keepMessages = true;
   load("IrrQuiz");
 }
 

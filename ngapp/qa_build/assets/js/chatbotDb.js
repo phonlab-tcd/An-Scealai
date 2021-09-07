@@ -1,3 +1,13 @@
+//for database....
+var currentTopic = "";
+var complete = false;
+var messageforDb = "";
+var switchTopic = false;
+var level1Complete = false;
+var level2Complete = false;
+var level3Complete = false;
+var date = new Date();
+
 var request = new XMLHttpRequest();
 var date = null;
 var topic = "";
