@@ -154,17 +154,20 @@ export class DashboardComponent implements OnInit {
     public classroomService: ClassroomService,
   ) {
     this.textUpdated.pipe(
-      debounceTime(500),
+      debounceTime(1000),
       distinctUntilChanged(),
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if (textToCheck !== this.mostRecentGramadoirInput) {
         this.quillHighlightService
-            .updateGrammarErrors(this.quillEditor, textToCheck);
-      }
-      if (!this.grammarTagsHidden) {
-        this.quillHighlightService
-            .applyGramadoirTagFormatting(this.quillEditor);
+            .updateGrammarErrors(this.quillEditor, textToCheck)
+            .then(() => {
+              this.grammarTagsHidden ?
+              this.quillHighlightService
+                  .clearAllGramadoirTags(this.quillEditor) :
+              this.quillHighlightService
+                  .applyGramadoirTagFormatting(this.quillEditor);
+            });
       }
     });
   }
@@ -247,7 +250,7 @@ export class DashboardComponent implements OnInit {
   hideGrammarTags(){
     this.grammarTagsHidden = true;
     this.quillHighlightService
-        .clearGramadoirTagFormatting(this.quillEditor);
+        .clearAllGramadoirTags(this.quillEditor);
   }
 
   showGrammarTags(){
@@ -262,10 +265,12 @@ export class DashboardComponent implements OnInit {
     // remove and re-apply formatting to ensure that
     // grammar highlights aren't saved to DB
     this.quillHighlightService
-        .clearGramadoirTagFormatting(this.quillEditor);
+        .clearAllGramadoirTags(this.quillEditor);
     const unhighlightedHtmlText = this.story.htmlText;
-    this.quillHighlightService
-        .applyGramadoirTagFormatting(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
 
     const updateData = {
       text : this.story.text,
@@ -345,6 +350,7 @@ export class DashboardComponent implements OnInit {
 
   // Get word count of story text
   getWordCount(text: string) {
+    if (!text) { return 0; }
     const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
     this.words = [];
     str.map((s: string) => {
