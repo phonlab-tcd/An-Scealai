@@ -38,11 +38,6 @@
     padding-top: 30px;
 }
 
-.subTitle {
-  padding-bottom:10px;
-  font-weight:12px;
-}
-
 .storyBlock {
   padding-left: 20px;
   padding-bottom: 20px;
@@ -63,6 +58,11 @@
   font-size : 15pt;
   font-weight: bold;
   padding-top: 70px;
+}
+
+.panelDescriptionNoPhoto {
+  font-size : 15pt;
+  font-weight: bold;
 }
 
 .panelFlex {
@@ -99,25 +99,31 @@
     flex-direction: column;
     bottom: 0;
     width: 100%;
-    padding-left:15%;
+    align-items: center;
     background: #f4f5e9;
 }
 
 .footerLogos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
 }
 
 .logoImg {
     height: 40px;
 }
 
-.separator {
-    width: 1px;
-    opacity: 0;
-    height: 40px;
-    background-color: grey;
+.copyright {
+    padding-top:10px;
+    padding-right:5px;
+    height: 15px;
+    opacity: 0.5;
+}
+
+.logoPadding {
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:5px;
+  padding-bottom:5px;
 }
 
 

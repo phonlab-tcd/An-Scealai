@@ -235,7 +235,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
           <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+            <img src="assets/img/neipeal01.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
           </mat-panel-title>
           <mat-panel-description class="panelDescription panelFlex">
             <div>Seal i Neipeal</div>
@@ -276,11 +276,8 @@
       -->
       <!-- An Seilide agus An Míol Mór  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>        
+          <mat-panel-description class="panelDescriptionNoPhoto">
             An Seilide agus An Míol Mór
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -290,11 +287,8 @@
       </mat-expansion-panel>
       <!-- An Prionsa Beag  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             An Prionsa Beag
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -306,16 +300,12 @@
     
     <!-- Simple versions of old stories-->
     <div class="dialectTitle"> {{ts.l.simple_versions_old_stories}} </div>
-    <div class="subTitle"> {{ts.l.published_courtesy_of_an_gum}} </div>
     <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
       <!-- Cinnín Óir agus na Trí Bhéar  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             Cinnín Óir agus na Trí Bhéar
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -325,11 +315,8 @@
       </mat-expansion-panel>
       <!-- Na Trí Mhuicín  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             Na Trí Mhuicín
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -355,11 +342,8 @@
       -->
       <!-- Cochaillín Dearg  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             Cochaillín Dearg
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -369,11 +353,8 @@
       </mat-expansion-panel>
       <!-- An Píobaire Breac  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             An Píobaire Breac
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -383,11 +364,8 @@
       </mat-expansion-panel>
       <!-- An Lacha Bheag Ghránna  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             An Lacha Bheag Ghránna
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -397,11 +375,8 @@
       </mat-expansion-panel>
       <!-- Na Trí Ghabhar Chliste  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             Na Trí Ghabhar Chliste
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -411,11 +386,8 @@
       </mat-expansion-panel>
       <!-- An Tornapa Mór Millteach  -->
       <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
             An Tornapa Mór Millteach
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -431,9 +403,8 @@
 <!-- Footer containing logos -->
 <div class="footer">
   <div class="footerLogos">
-    <img class="logoImg" src="assets/img/logo_an_gum.png">
-    <div class="separator"></div>
-    <img class="logoImg" src="assets/img/logo_foras_na_gaeilge.png">
-    <div class="separator"></div> 
+    <div class="copyright"> {{ts.l.published_courtesy_of}} </div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_an_gum.png"></div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_foras_na_gaeilge.png"></div>
   </div>
 </div>
