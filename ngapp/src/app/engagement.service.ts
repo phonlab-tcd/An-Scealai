@@ -15,7 +15,7 @@ export class EngagementService {
 
   baseUrl: string = config.baseurl + 'engagement/';
 
-  async addEventForLoggedInUser(type: EventType, story?: Story){
+  async addEventForLoggedInUser(type: EventType, story?: Story | any){
     if  (this.auth.isLoggedIn()) {
       const event: Event = new Event();
       event.type = type;
@@ -26,11 +26,10 @@ export class EngagementService {
   }
 
   getEventsForUser(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + "eventsForUser/" + id);
+    return this.http.get(this.baseUrl + 'eventsForUser/' + id);
   }
 
   getEventsForStory(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + "eventsForStory/" + id);
+    return this.http.get(this.baseUrl + 'eventsForStory/' + id);
   }
-  
 }

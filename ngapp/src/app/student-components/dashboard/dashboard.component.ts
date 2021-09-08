@@ -29,11 +29,12 @@ import {
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+// import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import config from 'src/abairconfig.json';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 import {Change} from 'diff';
+import clone from 'lodash/clone';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -63,13 +64,15 @@ type QuillHighlightTag = {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  styleUrls: [
+    './dashboard.component.css',
+    './../../gramadoir-tags.css'],
   encapsulation: ViewEncapsulation.None
 })
 
 export class DashboardComponent implements OnInit {
 
-  @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+  // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
 
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
@@ -83,7 +86,8 @@ export class DashboardComponent implements OnInit {
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading = false;
+  mostRecentGramadoirRequestTime = null;
+  grammarLoading = true;
   grammarSelected = true;
   grammarTagsHidden = true;
   mostRecentGramadoirInput: string = null;
@@ -164,7 +168,10 @@ export class DashboardComponent implements OnInit {
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if (textToCheck !== this.mostRecentGramadoirInput) {
-        this.quillHighlightService
+        const grammarCheckerTime = new Date();
+        this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+        this.grammarLoading = true;
+        await this.quillHighlightService
             .updateGrammarErrors(this.quillEditor, textToCheck)
             .then(() => {
               this.grammarTagsHidden ?
@@ -173,6 +180,9 @@ export class DashboardComponent implements OnInit {
               this.quillHighlightService
                   .applyGramadoirTagFormatting(this.quillEditor);
             });
+        if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
+          this.grammarLoading = false;
+        }
       }
     });
   }
@@ -276,15 +286,15 @@ export class DashboardComponent implements OnInit {
 
     // remove and re-apply formatting to ensure that
     // grammar highlights aren't saved to DB
-    this.quillHighlightService
+    await this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
     await this.changeDetection.detectChanges();
     const unhighlightedHtmlText = this.story.htmlText;
+    console.log(unhighlightedHtmlText);
     if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
-    console.log(unhighlightedHtmlText);
 
     const updateData = {
       text : this.story.text,
@@ -317,6 +327,22 @@ export class DashboardComponent implements OnInit {
       window.alert(error.message || JSON.stringify(error));
     }
     return;
+  }
+
+  stripGramadoirAttributes(t: string) {
+    console.dir(text);
+    const regex = /<span([^>])+>/g;
+    const matches = text.match(regex);
+    for (const match of matches) {
+        text = text
+            .replace(
+                match,
+                match.replace(
+                    /\s*data-gramadoir-tag="([^"])+"/,
+                    ''));
+    }
+    console.dir(text);
+    return text;
   }
 
   showDictionary() {
@@ -366,6 +392,8 @@ export class DashboardComponent implements OnInit {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
+    console.log(this.story.htmlText);
+    console.log(this.stripGramadoirAttributes(clone(this.story.htmlText)));
 
     this.storySaved = false;
   }
@@ -429,6 +457,7 @@ export class DashboardComponent implements OnInit {
   // Update the grammar error map
   // of the stat object corresponding
   // to the current student id
+  /*
   updateStats() {
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
@@ -442,6 +471,7 @@ export class DashboardComponent implements OnInit {
           updatedTimeStamp)
         .subscribe();
   }
+  */
 
   // set modalClass to visible fade
   showModal() {
@@ -477,12 +507,12 @@ export class DashboardComponent implements OnInit {
     this.dontToggle = false;
   }
 
-  handleGrammarCheckerOptionClick() {
-    this.dontToggle = true;
-    this.defaultMode();
-    this.grammarChecker.hideEntireGrammarChecker =
-      !this.grammarChecker.hideEntireGrammarChecker;
-  }
+  // handleGrammarCheckerOptionClick() {
+  //   this.dontToggle = true;
+  //   this.defaultMode();
+  //   this.grammarChecker.hideEntireGrammarChecker =
+  //     !this.grammarChecker.hideEntireGrammarChecker;
+  // }
 
   storySavedByGrammarChecker(story: Story) {
     if (this.story.htmlText === story.htmlText) {

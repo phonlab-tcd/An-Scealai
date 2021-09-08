@@ -124,24 +124,31 @@
               {{  ts.l.show_grammar_suggestions ?
                   ts.l.show_grammar_suggestions :
                   'show_grammar_suggestions' }}
+            <i class="fas fa-spell-check optionsBtnIcon"></i>
           </span>
           <ng-template #HideGrammarTags>
             <span (click)="hideGrammarTags();">
               {{  ts.l.hide_grammar_suggestions ?
                   ts.l.hide_grammar_suggestions :
                   'hide_grammar_suggestions' }}
+              <i class="fas fa-spell-check optionsBtnIcon"></i>
             </span>
+            <div
+              class="loader"
+              *ngIf="grammarLoading">
+            </div>
           </ng-template>
-          <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
 
         <!-- POPOUT GRAMMAR CHECK -->
+        <!--
         <div *ngIf="showOptions"
              class="optionsBtn optionsPopupBtn"
              (click)="handleGrammarCheckerOptionClick();">
           {{ts.l.grammar_check}}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
         </div>
+        -->
 
         <!-- RECORDINGS -->
         <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
@@ -165,10 +172,10 @@
           [preserveWhitespace]="true"
           [(ngModel)]="story.htmlText" 
           (onContentChanged)="
-              storyEdited($event);
-              this.grammarChecker?.debounceGramadoir()"
+              storyEdited($event);"
           (onEditorCreated)="quillEditor = $event"
         >
+              <!--this.grammarChecker?.debounceGramadoir()-->
         </quill-editor>
          
       </div>
@@ -257,7 +264,8 @@
       <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px; padding-top: 0; margin-top: 0;">
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
-
+      
+      <!--
       <app-grammar-checker
           #grammarChecker
           *ngIf="story.text !== undefined"
@@ -265,6 +273,7 @@
           [story]="story"
           >
       </app-grammar-checker>
+      -->
 
     </div>
     <!-- <app-chatbot></app-chatbot> -->

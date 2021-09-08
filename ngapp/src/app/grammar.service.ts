@@ -50,7 +50,7 @@ export class GrammarService {
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
   userFriendlyGramadoirMessage: {[ruleId: string]: { en: string; ga: string; } } = {
-    CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
+    // CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
     // Add more messages here
   };
 
