@@ -30,6 +30,14 @@ const gramadoirTag =
 
 Quill.register(gramadoirTag);
 
+const gramadoirTagStyleType =
+  new Parchment.Attributor.Attribute(
+    'gramadoir-tag-style-type',
+    'data-gramadoir-tag-style-type',
+    {scope: Parchment.Scope.INLINE});
+
+Quill.register(gramadoirTagStyleType);
+
 @Injectable({
   providedIn: 'root'
 })
@@ -96,16 +104,28 @@ export class QuillHighlightService {
                   error.start,
                   error.length,
                   {
-                    'gramadoir-tag': error.type,
+                    'gramadoir-tag-style-type': error.type,
+                    'gramadoir-tag': JSON.stringify(error),
                   },
-                  'api'
+                  'user'
               );
         });
 
-    const gramadoirSpans = document.querySelectorAll('[data-gramadoir-tag]');
+    this.generateGramadoirTagTooltips(quillEditor);
 
-    this.currentGramadoirHighlightTags.forEach((error, i) => {
-      this.createGrammarPopup(quillEditor, error, gramadoirSpans[i]);
+    // const gramadoirSpans = document.querySelectorAll('[data-gramadoir-tag]');
+
+    // this.currentGramadoirHighlightTags.forEach((error, i) => {
+    //   this.createGrammarPopup(quillEditor, error, gramadoirSpans[i]);
+    // });
+  }
+
+  generateGramadoirTagTooltips(quillEditor: Quill) {
+    const gramadoirTags = document.querySelectorAll('[data-gramadoir-tag]') || [];
+    gramadoirTags.forEach((t: HTMLElement) => {
+      const unparsed = t.getAttribute('data-gramadoir-tag');
+      const error = JSON.parse(unparsed);
+      this.createGrammarPopup(quillEditor, error, t)
     });
   }
 
@@ -123,6 +143,11 @@ export class QuillHighlightService {
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
       {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+    );
+    quillEditor.formatText(
+      0, // from the very beginning of the text
+      quillEditor.getLength(), // to the very end of the text
+      {'gramadoir-tag-style-type': null} // delete all gramadoir-tag's on the parchment
     );
   }
 
