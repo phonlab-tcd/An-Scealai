@@ -2,7 +2,9 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  ViewChild } from '@angular/core';
+  ChangeDetectorRef,
+  ViewChild,
+} from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
 import {
@@ -31,6 +33,7 @@ import { GrammarCheckerComponent } from 'src/app/student-components/grammar-chec
 import config from 'src/abairconfig.json';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
+import {Change} from 'diff';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -153,6 +156,7 @@ export class DashboardComponent implements OnInit {
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
+    private changeDetection: ChangeDetectorRef,
   ) {
     this.textUpdated.pipe(
       debounceTime(1000),
@@ -269,15 +273,18 @@ export class DashboardComponent implements OnInit {
     if (! this.story._id) {
       return window.alert('Cannot save story. The id is not known');
     }
+
     // remove and re-apply formatting to ensure that
     // grammar highlights aren't saved to DB
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
+    await this.changeDetection.detectChanges();
     const unhighlightedHtmlText = this.story.htmlText;
     if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
+    console.log(unhighlightedHtmlText);
 
     const updateData = {
       text : this.story.text,
@@ -419,11 +426,9 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-  /*
-  * Update the grammar error map
-  * of the stat object corresponding
-  * to the current student id
-  */
+  // Update the grammar error map
+  // of the stat object corresponding
+  // to the current student id
   updateStats() {
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
