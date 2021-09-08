@@ -137,9 +137,11 @@
       </mat-expansion-panel>
     </mat-accordion>
     
+    <div *ngIf="!auth.isLoggedIn()" class="signIn"> {{ts.l.sign_in_to_view_more}} </div>
+    
     <!-- Leaving Cert stories-->
     <div class="dialectTitle"> {{ts.l.leaving_cert_stories}} </div>
-    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
       <!-- Oisín i dTír na nÓg  -->
       <mat-expansion-panel>
@@ -256,24 +258,8 @@
     
     <!-- Other stories-->
     <div class="dialectTitle"> {{ts.l.other_stories}} </div>
-    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
-      <!-- An Garbhán  -->
-      <!--
-      <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-            An Garbhán
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-action-row>
-          <a class="viewStoryBtn" href="https://abair.ie/lara/an-prionsa-beagvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
-        </mat-action-row>
-      </mat-expansion-panel>
-      -->
       <!-- An Seilide agus An Míol Mór  -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>        
@@ -300,7 +286,7 @@
     
     <!-- Simple versions of old stories-->
     <div class="dialectTitle"> {{ts.l.simple_versions_old_stories}} </div>
-    <div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
     <mat-accordion multi *ngIf="auth.isLoggedIn()">
       <!-- Cinnín Óir agus na Trí Bhéar  -->
       <mat-expansion-panel>
@@ -324,22 +310,6 @@
           <a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
       </mat-expansion-panel>
-      <!-- An Sionnach Glic agus An Chircín Rua  -->
-      <!--
-      <mat-expansion-panel>
-        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
-          <mat-panel-title>
-            <img src="assets/img/logo-S.png" class="storyImg" alt="Mar a Baisteadh Fionn">
-          </mat-panel-title>
-          <mat-panel-description class="panelDescription">
-            An Sionnach Glic agus An Chircín Rua
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-action-row>
-          <a class="viewStoryBtn" href="https://abair.ie/lara/an-prionsa-beagvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
-        </mat-action-row>
-      </mat-expansion-panel>
-      -->
       <!-- Cochaillín Dearg  -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>
