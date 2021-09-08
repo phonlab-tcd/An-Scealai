@@ -134,8 +134,8 @@ export class GrammarCheckerComponent implements
       this.checkedText[FILTER.GRAMADOIR] = checkingText;
       this.filteredTags.clear();
       await tagsHandle.tags.then(
-          this.graciouslyReceiveGramadoirHighlightTags,
-          this.graciouslyHandleGramadoirError);
+          (tags) => { this.graciouslyReceiveGramadoirHighlightTags(tags); },
+          (error) => { this.graciouslyHandleGramadoirError(error); });
 
     }
   }
