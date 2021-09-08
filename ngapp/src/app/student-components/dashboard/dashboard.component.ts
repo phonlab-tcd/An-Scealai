@@ -2,8 +2,6 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  ChangeDetectorRef,
-  ViewChild,
 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
@@ -33,7 +31,6 @@ import { ClassroomService } from '../../classroom.service';
 import config from 'src/abairconfig.json';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
-import {Change} from 'diff';
 import clone from 'lodash/clone';
 
 const Parchment = Quill.import('parchment');
@@ -160,7 +157,6 @@ export class DashboardComponent implements OnInit {
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
-    private changeDetection: ChangeDetectorRef,
   ) {
     this.textUpdated.pipe(
       debounceTime(1000),
@@ -284,17 +280,9 @@ export class DashboardComponent implements OnInit {
       return window.alert('Cannot save story. The id is not known');
     }
 
-    // remove and re-apply formatting to ensure that
-    // grammar highlights aren't saved to DB
-    await this.quillHighlightService
-        .clearAllGramadoirTags(this.quillEditor);
-    await this.changeDetection.detectChanges();
-    const unhighlightedHtmlText = this.story.htmlText;
-    console.log(unhighlightedHtmlText);
-    if (!this.grammarTagsHidden) {
-      this.quillHighlightService
-          .applyGramadoirTagFormatting(this.quillEditor);
-    }
+    const unhighlightedHtmlText =
+      this.stripGramadoirAttributesFromHtml(
+        clone(this.story.htmlText));
 
     const updateData = {
       text : this.story.text,
@@ -329,20 +317,15 @@ export class DashboardComponent implements OnInit {
     return;
   }
 
-  stripGramadoirAttributes(t: string) {
-    console.dir(text);
-    const regex = /<span([^>])+>/g;
-    const matches = text.match(regex);
-    for (const match of matches) {
-        text = text
-            .replace(
-                match,
-                match.replace(
-                    /\s*data-gramadoir-tag="([^"])+"/,
-                    ''));
-    }
-    console.dir(text);
-    return text;
+  stripGramadoirAttributesFromHtml(text: string){
+    return text
+        .replace(
+            /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,
+            '');
+  }
+
+  stripEmptySpansFromQuillHtml(text: string) {
+    // return text.replace(/<span>|<\/span>/, '');
   }
 
   showDictionary() {
@@ -392,8 +375,6 @@ export class DashboardComponent implements OnInit {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-    console.log(this.story.htmlText);
-    console.log(this.stripGramadoirAttributes(clone(this.story.htmlText)));
 
     this.storySaved = false;
   }
