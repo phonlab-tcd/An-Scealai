@@ -208,15 +208,16 @@ function downloadNewScript(){
   var request = new XMLHttpRequest();
   request.open('POST', 'http://localhost:4000/Chatbot/getScriptForDownload', true);
   request.setRequestHeader("Content-type", "application/json");
-  request.send(JSON.stringify({user: user._id, name: currentFilename}));
+  request.send(JSON.stringify({user: user._id, name: currentFilename, role: user.role}));
   request.onload = function(){
     console.log(JSON.parse(this.response));
     if(JSON.parse(this.response).status == 200){
+      var text = JSON.parse(this.response).text
       setTimeout(function(){
-        var toDownload = currentFilename + '.rive';
         var link = document.createElement('a');
-        link.href = '../assets/rive/' + toDownload;
-        link.download = currentFilename + '.txt';
+        link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        link.setAttribute('download', currentFilename + '.txt');
+        link.style.display = 'none';
         link.click();
         link.remove();
       }, 500);
@@ -238,6 +239,8 @@ function deleteScript(){
     console.log(this.response);
     if(this.response == 'script deleted'){
       $('#' + selectedFile).remove();
+      var index = personal_buttons.indexOf(selectedFile);
+      if(index != -1) personal_buttons.splice(index, 1);
     }
   }
 }
@@ -271,9 +274,8 @@ function getPersonalScripts(){
     let response = JSON.parse(this.response).userFiles;
     if(typeof response == 'object'){
       currentScripts = JSON.parse(this.response).userFiles;
-      var scriptPaths = [];
-      for(let script of currentScripts) scriptPaths.push(script.file);
-      if(scriptPaths.length > 0) appendToPersonalTopics(scriptPaths, user.role.toLowerCase());
+      console.log(currentScripts);
+      if(currentScripts.length > 0) appendToPersonalTopics(currentScripts, user.role.toLowerCase());
     }
     else{
      console.log(response);
@@ -291,16 +293,16 @@ function openScript(){
   //console.log(selectedFile);
   if(selectedFile.includes('student')) toLoad = selectedFile.replace('student_script_', '');
   else toLoad = selectedFile.replace('teacher_script_', '');
-  var file = currentScripts.find(obj => obj.file.includes(toLoad));
+  var file = currentScripts.find(obj => obj.name.includes(toLoad));
   if(file){
-    if(file.numberOfQ) currentNumberofQuestions = file.numberOfQ;
-    if(file.QandA) current_qandanswers = file.QandA;
+    if(file.numberofquestions) currentNumberofQuestions = file.numberofquestions;
+    if(file.questionsandanswers) current_qandanswers = file.questionsandanswers;
   }
-  load(toLoad);
+  console.log(file);
+  loadQuiz(toLoad);
 }
 
 function getTeacherScripts(){
-  console.log('user');
   var request = new XMLHttpRequest();
   request.open('GET', 'http://localhost:4000/Classroom/getClassroomForStudent/' + user._id, true);
   request.send();
@@ -313,12 +315,8 @@ function getTeacherScripts(){
       console.log(JSON.parse(this.response));
       let response = JSON.parse(this.response);
       if(typeof response == 'object'){
-        var scriptPaths = [];
-        for(let script of response){
-          currentScripts.push(script);
-          scriptPaths.push(script.file);
-        } 
-        if(scriptPaths.length > 0) appendToPersonalTopics(scriptPaths, user.role.toLowerCase());
+        for(let s of response) currentScripts.push(s);
+        if(response.length > 0) appendToPersonalTopics(response, user.role.toLowerCase());
       }
     }
   }
@@ -332,7 +330,7 @@ function appendToPersonalTopics(scripts, role){
     //append buttons to personal-topics
     for(let script of scripts){
       //label for button
-      let topicname = script.substring(25, script.length-5);
+      let topicname = script.name;
       //check not already in DOM
       if(!personal_buttons.includes(button_id + topicname)){
         //create button
@@ -344,8 +342,11 @@ function appendToPersonalTopics(scripts, role){
         if(topic.id.includes('teacher') && user.role == 'STUDENT'){
           topic.style.display = 'none';
           topic.style.backgroundColor = '#138D75';
-          topic.innerText = topicname.replace('teacherquiz-', '');
+          topic.innerText = topicname.replace('teacher_', '');
         } 
+        else if(topic.id.includes('teacher') && user.role == 'TEACHER'){
+          topic.innerText = topicname.replace('teacher_', '');
+        }
         else topic.style.display = 'inline';
         //keep track of buttons
         personal_buttons.push(topic.id);
@@ -389,7 +390,7 @@ function showPersonal(role){
     } 
     else button.style.display = 'none';
 
-    if(role == 'student' && id.includes('teacherquiz')) button.style.display = 'none';
+    if(role == 'student' && id.includes('teacher')) button.style.display = 'none';
     $('#delete-script').css('display', 'none');
     $('#open-script').css('display', 'none');
   }
@@ -423,7 +424,7 @@ function tryAgain(quizName){
   console.log(quizName);
   quiz_score = 0;
   to_review = []
-  load(quizName);
+  loadQuiz(quizName);
 }
 
 function showAnswers(){
@@ -432,6 +433,20 @@ function showAnswers(){
     appendMessage(true, false, current_qandanswers);
     $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
   }, 2200)
+}
+
+function loadQuiz(script){
+  $("#bot-messages").empty();
+  let send = document.getElementById('bot-message-button');
+  send.onclick = function(){
+    sendInput();
+  }
+  var quiz = currentScripts.find(obj => obj.name.includes(script));
+
+  bot = new RiveScript({utf8: true});    
+  bot.stream(quiz.content);
+  bot.sortReplies();
+  chatSetup('start');
 }
 
 /*

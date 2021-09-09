@@ -104,6 +104,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
 
   //console.log(line);
   //getting ready for db
+  if(role == 'TEACHER') topicName = 'teacher_' + topicName;
   let s = {
     name: topicName,
     content: line,
@@ -117,7 +118,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   //store in db
   if(s.user != undefined && s.user != ''){
     //check not already in DB
-    Models.PersonalScript.find({"user": userId, name: topicName}, function(err, scripts){
+    Models.PersonalScript.find({"user": userId, name: topicName, classId: classId}, function(err, scripts){
       if(scripts.length > 0){
         console.log("can't save, already there.");
         res.status(404).send("script already exists");
@@ -142,41 +143,19 @@ chatbotRoute.route('/deleteScript').post(function(req, res){
   Models.PersonalScript.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
-      console.log(obj);
-      let path = '../ngapp/src/assets/rive/';
-      fs.unlink(path + req.body.name + '.rive', err => {
-        if(err) console.log(err);
-      });
       res.status(200).send('script deleted');
     }
-  })
+  });
 });
 
 //gets scripts ready for use in 'Personal Scripts'
 chatbotRoute.route('/getScripts').post(function(req, res){
   console.log("finding scripts by user...");
-  let path = '../ngapp/src/assets/rive/';
-  var files = [];
   console.log(req.body);
   Models.PersonalScript.find({"user": req.body.id}, function(err, scripts){
     
     if(scripts.length > 0){
-      for(var script of scripts){
-        let fileData = {};
-        let filename = path + script.name + '.rive';
-        fileData['numberOfQ'] = script.numberofquestions;
-        fileData['file'] = filename;
-        fileData['QandA'] = script.questionsandanswers;
-        files.push(fileData);
-
-        
-        //if file is not already in the directory
-        if(!fs.existsSync(filename)){
-          let writetofile = fs.createWriteStream(filename, {flags: 'a'});
-          writetofile.write(script.content);
-        }   
-      }
-      res.json({ status: 200, userFiles: files });
+      res.json({ status: 200, userFiles: scripts});
     }
     else if(scripts.length == 0){
       console.log("User has no personal scripts");
@@ -192,18 +171,16 @@ chatbotRoute.route('/getScripts').post(function(req, res){
 chatbotRoute.route('/getScriptForDownload').post(function(req, res){
   console.log(req.body);
   if(req.body){
-    let filename = '../ngapp/src/assets/rive/' + req.body.name + '.rive';
-    if(!fs.existsSync(filename)){
-      Models.PersonalScript.findOne(req.body, function(err, script){ 
-        console.log(script);
-        let writetofile = fs.createWriteStream(filename, {flags: 'a'});
-        writetofile.write(script.questionsandanswers);
-        res.json({status: 200, message: 'file ready to download'});
-      });
-    } 
-    else if(fs.existsSync(filename)){
-      res.json({status: 200, message: 'file already exists, ready to download'});
-    }
+    if(req.body.role == 'TEACHER') req.body.name = 'teacher_' + req.body.name;
+    Models.PersonalScript.findOne(req.body, function(err, script){ 
+      console.log(script);
+      if(err){
+        console.log(err);
+      }
+      else if(script != null){
+        res.json({status: 200, text: script.content});
+      }
+    }); 
   }
 });
 
@@ -349,30 +326,13 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
 chatbotRoute.route('/getTeacherScripts/:user/:classId').get(function(req, res){
   console.log('find scripts by teacher...');
   console.log(req.params);
-  var files = [];
-  let path = '../ngapp/src/assets/rive/';
   Models.PersonalScript.find(req.params, function(err, scripts){
     //console.log(scripts);
     if(scripts.length > 0){
       console.log('success in scripts!');
-      for(var script of scripts){
-        let fileData = {};
-        let filename = path + 'teacherquiz-' + script.name + '.rive';
-        fileData['numberOfQ'] = script.numberofquestions;
-        fileData['file'] = filename;
-        fileData['QandA'] = script.questionsandanswers;
-
-        files.push(fileData);
-        
-        //if file is not already in the directory
-        if(!fs.existsSync(filename)){
-          let writetofile = fs.createWriteStream(filename, {flags: 'a'});
-          writetofile.write(script.content);
-        }   
-      }
-      res.send(files);
+      res.send(scripts);
     }
-    console.log('no teacher scripts');
+    else console.log('no teacher scripts');
   });
 });
 

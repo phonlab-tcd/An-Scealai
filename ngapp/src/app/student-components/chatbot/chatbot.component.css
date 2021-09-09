@@ -279,6 +279,7 @@
     font-size: smaller;
     border: none;
     outline: none;
+    z-index: 5;
   }
 
   #personal-container{
