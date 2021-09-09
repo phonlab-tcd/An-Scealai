@@ -3,7 +3,7 @@
     <button id='about-button' onclick=showAbout()>About <i class="fas fa-info-circle"></i></button>
     <div id='quiz-name'><input id='topic-name' type="text" placeholder="Enter Name of Quiz"></div>
     <div id='questions'>
-      <p>Questions</p>
+      <p>{{ts.l.quiz_q_title}}</p>
       <div class='Q'>1. <input id='q1' placeholder='Insert Question' type="text"></div>
       <div class='Q'>2. <input id='q2' placeholder='Insert Question' type="text"></div>
       <div class='Q'>3. <input id='q3' placeholder='Insert Question' type="text"></div>
@@ -11,15 +11,15 @@
       <div class='Q'>5. <input id='q5' placeholder='Insert Question' type="text"></div>
     </div>
     <div id='answers'>
-      <p>Answers</p>
-      <div class='Q' id='answer-1'>1. <input placeholder='Insert Answer' class='A' id='a1' type="text"><button class='add-A' type="submit" id='add-a1' onclick='addAnswer("answer-1", "add-a1")'>Add Answer</button></div>
-      <div class='Q' id='answer-2'>2. <input placeholder='Insert Answer' class='A' id='a2' type="text"><button class='add-A' type="submit" id='add-a2' onclick='addAnswer("answer-2", "add-a2")'>Add Answer</button></div>
-      <div class='Q' id='answer-3'>3. <input placeholder='Insert Answer' class='A' id='a3' type="text"><button class='add-A' type="submit" id='add-a3' onclick='addAnswer("answer-3", "add-a3")'>Add Answer</button></div>
-      <div class='Q' id='answer-4'>4. <input placeholder='Insert Answer' class='A' id='a4' type="text"><button class='add-A' type="submit" id='add-a4' onclick='addAnswer("answer-4", "add-a4")'>Add Answer</button></div>
-      <div class='Q' id='answer-5'>5. <input placeholder='Insert Answer' class='A' id='a5' type="text"><button class='add-A' type="submit" id='add-a5' onclick='addAnswer("answer-5", "add-a5")'>Add Answer</button></div>
+      <p>{{ts.l.quiz_a_title}}</p>
+      <div class='Q' id='answer-1'>1. <input placeholder='Insert Answer' class='A' id='a1' type="text"><button class='add-A' type="submit" id='add-a1' onclick='addAnswer("answer-1", "add-a1")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-2'>2. <input placeholder='Insert Answer' class='A' id='a2' type="text"><button class='add-A' type="submit" id='add-a2' onclick='addAnswer("answer-2", "add-a2")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-3'>3. <input placeholder='Insert Answer' class='A' id='a3' type="text"><button class='add-A' type="submit" id='add-a3' onclick='addAnswer("answer-3", "add-a3")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-4'>4. <input placeholder='Insert Answer' class='A' id='a4' type="text"><button class='add-A' type="submit" id='add-a4' onclick='addAnswer("answer-4", "add-a4")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-5'>5. <input placeholder='Insert Answer' class='A' id='a5' type="text"><button class='add-A' type="submit" id='add-a5' onclick='addAnswer("answer-5", "add-a5")'>{{ts.l.quiz_add_a}}</button></div>
     </div>
-    <button id='add-question' onclick='addQuestion()'><i class="fas fa-plus-circle"></i> Add Question</button>
-    <button id='done' onclick='showVerificationStep()'>Done</button>
+    <button id='add-question' onclick='addQuestion()'><i class="fas fa-plus-circle"></i> {{ts.l.quiz_add_q}}</button>
+    <button id='done' onclick='showVerificationStep()'>{{ts.l.quiz_done}}</button>
   </div>
   <div id='submit-container'>
     <div id='submit-messages'>
@@ -44,18 +44,8 @@
   </div>
   <div id='about-container'>
     <div id='info'>
-      <h2>How to Use! ℹ️</h2>
-      <p id=description>
-        Welcome to the "create your own quiz-bot" <i>Taidhgín</i> page.<br><br> Use this page to create your own
-        quizzes which you can then run within the <i>Taidhgín</i> bot 💬. All you need to do is fill 
-        in the name of your quiz, your questions, and your answers and you're good to go! You can add
-        more questions with the "Add Question" button, and you can add multiple acceptable answers with
-        the "Add Answer" button. <br><br>Once you have finished creating your quiz, click on "Done" and then on "yes" to save it.
-        (You will also have the option to download the script as a .txt file for your own records). 
-        Once your quiz has been saved you can select it and run it on the <i>Taidhgín</i> page under "Your Quizzes".
-        <br><br>Teachers can create quizzes and assign them to their class. There is also an option to share your quiz
-        with the wider <i>An Scealaí</i> community. Students can create quizzes for practice and for fun 📖😄.
-      </p>
+      <h2>{{ts.l.how_to_tquiz_title}}</h2>
+      <p id=description innerHTML={{ts.l.how_to_tquiz}}></p>
     </div>
     <button id='cancel-submit' type='submit' onclick="closeAbout()">Close</button>
   </div>
