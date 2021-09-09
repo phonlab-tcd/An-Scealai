@@ -15,7 +15,10 @@ var slender_names = [];
 
 var test_file = "+ start\n - Hi this is taidhgin!:)";
 
-function setup(file){
+var backendUrl = 'backend url not yet created';
+
+function setup(file, backendUrlFromAngularComponent){
+  backendUrl = backendUrlFromAngularComponent
   videoPlayer = document.getElementById('chimp');
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
@@ -283,7 +286,7 @@ function enterWords(){
     for(i = 1; i < 11; i++){
       newWords.push(document.getElementById("word" + i).value);
     }
-    request.open('POST', 'http://localhost:4000/Chatbot/saveSpellings/', true);
+    request.open('POST', backendUrl + '/Chatbot/saveSpellings/', true);
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(newWords));
     request.onload = function(){
@@ -313,7 +316,7 @@ function closeWords(){
 }
 
 function getWords(){
-  request.open('GET', 'http://localhost:4000/Chatbot/getWords/', true);
+  request.open('GET', backendUrl + '/Chatbot/getWords/', true);
   request.send();
   request.onload = function(){
     currentSpellings = JSON.parse(this.response);
@@ -349,7 +352,7 @@ function chatAIML(){
     setTimeout(function(){
       playVid();
       $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-      request.open('POST', 'http://localhost:4000/Chatbot/aiml-message/', true);
+      request.open('POST', backendUrl + '/Chatbot/aiml-message/', true);
       request.setRequestHeader("Content-Type", "application/json");
       request.send(JSON.stringify({message: input, botId: pandoraID}));
       request.onload = function(){
