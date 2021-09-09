@@ -65,6 +65,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 
 
@@ -114,6 +115,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
     SponsorsComponent,
     GrammarCheckerComponent,
     CreateQuizComponent,
+    AboutTaidhginComponent,
   ],
   imports: [
     BrowserModule,

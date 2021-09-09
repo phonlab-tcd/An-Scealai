@@ -13,6 +13,7 @@ var user = null;
 var pandoraID = '';
 var slender_names = [];
 
+var test_file = "+ start\n - Hi this is taidhgin!:)";
 
 function setup(file){
   videoPlayer = document.getElementById('chimp');
@@ -21,11 +22,11 @@ function setup(file){
 
   //file = 'TestA5';
   bot = new RiveScript({utf8: true});    
-  bot.loadFile("assets/rive/" + file + ".rive").then( () => {
+  bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
     bot.sortReplies();
     currentFile = 'start';
     chatSetup("start", false, false);
-  });  
+  });
 }
 
 function load(fileId, start, content_id){
@@ -389,6 +390,10 @@ function showContents(content_id, background_id, show){
       contentPopup.style.opacity = "1";
       backgroundPopup.style.opacity = "0.6";
     }, 50);
+    if(content_id == 'p' && user.role == 'TEACHER'){
+      $('#to-create').css('margin-top', '5%');
+      $('#to-create').css('left', '5%');
+    }
   }
   else{
     //hide contents
