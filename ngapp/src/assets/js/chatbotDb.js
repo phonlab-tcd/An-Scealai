@@ -60,7 +60,7 @@ function sendLog(){
 
 //adding user to db
 function addUserToDb(chatbotObj){
-  request.open('POST', backendUrl + '/Chatbot/addUser', true);
+  request.open('POST', backendUrl + 'Chatbot/addUser', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify(chatbotObj));
   request.onload = function() {
@@ -75,7 +75,7 @@ function postLogToDb(logObj){
     logObj.role = thisPayload.role;
     logObj._id = thisPayload._id;
     console.log(logObj);
-    request.open('POST', backendUrl + '/Chatbot/addLog/', true);
+    request.open('POST', backendUrl + 'Chatbot/addLog/', true);
     request.setRequestHeader("Content-type", "application/json");
     request.send(JSON.stringify(logObj));
     request.onload = function(){
@@ -86,7 +86,7 @@ function postLogToDb(logObj){
 
 //clear logs of user
 function clearLogs(name){
-  request.open('GET', backendUrl + '/Chatbot/clearLogs/' + name, true);
+  request.open('GET', backendUrl + 'Chatbot/clearLogs/' + name, true);
   request.send();
   request.onload = function(){
     console.log(this.response);
