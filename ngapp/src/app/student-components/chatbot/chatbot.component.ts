@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
 import { AuthenticationService } from 'src/app/authentication.service';
+import config from 'src/abairconfig.json';
+
+const backendUrl = config.baseurl;
 
 @Component({
   selector: 'app-chatbot',
@@ -15,7 +18,7 @@ export class ChatbotComponent implements OnInit {
   ngOnInit(): void {
     if(this.auth.isLoggedIn()){
       // @ts-ignore
-      setup('startLoggedIn');
+      setup('startLoggedIn', backendUrl);
       //@ts-ignore
       personal_buttons = [];
       //@ts-ignore
