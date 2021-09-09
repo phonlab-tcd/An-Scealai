@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { doesNotReject } from 'assert';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { User } from '../user';
+import { TranslationService } from '../translation.service';
 
 @Component({
   selector: 'app-create-quiz',
@@ -11,7 +12,7 @@ import { User } from '../user';
 })
 export class CreateQuizComponent implements OnInit {
 
-  constructor(public auth: AuthenticationService) { }
+  constructor(public auth: AuthenticationService, public ts: TranslationService) { }
 
   ngOnInit(): void {
     console.log("create-init");

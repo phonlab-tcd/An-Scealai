@@ -26,7 +26,7 @@ function setup(file, backendUrlFromAngularComponent){
   audioCheckbox = document.querySelector(".audioCheckbox");
   currentDialectButton = document.getElementById('dialect-MU');
 
-  //file = 'TestA5';
+  //file = 'Community_Eire';
   bot = new RiveScript({utf8: true});    
   bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
     bot.sortReplies();

@@ -51,6 +51,7 @@ import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -68,6 +69,7 @@ const routes: Routes = [
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
+  { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },

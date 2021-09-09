@@ -64,8 +64,9 @@
       <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
         <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">Taidhgín</button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/taidhgin" ngbDropdownItem (click)="changeCheck()">Taidhgín Bot</button>
-          <button routerLink="/create-quiz" ngbDropdownItem (click)="changeCheck()">Create your own quiz</button>
+          <button routerLink="/taidhgin" ngbDropdownItem (click)="changeCheck()">{{ts.l.taidhgin_title}}</button>
+          <button routerLink="/create-quiz" ngbDropdownItem (click)="changeCheck()">{{ts.l.create_quiz_title}}</button>
+          <button routerLink="/about-taidhgin" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_taidhgin_title}}</button>
         </div>
       </div>
 
