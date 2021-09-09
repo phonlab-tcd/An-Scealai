@@ -17,11 +17,14 @@ var test_file = "+ start\n - Hi this is taidhgin!:)";
 
 var backendUrl = 'backend url not yet created';
 
+let currentDialectButton = null;
+
 function setup(file, backendUrlFromAngularComponent){
   backendUrl = backendUrlFromAngularComponent
   videoPlayer = document.getElementById('chimp');
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
+  currentDialectButton = document.getElementById('dialect-MU');
 
   //file = 'TestA5';
   bot = new RiveScript({utf8: true});    
@@ -229,7 +232,6 @@ function selectEngine(engine){
 
 // Selecting Dialect
 let currentDialect = '';
-let currentDialectButton = null;
 function dialectSelection(dialect){
   $('.audioCheckbox').prop('checked', true);
 
@@ -352,7 +354,7 @@ function chatAIML(){
     setTimeout(function(){
       playVid();
       $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-      request.open('POST', backendUrl + '/Chatbot/aiml-message/', true);
+      request.open('POST', backendUrl + 'Chatbot/aiml-message/', true);
       request.setRequestHeader("Content-Type", "application/json");
       request.send(JSON.stringify({message: input, botId: pandoraID}));
       request.onload = function(){

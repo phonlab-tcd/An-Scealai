@@ -154,7 +154,7 @@ function done(){
     console.log(result);  
     if(name != ''){
       //store questions & answers on the backend to be pulled again from the bot
-      request.open('POST', backendUrl + '/Chatbot/SaveScript', true);
+      request.open('POST', backendUrl + 'Chatbot/SaveScript', true);
       request.setRequestHeader("Content-type", "application/json");
       request.send(JSON.stringify(result));
       request.onload = function(){
@@ -190,7 +190,7 @@ function sendVerification(){
   $('#saved-message').text('Your script will be verified.');
   $('#saved-message').css('display', 'block');
   var request = new XMLHttpRequest();
-  request.open('POST', backendUrl + '/Chatbot/sendScriptVerification', true);
+  request.open('POST', backendUrl + 'Chatbot/sendScriptVerification', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({user: user._id, name: currentFilename}));
   request.onload = function(){
@@ -206,7 +206,7 @@ function showReminder(text){
 
 function downloadNewScript(){
   var request = new XMLHttpRequest();
-  request.open('POST', backendUrl + '/Chatbot/getScriptForDownload', true);
+  request.open('POST', backendUrl + 'Chatbot/getScriptForDownload', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({user: user._id, name: currentFilename, role: user.role}));
   request.onload = function(){
@@ -232,7 +232,7 @@ function deleteScript(){
   console.log('to delete: ' + toDelete);
 
   var request = new XMLHttpRequest();
-  request.open('POST', backendUrl + '/Chatbot/deleteScript', true);
+  request.open('POST', backendUrl + 'Chatbot/deleteScript', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({name: toDelete, user: user._id}));
   request.onload = function(){
@@ -267,7 +267,7 @@ var personal_buttons = [];
 var currentScripts = [];
 function getPersonalScripts(){
   var request = new XMLHttpRequest();
-  request.open('POST', backendUrl + '/Chatbot/getScripts', true);
+  request.open('POST', backendUrl + 'Chatbot/getScripts', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify({name: user.username, id: user._id}));
   request.onload = function(){
@@ -304,12 +304,12 @@ function openScript(){
 
 function getTeacherScripts(){
   var request = new XMLHttpRequest();
-  request.open('GET', backendUrl + '/Classroom/getClassroomForStudent/' + user._id, true);
+  request.open('GET', backendUrl + 'Classroom/getClassroomForStudent/' + user._id, true);
   request.send();
   request.onload = function(){
     console.log(JSON.parse(this.response));
     var classData = JSON.parse(this.response);
-    request.open('GET', backendUrl + '/Chatbot/getTeacherScripts/' + classData.teacherId + '/' + classData.code, true);
+    request.open('GET', backendUrl + 'Chatbot/getTeacherScripts/' + classData.teacherId + '/' + classData.code, true);
     request.send();
     request.onload = function(){
       console.log(JSON.parse(this.response));

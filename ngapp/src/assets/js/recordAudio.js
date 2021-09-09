@@ -85,7 +85,7 @@ function sendRecording(blob){
   var req = new XMLHttpRequest();
   var form = new FormData();
   form.append("file", blob);
-  req.open("POST", backendUrl + "/Chatbot/sendRecordedAnswer", true);
+  req.open("POST", backendUrl + "Chatbot/sendRecordedAnswer", true);
   req.send(form);
   req.onload = function(){
     console.log(this.response);
