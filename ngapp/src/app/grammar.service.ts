@@ -13,6 +13,12 @@ import { EngagementService } from 'src/app/engagement.service';
 import { EventType } from 'src/app/event';
 // import config from 'src/abairconfig.json';
 
+type DisagreeingVowelIndices = {
+  broadFirst: boolean;
+  first: number;
+  second: number;
+};
+
 export type GramadoirTag = {
   fromy: string;
   fromx: number;
@@ -234,12 +240,43 @@ export class GrammarService {
     return this.getVowelAgreementTags(story.text);
   }
 
+  // Takes in a story text and return an
+  // array of vowel tags showing slender/broad
+  // errors around consonants of words in the text
+  getDisagreeingVowelIndices(text: string): DisagreeingVowelIndices[] {
+    // Calculate which words need to be skipped, given the 'ignore' array.
+    let skipIndices = this.getSkipIndices(text);
+    let tags : HighlightTag[] = [];
+    // Algorithm to find vowels in the same word on either side of one or more
+    // consonants that arent in agreement.
+    for(let i=0; i<text.length-1; i++) {
+      if(skipIndices[i] > 0) {
+        i += skipIndices[i];
+      }
+      // if vowel and following letter a consonant
+      if(this.isVowel(text[i]) && this.isConsonant(text[i+1])) {
+        let vowelIndex = i++;
+        while(this.isConsonant(text[i])) {
+          i++;
+        }
+        // stop at an index in the text where there is a vowel
+        if(this.isVowel(text[i])) {
+          // push vowel tags onto array if the vowels do not agree
+          if(!this.vowelsAgree(text[vowelIndex], text[i])) {
+            const type = this.isLeathan(text[vowelIndex]) // true=BroadFirst false=SlenderFirst
+            tags.push({broadFirst: type, first: vowelIndex, second: i});
+          }
+        } 
+      }
+    }
+    return tags;
+  }
   
   
   // Takes in a story text and return an
   // array of vowel tags showing slender/broad 
   // errors around consonants of words in the text
-  getVowelAgreementTags(text: string) : HighlightTag[] {
+  getVowelAgreementTags(text: string): HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);
     let tags : HighlightTag[] = [];
@@ -298,22 +335,18 @@ export class GrammarService {
   // Output : an array 'skipIndices' that contains at a given index i the amount
   //          of characters to be skipped in order to get past a word
   //          in the 'ignore' array, from where it starts in the input string.
-
-  getSkipIndices(text : string) : number[] {
-    let skipIndices : number[] = [];
-    for(let word of this.ignore) {
+  getSkipIndices(text: string): number[] {
+    let skipIndices: number[] = [];
+    for (let word of this.ignore) {
       let lowerCaseText = text.toLowerCase();
       let indices = this.getAllIndexes(lowerCaseText, word);
-      for(let index of indices) {
+      for (let index of indices) {
         skipIndices[index] = word.length;
       }
     } 
     return skipIndices;
   }
 
-/*
-* 
-*/
   getAllIndexes(arr, val) : number[] {
     var indexes = [];
 
@@ -334,32 +367,33 @@ export class GrammarService {
     return indexes;
   }
 
-// given a string, return the string after changing the content a specified index
+  // given a string, return the string after
+  // changing the content a specified index
   replaceAt(str, index, replacement) : string {
     return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
   }
 
-// given a character, returns whether or not it is a vowel
+  // given a character, returns whether or not it is a vowel
   isVowel(char) : boolean {
     return this.broad.includes(char) || this.slender.includes(char);
   }
 
-// given a character, returns whether or not it is broad
+  // given a character, returns whether or not it is broad
   isLeathan(char) : boolean {
     return this.broad.includes(char);
   }
 
-// given a character, returns whether or not it is slender
+  // given a character, returns whether or not it is slender
   isCaol(char) : boolean {
     return this.slender.includes(char);
   }
 
-// given a character, returns whether or not it is a consonant
+  // given a character, returns whether or not it is a consonant
   isConsonant(char) : boolean {
     return this.consonants.includes(char);
   }
 
-// given two vowels, returns whether they are both broad or both slender 
+  // given two vowels, returns whether they are both broad or both slender 
   vowelsAgree(v1, v2) : boolean {
     return (this.broad.includes(v1) && this.broad.includes(v2)) || (this.slender.includes(v1) && this.slender.includes(v2));
   }
@@ -367,9 +401,8 @@ export class GrammarService {
 }
 
 
-/*
-* **************** Grammar Tag Class ************************
-*/
+
+// **************** Grammar Tag Class ************************
 export class GrammarTag {
   type;
   message: string;
@@ -377,7 +410,11 @@ export class GrammarTag {
   messageIrish: string;
   rule: string;
 
-  constructor(type: 'vowelAgreement' | 'gramadoir', englishTag: any, irishTag: any = null) {
+  constructor(
+    type: 'vowelAgreement' | 'gramadoir',
+    englishTag: any,
+    irishTag: any = null)
+  {
     this.type = type;
     this.rule = englishTag.ruleId;
 
@@ -389,41 +426,31 @@ export class GrammarTag {
     }
   }
 
-  /*
-  * Takes in a rule specifing a grammar concept and returns a message explaining the error
-  */
+  // Takes in a rule specifing a grammar
+  // concept and returns a message explaining the error
   static getMessageFromRule(rule: string): string {
-    /*
-    if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
-      return "Séimhiu missing";
-    }
-    if(rule === 'Lingua::GA::Gramadoir/URU') {
-      return "This noun should be plural.";
-    }
-    */
-    // etc.
     if (rule === 'VOWEL') {
       return 'vowels_should_agree';
     }
     return null;
   }
 
-/*
-* Specifies the pertaining css class of a given grammar rule
-*/
-  static getCssClassFromRule(rule: string) : string {
-    let cssClass : string;
-    if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
-      cssClass = "seimhiu-color";
-    } else if(rule === 'Lingua::GA::Gramadoir/URU') {
-      cssClass = "uru-color";
-    } else if(rule === 'VOWEL-CAOL') {
-      cssClass = "vowel-caol-agreement-tag";
-    }  else if(rule === 'VOWEL-LEATHAN') {
-      cssClass = "vowel-leathan-agreement-tag";
+
+  // Specifies the pertaining css
+  // class of a given grammar rule
+  static getCssClassFromRule(rule: string): string {
+    let cssClass: string;
+    if (rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
+      cssClass = 'seimhiu-color';
+    } else if (rule === 'Lingua::GA::Gramadoir/URU') {
+      cssClass = 'uru-color';
+    } else if (rule === 'VOWEL-CAOL') {
+      cssClass = 'vowel-caol-agreement-tag';
+    }  else if (rule === 'VOWEL-LEATHAN') {
+      cssClass = 'vowel-leathan-agreement-tag';
     } else {
-      cssClass = "default-tag";
+      cssClass = 'default-tag';
     }
-    return cssClass + " tagNotHover";
+    return cssClass + ' tagNotHover';
   }
 }
