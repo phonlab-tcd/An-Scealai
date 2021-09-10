@@ -115,6 +115,13 @@ export class QuillHighlightService {
         'vowel-agreement-tag': v.firstVowelType,
       },
       'api');
+    quillEditor.formatText(
+       v.secondVowelIndex,
+       1,
+       {
+         'vowel-agreement-tag': v.secondVowelType,
+       },
+       'api');
 
   }
 
