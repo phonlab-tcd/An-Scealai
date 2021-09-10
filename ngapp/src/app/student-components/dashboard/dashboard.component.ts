@@ -227,14 +227,14 @@ export class DashboardComponent implements OnInit {
         this.storySaved = true;
       }
     } catch (error) {
-      window.alert(error.message || JSON.stringify(error));
+      window.alert('Error while trying to save story:' + error.message);
       throw error;
     }
 
     try {
       await engagementPromise;
     } catch (error) {
-      window.alert(error.message || JSON.stringify(error));
+      window.alert('Error while sending engagement info:' + error.message);
     }
     return;
   }
