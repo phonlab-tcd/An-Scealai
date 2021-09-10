@@ -5,10 +5,13 @@ const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
-
-const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
+const { parse, stringify } = require('node-html-parser');
+const path = require('path');
+const fs = require('fs'); // file system
+const pandoc = require('node-pandoc-promise');
 const abairBaseUrl = require('../abair_base_url');
+const logger = require('../logger');
 
 // ENDPOINT HANDLERS
 const getStoryById =

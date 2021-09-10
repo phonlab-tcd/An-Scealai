@@ -27,11 +27,11 @@ import {
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-// import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
-import config from 'src/abairconfig.json';
+import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 import clone from 'lodash/clone';
+import config from 'src/abairconfig.json';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -56,7 +56,6 @@ type QuillHighlightTag = {
     ga: string;
   };
 };
-
 
 @Component({
   selector: 'app-dashboard',
@@ -290,30 +289,32 @@ export class DashboardComponent implements OnInit {
       lastUpdated : new Date(),
     };
 
+    this.engagement
+        .addEventForLoggedInUser(
+          EventType['SAVE-STORY'],
+          this.story);
+
     const saveStoryPromise = this
         .storyService
         .updateStory(updateData, this.story._id)
         .toPromise();
 
-    const engagementPromise = this
-        .engagement
-        .addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
 
-    try {
-      await saveStoryPromise;
-      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
-        this.storySaved = true;
-      }
-    } catch (error) {
-      window.alert(error.message || JSON.stringify(error));
+    try { await saveStoryPromise; }
+    catch (error) {
+      window.alert('Error while trying to save story: ' + error.message);
       throw error;
     }
 
     try {
-      await engagementPromise;
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+        this.storySaved = true;
+      }
     } catch (error) {
-      window.alert(error.message || JSON.stringify(error));
+      window.alert('Error setting storySaved to true: ' + error.message);
+      throw error;
     }
+
     return;
   }
 
@@ -438,6 +439,10 @@ export class DashboardComponent implements OnInit {
   // Update the grammar error map
   // of the stat object corresponding
   // to the current student id
+
+
+  // Update the grammar error map of the
+  // stat object corresponding to the current student id
   /*
   updateStats() {
     const updatedTimeStamp = new Date();
