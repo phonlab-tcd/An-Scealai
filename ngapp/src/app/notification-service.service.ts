@@ -48,7 +48,9 @@ export class NotificationService {
         this.stories = [];
         let stories = res;
         for(let story of stories) {
-          if(story.feedback.seenByStudent === false) {
+          if(story &&
+             story.feedback &&
+             story.feedback.seenByStudent === false) {
             this.stories.push(story);
           }
         }
