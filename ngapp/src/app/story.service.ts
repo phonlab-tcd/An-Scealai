@@ -83,7 +83,7 @@ export class StoryService {
     this.engagement
         .addEventForLoggedInUser(
           EventType['SAVE-STORY'],
-          story);
+          storyUpdate);
 
     return this.http.post(
       this.baseUrl + 'update/' + id,
