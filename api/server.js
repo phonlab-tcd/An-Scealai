@@ -27,7 +27,7 @@ const dbURL = require('./utils/dbUrl');
 // throw new Error('test error'); // use this to test where uncaughtExceptions get logged
 
 
-logger.info('DB url: ' + config.DB);
+logger.info('DB url: ' + dbURL);
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
