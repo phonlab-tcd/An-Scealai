@@ -217,24 +217,20 @@ export class DashboardComponent implements OnInit {
         .updateStory(updateData, this.story._id)
         .toPromise();
 
-    const engagementPromise = this
-        .engagement
-        .addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
-
     try {
       await saveStoryPromise;
-      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
-        this.storySaved = true;
-      }
     } catch (error) {
-      window.alert('Error while trying to save story:' + error.message);
+      window.alert('Error while trying to save story: ' + error.message);
       throw error;
     }
 
     try {
-      await engagementPromise;
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+        this.storySaved = true;
+      }
     } catch (error) {
-      window.alert('Error while sending engagement info:' + error.message);
+      window.alert('Error setting storySaved to true: ' + error.message);
+      throw error;
     }
     return;
   }
