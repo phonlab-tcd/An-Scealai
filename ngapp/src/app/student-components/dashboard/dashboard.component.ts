@@ -26,6 +26,7 @@ import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import { Quill } from 'quill';
+import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
 
   story: Story = new Story();
+  mostRecentAttemptToSaveStory = new Date();
   stories: Story[];
   id: string;
   storyFound: boolean;
@@ -65,6 +67,8 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
+
+  downloadStoryFormat = '.pdf';
 
   dialects = [
     {
@@ -192,25 +196,47 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /*
-  * Update story data (text htmlText and date) using story service
-  * Add logged event for saved story  using engagement service
-  */
-  saveStory() {
-    if (this.story === undefined) {
-      throw new Error('Tried to save story but this.story is undefined');
+  // Update story data (text and date) using story service
+  // Add logged event for saved story  using engagement service
+  async saveStory() {
+    const saveAttempt = new Date();
+    this.mostRecentAttemptToSaveStory = saveAttempt;
+
+    if (! this.story._id) {
+      return window.alert('Cannot save story. The id is not known');
     }
 
+    const updateData = {
+      text : this.story.text,
+      htmlText: this.story.htmlText,
+      lastUpdated : new Date(),
+    };
 
-    this.storyService
-        .updateStory(this.story)
-        .toPromise()
-        .then(
-          () => {
-            console.count('STORY SAVED');
-          });
-    this.storySaved = true;
-    console.count('Story saved');
+    const saveStoryPromise = this
+        .storyService
+        .updateStory(updateData, this.story._id)
+        .toPromise();
+
+    const engagementPromise = this
+        .engagement
+        .addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
+
+    try {
+      await saveStoryPromise;
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+        this.storySaved = true;
+      }
+    } catch (error) {
+      window.alert(error.message || JSON.stringify(error));
+      throw error;
+    }
+
+    try {
+      await engagementPromise;
+    } catch (error) {
+      window.alert(error.message || JSON.stringify(error));
+    }
+    return;
   }
 
   showDictionary() {
@@ -308,9 +334,16 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-  /*
-  * Update the grammar error map of the stat object corresponding to the current student id
-  */
+
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
+  }
+
+  // Update the grammar error map of the
+  // stat object corresponding to the current student id
   updateStats() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
@@ -340,10 +373,15 @@ export class DashboardComponent implements OnInit {
     this.modalChoice.next(true);
   }
 
-  // save story and set next modal choice to true
-  saveModal() {
-    this.saveStory();
-    this.modalChoice.next(true);
+  // save story and set next modal choice to true 
+  async saveModal() {
+    try {
+      await this.saveStory();
+      this.modalChoice.next(true);
+    } catch (error) {
+      window.alert('Your story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.'); 
+      this.hideModal();
+    }
   }
 
   toggleOptions() {

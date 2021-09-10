@@ -79,17 +79,15 @@ export class StoryService {
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
   }
 
-  updateStory(story: Story): Observable<any> {
+  updateStory(storyUpdate: object, id: string): Observable<any> {
     this.engagement
         .addEventForLoggedInUser(
           EventType['SAVE-STORY'],
           story);
 
-    return this.http.post(this.baseUrl + 'update/' + story._id, {
-      text : story.text,
-      htmlText: story.htmlText,
-      lastUpdated : new Date(),
-    });
+    return this.http.post(
+      this.baseUrl + 'update/' + id,
+      storyUpdate);
   }
   
   updateAuthor(oldAuthor, newAuthor): Observable<any> {
