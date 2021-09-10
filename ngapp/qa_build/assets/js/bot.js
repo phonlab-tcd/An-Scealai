@@ -13,22 +13,26 @@ var user = null;
 var pandoraID = '';
 var slender_names = [];
 
+var test_file = "+ start\n - Hi this is taidhgin!:)";
 
 var backendUrl = 'backend url not yet created';
+
+let currentDialectButton = null;
 
 function setup(file, backendUrlFromAngularComponent){
   backendUrl = backendUrlFromAngularComponent
   videoPlayer = document.getElementById('chimp');
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
+  currentDialectButton = document.getElementById('dialect-MU');
 
-  //file = 'TestA5';
+  //file = 'Community_Eire';
   bot = new RiveScript({utf8: true});    
-  bot.loadFile("assets/rive/" + file + ".rive").then( () => {
+  bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
     bot.sortReplies();
     currentFile = 'start';
     chatSetup("start", false, false);
-  });  
+  });
 }
 
 function load(fileId, start, content_id){
@@ -228,7 +232,6 @@ function selectEngine(engine){
 
 // Selecting Dialect
 let currentDialect = '';
-let currentDialectButton = null;
 function dialectSelection(dialect){
   $('.audioCheckbox').prop('checked', true);
 
@@ -351,7 +354,7 @@ function chatAIML(){
     setTimeout(function(){
       playVid();
       $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-      request.open('POST', backendUrl + '/Chatbot/aiml-message/', true);
+      request.open('POST', backendUrl + 'Chatbot/aiml-message/', true);
       request.setRequestHeader("Content-Type", "application/json");
       request.send(JSON.stringify({message: input, botId: pandoraID}));
       request.onload = function(){
@@ -392,6 +395,10 @@ function showContents(content_id, background_id, show){
       contentPopup.style.opacity = "1";
       backgroundPopup.style.opacity = "0.6";
     }, 50);
+    if(content_id == 'p' && user.role == 'TEACHER'){
+      $('#to-create').css('margin-top', '5%');
+      $('#to-create').css('left', '5%');
+    }
   }
   else{
     //hide contents

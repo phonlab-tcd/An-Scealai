@@ -4,8 +4,4 @@ return '';
 < object
 
 + start
-- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question2
-
-+ ans2
-% ceart an chéad cheist eile br br question2
-- Ceart! <call>addScore</call>An chéad cheist eile:<br><br>Question3
+- Hi this is from a string
