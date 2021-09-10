@@ -80,11 +80,6 @@ export class StoryService {
   }
 
   updateStory(storyUpdate: object, id: string): Observable<any> {
-    this.engagement
-        .addEventForLoggedInUser(
-          EventType['SAVE-STORY'],
-          storyUpdate);
-
     return this.http.post(
       this.baseUrl + 'update/' + id,
       storyUpdate);

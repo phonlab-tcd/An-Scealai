@@ -212,14 +212,19 @@ export class DashboardComponent implements OnInit {
       lastUpdated : new Date(),
     };
 
+    this.engagement
+        .addEventForLoggedInUser(
+          EventType['SAVE-STORY'],
+          this.story);
+
     const saveStoryPromise = this
         .storyService
         .updateStory(updateData, this.story._id)
         .toPromise();
 
-    try {
-      await saveStoryPromise;
-    } catch (error) {
+
+    try { await saveStoryPromise; }
+    catch (error) {
       window.alert('Error while trying to save story: ' + error.message);
       throw error;
     }
@@ -232,6 +237,7 @@ export class DashboardComponent implements OnInit {
       window.alert('Error setting storySaved to true: ' + error.message);
       throw error;
     }
+
     return;
   }
 
@@ -270,15 +276,15 @@ export class DashboardComponent implements OnInit {
 
   // Set story.text to most recent version of editor text and then switch to storyEditedAlt
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
-  storyEdited(text) {
-    this.story.text = text;
+  storyEdited(q: any) {
+    this.story.text = q.text;
 
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
-  storyEditedAlt(text) {
-    this.story.text = text;
+  storyEditedAlt(q: any) {
+    this.story.text = q.text;
     this.storySaved = false;
   }
 
