@@ -234,10 +234,11 @@ export class GrammarService {
     return this.getVowelAgreementTags(story.text);
   }
 
-  /*
-  * Takes in a story text and return an array of vowel tags showing slender/broad 
-  * errors around consonants of words in the text
-  */
+  
+  
+  // Takes in a story text and return an
+  // array of vowel tags showing slender/broad 
+  // errors around consonants of words in the text
   getVowelAgreementTags(text: string) : HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);

@@ -21,6 +21,18 @@ export type QuillHighlightTag = {
   };
 };
 
+export enum VOWEL {
+  BROAD = 0,
+  SLENDER
+}
+
+export type VowelAgreementHighlightTag = {
+  firstVowelType: VOWEL;
+  secondVowelType: VOWEL;
+  firstVowelIndex: number;
+  secondVowelIndex: number;
+};
+
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
@@ -93,6 +105,29 @@ export class QuillHighlightService {
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
   }
 
+  private applyVowelAgreementFormatting(
+    quillEditor: Quill,
+    v: VowelAgreementHighlightTag) {
+    quillEditor.formatText(
+      v.firstVowelIndex,
+      1,
+      {
+        'vowel-agreement-tag': v.firstVowelType,
+      },
+      'api');
+
+  }
+
+  applyManyVowelAgreementFormatting(
+    quillEditor: Quill,
+    vs: VowelAgreementHighlightTag[]) {
+    if (!vs) { return; }
+    for (const v of vs) {
+      this.applyVowelAgreementFormatting(quillEditor, v);
+    }
+
+  }
+
   applyGramadoirTagFormatting(quillEditor: Quill) {
     if (!this.currentGramadoirHighlightTags) { return; }
 
@@ -125,7 +160,7 @@ export class QuillHighlightService {
     gramadoirTags.forEach((t: HTMLElement) => {
       const unparsed = t.getAttribute('data-gramadoir-tag');
       const error = JSON.parse(unparsed);
-      this.createGrammarPopup(quillEditor, error, t)
+      this.createGrammarPopup(quillEditor, error, t);
     });
   }
 
