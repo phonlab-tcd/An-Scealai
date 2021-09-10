@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit {
     if (
       this.story &&
       this.story.feedback &&
-      !this.story.feedback.seenByStudent) {
+      this.story.feedback.seenByStudent === false) {
       return true;
     }
     return false;
