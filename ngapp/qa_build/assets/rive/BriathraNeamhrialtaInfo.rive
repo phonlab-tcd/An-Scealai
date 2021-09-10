@@ -1,0 +1,93 @@
+> object storeName javascript
+  return storeName(args[0]);
+< object
+
+> object getName javascript
+  return getName();
+< object
+
+> object isNameStored javascript
+  if(isNameStored()) return true;
+  else return false;
+< object
+
+> object loadFromChat javascript
+  loadFromChat(args[0]);
+  return "";
+< object
+
+> object askName javascript
+  return askName();
+< object
+
++ start
+* <call>isNameStored</call> == false => <call>askName</call>
+* <call>isNameStored</call> == true => A, <call>getName</call>. Níl ach aon cheann déag de bhriathra neamhrialta sa Ghaeilge Sin an méid. \s
+^ Níl sé seo ródheacair. Is féidir leat tosnú le haon cheann is mian leat. Abair liom cad é an chéan cheann ar mhaith leat tosnú leis. \s
+^ Tá do rogha féin agat:<br>
+^ <button class="rive-button" onclick="load('deanAC')">Déan</button>
+^ <button class="rive-button" onclick="load('beirAC')">Beir</button>
+^ <button class="rive-button" onclick="load('abairAC')">Abair</button>
+^ <button class="rive-button" onclick="load('faighAC')">Faigh</button>
+^ <button class="rive-button" onclick="load('ithAC')">Ith</button>
+^ <button class="rive-button" onclick="load('teighAC')">Téigh</button>
+^ <button class="rive-button" onclick="load('tarAC')">Tar</button>
+^ <button class="rive-button" onclick="load('tabhairAC')">Tabhair</button>
+^ <button class="rive-button" onclick="load('cloisAC')">Clois</button>
+^ <button class="rive-button" onclick="load('biAC')">Bí</button>
+^ <button class="rive-button" onclick="load('feicAC')">Feic</button>
+
+
++ (_ is ainm dom)
+- Deas bualadh leat a <call>storeName <formal></call><call>getName</call>.\s
+^ Anois, roghnaigh ábhar le do thoil:<br>
+^ <button class="rive-button" onclick="load('deanAC')">Déan</button>
+^ <button class="rive-button" onclick="load('beirAC')">Beir</button>
+^ <button class="rive-button" onclick="load('abairAC')">Abair</button>
+^ <button class="rive-button" onclick="load('faighAC')">Faigh</button>
+^ <button class="rive-button" onclick="load('ithAC')">Ith</button>
+^ <button class="rive-button" onclick="load('teighAC')">Téigh</button>
+^ <button class="rive-button" onclick="load('tarAC')">Tar</button>
+^ <button class="rive-button" onclick="load('tabhairAC')">Tabhair</button>
+^ <button class="rive-button" onclick="load('cloisAC')">Clois</button>
+^ <button class="rive-button" onclick="load('biAC')">Bí</button>
+^ <button class="rive-button" onclick="load('feicAC')">Feic</button>
+
++ (dean|déan)
+- <call>loadFromChat deanAC</call>
+
++ abair
+- <call>loadFromChat abairAC</call>
+
++ beir
+- <call>loadFromChat beirAC</call>
+
++ faigh
+- <call>loadFromChat faighAC</call>
+
++ ith
+- <call>loadFromChat ithAC</call>
+
++ (teigh|téigh)
+- <call>loadFromChat teighAC</call>
+
++ tar
+- <call>loadFromChat tarAC</call>
+
++ tabhair
+- <call>loadFromChat tabhairAC</call>
+
++ clois
+- <call>loadFromChat cloisAC</call>
+
++ (bi|bí)
+- <call>loadFromChat biAC</call>
+
++ feic
+- <call>loadFromChat feicAC</call>
+
++ quiz
+- <call>loadFromChat BQuiz</call>
+
++ *
+- Sorry, did not understand you. Please remember to reply as Gaeilge
