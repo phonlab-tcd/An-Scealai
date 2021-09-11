@@ -41,19 +41,19 @@ export class LoginComponent implements OnInit {
   usernameForgotPassword: string;
   emailForgotPassword: string;
 
-  errorMessageKeys = [];
+  errorMessageKeys: string[] = [];
   errorMessageKey = '';
 
-  emailToVerify = null;
+  emailToVerify: string = null;
   userHasNotBeenVerified = false;
   userToVerify: string = null;
   verificationEmailHasBeenSent = false;
 
   waitingForEmailVerification = false;
-  waitingErrorTextKeys = [];
+  waitingErrorTextKeys: string[] = [];
 
-  resetPasswordOkKeys = null;
-  resetPasswordErrKeys = null;
+  resetPasswordOkKeys: string[] = null;
+  resetPasswordErrKeys: string[]  = null;
 
   constructor(
     private auth: AuthenticationService,
