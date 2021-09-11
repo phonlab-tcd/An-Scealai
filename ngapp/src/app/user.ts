@@ -1,8 +1,8 @@
-import { Serializable } from "./serializable";
+import { Serializable } from 'ts-serializable';
 
 export class User extends Serializable {
-    _id: string;
+    '_id': string;
     username: string;
     role: string;
-    language : string;
+    language: string;
 }

@@ -1,7 +1,7 @@
-import { Serializable } from "./serializable";
+import { Serializable } from 'ts-serializable';
 
 export class Story extends Serializable {
-    _id: string;
+    '_id': string;
     title: string;
     date: Date;
     lastUpdated: Date;

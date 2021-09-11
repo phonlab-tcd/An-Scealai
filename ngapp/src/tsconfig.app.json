@@ -5,7 +5,7 @@
     "types": [
       "jquery",
       "node"
-    ],
+    ]
   },
   "files": [
     "main.ts",
