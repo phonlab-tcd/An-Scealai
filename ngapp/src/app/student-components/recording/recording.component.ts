@@ -9,7 +9,7 @@ import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 
-declare var MediaRecorder : any;
+declare var MediaRecorder: any;
 
 @Component({
   selector: 'app-recording',
@@ -22,7 +22,6 @@ export class RecordingComponent implements OnInit {
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
               private synthesis: SynthesisService) { }
-  
   // Synthesis variables
   story: Story = new Story();
   paragraphs: Paragraph[] = [];
@@ -30,44 +29,47 @@ export class RecordingComponent implements OnInit {
   chosenSections: Section[];
 
   // Audio variables
-  
+  //
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
-  recorder;
-  stream;
-  chunks;
+  recorder: {
+    start: () => void;
+    ondataavailable: (e: any) => void;
+    state: string;
+    stop: () => void;
+  };
+  stream: MediaStream;
+  chunks: any[];
 
   isRecordingParagraph: boolean[] = [];
   isRecordingSentence: boolean[] = [];
-  isRecordingSection: boolean[] = []
+  isRecordingSection: boolean[] = [];
 
-  paragraphAudioSources : SafeUrl[] = [];
+  paragraphAudioSources: SafeUrl[] = [];
   sentenceAudioSources: SafeUrl[] = [];
   sectionAudioSources: SafeUrl[] = [];
 
   paragraphBlobs: any[] = [];
   sentenceBlobs: any[] = [];
-  sectionBlobs: any[] = [];  
+  sectionBlobs: any[] = [];
 
-  paragraphChunks: {[key:number]:any[]} = [];
-  sentenceChunks: {[key:number]:any[]}  = [];
-  sectionChunks: {[key:number]:any[]}  = [];
+  paragraphChunks: {[key: number]: any[]} = [];
+  sentenceChunks: {[key: number]: any[]}  = [];
+  sectionChunks: {[key: number]: any[]}  = [];
 
   // UI variables
-  modalClass : string = "hidden";
+  modalClass = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
-  recordingSaved: boolean = true;
+  recordingSaved = true;
   popupVisible = false;
-  errorText : string;
-  registrationError : boolean;
-  audioFinishedLoading: boolean = false;
+  errorText: string;
+  registrationError: boolean;
+  audioFinishedLoading = false;
 
-  /*
-  * Call getStory() to get current story recording, story data, synthesise, and recordings
-  * Reset variables when recording text updated (function called in updateStory())
-  */
+  // Call getStory() to get current story recording, story data, synthesise, and recordings
+  // Reset variables when recording text updated (function called in updateStory())
   ngOnInit() {
-    this.modalClass = "hidden";
+    this.modalClass = 'hidden';
     this.chunks = [];
     this.sectionAudioSources = this.paragraphAudioSources;
     this.sectionBlobs = this.paragraphBlobs;
@@ -99,15 +101,13 @@ export class RecordingComponent implements OnInit {
   /**
    * Archives story.activeRecording by making a new, blank
    * up-to-date activeRecording for story.
-   * 
+   *
    * @param story - story whose activeRecording will be updated
    */
   archive(story: Story) {
-    
-    if(story.activeRecording) {
+    if (story.activeRecording) {
       this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
     }
-    
     const newActiveRecording = new Recording(story);
     this.recordingService.create(newActiveRecording).subscribe(res => {
       if (res.recording) {
@@ -134,24 +134,24 @@ export class RecordingComponent implements OnInit {
     })
   }
 
-  //--- Audio Control ---//
+  // --- Audio Control --- //
   // TODO: put recording/playback functions + audio variables in a service
 
   /**
    * Given some recording, gets audio data from the DB and saves it
    * in SafeUrl arrays to be displayed in <audio>s on the .html page
-   * 
+   *
    * @param recording - recording whose audio clips should be loaded
    */
   loadAudio(recording: Recording) {
     this.audioFinishedLoading = false;
-    for (let i=0; i<recording.paragraphIndices.length; ++i) {
+    for (let i = 0; i < recording.paragraphIndices.length; ++i) {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
         this.paragraphBlobs[i] = res;
         this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       });
     }
-    for (let i=0; i<recording.sentenceIndices.length; ++i) {
+    for (let i = 0; i < recording.sentenceIndices.length; ++i) {
       this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
         this.sentenceBlobs[i] = res;
         this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
@@ -167,9 +167,9 @@ export class RecordingComponent implements OnInit {
    * @param chunksArray - array of any[], should be either paragraphChunks
    * or sentenceChunks
    */
-  recordAudio(index:number) {
+  recordAudio(index: number) {
     console.log('Record audio:', index);
-    let media = {
+    const media = {
       tag: 'audio',
       type: 'audio/mp3',
       ext: '.mp3',
@@ -181,10 +181,10 @@ export class RecordingComponent implements OnInit {
       this.sectionChunks[index] = [];
       this.recorder.start();
       this.isRecordingSection[index] = true;
-      this.recorder.ondataavailable = e => {
+      this.recorder.ondataavailable = (e: { data: any; }) => {
         this.sectionChunks[index].push(e.data);
-        if(this.recorder.state == 'inactive') {
-        };
+        // if(this.recorder.state == 'inactive') {
+        // };
       };
     }).catch();
   }
@@ -192,7 +192,7 @@ export class RecordingComponent implements OnInit {
   stopRecording(index: number) {
     this.recorder.stop();
     this.isRecordingSection[index] = false;
-    this.stream.getTracks().forEach(track => track.stop());
+    this.stream.getTracks().forEach((track: {stop: () => any;}) => track.stop());
     setTimeout(() => {
       const blob = new Blob(this.sectionChunks[index], {type: 'audio/mp3'});
       this.sectionBlobs[index] = blob;
@@ -244,19 +244,20 @@ export class RecordingComponent implements OnInit {
     }
 
     const trackData = {
-      paragraphAudioIds: paragraphAudioIds,
-      paragraphIndices: paragraphIndices,
-      sentenceIndices: sentenceIndices,
-      sentenceAudioIds: sentenceAudioIds
-    }
+      paragraphAudioIds,
+      paragraphIndices,
+      sentenceIndices,
+      sentenceAudioIds
+    };
 
-    this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
-      this.recordingSaved = true;
-    });
+    this.recordingService
+        .update(this.story.activeRecording, trackData)
+        .subscribe(() => {
+          this.recordingSaved = true;
+        });
   }
-  
-  //--- UI Manipulation ---//
 
+  // --- UI Manipulation --- //
   isRecording(section: Section, index: number) {
     if (section instanceof Sentence) {
       return this.isRecordingSentence[index];
@@ -274,7 +275,7 @@ export class RecordingComponent implements OnInit {
   }
 
   // toggle paragraph / sentence mode
-  changeSections(sections) {
+  changeSections(sections: Section[]) {
     this.chosenSections = sections;
     const allSections = this.paragraphs.concat(this.sentences);
     allSections.forEach(section => this.stopSection(section));
@@ -296,7 +297,7 @@ export class RecordingComponent implements OnInit {
     section.highlight();
   }
 
-  stopSection(section) {
+  stopSection(section: Paragraph) {
     section.stop();
     section.removeHighlight();
   }
