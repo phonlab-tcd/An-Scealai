@@ -16,7 +16,7 @@ import { TranslationService } from '../../translation.service';
 })
 export class StoryHistoryComponent implements OnInit {
 
-  constructor(private engagement : EngagementService,
+  constructor(private engagement: EngagementService,
               private route: ActivatedRoute,
               private http: HttpClient,
               private storyService: StoryService,
@@ -52,7 +52,7 @@ export class StoryHistoryComponent implements OnInit {
     })
   }
 
-  highlightDifference(a, b) : SafeHtml {
+  highlightDifference(a: any, b: any) : SafeHtml {
     let one = a,
     other = b,
     spanClass = 'notHighlighted',

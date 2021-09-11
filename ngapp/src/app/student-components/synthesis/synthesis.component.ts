@@ -43,7 +43,7 @@ export class SynthesisComponent implements OnInit {
     return this.chosenSections[0] instanceof Paragraph;
   }
 
-  changeSections(sections) {
+  changeSections(sections: Section[]) {
     this.chosenSections = sections;
     const allSections = this.paragraphs.concat(this.sentences);
     allSections.forEach(section => this.stopSection(section));
@@ -54,7 +54,7 @@ export class SynthesisComponent implements OnInit {
     section.highlight();
   }
 
-  stopSection(section) {
+  stopSection(section: Paragraph) {
     section.stop();
     section.removeHighlight();
   }
