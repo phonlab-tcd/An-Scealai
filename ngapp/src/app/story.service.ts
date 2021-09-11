@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Story } from './story';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-//import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
+// import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from './authentication.service';
+import {
+  AuthenticationService,
+  TokenPayload,
+} from './authentication.service';
 import { Observable } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
-import { RecordingService } from './recording.service';
+// import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
@@ -26,38 +33,49 @@ export class StoryService {
     private auth: AuthenticationService,
     private engagement: EngagementService,
     private ts: TranslationService,
-    private recordingService: RecordingService
+    // private recordingService: RecordingService // TODO can we delete this?
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
 
-  saveStory(studentId, title, date, dialect, text, author) {
-    const storyObj = {
-      title: title,
-      date: date,
-      dialect: dialect,
-      text: text,
-      htmlText: text,
-      author: author,
-      studentId: studentId,
+  saveStory(
+    studentId: string, // TODO use an id type (e.g. new MongoId('hello') should throw an error)
+    title: string,
+    date: Date | string, // TODO restrict to one type
+    dialect: string, // TODO needs better type
+    text: string,
+    author: string)
+  {
+    const storyObj = { // TODO use new Story()
+      title,
+      date,
+      dialect,
+      text,
+      htmlText: text, // TODO let this function save htmlText
+      author,
+      studentId,
       lastUpdated: new Date(),
-      activeRecording: null
+      activeRecording: null as any,
     };
     console.log(storyObj);
     this.http.post(this.baseUrl + 'create', storyObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
-        //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        //this.recordingService.addRecordingForLoggedInUser(storyObj);
-        this.router.navigateByUrl('/dashboard/' + res["id"]);
+      .subscribe((res: any) => {
+        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        // this.engagement.addEventForLoggedInUser(EventType['RECORD-STORY'], storyObj);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+        if (res.id) {
+          this.router.navigateByUrl('/dashboard/' + res.id);
+        } else {
+          window.alert('There was an error while trying to create the story on the database');
+        }
       });
   }
 
-  getStoriesFor(author : string) {
-    return this.http.get(this.baseUrl+author);
+  getStoriesFor(author: string) {
+    return this.http.get(this.baseUrl + author);
   }
 
-  getStory(id: string) : Observable<any> {
+  getStory(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
@@ -74,9 +92,9 @@ export class StoryService {
   updateStoryTitleAndDialect(story: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'update/' + story._id, story);
   }
-  
-  getStoriesForClassroom(author: string, date): Observable<any> {
-    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+
+  getStoriesForClassroom(author: string, date: any): Observable<any> {
+    return this.http.get(this.baseUrl + 'getStoriesForClassroom/' + author + '/' + date);
   }
 
   updateStory(storyUpdate: object, id: string): Observable<any> {
@@ -84,39 +102,53 @@ export class StoryService {
       this.baseUrl + 'update/' + id,
       storyUpdate);
   }
-  
-  updateAuthor(oldAuthor, newAuthor): Observable<any> {
-    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
+
+  updateAuthor(oldAuthor: string, newAuthor: string): Observable<any> {
+    return this.http.post(
+      this.baseUrl + 'updateAuthor/' + oldAuthor,
+      {newAuthor});
   }
 
-  deleteStory(id) {
+  deleteStory(id: string) { // TODO use an id type
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
-  
-  deleteAllStories(author) {
+
+  deleteAllStories(author: string) {
     return this.http.get(this.baseUrl + 'deleteAllStories/' + author);
   }
 
-  addFeedback(id, feedbackText: string) : Observable<any> {
-    return this.http.post(this.baseUrl + "addFeedback/" + id, {feedback : feedbackText});
+  addFeedback(
+    id: string /* TODO use an id type */,
+    feedbackText: string): Observable<any>
+  {
+    return this.http.post(
+      this.baseUrl + 'addFeedback/' + id,
+      {feedback : feedbackText});
   }
 
-  getFeedback(id) : Observable<any> {
-    return this.http.get(this.baseUrl + "feedback/" + id);
+  getFeedback(id: string): Observable<any> {
+    return this.http.get(
+      this.baseUrl + 'feedback/' + id);
   }
 
-  viewFeedback(id) : Observable<any> {
-    return this.http.post(this.baseUrl + "viewFeedback/" + id, {});
+  viewFeedback(id: string): Observable<any> {
+    return this.http.post(
+      this.baseUrl + 'gviewFeedback/' + id,
+      {}); // TODO why is this a post request?
   }
 
-  getFeedbackAudio(id) : Observable<any> {
-    return this.http.get(this.baseUrl + "feedbackAudio/" + id, {responseType: "blob"});
+  getFeedbackAudio(id: string): Observable<any> {
+    return this.http.get(
+      this.baseUrl + 'feedbackAudio/' + id,
+      {responseType: 'blob'});
   }
 
-  addFeedbackAudio(id, audioBlob: Blob) : Observable<any>{
-    let formData = new FormData();
+  addFeedbackAudio(id: string, audioBlob: Blob): Observable<any>{
+    const formData = new FormData();
     formData.append('audio', audioBlob);
-    return this.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);
+    return this.http.post(
+      this.baseUrl + 'addFeedbackAudio/' + id,
+      formData);
   }
 
   synthesise(id: string): Observable<any> {
