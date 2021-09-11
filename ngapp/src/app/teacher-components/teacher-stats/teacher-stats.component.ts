@@ -33,7 +33,8 @@ export class TeacherStatsComponent implements OnInit {
   dateToDisplay: string = "";
   
 
-  constructor(private classroomService: ClassroomService, private auth: AuthenticationService, 
+  constructor(private classroomService: ClassroomService,
+              private auth: AuthenticationService,
               private userService: UserService, private router: Router,
               private route: ActivatedRoute,
               private statsService : StatsService,
@@ -78,7 +79,7 @@ export class TeacherStatsComponent implements OnInit {
           
           this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {
             let rules: string[] = res;
-            this.listOfGrammarErrors.forEach(item => {
+            this.listOfGrammarErrors.forEach((item: {error: string; checked: boolean; }) => {
               if(rules.includes(item.error)) {
                 item.checked = true;
               }
@@ -147,9 +148,8 @@ export class TeacherStatsComponent implements OnInit {
       }
       this.createChart(this.graphLabels, this.graphValues);
     }
-    
-    createChart(labels, values) {
-      
+
+    createChart(labels: string[], values: number[]) {
       this.myChart = new Chart('statChart', {  
         type: 'doughnut',  
         data: {  
@@ -198,7 +198,8 @@ export class TeacherStatsComponent implements OnInit {
  */ 
   hideErrorSelectionModal() {
     this.errorModalClass = "hiddenFade";
-    this.listOfGrammarErrors.forEach(item => {
+    this.listOfGrammarErrors.forEach(
+    (item: { checked: any; error: string; }) => { // TODO reusable type
       if(item.checked) {
         if(!this.setGrammarErrors.includes(item.error)) {
           this.setGrammarErrors.push(item.error);
@@ -218,12 +219,12 @@ export class TeacherStatsComponent implements OnInit {
   }
   
   // select all grammar error checkboxes
-  selectAll(event) {
+  selectAll(event: { target: { checked: any; }; }) {
     const checked = event.target.checked;
-    this.listOfGrammarErrors.forEach(item => item.checked = checked);
+    this.listOfGrammarErrors.forEach((item: { checked: any; }) => item.checked = checked);
   }
   
-  hoverDate(stamps, key) {
+  hoverDate(stamps: {get: (arg0: any) => {(): any; new(): any; toString: {(): string; new(): any;};};}, key: any) {
     console.log(stamps);
     console.log(key);
     this.dateToDisplay = stamps.get(key).toString();

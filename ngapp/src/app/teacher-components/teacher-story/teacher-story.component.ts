@@ -9,7 +9,7 @@ import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
 import config from '../../../abairconfig.json';
 
-declare var MediaRecorder : any;
+declare var MediaRecorder: any;
 
 @Component({
   selector: 'app-teacher-story',
@@ -45,9 +45,9 @@ export class TeacherStoryComponent implements OnInit {
   errorText : string;
   registrationError : boolean;
 
-  recorder;
-  stream;
-  chunks;
+  recorder: {ondataavailable: (e: any) => void; state: string; start: () => void; stop: () => void;};
+  stream: MediaStream;
+  chunks: any[];
 
   baseUrl: string = config.baseurl;
 
@@ -75,9 +75,9 @@ export class TeacherStoryComponent implements OnInit {
 */
   getStoryData() {
     this.getParams().then(params => {
-      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
+      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res: any[]) => {
         this.story = res[0];
-        if(this.story.htmlText == null) {
+        if (this.story.htmlText == null) {
           this.story.htmlText = this.story.text;
         }
         this.getFeedbackAudio();
@@ -121,7 +121,7 @@ export class TeacherStoryComponent implements OnInit {
 * Add feedback text to the story using the story service 
 */
   sendFeedback() {
-    this.storyService.addFeedback(this.story._id, this.story.feedback.text).subscribe((res) => {
+    this.storyService.addFeedback(this.story._id, this.story.feedback.text).subscribe(() => {
       this.feedbackSent = true;
     });
   }
@@ -192,7 +192,7 @@ export class TeacherStoryComponent implements OnInit {
 */
   saveAudio() {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
-    this.storyService.addFeedbackAudio(this.story._id, blob).subscribe((res) => {
+    this.storyService.addFeedbackAudio(this.story._id, blob).subscribe(() => {
       this.hideModal();
     }, (err) => {
       this.errorText = err.message;
@@ -204,7 +204,7 @@ export class TeacherStoryComponent implements OnInit {
 * Return the url parameters as a promise
 */
   getParams(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.route.params.subscribe(
         params => {
           resolve(params);
