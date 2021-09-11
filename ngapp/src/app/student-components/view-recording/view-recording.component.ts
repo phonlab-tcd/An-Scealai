@@ -17,38 +17,39 @@ export class ViewRecordingComponent implements OnInit {
   constructor(private recordingService: RecordingService, private route: ActivatedRoute,
               private sanitizer: DomSanitizer, public ts: TranslationService,
               private storyService: StoryService) { }
+  
   audioSource: any = null;
   story: Story;
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   audioFinishedLoading = false;
   recordingsFinishedLoading = false;
-  sectionSplit = 'paragraph';
-  a: HTMLAudioElement;
-  audioPlaying = false;
-  audioTimeouts: NodeJS.Timeout[] = [];
+  sectionSplit : string = "paragraph";
+  a: any;
+  audioPlaying: boolean = false;
+  audioTimeouts: any = [];
 
   paragraphToAudioSource: SafeUrl[] = [];
   sentenceToAudioSource: SafeUrl[] = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.recordingService.get(params.id).subscribe((res: Recording) => {
+      this.recordingService.get(params['id']).subscribe((res: Recording) => {
         this.story = res.storyData;
         this.synthesiseStory(this.story);
         this.loadRecordings(res);
       });
-    });
+    })
   }
 
   loadRecordings(recording: Recording) {
     console.log('The recording!', recording);
-    for (let i = 0; i < recording.paragraphIndices.length; ++i) {
+    for (let i=0; i<recording.paragraphIndices.length; ++i) {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
         this.paragraphToAudioSource[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       });
     }
-    for (let i = 0; i < recording.sentenceIndices.length; ++i) {
+    for (let i=0; i<recording.sentenceIndices.length; ++i) {
       this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
         this.sentenceToAudioSource[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       });
@@ -56,15 +57,15 @@ export class ViewRecordingComponent implements OnInit {
     this.recordingsFinishedLoading = true;
   }
 
-  synthesiseStory(story: Story) {
+  synthesiseStory(story: any) {
     this.storyService.synthesiseObject(story).subscribe((res) => {
       // loop through the html of the synthesis response and create sentences/paragraph instances
-      for (const p of res.html) {
-        let paragraphStr = '';
-        const paragraphObject = new Paragraph();
-        for (const sentenceStr of p) {
+      for(let p of res.html) {
+        let paragraphStr: string = "";
+        let paragraphObject = new Paragraph();
+        for(let sentenceStr of p) {
           paragraphStr += sentenceStr;
-          const sentence = new Sentence();
+          let sentence = new Sentence();
           sentence.responseHtml = this.sanitizer.bypassSecurityTrustHtml(sentenceStr);
           sentence.audioPlaying = false;
           sentence.paragraph = paragraphObject;
@@ -76,136 +77,120 @@ export class ViewRecordingComponent implements OnInit {
         this.paragraphs.push(paragraphObject);
       }
       let j = 0;
-
-      // loop through the audio of the synthesis response and
-      // add to sentence/paragraph instances
-      for (let i = 0; i < res.audio.length; i++) {
-        if (res.audio[i]) {
-          this.paragraphs[i].audioUrl = res.audio[i];
-          this.paragraphs[i].index = '' + i;
-          for (const s of this.paragraphs[i].sentences) {
-            s.index = '' + j;
-            ++j;
-          }
+      // loop through the audio of the synthesis response and add to sentence/paragraph instances
+      for(let i in res.audio) {
+        this.paragraphs[i as unknown as number].audioUrl = res.audio[i];
+        this.paragraphs[i as unknown as number].index = i;
+        for(let s of this.paragraphs[i as unknown as number].sentences) {
+          s.index = j as any;
+          ++j;
         }
       }
       this.audioFinishedLoading = true;
       this.paragraphMode();
     });
   }
-
-  // Set the html format for paragraph mode
+  
+  /*
+  * Set the html format for paragraph mode
+  */
   paragraphMode() {
-    this.sectionSplit = 'paragraph';
+    this.sectionSplit = "paragraph";
     this.pauseAllAudio();
     setTimeout(() => {
       this.paragraphs.forEach(p => {
-        const pElem = document.getElementById('paragraph-' + p.index);
-        if (pElem) {
-          const spans = pElem.querySelectorAll('span');
+        let pElem = document.getElementById("paragraph-" + p.index);
+        if(pElem) {
+          let spans = pElem.querySelectorAll('span');
           spans.forEach(span => {
-            if (span.className !== 'sentence_normal') {
+            if(span.className != "sentence_normal") {
               span.addEventListener('click', this.playWord.bind(this));
-              span.setAttribute('audio-url', p.audioUrl);
-              span.classList.add('wordBtn');
+              span.setAttribute("audio-url", p.audioUrl);
+              span.classList.add("wordBtn");
             }
-          });
+          })
         }
       });
     }, 1000);
   }
 
-  // Set the html for sentence mode
+  /*
+  * Set the html for sentence mode
+  */
   sentenceMode() {
-    this.sectionSplit = 'sentence';
+    this.sectionSplit = "sentence";
     this.pauseAllAudio();
     setTimeout(() => {
       this.sentences.forEach(s => {
-        const sElem = document.getElementById('sentence-' + s.index);
-        if (sElem) {
-          const spans = sElem.children[0].querySelectorAll('span');
+        let sElem = document.getElementById("sentence-" + s.index);
+        if(sElem) {
+          let spans = sElem.children[0].querySelectorAll('span');
           spans.forEach(span => {
-            if (span.className !== 'sentence_normal') {
+            if(span.className != "sentence_normal") {
               span.addEventListener('click', this.playWord.bind(this));
-              span.setAttribute('audio-url', s.paragraph.audioUrl);
-              span.classList.add('wordBtn');
+              span.setAttribute("audio-url", s.paragraph.audioUrl);
+              span.classList.add("wordBtn");
             }
-          });
+          })
         }
       });
     }, 1000);
   }
 
-  // Set audioPlaying to false for all sentences/paragraphs
+  /*
+    * Set audioPlaying to false for all sentences/paragraphs
+    */
   pauseAllAudio() {
-    if (this.a) {
+    if(this.a) {
       this.a.pause();
       this.audioPlaying = false;
       this.paragraphs.forEach((para) => {
-        if (this.sectionSplit === 'paragraph') {
+        if(this.sectionSplit === "paragraph") {
           para.audioPlaying = false;
           Highlighter.stopHighlighting(para);
-        } else if (this.sectionSplit === 'sentence')  {
+        } else if(this.sectionSplit === "sentence")  {
           para.sentences.forEach(sentence => {
             sentence.audioPlaying = false;
             Highlighter.stopHighlighting(sentence);
           });
-          this.audioTimeouts.forEach(t => {
+          this.audioTimeouts.forEach((t: any) => {
             clearTimeout(t);
-          });
+          })
         }
-      });
+      })
     }
   }
 
   /*
   * Play synthetic audio for each paragraph/sentence using the audio url and start highlighting
   */
-  playAudio(section: {
-    type: string;
-    audioUrl: string;
-    index: string;
-    startTime: number;
-    duration: number;
-    paragraph: {
-      audioUrl: string;
-    };
-  })
-  {
+  playAudio(section: any) {
     this.pauseAllAudio();
     console.log(section.type);
-    if (section.type === 'Paragraph') {
+    if(section.type === "Paragraph") {
       this.a = new Audio(section.audioUrl);
       this.a.play();
       this.audioPlaying = true;
       Highlighter.startHighlighting(section);
-    } else if (section.type === 'Sentence') {
-      const sentenceElement = document.getElementById('sentence-' + section.index);
+    } else if(section.type === "Sentence") {
+      let sentenceElement = document.getElementById('sentence-' + section.index);
       // calculate sentence start time
-      if (!section.startTime) {
-        section.startTime = + sentenceElement.children[0].children[0].getAttribute('data-begin');
+      if(!section.startTime) {
+        section.startTime = sentenceElement.children[0].children[0].getAttribute("data-begin");
       }
       // calculate sentence duration
-      if (!section.duration) {
-        section.duration =
-          + sentenceElement
-              .children[0]
-              .children[sentenceElement.children[0].childElementCount - 1]
-              .getAttribute('data-begin') +
-          + sentenceElement
-              .children[0]
-              .children[sentenceElement.children[0].childElementCount - 1]
-              .getAttribute('data-dur')
-          - section.startTime;
+      if(!section.duration) {
+        section.duration = +sentenceElement.children[0].children[sentenceElement.children[0].childElementCount-1].getAttribute("data-begin")
+        + +sentenceElement.children[0].children[sentenceElement.children[0].childElementCount-1].getAttribute("data-dur")
+        - section.startTime;
       }
-
       // set the audio player to start at the sentence start time
       this.a = new Audio(section.paragraph.audioUrl);
       this.a.currentTime = section.startTime;
       this.a.play();
       this.audioPlaying = true;
       Highlighter.startHighlighting(section);
-      const t = setTimeout(() => {
+      let t = setTimeout(()=> {
         this.a.pause();
         this.audioPlaying = false;
       }, section.duration * 1000);
@@ -213,29 +198,33 @@ export class ViewRecordingComponent implements OnInit {
     }
   }
 
-  // Pause the audio player and stop highlighting
+  /*
+  * Pause the audio player and stop highlighting
+  */
   stopAudio(section: any) {
     this.a.pause();
     this.audioPlaying = false;
     Highlighter.stopHighlighting(section);
   }
 
-  // Play the audio of a word when it is clicked
-  // Method bound to event target in sentence/paragraphMode functions
-  playWord(event: { target: any; }) {
-    const span = event.target;
+  /*
+  * Play the audio of a word when it is clicked 
+  * Method bound to event target in sentence/paragraphMode functions
+  */
+  playWord(event: any) {
+    let span = event.target;
     this.pauseAllAudio();
-    this.a = new Audio(span.getAttribute('audio-url'));
-    const time = span.getAttribute('data-begin');
-    console.log(time, time - 0.1);
-    const duration = span.getAttribute('data-dur');
+    this.a = new Audio(span.getAttribute("audio-url"));
+    let time = span.getAttribute("data-begin");
+    console.log(time, time-0.1);
+    let duration = span.getAttribute("data-dur");
     this.a.currentTime = time;
     this.a.play();
-    span.style.background = '#0088ff6b';
-    const t = setTimeout(() => {
+    span.style.background = "#0088ff6b";
+    let t = setTimeout(() => {
       this.a.pause();
-      span.classList.remove('staticHighlight');
-      span.style.background = '#00000000';
+      span.classList.remove("staticHighlight");
+      span.style.background = "#00000000";
     }, duration * 1500);
     this.audioTimeouts.push(t);
   }
@@ -247,116 +236,105 @@ class Paragraph {
   audioUrl: string;
   responseHtml: SafeHtml;
   audioPlaying: boolean;
-  highlightTimeouts: any[] = [];
-  sentences: Sentence[] = [];
-  type = 'Paragraph';
+  highlightTimeouts: any = [];
+  sentences : Sentence[] = [];
+  type: string = "Paragraph";
 }
 
 class Sentence {
-  index = '0';
-  responseHtml: SafeHtml;
-  audioPlaying: boolean;
-  highlightTimeouts: any = [];
-  startTime: number;
-  duration: number;
-  paragraph: Paragraph;
-  type = 'Sentence';
+index : string = "0";
+responseHtml : SafeHtml;
+audioPlaying : boolean;
+highlightTimeouts: any = [];
+startTime : number;
+duration : number;
+paragraph : Paragraph;
+type: string = "Sentence";
 }
 
 class Highlighter {
-
-  static startHighlighting(section: { // TODO reusable type declaration
-    type: any;
-    audioUrl?: string;
-    index: any;
-    startTime: any;
-    duration?: number;
-    paragraph?: {
-      audioUrl: string;
-    };
-    audioPlaying?: any;
-    highlightTimeouts?: any; }) {
+  static startHighlighting(section: any) {
     section.audioPlaying = true;
-
-    const isParagraph = section.type === 'Paragraph';
-    const isSentence = section.type === 'Sentence';
-
+  
+    let isParagraph = section.type === "Paragraph";
+    let isSentence = section.type === "Sentence";
+  
     // select all the span elements associated with each paragraph / sentence
-    let spans: NodeListOf<HTMLSpanElement> = null;
-    let delay = 0;
-    if (isParagraph) {
-      const sectionElement = document.getElementById('paragraph-' + section.index);
+    let spans, delay = 0;
+    if(isParagraph) {
+      let sectionElement = document.getElementById('paragraph-' + section.index);
       spans = sectionElement.querySelectorAll('span');
-    } else if (isSentence) {
-      const sectionElement = document.getElementById('sentence-' + section.index);
+    } else if(isSentence) {
+      let sectionElement = document.getElementById('sentence-' + section.index);
       spans = sectionElement.children[0].querySelectorAll('span');
       delay = section.startTime * 1000;
     }
-
+    
     let previousSpan: HTMLSpanElement;
   
     spans.forEach((s) => {
-      if (s.className !== 'sentence_normal') {
-        s.classList.add('spanText');
+      if(s.className != 'sentence_normal') {
+        s.classList.add("spanText");
       }
     });
   
     // set and reset the css classes for each highlighted item
     spans.forEach((s, i) => {
-      if (s.className !== 'sentence_normal') {
-        const t = setTimeout(() => {
-          if (i === spans.length - 1) {
+      if(s.className != 'sentence_normal') {
+        let t = setTimeout(() => {
+          if(i === spans.length-1) {
             setTimeout(() => {
-              s.classList.add('spanTextNoHighlight');
-              s.classList.remove('spanTextHighlight');
+              s.classList.add("spanTextNoHighlight");
+              s.classList.remove("spanTextHighlight");
               this.resetHighlight(section);
-            }, (+s.getAttribute('data-dur')) * 1000);
+            }, (+s.getAttribute("data-dur")) * 1000);
           }
-          if (previousSpan) {
-            previousSpan.classList.add('spanTextNoHighlight');
+          if(previousSpan) {
+            previousSpan.classList.add("spanTextNoHighlight");
           }
-          s.classList.add('spanTextHighlight');
-          s.style.setProperty('--trans', 'width ' + (+s.getAttribute('data-dur') / 2 ).toString() + 's  ease-in-out');
+          s.classList.add("spanTextHighlight");
+          s.style.setProperty('--trans', "width " + (+s.getAttribute("data-dur") / 2 ).toString() + "s  ease-in-out");
           previousSpan = s;
-        }, ((+s.getAttribute('data-begin') * 1000)) + ((+s.getAttribute('data-dur') / 2) * 1000) - delay);
+        }, ((+s.getAttribute("data-begin") * 1000)) + ((+s.getAttribute("data-dur") / 2) * 1000) - delay);
         section.highlightTimeouts.push(t);
       }
-    });
+    }); 
+    
   }
   
-  static stopHighlighting(section: Paragraph | Sentence) {
-    section.highlightTimeouts.forEach((t) => {
+  static stopHighlighting(section: any) {
+    section.highlightTimeouts.forEach((t: any) => {
       clearTimeout(t);
     });
     this.resetHighlight(section);
   }
   
-  static resetHighlight(section: Paragraph | Sentence) {
+  static resetHighlight(section: any) {
     section.audioPlaying = false;
   
-    const isParagraph = section.type === 'Paragraph';
-    const isSentence = section.type === 'Sentence';
+    let isParagraph = section.type === "Paragraph";
+    let isSentence = section.type === "Sentence";
   
     let spans;
-    if (isParagraph) {
-      const sectionElement = document.getElementById('paragraph-' + section.index);
-      if (sectionElement) {
+    if(isParagraph) {
+      let sectionElement = document.getElementById('paragraph-' + section.index);
+      if(sectionElement) {
         spans = sectionElement.querySelectorAll('span');
       }
-    } else if (isSentence) {
-      const sectionElement = document.getElementById('sentence-' + section.index);
-      if (sectionElement) {
+    } else if(isSentence) {
+      let sectionElement = document.getElementById('sentence-' + section.index);
+      if(sectionElement) {
         spans = sectionElement.children[0].querySelectorAll('span');
       }
     }
   
-    if (spans) {
+    if(spans) {
       spans.forEach((s) => {
-        s.classList.remove('spanText');
-        s.classList.remove('spanTextHighlight');
-        s.classList.remove('spanTextNoHighlight');
+        s.classList.remove("spanText");
+        s.classList.remove("spanTextHighlight");
+        s.classList.remove("spanTextNoHighlight");
       });
     }
+    
   }
-
 }

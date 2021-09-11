@@ -1,7 +1,7 @@
-import { Story } from './story';
+import { Story } from "./story";
 
 export class Recording {
-    '_id': string;
+    _id: string;
     storyData: Story;
     date: Date;
     paragraphAudioIds: string[];
@@ -11,18 +11,18 @@ export class Recording {
     archived: boolean;
 
     constructor(
-      story: Story,
-      paragraphAudioIds: string[] = [],
-      paragraphIndices: any[] = [],
-      sentenceAudioIds: string[] = [],
-      sentenceIndices: any[] = [])
-    {
-      this.paragraphAudioIds = paragraphAudioIds;
-      this.paragraphIndices = paragraphIndices;
-      this.sentenceAudioIds = sentenceAudioIds;
-      this.sentenceIndices = sentenceIndices;
-      this.storyData = story;
-      this.date = new Date();
-      this.archived = false;
+      story: any,
+      paragraphAudioIds: any = [],
+      paragraphIndices: any = [],
+      sentenceAudioIds: any = [],
+      sentenceIndices: any = [],
+    ) {
+        this.paragraphAudioIds = paragraphAudioIds;
+        this.paragraphIndices = paragraphIndices;
+        this.sentenceAudioIds = sentenceAudioIds;
+        this.sentenceIndices = sentenceIndices;
+        this.storyData = story;
+        this.date = new Date();
+        this.archived = false;
     }
 }

@@ -79,7 +79,7 @@ export class TeacherStatsComponent implements OnInit {
           
           this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {
             let rules: string[] = res;
-            this.listOfGrammarErrors.forEach((item: {error: string; checked: boolean; }) => {
+            this.listOfGrammarErrors.forEach((item: any) => {
               if(rules.includes(item.error)) {
                 item.checked = true;
               }
@@ -148,8 +148,9 @@ export class TeacherStatsComponent implements OnInit {
       }
       this.createChart(this.graphLabels, this.graphValues);
     }
-
-    createChart(labels: string[], values: number[]) {
+    
+    createChart(labels: any, values: any) {
+      
       this.myChart = new Chart('statChart', {  
         type: 'doughnut',  
         data: {  
@@ -177,7 +178,7 @@ export class TeacherStatsComponent implements OnInit {
         },
         responsive: true,
         maintainAspectRatio: false
-      }); 
+      } as any); 
     }
 
   /*
@@ -198,8 +199,7 @@ export class TeacherStatsComponent implements OnInit {
  */ 
   hideErrorSelectionModal() {
     this.errorModalClass = "hiddenFade";
-    this.listOfGrammarErrors.forEach(
-    (item: { checked: any; error: string; }) => { // TODO reusable type
+    this.listOfGrammarErrors.forEach((item: any) => {
       if(item.checked) {
         if(!this.setGrammarErrors.includes(item.error)) {
           this.setGrammarErrors.push(item.error);
@@ -219,12 +219,12 @@ export class TeacherStatsComponent implements OnInit {
   }
   
   // select all grammar error checkboxes
-  selectAll(event: { target: { checked: any; }; }) {
+  selectAll(event: any) {
     const checked = event.target.checked;
-    this.listOfGrammarErrors.forEach((item: { checked: any; }) => item.checked = checked);
+    this.listOfGrammarErrors.forEach((item: any)=> item.checked = checked);
   }
   
-  hoverDate(stamps: {get: (arg0: any) => {(): any; new(): any; toString: {(): string; new(): any;};};}, key: any) {
+  hoverDate(stamps: any, key: any) {
     console.log(stamps);
     console.log(key);
     this.dateToDisplay = stamps.get(key).toString();

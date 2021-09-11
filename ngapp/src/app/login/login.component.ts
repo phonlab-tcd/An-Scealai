@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   usernameForgotPassword: string;
   emailForgotPassword: string;
 
-  errorMessageKeys: string[] = [];
+  errorMessageKeys: any[]= [];
   errorMessageKey = '';
 
   emailToVerify: string = null;
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   verificationEmailHasBeenSent = false;
 
   waitingForEmailVerification = false;
-  waitingErrorTextKeys: string[] = [];
+  waitingErrorTextKeys: any[] = [];
 
   resetPasswordOkKeys: string[] = null;
   resetPasswordErrKeys: string[]  = null;

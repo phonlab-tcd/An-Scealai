@@ -16,7 +16,7 @@ import { TranslationService } from '../../translation.service';
 })
 export class StoryHistoryComponent implements OnInit {
 
-  constructor(private engagement: EngagementService,
+  constructor(private engagement : EngagementService,
               private route: ActivatedRoute,
               private http: HttpClient,
               private storyService: StoryService,

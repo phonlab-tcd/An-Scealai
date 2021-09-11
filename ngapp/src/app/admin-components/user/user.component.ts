@@ -40,7 +40,7 @@ export class UserComponent implements OnInit {
   stories: Story[];
   classrooms: Classroom[];
   eventDates: Event[][];
-  eventSelected = {};
+  eventSelected: any = {};
   allEvents: Event[] = [];
   maximised : boolean = false;
   modalClass : string = "hidden";
@@ -126,7 +126,7 @@ export class UserComponent implements OnInit {
     return this.formatDate(new Date(eventArray[0].date));
   }
 
-  eventIsSelected(event) : boolean {
+  eventIsSelected(event: any) : boolean {
     return this.eventSelected[event._id];
   }
 
@@ -167,11 +167,11 @@ export class UserComponent implements OnInit {
     });
   }
 
-  goToStory(storyId) {
+  goToStory(storyId: any) {
     this.router.navigateByUrl('admin/story/' + storyId.toString());
   }
 
-  goToClassroom(classroomId) {
+  goToClassroom(classroomId: any) {
     this.router.navigateByUrl('admin/classroom/' + classroomId);
   }
   
@@ -193,10 +193,10 @@ export class UserComponent implements OnInit {
       
       this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
         for(let story of res) {
-          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res2: any) => {
             console.log('Deleted audio recordings for: ', story._id);
           });
-          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
+          this.recordingService.deleteStoryRecording(story._id).subscribe( (res3: any) => {
             console.log("Deleted recording object for ", story._id);
           })
         }

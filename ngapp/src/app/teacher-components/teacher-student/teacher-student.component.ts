@@ -75,7 +75,7 @@ export class TeacherStudentComponent implements OnInit {
     }
   
     getUserId(): Promise<any> {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         this.route.params.subscribe(
           params => {
             resolve(params);
@@ -83,7 +83,7 @@ export class TeacherStudentComponent implements OnInit {
       });
     }
   
-    goToStory(storyId: {toString: () => string;}) {
+    goToStory(storyId: any) {
       this.router.navigateByUrl('teacher/story/' + storyId.toString());
     }
 

@@ -22,35 +22,38 @@ declare var gtag: any;
 })
 
 export class AppComponent {
-  title = 'An Scéalaí';
-  checkVal = false;
-  notificationsShown = false;
-  storiesForNotifications: Story[] = [];
-  messagesForNotifications: Message[] = [];
+  
+  title: string = 'An Scéalaí';
+  checkVal: boolean = false;
+  notificationsShown : boolean = false;
+  storiesForNotifications : Story[] = [];
+  messagesForNotifications: Message[] = [];  
   teacherMessagesForNotifications: Map<Classroom, number> = new Map();
-  wasInside = false;
-  currentUser = '';
-  teacherMessagesSum = 0;
-  currentLanguage = '';
+  wasInside : boolean = false;
+  currentUser: string = '';
+  teacherMessagesSum: number = 0;
+  currentLanguage: string = '';
 
   constructor(
-    // private _loadingBar: SlimLoadingBarService,
+    //private _loadingBar: SlimLoadingBarService, 
     private _router: Router,
     public auth: AuthenticationService,
-    private notificationSerivce: NotificationService,
+    private storyService: StoryService,
+    private notificationSerivce : NotificationService,
+    private engagement: EngagementService,
     public ts: TranslationService,
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
-
+    
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     );
     navEndEvents.subscribe((event: NavigationEnd) => {
       gtag('config', 'UA-178889778-1', {
-        page_path : event.urlAfterRedirects
+        'page_path' : event.urlAfterRedirects
       });
     });
   }
@@ -123,18 +126,20 @@ export class AppComponent {
       this.changeToEnglish();
     }
   }
-
+  
   changeToEnglish() {
-    this.ts.setLanguage('en');
-    this.currentLanguage = 'English';
+    this.ts.setLanguage("en");
+    this.currentLanguage = "English";
   }
-
+  
   changeToIrish() {
-    this.ts.setLanguage('ga');
-    this.currentLanguage = 'Gaeilge';
+    this.ts.setLanguage("ga");
+    this.currentLanguage = "Gaeilge";
   }
 
-  // Change loading bar status based on current event
+/*
+* Change loading bar status based on current event
+*/
   private navigationInterceptor(event: Event): void {
     /*
     if (event instanceof NavigationStart) {
@@ -152,13 +157,13 @@ export class AppComponent {
    */
   }
 
-  // Keep track of where the user clicks
+// Keep track of where the user clicks
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
 
-  // Hide the notification container if user clicks on the page
+// Hide the notification container if user clicks on the page
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {
@@ -166,4 +171,5 @@ export class AppComponent {
     }
     this.wasInside = false;
   }
+  
 }

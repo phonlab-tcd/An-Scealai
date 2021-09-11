@@ -79,9 +79,9 @@ export class MessagesComponent implements OnInit {
   blob: any;
   errorText : string;
   registrationError : boolean;
-  recorder;
-  stream;
-  chunks;
+  recorder: any;
+  stream: any;
+  chunks: any;
 
 
   constructor(private classroomService: ClassroomService,
@@ -184,7 +184,7 @@ export class MessagesComponent implements OnInit {
         for(let id of ids) {
           console.log("id: " + id);
           this.messageService.getMessageById(id).subscribe((res) => {
-            this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
+            this.messageService.addMessageAudio(res._id, this.blob).subscribe((res: any) => {
               console.log("audio message sent to : " + id);
               this.hideModal();
             }, (err) => {
@@ -360,7 +360,7 @@ export class MessagesComponent implements OnInit {
         this.stream = _stream;
         this.recorder = new MediaRecorder(this.stream);
         this.startRecording();
-        this.recorder.ondataavailable = e => {
+        this.recorder.ondataavailable = (e: any) => {
           this.chunks.push(e.data);
           if(this.recorder.state == 'inactive') {
 
@@ -397,7 +397,7 @@ export class MessagesComponent implements OnInit {
       this.recording = false;
       this.showListenBack = true;
       this.canSendAudio = true;
-      this.stream.getTracks().forEach(track => track.stop());
+      this.stream.getTracks().forEach((track: any) => track.stop());
     }
 
   /*
@@ -437,7 +437,7 @@ export class MessagesComponent implements OnInit {
       this.modalClass = "hiddenFade";
       if(this.recorder.state != 'inactive') {
         this.recorder.stop();
-        this.stream.getTracks().forEach(track => track.stop());
+        this.stream.getTracks().forEach((track: any) => track.stop());
       }
       this.recording = false;
       this.newRecording = false;
@@ -459,7 +459,7 @@ export class MessagesComponent implements OnInit {
           });
         
           this.messageService.deleteMessage(id).subscribe(
-            res => {
+            (res: any) => {
               console.log('Deleted: ', id);
               //this.ngOnInit();
             }

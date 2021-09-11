@@ -59,7 +59,7 @@ export class TeacherDashboardComponent implements OnInit {
     this.classroom.getAllCodes().subscribe((res: string[]) => {
       let newCode: string = this.getUniqueCode(res);
       this.newClassroom.code = newCode;
-      this.classroom.createClassroom(this.newClassroom).subscribe((res) => {
+      this.classroom.createClassroom(this.newClassroom).subscribe((res2: any) => {
         this.classrooms = this.getClassrooms();
         this.hideModal();
       }, (err) => {
@@ -71,7 +71,7 @@ export class TeacherDashboardComponent implements OnInit {
     
   }
 
-  showError(err) {
+  showError(err: any) {
     this.errorText = err.message;
     this.registrationError = true;
   }

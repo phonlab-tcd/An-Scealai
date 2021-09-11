@@ -13,11 +13,8 @@ import { TranslationService } from '../../translation.service';
 export class NewStoryComponent implements OnInit {
 
   newStoryForm: FormGroup;
-  constructor(
-    private fb: FormBuilder,
-    private storyService: StoryService,
-    private auth: AuthenticationService,
-    public ts: TranslationService) {
+  constructor(private fb: FormBuilder,  private storyService: StoryService,
+    private auth: AuthenticationService, public ts : TranslationService) {
     this.createForm();
   }
 
@@ -31,10 +28,10 @@ export class NewStoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  addNewStory(title: string, dialect: string) {
-    const date = new Date();
-    const username = this.auth.getUserDetails().username;
-    const studentId = this.auth.getUserDetails()._id;
-    this.storyService.saveStory(studentId, title, date, dialect, '', username);
+  addNewStory(title: any, dialect: any) {
+    let date = new Date();
+    let username = this.auth.getUserDetails().username;
+    let studentId = this.auth.getUserDetails()._id;
+    this.storyService.saveStory(studentId, title, date, dialect, "", username);
   }
 }

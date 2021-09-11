@@ -37,7 +37,7 @@ export class StatsComponent implements OnInit {
      
   }
 
-  generateChart(labelArray, dataArray) {
+  generateChart(labelArray: any, dataArray: any) {
     this.graphGenerated = true;
     this.chart = new Chart('canvas', {  
       type: 'doughnut',  
@@ -75,7 +75,6 @@ export class StatsComponent implements OnInit {
       },
       responsive: true,
       maintainAspectRatio: false
-    }); 
+    } as any); 
   }
-
 }

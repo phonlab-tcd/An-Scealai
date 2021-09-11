@@ -34,7 +34,7 @@ export class FindUserComponent implements OnInit {
    */
   getUserResults() {
     this.userService.getAllUsers().subscribe((users: any) => {
-      this.userResults = users.map(userData => new User().fromJSON(userData));
+      this.userResults = users.map((userData: any) => new User().fromJSON(userData));
       this.numberOfUsers = this.userResults.length;
       this.filterArray(users);
     });
@@ -43,7 +43,7 @@ export class FindUserComponent implements OnInit {
   /*
   *  Fill individual arays of students, teachers, and admins from the userResults array
   */
-  filterArray(users) {
+  filterArray(users: any) {
     for(let i of users) {
       if(i.role === "STUDENT") {
         this.allStudents.push(i);

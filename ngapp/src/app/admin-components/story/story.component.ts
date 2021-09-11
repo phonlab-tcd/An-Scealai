@@ -27,7 +27,9 @@ export class StoryComponent implements OnInit {
   
   ngOnInit() {
     this.getParams().then(params => {
-      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
+      this.http
+          .get(this.baseUrl + 'story/viewStory/' + params['id'].toString())
+          .subscribe((res: any) => {
         this.story = res[0];
         this.getFeedbackAudio();
       });

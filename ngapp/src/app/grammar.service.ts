@@ -32,7 +32,9 @@ export class GrammarService {
     private http: HttpClient,
   ) { }
 
-  // Set grammar and vowel tags of TagSet object
+  /*
+  * Set grammar and vowel tags of TagSet object
+  */
   checkGrammar(id: string, storyText: string): Observable<any> {
     return Observable.create(
       (observer: Observer<any>) => {
@@ -46,25 +48,27 @@ export class GrammarService {
       });
   }
 
-//   {
-//     "savedStory": false,
-//     "storyWithIdNotFound": "000000000000000000000000",
-//     "grammarTagsEnglish": "[{\"msg\":\"Non-standard form of /duit/\",\"context\":\"Dia dhuit\",\"errortext\":\"dhuit\",\"errorlength\":\"5\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"tox\":\"8\",\"toy\":\"0\",\"fromx\":\"4\",\"fromy\":\"0\",\"contextoffset\":\"4\"}]",
-//     "grammarTagsIrish": "[{\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"fromy\":\"0\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"fromx\":\"4\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"context\":\"Dia dhuit\",\"errorlength\":\"5\",\"tox\":\"8\"}]"
-// }
-// 
-// request body:
-// {
-//     "text": "Dia dhuit",
-//     "htmlText": "<h1>Dia dhuit</h1>",
-//     "_id": "000000000000000000000000",
-//     "lastUpdated": "2021-08-10T16:03:44.967Z"
-//  x}
-// {
-//     "savedStory": false,
-//     "grammarTagsEnglish": "[{\"errorlength\":\"5\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"fromx\":\"4\",\"tox\":\"8\",\"fromy\":\"0\",\"msg\":\"Non-standard form of /duit/\",\"contextoffset\":\"4\",\"errortext\":\"dhuit\",\"context\":\"Dia dhuit\"}]",
-//     "grammarTagsIrish": "[{\"tox\":\"8\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"context\":\"Dia dhuit\",\"fromy\":\"0\",\"errorlength\":\"5\",\"fromx\":\"4\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"toy\":\"0\"}]"
-// }
+  /*j
+   *{
+    "savedStory": false,
+    "storyWithIdNotFound": "000000000000000000000000",
+    "grammarTagsEnglish": "[{\"msg\":\"Non-standard form of /duit/\",\"context\":\"Dia dhuit\",\"errortext\":\"dhuit\",\"errorlength\":\"5\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"tox\":\"8\",\"toy\":\"0\",\"fromx\":\"4\",\"fromy\":\"0\",\"contextoffset\":\"4\"}]",
+    "grammarTagsIrish": "[{\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"fromy\":\"0\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"fromx\":\"4\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"context\":\"Dia dhuit\",\"errorlength\":\"5\",\"tox\":\"8\"}]"
+}
+
+request body:
+{
+    "text": "Dia dhuit",
+    "htmlText": "<h1>Dia dhuit</h1>",
+    "_id": "000000000000000000000000",
+    "lastUpdated": "2021-08-10T16:03:44.967Z"
+ x}
+{
+    "savedStory": false,
+    "grammarTagsEnglish": "[{\"errorlength\":\"5\",\"toy\":\"0\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"fromx\":\"4\",\"tox\":\"8\",\"fromy\":\"0\",\"msg\":\"Non-standard form of /duit/\",\"contextoffset\":\"4\",\"errortext\":\"dhuit\",\"context\":\"Dia dhuit\"}]",
+    "grammarTagsIrish": "[{\"tox\":\"8\",\"errortext\":\"dhuit\",\"contextoffset\":\"4\",\"context\":\"Dia dhuit\",\"fromy\":\"0\",\"errorlength\":\"5\",\"fromx\":\"4\",\"ruleId\":\"Lingua::GA::Gramadoir/CAIGHDEAN{duit}\",\"msg\":\"Foirm neamhchaighdeánach de ‘duit’\",\"toy\":\"0\"}]"
+}
+  */
   updateStoryAndGetGrammarTagsAsHighlightTags(story: Story): Observable<{
     savedStory: any,
     tags: HighlightTag[],
@@ -149,14 +153,16 @@ export class GrammarService {
     return highlightTags;
   }
 
-  // Get grammar tag data from an gramadoir
+  /*
+  * Get grammar tag data from an gramadoir
+  */
   getGramadoirTags(id: string): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
       this.storyService.gramadoirViaBackend(id).subscribe(
         (res) => {
         const tags: HighlightTag[] = [];
         console.dir(res);
-        JSON.parse(res.grammarTags).forEach((g: any /* TODO type GramadoirTag */) => {
+        JSON.parse(res.grammarTags).forEach((g: any) => {
           const tag: HighlightTag = {
             indices: {
               start: +g.fromx,
@@ -180,10 +186,11 @@ export class GrammarService {
     return this.getVowelAgreementTags(story.text);
   }
 
-  // Takes in a story text and return an array of vowel
-  // tags showing slender/broad
-  // errors around consonants of words in the text
-  getVowelAgreementTags(text: string): HighlightTag[] {
+  /*
+  * Takes in a story text and return an array of vowel tags showing slender/broad 
+  * errors around consonants of words in the text
+  */
+  getVowelAgreementTags(text: string) : HighlightTag[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
     let skipIndices = this.getSkipIndices(text);
     let tags : HighlightTag[] = [];
@@ -243,7 +250,7 @@ export class GrammarService {
   //          of characters to be skipped in order to get past a word
   //          in the 'ignore' array, from where it starts in the input string.
 
-  getSkipIndices(text : string): number[] {
+  getSkipIndices(text : string) : number[] {
     let skipIndices : number[] = [];
     for(let word of this.ignore) {
       let lowerCaseText = text.toLowerCase();
@@ -255,69 +262,73 @@ export class GrammarService {
     return skipIndices;
   }
 
-  getAllIndexes(arr: any, val: any): number[] {
-    const indexes = [];
+/*
+* 
+*/
+  getAllIndexes(arr: any, val: any) : number[] {
+    var indexes = [];
 
-    let regex = new RegExp('[\\s.!?\\-]' + val + '[\\s.!?\\-]', 'g');
+    let regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
     let match = regex.exec(arr);
-
-    while (match) {
+    
+    while(match) {
       regex = new RegExp(val);
-      const interiorMatch = regex.exec(match[0]);
+      let interiorMatch = regex.exec(match[0])
       indexes.push(match.index + interiorMatch.index);
       arr = this.replaceAt(arr, match.index, '#'.repeat(5));
-      regex = new RegExp('[\\s.!?\\-]' + val + '[\\s.!?\\-]', 'g');
+      regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
       match = regex.exec(arr);
-      console.log('matched ' + val);
-      console.log('indexes', indexes);
+      console.log("matched " + val);
+      console.log("indexes", indexes);
     }
+    
     return indexes;
   }
 
-  // given a string, return the string
-  // after changing the content a specified index
-  replaceAt(str: string, index: number, replacement: string | any[]): string {
-    return str.substr(0, index) +
-           replacement +
-           str.substr(index + replacement.length);
+// given a string, return the string after changing the content a specified index
+  replaceAt(str: any, index: any, replacement: any): string {
+    return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
   }
 
-  // given a character, returns whether or not it is a vowel
-  isVowel(char: string): boolean {
+// given a character, returns whether or not it is a vowel
+  isVowel(char: string) : boolean {
     return this.broad.includes(char) || this.slender.includes(char);
   }
 
 // given a character, returns whether or not it is broad
-  isLeathan(char: string): boolean {
+  isLeathan(char: string) : boolean {
     return this.broad.includes(char);
   }
 
 // given a character, returns whether or not it is slender
-  isCaol(char: string): boolean {
+  isCaol(char: string) : boolean {
     return this.slender.includes(char);
   }
 
 // given a character, returns whether or not it is a consonant
-  isConsonant(char: string): boolean {
+  isConsonant(char: string) : boolean {
     return this.consonants.includes(char);
   }
 
-  // given two vowels, returns whether they are both broad or both slender
-  vowelsAgree(v1: string, v2: string): boolean {
+// given two vowels, returns whether they are both broad or both slender 
+  vowelsAgree(v1: string, v2: string) : boolean {
     return (this.broad.includes(v1) && this.broad.includes(v2)) || (this.slender.includes(v1) && this.slender.includes(v2));
   }
 
 }
 
+/*
+** **************** Tag Set Class **************************
 
-// **************** Tag Set Class **************************
+*/
 export class TagSet {
   gramadoirTags: HighlightTag[];
   vowelTags: HighlightTag[];
 }
 
-
-// **************** Grammar Tag Class ************************
+/*
+* **************** Grammar Tag Class ************************
+*/
 export class GrammarTag {
   type;
   message: string;
@@ -359,8 +370,8 @@ export class GrammarTag {
 /*
 * Specifies the pertaining css class of a given grammar rule
 */
-  static getCssClassFromRule(rule: string): string {
-    let cssClass: string;
+  static getCssClassFromRule(rule: string) : string {
+    let cssClass : string;
     if(rule === 'Lingua::GA::Gramadoir/SEIMHIU') {
       cssClass = "seimhiu-color";
     } else if(rule === 'Lingua::GA::Gramadoir/URU') {

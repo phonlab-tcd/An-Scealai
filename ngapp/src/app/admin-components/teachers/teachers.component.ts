@@ -61,7 +61,7 @@ export class TeachersComponent implements OnInit {
   deleteTeacherCode() {
     if(this.codeToDelete != null) {
       console.log(this.codeToDelete);
-      this.http.get(this.baseUrl + 'teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
+      this.http.get(this.baseUrl + 'teacherCode/delete/' + this.codeToDelete).subscribe((res: any) => {
         this.getActiveTeacherCodes();
         this.hideModal();
       });
@@ -91,7 +91,7 @@ export class TeachersComponent implements OnInit {
     this.modalClass = "hiddenFade";
   }
 
-  goToUser(userId) {
+  goToUser(userId: any) {
     this.router.navigateByUrl('admin/user/' + userId.toString());
   }
 

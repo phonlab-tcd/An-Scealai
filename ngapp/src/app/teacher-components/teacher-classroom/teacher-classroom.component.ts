@@ -108,7 +108,7 @@ export class TeacherClassroomComponent implements OnInit {
 * Edit the title of the classroom with classroom service 
 */
   editTitle() {
-    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe((res) => {
+    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe((res: any) => {
       this.getClassroom();
       this.hideModal();
     }, (err) => {
@@ -120,8 +120,8 @@ export class TeacherClassroomComponent implements OnInit {
 * Delete classroom with classroom service, redirect to landing
 */
   deleteClassroom() {
-    this.classroomService.delete(this.classroom._id).subscribe((res) => {
-      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((res) => {
+    this.classroomService.delete(this.classroom._id).subscribe((res: any) => {
+      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((res: any) => {
         this.router.navigateByUrl('/landing');
       })  
     });
@@ -170,7 +170,7 @@ export class TeacherClassroomComponent implements OnInit {
     this.deleteModalClass = "hiddenFade";
   }
 
-  showError(err) {
+  showError(err: any) {
     this.errorText = err.message;
     this.registrationError = true;
   }
