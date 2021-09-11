@@ -89,21 +89,20 @@ export class DashboardComponent implements OnInit {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
       ['blockquote'/*, 'code-block'*/],
-      //[{ 'header': 1 }, { 'header': 2 }],               // custom button values
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      //[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      //[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-      //[{ 'direction': 'rtl' }],                         // text direction
-      //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['clean'],                                         // remove formatting button
-      //['link', 'image', 'video']                        // link and image, video
+      // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+      [{ list: 'ordered'}, { list: 'bullet' }],
+      // [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      // [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+      // [{ 'direction': 'rtl' }],                         // text direction
+      // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ color: [] as any[]}, { background: [] as any[]}],          // dropdown with defaults from theme
+      [{ font: [] as any[]}],
+      [{ align: [] as any[]}],
+      // ['link', 'image', 'video']                        // link and image, video
     ]
   };
-  
+
   constructor(
     private storyService: StoryService,
     private route: ActivatedRoute,
@@ -112,16 +111,14 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
-    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
   ) {}
 
-/*
-* set the stories array of all the student's stories 
-* and the current story being edited given its id from url 
-*/
+
+  // set the stories array of all the student's stories
+  // and the current story being edited given its id from url
   ngOnInit() {
     this.storyService
         .gramadoirDirect('dia dhuit mo cara')
@@ -140,11 +137,11 @@ export class DashboardComponent implements OnInit {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
-        for(let story of this.stories) {
-          if(story._id === this.id) {
+        for (const story of this.stories) {
+          if (story._id === this.id) {
             this.story = story;
             this.getWordCount(this.story.text);
-            if(this.story.htmlText == null) {
+            if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
             break;
@@ -170,25 +167,20 @@ export class DashboardComponent implements OnInit {
         );
   }
 
-/*
-* return the student's set of stories using the story service 
-*/
-  
+  // return the student's set of stories using the story service
   getStories(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.storyService.getStoriesForLoggedInUser().subscribe(
         (stories: Story[]) => {
           resolve(stories);
         }
-      )
+      );
     });
   }
 
-/*
-* return the story id using the routing parameters
-*/
+  // return the story id using the routing parameters
   getStoryId(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.route.params.subscribe(
         params => {
           resolve(params);
@@ -246,17 +238,17 @@ export class DashboardComponent implements OnInit {
     this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
-/*
-* Get audio feedback with function call 
-* Set feedback status to seen by student and remove story from not yet seen array
-* Add logged event for viewed feedback 
-*/
+
+  // Get audio feedback with function call
+  // Set feedback status to seen by student
+  // and remove story from not yet seen array
+  // Add logged event for viewed feedback
   getFeedback() {
     this.dictionaryVisible = false;
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if (this.story.feedback.text != "") {
+    if (this.story.feedback.text !== '') {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
@@ -265,9 +257,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* set the url for the audio source feedback 
-*/
+
+  // set the url for the audio source feedback
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
@@ -289,8 +280,8 @@ export class DashboardComponent implements OnInit {
   }
 
   // Get word count of story text
-  getWordCount(text) {
-    let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+  getWordCount(text: string) {
+    const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
     this.words = [];
     str.map((s) => {
       const trimStr = s.trim();
