@@ -27,20 +27,43 @@
           <!-- delete check box if deleteMode -->
           <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
           <!-- link the story to its dashboard -->
-          <div appHighlight [searchedWord]="searchText" [content]="story.title" [classToApply]="'font-weight-bold'" [setTitle]="'true'" 
-          [routerLink]="['/dashboard', story._id]" class="contentsLink"> 
-          {{story.title}}</div>
+          <div
+            appHighlight
+            [searchedWord]="searchText"
+            [content]="story.title"
+            [classToApply]="'font-weight-bold'"
+            [setTitle]="'true'" 
+            [routerLink]="['/dashboard', story._id]"
+            class="contentsLink"> 
+              {{story.title}}
+          </div>
           <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm a' }}</div>
           <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm a' }}</div>
         </div>
         <hr/>
       </div>
     </div>     
+
     <!-- delte and new story buttons -->
     <div class="contentsBtnsContainer">
-      <button class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><img src="assets/img/trash.ico" class="trashImg"></button>
-      <button *ngIf="isEnrolled" class="btn messagesBtn" (click)="goToMessages()"> {{ts.l.messages}} <span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></button>
-      <button class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}</button>
+      <button
+          class="btn deleteBtn"
+          [class.deleteModeBtn]="deleteMode"
+          (click)="toggleDeleteMode()">
+        <img src="assets/img/trash.ico" class="trashImg">
+      </button>
+      <button
+          *ngIf="isEnrolled"
+          class="btn messagesBtn"
+          (click)="goToMessages()">
+        {{ts.l.messages}}
+        <span class="notificationBtn" *ngIf="unreadMessages > 0">
+          {{unreadMessages}}
+        </span>
+      </button>
+      <button
+          class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}
+      </button>
     </div>        
   </div>
 </div>
