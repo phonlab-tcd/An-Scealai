@@ -5,7 +5,9 @@ import { TranslationService } from 'src/app/translation.service';
 import {
   GramadoirRuleId,
   GrammarService,
-  GramadoirTag } from 'src/app/grammar.service';
+  GramadoirTag,
+  DisagreeingVowelIndices,
+} from 'src/app/grammar.service';
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -26,14 +28,15 @@ export enum VOWEL {
   SLENDER
 }
 
-export type VowelAgreementHighlightTag = {
-  firstVowelType: VOWEL;
-  secondVowelType: VOWEL;
-  firstVowelIndex: number;
-  secondVowelIndex: number;
+export type VowelAgreementIndex = {
+  first: number;
+  second: number;
+  isFirst: boolean;
+  broadFirst: boolean;
 };
 
 const Parchment = Quill.import('parchment');
+
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
     'gramadoir-tag',
@@ -49,6 +52,14 @@ const gramadoirTagStyleType =
     {scope: Parchment.Scope.INLINE});
 
 Quill.register(gramadoirTagStyleType);
+
+const vowelAgreementAttributor =
+  new Parchment.Attributor.Attribute(
+    'vowel-agreement-tag',
+    'data-vowel-agreement-tag',
+    {scope: Parchment.Scope.INLINE});
+
+Quill.register(vowelAgreementAttributor);
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +88,8 @@ export class QuillHighlightService {
       this.grammar.gramadoirDirectObservable(text, 'ga')
       .toPromise();
 
-    const grammarCheckerErrors =
-      await this.grammar
+    const grammarCheckerErrorsPromise =
+      this.grammar
           .gramadoirDirectObservable(
             text,
             'en')
@@ -96,6 +107,9 @@ export class QuillHighlightService {
             ),
           ).toPromise();
 
+
+    const grammarCheckerErrors = await grammarCheckerErrorsPromise;
+
     const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
 
     grammarCheckerErrors.forEach((e, i) => {
@@ -107,19 +121,31 @@ export class QuillHighlightService {
 
   private applyVowelAgreementFormatting(
     quillEditor: Quill,
-    v: VowelAgreementHighlightTag) {
+    v: DisagreeingVowelIndices) {
+
+    (v as VowelAgreementIndex).isFirst = true;
+
+    const firstVowelAttributeValue: string =
+      JSON.stringify(v);
+
     quillEditor.formatText(
-      v.firstVowelIndex,
+      v.first,
       1,
       {
-        'vowel-agreement-tag': v.firstVowelType,
+        'vowel-agreement-tag': firstVowelAttributeValue,
       },
       'api');
+
+    (v as VowelAgreementIndex).isFirst = false;
+
+    const secondVowelAttributeValue: string =
+      JSON.stringify(v);
+
     quillEditor.formatText(
-       v.secondVowelIndex,
+       v.second,
        1,
        {
-         'vowel-agreement-tag': v.secondVowelType,
+         'vowel-agreement-tag': secondVowelAttributeValue,
        },
        'api');
 
@@ -127,12 +153,11 @@ export class QuillHighlightService {
 
   applyManyVowelAgreementFormatting(
     quillEditor: Quill,
-    vs: VowelAgreementHighlightTag[]) {
+    vs: DisagreeingVowelIndices[]) {
     if (!vs) { return; }
     for (const v of vs) {
       this.applyVowelAgreementFormatting(quillEditor, v);
     }
-
   }
 
   applyGramadoirTagFormatting(quillEditor: Quill) {
@@ -163,10 +188,21 @@ export class QuillHighlightService {
   }
 
   generateGramadoirTagTooltips(quillEditor: Quill) {
+    const disagreeingVowelIndices =
+      this.grammar.getDisagreeingVowelIndices(quillEditor.getText());
+
+    this.applyManyVowelAgreementFormatting(
+      quillEditor,
+      disagreeingVowelIndices);
+
     const gramadoirTags = document.querySelectorAll('[data-gramadoir-tag]') || [];
     gramadoirTags.forEach((t: HTMLElement) => {
       const unparsed = t.getAttribute('data-gramadoir-tag');
       const error = JSON.parse(unparsed);
+      error.vowelAgreementMessage =
+        this.grammar
+            .getVowelAgreementUserMessage(
+              t.getAttribute('data-vowel-agreement-tag'));
       this.createGrammarPopup(quillEditor, error, t);
     });
   }
@@ -190,6 +226,11 @@ export class QuillHighlightService {
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
       {'gramadoir-tag-style-type': null} // delete all gramadoir-tag's on the parchment
+    );
+    quillEditor.formatText(
+      0, // from the very beginning of the text
+      quillEditor.getLength(), // to the very end of the text
+      {'vowel-agreement-tag': null} // delete all gramadoir-tag's on the parchment
     );
   }
 
@@ -222,9 +263,14 @@ export class QuillHighlightService {
 
     error.tooltip.root.innerHTML =
       // Prefer user friendly message
-      userFriendlyMsgs ?
-      userFriendlyMsgs[this.ts.l.iso_code] :
-      error.messages[this.ts.l.iso_code];
+      ( userFriendlyMsgs ?
+        userFriendlyMsgs[this.ts.l.iso_code] :
+        error.messages[this.ts.l.iso_code]
+      ) +
+      ( (error as any).vowelAgreementMessage ?
+        '<hr>' + (error as any).vowelAgreementMessage :
+        ''
+      );
     error.tooltip.show();
     error.tooltip.position(bounds);
 

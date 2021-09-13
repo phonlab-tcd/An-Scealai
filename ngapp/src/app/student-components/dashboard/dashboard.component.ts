@@ -21,6 +21,7 @@ import { EngagementService } from '../../engagement.service';
 import {
   GrammarTag,
   GramadoirRuleId,
+  GrammarService,
 } from '../../grammar.service';
 
 // import { typeWithParameters } from '@angular/compiler/src/render3/util';
@@ -156,6 +157,7 @@ export class DashboardComponent implements OnInit {
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
+    private grammar: GrammarService,
   ) {
     this.textUpdated.pipe(
       debounceTime(1000),

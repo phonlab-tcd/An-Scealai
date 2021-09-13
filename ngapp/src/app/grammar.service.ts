@@ -11,9 +11,10 @@ import { HighlightTag } from 'angular-text-input-highlight';
 import { Story } from 'src/app/story';
 import { EngagementService } from 'src/app/engagement.service';
 import { EventType } from 'src/app/event';
+import { VowelAgreementIndex } from './services/quill-highlight.service';
 // import config from 'src/abairconfig.json';
 
-type DisagreeingVowelIndices = {
+export type DisagreeingVowelIndices = {
   broadFirst: boolean;
   first: number;
   second: number;
@@ -64,15 +65,14 @@ export class GrammarService {
     private storyService: StoryService,
     private http: HttpClient,
     private engagement: EngagementService,
+    private ts: TranslationService,
   ) { }
 
   string2GramadoirRuleId = (str: string): GramadoirRuleId =>
     GRAMADOIR_RULE_ID_VALUES.find(validType => str.includes(validType)) ||
     'default'
 
-  /*
-  * Set grammar and vowel tags of TagSet object
-  */
+  // Set grammar and vowel tags of TagSet object
   checkGrammar(id: string): Observable<any> {
     return this.getGramadoirTags(id);
   }
@@ -240,16 +240,26 @@ export class GrammarService {
     return this.getVowelAgreementTags(story.text);
   }
 
+
+  getVowelAgreementUserMessage(unparsedTag: string | null ): string {
+    if (!unparsedTag) { return ''; }
+    const parsed = JSON.parse(unparsedTag) as VowelAgreementIndex;
+    console.dir(parsed);
+    return  this.ts.l.vowels_should_agree ?
+            this.ts.l.vowels_should_agree :
+            'vowels_should_agree';
+  }
+
   // Takes in a story text and return an
   // array of vowel tags showing slender/broad
   // errors around consonants of words in the text
   getDisagreeingVowelIndices(text: string): DisagreeingVowelIndices[] {
     // Calculate which words need to be skipped, given the 'ignore' array.
-    let skipIndices = this.getSkipIndices(text);
-    let tags : HighlightTag[] = [];
+    const skipIndices = this.getSkipIndices(text);
+    const tags: DisagreeingVowelIndices[] = [];
     // Algorithm to find vowels in the same word on either side of one or more
     // consonants that arent in agreement.
-    for(let i=0; i<text.length-1; i++) {
+    for(let i = 0; i < text.length - 1; i++) {
       if(skipIndices[i] > 0) {
         i += skipIndices[i];
       }
@@ -266,7 +276,7 @@ export class GrammarService {
             const type = this.isLeathan(text[vowelIndex]) // true=BroadFirst false=SlenderFirst
             tags.push({broadFirst: type, first: vowelIndex, second: i});
           }
-        } 
+        }
       }
     }
     return tags;
@@ -347,13 +357,13 @@ export class GrammarService {
     return skipIndices;
   }
 
-  getAllIndexes(arr, val) : number[] {
+  getAllIndexes(arr: string, val: string | RegExp) : number[] {
     var indexes = [];
 
     let regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
     let match = regex.exec(arr);
-    
-    while(match) {
+
+    while (match) {
       regex = new RegExp(val);
       let interiorMatch = regex.exec(match[0])
       indexes.push(match.index + interiorMatch.index);

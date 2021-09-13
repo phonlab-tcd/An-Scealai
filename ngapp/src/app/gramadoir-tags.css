@@ -4,7 +4,6 @@
 
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
-  padding: 3px
 }
 span[data-gramadoir-tag-style-type] {
   border-radius: 3px;
@@ -34,4 +33,8 @@ span:not[data-gramadoir-tag-style-type] {
 
 [data-gramadoir-tag-style-type="CAIGHDEAN"] {
     background-color: #ffdc71;
+}
+
+[data-vowel-agreement-tag] {
+  background-color: lightpink;
 }
