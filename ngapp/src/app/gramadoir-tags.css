@@ -2,10 +2,18 @@
     content: none !important;
 }
 
+[data-vowel-agreement-tag]
+{
+  border-radius: 0;
+  border: 1px solid gray;
+}
+
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
 }
-span[data-gramadoir-tag-style-type] {
+span[data-gramadoir-tag-style-type]
+/*:not([data-vowel-agreement-tag])*/
+{
   border-radius: 3px;
 }
 
@@ -15,26 +23,76 @@ span:not[data-gramadoir-tag-style-type] {
   padding-right: 0px;
 }
 
-[data-gramadoir-tag-style-type="default"] {
+[data-gramadoir-tag-style-type]
+{
     background-color: #aed9ff; 
 }
 
-[data-gramadoir-tag-style-type="default"] > * {
-    background-color: #aed9ff; 
-}
-
-[data-gramadoir-tag-style-type="SEIMHIU"] {
+[data-gramadoir-tag-style-type="SEIMHIU"]
+{
     background-color: #a6dfc2;
 }
 
-[data-gramadoir-tag-style-type="CLAOCHLU"] {
+[data-gramadoir-tag-style-type="CLAOCHLU"]
+{
     background-color: #d1c3eb;
 }
 
-[data-gramadoir-tag-style-type="CAIGHDEAN"] {
+[data-gramadoir-tag-style-type="CAIGHDEAN"]
+{
     background-color: #ffdc71;
 }
 
-[data-vowel-agreement-tag] {
-  background-color: lightpink;
+[data-gramadoir-tag-style-type="CUPLA"],
+[data-gramadoir-tag-style-type="KESUNYANS"]
+{
+    background-color: #fcd694;
 }
+
+[data-gramadoir-tag-style-type="DROCHMHOIRF"]
+{
+    background-color: #21E9E9;
+}
+
+[data-gramadoir-tag-style-type="NEAMHCHOIT"],
+[data-gramadoir-tag-style-type="NAMMENOWGH"],
+[data-gramadoir-tag-style-type="UNCOMMON"]{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="DUBAILTE"]{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="IOLRA"]
+{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="UATHA"]
+{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="AIDIOLRA"]
+{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="BREISCHEIM"]
+{
+    background-color: black;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="BACHOIR"]
+{
+    background-color: black;
+    color: white;
+}
+
