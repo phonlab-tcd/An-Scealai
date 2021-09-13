@@ -142,7 +142,8 @@ export class DashboardComponent implements OnInit {
       [{ align: [] }],
       ['clean'],                                         // remove formatting button
       //  ['link', 'image', 'video']                        // link and image, video
-    ]
+    ],
+    scrollingContainer: false,
   };
 
   constructor(

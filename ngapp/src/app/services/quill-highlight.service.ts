@@ -101,7 +101,7 @@ export class QuillHighlightService {
                   length: + tag.tox + 1 - tag.fromx,
                   type: this.grammar.string2GramadoirRuleId(tag.ruleId),
                   tooltip: null,
-                  messages: { en: tag.msg},
+                  messages: { en: tag.ruleId + '<hr>' + tag.msg}, // TODO remove ruleId
                 }) as QuillHighlightTag
               )
             ),
@@ -195,15 +195,10 @@ export class QuillHighlightService {
       quillEditor,
       disagreeingVowelIndices);
 
-    const gramadoirTags = document.querySelectorAll('[data-gramadoir-tag]') || [];
+    const gramadoirTags: NodeListOf<Element> | [] =
+      document.querySelectorAll('[data-gramadoir-tag]') || [];
     gramadoirTags.forEach((t: HTMLElement) => {
-      const unparsed = t.getAttribute('data-gramadoir-tag');
-      const error = JSON.parse(unparsed);
-      error.vowelAgreementMessage =
-        this.grammar
-            .getVowelAgreementUserMessage(
-              t.getAttribute('data-vowel-agreement-tag'));
-      this.createGrammarPopup(quillEditor, error, t);
+      this.createGrammarPopup(quillEditor, t);
     });
   }
 
@@ -234,16 +229,23 @@ export class QuillHighlightService {
     );
   }
 
-  private createGrammarPopup(quillEditor: Quill, error: QuillHighlightTag, tagElement: Element) {
+  private createGrammarPopup(
+    quillEditor: Quill,
+    tagElement: Element)
+  {
+    const unparsed = tagElement.getAttribute('data-gramadoir-tag');
+    const error = JSON.parse(unparsed);
+
     // Create a customised quill tooltip containing
     // a message about the grammar error
     const bounds = quillEditor.getBounds(error.start, error.length);
     error.tooltip = new Tooltip(quillEditor);
     error.tooltip.root.classList.add('custom-tooltip');
+    error.tooltip.root.style.zIndex = '-1000000';
 
     // Add hover UI logic to the grammar error span element
     tagElement.addEventListener('mouseover', () => {
-      this.mouseOverTagElem(quillEditor, error, bounds);
+      this.mouseOverTagElem(quillEditor, error, bounds, tagElement);
     });
 
     tagElement.addEventListener('mouseout', () => {
@@ -255,24 +257,39 @@ export class QuillHighlightService {
     quillEditor: Quill,
     error: QuillHighlightTag,
     bounds: any,
+    tagElement: Element,
   )
   {
     const userFriendlyMsgs =
       this.grammar
           .userFriendlyGramadoirMessage[error.type];
 
+    const v: string = tagElement.getAttribute('data-vowel-agreement-tag');
+
+    let vowelAgreementMessage: string =
+      this.grammar
+          .getVowelAgreementUserMessage(v);
+
+    if (vowelAgreementMessage) {
+      vowelAgreementMessage = '<hr>' + vowelAgreementMessage;
+    }
+
     error.tooltip.root.innerHTML =
       // Prefer user friendly message
       ( userFriendlyMsgs ?
         userFriendlyMsgs[this.ts.l.iso_code] :
         error.messages[this.ts.l.iso_code]
-      ) +
-      ( (error as any).vowelAgreementMessage ?
-        '<hr>' + (error as any).vowelAgreementMessage :
-        ''
-      );
+      ) + vowelAgreementMessage;
+
     error.tooltip.show();
     error.tooltip.position(bounds);
+
+    console.log('tooltip');
+    console.dir(error.tooltip);
+
+    let style = error.tooltip.root.getAttribute('style') || '';
+    style = style + 'font-size: medium; z-index: 1000000;';
+    error.tooltip.root.setAttribute('style', style);
 
     // Ensure that tooltip isn't cut off by the right edge of the editor
     const rightOverflow =
@@ -289,5 +306,7 @@ export class QuillHighlightService {
       (error.tooltip.root.offsetLeft < 0) ?
       `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
       error.tooltip.root.style.left;
+
+    console.dir(error.tooltip.root);
   }
 }
