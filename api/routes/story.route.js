@@ -3,7 +3,7 @@ const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
-const querystring = require('querystring');
+const qs = require('querystring');
 const request = require('request');
 const makeEndpoints = require('../utils/makeEndpoints');
 const { parse, stringify } = require('node-html-parser');
@@ -387,7 +387,7 @@ function synthesiseStory(story) {
   };
 
   // turn form into a url query string
-  let formData = querystring.stringify(form);
+  let formData = qs.stringify(form);
   let contentLength = formData.length;
 
   return new Promise((resolve, reject) => {
@@ -447,7 +447,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
         teanga: req.params.lang,
       };
 
-      const formData = querystring.stringify(form);
+      const formData = qs.stringify(form);
 
       request({
         headers: {
