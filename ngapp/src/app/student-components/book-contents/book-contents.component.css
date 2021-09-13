@@ -139,6 +139,7 @@ border-radius: 5px 5px 5px 5px;
     color: white;
     font-size: 12pt;
     border-radius: 5px 5px 5px 5px;
+    display: flex;
 }
 
 .messagesBtn:hover {
