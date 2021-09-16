@@ -24,8 +24,15 @@
           <div *ngIf="storySaved" class="savedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>
-          <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
-            {{ts.l.save}} <i class="fas fa-save"></i>
+          <div
+            *ngIf="!storySaved"
+            class="savedIcon"
+            >
+              {{ts.l.saving}}
+              <i
+                class="fas fa-save"
+                >
+              </i>
           </div>
         </div>
       </div>

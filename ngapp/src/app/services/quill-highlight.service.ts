@@ -259,6 +259,11 @@ export class QuillHighlightService {
     tagElement: Element,
   )
   {
+    // for some reason bounds aren't calculated correctly until someone scrolls
+    const scrollTop = quillEditor.root.scrollTop;
+    quillEditor.root.scroll({top: + scrollTop + 1});
+    quillEditor.root.scroll({top: + scrollTop});
+
     const userFriendlyMsgs =
       this.grammar
           .userFriendlyGramadoirMessage[error.type];

@@ -24,7 +24,7 @@ import {
   GrammarService,
 } from '../../grammar.service';
 
-// import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
@@ -74,6 +74,7 @@ export class DashboardComponent implements OnInit {
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
   stories: Story[];
+  saveStoryDebounceId = 0;
   id: string;
   storyFound: boolean;
   storySaved = true;
@@ -185,10 +186,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /* set the stories array of all the student's stories
-  * set the stories array of all the student's stories w
-  * and the current story being edited given its id from url
-  */
+  // set the stories array of all the student's stories
+  // set the stories array of all the student's stories w
+  // and the current story being edited given its id from url
   ngOnInit() {
     this.storySaved = true;
     // Get the stories from the storyService and run
@@ -274,7 +274,7 @@ export class DashboardComponent implements OnInit {
 
   // Update story data (text and date) using story service
   // Add logged event for saved story  using engagement service
-  async saveStory() {
+  async saveStory(debounceId: number | 'modal', finishedWritingTime: Date) {
     const saveAttempt = new Date();
     this.mostRecentAttemptToSaveStory = saveAttempt;
 
@@ -287,9 +287,11 @@ export class DashboardComponent implements OnInit {
         clone(this.story.htmlText));
 
     const updateData = {
+      title: this.story.title,
+      dialect: this.story.dialect,
       text : this.story.text,
       htmlText: unhighlightedHtmlText,
-      lastUpdated : new Date(),
+      lastUpdated : finishedWritingTime,
     };
 
     this.engagement
@@ -302,8 +304,16 @@ export class DashboardComponent implements OnInit {
         .updateStory(updateData, this.story._id)
         .toPromise();
 
-
-    try { await saveStoryPromise; }
+    try {
+      await saveStoryPromise;
+      if (debounceId === this.saveStoryDebounceId) {
+        this.storySaved = true;
+        console.count('STORY SAVED');
+        console.log(debounceId);
+      } else if (debounceId === 'modal') {
+        this.storySaved = true;
+      }
+    }
     catch (error) {
       window.alert('Error while trying to save story: ' + error.message);
       throw error;
@@ -317,7 +327,6 @@ export class DashboardComponent implements OnInit {
       window.alert('Error setting storySaved to true: ' + error.message);
       throw error;
     }
-
     return;
   }
 
@@ -325,11 +334,25 @@ export class DashboardComponent implements OnInit {
     return text
         .replace(
             /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,
+            '')
+        .replace(
+            /\s*data-vowel-agreement-tag="([^"])+"/g,
             '');
   }
 
-  stripEmptySpansFromQuillHtml(text: string) {
-    // return text.replace(/<span>|<\/span>/, '');
+  debounceSaveStory() {
+    this.saveStoryDebounceId++;
+    const myId = this.saveStoryDebounceId;
+    const finishedWritingTime = new Date();
+    setTimeout(() => {
+      this.saveStoryDebounceCallback(myId, finishedWritingTime);
+    }, 1000);
+  }
+
+  saveStoryDebounceCallback(myId: number, finishedWritingTime: Date) {
+    if (myId === this.saveStoryDebounceId) {
+      this.saveStory(myId, finishedWritingTime);
+    }
   }
 
   showDictionary() {
@@ -365,23 +388,21 @@ export class DashboardComponent implements OnInit {
   }
 
   // Set story.text to most recent version of editor text and then switch to storyEditedAlt
-  // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
   storyEdited(q: any) {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-
     this.storyEdited = this.storyEditedAlt;
   }
 
-  // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
   storyEditedAlt(q: any) {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-
     this.storySaved = false;
+    this.debounceSaveStory();
   }
+
 
   downloadStoryUrl() {
     return config.baseurl +
@@ -439,29 +460,6 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-  // Update the grammar error map
-  // of the stat object corresponding
-  // to the current student id
-
-
-  // Update the grammar error map of the
-  // stat object corresponding to the current student id
-  /*
-  updateStats() {
-    const updatedTimeStamp = new Date();
-    const userDetails = this.auth.getUserDetails();
-
-    if (!userDetails) { return; }
-
-    this.statsService
-        .updateGrammarErrors(
-          userDetails._id,
-          this.grammarChecker.filteredTags,
-          updatedTimeStamp)
-        .subscribe();
-  }
-  */
-
   // set modalClass to visible fade
   showModal() {
     this.modalClass = 'visibleFade';
@@ -481,7 +479,7 @@ export class DashboardComponent implements OnInit {
   // save story and set next modal choice to true
   async saveModal() {
     try {
-      await this.saveStory();
+      await this.saveStory('modal', new Date());
       this.modalChoice.next(true);
     } catch (error) {
       window.alert('Your story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.');

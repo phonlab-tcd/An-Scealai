@@ -230,9 +230,8 @@ export class GrammarCheckerComponent implements
     });
   }
 
-  /*
-  * Update the grammar error map of the stat object corresponding to the current student id
-  */
+  // Update the grammar error map of the stat object
+  // corresponding to the current student id
   updateStats() {
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
@@ -245,25 +244,21 @@ export class GrammarCheckerComponent implements
         .updateGrammarErrors(
             userDetails._id,
             this.filteredTags,
-            updatedTimeStamp,
-        ).subscribe();
+            updatedTimeStamp)
+        .subscribe();
   }
 
-  /*
-  * Set tags to vowel tags or grammar tags based on event value
-  */
+  // Set tags to vowel tags or grammar tags based on event value
   onChangeGrammarFilter(eventValue: FILTER) {
     this.chosenTag = null;
     this.grammarCheckerTextArea?.nativeElement.scrollTo(0, 0);
     this.selectedFilter = eventValue;
   }
 
-  /**
-   * Gets an array of HighlighTags for which the associated grammar error category
-   * is selected according to the checkBox map.
-   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
-   * HighlightTags for seimhiu.
-   */
+  // Gets an array of HighlighTags for which the associated grammar error category
+  // is selected according to the checkBox map.
+  // E.g. if 'seimhiu' checkbox is selected, then this will return the array of
+  // HighlightTags for seimhiu.
   getSelectedTags(): HighlightTag[] {
     // Get only those filteredTags whose keys map to true in checkBox
     const selectedTagsLists =
@@ -279,7 +274,8 @@ export class GrammarCheckerComponent implements
             }
           );
     // Flatten 2d array of HighlightTags
-    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
+    const selectedTags =
+      selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
     return selectedTags;
   }
 
