@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BookContentsComponent } from './book-contents.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FilterPipe } from 'src/app/pipes/filter.pipe';
 
 describe('BookContentsComponent', () => {
   let component: BookContentsComponent;
@@ -9,8 +10,8 @@ describe('BookContentsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [ BookContentsComponent ]
+      imports: [ RouterTestingModule, HttpClientTestingModule],
+      declarations: [ FilterPipe, BookContentsComponent ]
     })
     .compileComponents();
   }));
