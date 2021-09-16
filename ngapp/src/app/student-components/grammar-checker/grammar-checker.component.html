@@ -55,7 +55,7 @@
   <!-- display story container after grammar checked -->
   <div class="textFieldContainer">
     <!-- display chosen tag window -->
-    <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
+    <div class="grammarMessageContainer">
       <span *ngIf="ts.l.iso_code === 'ga'">
         {{chosenTag?.messageIrish ?
           chosenTag.messageIrish :
