@@ -158,12 +158,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /*
-  * Update story data (text and date) using story service 
-  * Add logged event for saved story  using engagement service
-  */
-  saveStory(finishedWritingTime: Date) {
+  // Update story data (text and date) using story service
+  // Add logged event for saved story  using engagement service
+  saveStory(debounceId: number | 'modal', finishedWritingTime: Date) {
     const updateData = {
+      title: this.story.title,
+      dialect: this.story.dialect,
       text : this.story.text,
       htmlText: this.story.htmlText,
       lastUpdated: finishedWritingTime,
@@ -173,7 +173,13 @@ export class DashboardComponent implements OnInit {
         .toPromise()
         .then(
           () => {
-            this.storySaved = true;
+            if (debounceId === this.saveStoryDebounceId) {
+              this.storySaved = true;
+              console.count('STORY SAVED');
+              console.log(debounceId);
+            } else if (debounceId === 'modal') {
+              this.storySaved = true;
+            }
           },
           (error) => {
             window.alert(
@@ -183,9 +189,7 @@ export class DashboardComponent implements OnInit {
         );
 
     this.engagement
-        .addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
-
-    console.log("Story saved");
+        .addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
   }
 
   debounceSaveStory() {
@@ -199,7 +203,7 @@ export class DashboardComponent implements OnInit {
 
   saveStoryDebounceCallback(myId: number, finishedWritingTime: Date) {
     if (myId === this.saveStoryDebounceId) {
-      this.saveStory(finishedWritingTime);
+      this.saveStory(myId, finishedWritingTime);
     }
   }
   showDictionary() {
@@ -466,7 +470,7 @@ export class DashboardComponent implements OnInit {
 
   // save story and set next modal choice to true 
   saveModal() {
-    this.saveStory(new Date());
+    this.saveStory('modal', new Date());
     this.modalChoice.next(true);
   }
 
