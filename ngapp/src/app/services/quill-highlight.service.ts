@@ -8,6 +8,7 @@ import {
   GramadoirTag,
   DisagreeingVowelIndices,
 } from 'src/app/grammar.service';
+import {EngagementService} from "../engagement.service";
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -69,8 +70,9 @@ export class QuillHighlightService {
   currentGramadoirHighlightTags: QuillHighlightTag[] = [];
 
   constructor(
-  private grammar: GrammarService,
-  private ts: TranslationService,
+    private grammar: GrammarService,
+    private ts: TranslationService,
+    private engagement: EngagementService,
   ) { }
 
   async updateGrammarErrors(quillEditor: Quill, text: string) {
@@ -300,5 +302,7 @@ export class QuillHighlightService {
       (error.tooltip.root.offsetLeft < 0) ?
       `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
       error.tooltip.root.style.left;
+
+    this.engagement.mouseOverGrammarSuggestionEvent(error);
   }
 }
