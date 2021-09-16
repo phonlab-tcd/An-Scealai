@@ -55,23 +55,33 @@
   <!-- display story container after grammar checked -->
   <div class="textFieldContainer">
     <!-- display chosen tag window -->
-    <div class="grammarMessageContainer">
-      <span
-          *ngIf="chosenTag; else grammarMessagePlaceholder"
-          style="width: 60vw; float: left;">
-        {{getGramadoirMessage()}}
+    <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
+      <span *ngIf="ts.l.iso_code === 'ga'">
+        {{chosenTag?.messageIrish ?
+          chosenTag.messageIrish :
+          ts.l[chosenTag?.message] }}
       </span>
-      <ng-template #grammarMessagePlaceholder>
-        <span class="placeHolderText">
-          {{ts.l.choose_an_error}}
-        </span>
-      </ng-template>
-      <div
-          *ngIf="gramadoirErrorMessage"
-          class="has-error"
-          style="width: 30vw; float: right; color: maroon;"
-          >
-        {{gramadoirErrorMessage}}
+      <span *ngIf="ts.l.iso_code === 'en'">
+        {{chosenTag?.messageEnglish ?
+          chosenTag.messageEnglish :
+          ts.l[chosenTag.message] }}
+      </span>
+      <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">
+        {{ts.l.choose_an_error}}
+      </span>
+    </div>
+
+    <div class="grammarToolbar">
+      <div>
+        <i class="fa fa-redo-alt refreshGrammar"
+           (click)="runGramadoir()">
+        </i>
+      </div>
+      <div class="selectGrammarFilter">
+        <select (change)="onChangeGrammarFilter($event.target.value)">
+          <option value="gramadoir">{{ts.l.gramadoir}}</option>
+          <option value="vowel">{{ts.l.broad_slender}}</option>
+        </select>
       </div>
     </div>
 
