@@ -238,14 +238,12 @@ export class QuillHighlightService {
 
     // Create a customised quill tooltip containing
     // a message about the grammar error
-    const bounds = quillEditor.getBounds(error.start, error.length);
     error.tooltip = new Tooltip(quillEditor);
     error.tooltip.root.classList.add('custom-tooltip');
-    error.tooltip.root.style.zIndex = '-1000000';
 
     // Add hover UI logic to the grammar error span element
     tagElement.addEventListener('mouseover', () => {
-      this.mouseOverTagElem(quillEditor, error, bounds, tagElement);
+      this.mouseOverTagElem(quillEditor, error, tagElement);
     });
 
     tagElement.addEventListener('mouseout', () => {
@@ -256,7 +254,6 @@ export class QuillHighlightService {
   private mouseOverTagElem(
     quillEditor: Quill,
     error: QuillHighlightTag,
-    bounds: any,
     tagElement: Element,
   )
   {
@@ -282,13 +279,10 @@ export class QuillHighlightService {
       ) + vowelAgreementMessage;
 
     error.tooltip.show();
-    error.tooltip.position(bounds);
-
-    console.log('tooltip');
-    console.dir(error.tooltip);
+    error.tooltip.position(quillEditor.getBounds(error.start, error.length));
 
     let style = error.tooltip.root.getAttribute('style') || '';
-    style = style + 'font-size: medium; z-index: 1000000;';
+    style = style + 'font-size: medium; z-index: 10000001;';
     error.tooltip.root.setAttribute('style', style);
 
     // Ensure that tooltip isn't cut off by the right edge of the editor
@@ -306,7 +300,5 @@ export class QuillHighlightService {
       (error.tooltip.root.offsetLeft < 0) ?
       `${(error.tooltip.root.offsetLeft - error.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
       error.tooltip.root.style.left;
-
-    console.dir(error.tooltip.root);
   }
 }
