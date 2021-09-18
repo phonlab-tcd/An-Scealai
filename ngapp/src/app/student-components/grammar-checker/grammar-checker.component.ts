@@ -100,15 +100,14 @@ export class GrammarCheckerComponent implements
     this.synchroniseVowelAgreementChecker();
   }
 
-  /*
-  * Set boolean variables for
-  * checking data / grammar window
-  * in interface
-  * Check grammar using grammar service
-  * Set grammar tags using grammar
-  * service subscription and filter them by rule
-  * Add logged event for checked grammar
-  */
+  
+  // Set boolean variables for
+  // checking data / grammar window
+  // in interface
+  // Check grammar using grammar service
+  // Set grammar tags using grammar
+  // service subscription and filter them by rule
+  // Add logged event for checked grammar
   async runGramadoir(): Promise<void> {
     this.putFocusOnGrammarTextArea();
     // PUT BACKEND REQUEST IN THE QUEUE
@@ -177,12 +176,11 @@ export class GrammarCheckerComponent implements
     this.gramadoirErrorMessage = null;
   }
 
-  /*
-  * filter the grammar tags using a map
-  * key: rule name
-  * value: array of tags that match the rule
-  * sets checkBox map value to false (value) for each rule (key)
-  */
+  
+  // filter the grammar tags using a map
+  // key: rule name
+  // value: array of tags that match the rule
+  // sets checkBox map value to false (value) for each rule (key)
   filterTags() {
     this.filteredTags.clear();
     this.classroomService.getGrammarRules(
@@ -195,7 +193,7 @@ export class GrammarCheckerComponent implements
             for (const tag of this.tagSets[FILTER.GRAMADOIR]) {
               let values: HighlightTag[] = [];
               let rule: string = tag.data.english.ruleId.substring(22);
-              const rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
+              const rx = rule.match(/(\b[A-Z][A-Z]+)/g);
               rule = rx[0];
               // check against errors that the teacher provides
               if (this.teacherSelectedErrors.length > 0) {

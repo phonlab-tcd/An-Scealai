@@ -9,19 +9,21 @@ import {
   DisagreeingVowelIndices,
 } from 'src/app/grammar.service';
 import {EngagementService} from "../engagement.service";
+import { reject } from 'lodash';
 
 const Tooltip = Quill.import('ui/tooltip');
+
+export type Messages = {
+  en: string;
+  ga: string;
+};
 
 export type QuillHighlightTag = {
   start: number;
   length: number;
   type: GramadoirRuleId;
   tooltip: any;
-  color: string;
-  messages: {
-    en: string;
-    ga: string;
-  };
+  messages: Messages;
 };
 
 export enum VOWEL {
@@ -68,6 +70,10 @@ Quill.register(vowelAgreementAttributor);
 export class QuillHighlightService {
   mostRecentGramadoirInput = null;
   currentGramadoirHighlightTags: QuillHighlightTag[] = [];
+  currentFilteredHighlightTags: QuillHighlightTag[] = [];
+  public showLeathanCaol = true;
+  public mostRecentHoveredMessages: Messages | null =
+      null;
 
   constructor(
     private grammar: GrammarService,
@@ -75,10 +81,10 @@ export class QuillHighlightService {
     private engagement: EngagementService,
   ) { }
 
-  async updateGrammarErrors(quillEditor: Quill, text: string) {
+  async updateGrammarErrors(quillEditor: Quill, text: string): Promise<object> {
     // my tslint server keeps
     // asking me to brace these guys
-    if (!quillEditor) { return; }
+    if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
 
     this.clearAllGramadoirTags(quillEditor);
 
@@ -90,6 +96,8 @@ export class QuillHighlightService {
       this.grammar.gramadoirDirectObservable(text, 'ga')
       .toPromise();
 
+    const currentGramadoirErrorTypes: object = {};
+
     const grammarCheckerErrorsPromise =
       this.grammar
           .gramadoirDirectObservable(
@@ -97,14 +105,21 @@ export class QuillHighlightService {
             'en')
           .pipe(
             map((tagData: GramadoirTag[]) =>
-              tagData.map(tag =>
-                ({
-                  start: + tag.fromx,
-                  length: + tag.tox + 1 - tag.fromx,
-                  type: this.grammar.string2GramadoirRuleId(tag.ruleId),
-                  tooltip: null,
-                  messages: { en: tag.ruleId + '<hr>' + tag.msg}, // TODO remove ruleId
-                }) as QuillHighlightTag
+              tagData.map(tag => {
+                  const ruleIdShort =
+                    this.grammar.string2GramadoirRuleId(tag.ruleId);
+                  currentGramadoirErrorTypes[ruleIdShort] ?
+                  currentGramadoirErrorTypes[ruleIdShort]++ :
+                  currentGramadoirErrorTypes[ruleIdShort] = 1;
+                  const qTag: QuillHighlightTag = {
+                    start: + tag.fromx,
+                    length: + tag.tox + 1 - tag.fromx,
+                    type: ruleIdShort,
+                    tooltip: null,
+                    messages: { en: tag.msg, ga: null}, 
+                  };
+                  return qTag;
+                }
               )
             ),
           ).toPromise();
@@ -117,8 +132,8 @@ export class QuillHighlightService {
     grammarCheckerErrors.forEach((e, i) => {
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
-
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
+    return currentGramadoirErrorTypes;
   }
 
   private applyVowelAgreementFormatting(
@@ -153,6 +168,17 @@ export class QuillHighlightService {
 
   }
 
+  filterGramadoirTags(filter: object) {
+    this.currentFilteredHighlightTags = [];
+    this.currentGramadoirHighlightTags
+        .forEach((t) => {
+          if (filter[t.type]) {
+            this.currentFilteredHighlightTags.push(t);
+          }
+        });
+
+  }
+
   applyManyVowelAgreementFormatting(
     quillEditor: Quill,
     vs: DisagreeingVowelIndices[]) {
@@ -163,9 +189,8 @@ export class QuillHighlightService {
   }
 
   applyGramadoirTagFormatting(quillEditor: Quill) {
-    if (!this.currentGramadoirHighlightTags) { return; }
-
-    this.currentGramadoirHighlightTags
+    if (!this.currentFilteredHighlightTags) { return; }
+    this.currentFilteredHighlightTags
         .forEach((error) => {
           // Add highlighting to error text
           quillEditor
@@ -179,23 +204,18 @@ export class QuillHighlightService {
                   'user'
               );
         });
-
     this.generateGramadoirTagTooltips(quillEditor);
-
-    // const gramadoirSpans = document.querySelectorAll('[data-gramadoir-tag]');
-
-    // this.currentGramadoirHighlightTags.forEach((error, i) => {
-    //   this.createGrammarPopup(quillEditor, error, gramadoirSpans[i]);
-    // });
   }
 
   generateGramadoirTagTooltips(quillEditor: Quill) {
-    const disagreeingVowelIndices =
-      this.grammar.getDisagreeingVowelIndices(quillEditor.getText());
 
-    this.applyManyVowelAgreementFormatting(
-      quillEditor,
-      disagreeingVowelIndices);
+    if (this.showLeathanCaol) {
+      const disagreeingVowelIndices =
+        this.grammar.getDisagreeingVowelIndices(quillEditor.getText());
+      this.applyManyVowelAgreementFormatting(
+        quillEditor,
+        disagreeingVowelIndices);
+    }
 
     const gramadoirTags: NodeListOf<Element> | [] =
       document.querySelectorAll('[data-gramadoir-tag]') || [];
@@ -274,16 +294,24 @@ export class QuillHighlightService {
       this.grammar
           .getVowelAgreementUserMessage(v);
 
+    let mainMessagePart; 
+    if (userFriendlyMsgs) {
+      this.mostRecentHoveredMessages =
+        userFriendlyMsgs;
+      mainMessagePart =
+        userFriendlyMsgs[this.ts.l.iso_code];
+    } else {
+      this.mostRecentHoveredMessages =
+        error.messages;
+      mainMessagePart =
+        error.messages[this.ts.l.iso_code];
+    }
     if (vowelAgreementMessage) {
       vowelAgreementMessage = '<hr>' + vowelAgreementMessage;
     }
-
     error.tooltip.root.innerHTML =
       // Prefer user friendly message
-      ( userFriendlyMsgs ?
-        userFriendlyMsgs[this.ts.l.iso_code] :
-        error.messages[this.ts.l.iso_code]
-      ) + vowelAgreementMessage;
+      mainMessagePart + vowelAgreementMessage;
 
     error.tooltip.show();
     error.tooltip.position(quillEditor.getBounds(error.start, error.length));
