@@ -90,6 +90,8 @@ export class DashboardComponent implements OnInit {
   grammarTagsHidden = true;
   mostRecentGramadoirInput: string = null;
   currentGramadoirHighlightTags: QuillHighlightTag[] = null;
+  grammarTagFilter: object = {};
+  currentGrammarErrorTypes = {};
   modalClass = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: string[] = [];
@@ -172,7 +174,15 @@ export class DashboardComponent implements OnInit {
         this.grammarLoading = true;
         await this.quillHighlightService
             .updateGrammarErrors(this.quillEditor, textToCheck)
-            .then(() => {
+            .then((errTypes: object) => {
+              this.currentGrammarErrorTypes = errTypes;
+              Object.keys(errTypes).forEach((k) => {
+                this.grammarTagFilter[k] !== undefined ?
+                this.grammarTagFilter[k] = this.grammarTagFilter[k] :
+                this.grammarTagFilter[k] = true;
+              });
+              this.quillHighlightService
+                  .filterGramadoirTags(this.grammarTagFilter);
               this.grammarTagsHidden ?
               this.quillHighlightService
                   .clearAllGramadoirTags(this.quillEditor) :
@@ -184,6 +194,46 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+  }
+
+  grammarCheckBoxEvent(key: string, event: boolean) {
+    this.grammarTagFilter[key] = event;
+    this.quillHighlightService
+        .filterGramadoirTags(this.grammarTagFilter);
+    this.quillHighlightService
+        .clearAllGramadoirTags(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
+  }
+
+  leathanCaolCheckBox(event: boolean) {
+    this.quillHighlightService.showLeathanCaol = event;
+    console.log(this.quillHighlightService.showLeathanCaol,event);
+    this.quillHighlightService
+        .clearAllGramadoirTags(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
+  }
+
+  setAllCheckBoxes(value: boolean) {
+    this.quillHighlightService
+        .showLeathanCaol = value;
+    Object.keys(this.grammarTagFilter)
+        .forEach((k) => {
+          this.grammarTagFilter[k] = value;
+        });
+    this.quillHighlightService
+        .filterGramadoirTags(this.grammarTagFilter);
+    this.quillHighlightService
+        .clearAllGramadoirTags(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
   }
 
   // set the stories array of all the student's stories

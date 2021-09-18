@@ -167,6 +167,31 @@
       </div>
     </div>
 
+    <div class="selectErrorCheckbox">
+      <div *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)" style="margin:2px;">
+        <input
+            [(ngModel)]="grammarTagFilter[recipient.key]"
+            (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
+            type="checkbox">
+          {{recipient.key | lowercase}} ({{recipient.value}})
+      </div> 
+      <div style="margin: 2px;">
+        <input 
+          [(ngModel)]="quillHighlightService.showLeathanCaol"
+          (ngModelChange)="leathanCaolCheckBox($event)"
+          type="checkbox">
+          leathan/caol
+      </div>
+      <button
+        (click)="setAllCheckBoxes(false)">
+        {{ ts.l.uncheck_all ? ts.l.uncheck_all : 'uncheck_all'}}
+      </button>
+      <button
+        (click)="setAllCheckBoxes(true)">
+        {{ ts.l.check_all ? ts.l.check_all : 'check_all'}}
+      </button>
+    </div>
+
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
@@ -269,6 +294,11 @@
       <!-- Word Count -->
       <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px; padding-top: 0; margin-top: 0;">
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
+      </div>
+      <div>
+        {{ quillHighlightService.mostRecentHoveredMessages ?
+            quillHighlightService.mostRecentHoveredMessages[ts.l.iso_code] :
+            'hover_over_a_highlighted_word_for_a_grammar_suggestion'}}
       </div>
       
       <!--
