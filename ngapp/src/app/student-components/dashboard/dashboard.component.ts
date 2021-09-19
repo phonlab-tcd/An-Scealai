@@ -88,6 +88,7 @@ export class DashboardComponent implements OnInit {
   grammarLoading = true;
   grammarSelected = true;
   grammarTagsHidden = true;
+  grammarSettingsHidden = false;
   mostRecentGramadoirInput: string = null;
   currentGramadoirHighlightTags: QuillHighlightTag[] = null;
   grammarTagFilter: object = {};
@@ -98,6 +99,7 @@ export class DashboardComponent implements OnInit {
   classroomId: string;
   selectTeanglann = true;
   selectExternalLinks = false;
+  quillEditorStyle: { height: string; } = { height: '10vh' };
 
   downloadStoryFormat = '.pdf';
 
@@ -146,22 +148,22 @@ export class DashboardComponent implements OnInit {
       ['clean'],                                         // remove formatting button
       //  ['link', 'image', 'video']                        // link and image, video
     ],
-    scrollingContainer: false,
+    // scrollingContainer: false,
   };
 
   constructor(
-    private quillHighlightService: QuillHighlightService,
+    protected sanitizer: DomSanitizer,
     private storyService: StoryService,
     private route: ActivatedRoute,
     private auth: AuthenticationService,
-    protected sanitizer: DomSanitizer,
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
+    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
-    private grammar: GrammarService,
+    public quillHighlightService: QuillHighlightService,
   ) {
     this.textUpdated.pipe(
       debounceTime(1000),
@@ -196,6 +198,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getSelectedMessage() {
+    return this.quillHighlightService.getMostRecentMessage();
+  }
+
   grammarCheckBoxEvent(key: string, event: boolean) {
     this.grammarTagFilter[key] = event;
     this.quillHighlightService
@@ -210,7 +216,7 @@ export class DashboardComponent implements OnInit {
 
   leathanCaolCheckBox(event: boolean) {
     this.quillHighlightService.showLeathanCaol = event;
-    console.log(this.quillHighlightService.showLeathanCaol,event);
+    console.log(this.quillHighlightService.showLeathanCaol, event);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
     if (!this.grammarTagsHidden) {
@@ -320,6 +326,8 @@ export class DashboardComponent implements OnInit {
     this.grammarTagsHidden = false;
     this.quillHighlightService
         .applyGramadoirTagFormatting(this.quillEditor);
+
+    this.quillEditorStyle.height = '10vh';
   }
 
   // Update story data (text and date) using story service
@@ -406,8 +414,10 @@ export class DashboardComponent implements OnInit {
   }
 
   showDictionary() {
-    this.dictionaryVisible = true;
-    this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
+    if (!!this.dictionaryVisible === false) {
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
+    }
+    this.dictionaryVisible = !this.dictionaryVisible;
   }
 
   // Get audio feedback with function call
@@ -415,8 +425,7 @@ export class DashboardComponent implements OnInit {
   // and remove story from not yet seen array
   // Add logged event for viewed feedback
   getFeedback() {
-    this.dictionaryVisible = false;
-    this.feedbackVisible = true;
+    this.feedbackVisible = !this.feedbackVisible;
     this.getFeedbackAudio();
     // set feedback status to seen by student
     if (this.story.feedback.text !== '') {
