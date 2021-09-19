@@ -1,7 +1,17 @@
-import { Component, OnInit, HostListener, ViewEncapsulation, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewEncapsulation,
+  ViewChild,
+  Renderer2 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  NavigationEnd,
+  NavigationStart } from '@angular/router';
 import { AuthenticationService } from '../../authentication.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NotificationService } from '../../notification-service.service';
@@ -14,6 +24,9 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import { Quill } from 'quill';
+import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +37,10 @@ import { ClassroomService } from '../../classroom.service';
 
 export class DashboardComponent implements OnInit {
 
+  @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+
   story: Story = new Story();
+  mostRecentAttemptToSaveStory = new Date();
   stories: Story[];
   id: string;
   storyFound: boolean;
@@ -32,24 +48,27 @@ export class DashboardComponent implements OnInit {
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
   audioSource: SafeUrl;
-  grammarChecked: boolean = false;
-  tags: HighlightTag[] = [];
-  tagSets : TagSet;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   chosenTag: GrammarTag;
-  grammarLoading: boolean = false;
-  grammarSelected: boolean = true;
   modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: String[] = [];
   classroomId: string;
   selectTeanglann: boolean = true;
   selectExternalLinks: boolean = false;
+
+  gramadoirResponse: string;
+  
+  // OPTIONS (to show or not to show)
   showOptions: boolean = true;
   dontToggle: boolean = false;
+
+  // WORD COUNT
   words: string[] = [];
   wordCount: number = 0;
+
+  downloadStoryFormat = '.pdf';
 
   dialects = [
     {
@@ -85,18 +104,30 @@ export class DashboardComponent implements OnInit {
     ]
   };
   
-  constructor(private storyService: StoryService, private route: ActivatedRoute,
-    private auth: AuthenticationService, protected sanitizer: DomSanitizer,
-    private notifications: NotificationService, private router: Router,
-    private engagement: EngagementService, private grammar: GrammarService,
-    public ts : TranslationService, public statsService: StatsService,
-    public classroomService: ClassroomService,) {}
+  constructor(
+    private storyService: StoryService,
+    private route: ActivatedRoute,
+    private auth: AuthenticationService,
+    protected sanitizer: DomSanitizer,
+    private notifications: NotificationService,
+    private router: Router,
+    private engagement: EngagementService,
+    private grammar: GrammarService,
+    public ts: TranslationService,
+    public statsService: StatsService,
+    public classroomService: ClassroomService,
+  ) {}
 
 /*
 * set the stories array of all the student's stories 
 * and the current story being edited given its id from url 
 */
   ngOnInit() {
+    this.storyService
+        .gramadoirDirect('dia dhuit mo cara')
+        .subscribe((res) => {
+          this.gramadoirResponse = res;
+        });
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
@@ -121,14 +152,22 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+
+    // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.classroomService.getClassroomOfStudent(this.auth.getUserDetails()._id).subscribe( (res) => {
-      if(res) {
-        this.classroomId = res._id;
-        console.log(this.classroomId);
-      }
-    });
+    if (!userDetails) {
+      return;
+    }
+    this.classroomService
+        .getClassroomOfStudent(
+          userDetails._id)
+        .subscribe(
+          (res) => {
+            if (res) {
+              this.classroomId = res._id;
+            }
+          }
+        );
   }
 
 /*
@@ -157,29 +196,54 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* Update story data (text and date) using story service 
-* Add logged event for saved story  using engagement service
-*/
-  saveStory() {
-    this.route.params.subscribe(
-      params => {
-        let updateData = {
-          text : this.story.text,
-          htmlText: this.story.htmlText,
-          lastUpdated : new Date(),
-        };
-        this.storyService.updateStory(updateData, params['id']).subscribe();
-        this.engagement.addEventForLoggedInUser(EventType["SAVE-STORY"], this.story);
+  // Update story data (text and date) using story service
+  // Add logged event for saved story  using engagement service
+  async saveStory() {
+    const saveAttempt = new Date();
+    this.mostRecentAttemptToSaveStory = saveAttempt;
+
+    if (! this.story._id) {
+      return window.alert('Cannot save story. The id is not known');
+    }
+
+    const updateData = {
+      text : this.story.text,
+      htmlText: this.story.htmlText,
+      lastUpdated : new Date(),
+    };
+
+    this.engagement
+        .addEventForLoggedInUser(
+          EventType['SAVE-STORY'],
+          this.story);
+
+    const saveStoryPromise = this
+        .storyService
+        .updateStory(updateData, this.story._id)
+        .toPromise();
+
+
+    try { await saveStoryPromise; }
+    catch (error) {
+      window.alert('Error while trying to save story: ' + error.message);
+      throw error;
+    }
+
+    try {
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
         this.storySaved = true;
-        console.log("Story saved");
       }
-    )
+    } catch (error) {
+      window.alert('Error setting storySaved to true: ' + error.message);
+      throw error;
+    }
+
+    return;
   }
-  
+
   showDictionary() {
     this.dictionaryVisible = true;
-    this.engagement.addEventForLoggedInUser(EventType["USE-DICTIONARY"]);
+    this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
   }
 
 /*
@@ -192,12 +256,12 @@ export class DashboardComponent implements OnInit {
     this.feedbackVisible = true;
     this.getFeedbackAudio();
     // set feedback status to seen by student
-    if(this.story.feedback.text != "") {
+    if (this.story.feedback.text != "") {
       this.story.feedback.seenByStudent = true;
     }
     this.notifications.removeStory(this.story);
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser(EventType["VIEW-FEEDBACK"], this.story);
+      this.engagement.addEventForLoggedInUser(EventType['VIEW-FEEDBACK'], this.story);
     });
   }
 
@@ -212,15 +276,15 @@ export class DashboardComponent implements OnInit {
 
   // Set story.text to most recent version of editor text and then switch to storyEditedAlt
   // WARNING THIS FUNCTION CAN ONLY BE CALLED ONCE
-  storyEdited(text) {
-    this.story.text = text;
+  storyEdited(q: any) {
+    this.story.text = q.text;
 
     this.storyEdited = this.storyEditedAlt;
   }
 
   // THIS IS THE VALUE OF storyEdited AFTER IT'S FIRST CALL
-  storyEditedAlt(text) {
-    this.story.text = text;
+  storyEditedAlt(q: any) {
+    this.story.text = q.text;
     this.storySaved = false;
   }
 
@@ -229,16 +293,15 @@ export class DashboardComponent implements OnInit {
     let str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s) => {
-      let trimStr = s.trim();
+      const trimStr = s.trim();
       if (trimStr.length > 0) {
         this.words.push(trimStr);
       }
-      
     });
     this.wordCount = this.words.length;
   }
 
-// set feedback window to false 
+  // set feedback window to false
   closeFeedback() {
     this.feedbackVisible = false;
   }
@@ -249,188 +312,61 @@ export class DashboardComponent implements OnInit {
    */
   defaultMode() {
     this.feedbackVisible = false;
-    this.grammarChecked = false;
     this.dictionaryVisible = false;
   }
 
 // return whether or not the student has viewed the feedback
-  hasNewFeedback() : boolean {
-    if(this.story && this.story.feedback && this.story.feedback.seenByStudent === false) {
+  hasNewFeedback(): boolean {
+    if (
+      this.story &&
+      this.story.feedback &&
+      this.story.feedback.seenByStudent === false) {
       return true;
     }
     return false;
   }
 
-// route to synthesis 
+  // route to synthesis 
   goToSynthesis() {
     this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
-  
-// route to synthesis 
+
+  // route to synthesis 
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-/*
-* Set boolean variables for checking data / grammar window in interface
-* Check grammar using grammar service 
-* Set grammar tags using grammar service subscription and filter them by rule
-* Add logged event for checked grammar
-*/
-  runGramadoir() {
-    this.saveStory();
-    this.feedbackVisible = false;
-    this.grammarChecked = false;
-    this.dictionaryVisible = false;
-    this.grammarLoading = true;
-    this.tags = [];
-    this.filteredTags.clear();
-    this.chosenTag = null;
-    console.log(this.story._id);
-    this.grammar.checkGrammar(this.story._id).subscribe((res: TagSet) => {
-      console.log("checking grammar for: ", this.story._id);
-      this.tagSets = res;
-      this.tags = this.tagSets.gramadoirTags;
-      this.filterTags();
-      this.grammarLoading = false;
-      this.grammarChecked = true;
-      this.engagement.addEventForLoggedInUser(EventType["GRAMMAR-CHECK-STORY"], this.story);
-    });
+
+  downloadStoryUrl() {
+    return config.baseurl +
+      'story/downloadStory/' +
+      this.story._id + '/' +
+      this.downloadStoryFormat;
   }
 
-/*
-* Set tags to vowel tags or grammar tags based on event value
-*/
-  onChangeGrammarFilter(eventValue : any) {
-    this.chosenTag = null;
-    if(eventValue == 'vowel') {
-      this.tags = this.tagSets.vowelTags;
-      this.grammarSelected = false;
-    }
-    if(eventValue == 'gramadoir') {
-      this.tags = this.tagSets.gramadoirTags;
-      this.grammarSelected = true;
-    }
-  }
-
-// set chosen tag to tag passed in parameters
-  chooseGrammarTag(tag: HighlightTag) {
-    this.chosenTag = new GrammarTag(tag.data);
-  }
-
-// reset checked grammar to false, set tags array and chosen tag to null
-  closeGrammar() {
-    this.grammarChecked = false;
-    this.tags = [];
-    this.chosenTag = null;
-  }
-
-// set the css class to hover over the tag
-  addTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagNotHover");
-    tagElement.classList.add("tagHover");
-  }
-
-// set the css class to not hover over the tag
-  removeTagHoverClass(tagElement: HTMLInputElement) {
-    tagElement.classList.remove("tagHover");
-    tagElement.classList.add("tagNotHover");
-  }
-
-/*
-* filter the grammar tags using a map
-* key: rule name 
-* value: array of tags that match the rule
-* sets checkBox map value to false (value) for each rule (key)
-*/
-  filterTags() {
-    this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {  
-      this.teacherSelectedErrors = res;
-      //loop through tags of errors found in the story
-      for(let tag of this.tags) {
-        let values: HighlightTag[] = [];
-        let rule: string = tag.data.ruleId.substring(22);
-        
-        let rx = rule.match(/(\b[A-Z][A-Z]+|\b[A-Z]\b)/g);
-        rule = rx[0];
-      
-        // check against errors that the teacher provides
-        if(this.teacherSelectedErrors.length > 0) {
-          if(this.teacherSelectedErrors.indexOf(rule) !== -1) {
-            if(this.filteredTags.has(rule)) {
-              values = this.filteredTags.get(rule);
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-            }
-            else {
-              values.push(tag);
-              this.filteredTags.set(rule, values);
-              this.checkBox.set(rule, false);
-            }    
-          }
-        }
-        // otherwise check against all grammar errors 
-        else {
-          if(this.filteredTags.has(rule)) {
-            values = this.filteredTags.get(rule);
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-          }
-          else {
-            values.push(tag);
-            this.filteredTags.set(rule, values);
-            this.checkBox.set(rule, true);
-          }
-        } 
-      }
-      console.log("Filtered tags: ", this.filteredTags);
-      this.updateStats();
-    });
-  }
-
-  /**
-   * Gets an array of HighlighTags for which the associated grammar error category
-   * is selected according to the checkBox map.
-   * 
-   * E.g. if 'seimhiu' checkbox is selected, then this will return the array of
-   * HighlightTags for seimhiu.
-   */
-  getSelectedTags(): HighlightTag[] {
-    // Get only those filteredTags whose keys map to true in checkBox
-    const selectedTagsLists = Array.from(this.filteredTags.entries()).map(entry => {
-      // entry[0] is key, entry[1] is val.
-      if (this.checkBox.get(entry[0])) {
-        return entry[1];
-      } else {
-        return [];
-      }
-    });
-    // Flatten 2d array of HighlightTags
-    const selectedTags = selectedTagsLists.reduce((acc, val) => acc.concat(val), []);
-    return selectedTags;
-  }
-
-  /*
-  * Update the grammar error map of the stat object corresponding to the current student id
-  */
+  // Update the grammar error map of the
+  // stat object corresponding to the current student id
   updateStats() {
-    console.log("Update grammar errors");
-    let updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    this.statsService.updateGrammarErrors(userDetails._id, this.filteredTags, updatedTimeStamp).subscribe((res) => {
-      console.log(res);
-    });
-  }
-  
-  // set modalClass to visible fade 
-  showModal() {
-    this.modalClass = "visibleFade";
+    if (!userDetails) {
+      return;
+    }
+    this.statsService
+        .updateGrammarErrors(
+          userDetails._id,
+          this.filteredTags,
+          new Date())
+        .subscribe();
   }
 
-  // set modalClass to hidden fade and next choice to false 
+  // set modalClass to visible fade
+  showModal() {
+    this.modalClass = 'visibleFade';
+  }
+
+  // set modalClass to hidden fade and next choice to false
   hideModal() {
-    this.modalClass = "hiddenFade";
+    this.modalClass = 'hiddenFade';
     this.modalChoice.next(false);
   }
 
@@ -440,18 +376,33 @@ export class DashboardComponent implements OnInit {
   }
 
   // save story and set next modal choice to true 
-  saveModal() {
-    this.saveStory();
-    this.modalChoice.next(true);
+  async saveModal() {
+    try {
+      await this.saveStory();
+      this.modalChoice.next(true);
+    } catch (error) {
+      window.alert('Your story was not saved. You should copy your story to another program to save it. Otherwise it may be lost.'); 
+      this.hideModal();
+    }
   }
 
   toggleOptions() {
-    console.log("setOptionsVisibleIfNot()\tshowOptions=",
-                this.showOptions,"\tdontToggle=",
-                this.dontToggle);
-    if(!this.dontToggle){
+    if (!this.dontToggle) {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
+  }
+
+  handleGrammarCheckerOptionClick() {
+    this.dontToggle = true;
+    this.defaultMode();
+    this.grammarChecker.hideEntireGrammarChecker =
+      !this.grammarChecker.hideEntireGrammarChecker;
+  }
+  
+  storySavedByGrammarChecker(story: Story) {
+    if (this.story.htmlText === story.htmlText) {
+      this.storySaved = true;
+    }
   }
 }

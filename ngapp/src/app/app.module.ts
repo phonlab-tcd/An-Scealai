@@ -68,6 +68,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
+import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 
 
 
@@ -117,6 +118,7 @@ import { FeatureStatsComponent } from './admin-components/feature-stats/feature-
     SponsorsComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
+    GrammarCheckerComponent,
   ],
   imports: [
     BrowserModule,
