@@ -16,11 +16,14 @@ let Event = new mongoose.Schema({
             'VIEW-FEEDBACK',
             'CREATE-MESSAGE',
             'RECORD-STORY',
-            'USE-DICTIONARY'
+            'USE-DICTIONARY',
+            'PROFILE-STATS',
+            'FEATURE-STATS'
         ],
     },
     storyData: Object,
     userId: String,
+    statsData: Object,
 }, {
     collection: 'engagement'
 });
