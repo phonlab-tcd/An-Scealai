@@ -75,7 +75,7 @@ export class StatsComponent implements OnInit {
       },
       responsive: true,
       maintainAspectRatio: false
-    }); 
+    } as any); 
   }
 
 }
