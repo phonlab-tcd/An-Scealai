@@ -16,8 +16,8 @@
 
 .content {
   text-align: center;
-  margin-top: 5vh;
-  margin-bottom: 95vh;
+  margin-top: 55px;
+  margin-bottom: 2vh;
   min-height: 93%;
   display: flex;
   flex-direction: column;
