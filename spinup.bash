@@ -4,7 +4,7 @@
 
 tmux new-session -s "an-scealai" -d
 
-tmux send "mongod --config ./mongotest/mongotest.conf" C-m
+tmux send "cat ./mongotest/mongotest.conf && mongod --config ./mongotest/mongotest.conf" C-m
 tmux rename-window "mongod"
 
 # This command requires tail and jq. jq is a json colorizer/formatter

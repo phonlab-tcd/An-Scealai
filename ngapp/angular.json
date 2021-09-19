@@ -14,6 +14,7 @@
       "schematics": {},
       "architect": {
         "build": {
+          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
@@ -42,6 +43,17 @@
             ]
           },
           "configurations": {
+            "dev": {
+              "aot": true,
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "budgets": []
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -73,10 +85,43 @@
                   "maximumWarning": "6kb"
                 }
               ]
+            },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/abairconfig.json",
+                  "with": "src/abairconfig.qa.json"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
             }
           }
         },
         "serve": {
+          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "an-scealai:build"

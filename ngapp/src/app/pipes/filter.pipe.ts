@@ -1,4 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { User } from '../user';
+import { Story } from '../story';
+import { userInfo } from 'os';
 
 /*
 * Pipe created to filter out usernames from the list of users in the find-user component
@@ -12,7 +15,7 @@ export class FilterPipe implements PipeTransform {
    * @param {string} searchText
    * @returns {any[]}
    */
-  transform(items: any[], searchText: string): any[] {
+  transform(items: PipeInput[], searchText: string): any[] {
     if (!items) {
       return [];
     }
@@ -21,8 +24,15 @@ export class FilterPipe implements PipeTransform {
     }
     searchText = searchText.toLocaleLowerCase();
 
+    // used in admin find-user component and student book-contents component
+    // it.username for admin, it.title for student
     return items.filter(it => {
-      return it.username.toLocaleLowerCase().includes(searchText);
+      if (it instanceof User)
+        return it.username.toLocaleLowerCase().includes(searchText);
+      if (it instanceof Story)
+        return it.title.toLocaleLowerCase().includes(searchText) || it.text.toLocaleLowerCase().includes(searchText);
     });
   }
 }
+
+type PipeInput = User | Story;

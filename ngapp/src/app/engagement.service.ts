@@ -15,14 +15,24 @@ export class EngagementService {
 
   baseUrl: string = config.baseurl + 'engagement/';
 
-  addEventForLoggedInUser(type: EventType, story?: Object){
-    if(this.auth.isLoggedIn()) {
-      let event: Event = new Event();
-      event.type = type;
-      if(story) event.storyData = story;
-      event.userId = this.auth.getUserDetails()._id;
-      return this.http.post(this.baseUrl + "addEventForUser/" + this.auth.getUserDetails()._id, {event:event}).subscribe();
+  addEventForLoggedInUser(type: EventType, story?: object){
+    this.addEventObservable(type, story).subscribe();
+  }
+
+  addEventObservable(type: EventType, storyData: object): Observable<any> {
+    if (! this.auth.isLoggedIn()) {
+      throw new Error('Cannot add event if user is not logged in');
     }
+
+    const event: Event = new Event();
+    event.type = type;
+    if(storyData) { event.storyData = storyData; }
+    event.userId = this.auth.getUserDetails()._id;
+
+    return this.http
+        .post(this.baseUrl + 'addEventForUser/' +
+              event.userId,
+              { event });
   }
   
   addAnalysisEvent(type: EventType, stats: Object) {
