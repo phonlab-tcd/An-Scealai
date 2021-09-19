@@ -1,0 +1,55 @@
+<div class="header"> {{ts.l.scealai_feature_statistics}} </div>
+<!-- Toggle between date picker and feature logs -->
+<div class="dataOptions">
+  <div class="option" (click)="selectDateRange = true"> {{ts.l.date_range}}</div> |
+  <div class="option" (click)="selectDateRange = false"> {{ts.l.previous_data}} </div>
+</div>
+<div class="content">
+  <!-- Date picker -->
+  <div class="datePicker" *ngIf="selectDateRange">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ts.l.enter_date_range}}</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">{{ts.l.invalid_start_date}}</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{ts.l.invalid_end_date}}</mat-error>
+    </mat-form-field>
+    <div> ({{ts.l.no_date_range_entered}}) </div><br>
+    <div class="submitButton" (click)="getFeatureData()">{{ts.l.get_data}}</div>
+  </div>
+  <!-- List of previous feature logs -->
+  <div class="datePicker" *ngIf="!selectDateRange">
+    <div *ngIf="previousFeatures">
+      <div *ngFor="let feature of previousFeatures" style="padding:10px">
+        <div class="submitButton" (click)="sortData(feature.statsData);"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
+      </div>
+    </div>
+    <br>
+    <hr>
+    <div class="submitButton" (click)="addNewFeatureData()">{{ts.l.add_data_log}}</div>
+  </div>
+</div>
+
+<!-- Loading panel -->
+<div *ngIf="!dataLoaded" class="loaderContainer">
+  <b>{{ts.l.compiling_data}}</b>
+  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+<!-- Display feature data -->
+<div *ngIf="dataLoaded">
+  <mat-card *ngFor="let stat of sortedFeatureCounts">
+    <div class="card">
+    <mat-card-content>
+      <div class="featureName"><b>{{stat[0]}} : </b></div>
+    </mat-card-content>
+    <mat-card-content>
+      <div class="featureValue">{{stat[1]}}</div>
+    </mat-card-content>
+    </div>
+  </mat-card>
+</div>
