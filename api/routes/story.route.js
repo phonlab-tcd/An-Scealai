@@ -3,6 +3,7 @@ const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
+const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
 const makeEndpoints = require('../utils/makeEndpoints');
@@ -12,7 +13,6 @@ const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
 const abairBaseUrl = require('../abair_base_url');
 const logger = require('../logger');
-
 const dbUrl = require('../utils/dbUrl');
 
 const config = require('../DB');
