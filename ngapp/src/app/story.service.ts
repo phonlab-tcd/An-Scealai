@@ -12,6 +12,7 @@ import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from '../abairconfig.json';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,11 +20,16 @@ export class StoryService {
 
   chosenStory: Story;
 
-  constructor(private http: HttpClient, private router: Router,
-    private auth: AuthenticationService, private engagement: EngagementService,
-    private ts : TranslationService, private recordingService: RecordingService) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private auth: AuthenticationService,
+    private engagement: EngagementService,
+    private ts: TranslationService,
+    private recordingService: RecordingService
+  ) { }
 
-  baseUrl: string = config.baseurl + "story/";
+  baseUrl: string = config.baseurl + 'story/';
 
   saveStory(studentId, title, date, dialect, text, author) {
     const storyObj = {
@@ -55,16 +61,28 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
-  getStoriesForLoggedInUser() {
+  getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return new Observable<Story[]>();
+    if (!userDetails) {
+      return new Observable<Story[]>();
+    }
 
     const author = userDetails.username;
-    return this.http.get(this.baseUrl+author);
+    return this.http.get<Story[]>(this.baseUrl + author);
   }
 
-  updateStory(data, id) : Observable<any> {
-    return this.http.post(this.baseUrl + 'update/' +id, data);
+  updateStoryTitleAndDialect(story: Story): Observable<any> {
+    return this.http.post(this.baseUrl + 'update/' + story._id, story);
+  }
+  
+  getStoriesForClassroom(author: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  }
+
+  updateStory(storyUpdate: object, id: string): Observable<any> {
+    return this.http.post(
+      this.baseUrl + 'update/' + id,
+      storyUpdate);
   }
   
   updateAuthor(oldAuthor, newAuthor): Observable<any> {
@@ -101,15 +119,34 @@ export class StoryService {
     return this.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);
   }
 
-  synthesise(id: string) : Observable<any> {
+  synthesise(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'synthesise/' + id);
   }
 
-  gramadoir(id: string) : Observable<any> {
-    return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
+  gramadoirViaBackend(id: string): Observable<any> {
+    return this
+      .http
+      .get(
+        // URL
+        this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
-  
-  synthesiseObject(storyObject: Story) : Observable<any> {
+
+  gramadoirDirect(text: string): Observable<any> {
+    return this
+      .http
+      .post('https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        observe: 'body',
+        params: {
+          teacs: text.replace(/\n/g, ' '),
+          teanga: this.ts.l.iso_code,
+        },
+      });
+  }
+
+  synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
   }
 
