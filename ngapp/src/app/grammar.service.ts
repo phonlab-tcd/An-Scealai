@@ -33,6 +33,90 @@ export type GramadoirTag = {
   errorlength: string;
 };
 
+export const ReadableGramadoirRuleIds = {
+  CAIGHDEAN: { ga: 'Foirme neamhcaighdeánach', en: 'Non-standard word forms' },
+  SEIMHIU: { ga: '', en: '' },
+  CLAOCHLU: { ga: '', en: '' },
+  NEAMHCHOIT: { ga: '', en: '' },     // = same as next
+  NAMMENOWGH: { ga: '', en: '' },     // = same as next
+  UNCOMMON: { ga: '', en: '' },       // 'Valid word but extremely
+                    // rare in actual usage.
+                    // Is this the word you want?'
+  DUBAILTE: { ga: '', en: '' },       // 'Repeated word'
+  CUPLA: { ga: '', en: '' },          // = same as next
+  KESUNYANS: { ga: '', en: '' },      // 'Unusual combination of words'
+  IOLRA: { ga: '', en: '' },          // 'The plural form is required here'
+  UATHA: { ga: '', en: '' },          // 'The singular form is required here'
+  AIDIOLRA: { ga: '', en: '' },       // 'Plural adjective required'
+  BREISCHEIM: { ga: '', en: '' },     // 'Comparative adjective required'
+  NEEDART: { ga: '', en: '' },        // 'Definite article required'
+  BADART: { ga: '', en: '' },         // 'Unnecessary use of the definite article'
+  ONEART: { ga: '', en: '' },         // 'No need for the first definite article'
+  NOGENITIVE: { ga: '', en: '' },     // 'Unnecessary use of the genitive case'
+  GENITIVE: { ga: '', en: '' },       // 'The genitive case is required here'
+  PRESENT: { ga: '', en: '' },        // 'You should use the present tense here'
+  CONDITIONAL: { ga: '', en: '' },    //  'You should use the conditional here'
+  NOSUBJ: { ga: '', en: '' },         //  'It seems unlikely that you intended to use the subjunctive here'
+
+  // # TRANSLATORS: You can use whatever kind of quotes you prefer for your locale
+  // # around the variable \\1.  You should keep the double backslash before the 1: { ga: '', en: '' },
+  // # but there is no need to escape the quotes the way they are in the msgid.
+  INPHRASE: { ga: '', en: '' },       // 'Usually used in the set phrase \/\1\/'
+  BACHOIR: { ga: '', en: '' },
+  EWNHEANS: { ga: '', en: '' },       //  'You should use \/\1\/ here instead'
+  CAIGHMOIRF: { ga: '', en: '' },     // 'Derived from a non-standard form of \/\1\/'
+  DROCHMHOIRF: { ga: '', en: '' },    // 'Derived incorrectly from the root \/\1\/'
+  ANAITHNID: { ga: '', en: '' },
+  ANKOTHVOS: { ga: '', en: '' },
+  UNKNOWN: { ga: '', en: '' }, // 'Unknown word'
+
+  // # TRANSLATORS: \\1 is substituted with one or more suggested replacements
+  MOLADH: { ga: '', en: '' },         //  'Unknown word: \/\1\/?'
+  IONADAI: { ga: '', en: '' },        //  'Valid word but \/\1\/ is more common'
+  MOIRF: { ga: '', en: '' },          //  'Not in database but apparently formed from the root \/\1\/'
+  NIGA: { ga: '', en: '' },           //  'The word \/\1\/ is not needed'
+  MICHEART: { ga: '', en: '' },       // 'Do you mean \/\1\/?'
+  MIMHOIRF: { ga: '', en: '' },       // 'Derived form of common misspelling \/\1\/?'
+  COMHFHOCAL: { ga: '', en: '' },     // 'Not in database but may be a compound \/\1\/?'
+  COMHCHAIGH: { ga: '', en: '' },     // 'Not in database but may be a non-standard compound \/\1\/?'
+  GRAM: { ga: '', en: '' },           // 'Possibly a foreign word (the sequence \/\1\/ is highly improbable)'
+  GENDER: { ga: '', en: '' },
+  GENRE: { ga: '', en: '' },   // 'Gender disagreement'
+  NUMBER: { ga: '', en: '' },
+  NOMBRE: { ga: '', en: '' },  // 'Number disagreement'
+  CASE: { ga: '', en: '' },           // 'Case disagreement'
+
+  // # TRANSLATORS: Rules specific to the Irish language (ga)
+  PREFIXH: { ga: '', en: '' },        // 'Prefix \/h\/ missing'
+  PREFIXT: { ga: '', en: '' },        // 'Prefix \/t\/ missing'
+  PREFIXD: { ga: '', en: '' },        // 'Prefix \/d\'\/ missing'
+  NIAITCH: { ga: '', en: '' },        // 'Unnecessary prefix \/h\/'
+  NITEE: { ga: '', en: '' },          // 'Unnecessary prefix \/t\/'
+  NIDEE: { ga: '', en: '' },          // 'Unnecessary prefix \/d\'\/'
+  NIBEE: { ga: '', en: '' },          // 'Unnecessary prefix \/b\'\/'
+
+  // # TRANSLATORS: "Mutation" refers to either "lenition" or "eclipsis" (see below)
+  NICLAOCHLU: { ga: '', en: '' },     // 'Unnecessary initial mutation'
+
+  // # TRANSLATORS: "Lenition" is the softening of an initial consonant in Irish.
+  // # It is indicated in writing by the addition of an "h": e.g. "bean" -> "bhean"
+  NISEIMHIU: { ga: '', en: '' },      // 'Unnecessary lenition'
+  NIDARASEIMHIU: { ga: '', en: '' },  // 'The second lenition is unnecessary'
+  WEAKSEIMHIU: { ga: '', en: '' },    // 'Often the preposition \/\1\/ causes lenition: { ga: '', en: '' }, but this case is unclear'
+
+  // # TRANSLATORS: "Eclipsis" is: { ga: '', en: '' }, like lenition: { ga: '', en: '' }, a phonetic change applied to
+  // # initial consonants in Irish.  It is indicated in writing by the addition
+  // # of the eclipsing consonant as a prefix: e.g. "bean" -> "mbean"
+  NIURU: { ga: '', en: '' },          // 'Unnecessary eclipsis'
+  URU: { ga: '', en: '' },            // 'Eclipsis missing'
+  NODATIVE: { ga: '', en: '' },       // 'The dative is used only in special phrases'
+  RELATIVE: { ga: '', en: '' },       // 'The dependent form of the verb is required here'
+  ABSOLUTE: { ga: '', en: '' },       // 'Unnecessary use of the dependent form of the verb'
+  SYNTHETIC: { ga: '', en: '' },
+  // 'The synthetic (combined) form, ending in \/\1\/, is often used here'
+  default: { ga: 'Default', en: 'Default' },
+};
+
 const GRAMADOIR_RULE_ID_VALUES: string[] = [
   'CAIGHDEAN',
   'SEIMHIU',
@@ -59,15 +143,20 @@ const GRAMADOIR_RULE_ID_VALUES: string[] = [
   'PRESENT',        // 'You should use the present tense here'
   'CONDITIONAL',    //  'You should use the conditional here'
   'NOSUBJ',         //  'It seems unlikely that you intended to use the subjunctive here'
+
   // # TRANSLATORS: You can use whatever kind of quotes you prefer for your locale
   // # around the variable \\1.  You should keep the double backslash before the 1,
   // # but there is no need to escape the quotes the way they are in the msgid.
   'INPHRASE',       // 'Usually used in the set phrase \/\1\/'
-  'BACHOIR=EWNHEANS', //  'You should use \/\1\/ here instead'
+  'BACHOIR',
+  'EWNHEANS',       //  'You should use \/\1\/ here instead'
   'CAIGHDEAN',      // 'Non-standard form of \/\1\/'
   'CAIGHMOIRF',     // 'Derived from a non-standard form of \/\1\/'
   'DROCHMHOIRF',    // 'Derived incorrectly from the root \/\1\/'
-  'ANAITHNID=ANKOTHVOS=UNKNOWN', // 'Unknown word'
+  'ANAITHNID',
+  'ANKOTHVOS',
+  'UNKNOWN', // 'Unknown word'
+
   // # TRANSLATORS: \\1 is substituted with one or more suggested replacements
   'MOLADH',         //  'Unknown word: \/\1\/?'
   'IONADAI',        //  'Valid word but \/\1\/ is more common'
@@ -78,9 +167,12 @@ const GRAMADOIR_RULE_ID_VALUES: string[] = [
   'COMHFHOCAL',     // 'Not in database but may be a compound \/\1\/?'
   'COMHCHAIGH',     // 'Not in database but may be a non-standard compound \/\1\/?'
   'GRAM',           // 'Possibly a foreign word (the sequence \/\1\/ is highly improbable)'
-  'GENDER=GENRE',   // 'Gender disagreement'
-  'NUMBER=NOMBRE',  // 'Number disagreement'
+  'GENDER',
+  'GENRE',   // 'Gender disagreement'
+  'NUMBER',
+  'NOMBRE',  // 'Number disagreement'
   'CASE',           // 'Case disagreement'
+
   // # TRANSLATORS: Rules specific to the Irish language (ga)
   'PREFIXH',        // 'Prefix \/h\/ missing'
   'PREFIXT',        // 'Prefix \/t\/ missing'
@@ -89,15 +181,18 @@ const GRAMADOIR_RULE_ID_VALUES: string[] = [
   'NITEE',          // 'Unnecessary prefix \/t\/'
   'NIDEE',          // 'Unnecessary prefix \/d\'\/'
   'NIBEE',          // 'Unnecessary prefix \/b\'\/'
+
   // # TRANSLATORS: "Mutation" refers to either "lenition" or "eclipsis" (see below)
   'NICLAOCHLU',     // 'Unnecessary initial mutation'
   'CLAOCHLU',       // 'Initial mutation missing'
+
   // # TRANSLATORS: "Lenition" is the softening of an initial consonant in Irish.
   // # It is indicated in writing by the addition of an "h": e.g. "bean" -> "bhean"
   'NISEIMHIU',      // 'Unnecessary lenition'
   'NIDARASEIMHIU',  // 'The second lenition is unnecessary'
   'WEAKSEIMHIU',    // 'Often the preposition \/\1\/ causes lenition, but this case is unclear'
   'SEIMHIU',        // 'Lenition missing'
+
   // # TRANSLATORS: "Eclipsis" is, like lenition, a phonetic change applied to
   // # initial consonants in Irish.  It is indicated in writing by the addition
   // # of the eclipsing consonant as a prefix: e.g. "bean" -> "mbean"
@@ -138,6 +233,7 @@ export enum LANGUAGE {
 })
 export class GrammarService {
   gramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
+  gramadoirCadhanUrl = 'https://cadhan.com/api/gramadoir/1.0';
 
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
@@ -156,9 +252,14 @@ export class GrammarService {
     private ts: TranslationService,
   ) { }
 
-  string2GramadoirRuleId = (str: string): GramadoirRuleId =>
-    GRAMADOIR_RULE_ID_VALUES.find((validType) => str.includes(validType)) ||
-    'default'
+  string2GramadoirRuleId = (str: string): GramadoirRuleId => {
+    if (!str) { return 'default'; }
+    const subString = str.replace(/[A-Za-z:]+\//, '');
+    if (!subString) { return 'default'; }
+    const ruleIdShortArray = /[A-Z]+/.exec(subString);
+    if (!ruleIdShortArray || !ruleIdShortArray[0]) { return 'default'; }
+    return ruleIdShortArray[0];
+  }
 
   // Set grammar and vowel tags of TagSet object
   checkGrammar(id: string): Observable<any> {
@@ -323,6 +424,18 @@ export class GrammarService {
           }
         });
   }
+
+  gramadoirDirectCadhanObservable(input: string, language: 'en' | 'ga'): Observable<any> {
+    return this.http.post(
+        this.gramadoirCadhanUrl,
+        this.gramadoirXWwwFormUrlencodedRequestData(input, language),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }
+        });
+  }
+
   async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
     const story = await this.storyService.getStory(id).toPromise();
     return this.getVowelAgreementTags(story.text);

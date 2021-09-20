@@ -100,13 +100,13 @@ export class QuillHighlightService {
     // const gramadoirInputText = text; // this.story.text.replace(/\n/g, ' ');
     this.mostRecentGramadoirInput = text; // gramadoirInputText;
 
-    const gramadoirPromiseIrish =
+    let gramadoirPromiseIrish =
       this.grammar.gramadoirDirectObservable(text, 'ga')
       .toPromise();
 
     const currentGramadoirErrorTypes: object = {};
 
-    const grammarCheckerErrorsPromise =
+    let grammarCheckerErrorsPromise =
       this.grammar
           .gramadoirDirectObservable(
             text,
@@ -114,6 +114,7 @@ export class QuillHighlightService {
           .pipe(
             map((tagData: GramadoirTag[]) =>
               tagData.map(tag => {
+                  console.log(tag.ruleId);
                   const ruleIdShort =
                     this.grammar.string2GramadoirRuleId(tag.ruleId);
                   currentGramadoirErrorTypes[ruleIdShort] ?
@@ -124,7 +125,7 @@ export class QuillHighlightService {
                     length: + tag.tox + 1 - tag.fromx,
                     type: ruleIdShort,
                     tooltip: null,
-                    messages: { en: tag.msg, ga: null}, 
+                    messages: { en: tag.msg, ga: null},
                   };
                   return qTag;
                 }
@@ -133,11 +134,57 @@ export class QuillHighlightService {
           ).toPromise();
 
 
-    const grammarCheckerErrors = await grammarCheckerErrorsPromise;
+    let grammarCheckerErrors;
+    let grammarCheckerErrorsIrish;
 
-    const grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
+    try {
+      grammarCheckerErrors = await grammarCheckerErrorsPromise;
+      grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
+    } catch (error) {
+      console.dir(error);
+      gramadoirPromiseIrish =
+        this.grammar.gramadoirDirectCadhanObservable(text, 'ga')
+        .toPromise();
+
+      grammarCheckerErrorsPromise =
+        this.grammar
+            .gramadoirDirectCadhanObservable(
+              text,
+              'en')
+            .pipe(
+              map((tagData: GramadoirTag[]) =>
+                tagData.map(tag => {
+                    console.log(tag.ruleId);
+                    const ruleIdShort =
+                      this.grammar.string2GramadoirRuleId(tag.ruleId);
+                    currentGramadoirErrorTypes[ruleIdShort] ?
+                    currentGramadoirErrorTypes[ruleIdShort]++ :
+                    currentGramadoirErrorTypes[ruleIdShort] = 1;
+                    const qTag: QuillHighlightTag = {
+                      start: + tag.fromx,
+                      length: + tag.tox + 1 - tag.fromx,
+                      type: ruleIdShort,
+                      tooltip: null,
+                      messages: { en: tag.msg, ga: null},
+                    };
+                    return qTag;
+                  }
+                )
+              ),
+            ).toPromise();
+      try {
+      grammarCheckerErrors = await grammarCheckerErrorsPromise;
+      grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
+      } catch (secondGramadoirError) {
+        console.dir(secondGramadoirError);
+        window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
+                     error.message +
+                    '\n\nError 2:\n' + secondGramadoirError.message);
+      }
+    }
 
     grammarCheckerErrors.forEach((e, i) => {
+      console.log(grammarCheckerErrorsIrish[i].ruleId);
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
     this.currentGramadoirHighlightTags = grammarCheckerErrors;

@@ -22,6 +22,7 @@ import {
   GrammarTag,
   GramadoirRuleId,
   GrammarService,
+  ReadableGramadoirRuleIds,
 } from '../../grammar.service';
 
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
@@ -70,6 +71,9 @@ type QuillHighlightTag = {
 export class DashboardComponent implements OnInit {
 
   // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+
+  // So that we can use this in the template
+  ReadableGramadoirRuleIds = ReadableGramadoirRuleIds;
 
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
@@ -174,6 +178,7 @@ export class DashboardComponent implements OnInit {
         const grammarCheckerTime = new Date();
         this.mostRecentGramadoirRequestTime = grammarCheckerTime;
         this.grammarLoading = true;
+        try {
         await this.quillHighlightService
             .updateGrammarErrors(this.quillEditor, textToCheck)
             .then((errTypes: object) => {
@@ -191,6 +196,16 @@ export class DashboardComponent implements OnInit {
               this.quillHighlightService
                   .applyGramadoirTagFormatting(this.quillEditor);
             });
+        } catch (updateGrammarErrorsError) {
+          if ( !this.grammarTagsHidden) {
+            window.alert(
+              'There was an error while trying to fetch grammar ' +
+              'suggestions from the Gramadóir server:\n' +
+              updateGrammarErrorsError.message + '\n' +
+              'See the browser console for more information');
+          }
+          console.dir(updateGrammarErrorsError);
+        }
         if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
           this.grammarLoading = false;
         }
