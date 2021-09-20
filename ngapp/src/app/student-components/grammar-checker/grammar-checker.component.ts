@@ -176,7 +176,6 @@ export class GrammarCheckerComponent implements
     this.gramadoirErrorMessage = null;
   }
 
-  
   // filter the grammar tags using a map
   // key: rule name
   // value: array of tags that match the rule

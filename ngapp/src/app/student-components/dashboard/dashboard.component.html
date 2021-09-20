@@ -234,11 +234,14 @@
       </app-grammar-checker>
       -->
 
+      <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
-                {{ts.l.grammar_checker_settings ? ts.l.grammar_checker_settings : 'grammar_checker_settings'}}
+                {{  ts.l.grammar_checker_settings ?
+                    ts.l.grammar_checker_settings :
+                    'grammar_checker_settings'}}
               </h5>
               <div class="closeDictionaryBtn"
                 (click)="grammarSettingsHidden = true;">
@@ -251,14 +254,18 @@
               [(ngModel)]="grammarTagFilter[recipient.key]"
               (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
               type="checkbox">
-            {{recipient.key | lowercase}} ({{recipient.value}})
+            {{ ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] ?
+               ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] :
+               recipient.key | lowercase}} ({{recipient.value}})
         </div> 
         <div style="margin: 2px;">
           <input 
             [(ngModel)]="quillHighlightService.showLeathanCaol"
             (ngModelChange)="leathanCaolCheckBox($event)"
             type="checkbox">
-            leathan/caol
+          {{ ts.l.iso_code === 'ga' ? 
+            'leathan/caol' :
+            'broad/slender' }}
         </div>
         <button
           (click)="setAllCheckBoxes(false)">
