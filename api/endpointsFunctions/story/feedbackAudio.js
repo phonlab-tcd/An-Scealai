@@ -1,8 +1,27 @@
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
+const path = require('path');
+const Story = require('../../models/story');
+
+
+const config = require('../../DB');
+const dbUrl = require('../../utils/dbUrl');
+
+let db;
+mongodb.MongoClient.connect(dbUrl,
+    {useNewUrlParser: true, useUnifiedTopology: true},
+    (err, client) => {
+      if (err) {
+        console.log(
+            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+            'Please make sure that MongoDB is running.');
+        process.exit(1);
+      }
+      db = client.db(process.env.DB || config.DB);
+    });
 
 // storyRoutes.route('/feedbackAudio/:id').get(
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   if (! mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({
       invalidObjectId: req.params.id,

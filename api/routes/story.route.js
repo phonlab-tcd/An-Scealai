@@ -16,6 +16,7 @@ const logger = require('../logger');
 const dbUrl = require('../utils/dbUrl');
 
 const config = require('../DB');
+const Story = require('../models/story');
 
 let db;
 MongoClient.connect(dbUrl,
@@ -31,24 +32,31 @@ MongoClient.connect(dbUrl,
     });
 
 
-// ENDPOINT HANDLERS
-const getStoryById =
-  require('../endpointsFunctions/story/getStoryById');
-const updateStoryAndCheckGrammar =
-  require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
+let storyRoutes;
+// Immediately Invoked Function Expression.
+// Scopes the imported functions to just this function
+(() => {  
+  // ENDPOINT HANDLERS
+  const getStoryById =
+    require('../endpointsFunctions/story/getStoryById');
+  const updateStoryAndCheckGrammar =
+    require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
+  const feedbackAudio =
+    require('../endpointsFunctions/story/feedbackAudio');
+  const viewFeedback =
+    require('../endpointsFunctions/story/viewFeedback');
 
-const Story = require('../models/story');
-
-const storyRoutes = makeEndpoints({
-  get: {
-    '/getStoryById/:id': getStoryById,
-    '/feedbackAudio/:id': require('../endpointsFunctions/story/feedbackAudio'),
-  },
-  post: {
-    '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
-  },
-});
+  storyRoutes = makeEndpoints({
+    get: {
+      '/getStoryById/:id': getStoryById,
+      '/feedbackAudio/:id': feedbackAudio,
+    },
+    post: {
+      '/viewFeedback/:id': viewFeedback,
+      '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    },
+  });
+})();
 
 
 // Create new story

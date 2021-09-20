@@ -33,9 +33,64 @@ export type GramadoirTag = {
   errorlength: string;
 };
 
+export function getGramadoirRuleSubCategory(str: string) {
+  if (GramadoirRuleSubcategorisation[str]) {
+    return GramadoirRuleSubcategorisation[str];
+  }
+  return str;
+}
+
+const rare = 'rare';
+const wrongNumber = 'wrongNumber';
+const article = 'article';
+const genitive = 'genitive';
+const tense = 'tense';
+const vocabulary = 'vocabulary';
+export const GramadoirRuleSubcategorisation = {
+  // UNCOMMON: rare,
+  // NAMMENOWGH: rare,
+  // NEAMHCHOIT: rare,
+  // CAIGHMOIRF: rare,
+
+  // IOLRA: wrongNumber,
+  // UATHA: wrongNumber,
+  // AIDIOLRA: wrongNumber,
+
+  // BREISCHEIM: 'BREISCHEIM',
+
+  // NEEDART: article,
+  // BADART: article,
+  // ONEART: article,
+
+  // GENITIVE: genitive,
+  // NOGENITIVE: genitive,
+
+  // PRESENT: tense,
+  // CONDITIONAL: tense,
+  // NOSUBJ: tense,
+
+  // INPHRASE: vocabulary,
+  // BACHOIR: vocabulary,
+  // EWNHEANS: vocabulary, // TODO
+  // MOLADH: vocabulary,
+  // UNKNOWN: vocabulary,
+  // DROCHMHOIRF: vocabulary,
+  // ANAITHNID: vocabulary,
+  // GRAM: vocabulary,
+
+};
+
 export const ReadableGramadoirRuleIds = {
+  // SUBCATEGORISATIONS
+  // wrongNumber: { ga: '', en: 'Incorrect use of plural/singular'},
+  // article: { ga: '', en: 'Incorrect use of a definite or indefinite article (i.e. \'an\', \'na\')'},
+  // genitive: { ga: '', en: 'Genitive case' },
+  // rare: { ga: '', en: 'Rare words (may be a mistake)' },
+  // tense: { ga: '', en: 'Tense' },
+  // vocabulary: { ga: '', en: 'Word choice' },
+
   CAIGHDEAN: { ga: 'Foirme neamhcaighdeánach', en: 'Non-standard word forms' },
-  SEIMHIU: { ga: '', en: '' },
+  SEIMHIU: { ga: 'Séihmiú', en: 'Lenition/séimhiú (h after first letter)' },
   CLAOCHLU: { ga: '', en: '' },
   NEAMHCHOIT: { ga: '', en: '' },     // = same as next
   NAMMENOWGH: { ga: '', en: '' },     // = same as next
@@ -48,7 +103,7 @@ export const ReadableGramadoirRuleIds = {
   IOLRA: { ga: '', en: '' },          // 'The plural form is required here'
   UATHA: { ga: '', en: '' },          // 'The singular form is required here'
   AIDIOLRA: { ga: '', en: '' },       // 'Plural adjective required'
-  BREISCHEIM: { ga: '', en: '' },     // 'Comparative adjective required'
+  BREISCHEIM: { ga: 'Breischéim', en: 'Comparative adjective' },     // 'Comparative adjective required'
   NEEDART: { ga: '', en: '' },        // 'Definite article required'
   BADART: { ga: '', en: '' },         // 'Unnecessary use of the definite article'
   ONEART: { ga: '', en: '' },         // 'No need for the first definite article'
@@ -59,7 +114,7 @@ export const ReadableGramadoirRuleIds = {
   NOSUBJ: { ga: '', en: '' },         //  'It seems unlikely that you intended to use the subjunctive here'
 
   // # TRANSLATORS: You can use whatever kind of quotes you prefer for your locale
-  // # around the variable \\1.  You should keep the double backslash before the 1: { ga: '', en: '' },
+  // # around the variable \\1.  You should keep the double backslash before the 1,
   // # but there is no need to escape the quotes the way they are in the msgid.
   INPHRASE: { ga: '', en: '' },       // 'Usually used in the set phrase \/\1\/'
   BACHOIR: { ga: '', en: '' },
@@ -114,7 +169,7 @@ export const ReadableGramadoirRuleIds = {
   ABSOLUTE: { ga: '', en: '' },       // 'Unnecessary use of the dependent form of the verb'
   SYNTHETIC: { ga: '', en: '' },
   // 'The synthetic (combined) form, ending in \/\1\/, is often used here'
-  default: { ga: 'Default', en: 'Default' },
+  default: { ga: 'Error type unkown', en: 'Error type unkown' },
 };
 
 const GRAMADOIR_RULE_ID_VALUES: string[] = [
@@ -258,7 +313,7 @@ export class GrammarService {
     if (!subString) { return 'default'; }
     const ruleIdShortArray = /[A-Z]+/.exec(subString);
     if (!ruleIdShortArray || !ruleIdShortArray[0]) { return 'default'; }
-    return ruleIdShortArray[0];
+    return getGramadoirRuleSubCategory(ruleIdShortArray[0]);
   }
 
   // Set grammar and vowel tags of TagSet object
