@@ -17,21 +17,23 @@ const express = require('express');
  * @return - an express Router object containing all the endpoints passed in mappings
  */
 function makeEndpoints(mappings) {
-    const routes = express.Router();
+  const routes = new express.Router();
+  console.dir(mappings);
 
-    for (const httpMethod of Object.keys(mappings)) {
-        for (const [endpoint, func] of Object.entries(mappings[httpMethod])) {
-            routes.route(endpoint)[httpMethod](async (req, res, next) => {
-                try {
-                    await func(req, res);
-                } catch (error) {
-                    next(error);
-                }
-            });
+  for (const httpMethod of Object.keys(mappings)) {
+    for (const [endpoint, func] of Object.entries(mappings[httpMethod])) {
+      routes.route(endpoint)[httpMethod](async (req, res, next) => {
+        try {
+          await func(req, res);
+        } catch (error) {
+          console.log(httpMethod, endpoint, func);
+          next(error);
         }
+      });
     }
+  }
 
-    return routes;
+  return routes;
 }
 
 module.exports = makeEndpoints;

@@ -102,8 +102,6 @@ export class DashboardComponent implements OnInit {
   teacherSelectedErrors: string[] = [];
   classroomId: string;
   selectTeanglann = true;
-  selectExternalLinks = false;
-  quillEditorStyle: { height: string; } = { height: '10vh' };
 
   downloadStoryFormat = '.pdf';
 
@@ -170,7 +168,7 @@ export class DashboardComponent implements OnInit {
     public quillHighlightService: QuillHighlightService,
   ) {
     this.textUpdated.pipe(
-      debounceTime(1000),
+      debounceTime(1500),
       distinctUntilChanged(),
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
@@ -341,8 +339,6 @@ export class DashboardComponent implements OnInit {
     this.grammarTagsHidden = false;
     this.quillHighlightService
         .applyGramadoirTagFormatting(this.quillEditor);
-
-    this.quillEditorStyle.height = '10vh';
   }
 
   // Update story data (text and date) using story service

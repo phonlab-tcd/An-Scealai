@@ -25,12 +25,39 @@ span:not[data-gramadoir-tag-style-type] {
 
 [data-gramadoir-tag-style-type]
 {
-    background-color: #aed9ff; 
+    background-color: #FFA3A3;  /* lightpink */
+}
+
+[data-gramadoir-tag-style-type="rare"]
+{
+    background-color: steelblue;
+    color: white;
+}
+
+[data-gramadoir-tag-style-type="vocabulary"]
+{
+    background-color: lightblue;
+}
+
+[data-gramadoir-tag-style-type="wrongNumber"]
+{
+    background-color: mediumspringgreen; 
+}
+
+[data-gramadoir-tag-style-type="article"]
+{
+    background-color: coral;
+}
+
+[data-gramadoir-tag-style-type="genitive"]
+{
+    background-color: darkcyan;
+    color: white;
 }
 
 [data-gramadoir-tag-style-type="SEIMHIU"]
 {
-    background-color: #a6dfc2;
+    background-color: darkorchid;
 }
 
 [data-gramadoir-tag-style-type="CLAOCHLU"]
