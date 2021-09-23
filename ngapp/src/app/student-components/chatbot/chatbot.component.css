@@ -35,7 +35,7 @@
     color: white;
     position: absolute;
     margin-top: -3%;
-    margin-left: -10%;
+    margin-left: 45%;
   }
   
   .chatlogs{
@@ -186,7 +186,7 @@
     font-size: 14px;
     width: 40%;
     height: 20%;
-    margin-top: 4%;
+    margin-top: 15%;
     left: 28%;
     color: white;
     background-color: #F39C12;
@@ -209,11 +209,11 @@
   }
   
   .choose-personal{
-    margin-top: 22%;
+    margin-top: 33%;
   }
   
   .choose-community{
-    margin-top: 40%;
+    margin-top: 73%;
   }
   
   .contents-button{
