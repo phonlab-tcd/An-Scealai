@@ -35,7 +35,7 @@
     color: white;
     position: absolute;
     margin-top: -3%;
-    margin-left: 42%;
+    margin-left: -10%;
   }
   
   .chatlogs{
@@ -175,7 +175,8 @@
   
   #topics{
     font-size: 20px;
-    margin-left: 30%;
+    position: absolute;	
+    left: 30%;
   }
   
   .choose-scealai, .choose-personal, .choose-community{
@@ -615,7 +616,6 @@
     .bot-title{
       font-size: 22px;
       top: 4%;
-      left: -1%;
     }
     .audio-checkbox{
       font-size: smaller;
@@ -647,7 +647,7 @@
       font-size: 13px;
     }
     #topics{
-      margin-left: 22%;
+      left: 22%;
     }
     .choose-scealai, .choose-personal, .choose-community{
       width: 50%;
