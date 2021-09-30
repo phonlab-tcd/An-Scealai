@@ -180,7 +180,7 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
         console.log(err);
       }
       else if(script != null){
-        res.json({status: 200, text: script.content});
+        res.json({status: 200, text: script.questionsandanswers});
       }
     }); 
   }
@@ -367,7 +367,7 @@ chatbotRoute.route('/sendScriptVerification').post(function(req, res){
     //console.log(script);
     mailObj = {
       from: "gilsenci@tcd.ie",
-      recipients: ["ciaragil98@gmail.com"],
+      recipients: ["gilsenci@tcd.ie, scealai.info@gmail.com"],
       subject: 'Taidhgín Script Verification',
       message: "User: " + script.user + "\nVerify Script: \n\n" + script.questionsandanswers,
     };
