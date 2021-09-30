@@ -64,6 +64,17 @@ button:focus, input:focus, audio:focus{
   font-style: italic;
 }
 
+#go-to-taidhgin{
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  background-color:lightsalmon;
+}
+
+#go-to-taidhgin:hover{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
 /* Chatbot Styles */
 /* Dialogue and Photos */
 .bot-message-photo, .user-message-photo{

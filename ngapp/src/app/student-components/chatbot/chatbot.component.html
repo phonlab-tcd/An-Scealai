@@ -5,11 +5,11 @@
   <audio id='botaudio' src=''></audio>
   <video id='chimp' src='./assets/img/chimp_talking.mp4'></video>
   <div id='new-contents'>
-    <div id='topics'>Choose a Topic</div>
-    <button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>
-    <button class='choose-personal' onclick="showContents('p', 'popup-background', true)">My Quizzes</button>
-    <button class='choose-community' onclick="showContents('c', 'popup-background', true)">Community Quizzes</button>
-    <p id='login-rec'>Sign up for An Scealaí to access more Taidhgín topics!</p>
+    <div id='topics'>{{ts.l.taidhgin_choose_topic}}</div>
+    <!--<button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>-->
+    <button class='choose-personal' onclick="showContents('p', 'popup-background', true)">{{ts.l.my_quiz_s}}</button>
+    <button class='choose-community' onclick="showContents('c', 'popup-background', true)">{{ts.l.t_community_quiz}}</button>
+    <p id='login-rec'>{{ts.l.taidhgin_signup}}</p>
   </div>
   <div class="scealai-topics" id='sc'>
     <div>An Scealaí Topics</div>
@@ -19,14 +19,14 @@
     <p>Topics Coming soon!</p>
   </div>
   <div class="personal-topics" id='p'>
-    <div id='personal-topics-title'>Personal Quizzes</div>
-    <div id='student' onclick="showPersonal('student')"><p>My Quizzes</p></div>
+    <div id='personal-topics-title'></div>
+    <div id='student' onclick="showPersonal('student')"><p>{{ts.l.my_quiz_s}}</p></div>
     <button id='to-create' routerLink='/create-quiz'><i class="fas fa-plus"></i></button>
-    <div id='teacher' onclick="showPersonal('teacher')"><p>Your Teacher's Quizzes</p></div>
+    <div id='teacher' onclick="showPersonal('teacher')"><p>{{ts.l.my_teachquiz}}</p></div>
     <div id='personal-container'></div>
     <i class="fas fa-times close-topics" onclick='closePersonal()'></i>
-    <button id='delete-script' onclick="deleteScript()">Delete</button>
-    <button id='open-script' onclick="openScript()">Open</button>
+    <button id='delete-script' onclick="deleteScript()">{{ts.l.delete_quiz}}</button>
+    <button id='open-script' onclick="openScript()">{{ts.l.open_quiz}}</button>
   </div>
   <div class="community-topics" id='c'>
     <div>Community Topics</div>
@@ -39,20 +39,20 @@
       <div id='dialects'>
         <div id='select-HTS' onclick="selectEngine('#select-HTS')">
           HTS
-          <span class=tooltip-text>Faster but lower in quality.</span>
+          <span class=tooltip-text>{{ts.l.tt_hts}}</span>
         </div>
         <div id='select-DNN' onclick="selectEngine('#select-DNN')">
           DNN
-          <span class=tooltip-text>Slower but higher in quality.</span>
+          <span class=tooltip-text>{{ts.l.tt_dnn}}</span>
         </div>
       </div>
       <button id='dialect-CM' onclick="dialectSelection('dialect-CM')">Connemara (male)</button>
-      <button id='dialect-GD' onclick="dialectSelection('dialect-GD')">Donegal (female)</button>
-      <button id='dialect-MU' onclick="dialectSelection('dialect-MU')">Kerry (female)</button>
+      <button id='dialect-GD' onclick="dialectSelection('dialect-GD')">Gaoth Dobhair (female)</button>
+      <button id='dialect-MU' onclick="dialectSelection('dialect-MU')">Corca Dhuibhne (female)</button>
 
-      <button id='dialect-UL' onclick="dialectSelection('dialect-UL')">Gaoth Dobhair (female)</button>
       <button id='dialect-CO' onclick="dialectSelection('dialect-CO')">Connemara (male)</button>
-      <button id='dialect-MU-DNN' onclick="dialectSelection('dialect-MU-DNN')">Kerry (male)</button>
+      <button id='dialect-UL' onclick="dialectSelection('dialect-UL')">Gaoth Dobhair (female)</button>
+      <button id='dialect-MU-DNN' onclick="dialectSelection('dialect-MU-DNN')">Corca Dhuibhne (male)</button>
     </div>
     <div id='recording-prompt'>
       <p id='record-title'>Record your Response</p>
@@ -62,8 +62,8 @@
       <audio id='recording-player' src='' controls></audio>
       <button type='submit' id='cancel-recording' onclick='showContents("recording-prompt", "bg-background", false)'>Cancel</button>
     </div>
-    <div class="audio-checkbox"><input type="checkbox" name="audio" class="audioCheckbox" checked> Audio Autoplay</div>
-    <div id='this-dialect'>Dialect: please choose</div>
+    <div class="audio-checkbox"><input type="checkbox" name="audio" class="audioCheckbox" checked> {{ts.l.taidhgin_audio_autoplay}}</div>
+    <div id='this-dialect'>{{ts.l.taidhgin_currentDialect}}</div>
     <span class='bot-title'>Taidhgín <i class="fa fa-comments"></i></span>
     <div class="chatlogs">
       <div id="bot-messages"></div>
@@ -72,7 +72,7 @@
       <input id="bot-user_input" type="text" autocomplete="off">
       <button type="submit" id="bot-message-button" onclick="chatAIML()"><i class="fas fa-arrow-circle-right arrow"></i></button>
       <button id='open-record' type='submit' onclick="showContents('recording-prompt', 'bg-background', true)"><i class="fas fa-microphone-alt"></i></button>
-      <button type='submit' id='choose-dialect' onclick="showContents('bot-audio', 'bg-background', true)">Choose Dialect</button>
+      <button type='submit' id='choose-dialect' onclick="showContents('bot-audio', 'bg-background', true)">{{ts.l.taidhgin_choose_dialect}}</button>
     </form>
     </div>
 </body>

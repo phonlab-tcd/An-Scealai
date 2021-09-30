@@ -1,52 +1,55 @@
 <body>
   <div id='container'>
-    <button id='about-button' onclick=showAbout()>About <i class="fas fa-info-circle"></i></button>
-    <div id='quiz-name'><input id='topic-name' type="text" placeholder="Enter Name of Quiz"></div>
+    <button id='about-button' onclick=showAbout()>{{ts.l.taidhgin_about}} <i class="fas fa-info-circle"></i></button>
+    <div id='quiz-name'><input id='topic-name' type="text" placeholder={{ts.l.t_enterName}}></div>
     <div id='questions'>
       <p>{{ts.l.quiz_q_title}}</p>
-      <div class='Q'>1. <input id='q1' placeholder='Insert Question' type="text"></div>
-      <div class='Q'>2. <input id='q2' placeholder='Insert Question' type="text"></div>
-      <div class='Q'>3. <input id='q3' placeholder='Insert Question' type="text"></div>
-      <div class='Q'>4. <input id='q4' placeholder='Insert Question' type="text"></div>
-      <div class='Q'>5. <input id='q5' placeholder='Insert Question' type="text"></div>
+      <div class='Q'>1. <input id='q1' placeholder={{ts.l.t_insert_q}} type="text"></div>
+      <div class='Q'>2. <input id='q2' placeholder={{ts.l.t_insert_q}} type="text"></div>
+      <div class='Q'>3. <input id='q3' placeholder={{ts.l.t_insert_q}} type="text"></div>
+      <div class='Q'>4. <input id='q4' placeholder={{ts.l.t_insert_q}} type="text"></div>
+      <div class='Q'>5. <input id='q5' placeholder={{ts.l.t_insert_q}} type="text"></div>
     </div>
     <div id='answers'>
       <p>{{ts.l.quiz_a_title}}</p>
-      <div class='Q' id='answer-1'>1. <input placeholder='Insert Answer' class='A' id='a1' type="text"><button class='add-A' type="submit" id='add-a1' onclick='addAnswer("answer-1", "add-a1")'>{{ts.l.quiz_add_a}}</button></div>
-      <div class='Q' id='answer-2'>2. <input placeholder='Insert Answer' class='A' id='a2' type="text"><button class='add-A' type="submit" id='add-a2' onclick='addAnswer("answer-2", "add-a2")'>{{ts.l.quiz_add_a}}</button></div>
-      <div class='Q' id='answer-3'>3. <input placeholder='Insert Answer' class='A' id='a3' type="text"><button class='add-A' type="submit" id='add-a3' onclick='addAnswer("answer-3", "add-a3")'>{{ts.l.quiz_add_a}}</button></div>
-      <div class='Q' id='answer-4'>4. <input placeholder='Insert Answer' class='A' id='a4' type="text"><button class='add-A' type="submit" id='add-a4' onclick='addAnswer("answer-4", "add-a4")'>{{ts.l.quiz_add_a}}</button></div>
-      <div class='Q' id='answer-5'>5. <input placeholder='Insert Answer' class='A' id='a5' type="text"><button class='add-A' type="submit" id='add-a5' onclick='addAnswer("answer-5", "add-a5")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-1'>1. <input placeholder={{ts.l.t_insert_a}} class='A' id='a1' type="text"><button class='add-A' type="submit" id='add-a1' onclick='addAnswer("answer-1", "add-a1")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-2'>2. <input placeholder={{ts.l.t_insert_a}} class='A' id='a2' type="text"><button class='add-A' type="submit" id='add-a2' onclick='addAnswer("answer-2", "add-a2")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-3'>3. <input placeholder={{ts.l.t_insert_a}} class='A' id='a3' type="text"><button class='add-A' type="submit" id='add-a3' onclick='addAnswer("answer-3", "add-a3")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-4'>4. <input placeholder={{ts.l.t_insert_a}} class='A' id='a4' type="text"><button class='add-A' type="submit" id='add-a4' onclick='addAnswer("answer-4", "add-a4")'>{{ts.l.quiz_add_a}}</button></div>
+      <div class='Q' id='answer-5'>5. <input placeholder={{ts.l.t_insert_a}} class='A' id='a5' type="text"><button class='add-A' type="submit" id='add-a5' onclick='addAnswer("answer-5", "add-a5")'>{{ts.l.quiz_add_a}}</button></div>
     </div>
     <button id='add-question' onclick='addQuestion()'><i class="fas fa-plus-circle"></i> {{ts.l.quiz_add_q}}</button>
-    <button id='done' onclick='showVerificationStep()'>{{ts.l.quiz_done}}</button>
+    <button id='done' (click)=submit()>{{ts.l.quiz_done}}</button>
   </div>
   <div id='submit-container'>
     <div id='submit-messages'>
       <div id='save-prompt'>
-        Save your script?
+        {{ts.l.save_script}}
         <input id='class-code-input' type='text' placeholder="class code">
-        <button type='submit' (click)=sendScript() id='yes-publish'>Yes</button>
+        <button type='submit' (click)=sendScript() id='yes-publish'>{{ts.l.save_script_y}}</button>
         <button type='submit' onclick='$("#saved-message").text("Your script will not be saved. Save it to use with Taidhgín."); 
-        $("#saved-message").css("display", "block")' id='no-publish'>No</button>
+        $("#saved-message").css("display", "block")' id='no-publish'>{{ts.l.save_script_n}}</button>
       </div>
-      <div id='thank-message'>Thank you for using the 'make your own script' framwork! 😄</div>
-      <div id='saved-message'>Your script has been saved! You can now use it in Taidhgín under 'Personal Topics'.</div>
+      <div id='thank-message'>{{ts.l.taidhgin_createThankMessage}}</div>
+      <div id='saved-message'>
+        {{ts.l.taidhgin_saved_message}}
+        <button id='go-to-taidhgin' routerLink='/taidhgin'>{{ts.l.go_to_taidhgin}}</button>
+      </div>
       <div id='ask-publish'>
-        Would you like to publish your script to the An Scealaí community?
-        <button id='yes-publish' onclick='sendVerification()'>Yes</button>
-        <button id='no-publish' onclick="$('#saved-message').text('No problem! You can still use your script in Taidhgín under Personal Topics.')">No</button>
+        {{ts.l.taidhgin_askPublish}}
+        <button id='yes-publish' onclick='sendVerification()'>{{ts.l.publish_script_y}}</button>
+        <button id='no-publish' onclick="$('#saved-message').text('No problem! You can still use your script in Taidhgín under Personal Topics.')">{{ts.l.publish_script_n}}</button>
       </div>
-      <button id='ask-download' onclick="downloadNewScript()">Download a copy of you script?</button>
-      <div id='remind-message'>Fill in all entries</div>
+      <button id='ask-download' onclick="downloadNewScript()">{{ts.l.t_downloadQuiz}}</button>
+      <div id='remind-message'>{{ts.l.fillAllEntries}}</div>
     </div>
-    <button id='cancel-submit' type='submit' onclick="closeSubmit()">Close</button>
+    <button id='cancel-submit' type='submit' onclick="closeSubmit()">{{ts.l.closeSubmition}}</button>
   </div>
   <div id='about-container'>
     <div id='info'>
       <h2>{{ts.l.how_to_tquiz_title}}</h2>
       <p id=description innerHTML={{ts.l.how_to_tquiz}}></p>
     </div>
-    <button id='cancel-submit' type='submit' onclick="closeAbout()">Close</button>
+    <button id='cancel-submit' type='submit' onclick="closeAbout()">{{ts.l.closeSubmition}}</button>
   </div>
 </body>

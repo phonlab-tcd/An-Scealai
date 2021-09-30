@@ -4,6 +4,9 @@ import { doesNotReject } from 'assert';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { User } from '../user';
 import { TranslationService } from '../translation.service';
+import config from 'src/abairconfig.json';
+
+const backendUrl = config.baseurl;
 
 @Component({
   selector: 'app-create-quiz',
@@ -25,6 +28,13 @@ export class CreateQuizComponent implements OnInit {
     }
   }
 
+  submit(){
+    // @ts-ignore
+    showSubmitSection(backendUrl);
+  }
+  test(){
+    console.log('here');
+  }
   sendScript(){
     if(this.auth.isLoggedIn()){
       // @ts-ignore
