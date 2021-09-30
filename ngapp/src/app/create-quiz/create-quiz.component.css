@@ -69,6 +69,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+
 #cancel-submit, #ask-download{
     outline: none;
     border: none;
@@ -139,7 +140,7 @@
 }
 
 #ask-publish{
-    bottom: 10%;
+    bottom: 3%;
     left: 5%;
     width: 35%;
     display: none;

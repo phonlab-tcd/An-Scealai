@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
 import { AuthenticationService } from 'src/app/authentication.service';
 import config from 'src/abairconfig.json';
+import { TranslationService } from 'src/app/translation.service';
 
 const backendUrl = config.baseurl;
 
@@ -12,7 +13,7 @@ const backendUrl = config.baseurl;
 })
 export class ChatbotComponent implements OnInit {
 
-  constructor(public auth: AuthenticationService) {
+  constructor(public auth: AuthenticationService, public ts: TranslationService) {
    }
 
   ngOnInit(): void {

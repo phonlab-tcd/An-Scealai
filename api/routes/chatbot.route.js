@@ -59,7 +59,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
 
-    questionsAnswers += '<b>Q:</b> ' + key + '   <b>A:</b> ' + content[key] + '<br>';
+    questionsAnswers += '<b>Ceist:</b> ' + key + '   <b>Freagra:</b> ' + content[key] + '<br>';
 
     //let correctTrigger = "Ceart! <call>addScore</call>An chéad cheist eile:<br><br>" + key;
 

@@ -17,54 +17,54 @@ return '';
 < object
 
 + start
-- Cad é an contae is lú in Éirinn?
+- Críochnaigh an nath seo: 'Níl aon tinteán…'
 
 + *
-% cad é an contae is lú in éirinn
+% críochnaigh an nath seo níl aon tinteán
 - Mícheart! <call>chatSetup ans1w</call>
 
 + ans1w
-- Cén contae ina bhfuil Conamara?
+- Críochnaigh an nath seo: 'An té a bhíonn siúlach…'
 
 + (an lú|contae lú|co lú)
-% cad é an contae is lú in éirinn
-- Cén contae ina bhfuil Conamara?<call>addScore</call>
+% críochnaigh an nath seo níl aon tinteán
+- Críochnaigh an nath seo: 'An té a bhíonn siúlach…'<call>addScore</call>
 
 + *
-% cén contae ina bhfuil conamara
+% críochnaigh an nath seo an té a bhíonn siúlach
 - Mícheart! <call>chatSetup ans2w</call>
 
 + ans2w
-- Cé mhéad bliain a bhíonn i dtéarma Uachtaránachta in Éirinn?
+- Críochnaigh an nath seo: 'Ní thagann ciall…'
 
 + (gaillimh|contae na gaillimhe|co na gaillimhe)
-% cén contae ina bhfuil conamara
-- Cé mhéad bliain a bhíonn i dtéarma Uachtaránachta in Éirinn?<call>addScore</call>
+% críochnaigh an nath seo an té a bhíonn siúlach
+- Críochnaigh an nath seo: 'Ní thagann ciall…'<call>addScore</call>
 
 + *
-% cé mhéad bliain a bhíonn i dtéarma uachtaránachta in éirinn
+% críochnaigh an nath seo ní thagann ciall
 - Mícheart! <call>chatSetup ans3w</call>
 
 + ans3w
-- Cad é siombail náisiúnta na hÉireann?
+- Críochnaigh an nath seo: 'Aithníonn ciaróg…'
 
 + (seacht|7)
-% cé mhéad bliain a bhíonn i dtéarma uachtaránachta in éirinn
-- Cad é siombail náisiúnta na hÉireann?<call>addScore</call>
+% críochnaigh an nath seo ní thagann ciall
+- Críochnaigh an nath seo: 'Aithníonn ciaróg…'<call>addScore</call>
 
 + *
-% cad é siombail náisiúnta na héireann
+% críochnaigh an nath seo aithníonn ciaróg
 - Mícheart! <call>chatSetup ans4w</call>
 
 + ans4w
-- Cé a bhí mar an gcéad Uachtarán ar Éirinn?
+- Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'
 
 + (cláirseach|cruit)
-% cad é siombail náisiúnta na héireann
-- Cé a bhí mar an gcéad Uachtarán ar Éirinn?<call>addScore</call>
+% críochnaigh an nath seo aithníonn ciaróg
+- Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'<call>addScore</call>
 
 + *
-% cé a bhí mar an gcéad uachtarán ar éirinn
+% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith
 - Mícheart! <call>chatSetup ans5w</call>
 
 + ans5w

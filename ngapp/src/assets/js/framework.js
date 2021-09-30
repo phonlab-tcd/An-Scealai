@@ -98,7 +98,8 @@ function addAnswer(answer_id, button_id){
   $("#answers").animate({ scrollLeft: $("#answers")[0].scrollHeight }, 200);
 }
 
-function showVerificationStep(){
+function showSubmitSection(backendUrlFromAngularComponent){
+  backendUrl = backendUrlFromAngularComponent;
   $('#submit-container').css('top', '14%');
 }
 
@@ -166,7 +167,6 @@ function done(){
         else{
           // if file creation was successful
           $('#saved-message').css('display', 'block');
-          $('#saved-message').text('Your script has been saved! You can now use it in Taidhgín under "Personal Topics".');
           $('#ask-publish').css('display', 'block');
           $('#ask-download').css('display', 'block');
           currentFilename = name;
@@ -308,18 +308,20 @@ function getTeacherScripts(){
   request.send();
   request.onload = function(){
     console.log(JSON.parse(this.response));
-    var classData = JSON.parse(this.response);
-    request.open('GET', backendUrl + 'Chatbot/getTeacherScripts/' + classData.teacherId + '/' + classData.code, true);
-    request.send();
-    request.onload = function(){
-      console.log(JSON.parse(this.response));
-      let response = JSON.parse(this.response);
-      if(typeof response == 'object'){
-        for(let s of response) currentScripts.push(s);
-        if(response.length > 0) appendToPersonalTopics(response, user.role.toLowerCase());
-      }
-      else{
-        console.log(response);
+    if(JSON.parse(this.response) != null){
+      var classData = JSON.parse(this.response);
+      request.open('GET', backendUrl + 'Chatbot/getTeacherScripts/' + classData.teacherId + '/' + classData.code, true);
+      request.send();
+      request.onload = function(){
+        console.log(JSON.parse(this.response));
+        let response = JSON.parse(this.response);
+        if(typeof response == 'object'){
+          for(let s of response) currentScripts.push(s);
+          if(response.length > 0) appendToPersonalTopics(response, user.role.toLowerCase());
+        }
+        else{
+          console.log(response);
+        }
       }
     }
   }
