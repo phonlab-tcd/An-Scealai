@@ -612,7 +612,11 @@
       "delete_quiz": "Delete",
       "open_quiz": "Open",
       "tt_hts": "speech engine 1",
-      "tt_dnn": "speech engine 2"
+      "tt_dnn": "speech engine 2",
+      "script_exists": "Quiz with this name already exists",
+      "taidhgin_verified_message": "Your quiz will be verified.",
+      "forgetQuizName": "Don't forget to name your quiz.",
+      "shuffle_questions": " shuffle questions"
     },
     {
       "iso_code" : "ga",
@@ -1218,12 +1222,16 @@
       "fillAllEntries": "Líon isteach gach bosca",
       "publish_script_y": "Ba mhaith",
       "publish_script_n": "Níor mhaith",
-      "closeSubmition": "Dúnta",
+      "closeSubmition": "Dún",
       "go_to_taidhgin": "Go dtí Taidhgín",
       "delete_quiz": "Scrios",
       "open_quiz": "Oscail",
       "tt_hts": "inneall cainte 1",
-      "tt_dnn": "inneall cainte 2"
+      "tt_dnn": "inneall cainte 2",
+      "script_exists": "Tá an teideal seo in úsáid cheana",
+      "taidhgin_verified_message": "Faofar d’iontráil",
+      "forgetQuizName": "Gaeilge Version",
+      "shuffle_questions": " shuffle questions"
     }
   ]
 }

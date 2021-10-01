@@ -19,7 +19,7 @@ export class ChatbotComponent implements OnInit {
   ngOnInit(): void {
     if(this.auth.isLoggedIn()){
       // @ts-ignore
-      setup('startLoggedIn', backendUrl);
+      setup('startLoggedIn', backendUrl, this.ts.getCurrentLanguage());
       //@ts-ignore
       personal_buttons = [];
       //@ts-ignore
@@ -43,7 +43,7 @@ export class ChatbotComponent implements OnInit {
     }
     else{
       // @ts-ignore
-      setup('startNotLoggedIn');
+      setup('startNotLoggedIn', backendUrl, this.ts.getCurrentLanguage());
       // @ts-ignore
       hideTopics();
       // @ts-ignore

@@ -2,6 +2,7 @@
   <div id='container'>
     <button id='about-button' onclick=showAbout()>{{ts.l.taidhgin_about}} <i class="fas fa-info-circle"></i></button>
     <div id='quiz-name'><input id='topic-name' type="text" placeholder={{ts.l.t_enterName}}></div>
+    <div id='shuffle-box'><input type="checkbox" checked> {{ts.l.shuffle_questions}}</div>
     <div id='questions'>
       <p>{{ts.l.quiz_q_title}}</p>
       <div class='Q'>1. <input id='q1' placeholder={{ts.l.t_insert_q}} type="text"></div>
@@ -35,6 +36,9 @@
         {{ts.l.taidhgin_saved_message}}
         <button id='go-to-taidhgin' routerLink='/taidhgin'>{{ts.l.go_to_taidhgin}}</button>
       </div>
+      <div id='verified-message'>
+        {{ts.l.taidhgin_verified_message}}
+      </div>
       <div id='ask-publish'>
         {{ts.l.taidhgin_askPublish}}
         <button id='yes-publish' onclick='sendVerification()'>{{ts.l.publish_script_y}}</button>
@@ -42,6 +46,8 @@
       </div>
       <button id='ask-download' onclick="downloadNewScript()">{{ts.l.t_downloadQuiz}}</button>
       <div id='remind-message'>{{ts.l.fillAllEntries}}</div>
+      <div id='exists-message'>{{ts.l.script_exists}}</div>
+      <div id='forgetName-message'>{{ts.l.forgetQuizName}}</div>
     </div>
     <button id='cancel-submit' type='submit' onclick="closeSubmit()">{{ts.l.closeSubmition}}</button>
   </div>

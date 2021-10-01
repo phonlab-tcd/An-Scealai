@@ -35,16 +35,19 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   let topicName = content['topic-name'];
   let userId = content['userId'];
   let role = content['role'];
+  let shuffle = content['shuffle'];
+  console.log(content);
   if(content['classId']) var classId = content['classId'];
   delete content['topic-name'];
   delete content['userId'];
   delete content['role'];
   delete content['classId'];
+  delete content['shuffle'];
   console.log(content);
   var questionsAnswers = '';
   let tryAgain = '\n\n+ tryagain\n- <button class="rive-button"'; 
-  tryAgain += " onclick='tryAgain(\"" + topicName + "\")'>Try Quiz again?</button>\n"
-  tryAgain += "^ <button class='rive-button' onclick='showAnswers()'>Show Answers?</button>";
+  tryAgain += " onclick='tryAgain(\"" + topicName + "\")'>Bain triail as arís?</button>\n"
+  tryAgain += "^ <button class='rive-button' onclick='showAnswers()'>Taispeáin na freagraí?</button>";
 
   //Construct Script
   var line = "";
@@ -55,11 +58,15 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   line += firstLine;
 
   let keys = Object.keys(content);
-  for(var key of Object.keys(content)){
+
+  // if user wants questions shuffled
+  if(shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
+
+  for(var key of keys){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
 
-    questionsAnswers += '<b>Ceist:</b> ' + key + '   <b>Freagra:</b> ' + content[key] + '<br>';
+    questionsAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
 
     //let correctTrigger = "Ceart! <call>addScore</call>An chéad cheist eile:<br><br>" + key;
 

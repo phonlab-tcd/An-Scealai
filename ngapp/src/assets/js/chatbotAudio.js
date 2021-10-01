@@ -57,9 +57,12 @@ function audio(newReply, id, isUser){
     bubbleText = audio_reply;
     newBubble = { text: audio_reply , id: thisId, url: null, isUser: isUser };
   }
-  if(!bubbleText.includes("Hi this is Taidhgín")){
+
+  newBubble.text = newBubble.text.replace(/(<([^>]+)>)/gi, "");
+  bubbleText = bubbleText.replace(/(<([^>]+)>)/gi, "");
+  if(currentLanguage == 'Gaeilge'){
     bubbleObjArr.push(newBubble);
-    //console.log(bubbleObjArr);
+    console.log(newBubble);
     //makeMessageObj(isUser, bubbleText);
     if(currentEngine == 'DNN') testDNN(bubbleText, thisId);
     else if(currentEngine == 'HTS') callAudio(bubbleText, thisId);

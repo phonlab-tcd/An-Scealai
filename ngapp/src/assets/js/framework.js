@@ -149,6 +149,7 @@ function done(){
     result["topic-name"] = name;
     result['userId'] = user._id;
     result['role'] = user.role;
+    result['shuffle'] = $('#shuffle-box input').prop('checked');
     if(user.role == 'TEACHER' && classId != ""){
       result['classId'] = classId;
     }
@@ -161,8 +162,7 @@ function done(){
       request.onload = function(){
         console.log(this.response);
         if(this.response == 'script already exists'){
-          $('#remind-message').text('Script with this name already exists!');
-          $('#remind-message').css('display', 'block');
+          $('#exists-message').css('display', 'block');
         }
         else{
           // if file creation was successful
@@ -175,20 +175,19 @@ function done(){
     }
     else{
       //remind to fill in quiz name
-      showReminder("Don't forget to name your quiz.");
+      $('#forgetName-message').css('display', 'block');
     }
   }
   else{
     //remind to fill in all entries
-    showReminder('Fill in all entries.');
+    $('#remind-message').css('display', 'block');
   }
   
 }
 
 function sendVerification(){
   //send new script to an scealai email
-  $('#saved-message').text('Your script will be verified.');
-  $('#saved-message').css('display', 'block');
+  $('#verified-message').css('display', 'block');
   var request = new XMLHttpRequest();
   request.open('POST', backendUrl + 'Chatbot/sendScriptVerification', true);
   request.setRequestHeader("Content-type", "application/json");
@@ -196,12 +195,6 @@ function sendVerification(){
   request.onload = function(){
     console.log(this.response);
   }
-}
-
-function showReminder(text){
-  let reminder = document.getElementById('remind-message');
-  reminder.innerText = text;
-  reminder.style.display = 'block';
 }
 
 function downloadNewScript(){
@@ -250,6 +243,8 @@ function closeSubmit(){
   setTimeout(function(){
     $('#remind-message').css('display', 'none');
     $('#saved-message').css('display', 'none');
+    $('#forgetName-message').css('display', 'none');
+    $('#exists-message').css('display', 'none');
     $('#ask-publish').css('display', 'none');
     $('#ask-download').css('display', 'none');
   }, 500);
@@ -414,7 +409,13 @@ function endOfQuiz(){
   console.log('quiz ended');
   appendTypingIndicator();
   setTimeout(function(){
-    let message = 'Well done! Your score is ' + quiz_score + ' out of ' + currentNumberofQuestions;
+    let message = '';
+    if(quiz_score >= 3){
+      message = 'Maith thú! Fuairis ' + quiz_score + ' as ' + currentNumberofQuestions;
+    } 
+    else{
+      message = 'Fuairis ' + quiz_score + ' as ' + currentNumberofQuestions;
+    }
     appendMessage(true, false, message);
   }, 2200);
   setTimeout(function(){
