@@ -16,11 +16,13 @@ var slender_names = [];
 var test_file = "+ start\n - Hi this is taidhgin!:)";
 
 var backendUrl = 'backend url not yet created';
+var currentLanguage = 'Gaeilge';
 
 let currentDialectButton = null;
 
-function setup(file, backendUrlFromAngularComponent){
-  backendUrl = backendUrlFromAngularComponent
+function setup(file, backendUrlFromAngularComponent, languageFromAngular){
+  backendUrl = backendUrlFromAngularComponent;
+  currentLanguage = languageFromAngular;
   videoPlayer = document.getElementById('chimp');
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
@@ -31,7 +33,7 @@ function setup(file, backendUrlFromAngularComponent){
   bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
     bot.sortReplies();
     currentFile = 'start';
-    chatSetup("start", false, false);
+    chatSetup("start" + currentLanguage.toLowerCase(), false, false);
   });
 }
 

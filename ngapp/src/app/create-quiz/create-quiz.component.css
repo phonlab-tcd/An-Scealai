@@ -102,7 +102,7 @@
     cursor: pointer;
 }
 
-#saved-message, #ask-publish, #save-prompt, #thank-message{
+#saved-message, #ask-publish, #save-prompt, #thank-message, #verified-message{
     border-radius: 5px;
     position: absolute;
     padding: 5px;
@@ -110,11 +110,15 @@
     box-shadow: 1px 1px 1px 0px #ccc;
 }
 
-#saved-message{
+#saved-message, #verified-message{
     top: 30%;
     width: 50%;
     right: 5%;
     display: none;
+}
+
+#verified-message{
+    top: 60%;
 }
 
 #thank-message{
@@ -231,7 +235,16 @@ button:hover{
     margin-left: 5%;
 } 
 
-#remind-message{
+#shuffle-box{
+    position: absolute;
+    right: 5%;
+    top: 6%;
+    background-color: aquamarine;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+#remind-message, #exists-message, #forgetName-message{
     width: 25%;
     position: absolute;
     bottom: 5%;
