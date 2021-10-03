@@ -62,10 +62,10 @@ function audio(newReply, id, isUser){
   bubbleText = bubbleText.replace(/(<([^>]+)>)/gi, "");
   if(currentLanguage == 'Gaeilge'){
     bubbleObjArr.push(newBubble);
-    console.log(newBubble);
+    //console.log(newBubble);
     //makeMessageObj(isUser, bubbleText);
-    if(currentEngine == 'DNN') testDNN(bubbleText, thisId);
-    else if(currentEngine == 'HTS') callAudio(bubbleText, thisId);
+    if(currentEngine == 'DNN') testDNN(newBubble, thisId);
+    else if(currentEngine == 'HTS') callAudio(newBubble, thisId);
   }
 }
 
@@ -132,10 +132,16 @@ function editMessageForAudio(){
 }
 
 function callAudio(testString, id){
+  var messageBubble = {};
   if(currentDialect == ''){
     currentDialect = 'MU'; 
   }
-  var messageBubble = {text: testString, dialect: currentDialect};
+  if(testString.isUser){
+    messageBubble = {text: testString.text, dialect: currentDialect};
+  }
+  else{
+    messageBubble = {text: testString.text, dialect: 'MU'};
+  }
   request.open('POST', backendUrl + 'Chatbot/getAudio', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify(messageBubble));
@@ -151,25 +157,33 @@ function callAudio(testString, id){
   }
 }
 
-function testDNN(text, id){
-  if(currentDialect != ''){
-    var messageBubble = {text: text, dialect: currentDialect};
-    request.open('POST', backendUrl + 'Chatbot/getDNNAudio', true);
-    request.setRequestHeader("Content-type", "application/json");
-    request.send(JSON.stringify(messageBubble));
-    request.onload = function(){
-      //Get audio src strings
-      var audioObj = JSON.parse(this.response).audio.sort((a, b) => { return a.id - b.id; });
-      var audioStrings = [];
-      for(obj of audioObj){
-        audioStrings.push(obj.audioString);
-      }
-      var bubbleSrc = testMerge(audioStrings);
-      let bubble = bubbleObjArr.find(obj => obj.id == id);
-      bubble.url = bubbleSrc;
-      if(audioCheckbox.checked == true){
-        playAudio(bubble);
-      }
+function testDNN(textBubble, id){
+  console.log(textBubble);
+  var messageBubble = {};
+  if(currentDialect == ''){
+    currentDialect = 'MU';
+  }
+  if(textBubble.isUser){
+    messageBubble = {text: textBubble.text, dialect: currentDialect};
+  }
+  else{
+    messageBubble = {text: textBubble.text, dialect: 'MU'};
+  }
+  request.open('POST', backendUrl + 'Chatbot/getDNNAudio', true);
+  request.setRequestHeader("Content-type", "application/json");
+  request.send(JSON.stringify(messageBubble));
+  request.onload = function(){
+    //Get audio src strings
+    var audioObj = JSON.parse(this.response).audio.sort((a, b) => { return a.id - b.id; });
+    var audioStrings = [];
+    for(obj of audioObj){
+      audioStrings.push(obj.audioString);
+    }
+    var bubbleSrc = testMerge(audioStrings);
+    let bubble = bubbleObjArr.find(obj => obj.id == id);
+    bubble.url = bubbleSrc;
+    if(audioCheckbox.checked == true){
+      playAudio(bubble);
     }
   }
 }

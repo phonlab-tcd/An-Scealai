@@ -62,7 +62,7 @@
     "jest": "^27.0.6",
     "mocha": "^8.4.0",
     "mockingoose": "^2.15.2",
-    "nodemon": "^2.0.9",
+    "nodemon": "^2.0.13",
     "supertest": "^6.1.4"
   }
 }
