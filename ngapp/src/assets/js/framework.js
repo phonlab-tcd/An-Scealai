@@ -405,7 +405,8 @@ function trackWrongAnswer(){
   to_review.push(this_reply);
 }
 
-function endOfQuiz(){
+function endOfQuiz(numberOfAnswers){
+  if(numberOfAnswers != 0) currentNumberofQuestions = numberOfAnswers;
   console.log('quiz ended');
   appendTypingIndicator();
   setTimeout(function(){
@@ -430,10 +431,16 @@ function tryAgain(quizName){
   console.log(quizName);
   quiz_score = 0;
   to_review = []
-  loadQuiz(quizName);
+  var quiz = community_scripts.find(obj => obj.name.includes(quizName));
+
+  if(quiz != undefined) load(quizName);
+  else loadQuiz(quizName);
 }
 
-function showAnswers(){
+function showAnswers(quiz){
+  if(quiz){
+    current_qandanswers = community_scripts.find(obj => obj.name.includes(quiz)).answers;
+  }
   appendTypingIndicator();
   setTimeout(function(){
     appendMessage(true, false, current_qandanswers);

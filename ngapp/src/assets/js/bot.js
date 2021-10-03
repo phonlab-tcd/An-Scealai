@@ -44,7 +44,7 @@ function load(fileId, start, content_id){
   }
   //console.log(send);
 
-  if(fileId == 'BriathraNeamhrialta') showContents(content_id, 'popup-background', false);
+  if(content_id) showContents(content_id, 'popup-background', false);
   if(currentFile == 'start') $("#bot-messages").empty();
   else currentFile = fileId;
   console.log(fileId);
@@ -429,8 +429,7 @@ function hideTopics(){
   $('.choose-community').css('display', 'none');
 }
 
-// Testing Communication between typescript & javascript for triggering bot from grammar checker
-function testType(){
-  alert("this is javascript");
-}
-
+var community_scripts = [
+  {name: 'Community_Eire', numberofquestions: 10, answers: '<b>Ceist:</b> Cad é an contae is lú in Éirinn?   <b>Freagra:</b> An Lú, Contae Lú, Co. Lú, Contae Lú<br>' + '<br>' + '<b>Ceist:</b> Cén contae ina bhfuil Conamara?   <b>Freagra:</b> Gaillimh, Contae na Gaillimhe, Co. na Gaillimhe<br>' + '<br>' + '<b>Ceist:</b> Cé mhéad bliain a bhíonn i dtéarma Uachtaránachta in Éirinn?   <b>Freagra:</b> Seacht, 7<br>' + '<br>' + '<b>Ceist:</b> Cad é siombail náisiúnta na hÉireann?   <b>Freagra:</b> cláirseach, cruit<br>' + '<br>' + '<b>Ceist:</b> Cé a bhí mar an gcéad Uachtarán ar Éirinn?   <b>Freagra:</b> Dúbhghlas de hÍde, Douglas Hyde<br>' + '<br>' + '<b>Ceist:</b> Cén contae ag a bhfuil an daonra is lú in Éirinn?   <b>Freagra:</b> Liatroim, Contae Liatroma, Co. Liatroma<br>' + '<br>' + '<b>Ceist:</b> Cén contae ina bhfuil Caisleán Bhun Raite?   <b>Freagra:</b> an Clár, Contae an Chláir, Co. an Chláir, Clár<br>' + '<br>' + '<b>Ceist:</b> Cén sliabh is airde in Éirinn?   <b>Freagra:</b> Corrán Tuathaill, Carrauntoohil<br>' + '<br>' + '<b>Ceist:</b> Cén teanga inar scríobhadh Leabhar Cheanannais   <b>Freagra:</b> Laidin<br>' + '<br>' + '<b>Ceist:</b> Cad í an dara abhainn is faide in Éirinn?   <b>Freagra:</b> Abhainn na Bearú, An Bhearú'},
+  {name: 'Community_Seanfhocail', numberofquestions: 10, answers: "<b>Ceist:</b> Críochnaigh an nath seo: 'Níl aon tinteán…'   <b>Freagra:</b> mar do thinteán féin<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'An té a bhíonn siúlach…'   <b>Freagra:</b> bíonn sé scéalach<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Ní thagann ciall…'   <b>Freagra:</b> roimh aois<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Aithníonn ciaróg…'   <b>Freagra:</b> ciaróg eile<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'   <b>Freagra:</b> glic<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Beatha teanga…'   <b>Freagra:</b> í a labhairt<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Bíonn blas ar an…'   <b>Freagra:</b> mbeagán<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Is binn béal…'   <b>Freagra:</b> ina thost<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Marbh le tae agus…'   <b>Freagra:</b> marbh gan é<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Ná déan nós is ná…'   <b>Freagra:</b> bris nós"},
+];

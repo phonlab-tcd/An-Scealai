@@ -12,7 +12,7 @@ return '';
 < object
 
 > object endOfQuiz javascript
-endOfQuiz();
+endOfQuiz(10);
 return '';
 < object
 
@@ -130,5 +130,5 @@ return '';
 - <call>endOfQuiz</call>
 
 + tryagain
-- <button class="rive-button" onclick='tryAgain("Community_Eire")'>Try Quiz again?</button>
-^ <button class='rive-button' onclick='showAnswers()'>Show Answers?</button>
+- <button class="rive-button" onclick='tryAgain("Community_Eire")'>Bain triail as arís?</button>
+^ <button class='rive-button' onclick='showAnswers("Community_Eire")'>Taispeáin na freagraí?</button>

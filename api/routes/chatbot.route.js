@@ -43,7 +43,6 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   delete content['role'];
   delete content['classId'];
   delete content['shuffle'];
-  console.log(content);
   var questionsAnswers = '';
   let tryAgain = '\n\n+ tryagain\n- <button class="rive-button"'; 
   tryAgain += " onclick='tryAgain(\"" + topicName + "\")'>Bain triail as arís?</button>\n"

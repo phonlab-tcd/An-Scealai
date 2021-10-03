@@ -12,123 +12,123 @@ return '';
 < object
 
 > object endOfQuiz javascript
-endOfQuiz();
+endOfQuiz(10);
 return '';
 < object
 
 + start
 - Críochnaigh an nath seo: 'Níl aon tinteán…'
-
+  
 + *
-% críochnaigh an nath seo níl aon tinteán
-- Mícheart! <call>chatSetup ans1w</call>
+% críochnaigh an nath seo níl aon tinteán…
+- Mícheart! <call>chatSetup mar do thinteán féinw</call>
 
-+ ans1w
++ mar do thinteán féinw
 - Críochnaigh an nath seo: 'An té a bhíonn siúlach…'
 
-+ (an lú|contae lú|co lú)
-% críochnaigh an nath seo níl aon tinteán
++ mar do thinteán féin
+% críochnaigh an nath seo níl aon tinteán…
 - Críochnaigh an nath seo: 'An té a bhíonn siúlach…'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo an té a bhíonn siúlach
-- Mícheart! <call>chatSetup ans2w</call>
-
-+ ans2w
-- Críochnaigh an nath seo: 'Ní thagann ciall…'
-
-+ (gaillimh|contae na gaillimhe|co na gaillimhe)
-% críochnaigh an nath seo an té a bhíonn siúlach
+% críochnaigh an nath seo an té a bhíonn siúlach…
+- Mícheart! <call>chatSetup bíonn sé scéalachw</call>
+    
++ bíonn sé scéalachw\n' +
+- Críochnaigh an nath seo: 'Ní thagann ciall…'\n" +
+    
++ bíonn sé scéalach
+% críochnaigh an nath seo an té a bhíonn siúlach…
 - Críochnaigh an nath seo: 'Ní thagann ciall…'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo ní thagann ciall
-- Mícheart! <call>chatSetup ans3w</call>
+% críochnaigh an nath seo ní thagann ciall…
+- Mícheart! <call>chatSetup roimh aoisw</call>
 
-+ ans3w
++ roimh aoisw
 - Críochnaigh an nath seo: 'Aithníonn ciaróg…'
-
-+ (seacht|7)
-% críochnaigh an nath seo ní thagann ciall
+    
++ roimh aois
+% críochnaigh an nath seo ní thagann ciall…
 - Críochnaigh an nath seo: 'Aithníonn ciaróg…'<call>addScore</call>
-
+    
 + *
-% críochnaigh an nath seo aithníonn ciaróg
-- Mícheart! <call>chatSetup ans4w</call>
+% críochnaigh an nath seo aithníonn ciaróg…
+- Mícheart! <call>chatSetup ciaróg eilew</call>
 
-+ ans4w
++ ciaróg eilew
 - Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'
 
-+ (cláirseach|cruit)
-% críochnaigh an nath seo aithníonn ciaróg
++ ciaróg eile
+% críochnaigh an nath seo aithníonn ciaróg…
 - Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith
-- Mícheart! <call>chatSetup ans5w</call>
+% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith…
+- Mícheart! <call>chatSetup glicw</call>
+    
++ glicw
+- Críochnaigh an nath seo: 'Beatha teanga…
 
-+ ans5w
-- Cén contae ag a bhfuil an daonra is lú in Éirinn?
-
-+ (dúbhghlas de híde|douglas hyde)
-% cé a bhí mar an gcéad uachtarán ar éirinn
-- Cén contae ag a bhfuil an daonra is lú in Éirinn?<call>addScore</call>
-
-+ *
-% cén contae ag a bhfuil an daonra is lú in éirinn
-- Mícheart! <call>chatSetup a6w</call>
-
-+ a6w
-- Cén contae ina bhfuil Caisleán Bhun Raite?
-
-+ (liatroim|contae liatroima|co liatroma)
-% cén contae ag a bhfuil an daonra is lú in éirinn
-- Cén contae ina bhfuil Caisleán Bhun Raite?<call>addScore</call>
++ glic
+% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith…
+- Críochnaigh an nath seo: 'Beatha teanga…'<call>addScore</call>
 
 + *
-% cén contae ina bhfuil caisleán bhun raite
-- Mícheart! <call>chatSetup a7w</call>
+% críochnaigh an nath seo beatha teanga…
+- Mícheart! <call>chatSetup í a labhairtw</call>
+    
++ í a labhairtw
+- Críochnaigh an nath seo: 'Bíonn blas ar an…'
 
-+ a7w
-- Cén sliabh is airde in Éirinn?
-
-+ (an clár|contae an chláir|co an chláir|clár)
-% cén contae ina bhfuil caisleán bhun raite
-- Cén sliabh is airde in Éirinn?<call>addScore</call>
-
-+ *
-% cén sliabh is airde in éirinn
-- Mícheart! <call>chatSetup a8w</call>
-
-+ a8w
-- Cén teanga inar scríobhadh Leabhar Cheanannais?
-
-+ (corrán tuathaill|carrauntoohil)
-% cén sliabh is airde in éirinn
-- Cén teanga inar scríobhadh Leabhar Cheanannais?<call>addScore</call>
++ í a labhairt
+% críochnaigh an nath seo beatha teanga…
+- Críochnaigh an nath seo: 'Bíonn blas ar an…'<call>addScore</call>
 
 + *
-% cén teanga inar scríobhadh leabhar cheanannais
-- Mícheart! <call>chatSetup a9w</call>
+% críochnaigh an nath seo bíonn blas ar an…
+- Mícheart! <call>chatSetup mbeagánw</call>
+    
++ mbeagánw
+- Críochnaigh an nath seo: 'Is binn béal…'
 
-+ a9w
-- Cad í an dara abhainn is faide in Éirinn?
-
-+ laidin
-% cén teanga inar scríobhadh leabhar cheanannais
-- Cad í an dara abhainn is faide in Éirinn?<call>addScore</call>
++ mbeagán
+% críochnaigh an nath seo bíonn blas ar an…
+- Críochnaigh an nath seo: 'Is binn béal…'<call>addScore</call>
 
 + *
-% cad í an dara abhainn is faide in éirinn
+% críochnaigh an nath seo is binn béal…
+- Mícheart! <call>chatSetup ina thostw</call>
+
++ ina thostw
+- Críochnaigh an nath seo: 'Marbh le tae agus…'
+
++ ina thost
+% críochnaigh an nath seo is binn béal…
+- Críochnaigh an nath seo: 'Marbh le tae agus…'<call>addScore</call>
+  
++ *\n
+% críochnaigh an nath seo marbh le tae agus…
+- Mícheart! <call>chatSetup marbh gan éw</call>
+
++ marbh gan éw
+- Críochnaigh an nath seo: 'Ná déan nós is ná…'
+
++ marbh gan é
+% críochnaigh an nath seo marbh le tae agus…
+- Críochnaigh an nath seo: 'Ná déan nós is ná…'<call>addScore</call>
+
++ *
+% críochnaigh an nath seo ná déan nós is ná…
 - Mícheart! <call>chatSetup finish</call>
 
-+ (abhainn na bearú|an bhearú)
-% cad í an dara abhainn is faide in éirinn
++ bris nós
+% críochnaigh an nath seo ná déan nós is ná…
 - <call>addScore</call><call>chatSetup finish</call>
 
 + finish 
 - <call>endOfQuiz</call>
 
 + tryagain
-- <button class="rive-button" onclick='tryAgain("Community_Eire")'>Try Quiz again?</button>
-^ <button class='rive-button' onclick='showAnswers()'>Show Answers?</button>
+- <button class="rive-button" onclick='tryAgain("Community_Seanfhocail")'>Bain triail as arís?</button>
+^ <button class='rive-button' onclick='showAnswers("Community_Seanfhocail")'>Taispeáin na freagraí?</button>
