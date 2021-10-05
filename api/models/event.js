@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Event = new mongoose.Schema({
+let Event = new mongoose.Schema({
   date: Date,
   type: {
     type: String,
@@ -18,10 +18,13 @@ const Event = new mongoose.Schema({
       'CREATE-MESSAGE',
       'RECORD-STORY',
       'USE-DICTIONARY',
+      'PROFILE-STATS',
+      'FEATURE-STATS',
     ],
   },
   storyData: Object,
   userId: String,
+  statsData: Object,
 }, {
   collection: 'engagement',
 });

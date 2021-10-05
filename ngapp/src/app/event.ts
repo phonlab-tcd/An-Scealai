@@ -12,6 +12,7 @@ export class Event extends Serializable {
     userId: string;
     storyData: object;
     date: Date;
+    statsData: Object;
 }
 
 export class MouseOverGrammarSuggestionEvent extends Event {
@@ -31,5 +32,7 @@ export enum EventType {
     'VIEW-FEEDBACK' = 'VIEW-FEEDBACK',
     'CREATE-MESSAGE' = 'CREATE-MESSAGE',
     'RECORD-STORY' = 'RECORD-STORY',
-    'USE-DICTIONARY' = 'USE-DICTIONARY'
+    'USE-DICTIONARY' = 'USE-DICTIONARY',
+    'PROFILE-STATS' = 'PROFILE-STATS',
+    'FEATURE-STATS' = 'FEATURE-STATS'
 }

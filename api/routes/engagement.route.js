@@ -43,6 +43,37 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
   });
 });
 
+engagementRoutes.route('/addAnalysisEvent').post((req, res) => {
+  let event = new Event();
+  event.type = req.body.event.type;
+  event.statsData = req.body.event.statsData;
+  event.userId = req.body.event.userId;
+  event.date = new Date();
+  console.log(event);
+  
+  event.save().then(event => {
+    res.status(200).json({'event': 'event added successfully', 'id': event._id});
+  })
+    .catch(err => {
+      console.log(err);
+      res.status(400).send("unable to save event to DB");
+    });
+
+});
+
+engagementRoutes.route('/getPreviousAnalysisData/:type').get((req, res) => {
+    Event.find({'type':req.params.type}, (err, events) => {
+        if(err) {
+            res.json(err);
+        }
+        if(events) {
+            res.status(200).json(events);
+        } else {
+            res.status(404).json("DB does not have any event stats data.");
+        }
+    });
+});
+
 engagementRoutes.route('/eventsForUser/:id').get((req, res) => {
     Event.find({'userId':req.params.id}, (err, events) => {
         if(err) {

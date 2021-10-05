@@ -35,6 +35,21 @@ export class EngagementService {
               event.userId,
               { event });
   }
+  
+  addAnalysisEvent(type: EventType, stats: Object) {
+    if(this.auth.isLoggedIn()) {
+      let event: Event = new Event();
+      event.type = type;
+      event.statsData = stats;
+      event.userId = this.auth.getUserDetails()._id;
+      console.log("event to record: ", event);
+      return this.http.post(this.baseUrl + "addAnalysisEvent/", {event:event}).subscribe();
+    }
+  }
+  
+  getPreviousAnalysisData(type: string): Observable<any> {
+    return this.http.get(this.baseUrl + "getPreviousAnalysisData/" + type); 
+  }
 
   getEventsForUser(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'eventsForUser/' + id);
