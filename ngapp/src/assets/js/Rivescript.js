@@ -1,59 +1,4 @@
-var files = [
-  {id: "start", file: "assets/rive/start.rive"},
-  {id: "bc", file: "assets/rive/briathraneamhrialtaChaite.rive"},
-  {id: "bl", file: "assets/rive/briathraneamhrialtaLaithreach.rive"},
-  {id: "BriathraNeamhrialta", file: "assets/rive/BriathraNeamhrialta.rive"},
-  {id: "BriathraNeamhrialtaInfo", file: "assets/rive/BriathraNeamhrialtaInfo.rive"},
-  {id: "BQuiz", file: "assets/rive/BQuiz.rive"},
-  {id: "deanAC", file: "assets/rive/deanAC.rive"},
-  {id: "deanAL", file: "assets/rive/deanAL.rive"},
-  {id: "deanAF", file: "assets/rive/deanAF.rive"},
-  {id: "deanMC", file: "assets/rive/deanMC.rive"},
-  {id: "beirAC", file: "assets/rive/beirAC.rive"},
-  {id: "beirAL", file: "assets/rive/beirAL.rive"},
-  {id: "beirAF", file: "assets/rive/beirAF.rive"},
-  {id: "beirMC", file: "assets/rive/beirMC.rive"},
-  {id: "faighAC", file: "assets/rive/faighAC.rive"},
-  {id: "faighAL", file: "assets/rive/faighAL.rive"},
-  {id: "faighAF", file: "assets/rive/faighAF.rive"},
-  {id: "faighMC", file: "assets/rive/faighMC.rive"},
-  {id: "feicAC", file: "assets/rive/feicAC.rive"},
-  {id: "feicAL", file: "assets/rive/feicAL.rive"},
-  {id: "feicAF", file: "assets/rive/feicAF.rive"},
-  {id: "feicMC", file: "assets/rive/feicMC.rive"},
-  {id: "abairAC", file: "assets/rive/abairAC.rive"},
-  {id: "abairAL", file: "assets/rive/abairAL.rive"},
-  {id: "abairAF", file: "assets/rive/abairAF.rive"},
-  {id: "abairMC", file: "assets/rive/abairMC.rive"},
-  {id: "tabhairAC", file: "assets/rive/tabhairAC.rive"},
-  {id: "tabhairAL", file: "assets/rive/tabhairAL.rive"},
-  {id: "tabhairAF", file: "assets/rive/tabhairAF.rive"},
-  {id: "tabhairMC", file: "assets/rive/tabhairMC.rive"},
-  {id: "tarAC", file: "assets/rive/tarAC.rive"},
-  {id: "tarAL", file: "assets/rive/tarAL.rive"},
-  {id: "tarAF", file: "assets/rive/tarAF.rive"},
-  {id: "tarMC", file: "assets/rive/tarMC.rive"},
-  {id: "biAC", file: "assets/rive/biAC.rive"},
-  {id: "biAL", file: "assets/rive/biAL.rive"},
-  {id: "biAF", file: "assets/rive/biAF.rive"},
-  {id: "biMC", file: "assets/rive/biMC.rive"},
-  {id: "teighAC", file: "assets/rive/teighAC.rive"},
-  {id: "teighAL", file: "assets/rive/teighAL.rive"},
-  {id: "teighAF", file: "assets/rive/teighAF.rive"},
-  {id: "teighMC", file: "assets/rive/teighMC.rive"},
-  {id: "ithAC", file: "assets/rive/ithAC.rive"},
-  {id: "ithAL", file: "assets/rive/ithAL.rive"},
-  {id: "ithAF", file: "assets/rive/ithAF.rive"},
-  {id: "ithMC", file: "assets/rive/ithMC.rive"},
-  {id: "cloisAC", file: "assets/rive/cloisAC.rive"},
-  {id: "cloisAL", file: "assets/rive/cloisAL.rive"},
-  {id: "cloisAF", file: "assets/rive/cloisAF.rive"},
-  {id: "cloisMC", file: "assets/rive/cloisMC.rive"},
-  {id: "IrrQuiz", file: "assets/rive/BriathraNQuiz.rive"},
-];
-
-var userName;
-var name;
+var username = '';
 var botName = "Taidhgín";
 var progress = 0;
 var currentQuestion;
@@ -68,73 +13,40 @@ var quizScore = 0;
 var quizProgress = 0;
 var isAQuestion = false;
 
-function next(){
-  if(thisDialect != ""){
-    chatSetup("askname");
-    play = true;
-  }
-  else{
-    appendTypingIndicator();
-    setTimeout(function(){
-      appendMessage(true, false, "Please choose a dialect!", false);
-      $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-    }, 1200);
-  }
-}
-
-function searchNames(name){
-  var slenderName;
-  for(i = 0; i < ainmneacha.length; i++){
-    if(name == ainmneacha[i].ainm){
-      slenderName = ainmneacha[i].slender;
-      localStorage.setItem("name", slenderName);
-    }
-  }
-  return slenderName;
-}
-
-function storeName(name){
-  play = true;
-  userName = name;
-  botObj.username = userName;
-  var slName = searchNames(name);
-  if(slName) localStorage.setItem("name", slName);
-  else localStorage.setItem("name", name);
-  return "";
-}
 
 function getName(){
-  name = localStorage.getItem("name");
-  if(name) return name;
-  else return userName;
+  return username;
+}
+
+function clearName(){
+  userName = '';
+}
+
+function setUsername(name){
+  username = name;
+  return '';
+}
+
+function isNameStored(){
+  if(username != '') return true;
+  else return false;
 }
 
 function getCurrentTopic(){
   return currentTopic;
 }
 
-function getUserName(){
-  return userName;
-}
 function getBotName(){
   if(botName) return botName;
 }
 
-function clearName(){
-  localStorage.removeItem("name");
-  userName = "";
-}
-
-function isNameStored(){
-  if(localStorage.getItem("name")) return true;
-  else return false;
-}
 
 function askName(){
   var greeting = "Dia Dhuit, Is mise " + getBotName() + ". ";
   var askNames = ["Cén t-ainm atá ort?", "Cad is ainm duit?", "Cé thú féin?", "Cad a thabharfaidh mé ort?"];
   var ran = getRandomIntInclusive(0, askNames.length - 1);
-  return greeting + askNames[ran];
+  let reply = greeting + askNames[ran];
+  return reply;
 }
 
 function getProgress(){
@@ -210,24 +122,24 @@ function getCrioch(){
 
 function getRandomQuestion(questions){
     answer2 = "";
-  wrongCount = 0;
-  if(isLevelComplete == true && quiz == false){
-    return "";
-  }
-  if(isQuizComplete == true) return "";
-  if(quiz) quizProgress++;
-  var index = getRandomIntInclusive(0, questions.length - 1);
-  console.log("index: " +  index);
-  if(index == prevQuestion) index = getRandomIntInclusive(0, questions.length - 1);
-  prevQuestion = index;
-  currentQuestion = questions[index];
-  if("answer2" in currentQuestion){
-    answer2 = currentQuestion.answer2;
-  }
-  console.log(currentQuestion.question + ", " + currentQuestion.answer + " " + answer2);
-  var ceist = "Ceist: " + currentQuestion.question;
-  isAQuestion = true;
-  return ceist;
+    wrongCount = 0;
+    if(isLevelComplete == true && quiz == false){
+      return "";
+    }
+    if(isQuizComplete == true) return "";
+    if(quiz) quizProgress++;
+    var index = getRandomIntInclusive(0, questions.length - 1);
+    console.log("index: " +  index);
+    if(index == prevQuestion) index = getRandomIntInclusive(0, questions.length - 1);
+    prevQuestion = index;
+    currentQuestion = questions[index];
+    if("answer2" in currentQuestion){
+      answer2 = currentQuestion.answer2;
+    }
+    console.log(currentQuestion.question + ", " + currentQuestion.answer + " " + answer2);
+    var ceist = "Ceist: " + currentQuestion.question;
+    isAQuestion = true;
+    return ceist;
 }
 
 function getCurrentAnswer(){
@@ -632,9 +544,6 @@ function getQuestion(verb, topic, ran, tense){
       else if(topic == 5) return abairMCSpleach[ran];
     }
   }
-
-
-
 }
 
 function getRandomIntInclusive(min, max) {
