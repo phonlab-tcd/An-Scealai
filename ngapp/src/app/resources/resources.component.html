@@ -4,6 +4,7 @@
   </div>
   <div class="content">
     <div class="headerTitle"> {{ts.l.story_examples}} </div><br>
+    <div class="headerTitle"> {{ts.l.story_bank_growing}} </div><br><br>
     <div style="font-size: 15pt;"> {{ts.l.higher_level}} </div>
     <!-- Gweedore (Ulster) stories-->
     <div class="dialectTitle"> {{ts.l.gweedore}} </div>
@@ -57,14 +58,14 @@
           <a class="viewStoryBtn" href="https://www.abair.tcd.ie/lara/colorado_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.view_story}} </a>
         </mat-action-row>
       </mat-expansion-panel>
-      <!-- Druma Mór -->
+      <!-- An Druma Mór -->
       <mat-expansion-panel>
         <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
           <mat-panel-title>
             <img src="assets/img/logo-S.png" class="storyImg" alt="Druma Mór">
           </mat-panel-title>
           <mat-panel-description class="panelDescription">
-            Druma Mór
+            An Druma Mór
           </mat-panel-description>
         </mat-expansion-panel-header>
           <div> {{ts.l.druma_mor1}}</div> <br>
@@ -136,8 +137,404 @@
       </mat-expansion-panel>
     </mat-accordion>
     
-    <!-- Chonamara stories-->
-    <!-- <div class="dialectTitle"> {{ts.l.chonamara}} </div>
-      <div> Coming Soon! </div> -->
+    <div *ngIf="!auth.isLoggedIn()" class="signIn"> {{ts.l.sign_in_to_view_more}} </div>
+    
+    <!-- Leaving Cert stories-->
+    <div class="dialectTitle"> {{ts.l.leaving_cert_stories}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
+    <mat-accordion multi *ngIf="auth.isLoggedIn()">
+      <!-- Oisín i dTír na nÓg  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/oisin02_color.png" class="storyImg" alt="Mar a Baisteadh Fionn">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription">
+            Oisín i dTír na nÓg
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.oisin_i_dTir_na_nOg1}} </div> <br>
+          <div> {{ts.l.oisin_i_dTir_na_nOg2}} </div> <br>
+          <div> {{ts.l.oisin_i_dTir_na_nOg3}} </div>
+        <mat-action-row class="moreResources">
+            <div><a class="viewStoryBtn" href="https://tuairisc.ie/pros-oisin-i-dtir-na-nog/" target="_blank" rel="noopener noreferrer"> {{ts.l.more_resources}} </a> </div>
+            <div class="dialectContainer">         
+              <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+              <!--
+              <div class="viewStory dropdown">
+                <div class="viewStoryBtn">{{ts.l.munster}}</div>
+                <div class="dropdown-content">
+                  <a href="https://abair.ie/lara/LARA_Oisin_i_dTir_na_nOg_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                  <a href="https://abair.ie/lara/LARA_Oisin_i_dTir_na_nOg_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+                </div>
+              </div>
+              -->
+              <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Oisin_i_dTir_na_nOg_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+              <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Oisin_i_dTir_na_nOg_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+              <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Oisin_i_dTir_na_nOg_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+            </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Dís -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/dis_sketch.png" class="storyImg" alt="Fairceallach Fhinn Mhic Chumhaill"> 
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Dís</div>
+            <div>le Siobhán Ní Shúilleabháin</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.dis1}} </div> <br>
+          <div> {{ts.l.dis2}} </div>
+        <mat-action-row class="moreResources">
+          <div><a class="viewStoryBtn" href="https://tuairisc.ie/pros-dis/" target="_blank" rel="noopener noreferrer"> {{ts.l.more_resources}} </a> </div>
+          <div class="dialectContainer">      
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Dis_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Dis_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Dis_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Dis_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Dis_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Gnáthrud -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/an_gnathrud_sketch.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>An Gnáthrud</div>
+            <div>le Deirdre Ní Ghrianna</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.an_gnathrud}} </div>
+        <mat-action-row class="moreResources">
+          <div><a class="viewStoryBtn" href="https://tuairisc.ie/pros-an-gnathrud/" target="_blank" rel="noopener noreferrer"> {{ts.l.more_resources}} </a> </div>
+          <div class="dialectContainer">      
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_An_Gnathrud_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_An_Gnathrud_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Gnathrud_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Gnathrud_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Gnathrud_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Hurlamboc -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/logo-S.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Hurlamboc</div>
+            <div>le hÉilís Ní Dhuibhne</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.hurlamboc}} </div>
+        <mat-action-row class="moreResources">
+          <div><a class="viewStoryBtn" href="https://tuairisc.ie/pros-hurlamaboc/" target="_blank" rel="noopener noreferrer"> {{ts.l.more_resources}} </a> </div>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Hurlamaboc_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Hurlamaboc_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Hurlamaboc_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Hurlamaboc_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div> -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Hurlamaboc_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Seal i Neipeal -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'200px'" [expandedHeight]="'200px'">
+          <mat-panel-title>
+            <img src="assets/img/neipeal02_color.png" class="storyImg" alt="Pósadh ar an mBlascaod Mór">
+          </mat-panel-title>
+          <mat-panel-description class="panelDescription panelFlex">
+            <div>Seal i Neipeal</div>
+            <div>le Cathal Ó Searcaigh</div>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div> {{ts.l.seal_i_neipeal}} </div>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Seal_i_Neipeal_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Seal_i_Neipeal_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Seal_i_Neipeal_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Seal_i_Neipeal_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Seal_i_Neipeal_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    <!-- Other stories-->
+    <div class="dialectTitle"> {{ts.l.other_stories}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
+    <mat-accordion multi *ngIf="auth.isLoggedIn()">
+      <!-- An Seilide agus An Míol Mór  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>        
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            An Seilide agus An Míol Mór
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_An_Seilide_agus_an_Miol_Mor_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_An_Seilide_agus_an_Miol_Mor_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Seilide_agus_an_Miol_Mor_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Seilide_agus_an_Miol_Mor_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Seilide_agus_an_Miol_Mor_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Prionsa Beag  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            An Prionsa Beag
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+          <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Prionsa_Beag_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+          <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+          <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Prionsa_Beag_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    <!-- Simple versions of old stories-->
+    <div class="dialectTitle"> {{ts.l.simple_versions_old_stories}} </div>
+    <!--<div *ngIf="!auth.isLoggedIn()" style="padding-left:30px"> {{ts.l.sign_in_to_view_more}} </div>-->
+    <mat-accordion multi *ngIf="auth.isLoggedIn()">
+      <!-- Cinnín Óir agus na Trí Bhéar  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            Cinnín Óir agus na Trí Bhéar
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cinnin_Oir_agus_na_Tri_Bhear_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Na Trí Mhuicín  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            Na Trí Mhuicín
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Mhuicin_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Cochaillín Dearg  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            Cochaillín Dearg
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Cochaillin_Dearg_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Cochaillin_Dearg_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cochaillin_Dearg_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cochaillin_Dearg_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Cochaillin_Dearg_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Píobaire Breac  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            An Píobaire Breac
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_An_Piobaire_Breac_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_An_Piobaire_Breac_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Piobaire_Breac_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Piobaire_Breac_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Piobaire_Breac_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Lacha Bheag Ghránna  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            An Lacha Bheag Ghránna
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_An_Lacha_Bheag_Ghranna_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_An_Lacha_Bheag_Ghranna_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Lacha_Bheag_Ghranna_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Lacha_Bheag_Ghranna_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Lacha_Bheag_Ghranna_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- Na Trí Ghabhar Chliste  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            Na Trí Ghabhar Chliste
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_Na_Tri_Ghabhar_Chliste_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_Na_Tri_Ghabhar_Chliste_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Ghabhar_Chliste_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Ghabhar_Chliste_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_Na_Tri_Ghabhar_Chliste_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <!-- An Tornapa Mór Millteach  -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-description class="panelDescriptionNoPhoto">
+            An Tornapa Mór Millteach
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <div class="dialectContainer">         
+            <div class="viewStory" style="font-weight:bold;">{{ts.l.view_story}}:</div>
+            <!--
+            <div class="viewStory dropdown">
+              <div class="viewStoryBtn">{{ts.l.munster}}</div>
+              <div class="dropdown-content">
+                <a href="https://abair.ie/lara/LARA_An_Tornapa_Mor_Millteach_cmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.male}} </a>
+                <a href="https://abair.ie/lara/LARA_An_Tornapa_Mor_Millteach_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.female}} </a>
+              </div>
+            </div>
+            -->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Tornapa_Mor_Millteach_nnc_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.munster}} </a></div>
+            <!--<div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Tornapa_Mor_Millteach_pmg_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.connacht}} </a></div>-->
+            <div class="viewStory"><a class="viewStoryBtn" href="https://abair.ie/lara/LARA_An_Tornapa_Mor_Millteach_anb_dnnvocabpages/_hyperlinked_text_.html" target="_blank" rel="noopener noreferrer"> {{ts.l.ulster}} </a></div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+  </div>
+</div>
+
+<!-- Footer containing logos -->
+<div class="footer">
+  <div class="footerLogos">
+    <div class="copyright"> {{ts.l.published_courtesy_of}} </div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_an_gum.png"></div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_foras_na_gaeilge.png"></div>
   </div>
 </div>

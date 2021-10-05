@@ -1,8 +1,97 @@
+.ql-editor {
+  background-color: #f7f2e7;
+  /* ~44px is the height of the toolbar */
+  height: calc(var(--textfieldHeight));
+  z-index: 1;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  font-size: 14pt;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.⚙ {
+  font-size: x-large;
+  color: darkgrey;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.⚙:hover {
+  color: black;
+  background-color: #aeffc486;
+}
+
+.loader {
+  font-size: 2px;
+  text-indent: -9999em;
+  width: 11em;
+  height: 11em;
+  border-radius: 50%;
+  --backgroundColor: cyan;
+  background: var(--backgroundColor);
+  background: -moz-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.loader::before {
+  width: 50%;
+  height: 50%;
+  background: cyan;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+}
+.loader::after {
+  background: transparent;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 .bookContainer {
-    --bookContainerHeight: 60vh;
+    --bookContainerHeight: 40vh;
     --bookContainerWidth: 95%;
     --textfieldHeight: calc(var(--bookContainerHeight));
-    height: calc(var(--bookContainerHeight/2));
+    --dictionaryHeight: 50vh;
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
     background: url("src/assets/img/paperBg.jpg") no-repeat center center fixed; 
@@ -84,7 +173,7 @@
 
 .textField {
     width: 100%;
-    height: var(--textfieldHeight);
+    /* height: var(--textfieldHeight); */
     resize: none;
     z-index: 1;
     color: #261500;
@@ -94,21 +183,10 @@
     padding-top: 10px;
 }
 
-.ql-editor {
-  background-color: #f7f2e7;
-  /* ~44px is the height of the toolbar */
-  height: calc(var(--textfieldHeight));
-  z-index: 1;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
-  font-size: 14pt;
-  font-family: "Times New Roman", Times, serif;
-  resize: vertical;
-}
 
 quill-editor {
-    width: 100%;
+  width: 100%;
+  height: 10vh;
 }
 
 .quill-editor-dict {
@@ -143,7 +221,7 @@ background-color: lightblue;
 
 .dictionary {
   width: 90%;
-  height: 190px;
+  height: 40vh;
 }
 
 .dictionaryModeContainer {
@@ -151,14 +229,17 @@ background-color: lightblue;
 }
 
 .dictionaryContainer {
-    height: var(--textfieldHeight);
-    width: var(--dictionaryWidth);
+    border-top: solid grey 1px;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
+.dictionaryHeight {
+  height: var(--dictionaryHeight);
+}
 
 .dictionaryIframe {
-    height: var(--textfieldHeight);
+    height: var(--dictionaryHeight);
     width: 100%;
 }
 
@@ -198,7 +279,7 @@ background-color: lightblue;
     z-index: 1;
     --feedbackHeight: 120px;
     --grammarMessageHeight: 80px;
-    --dictionaryWidth: 40%;
+    --dictionaryWidth: 100%;
 }
 
 .tickIcon {
@@ -250,13 +331,32 @@ background-color: lightblue;
     padding: 5px;
     background: #dfd9c800;
     background-color: rgba(223, 217, 200, 0);
-
 }
 
 .optionsBtn:hover {
-    background-color: #aeffc486;
-    color: #35322f;
-    cursor: pointer;
+  background-color: #aeffc486;
+  color: #35322f;
+  cursor: pointer;
+}
+
+.grammarOptionsBtns {
+  justify-content: center;
+  background-color: rgba(223, 217, 200, 0);
+}
+
+.grammarOptionsBtns:hover {
+  background-color: #aeffc486;
+  color: #35322f;
+  cursor: pointer;
+}
+
+.⚙ {
+  color: darkgrey;
+}
+
+.⚙:hover {
+    background-color: #aeffc4E6;
+    color: black;
 }
 
 .optionsBtnClicked {
@@ -335,19 +435,7 @@ background-color: lightblue;
     font-size: 10pt;
 }
 
-.grammarMessagePlaceholder {
-    color: #999999;
-}
-
-.grammarToolbar {
-    background-color: #70a87f;
-    color: white;
-    display: flex;
-    padding-left: 20px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-}
+/* Add more here */
 
 .selectErrorCheckbox {
   display: flex;
@@ -507,10 +595,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     height: 130px;
 }
 
+/*
 .feedbackVisibleTextfield {
     height: calc(var(--textfieldHeight) - var(--feedbackHeight) - 35px);
 }
-/*
 .dictionaryVisibleTextfield {
   width: 90%;
   height: 280px;
@@ -591,6 +679,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     width: 64px;
     height: 64px;
   }
+
   .lds-grid div {
     position: absolute;
     width: 13px;
@@ -644,6 +733,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     left: 45px;
     animation-delay: -1.6s;
   }
+
+  /*
   @keyframes lds-grid {
     0%, 100% {
       opacity: 1;
@@ -652,3 +743,4 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       opacity: 0.5;
     }
   }
+  */

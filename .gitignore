@@ -18,7 +18,6 @@ ngapp/build_prod_local/
 session.vim
 
 /mongotest/logs/**
-/mongotest/db/**
 
 /api/logs/**
 /api/sendinblue.json
@@ -28,4 +27,5 @@ session.vim
 /sshlogin
 /login_to_phonetics.sh
 /login
-.neimhin
+
+/.neimhin

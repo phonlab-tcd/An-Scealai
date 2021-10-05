@@ -12,17 +12,20 @@ import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { RecordingService } from '../../recording.service';
+import { FilterPipe } from 'src/app/pipes/filter.pipe'; // used in html template
 
 @Component({
   selector: 'app-book-contents',
   templateUrl: './book-contents.component.html',
-  styleUrls: ['./book-contents.component.css']
+  styleUrls: ['./book-contents.component.css'],
+  providers: [
+    FilterPipe,
+  ],
 })
 export class BookContentsComponent implements OnInit {
-  
   stories: Story[] = [];
   deleteMode: Boolean;
-  editMode : boolean;
+  editMode: boolean;
   toBeDeleted: string[] = [];
   userId: string = '';
   messagesForNotifications : Message[] = [];
@@ -31,10 +34,17 @@ export class BookContentsComponent implements OnInit {
   isEnrolled: boolean = false;
   searchText: string = '';
 
-  constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService, public ts : TranslationService, private router: Router,
-    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService,
-    private ns: NotificationService, private recordingService: RecordingService) { }
+  constructor(
+    private storyService: StoryService,
+    private auth: AuthenticationService,
+    private engagement: EngagementService,
+    public ts:  TranslationService,
+    private router: Router,
+    private messageService: MessageService,
+    private profileService: ProfileService,
+    private classroomService: ClassroomService,
+    private ns: NotificationService,
+    private recordingService: RecordingService) { }
 
 /*
 * Set story array of stories for logged in user

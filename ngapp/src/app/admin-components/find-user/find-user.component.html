@@ -3,8 +3,15 @@
     <div class='searchHeader'>
       {{ts.l.all_users}} ({{numberOfUsers}})
     </div>
+    
+    <!-- Loading panel -->
+    <div *ngIf="!dataLoaded" class="loaderContainer">
+      <b>{{ts.l.compiling_data}}</b>
+      <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    
     <!-- Filter by role -->
-    <div class='searchResultsContainer'>
+    <div *ngIf="dataLoaded" class='searchResultsContainer'>
       <div class='filter'>
         <div> {{ts.l.filter_by}}: </div>
         <div class="checkbox-line"><input type="checkbox"[(ngModel)]="students"/> {{ts.l.students}} ({{allStudents.length}})</div>
