@@ -17,113 +17,113 @@ return '';
 < object
 
 + start
-- Críochnaigh an nath seo: 'Níl aon tinteán…'
+- Críochnaigh an nath seo - 'Níl aon tinteán...'
   
 + *
-% críochnaigh an nath seo níl aon tinteán
-- Mícheart! <call>chatSetup mar do thinteán féinw</call>
+% críochnaigh an nath seo - 'níl aon tinteán'
+- Mícheart! <call>chatSetup q1w</call>
 
-+ mar do thinteán féinw
-- Críochnaigh an nath seo: 'An té a bhíonn siúlach…'
++ q1w
+- Críochnaigh an nath seo - 'An té a bhíonn siúlach...'
 
 + mar do thinteán féin
-% críochnaigh an nath seo níl aon tinteán…
-- Críochnaigh an nath seo: 'An té a bhíonn siúlach…'<call>addScore</call>
+% críochnaigh an nath seo - 'níl aon tinteán'
+- Críochnaigh an nath seo - 'An té a bhíonn siúlach...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo an té a bhíonn siúlach
-- Mícheart! <call>chatSetup bíonn sé scéalachw</call>
+% críochnaigh an nath seo - 'an té a bhíonn siúlach'
+- Mícheart! <call>chatSetup q2w</call>
     
-+ bíonn sé scéalachw
-- Críochnaigh an nath seo: 'Ní thagann ciall…'
++ q2w
+- Críochnaigh an nath seo - 'Ní thagann ciall...'
     
 + bíonn sé scéalach
-% críochnaigh an nath seo an té a bhíonn siúlach
-- Críochnaigh an nath seo: 'Ní thagann ciall…'<call>addScore</call>
+% críochnaigh an nath seo - 'an té a bhíonn siúlach'
+- Críochnaigh an nath seo - 'Ní thagann ciall...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo ní thagann ciall
-- Mícheart! <call>chatSetup roimh aoisw</call>
+% críochnaigh an nath seo - 'ní thagann ciall'
+- Mícheart! <call>chatSetup q3w</call>
 
-+ roimh aoisw
-- Críochnaigh an nath seo: 'Aithníonn ciaróg…'
++ q3w
+- Críochnaigh an nath seo - 'Aithníonn ciaróg...'
     
 + roimh aois
-% críochnaigh an nath seo ní thagann ciall
-- Críochnaigh an nath seo: 'Aithníonn ciaróg…'<call>addScore</call>
+% críochnaigh an nath seo - 'ní thagann ciall'
+- Críochnaigh an nath seo - 'Aithníonn ciaróg...'<call>addScore</call>
     
 + *
-% críochnaigh an nath seo aithníonn ciaróg
-- Mícheart! <call>chatSetup ciaróg eilew</call>
+% críochnaigh an nath seo - 'aithníonn ciaróg'
+- Mícheart! <call>chatSetup q4w</call>
 
-+ ciaróg eilew
-- Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'
++ q4w
+- Críochnaigh an nath seo - 'An té nach bhfuil láidir, ní foláir dó a bheith...'
 
 + ciaróg eile
-% críochnaigh an nath seo aithníonn ciaróg
-- Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'<call>addScore</call>
+% críochnaigh an nath seo - 'aithníonn ciaróg'
+- Críochnaigh an nath seo - 'An té nach bhfuil láidir, ní foláir dó a bheith...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith
-- Mícheart! <call>chatSetup glicw</call>
+% críochnaigh an nath seo - 'an té nach bhfuil láidir ní foláir dó a bheith'
+- Mícheart! <call>chatSetup q5w</call>
     
 + glicw
-- Críochnaigh an nath seo: 'Beatha teanga…'
+- Críochnaigh an nath seo - 'Beatha teanga...'
 
 + glic
-% críochnaigh an nath seo an té nach bhfuil láidir ní foláir dó a bheith
-- Críochnaigh an nath seo: 'Beatha teanga…'<call>addScore</call>
+% críochnaigh an nath seo - 'an té nach bhfuil láidir ní foláir dó a bheith'
+- Críochnaigh an nath seo - 'Beatha teanga...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo beatha teanga
-- Mícheart! <call>chatSetup í a labhairtw</call>
+% críochnaigh an nath seo - 'beatha teanga'
+- Mícheart! <call>chatSetup q6w</call>
     
-+ í a labhairtw
-- Críochnaigh an nath seo: 'Bíonn blas ar an…'
++ q6w
+- Críochnaigh an nath seo - 'Bíonn blas ar an...'
 
 + í a labhairt
-% críochnaigh an nath seo beatha teanga
-- Críochnaigh an nath seo: 'Bíonn blas ar an…'<call>addScore</call>
+% críochnaigh an nath seo - 'beatha teanga'
+- Críochnaigh an nath seo - 'Bíonn blas ar an...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo bíonn blas ar an
-- Mícheart! <call>chatSetup mbeagánw</call>
+% críochnaigh an nath seo - 'bíonn blas ar an'
+- Mícheart! <call>chatSetup q7w</call>
     
-+ mbeagánw
-- Críochnaigh an nath seo: 'Is binn béal…'
++ q7w
+- Críochnaigh an nath seo - 'Is binn béal...'
 
 + mbeagán
-% críochnaigh an nath seo bíonn blas ar an
-- Críochnaigh an nath seo: 'Is binn béal…'<call>addScore</call>
+% críochnaigh an nath seo - 'bíonn blas ar an'
+- Críochnaigh an nath seo - 'Is binn béal...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo is binn béal
-- Mícheart! <call>chatSetup ina thostw</call>
+% críochnaigh an nath seo - 'is binn béal'
+- Mícheart! <call>chatSetup q8w</call>
 
-+ ina thostw
-- Críochnaigh an nath seo: 'Marbh le tae agus…'
++ q8w
+- Críochnaigh an nath seo - 'Marbh le tae agus...'
 
 + ina thost
-% críochnaigh an nath seo is binn béal
-- Críochnaigh an nath seo: 'Marbh le tae agus…'<call>addScore</call>
+% críochnaigh an nath seo - 'is binn béal'
+- Críochnaigh an nath seo - 'Marbh le tae agus...'<call>addScore</call>
   
 + *
-% críochnaigh an nath seo marbh le tae agus
-- Mícheart! <call>chatSetup marbh gan éw</call>
+% críochnaigh an nath seo - 'marbh le tae agus'
+- Mícheart! <call>chatSetup q9w</call>
 
-+ marbh gan éw
-- Críochnaigh an nath seo: 'Ná déan nós is ná…'
++ q9w
+- Críochnaigh an nath seo - 'Ná déan nós is ná...'
 
 + marbh gan é
-% críochnaigh an nath seo marbh le tae agus
-- Críochnaigh an nath seo: 'Ná déan nós is ná…'<call>addScore</call>
+% críochnaigh an nath seo - 'marbh le tae agus'
+- Críochnaigh an nath seo - 'Ná déan nós is ná...'<call>addScore</call>
 
 + *
-% críochnaigh an nath seo ná déan nós is ná
+% críochnaigh an nath seo - 'ná déan nós is ná'
 - Mícheart! <call>chatSetup finish</call>
 
 + bris nós
-% críochnaigh an nath seo ná déan nós is ná
+% críochnaigh an nath seo - 'ná déan nós is ná'
 - <call>addScore</call><call>chatSetup finish</call>
 
 + finish 

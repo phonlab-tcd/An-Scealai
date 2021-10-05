@@ -38,6 +38,7 @@ function setup(file, backendUrlFromAngularComponent, languageFromAngular){
 }
 
 function load(fileId, start, content_id){
+  audioPlayer.pause();
   let send = document.getElementById('bot-message-button');
   send.onclick = function(){
     sendInput();
