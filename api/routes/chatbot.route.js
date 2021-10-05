@@ -82,11 +82,11 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
       line += "\n- Mícheart! <call>chatSetup finish</call>\n\n";
     }
     else{
-      line += "\n- Mícheart! <call>chatSetup " + content[key][0].toLowerCase().replace(regex, '') + "w</call>\n\n";
+      line += "\n- Mícheart! <call>chatSetup q" + keys.indexOf(key) + "w</call>\n\n";
     }
 
     if(nextKey != undefined){
-      line += "+ " + content[key][0].toLowerCase().replace(regex, '') + 'w\n';
+      line += "+ q" + keys.indexOf(key) + 'w\n';
       line += "- " + nextKey + '\n\n';
     }
     
