@@ -30,10 +30,6 @@ import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
-<<<<<<< HEAD
-import { Quill } from 'quill';
-import config from 'src/abairconfig.json';
-=======
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 import clone from 'lodash/clone';
@@ -62,7 +58,6 @@ type QuillHighlightTag = {
     ga: string;
   };
 };
->>>>>>> v1.0.5
 
 @Component({
   selector: 'app-dashboard',
@@ -535,16 +530,6 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-<<<<<<< HEAD
-  downloadStoryUrl() {
-    return config.baseurl +
-      'story/downloadStory/' +
-      this.story._id + '/' +
-      this.downloadStoryFormat;
-  }
-
-=======
->>>>>>> v1.0.5
   // set modalClass to visible fade
   showModal() {
     this.modalClass = 'visibleFade';
