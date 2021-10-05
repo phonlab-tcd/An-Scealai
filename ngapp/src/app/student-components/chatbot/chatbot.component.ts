@@ -17,12 +17,12 @@ export class ChatbotComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    if(this.auth.isLoggedIn()){
+    if (this.auth.isLoggedIn()){
       // @ts-ignore
       setup('startLoggedIn', backendUrl, this.ts.getCurrentLanguage());
-      //@ts-ignore
+      // @ts-ignore
       personal_buttons = [];
-      //@ts-ignore
+      // @ts-ignore
       currentScripts = [];
       $('#login-rec').css('display', 'none');
       // @ts-ignore
@@ -31,7 +31,7 @@ export class ChatbotComponent implements OnInit {
       pandoraID = 'da387bedce347878';
       // @ts-ignore
       getPersonalScripts();
-      if(this.auth.getUserDetails().role == 'STUDENT'){
+      if (this.auth.getUserDetails().role == 'STUDENT'){
         // @ts-ignore
         getTeacherScripts();
       }
