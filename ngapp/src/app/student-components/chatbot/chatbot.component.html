@@ -64,9 +64,21 @@
       <audio id='recording-player' src='' controls></audio>
       <button type='submit' id='cancel-recording' onclick='showContents("recording-prompt", "bg-background", false)'>Cancel</button>
     </div>
-    <div class="audio-checkbox"><input type="checkbox" name="audio" class="audioCheckbox" checked> {{ts.l.taidhgin_audio_autoplay}}</div>
-    <div id='this-dialect'>{{ts.l.taidhgin_currentDialect}}</div>
-    <span class='bot-title'>Taidhgín <i class="fa fa-comments"></i></span>
+
+    <div style="display: flex; justify-content: space-between;">
+      <div class="audio-checkbox">
+        <input type="checkbox" name="audio" class="audioCheckbox" checked>
+        {{ts.l.taidhgin_audio_autoplay}}
+      </div>
+      <div class='bot-title'>
+        Taidhgín
+        <i class="fa fa-comments"></i>
+      </div>
+      <div id='this-dialect'>
+        {{ts.l.taidhgin_currentDialect}}
+      </div>
+    </div>
+
     <div class="chatlogs">
       <div id="bot-messages"></div>
     </div>
@@ -74,7 +86,11 @@
       <input id="bot-user_input" type="text" autocomplete="off">
       <button type="submit" id="bot-message-button" onclick="chatAIML()"><i class="fas fa-arrow-circle-right arrow"></i></button>
       <button id='open-record' type='submit' onclick="showContents('recording-prompt', 'bg-background', true)"><i class="fas fa-microphone-alt"></i></button>
-      <button type='submit' id='choose-dialect' onclick="showContents('bot-audio', 'bg-background', true)">{{ts.l.taidhgin_choose_dialect}}</button>
+      <button type='submit'
+        id='choose-dialect'
+        onclick="showContents('bot-audio', 'bg-background', true)">
+        {{ts.l.taidhgin_choose_dialect}}
+      </button>
     </form>
     </div>
 </body>
