@@ -23,6 +23,7 @@ session.vim
 /api/sendinblue.json
 /api/DB.js
 /api/globalConfig.json
+/api/node_modules_backup_*
 
 /sshlogin
 /login_to_phonetics.sh
