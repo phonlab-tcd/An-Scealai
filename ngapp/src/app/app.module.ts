@@ -69,6 +69,9 @@ import { QuillModule } from 'ngx-quill';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
+import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { LoadingComponent } from './loading/loading.component';
 
 
 
@@ -119,6 +122,9 @@ import { GrammarCheckerComponent } from './student-components/grammar-checker/gr
     ProfileStatsComponent,
     FeatureStatsComponent,
     GrammarCheckerComponent,
+    CreateQuizComponent,
+    AboutTaidhginComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,7 +161,7 @@ import { GrammarCheckerComponent } from './student-components/grammar-checker/gr
 })
 export class AppModule {
   constructor(private injector: Injector) {
-    const chatbotElement = createCustomElement(ChatbotComponent, {injector});
-    customElements.define('app-chatbot', chatbotElement);
+    //const chatbotElement = createCustomElement(ChatbotComponent, {injector});
+    //customElements.define('app-chatbot', chatbotElement);
   }
  }

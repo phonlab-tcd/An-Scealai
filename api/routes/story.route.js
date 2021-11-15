@@ -3,35 +3,61 @@ const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
+const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
+
 const makeEndpoints = require('../utils/makeEndpoints');
 const { parse, stringify } = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
-
 const abairBaseUrl = require('../abair_base_url');
-
 const logger = require('../logger');
-// ENDPOINT HANDLERS
-const getStoryById =
-  require('../endpointsFunctions/story/getStoryById');
-const updateStoryAndCheckGrammar =
-  require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
+const dbUrl = require('../utils/dbUrl');
 
+const config = require('../DB');
 const Story = require('../models/story');
 
-const storyRoutes = makeEndpoints({
-  get: {
-    '/getStoryById/:id': getStoryById,
-    '/feedbackAudio/:id': require('../endpointsFunctions/story/feedbackAudio'),
-  },
-  post: {
-    '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
-  },
-});
+let db;
+MongoClient.connect(dbUrl,
+    {useNewUrlParser: true, useUnifiedTopology: true},
+    (err, client) => {
+      if (err) {
+        console.log(
+            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+            'Please make sure that MongoDB is running.');
+        process.exit(1);
+      }
+      db = client.db(process.env.DB || config.DB);
+    });
+
+
+let storyRoutes;
+// Immediately Invoked Function Expression.
+// Scopes the imported functions to just this function
+(() => {  
+  // ENDPOINT HANDLERS
+  const getStoryById =
+    require('../endpointsFunctions/story/getStoryById');
+  const updateStoryAndCheckGrammar =
+    require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
+  const feedbackAudio =
+    require('../endpointsFunctions/story/feedbackAudio');
+  const viewFeedback =
+    require('../endpointsFunctions/story/viewFeedback');
+
+  storyRoutes = makeEndpoints({
+    get: {
+      '/getStoryById/:id': getStoryById,
+      '/feedbackAudio/:id': feedbackAudio,
+    },
+    post: {
+      '/viewFeedback/:id': viewFeedback,
+      '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    },
+  });
+})();
 
 
 // Create new story
@@ -276,11 +302,15 @@ storyRoutes
               });
         }
 
+	console.dir(story);
+
         // GENERATE A FILENAME <story._id>.<format>
         const filename =
           path.join(
               __dirname,
               `storiesForDownload/${story._id}.${req.params.format}`);
+	
+	console.log(filename);
 
         logger.info({
           msg: 'CREATING ' + req.params.format,
@@ -291,7 +321,7 @@ storyRoutes
         // Pandoc example
         const pandocErr =
           await pandoc(
-              story.htmlText, // src
+              story.htmlText || story.text, // src
               ['--from', 'html', '-o', filename]); // args
 
         if (pandocErr) {
@@ -308,6 +338,7 @@ storyRoutes
               while: 'sending the file:' + filename,
               error: sendFileErr,
             });
+	    return res.send(sendFileErr);
           }
           // DELETE THE FILE AFTER IT HAS BEEN SENT
           fs.unlink(filename, (err) => {
@@ -449,6 +480,7 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 
       const formData = querystring.stringify(form);
 
+      logger.info('formData: ' + formData);
       request({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

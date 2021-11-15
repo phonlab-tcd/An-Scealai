@@ -52,6 +52,8 @@ import { SynthesisComponent } from './student-components/synthesis/synthesis.com
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -67,7 +69,9 @@ const routes: Routes = [
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
-  { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
+  { path: 'taidhgin', component: ChatbotComponent },
+  { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
+  { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },

@@ -1,9 +1,12 @@
+
+// Best to initialize the logger first
+const logger = require('./logger');
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const logger = require('./logger');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
@@ -24,7 +27,8 @@ const mailRoute = require('./routes/send_mail.route');
 
 const dbURL = require('./utils/dbUrl');
 
-// throw new Error('test error'); // use this to test where uncaughtExceptions get logged
+// use this to test where uncaughtExceptions get logged
+// throw new Error('test error');
 
 
 logger.info('DB url: ' + dbURL);
