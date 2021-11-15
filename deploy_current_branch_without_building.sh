@@ -19,3 +19,7 @@ if [ $? != 0 ] ; then
   echo -e "\033[0m" # reset colors to default
   exit 1
 fi
+
+echo -e "\033[32;1m" # print this in green and bold
+echo -n "SUCCESS"
+echo -e "\033[0m" # reset colors to default
