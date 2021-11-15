@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install node dependencies
-# Not sure if we should delete node_modules before installing.
+# TODO(neimhin) Not sure if we should delete node_modules before installing.
 rm -rf ngapp/node_modules
 rm -rf api/node_modules
 npm install --prefix ./api
