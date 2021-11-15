@@ -37,6 +37,7 @@
     display: inline-block;
     font-size: 18pt;
 }
+
 /*
 .contentsContainer {
     padding-left: 3%;
@@ -53,7 +54,7 @@
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 */
 
@@ -66,7 +67,7 @@
     overflow: scroll;
     padding: 10px;
     -webkit-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
--moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 border-radius: 5px 5px 5px 5px;
 }
@@ -87,6 +88,7 @@ border-radius: 5px 5px 5px 5px;
 
 .contentsLink:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .contentsDate {
@@ -113,6 +115,8 @@ border-radius: 5px 5px 5px 5px;
 
 .contentsBtnsContainer {
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .newStoryBtn {
@@ -121,7 +125,6 @@ border-radius: 5px 5px 5px 5px;
     color: white;
     font-size: 12pt;
     margin: 0px;
-    float: right;
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -135,10 +138,8 @@ border-radius: 5px 5px 5px 5px;
     border-style: none;
     color: white;
     font-size: 12pt;
-    margin: 0px;
-    float: center;
     border-radius: 5px 5px 5px 5px;
-    display: inline-flex;
+    display: flex;
 }
 
 .messagesBtn:hover {
@@ -218,7 +219,7 @@ border-radius: 5px 5px 5px 5px;
     border-style: none;
     color: white;
     margin: 0px;
-    float: left;
+    /* float: left; */
     padding-left: 7px;
     padding-right: 7px;
     padding-bottom: 7px;

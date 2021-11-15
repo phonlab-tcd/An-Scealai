@@ -1,3 +1,13 @@
+//for database....
+var currentTopic = "";
+var complete = false;
+var messageforDb = "";
+var switchTopic = false;
+var level1Complete = false;
+var level2Complete = false;
+var level3Complete = false;
+var date = new Date();
+
 var request = new XMLHttpRequest();
 var date = null;
 var topic = "";
@@ -50,7 +60,7 @@ function sendLog(){
 
 //adding user to db
 function addUserToDb(chatbotObj){
-  request.open('POST', 'http://localhost:4000/Chatbot/addUser', true);
+  request.open('POST', backendUrl + 'Chatbot/addUser', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify(chatbotObj));
   request.onload = function() {
@@ -65,7 +75,7 @@ function postLogToDb(logObj){
     logObj.role = thisPayload.role;
     logObj._id = thisPayload._id;
     console.log(logObj);
-    request.open('POST', 'http://localhost:4000/Chatbot/addLog/', true);
+    request.open('POST', backendUrl + 'Chatbot/addLog/', true);
     request.setRequestHeader("Content-type", "application/json");
     request.send(JSON.stringify(logObj));
     request.onload = function(){
@@ -76,7 +86,7 @@ function postLogToDb(logObj){
 
 //clear logs of user
 function clearLogs(name){
-  request.open('GET', 'http://localhost:4000/Chatbot/clearLogs/' + name, true);
+  request.open('GET', backendUrl + 'Chatbot/clearLogs/' + name, true);
   request.send();
   request.onload = function(){
     console.log(this.response);

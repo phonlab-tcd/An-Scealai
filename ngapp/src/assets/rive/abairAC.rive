@@ -338,7 +338,7 @@
     ^ <call>chatSetup nis true</call>
 
     + cleachtadh
-    - Bain triai as tú féin:<br>
+    - Bain triail as tú féin:<br>
     ^ <call>levelComplete false</call><call>getRandomQuestion 2</call><call>setAnsweringQuestions true</call><call>resetProgress</call>
 
     + *

@@ -1,237 +1,124 @@
-window.onload = init;
-var ainmneacha = [];
-var keepMessages = false;
+//window.onload = setup;
 var bubbleId = 0;
-var speakerId = 0;
-var thisMessage = 0;
 var holdMessages = false;
-var bubblePlayed = false;
-var played = false;
-var messageDivs = [];
-var dictPopup;
-var dictTri;
-var dictText;
-var dictImg;
 var thisVerb;
 var dictOn = false;
-var play = false;
-var pause = false;
-var thisFile = "";
 
-//for database....
-var currentTopic = "";
-var complete = false;
-var messageforDb = "";
-var switchTopic = false;
-var level1Complete = false;
-var level2Complete = false;
-var level3Complete = false;
-var date = new Date();
+var request = new XMLHttpRequest();
+let parser = new DOMParser();
+var currentSpellings;
+var videoPlayer;
+let currentFile = '';
+var user = null;
+var pandoraID = '';
+var slender_names = [];
 
-//Read Google Sheet with slenderised names...
-function init(){
-  var names = "https://docs.google.com/spreadsheets/d/1vvA9n123EJ0hmuQcnwE88JpsOVgxvUgDonPSaoULP3k/edit?usp=sharing";
-  Tabletop.init({key: names, callback: loadData, simpleSheet: true } );
-}
+var test_file = "+ start\n - Hi this is taidhgin!:)";
 
-function loadData(data, tabletop){
-  for(i = 0; i < data.length; i++){
-    ainmneacha[i] = data[i];
-  }
-  setup();
-}
+var backendUrl = 'backend url not yet created';
+var currentLanguage = 'Gaeilge';
 
-function setup(){
-  clearName();
-  //load("start", "start", true); //for testing only
+let currentDialectButton = null;
+
+function setup(file, backendUrlFromAngularComponent, languageFromAngular){
+  backendUrl = backendUrlFromAngularComponent;
+  currentLanguage = languageFromAngular;
+  videoPlayer = document.getElementById('chimp');
   audioPlayer = document.getElementById("botaudio");
   audioCheckbox = document.querySelector(".audioCheckbox");
-  dictPopup = document.querySelector(".dictPopup");
-  dictText = document.querySelector(".dictText");
-  dictTri = document.querySelector(".bot-tri");
+  currentDialectButton = document.getElementById('dialect-MU');
 
-  //collapsable menu for the contents
-  var coll = document.getElementsByClassName("bot-collapsable");
-  var i;
-  for(i = 0; i < coll.length; i++){
-    coll[i].addEventListener("click", function(){
-      this.classList.toggle("active");
-      var content = this.nextElementSibling;
-      if(content.style.maxHeight){
-        content.style.maxHeight = null;
-      }
-      else {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }
-      //$(".bot-contents").animate({ scrollTop: $(".bot-contents")[0].scrollHeight }, 200);
-    });
-  }
-
-  var home = document.querySelector(".homeButton");
-  if(home){
-    home.addEventListener("click", function(){
-      if(thisFile != "BriathraNeamhrialta") load("BriathraNeamhrialta", "start");
-    });
-  }
+  //file = 'Community_Eire';
+  bot = new RiveScript({utf8: true});    
+  bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
+    bot.sortReplies();
+    currentFile = 'start';
+    chatSetup("start" + currentLanguage.toLowerCase(), false, false);
+  });
 }
 
-function showBot(){
-  getUserDetails();
-  var bot = document.querySelector(".bot-bg-modal");
-  var menu = document.querySelector(".bot-contents");
-  bot.style.right = "0px";
-  menu.style.right = "200px";
-
-  play = false;
-  $(".bot-messages").empty();
-  if(audioCheckbox.checked == false) audioCheckbox.checked = true;
-  load("BriathraNeamhrialta", "start");
-}
-
-function hideBot(){
-  var bot = document.querySelector(".bot-bg-modal");
-  var menu = document.querySelector(".bot-contents");
-  console.log(bot);
-  bot.style.right = "-500px";
-  menu.style.transition = "0.4s";
-  menu.style.right = "-500px";
-  menu.style.opacity = "0";
-  clearName();
+function load(fileId, start, content_id){
   audioPlayer.pause();
-  sendLog();
-  currentTopic = "";
-}
-
-function showContents(){
-  contentsClicked = true;
-  var menu = document.querySelector(".bot-contents");
-  if(menu.style.opacity == 0){
-    menu.style.right = "300px";
-    menu.style.opacity = "1";
+  let send = document.getElementById('bot-message-button');
+  send.onclick = function(){
+    sendInput();
   }
-  else if(menu.style.opacity == 1){
-    menu.style.right = "0px";
-    menu.style.opacity = "0";
+  //console.log(send);
+
+  if(content_id) showContents(content_id, 'popup-background', false);
+  if(currentFile == 'start') $("#bot-messages").empty();
+  else currentFile = fileId;
+  console.log(fileId);
+
+  // sets thisVerb, use regex
+  if(fileId.indexOf("quiz") == -1){
+    var length = fileId.length - 2;
+    thisVerb = fileId.substr(0, length);
+    if(thisVerb == "bi") thisVerb = "bí";
+    else if(thisVerb == "teigh") thisVerb = "téigh";
+    else if(thisVerb == "dean") thisVerb = "déan";
   }
-}
 
-//loads file chosen by the user
-function load(fileId, start, toPlay){
-  if(fileId != "BQuiz"){
-    console.log(fileId);
-    if(thisDialect != "" || fileId == "BriathraNeamhrialta"){
-      if(fileId.indexOf("quiz") == -1){
-        var length = fileId.length - 2;
-        thisVerb = fileId.substr(0, length);
-        if(thisVerb == "bi") thisVerb = "bí";
-        else if(thisVerb == "teigh") thisVerb = "téigh";
-        else if(thisVerb == "dean") thisVerb = "déan";
-      }
+  console.log("To Load: " + fileId);
+  bot = new RiveScript({utf8: true});
+  bot.loadFile('assets/rive/' + fileId + '.rive').then( () => {
+    bot.sortReplies();
+    console.log(fileId + ' loaded');
+    if(start == null) start = 'start';
 
-      thisFile = fileId;
-
-      if(toPlay) play = true;
-      if(thisFile == "BriathraNeamhrialta"){
-        switchTopic = false;
-        currentTopic = fileId;
-      }
-      else{
-        currentTopic = fileId;
-        sendLog();
-      }
-
-      console.log("To Load: " + fileId);
-      if(keepMessages == false){
-        $(".bot-messages").empty();
-      }
-      for(i = 0; i < files.length; i++){
-        if(fileId == files[i].id){
-          console.log(files[i].id + " " + files[i].file);
-          bot = new RiveScript({utf8: true});
-          bot.loadFile(files[i].file).then( () => {
-            bot.sortReplies();
-            console.log(fileId + " loaded");
-            if(fileId == "BriathraNeamhrialta" || fileId == "BQuiz") chatSetup("start", false, false);
-            else if(start != null) chatSetup(start);
-            else{
-              if(isNameStored() == false) chatSetup("askname");
-              else chatSetup("start");
-            }
-          });
-        }
-      }
-      keepMessages = false;
-    }
-  }
+    chatSetup(start, false, false);
+  });
 }
 
 function loadFromChat(fileId, start){ load(fileId, start); }
 
 function appendTypingIndicator(){
-  stillChatting = true;
-  $(".bot-messages").append($("<div class=\"typing-indicator\"><div class=\"user-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"chat-message\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
-  $(".typing-indicator").delay(1000).fadeOut("fast");
+  $("#bot-messages").append($("<div class=\"typing-indicator\"><div class=\"bot-message-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"bot-message-ind\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
+  $(".typing-indicator").delay(2000).fadeOut("fast");
   $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
 }
 
 function appendMessage(isBot, isUser, text, showButtons){
-  speakerId++;
   bubbleId++;
   var newMessage = document.createElement("div");
-  var photoSrc = "";
-  var photoId = "";
-  if(isBot == true){
-    newMessage.setAttribute("class", "chat bot");
-    photoSrc = "assets/img/logo-S.png";
-    photoId = "bot-img";
-  }
-  else if(isUser == true){
-    newMessage.setAttribute("class", "chat user");
-    photoSrc = "assets/img/education.png";
-    photoId = "user-img";
-  }
+  newMessage.setAttribute("class", "message_parent");
   newMessage.setAttribute("id", bubbleId);
-  var userphotoDiv = document.createElement("div");
-  userphotoDiv.setAttribute("class", "user-photo");
-  var photo = document.createElement("img");
-  photo.src = photoSrc;
-  photo.setAttribute("id", photoId);
-  userphotoDiv.appendChild(photo)
-  newMessage.appendChild(userphotoDiv);
-
   var newP = document.createElement("p");
-  newP.setAttribute("class", "chat-message");
   var newSpan = document.createElement("span");
-  newSpan.setAttribute("class", "output");
+  var photoDiv = document.createElement("div");
+  var photo = document.createElement("img");
+  if(isBot){
+    newP.setAttribute("class", "bot-message");
+    photoDiv.setAttribute("class", "bot-message-photo");
+    photo.src = "assets/img/logo-S.png";
+    photo.setAttribute("id", "bot-img");
+  }
+  else{
+    newP.setAttribute("class", "user-message");
+    photoDiv.setAttribute("class", "user-message-photo");
+    photo.src = "assets/img/apple-user.svg";
+    photo.setAttribute("id", "user-img");
+  }
+  
+  photoDiv.appendChild(photo);
+  newMessage.appendChild(photoDiv);
+  newSpan.setAttribute("class", "this-message");
   newSpan.innerHTML = text;
   newP.appendChild(newSpan);
 
-  var speakerImg = document.createElement("img");
-  speakerImg.setAttribute("class", "speaker");
-  speakerImg.setAttribute("id", speakerId);
-  speakerImg.src = "assets/img/speaker.png";
-  speakerImg.onclick = function(){
-    if(isPlaying == false) manualPlay(speakerImg.id, newMessage.id);
+  newMessage.ondblclick = function(){
+    manualPlay(newMessage.id);
   }
-  newP.appendChild(speakerImg);
-
-  var pauseImg = document.createElement("img");
-  pauseImg.setAttribute("class", "pauseButton");
-  pauseImg.src = "assets/img/pause.png"
-  pauseImg.onclick = function(){
-    if(audioCheckbox.checked == false){
-      audioPlayer.pause();
-      isPlaying = false;
-      pause = false;
-    }
-  }
-  newP.appendChild(pauseImg);
 
   if(isAQuestion){
+    var dictPopup;
+    var dictTri;
+    var dictText;
+    var dictImg;
     dictImg = document.createElement("img");
     dictImg.src = "assets/img/dict.png";
     dictImg.setAttribute("class", "dictButton");
-    dictImg.style.display = "flex";
+    dictImg.style.display = "none";
     dictImg.onclick = function(){
       if(dictOn == false){
         dictPopup.style.display = "flex";
@@ -249,54 +136,55 @@ function appendMessage(isBot, isUser, text, showButtons){
     isAQuestion = false;
   }
 
-  if(showButtons == false){
-    speakerImg.style.display = "none";
-    pauseImg.style.display = "none";
-  }
-
-  newMessage.appendChild(newP);
-  $(".bot-messages").append(newMessage);
-  messageDivs.push(newMessage);
+  let messages = document.getElementById("bot-messages");
+  newMessage.appendChild(newP);  
+  messages.appendChild(newMessage);
 }
 
-//CHAT REPLIES AND INPUTS
+//CHAT REPLIES AND INPUTS from scripts
 function chatSetup(text, holdMessages, showButtons){
-  var messages = document.querySelector(".bot-messages");
+  // holdMessages => for autoplay audio
+  // showButtons => for manual audio 
+
   if(holdMessages == "true" && audioCheckbox.checked == true){
-    audioPlayer.addEventListener("ended", function(){
-      isPlaying = false;
-      bot.reply("local-user", text).then( (reply) => {
-        if(reply != ""){
-          //console.log(reply);
-          appendTypingIndicator();
-          setTimeout(function(){
-            appendMessage(true, false, reply, showButtons);
-            if(play) audio(reply, bubbleId, false);
-            $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-          }, 1200);
-        }
-      });
-    });
+    // autoplay is on & bot is sending multiple consecutive bubbles
+    audioPlayer.onended = function(){
+      if(text != ""){
+        bot.reply("local-user", text).then( (reply) => {
+          text = "";
+          if(reply != "" && !reply.includes('ERR')){
+            //console.log(reply);
+            appendTypingIndicator();
+            setTimeout(function(){
+              appendMessage(true, false, reply, showButtons);
+              audio(reply, bubbleId, false);
+              $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+            }, 2200);
+          }
+        });
+      }
+    }
   }
   else{
+    // autoplay is off => no need to wait for audio to play for consecutive bubbles
     bot.reply("local-user", text).then( (reply) => {
-      if(reply != ""){
-        //console.log(reply);
+      if(reply != "" && !reply.includes('ERR')){
+        //console.log("Reply: " + reply);
+        this_reply = reply;
         appendTypingIndicator();
         setTimeout(function(){
           appendMessage(true, false, reply, showButtons);
-          if(play) audio(reply, bubbleId, false);
-
+          audio(reply, bubbleId, false);
           $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-        }, 1200);
+        }, 2200);
       }
     });
   }
   return "";
 }
 
-function chat(){
-  //if(holdInput) setTimeout(function(){}, 1200);
+// receives input from user 
+function sendInput(){
   var input = document.getElementById("bot-user_input").value;
   $("form").on("submit", (event) => {
     event.preventDefault();
@@ -304,18 +192,245 @@ function chat(){
   if(input != ""){
     document.getElementById("bot-user_input").value = "";
     appendMessage(false, true, input);
-    audio(input, bubbleId, true)
+    playVid();
+    setTimeout(function(){
+      chatSetup(input, "true", false);
+      audio(input, bubbleId, true)
+    }, 1500);
     $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+
   }
-  bot.reply("local-user", input).then( (reply) => {
-    if(reply != ""){
-      appendTypingIndicator();
-      setTimeout(function(){
-        appendMessage(true, false, reply);
-        if(play) audio(reply, bubbleId, false);
-        $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-      }, 1200);
-      $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+}
+
+function playVid(){
+  videoPlayer.play();
+}
+
+// Select Synthesis Engine
+function selectEngine(engine){
+  $(engine).css('backgroundColor', '#F5B041');
+  if(engine == "#select-DNN"){
+    currentEngine = 'DNN';
+    $('#select-HTS').css('backgroundColor', '#FBFCFC');
+    $('#dialect-CM').css('display', 'none');
+    $('#dialect-GD').css('display', 'none');
+    $('#dialect-MU').css('display', 'none');
+
+    $('#dialect-UL').css('display', 'block');
+    $('#dialect-CO').css('display', 'block');
+    $('#dialect-MU-DNN').css('display', 'block');
+  }
+  else{
+    currentEngine = 'HTS';
+    $('#select-DNN').css('backgroundColor', '#FBFCFC');
+    $('#dialect-CM').css('display', 'block');
+    $('#dialect-GD').css('display', 'block');
+    $('#dialect-MU').css('display', 'block');
+
+    $('#dialect-UL').css('display', 'none');
+    $('#dialect-CO').css('display', 'none');
+    $('#dialect-MU-DNN').css('display', 'none');
+  }
+}
+
+// Selecting Dialect
+let currentDialect = '';
+function dialectSelection(dialect){
+  $('.audioCheckbox').prop('checked', true);
+
+  //set color
+  if(currentDialect != ''){
+    currentDialectButton.style.backgroundColor = '#1ABC9C';
+    currentDialectButton.style.fontWeight = '';
+  }
+  currentDialect = dialect.substr(8, dialect.length);
+  console.log(currentDialect);
+
+  //set text
+  if(currentDialect == 'MU-DNN') currentDialect = 'MU';
+  
+  if(currentEngine == 'HTS'){
+    if(currentDialect == 'CM') $('#this-dialect').text("Dialect: Connemara - HTS");
+    else if(currentDialect == 'GD') $('#this-dialect').text("Dialect: Donegál - HTS");
+    else $('#this-dialect').text("Dialect: Kerry - HTS");
+  }
+  else{
+    if(currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
+    else if(currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
+    else $('#this-dialect').text("Dialect: Kerry - DNN");
+  }
+
+  currentDialectButton = document.getElementById(dialect);
+  currentDialectButton.style.backgroundColor = '#117A65';
+  currentDialectButton.style.fontWeight = 'bold';
+}
+
+
+//Bunscoil Spelling Test
+var vocabInput;
+var vocabOuter;
+
+function showWordsInput(){
+  vocabInput = document.querySelector(".inputVocab");
+  vocabOuter = document.querySelector(".vocabOuter");
+  vocabInput.style.display = "flex";
+  vocabOuter.style.display = "flex";
+  setTimeout(function(){
+    vocabInput.style.opacity = "1";
+    vocabOuter.style.opacity = "0.5";
+  }, 50);
+}
+
+function enterWords(){
+  if(document.getElementById("word10").value == ""){
+    var warning = document.querySelector(".warning");
+    warning.style.display = "flex";
+  }
+  else{
+    var newWords = [];
+    for(i = 1; i < 11; i++){
+      newWords.push(document.getElementById("word" + i).value);
     }
+    request.open('POST', backendUrl + '/Chatbot/saveSpellings/', true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(newWords));
+    request.onload = function(){
+      console.log(this.response);
+    }
+  }
+  closeWords();
+  console.log("loading spelling test")
+  $('#bot-messages').empty();
+  bot = new RiveScript({utf8: true});
+  bot.loadFile("assets/rive/spelling.rive").then( () => {
+    bot.sortReplies();
+    chatSetup("start", false, false);
+    getWords();
   });
 }
+
+function closeWords(){
+  var warning = document.querySelector(".warning");
+  warning.style.display = "none";
+  vocabInput.style.opacity = "0";
+  vocabOuter.style.opacity = "0";
+  setTimeout(function(){
+    vocabInput.style.display = "none";
+    vocabOuter.style.display = "none";
+  }, 1000);
+}
+
+function getWords(){
+  request.open('GET', backendUrl + '/Chatbot/getWords/', true);
+  request.send();
+  request.onload = function(){
+    currentSpellings = JSON.parse(this.response);
+    console.log(currentSpellings);
+  }
+}
+
+function getRandomWord(){
+  console.log(currentSpellings);
+  var ran = getRandomIntInclusive(0, currentSpellings.length - 1);
+  currentWord = currentSpellings[ran];
+  console.log("Current Word: " + currentWord);
+  var wordToReturn = "<p style=\"display:none\">" + currentWord + "</p>";
+  //currentSpellings.splice(ran, 1);
+  if(currentSpellings.length == 0){
+    isLevelComplete = true;
+  }
+  return wordToReturn;
+}
+
+
+//Test AIML Chit-Chat
+function chatAIML(){
+  let output = '';
+  var input = document.getElementById("bot-user_input").value;
+  $("form").on("submit", (event) => {
+    event.preventDefault();
+  });
+  if(input != ""){
+    document.getElementById("bot-user_input").value = "";
+    appendMessage(false, true, input);
+    audio(input, bubbleId, true);
+    setTimeout(function(){
+      playVid();
+      $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+      request.open('POST', backendUrl + 'Chatbot/aiml-message/', true);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.send(JSON.stringify({message: input, botId: pandoraID}));
+      request.onload = function(){
+        //console.log(this.response);
+        if(this.response != ""){
+          let xmlDoc = parser.parseFromString(JSON.parse(this.response).reply, 'text/xml');
+          output = xmlDoc.getElementsByTagName('that')[0].childNodes[0].nodeValue;
+          appendTypingIndicator();
+          setTimeout(function(){
+            appendMessage(true, false, output);
+            $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+            audio(output, bubbleId, false);
+            //videoPlayer.pause();
+          }, 2200);
+          //callAudio(output, 'GD');
+        } 
+      }
+    }, 2200)
+  }
+}
+
+function showContents(content_id, background_id, show){
+  $("form").on("submit", (event) => {
+    event.preventDefault();
+  });
+  if(content_id == 'recording-prompt'){
+    $('#send-recording').css('display', 'none');
+    $('#recording-player').css('display', 'none');
+  }
+
+  let contentPopup = document.getElementById(content_id);
+  let backgroundPopup = document.getElementById(background_id);
+  if(show){
+    //show contents
+    contentPopup.style.display = 'inline-block';
+    backgroundPopup.style.display = 'flex';
+    setTimeout(function(){
+      contentPopup.style.opacity = "1";
+      backgroundPopup.style.opacity = "0.6";
+    }, 50);
+    if(content_id == 'p' && user.role == 'TEACHER'){
+      $('#to-create').css('margin-top', '5%');
+      $('#to-create').css('left', '5%');
+    }
+  }
+  else{
+    //hide contents
+    contentPopup.style.opacity = "0";
+    backgroundPopup.style.opacity = "0";
+    setTimeout(function(){
+      contentPopup.style.display = 'none';
+      backgroundPopup.style.display = 'none';
+    }, 500);
+  }
+}
+
+function closePersonal(){
+  showContents("p", "popup-background", false);
+  if(user.role == 'STUDENT') showPersonal('student');
+  if(selectedFile != ''){
+    $('#' + selectedFile).css('border', 'none');
+    $('#open-script').css('display', 'none');
+    $('#delete-script').css('display', 'none'); 
+  }
+}
+
+function hideTopics(){
+  $('.choose-scealai').css('display', 'none');
+  $('.choose-personal').css('display', 'none');
+  $('.choose-community').css('display', 'none');
+}
+
+var community_scripts = [
+  {name: 'Community_Eire', numberofquestions: 10, answers: '<b>Ceist:</b> Cad é an contae is lú in Éirinn?   <b>Freagra:</b> An Lú, Contae Lú, Co. Lú, Contae Lú<br>' + '<br>' + '<b>Ceist:</b> Cén contae ina bhfuil Conamara?   <b>Freagra:</b> Gaillimh, Contae na Gaillimhe, Co. na Gaillimhe<br>' + '<br>' + '<b>Ceist:</b> Cé mhéad bliain a bhíonn i dtéarma Uachtaránachta in Éirinn?   <b>Freagra:</b> Seacht, 7<br>' + '<br>' + '<b>Ceist:</b> Cad é siombail náisiúnta na hÉireann?   <b>Freagra:</b> cláirseach, cruit<br>' + '<br>' + '<b>Ceist:</b> Cé a bhí mar an gcéad Uachtarán ar Éirinn?   <b>Freagra:</b> Dúbhghlas de hÍde, Douglas Hyde<br>' + '<br>' + '<b>Ceist:</b> Cén contae ag a bhfuil an daonra is lú in Éirinn?   <b>Freagra:</b> Liatroim, Contae Liatroma, Co. Liatroma<br>' + '<br>' + '<b>Ceist:</b> Cén contae ina bhfuil Caisleán Bhun Raite?   <b>Freagra:</b> an Clár, Contae an Chláir, Co. an Chláir, Clár<br>' + '<br>' + '<b>Ceist:</b> Cén sliabh is airde in Éirinn?   <b>Freagra:</b> Corrán Tuathaill, Carrauntoohil<br>' + '<br>' + '<b>Ceist:</b> Cén teanga inar scríobhadh Leabhar Cheanannais   <b>Freagra:</b> Laidin<br>' + '<br>' + '<b>Ceist:</b> Cad í an dara abhainn is faide in Éirinn?   <b>Freagra:</b> Abhainn na Bearú, An Bhearú'},
+  {name: 'Community_Seanfhocail', numberofquestions: 10, answers: "<b>Ceist:</b> Críochnaigh an nath seo: 'Níl aon tinteán…'   <b>Freagra:</b> mar do thinteán féin<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'An té a bhíonn siúlach…'   <b>Freagra:</b> bíonn sé scéalach<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Ní thagann ciall…'   <b>Freagra:</b> roimh aois<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Aithníonn ciaróg…'   <b>Freagra:</b> ciaróg eile<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'An té nach bhfuil láidir, ní foláir dó a bheith…'   <b>Freagra:</b> glic<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Beatha teanga…'   <b>Freagra:</b> í a labhairt<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Bíonn blas ar an…'   <b>Freagra:</b> mbeagán<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Is binn béal…'   <b>Freagra:</b> ina thost<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Marbh le tae agus…'   <b>Freagra:</b> marbh gan é<br>" + '<br>' + "<b>Ceist:</b> Críochnaigh an nath seo: 'Ná déan nós is ná…'   <b>Freagra:</b> bris nós"},
+];

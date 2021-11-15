@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Event, EventType } from './event';
+import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';  
+import { AuthenticationService } from './authentication.service';
 import { Story } from './story';
 import config from '../abairconfig.json';
+import {QuillHighlightTag} from './services/quill-highlight.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class EngagementService {
 
     const event: Event = new Event();
     event.type = type;
-    if(storyData) { event.storyData = storyData; }
+    if (storyData) { event.storyData = storyData; }
     event.userId = this.auth.getUserDetails()._id;
 
     return this.http
@@ -51,11 +52,32 @@ export class EngagementService {
   }
 
   getEventsForUser(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + "eventsForUser/" + id);
+    return this.http.get(this.baseUrl + 'eventsForUser/' + id);
+  }
+
+  mouseOverGrammarSuggestionEvent(tag: QuillHighlightTag) {
+    if (! this.auth.isLoggedIn()) {
+      throw new Error('Cannot add event if user is not logged in');
+    }
+    const event: MouseOverGrammarSuggestionEvent =
+      new MouseOverGrammarSuggestionEvent();
+    event.type = EventType['MOUSE-OVER-GRAMMAR-SUGGESTION'];
+    event.grammarSuggestionData = {};
+    for (const key in Object.keys(tag)) {
+      if ( key !== 'tooltip'){
+        event.grammarSuggestionData[key] = tag[key];
+      }
+    }
+    event.userId = this.auth.getUserDetails()._id;
+    this.http
+        .post(
+            this.baseUrl + 'addEventForUser/' + event.userId,
+            { event: event.fromJSON(event) })
+        .subscribe();
+
   }
 
   getEventsForStory(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + "eventsForStory/" + id);
+    return this.http.get(this.baseUrl + 'eventsForStory/' + id);
   }
-  
 }

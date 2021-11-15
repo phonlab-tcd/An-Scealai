@@ -65,7 +65,6 @@ export class StatsService {
 * Update the grammar error map for the stat object of a given student
 */
   updateGrammarErrors(id: string, data, updatedTimeStamp: Date): Observable<any> {
-    console.log("errors to add: ", data);
     return this.http.post(this.baseUrlStudents + 'updateGrammarErrors/' + id + '/' + updatedTimeStamp, data);
   }
 

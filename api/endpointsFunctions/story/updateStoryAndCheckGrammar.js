@@ -1,5 +1,6 @@
 const Story = require('../../models/story');
 const {requestGrammarTags} = require('../../utils/grammar');
+const logger = require('../../logger');
 
 module.exports = async (req, res) => {
   const storyUpdate = new Story(req.body);
@@ -13,7 +14,6 @@ module.exports = async (req, res) => {
 
   // DON'T UPDATE THE STORY'S _id
   delete storyUpdate._doc._id;
-  delete storyUpdate._doc.storyId;
 
   // UPDATE STORY ASYNCHRONOUSLY
   // AND MAKE GRAMADOIR REQUESTS WHILE THAT'S HAPPENING
@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
 
   responseObject.savedStory =
       await updateStoryPromise.catch((error) => {
+        logger.error(error);
         responseObject.saveStoryError = error;
       }) || false;
 
@@ -40,11 +41,13 @@ module.exports = async (req, res) => {
 
   responseObject.grammarTagsEnglish =
     await grammarTagsEnglishPromise.catch((error) => {
+      logger.error(error);
       responseObject.englishGramadoirError = error;
     }) || false;
 
   responseObject.grammarTagsIrish =
     await grammarTagsIrishPromise.catch((error) => {
+      logger.error(error);
       responseObject.irishGramadoirError = error;
     }) || false;
 
@@ -58,5 +61,6 @@ module.exports = async (req, res) => {
     status = irishGramadoirError.status;
   }
 
+  logger.info({endpoint: req.url, responseObject});
   return res.status(status || 500).json(responseObject);
 };

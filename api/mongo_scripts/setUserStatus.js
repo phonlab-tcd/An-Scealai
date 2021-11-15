@@ -25,14 +25,14 @@ if ( !status.match(statusEnumRegex)) {
 
 const User = require('../models/user');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const dbUrl = require('../utils/dbUrl');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
 main = async () => {
   // Connect to mongodb
-  await mongoose.connect(config.DB, { useNewUrlParser: true, useUnifiedTopology: true}).then(
+  await mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true}).then(
     () => {console.log('Database is connected');},
     (err) => {console.log('Cannot connect to the database. ',err)}
   );

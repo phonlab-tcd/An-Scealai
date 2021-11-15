@@ -1,5 +1,5 @@
 > object storeName javascript
-  return storeName(args[0]);
+  return setUsername(args[0]);
 < object
 
 > object getName javascript
@@ -11,8 +11,7 @@
 < object
 
 > object isNameStored javascript
-  if(isNameStored()) return true;
-  else return false;
+  return isNameStored();
 < object
 
 > object loadFromChat javascript
@@ -33,11 +32,10 @@
 < object
 
 + start
-* <call>isNameStored</call> == false =>  Please choose a dialect: <br>
-^ Connemara (male)  <input type="checkbox" name="connemara" class="connemaraCheckbox" id="rive-checkbox" onclick="checkboxSelect('connemara', false, true)"><br>
-^ Kerry (female)  <input type="checkbox" name="kerry" class="kerryCheckbox" id="rive-checkbox" onclick="checkboxSelect('kerry', false, true)"><br>
-^ Donegal (female)  <input type="checkbox" name="donegal" class="donegalCheckbox" id="rive-checkbox" onclick="checkboxSelect('donegal', false, true)"><br><br>
-^ <button class="rive-button" onclick="next()">Next</button>
+- Tá mé beagnach réidh. <call>chatSetup nom</call>
+
++ nom
+* <call>isNameStored</call> == false => <call>chatSetup askname false</call>
 * <call>isNameStored</call> == true => Anois, a <call>getName</call> feicim go bhfuil spéis agat sna briathra neamhrialta. An bhfuil an ceart agam?
 
 + askname
@@ -50,7 +48,7 @@
 
 + ans
 - Táim anseo chun cabhrú leat le roinnt briathra neamhrialta.\s
-^ Feicim go bhfuil spéis agat!<call>chatSetup reidh true</call>
+^ Feicim go bhfuil spéis agat! <call>chatSetup reidh true</call>
 
 + reidh
 - An bhfuil tú réidh?
