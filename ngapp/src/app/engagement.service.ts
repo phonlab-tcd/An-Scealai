@@ -63,7 +63,7 @@ export class EngagementService {
       new MouseOverGrammarSuggestionEvent();
     event.type = EventType['MOUSE-OVER-GRAMMAR-SUGGESTION'];
     event.grammarSuggestionData = {};
-    for (const key in Object.keys(tag)) {
+    for (const key of Object.getOwnPropertyNames(tag)) {
       if ( key !== 'tooltip'){
         event.grammarSuggestionData[key] = tag[key];
       }
