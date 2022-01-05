@@ -81,20 +81,20 @@ $ sudo mongod --dbpath=/path/to/data/db/folder
 ```
 (See https://stackoverflow.com/a/61423909 for more)
 #### Backend
-5) Add [sendinblue](https://www.sendinblue.com/) authentication details to `/an-scealai/api/sendinblue.json`. This allows the backend to send verification emails for user registration. [See this tutorial for more information](https://schadokar.dev/posts/how-to-send-email-in-nodejs/).
+4) Add the following [sendinblue](https://www.sendinblue.com/) authentication details to `/an-scealai/api/sendinblue.json`. This allows the backend to send verification emails for user registration. [See this tutorial for more information](https://schadokar.dev/posts/how-to-send-email-in-nodejs/).
 ```javascript
 {
   "user": "<username>",
   "pass": "<password>"
 }
 ```
-6) In the API folder, `/an-scealai/api`, run the following command to start the Backend server:
+5) In the API folder, `/an-scealai/api`, run the following command to start the Backend server:
 ```bash
 $ cd api/
 $ nodemon server.js
 ```
 
-7) Navigate to http://localhost:4200/.
+6) Navigate to http://localhost:4200/.
 
 
 # CHANGE LOG
