@@ -19,9 +19,10 @@ session.vim
 
 /mongotest/logs/**
 
+/data/**
+
 /api/logs/**
 /api/sendinblue.json
-/api/DB.js
 /api/globalConfig.json
 /api/node_modules_backup_*
 
