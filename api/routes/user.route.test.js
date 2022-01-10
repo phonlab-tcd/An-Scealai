@@ -34,9 +34,6 @@ describe('user routes', () => {
         const SEARCH_STRING = 'a'
         const LIMIT = 2
         const res = await request.get(`/user/searchUser/${SEARCH_STRING}/0/${LIMIT}`);
-  
-        console.log(res.body)
-        console.log(res.body.length)
 
         expect(res.status).toBe(200);
         expect(res.body.length).toBe(LIMIT);
