@@ -24,4 +24,7 @@ const makeFakeRes = () => {
     return res;
 }
 
-module.exports = {makeFakeRes}
+// shorthand json parsing util function
+const json = (obj) => JSON.parse(JSON.stringify(obj));
+
+module.exports = {makeFakeRes, json}

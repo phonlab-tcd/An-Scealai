@@ -1,4 +1,5 @@
 const {
+  API400Error,
   API404Error,
   APIError,
   API500Error} = require('./APIError');
@@ -18,6 +19,9 @@ function errorHandler(err, req, res, next) {
 
   if (!(err instanceof APIError)) {
       return res.send(err);
+  }
+  if (err instanceof API400Error ) {
+    return res.status(400).send(err);
   }
   if (err instanceof API404Error ) {
     return res.status(404).send(err);

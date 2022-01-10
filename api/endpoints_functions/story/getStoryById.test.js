@@ -2,7 +2,7 @@ const mockingoose = require('mockingoose');
 const getStoryById = require('./getStoryById');
 const Story = require('../../models/story');
 const {API404Error} = require('../../utils/APIError');
-const {makeFakeRes} = require('../../utils/makeFakeRes');
+const {makeFakeRes, json} = require('../../utils/makeFakeRes');
 
 describe('getStoryById endpoint function', () => {
   it('should throw an API404Error if no story with :id exists', async () => {
@@ -42,5 +42,3 @@ const makeFakeStory = () => {
     author: 'some-student-username'
   }
 }
-
-const json = (obj) => JSON.parse(JSON.stringify(obj));
