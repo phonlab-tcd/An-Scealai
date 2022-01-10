@@ -39,13 +39,13 @@ let storyRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   const getStoryById =
-    require('../endpointsFunctions/story/getStoryById');
+    require('../endpoints_functions/story/getStoryById');
   const updateStoryAndCheckGrammar =
-    require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
+    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
   const feedbackAudio =
-    require('../endpointsFunctions/story/feedbackAudio');
+    require('../endpoints_functions/story/feedbackAudio');
   const viewFeedback =
-    require('../endpointsFunctions/story/viewFeedback');
+    require('../endpoints_functions/story/viewFeedback');
 
   storyRoutes = makeEndpoints({
     get: {
