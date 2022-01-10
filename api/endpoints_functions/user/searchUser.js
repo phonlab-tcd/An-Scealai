@@ -12,9 +12,9 @@ async function searchUser(req, res) {
   page = +req.params.currentPage
   // skip and limit must be non-negative
   if (limit < 0 || page < 0) {
-    console.log('\n\n\nIT RAN\n\n\n')
     throw new API400Error('currentPage and limit parameters must be greater than 0.');
   }
+
   // find username containing searchRegex as substring
   const searchRegex = new RegExp(req.params.searchString, 'i'); // i for case insensitive
   const users = await User.find({username: {$regex: searchRegex}})
