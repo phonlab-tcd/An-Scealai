@@ -8,6 +8,8 @@ In order to make a new endpoint, first implement the endpoint function, and then
 
 The easiest way to go about this is to _copy and edit an existing endpoint_. You'll want to find the existing endpoint that is most similar to the one you want to implement.
 
+Here's a PR that traces the entire process of adding a new endpoint + tests: https://github.com/OisinNolan/An-Scealai/pull/173/files. 
+
 ### Testing
 We currently have two ways to test our endpoints:
 * **function-level tests**: these can be used to test that the endpoint function logic is working correctly. We can use [mock requests](https://github.com/OisinNolan/An-Scealai/blob/119cbcdc7ff25c4d6cf069663f5bc0297021ef51/api/endpointsFunctions/story/getStoryById.test.js#L9) and [mock responses](https://github.com/OisinNolan/An-Scealai/blob/119cbcdc7ff25c4d6cf069663f5bc0297021ef51/api/endpointsFunctions/story/getStoryById.test.js#L14) to provide the possible input cases to the endpoint function, and ensure that they return the appropriate response, or throw the expected error. We use [mockingoose](https://www.npmjs.com/package/mockingoose) to mock responses from mongoose functions like `.find()` and `.update()`. These tests live alongside endpoint functions in `api > endpointsFunctions > * > *.test.js`. An example is [`getStoryById.test.js`](https://github.com/OisinNolan/An-Scealai/blob/master/api/endpointsFunctions/story/getStoryById.test.js).
