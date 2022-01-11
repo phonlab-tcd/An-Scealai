@@ -6,7 +6,7 @@ Endpoints consist of:
 
 In order to make a new endpoint, first implement the endpoint function, and then specify it's route in the appropriate `.route.js` file. The route files correspond to the models that their endpoints operate on.
 
-The easiest way to go about this is to _copy an existing endpoint_. You'll want to find the existing endpoint that is most similar to the one you want to implement.
+The easiest way to go about this is to _copy and edit an existing endpoint_. You'll want to find the existing endpoint that is most similar to the one you want to implement.
 
 ### Testing
 We currently have two ways to test our endpoints:
