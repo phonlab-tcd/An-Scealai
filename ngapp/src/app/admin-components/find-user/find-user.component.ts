@@ -2,6 +2,8 @@ import { Component, OnInit, } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-find-user',
@@ -12,8 +14,23 @@ export class FindUserComponent implements OnInit {
 
   constructor(private userService: UserService, public ts: TranslationService) { }
   
+  public searchText: string;
+  public searchModelChanged: Subject<string> = new Subject<string>();
+  private searchModelChangeSubscription: Subscription;
+
   ngOnInit() {
-    this.getUserResults();
+    this.searchModelChangeSubscription = this.searchModelChanged
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged()
+      )
+      .subscribe(searchString => {
+        this.searchUsers(searchString)
+      });
+  }
+
+  ngOnDestroy() {
+    this.searchModelChangeSubscription.unsubscribe();
   }
 
   // This array will store User objects to be displayed
@@ -26,24 +43,21 @@ export class FindUserComponent implements OnInit {
   allStudents : User[] = [];
   allTeachers : User[] = [];
   allAdmins: User[] = [];
-  searchText: string = '';
   dataLoaded: boolean = true;
 
-  /**
-   * Gets an array of all users on the database, call the function to make subarrays
-   */
-  getUserResults() {
+  searchUsers(searchString: string) {
     this.dataLoaded = false;
-    this.userService.getAllUsers().subscribe((users: any) => {
+    this.userService.searchUser(searchString, 0, 2).subscribe((users: any) => {
       this.userResults = users.map(userData => new User().fromJSON(userData));
-      this.numberOfUsers = this.userResults.length;
-      this.filterArray(users);
+      this.dataLoaded = true;
     });
   }
   
   /*
   *  Fill individual arays of students, teachers, and admins from the userResults array
   */
+ // We'll probably need to do this filtering on the backend.
+ /*
   filterArray(users) {
     for(let i of users) {
       if(i.role === "STUDENT") {
@@ -59,8 +73,9 @@ export class FindUserComponent implements OnInit {
         console.log("User is not a student, teacher, or admin");
       }
     }
-    this.dataLoaded = true;
   }
+  */
+
   /*
   goBack() {
     this.router.navigateByUrl('/admin/dashboard/');
