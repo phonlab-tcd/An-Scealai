@@ -3,7 +3,7 @@ const express = require('express');
 /**
  * This function takes in mappings from endpoint strings to functions for those
  * endpoints and uses them to create an express Router that's ready to be used
- * in server.js Note that this wraps the endpoint functions in a try / catch
+ * in server.js. This wraps the endpoint functions in a try / catch
  * block so that unexpected runtime errors won't bring the server down. 
  * 
  * @param mappings - an object containing mappings from endpoint strings to
