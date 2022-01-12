@@ -75,8 +75,12 @@ const port = process.env.PORT || 4000;
 
 app.use(errorHandler);
 
-const server = app.listen(port, function(){
-    logger.info('Listening on port ' + port);
-});
+// We don't want to call app.listen while testing
+// See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
+if (process.env.TEST != 1) {
+  const server = app.listen(port, function(){
+      logger.info('Listening on port ' + port);
+  });
+}
 
 module.exports = app;
