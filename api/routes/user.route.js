@@ -5,6 +5,7 @@
 
 const logger = require('../logger');
 const generator = require('generate-password');
+const makeEndpoints = require('../utils/makeEndpoints');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -17,7 +18,6 @@ var crypto = require('crypto');
 
 
 var express = require('express');
-var userRoutes = express.Router();
 var jwt = require('express-jwt');
 
 let User = require('../models/user');
@@ -29,6 +29,22 @@ var auth = jwt({
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
+
+let userRoutes;
+// Immediately Invoked Function Expression.
+// Scopes the imported functions to just this function
+(() => {  
+  // ENDPOINT HANDLERS
+  const searchUser =
+    require('../endpoints_functions/user/searchUser');
+
+    userRoutes = makeEndpoints({
+      get: {},
+      post: {
+        '/searchUser/:searchString': searchUser,
+      }
+    });
+})();
 
 userRoutes.get('/profile', auth, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
