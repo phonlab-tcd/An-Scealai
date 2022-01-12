@@ -27,36 +27,15 @@ export class UserService {
   }
 
   searchUser(searchString: string, pageNumber: number, limit: number, roles: string[]): Observable<any> {
-    console.log(roles);
-    return of({
-      users: [
-        {
-          "_id": '12345',
-          "username": 'alice',
-          "role": 'STUDENT',
-          "language" : 'ga',
-        },
-        {
-          "_id": '67890',
-          "username": 'bob',
-          "role": 'TEACHER',
-          "language" : 'en',
-        },
-        {
-          "_id": '14525',
-          "username": 'carl',
-          "role": 'TEACHER',
-          "language" : 'en',
-        },
-        {
-          "_id": '19572',
-          "username": 'dearbhla',
-          "role": 'STUDENT',
-          "language" : 'ga',
-        },
-      ].slice(pageNumber * limit, (pageNumber * limit) + limit),
-      count: 4
-    });
+    return this.http.post(
+      this.baseUrl + `searchUser/`,
+      {
+        searchString: searchString,
+        limit: limit,
+        currentPage: pageNumber,
+        roles: roles
+      }
+    );
   }
 
   deleteUser(username: string): Observable<any> {

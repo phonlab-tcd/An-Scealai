@@ -9,6 +9,7 @@ const {API404Error, API400Error} = require('../../utils/APIError');
 async function searchUser(req, res) {
   // default values for req body
   reqBody = {
+    searchString: req.body.searchString ? req.body.searchString : '',
     limit: req.body.limit ? req.body.limit : 20,
     currentPage: req.body.currentPage ? req.body.currentPage : 0,
     roles: req.body.roles ? req.body.roles : [
@@ -33,7 +34,7 @@ async function searchUser(req, res) {
   }
 
   // find username containing searchRegex as substring
-  const searchRegex = new RegExp(req.params.searchString, 'i'); // i for case insensitive
+  const searchRegex = new RegExp(reqBody.searchString, 'i'); // i for case insensitive
   const mongoQuery = {
     username: {$regex: searchRegex},
     role: {$in: reqBody.roles}
@@ -46,7 +47,7 @@ async function searchUser(req, res) {
   const userCount = await User.where(mongoQuery).countDocuments()
 
   if (!users) {
-    throw new API404Error(`No users with substring ${req.params.searchString} were found.`);
+    throw new API404Error(`No users matching the search string were found.`);
   }
   console.dir(users);
   return res.status(200).json({users: users, count: userCount});

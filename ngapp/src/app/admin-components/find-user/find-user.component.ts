@@ -43,14 +43,15 @@ export class FindUserComponent implements OnInit {
   currentPage: number = 0;
   LIMIT = 1;
   roleFilter = {
-    'STUDENT': false,
-    'TEACHER': false,
-    'ADMIN': false,
+    'STUDENT': true,
+    'TEACHER': true,
+    'ADMIN': true,
   }
   dataLoaded: boolean = true;
 
   searchUsers() {
     this.dataLoaded = false;
+    this.userResults = [];
     const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
     this.userService.searchUser(this.searchText, this.currentPage, this.LIMIT, roles).subscribe((res: any) => {
       this.userResults = res.users.map(userData => new User().fromJSON(userData));
@@ -60,11 +61,12 @@ export class FindUserComponent implements OnInit {
   }
 
   getPageCount(): number {
-    return Math.floor(this.resultCount / this.LIMIT);
+    const pageCount = Math.floor(this.resultCount / this.LIMIT);
+    return pageCount > 0 ? pageCount - 1 : 0;
   }
 
   goNextPage() {
-    if (this.currentPage < this.getPageCount()) {
+    if (this.currentPage < this.getPageCount() - 1) {
       this.currentPage++;
       this.searchUsers();
     }

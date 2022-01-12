@@ -41,7 +41,7 @@ let userRoutes;
     userRoutes = makeEndpoints({
       get: {},
       post: {
-        '/searchUser/:searchString': searchUser,
+        '/searchUser': searchUser,
       }
     });
 })();
