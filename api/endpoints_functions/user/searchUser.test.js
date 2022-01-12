@@ -10,7 +10,8 @@ describe('searchUser endpoint function', () => {
     const mockReq = {
       params: {
         searchString: 'test'
-      }
+      },
+      body: {}
     };
     const mockRes = makeFakeRes();
 
@@ -21,23 +22,23 @@ describe('searchUser endpoint function', () => {
     const fakeUsers = makeFakeUsers();
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
-      params: {}
+      params: {},
+      body: {}
     };
     const mockRes = makeFakeRes();
 
     const response = await searchUser(mockReq, mockRes);
 
     expect(response.statusCode).toBe(200);
-    expect(json(response.jsonBody)).toMatchObject(fakeUsers);
+    expect(json(response.jsonBody.users)).toMatchObject(fakeUsers);
   });
 
   it('should throw 400 error if currentPage is < 0', async () => {
     const fakeUsers = makeFakeUsers();
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
-      params: {
-        currentPage: '-1'
-      }
+      params: {},
+      body: {currentPage: '-1'}
     };
     const mockRes = makeFakeRes();
 
@@ -48,9 +49,8 @@ describe('searchUser endpoint function', () => {
     const fakeUsers = makeFakeUsers();
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
-      params: {
-        limit: '-1'
-      }
+      params: {},
+      body: {limit: '-1'}
     };
     const mockRes = makeFakeRes();
 

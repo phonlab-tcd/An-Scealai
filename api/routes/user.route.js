@@ -39,10 +39,10 @@ let userRoutes;
     require('../endpoints_functions/user/searchUser');
 
     userRoutes = makeEndpoints({
-      get: {
-        '/searchUser/:searchString/:currentPage/:limit': searchUser,
-      },
-      post: {}
+      get: {},
+      post: {
+        '/searchUser/:searchString': searchUser,
+      }
     });
 })();
 

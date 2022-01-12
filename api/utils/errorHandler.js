@@ -21,10 +21,10 @@ function errorHandler(err, req, res, next) {
       return res.send(err);
   }
   if (err instanceof API400Error ) {
-    return res.status(400).send(err);
+    return res.status(400).json(err.message);
   }
   if (err instanceof API404Error ) {
-    return res.status(404).send(err);
+    return res.status(404).json(err.message);
   }
   if (err instanceof API500Error) {
       // Notify us
