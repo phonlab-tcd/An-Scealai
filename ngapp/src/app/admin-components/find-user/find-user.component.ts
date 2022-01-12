@@ -25,7 +25,9 @@ export class FindUserComponent implements OnInit {
         distinctUntilChanged()
       )
       .subscribe(searchString => {
-        this.searchUsers(searchString)
+        this.searchText = searchString;
+        this.currentPage = 0;
+        this.searchUsers();
       });
   }
 
@@ -37,20 +39,42 @@ export class FindUserComponent implements OnInit {
   userResults : User[] = [];
   
   numberOfUsers : number = 0;
-  students : boolean = false;
-  teachers : boolean = false;
-  admins : boolean = false;
-  allStudents : User[] = [];
-  allTeachers : User[] = [];
-  allAdmins: User[] = [];
+  resultCount: number = 0;
+  currentPage: number = 0;
+  LIMIT = 1;
+  roleFilter = {
+    'STUDENT': false,
+    'TEACHER': false,
+    'ADMIN': false,
+  }
   dataLoaded: boolean = true;
 
-  searchUsers(searchString: string) {
+  searchUsers() {
     this.dataLoaded = false;
-    this.userService.searchUser(searchString, 0, 2).subscribe((users: any) => {
-      this.userResults = users.map(userData => new User().fromJSON(userData));
+    const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
+    this.userService.searchUser(this.searchText, this.currentPage, this.LIMIT, roles).subscribe((res: any) => {
+      this.userResults = res.users.map(userData => new User().fromJSON(userData));
+      this.resultCount = res.count;
       this.dataLoaded = true;
     });
+  }
+
+  getPageCount(): number {
+    return Math.floor(this.resultCount / this.LIMIT);
+  }
+
+  goNextPage() {
+    if (this.currentPage < this.getPageCount()) {
+      this.currentPage++;
+      this.searchUsers();
+    }
+  }
+
+  goPrevPage() {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.searchUsers();
+    }
   }
   
   /*
