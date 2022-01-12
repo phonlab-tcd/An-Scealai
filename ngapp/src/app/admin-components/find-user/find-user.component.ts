@@ -41,7 +41,7 @@ export class FindUserComponent implements OnInit {
   numberOfUsers : number = 0;
   resultCount: number = 0;
   currentPage: number = 0;
-  LIMIT = 1;
+  LIMIT = 20;
   roleFilter = {
     'STUDENT': true,
     'TEACHER': true,
