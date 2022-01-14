@@ -64,6 +64,7 @@ export class FindUserComponent implements OnInit {
   }
 
   searchUsers() {
+    if (!validTextSearch()) return;
     this.dataLoaded = false;
     this.userResults = [];
     const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
