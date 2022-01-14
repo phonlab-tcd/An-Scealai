@@ -52,7 +52,20 @@ export class FindUserComponent implements OnInit {
   }
   dataLoaded: boolean = true;
 
+  validSearchText() {
+    try {
+      new RegExp(this.searchText, 'i'); // i for case insensitive
+    }
+    catch (e) {
+      console.log('Caught error:', e);
+      alert("invalid regular expression");
+      return false;
+    }
+    return true;
+  }
+
   searchUsers() {
+    if (!this.validSearchText()) return;
     this.dataLoaded = false;
     this.userResults = [];
     const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
@@ -60,7 +73,7 @@ export class FindUserComponent implements OnInit {
       this.userResults = res.users.map(userData => new User().fromJSON(userData));
       this.resultCount = res.count;
       this.dataLoaded = true;
-    });
+      });
   }
 
   getPageCount(): number {
