@@ -12,6 +12,7 @@ const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
+const synthRoute = require('./routes/synth.route');
 const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
@@ -57,6 +58,7 @@ app.use(cors());
 app.use(passport.initialize());
 
 app.use('/story', storyRoute);
+app.use('/synth', synthRoute);
 app.use('/user', userRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
