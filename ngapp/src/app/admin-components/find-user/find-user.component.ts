@@ -19,6 +19,7 @@ export class FindUserComponent implements OnInit {
   private searchModelChangeSubscription: Subscription;
 
   ngOnInit() {
+    this.userService.getUserCount().subscribe(res => this.userCount = res.total);
     this.searchModelChangeSubscription = this.searchModelChanged
       .pipe(
         debounceTime(1000),
@@ -34,6 +35,8 @@ export class FindUserComponent implements OnInit {
   ngOnDestroy() {
     this.searchModelChangeSubscription.unsubscribe();
   }
+
+  userCount: number = 0;
 
   // This array will store User objects to be displayed
   userResults : User[] = [];

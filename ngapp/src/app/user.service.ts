@@ -38,6 +38,10 @@ export class UserService {
     );
   }
 
+  getUserCount(): Observable<any> {
+    return this.http.get(this.baseUrl + 'count/');
+  }
+
   deleteUser(username: string): Observable<any> {
     return this.http.get(this.baseUrl + 'deleteUser/' + username);
   }
