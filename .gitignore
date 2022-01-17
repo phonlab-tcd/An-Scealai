@@ -22,7 +22,6 @@ session.vim
 
 /api/logs/**
 /api/sendinblue.json
-/api/DB.js
 /api/globalConfig.json
 
 /sshlogin
