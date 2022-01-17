@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import config from '../../abairconfig.json';
@@ -55,6 +55,22 @@ export class SynthesisService {
     this.engagement.addEventForLoggedInUser(EventType['SYNTHESISE-STORY'], storyObject);
     return [paragraphs, sentences];
   }
+
+  async singleSentenceDNN(query: { [param: string]: string | readonly string[]; }): Promise<object> {
+    const q = new HttpParams({fromObject: query });
+    return this.http.get(
+      this.baseUrl + 'synth/singleSentenceDNN',
+      {params: q}).toPromise();
+  }
+  /* singleSentenceDNN usage example
+    this.synth.singleSentenceDNN({
+        input: 'dia duit',
+        outputType: 'JSON_WITH_TIMING',
+        speed: '1',
+        audioEncoding: 'MP3',
+        voice: 'ga_MU_nnc_nnmnkwii'
+    });
+  */
 
   /**
    * Converts a string of HTML code into a DOM Node object.
