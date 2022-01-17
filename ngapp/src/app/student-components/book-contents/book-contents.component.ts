@@ -12,28 +12,39 @@ import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { RecordingService } from '../../recording.service';
+import { FilterPipe } from 'src/app/pipes/filter.pipe'; // used in html template
 
 @Component({
   selector: 'app-book-contents',
   templateUrl: './book-contents.component.html',
-  styleUrls: ['./book-contents.component.css']
+  styleUrls: ['./book-contents.component.css'],
+  providers: [
+    FilterPipe,
+  ],
 })
 export class BookContentsComponent implements OnInit {
-  
   stories: Story[] = [];
   deleteMode: Boolean;
-  editMode : boolean;
+  editMode: boolean;
   toBeDeleted: string[] = [];
   userId: string = '';
   messagesForNotifications : Message[] = [];
   unreadMessages: number = 0;
   isFromAmerica: boolean = false;
   isEnrolled: boolean = false;
+  searchText: string = '';
 
-  constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService, public ts : TranslationService, private router: Router,
-    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService,
-    private ns: NotificationService, private recordingService: RecordingService) { }
+  constructor(
+    private storyService: StoryService,
+    private auth: AuthenticationService,
+    private engagement: EngagementService,
+    public ts:  TranslationService,
+    private router: Router,
+    private messageService: MessageService,
+    private profileService: ProfileService,
+    private classroomService: ClassroomService,
+    private ns: NotificationService,
+    private recordingService: RecordingService) { }
 
 /*
 * Set story array of stories for logged in user
@@ -42,12 +53,11 @@ export class BookContentsComponent implements OnInit {
   ngOnInit() {
     // get stories for the user
     this.storyService
-        .getStoriesForLoggedInUser()
-        .then((data: Story[]) => {
-          this.stories = data;
-          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
-        });
-
+    .getStoriesForLoggedInUser()
+    .subscribe((data) => {
+      this.stories = data.map(storyData => new Story().fromJSON(storyData));
+      this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
+    });
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
       return;

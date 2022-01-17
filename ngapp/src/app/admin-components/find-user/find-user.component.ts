@@ -27,14 +27,17 @@ export class FindUserComponent implements OnInit {
   allTeachers : User[] = [];
   allAdmins: User[] = [];
   searchText: string = '';
-  //onDashboard: Boolean = false;
+  dataLoaded: boolean = true;
 
   /**
    * Gets an array of all users on the database, call the function to make subarrays
    */
   getUserResults() {
+    this.dataLoaded = false;
     this.userService.getAllUsers().subscribe((users: any) => {
-      this.userResults = users, this.numberOfUsers = this.userResults.length, this.filterArray(users);
+      this.userResults = users.map(userData => new User().fromJSON(userData));
+      this.numberOfUsers = this.userResults.length;
+      this.filterArray(users);
     });
   }
   
@@ -55,6 +58,7 @@ export class FindUserComponent implements OnInit {
       else {
       }
     }
+    this.dataLoaded = true;
   }
   /*
   goBack() {

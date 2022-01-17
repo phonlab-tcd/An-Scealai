@@ -1,17 +1,35 @@
 .bookContentsContainer {
-    width: 80%;
+    /*width: 95%;
+    height: 40vh;*/
+    width: 700px;
+    height: auto;
     margin-left: 10%;
     z-index: 10;
 }
 
+.bookContainer {
+    --bookContainerHeight: 80vh;
+    --bookContainerWidth: 70%;
+    height: calc(var(--bookContainerHeight/2));
+    width: var(--bookContainerWidth);
+    margin-left: 13%;
+    -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
+    box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+    border-radius: 5px 5px 5px 5px;
+    border: solid 2px #827662b8;
+}
+/*
 .bookImg {
     z-index: -10;
-    width: 90%;
-    height: 500px;
+    --bookContainerHeight: 80vh;
+    --bookContainerWidth: 70%;
+    height: calc(var(--bookContainerHeight/2));
+    width: var(--bookContainerWidth);
     position: fixed;
     right: 5%;
 }
-
+*/
 .bookContentsTitle {
     color: #261500;
     padding-left: 5%;
@@ -20,21 +38,28 @@
     font-size: 18pt;
 }
 
+/*
 .contentsContainer {
     padding-left: 3%;
     padding-right: 3%;
-    height: 390px;
+    height: 450px;
     width: 80%;
     margin-left: 10%;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
+}
+*/
+
+.contentsContainer {
+  padding: 20px;
 }
 
 .contentsLinkContainer {
@@ -42,7 +67,7 @@ border-radius: 5px 5px 5px 5px;
     overflow: scroll;
     padding: 10px;
     -webkit-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
--moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
 border-radius: 5px 5px 5px 5px;
 }
@@ -63,6 +88,7 @@ border-radius: 5px 5px 5px 5px;
 
 .contentsLink:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .contentsDate {
@@ -89,6 +115,8 @@ border-radius: 5px 5px 5px 5px;
 
 .contentsBtnsContainer {
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .newStoryBtn {
@@ -97,7 +125,6 @@ border-radius: 5px 5px 5px 5px;
     color: white;
     font-size: 12pt;
     margin: 0px;
-    float: right;
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -111,10 +138,8 @@ border-radius: 5px 5px 5px 5px;
     border-style: none;
     color: white;
     font-size: 12pt;
-    margin: 0px;
-    float: center;
     border-radius: 5px 5px 5px 5px;
-    display: inline-flex;
+    display: flex;
 }
 
 .messagesBtn:hover {
@@ -164,7 +189,7 @@ border-radius: 5px 5px 5px 5px;
     align-items: center;
     padding: 4px;
     padding-right: 0px;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    /*background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -194,7 +219,7 @@ border-radius: 5px 5px 5px 5px;
     border-style: none;
     color: white;
     margin: 0px;
-    float: left;
+    /* float: left; */
     padding-left: 7px;
     padding-right: 7px;
     padding-bottom: 7px;

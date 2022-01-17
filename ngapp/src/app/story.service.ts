@@ -62,15 +62,14 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'getStoryById/' + id);
   }
 
-  getStoriesForLoggedInUser(): Promise<Story[]>{
+  getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
       throw new Error('no user details. can\'t get user\'s stories');
     }
 
     const author = userDetails.username;
-    const url = this.baseUrl + author;
-    return this.http.get(url).toPromise() as Promise<Story[]>;
+    return this.http.get<Story[]>(this.baseUrl + author);
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {
@@ -81,17 +80,10 @@ export class StoryService {
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
   }
 
-  updateStory(story: Story): Observable<any> {
-    this.engagement
-        .addEventForLoggedInUser(
-          EventType['SAVE-STORY'],
-          story);
-
-    return this.http.post(this.baseUrl + 'update/' + story._id, {
-      text : story.text,
-      htmlText: story.htmlText,
-      lastUpdated : new Date(),
-    });
+  updateStory(updateData: any, id: string): Observable<any> {
+    return this.http.post(
+      this.baseUrl + 'update/' + id,
+      updateData);
   }
   
   updateAuthor(oldAuthor, newAuthor): Observable<any> {
@@ -138,22 +130,6 @@ export class StoryService {
       .get(
         // URL
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
-  }
-
-  gramadoirDirect(text: string): Observable<any> {
-    return this
-      .http
-      .post('https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl',
-        {
-          observe: 'body',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: {
-            teacs: text.replace(/\n/g, ' '),
-            teanga: this.ts.l.iso_code,
-          },
-        });
   }
 
   synthesiseObject(storyObject: Story): Observable<any> {

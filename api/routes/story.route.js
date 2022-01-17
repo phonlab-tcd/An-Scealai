@@ -3,89 +3,60 @@ const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
+const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
-/*
-<<<<<<< HEAD
-const { parse, stringify } = require('node-html-parser');
-const logger = require('../logger');
-
-const abairBaseUrl = require('../abair_base_url');
-
-logger.info('abairBaseUrl: ' + abairBaseUrl);
-console.log('abairBaseUrl: ' + abairBaseUrl);
-
-let Story = require('../models/story');
-let Event = require('../models/event');
-
-let db;
-MongoClient.connect('mongodb://localhost:27017/', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-},
-(err, client) => {
-  if (err) {
-    logger.error(
-        'MongoDB Connection Error in ./api/routes/story.route.js .' +
-        ' Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
-});
-
-storyRoutes.route('/getStoryById/:id').get((req, res) => {
-  // TEST CASE
-  if (req.params.id === 'test_id') {
-    const testStory = new Story({
-      text: 'Tá chúpla botúin inseo',
-    });
-    return res.status(300).json(testStory);
-  }
-
-  Story.findById(req.params.id, (err, story) => {
-    if (err) {
-      logger.error(err);
-      res.status(400).json(
-        "An error occurred while trying to find this profile");
-      return;
-    }
-    logger.info({
-      endpoint: "/story/getStoryById/:id",
-      id: req.params.id,
-      story: story
-    });
-    if(!story) {
-      res.status(404).json("Story with given ID not found");
-      return;
-    }
-    res.status(200).json(story);             
-  });
-});
-
-
-=======
-*/
-const {parse} = require('node-html-parser');
 const makeEndpoints = require('../utils/makeEndpoints');
+const { parse, stringify } = require('node-html-parser');
+const path = require('path');
+const fs = require('fs'); // file system
+const pandoc = require('node-pandoc-promise');
+const abairBaseUrl = require('../abair_base_url');
+const logger = require('../logger');
+const dbUrl = require('../utils/dbUrl');
 
-// ENDPOINT HANDLERS
-const getStoryById =
-  require('../endpointsFunctions/story/getStoryById');
-const updateStoryAndCheckGrammar =
-  require('../endpointsFunctions/story/updateStoryAndCheckGrammar');
-
+const config = require('../DB');
 const Story = require('../models/story');
 
-const storyRoutes = makeEndpoints({
-  get: {
-    '/getStoryById/:id': getStoryById,
-    '/feedbackAudio/:id': require('../endpointsFunctions/story/feedbackAudio'),
-  },
-  post: {
-    '/viewFeedback/:id': require('../endpointsFunctions/story/viewFeedback'),
-    '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
-  },
-});
+let db;
+MongoClient.connect(dbUrl,
+    {useNewUrlParser: true, useUnifiedTopology: true},
+    (err, client) => {
+      if (err) {
+        console.log(
+            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+            'Please make sure that MongoDB is running.');
+        process.exit(1);
+      }
+      db = client.db(process.env.DB || config.DB);
+    });
+
+
+let storyRoutes;
+// Immediately Invoked Function Expression.
+// Scopes the imported functions to just this function
+(() => {  
+  // ENDPOINT HANDLERS
+  const getStoryById =
+    require('../endpoints_functions/story/getStoryById');
+  const updateStoryAndCheckGrammar =
+    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+  const feedbackAudio =
+    require('../endpoints_functions/story/feedbackAudio');
+  const viewFeedback =
+    require('../endpoints_functions/story/viewFeedback');
+
+  storyRoutes = makeEndpoints({
+    get: {
+      '/getStoryById/:id': getStoryById,
+      '/feedbackAudio/:id': feedbackAudio,
+    },
+    post: {
+      '/viewFeedback/:id': viewFeedback,
+      '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+    },
+  });
+})();
 
 // Create new story
 storyRoutes.route('/create').post(function(req, res) {
@@ -310,6 +281,80 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   });
 });
 
+storyRoutes
+    .route('/downloadStory/:id/:format')
+    .get(async (req, res) => {
+      try {
+        logger.info({
+          endpoint: '/story/downloadStory',
+          params: req.params,
+        });
+
+        const story =
+          await Story.findById(req.params.id);
+
+        if (!story) {
+          return res.status(404)
+              .json({
+                message: 'Story does not exist',
+              });
+        }
+
+	console.dir(story);
+
+        // GENERATE A FILENAME <story._id>.<format>
+        const filename =
+          path.join(
+              __dirname,
+              `storiesForDownload/${story._id}.${req.params.format}`);
+	
+	console.log(filename);
+
+        logger.info({
+          msg: 'CREATING ' + req.params.format,
+          filename: filename,
+          story: story,
+        });
+
+        // Pandoc example
+        const pandocErr =
+          await pandoc(
+              story.htmlText || story.text, // src
+              ['--from', 'html', '-o', filename]); // args
+
+        if (pandocErr) {
+          return res.json({
+            pandocError: pandocErr,
+          });
+        }
+
+        // SEND THE FILE CREATED WITH PANDOC
+        res.sendFile(filename, (sendFileErr) => {
+          if (sendFileErr) {
+            logger.error({
+              endpoint: '/story/downloadStory',
+              while: 'sending the file:' + filename,
+              error: sendFileErr,
+            });
+	    return res.send(sendFileErr);
+          }
+          // DELETE THE FILE AFTER IT HAS BEEN SENT
+          fs.unlink(filename, (err) => {
+            if (err) {
+              logger.error({
+                endpoint: '/story/downloadStory',
+                while: 'trying to delete file:' + filename,
+                error: err,
+              });
+            }
+          });
+        });
+      } catch (error) {
+        console.dir(error);
+        logger.error(error);
+        return res.json(error);
+      }
+    });
 /*
  * Synthesise a story given the story id 
  */
@@ -426,15 +471,6 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
       return res.send(err);
     }
     if (story) {
-      /*
-      console.log("original text: ", story.text);
-      let test8 = story.text.replace(/<br>/g, "\n");
-      let test9 = test8.replace(/(<([^>]+)>)/ig, '');
-      let test10 = test9.replace(/\n/g, " ");
-      console.log("test8: ", test8);
-      console.log("test9: ", test9);
-      console.log("test10: ", test10);
-      */
       const form = {
         teacs: story.text.replace(/\n/g, ' '),
         teanga: req.params.lang,
