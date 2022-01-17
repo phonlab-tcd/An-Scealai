@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import {
@@ -108,9 +108,7 @@ export class SynthesisService {
       });
     }
 
-    let url = 'https://www.abair.ie/api2/synthesise?input=';
-
-    url = url + encodeURIComponent(input);
+    const url = 'https://www.abair.ie/api2/synthesise';
 
     if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
       // use given voice
@@ -119,30 +117,27 @@ export class SynthesisService {
       voice = this.voice(dialect);
     }
 
-    url = url + '&voice=' + encodeURIComponent(voice);
+    const q = new HttpParams({fromObject: {
+      input,
+      voice,
+      audioEncoding,
+      outputType: 'JSON_WITH_TIMING',
+    }});
 
-    url = url + '&speed=' + encodeURIComponent(speed);
-
-    url = url + '&audioEncoding=' + encodeURIComponent(audioEncoding);
-
-    return this.http.get(url, {
-      observe: 'body',
-      headers: {
-        crossorigin: 'anonymous',
-      }
-    }).pipe(
-    map((data: {audioContent: string}) => {
-      return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
-    }),
-    tap((data) => {
-      this.synthBank
-          .storeAudioUrlOfSentence(
-            input,
-            dialect,
-            audioEncoding,
-            data);
-    })
-    );
+    return this.http.get(url, {params: q})
+     .pipe(
+     map((data: {audioContent: string}) => {
+       return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
+     }),
+     tap((data) => {
+       this.synthBank
+           .storeAudioUrlOfSentence(
+             input,
+             dialect,
+             audioEncoding,
+             data);
+     })
+     );
   }
 
   prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
