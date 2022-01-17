@@ -36,9 +36,14 @@ export class AppComponent {
 
   constructor(
     //private _loadingBar: SlimLoadingBarService, 
-              private _router: Router, public auth: AuthenticationService,
-              private storyService : StoryService, private notificationSerivce : NotificationService,
-              private engagement: EngagementService, public ts : TranslationService) {
+    private _router: Router,
+    public auth: AuthenticationService,
+    private storyService: StoryService,
+    private notificationSerivce : NotificationService,
+    private engagement: EngagementService,
+    public ts: TranslationService,
+  ) {
+    this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
@@ -96,7 +101,7 @@ export class AppComponent {
     this.notificationsShown = !this.notificationsShown;
   }
 
-// Hide notifications and route to story dashboard component
+  // Hide notifications and route to story dashboard component
   goToStory(id : string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/dashboard/' + id);

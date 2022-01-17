@@ -44,18 +44,18 @@ export class NotificationService {
         }
         this.messageEmitter.emit(this.messages);
       });
-      this.storyService
-          .getStoriesForLoggedInUser()
-          .then((res : Story[]) => {
-            this.stories = [];
-            let stories = res;
-            for(let story of stories) {
-              if(story.feedback.seenByStudent === false) {
-                this.stories.push(story);
-              }
-            }
-            this.storyEmitter.emit(this.stories);
-          });
+      this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
+        this.stories = [];
+        let stories = res;
+        for(let story of stories) {
+          if(story &&
+             story.feedback &&
+             story.feedback.seenByStudent === false) {
+            this.stories.push(story);
+          }
+        }
+        this.storyEmitter.emit(this.stories);
+      });
     }
     if(userDetails.role == "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {

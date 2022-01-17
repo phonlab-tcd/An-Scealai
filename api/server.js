@@ -1,9 +1,12 @@
+
+// Best to initialize the logger first
+const logger = require('./logger');
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const logger = require('./logger');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
@@ -26,6 +29,7 @@ const dbURL = require('./utils/dbUrl');
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
+logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -73,8 +77,12 @@ const port = process.env.PORT || 4000;
 
 app.use(errorHandler);
 
-const server = app.listen(port, function(){
-    logger.info('Listening on port ' + port);
-});
+// We don't want to call app.listen while testing
+// See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
+if (process.env.TEST != 1) {
+  const server = app.listen(port, function(){
+      logger.info('Listening on port ' + port);
+  });
+}
 
 module.exports = app;

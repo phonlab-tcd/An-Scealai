@@ -1,9 +1,6 @@
 <!-- Display the written story along with edit options -->
-<div>
-  {{gramadoirResponse}}
-</div>
-<div class="page">
-  <div class="bookContainer">
+<div class="page bookContainer">
+    <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
       <div class="modalContent" *ngIf="story">
         <div class="modalText">
@@ -39,81 +36,146 @@
           <div *ngIf="storySaved" class="savedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>
-          <div *ngIf="!storySaved" class="unsavedIcon" (click)="saveStory()">
-            {{ts.l.save}} <i class="fas fa-save"></i>
+          <div
+            *ngIf="!storySaved"
+            class="savedIcon"
+            >
+              {{ts.l.saving}}
+              <i
+                class="fas fa-save"
+                >
+              </i>
           </div>
         </div>
       </div>
-
       <!-- STORY TITLE -->
       <div class="storyTitle">
         <div>
           {{story?.title}}
           <span *ngIf="!storySaved">*</span>
         </div>
+      </div>
+    </div>
 
-        <!-- CHANGE STORY DIALECT --
-        <select *ngIf="dialects" [(ngModel)]="story.dialect" class="selectDialect">
-          <option *ngFor="let d of dialects" [ngValue]="d.code">
-          {{d.name}}
-          </option>
-        </select>
-        -->
+    <div class="optionsBtnContainer" (click)="toggleOptions();">
 
+      <div class="toggleShowOptions optionsBtn">
+        <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+        <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
       </div>
 
+      <!-- EDIT STORY DETAILS -->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
+        {{ts.l.edit_title_or_dialect}}
+        <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+      </div>
 
-      <div class="optionsBtnContainer" (click)="toggleOptions();">
-
-        <div class="toggleShowOptions optionsBtn">
-          <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
-          <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
-        </div>
-
-        <!-- EDIT STORY DETAILS -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
-          {{ts.l.edit_title_or_dialect}}
-          <i class="fas fa-pencil-alt optionsBtnIcon"></i>
-        </div>
-
-        <!-- FEEDBACK -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-                                 (click)="this.dontToggle=true; defaultMode(); getFeedback()">
+      <!-- DOWNLOAD -->
+      <div 
+          *ngIf="showOptions"
+          style="display: flex;"
+          (click)="dontToggle=true">
+        <a 
+          style="text-decoration: none;"
+          class="optionsBtn optionsPopupBtn"
+          target="_blank"
+          href="{{downloadStoryUrl()}}">
+          Download
+          <i class="fas fa-download optionsBtnIcon"></i>
+        </a>
+        <select 
+             #downloadFormatOption
+             style="border-end-end-radius: 0; background: rgba(0,0,0,0);"
+             [(ngModel)]="downloadStoryFormat">
+          <option>.pdf</option>
+          <option>.docx</option>
+          <option>.odt</option>
+          <option>.pptx</option>
+          <option>.md</option>
+          <option>.txt</option>
+          <option>.html</option>
+          <option>.json</option>
+          <option>.latex</option>
+        </select>
+      </div>
+      <!-- FEEDBACK -->
+      <div
+        *ngIf="showOptions"
+        class="optionsBtn optionsPopupBtn"
+        (click)="this.dontToggle=true; getFeedback()">
           {{ts.l.feedback}}
-          <i class="fas fa-comment-dots optionsBtnIcon"></i>
-          <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
-        </div>
+        <i class="fas fa-comment-dots optionsBtnIcon"></i>
+        <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
+      </div>
 
-        <!-- DICTIONARY -->
-        <div *ngIf="showOptions"
-             class="optionsBtn optionsPopupBtn"
-             (click)="handleOptionClick(DICTINARY);">
+      <!-- DICTIONARY -->
+      <div
+        *ngIf="showOptions"
+        class="optionsBtn optionsPopupBtn"
+        (click)="this.dontToggle=true; showDictionary();">
           {{ts.l.dictionary}}
-          <i class="fas fa-book optionsBtnIcon"></i>
-        </div>
+        <i class="fas fa-book optionsBtnIcon"></i>
+      </div>
 
-        <!-- AUDIO CHECK -->
-        <div *ngIf="showOptions"
-             class="optionsBtn optionsPopupBtn"
-             (click)="handleOptionClick(AUDIO_CHECK);">
-          {{ts.l.audio_check}}
-          <i class="fas fa-volume-up optionsBtnIcon"></i>
-        </div>
+      <!-- AUDIO CHECK -->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+        (click)="this.dontToggle=true; goToSynthesis()">
+        {{ts.l.audio_check}}
+        <i class="fas fa-volume-up optionsBtnIcon"></i>
+      </div>
 
-        <!-- GRAMMAR CHECK -->
-        <div *ngIf="showOptions"
-             class="optionsBtn optionsPopupBtn"
-             (click)="handleOptionClick(GRAMMAR_CHECK);">
-          {{ts.l.grammar_check}}
+      <!-- INLINE GRAMMAR CHECK -->
+      <div
+        style="display: flex;"
+         *ngIf="showOptions"
+        (click)="this.dontToggle=true;">
+        <span
+         class="optionsBtn optionsPopupBtn"
+          *ngIf="grammarTagsHidden; else HideGrammarTags"
+          (click)="showGrammarTags();">
+            {{  ts.l.show_grammar_suggestions ?
+                ts.l.show_grammar_suggestions :
+                'show_grammar_suggestions' }}
           <i class="fas fa-spell-check optionsBtnIcon"></i>
-        </div>
+        </span>
+        <ng-template #HideGrammarTags>
+          <span 
+            class="optionsBtn optionsPopupBtn"
+            (click)="hideGrammarTags();">
+            {{  ts.l.hide_grammar_suggestions ?
+                ts.l.hide_grammar_suggestions :
+                'hide_grammar_suggestions' }}
+            <i class="fas fa-spell-check optionsBtnIcon"></i>
+          </span>
+          <div
+            class="optionsBtn optionsPopupBtn"
+            class="loader"
+            *ngIf="grammarLoading">
+          </div>
+        </ng-template>
+        <span
+          [hidden]="grammarTagsHidden"
+          (click)="grammarSettingsHidden = !grammarSettingsHidden"
+          class="⚙">
+          ⚙
+        </span>
+      </div>
 
-        <!-- RECORDINGS -->
-        <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-          (click)="this.dontToggle=true; goToRecording()">
-          {{ts.l.recordings}}
-          <i class="fas fa-microphone optionsBtnIcon"></i>
-        </div>
+      <!-- POPOUT GRAMMAR CHECK -->
+      <!--
+      <div *ngIf="showOptions"
+           class="optionsBtn optionsPopupBtn"
+           (click)="handleGrammarCheckerOptionClick();">
+        {{ts.l.grammar_check}}
+        <i class="fas fa-spell-check optionsBtnIcon"></i>
+      </div>
+      -->
+
+      <!-- RECORDINGS -->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+        (click)="this.dontToggle=true; goToRecording()">
+        {{ts.l.recordings}}
+        <i class="fas fa-microphone optionsBtnIcon"></i>
       </div>
     </div>
 
@@ -129,56 +191,41 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div class="textFieldContainer"  *ngIf="!feedbackVisible && !dictionaryVisible">
-         
-      </div>
-
-      <!-- display story with feedback excluding audio feedback-->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && !story.feedback.audioId">
-        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea
-            class="textField feedbackTextarea"
-            placeholder="{{ts.l.no_feedback_provided}}" 
-            readonly
-            value="{{story?.feedback.text}}">
-        </textarea>
-      </div>
-
-      <!-- display story with feedback including audio feedback -->
-      <div class="textFieldContainer" *ngIf="feedbackVisible && story.feedback.audioId">
-        <div class="feedbackHeader"><div>{{ts.l.feedback}}</div> <div class="closeFeedbackBtn" (click)="closeFeedback()"><i class="fa fa-times"></i></div></div>
-        <textarea class="textField feedbackTextareaAudio" placeholder="{{ts.l.no_feedback_provided}}" readonly value="{{story?.feedback.text}}"></textarea>
-        <audio *ngIf="audioSource" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
-      </div>
-
-      <!-- display dictionary option-->
-      <div class="dictionaryModeContainer" *ngIf="dictionaryVisible && !feedbackVisible">
-        <div class="dictionaryContainer">
-          <div class="dictionaryHeader"><div>{{ts.l.dictionary}}</div> <div class="closeDictionaryBtn" (click)="dictionaryVisible = false;"><i class="fa fa-times"></i></div></div>
-          <div class="dictionarySubHeader">
-            <div class="dictionaryName"
-                 (click)="selectTeanglann = true;
-                          selectExternalLinks = false; 
-                          selectedDictionary = true;">
-              Teanglann
-            </div> |
-            <div class="dictionaryName"
-                 (click)="selectExternalLinks = true; 
-                          selectTeanglann = false;">
-              {{ts.l.external_links}}
+      <div 
+        class="textFieldContainer">
+          <div 
+            *ngIf="feedbackVisible"
+            class="feedbackHeader">
+            <div>
+                {{ts.l.feedback}}
+            </div>
+            <div class="closeFeedbackBtn" (click)="closeFeedback()">
+              <i class="fa fa-times"></i>
             </div>
           </div>
-          <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
-          <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
-            <ul>
-              <li><a href="http://www.potafocal.com/beo/" target="_blank">potafocal.com</a></li>
-              <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
-            </ul>
-          </div>
-          <!--
-          <iframe *ngIf="selectPotafocal" class="dictionaryIframe" src="//www.focloir.ie"></iframe>
-          -->
-        </div>
+          <textarea
+            *ngIf="feedbackVisible"
+            class="textField feedbackTextareaAudio"
+            placeholder="{{ts.l.no_feedback_provided}}"
+            readonly value="{{story?.feedback.text}}">
+          </textarea>
+          <audio
+            *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
+            [src]="audioSource"
+            id="audio" controls #audioTag class="audioPlayer">
+          </audio>
+
+          <span #quillHeightSpan [ngStyle]="quillEditorStyle">
+            <quill-editor
+              [modules]="quillToolbar"
+              placeholder=""
+              [preserveWhitespace]="true"
+              [(ngModel)]="story.htmlText" 
+              (onContentChanged)="storyEdited($event);"
+              (onEditorCreated)="quillEditor = $event"
+              >
+            </quill-editor>
+          </span>
       </div>
       
       <!-- Word Count -->
@@ -186,21 +233,100 @@
         <span> {{ts.l.word_count}}: {{wordCount}} </span>
       </div>
 
-      <app-grammar-checker
-          #grammarChecker
-          *ngIf="story.text"
-          [storySaved]=storySaved
-          [classroomId]="classroomId"
-          [story]="story">
-      </app-grammar-checker>
+      <!-- SELECTED GRAMMAR SUGGESTION -->
+      <div
+        style="background-color: #8FCAFF"
+        [hidden]="grammarTagsHidden || grammarLoading">
+        {{ quillHighlightService.mostRecentHoveredMessages ?
+            quillHighlightService.mostRecentHoveredMessages[ts.l.iso_code] :
+              ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion ?
+              ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion :
+              'hover_over_a_highlighted_word_for_a_grammar_suggestion'  }}
+      </div>
+      <!-- GRAMMAR CHECKER SETTINGS -->
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
+        <span class="dictionaryContainer">
+          <div class="dictionaryHeader">
+              <h5>
+                {{  ts.l.grammar_checker_settings ?
+                    ts.l.grammar_checker_settings :
+                    'grammar_checker_settings'}}
+              </h5>
+              <div class="closeDictionaryBtn"
+                (click)="grammarSettingsHidden = true;">
+                  <i class="fa fa-times"></i>
+              </div>
+          </div>
+        </span>
+        <div *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)" style="margin:2px;">
+          <input
+              [(ngModel)]="grammarTagFilter[recipient.key]"
+              (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
+              type="checkbox">
+            {{ ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] ?
+               ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] :
+               recipient.key | lowercase}} ({{recipient.value}})
+        </div> 
+        <div style="margin: 2px;">
+          <input 
+            [(ngModel)]="quillHighlightService.showLeathanCaol"
+            (ngModelChange)="leathanCaolCheckBox($event)"
+            type="checkbox">
+          {{ ts.l.iso_code === 'ga' ? 
+            'Leathan/caol' :
+            'Broad/slender vowel agreement' }}
+        </div>
+        <button
+          (click)="setAllCheckBoxes(false)">
+          {{ ts.l.uncheck_all ? ts.l.uncheck_all : 'uncheck_all'}}
+        </button>
+        <button
+          (click)="setAllCheckBoxes(true)">
+          {{ ts.l.check_all ? ts.l.check_all : 'check_all'}}
+        </button>
+      </div>
+    </div>
 
+    <!-- DICTIONARY -->
+    <div class="dictionaryContainer dictionaryHeight" *ngIf="dictionaryVisible">
+      <div class="dictionaryHeader">
+          <h5>
+            {{ts.l.dictionary}}
+          </h5>
+          <div class="closeDictionaryBtn"
+            (click)="dictionaryVisible = false;">
+              <i class="fa fa-times"></i>
+          </div>
+      </div>
+      <div class="dictionarySubHeader">
+        <div class="dictionaryName"
+             (click)="selectTeanglann = true;
+                      selectExternalLinks = false; 
+                      selectedDictionary = true;">
+          Teanglann
+        </div> |
+        <div class="dictionaryName"
+             (click)="selectExternalLinks = true; 
+                      selectTeanglann = false;">
+          {{ts.l.external_links}}
+        </div>
+      </div>
+
+      <!-- TEANGLANN -->
+      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+
+      <!-- EXTERNAL LINKS -->
+      <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
+        <ul>
+          <li><a href="http://www.potafocal.com/beo/" target="_blank">potafocal.com</a></li>
+          <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
+        </ul>
+      </div>
       <app-synthesis-player
           #mySynthesisPlayer
           *ngIf="story.text"
           [dialect]="story.dialect"
           [text]="story.text">
       </app-synthesis-player>
-
     </div>
-  </div>
 </div>

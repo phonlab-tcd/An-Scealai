@@ -35,6 +35,8 @@ import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
+import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
+import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
@@ -50,6 +52,8 @@ import { SynthesisComponent } from './student-components/synthesis/synthesis.com
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -65,7 +69,9 @@ const routes: Routes = [
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
-  { path: 'chatbot', component: ChatbotComponent, canActivate: [AuthGuardService] },
+  { path: 'taidhgin', component: ChatbotComponent },
+  { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
+  { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
@@ -116,6 +122,14 @@ const routes: Routes = [
       {
         path: 'find-user',
         component: FindUserComponent,
+      },
+      {
+        path: 'profile-stats',
+        component: ProfileStatsComponent,
+      },
+      {
+        path: 'feature-stats',
+        component: FeatureStatsComponent,
       }
     ]
   },

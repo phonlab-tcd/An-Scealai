@@ -51,9 +51,42 @@ let AudioBubble = new Schema({
   dialect: { type: String }
 });
 
-var AudioBubbleModel = mongoose.model('AudioBubble', AudioBubble)
+var AudioBubbleModel = mongoose.model('AudioBubble', AudioBubble);
+
+
+
+let PersonalScript = new Schema({
+  name: { type: String },
+  content: { type: String },
+  user: { type: String }, 
+  role: {type: String },
+  classId: {type: String},
+  numberofquestions: {type: Number},
+  questionsandanswers: {type: String},
+},
+ {
+   collection: 'personalScripts'
+ },
+);
+
+var PersonalScriptModel = mongoose.model('PersonalScripts', PersonalScript);
+
+let CommunityScript = new Schema({
+  name: { type: String },
+  content: { type: String },
+  user: { type: String }, 
+},
+ {
+   collection: 'communityScripts'
+ },
+);
+
+var CommunityScriptModel = mongoose.model('CommunityScripts', CommunityScript);
+
 module.exports = {
   Log: LogModel,
   Chatbot: ChatbotModel,
-  AudioBubble: AudioBubbleModel
+  AudioBubble: AudioBubbleModel,
+  PersonalScript: PersonalScriptModel,
+  CommunityScript: CommunityScriptModel,
 }

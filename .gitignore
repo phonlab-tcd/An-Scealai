@@ -18,12 +18,16 @@ ngapp/build_prod_local/
 session.vim
 
 /mongotest/logs/**
-/mongotest/db/**
+
+/data/**
 
 /api/logs/**
 /api/sendinblue.json
 /api/globalConfig.json
+/api/node_modules_backup_*
 
 /sshlogin
 /login_to_phonetics.sh
 /login
+
+/.neimhin

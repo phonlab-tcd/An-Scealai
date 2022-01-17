@@ -8,6 +8,8 @@ import { Story } from '../../story';
 import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import { EventType } from '../../event';
+import { EngagementService } from '../../engagement.service';
 
 declare var MediaRecorder : any;
 
@@ -21,7 +23,7 @@ export class RecordingComponent implements OnInit {
   constructor(private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService) { }
+              private synthesis: SynthesisService, private engagement: EngagementService) { }
   
   // Synthesis variables
   story: Story = new Story();
@@ -168,6 +170,9 @@ export class RecordingComponent implements OnInit {
    * or sentenceChunks
    */
   recordAudio(index:number) {
+    this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], this.story)
+    
+    console.log('Record audio:', index);
     let media = {
       tag: 'audio',
       type: 'audio/mp3',

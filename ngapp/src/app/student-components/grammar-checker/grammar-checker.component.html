@@ -2,15 +2,43 @@
     [hidden]="hideEntireGrammarChecker"
     style="padding-bottom: 10px; padding-left: 10px; padding-right: 10px;">
   <div class="feedbackHeader">
-    <div>{{ts.l.grammar_checker}} </div>
+    <div>
+      {{ts.l.grammar_checker}}
+    </div>
     <div
         class="closeFeedbackBtn"
         (click)="hideEntireGrammarChecker = true;">
-      <i class="fa fa-times optionsBtnIcon"></i>
+      <i class="fa fa-times optionsBtnIcon">
+      </i>
     </div>
   </div>
 
-  <div class="textFieldContainer"  *ngIf="!grammarChecked && grammarLoading">
+  <div class="grammarToolbar">
+      <div>
+        <i class="fa fa-redo-alt refreshGrammar"
+           (click)="synchroniseGramadoir(); synchroniseVowelAgreementChecker();">
+        </i>
+      </div>
+    <div class="selectGrammarFilter">
+      <button
+          (click)="onChangeGrammarFilter(this.FILTER.GRAMADOIR)"
+          class="active"
+          [ngClass]="{'invisibleBackground': isGramadoirMode()}"
+          >
+          {{ts.l.gramadoir}}
+      </button>
+      <button
+          (click)="onChangeGrammarFilter(this.FILTER.VOWEL)"
+          [ngClass]="{'invisibleBackground': isVowelMode()}"
+          >
+          {{ts.l.broad_slender}}
+      </button>
+    </div>
+  </div>
+  
+
+  <!-- display the story with error highlighting
+  <div class="textFieldContainer" [hidden]="!(grammarLoading && isGramadoirMode())">
     <div class="textContainer">
       <div class="loaderContainer">
         <b>{{ts.l.correcting_grammar}}</b>
@@ -22,19 +50,25 @@
       </div>
     </div>
   </div>
-  
+  -->
+
   <!-- display story container after grammar checked -->
-  <div class="textFieldContainer" *ngIf="grammarChecked">
+  <div class="textFieldContainer">
     <!-- display chosen tag window -->
-    <div class="grammarMessageContainer {{grammarMessageClass ? grammarMessageClass : ts.l.loading}}">
-      <span *ngIf="chosenTag; else grammarMessagePlaceholder">
-        {{getGramadoirMessage()}}
+    <div class="grammarMessageContainer">
+      <span *ngIf="ts.l.iso_code === 'ga'">
+        {{chosenTag?.messageIrish ?
+          chosenTag.messageIrish :
+          ts.l[chosenTag?.message] }}
       </span>
-      <ng-template #grammarMessagePlaceholder>
-        <span class="placeHolderText">
-          {{ts.l.choose_an_error}}
-        </span>
-      </ng-template>
+      <span *ngIf="ts.l.iso_code === 'en'">
+        {{chosenTag?.messageEnglish ?
+          chosenTag.messageEnglish :
+          ts.l[chosenTag.message] }}
+      </span>
+      <span *ngIf="!chosenTag" class="grammarMessagePlaceholder">
+        {{ts.l.choose_an_error}}
+      </span>
     </div>
 
     <div class="grammarToolbar">
@@ -51,48 +85,90 @@
       </div>
     </div>
 
-    <!-- display grammar error filter options -->
-    <div class="selectErrorCheckbox" *ngIf="grammarSelected">
-      <div *ngFor="let recipient of filteredTags | keyvalue">
-        <div style="margin:2px;" >
-          <input
-              [ngModel]="checkBox.get(recipient.key)"
-              (ngModelChange)="checkBox.set(recipient.key, $event)"
-              type="checkbox">
-          {{recipient.key | lowercase}} ({{recipient.value.length}})
-        </div> 
+
+
+    <!-- an gramadoir -->
+    <div [hidden]="!isGramadoirMode()">
+      <div
+          mwlTextInputHighlightContainer>
+        <textarea
+            #gramadoirTextArea
+            style="color: black;"
+            mwlTextInputElement
+            readonly
+            style="width: 100%; height: 42vh;"
+            [(ngModel)]="checkedText[FILTER.GRAMADOIR]"
+            >
+        </textarea>
+        <mwl-text-input-highlight
+            [tags]="getSelectedTags()"
+            [textInputElement]="gramadoirTextArea"
+            (tagClick)="chooseGrammarTag($event.tag)"
+            (tagMouseEnter)="addTagHoverClass($event.target)"
+            (tagMouseLeave)="removeTagHoverClass($event.target)">
+        </mwl-text-input-highlight>
+        <div style="text-align: left">
+          <button 
+            style="height: 40px; width: 200px;"
+            [hidden]="grammarLoading"
+            (click)=" synchroniseGramadoir()">
+            {{  ts.l['synchronise'] ?
+                ts.l['synchronise'] :
+                'Synchronise gramadoir'
+                }}
+          </button>
+          <div 
+            style="height: 40px; line-height: 40px; width: 200px; border: 2px dashed #f69c55; text-align: center;"
+            [hidden]="!grammarLoading">
+            <span>
+              {{  ts.l['synchronising'] ?
+                ts.l['synchronising'] :
+                'Synchronising...'
+                }}
+            </span>
+          </div>
+        </div>
+        <div class="selectErrorCheckbox">
+          <div *ngFor="let recipient of filteredTags | keyvalue" style="margin:2px;">
+            <input
+                [ngModel]="checkBox.get(recipient.key)"
+                (ngModelChange)="checkBox.set(recipient.key, $event)"
+                type="checkbox">
+            {{recipient.key | lowercase}} ({{recipient.value.length}})
+          </div> 
+        </div>
       </div>
     </div>
 
-    <!-- display the story with error highlighting-->
-    <div mwlTextInputHighlightContainer>
-      <textarea
-          style="color: black;"
-          mwlTextInputElement
-          readonly
-          style="width: 100%; height: 42vh;"
-          [(ngModel)]="checkedText"
-          #inputTextarea ></textarea>
-
-      <!-- an gramadoir -->
-      <div *ngIf="grammarSelected">
+    <!-- vowel Agreement -->
+    <div [hidden]="!isVowelMode()">
+      <div
+          mwlTextInputHighlightContainer>
+        <textarea
+            #vowelTextarea 
+            style="color: black;"
+            mwlTextInputElement
+            readonly
+            style="width: 100%; height: 42vh;"
+            [(ngModel)]="checkedText[FILTER.VOWEL]"
+            >
+        </textarea>
         <mwl-text-input-highlight
-            [tags]="getSelectedTags()"
-            [textInputElement]="inputTextarea"
+            [tags]="tagSets[FILTER.VOWEL]"
+            [textInputElement]="vowelTextarea"
             (tagClick)="chooseGrammarTag($event.tag)"
             (tagMouseEnter)="addTagHoverClass($event.target)"
             (tagMouseLeave)="removeTagHoverClass($event.target)">
         </mwl-text-input-highlight>
-      </div>
-      <!-- an gramadoir -->
-      <div *ngIf="!grammarSelected">
-        <mwl-text-input-highlight
-            [tags]="tags"
-            [textInputElement]="inputTextarea"
-            (tagClick)="chooseGrammarTag($event.tag)"
-            (tagMouseEnter)="addTagHoverClass($event.target)"
-            (tagMouseLeave)="removeTagHoverClass($event.target)">
-        </mwl-text-input-highlight>
+        <button
+            style="height: 40px;"
+            (click)="synchroniseVowelAgreementChecker()">
+              {{ 
+                ts.l['synchronise'] ?
+                ts.l['synchronise'] :
+                'Synchronise vowel agreement tags'
+              }}
+        </button>
       </div>
     </div>
   </div>
