@@ -179,14 +179,6 @@
       </div>
     </div>
 
-    <quill-editor
-        [modules]="quillToolbar"
-        placeholder=""
-        [preserveWhitespace]="true"
-        [(ngModel)]="story.htmlText"
-        (onEditorCreated)="synthesisRefresh($event)"
-        (onContentChanged)="storyEdited($event);">
-    </quill-editor>
 
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
@@ -322,11 +314,11 @@
           <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
         </ul>
       </div>
+    </div>
+</div>
       <app-synthesis-player
           #mySynthesisPlayer
           *ngIf="story.text"
           [dialect]="story.dialect"
           [text]="story.text">
       </app-synthesis-player>
-    </div>
-</div>

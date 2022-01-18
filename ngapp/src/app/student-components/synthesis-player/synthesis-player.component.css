@@ -1,0 +1,21 @@
+.synth {
+  display: grid;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.synth .reload {
+  font-family: Lucida Sans Unicode;
+  font-size: 20px;
+  justify-self: left;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.synth .reload:hover {
+  background-color: #8fcaff;
+  color: white;
+}
