@@ -1,7 +1,7 @@
 <div class='container'>
   <div class='searchContainer'>
     <div class='searchHeader'>
-      {{ts.l.all_users}} ({{numberOfUsers}})
+      {{ts.l.all_users}} ({{userCount}})
     </div>
     
     <!-- Loading panel -->
@@ -13,55 +13,52 @@
     <!-- Filter by role -->
     <div *ngIf="dataLoaded" class='searchResultsContainer'>
       <div class='filter'>
-        <div> {{ts.l.filter_by}}: </div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="students"/> {{ts.l.students}} ({{allStudents.length}})</div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="teachers"/> {{ts.l.teachers}} ({{allTeachers.length}})</div>
-        <div class="checkbox-line"><input type="checkbox"[(ngModel)]="admins"/> {{ts.l.admins}} ({{allAdmins.length}})</div>  
-      </div> 
+        <div> Include: </div>
+        <div class="checkbox-line"><input type="checkbox" [(ngModel)]="roleFilter.STUDENT"/> {{ts.l.students}}</div>
+        <div class="checkbox-line"><input type="checkbox" [(ngModel)]="roleFilter.TEACHER"/> {{ts.l.teachers}}</div>
+        <div class="checkbox-line"><input type="checkbox" [(ngModel)]="roleFilter.ADMIN"/> {{ts.l.admins}}</div>  
+      </div>
       <!-- Search bar -->
       <div role="main">
         <div>
           <div class="form-group">
             <label for="search-text">{{ts.l.search_user}}</label>
-            <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
-              [(ngModel)]="searchText" placeholder="Enter user to search" 
-              autofocus>
+            <div style="display: flex">
+              <input
+                type="text" 
+                class="form-control" 
+                id="search-text" 
+                aria-describedby="search-text"
+                [ngModel]='searchText'
+                (ngModelChange)='searchModelChanged.next($event)' 
+                placeholder="Enter user to search"
+              >
+              <button (click)="currentPage = 0; searchUsers();">Search</button>
+            </div>
           </div>
         </div>
       </div>
       
+      <div>
+        <button (click)="goPrevPage()">&lt;</button>
+        Page {{currentPage+1}} / {{getPageCount()+1}}
+        <button (click)="goNextPage()">&gt;</button>
+      </div>
+
       <!-- List of users -->
-      {{ts.l.results}}
-      <div *ngIf="!students && !teachers && !admins">
-        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults | appFilter: searchText" >
+      <div style="margin: 5px;">{{ts.l.results}} ({{resultCount}})</div>
+      <div class='resultContainer' *ngIf="resultCount > 0 && searchText">
+        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults" >
           <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
           <div>{{user.role}}</div>
         </div>
       </div>
-      
-      <div *ngIf="students">
-        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allStudents | appFilter: searchText">
-          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
-          {{user.username}}</div>
-          <div>{{user.role}}</div>
-        </div>
+      <div *ngIf="!searchText">
+        Type above to search for users.
       </div>
-      
-      <div *ngIf="teachers">
-        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allTeachers | appFilter: searchText">
-          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
-          {{user.username}}</div>
-          <div>{{user.role}}</div>
-        </div>
-      </div>
-      
-      <div *ngIf="admins">
-        <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of allAdmins | appFilter: searchText">
-          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
-          {{user.username}}</div>
-          <div>{{user.role}}</div>
-        </div>
+      <div *ngIf="searchText && resultCount == 0">
+        No usernames match the string entered above.
       </div>
     </div>
   </div>

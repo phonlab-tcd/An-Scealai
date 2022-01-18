@@ -37,11 +37,15 @@ let userRoutes;
   // ENDPOINT HANDLERS
   const searchUser =
     require('../endpoints_functions/user/searchUser');
+  const getUserCount =
+    require('../endpoints_functions/user/getUserCount');
 
     userRoutes = makeEndpoints({
-      get: {},
+      get: {
+        '/count': getUserCount,
+      },
       post: {
-        '/searchUser/:searchString': searchUser,
+        '/searchUser': searchUser,
       }
     });
 })();
