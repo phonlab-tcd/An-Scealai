@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 // import { User } from './user';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { User } from './user'
 import config from '../abairconfig.json';
 
 @Injectable({
@@ -23,6 +24,22 @@ export class UserService {
 
   getAllUsers(): Observable<any> {
     return this.http.get(this.baseUrl + 'getAllUsers/');
+  }
+
+  searchUser(searchString: string, pageNumber: number, limit: number, roles: string[]): Observable<any> {
+    return this.http.post(
+      this.baseUrl + `searchUser/`,
+      {
+        searchString: searchString,
+        limit: limit,
+        currentPage: pageNumber,
+        roles: roles
+      }
+    );
+  }
+
+  getUserCount(): Observable<any> {
+    return this.http.get(this.baseUrl + 'count/');
   }
 
   deleteUser(username: string): Observable<any> {

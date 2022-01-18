@@ -18,7 +18,7 @@ describe('user routes', () => {
         ]);
 
         const SEARCH_STRING = 'a'
-        const res = await request.post(`/user/searchUser/${SEARCH_STRING}`);
+        const res = await request.post(`/user/searchUser/`, {searchString: SEARCH_STRING});
   
         expect(res.status).toBe(200);
         expect(res.body.users[0].username).toBe(users[0].username);
@@ -34,9 +34,12 @@ describe('user routes', () => {
         const SEARCH_STRING = 'a'
         const LIMIT = 2
         const res = await request.post(
-          `/user/searchUser/${SEARCH_STRING}/`,
+          `/user/searchUser`,
         ).send(
-          {limit: LIMIT}
+          {
+            searchString: SEARCH_STRING,
+            limit: LIMIT
+          }
         );
 
         expect(res.status).toBe(200);
@@ -54,9 +57,10 @@ describe('user routes', () => {
         const LIMIT = 1
         const PAGE_NUMBER = 1
         const res = await request.post(
-          `/user/searchUser/${SEARCH_STRING}`
+          `/user/searchUser`
         ).send(
           {
+            searchString: SEARCH_STRING,
             limit: LIMIT,
             currentPage: PAGE_NUMBER
           }
@@ -77,9 +81,10 @@ describe('user routes', () => {
 
       const SEARCH_STRING = 'a'
       const res = await request.post(
-        `/user/searchUser/${SEARCH_STRING}`
+        `/user/searchUser`
       ).send(
         {
+          searchString: SEARCH_STRING,
           roles: ['STUDENT', 'ADMIN']
         }
       );
@@ -99,8 +104,13 @@ describe('user routes', () => {
       const SEARCH_STRING = 'a'
       const LIMIT = 1
       const res = await request.post(
-        `/user/searchUser/${SEARCH_STRING}`
-      ).send({limit: LIMIT});
+        `/user/searchUser`
+      ).send(
+        {
+          searchString: SEARCH_STRING,
+          limit: LIMIT
+        }
+      );
 
       expect(res.status).toBe(200);
       // limited to 1 result, but total count is 3, 
