@@ -54,7 +54,39 @@ describe('story routes', () => {
     });
   });
 
-  describe('/story/viewFeedback/:id', () => {
+  describe('story/:author', () => {
+    it('returns stories associated with only the author', async () => {
+      const AUTHOR_USERNAME = 'alice';
+      await Story.create([
+        {
+          title: 'Scéal 1',
+          text: 'Story 1 is ainm dom.',
+          author: AUTHOR_USERNAME
+        },
+        {            
+          title: 'Scéal 2',
+          text: 'Story eile atá ann.',
+          author: AUTHOR_USERNAME
+        },
+        {            
+          title: 'Scéal 3',
+          text: 'Bob wrote this one!',
+          author: 'bob'
+        },
+      ]);
+
+      const res = await request.get(`/story/${AUTHOR_USERNAME}`);
+
+      expect(res.status).toBe(200);
+      foundStories = res.body
+      expect(foundStories.length).toBe(2); // 2 alice stories, not bob's story
+      for (story of foundStories) {
+        expect(story.author).toBe(AUTHOR_USERNAME);
+      }
+    });
+  });
+
+  describe('story/viewFeedback/:id', () => {
     it('sets the \'seenByStudent\' property for the ' +
       'story with given id to true',
     async () => {
@@ -77,7 +109,7 @@ describe('story routes', () => {
     });
   });
 
-  describe('/story/feedbackAudio/:id', () => {
+  describe('story/feedbackAudio/:id', () => {
     it('requires a valid id param', async () => {
       return request
           .get('/story/feedbackAudio/badId')

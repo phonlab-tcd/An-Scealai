@@ -41,6 +41,8 @@ let storyRoutes;
   // GET
   const getStoryById =
     require('../endpoints_functions/story/getStoryById');
+  const author =
+    require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
 
@@ -55,6 +57,7 @@ let storyRoutes;
   storyRoutes = makeEndpoints({
     get: {
       '/getStoryById/:id': getStoryById,
+      '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
     },
     post: {
@@ -66,6 +69,7 @@ let storyRoutes;
 })();
 
 // Get story by a given author from DB
+/*
 storyRoutes.route('/:author').get(function (req, res) {
   Story.find({"author": req.params.author}, function (err, stories) {
     if(err) {
@@ -76,6 +80,7 @@ storyRoutes.route('/:author').get(function (req, res) {
     }
   });
 });
+*/
 
 // Get stories by a given author after a certain date from DB
 storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
