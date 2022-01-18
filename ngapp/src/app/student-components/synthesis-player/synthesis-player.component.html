@@ -1,6 +1,8 @@
 <div
     style="width: 100% - 20px; margin: 10px; background-color: #14ff004a; border: 1px;"
-    [hidden]="hideEntireSynthesisPlayer">
+    [hidden]="hideEntireSynthesisPlayer"
+    class=synth>
+  <span class=reload (click)="refresh();">&#8635;</span>
   <!--
   <audio 
     preload="auto"

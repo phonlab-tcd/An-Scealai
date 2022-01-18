@@ -548,7 +548,8 @@ export class DashboardComponent implements OnInit{
 
   // route to synthesis
   goToSynthesis() {
-    this.router.navigateByUrl('/synthesis/' + this.story._id);
+    this.synthesisPlayer.hideEntireSynthesisPlayer = !this.synthesisPlayer.hideEntireSynthesisPlayer;
+    // this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
 
   // route to synthesis
