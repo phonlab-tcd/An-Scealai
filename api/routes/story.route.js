@@ -38,14 +38,19 @@ let storyRoutes;
 // Scopes the imported functions to just this function
 (() => {  
   // ENDPOINT HANDLERS
+  // GET
   const getStoryById =
     require('../endpoints_functions/story/getStoryById');
-  const updateStoryAndCheckGrammar =
-    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
+
+  // POST
+  const create =
+    require('../endpoints_functions/story/create');
   const viewFeedback =
     require('../endpoints_functions/story/viewFeedback');
+  const updateStoryAndCheckGrammar =
+    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -53,30 +58,12 @@ let storyRoutes;
       '/feedbackAudio/:id': feedbackAudio,
     },
     post: {
+      '/create': create,
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
     },
   });
 })();
-
-
-// Create new story
-storyRoutes.route('/create').post(function(req, res) {
-  const story = new Story(req.body);
-  story.feedback.seenByStudent = null;
-  story.feedback.text = null;
-  story.feedback.audioId = null;
-  story.save().then((story) => {
-    res.status(200).json({
-      story: 'story added successfully',
-      id: story._id,
-    });
-  })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).send('unable to save story to DB');
-      });
-});
 
 // Get story by a given author from DB
 storyRoutes.route('/:author').get(function (req, res) {

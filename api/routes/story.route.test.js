@@ -42,7 +42,8 @@ describe('story routes', () => {
       const story = {
         author: 'student-of-the-gaeilge',
         title: 'Hello world!',
-        text: 'Story is ainm dom.'};
+        text: 'Story is ainm dom.'
+      };
 
       const res = await request.post(`/story/create`).send(story);
 
