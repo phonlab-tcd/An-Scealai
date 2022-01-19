@@ -54,7 +54,7 @@
     "tslib": "^2.0.0",
     "wink-eng-lite-web-model": "^1.2.1",
     "wink-nlp": "^1.7.2",
-    "wink-nlp-utils": "^2.0.6",
+    "zone": "^0.3.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

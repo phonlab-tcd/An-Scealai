@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import nlp from 'wink-nlp-utils';
+// import nlp from 'wink-nlp-utils';
 
 // This ought to be a stateless service.
 // The service offers functions but should not
@@ -17,8 +17,9 @@ export class TextProcessingService {
     return this.sentences(this.convertHtmlToPlainText(html));
   }
 
-  sentences(text: string) {
-    return nlp.string.sentences(text);
+  sentences(text: string): string[] {
+    return text.split(/[\.\n]/).filter(Boolean);
+    // return nlp.string.sentences(text);
   }
 
   // TODO this is troublesome
