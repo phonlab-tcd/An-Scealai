@@ -4,7 +4,7 @@
 
 tmux new-session -s "an-scealai" -d
 
-tmux send "cat ./mongotest/mongotest.conf && mongod --config ./mongotest/mongotest.conf" C-m
+tmux send "cat ./mongotest/mongotest.conf && mongod --config ./mongotest/mongotest.conf --logpath ./mongotest/logs/log --dbpath ./mongotest/db/" C-m
 tmux rename-window "mongod"
 
 # This command requires tail and jq. jq is a json colorizer/formatter
@@ -22,12 +22,11 @@ fi
 
 tmux split-window
 tmux send "$mongotailcmd" C-m
-tmux rename-window "outputs"
 
-tmux split-window 
+tmux new-window
 tmux send "npm start --prefix ngapp" C-m
 
-tmux split-window
+tmux new-window
 tmux send "echo \"sleeping for 1 second\"" C-m
 # Requires sleep
 tmux send "sleep 1" C-m
