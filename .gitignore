@@ -7,13 +7,9 @@ session.vim
 
 ngapp/build_prod_local
 
-ngapp/build_prod_local
-
 /api/sendinblue.json
 
 **/logs/*
-
-ngapp/build_prod_local/
 
 session.vim
 
