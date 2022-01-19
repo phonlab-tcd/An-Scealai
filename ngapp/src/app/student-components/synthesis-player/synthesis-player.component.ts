@@ -46,6 +46,10 @@ export class SynthesisPlayerComponent implements OnInit {
     this.synthesiseText();
   }
 
+  alternateColors(i: number): string {
+    return 'b'+ i%3;
+  }
+
   refresh() {
     this.synthesiseText();
   }

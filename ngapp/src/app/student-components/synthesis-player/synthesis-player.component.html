@@ -1,28 +1,39 @@
 <div
-    style="width: 100% - 20px; margin: 10px; background-color: #14ff004a; border: 1px;"
+    style="width: 100% - 40px; margin: 10px; background-color: #14ff004a; border: 2px;"
     [hidden]="hideEntireSynthesisPlayer"
     class=synth>
-  <span class=reload (click)="refresh();">&#8635;</span>
-  <span class=fast-synth (click)="goToFastSynthesiser()">go to fast synthesiser</span>
+  <div>
+    <h1>Listen back to your story</h1>
+    <p>(High Quality)</p>
+  </div>
+  <hr>
+  <div class=header>
+    <div class=reload (click)="refresh();">&#8635;</div>
+    <div class=fast-synth (click)="goToFastSynthesiser()">
+      go to fast synthesiser
+    </div>
+  </div>
+  <hr>
   <div
       #audioElements
       *ngFor="let line of lines; let i = index;"
       class="flex-container"
       (click)="playAudio(i)">
-      <p
-          style="">
-       {{line}}
-      </p>
-      <audio 
-         *ngIf="audioBuffers[i].url; else loading"
-         controls>
-        <source src="{{audioBuffers[i].url}}">
-      </audio>
-      <ng-template #loading>
-          <div
-           class="spinner-grow">
-          </div>
-      </ng-template>
-
+    <div class="item {{alternateColors(i)}}">
+        <p
+            style="">
+         {{line}}
+        </p>
+        <audio 
+           *ngIf="audioBuffers[i].url; else loading"
+           controls>
+          <source src="{{audioBuffers[i].url}}">
+        </audio>
+        <ng-template #loading>
+            <div
+             class="spinner-grow">
+            </div>
+        </ng-template>
+      </div>
   <div>
 </div>

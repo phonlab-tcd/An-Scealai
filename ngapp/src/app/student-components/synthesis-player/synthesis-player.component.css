@@ -1,14 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .synth {
   display: grid;
   margin: 20px;
   padding: 20px;
   border-radius: 15px;
 }
-
 .synth .reload {
   font-family: Lucida Sans Unicode;
   font-size: 20px;
-  justify-self: left;
   width: 1em;
   height: 2rem;
   padding: 0px;
@@ -21,10 +24,10 @@
   background-color: #8fcaff;
   color: black;
   border-radius: 2px;
+  font-weight: bold;
 }
 
 .synth .fast-synth {
-  justify-self: right;
   padding: 3px;
   color: grey;
   cursor: pointer;
@@ -34,4 +37,25 @@
   background-color: #8fcaff;
   color: black;
   border-radius: 2px;
+  font-weight: bold;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  border-radius: 3px;
+  text-align: left;
+}
+
+.b0 {
+  background-color: #adfc9999;
+}
+.b1 {
+  background-color: #99fcb799;
+}
+.b2 {
+  background-color: #defc9999;
 }
