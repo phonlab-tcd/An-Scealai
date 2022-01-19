@@ -9,13 +9,28 @@
   font-family: Lucida Sans Unicode;
   font-size: 20px;
   justify-self: left;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 1em;
+  height: 2rem;
+  padding: 0px;
+  margin: 0px;
+  color: grey;
   cursor: pointer;
 }
 
 .synth .reload:hover {
   background-color: #8fcaff;
-  color: white;
+  color: black;
+  border-radius: 2px;
+}
+
+.synth .fast-synth {
+  justify-self: right;
+  padding: 3px;
+  color: grey;
+  cursor: pointer;
+}
+
+.synth .fast-synth:hover {
+  background-color: #8fcaff;
+  border-radius: 2px;
 }
