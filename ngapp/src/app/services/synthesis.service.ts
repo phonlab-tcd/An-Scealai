@@ -122,7 +122,7 @@ export class SynthesisService {
       voice,
       audioEncoding,
       outputType: 'JSON_WITH_TIMING',
-      speed: "0.9",
+      speed: "1",
     }});
 
     return this.http.get(url, {params: q})
