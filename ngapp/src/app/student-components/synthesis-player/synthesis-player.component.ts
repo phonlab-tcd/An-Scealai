@@ -1,8 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TextProcessingService } from 'src/app/services/text-processing.service';
+import { Component, OnInit, Input, ViewChildren } from '@angular/core';
+// import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 import { Subscription } from 'rxjs';
+import {
+  Router,
+} from '@angular/router';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -27,12 +30,16 @@ export class SynthesisPlayerComponent implements OnInit {
     // audioContext: AudioContext;
     subscription: Subscription}[] = [];
 
+  @ViewChildren('audioElements') audioElements;
+  
+  @Input() storyId: string;
   @Input() text: string;
   @Input() dialect: Dialect;
 
   constructor(
     private synth: SynthesisService,
     private synthBank: SynthesisBankService,
+    private router: Router,
     ) { }
 
   ngOnInit(): void {
@@ -43,33 +50,45 @@ export class SynthesisPlayerComponent implements OnInit {
     this.synthesiseText();
   }
 
+  play(i: number) {
+    console.log(i);
+    console.log(
+      this.audioElements[i]
+    );
+
+  }
+
+  goToFastSynthesiser() {
+    this.router.navigateByUrl('/synthesis/' + this.storyId);
+  }
+
   splitTextIntoLines() {
     for (const buf of this.audioBuffers) {
       buf.subscription.unsubscribe();
     }
     this.lines = [];
     this.audioBuffers = [];
-    this.text?.split('\n')
-        .filter(Boolean)
-        .forEach((line, index) => {
-          this.lines.push(line);
-          const newBuffer = {
-            url: null,
-            subscription: null,
-          };
+    this.synth.naiveSentences(this.text)
+      .forEach((sent,i) => {
+        console.log(sent);
+        this.lines.push(sent);
+        const newBuffer = {
+          url: null,
+          subscription: null,
+        };
 
-          newBuffer.subscription = this.synth
-                .synthesiseText(
-                  line.replace(/[\.!?\n]+/g, ' -- ')
-                      .replace(/[\s]+/g, ' '),
-                  this.dialect as Dialect
-                )
-                .subscribe((audioUrl) => {
-                  newBuffer.url = audioUrl;
-                });
+        newBuffer.subscription = this.synth
+              .synthesiseText(
+                sent.replace(/[\.!?\n]+/g, ' -- ')
+                    .replace(/[\s]+/g, ' '),
+                this.dialect as Dialect
+              )
+              .subscribe((audioUrl) => {
+                newBuffer.url = audioUrl;
+              });
 
-          this.audioBuffers.push(newBuffer);
-        });
+        this.audioBuffers.push(newBuffer);
+      });
   }
  
   rebuildAudioUrl() {

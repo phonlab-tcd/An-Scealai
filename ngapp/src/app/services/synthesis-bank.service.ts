@@ -5,7 +5,14 @@ import { Injectable } from '@angular/core';
 })
 export class SynthesisBankService {
 
-  constructor() { }
+  constructor() {
+  }
+
+  freeSomeSpace(keep: Array<{sentence:string;dialect:string;encoding:string}>) {
+    for (const key of Object.keys(sessionStorage)) {
+
+    }
+  }
 
   getAudioUrlOfSentence(sentence: string, dialect: string, encoding: string = 'MP3'): string {
     const key = this.generateKey(sentence, dialect, encoding);
@@ -15,11 +22,15 @@ export class SynthesisBankService {
   storeAudioUrlOfSentence(sentence: string, dialect: string, encoding: string = 'MP3', data: string) {
     const key = this.generateKey(sentence, dialect, encoding);
     if (!sessionStorage.getItem(key)) {
-      return sessionStorage.setItem(key, data);
+      try {
+        return sessionStorage.setItem(key, data);
+      } catch (e) {
+        console.count('FAILED TO SET ITEM IN SESSION STORAGE');
+      }
     }
   }
 
   generateKey(sentence: string, dialect: string, encoding: string) {
-    return encodeURIComponent(encoding + dialect + sentence.trim());
+    return encodeURIComponent(encoding + dialect + sentence.toLowerCase().trim());
   }
 }

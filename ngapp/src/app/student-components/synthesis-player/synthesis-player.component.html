@@ -3,21 +3,9 @@
     [hidden]="hideEntireSynthesisPlayer"
     class=synth>
   <span class=reload (click)="refresh();">&#8635;</span>
-  <!--
-  <audio 
-    preload="auto"
-    *ngIf="audioUrl; else audioLoading"
-    controls>
-      <source
-          src="{{audioUrl}}">
-  </audio>
-  <ng-template #audioLoading>
-      <div
-       class="spinner-grow">
-      </div>
-  </ng-template>
-  -->
+  <span class=fast-synth (click)="goToFastSynthesiser()">go to fast synthesiser</span>
   <div
+      #audioElements
       *ngFor="let line of lines; let i = index;"
       class="flex-container"
       (click)="playAudio(i)">
@@ -28,7 +16,7 @@
       <audio 
          *ngIf="audioBuffers[i].url; else loading"
          controls>
-           <source src="{{audioBuffers[i].url}}">
+        <source src="{{audioBuffers[i].url}}">
       </audio>
       <ng-template #loading>
           <div
