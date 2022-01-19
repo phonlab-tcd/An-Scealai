@@ -32,5 +32,6 @@
 
 .synth .fast-synth:hover {
   background-color: #8fcaff;
+  color: black;
   border-radius: 2px;
 }
