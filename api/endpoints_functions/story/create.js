@@ -1,6 +1,14 @@
 const Story = require('../../models/story');
 const {API500Error} = require('../../utils/APIError');
 
+/**
+ * Creates a new story document on the DB.
+ * 
+ * @param req {
+ *     body: Story object
+ * }
+ * @returns {id: the id of the created story}
+ */
 module.exports = async (req, res) => {
     const story = await Story.create(req.body);
     if (!story) {
