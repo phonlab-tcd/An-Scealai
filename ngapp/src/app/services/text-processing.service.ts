@@ -18,8 +18,27 @@ export class TextProcessingService {
   }
 
   sentences(text: string): string[] {
-    return text.split(/[\.\n]/).filter(Boolean);
+    return this.naiveSentences(text);
     // return nlp.string.sentences(text);
+  }
+
+  split_and_replace(lines: string[], pattern: string) {
+    return lines.flatMap(s=>{
+      const ss = s.split(pattern);
+      return ss.slice(0,-1)
+        .filter(Boolean)
+        .map((s:string)=>s+pattern)
+        .concat(ss.slice(-1).filter(Boolean));
+      });
+  }
+
+  naiveSentences(text: string) {
+    let ss = text.split('\n').filter(Boolean);
+    // split by pattern and append pattern back on if necessary
+    for(const pattern of ['.','!','?']) {
+      ss = this.split_and_replace(ss,pattern);
+    }
+    return ss;
   }
 
   // TODO this is troublesome

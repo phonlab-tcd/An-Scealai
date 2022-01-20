@@ -141,17 +141,6 @@ export class SynthesisService {
      );
   }
 
-  naiveSentences(text: string) {
-    return text
-      .split('\n').filter(Boolean)
-      .flatMap((s)=>s.split(/\./)).filter(Boolean)
-      .flatMap((s)=>{
-        if(s.length > 100)
-          {return s.split(/,/)}
-        return [s];
-      });
-  }
-
   prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
     return 'data:audio/' + encoding + ';base64,' + base64AudioData;
   }
