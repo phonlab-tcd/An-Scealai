@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChildren } from '@angular/core';
-// import { TextProcessingService } from 'src/app/services/text-processing.service';
+import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 import { Subscription } from 'rxjs';
@@ -40,6 +40,7 @@ export class SynthesisPlayerComponent implements OnInit {
     private synth: SynthesisService,
     private synthBank: SynthesisBankService,
     private router: Router,
+    private textProcessor: TextProcessingService,
     ) { }
 
   ngOnInit(): void {
@@ -72,7 +73,7 @@ export class SynthesisPlayerComponent implements OnInit {
     }
     this.lines = [];
     this.audioBuffers = [];
-    this.synth.naiveSentences(this.text)
+    this.textProcessor.sentences(this.text)
       .forEach((sent,i) => {
         console.log(sent);
         this.lines.push(sent);
@@ -83,8 +84,9 @@ export class SynthesisPlayerComponent implements OnInit {
 
         newBuffer.subscription = this.synth
               .synthesiseText(
-                sent.replace(/[\.!?\n]+/g, ' -- ')
-                    .replace(/[\s]+/g, ' '),
+                sent,
+                    // .replace(/[\.!?\n]+/g, ' -- ')
+                    // .replace(/[\s]+/g, ' '),
                 this.dialect as Dialect
               )
               .subscribe((audioUrl) => {
