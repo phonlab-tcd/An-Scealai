@@ -22,23 +22,30 @@ export class TextProcessingService {
     // return nlp.string.sentences(text);
   }
 
-  split_and_replace(lines: string[], pattern: string) {
-    return lines.flatMap(s=>{
-      const ss = s.split(pattern);
-      return ss.slice(0,-1)
-        .filter(Boolean)
-        .map((s:string)=>s+pattern)
-        .concat(ss.slice(-1).filter(Boolean));
-      });
+  splitWithReplacement(line: string, pattern: string) {
+    const ss = line.split(pattern);
+    return ss.slice(0,-1)
+      .filter(Boolean)
+      .map((s:string)=>s+pattern)
+      .concat(ss.slice(-1).filter(Boolean));
   }
 
-  naiveSentences(text: string) {
+  extraShortening(lines: string[]): string[] {
+    return lines.flatMap(s=>{
+      if(s.charAt(100)){
+        return this.splitWithReplacement(s,',');
+      }
+      return [s];
+    });
+  }
+
+  naiveSentences(text: string): string[] {
     let ss = text.split('\n').filter(Boolean);
     // split by pattern and append pattern back on if necessary
     for(const pattern of ['.','!','?']) {
-      ss = this.split_and_replace(ss,pattern);
+      ss = ss.flatMap(s=>this.splitWithReplacement(s,pattern));
     }
-    return ss;
+    return this.extraShortening(ss);
   }
 
   // TODO this is troublesome
