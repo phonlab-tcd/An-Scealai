@@ -1,0 +1,6 @@
+p {
+  cursor: pointer;
+}
+p:hover {
+  background-color: lightblue;
+}

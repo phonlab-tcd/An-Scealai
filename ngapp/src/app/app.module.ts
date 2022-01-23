@@ -73,6 +73,7 @@ import { GrammarCheckerComponent } from './student-components/grammar-checker/gr
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { LoadingComponent } from './loading/loading.component';
+import { SynthItemComponent } from './synth-item/synth-item.component';
 
 
 
@@ -127,6 +128,7 @@ import { LoadingComponent } from './loading/loading.component';
     CreateQuizComponent,
     AboutTaidhginComponent,
     LoadingComponent,
+    SynthItemComponent,
   ],
   imports: [
     BrowserModule,

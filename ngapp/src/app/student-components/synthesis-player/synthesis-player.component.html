@@ -19,21 +19,9 @@
       *ngFor="let line of lines; let i = index;"
       class="flex-container"
       (click)="playAudio(i)">
-    <div class="item {{alternateColors(i)}}">
-        <p
-            style="">
-         {{line}}
-        </p>
-        <audio 
-           *ngIf="audioBuffers[i].url; else loading"
-           controls>
-          <source src="{{audioBuffers[i].url}}">
-        </audio>
-        <ng-template #loading>
-            <div
-             class="spinner-grow">
-            </div>
-        </ng-template>
-      </div>
+    <app-synth-item
+      [dialect]="dialect"
+      [raw_text]="line"
+      class={{alternateColors(i)}}></app-synth-item>
   <div>
 </div>

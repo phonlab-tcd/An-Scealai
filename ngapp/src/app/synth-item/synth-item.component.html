@@ -1,0 +1,10 @@
+<div class="item" >
+  <p (click)="play()" style="">{{raw_text}}</p>
+  <audio *ngIf="url; else loading" #audioElement>
+    <source src="{{url}}">
+  </audio>
+  <ng-template #loading>
+      <div class="spinner-grow">
+      </div>
+  </ng-template>
+</div>
