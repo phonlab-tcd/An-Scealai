@@ -40,7 +40,7 @@ export class SynthesisPlayerComponent implements OnInit {
     private synth: SynthesisService,
     private synthBank: SynthesisBankService,
     private router: Router,
-    private textProcessor: TextProcessingService,
+    public textProcessor: TextProcessingService,
     ) { }
 
   ngOnInit(): void {
