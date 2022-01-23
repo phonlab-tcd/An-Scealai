@@ -2,6 +2,7 @@
     style="width: 100% - 40px; margin: 10px; background-color: #14ff004a; border: 2px;"
     [hidden]="hideEntireSynthesisPlayer"
     class=synth>
+  <button (click)="check()">check</button>
   <div>
     <h1>Listen back to your story</h1>
     <p>(High Quality)</p>
@@ -16,12 +17,23 @@
   <hr>
   <div
       #audioElements
-      *ngFor="let line of lines; let i = index;"
-      class="flex-container"
-      (click)="playAudio(i)">
+      *ngFor="let si of synthItems; let i = index;"
+      class="flex-container">
+  <div class="item" >
+    <p (click)="play()" style="">{{si.text}}</p>
+    <audio *ngIf="si.url; else loading" #audioElement controls>
+      <source src="{{si.url}}">
+    </audio>
+    <ng-template #loading>
+        <div class="spinner-grow">
+        </div>
+    </ng-template>
+  </div>
+    <!--
     <app-synth-item
-      [dialect]="dialect"
-      [raw_text]="line"
-      class={{alternateColors(i)}}></app-synth-item>
+        [text]="synthItems[i].text"
+        [url]="synthItems[i].url"
+      ></app-synth-item>
+    -->
   <div>
 </div>

@@ -14,13 +14,12 @@ export class SynthesisBankService {
     }
   }
 
-  getAudioUrlOfSentence(sentence: string, dialect: string, encoding: string = 'MP3'): string {
-    const key = this.generateKey(sentence, dialect, encoding);
+  getAudioUrlOfSentence(key: string): string {
+    return undefined;
     return sessionStorage.getItem(key);
   }
 
-  storeAudioUrlOfSentence(sentence: string, dialect: string, encoding: string = 'MP3', data: string) {
-    const key = this.generateKey(sentence, dialect, encoding);
+  storeAudioUrlOfSentence(key: string, data: string) {
     if (!sessionStorage.getItem(key)) {
       try {
         return sessionStorage.setItem(key, data);

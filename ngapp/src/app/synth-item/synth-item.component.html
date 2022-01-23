@@ -1,5 +1,5 @@
 <div class="item" >
-  <p (click)="play()" style="">{{raw_text}}</p>
+  <p (click)="play()" style="">{{text}}</p>
   <audio *ngIf="url; else loading" #audioElement>
     <source src="{{url}}">
   </audio>

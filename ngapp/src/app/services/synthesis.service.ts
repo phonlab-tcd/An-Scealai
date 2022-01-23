@@ -99,16 +99,44 @@ export class SynthesisService {
       throw new Error('input required');
     }
 
-    const storedUrl =
-      this.synthBank.getAudioUrlOfSentence(input, dialect);
-    if (storedUrl) {
-      return new Observable((subscriber) => {
-        subscriber.next(storedUrl);
-        subscriber.complete();
-      });
-    }
+    const url = this.url(input,dialect,voice,audioEncoding,speed);
+    // const storedUrl =
+    //   this.synthBank.getAudioUrlOfSentence(url);
+    // if (storedUrl) {
+    //   console.count('STORED VERSION');
+    //   return new Observable((subscriber) => {
+    //     subscriber.next(storedUrl);
+    //     subscriber.complete();
+    //   });
+    // }
 
-    const url = 'https://www.abair.ie/api2/synthesise';
+    console.count('REQUESTED VERSION');
+
+    console.log(url);
+
+    return this.http.get(url).pipe(
+     map((data: {audioContent: string}) => {
+       console.log(data);
+       return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
+     })
+     // ,
+     // tap((data) => {
+     //   this.synthBank
+     //       .storeAudioUrlOfSentence(
+     //         url,
+     //         data);
+     // })
+     );
+  }
+
+  url(
+    input: string,
+    dialect: Dialect = 'connemara',
+    voice: AbairAPIv2Voice = null,
+    audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
+    speed: number = 1,
+  ) {
+    const url = 'https://www.abair.ie/api2/synthesise?';
 
     if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
       // use given voice
@@ -125,20 +153,7 @@ export class SynthesisService {
       speed: "1",
     }});
 
-    return this.http.get(url, {params: q})
-     .pipe(
-     map((data: {audioContent: string}) => {
-       return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
-     }),
-     tap((data) => {
-       this.synthBank
-           .storeAudioUrlOfSentence(
-             input,
-             dialect,
-             audioEncoding,
-             data);
-     })
-     );
+    return url + q.toString();
   }
 
   prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
