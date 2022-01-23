@@ -1,11 +1,8 @@
-import { Component, OnInit, Input, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
-import { Dialect, SynthesisService } from 'src/app/services/synthesis.service';
-import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
-import { Subscription } from 'rxjs';
-import {
-  Router,
-} from '@angular/router';
+import { SynthesisService, Dialect } from 'src/app/services/synthesis.service';
+import { SynthItem } from 'src/app/synth-item';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -16,170 +13,66 @@ import {
    ]
 })
 export class SynthesisPlayerComponent implements OnInit {
-  creationDate: Date;
   hideEntireSynthesisPlayer = true;
-
-  audioUrl: string;
-  subscription: Subscription;
   lines: string[] = [];
-  audioBuffers: {
-    // source: AudioBufferSourceNode;
-    // buffer: AudioBuffer;
-    url: string;
-    // audioElement: any; // TODO
-    // audioContext: AudioContext;
-    subscription: Subscription}[] = [];
-
-  @ViewChildren('audioElements') audioElements;
+  synthItems: SynthItem[] = [];
   
   @Input() storyId: string;
   @Input() text: string;
   @Input() dialect: Dialect;
 
   constructor(
-    private synth: SynthesisService,
-    private synthBank: SynthesisBankService,
     private router: Router,
     public textProcessor: TextProcessingService,
+    private cdref: ChangeDetectorRef,
+    private synth: SynthesisService,
     ) { }
 
   ngOnInit(): void {
-    this.synthesiseText();
+    this.refresh();
   }
 
   alternateColors(i: number): string {
     return 'b'+ i%3;
   }
 
-  refresh() {
-    this.synthesiseText();
+  async check() {
+    for(const si of this.synthItems) {
+      for(const si2 of this.synthItems) {
+        if(si.text !== si2.text && si.url === si2.url) {
+          console.log('WEIRD');
+          console.dir(si.text);
+          console.dir(si2.text);
+        }
+      }
+    }
+
+    for(const key of Object.keys(sessionStorage)){
+      for(const key2 of Object.keys(sessionStorage)){
+        if (key !== key2 && sessionStorage[key] === sessionStorage[key2]) {
+          console.count('WEIRD SESSION STORAGE');
+          console.dir(key);
+          console.dir(key2);
+        }
+      }
+    }
   }
 
-  play(i: number) {
-    console.log(i);
-    console.log(
-      this.audioElements[i]
-    );
+  getSynthItem(line: string) {
+    return new SynthItem(line,this.dialect,this.synth);
+  }
 
+  refresh() {
+    this.lines = this.textProcessor.sentences(this.text);
+    this.synthItems = this.lines.map(l=>{
+      console.log('CREATING SYNTH ITME FOR', ''+l);
+      return new SynthItem(''+l, this.dialect, this.synth);
+    });
+    this.cdref.detectChanges();
+    console.log('NUMBER OF SYNTH ITEMS:', this.synthItems.length);
   }
 
   goToFastSynthesiser() {
     this.router.navigateByUrl('/synthesis/' + this.storyId);
   }
-
-  splitTextIntoLines() {
-    for (const buf of this.audioBuffers) {
-      buf.subscription.unsubscribe();
-    }
-    this.lines = [];
-    this.audioBuffers = [];
-    this.textProcessor.sentences(this.text)
-      .forEach((sent,i) => {
-        console.log(sent);
-        this.lines.push(sent);
-        const newBuffer = {
-          url: null,
-          subscription: null,
-        };
-
-        newBuffer.subscription = this.synth
-              .synthesiseText(
-                sent,
-                    // .replace(/[\.!?\n]+/g, ' -- ')
-                    // .replace(/[\s]+/g, ' '),
-                this.dialect as Dialect
-              )
-              .subscribe((audioUrl) => {
-                newBuffer.url = audioUrl;
-              });
-
-        this.audioBuffers.push(newBuffer);
-      });
-  }
- 
-  rebuildAudioUrl() {
-  }
-
-  synthesiseText(): void {
-    /*
-    this.subscription?.unsubscribe();
-    this.subscription =
-        this.synth
-            .synthesiseText(
-              this.text.replace(/[\.!?\n]+/g, ' -- ').replace(/[\s]+/g, ' '),
-              this.dialect as Dialect)
-            .subscribe(
-              (audioData) => {
-                this.audioUrl = this.synth.prependAudioUrlPrefix(audioData, 'mp3');
-              });
-    */
-
-    this.splitTextIntoLines();
-  }
-
-  _base64ToArrayBuffer(base64) {
-    const binaryString = window.atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-  }
-}
-
-interface SynthesisedSentence {
-  url: string;
-  sentence: string;
-  waiting: boolean;
-  subscription: Subscription;
-}
-
-type SynthesisSentenceBySentence = {
-  date: Date,
-  // The synthesised sentences should be in the order they appear in the text.
-  // I don't think this can't be enforced with static type checking.
-  // (Neimhin Mon 19 July 2021)
-  sentences: SynthesisedSentence[],
-};
-
-function  synthesiseQuillTextSentenceBySentence(lines: string[]) {
-
-  const sentences: string[] = lines.flatMap(this.textProcessor.sentences);
-  const d = this.story.dialect as Dialect;
-
-  const newSynthesis: SynthesisSentenceBySentence = {
-    date: new Date(),
-    sentences: [],
-  };
-
-  for (const sentence of sentences) {
-
-    // BEGIN THE HTTP REQUEST TO SYNTHESISE A NEW SENTENCE
-    const thisSentence = {
-      url: null,
-      sentence,
-      waiting: true,
-      subscription: this.synth
-                        .synthesiseText(sentence, d)
-                        .subscribe({
-                          next: (url: string) => {
-                            thisSentence.url = url;
-                            thisSentence.waiting = false;
-                          }
-                        }),
-    } as SynthesisedSentence;
-    newSynthesis.sentences.push(thisSentence);
-
-    // IF WE ALREADY HAVE THE SYNTHESIS IN STORAGE, CANCEL THE HTTP REQUEST
-    const storageUrl = this.synthBank.getAudioUrlOfSentence(sentence, d, 'MP3');
-    if (storageUrl && thisSentence.waiting) {
-      thisSentence.subscription.unsubscribe();
-      thisSentence.url = storageUrl;
-      thisSentence.waiting = false;
-      delete thisSentence.subscription;
-    }
-  }
-
-  this.audioSources.unshift(newSynthesis as SynthesisSentenceBySentence);
-  
 }
