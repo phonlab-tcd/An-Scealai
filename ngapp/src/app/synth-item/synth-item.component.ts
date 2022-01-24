@@ -16,9 +16,8 @@ import { Subscription } from 'rxjs';
 })
 export class SynthItemComponent {
 
-  @Input('text') text: string;
-  @Input('url') url: string;
-  @ViewChild('audioElement') audioElement;
+  @Input('synthItem') synthItem: SynthItem;
+  @ViewChild('audioElement') audioElement ;
 
   constructor(
     private synth: SynthesisService,

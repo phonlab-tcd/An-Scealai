@@ -2,38 +2,20 @@
     style="width: 100% - 40px; margin: 10px; background-color: #14ff004a; border: 2px;"
     [hidden]="hideEntireSynthesisPlayer"
     class=synth>
-  <button (click)="check()">check</button>
   <div>
-    <h1>Listen back to your story</h1>
-    <p>(High Quality)</p>
+    <h1>{{ts.l['listen_back_to_your_story'] ? ts.l['listen_back_to_your_story'] : 'listen_back_to_your_story'}}</h1>
+    <p>({{ts.l['high_quality_synthesiser'] ? ts.l['high_quality_synthesiser'] : 'high_quality_synthesiser' }})</p>
   </div>
-  <hr>
   <div class=header>
     <div class=reload (click)="refresh();">&#8635;</div>
     <div class=fast-synth (click)="goToFastSynthesiser()">
-      go to fast synthesiser
+      {{ts.l['go_to_fast_synthesiser'] ? ts.l['go_to_fast_synthesiser'] : 'go_to_fast_synthesiser'}}
     </div>
   </div>
   <hr>
-  <div
-      #audioElements
-      *ngFor="let si of synthItems; let i = index;"
-      class="flex-container">
-  <div class="item" >
-    <p (click)="play()" style="">{{si.text}}</p>
-    <audio *ngIf="si.url; else loading" #audioElement controls>
-      <source src="{{si.url}}">
-    </audio>
-    <ng-template #loading>
-        <div class="spinner-grow">
-        </div>
-    </ng-template>
+  <div #audioElements
+    *ngFor="let si of synthItems; let i = index;"
+    class="flex-container">
+      <app-synth-item [synthItem]="si"></app-synth-item>
   </div>
-    <!--
-    <app-synth-item
-        [text]="synthItems[i].text"
-        [url]="synthItems[i].url"
-      ></app-synth-item>
-    -->
-  <div>
 </div>

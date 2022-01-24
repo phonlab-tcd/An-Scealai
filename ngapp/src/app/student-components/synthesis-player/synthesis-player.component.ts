@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TextProcessingService } from 'src/app/services/text-processing.service';
 import { SynthesisService, Dialect } from 'src/app/services/synthesis.service';
 import { SynthItem } from 'src/app/synth-item';
+import { TranslationService } from "src/app/translation.service";
 
 @Component({
   selector: 'app-synthesis-player',
@@ -14,7 +15,6 @@ import { SynthItem } from 'src/app/synth-item';
 })
 export class SynthesisPlayerComponent implements OnInit {
   hideEntireSynthesisPlayer = true;
-  lines: string[] = [];
   synthItems: SynthItem[] = [];
   
   @Input() storyId: string;
@@ -23,9 +23,10 @@ export class SynthesisPlayerComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public textProcessor: TextProcessingService,
+    private textProcessor: TextProcessingService,
     private cdref: ChangeDetectorRef,
     private synth: SynthesisService,
+    public ts: TranslationService
     ) { }
 
   ngOnInit(): void {
@@ -36,40 +37,39 @@ export class SynthesisPlayerComponent implements OnInit {
     return 'b'+ i%3;
   }
 
-  async check() {
-    for(const si of this.synthItems) {
-      for(const si2 of this.synthItems) {
-        if(si.text !== si2.text && si.url === si2.url) {
-          console.log('WEIRD');
-          console.dir(si.text);
-          console.dir(si2.text);
-        }
-      }
-    }
-
-    for(const key of Object.keys(sessionStorage)){
-      for(const key2 of Object.keys(sessionStorage)){
-        if (key !== key2 && sessionStorage[key] === sessionStorage[key2]) {
-          console.count('WEIRD SESSION STORAGE');
-          console.dir(key);
-          console.dir(key2);
-        }
-      }
-    }
-  }
+//   async check() {
+//     for(const si of this.synthItems) {
+//       for(const si2 of this.synthItems) {
+//         if(si.text !== si2.text && si.url === si2.url) {
+//           console.log('WEIRD');
+//           console.dir(si.text);
+//           console.dir(si2.text);
+//         }
+//       }
+//     }
+// 
+//     for(const key of Object.keys(sessionStorage)){
+//       for(const key2 of Object.keys(sessionStorage)){
+//         if (key !== key2 && sessionStorage[key] === sessionStorage[key2]) {
+//           console.count('WEIRD SESSION STORAGE');
+//           console.dir(key);
+//           console.dir(key2);
+//         }
+//       }
+//     }
+//   }
 
   getSynthItem(line: string) {
     return new SynthItem(line,this.dialect,this.synth);
   }
 
   refresh() {
-    this.lines = this.textProcessor.sentences(this.text);
-    this.synthItems = this.lines.map(l=>{
-      console.log('CREATING SYNTH ITME FOR', ''+l);
-      return new SynthItem(''+l, this.dialect, this.synth);
-    });
+    this.synthItems.map(s=>s.dispose())
+    this.synthItems =
+      this.textProcessor
+          .sentences(this.text)
+      .map(l=>new SynthItem(l, this.dialect, this.synth));
     this.cdref.detectChanges();
-    console.log('NUMBER OF SYNTH ITEMS:', this.synthItems.length);
   }
 
   goToFastSynthesiser() {
