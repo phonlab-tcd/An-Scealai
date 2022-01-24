@@ -100,15 +100,15 @@ export class SynthesisService {
     }
 
     const url = this.url(input,dialect,voice,audioEncoding,speed);
-    // const storedUrl =
-    //   this.synthBank.getAudioUrlOfSentence(url);
-    // if (storedUrl) {
-    //   console.count('STORED VERSION');
-    //   return new Observable((subscriber) => {
-    //     subscriber.next(storedUrl);
-    //     subscriber.complete();
-    //   });
-    // }
+    const storedUrl =
+      this.synthBank.getAudioUrlOfSentence(url);
+    if (storedUrl) {
+      console.count('STORED VERSION');
+      return new Observable((subscriber) => {
+        subscriber.next(storedUrl);
+        subscriber.complete();
+      });
+    }
 
     console.count('REQUESTED VERSION');
 
@@ -119,13 +119,13 @@ export class SynthesisService {
        console.log(data);
        return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
      })
-     // ,
-     // tap((data) => {
-     //   this.synthBank
-     //       .storeAudioUrlOfSentence(
-     //         url,
-     //         data);
-     // })
+     ,
+     tap((data) => {
+       this.synthBank
+           .storeAudioUrlOfSentence(
+             url,
+             data);
+     })
      );
   }
 

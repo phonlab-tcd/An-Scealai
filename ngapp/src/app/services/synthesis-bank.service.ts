@@ -8,14 +8,15 @@ export class SynthesisBankService {
   constructor() {
   }
 
-  freeSomeSpace(keep: Array<{sentence:string;dialect:string;encoding:string}>) {
+  freeSomeSpace(keep: Array<string>) {
     for (const key of Object.keys(sessionStorage)) {
-
+      if(!keep.includes(key)) {
+        sessionStorage.removeItem(key);
+      }
     }
   }
 
   getAudioUrlOfSentence(key: string): string {
-    return undefined;
     return sessionStorage.getItem(key);
   }
 
@@ -27,9 +28,5 @@ export class SynthesisBankService {
         console.count('FAILED TO SET ITEM IN SESSION STORAGE');
       }
     }
-  }
-
-  generateKey(sentence: string, dialect: string, encoding: string) {
-    return encodeURIComponent(encoding + dialect + sentence.toLowerCase().trim());
   }
 }
