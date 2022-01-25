@@ -82,7 +82,6 @@ export class SynthesisService {
     }
   }
 
-
   synthesiseHtml(input: string, ... theRest): Observable<any> {
     input = this.textProcessor.convertHtmlToPlainText(input);
     return this.synthesiseText(input, ... theRest );
@@ -100,7 +99,7 @@ export class SynthesisService {
       throw new Error('input required');
     }
 
-    const url = this.url(input,dialect,voice,audioEncoding,speed);
+    const url = this.api2_url(input,dialect,voice,audioEncoding,speed);
     console.log(url);
     const storedUrl =
       this.synthBank.getAudioUrlOfSentence(url);
@@ -131,14 +130,14 @@ export class SynthesisService {
      );
   }
 
-  url(
+  api2_url(
     input: string,
     dialect: Dialect = 'connemara',
     voice: AbairAPIv2Voice = null,
     audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
     speed: number = 1,
-  ) {
-    const url = 'https://www.abair.ie/api2/synthesise?';
+  ): string {
+    const url_base = 'https://www.abair.ie/api2/synthesise?';
 
     if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
       // use given voice
@@ -155,7 +154,7 @@ export class SynthesisService {
       speed: "1",
     }});
 
-    return url + q.toString();
+    return url_base + q.toString();
   }
 
   prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){

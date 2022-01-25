@@ -5,3 +5,20 @@ p:hover {
   background-color: lightblue;
 }
 
+.reload {
+  font-family: Lucida Sans Unicode;
+  font-size: 20px;
+  width: 1em;
+  height: 2rem;
+  padding: 0px;
+  margin: 0px;
+  color: grey;
+  cursor: pointer;
+}
+
+.reload:hover {
+  background-color: #8fcaff;
+  color: black;
+  border-radius: 2px;
+  font-weight: bold;
+}

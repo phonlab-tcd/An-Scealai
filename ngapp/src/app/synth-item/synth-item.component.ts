@@ -29,4 +29,8 @@ export class SynthItemComponent {
       this.audioElement.nativeElement.play()
     }
   }
+
+  refresh() {
+    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
+  }
 }

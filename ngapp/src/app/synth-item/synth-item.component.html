@@ -1,10 +1,12 @@
 <div class="item">
+  <span class=reload (click)="refresh();">&#8635;</span>
   <span (click)="play()" style="">{{synthItem.text}}</span>
-  <audio *ngIf="synthItem.url; else loading" #audioElement>
-    <source src="{{synthItem.url}}">
+  <audio *ngIf="synthItem.audioUrl; else loading" #audioElement>
+    <source src="{{synthItem.audioUrl}}">
   </audio>
   <ng-template #loading>
       <div class="spinner-grow">
       </div>
   </ng-template>
+  <a href="{{synthItem.requestUrl}}">link</a>
 </div>
