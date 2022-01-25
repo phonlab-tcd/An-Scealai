@@ -93,13 +93,15 @@ export class SynthesisService {
     dialect: Dialect = 'connemara',
     voice: AbairAPIv2Voice = null,
     audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
-    speed: number = 1,
-    ): Observable<any> {
+    speed: number = 1, ): Observable<any> {
+  
+    console.log('new synthesis');
     if (!input) {
       throw new Error('input required');
     }
 
     const url = this.url(input,dialect,voice,audioEncoding,speed);
+    console.log(url);
     const storedUrl =
       this.synthBank.getAudioUrlOfSentence(url);
     if (storedUrl) {
