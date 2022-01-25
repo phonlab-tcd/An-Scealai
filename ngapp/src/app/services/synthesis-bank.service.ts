@@ -17,6 +17,7 @@ export class SynthesisBankService {
   }
 
   getAudioUrlOfSentence(key: string): string {
+    return null;
     return sessionStorage.getItem(key);
   }
 

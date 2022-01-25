@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 export class SynthItem {
   text: string;
   dialect: Dialect;
-  url: string = undefined;
+  audioUrl: string = undefined;
   subscription: Subscription
   requestUrl: string;
   audio: HTMLAudioElement;
@@ -15,16 +15,14 @@ export class SynthItem {
   ){
     this.text = ''+text;
     this.dialect = ''+dialect as Dialect;
-    this.requestUrl = synth.url(this.text,this.dialect);
+    this.requestUrl = synth.api2_url(this.text,this.dialect);
     this.subscription = this.synth
       .synthesiseText(
         this.text,
         this.dialect)
       .subscribe((audioUrl) => {
-        console.log('GOT RESPONSE FOR', this.text);
-        this.url = audioUrl
-        console.log('THIS URL', this.url);
-        this.audio = new Audio(this.url);
+        this.audioUrl = audioUrl
+        this.audio = new Audio(this.audioUrl);
       });
   }
 
