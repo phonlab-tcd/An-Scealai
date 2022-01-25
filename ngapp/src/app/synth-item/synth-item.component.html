@@ -1,5 +1,5 @@
-<div class="item" >
-  <p (click)="play()" style="">{{synthItem.text}}</p>
+<div class="item">
+  <span (click)="play()" style="">{{synthItem.text}}</span>
   <audio *ngIf="synthItem.url; else loading" #audioElement>
     <source src="{{synthItem.url}}">
   </audio>
