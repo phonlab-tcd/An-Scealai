@@ -41,7 +41,7 @@
   font-weight: bold;
 }
 
-.item {
+.items {
   display: flex;
   justify-content: space-between;
   padding: 3px;
@@ -49,14 +49,6 @@
   padding-top: 1rem;
   border-radius: 3px;
   text-align: left;
-}
-
-.b0 {
-  background-color: #adfc9999;
-}
-.b1 {
-  background-color: #99fcb799;
-}
-.b2 {
-  background-color: #defc9999;
+  flex-wrap: wrap;
+  justify-content: left;
 }

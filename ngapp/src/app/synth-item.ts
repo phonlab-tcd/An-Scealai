@@ -7,7 +7,7 @@ export class SynthItem {
   audioUrl: string = undefined;
   subscription: Subscription
   requestUrl: string;
-  audio: HTMLAudioElement;
+  exceptions: object[] = [];
   constructor(
     text: string,
     dialect: Dialect,
@@ -20,10 +20,13 @@ export class SynthItem {
       .synthesiseText(
         this.text,
         this.dialect)
-      .subscribe((audioUrl) => {
-        this.audioUrl = audioUrl
-        this.audio = new Audio(this.audioUrl);
-      });
+      .subscribe(
+        (audioUrl) => {
+          this.audioUrl = audioUrl
+        },
+        (error)=>{
+          this.exceptions += error;
+        });
   }
 
   dispose() {

@@ -1,19 +1,31 @@
-p {
+.outer{
+  display: flex;
+  height: 3rem;
   cursor: pointer;
+  align-items: center;
+  padding: 0.5rem;
+  filter: brightness(130%);
 }
-p:hover {
+.outer:hover{
   background-color: lightblue;
+  filter: brightness(100%);
+}
+
+.outer * {
+  vertical-align: middle;
 }
 
 .reload {
   font-family: Lucida Sans Unicode;
   font-size: 20px;
-  width: 1em;
+  width: 2rem;
   height: 2rem;
   padding: 0px;
   margin: 0px;
   color: grey;
   cursor: pointer;
+  vertical-align: center;
+  text-align: center;
 }
 
 .reload:hover {
@@ -21,4 +33,22 @@ p:hover {
   color: black;
   border-radius: 2px;
   font-weight: bold;
+}
+.b0 {
+  background-color:#BBF5F0;
+}
+.b1 {
+  background-color: #B3EDE9;
+}
+.b2 {
+  background-color: #ACE5E2;
+}
+.b3 {
+  background-color: #A4DDDB;
+}
+.b4 {
+  background-color: #95CDCD;
+}
+.b5 {
+  background-color: #85BDBF;
 }
