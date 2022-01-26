@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 export class SynthItemComponent {
 
   @Input('synthItem') synthItem: SynthItem;
+  @Input('i') i: number;
   @ViewChild('audioElement') audioElement ;
 
   constructor(
@@ -32,5 +33,17 @@ export class SynthItemComponent {
 
   refresh() {
     this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
+  }
+
+  alternateColors(i: number): string {
+    const k = i%10;
+    if (k > 5) {
+      return 'b'+(5-k%5);
+    }
+    return 'b'+ k;
+  }
+
+  ready() {
+    return !!this.synthItem.audioUrl;
   }
 }

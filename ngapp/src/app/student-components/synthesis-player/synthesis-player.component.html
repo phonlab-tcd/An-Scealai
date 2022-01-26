@@ -13,9 +13,8 @@
     </div>
   </div>
   <hr>
-  <div #audioElements
-    *ngFor="let si of synthItems; let i = index;"
-    class="flex-container">
-      <app-synth-item [synthItem]="si"></app-synth-item>
+  <div class="items">
+    <app-synth-item *ngFor="let si of synthItems; let i = index" [synthItem]="si" [i]="i">
+    </app-synth-item>
   </div>
 </div>

@@ -34,7 +34,7 @@ export class SynthesisPlayerComponent implements OnInit {
   }
 
   alternateColors(i: number): string {
-    return 'b'+ i%3;
+    return 'b'+ i%5;
   }
 
 //   async check() {
