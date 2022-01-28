@@ -21,6 +21,11 @@ export class SynthesisPlayerComponent implements OnInit {
   @Input() text: string;
   @Input() dialect: Dialect;
 
+  toggleHidden() {
+    this.hideEntireSynthesisPlayer = !this.hideEntireSynthesisPlayer;
+    this.refresh();
+  }
+
   constructor(
     private router: Router,
     private textProcessor: TextProcessingService,
@@ -33,43 +38,22 @@ export class SynthesisPlayerComponent implements OnInit {
     this.refresh();
   }
 
-  alternateColors(i: number): string {
-    return 'b'+ i%5;
-  }
-
-//   async check() {
-//     for(const si of this.synthItems) {
-//       for(const si2 of this.synthItems) {
-//         if(si.text !== si2.text && si.url === si2.url) {
-//           console.log('WEIRD');
-//           console.dir(si.text);
-//           console.dir(si2.text);
-//         }
-//       }
-//     }
-// 
-//     for(const key of Object.keys(sessionStorage)){
-//       for(const key2 of Object.keys(sessionStorage)){
-//         if (key !== key2 && sessionStorage[key] === sessionStorage[key2]) {
-//           console.count('WEIRD SESSION STORAGE');
-//           console.dir(key);
-//           console.dir(key2);
-//         }
-//       }
-//     }
-//   }
-
   getSynthItem(line: string) {
     return new SynthItem(line,this.dialect,this.synth);
   }
 
   refresh() {
-    this.synthItems.map(s=>s.dispose())
-    this.synthItems =
-      this.textProcessor
-          .sentences(this.text)
-      .map(l=>new SynthItem(l, this.dialect, this.synth));
-    this.cdref.detectChanges();
+    this.synthItems.map(s=>{
+      s.audioUrl = undefined;
+      s.dispose();
+    })
+    setTimeout(()=>{
+      this.synthItems =
+        this.textProcessor
+            .sentences(this.text)
+        .map(l=>new SynthItem(l, this.dialect, this.synth));
+      this.cdref.detectChanges();
+    },50);
   }
 
   goToFastSynthesiser() {
