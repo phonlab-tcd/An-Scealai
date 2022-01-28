@@ -47,6 +47,7 @@ export class SynthesisPlayerComponent implements OnInit {
       s.audioUrl = undefined;
       s.dispose();
     })
+    // just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
     setTimeout(()=>{
       this.synthItems =
         this.textProcessor
