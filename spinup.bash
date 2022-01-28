@@ -32,6 +32,9 @@ tmux send "echo \"sleeping for 1 second\"" C-m
 tmux send "sleep 1" C-m
 tmux send "npm start --prefix api" C-m
 
+tmux new-window
+tmux send "firefox localhost:4200"
+
 tmux select-layout tiled
 
 tmux attach
