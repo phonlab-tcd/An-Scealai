@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   SimpleChanges } from '@angular/core';
 import { SynthesisService, Dialect } from "../services/synthesis.service";
+import { SynthesisBankService } from "src/app/services/synthesis-bank.service";
 import { SynthItem } from 'src/app/synth-item';
 import { Subscription } from 'rxjs';
 
@@ -22,6 +23,7 @@ export class SynthItemComponent {
 
   constructor(
     private synth: SynthesisService,
+    private synth_bank: SynthesisBankService,
     private cdref: ChangeDetectorRef
   ) {}
 
@@ -31,14 +33,15 @@ export class SynthItemComponent {
     }
   }
 
-  refresh() {
+  public refresh() {
+    this.synth_bank.remove(this.synthItem.requestUrl);
     this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
   }
 
   alternateColors(i: number): string {
-    const k = i%10;
-    if (k > 5) {
-      return 'b'+(5-k%5);
+    const k = i%8;
+    if (k > 3) {
+      return 'b'+(4-k%4);
     }
     return 'b'+ k;
   }

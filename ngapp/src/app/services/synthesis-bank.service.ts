@@ -8,6 +8,10 @@ export class SynthesisBankService {
   constructor() {
   }
 
+  remove(key: string) {
+    return sessionStorage.removeItem(key);
+  }
+
   freeSomeSpace(keep: Array<string>) {
     for (const key of Object.keys(sessionStorage)) {
       if(!keep.includes(key)) {

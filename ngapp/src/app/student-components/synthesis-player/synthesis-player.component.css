@@ -13,8 +13,9 @@
 .synth .reload {
   font-family: Lucida Sans Unicode;
   font-size: 20px;
-  width: 1em;
+  width: 2rem;
   height: 2rem;
+  border-radius: 0.5em;
   padding: 0px;
   margin: 0px;
   color: grey;
@@ -24,7 +25,6 @@
 .synth .reload:hover {
   background-color: #8fcaff;
   color: black;
-  border-radius: 2px;
   font-weight: bold;
 }
 
