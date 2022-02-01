@@ -33,7 +33,8 @@ tmux send "sleep 1" C-m
 tmux send "npm start --prefix api" C-m
 
 tmux new-window
-tmux send "firefox localhost:4200"
+tmux send "sleep 4" C-m
+tmux send "firefox localhost:4200" C-m
 
 tmux select-layout tiled
 
