@@ -1,25 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const GramadoirTag = new Schema({
-  fromy: { type: Number },
-  fromx: { type: Number },
-  toy: { type: Number },
-  tox: { type: Number },
-  ruleId: { type: String },
-  msg: { type: String },
-  context: { type: String },
-  contextoffset: { type: Number },
-  errortext: { type: String },
-  errorlength: { type: Number },
-  messages: {
-    type: {
-      ga: { type: String },
-      en: { type: String },
-    },
-  }
-});
-
 const QuillHighlightTag = new Schema({
   start: { type: Number }, 
   length: { type: Number },
