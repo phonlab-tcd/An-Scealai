@@ -118,16 +118,6 @@ export class QuillHighlightService {
             text,
             'en')
           .pipe(
-            tap((tagData: GramadoirTag[])=> {
-              console.count('TAP GRAMMAR TAGS');
-              const headers = { 'Authorization': this.auth.getToken() }
-              const body = {
-                userUnderscoreId: this.auth.getUserDetails()._id,
-                storyUnderscoreId,
-                tagData };
-              console.log(config.baseurl + 'gramadoir/insert');
-              this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
-            }),
             map((tagData: GramadoirTag[]) =>
               tagData.map(tag => {
                   console.log(tag.ruleId);
@@ -204,6 +194,18 @@ export class QuillHighlightService {
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
+
+    ((sendGrammarErrorsToDb)=>{
+      const headers = { 'Authorization': this.auth.getToken() }
+      const body = {
+        text,
+        userUnderscoreId: this.auth.getUserDetails()._id,
+        storyUnderscoreId,
+        tagData: grammarCheckerErrors };
+      console.log(config.baseurl + 'gramadoir/insert');
+      this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
+    })();
+
     return currentGramadoirErrorTypes;
   }
 
