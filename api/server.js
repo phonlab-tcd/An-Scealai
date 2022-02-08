@@ -24,6 +24,7 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
+const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
 const dbURL = require('./utils/dbUrl');
 
@@ -67,6 +68,7 @@ app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
+app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));

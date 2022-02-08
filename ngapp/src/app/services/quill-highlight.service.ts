@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TranslationService } from 'src/app/translation.service';
 import {
   GramadoirRuleId,
@@ -10,6 +11,9 @@ import {
 } from 'src/app/grammar.service';
 import {EngagementService} from "../engagement.service";
 import { reject } from 'lodash';
+import {AuthenticationService} from "../authentication.service";
+import config from '../../abairconfig.json';
+import clone from 'lodash/clone';
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -81,6 +85,8 @@ export class QuillHighlightService {
     private grammar: GrammarService,
     private ts: TranslationService,
     private engagement: EngagementService,
+    private http: HttpClient,
+    private auth: AuthenticationService,
   ) { }
 
   getMostRecentMessage() {
@@ -89,7 +95,7 @@ export class QuillHighlightService {
     return this.outMessages[this.ts.l.iso_code];
   }
 
-  async updateGrammarErrors(quillEditor: Quill, text: string): Promise<object> {
+  async updateGrammarErrors(quillEditor: Quill, text: string, storyUnderscoreId: string): Promise<object> {
     // my tslint server keeps
     // asking me to brace these guys
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
@@ -112,6 +118,16 @@ export class QuillHighlightService {
             text,
             'en')
           .pipe(
+            tap((tagData: GramadoirTag[])=> {
+              console.count('TAP GRAMMAR TAGS');
+              const headers = { 'Authorization': this.auth.getToken() }
+              const body = {
+                userUnderscoreId: this.auth.getUserDetails()._id,
+                storyUnderscoreId,
+                tagData };
+              console.log(config.baseurl + 'gramadoir/insert');
+              this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
+            }),
             map((tagData: GramadoirTag[]) =>
               tagData.map(tag => {
                   console.log(tag.ruleId);
