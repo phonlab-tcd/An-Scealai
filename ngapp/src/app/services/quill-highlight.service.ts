@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { TranslationService } from 'src/app/translation.service';
 import {
   GramadoirRuleId,
