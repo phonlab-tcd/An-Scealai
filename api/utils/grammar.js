@@ -5,6 +5,8 @@ const logger = require('../logger');
 // querystring is native to node.js
 const querystring = require('querystring');
 const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
+const Story = require('../models/story');
+const User = require('../models/user');
 
 
 //  @description - grammar tags into db
@@ -37,6 +39,13 @@ async function upsertGramadoirCacheItem(text, qtags) {
 //      will be coerced to Date
 async function upsertStoryGramadoirVersion(
   storyId, userId, gramadoirCacheId, timestamp) {
+  const story = Story.findOne({_id: storyId});
+  const user = User.findOne({_id: userId});
+  const gram = GramadoirCache.findOne({_id: gramadoirCacheId});
+  if(!(await story)) return new Promise((_,rej)=>rej(new Error('storyId invalid in upsertStoryGramadoirVersion')))
+  if(!(await user))  return new Promise((_,rej)=>rej(new Error('userId invalid in upsertStoryGramadoirVersion')))
+  if(!(await gram))  return new Promise((_,rej)=>rej(new Error('gramadoirCacheId invalid in upsertStoryGramadoirVersion')))
+
   return new Promise((resolve,reject) => {
     GramadoirStoryHistory.findOneAndUpdate(
         { userId: userId,
@@ -102,3 +111,4 @@ function requestGrammarTags(text, language) {
 
 module.exports.requestGrammarTags = requestGrammarTags;
 module.exports.upsertGramadoirCacheItem = upsertGramadoirCacheItem;
+module.exports.upsertStoryGramadoirVersion = upsertStoryGramadoirVersion;
