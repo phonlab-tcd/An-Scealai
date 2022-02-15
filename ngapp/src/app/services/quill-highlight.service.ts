@@ -202,7 +202,6 @@ export class QuillHighlightService {
         userUnderscoreId: this.auth.getUserDetails()._id,
         storyUnderscoreId,
         tagData: grammarCheckerErrors };
-      console.log(config.baseurl + 'gramadoir/insert');
       this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
     })();
 
