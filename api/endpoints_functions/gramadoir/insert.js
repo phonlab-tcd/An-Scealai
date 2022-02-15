@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { upsertGramadoirCacheItem, upsertStoryGramadoirVersion} = require('../../utils/grammar');
+
 module.exports = async (req, res) => {
-  console.dir(req.pabody.tagData);
   const cache_id =
     (await upsertGramadoirCacheItem(req.body.text, req.body.tagData))
     ._id;
@@ -9,5 +10,4 @@ module.exports = async (req, res) => {
     mongoose.mongo.ObjectId(req.body.userUnderscoreId),
     cache_id,
     req.body.timestamp).catch((err) => {throw err});
-
 }
