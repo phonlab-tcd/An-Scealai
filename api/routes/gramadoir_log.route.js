@@ -6,6 +6,10 @@ const gramadoirRoutes = express.Router();
 const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
 
 // Create new stat entry in database
+// Inputs:
+//    tagData
+//    userUnderscoreId
+//    storyUnderscoreId
 gramadoirRoutes.route('/insert').post((req, res) => {
   console.dir(req.body.tagData);
   GramadoirCache.findOneAndUpdate(
@@ -13,9 +17,11 @@ gramadoirRoutes.route('/insert').post((req, res) => {
     { grammarTags: req.body.tagData},
     { upsert: true, new: true },
     (err,doc)=>{
-      console.log(doc._id);
+      if (err) {
+        throw err;
+      }
       GramadoirStoryHistory.findOneAndUpdate(
-        { ownerId: mongoose.mongo.ObjectId(req.body.userUnderscoreId),
+        { userId: mongoose.mongo.ObjectId(req.body.userUnderscoreId),
           storyId: mongoose.mongo.ObjectId(req.body.storyUnderscoreId), },
         { $push:
           {versions:
@@ -25,12 +31,12 @@ gramadoirRoutes.route('/insert').post((req, res) => {
           }
         },
         { upsert: true, new: true },
-        (err,doc)=>{
-          console.log(doc.versions);
+        (err)=>{
+          logger.error();
         }
       );
     });
-  res.send('hello');
+  res.status(200).send();
 });
 
 module.exports = gramadoirRoutes;

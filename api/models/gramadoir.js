@@ -26,24 +26,27 @@ const GramadoirCache = new Schema({
   collection: 'gramadoir.cache'
 });
 
+const GramadoirCacheLink = new Schema({
+  gramadoirCacheId: {
+    type: mongoose.ObjectId,
+  },
+  timestamp: {
+    type: Date,
+  }
+});
+
+
 const GramadoirStoryHistory = new Schema({
-    ownerId: {
+    userId: {
       type: mongoose.ObjectId,
     },
     storyId: {
       type: mongoose.ObjectId,
     },
     versions: {
-      type: Array,
-      of: {
-        gramadoirCacheId: {
-          type: mongoose.ObjectId,
-        },
-        timestamp: {
-          type: Date,
-        }
-      }
-    }
+      type: [GramadoirCacheLink],
+      default: [],
+    },
 }, {
     collection: 'gramadoir.story.history'
 });
