@@ -4,6 +4,58 @@ const abairBaseUrl = require('../abair_base_url');
 const logger = require('../logger');
 // querystring is native to node.js
 const querystring = require('querystring');
+const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
+
+
+//  @description - grammar tags into db
+//
+//  @param {string} text
+//
+//  @param {[quill-highlight-tag]} qtags
+async function upsertGramadoirCacheItem(text, qtags) {
+  return new Promise((resolve,reject) => {
+    GramadoirCache.findOneAndUpdate(
+      { text: text },
+      { grammarTags: qtags },
+      { upsert: true, new: true },
+      (err,doc)=>{
+        if (err) { return reject(err) }
+        return resolve(doc)
+      });
+  });
+}
+
+//  @description - story version grammar errors update 
+//
+//  @param {ObjectId} storyId
+//
+//  @param {ObjectId} userId
+//
+//  @param {ObjectId} gramadoirCacheId
+//
+//  @param {string | falsy} timestamp - falsy means now, string
+//      will be coerced to Date
+async function upsertStoryGramadoirVersion(
+  storyId, userId, gramadoirCacheId, timestamp) {
+  return new Promise((resolve,reject) => {
+    GramadoirStoryHistory.findOneAndUpdate(
+        { userId: userId,
+          storyId: storyId, },
+        { $push:
+          {versions:
+            { gramadoirCacheId: gramadoirCacheId,
+              timestamp: timestamp || new Date(),
+            }
+          }
+        },
+        { upsert: true, new: true },
+        (err)=>{
+          if(err) { return reject(err) }
+          return resolve();
+        }
+      );
+    });
+}
 
 /** @description - Get a promise which resolves to a
  *    list of tags describing grammar errors in the given text.
@@ -49,3 +101,4 @@ function requestGrammarTags(text, language) {
 }
 
 module.exports.requestGrammarTags = requestGrammarTags;
+module.exports.upsertGramadoirCacheItem = upsertGramadoirCacheItem;
