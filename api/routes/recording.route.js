@@ -14,17 +14,17 @@ const logger = require('../logger.js');
 let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
-let db;
-MongoClient.connect('mongodb://localhost:27017/',
-  { useNewUrlParser: true, useUnifiedTopology: true},
-  (err, client) => {
-  if (err) {
-    console.log(
-      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
-});
+// let db;
+// MongoClient.connect('mongodb://localhost:27017/',
+//   { useNewUrlParser: true, useUnifiedTopology: true},
+//   (err, client) => {
+//   if (err) {
+//     console.log(
+//       'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
+//     process.exit(1);
+//   }
+//   db = client.db('an-scealai');
+// });
 
 recordingRoutes.route('/create').post((req, res) => {
     const recording = new VoiceRecording(req.body);

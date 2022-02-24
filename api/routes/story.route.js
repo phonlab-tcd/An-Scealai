@@ -19,18 +19,18 @@ const dbUrl = require('../utils/dbUrl');
 const config = require('../DB');
 const Story = require('../models/story');
 
-let db;
-MongoClient.connect(dbUrl,
-    {useNewUrlParser: true, useUnifiedTopology: true},
-    (err, client) => {
-      if (err) {
-        console.log(
-            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
-            'Please make sure that MongoDB is running.');
-        process.exit(1);
-      }
-      db = client.db(process.env.DB || config.DB);
-    });
+// let db;
+// MongoClient.connect(dbUrl,
+//     {useNewUrlParser: true, useUnifiedTopology: true},
+//     (err, client) => {
+//       if (err) {
+//         console.log(
+//             'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+//             'Please make sure that MongoDB is running.');
+//         process.exit(1);
+//       }
+//       db = client.db(process.env.DB || config.DB);
+//     });
 
 
 let storyRoutes;
