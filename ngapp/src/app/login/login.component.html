@@ -38,12 +38,6 @@
               (click)="forgotPassword=true;errorMessage='';showModal()">
             {{ts.l.forgot_password}}
           </div><br>
-          <div 
-               *ngFor="let errorMsgKey of errorMsgKeys" 
-               class="errorMessage"
-               style="margin-left: 10%; margin-right: 10%;">
-            {{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey}}
-          </div>
         </div>
 
         <!-- Verify the user's email address if they have not yet been verified -->
@@ -63,6 +57,12 @@
             type="submit"
             class="btn loginBtn"
             *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
+          <div 
+               *ngFor="let errorMsgKey of errorMsgKeys" 
+               class="errorMessage"
+               style="margin-left: 10%; margin-right: 10%;">
+            {{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey}}
+          </div>
       </form>
     </div>
 </div>

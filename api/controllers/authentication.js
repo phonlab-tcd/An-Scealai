@@ -474,59 +474,43 @@ module.exports.register = async (req, res) => {
 
 
 module.exports.login = function(req, res) {
+  // assume passport.authenticate('local') has succeeded
+  const user = req.user;
   const resObj = {
     userStatus: null,
     messageKeys: [],
     errors: [],
   }
 
-  if(!req.body.username || !req.body.password) {
-    resObj.messageKeys.push('username_and_password_required');
-    return res
-      .status(400)
-      .json(resObj);
+  if(!user){
+    resObj.messageKeys.push(info.message);
+    return res.status(400).json(resObj);
   }
 
-  // AUTHENTICATE
-  passport.authenticate('local', function(err, user, info) {
-    if(err) {
-      logger.error(err);
-      resObj.errors.push(err);
-    }
+  if(!user.validStatus()){
+    logger.error('User,' + user.username + 'has an invalid no status property');
+    resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
+    user.status = 'Pending';
+    user.save().catch(err => { 
+      logger.error(JSON.parse(JSON.stringify(err)));
+      resObj.errors.push(JSON.stringify(err));});
+  }
 
-    if(!user){
-      resObj.messageKeys.push(info.message);
-      return res.status(400).json(resObj);
-    }
+  if(user.status.match(pendingRegEx)){
+    resObj.messageKeys.push('email_not_verified')
+    resObj.userStatus = user.status;
+    return res.status(400).json(resObj);
+  }
+  else if (user.status.match(activeRegEx)) {
+    logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
+    resObj.token = user.generateJwt();
+    return res
+      .status(200)
+      .json(resObj);
+  } 
 
-    if(!user.validStatus()){
-      logger.error('User,' + user.username + 'has an invalid no status property');
-      resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
-      user.status = 'Pending';
-      user.save().catch(err => { 
-        logger.error(JSON.parse(JSON.stringify(err)));
-        resObj.errors.push(JSON.stringify(err));});
-    }
-
-    console.log(user.status);
-    if(user.status.match(pendingRegEx)){
-      resObj.messageKeys.push('email_not_verified')
-      resObj.userStatus = user.status;
-      return res.status(400).json(resObj);
-    }
-    else if (user.status.match(activeRegEx)) {
-      logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
-      resObj.token = user.generateJwt();
-      return res
-        .status(200)
-        .json(resObj);
-    } 
-
-    // ELSE
-    // TODO throw new Error()
-    logger.error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
-    return res.status(500).json(resObj);
-
-  })(req, res);
-  // DON'T PUT ANYTHING AFTER passport.authenticate CALLBACK
+  // ELSE
+  // TODO throw new Error()
+  logger.error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
+  return res.status(500).json(resObj);
 };

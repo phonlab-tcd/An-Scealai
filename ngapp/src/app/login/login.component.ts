@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   };
 
   loginError: boolean;
-  errorMsgKeys: string[];
+  errorMsgKeys: string[] = [];
 
   forgotPassword = false;
   modalClass: 'hiddenFade' | 'visibleFade';
@@ -108,6 +108,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.errorMsgKeys = [];
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(
@@ -133,6 +134,8 @@ export class LoginComponent implements OnInit {
     }
     this.auth.login(this.credentials).subscribe(
       (res) => {
+        if(res.error)
+          this.errorMsgKeys = this.errorMsgKeys.concat(res.error.messages);
         console.dir(res);
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         this.router.navigateByUrl('/landing');

@@ -6,28 +6,19 @@ var User = require('../models/user');
 mongoose.model('User');
 
 passport.use(new LocalStrategy(
-
   function(username, password, done) {
-    User.findOne({ username: username}, function(err, user) {
-
+    User.findOne({ username: username}, (err, user) => {
       if(err) { 
         logger.error(err);
-        return done(err); 
+        return done({error: err }); 
       }
 
-      // If user doesn't exist
-      if(!user) {
-        return done(null, false, {
-          message: 'username_not_found'
-        });
-      }
-
-      // If password is wrong
-      if(!user.validPassword(password)) {
-        return done(null, false, {
-          message: 'incorrect_password'
-        });
-      }
+      if(!user)
+        return done({error: { messages: ['username_not_found', username]}, status: 404});
+      if(!user.validPassword(password))
+        return done({error: { messages: ['incorrect_password']}, status: 401});
+      if(!user.status === 'Active')
+        return done({error: { messages: ['activation_pending']}, email: user.email});
 
       // If everything is correct, return user object
       logger.info('Successfully authenticated user:' + username);
@@ -35,3 +26,12 @@ passport.use(new LocalStrategy(
     });
   }
 ));
+
+passport.serializeUser((user,done)=>{
+  done(null,user._id);
+});
+passport.deserializeUser((id,done)=>{
+  User.findById(id, (err,user)=>{
+    done(err,user);
+  });
+});

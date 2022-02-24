@@ -6,6 +6,7 @@
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
+const passport = require('passport');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -55,7 +56,7 @@ userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', ctrlAuth.login);
+userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
