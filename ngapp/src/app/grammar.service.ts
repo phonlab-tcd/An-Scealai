@@ -300,18 +300,12 @@ export class GrammarService {
     // Add more messages here
   };
 
-  private httpDirect: HttpClient;
-
   constructor(
     private storyService: StoryService,
     private http: HttpClient,
     private engagement: EngagementService,
     private ts: TranslationService,
-    private httpIntercepted: HttpClient, // for intercepted (authenticated) requests
-    private handler: HttpBackend,
-  ) {
-    this.httpDirect = new HttpClient(handler);
-  }
+  ) {}
 
   string2GramadoirRuleId = (str: string): GramadoirRuleId => {
     if (!str) { return 'default'; }
@@ -476,25 +470,23 @@ export class GrammarService {
   }
 
   gramadoirDirectObservable(input: string, language: 'en' | 'ga'): Observable<any> {
-    return this.httpDirect.post(
+    return this.http.post(
         this.gramadoirUrl,
         this.gramadoirXWwwFormUrlencodedRequestData(input, language),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'No-Intercept': 'true',
           }
         });
   }
 
   gramadoirDirectCadhanObservable(input: string, language: 'en' | 'ga'): Observable<any> {
-    return this.httpDirect.post(
+    return this.http.post(
         this.gramadoirCadhanUrl,
         this.gramadoirXWwwFormUrlencodedRequestData(input, language),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'No-Intercep': 'true',
           }
         });
   }
