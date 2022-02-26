@@ -202,7 +202,6 @@ export class DashboardComponent implements OnInit {
               updateGrammarErrorsError.message + '\n' +
               'See the browser console for more information');
           }
-          console.dir(updateGrammarErrorsError);
         }
         if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
           this.grammarLoading = false;

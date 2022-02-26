@@ -44,7 +44,8 @@ export class StoryService {
       activeRecording: null
     };
     console.log(storyObj);
-    this.http.post(this.baseUrl + 'create', storyObj)
+    this.http.post(this.baseUrl + 'create', storyObj,
+                   {headers: {Authorization: this.auth.getToken()}})
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
         //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);

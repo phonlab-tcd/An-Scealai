@@ -21,6 +21,7 @@
   "dependencies": {
     "@google-cloud/speech": "^4.8.0",
     "axios": "^0.21.1",
+    "base64url": "^3.0.1",
     "body-parser": "^1.19.0",
     "bson": "^4.4.0",
     "chai-arrays": "^2.2.0",

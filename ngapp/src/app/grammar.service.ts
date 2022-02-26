@@ -476,6 +476,7 @@ export class GrammarService {
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'No-Intercept': 'true',
           }
         });
   }
@@ -487,6 +488,7 @@ export class GrammarService {
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'No-Intercep': 'true',
           }
         });
   }

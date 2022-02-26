@@ -7,6 +7,7 @@ const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
+const jwtmw = passport.authenticate('jwt', {session: false});
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -62,6 +63,17 @@ userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
+userRoutes.route('/whoamai',
+  jwtmw,
+  (req,res) => {
+    return res.json({
+      username: req.user.username,
+      _id: req.user._id,
+      email: req.user.email,
+      language: req.user.language,
+    });
+});
+
 userRoutes.route('/setLanguage/:id').post((req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(user) {
@@ -76,19 +88,10 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
     });
 });
 
-userRoutes.route('/getLanguage/:id').get((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(err) {
-          console.log(err);
-          res.send(err);
-        }
-        if(user) {
-            res.json({"language" : user.language});
-        } else {
-            res.status(404).json("User not found");
-        }
-    });
-});
+userRoutes.route('/getLanguage').get(
+  jwtmw,
+  (req, res) => res.send(req.user.language)
+);
 
 userRoutes.route('/getUserByUsername/:username').get((req, res) => {
     User.find({"username" : req.params.username}, (err, user) => {

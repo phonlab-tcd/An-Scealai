@@ -23,7 +23,6 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) =>
   
   User.find(conditions, (err, users) => {
     if(err) {
-      console.log(err);
       res.status(400).send("An error occurred while trying to find users by date");
     }
     if(!users) {
@@ -39,7 +38,6 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) =>
         return new Promise ((resolve) => {
           Profile.find({"userId":id}, (err, profile) => {
               if(err) {
-                console.log(err);
                 res.status(400).send("An error occurred while trying to find a profile with this user id");
               }
               if(!profile) {
@@ -75,7 +73,6 @@ statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) =>
     
   Event.find(conditions, (err, events) => {
     if(err) {
-      console.log(err);
       res.status(400).send("An error occurred while trying to find users by date");
     }
     if(!events) {
@@ -89,17 +86,14 @@ statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) =>
 });
 
 statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
-  console.log("Function reached");
   Event.find({"date": {'$gt': req.params.date}}, (err, events) => {
     if(err) {
-      console.log(err);
       res.status(400).send("An error occurred while trying to find the latest feature record");
     }
     if(!events) {
       res.status(404).send({"message": "No previous feature stats were found"});  
     }
     else {
-      console.log(events);
       res.status(200).json(events);
     }  
   });
@@ -112,9 +106,7 @@ statsRoutes.route('/synthesisFixes').get((req, res) => {
         if(data) {
             let errorDifferences = new Map();
             countErrors(data, 'BEFORE').then(beforeErrors => {
-                console.log("BEFORE ERRORS", beforeErrors);
                 countErrors(data, 'AFTER').then(afterErrors => {
-                    console.log("AFTER ERRORS", afterErrors);
                     beforeErrors.forEach((val, key) => {
                         if(afterErrors.has(key)) {
                             errorDifferences.set(key, (val-afterErrors.get(key)));
@@ -169,7 +161,6 @@ function getTexts() {
                             data.push(datum);
                         });
                         counter++;
-                        console.log(counter, array.length);
                         if(counter === array.length) {
                             resolve(data);
                         }
@@ -181,7 +172,6 @@ function getTexts() {
 }
 
 function getEvents(story) {
-    console.log("getEvents()");
     return new Promise((resolve, reject) => {
         let data = [];
         Event.find({"storyData._id":story._id.toString()}, (err, events) => {

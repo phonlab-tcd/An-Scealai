@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from 'src/app/authentication.service';
 import { Story } from './story';
-import config from '../abairconfig.json';
-import {QuillHighlightTag} from './services/quill-highlight.service';
+import config from 'src/abairconfig.json';
+import {QuillHighlightTag} from 'src/app/services/quill-highlight.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +21,9 @@ export class EngagementService {
   }
 
   addEventObservable(type: EventType, storyData: object): Observable<any> {
-    if (! this.auth.isLoggedIn()) {
-      throw new Error('Cannot add event if user is not logged in');
-    }
+    // if (! this.auth.isLoggedIn()) {
+    //   throw new Error('Cannot add event if user is not logged in');
+    // }
 
     const event: Event = new Event();
     event.type = type;

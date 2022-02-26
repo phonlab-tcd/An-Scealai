@@ -12,9 +12,6 @@ mongodb.MongoClient.connect(dbUrl,
     {useNewUrlParser: true, useUnifiedTopology: true},
     (err, client) => {
       if (err) {
-        console.log(
-            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
-            'Please make sure that MongoDB is running.');
         process.exit(1);
       }
       db = client.db(process.env.DB || config.DB);
@@ -29,7 +26,6 @@ module.exports = async (req, res) => {
   }
   Story.findById(req.params.id, (err, story) => {
     if (err) {
-      console.log(err);
       res.status(404).json(err);
     } else if (story) {
       if (story.feedback.audioId) {

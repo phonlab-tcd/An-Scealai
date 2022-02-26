@@ -1,5 +1,6 @@
 const logger = require('../logger.js');
-
+const {verifyJwt} = require('../utils/jwtTools');
+const { oneWeekFromNowMs } = require('../utils/time');
 const mail = require('../mail');
 if(mail.couldNotCreate){
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
@@ -238,7 +239,6 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
         error: err,
       });
       if (err.response) {
-        console.log(err.response);
         return reject({
           messageToUser: err.response,
         });
@@ -250,40 +250,18 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
 
 // Set a user's status to Active when they click on the activation link
 module.exports.verify = async (req, res) => {
-  if (!req.query.username){
-    return res.status(400).json("username required to verify account email address");
-  }
-  if (!req.query.email){
-    return res.status(400).json("email required to verify account email address");
-  }
-  if (!req.query.verificationCode){
-    return res.status(400).json("verificationCode required to verify account email address");
-  }
-
-  const user = await User.findOne({username: req.query.username, email: req.query.email})
-    .catch(err => {
-      logger.error({
-        error: err,
-        endpoint: '/user/verify'
-      });
-    });
+  const payload = await verifyJwt(req.query.jwt);
+  const user = await User.findById(payload.sub);
   
-  if(!user){
-    return res.status(404).json(`User with username: ${req.query.username} and email: ${req.query.email} does not exist.`);
-  }
+  if(!user)
+    return res.status(404).json(`User with id: ${payload.sub} not found`);
 
-  if (user.verification.code === req.query.verificationCode) {
-    user.status = 'Active';
+  user.status = 'Active';
+  await user.save();
 
-    await user.save();
-
-    return res
-        .status(200)
-        .sendFile(path.join(__dirname, '../views/account_verification.html'));
-  }
-
-
-  res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
+  return res
+    .status(200)
+    .sendFile(path.join(__dirname, '../views/account_verification.html'));
 };
 
 module.exports.verifyOldAccount = async (req, res) => {
@@ -355,9 +333,6 @@ module.exports.verifyOldAccount = async (req, res) => {
       }
     }
 
-    // todo: remove
-    console.log('verifyOldAccount language', req.body.language);
-
     try {
       const mailRes =
         await sendVerificationEmail(
@@ -368,14 +343,11 @@ module.exports.verifyOldAccount = async (req, res) => {
           req.body.language,
         );
 
-      console.log('mailRes:', mailRes);
-
       // IF ALL GOES WELL
       return res.status(200).json({
         messageKeys: ['User activation pending. Please check your email inbox'],
       });
     } catch (mailErr) {
-      console.dir(mailErr);
       logger.error('mailErr', mailErr);
       resObj.messageKeys.push(
           'An error occurred while trying to send a verification email.');
@@ -388,7 +360,6 @@ module.exports.verifyOldAccount = async (req, res) => {
     }
   } catch (error) {
     const messageKeys = ['An unknown error occurred'];
-    console.dir(error);
     if (error.messageToUser) {
       messageKeys.push(error.messageToUser);
     }
@@ -403,7 +374,6 @@ module.exports.verifyOldAccount = async (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
-  console.dir(req);
   const resObj = {
     messageKeys: [],
     errors: [],
@@ -503,10 +473,15 @@ module.exports.login = function(req, res) {
   }
   else if (user.status.match(activeRegEx)) {
     logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
-    resObj.token = user.generateJwt();
     return res
       .status(200)
-      .json(resObj);
+      .json({
+        token: {
+          token: 'Bearer ' + user.generateJwt(),
+          expires: oneWeekFromNowMs(),
+        },
+        user: user,
+      });
   } 
 
   // ELSE

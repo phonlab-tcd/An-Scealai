@@ -1,8 +1,9 @@
-var mongoose = require('mongoose');
-var crypto = require('crypto');
-var jwt = require('jsonwebtoken');
-
+const mongoose = require('mongoose');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const generate_password = require('generate-password');
+const fs = require('fs');
+const { oneWeekFromNowMs } = require('../utils/time');
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -96,19 +97,24 @@ userSchema.methods.validStatus = function() {
   return this.status.match(allowableStatus);
 };
 
-userSchema.methods.generateJwt = function() {
-  const expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
+const PRIV_KEY = fs.readFileSync(__dirname + '/../priv_key.pem','utf8');
+const PUB_KEY = fs.readFileSync(__dirname + '/../pub_key.pem','utf8');
 
+userSchema.methods.generateJwt = function() {
   return jwt.sign({
     _id: this._id,
     username: this.username,
     role: this.role,
     language: this.language,
-    exp: parseInt(
-        expiry.getTime() / 1000 /* convert milliseconds to seconds */),
-  }, 'sonJJxVqRC'); // 5ecret
+    exp: oneWeekFromNowMs(),
+    iat: Date.now()/1000,
+  },{
+    key: PRIV_KEY, passphrase: 'top secret'
+  },{
+    algorithm: 'RS256'
+  });
 };
+
 
 userSchema.methods.generateNewPassword = function() {
   return generate_password.generate({
@@ -120,42 +126,22 @@ userSchema.methods.generateNewPassword = function() {
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
 userSchema.methods.generateResetPasswordLink = function(baseurl) {
-  if ( ! this.resetPassword ) {
+  if ( ! this.resetPassword )
     this.resetPassword = {};
-  }
-
-  this.resetPassword.code = jwt.sign({
-    username: this.username,
-    email: this.email,
-  }, 'sonJJxVqRC');
-
+  this.resetPassword.code = this.generateJwt();
   this.resetPassword.date = new Date();
-
-  return `${baseurl}user/generateNewPassword` +
-    `?username=${this.username}` +
-    `&email=${this.email}` +
-    `&code=${this.resetPassword.code}`;
+  return `${baseurl}user/generateNewPassword?jwt=${this.resetPassword.code}`;
 };
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
 userSchema.methods.generateActivationLink = function(baseurl, language) {
   // Make sure this.verification exists
-  if ( ! this.verification ) {
+  if ( ! this.verification )
     this.verification = {};
-  }
-  this.verification.code = jwt.sign({
-    username: this.username,
-    email: this.email,
-  }, 'sonJJxVqRC');
-
+  this.verification.code = this.generateJwt(); 
   this.verification.date = new Date();
-
-  return `${baseurl}user/verify?` +
-      `username=${this.username}` +
-      `&email=${this.email}` +
-      `&language=${language}` +
-      `&verificationCode=${this.verification.code}`;
+  return `${baseurl}user/verify?jwt=${this.verification.code}`;
 }
 
 module.exports = mongoose.model('User', userSchema);

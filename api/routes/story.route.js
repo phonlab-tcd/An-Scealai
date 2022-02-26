@@ -6,6 +6,7 @@ const ObjectID = require('mongodb').ObjectID;
 const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
+const passport = require('passport');
 
 const makeEndpoints = require('../utils/makeEndpoints');
 const { parse, stringify } = require('node-html-parser');
@@ -18,6 +19,7 @@ const dbUrl = require('../utils/dbUrl');
 
 const config = require('../DB');
 const Story = require('../models/story');
+const { jwtmw } = require('../utils/authMiddleware');
 
 let db;
 MongoClient.connect(dbUrl,
@@ -61,33 +63,39 @@ let storyRoutes;
 
 
 // Create new story
-storyRoutes.route('/create').post(function(req, res) {
-  const story = new Story(req.body);
-  story.feedback.seenByStudent = null;
-  story.feedback.text = null;
-  story.feedback.audioId = null;
-  story.save().then((story) => {
-    res.status(200).json({
-      story: 'story added successfully',
-      id: story._id,
-    });
-  })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).send('unable to save story to DB');
+storyRoutes.route('/create').post(
+  jwtmw,
+  function(req, res) {
+    const story = new Story(req.body);
+    story.feedback.seenByStudent = null;
+    story.feedback.text = null;
+    story.feedback.audioId = null;
+    story.save().then((story) => {
+      res.status(200).json({
+        story: 'story added successfully',
+        id: story._id,
       });
+    })
+        .catch((err) => {
+          console.log(err);
+          res.status(400).send('unable to save story to DB');
+        });
 });
 
 // Get story by a given author from DB
-storyRoutes.route('/:author').get(function (req, res) {
-  Story.find({"author": req.params.author}, function (err, stories) {
-    if(err) {
-      console.log(err);
-      res.json(err)
-    } else {
-      res.json(stories);
-    }
-  });
+storyRoutes.route('/:author').get(
+  jwtmw,
+  (req, res) => {
+    if(req.user.role !== "ADMIN" && req.user.username !== req.params.author)
+      return res.status(401).send();
+    Story.find({"author": req.params.author}, function (err, stories) {
+      if(err) {
+        console.log(err);
+        res.json(err)
+      } else {
+        res.json(stories);
+      }
+    });
 });
 
 // Get stories by a given author after a certain date from DB
@@ -118,11 +126,16 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
 // Update story by ID
 storyRoutes
     .route('/update/:id')
-    .post((req, res) => {
+    .post(
+      jwtmw,
+      (req, res) => {
       Story.findById(req.params.id, function(err, story) {
         if (err) {
           console.log(err);
-          return res.json(err);
+          return res.status(500).json(err);
+        }
+        if (story.studentId != req.user._id || !ObjectID.isValid(story.studentId)) {
+          return res.status(401).send();
         }
         if (story === null) {
           console.log('story is null!');

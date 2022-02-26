@@ -7,41 +7,28 @@ const { Readable } = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
 const logger = require('../logger')
+const passport = require('passport');
 
 let Event = require('../models/event');
 let User = require('../models/user');
 
 
-engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      const stackTrace = {};
-      Error.captureStackTrace(stackTrace);
-      logger.error({
-        'endpoint': '/engagement/addEventForUser/:id',
-        'error.message': err.message,
-        'stackTrace': stackTrace,
-      });
-      return res.json(err);
-    }
-    if (user) {
-      if (req.body.event) {
-        const event = new Event();
-        event.type = req.body.event.type;
-        event.storyData = req.body.event.storyData; // may be null
-        event.userId = user._id;
-        event.date = new Date();
-        event.save().then(() => {
-          return res.status(200).json('Event added succesfully');
-        });
-      } else {
-        return res.status(400)
-            .json('Bad request, must include event object in request body');
-      }
-    } else {
-      res.status(404).json('User does not exist');
-    }
-  });
+engagementRoutes.route('/addEventForUser/:id').post(
+passport.authenticate('jwt', {session: false}),
+(req, res) => {
+  if (req.body.event) {
+    const event = new Event();
+    event.type = req.body.event.type;
+    event.storyData = req.body.event.storyData; // may be null
+    event.userId = req.user._id;
+    event.date = new Date();
+    event.save().then(() => {
+      return res.status(200).json('Event added succesfully');
+    });
+  } else {
+    return res.status(400)
+      .json('Bad request, must include event object in request body');
+  }
 });
 
 engagementRoutes.route('/addAnalysisEvent').post((req, res) => {

@@ -4,6 +4,8 @@ import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from '../abairconfig.json';
+import moment from 'moment';
+import jwt from 'jsonwebtoken';
 
 export interface UserDetails {
   _id: string;
@@ -15,6 +17,7 @@ export interface UserDetails {
 
 interface TokenResponse {
   token: string;
+  expires: string;
 }
 
 export interface TokenPayload {
@@ -56,6 +59,7 @@ export class AuthenticationService {
 
   baseUrl: string = config.baseurl + 'user/';
   private token: string;
+  public userDetails: UserDetails = null;
   public getLoggedInName: any = new Subject();
 
   public pendingUserPayload: LoginTokenPayload = null;
@@ -64,43 +68,36 @@ export class AuthenticationService {
     private http: HttpClient,
     private router: Router, ) { }
 
-  private saveToken(token: string): void {
-    localStorage.setItem('scealai-token', token);
-    this.token = token;
+  expiration() {
+    const expiration = localStorage.getItem('expires');
+    return new Date(parseInt(expiration));
   }
 
-  private getToken(): string {
+  private saveToken(res: TokenResponse): void {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('expires', res.expires);
+    this.token = res.token;
+  }
+
+  public getToken(): string {
     if (!this.token) {
-      this.token = localStorage.getItem('scealai-token');
+      this.token = localStorage.getItem('token');
     }
     return this.token;
   }
 
-  public getUserDetails(): UserDetails {
-    const token = this.getToken();
-    let payload: any;
-    if (token) {
-
-      payload = token.split('.')[1];
-      payload = window.atob(payload);
-
-      this.getLoggedInName.next(JSON.parse(payload).username);
-
-      return JSON.parse(payload);
-
-    } else {
-      return null;
-    }
+  public getUserDetails(): UserDetails|{} {
+    return this.userDetails ? this.userDetails : {
+      language: 'ga',
+    };
   }
 
   public isLoggedIn(): boolean {
-    const user = this.getUserDetails();
+    return this.expiration() > new Date();
+  }
 
-    if (user) {
-      return user.exp > Date.now() / 1000;
-    } else {
-      return false;
-    }
+  public isLoggedOut(): boolean {
+    return !this.isLoggedIn();
   }
 
   private request(
@@ -119,7 +116,7 @@ export class AuthenticationService {
     const request = base.pipe(
       map((data: TokenResponse) => {
         if (data.token) {
-          this.saveToken(data.token);
+          this.saveToken(data);
         }
         return data;
       })
@@ -149,10 +146,11 @@ export class AuthenticationService {
       this.baseUrl + 'login',
       user)
       .pipe(
-        map((data: TokenResponse) => {
+        map((data: {token:TokenResponse;user:object}) => {
           if (data.token) {
             this.saveToken(data.token);
           }
+          this.userDetails = data.user;
           return data;
         })
       );
@@ -164,7 +162,8 @@ export class AuthenticationService {
 
   public logout(): void {
     this.token = '';
-    window.localStorage.removeItem('scealai-token');
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('expires');
     this.router.navigateByUrl('/landing');
     // location.reload();
   }
