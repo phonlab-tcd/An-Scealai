@@ -6,13 +6,28 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {AuthenticationService} from "src/app/authentication.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(
+    private auth: AuthenticationService,
+  ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return next.handle(request);
+    const maybeJwt = this.auth.getToken();
+    const authHeaderValue = maybeJwt ? 'Bearer ' + maybeJwt : false;
+    if(authHeaderValue && request.url.indexOf('gramadoir') < 0) {
+      const newRequest =
+        request.clone({
+          setHeaders: {
+            Authorization: authHeaderValue,
+          }});
+      return next.handle(newRequest);
+    }
+    else {
+      return next.handle(request);
+    }
   }
 }
