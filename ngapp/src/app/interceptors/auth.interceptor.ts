@@ -19,19 +19,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const idToken = this.auth.getToken();
-    if(idToken) {
-      if(request.headers.get('No-Intercept')) {
-        console.log("NO INTERCEPT");
-        console.dir(request);
-        request.headers.delete('No-Intercept');
-        console.dir(request);
-      } else {
-        const cloned = request.clone({
-          headers: request.headers.set("Authorization", idToken)
+    if(idToken && request.url.indexOf('gramadoir') < 0) {
+        const newRequest = request.clone({
+          setHeaders: {
+            Authorization: idToken,
+          }
         });
-        return next.handle(cloned);
+        return next.handle(newRequest);
       }
-    }
     return next.handle(request);
   }
 }
