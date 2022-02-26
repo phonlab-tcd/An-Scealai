@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from 'src/app/interceptor/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -171,6 +173,8 @@ const routes: Routes = [
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ],
-  providers: [ NotificationService ]
+  providers: [ 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    NotificationService ],
 })
 export class AppRoutingModule { }
