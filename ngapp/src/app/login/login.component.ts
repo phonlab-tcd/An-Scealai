@@ -112,10 +112,12 @@ export class LoginComponent implements OnInit {
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(
-        () => {
+        (res) => {
+          console.dir(res);
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
+          console.dir(err);
           for (const msg of err.error.messageKeys) {
             this.waitingErrorTextKeys.push(msg);
           }
@@ -135,24 +137,19 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.credentials).subscribe(
       (res) => {
         if(res.error)
-          this.errorMsgKeys = this.errorMsgKeys.concat(res.error.messages);
-        console.dir(res);
-        this.engagement.addEventForLoggedInUser(EventType.LOGIN);
-        this.router.navigateByUrl('/landing');
+          this.errorMsgKeys = res.error.messages;
+        else
+          this.router.navigateByUrl('/landing');
       },
       (err) => {
-        this.errorMsgKeys = err.error.messageKeys;
-        if (err.error.userStatus === 'Pending') {
-          console.log('User status is Pending');
+        this.errorMsgKeys = err.error.messages;
+        if (err.error.messages.includes('activation_pending')) {
           // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
         } else if (err.status === 400) {
           this.loginError = true;
         }
-      },
-      () => {
-        console.log('completed login for:', this.credentials.username);
       });
   }
 

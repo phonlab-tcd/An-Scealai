@@ -59,8 +59,7 @@ export class BookContentsComponent implements OnInit {
       this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
     });
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-
+    if(!userDetails) return;
     this.userId = userDetails._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
@@ -92,20 +91,18 @@ export class BookContentsComponent implements OnInit {
       else {
         this.isFromAmerica = false;
       }
-    
     });
-  
   }
-  
-//use story service to set the chosen story
+
+
+  //use story service to set the chosen story
   chooseStory(story: Story) {
     this.storyService.chosenStory = story;
   }
 
-/* delete stories added to the to be deleted array
-* adds delete event to event list 
-* deletes story using the story service 
-*/
+  // delete stories added to the to be deleted array
+  // adds delete event to event list 
+  // deletes story using the story service 
   toggleDeleteMode() {
     if(this.deleteMode && this.toBeDeleted.length > 0) {
       for(let id of this.toBeDeleted) {

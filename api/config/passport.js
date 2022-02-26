@@ -39,9 +39,8 @@ opts.algorithms =       ['RS256']
 //
 
 function jwtCallback(payload, done) {
-  User.findById(payload.sub || payload._id, (err,user) => {
+  User.findById(payload._id, (err,user) => {
     if (err) return done(err, false);
-    console.log('jwt success');
     return done(null, user ? user : false);
   });
 }

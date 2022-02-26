@@ -443,49 +443,35 @@ module.exports.register = async (req, res) => {
 };
 
 
-module.exports.login = function(req, res) {
+module.exports.login = function(req, res, next) {
   // assume passport.authenticate('local') has succeeded
   const user = req.user;
   const resObj = {
     userStatus: null,
     messageKeys: [],
     errors: [],
-  }
-
-  if(!user){
-    resObj.messageKeys.push(info.message);
-    return res.status(400).json(resObj);
+    verificationStatus: user.status,
   }
 
   if(!user.validStatus()){
-    logger.error('User,' + user.username + 'has an invalid no status property');
     resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
     user.status = 'Pending';
-    user.save().catch(err => { 
-      logger.error(JSON.parse(JSON.stringify(err)));
-      resObj.errors.push(JSON.stringify(err));});
+    user.save();
   }
 
   if(user.status.match(pendingRegEx)){
     resObj.messageKeys.push('email_not_verified')
-    resObj.userStatus = user.status;
     return res.status(400).json(resObj);
   }
   else if (user.status.match(activeRegEx)) {
-    logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
-    return res
-      .status(200)
-      .json({
-        token: {
-          token: 'Bearer ' + user.generateJwt(),
-          expires: oneWeekFromNowMs(),
-        },
-        user: user,
-      });
+    res.status(200).json({
+      token: {
+        token: 'Bearer ' + user.generateJwt(),
+        expires: oneWeekFromNowMs(),
+      },
+      user: user,
+    });
+    return user.loginEvent();
   } 
-
-  // ELSE
-  // TODO throw new Error()
-  logger.error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
-  return res.status(500).json(resObj);
+  return res.status(500);
 };

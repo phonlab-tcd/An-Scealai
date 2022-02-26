@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from '../abairconfig.json';
-import moment from 'moment';
-import jwt from 'jsonwebtoken';
 
 export interface UserDetails {
   _id: string;
@@ -60,6 +58,7 @@ export class AuthenticationService {
   baseUrl: string = config.baseurl + 'user/';
   private token: string;
   public userDetails: UserDetails = null;
+  public user: UserDetails = null;
   public getLoggedInName: any = new Subject();
 
   public pendingUserPayload: LoginTokenPayload = null;
@@ -71,6 +70,12 @@ export class AuthenticationService {
   expiration() {
     const expiration = localStorage.getItem('expires');
     return new Date(parseInt(expiration));
+  }
+
+  public whoami() {
+    return this.http
+      .get(config.baseurl + 'user/whomai')
+      .pipe(tap((freshUser: UserDetails)=>this.user=freshUser));
   }
 
   private saveToken(res: TokenResponse): void {
@@ -86,10 +91,8 @@ export class AuthenticationService {
     return this.token;
   }
 
-  public getUserDetails(): UserDetails|{} {
-    return this.userDetails ? this.userDetails : {
-      language: 'ga',
-    };
+  public getUserDetails(): UserDetails {
+    return this.user;
   }
 
   public isLoggedIn(): boolean {
@@ -146,11 +149,11 @@ export class AuthenticationService {
       this.baseUrl + 'login',
       user)
       .pipe(
-        map((data: {token:TokenResponse;user:object}) => {
+        map((data: {token:TokenResponse;user:UserDetails;}) => {
           if (data.token) {
             this.saveToken(data.token);
           }
-          this.userDetails = data.user;
+          this.user = data.user;
           return data;
         })
       );

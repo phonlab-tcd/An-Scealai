@@ -332,8 +332,7 @@ export class RegisterProfileComponent implements OnInit {
 
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-
+    if(!userDetails) return;
     this.profileService.getForUser(userDetails._id).subscribe((res) => {
       if(res) {
         let p = res.profile;
@@ -382,7 +381,6 @@ export class RegisterProfileComponent implements OnInit {
     }, (err) => {
       console.log("No previous profile data associated with user.");
     });
-    
   }
 
   saveDetails() {

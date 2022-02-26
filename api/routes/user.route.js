@@ -57,40 +57,33 @@ userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
+userRoutes.post('/login',passport.authenticate('local'),ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
-userRoutes.route('/whoamai',
+userRoutes.get('/whoami',
   jwtmw,
   (req,res) => {
-    return res.json({
-      username: req.user.username,
-      _id: req.user._id,
-      email: req.user.email,
-      language: req.user.language,
-    });
+    return res.json(req.user);
 });
 
-userRoutes.route('/setLanguage/:id').post((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(user) {
-            user.language = req.body.language;
-            user.save().then(() => {
-                res.status(200).json("Language set successfully");
-            }).catch(err => {
-                console.log(err);
-                res.status(400).send(err);
-            })
-        }
+userRoutes.route('/setLanguage').post(
+  jwtmw,
+  (req, res) => {
+    req.user.language = req.body.language;
+    req.user.save().then(() => {
+        return res.status(200).json("Language set successfully");
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json(err);
     });
 });
 
 userRoutes.route('/getLanguage').get(
   jwtmw,
-  (req, res) => res.send(req.user.language)
+  (req, res) => res.json(req.user.language)
 );
 
 userRoutes.route('/getUserByUsername/:username').get((req, res) => {

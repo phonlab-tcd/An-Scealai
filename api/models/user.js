@@ -69,6 +69,14 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.methods.loginEvent = () => {
+  const event = new Event();
+  event.type = "LOGIN";
+  event.userId = thi._id;
+  event.date = new Date();
+  event.save();
+};
+
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(

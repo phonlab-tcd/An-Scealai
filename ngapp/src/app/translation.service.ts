@@ -71,11 +71,10 @@ export class TranslationService {
   }
 
   updateUserLanguage(code : string) : Observable<any> {
-    return this.http.post(this.baseUrl + "user/setLanguage/" + this.auth.getUserDetails()._id, {language : code});
+    return this.http.post(this.baseUrl + "user/setLanguage/", {language : code});
   }
 
   getUserLanguageCode() : Observable<any> {
-    return this.http.get(this.baseUrl + "user/getLanguage/" + this.auth.getUserDetails()._id);
+    return this.http.get(this.baseUrl + "user/getLanguage/");
   }
-
 }

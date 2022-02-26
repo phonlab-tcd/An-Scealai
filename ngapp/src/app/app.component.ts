@@ -85,14 +85,11 @@ export class AppComponent {
       }
       console.log(this.teacherMessagesSum);
     });
-    
-    if(this.auth.isLoggedIn()){
-      console.log(this.auth.getUserDetails().username);
-    }
   }
-/*
-* Swap value of checkVal, if changed to false set notificationShown to false
-*/
+
+  // Swap value of checkVal,
+  // if changed to false set
+  // notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
       this.checkVal = true;
