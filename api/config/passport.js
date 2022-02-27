@@ -60,7 +60,7 @@ function localCallback(username, password, done) {
       return done({error: { messages: ['activation_pending']}, email: user.email});
   
     // If everything is correct, return user object
-    logger.info('Successfully authenticated (password) user:' + username);
+    logger.info('Successfully authenticated (by password) user: ' + username);
     return done(null, user);
   });
 }
