@@ -15,7 +15,7 @@ const logger = require('../logger');
 function errorHandler(err, req, res, next) {
   console.dir(err);
 
-  logger.alert({errorHandler: {err}});
+  logger.alert(err.stack || err);
 
   if (!(err instanceof APIError)) {
       return res.send(err);
