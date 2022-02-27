@@ -32,8 +32,6 @@ function makeEndpoints(mappings) {
       });
     }
   }
-
   return routes;
 }
-
 module.exports = makeEndpoints;
