@@ -251,10 +251,10 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
 // Set a user's status to Active when they click on the activation link
 module.exports.verify = async (req, res) => {
   const payload = await verifyJwt(req.query.jwt);
-  const user = await User.findById(payload.sub);
+  const user = await User.findById(payload._id);
   
   if(!user)
-    return res.status(404).json(`User with id: ${payload.sub} not found`);
+    return res.status(404).json(`User with id: ${payload._id} not found`);
 
   user.status = 'Active';
   await user.save();
