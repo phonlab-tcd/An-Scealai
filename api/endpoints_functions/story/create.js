@@ -1,4 +1,4 @@
-const Story = require('../../models/story');
+const Story = require.main.require('./models/story');
 module.exports = (req, res, next) => {
   const story = new Story(req.body);
   story.feedback.seenByStudent = null;

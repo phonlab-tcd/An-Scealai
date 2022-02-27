@@ -20,6 +20,7 @@ const dbUrl = require('../utils/dbUrl');
 const config = require('../DB');
 const Story = require('../models/story');
 const { jwtmw } = require('../utils/authMiddleware');
+const ep = require('../utils/requireFromEndpointsFunctions');
 
 let db;
 MongoClient.connect(dbUrl,
@@ -35,136 +36,48 @@ MongoClient.connect(dbUrl,
     });
 
 
-let storyRoutes;
-// Immediately Invoked Function Expression.
-// Scopes the imported functions to just this function
-(() => {  
-  // ENDPOINT HANDLERS
-  const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
-  const updateStoryAndCheckGrammar =
-    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
-  const feedbackAudio =
-    require('../endpoints_functions/story/feedbackAudio');
-  const viewFeedback =
-    require('../endpoints_functions/story/viewFeedback');
+const storyRoutes = express.Router();
+storyRoutes.use(jwtmw);
 
-  storyRoutes = makeEndpoints({
-    get: {
-      '/getStoryById/:id': getStoryById,
-      '/feedbackAudio/:id': feedbackAudio,
-    },
-    post: {
-      '/viewFeedback/:id': viewFeedback,
-      '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
-    },
-  });
-})();
+////////////////////////////////////////// GET
+storyRoutes
+  .route('/viewStory/:id')
+  .get(ep('/story/viewStory'));
 
+storyRoutes
+  .route('/getStoryById/:id')
+  .get(ep('/story/getStoryById'));
 
-// Create new story
-storyRoutes.route('/create').post(
-  jwtmw,
-  function(req, res) {
-    const story = new Story(req.body);
-    story.feedback.seenByStudent = null;
-    story.feedback.text = null;
-    story.feedback.audioId = null;
-    story.save().then((story) => {
-      res.status(200).json({
-        story: 'story added successfully',
-        id: story._id,
-      });
-    })
-        .catch((err) => {
-          console.log(err);
-          res.status(400).send('unable to save story to DB');
-        });
-});
+storyRoutes
+  .route('/feedbackAudio/:id')
+  .get(ep('/story/feedbackAudio'));
 
-// Get story by a given author from DB
-storyRoutes.route('/:author').get(
-  jwtmw,
-  (req, res) => {
-    if(req.user.role !== "ADMIN" && req.user.username !== req.params.author)
-      return res.status(401).send();
-    Story.find({"author": req.params.author}, function (err, stories) {
-      if(err) {
-        console.log(err);
-        res.json(err)
-      } else {
-        res.json(stories);
-      }
-    });
-});
+storyRoutes
+  .route('/:author')
+  .get(ep('/story/:author'));
+  
+storyRoutes
+  .route('/getStoriesForClassroom/:author/:date')
+  .get(ep('/story/getStoriesForClassroom'));
 
-// Get stories by a given author after a certain date from DB
-storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
-  Story.find({"author": req.params.author, date: {$gte: req.params.date}}, function (err, stories) {
-    if(err) {
-      console.log(err);
-      res.json(err)
-    } else {
-      res.json(stories);
-    }
-  });
-});
+////////////////////////////////////////// POST
+storyRoutes
+  .route('/viewFeedback/:id')
+  .post(ep('/story/viewFeedback'));
 
-// Get story with a given ID from DB
-storyRoutes.route('/viewStory/:id').get(function(req, res) {
-  Story.find({_id:req.params.id}, (err, story) => {
-    if(err) {
-      console.log(err);
-      res.status(400).json({"message" : err.message});
-    } else {
-      res.json(story);
-    }
-  });
-});
+storyRoutes
+  .route('/updateStoryAndCheckGrammar')
+  .post(ep('/story/updateStoryAndCheckGrammar'));
+
+storyRoutes
+  .route('/create')
+  .post(ep('/story/create'));
 
 
 // Update story by ID
 storyRoutes
-    .route('/update/:id')
-    .post(
-      jwtmw,
-      (req, res) => {
-      Story.findById(req.params.id, function(err, story) {
-        if (err) {
-          console.log(err);
-          return res.status(500).json(err);
-        }
-        if (story.studentId != req.user._id || !ObjectID.isValid(story.studentId)) {
-          return res.status(401).send();
-        }
-        if (story === null) {
-          console.log('story is null!');
-        } else {
-          if (req.body.text) {
-            story.text = req.body.text;
-          }
-          if (req.body.htmlText) {
-            story.htmlText = req.body.htmlText;
-          }
-          if (req.body.lastUpdated) {
-            story.lastUpdated = req.body.lastUpdated;
-          }
-          if (req.body.dialect) {
-            story.dialect = req.body.dialect;
-          }
-          if (req.body.title) {
-            story.title = req.body.title;
-          }
-
-          story.save().then( (story) => {
-            res.json('Update complete');
-          }).catch( (err) => {
-            res.status(400).json(err);
-          });
-        }
-        // TODO This endpoint can hang here
-      });
-});
+  .route('/update/:id')
+  .post(ep('/story/update'));
 
 // Update story author
 storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
