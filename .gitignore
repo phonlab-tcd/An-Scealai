@@ -3,6 +3,8 @@ dist
 **/node_modules
 session.vim
 
+*key.pem
+
 .DS_Store
 
 ngapp/build_prod_local
