@@ -11,6 +11,7 @@ export interface UserDetails {
   exp: number;
   iat: number;
   role: string;
+  language: 'ga'|'en';
 }
 
 interface TokenResponse {
@@ -92,7 +93,7 @@ export class AuthenticationService {
   }
 
   public getUserDetails(): UserDetails {
-    return this.user;
+    return JSON.parse(window.localStorage.getItem('user'));
   }
 
   public isLoggedIn(): boolean {
@@ -153,7 +154,7 @@ export class AuthenticationService {
           if (data.token) {
             this.saveToken(data.token);
           }
-          this.user = data.user;
+          window.localStorage.setItem('user',JSON.stringify(data.user));
           return data;
         })
       );
@@ -167,6 +168,7 @@ export class AuthenticationService {
     this.token = '';
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('expires');
+    window.localStorage.removeItem('user');
     this.router.navigateByUrl('/landing');
     // location.reload();
   }
