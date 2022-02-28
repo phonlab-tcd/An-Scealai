@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CurSíosModule } from 'src/cur-síos/cur-síos.module';
 
+import { ImageComponent } from 'src/cur-síos/component/image/image.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -81,6 +83,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'description', component: ImageComponent },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -130,7 +133,7 @@ const routes: Routes = [
       {
         path: 'feature-stats',
         component: FeatureStatsComponent,
-      }
+      },
     ]
   },
   { path: 'teacher',
@@ -162,14 +165,17 @@ const routes: Routes = [
       {
         path: 'teacher-stats/:id',
         component: TeacherStatsComponent,
-      }
+      },
     ]
   },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [
+    RouterModule.forRoot(routes),
+    CurSíosModule,
+  ],
   exports: [ RouterModule ],
   providers: [ NotificationService ]
 })
