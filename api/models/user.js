@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const generate_password = require('generate-password');
 const fs = require('fs');
-const { oneWeekFromNowMs } = require('../utils/time');
+const { oneWeekFromNowMs } = require.main.require('./utils/time');
+const Event =  require.main.require('./models/event');
+const logger =  require.main.require('./logger');
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -69,11 +71,13 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.loginEvent = () => {
-  const event = new Event();
-  event.type = "LOGIN";
-  event.userId = thi._id;
-  event.date = new Date();
+userSchema.methods.loginEvent = (userId) => {
+  const event = new Event({
+    type: "LOGIN",
+    userId: userId,
+    date: new Date(),
+  });
+  console.log(event);
   event.save();
 };
 
