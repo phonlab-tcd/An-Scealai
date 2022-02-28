@@ -1,4 +1,3 @@
-
 // Best to initialize the logger first
 const logger = require('./logger');
 
@@ -52,6 +51,9 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+
+app.use('/image',express.static(path.join(__dirname,'..','picture_description','images')));
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
