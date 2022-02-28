@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DescriptionGameModule } from 'src/description-game/description-game.module';
 
-import { ImageComponent } from 'src/cur-síos/component/image/image.component';
+import { ImageComponent } from 'src/description-game/component/image/image.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -174,7 +174,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes),
-    CurSíosModule,
+    DescriptionGameModule,
   ],
   exports: [ RouterModule ],
   providers: [ NotificationService ]
