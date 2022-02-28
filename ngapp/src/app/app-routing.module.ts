@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CurSíosModule } from 'src/cur-síos/cur-síos.module';
+import { DescriptionGameModule } from 'src/description-game/description-game.module';
 
 import { ImageComponent } from 'src/cur-síos/component/image/image.component';
 import { LandingComponent } from './landing/landing.component';

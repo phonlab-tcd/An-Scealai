@@ -11,4 +11,4 @@ import { ImageComponent } from './component/image/image.component';
     CommonModule
   ]
 })
-export class CurSíosModule { }
+export class DescriptionGameModule { }
