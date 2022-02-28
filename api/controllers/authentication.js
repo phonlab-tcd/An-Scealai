@@ -471,7 +471,8 @@ module.exports.login = function(req, res, next) {
       },
       user: user,
     });
-    return user.loginEvent();
+    user.loginEvent(user._id);
+    return;
   } 
   return res.status(500);
 };
