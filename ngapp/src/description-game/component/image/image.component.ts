@@ -8,17 +8,13 @@ import config from 'src/abairconfig.json';
 })
 export class ImageComponent implements OnInit {
   public src: string = config.baseurl + 'image/dog/1.png';
+  private count = { mouseover: 0, mouseout: 0 }
 
   constructor() { }
 
-  next_image(i) {
-    i = (i % 6);
-    this.src = config.baseurl + 'image/dog/' + i + '.png';
-    setTimeout(()=>this.next_image(i+1),2 * 1000);
-  }
+  mouseover() { this.count.mouseover++}
+  mouseout() { this.count.mouseout++}
 
-  ngOnInit(): void {
-    this.next_image(0);
-  }
+  ngOnInit(): void {}
 
 }
