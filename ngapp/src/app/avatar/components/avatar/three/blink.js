@@ -2,7 +2,14 @@ const TWEEN = require('@tweenjs/tween.js')
 import { lenMorphs, head } from './main'
 import { updateAvatarState, avatarStates } from './config.js'
 
+let blinkFrom
+let blinkTo
+let partKey
 const startRandomBlink = () => {
+	blinkFrom = new Array(lenMorphs).fill(0);
+	blinkTo = new Array(lenMorphs).fill(0);
+	partKey = head.morphTargetDictionary.eyesClosed;
+	blinkTo[partKey] = 1
 	updateAvatarState('blinking', true)
 	randomBlink()
 }
@@ -17,14 +24,17 @@ const randomBlink = () => {
 
 const blink = () => {
 		if ( !avatarStates.speaking ) {
-			let blinkTo = new Array(lenMorphs).fill(0);
-			let partKey = head.morphTargetDictionary.eyesClosed;
-			blinkTo[partKey] = 1
 			let blinking = new TWEEN.Tween(head.morphTargetInfluences).to(blinkTo, 100)
 				.easing(TWEEN.Easing.Quadratic.Out)
-				.yoyo(true)
-				.repeat(1)
 				.start()
+			blinking.onComplete( () => {
+				let blinkingOut = new TWEEN.Tween(head.morphTargetInfluences).to(blinkFrom, 150)
+					.easing(TWEEN.Easing.Quadratic.Out)
+					.start()
+				blinkingOut.onComplete( () => {
+					updateAvatarState('blinking', false)
+				} )
+			} )
 		}
 }
 
