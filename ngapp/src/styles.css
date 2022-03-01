@@ -414,3 +414,23 @@ button:focus, input:focus, audio:focus{
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* for avatar */
+.full-height {
+  position: relative;
+  height: 100%;
+}
+
+.full-size {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.center-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
