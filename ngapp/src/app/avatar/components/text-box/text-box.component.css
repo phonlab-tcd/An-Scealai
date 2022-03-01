@@ -1,0 +1,17 @@
+.readyToSpeak-text-box {
+  /*background-color: #ffffcc;*/
+  font-weight: bold;
+}
+
+.inactive-text-box {
+  background-color: white;
+}
+
+.awaiting-text-box {
+  background-color: white;
+  color: grey;
+}
+
+textarea {
+  outline: none;
+}
