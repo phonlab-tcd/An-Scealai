@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     ._id;
   upsertStoryGramadoirVersion(
     mongoose.mongo.ObjectId(req.body.storyUnderscoreId),
-    mongoose.mongo.ObjectId(req.body.userUnderscoreId),
+    mongoose.mongo.ObjectId(req.user._id),
     cache_id,
     req.body.timestamp).catch((err) => {throw err});
 }
