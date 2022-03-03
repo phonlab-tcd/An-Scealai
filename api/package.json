@@ -56,11 +56,10 @@
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
-    "@shelf/jest-mongodb": "^2.0.1",
+    "@shelf/jest-mongodb": "^2.2.0",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^27.0.6",
-    "mocha": "^8.4.0",
     "mockingoose": "^2.15.2",
     "nodemon": "^2.0.13",
     "supertest": "^6.1.4"
