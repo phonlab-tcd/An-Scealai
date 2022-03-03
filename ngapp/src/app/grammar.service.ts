@@ -289,6 +289,7 @@ export enum LANGUAGE {
 export class GrammarService {
   gramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
   gramadoirCadhanUrl = 'https://cadhan.com/api/gramadoir/1.0';
+  genitiveUrl = 'https://phoneticsrv3.lcs.tcd.ie/gramsrv/api/grammar'
 
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
@@ -448,6 +449,10 @@ export class GrammarService {
     return `teacs=${encodeURIComponent(input)}&teanga=${language}`;
   }
 
+  genitiveXWwwFormUrlencodedRequestData(input: string) {
+    return `text=${encodeURIComponent(input)}&check=genitive`;
+  }
+
   async gramadoirDirect(text: string, language: 'en' | 'ga', signal: AbortSignal): Promise<GramadoirTag[]> {
     const res = await fetch(this.gramadoirUrl, {
          headers: {
@@ -466,14 +471,14 @@ export class GrammarService {
   }
 
   gramadoirDirectObservable(input: string, language: 'en' | 'ga'): Observable<any> {
-    return this.http.post(
-        this.gramadoirUrl,
-        this.gramadoirXWwwFormUrlencodedRequestData(input, language),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          }
-        });
+  return this.http.post(
+      this.gramadoirUrl,
+      this.gramadoirXWwwFormUrlencodedRequestData(input, language),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    });
   }
 
   gramadoirDirectCadhanObservable(input: string, language: 'en' | 'ga'): Observable<any> {
@@ -485,6 +490,14 @@ export class GrammarService {
             'Content-Type': 'application/x-www-form-urlencoded',
           }
         });
+  }
+
+  genitiveDirectObservable(input: string): Observable<any> {
+    // Temporarily using backend to get around CORS
+    return this.http.post(
+      'http://localhost:4000/story/genitive',
+      {text: input}
+    );
   }
 
   async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
@@ -660,7 +673,7 @@ export class GrammarService {
 
 
 
-// **************** Grammar Tag Class ************************
+// **************** Grammar Tag Class ****************
 export class GrammarTag {
   type;
   message: string;

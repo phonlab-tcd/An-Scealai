@@ -8,6 +8,13 @@
   border: 1px solid gray;
 }
 
+[data-genitive-tag]
+{
+    background-color: darkcyan;
+    color: white;
+    border-radius: 3px;
+}
+
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
 }
