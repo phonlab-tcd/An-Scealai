@@ -43,4 +43,4 @@ $ cd api/
 $ nodemon server.js
 ```
 
-4) Navigate to http://localhost:4200/.
+4) Navigate to http://localhost:4200/
