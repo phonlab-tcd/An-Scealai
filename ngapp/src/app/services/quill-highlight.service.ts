@@ -10,6 +10,7 @@ import {
 } from 'src/app/grammar.service';
 import {EngagementService} from "../engagement.service";
 import { reject } from 'lodash';
+import { of } from 'rxjs';
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -64,6 +65,14 @@ const vowelAgreementAttributor =
 
 Quill.register(vowelAgreementAttributor);
 
+const genitiveAttributor =
+  new Parchment.Attributor.Attribute(
+    'genitive-tag',
+    'data-genitive-tag',
+    {scope: Parchment.Scope.INLINE});
+
+Quill.register(genitiveAttributor);
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,9 +80,11 @@ export class QuillHighlightService {
   mostRecentGramadoirInput = null;
   currentGramadoirHighlightTags: QuillHighlightTag[] = [];
   currentFilteredHighlightTags: QuillHighlightTag[] = [];
+  currentGenetiveHighlightTags: QuillHighlightTag[] = [];
   outMessages: { ga: string, en: string } = null;
 
   public showLeathanCaol = true;
+  public showGenitive = true;
   public mostRecentHoveredMessages: Messages | null =
       null;
 
@@ -106,31 +117,14 @@ export class QuillHighlightService {
 
     const currentGramadoirErrorTypes: object = {};
 
+    // First try get gramadoir errors using ABAIR hosted gramadoir
     let grammarCheckerErrorsPromise =
       this.grammar
           .gramadoirDirectObservable(
             text,
             'en')
           .pipe(
-            map((tagData: GramadoirTag[]) =>
-              tagData.map(tag => {
-                  console.log(tag.ruleId);
-                  const ruleIdShort =
-                    this.grammar.string2GramadoirRuleId(tag.ruleId);
-                  currentGramadoirErrorTypes[ruleIdShort] ?
-                  currentGramadoirErrorTypes[ruleIdShort]++ :
-                  currentGramadoirErrorTypes[ruleIdShort] = 1;
-                  const qTag: QuillHighlightTag = {
-                    start: + tag.fromx,
-                    length: + tag.tox + 1 - tag.fromx,
-                    type: ruleIdShort,
-                    tooltip: null,
-                    messages: { en: tag.msg, ga: null},
-                  };
-                  return qTag;
-                }
-              )
-            ),
+            map(gTags => this.gramadoir2QuillTags(gTags, currentGramadoirErrorTypes))
           ).toPromise();
 
 
@@ -146,31 +140,14 @@ export class QuillHighlightService {
         this.grammar.gramadoirDirectCadhanObservable(text, 'ga')
         .toPromise();
 
+      // If request to ABAIR gramadoir fails, try Scannell's gramadoir server
       grammarCheckerErrorsPromise =
         this.grammar
             .gramadoirDirectCadhanObservable(
               text,
               'en')
             .pipe(
-              map((tagData: GramadoirTag[]) =>
-                tagData.map(tag => {
-                    console.log(tag.ruleId);
-                    const ruleIdShort =
-                      this.grammar.string2GramadoirRuleId(tag.ruleId);
-                    currentGramadoirErrorTypes[ruleIdShort] ?
-                    currentGramadoirErrorTypes[ruleIdShort]++ :
-                    currentGramadoirErrorTypes[ruleIdShort] = 1;
-                    const qTag: QuillHighlightTag = {
-                      start: + tag.fromx,
-                      length: + tag.tox + 1 - tag.fromx,
-                      type: ruleIdShort,
-                      tooltip: null,
-                      messages: { en: tag.msg, ga: null},
-                    };
-                    return qTag;
-                  }
-                )
-              ),
+              map(gTags => this.gramadoir2QuillTags(gTags, currentGramadoirErrorTypes))
             ).toPromise();
       try {
       grammarCheckerErrors = await grammarCheckerErrorsPromise;
@@ -188,6 +165,12 @@ export class QuillHighlightService {
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
+
+    this.currentGenetiveHighlightTags = await this.grammar
+      .genitiveDirectObservable(text)
+      .pipe(map(gTags => this.gramadoir2QuillTags(gTags, {})))
+      .toPromise();
+
     return currentGramadoirErrorTypes;
   }
 
@@ -221,6 +204,32 @@ export class QuillHighlightService {
        },
        'api');
 
+  }
+
+  /**
+   * Maps an array of gramadoir tags to quill tags
+   * @param tagData - raw gramadoir tags
+   * @param currentGramadoirErrorTypes - dictionary counting error types
+   * @returns - QuillHighlightTags representing gramadoir tags
+   */
+  gramadoir2QuillTags(tagData: GramadoirTag[], currentGramadoirErrorTypes: object = {}): QuillHighlightTag[] {
+    return tagData.map(tag => {
+        console.log(tag.ruleId);
+        const ruleIdShort =
+          this.grammar.string2GramadoirRuleId(tag.ruleId);
+        currentGramadoirErrorTypes[ruleIdShort] ?
+        currentGramadoirErrorTypes[ruleIdShort]++ :
+        currentGramadoirErrorTypes[ruleIdShort] = 1;
+        const qTag: QuillHighlightTag = {
+          start: + tag.fromx,
+          length: + tag.tox + 1 - tag.fromx,
+          type: ruleIdShort,
+          tooltip: null,
+          messages: { en: tag.msg, ga: null},
+        };
+        return qTag;
+      }
+    )
   }
 
   filterGramadoirTags(filter: object) {
@@ -259,6 +268,20 @@ export class QuillHighlightService {
                   'user'
               );
         });
+    
+    if (this.showGenitive) {
+        for (const tag of this.currentGenetiveHighlightTags) {
+            quillEditor.formatText(
+                tag.start,
+                tag.length,
+                {
+                'genitive-tag': JSON.stringify(tag),
+                },
+                'user'
+            );
+        }
+    }
+
     this.generateGramadoirTagTooltips(quillEditor);
   }
 
@@ -272,11 +295,12 @@ export class QuillHighlightService {
         disagreeingVowelIndices);
     }
 
-    const gramadoirTags: NodeListOf<Element> | [] =
-      document.querySelectorAll('[data-gramadoir-tag]') || [];
-    gramadoirTags.forEach((t: HTMLElement) => {
-      this.createGrammarPopup(quillEditor, t);
-    });
+    for (const tagAttribute of ['data-gramadoir-tag', 'data-genitive-tag']) {
+        const tagElements: NodeListOf<Element> | [] = document.querySelectorAll(`[${tagAttribute}]`) || [];
+        tagElements.forEach((t: HTMLElement) => {
+            this.createGrammarPopup(quillEditor, t, tagAttribute);
+        });
+    }
   }
 
   clearAllGramadoirTags(quillEditor: Quill) {
@@ -290,27 +314,33 @@ export class QuillHighlightService {
 
   private clearGramadoirTagFormatting(quillEditor: Quill) {
     quillEditor.formatText(
-      0, // from the very beginning of the text
-      quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+        0, // from the very beginning of the text
+        quillEditor.getLength(), // to the very end of the text
+        {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
     );
     quillEditor.formatText(
-      0, // from the very beginning of the text
-      quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag-style-type': null} // delete all gramadoir-tag's on the parchment
+        0, 
+        quillEditor.getLength(), 
+        {'gramadoir-tag-style-type': null} 
     );
     quillEditor.formatText(
-      0, // from the very beginning of the text
-      quillEditor.getLength(), // to the very end of the text
-      {'vowel-agreement-tag': null} // delete all gramadoir-tag's on the parchment
+        0,
+        quillEditor.getLength(), 
+        {'vowel-agreement-tag': null}
+    );
+    quillEditor.formatText(
+        0, 
+        quillEditor.getLength(), 
+        {'genitive-tag': null}
     );
   }
 
-  private createGrammarPopup(
+    private createGrammarPopup(
     quillEditor: Quill,
-    tagElement: Element)
-  {
-    const unparsed = tagElement.getAttribute('data-gramadoir-tag');
+    tagElement: Element,
+    tagAttribute: string
+    ) {
+    const unparsed = tagElement.getAttribute(tagAttribute);
     const error = JSON.parse(unparsed);
 
     // Create a customised quill tooltip containing

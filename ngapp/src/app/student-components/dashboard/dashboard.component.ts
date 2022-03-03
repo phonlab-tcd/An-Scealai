@@ -238,9 +238,21 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  genitiveCheckBox(event: boolean) {
+    this.quillHighlightService.showGenitive = event;
+    this.quillHighlightService
+        .clearAllGramadoirTags(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
+  }
+
   setAllCheckBoxes(value: boolean) {
     this.quillHighlightService
         .showLeathanCaol = value;
+    this.quillHighlightService
+        .showGenitive = value;
     Object.keys(this.grammarTagFilter)
         .forEach((k) => {
           this.grammarTagFilter[k] = value;

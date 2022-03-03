@@ -267,6 +267,15 @@
             'Leathan/caol' :
             'Broad/slender vowel agreement' }}
         </div>
+        <div style="margin: 2px;">
+          <input 
+            [(ngModel)]="quillHighlightService.showGenitive"
+            (ngModelChange)="genitiveCheckBox($event)"
+            type="checkbox">
+          {{ ts.l.iso_code === 'ga' ? 
+            'Tuiseal ginideach' :
+            'Genitive' }}
+        </div>
         <button
           (click)="setAllCheckBoxes(false)">
           {{ ts.l.uncheck_all ? ts.l.uncheck_all : 'uncheck_all'}}

@@ -59,6 +59,30 @@ let storyRoutes;
   });
 })();
 
+// ***
+// TEMPORARY CORS WORKAROUND (@oisin)
+// -> need to contact christoph about CORS for the scéalaí server
+// -> for now, I need to test this with localhost
+// ***
+storyRoutes.route('/genitive').post((req, res) => {
+  console.log('REQ', req);
+  const form = {
+    text: req.body.text.replace(/\n/g, ' '),
+    check: 'genitive'
+  };
+  const formData = querystring.stringify(form);
+  request({
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    uri:  'https://phoneticsrv3.lcs.tcd.ie/gramsrv/api/grammar',
+    body: formData,
+    method: 'POST',
+  }, (err, resp, body) => {
+    res.send(body);
+  });
+})
+
 
 // Create new story
 storyRoutes.route('/create').post(function(req, res) {
