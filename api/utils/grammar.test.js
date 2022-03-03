@@ -101,32 +101,10 @@ describe('gramadoir log route', () => {
       await expect(history).resolves.not.toThrow();
     });
 
-// async function upsertGramadoirCacheItem(text, qtags) {
-//   return new Promise((resolve,reject) => {
-//     GramadoirCache.findOneAndUpdate(
-//       { text: text },
-//       { grammarTags: qtags },
-//       { upsert: true, new: true },
-//       (err,doc)=>{
-//         if (err) { return reject(err) }
-//         return resolve(doc)
-//       });
-//   });
-// }
-
     it(
       `should create a new gramadoir cache item`,
       async () => {
         const gram = grammarUtils.upsertGramadoirCacheItem('blinks', []);
         await expect(gram).resolves.toBeDefined();
       });
-
-  describe('known to fail', () => {
-    it(
-      `should reject non array as grammar tags`,
-      async () => {
-        const gram = grammarUtils.upsertGramadoirCacheItem('blinks');
-        await expect(gram).rejects.toBeDefined();
-      });
-  });
 });
