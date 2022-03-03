@@ -73,10 +73,6 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { LoadingComponent } from './loading/loading.component';
 
-import { AvatarComponent } from './avatar/components/avatar/avatar.component';
-import { TextBoxComponent } from './avatar/components/text-box/text-box.component';
-import { PageComponent } from './avatar/components/page/page.component';
-import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/avatar-classroom.component';
 
 
 @NgModule({
@@ -129,10 +125,6 @@ import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/a
     CreateQuizComponent,
     AboutTaidhginComponent,
     LoadingComponent,
-    AvatarComponent,
-    TextBoxComponent,
-    PageComponent,
-    AvatarClassroomComponent
   ],
   imports: [
     BrowserModule,
