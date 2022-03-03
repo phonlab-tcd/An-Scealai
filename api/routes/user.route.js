@@ -18,14 +18,10 @@ var crypto = require('crypto');
 
 
 var express = require('express');
-var jwt = require('express-jwt');
 
 let User = require('../models/user');
 
-var auth = jwt({
-  secret: 'sonJJxVqRC',
-  userProperty: 'payload'
-});
+const auth = require('../utils/jwtAuthMw');
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
