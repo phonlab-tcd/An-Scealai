@@ -72,7 +72,6 @@ app.use('/recordings', recordingRoute);
 const synthesisRoute = require('./routes/synthesis.route');
 app.use('/synthesis', synthesisRoute);
 
-const mailRoute = require('./routes/send_mail.route');
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 
