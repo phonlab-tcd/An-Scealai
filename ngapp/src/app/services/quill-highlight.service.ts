@@ -196,7 +196,7 @@ export class QuillHighlightService {
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
 
     ((sendGrammarErrorsToDb)=>{
-      const headers = { 'Authorization': this.auth.getToken() }
+      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
       const body = {
         text,
         userUnderscoreId: this.auth.getUserDetails()._id,
