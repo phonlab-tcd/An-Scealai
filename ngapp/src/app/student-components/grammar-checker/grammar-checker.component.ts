@@ -163,6 +163,7 @@ export class GrammarCheckerComponent implements
   }
 
   graciouslyReceiveGramadoirHighlightTags = (tags: HighlightTag[]) => {
+    console.count("RECEIVING GRAMMAR HIGHLIGHT TAGS");
     // NOTE RECEPTION TIME
     this.timeThatCheckedTextWasChecked = new Date();
 
@@ -186,6 +187,7 @@ export class GrammarCheckerComponent implements
       this.classroomId)
         .subscribe(
           (res) => {
+            console.count("GOT CLASSROOM GRAMMAR RULES");
             this.teacherSelectedErrors = res;
 
             // loop through tags of errors found in the story
@@ -230,6 +232,7 @@ export class GrammarCheckerComponent implements
   // Update the grammar error map of the stat object
   // corresponding to the current student id
   updateStats() {
+    console.count("UPDATE STATS GRAMMAR CHECKER");
     const updatedTimeStamp = new Date();
     const userDetails = this.auth.getUserDetails();
 
