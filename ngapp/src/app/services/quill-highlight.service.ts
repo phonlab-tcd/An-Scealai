@@ -199,9 +199,9 @@ export class QuillHighlightService {
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
       const body = {
         text,
-        userUnderscoreId: this.auth.getUserDetails()._id,
         storyUnderscoreId,
-        tagData: grammarCheckerErrors };
+        tagData: grammarCheckerErrors,
+      };
       this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
     })();
 
