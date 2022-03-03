@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
 import { map } from 'rxjs/operators';
 import { TranslationService } from 'src/app/translation.service';
@@ -10,6 +11,9 @@ import {
 } from 'src/app/grammar.service';
 import {EngagementService} from "../engagement.service";
 import { reject } from 'lodash';
+import {AuthenticationService} from "../authentication.service";
+import config from '../../abairconfig.json';
+import clone from 'lodash/clone';
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -81,6 +85,8 @@ export class QuillHighlightService {
     private grammar: GrammarService,
     private ts: TranslationService,
     private engagement: EngagementService,
+    private http: HttpClient,
+    private auth: AuthenticationService,
   ) { }
 
   getMostRecentMessage() {
@@ -89,7 +95,7 @@ export class QuillHighlightService {
     return this.outMessages[this.ts.l.iso_code];
   }
 
-  async updateGrammarErrors(quillEditor: Quill, text: string): Promise<object> {
+  async updateGrammarErrors(quillEditor: Quill, text: string, storyUnderscoreId: string): Promise<object> {
     // my tslint server keeps
     // asking me to brace these guys
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
@@ -188,6 +194,17 @@ export class QuillHighlightService {
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
+
+    ((sendGrammarErrorsToDb)=>{
+      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
+      const body = {
+        text,
+        storyUnderscoreId,
+        tagData: grammarCheckerErrors,
+      };
+      this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
+    })();
+
     return currentGramadoirErrorTypes;
   }
 

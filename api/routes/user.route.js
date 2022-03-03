@@ -1,8 +1,5 @@
 // user.route.js 
-//
 // endpoint prefix = '/user'
-
-
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
@@ -18,14 +15,10 @@ var crypto = require('crypto');
 
 
 var express = require('express');
-var jwt = require('express-jwt');
 
 let User = require('../models/user');
 
-var auth = jwt({
-  secret: 'sonJJxVqRC',
-  userProperty: 'payload'
-});
+const auth = require('../utils/jwtAuthMw');
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
@@ -68,7 +61,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
             user.save().then(() => {
                 res.status(200).json("Language set successfully");
             }).catch(err => {
-                console.log(err);
+                logger.error(err.stack || err);
                 res.status(400).send(err);
             })
         }
@@ -78,7 +71,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
 userRoutes.route('/getLanguage/:id').get((req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(err) {
-          console.log(err);
+          logger.error(err.stack || err);
           res.send(err);
         }
         if(user) {

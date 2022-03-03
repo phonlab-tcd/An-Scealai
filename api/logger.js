@@ -79,37 +79,21 @@ logger = winston.createLogger({
 });
 
 require('winston-mongodb');
-const dbURL = require('./utils/dbUrl');
-logger.info('dbUrl: ' + dbURL);
+const mongoTransport = new winston.transports.MongoDB({
+  level: 'info', // info is the default
+  db: require('./utils/dbUrl'),
+  collection: 'log', // default is 'log'
+  options: { // modified version of default
+    poolSize: 2, // default
+    useNewUrlParser: true, // default
+    useUnifiedTopology: true, // not default
+  },
+  handleExceptions: true,
+});
+logger.info('Adding MongoDB transport to logger');
+logger.add(mongoTransport);
 
-let preconnectedDB = null;
-mongodb.MongoClient.connect(dbURL,
-    {useUnifiedTopology: true, useNewUrlParser: true})
-    .then((db) => {
-      logger.info('Winston has connected to MongoDB');
-      preconnectedDB = db;
-      const mongoTransport = new winston.transports.MongoDB({
-        level: 'info', // info is the default
-        db: preconnectedDB,
-        collection: 'log', // default is 'log'
-        options: { // modified version of default
-          poolSize: 2, // default
-          useNewUrlParser: true, // default
-          useUnifiedTopology: true, // not default
-        },
-        handleExceptions: true,
-      });
-      logger.info('Adding MongoDB transport to logger');
-      logger.add(mongoTransport);
-    })
-    .catch((err) => {
-      logger.error(
-          'FAILED TO CONNECT TO MONGODB. MONGODB TRANSPORT WILL NOT BE ADDED.',
-          err.message);
-    });
-
-
-// This should be deleted before merging the PR
+// EXAMPLE LOGGER USAGE
 // logger.emerg('this is just a test');
 // logger.alert('this is just a test');
 // logger.crit('this is just a test');
