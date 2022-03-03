@@ -59,7 +59,9 @@ export class BookContentsComponent implements OnInit {
       this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
     });
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      return;
+    }
 
     this.userId = userDetails._id;
     this.deleteMode = false;
@@ -112,14 +114,11 @@ export class BookContentsComponent implements OnInit {
         this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], {_id: id});
         
         this.recordingService.deleteStoryRecordingAudio(id).subscribe((res) => {
-          console.log(res);
         });
         this.recordingService.deleteStoryRecording(id).subscribe( (res) => {
-          console.log(res);
         })
         this.storyService.deleteStory(id).subscribe(
           res => {
-            console.log('Deleted: ', id);
             this.ngOnInit();
           }
         );

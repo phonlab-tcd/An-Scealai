@@ -76,8 +76,6 @@ export class ClassroomService {
  }
  
  setGrammarRules(classroomId: string, rules: string[]): Observable<any> {
-   console.log("rules to add:")
-   console.log( rules);
    return this.http.post(this.baseUrl + 'setGrammarRules/' + classroomId, {"grammarRules":rules});
  }
  

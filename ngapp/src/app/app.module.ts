@@ -66,12 +66,14 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { LoadingComponent } from './loading/loading.component';
+import { SynthItemComponent } from './synth-item/synth-item.component';
 
 
 
@@ -119,19 +121,21 @@ import { LoadingComponent } from './loading/loading.component';
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
+    SynthesisPlayerComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
     GrammarCheckerComponent,
     CreateQuizComponent,
     AboutTaidhginComponent,
     LoadingComponent,
+    SynthItemComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    //SlimLoadingBarModule,
+    // SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,
@@ -149,14 +153,16 @@ import { LoadingComponent } from './loading/loading.component';
       }]
     })
   ],
-  providers: [ 
+  providers: [
     StoryService,
     UserService,
     MatDatepickerModule,
     MatNativeDateModule,
     {provide : LocationStrategy , useClass: HashLocationStrategy}
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent,
+  ],
   entryComponents: [ChatbotComponent],
 })
 export class AppModule {
