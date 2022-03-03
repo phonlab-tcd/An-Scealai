@@ -58,6 +58,8 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/avatar-classroom.component';
 
 const routes: Routes = [
+  { path: 'landing', component: LandingComponent},
+  { path: 'about', component: AboutComponent},
   { path: 'avatar-classroom', component: AvatarClassroomComponent},
   { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
