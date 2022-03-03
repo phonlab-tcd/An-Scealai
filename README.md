@@ -99,6 +99,12 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.10
+Record gramadoir responses for stories throughout time.
+
+## v1.0.9
+we don't talk about v1.0.9
+
 ## v1.0.8
 bugfix: in `ngapp/src/app/engagement.service.ts`
 `for in` was used instead of a `for of` loop to serialize
