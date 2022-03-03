@@ -1,8 +1,5 @@
 // user.route.js 
-//
 // endpoint prefix = '/user'
-
-
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
@@ -64,7 +61,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
             user.save().then(() => {
                 res.status(200).json("Language set successfully");
             }).catch(err => {
-                console.log(err);
+                logger.error(err.stack || err);
                 res.status(400).send(err);
             })
         }
@@ -74,7 +71,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
 userRoutes.route('/getLanguage/:id').get((req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(err) {
-          console.log(err);
+          logger.error(err.stack || err);
           res.send(err);
         }
         if(user) {
