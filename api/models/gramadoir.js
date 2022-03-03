@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const QuillHighlightTag = new Schema({
-  start: { type: Number }, 
-  length: { type: Number },
-  type: { type: String },
+  start: { type: Number, required: true }, 
+  length: { type: Number, required: true },
+  type: { type: String, required: true},
   messages: { 
     type: {
-      en: { type: String },
-      ga: { type: String }
+      en: { type: String, required: true },
+      ga: { type: String, required: true }
     }
   },
 });
