@@ -10,6 +10,7 @@ ngapp/build_prod_local
 ngapp/build_prod_local
 
 /api/sendinblue.json
+./api/globalConfig.json
 
 **/logs/*
 
@@ -22,8 +23,7 @@ session.vim
 /data/**
 
 /api/logs/**
-/api/sendinblue.json
-/api/globalConfig.json
+api/globalConfig.json
 /api/node_modules_backup_*
 
 /sshlogin
