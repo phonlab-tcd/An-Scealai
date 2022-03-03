@@ -96,25 +96,6 @@ $ nodemon server.js
 
 6) Navigate to http://localhost:4200/.
 
-# UPDATING THE LIVE SERVER
-
-## check version
-Check what version the live server is on with `git status` (e.g. v1.0.8 branch).
-Update semantic version appropriately (e.g. v1.0.9).
-Checkout new branch from `master` with version name:
-`git checkout master`
-`git checkout -b <version>`
-
-Update version numbers in `api/package.json` and `ngapp/package.json`.
-
-## building
-- please build ngapp package locally with
-`npm run build_prod`
-add and commit `ngapp/unpublished_dist` to the new branch (e.g. v1.0.9)
-
-
-## pulling to the live server
-The apache server serves
 
 # CHANGE LOG
 
