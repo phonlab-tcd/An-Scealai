@@ -77,6 +77,7 @@ import { AvatarComponent } from './avatar/components/avatar/avatar.component';
 import { TextBoxComponent } from './avatar/components/text-box/text-box.component';
 import { PageComponent } from './avatar/components/page/page.component';
 import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/avatar-classroom.component';
+import { EnterMessageComponent } from './avatar/components/enter-message/enter-message.component';
 
 
 @NgModule({
@@ -132,7 +133,8 @@ import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/a
     AvatarComponent,
     TextBoxComponent,
     PageComponent,
-    AvatarClassroomComponent
+    AvatarClassroomComponent,
+    EnterMessageComponent
   ],
   imports: [
     BrowserModule,
