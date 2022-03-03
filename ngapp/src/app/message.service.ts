@@ -38,7 +38,6 @@ export class MessageService {
       seenByRecipient: message.seenByRecipient,
     };
     
-    console.log(messageObj);
     this.http.post(this.baseUrl + 'create', messageObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);

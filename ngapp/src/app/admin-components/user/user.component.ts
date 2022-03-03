@@ -60,7 +60,6 @@ export class UserComponent implements OnInit {
           let events: Event[] = res;
           this.eventDates = [];
           this.eventDates.push([res[0]]);
-          console.log(this.eventDates);
           events.forEach((e) => {
             if(events.indexOf(e) > 0) {
               let date : Date = new Date(e.date);
@@ -182,52 +181,42 @@ export class UserComponent implements OnInit {
       this.classroomService.getClassroomOfStudent(this.user._id).subscribe((res) => {
         if(res) {
           this.classroomService.removeStudentFromClassroom(res._id, this.user._id).subscribe(res => {
-            console.log(res);
           });
         }
       });
       
       this.statsService.deleteStats(this.user._id).subscribe( (res) => {
-        console.log(res);
       });
       
       this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
         for(let story of res) {
           this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
-            console.log('Deleted audio recordings for: ', story._id);
           });
           this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
-            console.log("Deleted recording object for ", story._id);
           })
         }
       });
     
       this.storyService.deleteAllStories(this.user.username).subscribe( (res) => {
-        console.log(res);
       });
     }
     if(this.user.role === "TEACHER") {
       if(this.classrooms) {
         for(let classroom of this.classrooms) {
           this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
-            console.log(res);
           });
         }
         
       }
       this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( (res) => {
-        console.log(res)
       });  
     }
     
     this.messageService.deleteAllMessages(this.user._id).subscribe( (res) => {
-      console.log(res);
     });  
     this.profileService.deleteProfile(this.user._id).subscribe( (res) => {
-      console.log(res);
     });
     this.userService.deleteUser(this.user.username).subscribe( (res) => {
-      console.log(res);
     });
     
     this.router.navigateByUrl('admin/find-user');

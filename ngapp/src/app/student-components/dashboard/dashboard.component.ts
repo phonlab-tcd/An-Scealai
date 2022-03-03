@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
+  ViewChild,
 } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { Story } from '../../story';
@@ -29,6 +30,10 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
+import { TextProcessingService } from 'src/app/services/text-processing.service';
+import { SynthesisService } from 'src/app/services/synthesis.service';
+import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
+import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
 import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
@@ -68,8 +73,9 @@ type QuillHighlightTag = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
 
+  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
   // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
 
   // So that we can use this in the template
@@ -115,6 +121,9 @@ export class DashboardComponent implements OnInit {
   words: string[] = [];
   wordCount = 0;
 
+  audioSources = [];
+
+  htmlDataIsReady = false;
   quillEditor: Quill;
   textUpdated: Subject<string> = new Subject<string>();
 
@@ -152,6 +161,14 @@ export class DashboardComponent implements OnInit {
     ],
     // scrollingContainer: false,
   };
+
+  stringifySynth(i: number) {
+    if (this.audioSources[i]) {
+      return JSON.stringify(this.audioSources[i]);
+    }
+    return 'not defined';
+  }
+
 
   constructor(
     protected sanitizer: DomSanitizer,
@@ -270,6 +287,7 @@ export class DashboardComponent implements OnInit {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
+        // TODO Woah that's gotta be slow (Neimhin 15 July 2021)
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
@@ -277,11 +295,18 @@ export class DashboardComponent implements OnInit {
             if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
+            this.htmlDataIsReady = true;
             break;
           }
         }
+        }).catch(error => {
+          this.story.text = JSON.stringify(error);
+          throw error;
+      }).catch(error => {
+        this.story.text = JSON.stringify(error);
       });
     });
+
 
     // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
@@ -448,16 +473,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* set the url for the audio source feedback
-*/
+  /*
+  * set the url for the audio source feedback
+  */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
-  // Set story.text to most recent version of editor text and then switch to storyEditedAlt
+  // Set story.text to most recent version of
+  // editor text and then switch to storyEditedAlt
   storyEdited(q: any) {
     this.story.text = q.text;
     this.textUpdated.next(q.text);
@@ -522,7 +548,8 @@ export class DashboardComponent implements OnInit {
 
   // route to synthesis
   goToSynthesis() {
-    this.router.navigateByUrl('/synthesis/' + this.story._id);
+    this.synthesisPlayer.toggleHidden();
+    // this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
 
   // route to synthesis

@@ -37,6 +37,7 @@
               "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
@@ -129,6 +130,12 @@
           "configurations": {
             "production": {
               "browserTarget": "an-scealai:build:production"
+            },
+            "dev": {
+              "aot": true,
+              "optimization": false,
+              "sourceMap": true,
+              "vendorChunk": true
             }
           }
         },
@@ -201,3 +208,4 @@
   },
   "defaultProject": "an-scealai"
 }
+

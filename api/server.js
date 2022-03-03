@@ -31,9 +31,7 @@ const dbURL = require('./utils/dbUrl');
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-
 logger.info('DB url: ' + dbURL);
-
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -70,6 +68,11 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
+
+const synthesisRoute = require('./routes/synthesis.route');
+app.use('/synthesis', synthesisRoute);
+
+const mailRoute = require('./routes/send_mail.route');
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 

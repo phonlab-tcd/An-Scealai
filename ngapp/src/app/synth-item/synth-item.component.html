@@ -1,0 +1,28 @@
+<span class="flex height center">
+    <span (click)="refresh();" class="flex clickable height reload left {{alternateColors(i)}}">
+      <span>
+        &#8635;
+      </span>
+    </span>
+  <span (click)="play()" class="flex clickable height right {{alternateColors(i)}}" style="display: flex;">
+    <span *ngIf="synthItem.audioUrl; else loading" style="display: flex;">
+      <div style="width: 1rem; height: 1rem;"></div>
+      <span>&ensp;{{synthItem.text}}</span>
+      <audio  #audioElement>
+        <source src="{{synthItem.audioUrl}}">
+      </audio>
+    </span>
+    <ng-template #loading style="display: flex;">
+        <div *ngIf="synthItem.exceptions.length === 0; else error">
+          <div class="spinner-grow" style="width: 1rem; height: 1rem;"></div>
+        </div>
+        <ng-template #error>
+          <div style="color: red; width: 1rem; height: 1rem;">&#10006;</div>
+        </ng-template>
+        <span style="color: grey;">&ensp;{{synthItem.text}}</span>
+    </ng-template>
+  </span>
+  <span>
+    &ensp;
+  </span>
+</span>
