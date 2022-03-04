@@ -45,6 +45,8 @@ import { TeacherStudentComponent } from './teacher-components/teacher-student/te
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 
+import { AvatarClassroomComponent } from './avatar-interface/components/avatar-classroom/avatar-classroom.component';
+
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { NotificationService } from './notification-service.service';
@@ -56,6 +58,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
+  { path: 'avatar-classroom', component: AvatarClassroomComponent},
   { path: 'landing', component: LandingComponent},
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },
