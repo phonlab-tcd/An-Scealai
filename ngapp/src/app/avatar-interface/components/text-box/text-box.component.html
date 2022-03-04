@@ -1,0 +1,3 @@
+<textarea maxlength="150" id="{{'sentence_' + sentence.id}}" (input)="changeSentence()" (click)="clickSentence()" (blur)="blurSentence()" (keydown.arrowup)="$event.preventDefault();arrowSentence(true);" (keydown.arrowdown)="$event.preventDefault();arrowSentence(false);" (keypress)="onKeyPress($event)" [(ngModel)]="sentence.text" rows="1" [ngClass]="{'readyToSpeak-text-box': sentence.readyToSpeak, 'awaiting-text-box': sentence.awaitingTts || sentence.awaitingGramadoir}" style="width: 100%; border: none; resize: none; rows: 2; height: 50px; overflow-y: hidden;"></textarea>
+<audio [id]="audioID" ></audio>
+<audio [id]="helpAudioID" ></audio>
