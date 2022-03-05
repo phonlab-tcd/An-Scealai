@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { AvatarInterfaceModule } from './avatar-interface/avatar-interface.module';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -131,6 +132,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthItemComponent,
   ],
   imports: [
+    AvatarInterfaceModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
