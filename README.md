@@ -99,6 +99,12 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.12
+Avatar in Beta tab.
+
+## v1.0.11
+Abair 2 component with audio caching
+
 ## v1.0.10
 Record gramadoir responses for stories throughout time.
 
