@@ -206,7 +206,7 @@
   transition: 0.5s;
 }
 
-@media (max-width:750px) {
+@media (max-width:1150px) {
   .nav > .nav-btn {
     display: inline-block;
     position: absolute;
