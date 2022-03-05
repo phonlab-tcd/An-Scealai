@@ -60,7 +60,7 @@
         </div>
 
         <button
-            type="submit"
+            (click)="login()"
             class="btn loginBtn"
             *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
       </form>
