@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
+const jwtAuthMw = require('./utils/jwtAuthMw');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -51,6 +52,8 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+module.exports = app;
+app.logger = logger;
 
 app.use('/image',express.static(path.join(__dirname,'..','picture_description','images')));
 
@@ -72,6 +75,9 @@ app.use('/studentStats', studentStatsRoute);
 app.use('/recordings', recordingRoute);
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
+app.use('/description-game',
+  jwtAuthMw,
+  require('./routes/description-game.route'));
 
 const port = process.env.PORT || 4000;
 
