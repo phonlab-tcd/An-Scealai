@@ -1,5 +1,6 @@
 const {
   API400Error,
+  API401Error,
   API404Error,
   APIError,
   API500Error} = require('./APIError');
