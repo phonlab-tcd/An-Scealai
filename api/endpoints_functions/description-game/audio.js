@@ -29,23 +29,20 @@ module.exports = async (req,res,next) => {
     body: req.body,
     numFiles: req.files.length,
   });
-  const dir = path.join(
-    apiRootDir,
-    'audioMessages',
-    req.user._id);
+  const dir = path.join(apiRootDir, 'audioMessages', req.user._id);
   const [_, audioMessages] = await Promise.all([
     ensureDirExists(dir),
     AudioMessage.create(req.files.map(file => {
       return {
         ownerId: req.user._id,
         public: true,
-        dir: dir.toString(),
         mimetype: file.mimetype,
+        recipients: [],
       }
     })),
   ]);
   await audioMessages.map(async (am,i)=>{
     await fs.writeFile(am.path(), req.files[i].buffer)
   });
-  res.json(audioMessages);
+  res.json(audioMessages.map(am=>am._id));
 }
