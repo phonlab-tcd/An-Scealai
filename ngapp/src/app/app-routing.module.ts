@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DescriptionGameModule } from 'src/description-game/description-game.module';
 
-import { ImageComponent } from 'src/description-game/component/image/image.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -56,6 +55,7 @@ import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import {DescribeComponent} from "src/description-game/component/describe/describe.component";
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -83,7 +83,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  { path: 'description', component: ImageComponent },
+  { path: 'description', component: DescribeComponent},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
