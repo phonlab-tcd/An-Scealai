@@ -2,9 +2,11 @@
 <button (click)=start()>start</button>
 <button (click)=stop()>stop</button>
 <button (click)=listenBack()>listen back</button>
+<button (click)=save()>save</button>
 <br>
 <description-game-listen
   *ngFor="let recording of chunks; let index = index"
   [recording]="recording"
   [index]="index">
+  <h1>{{index}}</h1>
 </description-game-listen>

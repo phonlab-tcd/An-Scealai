@@ -1,4 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AuthenticationService } from 'src/app/authentication.service';
+import config from 'src/abairconfig.json';
 
 declare var MediaRecorder: any;
 
@@ -15,6 +18,8 @@ export class RecordMessageComponent implements OnInit {
 
   constructor(
     private cd: ChangeDetectorRef,
+    private http: HttpClient,
+    private auth: AuthenticationService,
   ) { }
 
   ngOnInit(): void {
@@ -37,13 +42,18 @@ export class RecordMessageComponent implements OnInit {
     });
   }
 
-  processedChunks() {
-    return this.chunks.map(e=>{
-      return {
-        url: window.URL.createObjectURL(e.data),
-        type: e.data.type,
-      };
-    })
+  save() {
+    var form = new FormData();
+    form.append('source', this.chunks[0].data);
+    form.append('type', this.chunks[0].data.type);
+    const headers = {
+        Authorization: 'Bearer ' + this.auth.getToken(),
+    };
+    this.http.post(
+      config.baseurl + 'description-game/audio',
+      form,
+      {headers})
+      .subscribe();
   }
 
   stop() {
