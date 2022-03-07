@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import config from 'src/abairconfig.json';
 
+
 declare var MediaRecorder: any;
 
 @Component({
@@ -12,9 +13,9 @@ declare var MediaRecorder: any;
 })
 export class RecordMessageComponent implements OnInit {
 
-  chunks = [];
   recorder: any;
-  audio: any;
+  audio: HTMLAudioElement;
+  savedAudio: any[] = [];
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -30,38 +31,35 @@ export class RecordMessageComponent implements OnInit {
   }
 
   start() {
-    navigator.mediaDevices.getUserMedia({audio: true}).then(_stream => {
-      this.recorder = new MediaRecorder(_stream);
-      this.recorder.start();
-      this.recorder.ondataavailable = e => {
-        console.log(e);
-        this.chunks.push(e);
-        this.cd.detectChanges();
-        this.audio = new Audio(window.URL.createObjectURL(e.data));
+    navigator.mediaDevices
+      .getUserMedia({audio: true})
+      .then(_stream => {
+        this.recorder = new MediaRecorder(_stream);
+        this.recorder.start();
+        this.recorder.ondataavailable = e=>{
+          this.save(e);
       };
-    });
+      });
   }
 
-  save() {
+  private save(chunk) {
+    const newlySaved = { originalChunk: chunk, _id: null};
     var form = new FormData();
-    form.append('source', this.chunks[0].data);
-    form.append('type', this.chunks[0].data.type);
+    form.append('source', chunk.data);
     const headers = {
-        Authorization: 'Bearer ' + this.auth.getToken(),
+      Authorization: 'Bearer ' + this.auth.getToken(),
     };
-    this.http.post(
+    this.http.post<[string]>(
       config.baseurl + 'description-game/audio',
       form,
-      {headers})
-      .subscribe();
+      {headers}).subscribe(ok=>{
+        this.savedAudio.push(ok[0]);
+        this.cd.detectChanges();
+        console.log(this.savedAudio);
+      });
   }
 
   stop() {
     this.recorder.stop();
   }
-
-  listenBack() {
-    this.audio.play();
-  }
-
 }

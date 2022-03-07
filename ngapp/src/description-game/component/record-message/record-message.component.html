@@ -1,12 +1,10 @@
 <p>record-message works!</p>
 <button (click)=start()>start</button>
 <button (click)=stop()>stop</button>
-<button (click)=listenBack()>listen back</button>
-<button (click)=save()>save</button>
 <br>
 <description-game-listen
-  *ngFor="let recording of chunks; let index = index"
-  [recording]="recording"
+  *ngFor="let saved of savedAudio; let index = index"
+  [_id]="saved"
   [index]="index">
   <h1>{{index}}</h1>
 </description-game-listen>
