@@ -1,4 +1,7 @@
 <ng-content></ng-content>
-{{d}}
-<button (click)="audioFromServer.play()">fromServer</button>
+{{d}}<br>
+{{savedAudioRef._id}}<br>
+{{savedAudioRef.mimetype}}<br>
+{{savedAudioRef.uriPrefix}}
+<button (click)="audio.play()">listen</button>
 <br>

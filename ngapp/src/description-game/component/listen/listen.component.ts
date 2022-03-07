@@ -19,11 +19,14 @@ function date(timestamp: string) {
 export class ListenComponent implements OnInit {
 
   // @Input('originalAudioData') originalAudioData: any;
-  @Input('_id') _id: any;
+  @Input('savedAudioRef') savedAudioRef: {
+    _id: string;
+    mimetype: string;
+    uriPrefix: string;
+  };
   @Input('index') index: number;
 
   audio: HTMLAudioElement;
-  audioFromServer: HTMLAudioElement;
   d: Date;
   constructor(
     private http: HttpClient,
@@ -31,33 +34,21 @@ export class ListenComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.d = date(timestamp(this._id));
+    this.d = date(timestamp(this.savedAudioRef._id));
     // if(this.audioFileData.originalChunk)
     //   this.audio = new Audio(
     //     window.URL.createObjectURL(
     //       this.audioFileData.originalChunk.data));
     // this.audioFromServer = new Audio(config.baseurl + 'description-game/audio');
     this.http.get(
-      config.baseurl + `description-game/audio/${this._id}`,
+      config.baseurl + `description-game/audio/${this.savedAudioRef._id}`,
       {
         headers: {Authorization: 'Bearer ' + this.auth.getToken()},
         responseType: 'text',
       })
       .subscribe(d => {
-        console.log('GOT AUDIO FILE');
-        console.log(d); 
-        const raw = window.atob(d);
-        const binaryData = new Uint8Array(new ArrayBuffer(raw.length));
-        for(let i = 0; i < raw.length; i++) {
-          binaryData[i] = raw.charCodeAt(i);
-        }
-        const blob = new Blob([binaryData], {'type': 'audio/ogg; codecs=opus'});
-        this.audioFromServer = new Audio(URL.createObjectURL(blob));
-      },
-      e => {
-        console.log('ERROR GETTING AUDIO');
-        console.log(e);
-      },);
+        this.audio = new Audio(this.savedAudioRef.uriPrefix.concat(d));
+      });
   }
 
 

@@ -11,9 +11,8 @@ function ep(_path,method) {
   return (req,res,next) => {
     try {
       const module = require(_path);
-      if(method)
-          return module[method](req,res,next);
-      return module(req,res,next);
+      const func = method ? module[method] : module;
+      func(req,res,next);
     } catch(e) {
       next(e);
     }
@@ -30,6 +29,11 @@ descriptionGameRoutes
   .get('/audio/:id',
     jwtAuthMw,
     ep('audio','get'));
+
+descriptionGameRoutes
+  .get('/allAudio',
+    jwtAuthMw,
+    ep('allAudio','get'));
 
 module.exports = descriptionGameRoutes;
 
