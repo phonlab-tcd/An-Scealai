@@ -17,8 +17,9 @@ async function ensureDirExists(dir) {
 }
 
 const apiRootDir = path.join(__dirname,'..','..');
-
-module.exports = async (req,res,next) => {
+module.exports = {}
+// POST /description-game/audio/
+module.exports.post = async (req,res,next) => {
   if(!validAudioForms(req.files)) {
     console.log(req.files);
     return next(new Error('req.files is not valid'));
@@ -45,4 +46,15 @@ module.exports = async (req,res,next) => {
     await fs.writeFile(am.path(), req.files[i].buffer)
   });
   res.json(audioMessages.map(am=>am._id));
+}
+
+// GET /description-game/audio/:id
+// req.params.id
+module.exports.get = async (req,res,next)=>{
+  const am = await AudioMessage.findById(req.params.id);
+  if(!(req.user._id.toString()=== am.ownerId.toString()))
+    return res.sendStatus(401); 
+  res.set('Content-Type', am.mimetype);
+  return res.send(
+    await fs.readFile(am.path(), {encoding: 'base64'}));
 }
