@@ -40,7 +40,13 @@ export class RecordMessageComponent implements OnInit {
       .then(_stream => {
         this.recorder = new MediaRecorder(_stream);
         this.recorder.start();
+        const timeStart = new Date();
+        const r = this.recorder;
         this.recorder.ondataavailable = (dataavailable) => {
+          dataavailable.time = {};
+          dataavailable.time.start = timeStart;
+          dataavailable.time.ready = new Date();
+          dataavailable.time.stop = r.timeStop;
           this.save(dataavailable);
         };
       });
@@ -67,6 +73,7 @@ export class RecordMessageComponent implements OnInit {
 
   stop() {
     const r = this.recorder;
+    r.timeStop = new Date();
     this.recorder = undefined;
     setTimeout(()=>{r.stop()}, 1000);
   }
