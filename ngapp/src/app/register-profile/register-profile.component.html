@@ -321,7 +321,7 @@
         </div>
       </div>
       
-      <button type="submit" [disabled]="!profileForm.form.valid" class="btn loginBtn"><i class="fas fa-save"></i>  {{ts.l.save_details}} </button>
+      <button type="submit" (click)="saveDetails()" [disabled]="!profileForm.form.valid" class="btn loginBtn"><i class="fas fa-save"></i>  {{ts.l.save_details}} </button>
   </form>
     
 </div>
