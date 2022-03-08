@@ -112,7 +112,6 @@ export class FindUserComponent implements OnInit {
         this.allAdmins.push(i);
       }
       else {
-        console.log("User is not a student, teacher, or admin");
       }
     }
   }

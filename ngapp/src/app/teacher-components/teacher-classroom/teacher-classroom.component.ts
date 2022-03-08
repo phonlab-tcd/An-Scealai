@@ -67,7 +67,6 @@ export class TeacherClassroomComponent implements OnInit {
       let id: string = params.id.toString();
       this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
         this.classroom = res;
-        console.log(this.classroom);
         this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
           this.messagesForNotifications = res;
           this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);

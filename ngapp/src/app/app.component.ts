@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+// import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 import { StoryService } from './story.service';
@@ -65,29 +65,23 @@ export class AppComponent {
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
-    console.log(this.currentLanguage);
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
       this.storiesForNotifications = res;
-      console.log(this.storiesForNotifications);
     });
 
     this.notificationSerivce.messageEmitter.subscribe( (res) => {
       this.messagesForNotifications = res;
-      console.log(this.messagesForNotifications);
     });
   
     this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
       this.teacherMessagesForNotifications = res;
-      console.log(this.teacherMessagesForNotifications);
       this.teacherMessagesSum = 0;
       for (let entry of Array.from(this.teacherMessagesForNotifications.entries())) {
         this.teacherMessagesSum += entry[1];
       }
-      console.log(this.teacherMessagesSum);
     });
     
     if(this.auth.isLoggedIn()){
-      console.log(this.auth.getUserDetails().username);
     }
   }
 /*

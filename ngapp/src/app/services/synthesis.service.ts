@@ -1,43 +1,196 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
+import {
+  Observable,
+  Observer } from 'rxjs';
+import {
+  map,
+  tap } from 'rxjs/operators';
 import config from '../../abairconfig.json';
+import {TextProcessingService} from './text-processing.service';
+import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
+
+interface APIv2Response {
+  audioContent: string;
+}
+
+const abairAPIv2Voices = [
+  'ga_UL_anb_nnmnkwii',
+  'ga_UL',
+  'ga_UL_anb_exthts',
+  'ga_CO',
+  'ga_CO_hts',
+  'ga_CO_pmg_nnmnkwii',
+  'ga_MU_nnc_exthts',
+  'ga_MU_nnc_nnmnkwii',
+  'ga_MU_cmg_nnmnkwii'
+];
+
+export type AbairAPIv2Voice =
+  'ga_UL_anb_nnmnkwii' |
+  'ga_UL' |
+  'ga_UL_anb_exthts' |
+  'ga_CO' |
+  'ga_CO_hts' |
+  'ga_CO_pmg_nnmnkwii' |
+  'ga_MU_nnc_exthts' |
+  'ga_MU_nnc_nnmnkwii' |
+  'ga_MU_cmg_nnmnkwii';
+
+export type AbairAPIv2AudioEncoding =
+  'LINEAR16' |
+  'MP3' |
+  // TODO, get the proper name for the OGG type
+  'OGG';
+
+export type Dialect = ('connemara' | 'kerry' | 'donegal');
+
+
+export interface SynthRequestObject {
+  input: string;
+  voice?: AbairAPIv2Voice; // voice takes precedence over dialect. If a valid voice is given, ignore the dialect
+  dialect?: ('connemara' | 'kerry' | 'donegal');
+  speed?: number;
+  audioEncoding?: AbairAPIv2AudioEncoding;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SynthesisService {
 
-  constructor(private http: HttpClient, private engagement: EngagementService) { }
+  constructor(
+    private http: HttpClient,
+    private engagement: EngagementService,
+    private textProcessor: TextProcessingService,
+    private synthBank: SynthesisBankService,
+  ) { }
 
   baseUrl = config.baseurl;
+
+  voice(dialect: 'connemara' | 'kerry' | 'donegal') {
+    switch (dialect) {
+      case 'connemara':
+        return 'ga_CO_pmg_nnmnkwii' as AbairAPIv2Voice;
+      case 'kerry':
+        return 'ga_MU_nnc_nnmnkwii' as AbairAPIv2Voice;
+      default: // donegal
+        return 'ga_UL_anb_nnmnkwii' as AbairAPIv2Voice;
+    }
+  }
+
+  synthesiseHtml(input: string, ... theRest): Observable<any> {
+    input = this.textProcessor.convertHtmlToPlainText(input);
+    return this.synthesiseText(input, ... theRest );
+  }
+
+  synthesiseText(
+    input: string,
+    dialect: Dialect = 'connemara',
+    voice: AbairAPIv2Voice = null,
+    audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
+    speed: number = 1, ): Observable<any> {
+  
+    console.log('new synthesis');
+    if (!input) {
+      throw new Error('input required');
+    }
+
+    const url = this.api2_url(input,dialect,voice,audioEncoding,speed);
+    console.log(url);
+    const storedUrl =
+      this.synthBank.getAudioUrlOfSentence(url);
+    if (storedUrl) {
+      console.count('STORED VERSION');
+      return new Observable((subscriber) => {
+        subscriber.next(storedUrl);
+        subscriber.complete();
+      });
+    }
+
+    console.count('REQUESTED VERSION');
+
+    console.log(url);
+
+    return this.http.get(url).pipe(
+     map((data: {audioContent: string}) => {
+       console.log(data);
+       return this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg');
+     })
+     ,
+     tap((data) => {
+       this.synthBank
+           .storeAudioUrlOfSentence(
+             url,
+             data);
+     })
+     );
+  }
+
+  api2_url(
+    input: string,
+    dialect: Dialect = 'connemara',
+    voice: AbairAPIv2Voice = null,
+    audioEncoding: AbairAPIv2AudioEncoding = 'MP3',
+    speed: number = 1,
+  ): string {
+    const url_base = 'https://www.abair.ie/api2/synthesise?';
+
+    if ( voice && abairAPIv2Voices.includes(voice.toString()) ) {
+      // use given voice
+    } else {
+      // get voice for given dialect
+      voice = this.voice(dialect);
+    }
+
+    const q = new HttpParams({fromObject: {
+      input,
+      voice,
+      audioEncoding,
+      outputType: 'JSON_WITH_TIMING',
+      speed: "1",
+    }});
+
+    return url_base + q.toString();
+  }
+
+  prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
+    return 'data:audio/' + encoding + ';base64,' + base64AudioData;
+  }
 
   /**
    * Gets synthesis data for storyObject from
    * the backend, which comes in the form of HTML data.
    * Then parses that HTML data to populate Paragraph
    * and Sentence objects.
-   * 
+   *
    * @param storyObject - Story to be synthesised
    * @returns - Paragraph and Sentence objects containing data for
    * synthesis of input story.
    */
   async synthesiseStory(storyObject: Story): Promise<[Paragraph[], Sentence[]]> {
-    const synthesisResponse = await this.http.post(this.baseUrl + 'story/synthesiseObject/', {story: storyObject}).toPromise() as SynthesisResponse;
+    const synthesisResponse =
+      await this.http.post(
+        this.baseUrl + 'story/synthesiseObject/',
+        {story: storyObject},
+      ).toPromise() as SynthesisResponse;
+
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];
     synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
-      let paragraphSentences: Sentence[] = [];
+      const paragraphSentences: Sentence[] = [];
       for (const sentenceHtml of sentenceHtmlArray) {
         // sentenceSpan contains a span child for each word in the sentence
         const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
         const startTime = +sentenceSpan.children[0].getAttribute('data-begin');
-        const lastSentenceChild = sentenceSpan.children[sentenceSpan.childElementCount-1]
+        const lastSentenceChild =
+          sentenceSpan.children[sentenceSpan.childElementCount - 1]
         const duration = (+lastSentenceChild.getAttribute('data-begin') + +lastSentenceChild.getAttribute('data-dur')) - startTime;
         const audio = new Audio(synthesisResponse.audio[i]);
-        
+
         let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
         spans.forEach(span => span.classList.add('highlightable'));
 

@@ -1,10 +1,10 @@
 {
   "name": "api",
-  "version": "1.0.8",
+  "version": "1.0.14",
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "TEST=1 jest",
+    "test": "TEST=1 jest --runInBand",
     "start": "nodemon server.js",
     "start_prod": "DB=an-scealai PORT=4000 node server.js",
     "start_qa": "DB=qa PORT=4002 node server.js"
@@ -56,11 +56,10 @@
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
-    "@shelf/jest-mongodb": "^2.0.1",
+    "@shelf/jest-mongodb": "^2.2.0",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^27.0.6",
-    "mocha": "^8.4.0",
     "mockingoose": "^2.15.2",
     "nodemon": "^2.0.13",
     "supertest": "^6.1.4"

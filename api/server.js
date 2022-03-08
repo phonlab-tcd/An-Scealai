@@ -24,15 +24,14 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
+const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
 const dbURL = require('./utils/dbUrl');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-
 logger.info('DB url: ' + dbURL);
-
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -72,7 +71,12 @@ app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
+app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
+
+const synthesisRoute = require('./routes/synthesis.route');
+app.use('/synthesis', synthesisRoute);
+
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 app.use('/description-game',
