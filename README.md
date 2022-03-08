@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.13
+Register form submit bug fixed.
+
 ## v1.0.12
 Avatar in Beta tab.
 
