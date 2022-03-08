@@ -5,6 +5,7 @@ import { DescribeComponent } from './component/describe/describe.component';
 import { RecordMessageComponent } from './component/record-message/record-message.component';
 import { ListenComponent } from './component/listen/listen.component';
 import { RecordingDashboardComponent } from './component/recording-dashboard/recording-dashboard.component';
+import { NgWaveformModule } from 'ng-waveform';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { RecordingDashboardComponent } from './component/recording-dashboard/rec
   ],
   imports: [
     CommonModule,
+    NgWaveformModule,
   ],
 })
 export class DescriptionGameModule { }
