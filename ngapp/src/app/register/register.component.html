@@ -55,7 +55,7 @@
             <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
           </div>
         </div>
-        <button (click)="register()" type="submit" class="btn loginBtn">{{ts.l.register}}</button>
+        <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
       </form>
     </div>
 </div>
@@ -69,9 +69,16 @@
         class="formLabel">{{ts.l.username}}: <strong>{{frozenCredentials.username}}</strong></p>
     <p
         class="formLabel">{{ts.l.email_address}}: <strong>{{frozenCredentials.email}}</strong></p>
-    <div *ngIf="loginErrorText" class="errorMessage">{{ts.l[loginErrorText]}}<br></div>
+    <div
+      *ngIf="loginErrorText"
+      class="errorMessage">
+        {{ts.l[loginErrorText]}}
+        <br>
+    </div>
     <button 
       class="btn loginBtn"
-      (click)="login()">{{ts.l.sign_in}}</button>
+      type="submit">
+        {{ts.l.sign_in}}
+    </button>
   </div>
 </div>
