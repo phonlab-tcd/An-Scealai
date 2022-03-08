@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import config from 'src/abairconfig.json';
 import {AuthenticationService} from "src/app/authentication.service";
+import { WaveformComponent } from "ng-waveform";
 
 function timestamp(_id:string):string {
   return new String(_id).substring(0,8);
@@ -25,15 +26,23 @@ export class ListenComponent implements OnInit {
     uriPrefix: string;
   };
   @Input('index') index: number;
+  @ViewChild('waveform') waveform: WaveformComponent;
+
+  onTimeUpdate(e) {
+    this.waveform.overlayEl.nativeElement.style.width = e.progress + '%';
+  }
 
   date(){
     if(this.originalBlob) {
-      const d = new Date(this.originalBlob.timecode);
-      return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+      console.log(this.originalBlob);
+      console.log(this.originalBlob.timeStart);
+      return new Date(this.originalBlob.time.start)
+        .toLocaleTimeString();
     }
     if(this.savedAudioRef) {
       console.log(this.savedAudioRef);
-      return date(timestamp(this.savedAudioRef._id));
+      return date(timestamp(this.savedAudioRef._id))
+        .toLocaleTimeString();
     }
     else
       return '...';
@@ -66,6 +75,4 @@ export class ListenComponent implements OnInit {
         this.audio = new Audio(this.savedAudioRef.uriPrefix.concat(d));
       });
   }
-
-
 }
