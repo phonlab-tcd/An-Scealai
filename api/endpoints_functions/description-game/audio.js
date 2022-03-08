@@ -61,5 +61,20 @@ module.exports.get = async (req,res,next)=>{
   if(!(req.user._id.toString() === am.ownerId.toString()))
     return res.sendStatus(401); 
   res.set('Content-Type', am.mimetype);
-  return res.sendFile(am.path(), {encoding: 'base64'});
+  try {
+    await fs.access(am.path());
+  } catch (e) {
+    console.log('FILE DOES NOT EXIST');
+    console.log(am.path());
+    console.log('DELETING META DATA FROM DB');
+    am.remove({_id: am._id});
+    return res.sendStatus(404);
+  }
+  try {
+    const data = await fs.readFile(am.path(), {encoding: 'base64'});
+    return res.send(data);
+  }
+  catch (e){
+    next(e);
+  }
 }

@@ -7,6 +7,31 @@ import config from 'src/abairconfig.json';
 
 declare var MediaRecorder: any;
 
+const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+  try {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, {type: contentType});
+    return blob;
+  } catch (e) {
+    console.log(e);
+    console.log(b64Data); 
+  }
+}
+
 const mimeOptions = [
   'browser default',
   'audio/mp3',// : '.mp3',
@@ -40,11 +65,21 @@ export class RecordMessageComponent implements OnInit {
     this.mimeType = v;
   }
 
+  playAudio(a) {
+    console.log(a.src);
+    console.dir(a);
+    a.play()
+  }
+
   ngOnInit(): void {
-    if (!navigator.mediaDevices)
+    console.log(this.http);
+    console.log(this.auth);
+    if (!navigator.mediaDevices) {
       alert('mediaDevices API not supported in this browser')
-    if (!navigator.mediaDevices.getUserMedia)
+    }
+    if (!navigator.mediaDevices.getUserMedia) {
       alert('getUserMedia API not supported in this browser')
+    }
 
     this.http.get<any[]>(
       config.baseurl + 'description-game/allAudio',
@@ -53,15 +88,18 @@ export class RecordMessageComponent implements OnInit {
         this.oldSaved = ok;
         this.oldSaved.forEach(o=>{
           this.retrieve(o).subscribe(src=>{
-           o.src = src;
-           o.audio = new Audio(src);
-           this.cd.detectChanges();
+            o.src = src;
+            o.audio = new Audio(src.dataUri);
+            o.audioBlob = new Audio(src.blobUrl);
+            this.cd.detectChanges();
+            console.log(this.http);
+            console.log(this.auth);
           });
         });
       });
   }
 
-  retrieve(s): Observable<string> {
+  retrieve(s): Observable<{dataUri:string;blobUrl:string}> {
     return this.http.get(
       config.baseurl + `description-game/audio/${s._id}`,
       {
@@ -69,7 +107,10 @@ export class RecordMessageComponent implements OnInit {
         responseType: 'text',
       })
       .pipe(map(d=>{
-        return s.uriPrefix + d;
+        return {
+          dataUri: s.uriPrefix + d,
+          blobUrl: URL.createObjectURL(b64toBlob(d)),
+        }
       }));
   }
 
@@ -83,7 +124,7 @@ export class RecordMessageComponent implements OnInit {
           { mimeType: this.mimeType };
         this.recorder = new MediaRecorder(_stream, options);
         this.recorder.start();
-        this.recorder.ondataavailable = this.save;
+        this.recorder.ondataavailable = (e) => { this.save(e) };
       });
   }
 
@@ -91,7 +132,8 @@ export class RecordMessageComponent implements OnInit {
     const newlySaved = { originalChunk: chunk, _id: null};
     var form = new FormData();
     form.append('source', chunk.data);
-    this.http.post<[{_id: string; mimetype: string; uriPrefix: string}]>(
+    console.log(this.http);
+    this.http.post<any[]>(
       config.baseurl + 'description-game/audio',
       form,
       {
@@ -103,7 +145,8 @@ export class RecordMessageComponent implements OnInit {
   }
 
   stop() {
-    this.recorder.stop();
+    const r = this.recorder;
     this.recorder = undefined;
+    setTimeout(()=>{r.stop()}, 1000);
   }
 }
