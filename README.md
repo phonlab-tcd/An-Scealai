@@ -99,6 +99,12 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.14
+revert avatar-classroom commits
+
+## v1.0.13
+Duct tape on submit/[(ngModel)] form bug
+
 ## v1.0.12
 Avatar in Beta tab.
 
