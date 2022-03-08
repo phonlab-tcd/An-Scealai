@@ -1,3 +1,11 @@
-button {
-  width: 100%;
+* {
+  cursor: pointer;
+}
+div {
+  height: 100px;
+  width: 200px;
+}
+ng-waveform {
+  width: 200px;
+  height: 100px;
 }

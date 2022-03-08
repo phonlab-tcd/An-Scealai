@@ -1,14 +1,27 @@
-<ng-content></ng-content>
-<button (click)="togglePlayback()"
-  {{date()}}
-</button>
-<ng-waveform
-    #waveform
-    class="waveform"
-    [src]="audio.src"
-    [height]="50"
-    waveColor="#ff11ff"
-    (timeUpdate)="onTimeUpdate($event)"
-    backgroundColor="#00ee00">
-</ng-waveform>
-<br>
+<div
+  style="
+    margin: 20px;
+    display: flex;
+    background-color: black;
+    color: white;
+    border-top-left-radius: 0.3em;
+    border-bottom-left-radius: 1.5em;
+    "
+  (click)="togglePlayback()">
+    <div style="width: 3em; align-items: center; display: grid;">
+      <span style="vertical-align: middle" *ngIf="!isPlaying()">▶ </span>
+      <span style="vertical-align: middle" *ngIf=" isPlaying()">⏸ </span>
+    </div>
+    <div>
+      <ng-waveform
+          #waveform
+          class="waveform"
+          [src]="audio.src"
+          waveColor="#c59fcb"
+          (timeUpdate)="waveform.refreshProgress()"
+          (rendered)="cd.detectChanges()"
+          (paused)="cd.detectChanges()"
+          backgroundColor="{{backgroundColor}}">
+      </ng-waveform>
+    </div>
+</div>

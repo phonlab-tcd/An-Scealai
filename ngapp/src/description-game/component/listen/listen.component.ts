@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import config from 'src/abairconfig.json';
 import {AuthenticationService} from "src/app/authentication.service";
-import { NgWaveformComponent } from "ng-waveform";
+import { NgWaveformComponent } from '../../ng-waveform/ng-waveform.component'
 
 function timestamp(_id:string):string {
   return new String(_id).substring(0,8);
@@ -18,7 +18,7 @@ function date(timestamp: string) {
   styleUrls: ['./listen.component.css']
 })
 export class ListenComponent implements OnInit {
-
+  @Input('src') src: string;
   @Input('originalBlob') originalBlob: any;
   @Input('savedAudioRef') savedAudioRef: {
     _id: string;
@@ -26,25 +26,34 @@ export class ListenComponent implements OnInit {
     uriPrefix: string;
   };
   @Input('index') index: number;
+  @Input('height') height: number = 40;
   @ViewChild('waveform') waveform: NgWaveformComponent;
+  
+  backgroundColor = '#b1d0b9';
 
-  onTimeUpdate(e) {
-    this.waveform.overlayEl.nativeElement.style.width = e.progress + '%';
+  constructor(
+    private http: HttpClient,
+    private auth: AuthenticationService,
+    public cd: ChangeDetectorRef,
+  ) { }
+
+  onTimeUpdate() {
+    this.waveform.refreshProgress();
   }
 
   togglePlayback() {
-    if(this.waveform) {
-      if(this.waveform._isPlaying) {
-        return this.waveform.pause();
-      }
-      return this.waveform.pause();
-    }
+    if(this.waveform)
+      this.waveform.togglePlayback();
+  }
+
+  isPlaying() {
+    if(this.waveform)
+      return this.waveform.isPlaying();
+    return false;
   }
 
   date(){
     if(this.originalBlob) {
-      console.log(this.originalBlob);
-      console.log(this.originalBlob.timeStart);
       return new Date(this.originalBlob.time.start)
         .toLocaleTimeString();
     }
@@ -52,13 +61,8 @@ export class ListenComponent implements OnInit {
 
   audio: HTMLAudioElement;
   d: Date;
-  constructor(
-    private http: HttpClient,
-    private auth: AuthenticationService
-  ) { }
 
   ngOnInit(): void {
-    console.log(this.originalBlob);
     if(this.originalBlob) {
       this.audio =
         new Audio(
