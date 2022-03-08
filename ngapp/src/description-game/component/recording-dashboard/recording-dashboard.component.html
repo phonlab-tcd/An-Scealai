@@ -1,0 +1,12 @@
+<div style="background-color: lightblue">
+  <div (click)="show = !show">show</div>
+  <span *ngIf="show">
+    <div *ngFor="let s of oldSaved">
+      <button
+        *ngIf="s.audio"
+        (click)="s.audio.play()">
+          {{s.mimetype}}
+      </button>
+    </div>
+  </span>
+</div>

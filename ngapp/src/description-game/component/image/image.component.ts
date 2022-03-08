@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import config from 'src/abairconfig.json';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-image',
+  selector: 'description-game-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css'],
 })
 export class ImageComponent implements OnInit {
-  public src: string = config.baseurl + 'image/dog/1.png';
+  @Input('src') src: string;
   private count = { mouseover: 0, mouseout: 0 }
 
   constructor() { }
@@ -16,5 +15,4 @@ export class ImageComponent implements OnInit {
   mouseout() { this.count.mouseout++}
 
   ngOnInit(): void {}
-
 }

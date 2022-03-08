@@ -18,13 +18,26 @@ function date(timestamp: string) {
 })
 export class ListenComponent implements OnInit {
 
-  // @Input('originalAudioData') originalAudioData: any;
+  @Input('originalBlob') originalBlob: any;
   @Input('savedAudioRef') savedAudioRef: {
     _id: string;
     mimetype: string;
     uriPrefix: string;
   };
   @Input('index') index: number;
+
+  date(){
+    if(this.originalBlob) {
+      const d = new Date(this.originalBlob.timecode);
+      return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    }
+    if(this.savedAudioRef) {
+      console.log(this.savedAudioRef);
+      return date(timestamp(this.savedAudioRef._id));
+    }
+    else
+      return '...';
+  };
 
   audio: HTMLAudioElement;
   d: Date;
@@ -34,12 +47,15 @@ export class ListenComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.d = date(timestamp(this.savedAudioRef._id));
-    // if(this.audioFileData.originalChunk)
-    //   this.audio = new Audio(
-    //     window.URL.createObjectURL(
-    //       this.audioFileData.originalChunk.data));
-    // this.audioFromServer = new Audio(config.baseurl + 'description-game/audio');
+    console.log(this.originalBlob);
+    if(this.originalBlob) {
+      this.audio =
+        new Audio(
+          window.URL.createObjectURL(
+            this.originalBlob.data));
+      return;
+    }
+
     this.http.get(
       config.baseurl + `description-game/audio/${this.savedAudioRef._id}`,
       {

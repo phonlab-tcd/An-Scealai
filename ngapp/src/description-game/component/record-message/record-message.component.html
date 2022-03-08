@@ -1,11 +1,6 @@
 <p>record-message works!</p>
-<div *ngFor="let s of oldSaved">
-  <button
-    *ngIf="s.audio"
-    (click)="playAudio(s.audio)">
-      {{s.mimetype}}
-  </button>
-</div>
+<description-game-recording-dashboard>
+</description-game-recording-dashboard>
 <button
   *ngIf="!recorder"
   (click)=start()>
@@ -18,7 +13,9 @@
 </button>
 <br>
 <description-game-listen
-  *ngFor="let saved of savedAudio; let index = index"
-  [savedAudioRef]="saved"
+  *ngFor="let s of saved; let index = index"
+  [originalBlob]="s.originalBlob"
+  [savedAudioRef]="s.d"
   [index]="index">
+  {{s.mimetype}}
 </description-game-listen>
