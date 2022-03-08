@@ -45,13 +45,7 @@ module.exports.post = async (req,res,next) => {
   await audioMessages.map(async (am,i)=>{
     await fs.writeFile(am.path(), req.files[i].buffer)
   });
-  res.json(audioMessages.map(am=>{
-    return {
-      _id: am._id,
-      mimetype: am.mimetype,
-      uriPrefix: `data:${am.mimetype};base64,`,
-    };
-  }));
+  res.json(audioMessages.map(am=>am.forFrontend()));
 }
 
 // GET /description-game/audio/:id

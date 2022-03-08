@@ -58,13 +58,7 @@ module.exports = {}
 // req.params.id
 module.exports.get = async (req,res,next)=>{
   const ams = await AudioMessage.find({ownerId: req.user._id});
-  const ret = ams.map(am=>{
-      return {
-        _id: am._id,
-        mimetype: am.mimetype,
-        uriPrefix: am.uriPrefix(),
-      }
-    })
+  const ret = ams.map(am=>am.forFrontend());
   console.log(ret);
   return res.json(ret);
 }

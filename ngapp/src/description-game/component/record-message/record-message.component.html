@@ -1,19 +1,8 @@
 <p>record-message works!</p>
-<select (change)="selectChange($event.target.value)">
-  <option
-    *ngFor="let mime of mimeOptions">
-      {{mime}}
-  </option>
-</select>
 <div *ngFor="let s of oldSaved">
   <button
     *ngIf="s.audio"
     (click)="playAudio(s.audio)">
-      {{s.mimetype}}
-  </button>
-  <button
-    *ngIf="s.audioBlob"
-    (click)="playAudio(s.audioBlob)">
       {{s.mimetype}}
   </button>
 </div>
