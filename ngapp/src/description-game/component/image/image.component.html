@@ -1,2 +1,12 @@
-<p>image works!</p>
-<img src={{src}} (mouseover)="mouseover()" (mouseout)="mouseout()">
+<div style='margin: 20px;'>
+  <lib-ngx-image-zoom
+    #viewer
+    *ngIf=src
+    [thumbImage]=src
+    [enableLens]=true
+    [lensWidth]=600
+    [lensHeight]=600
+    [magnification]=0.4
+    [circularLens]=true
+  ></lib-ngx-image-zoom>
+<div>

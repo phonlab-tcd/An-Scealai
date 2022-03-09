@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'description-game-image',
@@ -7,12 +7,19 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ImageComponent implements OnInit {
   @Input('src') src: string;
+  @ViewChild('viewer') viewer;
   private count = { mouseover: 0, mouseout: 0 }
 
-  constructor() { }
+  constructor(
+    private cd: ChangeDetectorRef,
+  ) { }
 
-  mouseover() { this.count.mouseover++}
-  mouseout() { this.count.mouseout++}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.viewer.thumbWidth = 20;
+    this.viewer.thumbHeight = 20;
+    this.viewer.fullWidth = 20;
+    this.viewer.fullHeight = 20;
+    this.cd.detectChanges();
+  }
+  
 }
