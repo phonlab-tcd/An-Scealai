@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { RecordingService} from 'src/description-game/service/recording.service';
@@ -17,6 +17,14 @@ export class RecordMessageComponent implements OnInit {
   audio: HTMLAudioElement;
   saved: any[] = [];
   headers: any;
+  @Output('ondataavailable') dataAvailableEmitter: EventEmitter<{
+   data: Blob,
+   time: {
+     start: Date,
+     stop: Date,
+     ready: Date,
+   },
+  }> = new EventEmitter();
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -40,40 +48,23 @@ export class RecordMessageComponent implements OnInit {
       .then(_stream => {
         this.recorder = new MediaRecorder(_stream);
         this.recorder.start();
-        const timeStart = new Date();
+        const timeStart = Date.now();
         const r = this.recorder;
         this.recorder.ondataavailable = (dataavailable) => {
           dataavailable.time = {};
           dataavailable.time.start = timeStart;
-          dataavailable.time.ready = new Date();
+          dataavailable.time.ready = Date.now();
           dataavailable.time.stop = r.timeStop;
-          this.save(dataavailable);
+          console.log(r.timeStop);
+          this.dataAvailableEmitter.emit(dataavailable);
         };
       });
   }
 
-  private save = (dataavailable) => {
-    console.log(dataavailable);
-    const newlySaved = { originalBlob: dataavailable, d: null};
-    this.saved.push(newlySaved);
-    this.cd.detectChanges();
-    var form = new FormData();
-    form.append('source', dataavailable.data);
-    console.log(this.http);
-    this.http.post<any[]>(
-      config.baseurl + 'description-game/audio',
-      form,
-      {
-        headers: { Authorization: 'Bearer '.concat(this.auth.getToken()) },
-      }).subscribe(ok=>{
-        newlySaved.d = ok[0];
-        this.cd.detectChanges();
-      });
-  }
 
   stop() {
     const r = this.recorder;
-    r.timeStop = new Date();
+    r.timeStop = Date.now();
     this.recorder = undefined;
     setTimeout(()=>{r.stop()}, 1000);
   }

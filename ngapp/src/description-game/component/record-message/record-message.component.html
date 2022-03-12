@@ -9,10 +9,3 @@
     stop
 </button>
 <br>
-<description-game-listen
-  *ngFor="let s of saved; let index = index"
-  [originalBlob]="s.originalBlob"
-  [savedAudioRef]="s.d"
-  [index]="index">
-  {{s.mimetype}}
-</description-game-listen>
