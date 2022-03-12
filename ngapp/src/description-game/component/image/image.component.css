@@ -1,15 +1,5 @@
-img {
-  max-height: 100px;
-  max-width: 100px;
-}
-img:hover {
-  max-height: 400px;
-  max-width: 400px;
-}
 ::ng-deep .ngxImageZoomContainer > img {
-  max-width: 66vw;
-}
-::ng-deep .ngxImageZoomContainer > img:hover {
+  max-width: 33vw;
 }
 
 ::ng-deep div > img {
