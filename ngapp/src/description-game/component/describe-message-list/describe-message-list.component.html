@@ -1,0 +1,8 @@
+<p>describe-message-list works!</p>
+<description-game-listen
+  *ngFor="let s of saved; let index = index"
+  [originalBlob]=s.originalBlob
+  [savedAudioRef]=s.apiRef
+  [index]=index>
+  {{s.mimetype}}
+</description-game-listen>
