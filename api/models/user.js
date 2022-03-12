@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.methods.newImagePathForDescribeGame = async function() {
+
+};
+
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(
