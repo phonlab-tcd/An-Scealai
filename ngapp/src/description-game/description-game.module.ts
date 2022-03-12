@@ -11,6 +11,7 @@ import { DecideComponent } from './component/decide/decide.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { DescribeMessageListComponent } from './component/describe-message-list/describe-message-list.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
     ListenComponent,
     RecordingDashboardComponent,
     ChooseComponent,
-    DecideComponent
+    DecideComponent,
+    DescribeMessageListComponent
   ],
   imports: [
     CommonModule,
