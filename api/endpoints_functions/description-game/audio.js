@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const AudioMessage = require('../../models/audioMessage');
 
-function validAudioForms(files)  {
+function validAudioFiles(files)  {
   if(!files) return false;
   for(const f of files) if(!f.buffer || !f.mimetype) return false;
   return true;
@@ -20,17 +20,15 @@ const apiRootDir = path.join(__dirname,'..','..');
 module.exports = {}
 // POST /description-game/audio/
 module.exports.post = async (req,res,next) => {
-  if(!validAudioForms(req.files)) {
-    console.log(req.files);
+  if(!validAudioFiles(req.files))
     return next(new Error('req.files is not valid'));
-  }
   app.logger.info({
     route: '/description-game/audio',
     user: req.user,
     body: req.body,
     numFiles: req.files.length,
   });
-  const dir = path.join(apiRootDir, 'audioMessages', req.user._id);
+  const dir = path.join(apiRootDir, 'audioMessages', req.user._id.toString());
   const [_, audioMessages] = await Promise.all([
     ensureDirExists(dir),
     AudioMessage.create(req.files.map(file => {

@@ -39,7 +39,7 @@ module.exports.get = async (req,res,next) => {
     published: false,
     recipients: [],
     audioMessages: [],
-    imagePath: req.params.imagePath,
+    imagePath: DescribeGame.newImagePathForUser(req.user),
     time: {
       started: new Date(),
       finished: null,
