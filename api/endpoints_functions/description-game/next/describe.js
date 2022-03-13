@@ -1,9 +1,11 @@
 const DescribeGame = require('../../../models/description-game/describe-game');
+const User = require('../../../models/user');
 const ObjectId = require('mongoose').Types.ObjectId;
 const fs = require('fs').promises;
 const path = require('path');
 const imageDir = require('../../../utils/imageDir');
 const { API400Error } = require('../../../utils/APIError');
+const AudioMessage = require('../../../models/audioMessage');
 
 async function validParams(params, res, next) {
   params.public = params.public === false ? false : true;
@@ -31,15 +33,25 @@ module.exports.get = async (req,res,next) => {
   const currentGame = await DescribeGame.findOne(
     {ownerId: ObjectId(req.user._id), 'time.finished': null });
   if(currentGame) {
+    if(!currentGame.imagePath) {
+      // TODO make this a method so that next image is tailored to user
+      currentGame.imagePath = User.newImagePathForDescribeGame();
+      await currentGame.save();
+    }
+    currentGame.audioMessages =
+      currentGame.audioMessages.map(AudioMessage.uriPrefixStatic);
     return res.json(currentGame);
   };
+  console.log(req.user);
+  console.log(req.user.methods);
   const newGame = await DescribeGame.create({
     ownerId: req.user._id,
     public: false,
     published: false,
     recipients: [],
     audioMessages: [],
-    imagePath: DescribeGame.newImagePathForUser(req.user),
+    // TODO make this a method so that next image is tailored to user
+    imagePath: User.newImagePathForDescribeGame(),
     time: {
       started: new Date(),
       finished: null,

@@ -3,11 +3,13 @@
     <description-game-image [src]="imageUri">
     </description-game-image>
     <description-game-record-message
-      (ondataavailable)=messageList.receive($event)>
+      (ondataavailable)=messageList.refresh()
+      (hitStop)=messageList.receiveHandle($event)>
     </description-game-record-message>
   </div>
   <description-game-describe-message-list
     #messageList
+    [gameInfo]=gameInfo
     >
   </description-game-describe-message-list>
 <span>

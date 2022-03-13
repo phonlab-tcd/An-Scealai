@@ -15,7 +15,7 @@ function getRandomIndex(length){
 module.exports = () => {
   const t = getRandomIndex(themes.length);
   const i = getRandomIndex(images[t].length);
-  return path.join(themes[t],images[t][i]);
+  return path.join('image',themes[t],images[t][i]);
 }
 
 (async function refresh() {
@@ -27,14 +27,7 @@ module.exports = () => {
       return fs.readdir(path.join(root,theme));
     })
   );
-  console.log(_themes);
-  console.log(_images);
   themes = _themes;
   images = _images;
   setTimeout(refresh,60*60*1000);
 })();
-
-(function tryit(){
-  console.log(module.exports());
-  setTimeout(tryit,1000);
-})()

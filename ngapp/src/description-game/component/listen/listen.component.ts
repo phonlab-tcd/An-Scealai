@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import config from 'src/abairconfig.json';
 import {AuthenticationService} from "src/app/authentication.service";
@@ -20,14 +20,16 @@ function date(timestamp: string) {
 export class ListenComponent implements OnInit {
   @Input('src') src: string;
   @Input('originalBlob') originalBlob: any;
-  @Input('savedAudioRef') savedAudioRef: {
+  @Input('apiRef') apiRef: {
     _id: string;
     mimetype: string;
+    // prefix for data uri eg "data:audio/webm;base64,"
     uriPrefix: string;
   };
   @Input('index') index: number;
   @Input('height') height: number = 40;
   @ViewChild('waveform') waveform: NgWaveformComponent;
+  @Output('deleteMe') deleteMe: EventEmitter<number> = new EventEmitter();
   
   backgroundColor = '#b1d0b9';
 
@@ -71,14 +73,20 @@ export class ListenComponent implements OnInit {
       return;
     }
 
+    if(!this.apiRef) {
+      this.deleteMe.emit(this.index);
+      return;
+    }
     this.http.get(
-      config.baseurl + `description-game/audio/${this.savedAudioRef._id}`,
+      config.baseurl + `description-game/audio/${this.apiRef._id}`,
       {
         headers: {Authorization: 'Bearer ' + this.auth.getToken()},
         responseType: 'text',
       })
       .subscribe(d => {
-        this.audio = new Audio(this.savedAudioRef.uriPrefix.concat(d));
+        this.audio = new Audio(this.apiRef.uriPrefix.concat(d));
+        console.log(this.audio);
+        this.cd.detectChanges();
       });
   }
 }

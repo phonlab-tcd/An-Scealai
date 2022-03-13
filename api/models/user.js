@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
+
+const randomImagePath = require('../utils/randomImagePath');
 const generate_password = require('generate-password');
 
 const verificationSchema = new mongoose.Schema({
@@ -68,8 +70,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.newImagePathForDescribeGame = async function() {
-
+userSchema.statics.newImagePathForDescribeGame = function() {
+  return randomImagePath();
 };
 
 userSchema.methods.setPassword = function(password) {

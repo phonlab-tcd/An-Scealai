@@ -28,6 +28,12 @@ AudioMessage.methods.uriPrefix = function () {
   return `data:${this.mimetype};base64,`;
 };
 
+AudioMessage.statics.uriPrefixStatic = function (am) {
+  if(!am || !am.mimetype)
+    return null;
+  return `data:${am.mimetype};base64,`;
+};
+
 AudioMessage.methods.forFrontend = function () {
   return {
     _id: this._id,
@@ -37,3 +43,4 @@ AudioMessage.methods.forFrontend = function () {
 };
 
 module.exports = mongoose.model('AudioMessage', AudioMessage);
+module.exports.schema = AudioMessage;

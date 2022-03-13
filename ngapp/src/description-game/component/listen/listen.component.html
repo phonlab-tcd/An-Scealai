@@ -1,4 +1,9 @@
 <div
+  *ngIf=!audio>
+  loading
+</div>
+<div
+  *ngIf=audio
   style="
     margin: 20px;
     display: flex;
@@ -7,21 +12,29 @@
     border-top-left-radius: 0.3em;
     border-bottom-left-radius: 1.5em;
     "
-  (click)="togglePlayback()">
+  (click)=togglePlayback()>
     <div style="width: 3em; align-items: center; display: grid;">
-      <span style="vertical-align: middle" *ngIf="!isPlaying()">▶ </span>
-      <span style="vertical-align: middle" *ngIf=" isPlaying()">⏸ </span>
+      <span
+        style="vertical-align: middle"
+        *ngIf=!isPlaying()>
+          ▶
+      </span>
+      <span
+        style="vertical-align: middle"
+        *ngIf=isPlaying()>
+         ⏸
+      </span>
     </div>
     <div>
       <ng-waveform
           #waveform
-          class="waveform"
-          [src]="audio.src"
-          waveColor="#c59fcb"
-          (timeUpdate)="waveform.refreshProgress()"
-          (rendered)="cd.detectChanges()"
-          (paused)="cd.detectChanges()"
-          backgroundColor="{{backgroundColor}}">
+          class=waveform
+          [src]=audio.src
+          waveColor=#c59fcb
+          (timeUpdate)=waveform.refreshProgress()
+          (rendered)=cd.detectChanges()
+          (paused)=cd.detectChanges()
+          backgroundColor={{backgroundColor}}>
       </ng-waveform>
     </div>
 </div>

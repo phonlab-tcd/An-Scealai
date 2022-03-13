@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const AudioMessage = require('../audioMessage').schema;
 const path = require('path');
 
 
@@ -8,7 +9,7 @@ const DescribeGame = new Schema({
   public: Boolean,
   published: Boolean,
   recipients: [mongoose.ObjectId],
-  audioMessages: [mongoose.ObjectId],
+  audioMessages: [AudioMessage],
   imagePath: String,
   time: {
     type: {

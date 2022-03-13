@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { tap, map} from 'rxjs/operators';
 import config from 'src/abairconfig.json';
+import {AuthenticationService} from "src/app/authentication.service";
 
 @Component({
   selector: 'description-game-describe',
@@ -8,16 +10,33 @@ import config from 'src/abairconfig.json';
   styleUrls: ['./describe.component.css']
 })
 export class DescribeComponent implements OnInit {
-  gameSessionData: any;
+  gameInfo: any;
   imageUri = '';
   constructor(
     private http: HttpClient,
+    private auth: AuthenticationService,
   ) {
-    this.http.get<{imagePath: string}>(config.baseurl + 'description-game/next/describe')
-      .subscribe(ok=>{
-        this.gameSessionData = ok;
-        this.imageUri = config.baseurl.concat(ok.imagePath);
-      })
+    this.fetchGameInfo().subscribe(d=>{
+      console.log('gameInfo:',d);
+      this.gameInfo=d
+    });
+  }
+  fetchGameInfo() {
+    return this.http.get<{imagePath: string;audioMessages: any[]}>(
+      config.baseurl + 'description-game/next/describe',
+      {headers: {Authorization: 'Bearer ' + this.auth.getToken() }})
+      .pipe(
+        tap(d=>{
+          console.log(d);
+          this.imageUri=config.baseurl.concat(d.imagePath)
+        }),
+        map(d=>{
+          d.audioMessages.map(am=>{
+            am.uriPrefix = 'data:'+am.mimetype+';base64,';
+            return am;
+          });
+          return d;
+        }))
   }
 
   ngOnInit(): void {

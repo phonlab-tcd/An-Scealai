@@ -17,13 +17,17 @@ export class RecordMessageComponent implements OnInit {
   audio: HTMLAudioElement;
   saved: any[] = [];
   headers: any;
-  @Output('ondataavailable') dataAvailableEmitter: EventEmitter<{
-   data: Blob,
-   time: {
-     start: Date,
-     stop: Date,
-     ready: Date,
-   },
+  @Output('ondataavailable') dataAvailableEmitter: EventEmitter<boolean> = new EventEmitter();
+  @Output('hitStop') hitStop: EventEmitter<{
+    processing: boolean;
+    ondataavailable: {
+      data: Blob,
+      time: {
+        start: Date,
+        stop: Date,
+        ready: Date,
+      },
+    }
   }> = new EventEmitter();
 
   constructor(
@@ -56,7 +60,8 @@ export class RecordMessageComponent implements OnInit {
           dataavailable.time.ready = Date.now();
           dataavailable.time.stop = r.timeStop;
           console.log(r.timeStop);
-          this.dataAvailableEmitter.emit(dataavailable);
+          r.recordingHandle.dataavailable = dataavailable;
+          this.dataAvailableEmitter.emit(r.recordingHandle);
         };
       });
   }
@@ -65,7 +70,9 @@ export class RecordMessageComponent implements OnInit {
   stop() {
     const r = this.recorder;
     r.timeStop = Date.now();
+    r.recordingHandle = {processing: true};
     this.recorder = undefined;
+    this.hitStop.emit(r.recordingHandle);
     setTimeout(()=>{r.stop()}, 1000);
   }
 }

@@ -1,8 +1,18 @@
 <p>describe-message-list works!</p>
 <description-game-listen
-  *ngFor="let s of saved; let index = index"
-  [originalBlob]=s.originalBlob
-  [savedAudioRef]=s.apiRef
+  *ngFor="let s of fromDb; let index = index"
+  [apiRef]=s
   [index]=index>
   {{s.mimetype}}
 </description-game-listen>
+<description-game-listen
+  *ngFor="let s of saved; let index = index"
+  [originalBlob]=s.originalBlob
+  [index]=index
+  (deleteMe)="removeSaved(index)">
+  {{s.mimetype}}
+</description-game-listen>
+<div
+    *ngFor="let h of handles; let index = index">
+  loading...
+</div>
