@@ -76,6 +76,8 @@ module.exports.post = async (req,res,next) => {
 // GET /description-game/audio/:id
 // req.params.id
 module.exports.get = async (req,res,next)=>{
+  if(!ObjectId.isValid(req.params.id))
+    return next(new Error('bad audioMessage.id: ' + req.params.id));
   const am = await AudioMessage.findById(req.params.id);
   if(!(req.user._id.toString() === am.ownerId.toString()))
     return res.sendStatus(401); 
@@ -90,8 +92,10 @@ module.exports.get = async (req,res,next)=>{
     return res.sendStatus(404);
   }
   try {
+    res.write(am.uriPrefix());
     const data = await fs.readFile(am.path(), {encoding: 'base64'});
-    return res.send(data);
+    res.write(data);
+    return res.end();
   }
   catch (e){
     next(e);
