@@ -10,9 +10,9 @@ import config from 'src/abairconfig.json';
 })
 export class DescribeMessageListComponent implements OnInit {
   private _gameInfo;
-  fromDb: any[] = [];
-  handles: any[] = [];
+  fromDb: string[] = []; // TODO actually should be ObjectId[]
   saved: any[] = [];
+  unprocessedRecordings: any = {};
   @Input('gameInfo')
   set gameInfo(d:{audioMessages: any[]}) {
     this._gameInfo = d;
@@ -29,24 +29,31 @@ export class DescribeMessageListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  receiveHandle(handle) {
-    console.log('receiveHandle',handle);
-    this.handles.push(handle);
-    console.log(this.handles);
+  receiveRecordingId(d) {
+    this.unprocessedRecordings[d.start] = d;
   }
 
-  refresh() {
-    console.log(this.handles);
-    this.handles = this.handles.map(x=>{
-        this.receive(x.dataavailable);
-        x.processing = false;
-        return x;
-      });
-    this.handles = this.handles.filter(x=>x.processing);
+  listUnprocessed() {
+    return Object.keys(this.unprocessedRecordings)
+      .map(id=>{return new Date(parseInt(id)*1000).toLocaleTimeString()});
   }
 
-  receive = (dataavailable) => {
+  // refresh() {
+  //   console.log(this.handles);
+  //   this.handles = this.handles.map(x=>{
+  //       this.receive(x.dataavailable);
+  //       x.processing = false;
+  //       return x;
+  //     });
+  //   this.handles = this.handles.filter(x=>x.processing);
+  // }
+
+  process(dataavailable) {
     console.log(dataavailable);
+    console.log(this.unprocessedRecordings);
+    console.log(dataavailable.time.start);
+    delete this.unprocessedRecordings[dataavailable.time.start];
+    console.log(this.unprocessedRecordings);
     const newlySaved = { originalBlob: dataavailable, apiRef: null};
     this.saved.push(newlySaved);
     this.cd.detectChanges();

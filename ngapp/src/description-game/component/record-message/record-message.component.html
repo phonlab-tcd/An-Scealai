@@ -1,5 +1,5 @@
 <button
-  *ngIf="!recorder"
+  *ngIf="!recorder && !throttle"
   (click)=start()>
     start
 </button>

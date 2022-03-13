@@ -17,17 +17,11 @@ export class RecordMessageComponent implements OnInit {
   audio: HTMLAudioElement;
   saved: any[] = [];
   headers: any;
+  throttle: boolean = false;
   @Output('ondataavailable') dataAvailableEmitter: EventEmitter<boolean> = new EventEmitter();
   @Output('hitStop') hitStop: EventEmitter<{
-    processing: boolean;
-    ondataavailable: {
-      data: Blob,
-      time: {
-        start: Date,
-        stop: Date,
-        ready: Date,
-      },
-    }
+    start: number;
+    stop: number;
   }> = new EventEmitter();
 
   constructor(
@@ -47,21 +41,24 @@ export class RecordMessageComponent implements OnInit {
   }
 
   start() {
+    this.throttle = true;
+    this.cd.detectChanges();
+    setTimeout(()=>{this.throttle=false},500);
+    console.log('START RECORDING');
     navigator.mediaDevices
       .getUserMedia({audio: true})
       .then(_stream => {
         this.recorder = new MediaRecorder(_stream);
         this.recorder.start();
-        const timeStart = Date.now();
         const r = this.recorder;
+        r.timeStart = Date.now();
         this.recorder.ondataavailable = (dataavailable) => {
           dataavailable.time = {};
-          dataavailable.time.start = timeStart;
           dataavailable.time.ready = Date.now();
+          dataavailable.time.start = r.timeStart;
           dataavailable.time.stop = r.timeStop;
           console.log(r.timeStop);
-          r.recordingHandle.dataavailable = dataavailable;
-          this.dataAvailableEmitter.emit(r.recordingHandle);
+          this.dataAvailableEmitter.emit(dataavailable);
         };
       });
   }
@@ -70,9 +67,8 @@ export class RecordMessageComponent implements OnInit {
   stop() {
     const r = this.recorder;
     r.timeStop = Date.now();
-    r.recordingHandle = {processing: true};
     this.recorder = undefined;
-    this.hitStop.emit(r.recordingHandle);
-    setTimeout(()=>{r.stop()}, 1000);
+    this.hitStop.emit({start:r.timeStart,stop:r.timeStop});
+    setTimeout(()=>{r.stop()}, 500);
   }
 }

@@ -18,14 +18,8 @@ function date(timestamp: string) {
   styleUrls: ['./listen.component.css']
 })
 export class ListenComponent implements OnInit {
-  @Input('src') src: string;
   @Input('originalBlob') originalBlob: any;
-  @Input('apiRef') apiRef: {
-    _id: string;
-    mimetype: string;
-    // prefix for data uri eg "data:audio/webm;base64,"
-    uriPrefix: string;
-  };
+  @Input('apiRef') apiRef: string; // ObjectId
   @Input('index') index: number;
   @Input('height') height: number = 40;
   @ViewChild('waveform') waveform: NgWaveformComponent;
@@ -78,13 +72,13 @@ export class ListenComponent implements OnInit {
       return;
     }
     this.http.get(
-      config.baseurl + `description-game/audio/${this.apiRef._id}`,
+      config.baseurl + `description-game/audio/${this.apiRef}`,
       {
         headers: {Authorization: 'Bearer ' + this.auth.getToken()},
         responseType: 'text',
       })
       .subscribe(d => {
-        this.audio = new Audio(this.apiRef.uriPrefix.concat(d));
+        this.audio = new Audio(d);
         console.log(this.audio);
         this.cd.detectChanges();
       });

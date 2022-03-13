@@ -21,6 +21,7 @@ export class DescribeComponent implements OnInit {
       this.gameInfo=d
     });
   }
+
   fetchGameInfo() {
     return this.http.get<{imagePath: string;audioMessages: any[]}>(
       config.baseurl + 'description-game/next/describe',
@@ -29,14 +30,7 @@ export class DescribeComponent implements OnInit {
         tap(d=>{
           console.log(d);
           this.imageUri=config.baseurl.concat(d.imagePath)
-        }),
-        map(d=>{
-          d.audioMessages.map(am=>{
-            am.uriPrefix = 'data:'+am.mimetype+';base64,';
-            return am;
-          });
-          return d;
-        }))
+        }));
   }
 
   ngOnInit(): void {
