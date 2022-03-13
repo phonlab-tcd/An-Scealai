@@ -1,11 +1,6 @@
 <div
-  *ngIf=!audio>
-  loading
-</div>
-<div
-  matTooltip={{metaDataString()}}
-  matTooltipClass="linebreak"
-  *ngIf=audio
+  [matTooltip]=tooltip
+  *ngIf=src
   style="
     margin: 20px;
     display: flex;
@@ -31,11 +26,12 @@
       <ng-waveform
           #waveform
           class=waveform
-          [src]=audio.src
+          [src]=src
           waveColor=#c59fcb
           (timeUpdate)=waveform.refreshProgress()
           (rendered)=cd.detectChanges()
           (paused)=cd.detectChanges()
+          (durationChange)=setDuration($event)
           backgroundColor={{backgroundColor}}>
       </ng-waveform>
     </div>

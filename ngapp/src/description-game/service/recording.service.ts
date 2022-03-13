@@ -24,12 +24,16 @@ export class RecordingService {
   ) { }
 
 
-  createAudio = (id: string)=>{
-    return new Promise((resolve,reject) => {
-      this.retrieve(id).subscribe(src=>{
-        resolve(new Audio(src));
-      },e=>{reject(e)});
-    });
+  async fetchAudioSrc(id: string) {
+    const cache = this.fetchFromCache(id);
+    if(cache) return cache;
+    const src = await this.retrieve(id).toPromise();
+    localStorage.setItem('audio.'+id,src);
+    return src;
+  }
+
+  fetchFromCache(id: string) {
+    return localStorage.getItem('audio.'+id);
   }
 
   retrieve(id: string): Observable<string> {

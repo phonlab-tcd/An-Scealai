@@ -28,11 +28,6 @@ export class RecordingDashboardComponent implements OnInit {
       {headers: { Authorization: 'Bearer '.concat(this.auth.getToken())}})
       .subscribe(ok=>{
         this.ids = ok;
-        this.ids.forEach(async id=>{
-          console.log('allAudio',id);
-          await this.rec.createAudio(id);
-          this.cd.detectChanges();
-        });
       });
   }
 

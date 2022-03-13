@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, Output, EventEm
 import { HttpClient } from '@angular/common/http';
 import config from 'src/abairconfig.json';
 import {AuthenticationService} from "src/app/authentication.service";
-import { NgWaveformComponent } from '../../ng-waveform/ng-waveform.component'
+import { NgWaveformComponent } from '../../ng-waveform/ng-waveform.component';
+import { RecordingService } from '../../service/recording.service';
 
 function timestamp(_id:string):string {
   return new String(_id).substring(0,8);
@@ -28,6 +29,7 @@ interface MetaData {
 })
 export class ListenComponent implements OnInit {
   public metaData: {time: {start: number}}= null;
+  duration: number = null;
   @Input('originalBlob') originalBlob: any;
   @Input('apiRef') apiRef: string; // ObjectId
   @Input('index') index: number;
@@ -37,31 +39,31 @@ export class ListenComponent implements OnInit {
   
   backgroundColor = '#b1d0b9';
 
-  printMetaData() {
-    console.log('METADATA');
-    console.log(this.metaData);
-  }
-
-  private _metaDataString: string;
-
-  metaDataString() {
-    if(this._metaDataString)
-      return this._metaDataString;
-    if(!this.metaData)
-      return 'waiting...';
-    if(!this.metaData.time)
-      return 'no time info...';
-    const d = new Date(this.metaData.time.start);
-    const s = d.toLocaleDateString() + '\t' + d.toLocaleTimeString();
-    this._metaDataString = s;
-    return s;
+  public tooltip: string = '';
+  makeTooltip() {
+    this.tooltip = ''; 
+    if(this.metaData && this.metaData.time && this.metaData.time.start) {
+    const startTime = new Date(this.metaData.time.start);
+    this.tooltip =
+      startTime.toLocaleDateString() + ' ' +
+      startTime.toLocaleTimeString();
+    }
+    if(this.duration)
+      this.tooltip += ' Duration: ' + this.duration.toFixed(2) + 's';
+    this.cd.detectChanges();
   }
 
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
+    private rec: RecordingService,
     public cd: ChangeDetectorRef,
   ) { }
+
+  setDuration(d:number) {
+    this.duration = d;
+    this.makeTooltip();
+  }
 
   onTimeUpdate() {
     this.waveform.refreshProgress();
@@ -85,16 +87,17 @@ export class ListenComponent implements OnInit {
     }
   };
 
-  audio: HTMLAudioElement;
+  src: string;
   d: Date;
 
   ngOnInit(): void {
     if(this.originalBlob) {
       this.metaData = {time: this.originalBlob.time};
-      this.audio =
-        new Audio(
+      this.makeTooltip();
+      this.cd.detectChanges();
+      this.src =
           window.URL.createObjectURL(
-            this.originalBlob.data));
+            this.originalBlob.data);
       return;
     }
     if(!this.apiRef) {
@@ -112,21 +115,14 @@ export class ListenComponent implements OnInit {
         headers: {Authorization: 'Bearer ' + this.auth.getToken()},
       })
       .subscribe((d: MetaData) => {
-        console.log(d);
-        this.metaData = d;});
-  }
-
-  fetchAudio() {
-    this.http.get(
-      config.baseurl + `description-game/audio/${this.apiRef}`,
-      {
-        headers: {Authorization: 'Bearer ' + this.auth.getToken()},
-        responseType: 'text',
-      })
-      .subscribe(d => {
-        this.audio = new Audio(d);
-        console.log(this.audio);
+        this.metaData = d;
+        this.makeTooltip();
         this.cd.detectChanges();
       });
+  }
+
+  async fetchAudio() {
+    this.src = await this.rec.fetchAudioSrc(this.apiRef);
+    this.cd.detectChanges();
   }
 }

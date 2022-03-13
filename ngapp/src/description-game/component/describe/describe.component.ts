@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap, map} from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { AuthenticationService } from "src/app/authentication.service";
 import config from 'src/abairconfig.json';
-import {AuthenticationService} from "src/app/authentication.service";
 
 @Component({
   selector: 'description-game-describe',
@@ -16,15 +16,11 @@ export class DescribeComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
+    private cd: ChangeDetectorRef,
   ) {
     this.fetchGameInfo().subscribe(d=>{
-      console.log('gameInfo:',d);
       this.gameInfo=d
     });
-  }
-
-  messageListReady() {
-    return !!this.messageList;
   }
 
   fetchGameInfo() {
@@ -33,7 +29,6 @@ export class DescribeComponent implements OnInit {
       {headers: {Authorization: 'Bearer ' + this.auth.getToken() }})
       .pipe(
         tap(d=>{
-          console.log(d);
           this.imageUri=config.baseurl.concat(d.imagePath)
         }));
   }
@@ -47,4 +42,7 @@ export class DescribeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit() {
+    this.cd.detectChanges();
+  }
 }
