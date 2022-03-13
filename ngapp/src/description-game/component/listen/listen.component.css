@@ -9,3 +9,7 @@ ng-waveform {
   width: 200px;
   height: 100px;
 }
+
+.linebreak {
+  white-space: pre-line;
+}

@@ -3,13 +3,22 @@
     <description-game-image [src]="imageUri">
     </description-game-image>
     <description-game-record-message
+      *ngIf=messageListReady()
       (ondataavailable)=messageList.process($event)
       (hitStop)=messageList.receiveRecordingId($event)>
     </description-game-record-message>
   </div>
-  <description-game-describe-message-list
-    #messageList
-    [gameInfo]=gameInfo
-    >
-  </description-game-describe-message-list>
+  <div>
+    <button
+      *ngIf=messageListReady()
+      (click)=submitDescription(messageList)>
+        submit
+    </button>
+    <description-game-describe-message-list
+      *ngIf=gameInfo
+      #messageList
+      [gameInfo]=gameInfo
+      >
+    </description-game-describe-message-list>
+  </div>
 <span>

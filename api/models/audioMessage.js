@@ -7,6 +7,11 @@ const AudioMessage = new Schema({
     public: Boolean,
     reciptients: [mongoose.ObjectId],
     mimetype: String,
+    time: {
+      start: Number,
+      stop: Number,
+      ready: Number,
+    }
 }, {
     collection: 'description.game.audio.message'
 });

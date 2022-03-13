@@ -50,23 +50,23 @@ module.exports.post = async (req,res,next) => {
   await audioMessages.map(async (am,i)=>{
     await fs.writeFile(am.path(), req.files[i].buffer)
   });
-  res.json(audioMessages.map(am=>am.forFrontend()));
+  res.json(audioMessages.map(am=>am._id));
 
   try {
-  if(req.body.game_type ) {
-    console.log(req.body);
-    switch(req.body.game_type) {
-      case 'describe':
-        DescribeGame.updateOne(
-          {_id: ObjectId(req.body.game_id)},
-          { $push: {audioMessages: audioMessages }},
-          (err,doc)=>{
-            console.error(err);
-            console.log(doc);
-          }); 
-        break;
+    if(req.body.game_type ) {
+      console.log(req.body);
+      switch(req.body.game_type) {
+        case 'describe':
+          DescribeGame.updateOne(
+            {_id: ObjectId(req.body.game_id)},
+            { $push: {audioMessages: audioMessages.map(a=>a._id) }},
+            (err,doc)=>{
+              console.error(err);
+              console.log(doc);
+            }); 
+          break;
+      }
     }
-  }
   } catch (e) {
     console.error(e);
   }
@@ -79,6 +79,7 @@ module.exports.get = async (req,res,next)=>{
   if(!ObjectId.isValid(req.params.id))
     return next(new Error('bad audioMessage.id: ' + req.params.id));
   const am = await AudioMessage.findById(req.params.id);
+  if(!am) return res.sendStatus(404);
   if(!(req.user._id.toString() === am.ownerId.toString()))
     return res.sendStatus(401); 
   res.set('Content-Type', am.mimetype);

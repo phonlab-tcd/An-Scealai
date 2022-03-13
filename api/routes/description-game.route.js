@@ -42,6 +42,10 @@ descriptionGameRoutes
     ep(['audio'],'get'));
 
 descriptionGameRoutes
+  .get('/meta/audio/:id',
+    ep(['meta','audio'],'get'));
+
+descriptionGameRoutes
   .get('/allAudio',
     ep(['allAudio'],'get'));
 

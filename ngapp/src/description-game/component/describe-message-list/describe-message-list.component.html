@@ -3,7 +3,7 @@
   *ngFor="let s of fromDb; let index = index"
   [apiRef]=s
   [index]=index>
-  {{s.mimetype}}
+  {{s}}
 </description-game-listen>
 <description-game-listen
   *ngFor="let s of saved; let index = index"
@@ -13,6 +13,6 @@
   {{s.mimetype}}
 </description-game-listen>
 <div
-    *ngFor="let h of listUnprocessed(); let index = index">
+    *ngFor="let h of unprocessedRecordings; let index = index">
   {{h}} loading...
 </div>

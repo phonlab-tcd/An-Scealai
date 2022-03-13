@@ -43,7 +43,10 @@ export class RecordMessageComponent implements OnInit {
   start() {
     this.throttle = true;
     this.cd.detectChanges();
-    setTimeout(()=>{this.throttle=false},500);
+    setTimeout(()=>{
+      this.throttle=false;
+      this.cd.detectChanges();},
+      500);
     console.log('START RECORDING');
     navigator.mediaDevices
       .getUserMedia({audio: true})

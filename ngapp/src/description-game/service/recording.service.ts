@@ -24,23 +24,20 @@ export class RecordingService {
   ) { }
 
 
-  createAudio = (o: AudioMessageData)=>{
+  createAudio = (id: string)=>{
     return new Promise((resolve,reject) => {
-      this.retrieve(o).subscribe(src=>{
-        o.src = src;
-        o.audio = new Audio(src);
-        resolve();
+      this.retrieve(id).subscribe(src=>{
+        resolve(new Audio(src));
       },e=>{reject(e)});
     });
   }
 
-  retrieve(s: AudioMessageData): Observable<string> {
+  retrieve(id: string): Observable<string> {
     return this.http.get(
-      config.baseurl + `description-game/audio/${s._id}`,
+      config.baseurl + `description-game/audio/${id}`,
       {
         headers: { Authorization: 'Bearer '.concat(this.auth.getToken())},
         responseType: 'text',
-      })
-      .pipe(map(d=>s.uriPrefix.concat(d)));
+      });
   }
 }

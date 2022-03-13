@@ -12,13 +12,16 @@ export class DescribeMessageListComponent implements OnInit {
   private _gameInfo;
   fromDb: string[] = []; // TODO actually should be ObjectId[]
   saved: any[] = [];
-  unprocessedRecordings: any = {};
+  unprocessedRecordings: {start: number; stop: number}[] = []; 
+
   @Input('gameInfo')
   set gameInfo(d:{audioMessages: any[]}) {
     this._gameInfo = d;
-    if(d.audioMessages)
+    if(d && d.audioMessages)
       this.fromDb = d.audioMessages;
+    this.cd.detectChanges();
   }
+
   constructor(
     private http: HttpClient,
     private cd: ChangeDetectorRef,
@@ -30,29 +33,16 @@ export class DescribeMessageListComponent implements OnInit {
   }
 
   receiveRecordingId(d) {
-    this.unprocessedRecordings[d.start] = d;
+    this.unprocessedRecordings.push(d);
   }
-
-  listUnprocessed() {
-    return Object.keys(this.unprocessedRecordings)
-      .map(id=>{return new Date(parseInt(id)*1000).toLocaleTimeString()});
-  }
-
-  // refresh() {
-  //   console.log(this.handles);
-  //   this.handles = this.handles.map(x=>{
-  //       this.receive(x.dataavailable);
-  //       x.processing = false;
-  //       return x;
-  //     });
-  //   this.handles = this.handles.filter(x=>x.processing);
-  // }
 
   process(dataavailable) {
     console.log(dataavailable);
     console.log(this.unprocessedRecordings);
     console.log(dataavailable.time.start);
-    delete this.unprocessedRecordings[dataavailable.time.start];
+    this.unprocessedRecordings = 
+      this.unprocessedRecordings
+        .filter(t=>t.start!=dataavailable.time.start);
     console.log(this.unprocessedRecordings);
     const newlySaved = { originalBlob: dataavailable, apiRef: null};
     this.saved.push(newlySaved);
@@ -78,7 +68,11 @@ export class DescribeMessageListComponent implements OnInit {
   }
 
   removeSaved(index) {
-    delete this.saved[index];
+    console.log('removSaved('+index+')');
+    console.log(this.saved);
+    this.saved = this.saved.slice(0,index).concat(this.saved.slice(index+1));
+    console.log(this.saved);
+    this.cd.detectChanges();
   }
 
 }

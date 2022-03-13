@@ -10,7 +10,7 @@ import { RecordingService } from 'src/description-game/service/recording.service
   styleUrls: ['./recording-dashboard.component.css']
 })
 export class RecordingDashboardComponent implements OnInit {
-  oldSaved: any[] = [];
+  ids: string[] = [];
   show = false;
 
   constructor(
@@ -27,9 +27,10 @@ export class RecordingDashboardComponent implements OnInit {
       config.baseurl + 'description-game/allAudio',
       {headers: { Authorization: 'Bearer '.concat(this.auth.getToken())}})
       .subscribe(ok=>{
-        this.oldSaved = ok;
-        this.oldSaved.forEach(async o=>{
-          await this.rec.createAudio(o);
+        this.ids = ok;
+        this.ids.forEach(async id=>{
+          console.log('allAudio',id);
+          await this.rec.createAudio(id);
           this.cd.detectChanges();
         });
       });
