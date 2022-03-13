@@ -38,8 +38,6 @@ module.exports.get = async (req,res,next) => {
       currentGame.imagePath = User.newImagePathForDescribeGame();
       await currentGame.save();
     }
-    currentGame.audioMessages =
-      currentGame.audioMessages.map(AudioMessage.uriPrefixStatic);
     return res.json(currentGame);
   };
   console.log(req.user);
