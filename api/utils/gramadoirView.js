@@ -24,16 +24,17 @@ module.exports = async (view_name='gramadoir_view') => {
         as: 'gramadoir',
       }},
       {$project: {
+        ownerId: 1,
         storyId: 1,
         gramadoir: {$arrayElemAt: ['$gramadoir', 0]}
       }},
       {$unset: 'gramadoirCacheId'},
       {$group: {
         _id: {
-          storyId: "$storyId"
+          storyId: "$storyId",
         },
         gramadoirHistory: {
-          $addToSet: "$gramadoir"
+          $addToSet: "$$ROOT"
         },
       }},
     ]
