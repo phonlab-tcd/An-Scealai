@@ -8,10 +8,7 @@
     cursor.toArray((err,docs)=>{
       console.error(err);
       docs.forEach(d=>{
-        d.gramadoirHistory.forEach(t=>{
-          console.log(t.text);
-          console.log(t.grammarTags);
-        });
+        console.log(d);
       });
       db.collection(viewName).drop();
       resolve();
