@@ -145,6 +145,8 @@ export class TextBoxComponent implements OnInit {
   }
 
   enterSentence = () => {
+    // avoiding using ngModel
+    this.sentence.text = document.getElementById('sentence_' + this.sentence.id).value
     if ( this.sentence.text !== "" && !avatarStates.lookingAtBoard && !avatarStates.speaking) {
       this.sentence.editted = false
       avatarControl("look at board")
