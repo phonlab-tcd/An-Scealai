@@ -1,5 +1,5 @@
 const TWEEN = require('@tweenjs/tween.js')
-import { lenMorphs, avatarBody, updateAvatarState, avatarStates, speakingSpeedMultDict } from './config'
+import { avatarBody, updateAvatarState, avatarStates, speakingSpeedMultDict } from './config'
 import phonemeToVisemeMap from './phonemeToViseme.js'
 import { sentences } from '../data/sentences'
 import { flashAvatar } from './flash'
@@ -72,7 +72,7 @@ const mouthHelp = () => {
 }
 
 const mouthViseme = (vis, duration, sent) => {
-	let faceMorphsTo = new Array(lenMorphs).fill(0);
+	let faceMorphsTo = new Array(avatarStates.lenMorphs).fill(0);
 	faceMorphsTo[avatarBody.head.morphTargetDictionary[vis]] = 0.4;
 	let mouthingIn = new TWEEN.Tween(avatarBody.head.morphTargetInfluences).to(faceMorphsTo, duration)
 		.easing(TWEEN.Easing.Cubic.In)
@@ -99,7 +99,7 @@ const mouthViseme = (vis, duration, sent) => {
 	})
 
 	const lastPhone = () => {
-		faceMorphsTo = new Array(lenMorphs).fill(0);
+		faceMorphsTo = new Array(avatarStates.lenMorphs).fill(0);
 		let lastMouthingIn = new TWEEN.Tween(avatarBody.head.morphTargetInfluences).to(faceMorphsTo, 500)
 			.easing(TWEEN.Easing.Cubic.InOut)
 			.start()

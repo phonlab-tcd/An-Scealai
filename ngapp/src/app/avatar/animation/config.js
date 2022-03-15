@@ -6,13 +6,12 @@ const avatarStates = {
 	mouseHover: false,
 	activeSentenceID: null,
 	focalPoint: null,
+	lenMorphs: 0
 }
 
 const avatarBody = {
 
 }
-
-var lenMorphs
 
 const updateAvatarState = (state, value) => {
 	avatarStates[state] = value
@@ -31,4 +30,4 @@ const speakingSpeedMultDict = {
 	0.1: 928
 }
 
-module.exports = { lenMorphs, avatarBody, updateAvatarState, avatarStates, speakingSpeedMultDict }
+module.exports = { avatarBody, updateAvatarState, avatarStates, speakingSpeedMultDict }

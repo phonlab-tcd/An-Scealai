@@ -1,12 +1,12 @@
 const TWEEN = require('@tweenjs/tween.js')
-import { lenMorphs, avatarBody, updateAvatarState, avatarStates } from './config.js'
+import { avatarBody, updateAvatarState, avatarStates } from './config.js'
 
 let blinkFrom
 let blinkTo
 let partKey
 const startRandomBlink = () => {
-	blinkFrom = new Array(lenMorphs).fill(0);
-	blinkTo = new Array(lenMorphs).fill(0);
+	blinkFrom = new Array(avatarStates.lenMorphs).fill(0);
+	blinkTo = new Array(avatarStates.lenMorphs).fill(0);
 	partKey = avatarBody.head.morphTargetDictionary.eyesClosed;
 	blinkTo[partKey] = 1
 	updateAvatarState('blinking', true)
