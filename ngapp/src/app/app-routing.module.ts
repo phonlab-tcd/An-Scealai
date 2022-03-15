@@ -16,6 +16,8 @@ import { RegisterProfileComponent } from './register-profile/register-profile.co
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
 
+import { AvatarClassroomComponent } from './avatar/components/avatar-classroom/avatar-classroom.component'
+
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
@@ -56,6 +58,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
+  { path: 'avatar', component: AvatarComponent},
   { path: 'landing', component: LandingComponent},
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },
