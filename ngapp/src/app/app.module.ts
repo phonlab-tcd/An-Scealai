@@ -31,6 +31,8 @@ import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
 
+import { AvatarModule } from './avatar/avatar.module'
+
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
@@ -151,7 +153,8 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
         import: 'formats/font',
         whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
       }]
-    })
+    }),
+    AvatarModule
   ],
   providers: [
     StoryService,
