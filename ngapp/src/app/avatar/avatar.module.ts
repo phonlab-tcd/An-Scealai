@@ -9,14 +9,16 @@ import { EnterMessageComponent } from './components/enter-message/enter-message.
 
 @NgModule({
   declarations: [
-  PageComponent,
+   ],
+  imports: [
+    CommonModule
+  ],
+  exports: [
+    PageComponent,
     AvatarComponent,
     TextBoxComponent,
     AvatarClassroomComponent,
     EnterMessageComponent
-   ],
-  imports: [
-    CommonModule
   ]
 })
 export class AvatarModule { }
