@@ -70,6 +70,14 @@
         </div>
       </div>
 
+      <!--Beta-->
+      <div ngbDropdown class="d-inline-block" #myDrop5="ngbDropdown" placement="bottom">
+        <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">Beta</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/avatar" ngbDropdownItem (click)="changeCheck()">Avatar</button>
+        </div>
+      </div>
+
       <div class="d-inline-block">
         <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a>
       </div>
