@@ -58,7 +58,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
-  { path: 'avatar', component: AvatarComponent},
+  { path: 'avatar', component: AvatarClassroomComponent},
   { path: 'landing', component: LandingComponent},
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },
