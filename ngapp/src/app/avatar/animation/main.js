@@ -4,7 +4,7 @@ import * as THREE from 'three'
 //import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { startSpeaking } from './mouth'
 import { startRandomBlink } from './blink'
-import { lenMorphs, avatarBody, avatarStates, updateAvatarState } from './config'
+import { avatarBody, avatarStates, updateAvatarState } from './config'
 import { randomNeckTurn, randomSway } from './sway'
 import { avatarLookAt } from './look'
 const TWEEN = require('@tweenjs/tween.js')
@@ -82,7 +82,7 @@ function loadIndividualGLTF() {
       else if (object.name =="Wolf3D_Head") {
         //console.log('MorphTargetDictionary:', object.morphTargetDictionary)
         avatarBody['head'] = object
-				lenMorphs = avatarBody.head.morphTargetInfluences.length;
+				avatarStates.lenMorphs = avatarBody.head.morphTargetInfluences.length;
       } else if (object.name === "Spine") {
 				avatarBody['spine'] = object;
       } else if (object.name === "Spine1") {
