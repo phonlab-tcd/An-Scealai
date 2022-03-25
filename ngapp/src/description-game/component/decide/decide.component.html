@@ -1,8 +1,11 @@
-<p>decide works!</p>
-<select>
-  <option *ngFor="let possibleImage of possibleImages;">
-    <description-game-image
-      [src]=possibleImage>
-    </description-game-image>
-  </option>
-</select>
+<form>
+  <span
+    *ngFor="let possibleImage of possibleImages; let index = index">
+    <label for="radio{{index}}">
+      <input  id="radio{{index}}" type="radio" name="radio">
+      <description-game-image
+        [src]=possibleImage>
+      </description-game-image>
+    </label>
+  </span>
+</form>
