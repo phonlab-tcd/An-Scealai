@@ -1,1 +1,8 @@
 <p>decide works!</p>
+<select>
+  <option *ngFor="let possibleImage of possibleImages;">
+    <description-game-image
+      [src]=possibleImage>
+    </description-game-image>
+  </option>
+</select>
