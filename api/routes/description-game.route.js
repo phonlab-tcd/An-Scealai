@@ -9,10 +9,12 @@ const fs = require('fs').promises;
 
 function ep(_path,method) {
   _path = path.join('..','endpoints_functions','description-game',..._path);
+  const module = require(_path);
+  const func = method ? module[method] : module;
   return (req,res,next) => {
     try {
-      const module = require(_path);
-      const func = method ? module[method] : module;
+      console.log(module);
+      console.log(_path, func);
       func(req,res,next);
     } catch(e) {
       next(e);
@@ -31,30 +33,38 @@ else {
     next();
   });
 }
+const POST = 'post';
+const GET = 'get';
 
 descriptionGameRoutes
   .post('/audio',
     multer.any(),
-    ep(['audio'],'post'));
+    ep(['audio'], POST));
 
 descriptionGameRoutes
   .get('/audio/:id',
-    ep(['audio'],'get'));
+    ep(['audio'], GET));
 
 descriptionGameRoutes
   .get('/meta/audio/:id',
-    ep(['meta','audio'],'get'));
+    ep(['meta','audio'], GET));
 
 descriptionGameRoutes
   .get('/allAudio',
-    ep(['allAudio'],'get'));
+    ep(['allAudio'], GET));
 
 descriptionGameRoutes
   .get('/next/describe',
-    ep(['next','describe'],'get'));
+    ep(['next','describe'], GET));
 
 descriptionGameRoutes
   .get('/next/interpret',
-    ep(['next','interpret'],'get'));
+    ep(['next','interpret'], GET));
+
+descriptionGameRoutes
+  .post('/submit/describe',
+    ep(['submit','describe'], POST));
+
+console.log(descriptionGameRoutes.stack);
 
 module.exports = descriptionGameRoutes;

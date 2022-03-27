@@ -34,9 +34,13 @@ export class DescribeComponent implements OnInit {
   }
 
   submitDescription(messageList) {
-    console.log(this.gameInfo);
-    console.log(messageList.saved);
-    console.log(messageList.fromDb);
+    const messageIds = messageList.saved.concat(messageList.fromDb);
+    const game = this.gameInfo;
+    this.http.post(
+      config.baseurl + 'description-game/submit/describe',
+      { game, messageIds, },
+      { headers: { Authorization: 'Bearer ' + this.auth.getToken() } }
+    ).subscribe(console.log,console.error);
   }
 
   ngOnInit(): void {

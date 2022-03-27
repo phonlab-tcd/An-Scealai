@@ -31,7 +31,7 @@ async function validParams(params, res, next) {
 module.exports = {};
 module.exports.get = async (req,res,next) => {
   const currentGame = await DescribeGame.findOne(
-    {ownerId: ObjectId(req.user._id), 'time.finished': null });
+    {ownerId: ObjectId(req.user._id), 'time.finished': null })
   if(currentGame) {
     if(!currentGame.imagePath) {
       // TODO make this a method so that next image is tailored to user
@@ -55,5 +55,5 @@ module.exports.get = async (req,res,next) => {
       finished: null,
     },
   });
-  res.json(newGame);
+  return res.json(newGame);
 };

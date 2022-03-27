@@ -1,6 +1,7 @@
 <form>
   <span
-    *ngFor="let possibleImage of possibleImages; let index = index">
+    *ngFor="let possibleImage of possibleImages; let index = index"
+    style="width: 20vw">
     <label for="radio{{index}}">
       <input  id="radio{{index}}" type="radio" name="radio">
       <description-game-image

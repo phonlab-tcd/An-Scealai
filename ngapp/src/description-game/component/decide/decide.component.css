@@ -1,0 +1,6 @@
+span {
+  margin: 20px;
+};
+input[type=radio]:checked {
+  background-color: #c2dac8;
+};

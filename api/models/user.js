@@ -71,7 +71,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.newImagePathForDescribeGame = function() {
-  return randomImagePath();
+  return randomImagePath()[0];
 };
 
 userSchema.methods.setPassword = function(password) {

@@ -74,5 +74,4 @@ export class DescribeMessageListComponent implements OnInit {
     console.log(this.saved);
     this.cd.detectChanges();
   }
-
 }

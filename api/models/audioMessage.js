@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 const path = require('path');
 
 const AudioMessage = new Schema({
-    ownerId: mongoose.ObjectId,
-    public: Boolean,
-    reciptients: [mongoose.ObjectId],
-    mimetype: String,
-    time: {
-      start: Number,
-      stop: Number,
-      ready: Number,
-    }
+  ownerId: mongoose.ObjectId,
+  public: Boolean,
+  reciptients: [mongoose.ObjectId],
+  mimetype: String,
+  time: {
+    start: Number,
+    stop: Number,
+    ready: Number,
+  }
 }, {
     collection: 'description.game.audio.message'
 });
