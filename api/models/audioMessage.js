@@ -3,9 +3,18 @@ const Schema = mongoose.Schema;
 const path = require('path');
 
 const AudioMessage = new Schema({
-  ownerId: mongoose.ObjectId,
-  public: Boolean,
-  reciptients: [mongoose.ObjectId],
+  ownerId: {
+    type: mongoose.ObjectId,
+    ref: 'User'
+  },
+  public: {
+    type: Boolean,
+    default: true,
+  },
+  reciptients: [{
+    type: mongoose.ObjectId,
+    ref: 'User',
+  }],
   mimetype: String,
   time: {
     start: Number,

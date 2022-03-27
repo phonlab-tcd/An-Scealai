@@ -36,6 +36,7 @@ export class ListenComponent implements OnInit {
   @Input('height') height: number = 40;
   @ViewChild('waveform') waveform: NgWaveformComponent;
   @Output('deleteMe') deleteMe: EventEmitter<number> = new EventEmitter();
+  @Output('finishPlaying') finishPlaying: EventEmitter<string> = new EventEmitter();
   
   backgroundColor = '#b1d0b9';
 

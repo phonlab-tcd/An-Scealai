@@ -80,8 +80,12 @@ module.exports.get = async (req,res,next)=>{
     return next(new Error('bad audioMessage.id: ' + req.params.id));
   const am = await AudioMessage.findById(req.params.id);
   if(!am) return res.sendStatus(404);
-  if(!(req.user._id.toString() === am.ownerId.toString()))
+  console.log(am);
+  console.log(am.public);
+  if(am.public === false && !(req.user._id.toString() === am.ownerId.toString())) {
+    console.log('SEND STATUS 401');
     return res.sendStatus(401); 
+  }
   res.set('Content-Type', am.mimetype);
   try {
     await fs.access(am.path());

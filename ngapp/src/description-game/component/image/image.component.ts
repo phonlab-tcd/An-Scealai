@@ -7,6 +7,7 @@ import { Component, ChangeDetectorRef, OnInit, Input, ViewChild } from '@angular
 })
 export class ImageComponent implements OnInit {
   @Input('src') src: string;
+  @Input('width') width: number;
   private count = { mouseover: 0, mouseout: 0 }
 
   constructor(

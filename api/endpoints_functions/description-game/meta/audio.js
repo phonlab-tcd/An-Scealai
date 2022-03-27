@@ -13,7 +13,7 @@ module.exports.get = async (req,res,next)=>{
     return next(new Error('bad audioMessage.id: ' + req.params.id));
   const am = await AudioMessage.findById(req.params.id);
   if(!am)                                 return res.sendStatus(404);
-  if(!equalIds(req.user._id,am.ownerId))  return res.sendStatus(401); 
+  if(am.public === false && !equalIds(req.user._id,am.ownerId))  return res.sendStatus(401); 
   try {
     await fs.access(am.path());
   } catch (e) {

@@ -4,3 +4,12 @@ span {
 input[type=radio]:checked {
   background-color: #c2dac8;
 };
+
+.selectable {
+   margin: 0;
+   padding: 0;
+   opacity: 0.8;
+ }
+ .selectable:hover {
+   background-color: white;
+ }
