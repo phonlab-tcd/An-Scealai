@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
-import { DescribeMessageListComponent } from './component/describe-message-list/describe-message-list.component';
+import { MessageList } from './component/message-list/message-list';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { DescribeMessageListComponent } from './component/describe-message-list/
     RecordingDashboardComponent,
     ChooseComponent,
     DecideComponent,
-    DescribeMessageListComponent
+    ListComponent
   ],
   imports: [
     CommonModule,
