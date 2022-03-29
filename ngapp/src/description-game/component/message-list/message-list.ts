@@ -4,7 +4,7 @@ import { AuthenticationService } from 'src/app/authentication.service';
 import config from 'src/abairconfig.json';
 
 @Component({
-  selector: 'description-game-describe-message-list',
+  selector: 'dsc-message-list',
   templateUrl: './describe-message-list.component.html',
   styleUrls: ['./describe-message-list.component.css']
 })
