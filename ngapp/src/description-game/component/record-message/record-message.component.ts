@@ -86,7 +86,6 @@ export class RecordMessageComponent implements OnInit {
           dataavailable.time.ready = Date.now();
           dataavailable.time.start = r.timeStart;
           dataavailable.time.stop = r.timeStop;
-          console.log(r.timeStop);
           this.dataAvailableEmitter.emit(dataavailable);
         };
       });

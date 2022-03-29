@@ -29,12 +29,6 @@ export class MessageList implements OnInit {
 
   initGame(gameInfo: { audioMessages: string[], _id: string}) {
     this.gameId = gameInfo._id;
-    const dbMessages = gameInfo.audioMessages.map(a=>{
-      const m = new Message(this.gameId, this.rec,this.cd);
-      m.initByRef(a);
-      return m;
-    });
-    this.messages = (dbMessages).concat(this.messages);
   }
 
   fillHeight(ref: HTMLElement): string {

@@ -25,9 +25,13 @@ export class DescribeComponent implements OnInit {
   }
 
   newMessage(dataavailable) {
-    const newM = new Message(this.gameInfo._id, this.rec, this.cd);
+    console.log('NEW MESSAGE');
+    const newM =
+      new Message(this.gameInfo._id, this.rec, this.cd)
+        .initByBlob(dataavailable);
+    console.dir(this.messages);
     this.messages.push(newM);
-    newM.initByBlob(dataavailable);
+    console.dir(this.messages);
     this.cd.detectChanges();
   }
 
@@ -64,7 +68,11 @@ export class DescribeComponent implements OnInit {
     this.cd.detectChanges();
     this.fetchGameInfo().subscribe(d=>{
       this.gameInfo=d;
-      this.messageList.initGame(d);
+      const dbMessages = this.gameInfo.audioMessages.map(a=>
+        new Message(this.gameInfo._id, this.rec,this.cd).initByRef(a));
+      this.messages = (dbMessages).concat(this.messages);
+      this.cd.detectChanges();
+      console.log(this.messages);
     });
     this.cd.detectChanges();
   }

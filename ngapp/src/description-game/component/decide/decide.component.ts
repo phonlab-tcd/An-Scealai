@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { shuffle } from 'lodash';
+import { Message } from 'src/description-game/class/message';
+import { RecordingService } from 'src/description-game/service/recording.service';
 import config from 'src/abairconfig.json';
 
 @Component({
@@ -11,6 +13,7 @@ import config from 'src/abairconfig.json';
 })
 export class DecideComponent implements OnInit {
   possibleImages = [];
+  messages: Message[] = [];
   audioMessageRefs: string[] = [];
   currentMessage: number = 0;
   selectedImage: string;
@@ -19,6 +22,7 @@ export class DecideComponent implements OnInit {
     private http: HttpClient,
     private auth: AuthenticationService,
     private cd: ChangeDetectorRef,
+    private rec: RecordingService,
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +34,7 @@ export class DecideComponent implements OnInit {
         shuffle(d.game.red_herrings.concat([d.game.correct_description.imagePath]))
         .map(p=>config.baseurl + p);
       this.audioMessageRefs = d.game.correct_description.audioMessages;
+      this.messages = this.audioMessageRefs.map(a=>new Message('true',this.rec,this.cd).initByRef(a));
       console.log(this.audioMessageRefs);
     },console.error);
   }

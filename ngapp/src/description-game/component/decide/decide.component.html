@@ -1,9 +1,9 @@
 Message {{currentMessage + 1}} of {{audioMessageRefs.length}}
 <div>
   <ng-container
-      *ngFor="let apiRef of  audioMessageRefs; let index = index">
+      *ngFor="let message of messages; let index = index">
     <dsc-listen
-      [apiRef]=apiRef
+      [src]=message.src
       (finishPlaying)="nextMessage()"
       *ngIf="currentMessage === index">
     </dsc-listen>
@@ -14,7 +14,7 @@ Message {{currentMessage + 1}} of {{audioMessageRefs.length}}
       flex-direction: row;
       ">
     <div
-      *ngFor="let apiRef of  audioMessageRefs; let index = index"
+      *ngFor="let message of  messages; let index = index"
       (click)=selectMessage(index)
       class="selectable"
       [style.width]="'' + (100/audioMessageRefs.length) + '%'"
@@ -23,41 +23,41 @@ Message {{currentMessage + 1}} of {{audioMessageRefs.length}}
   </div>
 </div>
 <br>
-<span
-  style="
+<span style="
+  display: grid;
+  grid-template-columns: 4fr 2fr;
+  ">
+  <span style ="
     display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;">
-  <span
-    *ngFor="let possibleImage of possibleImages; let index = index"
-    style="
-      margin: 5px;
-      padding: 5px;
-      width: {{100/possibleImages.length}}%;
-      height: {{100/possibleImages.length}}%;"
-    (click)=selectImage(index)>
-      <img
-        style="
-          margin: 0;
-          padding: 0;
-          max-width: 100%;
-          max-height: 100%;"
-        class="selectable"
-        [src]=possibleImage />
+    flex-wrap: wrap;
+    flex-direction: row;
+    ">
+    <img
+      *ngFor="let possibleImage of possibleImages; let index = index"
+      [src]=possibleImage
+      class="selectable"
+      [style.width]="''+150/possibleImages.length+'%'"
+      style="
+        margin: 5px;
+        padding: 5px;
+        "
+      (click)=selectImage(index) />
+  </span>
+  <span>
+    <div
+      *ngFor="let image of possibleImages; let index = index;">
+      <lib-ngx-image-zoom
+        *ngIf="selectedImage && selectedImage === image"
+        [thumbImage]=image
+        [fullImage]=image
+        [enableLens]=true
+        [lensWidth]=600
+        [lensHeight]=600
+        [magnification]=0.4
+        [circularLens]=true
+      ></lib-ngx-image-zoom>
+    </div>
+    <span *ngIf="!selectedImage"
+      style="font-size: 20vw;">?</span>
   </span>
 </span>
-<div
-  *ngFor="let image of possibleImages; let index = index;">
-  <lib-ngx-image-zoom
-    *ngIf="selectedImage && selectedImage === image"
-    [thumbImage]=image
-    [fullImage]=image
-    [enableLens]=true
-    [lensWidth]=600
-    [lensHeight]=600
-    [magnification]=0.4
-    [circularLens]=true
-  ></lib-ngx-image-zoom>
-</div>
-<span *ngIf="!selectedImage"
-  style="font-size: 20vw;">?</span>

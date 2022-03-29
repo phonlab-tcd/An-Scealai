@@ -1,22 +1,31 @@
 <div
   #fullHeightDiv
-  [style.overflow]="'scroll'"
+  [style.width]="'100%'"
+  [style.x-overflow]="'visible'"
+  [style.overflow]="'auto'"
+  [style.max-width]="'100%'"
   [style.max-height]="fillHeight(fullHeightDiv)">
   <div
-      *ngFor="let message of messages; let index = index"
-      style="display: flex; margin: 10px;">
+      *ngFor="
+        let message of messages;
+        let index = index
+        "
+      style="
+        display: flex;
+        margin: 10px;
+        ">
       <dsc-listen
         *ngIf="message.src"
         [src]=message.src
         [index]=index>
         {{s}}
       </dsc-listen>
-      <span>
+      <span *ngIf=message.apiRef>
         <span
-          *ngIf=message.apiRef
           class="fa-trash"
           (click)=removeMessage(index,message)
-          ></span>
+          >
+        </span>
       </span>
   </div>
 </div>

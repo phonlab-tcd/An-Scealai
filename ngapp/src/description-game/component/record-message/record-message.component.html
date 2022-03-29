@@ -5,8 +5,9 @@
     border-radius: 100px;"
   [style.background]=backgroundColor
   (click)=click()>
-    <span
-    style="font-size: 60px;">
+    <span 
+      [style.color]="recorder ? 'white' : 'black'"
+      style="font-size: 60px;">
     🎙
     </span>
     <br>

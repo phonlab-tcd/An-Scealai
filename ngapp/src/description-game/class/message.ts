@@ -1,6 +1,5 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { RecordingService } from "src/description-game/service/recording.service";
-
 export class Message {
   private cd: ChangeDetectorRef;
   private rec: RecordingService;
@@ -23,19 +22,25 @@ export class Message {
     }
   }
 
-  async initByRef(apiRef: string): Promise<Message> {
+  initByRef(apiRef: string): Message {
     this.apiRef = apiRef;
-    this.src = await this.rec.fetchAudioSrc(apiRef);
-    this.cd.detectChanges();
+    ;(async () => {
+      this.src = await this.rec.fetchAudioSrc(apiRef);
+      console.log(this.src);
+      this.cd.detectChanges();
+    })();
     return this;
   }
 
-  async initByBlob(blob: {data: any}): Promise<Message> {
+  initByBlob(blob: {data: any}): Message {
     console.log('INIT BY BLOB');
     this.src = window.URL.createObjectURL(blob.data);
     console.log(this.src);
-    this.cd.detectChanges();
-    this.apiRef = await this.rec.saveToDbAndGetRef(this.gameId, blob);
+    ;(async () => {
+      this.apiRef = await this.rec.saveToDbAndGetRef(this.gameId, blob);
+      console.log(this.apiRef);
+      this.cd.detectChanges();
+    })();
     return this;
   }
 
