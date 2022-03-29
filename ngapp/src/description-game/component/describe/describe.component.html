@@ -12,12 +12,12 @@
     <dsc-record-message
       *ngIf=messageList
       (ondataavailable)=messageList.process($event)
-      (hitStop)=messageList.receiveRecordingId($event)>
+      (hitStop)="hitStop(messageList,$event)">
     </dsc-record-message>
   </div>
 <span>
-  <button
-    *ngIf=messageList
-    (click)=submitDescription(messageList)>
-      submit
-  </button>
+<button
+  *ngIf=messageList
+  (click)=submitDescription(messageList)>
+  <i class="fa-regular fa-paper-plane"></i>
+</button>

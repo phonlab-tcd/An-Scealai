@@ -49,4 +49,9 @@ export class DescribeComponent implements OnInit {
   ngAfterViewInit() {
     this.cd.detectChanges();
   }
+
+  hitStop(messageList, event) {
+    messageList.scrollTop = messageList.scrollTopMax;
+    messageList.receiveRecordingId(event);
+  }
 }

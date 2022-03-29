@@ -53,8 +53,6 @@ export class ListenComponent implements OnInit {
     if(this.duration)
       this.tooltipText += ' Duration: ' + this.duration.toFixed(2) + 's';
     this.cd.detectChanges();
-    console.dir(this);
-    console.dir(this.tooltipText);
   }
 
   constructor(
@@ -96,12 +94,12 @@ export class ListenComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.originalBlob) {
-      this.metaData = {time: this.originalBlob.time};
-      this.makeTooltip();
-      this.cd.detectChanges();
       this.src =
           window.URL.createObjectURL(
             this.originalBlob.data);
+      this.metaData = {time: this.originalBlob.time};
+      this.makeTooltip();
+      this.cd.detectChanges();
       return;
     }
     if(!this.apiRef) {
