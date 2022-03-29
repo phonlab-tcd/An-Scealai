@@ -2,22 +2,22 @@
   <div>
     <dsc-image [src]="imageUri">
     </dsc-image>
+  </div>
+  <div>
+    <dsc-message-list
+      #messageList
+      [gameInfo]=gameInfo
+      >
+    </dsc-message-list>
     <dsc-record-message
       *ngIf=messageList
       (ondataavailable)=messageList.process($event)
       (hitStop)=messageList.receiveRecordingId($event)>
     </dsc-record-message>
   </div>
-  <div>
-    <button
-      *ngIf=messageList
-      (click)=submitDescription(messageList)>
-        submit
-    </button>
-    <dsc-message-list
-      #messageList
-      [gameInfo]=gameInfo
-      >
-    </dsc-message-list>
-  </div>
 <span>
+  <button
+    *ngIf=messageList
+    (click)=submitDescription(messageList)>
+      submit
+  </button>

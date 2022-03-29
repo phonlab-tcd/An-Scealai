@@ -1,11 +1,17 @@
-<button
-  *ngIf="!recorder && !throttle"
-  (click)=start()>
-    start
-</button>
-<button
-  *ngIf="recorder"
-  (click)=stop()>
-    stop
-</button>
-<br>
+<button 
+  style="
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;"
+  [style.background]=backgroundColor
+  (click)=click()>
+    <span
+    style="font-size: 60px;">
+    🎙
+    </span>
+    <br>
+    <span #elapsedTime
+      style="
+        font-size: tiny;
+        color: light-gray;
+        "></span></button>

@@ -1,4 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { RecordingService} from 'src/description-game/service/recording.service';
@@ -18,11 +26,14 @@ export class RecordMessageComponent implements OnInit {
   saved: any[] = [];
   headers: any;
   throttle: boolean = false;
+  backgroundColor: string = 'lightgreen';
   @Output('ondataavailable') dataAvailableEmitter: EventEmitter<boolean> = new EventEmitter();
   @Output('hitStop') hitStop: EventEmitter<{
     start: number;
     stop: number;
   }> = new EventEmitter();
+
+  @ViewChild('elapsedTime') elapsedTime: ElementRef;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -37,6 +48,20 @@ export class RecordMessageComponent implements OnInit {
     }
     if (!navigator.mediaDevices.getUserMedia) {
       alert('getUserMedia API not supported in this browser')
+    }
+  }
+  click() {
+    if(!this.recorder && !this.throttle) {
+      this.start();
+    } else if (this.recorder) {
+      this.stop();
+    }
+  }
+
+  showTime(start) {
+    if( this.recorder ) {
+      this.elapsedTime.nativeElement.innerHTML = ((Date.now() - start)/1000).toFixed(3);
+      setTimeout(()=>{this.showTime(start)},10);
     }
   }
 
@@ -55,6 +80,7 @@ export class RecordMessageComponent implements OnInit {
         this.recorder.start();
         const r = this.recorder;
         r.timeStart = Date.now();
+        this.showTime(r.timeStart);
         this.recorder.ondataavailable = (dataavailable) => {
           dataavailable.time = {};
           dataavailable.time.ready = Date.now();

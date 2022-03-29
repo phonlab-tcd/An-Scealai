@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import config from 'src/abairconfig.json';
+import max from 'lodash/max';
 
 @Component({
   selector: 'dsc-message-list',
@@ -73,5 +74,9 @@ export class MessageList implements OnInit {
     this.saved = this.saved.slice(0,index).concat(this.saved.slice(index+1));
     console.log(this.saved);
     this.cd.detectChanges();
+  }
+
+  fillHeight(ref: HTMLElement): string {
+    return '' + max([100, (window.innerHeight - ref.offsetTop)/2]) + 'px';
   }
 }
