@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { AuthenticationService } from "src/app/authentication.service";
+import { Message } from 'src/description-game/class/message';
+import { RecordingService } from 'src/description-game/service/recording.service';
 import config from 'src/abairconfig.json';
 
 @Component({
@@ -11,16 +13,22 @@ import config from 'src/abairconfig.json';
 })
 export class DescribeComponent implements OnInit {
   @ViewChild('messageList') messageList = null;
+  messages: Message[] = [];
   gameInfo: any;
   imageUri = '';
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
+    private rec: RecordingService,
     private cd: ChangeDetectorRef,
   ) {
-    this.fetchGameInfo().subscribe(d=>{
-      this.gameInfo=d
-    });
+  }
+
+  newMessage(dataavailable) {
+    const newM = new Message(this.gameInfo._id, this.rec, this.cd);
+    this.messages.push(newM);
+    newM.initByBlob(dataavailable);
+    this.cd.detectChanges();
   }
 
   fetchGameInfo() {
@@ -34,24 +42,34 @@ export class DescribeComponent implements OnInit {
   }
 
   submitDescription(messageList) {
-    const messageIds = messageList.saved.concat(messageList.fromDb);
+    const messageIds =
+      messageList.apiRefs.concat(
+        messageList.inMemoryRefs.map(i=>i.apiRef));
     const game = this.gameInfo;
     this.http.post(
       config.baseurl + 'description-game/submit/describe',
       { game, messageIds, },
       { headers: { Authorization: 'Bearer ' + this.auth.getToken() } }
-    ).subscribe(console.log,console.error);
+    ).subscribe(()=>{
+      this.messageList.refresh();
+      this.ngAfterViewInit();
+    },console.error);
   }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit() {
+    this.messageList.gameInfo = undefined;
+    this.cd.detectChanges();
+    this.fetchGameInfo().subscribe(d=>{
+      this.gameInfo=d;
+      this.messageList.initGame(d);
+    });
     this.cd.detectChanges();
   }
 
   hitStop(messageList, event) {
     messageList.scrollTop = messageList.scrollTopMax;
-    messageList.receiveRecordingId(event);
   }
 }

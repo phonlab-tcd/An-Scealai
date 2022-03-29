@@ -13,14 +13,6 @@ function date(timestamp: string) {
   return new Date(parseInt(timestamp,16) *1000);
 }
 
-interface MetaData {
-  time: {
-    start: number;
-    stop: number;
-    ready: number;
-  };
-  mimetype: string;
-}
 
 @Component({
   selector: 'dsc-listen',
@@ -30,8 +22,7 @@ interface MetaData {
 export class ListenComponent implements OnInit {
   public metaData: {time: {start: number}}= null;
   duration: number = null;
-  @Input('originalBlob') originalBlob: any;
-  @Input('apiRef') apiRef: string; // ObjectId
+  @Input('src') src: string;
   @Input('index') index: number;
   @Input('height') height: number = 40;
   @ViewChild('waveform') waveform: NgWaveformComponent;
@@ -82,49 +73,8 @@ export class ListenComponent implements OnInit {
     return false;
   }
 
-  date(){
-    if(this.originalBlob) {
-      return new Date(this.originalBlob.time.start)
-        .toLocaleTimeString();
-    }
-  };
-
-  src: string;
-  d: Date;
-
   ngOnInit(): void {
-    if(this.originalBlob) {
-      this.src =
-          window.URL.createObjectURL(
-            this.originalBlob.data);
-      this.metaData = {time: this.originalBlob.time};
-      this.makeTooltip();
-      this.cd.detectChanges();
-      return;
-    }
-    if(!this.apiRef) {
-      this.deleteMe.emit(this.index);
-      return;
-    }
-    this.fetchMetaData();
-    this.fetchAudio();
+    console.log('LISTEN ON INIT');
   }
 
-  fetchMetaData() {
-    this.http.get<MetaData>(
-      config.baseurl + `description-game/meta/audio/${this.apiRef}`,
-      {
-        headers: {Authorization: 'Bearer ' + this.auth.getToken()},
-      })
-      .subscribe((d: MetaData) => {
-        this.metaData = d;
-        this.makeTooltip();
-        this.cd.detectChanges();
-      });
-  }
-
-  async fetchAudio() {
-    this.src = await this.rec.fetchAudioSrc(this.apiRef);
-    this.cd.detectChanges();
-  }
 }

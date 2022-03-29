@@ -11,10 +11,10 @@ function ep(_path,method) {
   _path = path.join('..','endpoints_functions','description-game',..._path);
   const module = require(_path);
   const func = method ? module[method] : module;
+  console.log(module);
+  console.log(_path, func);
   return (req,res,next) => {
     try {
-      console.log(module);
-      console.log(_path, func);
       func(req,res,next);
     } catch(e) {
       next(e);
@@ -35,35 +35,50 @@ else {
 }
 const POST = 'post';
 const GET = 'get';
+const DELETE = 'delete';
 
-descriptionGameRoutes
-  .post('/audio',
-    multer.any(),
-    ep(['audio'], POST));
+///////////////////////////// POST
+descriptionGameRoutes[POST](
+  '/audio',
+  multer.any(),
+  ep(['audio'], POST));
 
-descriptionGameRoutes
-  .get('/audio/:id',
-    ep(['audio'], GET));
+descriptionGameRoutes[POST](
+  '/submit/describe',
+  ep(['submit','describe'],
+  POST));
 
-descriptionGameRoutes
-  .get('/meta/audio/:id',
-    ep(['meta','audio'], GET));
+///////////////////////////// GET
+descriptionGameRoutes[GET](
+  '/audio/:id',
+  ep(['audio'],
+  GET));
 
-descriptionGameRoutes
-  .get('/allAudio',
-    ep(['allAudio'], GET));
+descriptionGameRoutes[GET](
+  '/meta/audio/:id',
+  ep(['meta','audio'],
+  GET));
 
-descriptionGameRoutes
-  .get('/next/describe',
-    ep(['next','describe'], GET));
+descriptionGameRoutes[GET](
+  '/allAudio',
+  ep(['allAudio'],
+  GET));
 
-descriptionGameRoutes
-  .get('/next/interpret',
-    ep(['next','interpret'], GET));
+descriptionGameRoutes[GET](
+  '/next/describe',
+  ep(['next','describe'],
+  GET));
 
-descriptionGameRoutes
-  .post('/submit/describe',
-    ep(['submit','describe'], POST));
+descriptionGameRoutes[GET](
+  '/next/interpret',
+  ep(['next','interpret'],
+  GET));
+
+///////////////////////////// DELETE
+descriptionGameRoutes[DELETE](
+  '/describe/audio/:gameId/:messageId',
+  ep(['describe','audio'],
+  DELETE));
 
 console.log(descriptionGameRoutes.stack);
 

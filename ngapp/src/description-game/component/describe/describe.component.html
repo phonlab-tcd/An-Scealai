@@ -1,4 +1,4 @@
-<span style="display: grid; grid-template-columns: 2fr 1fr;">
+<span style="display: grid; grid-template-columns: 2fr 2fr 1fr;">
   <div>
     <dsc-image [src]="imageUri">
     </dsc-image>
@@ -6,18 +6,17 @@
   <div>
     <dsc-message-list
       #messageList
-      [gameInfo]=gameInfo
-      >
+      [messages]=messages>
     </dsc-message-list>
     <dsc-record-message
       *ngIf=messageList
-      (ondataavailable)=messageList.process($event)
+      (ondataavailable)=newMessage($event)
       (hitStop)="hitStop(messageList,$event)">
     </dsc-record-message>
   </div>
+  <button
+    *ngIf=messageList
+    (click)=submitDescription(messageList)>
+    <i class="fa-regular fa-paper-plane"></i>
+  </button>
 <span>
-<button
-  *ngIf=messageList
-  (click)=submitDescription(messageList)>
-  <i class="fa-regular fa-paper-plane"></i>
-</button>

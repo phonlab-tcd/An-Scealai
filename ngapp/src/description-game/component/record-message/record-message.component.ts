@@ -58,10 +58,10 @@ export class RecordMessageComponent implements OnInit {
     }
   }
 
-  showTime(start) {
+  startTimer(start) {
     if( this.recorder ) {
       this.elapsedTime.nativeElement.innerHTML = ((Date.now() - start)/1000).toFixed(3);
-      setTimeout(()=>{this.showTime(start)},10);
+      setTimeout(()=>{this.startTimer(start)},10);
     }
   }
 
@@ -80,7 +80,7 @@ export class RecordMessageComponent implements OnInit {
         this.recorder.start();
         const r = this.recorder;
         r.timeStart = Date.now();
-        this.showTime(r.timeStart);
+        this.startTimer(r.timeStart);
         this.recorder.ondataavailable = (dataavailable) => {
           dataavailable.time = {};
           dataavailable.time.ready = Date.now();

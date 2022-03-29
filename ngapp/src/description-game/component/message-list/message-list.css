@@ -1,0 +1,11 @@
+
+.fa-trash:hover {
+  font-size: large;
+  color: white;
+}
+span.fa-trash {
+  background-color: transparent;
+}
+span.fa-trash:hover {
+  background-color: red;
+}
