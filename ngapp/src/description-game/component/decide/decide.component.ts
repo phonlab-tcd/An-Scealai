@@ -5,7 +5,7 @@ import { shuffle } from 'lodash';
 import config from 'src/abairconfig.json';
 
 @Component({
-  selector: 'description-game-decide',
+  selector: 'dsc-decide',
   templateUrl: './decide.component.html',
   styleUrls: ['./decide.component.css']
 })

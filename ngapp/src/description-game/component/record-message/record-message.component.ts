@@ -7,7 +7,7 @@ import config from 'src/abairconfig.json';
 declare var MediaRecorder: any;
 
 @Component({
-  selector: 'description-game-record-message',
+  selector: 'dsc-record-message',
   templateUrl: './record-message.component.html',
   styleUrls: ['./record-message.component.css']
 })

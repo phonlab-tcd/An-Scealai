@@ -2,11 +2,11 @@ Message {{currentMessage + 1}} of {{audioMessageRefs.length}}
 <div>
   <ng-container
       *ngFor="let apiRef of  audioMessageRefs; let index = index">
-    <description-game-listen
+    <dsc-listen
       [apiRef]=apiRef
       (finishPlaying)="nextMessage()"
       *ngIf="currentMessage === index">
-    </description-game-listen>
+    </dsc-listen>
   </ng-container>
   <div
     style="

@@ -23,7 +23,7 @@ interface MetaData {
 }
 
 @Component({
-  selector: 'description-game-listen',
+  selector: 'dsc-listen',
   templateUrl: './listen.component.html',
   styleUrls: ['./listen.component.css']
 })
@@ -40,18 +40,21 @@ export class ListenComponent implements OnInit {
   
   backgroundColor = '#b1d0b9';
 
-  public tooltip: string = '';
+  public tooltipText: string = '';
+
   makeTooltip() {
-    this.tooltip = ''; 
+    this.tooltipText = ''; 
     if(this.metaData && this.metaData.time && this.metaData.time.start) {
     const startTime = new Date(this.metaData.time.start);
-    this.tooltip =
+    this.tooltipText =
       startTime.toLocaleDateString() + ' ' +
       startTime.toLocaleTimeString();
     }
     if(this.duration)
-      this.tooltip += ' Duration: ' + this.duration.toFixed(2) + 's';
+      this.tooltipText += ' Duration: ' + this.duration.toFixed(2) + 's';
     this.cd.detectChanges();
+    console.dir(this);
+    console.dir(this.tooltipText);
   }
 
   constructor(

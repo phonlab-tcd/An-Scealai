@@ -5,10 +5,10 @@ import config from 'src/abairconfig.json';
 
 @Component({
   selector: 'dsc-message-list',
-  templateUrl: './describe-message-list.component.html',
-  styleUrls: ['./describe-message-list.component.css']
+  templateUrl: './message-list.html',
+  styleUrls: ['./message-list.css']
 })
-export class DescribeMessageListComponent implements OnInit {
+export class MessageList implements OnInit {
   private _gameInfo;
   fromDb: string[] = []; // TODO actually should be ObjectId[]
   saved: any[] = [];

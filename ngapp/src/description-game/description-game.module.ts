@@ -23,7 +23,7 @@ import { MessageList } from './component/message-list/message-list';
     RecordingDashboardComponent,
     ChooseComponent,
     DecideComponent,
-    ListComponent
+    MessageList,
   ],
   imports: [
     CommonModule,

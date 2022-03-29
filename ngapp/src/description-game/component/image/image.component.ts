@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, Input, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'description-game-image',
+  selector: 'dsc-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css'],
 })

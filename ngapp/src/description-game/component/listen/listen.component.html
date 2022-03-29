@@ -1,5 +1,6 @@
 <div
-  [matTooltip]=tooltip
+  #tooltip="matTooltip"
+  matTooltip={{tooltipText}}
   *ngIf=src
   style="
     margin: 20px;
@@ -11,15 +12,8 @@
     "
   (click)=togglePlayback()>
     <div style="width: 3em; align-items: center; display: grid;">
-      <span
-        style="vertical-align: middle"
-        *ngIf=!isPlaying()>
-          ▶
-      </span>
-      <span
-        style="vertical-align: middle"
-        *ngIf=isPlaying()>
-         ⏸
+      <span style="vertical-align: middle">
+        {{ isPlaying() ?  '⏸' : '▶' }}
       </span>
     </div>
     <div>

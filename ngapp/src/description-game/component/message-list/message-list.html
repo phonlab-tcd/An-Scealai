@@ -1,16 +1,16 @@
-<description-game-listen
+<dsc-listen
   *ngFor="let s of fromDb; let index = index"
   [apiRef]=s
   [index]=index>
   {{s}}
-</description-game-listen>
-<description-game-listen
+</dsc-listen>
+<dsc-listen
   *ngFor="let s of saved; let index = index"
   [originalBlob]=s.originalBlob
   [index]=index
   (deleteMe)="removeSaved(index)">
   {{s.mimetype}}
-</description-game-listen>
+</dsc-listen>
 <div
     *ngFor="let h of unprocessedRecordings; let index = index">
   {{h}} loading...

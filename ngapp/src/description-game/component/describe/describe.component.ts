@@ -5,7 +5,7 @@ import { AuthenticationService } from "src/app/authentication.service";
 import config from 'src/abairconfig.json';
 
 @Component({
-  selector: 'description-game-describe',
+  selector: 'dsc-describe',
   templateUrl: './describe.component.html',
   styleUrls: ['./describe.component.css']
 })

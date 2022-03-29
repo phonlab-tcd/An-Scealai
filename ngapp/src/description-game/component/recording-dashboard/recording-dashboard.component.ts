@@ -5,7 +5,7 @@ import config from 'src/abairconfig.json';
 import { RecordingService } from 'src/description-game/service/recording.service';
 
 @Component({
-  selector: 'description-game-recording-dashboard',
+  selector: 'dsc-recording-dashboard',
   templateUrl: './recording-dashboard.component.html',
   styleUrls: ['./recording-dashboard.component.css']
 })
