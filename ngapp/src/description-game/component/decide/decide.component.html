@@ -1,5 +1,10 @@
-Message {{currentMessage + 1}} of {{audioMessageRefs.length}}
 <div>
+  <mat-card>
+    Listen to {{audioMessageRefs.length !== 1 ? 'these ' + audioMessageRefs.length + ' audio recordings.' : 'this audio recording.'}}
+    In them a narrator is describing a picture.
+    When you are ready you will be shown a picture.
+    You will have {{numSeconds}} seconds to decide if the picture you are shown is the same as the picture being described.
+  </mat-card>
   <ng-container
       *ngFor="let message of messages; let index = index">
     <dsc-listen

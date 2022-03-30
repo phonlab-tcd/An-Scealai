@@ -17,6 +17,7 @@ export class DecideComponent implements OnInit {
   audioMessageRefs: string[] = [];
   currentMessage: number = 0;
   selectedImage: string;
+  numSeconds = 10;
 
   constructor(
     private http: HttpClient,

@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, OnInit, Input } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import max from 'lodash/max';
@@ -15,6 +24,11 @@ export class MessageList implements OnInit {
   gameId: string;
   @Input('messages')
   messages: Message[] = [];
+  @Output('trashMessage')
+  trashMessage: EventEmitter<{index: number; message: Message}>
+    = new EventEmitter();
+  @ViewChild('fullHeightDiv')
+  fullHeightDiv: ElementRef;
 
   constructor(
     private http: HttpClient,
@@ -36,7 +50,12 @@ export class MessageList implements OnInit {
   }
 
   removeMessage(n, message) {
-    this.messages = this.messages.filter((v,i)=>i!=n);
-    message.removeFromGame();
+    this.trashMessage.emit({index: n, message});
+  }
+
+  scrollToBottom(): void {
+    console.log('SCROLL TO BOTTOM', this);
+    this.fullHeightDiv.nativeElement.scrollTop
+      = this.fullHeightDiv.nativeElement.scrollHeight;
   }
 }

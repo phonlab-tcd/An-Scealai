@@ -20,12 +20,12 @@
         [index]=index>
         {{s}}
       </dsc-listen>
-      <span *ngIf=message.apiRef>
-        <span
-          class="fa-trash"
-          (click)=removeMessage(index,message)
-          >
-        </span>
-      </span>
+      <img
+        *ngIf=message.apiRef
+        style="width: 30px;"
+        class="trash"
+        src="assets/img/trash-solid.svg"
+        (click)=removeMessage(index,message)
+        />
   </div>
 </div>

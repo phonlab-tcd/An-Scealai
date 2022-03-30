@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { AuthenticationService } from "src/app/authentication.service";
 import { Message } from 'src/description-game/class/message';
 import { RecordingService } from 'src/description-game/service/recording.service';
+import { MessageList } from 'src/description-game/component/message-list/message-list';
 import config from 'src/abairconfig.json';
 
 @Component({
@@ -12,7 +13,7 @@ import config from 'src/abairconfig.json';
   styleUrls: ['./describe.component.css']
 })
 export class DescribeComponent implements OnInit {
-  @ViewChild('messageList') messageList = null;
+  @ViewChild('messageList') messageList;
   messages: Message[] = [];
   gameInfo: any;
   imageUri = '';
@@ -33,6 +34,7 @@ export class DescribeComponent implements OnInit {
     this.messages.push(newM);
     console.dir(this.messages);
     this.cd.detectChanges();
+    this.messageList.scrollToBottom();
   }
 
   fetchGameInfo() {
@@ -77,7 +79,11 @@ export class DescribeComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  hitStop(messageList, event) {
-    messageList.scrollTop = messageList.scrollTopMax;
+  hitStop(messageList: MessageList, event) {
+  }
+
+  removeMessage(o) {
+    this.messages = this.messages.filter((v,i)=>i!=o.index);
+    o.message.removeFromGame();
   }
 }

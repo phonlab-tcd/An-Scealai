@@ -1,4 +1,5 @@
 <button 
+  mat-button
   style="
     width: 200px;
     height: 200px;
@@ -8,11 +9,14 @@
     <span 
       [style.color]="recorder ? 'white' : 'black'"
       style="font-size: 60px;">
-    🎙
+      <img
+        src="assets/img/microphone-lines-solid.svg"
+        style="width: 30%;">
     </span>
     <br>
     <span #elapsedTime
       style="
         font-size: tiny;
         color: light-gray;
-        "></span></button>
+        "></span>
+</button>

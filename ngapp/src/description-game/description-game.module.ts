@@ -13,6 +13,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { MessageList } from './component/message-list/message-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { MessageList } from './component/message-list/message-list';
     MatTabsModule,
     NgxImageZoomModule,
     MatTooltipModule,
+    MatCardModule,
+    MatButtonModule,
   ],
 })
 export class DescriptionGameModule { }

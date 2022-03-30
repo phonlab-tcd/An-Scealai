@@ -8,3 +8,11 @@ span.fa-trash {
 span.fa-trash:hover {
   background-color: red;
 }
+
+img.trash {
+  background: transparent;
+}
+
+img.trash:hover {
+  background-color: pink;
+}
