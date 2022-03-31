@@ -146,7 +146,8 @@ export class TextBoxComponent implements OnInit {
 
   enterSentence = () => {
     // avoiding using ngModel
-    this.sentence.text = document.getElementById('sentence_' + this.sentence.id).value
+    this.sentence.text = (<HTMLInputElement>document.getElementById('sentence_' + this.sentence.id)).value
+    //this.sentence.text = "dia duit"
     if ( this.sentence.text !== "" && !avatarStates.lookingAtBoard && !avatarStates.speaking) {
       this.sentence.editted = false
       avatarControl("look at board")
@@ -162,9 +163,9 @@ export class TextBoxComponent implements OnInit {
         this.sentence.awaitingTts = false;
         this.speakNow()
         if (g.length === 0) {
-	   this.sentence.readyToSpeakHelp = false
-            this.sentence['audioDataHelp'] = undefined
-	} else {
+          this.sentence.readyToSpeakHelp = false
+          this.sentence['audioDataHelp'] = undefined
+        } else {
           let helpMessage = ""
           g.forEach((e, i) => {
             helpMessage += e['errortext'] + ", " + e['msg']
