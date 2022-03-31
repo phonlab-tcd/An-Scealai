@@ -1,6 +1,14 @@
-.submit{
+span > div {
+  padding: 10px;
+}
+.submit:disabled {
+  fill: gray;
+}
+
+.submit:enabled {
   fill: lightblue;
 }
-.submit:hover {
+
+.submit:hover:enabled {
   fill: blue;
 }

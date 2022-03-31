@@ -14,6 +14,7 @@ const randomRedHerrings = (correct, n) => {
 
 const collection = 'description.game.interpret.game';
 const InterpretGame = new Schema({
+  describer: {type: ObjectId, ref: 'User' },
   correct_description: { type: ObjectId, ref: 'DescribeGame' },
   red_herrings: [String],
   estimated_difficulty: Number,
@@ -60,9 +61,10 @@ InterpretGameSession.statics.newSession = async function (user) {
     const ig = module.exports.InterpretGame;
     const alreadyUsed =
       (await this.find({owner: user._id}))
-      .map(igs=>igs._id);
+      .map(igs=>igs.game);
     const unplayedGames = await ig.find({
       _id: { $nin: alreadyUsed },
+      describer: {$ne: user._id},
     });
     const game = _.sample(unplayedGames);
     if(game) return game;

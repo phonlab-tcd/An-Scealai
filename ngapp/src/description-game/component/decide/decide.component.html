@@ -1,68 +1,83 @@
 <div>
   <mat-card>
     Listen to {{audioMessageRefs.length !== 1 ? 'these ' + audioMessageRefs.length + ' audio recordings.' : 'this audio recording.'}}
-    In them a narrator is describing a picture.
-    When you are ready you will be shown a picture.
-    You will have {{numSeconds}} seconds to decide if the picture you are shown is the same as the picture being described.
+    In them, a narrator is describing a picture.
   </mat-card>
-  <ng-container
-      *ngFor="let message of messages; let index = index">
-    <dsc-listen
-      [src]=message.src
-      (finishPlaying)="nextMessage()"
-      *ngIf="currentMessage === index">
-    </dsc-listen>
-  </ng-container>
-  <div
-    style="
-      display: flex;
-      flex-direction: row;
-      ">
-    <div
-      *ngFor="let message of  messages; let index = index"
-      (click)=selectMessage(index)
-      class="selectable"
-      [style.width]="'' + (100/audioMessageRefs.length) + '%'"
-      [style.background-color]="(currentMessage === index) ? 'lightgreen' : 'gray'"
-      >{{index + 1}}</div>
-  </div>
+  <mat-card
+    style="justify-content: center;">
+    <ng-container
+        *ngFor="let message of messages; let index = index">
+      <dsc-listen
+        [src]=message.src
+        (finishPlaying)="nextMessage()"
+        *ngIf="currentMessage === index">
+      </dsc-listen>
+    </ng-container>
+    <mat-button-toggle-group name="chooseMessage" value="0">
+      <mat-button-toggle
+        *ngFor="let message of  messages; let index = index"
+        (click)=selectMessage(index)
+        value={{index}}
+        >{{index + 1}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </mat-card>
 </div>
 <br>
-<span style="
-  display: grid;
-  grid-template-columns: 4fr 2fr;
-  ">
-  <span style ="
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    ">
-    <img
-      *ngFor="let possibleImage of possibleImages; let index = index"
-      [src]=possibleImage
-      class="selectable"
-      [style.width]="''+150/possibleImages.length+'%'"
-      style="
-        margin: 5px;
-        padding: 5px;
-        "
-      (click)=selectImage(index) />
-  </span>
-  <span>
-    <div
-      *ngFor="let image of possibleImages; let index = index;">
-      <lib-ngx-image-zoom
-        *ngIf="selectedImage && selectedImage === image"
-        [thumbImage]=image
-        [fullImage]=image
-        [enableLens]=true
-        [lensWidth]=600
-        [lensHeight]=600
-        [magnification]=0.4
-        [circularLens]=true
-      ></lib-ngx-image-zoom>
-    </div>
-    <span *ngIf="!selectedImage"
-      style="font-size: 20vw;">?</span>
-  </span>
-</span>
+<mat-card>
+  <mat-card-title>
+  Which picture was described?
+  </mat-card-title>
+  {{submittedImage}}
+  {{correctImage}}
+  <mat-card-content>
+    <mat-button-toggle-group name="chooseImage">
+      <mat-button-toggle
+        *ngFor="let image of  possibleImages; let index = index"
+        (click)=selectImage(index)
+        [style.background-color]="getColor(image)"
+        >{{index + 1}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <button mat-button
+      class="primary"
+      [disabled]="!selectedImage || correctImage"
+      [style.background-color]="'lightgreen'"
+      (click)=submit()>
+      submit
+    </button>
+    <lib-ngx-image-zoom
+      *ngIf=selectedImage
+      [thumbImage]=toHref(selectedImage)
+      [fullImage]=toHref(selectedImage)
+      [enableLens]=true
+      [lensWidth]=600
+      [lensHeight]=600
+      [magnification]=0.4
+      [circularLens]=true
+    ></lib-ngx-image-zoom>
+    <button mat-button
+      *ngIf=correctImage
+      [style.background-color]="'lightblue'"
+      (click)=nextGame()>
+      Next game
+    </button>
+    <mat-card
+      *ngIf="correctImage && correctImage !== submittedImage"
+      [style.background-color]="'lightgreen'">
+      <mat-card-title
+        >
+        Correct image:
+        <lib-ngx-image-zoom
+          [thumbImage]=toHref(correctImage)
+          [fullImage]=toHref(correctImage)
+          [enableLens]=true
+          [lensWidth]=600
+          [lensHeight]=600
+          [magnification]=0.4
+          [circularLens]=true
+        ></lib-ngx-image-zoom>
+      </mat-card-title>
+    </mat-card>
+  </mat-card-content>
+</mat-card>

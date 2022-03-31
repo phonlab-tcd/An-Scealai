@@ -48,6 +48,11 @@ descriptionGameRoutes[POST](
   ep(['submit','describe'],
   POST));
 
+descriptionGameRoutes[POST](
+  '/submit/interpret',
+  ep(['submit','interpret'],
+  POST));
+
 ///////////////////////////// GET
 descriptionGameRoutes[GET](
   '/audio/:id',

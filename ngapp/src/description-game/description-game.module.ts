@@ -15,6 +15,8 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { MessageList } from './component/message-list/message-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatTooltipModule,
     MatCardModule,
     MatButtonModule,
+    DragDropModule,
+    MatButtonToggleModule,
   ],
 })
 export class DescriptionGameModule { }

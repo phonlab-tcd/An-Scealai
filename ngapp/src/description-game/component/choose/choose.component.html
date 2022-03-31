@@ -1,13 +1,18 @@
 <mat-tab-group>
   <mat-tab label="Describe!">
     <ng-template matTabContent>
-      <dsc-describe>
+      <dsc-describe
+        *ngIf=playDescribeGame
+        (finishGame)=refreshDescribeGame()>
       </dsc-describe>
     </ng-template>
   </mat-tab>
   <mat-tab label="Listen!"> 
     <ng-template matTabContent>
-      <dsc-decide>
+      <dsc-decide
+        #decideGame
+        *ngIf=playDecideGame
+        (finishGame)=refreshDecideGame()>
       </dsc-decide>
     </ng-template>
   </mat-tab>

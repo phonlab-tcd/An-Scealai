@@ -1,31 +1,39 @@
 <div
   #fullHeightDiv
+  cdkDropList
+  (cdkDropListDropped)=drop($event)
   [style.width]="'100%'"
   [style.x-overflow]="'visible'"
   [style.overflow]="'auto'"
   [style.max-width]="'100%'"
   [style.max-height]="fillHeight(fullHeightDiv)">
-  <div
+  <mat-card
+      cdkDrag
       *ngFor="
         let message of messages;
         let index = index
         "
-      style="
-        display: flex;
-        margin: 10px;
-        ">
-      <dsc-listen
-        *ngIf="message.src"
-        [src]=message.src
-        [index]=index>
-        {{s}}
-      </dsc-listen>
-      <img
-        *ngIf=message.apiRef
-        style="width: 30px;"
-        class="trash"
-        src="assets/img/trash-solid.svg"
-        (click)=removeMessage(index,message)
-        />
-  </div>
+      (click)="log(message.color.str())"
+      [style.background-color]="message.color.str()">
+        <mat-card-content>
+          <dsc-listen
+            *ngIf="message.src"
+            [src]=message.src
+            [index]=index>
+            {{s}}
+          </dsc-listen>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-button
+            *ngIf=message.apiRef
+            (click)=removeMessage(index,message)
+            >
+            <img mat-card-image
+              src="assets/img/trash-solid.svg"
+              style="max-width: 100%; max-height: 100%;"
+              />
+          </button>
+        </mat-card-actions>
+  </mat-card>
 </div>

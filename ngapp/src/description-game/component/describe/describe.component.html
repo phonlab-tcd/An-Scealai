@@ -1,24 +1,34 @@
-<span style="display: grid; grid-template-columns: 2fr 2fr 1fr;">
+<span style="display: grid; grid-template-columns: 2fr 1fr 2fr 1fr;">
   <div>
-    <dsc-image [src]="imageUri">
+    <dsc-image
+      [src]="imageUri">
     </dsc-image>
+  </div>
+  <div>
+    <mat-card>
+      <mat-card-content>
+        Déan cur síos ar an phictúir seo.
+      </mat-card-content>
+      <dsc-record-message
+        *ngIf=messageList
+        (ondataavailable)=newMessage($event)
+        (hitStop)="hitStop(messageList,$event)">
+      </dsc-record-message>
+    </mat-card>
   </div>
   <div>
     <dsc-message-list
       #messageList
       [messages]=messages
+      style="height: 100%;"
       (trashMessage)=removeMessage($event)>
     </dsc-message-list>
-    <dsc-record-message
-      *ngIf=messageList
-      (ondataavailable)=newMessage($event)
-      (hitStop)="hitStop(messageList,$event)">
-    </dsc-record-message>
   </div>
   <button
     mat-button
     *ngIf=imageUri
     class="submit"
+    [disabled]="submitDisabled()"
     (click)=submitDescription(messageList)>
     <svg
       xmlns="http://www.w3.org/2000/svg"

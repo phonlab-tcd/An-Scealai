@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/authentication.service';
 import { shuffle } from 'lodash';
@@ -18,6 +24,12 @@ export class DecideComponent implements OnInit {
   currentMessage: number = 0;
   selectedImage: string;
   numSeconds = 10;
+  gameId = undefined;
+  submittedImage = undefined;
+  correctImage = undefined;
+
+  @Output('finishGame')
+  finishGame: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -27,17 +39,49 @@ export class DecideComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.audioMessageRefs = [];
+    this.messages = [];
     this.http.get<InterpretGame>(
       config.baseurl + 'description-game/next/interpret',
       {headers: {Authorization: 'Bearer ' + this.auth.getToken()}},
     ).subscribe((d:any)=>{
+      this.gameId = d._id;
       this.possibleImages = 
-        shuffle(d.game.red_herrings.concat([d.game.correct_description.imagePath]))
-        .map(p=>config.baseurl + p);
+        shuffle(d.game.red_herrings.concat([d.game.correct_description.imagePath]));
       this.audioMessageRefs = d.game.correct_description.audioMessages;
       this.messages = this.audioMessageRefs.map(a=>new Message('true',this.rec,this.cd).initByRef(a));
       console.log(this.audioMessageRefs);
     },console.error);
+  }
+
+  toHref(p) {
+    return config.baseurl + p;
+  }
+
+  submit() {
+    this.submittedImage = ''+this.selectedImage;
+    this.http.post(
+      config.baseurl + 'description-game/submit/interpret',
+      {
+        gameId: this.gameId,
+        selectedImage: this.submittedImage,
+      },
+      {headers: {Authorization: 'Bearer ' + this.auth.getToken()}},
+    ).subscribe(correctImage=>{
+      this.correctImage=correctImage;
+      console.log(this.correctImage);
+      console.log(this.selectedImage);
+    },console.error);
+  };
+
+  getColor(image) {
+    if(!this.correctImage) return '';
+    if(image === this.correctImage && image === this.submittedImage)
+      return 'lightgreen';
+    if(image === this.correctImage && !(image === this.submittedImage))
+      return 'orange';
+    if(image !== this.correctImage && image == this.submittedImage)
+      return 'pink';
   }
 
   nextMessage(): void {
@@ -59,6 +103,10 @@ export class DecideComponent implements OnInit {
       this.selectedImage = this.possibleImages[i];
       this.cd.detectChanges();
     }
+  }
+
+  nextGame() {
+    this.finishGame.emit();
   }
 }
 interface InterpretGame {

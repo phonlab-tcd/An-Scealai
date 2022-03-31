@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { 
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { AuthenticationService } from "src/app/authentication.service";
@@ -17,12 +24,22 @@ export class DescribeComponent implements OnInit {
   messages: Message[] = [];
   gameInfo: any;
   imageUri = '';
+  @Output('finishGame')
+  finishGame: EventEmitter<any> = new EventEmitter();
+
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
     private rec: RecordingService,
     private cd: ChangeDetectorRef,
   ) {
+  }
+
+  submitDisabled() {
+    if(this.messages.length < 1) return true;
+    const apiRefs = this.messages.map((m:Message)=>m.apiRef()).filter(a=>a);
+    if(apiRefs.length === this.messages.length) return false;
+    return true;
   }
 
   newMessage(dataavailable) {
@@ -48,18 +65,13 @@ export class DescribeComponent implements OnInit {
   }
 
   submitDescription(messageList) {
-    const messageIds =
-      messageList.apiRefs.concat(
-        messageList.inMemoryRefs.map(i=>i.apiRef));
+    const messageIds = this.messages.map(a=>a.apiRef());
     const game = this.gameInfo;
     this.http.post(
       config.baseurl + 'description-game/submit/describe',
       { game, messageIds, },
       { headers: { Authorization: 'Bearer ' + this.auth.getToken() } }
-    ).subscribe(()=>{
-      this.messageList.refresh();
-      this.ngAfterViewInit();
-    },console.error);
+    ).subscribe(()=>{this.finishGame.emit()},console.error);
   }
 
   ngOnInit(): void {

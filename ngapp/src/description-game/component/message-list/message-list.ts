@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/authentication.service';
 import max from 'lodash/max';
 import { Message } from 'src/description-game/class/message';
 import { RecordingService } from 'src/description-game/service/recording.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'dsc-message-list',
@@ -20,6 +21,7 @@ import { RecordingService } from 'src/description-game/service/recording.service
   styleUrls: ['./message-list.css']
 })
 export class MessageList implements OnInit {
+  log = console.log;
   @Input('gameId')
   gameId: string;
   @Input('messages')
@@ -41,12 +43,16 @@ export class MessageList implements OnInit {
   ngOnInit(): void {
   }
 
+  drop(event: CdkDragDrop<Message[]>) {
+    moveItemInArray(this.messages, event.previousIndex, event.currentIndex);
+  }
+
   initGame(gameInfo: { audioMessages: string[], _id: string}) {
     this.gameId = gameInfo._id;
   }
 
   fillHeight(ref: HTMLElement): string {
-    return '' + max([100, (window.innerHeight - ref.offsetTop)/2]) + 'px';
+    return '' + (window.innerHeight - ref.offsetTop) + 'px';
   }
 
   removeMessage(n, message) {
@@ -54,8 +60,22 @@ export class MessageList implements OnInit {
   }
 
   scrollToBottom(): void {
-    console.log('SCROLL TO BOTTOM', this);
-    this.fullHeightDiv.nativeElement.scrollTop
-      = this.fullHeightDiv.nativeElement.scrollHeight;
+    this.logarithmRaceToBottom();
+  }
+
+  logarithmRaceToBottom() {
+    console.count('LOG TO BOTTOM');
+    const st = this.fullHeightDiv.nativeElement.scrollTop;
+    const sh = this.fullHeightDiv.nativeElement.scrollTopMax;
+    const diff = sh-st;
+    console.log(diff);
+    if(diff < 3) {
+      console.count('end log to bottom');
+      this.fullHeightDiv.nativeElement.scrollTop =
+        this.fullHeightDiv.nativeElement.scrollTopMax;
+      return;
+    }
+    this.fullHeightDiv.nativeElement.scrollTop += Math.ceil(diff/10);
+    setTimeout(()=>{this.logarithmRaceToBottom()},1);
   }
 }

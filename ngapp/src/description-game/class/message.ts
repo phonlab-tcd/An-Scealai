@@ -1,11 +1,18 @@
 import { ChangeDetectorRef } from '@angular/core';
 import { RecordingService } from "src/description-game/service/recording.service";
+import { RandomColor } from './randomColor';
+
 export class Message {
   private cd: ChangeDetectorRef;
   private rec: RecordingService;
   private gameId: string;
-  private apiRef: string;
+  private _apiRef: string;
   src: string;
+  color: RandomColor;
+
+  apiRef() {
+    return this._apiRef;
+  }
 
   constructor( gameId: string, recordingService:  RecordingService, changeDetector: ChangeDetectorRef) {
     this.gameId = gameId;
@@ -20,10 +27,11 @@ export class Message {
     if(!this.rec) {
       throw new Error('message does not have recordingService');
     }
+    this.color = new RandomColor();
   }
 
   initByRef(apiRef: string): Message {
-    this.apiRef = apiRef;
+    this._apiRef = apiRef;
     ;(async () => {
       this.src = await this.rec.fetchAudioSrc(apiRef);
       console.log(this.src);
@@ -37,15 +45,15 @@ export class Message {
     this.src = window.URL.createObjectURL(blob.data);
     console.log(this.src);
     ;(async () => {
-      this.apiRef = await this.rec.saveToDbAndGetRef(this.gameId, blob);
-      console.log(this.apiRef);
+      this._apiRef = await this.rec.saveToDbAndGetRef(this.gameId, blob);
+      console.log(this.apiRef());
       this.cd.detectChanges();
     })();
     return this;
   }
 
   async removeFromGame(): Promise<Message> {
-    this.rec.removeMessageFromGame(this.gameId,this.apiRef);
+    this.rec.removeMessageFromGame(this.gameId,this.apiRef());
     return this;
   }
 }
