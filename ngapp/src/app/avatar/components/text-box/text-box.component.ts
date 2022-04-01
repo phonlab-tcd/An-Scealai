@@ -139,8 +139,8 @@ export class TextBoxComponent implements OnInit {
   punct = /[()'\[\]‘’]/g
   stops = /[\.\?!]/g
   cleanTextForTTS = t => {
-    let sentenceWithoutPunctuation = t.replace(this.stops, ", ")
-    let sentenceWithoutStops = sentenceWithoutPunctuation.replace(this.punct, "")
+    //let sentenceWithoutPunctuation = t.replace(this.stops, ", ")
+    let sentenceWithoutStops = t.replace(this.punct, "")
     return sentenceWithoutStops
   }
 
@@ -185,15 +185,32 @@ export class TextBoxComponent implements OnInit {
               flashAvatar()
               this.sentence.avatarFlashed = true;
             }
+          },
+          error => {
+            console.log('error in getting help tts')
           })
         }
-      })
+      },
+        error => {
+          console.log('error ')
+        }
+      )
       let cleanedSentence = this.cleanTextForTTS(this.sentence.text)
       this.ttsService.getTTS(cleanedSentence).subscribe((tts) => {
+        console.log('tts:', tts)
         this.sentence['audioData'] = tts
         this.sentence.awaitingGramadoir = false;
         this.speakNow()
-      })
+      },
+        error => {
+          console.log('error in getting tts')
+          this.ttsService.getTTS("tá brón orm, ach bhí fadhb ann").subscribe((tts) => {
+            this.sentence['audioData'] = tts
+            this.sentence.awaitingGramadoir = false;
+            this.speakNow()
+          }
+        )}
+      )
 
       this.sentence.focussed = false;
       let nextSentenceID = this.sentence.id + 1 ;
