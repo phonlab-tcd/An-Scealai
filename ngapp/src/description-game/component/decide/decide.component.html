@@ -1,7 +1,7 @@
 <div>
   <mat-card>
     Listen to {{audioMessageRefs.length !== 1 ? 'these ' + audioMessageRefs.length + ' audio recordings.' : 'this audio recording.'}}
-    In them, a narrator is describing a picture.
+    In {{(audioMessageRefs.length !== 1) ? 'them':'it'}}, a narrator is describing a picture.
   </mat-card>
   <mat-card
     style="justify-content: center;">
