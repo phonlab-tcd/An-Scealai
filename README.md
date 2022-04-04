@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.15
+LARA update
+
 ## v1.0.12
 Avatar in Beta tab.
 
