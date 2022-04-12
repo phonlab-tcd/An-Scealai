@@ -63,6 +63,7 @@ if [ "$?" != "0" ]; then
 fi
 
 # DEPLOY ON LIVE SERVER
+echo -e "${GREEN}PASSWORD REQUIRED$RESET_COLOR"
 ssh -t scealai@141.95.1.243 "
 cd An-Scealai &&
   git pull &&
