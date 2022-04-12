@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
