@@ -34,7 +34,7 @@ fi
 new_api_version=$(npm version patch --prefix api)
 new_ngapp_version=$(npm version patch --prefix ngapp)
 echo "new versions: api@$new_api_version ngapp@$new_ngapp_version"
-if [ $new_api_version != $new_ngapp_versio ]; then
+if [ $new_api_version != $new_ngapp_version ]; then
   echo -e "${RED}version mismatch. quitting.$RESET_COLOR"
   exit 1
 fi
