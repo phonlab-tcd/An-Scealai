@@ -38,3 +38,42 @@ if [ $new_api_version != $new_ngapp_versio ]; then
   echo -e "${RED}version mismatch. quitting.$RESET_COLOR"
   exit 1
 fi
+
+# CREATE VERSION BRANCH
+get checkout -b $new_api_version
+if [ "$?" != "0" ]; then
+  echo -e "${RED}error creating version branch. quitting.$RESET_COLOR"
+  exit 1
+fi
+
+# BUILD PROD
+npm run build_prod --prefix ngapp
+if [ "$?" != "0" ]; then
+  echo -e "${RED}build failed. quitting.$RESET_COLOR"
+  exit 1
+fi
+
+# PUSH UPDATES
+git add api/package* ngapp/package* ngapp/unpublished_dist && \
+  git commit -m "autocommit publish api@$new_api_version ngapp@$ngapp_new_version" && \
+  git push origin $new_api_version --set-upstream
+if [ "$?" != "0" ]; then
+  echo -e "${RED}error pushing changes to $new_api_version. quitting.$RESET_COLOR"
+  exit 1
+fi
+
+# DEPLOY ON LIVE SERVER
+ssh -t scealai@141.95.1.243 "
+cd An-Scealai &&
+  git pull &&
+  git checkout $new_api_version &&
+  ./reinstall.sh &&
+  ./deploy_current_branch_without_building.sh &&
+  exit 0"
+if [ "$?" != "0"]; then
+  echo -e "${RED}BIG WHOOPS. SOMETHING WENT WRONG ON LIVE SERVER. PLEASE FIX NOW!$RESET_COLOR"
+  exit 1
+fi
+
+echo -e "${GREEN}FINISHED$RESET_COLOR"
+firefox "www.abair.ie/scealai"
