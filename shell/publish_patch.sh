@@ -67,13 +67,7 @@ ssh -t scealai@141.95.1.243 "
 cd An-Scealai &&
   git pull &&
   git checkout $new_api_version &&
-  ./reinstall.sh &&
-  ./deploy_current_branch_without_building.sh &&
-  exit 0"
-if [ "$?" != "0"]; then
-  echo -e "${RED}BIG WHOOPS. SOMETHING WENT WRONG ON LIVE SERVER. PLEASE FIX NOW!$RESET_COLOR"
-  exit 1
-fi
+  bash reinstall.sh &&
+  bash deploy_current_branch_without_building.sh"
 
-echo -e "${GREEN}FINISHED$RESET_COLOR"
 firefox "www.abair.ie/scealai"
