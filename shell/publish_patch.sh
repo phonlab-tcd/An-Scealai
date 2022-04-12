@@ -40,7 +40,7 @@ if [ $new_api_version != $new_ngapp_versio ]; then
 fi
 
 # CREATE VERSION BRANCH
-get checkout -b $new_api_version
+get checkout -b "$new_api_version"
 if [ "$?" != "0" ]; then
   echo -e "${RED}error creating version branch. quitting.$RESET_COLOR"
   exit 1
