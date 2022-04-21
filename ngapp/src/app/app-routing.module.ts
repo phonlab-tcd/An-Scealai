@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DescriptionGameModule } from 'src/description-game/description-game.module';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -55,7 +54,9 @@ import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import {ChooseComponent} from "src/description-game/component/choose/choose.component";
+
+// import { DescriptionGameModule } from 'src/description-game/description-game.module';
+// import { ChooseComponent } from "src/description-game/component/choose/choose.component";
 
 const routes: Routes = [
   { path: 'landing', component: LandingComponent},
@@ -83,7 +84,8 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  { path: 'description', component: ChooseComponent },
+  // NEUTERED
+  // { path: 'description', component: ChooseComponent },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -174,7 +176,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes),
-    DescriptionGameModule,
+    // NEUTERED
+    // DescriptionGameModule,
   ],
   exports: [ RouterModule ],
   providers: [ NotificationService ]

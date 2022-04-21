@@ -79,9 +79,11 @@ app.use('/synthesis', synthesisRoute);
 
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
-app.use('/description-game',
-  // jwtAuthMw,
-  require('./routes/description-game.route'));
+
+// NEUTERED
+// app.use('/description-game',
+//   // jwtAuthMw,
+//   require('./routes/description-game.route'));
 
 const port = process.env.PORT || 4000;
 
