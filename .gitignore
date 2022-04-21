@@ -1,5 +1,6 @@
 dist
-
+installAPI.log
+installNG.log
 **/node_modules
 session.vim
 
