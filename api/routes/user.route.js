@@ -3,6 +3,8 @@
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
+const jwtAuthMw = require('../utils/jwtAuthMw');
+const mustBeAdminMw = require('../utils/mustBeAdminMw');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -96,20 +98,23 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
     });
 });
 
-// Endpoint to get all users from database
-userRoutes.route('/getAllUsers').get((req, res) => {
-    User.find({}, (err, users) => {
-        if(err) {
-          console.log(err);
-          res.send(err);
-        }
-        if(users) {
-            res.json(users);
-        } else {
-            res.status(404).json("No users exist on the database");
-        }
-    });
-});
+// // Endpoint to get all users from database
+// userRoutes.route('/getAllUsers').get(
+//   jwtAuthMw,
+//   mustBeAdminMw,
+//   (_, res) => {
+//     User.find({}, (err, users) => {
+//         if(err) {
+//           console.log(err);
+//           res.status(400).send(err);
+//         }
+//         if(users) {
+//             res.json(users);
+//         } else {
+//             res.status(404).json("No users exist on the database");
+//         }
+//     });
+// });
 
 // Delete user by username
 userRoutes.route('/deleteUser/:username').get(function(req, res) {
