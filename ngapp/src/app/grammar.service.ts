@@ -399,7 +399,6 @@ export class GrammarService {
   convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
     const highlightTags: HighlightTag[] = [];
     const parsed = JSON.parse(tags);
-    console.log(parsed);
     parsed.forEach((tag: any, index: number) => {
       highlightTags.push({
         indices: {
@@ -415,8 +414,6 @@ export class GrammarService {
         },
       });
     });
-    console.count('HIGHLIGHT TAGS');
-    console.log(highlightTags);
     return highlightTags;
   }
 
@@ -428,7 +425,6 @@ export class GrammarService {
       this.storyService.gramadoirViaBackend(id).subscribe(
         (res) => {
         const tags: HighlightTag[] = [];
-        console.dir(res);
         JSON.parse(res.grammarTags).forEach(g => {
           const tag: HighlightTag = {
             indices: {
@@ -624,8 +620,6 @@ export class GrammarService {
       arr = this.replaceAt(arr, match.index, '#'.repeat(5));
       regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
       match = regex.exec(arr);
-      console.log("matched " + val);
-      console.log("indexes", indexes);
     }
     
     return indexes;

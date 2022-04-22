@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.synth {
+  display: grid;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.synth .reload {
+  font-family: Lucida Sans Unicode;
+  font-size: 20px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5em;
+  padding: 0px;
+  margin: 0px;
+  color: grey;
+  cursor: pointer;
+}
+
+.synth .reload:hover {
+  background-color: #8fcaff;
+  color: black;
+  font-weight: bold;
+}
+
+.synth .fast-synth {
+  padding: 3px;
+  color: grey;
+  cursor: pointer;
+}
+
+.synth .fast-synth:hover {
+  background-color: #8fcaff;
+  color: black;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.items {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  border-radius: 3px;
+  text-align: left;
+  flex-wrap: wrap;
+  justify-content: left;
+}

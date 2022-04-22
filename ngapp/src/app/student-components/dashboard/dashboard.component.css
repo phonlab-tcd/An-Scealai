@@ -1,3 +1,20 @@
+.synthesisLoading {
+  align: center;
+  border-right: 2px solid orange;
+  border-left: 2px solid red;
+  border-top: 2px solid green;
+  border-bottom: 2px solid blue;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .ql-editor {
   background-color: #f7f2e7;
   /* ~44px is the height of the toolbar */
@@ -173,6 +190,8 @@
 
 .textField {
     width: 100%;
+    min-height: var(--textfieldHeight);
+    height: auto;
     /* height: var(--textfieldHeight); */
     resize: none;
     z-index: 1;
@@ -435,7 +454,15 @@ background-color: lightblue;
     font-size: 10pt;
 }
 
-/* Add more here */
+.grammarToolbar {
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    padding-left: 20px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
 
 .selectErrorCheckbox {
   display: flex;

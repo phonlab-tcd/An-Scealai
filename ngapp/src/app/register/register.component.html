@@ -55,7 +55,7 @@
             <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
           </div>
         </div>
-        <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
+        <button (click)="register()" type="submit" class="btn loginBtn">{{ts.l.register}}</button>
       </form>
     </div>
 </div>

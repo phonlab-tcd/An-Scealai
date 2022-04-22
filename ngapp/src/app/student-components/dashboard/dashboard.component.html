@@ -3,10 +3,21 @@
     <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
       <div class="modalContent" *ngIf="story">
-        <div class="modalText">{{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?</div>
-        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+        <div class="modalText">
+          {{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?
+        </div>
+
+        <div *ngIf="registrationError" class="errorMessage">
+          {{errorText}}
+        </div>
+
         <div>
-          <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
+          <button class="modalBtn" (click)="hideModal();">
+            {{ts.l.cancel}}
+          </button>
+          <button class="modalBtn createBtnGreen" (click)="saveModal()">
+            {{ts.l.save}}
+          </button>
         </div>
       </div>
     </div>
@@ -168,6 +179,7 @@
       </div>
     </div>
 
+
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
@@ -223,17 +235,6 @@
               ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion :
               'hover_over_a_highlighted_word_for_a_grammar_suggestion'  }}
       </div>
-      
-      <!--
-      <app-grammar-checker
-          #grammarChecker
-          *ngIf="story.text !== undefined"
-          [classroomId]="classroomId"
-          [story]="story"
-          >
-      </app-grammar-checker>
-      -->
-
       <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
         <span class="dictionaryContainer">
@@ -315,3 +316,9 @@
       </div>
     </div>
 </div>
+<app-synthesis-player
+    #mySynthesisPlayer
+    [dialect]="story.dialect"
+    [text]="story.text"
+    [storyId]="story._id">
+</app-synthesis-player>

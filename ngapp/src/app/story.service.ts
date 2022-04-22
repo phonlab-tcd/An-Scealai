@@ -43,18 +43,19 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    console.log(storyObj);
     this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
-        //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        //this.recordingService.addRecordingForLoggedInUser(storyObj);
-        this.router.navigateByUrl('/dashboard/' + res["id"]);
+        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+
+        // TODO should res['id'] really be using a string literal to reference a property?
+        this.router.navigateByUrl('/dashboard/' + res['id']);
       });
   }
 
   getStoriesFor(author : string) {
-    return this.http.get(this.baseUrl+author);
+    return this.http.get(this.baseUrl + author);
   }
 
   getStory(id: string) : Observable<any> {
@@ -64,7 +65,7 @@ export class StoryService {
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
-      return new Observable<Story[]>();
+      throw new Error('no user details. can\'t get user\'s stories');
     }
 
     const author = userDetails.username;
@@ -130,7 +131,6 @@ export class StoryService {
         // URL
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
-
 
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});

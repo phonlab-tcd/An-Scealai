@@ -221,7 +221,6 @@ export class RecordingComponent implements OnInit {
    * which is also saved to DB.
    */
   async saveRecordings() {
-    console.log('Paragraph blobs', this.paragraphBlobs);
     const paragraph_promises = Object.entries(this.paragraphBlobs).map(async ([index, blob]) => {
       return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
     });

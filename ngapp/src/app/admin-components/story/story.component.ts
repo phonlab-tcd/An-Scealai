@@ -46,7 +46,6 @@ export class StoryComponent implements OnInit {
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-      console.log(this.audioSource);
     });
   }
 
