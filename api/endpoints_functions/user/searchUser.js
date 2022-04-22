@@ -19,8 +19,6 @@ async function searchUser(req, res) {
     ]
   };
 
-  console.dir(reqBody)
-
   // '+' operator casts to Number
   limit = +reqBody.limit
   page = +reqBody.currentPage
@@ -49,7 +47,6 @@ async function searchUser(req, res) {
   if (!users) {
     throw new API404Error(`No users matching the search string were found.`);
   }
-  console.dir(users);
   return res.status(200).json({users: users, count: userCount});
 }
 

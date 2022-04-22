@@ -4,6 +4,7 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
+    "test_silent": "TEST=1 jest --silent",
     "test": "TEST=1 jest --runInBand",
     "start": "nodemon server.js",
     "start_prod": "DB=an-scealai PORT=4000 node server.js",

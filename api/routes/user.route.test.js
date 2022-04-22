@@ -21,6 +21,7 @@ describe('user routes', () => {
         const res = await request.post(`/user/searchUser/`, {searchString: SEARCH_STRING});
   
         expect(res.status).toBe(200);
+        expect(res.body.users[0]).toBeDefined();
         expect(res.body.users[0].username).toBe(users[0].username);
     });
 
@@ -43,7 +44,7 @@ describe('user routes', () => {
         );
 
         expect(res.status).toBe(200);
-        expect(res.body.users.length).toBe(LIMIT);
+        expect(res.body.users.length).toEqual(LIMIT);
     });
 
     it('allows skipping through pages of results', async () => {
@@ -90,6 +91,9 @@ describe('user routes', () => {
       );
 
       expect(res.status).toBe(200);
+      expect(res.body.users[0]).toBeDefined();
+      expect(res.body.users[1]).toBeDefined();
+      res.body.users.sort((a,b)=>(a.username > b.username)?1:((b.username > a.username)?-1:0));
       expect(res.body.users[0].username).toBe('boba');
       expect(res.body.users[1].username).toBe('carl');
     });

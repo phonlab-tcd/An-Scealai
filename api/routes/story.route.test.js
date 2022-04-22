@@ -100,6 +100,7 @@ describe('story routes', () => {
 
       const updatedStory = await Story.findById(story._id);
 
+      expect(updateStory).toBeDefined();
       expect(updatedStory.feedback.seenByStudent);
     });
 
