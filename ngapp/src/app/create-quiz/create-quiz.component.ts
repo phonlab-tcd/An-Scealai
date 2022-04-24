@@ -1,8 +1,5 @@
-import { identifierModuleUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { doesNotReject } from 'assert';
 import { AuthenticationService } from 'src/app/authentication.service';
-import { User } from '../user';
 import { TranslationService } from '../translation.service';
 import config from 'src/abairconfig.json';
 

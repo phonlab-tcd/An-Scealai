@@ -36,11 +36,11 @@ export class FeatureStatsComponent implements OnInit {
     });
   }
   
-  /*
-  * Get all events from the engagement collection in the DB that occured in the date range specified
-  * If no date range specified, get all events in the DB
-  */
-  async getFeatureData() {
+  
+  // Get all events from the engagement collection in the DB that occured in the date range specified
+  // If no date range specified, get all events in the DB
+  // TODO: this can be a void function (neimhin 25/04/22)
+  async getFeatureData(): Promise<void> {
     this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
@@ -98,23 +98,20 @@ export class FeatureStatsComponent implements OnInit {
       let mostRecentLog = this.previousFeatures[this.previousFeatures.length-1];
       console.log("Last log: ", mostRecentLog.statsData);
       
-      new Promise( (resolve, reject) => {
-        this.statsService.getFeatureDataSinceLog(mostRecentLog.date).subscribe( async (res) => {
-          this.features = res;
-          await this.calculateStats();
+      this.statsService.getFeatureDataSinceLog(mostRecentLog.date).subscribe( async (res) => {
+        this.features = res;
+        await this.calculateStats();
 
-          Object.entries(mostRecentLog.statsData).forEach(([key, value]) => {
-            if(this.totalFeatureCounts[key])
-              feature[key] = value + this.totalFeatureCounts[key];
-            else
-              feature[key] = value
-          });
-    
-          console.log("New feature log", feature);
-          this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
-          await this.sortData(feature);
-          resolve();
+        Object.entries(mostRecentLog.statsData).forEach(([key, value]) => {
+          if(this.totalFeatureCounts[key])
+            feature[key] = value + this.totalFeatureCounts[key];
+          else
+            feature[key] = value
         });
+    
+        console.log("New feature log", feature);
+        this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], feature);
+        await this.sortData(feature);
       }); 
     }
     // previous feature log does not exist

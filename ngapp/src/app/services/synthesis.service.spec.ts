@@ -24,7 +24,7 @@ describe('SynthesisService', () => {
         'connemara' as Dialect,
         null,
         'MP3' as AbairAPIv2AudioEncoding,
-      ).then(
+      ).toPromise().then(
       audioURI => {
         expect(audioURI).toBeTruthy();
         const audioElement = new Audio(audioURI);

@@ -41,7 +41,7 @@ export class ProfileStatsComponent implements OnInit {
   * Get all profiles from users that have activated accounts in the date range specified
   * If no date range specified, get profiles from all activated accounts
   */
-  async getProfileData() {
+  async getProfileData(): Promise<void> {
     this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
@@ -182,11 +182,12 @@ export class ProfileStatsComponent implements OnInit {
     return count;
   }
   
-  /*
-  * Create a log of total profile data from a certain period of time and save it to the engagement collection of the DB 
-  * If no log yet exists, the first one is made of all profile data available.  If a previous log does exist, the new data 
-  * is calculated from the previous log to speed up calculations
-  */
+  
+  // Create a log of total profile data from a certain period of time
+  // and save it to the engagement collection of the DB
+  // If no log yet exists, the first one is made of all profile data available.
+  // If a previous log does exist, the new data 
+  // is calculated from the previous log to speed up calculations.
   async addNewProfileData() {
     this.dataLoaded = false;
     // Previous log exists
@@ -195,54 +196,50 @@ export class ProfileStatsComponent implements OnInit {
       console.log(this.previousLogs);
       console.log("Last log: ", mostRecentLog);
       
-      new Promise( (resolve, reject) => {
-        this.statsService.getProfileDataByDate(mostRecentLog.date, "empty").subscribe( async (res) => {
-          await this.calculateStats(res);
-          console.log("Most recent added data: ", this.dataToDisplay);
-          let dataToLog = {};
-          let fieldValues = {};
-          
-          // loop through the keys (fields) of the new data (age, gender, ...)
-          Object.keys(this.dataToDisplay).forEach(field => {
-            // create new field for new log if not included in old log
+      this.statsService.getProfileDataByDate(mostRecentLog.date, "empty").subscribe( async (res) => {
+        await this.calculateStats(res);
+        console.log("Most recent added data: ", this.dataToDisplay);
+        let dataToLog = {};
+        let fieldValues = {};
+        
+        // loop through the keys (fields) of the new data (age, gender, ...)
+        Object.keys(this.dataToDisplay).forEach(field => {
+          // create new field for new log if not included in old log
+          if (mostRecentLog.statsData[field]) {
+            fieldValues = mostRecentLog.statsData[field];
+          }
+          else {
+            dataToLog[field] = {};
+            fieldValues = {};
+          }
+          // loop through the calculated values of the fields in the new data ({80+:1}, {male:2}, ...), compare with last log
+          Object.entries(this.dataToDisplay[field]).forEach(([key, value]) => {
+            // last log has the given field
             if (mostRecentLog.statsData[field]) {
-              fieldValues = mostRecentLog.statsData[field];
-            }
-            else {
-              dataToLog[field] = {};
-              fieldValues = {};
-            }
-            // loop through the calculated values of the fields in the new data ({80+:1}, {male:2}, ...), compare with last log
-            Object.entries(this.dataToDisplay[field]).forEach(([key, value]) => {
-              // last log has the given field
-              if (mostRecentLog.statsData[field]) {
-                //last log contains the given field and key
-                if(mostRecentLog.statsData[field][key]){
-                  //console.log("[", field, "][", key, "]", (value + mostRecentLog.statsData[field][key]), " = ", value, " + ", mostRecentLog.statsData[field][key]);
-                  fieldValues[key] = (value + mostRecentLog.statsData[field][key]);
-                }
-                // last log does not have the key for given field
-                else {
-                  //console.log("Last log did not have the key [", key, "] for [", field, "]");
-                  fieldValues[key] = value;
-                }
+              //last log contains the given field and key
+              if(mostRecentLog.statsData[field][key]){
+                //console.log("[", field, "][", key, "]", (value + mostRecentLog.statsData[field][key]), " = ", value, " + ", mostRecentLog.statsData[field][key]);
+                fieldValues[key] = (value + mostRecentLog.statsData[field][key]);
               }
-              //last log does not have the given field
+              // last log does not have the key for given field
               else {
-                //console.log("Last log did not have the field [", field, "]");
+                //console.log("Last log did not have the key [", key, "] for [", field, "]");
                 fieldValues[key] = value;
               }
-            });
-            dataToLog[field] = fieldValues;
+            }
+            //last log does not have the given field
+            else {
+              //console.log("Last log did not have the field [", field, "]");
+              fieldValues[key] = value;
+            }
           });
-          console.log("Profile to log: ", dataToLog);
-          this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], dataToLog);
-          this.setDataToDisplay(dataToLog);
-          this.ngOnInit();
-          resolve();
+          dataToLog[field] = fieldValues;
         });
+        console.log("Profile to log: ", dataToLog);
+        this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], dataToLog);
+        this.setDataToDisplay(dataToLog);
+        this.ngOnInit();
       }); 
-      
     }
     // Previous log does not exist, create one from all data
     else {
