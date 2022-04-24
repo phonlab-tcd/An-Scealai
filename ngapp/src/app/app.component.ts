@@ -20,9 +20,7 @@ declare var gtag;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent {
-  
   title: string = 'An Scéalaí';
   checkVal: boolean = false;
   notificationsShown : boolean = false;
@@ -47,7 +45,7 @@ export class AppComponent {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
-    
+
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     );
@@ -58,10 +56,8 @@ export class AppComponent {
     });
   }
 
-/*
-* Set the page langauge
-* Get list of stories that have notifications
-*/
+  // Set the page langauge
+  // Get list of stories that have notifications
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
@@ -80,13 +76,17 @@ export class AppComponent {
         this.teacherMessagesSum += entry[1];
       }
     });
-    
-    if(this.auth.isLoggedIn()){
-    }
+
+    // EXAMPLE AUTHENTICATED REQUEST (neimhin 22/04/2022)
+    // if(this.auth.isLoggedIn()){
+    //   this.http.get(config.baseurl + 'whoami').subscribe(
+    //     user=>{console.log(user)}
+    //   ); 
+    // }
   }
-/*
-* Swap value of checkVal, if changed to false set notificationShown to false
-*/
+
+  // Swap value of checkVal,
+  // if changed to false set notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
       this.checkVal = true;
@@ -95,8 +95,8 @@ export class AppComponent {
       this.notificationsShown = false;
     }
   }
-  
-// Set value to show notifications to true
+
+  // Set value to show notifications to true
   showNotifications() {
     this.notificationsShown = !this.notificationsShown;
   }

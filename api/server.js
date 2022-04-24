@@ -27,6 +27,7 @@ const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
 const dbURL = require('./utils/dbUrl');
+const jwtAuthMw = require('./utils/jwtAuthMw');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
@@ -54,6 +55,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
+
+app.get('/whoami',jwtAuthMw,(req,res)=>{return res.json(req.user)})
 
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
