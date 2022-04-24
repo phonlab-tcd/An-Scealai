@@ -207,9 +207,32 @@
             id="audio" controls #audioTag class="audioPlayer">
           </audio>
 
+          <!-- [modules]="quillToolbar" -->
+          <quill-editor
+            [preserveWhitespace]="true">
+            <div quill-editor-toolbar>
+              <span class="ql-formats">
+                <button class="ql-bold" [title]="'Bold'"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-align" [title]="'Aligment'">
+                  <option selected></option>
+                  <option value="center"></option>
+                  <option value="right"></option>
+                  <option value="justify"></option>
+                </select>
+                <select class="ql-align" [title]="'Aligment2'">
+                  <option selected></option>
+                  <option value="center"></option>
+                  <option value="right"></option>
+                  <option value="justify"></option>
+                </select>
+              </span>
+            </div>
+          </quill-editor>
+          <!--
           <span #quillHeightSpan [ngStyle]="quillEditorStyle">
             <quill-editor
-              [modules]="quillToolbar"
               placeholder=""
               [preserveWhitespace]="true"
               [(ngModel)]="story.htmlText" 
@@ -218,6 +241,7 @@
               >
             </quill-editor>
           </span>
+          -->
       </div>
       
       <!-- Word Count -->
