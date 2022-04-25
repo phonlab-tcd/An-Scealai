@@ -207,41 +207,8 @@
             id="audio" controls #audioTag class="audioPlayer">
           </audio>
 
-          <!-- [modules]="quillToolbar" -->
-          <quill-editor
-            [preserveWhitespace]="true">
-            <div quill-editor-toolbar>
-              <span class="ql-formats">
-                <button class="ql-bold" [title]="'Bold'"></button>
-              </span>
-              <span class="ql-formats">
-                <select class="ql-align" [title]="'Aligment'">
-                  <option selected></option>
-                  <option value="center"></option>
-                  <option value="right"></option>
-                  <option value="justify"></option>
-                </select>
-                <select class="ql-align" [title]="'Aligment2'">
-                  <option selected></option>
-                  <option value="center"></option>
-                  <option value="right"></option>
-                  <option value="justify"></option>
-                </select>
-              </span>
-            </div>
-          </quill-editor>
-          <!--
-          <span #quillHeightSpan [ngStyle]="quillEditorStyle">
-            <quill-editor
-              placeholder=""
-              [preserveWhitespace]="true"
-              [(ngModel)]="story.htmlText" 
-              (onContentChanged)="storyEdited($event);"
-              (onEditorCreated)="quillEditor = $event"
-              >
-            </quill-editor>
-          </span>
-          -->
+          <div id="editor">
+          </div>
       </div>
       
       <!-- Word Count -->
@@ -250,6 +217,7 @@
       </div>
 
       <!-- SELECTED GRAMMAR SUGGESTION -->
+      <!--
       <div
         style="background-color: #8FCAFF"
         [hidden]="grammarTagsHidden || grammarLoading">
@@ -259,6 +227,7 @@
               ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion :
               'hover_over_a_highlighted_word_for_a_grammar_suggestion'  }}
       </div>
+      -->
       <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
         <span class="dictionaryContainer">
@@ -342,7 +311,8 @@
 </div>
 <app-synthesis-player
     #mySynthesisPlayer
-    [dialect]="story.dialect"
-    [text]="story.text"
-    [storyId]="story._id">
+    *ngIf=story.text
+    [dialect]=story.dialect
+    [text]=story.text
+    [storyId]=story._id>
 </app-synthesis-player>

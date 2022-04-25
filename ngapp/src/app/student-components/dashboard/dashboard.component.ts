@@ -26,15 +26,10 @@ import {
   ReadableGramadoirRuleIds,
 } from '../../grammar.service';
 
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import { TextProcessingService } from 'src/app/services/text-processing.service';
-import { SynthesisService } from 'src/app/services/synthesis.service';
 import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
-import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
-import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
 import Quill from 'quill';
 import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
 import clone from 'lodash/clone';
@@ -69,7 +64,10 @@ type QuillHighlightTag = {
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.css',
-    './../../gramadoir-tags.css'],
+    './../../gramadoir-tags.css',
+    './../../quill.snow.css',
+    './../../quill.fonts.css',
+  ],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -125,7 +123,7 @@ export class DashboardComponent implements OnInit{
 
   htmlDataIsReady = false;
   quillEditor: Quill;
-  textUpdated: Subject<string> = new Subject<string>();
+  textUpdated: Subject<void> = new Subject<void>();
 
   dialects = [
     {
@@ -141,26 +139,6 @@ export class DashboardComponent implements OnInit{
       name : this.ts.l.ulster
     }
   ];
-
-  // quillToolbar = {
-  //   toolbar: [
-  //     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-  //     ['blockquote'/*, 'code-block'*/],
-  //     //  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-  //     [{ list: 'ordered'}, { list: 'bullet' }],
-  //     //  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-  //     //  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-  //     //  [{ 'direction': 'rtl' }],                         // text direction
-  //     //  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-  //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  //     [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
-  //     [{ font: [] }],
-  //     [{ align: [] }],
-  //     ['clean'],                                         // remove formatting button
-  //     //  ['link', 'image', 'video']                        // link and image, video
-  //   ],
-  //   // scrollingContainer: false,
-  // };
 
   stringifySynth(i: number) {
     if (this.audioSources[i]) {
@@ -185,9 +163,12 @@ export class DashboardComponent implements OnInit{
     public quillHighlightService: QuillHighlightService,
   ) {
     this.textUpdated.pipe(
-      debounceTime(1500),
+      debounceTime(500),
       distinctUntilChanged(),
     ).subscribe(async () => {
+      this.storyEdited({
+        text: this.quillEditor.getText(),
+      });
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if (textToCheck !== this.mostRecentGramadoirInput) {
         const grammarCheckerTime = new Date();
@@ -219,7 +200,6 @@ export class DashboardComponent implements OnInit{
               updateGrammarErrorsError.message + '\n' +
               'See the browser console for more information');
           }
-          console.dir(updateGrammarErrorsError);
         }
         if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
           this.grammarLoading = false;
@@ -246,7 +226,6 @@ export class DashboardComponent implements OnInit{
 
   leathanCaolCheckBox(event: boolean) {
     this.quillHighlightService.showLeathanCaol = event;
-    console.log(this.quillHighlightService.showLeathanCaol, event);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
     if (!this.grammarTagsHidden) {
@@ -271,6 +250,48 @@ export class DashboardComponent implements OnInit{
           .applyGramadoirTagFormatting(this.quillEditor);
     }
   }
+  ngAfterViewInit() {
+    let quillFonts = ['times-new-roman', 'arial', 'sans-serif', 'monospace'];
+
+    let Font = Quill.import('formats/font');
+    Font.whitelist = quillFonts;
+    Quill.register(Font, true);
+    let toolbarOptions = [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'font': Font.whitelist }],
+      [{ 'align': [] }],
+      ['clean'],
+    ];
+    this.quillEditor = new Quill('#editor', {
+      modules: {
+        toolbar: toolbarOptions
+      },
+      theme: 'snow',
+    });
+    const setHtml = () => {
+      if (this.htmlDataIsReady) {
+        this.quillEditor.clipboard.dangerouslyPasteHTML(this.story.htmlText);
+        this.getWordCount(this.quillEditor.getText());
+        return;
+      }
+      setTimeout(setHtml, 5);
+    }
+    setTimeout(setHtml, 0);
+    this.quillEditor.on('text-change', (delta,oldDelta,source)=>{
+      console.count(source);
+      if(source === 'user') {
+        this.storySaved = false;
+        this.textUpdated.next()
+      }
+    });
+  }
 
   // set the stories array of all the student's stories
   // set the stories array of all the student's stories w
@@ -291,7 +312,6 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
-            this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
@@ -378,12 +398,12 @@ export class DashboardComponent implements OnInit{
 
     const unhighlightedHtmlText =
       this.stripGramadoirAttributesFromHtml(
-        clone(this.story.htmlText));
+        clone(this.quillEditor.root.innerHTML));
 
     const updateData = {
       title: this.story.title,
       dialect: this.story.dialect,
-      text : this.story.text,
+      text : this.quillEditor.getText(),
       htmlText: unhighlightedHtmlText,
       lastUpdated : finishedWritingTime,
     };
@@ -393,13 +413,11 @@ export class DashboardComponent implements OnInit{
           EventType['SAVE-STORY'],
           this.story);
 
-    const saveStoryPromise = this
+    try {
+      await this
         .storyService
         .updateStory(updateData, this.story._id)
         .toPromise();
-
-    try {
-      await saveStoryPromise;
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
         console.count('STORY SAVED');
@@ -485,6 +503,7 @@ export class DashboardComponent implements OnInit{
   // Set story.text to most recent version of
   // editor text and then switch to storyEditedAlt
   storyEdited(q: any) {
+    console.log(q);
     this.story.text = q.text;
     this.textUpdated.next(q.text);
     this.getWordCount(q.text);

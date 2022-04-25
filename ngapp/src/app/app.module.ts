@@ -65,7 +65,6 @@ import { ViewRecordingComponent } from './student-components/view-recording/view
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { QuillModule } from 'ngx-quill';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
@@ -146,12 +145,6 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     MatFormFieldModule,
     NgbModule,
     NgbDropdownModule,
-    QuillModule.forRoot({
-      customOptions: [{
-        import: 'formats/font',
-        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
-      }]
-    })
   ],
   providers: [
     StoryService,

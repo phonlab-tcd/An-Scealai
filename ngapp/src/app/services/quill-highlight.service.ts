@@ -273,7 +273,7 @@ export class QuillHighlightService {
                     'gramadoir-tag-style-type': error.type,
                     'gramadoir-tag': JSON.stringify(error),
                   },
-                  'user'
+                  'api'
               );
         });
     this.generateGramadoirTagTooltips(quillEditor);
@@ -309,17 +309,20 @@ export class QuillHighlightService {
     quillEditor.formatText(
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
+      {'gramadoir-tag': null}, // delete all gramadoir-tag's on the parchment
+      'api'
     );
     quillEditor.formatText(
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
-      {'gramadoir-tag-style-type': null} // delete all gramadoir-tag's on the parchment
+      {'gramadoir-tag-style-type': null}, // delete all gramadoir-tag's on the parchment
+      'api',
     );
     quillEditor.formatText(
       0, // from the very beginning of the text
       quillEditor.getLength(), // to the very end of the text
-      {'vowel-agreement-tag': null} // delete all gramadoir-tag's on the parchment
+      {'vowel-agreement-tag': null}, // delete all gramadoir-tag's on the parchment
+      'api',
     );
   }
 
