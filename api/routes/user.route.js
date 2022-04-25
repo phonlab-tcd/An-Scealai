@@ -96,21 +96,6 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
     });
 });
 
-// Endpoint to get all users from database
-userRoutes.route('/getAllUsers').get((req, res) => {
-    User.find({}, (err, users) => {
-        if(err) {
-          console.log(err);
-          res.send(err);
-        }
-        if(users) {
-            res.json(users);
-        } else {
-            res.status(404).json("No users exist on the database");
-        }
-    });
-});
-
 // Delete user by username
 userRoutes.route('/deleteUser/:username').get(function(req, res) {
     User.findOneAndRemove({"username": req.params.username}, function(err, user) {
