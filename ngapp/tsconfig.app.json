@@ -1,5 +1,11 @@
 {
   "compileOnSave": false,
+  "exclude": [
+    "**/*.spec.ts",
+    "e2e/*",
+    "src/test.ts",
+    "src/environments/environment.prod.ts"
+  ],
   "compilerOptions": {
     "baseUrl": "./",
     "downlevelIteration": true,
