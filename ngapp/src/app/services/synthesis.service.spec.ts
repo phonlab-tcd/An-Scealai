@@ -4,13 +4,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('SynthesisService', () => {
+  let service: SynthesisService;
   beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [RouterTestingModule, HttpClientTestingModule],
+        providers: [
+          SynthesisService,
+        ],
     });
+    service = TestBed.get(SynthesisService);
   });
 
-  const service: SynthesisService = TestBed.inject(SynthesisService);
 
   it('should be created', (done) => {
     expect(service).toBeTruthy();
@@ -18,21 +22,23 @@ describe('SynthesisService', () => {
   });
 
   describe('synthesiseText', () => {
-    it('should create an observable which sends a valid audio URI', async (done) => {
+    it('should create an observable which sends a valid audio URI', (done) => {
       service.synthesiseText(
         'Dia dhuit a chara',
         'connemara' as Dialect,
         null,
         'MP3' as AbairAPIv2AudioEncoding,
-      ).toPromise().then(
-      audioURI => {
-        expect(audioURI).toBeTruthy();
-        const audioElement = new Audio(audioURI);
-        expect(audioElement).toBeTruthy();
-        expect(audioElement instanceof Audio).toBeTruthy();
-        expect(audioElement.play instanceof Function).toBeTruthy();
-        done();
-      });
+      ).subscribe(
+        data => {
+          expect(data).toBeTruthy();
+          expect(data).toBeTruthy();
+          const audioElement = new Audio(data);
+          expect(audioElement).toBeTruthy();
+          expect(audioElement instanceof Audio).toBeTruthy();
+          expect(audioElement.play instanceof Function).toBeTruthy();
+          done();
+        }
+      );
     });
   });
 });

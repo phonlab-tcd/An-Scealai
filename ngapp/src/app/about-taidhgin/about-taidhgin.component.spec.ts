@@ -1,24 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { AboutTaidhginComponent } from './about-taidhgin.component';
+import { TranslationService } from '../translation.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AboutTaidhginComponent', () => {
   let component: AboutTaidhginComponent;
   let fixture: ComponentFixture<AboutTaidhginComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ AboutTaidhginComponent ]
+  beforeEach(()=>{
+    TestBed.configureTestingModule({
+      declarations: [ AboutTaidhginComponent ],
+      providers: [ TranslationService ],
+      imports: [
+        NgbModule,
+        RouterTestingModule,
+        HttpClientTestingModule,
+      ],
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(AboutTaidhginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
