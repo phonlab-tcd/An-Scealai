@@ -273,7 +273,7 @@ export class QuillHighlightService {
                     'gramadoir-tag-style-type': error.type,
                     'gramadoir-tag': JSON.stringify(error),
                   },
-                  'user'
+                  'api'
               );
         });
     this.generateGramadoirTagTooltips(quillEditor);

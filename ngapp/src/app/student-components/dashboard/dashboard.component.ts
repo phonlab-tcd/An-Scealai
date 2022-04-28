@@ -26,17 +26,12 @@ import {
   ReadableGramadoirRuleIds,
 } from '../../grammar.service';
 
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import { TextProcessingService } from 'src/app/services/text-processing.service';
-import { SynthesisService } from 'src/app/services/synthesis.service';
-import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
-import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
-import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.component';
 import Quill from 'quill';
-import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
+import { QuillHighlightService } from '../../services/quill-highlight.service';
 import clone from 'lodash/clone';
 import config from 'src/abairconfig.json';
 
@@ -78,10 +73,9 @@ type QuillHighlightTag = {
 
 export class DashboardComponent implements OnInit{
 
-  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
-  // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+  @ViewChild('mySynthesisPlayer')
+  synthesisPlayer: SynthesisPlayerComponent;
 
-  // So that we can use this in the template
   ReadableGramadoirRuleIds = ReadableGramadoirRuleIds;
 
   story: Story = new Story();
@@ -157,7 +151,7 @@ export class DashboardComponent implements OnInit{
       //  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
-      [{ font: [] }],
+      [{ font: ['sans-serif', 'serif', 'monospace', 'arial', 'times-new-roman'] }],
       [{ align: [] }],
       ['clean'],                                         // remove formatting button
       //  ['link', 'image', 'video']                        // link and image, video

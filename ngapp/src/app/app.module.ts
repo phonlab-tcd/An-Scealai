@@ -149,8 +149,14 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',
-        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
-      }]
+        whitelist: [
+          'sans-serif',         // @quill-font
+          'serif',              // @quill-font
+          'monospace',          // @quill-font
+          'arial',              // @quill-font
+          'times-new-roman',    // @quill-font
+        ]
+      }],
     })
   ],
   providers: [
