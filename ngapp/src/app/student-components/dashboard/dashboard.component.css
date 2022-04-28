@@ -15,6 +15,10 @@
   100% { transform: rotate(360deg); }
 }
 
+.ql-container {
+  heigth: auto;
+}
+
 .ql-editor {
   background-color: #f7f2e7;
   /* ~44px is the height of the toolbar */
@@ -209,33 +213,33 @@ quill-editor {
 }
 
 .quill-editor-dict {
-    /* dictionary view adds another toolbar worth of height */
+  /* dictionary view adds another toolbar worth of height */
   height: calc(var(--textfieldHeight) - 44px);
 }
 
 .text-input-highlight-container .text-highlight-element  {
-    background: #f7f2e7;
+  background: #f7f2e7;
 }
 
 .bg-blue {
-background-color: lightblue;
+  background-color: lightblue;
 }
 
 
 .closeFeedbackBtn {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .closeFeedbackBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .closeDictionaryBtn {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .closeDictionaryBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dictionary {
@@ -244,61 +248,61 @@ background-color: lightblue;
 }
 
 .dictionaryModeContainer {
-    display: flex;
+  display: flex;
 }
 
 .dictionaryContainer {
-    border-top: solid grey 1px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  border-top: solid grey 1px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .dictionaryHeight {
   height: var(--dictionaryHeight);
 }
 
 .dictionaryIframe {
-    height: var(--dictionaryHeight);
-    width: 100%;
+  height: var(--dictionaryHeight);
+  width: 100%;
 }
 
 .dictionaryVisibleTextField {
-    height: var(--textfieldHeight);
-    width: calc(100% - var(--dictionaryWidth));
+  height: var(--textfieldHeight);
+  width: calc(100% - var(--dictionaryWidth));
 }
 
 .saveBtn {
-    font-size: 14pt;
-    border-style: none;
-    color: white;
-    font-size: 12pt;
-    margin: 0px;
-    margin-right: 5%;
-    margin-left: auto;
-    border-radius: 5px 5px 5px 5px;
+  font-size: 14pt;
+  border-style: none;
+  color: white;
+  font-size: 12pt;
+  margin: 0px;
+  margin-right: 5%;
+  margin-left: auto;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .audioPlayer {
-    height: 30px;
-    width: 90%;
-    background-color: #f1f3f4;
-    border: 1px solid #8c806e86;
+  height: 30px;
+  width: 90%;
+  background-color: #f1f3f4;
+  border: 1px solid #8c806e86;
 }
 
 .unsavedBtn {
-    background-color: #e5bd3b;
+  ackground-color: #e5bd3b;
 }
 
 .unsavedBtn:hover {
-    background-color: #ad8f2b;
-    color: white;
+  background-color: #ad8f2b;
+  color: white;
 }
 
 .storyContainer {
-    z-index: 1;
-    --feedbackHeight: 120px;
-    --grammarMessageHeight: 80px;
-    --dictionaryWidth: 100%;
+  z-index: 1;
+  --feedbackHeight: 120px;
+  --grammarMessageHeight: 80px;
+  --dictionaryWidth: 100%;
 }
 
 .tickIcon {
@@ -337,19 +341,19 @@ background-color: lightblue;
 }
 
 .optionsBtn {
-    font-size: 14pt;
-    background-color: #e5bd3b;
-    border-style: none;
-    color: #464444;
-    font-size: 12pt;
-    margin: 0px;
-        margin-right: 40px;
-    border-radius: 2px 2px 2px 2px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background: #dfd9c800;
-    background-color: rgba(223, 217, 200, 0);
+  font-size: 14pt;
+  background-color: #e5bd3b;
+  border-style: none;
+  color: #464444;
+  font-size: 12pt;
+  margin: 0px;
+  margin-right: 40px;
+  border-radius: 2px 2px 2px 2px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: #dfd9c800;
+  background-color: rgba(223, 217, 200, 0);
 }
 
 .optionsBtn:hover {

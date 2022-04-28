@@ -212,9 +212,10 @@
               [modules]=quillToolbar
               placeholder=""
               [preserveWhitespace]=true
+              [debounceTime]=1500
               [(ngModel)]=story.htmlText
-              (onContentChanged)=storyEdited($event)
-              (onEditorCreated)="quillEditor=$event"
+              (onContentChanged)=onContentChanged($event)
+              (onEditorCreated)=onEditorCreated($event)
               >
             </quill-editor>
           </span>

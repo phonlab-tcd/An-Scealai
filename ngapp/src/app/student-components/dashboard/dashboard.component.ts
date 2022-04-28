@@ -166,6 +166,9 @@ export class DashboardComponent implements OnInit{
     return 'not defined';
   }
 
+  onEditorCreated(q: Quill) {
+    this.quillEditor = q;
+  }
 
   constructor(
     protected sanitizer: DomSanitizer,
@@ -182,45 +185,42 @@ export class DashboardComponent implements OnInit{
     public quillHighlightService: QuillHighlightService,
   ) {
     this.textUpdated.pipe(
-      debounceTime(1500),
       distinctUntilChanged(),
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
-      if (textToCheck !== this.mostRecentGramadoirInput) {
-        const grammarCheckerTime = new Date();
-        this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-        this.grammarLoading = true;
-        try {
-        await this.quillHighlightService
-            .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
-            .then((errTypes: object) => {
-              this.currentGrammarErrorTypes = errTypes;
-              Object.keys(errTypes).forEach((k) => {
-                this.grammarTagFilter[k] !== undefined ?
-                this.grammarTagFilter[k] = this.grammarTagFilter[k] :
-                this.grammarTagFilter[k] = true;
-              });
-              this.quillHighlightService
-                  .filterGramadoirTags(this.grammarTagFilter);
-              this.grammarTagsHidden ?
-              this.quillHighlightService
-                  .clearAllGramadoirTags(this.quillEditor) :
-              this.quillHighlightService
-                  .applyGramadoirTagFormatting(this.quillEditor);
+      const grammarCheckerTime = new Date();
+      this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+      this.grammarLoading = true;
+      try {
+      await this.quillHighlightService
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
+          .then((errTypes: object) => {
+            this.currentGrammarErrorTypes = errTypes;
+            Object.keys(errTypes).forEach((k) => {
+              this.grammarTagFilter[k] !== undefined ?
+              this.grammarTagFilter[k] = this.grammarTagFilter[k] :
+              this.grammarTagFilter[k] = true;
             });
-        } catch (updateGrammarErrorsError) {
-          if ( !this.grammarTagsHidden) {
-            window.alert(
-              'There was an error while trying to fetch grammar ' +
-              'suggestions from the Gramadóir server:\n' +
-              updateGrammarErrorsError.message + '\n' +
-              'See the browser console for more information');
-          }
-          console.dir(updateGrammarErrorsError);
+            this.quillHighlightService
+                .filterGramadoirTags(this.grammarTagFilter);
+            this.grammarTagsHidden ?
+            this.quillHighlightService
+                .clearAllGramadoirTags(this.quillEditor) :
+            this.quillHighlightService
+                .applyGramadoirTagFormatting(this.quillEditor);
+          });
+      } catch (updateGrammarErrorsError) {
+        if ( !this.grammarTagsHidden) {
+          window.alert(
+            'There was an error while trying to fetch grammar ' +
+            'suggestions from the Gramadóir server:\n' +
+            updateGrammarErrorsError.message + '\n' +
+            'See the browser console for more information');
         }
-        if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
-          this.grammarLoading = false;
-        }
+        console.dir(updateGrammarErrorsError);
+      }
+      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
+        this.grammarLoading = false;
       }
     });
   }
@@ -481,19 +481,23 @@ export class DashboardComponent implements OnInit{
 
   // Set story.text to most recent version of
   // editor text and then switch to storyEditedAlt
-  storyEdited(q: any) {
+  onContentChanged(q: {
+    editor: Quill;
+    html: string;
+    text: string;
+    content: any;
+    delta: any; // TODO actual type is Quill Delta
+    oldDelta: any; // TODO actual type is Quill Delta
+    source: 'user'|'api'|'silent'|undefined
+  }) {
     this.story.text = q.text;
-    this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-    this.storyEdited = this.storyEditedAlt;
-  }
-
-  storyEditedAlt(q: any) {
-    this.story.text = q.text;
-    this.textUpdated.next(q.text);
-    this.getWordCount(q.text);
-    this.storySaved = false;
-    this.debounceSaveStory();
+    switch(q.source) {
+      case 'user':
+        this.storySaved = false;
+        this.textUpdated.next(q.text);
+        this.debounceSaveStory();
+    }
   }
 
 
