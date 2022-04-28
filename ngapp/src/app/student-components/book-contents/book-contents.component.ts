@@ -50,18 +50,21 @@ export class BookContentsComponent implements OnInit {
   // Set story array of stories for logged in user
   // set delete mode to false and create empty to be deleted array
   ngOnInit() {
-    // get stories for the user
-    this.storyService
-      .getStoriesForLoggedInUser()
-      .subscribe((data) => {
-        this.stories = data.map(storyData => new Story().fromJSON(storyData));
-        this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
-      });
     const userDetails = this.auth.getUserDetails();
     if(!userDetails) {
       window.alert('no user details available');
       return;
     }
+    // get stories for the user
+    this.storyService
+      .getStoriesForLoggedInUser()
+      .subscribe(
+        (data) => {
+          this.stories = data.map(storyData => new Story().fromJSON(storyData));
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
+        },
+        window.alert
+      );
     this.userId = userDetails._id;
     this.deleteMode = false;
     this.toBeDeleted = [];

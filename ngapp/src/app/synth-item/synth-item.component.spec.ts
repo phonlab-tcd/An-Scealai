@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SynthItemComponent } from './synth-item.component';
@@ -31,9 +32,11 @@ describe('SynthItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render when synth-item @Input is defined', () => {
+  it('should render when @Input synthItem is defined', () => {
+    expect(fixture.debugElement.query(By.css('.left'))).toBeTruthy();
     component.synthItem = new SynthItem('dia duit','connemara', TestBed.inject(SynthesisService));
     fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.right'))).toBeTruthy();
   });
 
   afterEach(()=>{

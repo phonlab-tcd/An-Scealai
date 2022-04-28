@@ -65,7 +65,9 @@ export class StoryService {
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
     if(!userDetails) {
-      return throwError(new Error("No user details. Can't get user's stories."));
+      return new Observable(subscriber=>{
+        subscriber.error('User details not available');
+      });
     }
     const author = userDetails.username;
     return this.http.get<Story[]>(this.baseUrl + author);

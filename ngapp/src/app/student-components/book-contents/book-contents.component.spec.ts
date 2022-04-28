@@ -16,13 +16,11 @@ describe('BookContentsComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BookContentsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('can\'t create without user details', waitForAsync(() => {
+    spyOn(window, 'alert');
+    let fixture = TestBed.createComponent(BookContentsComponent);
+    fixture.detectChanges();
+    expect(window.alert).toHaveBeenCalled();
+  }));
 });
