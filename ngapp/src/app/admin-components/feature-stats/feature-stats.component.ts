@@ -44,8 +44,8 @@ export class FeatureStatsComponent implements OnInit {
     this.dataLoaded = false;
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
-    
-    return new Promise( (resolve, reject) => {
+
+    return new Promise<void>( (resolve, reject) => {
       this.statsService.getFeatureDataByDate(startDate, endDate).subscribe( async (res) => {
         this.features = res;
         await this.calculateStats();
@@ -72,33 +72,33 @@ export class FeatureStatsComponent implements OnInit {
 
     return;
   }
-  
-  /*
-  * Return an object containing the counts of how many times the same items show up in an array. 
-  * ex: [1, 2, 2, 3, 4, 4] => {1:1, 2:2, 3:1, 4:2}
-  */
+
+  // Return an object containing the counts of
+  // how many times the same items show up in an array.
+  // ex: [1, 2, 2, 3, 4, 4] => {1:1, 2:2, 3:1, 4:2}
   getTotals(array): Object {
     let count = {};
     if(array)
       array.forEach(val => count[val] = (count[val] || 0) + 1);
     return count;
   }
-  
-  /*
-  * Create a log of total feature data from a certain period of time and save it to the engagement collection of the DB 
-  * If no log yet exists, the first one is made of all feature data available.  If a previous log does exist, the new data 
-  * is calculated up from the previous log to speed up calculations
-  */
+
+  // Create a log of total feature data from a certain period of time
+  // and save it to the engagement collection of the DB 
+  // If no log yet exists, the first one is made of all feature data available.
+  // If a previous log does exist,
+  // the new data is calculated up from the previous log
+  // to speed up calculations
   async addNewFeatureData() {
     let feature = {};
-    
+
     // previous feature log exists
     if(this.previousFeatures.length > 0) {
       console.log("Previous feature data exists in DB");
       let mostRecentLog = this.previousFeatures[this.previousFeatures.length-1];
       console.log("Last log: ", mostRecentLog.statsData);
-      
-      new Promise( (resolve, reject) => {
+
+      new Promise<void>( (resolve, reject) => {
         this.statsService.getFeatureDataSinceLog(mostRecentLog.date).subscribe( async (res) => {
           this.features = res;
           await this.calculateStats();
