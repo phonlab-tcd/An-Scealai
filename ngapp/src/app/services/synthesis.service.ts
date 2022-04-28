@@ -9,7 +9,7 @@ import {
 import {
   map,
   tap } from 'rxjs/operators';
-import config from '../../abairconfig';
+import config from 'abairconfig';
 import {TextProcessingService} from './text-processing.service';
 import { SynthesisBankService } from 'app/services/synthesis-bank.service';
 

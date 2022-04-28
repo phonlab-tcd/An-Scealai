@@ -7,7 +7,7 @@ import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
-import config from '../../../abairconfig';
+import config from 'abairconfig';
 
 declare var MediaRecorder : any;
 

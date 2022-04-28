@@ -7,7 +7,7 @@ import { TranslationService } from '../translation.service';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
 import { UserService } from '../user.service';
-import config from '../../abairconfig';
+import config from 'abairconfig';
 
 
 @Component({

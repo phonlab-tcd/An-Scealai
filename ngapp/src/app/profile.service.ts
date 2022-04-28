@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import config from '../abairconfig';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'

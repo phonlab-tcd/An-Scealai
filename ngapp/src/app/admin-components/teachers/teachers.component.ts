@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 // import identifierModuleUrl from '@angular/compiler';
 import { TranslationService } from '../../translation.service';
-import config from '../../../abairconfig';
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-teachers',

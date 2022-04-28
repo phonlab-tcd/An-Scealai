@@ -12,7 +12,7 @@ import {
 import {EngagementService} from "../engagement.service";
 import { reject } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
-import config from '../../abairconfig';
+import config from 'abairconfig';
 import clone from 'lodash/clone';
 
 const Tooltip = Quill.import('ui/tooltip');

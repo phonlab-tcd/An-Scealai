@@ -4,7 +4,7 @@ import { Classroom } from './classroom';
 import { User } from './user';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
-import config from '../abairconfig';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'

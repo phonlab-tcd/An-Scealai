@@ -12,7 +12,7 @@ import { Story } from 'app/story';
 import { EngagementService } from 'app/engagement.service';
 import { EventType } from 'app/event';
 import { VowelAgreementIndex } from './services/quill-highlight.service';
-// import config from 'src/abairconfig';
+import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
   broadFirst: boolean;

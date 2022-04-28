@@ -4,7 +4,7 @@ import { doesNotReject } from 'assert';
 import { AuthenticationService } from 'app/authentication.service';
 import { User } from '../user';
 import { TranslationService } from '../translation.service';
-import config from 'src/abairconfig';
+import config from 'abairconfig';
 
 const backendUrl = config.baseurl;
 

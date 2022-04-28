@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from '../../translation.service';
-import config from '../../../abairconfig';
+import config from 'abairconfig';
 
 
 @Component({

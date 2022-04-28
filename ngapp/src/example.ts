@@ -1,1 +1,1 @@
-import config from './abairconfig';
+import config from 'abairconfig';
