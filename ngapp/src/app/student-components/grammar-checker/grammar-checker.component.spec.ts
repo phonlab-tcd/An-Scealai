@@ -12,8 +12,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GrammarCheckerComponent } from './grammar-checker.component';
 import { Router } from '@angular/router';
-import { Story } from 'src/app/story';
-import { StoryService } from 'src/app/story.service';
+import { Story } from 'app/story';
+import { StoryService } from 'app/story.service';
 
 describe('GrammarCheckerComponent', () => {
   let component: GrammarCheckerComponent;

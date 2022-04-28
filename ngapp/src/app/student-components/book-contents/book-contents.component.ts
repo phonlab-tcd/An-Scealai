@@ -12,7 +12,7 @@ import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { RecordingService } from '../../recording.service';
-import { FilterPipe } from 'src/app/pipes/filter.pipe'; // used in html template
+import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template
 
 @Component({
   selector: 'app-book-contents',

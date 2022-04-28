@@ -13,7 +13,7 @@ import { EngagementService } from '../../engagement.service';
 import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
 import { RecordingService } from '../../recording.service';
-import config from '../../../abairconfig.json';
+import config from '../../../abairconfig';
 
 @Component({
   selector: 'app-user',

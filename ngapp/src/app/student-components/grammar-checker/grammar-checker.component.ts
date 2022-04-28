@@ -1,4 +1,4 @@
-// src/app/student-components/grammar-checker/grammar-checker.component.ts
+// app/student-components/grammar-checker/grammar-checker.component.ts
 import {
   Component,
   Input,
@@ -7,13 +7,13 @@ import {
   AfterViewInit,
   } from '@angular/core';
 
-import { AuthenticationService } from 'src/app/authentication.service';
-import { StatsService } from 'src/app/stats.service';
-import { ClassroomService } from 'src/app/classroom.service';
+import { AuthenticationService } from 'app/authentication.service';
+import { StatsService } from 'app/stats.service';
+import { ClassroomService } from 'app/classroom.service';
 import { HighlightTag, } from 'angular-text-input-highlight';
-import { GrammarService, GrammarTag } from 'src/app/grammar.service';
-import { TranslationService } from 'src/app/translation.service';
-import { Story } from 'src/app/story';
+import { GrammarService, GrammarTag } from 'app/grammar.service';
+import { TranslationService } from 'app/translation.service';
+import { Story } from 'app/story';
 import debounce from 'lodash/debounce';
 
 function cloneString(str: string) {

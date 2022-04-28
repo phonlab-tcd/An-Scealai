@@ -3,7 +3,7 @@ import {
   } from './services/quill-highlight.service';
 import {
     Serializable,
-  } from 'src/app/serializable';
+  } from 'app/serializable';
 
 export class Event extends Serializable {
     '_id': string;

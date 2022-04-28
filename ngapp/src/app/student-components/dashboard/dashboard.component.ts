@@ -33,7 +33,7 @@ import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.c
 import Quill from 'quill';
 import { QuillHighlightService } from '../../services/quill-highlight.service';
 import clone from 'lodash/clone';
-import config from 'src/abairconfig.json';
+import config from 'src/abairconfig';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =

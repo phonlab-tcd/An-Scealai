@@ -1,4 +1,4 @@
-{
+export default {
   "languages" : [
     {
       "iso_code" : "en",
@@ -291,6 +291,7 @@
       "exposure_to_irish" : "Exposure to Irish",
       "which_dialect" : "Which dialect of Irish are you most comfortable with?",
       "how_often" : "How often?",
+      // TODO disambiguate "how_often" : "How often",
       "save_details" : "Save details",
 
       "teacher_registration" : "Teacher Registration",
@@ -447,7 +448,6 @@
       "irish_reading" : "Irish Reading",
       "how_often_reading" : "Types of Irish reading that users do and how often they use it",
       "type" : "Type",
-      "how_often" : "How often",
       "irish_writing" : "Irish Writing",
       "how_often_writing" : "Types of Irish writing that users do and how often they use it",
       "synth_opinion" : "Synth Opinion",
@@ -994,6 +994,7 @@
       "exposure_to_irish" : "Cleachtadh ar an nGaeilge",
       "which_dialect" : "Cén chanúint Ghaeilge is éasca duit?",
       "how_often" : "Cé chomh minic?",
+      // TODO disambiguate "how_often" : "Minicíocht",
       "leave" : "Fág",
       "join_classroom" : "Isteach sa rang",
       "classroom" : "Rang",
@@ -1023,7 +1024,7 @@
 
       "agree_to_terms" : "Ar chlárú dom glacaim leis na coinníollacha úsáide",
       "about_an_scealai" : "Faoi An Scéalaí",
-      "TODO": "TRANSLATE",
+      // TODO translate about_quote
       "about_quote" : "Technology is the campfire around which we tell our stories",
       "about_quote_author": "Laurie Anderson",
       "about_content_text_academic" : "    Tionscadal nua is ea An Scéalaí atá á fhorbairt faoi láthair. Ardán Foghlaim Ríomhchuidithe Teanga-cliste atá ann a tharraingíonn na forbairtí is déanaí i dteicneolaíocht na hurlabhra agus na teanga don Ghaeilge le chéile ar mhaithe le teagasc/foghlaim na Gaeilge. Is cur chuige iomlánaíoch atá i gceist, a dhíríonn ar an scríobh, éisteacht, léamh agus caint ag an am céanna, le béim ar leith ar na nascanna idir an focal scíofa agus an fuaimniú. Tá sé mar aidhm againn ardán a chruthú d’fhoghlaimeoirí atá idirghníomhach agus pearsantaithe chun sealbhú an dara teanga a chothú. Is féidir le daoine An Scéalaí a úsáid iad féin agus leas a bhaint as an aiseolas a ghineann an córas go huathoibríoch agus/nó is féidir an t-ardán a úsáid mar acmhainn bhreise le cur leis an méid atá ar siúl sa seomra ranga, agus aiseolas an mhúinteora a fháil chomh maith. Seo a leanas foilseachán a thugann an cúlra, na haidhmeanna agus an fhorbairt atá déanta go dtí seo.",
@@ -1158,7 +1159,6 @@
       "irish_reading" : "Irish Reading",
       "how_often_reading" : "An cineál léitheoireachta a dhéanann úsáideoirí agus minicíocht na léitheoireachta sin",
       "type" : "Cineál",
-      "how_often" : "Minicíocht",
       "irish_writing" : "Scríbhneoireacht Ghaeilge",
       "how_often_writing" : "Cineal scríbhneoireachta a dhéanann úsáideoirí agus cé chomh minic is a dhéanann siad é",
       "synth_opinion" : "Meas ar chaint shintéiseach",

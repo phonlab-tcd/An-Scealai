@@ -10,7 +10,7 @@ import { EngagementService } from './engagement.service';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
-import config from '../abairconfig.json';
+import config from '../abairconfig';
 
 
 @Injectable({
