@@ -6,21 +6,19 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngapp": {
+    "an-scealai": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
+          "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngapp",
+            "aot": true,
+            "outputPath": "unpublished_dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -32,12 +30,18 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/angular-text-input-highlight/text-input-highlight.css",
               "src/styles.css",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
               "node_modules/quill/dist/quill.snow.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
+            ]
           },
           "configurations": {
             "production": {
@@ -49,8 +53,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "9kb"
                 }
               ],
               "fileReplacements": [
@@ -72,26 +76,37 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/abairconfig.ts",
+                  "with": "src/abairconfig.qa.ts"
+                }
+              ]
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
+          "defaultConfiguration": "dev",
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngapp:build:production"
+              "browserTarget": "an-scealai:build:production"
             },
             "dev": {
-              "browserTarget": "ngapp:build:dev"
+              "browserTarget": "an-scealai:build:dev"
             }
-          },
-          "defaultConfiguration": "dev"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngapp:build"
+            "browserTarget": "an-scealai:build"
           }
         },
         "test": {
@@ -114,5 +129,5 @@
       }
     }
   },
-  "defaultProject": "ngapp"
+  "defaultProject": "an-scealai"
 }

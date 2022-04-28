@@ -4,7 +4,8 @@
     "**/*.spec.ts",
     "e2e/*",
     "src/test.ts",
-    "src/environments/environment.prod.ts"
+    "src/environments/environment.prod.ts",
+    "**/*.qa.ts"
   ],
   "compilerOptions": {
     "baseUrl": "./src",
@@ -17,7 +18,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true, 
-    "target": "es2019",
+    "target": "es2020",
     "typeRoots": [
       "node_modules/@types"
     ],

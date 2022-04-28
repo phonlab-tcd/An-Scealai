@@ -1,19 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "target": "es2020",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
     "outDir": "../out-tsc/spec",
     "types": [
       "jasmine",
       "node",
       "jquery"
-    ]
-  },
-  "paths": {
-    "app": ["./src/app"]
+    ],
+    "baseUrl": "./src"
   },
   "files": [
     "src/test.ts",
