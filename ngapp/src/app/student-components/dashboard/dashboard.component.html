@@ -209,12 +209,12 @@
 
           <span #quillHeightSpan [ngStyle]="quillEditorStyle">
             <quill-editor
-              [modules]="quillToolbar"
+              [modules]=quillToolbar
               placeholder=""
-              [preserveWhitespace]="true"
-              [(ngModel)]="story.htmlText" 
-              (onContentChanged)="storyEdited($event);"
-              (onEditorCreated)="quillEditor = $event"
+              [preserveWhitespace]=true
+              [(ngModel)]=story.htmlText
+              (onContentChanged)=storyEdited($event)
+              (onEditorCreated)="quillEditor=$event"
               >
             </quill-editor>
           </span>
