@@ -1,26 +1,19 @@
 {
-  "compileOnSave": false,
+  "baseUrl" : "src",
   "compilerOptions": {
-    "baseUrl": "./",
-    "downlevelIteration": true,
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true, 
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "es2019",
-      "dom"
-    ],
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  }
+    "outDir": "../out-tsc/app",
+    "types": [
+      "jquery",
+      "node"
+    ]
+  },
+  "resolveJsonModule": true,
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
 }
