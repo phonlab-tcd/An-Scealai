@@ -1,0 +1,46 @@
+/* Set droplist names - -item is the currently selected font, -label is the font's appearance in the droplist*/
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='times-new-roman']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='times-new-roman']::before
+{
+  content: 'Times New Roman';
+  font-family: 'Times New Roman';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='arial']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='arial']::before
+{
+  content: 'Arial';
+  font-family: 'Arial';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='sans-serif']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='sans-serif']::before
+{
+  content: 'Sans Serif';
+  font-family: 'Sans Serif';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='monospace']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='monospace']::before
+{
+  content: 'Monospace';
+  font-family: 'monospace';
+}
+
+/****************************************************
+Set the font-family content used for the HTML content.
+*****************************************************/
+.ql-font-arial {
+  font-family: 'Arial';
+}
+
+.ql-font-times-new-roman {
+  font-family: 'Times New Roman';
+}
+
+.ql-font-sans-serif {
+  font-family: 'Sans Serif';
+}
+.ql-font-monospace {
+  font-family: 'monospace';
+}
