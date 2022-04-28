@@ -29,7 +29,7 @@ import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
+import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -74,8 +74,6 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +83,6 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     LanguageComponent,
     LoginComponent,
     RegisterComponent,
-    ReportAnIssueComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
@@ -128,6 +125,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthItemComponent,
   ],
   imports: [
+    ReportAnIssueModule,
     SpinnerModule,
     BrowserModule,
     AppRoutingModule,

@@ -47,7 +47,7 @@ export class AppComponent {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
-    
+
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     );
@@ -58,10 +58,8 @@ export class AppComponent {
     });
   }
 
-/*
-* Set the page langauge
-* Get list of stories that have notifications
-*/
+  // Set the page langauge
+  // Get list of stories that have notifications
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
@@ -80,13 +78,12 @@ export class AppComponent {
         this.teacherMessagesSum += entry[1];
       }
     });
-    
+
     if(this.auth.isLoggedIn()){
     }
   }
-/*
-* Swap value of checkVal, if changed to false set notificationShown to false
-*/
+
+  // Swap value of checkVal, if changed to false set notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
       this.checkVal = true;
@@ -95,8 +92,8 @@ export class AppComponent {
       this.notificationsShown = false;
     }
   }
-  
-// Set value to show notifications to true
+
+  // Set value to show notifications to true
   showNotifications() {
     this.notificationsShown = !this.notificationsShown;
   }
@@ -106,7 +103,7 @@ export class AppComponent {
     this.notificationsShown = false;
     this._router.navigateByUrl('/dashboard/' + id);
   }
-  
+
   goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
@@ -120,20 +117,18 @@ export class AppComponent {
       this.changeToEnglish();
     }
   }
-  
+
   changeToEnglish() {
     this.ts.setLanguage("en");
     this.currentLanguage = "English";
   }
-  
+
   changeToIrish() {
     this.ts.setLanguage("ga");
     this.currentLanguage = "Gaeilge";
   }
 
-/*
-* Change loading bar status based on current event
-*/
+  // Change loading bar status based on current event
   private navigationInterceptor(event: Event): void {
     /*
     if (event instanceof NavigationStart) {
@@ -151,13 +146,13 @@ export class AppComponent {
    */
   }
 
-// Keep track of where the user clicks
+  // Keep track of where the user clicks
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
 
-// Hide the notification container if user clicks on the page
+  // Hide the notification container if user clicks on the page
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {
@@ -165,5 +160,4 @@ export class AppComponent {
     }
     this.wasInside = false;
   }
-  
 }

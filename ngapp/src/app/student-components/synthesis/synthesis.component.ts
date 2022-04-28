@@ -9,7 +9,6 @@ import { SynthesisService, Paragraph, Sentence, Section } from '../../services/s
   templateUrl: './synthesis.component.html',
   styleUrls: [
     './synthesis.component.css',
-    './../../../loader-spinner-grid.css',
   ]
 })
 export class SynthesisComponent implements OnInit {

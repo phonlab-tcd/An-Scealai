@@ -83,7 +83,10 @@
           <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">{{ts.l.the_team}}</button>
           <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()">{{ts.l.sponsors}}</button>
           <!-- TODO add translation for Report Feedback -->
-          <button routerLink="/report_an_issue" ngbDropdownItem (click)="changeCheck()">{{ts.l.report_an_issue}}</button>
+          <button
+            routerLink="/report-an-issue"
+            ngbDropdownItem
+            (click)="changeCheck()">{{ts.l.report_an_issue}}</button>
         </div>
       </div>
       <!-- technology menu -->
