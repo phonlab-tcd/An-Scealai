@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BookContentsComponent } from './book-contents.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FilterPipe } from 'app/pipes/filter.pipe';
+import { HttpClientModule } from '@angular/common/http';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
 describe('BookContentsComponent', () => {
   let component: BookContentsComponent;
   let fixture: ComponentFixture<BookContentsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule, HttpClientTestingModule],
+      imports: [ RouterTestingModule, HttpClientModule],
       declarations: [ FilterPipe, BookContentsComponent ]
     })
     .compileComponents();

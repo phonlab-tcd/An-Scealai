@@ -15,7 +15,9 @@ const backendUrl = config.baseurl;
 })
 export class CreateQuizComponent implements OnInit {
 
-  constructor(public auth: AuthenticationService, public ts: TranslationService) { }
+  constructor(
+    public auth: AuthenticationService,
+    public ts: TranslationService) { }
 
   ngOnInit(): void {
     console.log("create-init");

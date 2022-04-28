@@ -166,8 +166,8 @@ export class TeacherStatsComponent implements OnInit {
             }],  
           }  
         },
-        responsive: true,
-        maintainAspectRatio: false
+        // responsive: true,
+        // maintainAspectRatio: false
       }); 
     }
 

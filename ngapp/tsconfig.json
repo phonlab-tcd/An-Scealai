@@ -1,8 +1,12 @@
 {
-  "baseUrl" : "src",
   "compilerOptions": {
+    "target": "es2019",
+    "baseUrl" : "./src",
     "moduleResolution": "node",
     "outDir": "../out-tsc/app",
+    "paths": {
+      "node_modules": ["../node_modules"]
+    },
     "types": [
       "jquery",
       "node"

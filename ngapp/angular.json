@@ -59,8 +59,8 @@
                   "with": "src/environments/environment.prod.ts"
                 },
                 {
-                  "replace": "src/abairconfig.json",
-                  "with": "src/abairconfig.prod.json"
+                  "replace": "src/abairconfig.ts",
+                  "with": "src/abairconfig.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -100,7 +100,7 @@
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "karmaConfig": "src/karma.conf.js",
             "assets": [
               "src/favicon.ico",
               "src/assets"

@@ -59,6 +59,7 @@
     "@angular/cli": "^13.3.3",
     "@angular/compiler-cli": "^13.3.4",
     "@angular/language-service": "~13.3.4",
+    "@types/chart.js": "^2.9.37",
     "@types/diff": "^4.0.2",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",

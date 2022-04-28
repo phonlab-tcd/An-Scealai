@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
 import { RecordingService } from './recording.service';
@@ -64,10 +64,9 @@ export class StoryService {
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      throw new Error('no user details. can\'t get user\'s stories');
+    if(!userDetails) {
+      return throwError(new Error("No user details. Can't get user's stories."));
     }
-
     const author = userDetails.username;
     return this.http.get<Story[]>(this.baseUrl + author);
   }
