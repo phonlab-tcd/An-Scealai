@@ -7,7 +7,10 @@ import { SynthesisService, Paragraph, Sentence, Section } from '../../services/s
 @Component({
   selector: 'app-synthesis',
   templateUrl: './synthesis.component.html',
-  styleUrls: ['./synthesis.component.css']
+  styleUrls: [
+    './synthesis.component.css',
+    './../../../loader-spinner-grid.css',
+  ]
 })
 export class SynthesisComponent implements OnInit {
 

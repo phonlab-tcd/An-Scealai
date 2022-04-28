@@ -1,5 +1,5 @@
 export default {
-  "languages" : [
+  languages: [
     {
       "iso_code" : "en",
       "vowels_should_agree": "These vowels should be in agreement according to the Leathan/Caol rule." ,
@@ -7,7 +7,7 @@ export default {
       "english" : "English",
       "irish" : "Irish",
       "quote" : "\"For the things we have to learn before we can do them, we learn by doing them.\"",
-      "author" : "-Aristotle",
+      "author" : "- Aristotle",
       "about" : "About",
       "report_an_issue": "Report An Issue",
       "report_an_issue_prose": "If you have noticed any issues with any of the services provided on the An Scéalaí website we would be delighted to hear from you so that we can get it fixed as quickly as possible. You can reach the team at ",

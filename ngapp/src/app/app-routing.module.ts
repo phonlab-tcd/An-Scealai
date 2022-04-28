@@ -63,7 +63,8 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent},
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
-  { path: 'report_an_issue', component: ReportAnIssueComponent},
+  { path: 'report_an_issue',
+    component: ReportAnIssueComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
@@ -166,6 +167,8 @@ const routes: Routes = [
     ]
   },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
+  { path: 'report-an-issue',
+    loadChildren: () => import('../report-an-issue/report-an-issue.module').then(m => m.ReportAnIssueModule) },
 ];
 
 @NgModule({

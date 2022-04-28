@@ -66,13 +66,12 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { SpinnerModule } from 'spinner/spinner.module';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
-import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import { LoadingComponent } from './loading/loading.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 
 
@@ -124,13 +123,12 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthesisPlayerComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
-    GrammarCheckerComponent,
     CreateQuizComponent,
     AboutTaidhginComponent,
-    LoadingComponent,
     SynthItemComponent,
   ],
   imports: [
+    SpinnerModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
