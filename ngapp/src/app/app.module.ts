@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsModule } from 'ng2-charts';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -153,7 +154,8 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
           'times-new-roman',    // @quill-font
         ]
       }],
-    })
+    }),
+    ChartsModule,
   ],
   providers: [
     StoryService,

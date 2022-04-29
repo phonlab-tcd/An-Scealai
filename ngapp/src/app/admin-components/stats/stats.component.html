@@ -1,15 +1,21 @@
-<div class="titleText">
+<h3>
   {{ts.l.synthesis_breakdown}}
-</div>
-<div *ngIf="!graphGenerated" class="loaderContainer">
-  <b>{{ts.l.compiling_data}}</b>
+</h3>
+<div *ngIf="!(labelArray && dataArray)" class="bodyContainer">
+  <h5>{{ts.l.compiling_data}}</h5>
   <grid-spinner></grid-spinner>
-  <div>(This may take a while!)</div>
+  <p>(This may take a while!)</p>
 </div>
-<div class="bodyContainer">
-  <div *ngIf="graphGenerated">{{ts.l.net_errors_corrected}}: {{netErrors}}</div>
-  <div class="chart-container">
-    <canvas id="canvas"></canvas>
-  </div>
+<div *ngIf="labelArray && dataArray" class="bodyContainer">
+  <h5>
+    {{ts.l.net_errors_corrected}}: {{netErrors}}
+  </h5>
+  <canvas
+    id="doughnut"
+    baseChart
+    [labels]=labelArray
+    [data]=dataArray
+    [chartType]="'doughnut'"
+    >
+  </canvas>
 </div>
-
