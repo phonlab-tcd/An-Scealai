@@ -83,9 +83,8 @@ statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) =>
     }
     else {
       res.status(200).json(events);
-    }  
+    }
   });
-    
 });
 
 statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
@@ -101,9 +100,8 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
     else {
       console.log(events);
       res.status(200).json(events);
-    }  
+    }
   });
-    
 });
 
 
