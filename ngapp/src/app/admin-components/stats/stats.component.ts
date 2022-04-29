@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import * as ChartModule from 'chart.js';
 import { StatsService } from '../../stats.service';
 import { TranslationService } from '../../translation.service';
 
@@ -17,7 +17,6 @@ export class StatsComponent implements OnInit {
   netErrors : number = 0;
 
   ngOnInit() {
-
     this.statsService.getSynthesisData().subscribe((data) => {
 
       let labelArray = [];
@@ -33,45 +32,43 @@ export class StatsComponent implements OnInit {
 
       this.generateChart(labelArray, dataArray);
     });
-
-     
   }
 
   generateChart(labelArray: any, dataArray: any) {
     this.graphGenerated = true;
-    this.chart = new Chart('canvas', {  
-      type: 'doughnut',  
-      data: {  
-        labels: labelArray,  
-        datasets: [  
-          {  
-            data: dataArray,   
-            backgroundColor: [  
+    this.chart = new ChartModule.Chart('canvas', {
+      type: 'doughnut',
+      data: {
+        labels: labelArray,
+        datasets: [
+          {
+            data: dataArray,
+            backgroundColor: [
               "#003f5c",
-              "#2f4b7c",  
-              "#665191",  
-              "#a05195",  
-              "#d45087",  
-              "#f95d6a",  
-              "#ff7c43",  
-              "#ffa600", 
-            ],  
-            fill: true  
-          }  
-        ]  
-      },  
-      options: {  
-        legend: {  
-          display: true  
-        },  
-        scales: {  
-          xAxes: [{  
-            display: false  
-          }],  
-          yAxes: [{  
-            display: false  
-          }],  
-        }  
+              "#2f4b7c",
+              "#665191",
+              "#a05195",
+              "#d45087",
+              "#f95d6a",
+              "#ff7c43",
+              "#ffa600",
+            ],
+            fill: true
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{
+            display: false
+          }],
+          yAxes: [{
+            display: false
+          }],
+        }
       },
       responsive: true,
       maintainAspectRatio: false

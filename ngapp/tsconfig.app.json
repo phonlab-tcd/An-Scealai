@@ -4,7 +4,7 @@
     "**/*.spec.ts",
     "e2e/*",
     "src/test.ts",
-    "src/environments/environment.prod.ts",
+    "**/*.prod.ts",
     "**/*.qa.ts"
   ],
   "compilerOptions": {

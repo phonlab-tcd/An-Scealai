@@ -32,7 +32,7 @@ import { ClassroomService } from '../../classroom.service';
 import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.component';
 import Quill from 'quill';
 import { QuillHighlightService } from '../../services/quill-highlight.service';
-import clone from 'lodash/clone';
+import clone from 'lodash-es/clone';
 import config from 'abairconfig';
 
 const Parchment = Quill.import('parchment');
