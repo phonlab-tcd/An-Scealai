@@ -7,8 +7,7 @@ import { TranslationService } from '../translation.service';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
 import { UserService } from '../user.service';
-import config from '../../abairconfig.json';
-
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +32,7 @@ export class LoginComponent implements OnInit {
   };
 
   loginError: boolean;
-  errorMsgKeys: string[];
+  errorMsgKeys: string[] = [];
 
   forgotPassword = false;
   modalClass: 'hiddenFade' | 'visibleFade';
@@ -102,6 +101,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.errorMsgKeys = [];
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(

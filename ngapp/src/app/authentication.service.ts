@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 export interface UserDetails {
   _id: string;
@@ -150,9 +150,7 @@ export class AuthenticationService {
       user)
       .pipe(
         map((data: TokenResponse) => {
-          if (data.token) {
-            this.saveToken(data.token);
-          }
+          if (data.token) this.saveToken(data.token);
           return data;
         })
       );

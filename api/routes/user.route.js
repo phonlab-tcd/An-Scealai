@@ -3,6 +3,7 @@
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
+const passport = require('passport');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -48,7 +49,7 @@ userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', ctrlAuth.login);
+userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
@@ -92,21 +93,6 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
             res.json(user);
         } else {
             res.status(404).json("User not found");
-        }
-    });
-});
-
-// Endpoint to get all users from database
-userRoutes.route('/getAllUsers').get((req, res) => {
-    User.find({}, (err, users) => {
-        if(err) {
-          console.log(err);
-          res.send(err);
-        }
-        if(users) {
-            res.json(users);
-        } else {
-            res.status(404).json("No users exist on the database");
         }
     });
 });

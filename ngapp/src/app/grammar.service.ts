@@ -6,13 +6,13 @@ import {
 } from '@angular/common/http';
 import { Observable, Observer} from 'rxjs';
 import { StoryService } from './story.service';
-import { TranslationService } from 'src/app/translation.service';
+import { TranslationService } from 'app/translation.service';
 import { HighlightTag } from 'angular-text-input-highlight';
-import { Story } from 'src/app/story';
-import { EngagementService } from 'src/app/engagement.service';
-import { EventType } from 'src/app/event';
+import { Story } from 'app/story';
+import { EngagementService } from 'app/engagement.service';
+import { EventType } from 'app/event';
 import { VowelAgreementIndex } from './services/quill-highlight.service';
-// import config from 'src/abairconfig.json';
+import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
   broadFirst: boolean;

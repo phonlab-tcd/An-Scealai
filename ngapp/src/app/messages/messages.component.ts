@@ -6,7 +6,7 @@ import { User } from '../user';
 import { Message } from '../message';
 import { UserService } from '../user.service';
 import { TranslationService } from '../translation.service';
-import { ClassroomService } from 'src/app/classroom.service';
+import { ClassroomService } from 'app/classroom.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';

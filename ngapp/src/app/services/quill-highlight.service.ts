@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
 import { map } from 'rxjs/operators';
-import { TranslationService } from 'src/app/translation.service';
+import { TranslationService } from 'app/translation.service';
 import {
   GramadoirRuleId,
   GrammarService,
   GramadoirTag,
   DisagreeingVowelIndices,
-} from 'src/app/grammar.service';
+} from 'app/grammar.service';
 import {EngagementService} from "../engagement.service";
 import { reject } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
-import config from '../../abairconfig.json';
+import config from 'abairconfig';
 import clone from 'lodash/clone';
 
 const Tooltip = Quill.import('ui/tooltip');
@@ -273,7 +273,7 @@ export class QuillHighlightService {
                     'gramadoir-tag-style-type': error.type,
                     'gramadoir-tag': JSON.stringify(error),
                   },
-                  'user'
+                  'api'
               );
         });
     this.generateGramadoirTagTooltips(quillEditor);

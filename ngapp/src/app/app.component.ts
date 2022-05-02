@@ -68,7 +68,7 @@ export class AppComponent {
     this.notificationSerivce.messageEmitter.subscribe( (res) => {
       this.messagesForNotifications = res;
     });
-  
+
     this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
       this.teacherMessagesForNotifications = res;
       this.teacherMessagesSum = 0;
@@ -76,16 +76,9 @@ export class AppComponent {
         this.teacherMessagesSum += entry[1];
       }
     });
-
-    // EXAMPLE AUTHENTICATED REQUEST (neimhin 22/04/2022)
-    // if(this.auth.isLoggedIn()){
-    //   this.http.get(config.baseurl + 'whoami').subscribe(
-    //     user=>{console.log(user)}
-    //   ); 
-    // }
   }
 
-  // Swap value of checkVal,
+  // Swap value of checkVal
   // if changed to false set notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
@@ -106,7 +99,7 @@ export class AppComponent {
     this.notificationsShown = false;
     this._router.navigateByUrl('/dashboard/' + id);
   }
-  
+
   goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
@@ -120,20 +113,18 @@ export class AppComponent {
       this.changeToEnglish();
     }
   }
-  
+
   changeToEnglish() {
     this.ts.setLanguage("en");
     this.currentLanguage = "English";
   }
-  
+
   changeToIrish() {
     this.ts.setLanguage("ga");
     this.currentLanguage = "Gaeilge";
   }
 
-/*
-* Change loading bar status based on current event
-*/
+  // Change loading bar status based on current event
   private navigationInterceptor(event: Event): void {
     /*
     if (event instanceof NavigationStart) {
@@ -151,13 +142,13 @@ export class AppComponent {
    */
   }
 
-// Keep track of where the user clicks
+  // Keep track of where the user clicks
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
 
-// Hide the notification container if user clicks on the page
+  // Hide the notification container if user clicks on the page
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {
@@ -165,5 +156,4 @@ export class AppComponent {
     }
     this.wasInside = false;
   }
-  
 }

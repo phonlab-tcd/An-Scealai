@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { TextProcessingService } from 'src/app/services/text-processing.service';
-import { SynthesisService, Dialect } from 'src/app/services/synthesis.service';
-import { SynthItem } from 'src/app/synth-item';
-import { TranslationService } from "src/app/translation.service";
+import { TextProcessingService } from 'app/services/text-processing.service';
+import { SynthesisService, Dialect } from 'app/services/synthesis.service';
+import { SynthItem } from 'app/synth-item';
+import { TranslationService } from "app/translation.service";
 
 @Component({
   selector: 'app-synthesis-player',

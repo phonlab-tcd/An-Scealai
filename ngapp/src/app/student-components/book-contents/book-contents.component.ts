@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { AuthenticationService, TokenPayload } from '../../authentication.service';
+import { AuthenticationService, TokenPayload, UserDetails } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
@@ -12,7 +12,7 @@ import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { RecordingService } from '../../recording.service';
-import { FilterPipe } from 'src/app/pipes/filter.pipe'; // used in html template
+import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template
 
 @Component({
   selector: 'app-book-contents',
@@ -46,23 +46,25 @@ export class BookContentsComponent implements OnInit {
     private ns: NotificationService,
     private recordingService: RecordingService) { }
 
-/*
-* Set story array of stories for logged in user
-* set delete mode to false and create empty to be deleted array
-*/
+
+  // Set story array of stories for logged in user
+  // set delete mode to false and create empty to be deleted array
   ngOnInit() {
-    // get stories for the user
-    this.storyService
-    .getStoriesForLoggedInUser()
-    .subscribe((data) => {
-      this.stories = data.map(storyData => new Story().fromJSON(storyData));
-      this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
-    });
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
+    if(!userDetails) {
+      window.alert('no user details available');
       return;
     }
-
+    // get stories for the user
+    this.storyService
+      .getStoriesForLoggedInUser()
+      .subscribe(
+        (data) => {
+          this.stories = data.map(storyData => new Story().fromJSON(storyData));
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
+        },
+        window.alert
+      );
     this.userId = userDetails._id;
     this.deleteMode = false;
     this.toBeDeleted = [];

@@ -14,6 +14,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterModule } from 'register/register.module';
+
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -27,9 +29,8 @@ import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
+import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -66,16 +67,13 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { SpinnerModule } from 'spinner/spinner.module';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
-import { GrammarCheckerComponent } from './student-components/grammar-checker/grammar-checker.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import { LoadingComponent } from './loading/loading.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
-
-
 
 @NgModule({
   declarations: [
@@ -85,8 +83,9 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     TechnologyComponent,
     LanguageComponent,
     LoginComponent,
-    RegisterComponent,
-    ReportAnIssueComponent,
+//     RegisterComponent,
+//     RegisterFormComponent,
+//     WaitingForEmailVerificationComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
@@ -124,13 +123,14 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthesisPlayerComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
-    GrammarCheckerComponent,
     CreateQuizComponent,
     AboutTaidhginComponent,
-    LoadingComponent,
     SynthItemComponent,
   ],
   imports: [
+    RegisterModule,
+    ReportAnIssueModule,
+    SpinnerModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -149,8 +149,14 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',
-        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
-      }]
+        whitelist: [
+          'sans-serif',         // @quill-font
+          'serif',              // @quill-font
+          'monospace',          // @quill-font
+          'arial',              // @quill-font
+          'times-new-roman',    // @quill-font
+        ]
+      }],
     })
   ],
   providers: [

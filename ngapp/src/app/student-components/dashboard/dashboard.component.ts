@@ -26,19 +26,14 @@ import {
   ReadableGramadoirRuleIds,
 } from '../../grammar.service';
 
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { TranslationService } from '../../translation.service';
 import { StatsService } from '../../stats.service';
 import { ClassroomService } from '../../classroom.service';
-import { TextProcessingService } from 'src/app/services/text-processing.service';
-import { SynthesisService } from 'src/app/services/synthesis.service';
-import { SynthesisPlayerComponent } from 'src/app/student-components/synthesis-player/synthesis-player.component';
-import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
-import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
+import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.component';
 import Quill from 'quill';
-import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
+import { QuillHighlightService } from '../../services/quill-highlight.service';
 import clone from 'lodash/clone';
-import config from 'src/abairconfig.json';
+import config from 'abairconfig';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -69,16 +64,17 @@ type QuillHighlightTag = {
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.css',
-    './../../gramadoir-tags.css'],
+    './../../gramadoir-tags.css',
+    './../../../quill.fonts.css',
+  ],
   encapsulation: ViewEncapsulation.None
 })
 
 export class DashboardComponent implements OnInit{
 
-  @ViewChild('mySynthesisPlayer') synthesisPlayer: SynthesisPlayerComponent;
-  // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+  @ViewChild('mySynthesisPlayer')
+  synthesisPlayer: SynthesisPlayerComponent;
 
-  // So that we can use this in the template
   ReadableGramadoirRuleIds = ReadableGramadoirRuleIds;
 
   story: Story = new Story();
@@ -154,7 +150,7 @@ export class DashboardComponent implements OnInit{
       //  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
-      [{ font: [] }],
+      [{ font: ['sans-serif', 'serif', 'monospace', 'arial', 'times-new-roman'] }],
       [{ align: [] }],
       ['clean'],                                         // remove formatting button
       //  ['link', 'image', 'video']                        // link and image, video
@@ -169,6 +165,9 @@ export class DashboardComponent implements OnInit{
     return 'not defined';
   }
 
+  onEditorCreated(q: Quill) {
+    this.quillEditor = q;
+  }
 
   constructor(
     protected sanitizer: DomSanitizer,
@@ -185,45 +184,42 @@ export class DashboardComponent implements OnInit{
     public quillHighlightService: QuillHighlightService,
   ) {
     this.textUpdated.pipe(
-      debounceTime(1500),
       distinctUntilChanged(),
     ).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
-      if (textToCheck !== this.mostRecentGramadoirInput) {
-        const grammarCheckerTime = new Date();
-        this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-        this.grammarLoading = true;
-        try {
-        await this.quillHighlightService
-            .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
-            .then((errTypes: object) => {
-              this.currentGrammarErrorTypes = errTypes;
-              Object.keys(errTypes).forEach((k) => {
-                this.grammarTagFilter[k] !== undefined ?
-                this.grammarTagFilter[k] = this.grammarTagFilter[k] :
-                this.grammarTagFilter[k] = true;
-              });
-              this.quillHighlightService
-                  .filterGramadoirTags(this.grammarTagFilter);
-              this.grammarTagsHidden ?
-              this.quillHighlightService
-                  .clearAllGramadoirTags(this.quillEditor) :
-              this.quillHighlightService
-                  .applyGramadoirTagFormatting(this.quillEditor);
+      const grammarCheckerTime = new Date();
+      this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+      this.grammarLoading = true;
+      try {
+      await this.quillHighlightService
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
+          .then((errTypes: object) => {
+            this.currentGrammarErrorTypes = errTypes;
+            Object.keys(errTypes).forEach((k) => {
+              this.grammarTagFilter[k] !== undefined ?
+              this.grammarTagFilter[k] = this.grammarTagFilter[k] :
+              this.grammarTagFilter[k] = true;
             });
-        } catch (updateGrammarErrorsError) {
-          if ( !this.grammarTagsHidden) {
-            window.alert(
-              'There was an error while trying to fetch grammar ' +
-              'suggestions from the Gramadóir server:\n' +
-              updateGrammarErrorsError.message + '\n' +
-              'See the browser console for more information');
-          }
-          console.dir(updateGrammarErrorsError);
+            this.quillHighlightService
+                .filterGramadoirTags(this.grammarTagFilter);
+            this.grammarTagsHidden ?
+            this.quillHighlightService
+                .clearAllGramadoirTags(this.quillEditor) :
+            this.quillHighlightService
+                .applyGramadoirTagFormatting(this.quillEditor);
+          });
+      } catch (updateGrammarErrorsError) {
+        if ( !this.grammarTagsHidden) {
+          window.alert(
+            'There was an error while trying to fetch grammar ' +
+            'suggestions from the Gramadóir server:\n' +
+            updateGrammarErrorsError.message + '\n' +
+            'See the browser console for more information');
         }
-        if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
-          this.grammarLoading = false;
-        }
+        console.dir(updateGrammarErrorsError);
+      }
+      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
+        this.grammarLoading = false;
       }
     });
   }
@@ -484,19 +480,23 @@ export class DashboardComponent implements OnInit{
 
   // Set story.text to most recent version of
   // editor text and then switch to storyEditedAlt
-  storyEdited(q: any) {
+  onContentChanged(q: {
+    editor: Quill;
+    html: string;
+    text: string;
+    content: any;
+    delta: any; // TODO actual type is Quill Delta
+    oldDelta: any; // TODO actual type is Quill Delta
+    source: 'user'|'api'|'silent'|undefined
+  }) {
     this.story.text = q.text;
-    this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-    this.storyEdited = this.storyEditedAlt;
-  }
-
-  storyEditedAlt(q: any) {
-    this.story.text = q.text;
-    this.textUpdated.next(q.text);
-    this.getWordCount(q.text);
-    this.storySaved = false;
-    this.debounceSaveStory();
+    switch(q.source) {
+      case 'user':
+        this.storySaved = false;
+        this.textUpdated.next(q.text);
+        this.debounceSaveStory();
+    }
   }
 
 

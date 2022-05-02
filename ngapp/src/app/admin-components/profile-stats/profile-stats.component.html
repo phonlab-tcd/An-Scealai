@@ -37,7 +37,7 @@
 <!-- Loading panel -->
 <div *ngIf="!dataLoaded" class="loaderContainer">
   <b>{{ts.l.compiling_data}}</b>
-  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  <grid-spinner></grid-spinner>
 </div>
 
 <div *ngIf="dataLoaded && selectDateRange" class="profileNumber"> {{ts.l.profiles_found}}: {{numProfilesFound}}</div>

@@ -9,9 +9,9 @@ import {
 import {
   map,
   tap } from 'rxjs/operators';
-import config from '../../abairconfig.json';
+import config from 'abairconfig';
 import {TextProcessingService} from './text-processing.service';
-import { SynthesisBankService } from 'src/app/services/synthesis-bank.service';
+import { SynthesisBankService } from 'app/services/synthesis-bank.service';
 
 interface APIv2Response {
   audioContent: string;
