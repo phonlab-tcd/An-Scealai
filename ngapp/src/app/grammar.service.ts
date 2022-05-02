@@ -6,13 +6,13 @@ import {
 } from '@angular/common/http';
 import { Observable, Observer} from 'rxjs';
 import { StoryService } from './story.service';
-import { TranslationService } from 'src/app/translation.service';
+import { TranslationService } from 'app/translation.service';
 import { HighlightTag } from 'angular-text-input-highlight';
-import { Story } from 'src/app/story';
-import { EngagementService } from 'src/app/engagement.service';
-import { EventType } from 'src/app/event';
+import { Story } from 'app/story';
+import { EngagementService } from 'app/engagement.service';
+import { EventType } from 'app/event';
 import { VowelAgreementIndex } from './services/quill-highlight.service';
-// import config from 'src/abairconfig.json';
+import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
   broadFirst: boolean;
@@ -399,7 +399,6 @@ export class GrammarService {
   convertJsonGramadoirTagsToHighlightTags(tags: string): HighlightTag[] {
     const highlightTags: HighlightTag[] = [];
     const parsed = JSON.parse(tags);
-    console.log(parsed);
     parsed.forEach((tag: any, index: number) => {
       highlightTags.push({
         indices: {
@@ -415,8 +414,6 @@ export class GrammarService {
         },
       });
     });
-    console.count('HIGHLIGHT TAGS');
-    console.log(highlightTags);
     return highlightTags;
   }
 
@@ -428,7 +425,6 @@ export class GrammarService {
       this.storyService.gramadoirViaBackend(id).subscribe(
         (res) => {
         const tags: HighlightTag[] = [];
-        console.dir(res);
         JSON.parse(res.grammarTags).forEach(g => {
           const tag: HighlightTag = {
             indices: {
@@ -624,8 +620,6 @@ export class GrammarService {
       arr = this.replaceAt(arr, match.index, '#'.repeat(5));
       regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
       match = regex.exec(arr);
-      console.log("matched " + val);
-      console.log("indexes", indexes);
     }
     
     return indexes;

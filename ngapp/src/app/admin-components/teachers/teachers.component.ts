@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { identifierModuleUrl } from '@angular/compiler';
+// import identifierModuleUrl from '@angular/compiler';
 import { TranslationService } from '../../translation.service';
-import config from '../../../abairconfig.json';
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-teachers',
@@ -37,10 +37,8 @@ export class TeachersComponent implements OnInit {
     const teacherCodeObj = {
       code : this.teacherCode,
     };
-    console.log(teacherCodeObj);
     this.http.post(this.baseUrl + 'teacherCode/create', teacherCodeObj)
       .subscribe(res => {
-        console.log("Teacher code created!", res)
         this.getActiveTeacherCodes();
       });
   }
@@ -48,7 +46,6 @@ export class TeachersComponent implements OnInit {
   getActiveTeacherCodes() {
     this.http.get(this.baseUrl + 'teacherCode/activeCodes').subscribe((res: TeacherCodeDetails[]) => {
       this.activeTeacherCodes = res;
-      console.log("teacher codes", this.activeTeacherCodes);
     });
   }
 
@@ -60,13 +57,11 @@ export class TeachersComponent implements OnInit {
 
   deleteTeacherCode() {
     if(this.codeToDelete != null) {
-      console.log(this.codeToDelete);
       this.http.get(this.baseUrl + 'teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
         this.getActiveTeacherCodes();
         this.hideModal();
       });
     } else {
-      console.log("Error, code id not found.");
     }
     
   }

@@ -7,7 +7,7 @@ import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { StatsService } from '../../stats.service';
 import { StudentStats } from '../../studentStats';
-import { Chart } from 'node_modules/chart.js';
+import { Chart } from 'chart.js';
 import { TranslationService } from '../../translation.service';
 
 @Component({
@@ -74,7 +74,6 @@ export class TeacherStatsComponent implements OnInit {
           this.classroom = res;
           this.classroomId = this.classroom._id;
           this.teacherId = this.classroom.teacherId;
-          console.log(this.classroom);
           
           this.classroomService.getGrammarRules(this.classroomId).subscribe( (res) => {
             let rules: string[] = res;
@@ -109,7 +108,6 @@ export class TeacherStatsComponent implements OnInit {
       this.statsService.getStatsForClassroom(this.classroomId).subscribe( (res: StudentStats[]) => {
         this.stats = res;
         this.stats.sort((a, b) => a.studentUsername.toLowerCase().localeCompare(b.studentUsername.toLowerCase()));
-        console.log(this.stats);
         this.getStatsForClass();
       });
     }
@@ -124,20 +122,13 @@ export class TeacherStatsComponent implements OnInit {
           
           let originalAmount = this.totalStats.get(error[0]);
           let newArrayOfValues = error[1];
-          //console.log("type of original amount: " +  originalAmount);
-        //  console.log("type of map object: " + typeof );
-          //console.log("original amount: " + originalAmount);
-        //  console.log("error[1]: " + error[1]);
-        
           if(originalAmount == null) {
             this.totalStats.set(error[0], newArrayOfValues[newArrayOfValues.length-1]);
           }
           else {
             let newAmount = (originalAmount + newArrayOfValues[newArrayOfValues.length-1]);
-            //console.log("New amount: " + newAmount);
             this.totalStats.set(error[0], newAmount);
           }
-          //console.log(this.totalStats);
         }
       }
   
@@ -175,8 +166,8 @@ export class TeacherStatsComponent implements OnInit {
             }],  
           }  
         },
-        responsive: true,
-        maintainAspectRatio: false
+        // responsive: true,
+        // maintainAspectRatio: false
       }); 
     }
 
@@ -224,8 +215,6 @@ export class TeacherStatsComponent implements OnInit {
   }
   
   hoverDate(stamps, key) {
-    console.log(stamps);
-    console.log(key);
     this.dateToDisplay = stamps.get(key).toString();
   }
 

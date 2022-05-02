@@ -6,7 +6,6 @@ const ObjectID = require('mongodb').ObjectID;
 const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
-
 const makeEndpoints = require('../utils/makeEndpoints');
 const { parse, stringify } = require('node-html-parser');
 const path = require('path');
@@ -58,7 +57,6 @@ let storyRoutes;
     },
   });
 })();
-
 
 // Create new story
 storyRoutes.route('/create').post(function(req, res) {
@@ -434,7 +432,7 @@ function synthesiseStory(story) {
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
-      if(err) res.send(err);
+      if(err) resp.send(err);
       if(body) {
         // audioContainer is chunk of text made up of paragraphs
         let audioContainer = parse(body).querySelectorAll('.audio_paragraph');

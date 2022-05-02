@@ -6,7 +6,7 @@ import { Story } from './story';
 import { Recording } from './recording';
 import { EventType } from './event';
 import { EngagementService } from './engagement.service';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 import { v4 as uuid } from 'uuid';
 
 @Injectable({

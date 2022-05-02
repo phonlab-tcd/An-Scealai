@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ClassroomService } from 'src/app/classroom.service';
+import { ClassroomService } from 'app/classroom.service';
 import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
 import { Observable } from 'rxjs';
@@ -67,7 +67,6 @@ export class TeacherClassroomComponent implements OnInit {
       let id: string = params.id.toString();
       this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
         this.classroom = res;
-        console.log(this.classroom);
         this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
           this.messagesForNotifications = res;
           this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);

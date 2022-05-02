@@ -409,6 +409,7 @@ module.exports.register = async (req, res) => {
     errors: [],
   };
 
+  console.dir(req.body);
   // REQUIREMENTS
   if (!req.body.username || !req.body.password || !req.body.email) {
     resObj.messageKeys.push('username_password_and_email_required');
@@ -416,7 +417,7 @@ module.exports.register = async (req, res) => {
   }
   if (!req.body.baseurl) {
     logger.warning(
-        'Property basurl missing from registration request.' +
+        'Property baseurl missing from registration request.' +
         'Using default (dev server).');
     req.body.baseurl = 'http://localhost:4000/';
   }

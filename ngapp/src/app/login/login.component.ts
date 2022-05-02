@@ -7,8 +7,7 @@ import { TranslationService } from '../translation.service';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
 import { UserService } from '../user.service';
-import config from '../../abairconfig.json';
-
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-login',
@@ -77,7 +76,6 @@ export class LoginComponent implements OnInit {
     this.frozenCredentials.language = this.ts.inIrish() ? 'ga' : 'en';
 
     if (this.userToVerify !== this.credentials.username) {
-      console.log('this.userToVerify !== this.credentials.username');
       this.errorMsgKeys = ['username_changed_starting_from_scratch'];
       this.userHasNotBeenVerified = false;
       this.userToVerify = null;
@@ -86,20 +84,15 @@ export class LoginComponent implements OnInit {
 
     this.errorMsgKeys = [];
 
-    console.log('Requesting email verification.');
     this.auth.verifyOldAccount(this.frozenCredentials).subscribe(
       (data) => {
-        console.log('Got response for verifyOldAccount endpoint');
         this.waitingForEmailVerification = true;
-        console.dir(data);
       },
       (error) => {
-        console.dir(error);
         this.verificationEmailHasBeenSent = false;
         this.errorMsgKeys = error.error.messageKeys;
       },
       () => {
-        console.log('Completed verifyOldAccount request');
         this.verificationEmailHasBeenSent = true;
         // Shallow copy frozen credentials to auth service.
         this.auth.pendingUserPayload = {baseurl: config.baseurl, ...this.frozenCredentials};
@@ -121,7 +114,6 @@ export class LoginComponent implements OnInit {
           }
         },
         () => {
-          console.log('Completed login Observable for:', this.frozenCredentials.username);
         });
       return;
     }
@@ -134,16 +126,12 @@ export class LoginComponent implements OnInit {
     }
     this.auth.login(this.credentials).subscribe(
       (res) => {
-        if(res.error)
-          this.errorMsgKeys = this.errorMsgKeys.concat(res.error.messages);
-        console.dir(res);
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         this.router.navigateByUrl('/landing');
       },
       (err) => {
         this.errorMsgKeys = err.error.messageKeys;
         if (err.error.userStatus === 'Pending') {
-          console.log('User status is Pending');
           // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
@@ -152,7 +140,6 @@ export class LoginComponent implements OnInit {
         }
       },
       () => {
-        console.log('completed login for:', this.credentials.username);
       });
   }
 
@@ -165,25 +152,19 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword() {
-    console.log('making request to reset password');
     this.resetPasswordOkKeys = [];
     this.resetPasswordErrKeys = [];
     const name = this.usernameForgotPassword;
     if (name) {
       this.auth.resetPassword(name).subscribe(
         okRes => {
-          console.log('ok');
-          console.dir(okRes);
           this.resetPasswordOkKeys = okRes.messageKeys;
           this.resetPasswordOkKeys.push(`[${okRes.sentTo}]`);
         },
         errRes => {
-          console.log('err');
-          console.dir(errRes);
           this.resetPasswordErrKeys = errRes.error.messageKeys;
         },
         () => {
-          console.log('Completed request to reset password for', name);
         });
     }
   }

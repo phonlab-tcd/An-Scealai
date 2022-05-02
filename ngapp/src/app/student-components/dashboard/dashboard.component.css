@@ -1,3 +1,24 @@
+.synthesisLoading {
+  align: center;
+  border-right: 2px solid orange;
+  border-left: 2px solid red;
+  border-top: 2px solid green;
+  border-bottom: 2px solid blue;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ql-container {
+  height: auto;
+}
+
 .ql-editor {
   background-color: #f7f2e7;
   /* ~44px is the height of the toolbar */
@@ -94,7 +115,7 @@
     --dictionaryHeight: 50vh;
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
-    background: url("src/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    background: url("assets/img/paperBg.jpg") no-repeat center center fixed; 
     -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
     box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
@@ -173,6 +194,8 @@
 
 .textField {
     width: 100%;
+    min-height: var(--textfieldHeight);
+    height: auto;
     /* height: var(--textfieldHeight); */
     resize: none;
     z-index: 1;
@@ -183,40 +206,39 @@
     padding-top: 10px;
 }
 
-
 quill-editor {
   width: 100%;
   height: 10vh;
 }
 
 .quill-editor-dict {
-    /* dictionary view adds another toolbar worth of height */
+  /* dictionary view adds another toolbar worth of height */
   height: calc(var(--textfieldHeight) - 44px);
 }
 
 .text-input-highlight-container .text-highlight-element  {
-    background: #f7f2e7;
+  background: #f7f2e7;
 }
 
 .bg-blue {
-background-color: lightblue;
+  background-color: lightblue;
 }
 
 
 .closeFeedbackBtn {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .closeFeedbackBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .closeDictionaryBtn {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .closeDictionaryBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dictionary {
@@ -225,61 +247,52 @@ background-color: lightblue;
 }
 
 .dictionaryModeContainer {
-    display: flex;
+  display: flex;
 }
 
 .dictionaryContainer {
-    border-top: solid grey 1px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  border-top: solid grey 1px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .dictionaryHeight {
   height: var(--dictionaryHeight);
 }
 
 .dictionaryIframe {
-    height: var(--dictionaryHeight);
-    width: 100%;
+  height: var(--dictionaryHeight);
+  width: 100%;
 }
 
 .dictionaryVisibleTextField {
-    height: var(--textfieldHeight);
-    width: calc(100% - var(--dictionaryWidth));
+  height: var(--textfieldHeight);
+  width: calc(100% - var(--dictionaryWidth));
 }
 
 .saveBtn {
-    font-size: 14pt;
-    border-style: none;
-    color: white;
-    font-size: 12pt;
-    margin: 0px;
-    margin-right: 5%;
-    margin-left: auto;
-    border-radius: 5px 5px 5px 5px;
+  font-size: 14pt;
+  border-style: none;
+  color: white;
+  font-size: 12pt;
+  margin: 0px;
+  margin-right: 5%;
+  margin-left: auto;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .audioPlayer {
-    height: 30px;
-    width: 90%;
-    background-color: #f1f3f4;
-    border: 1px solid #8c806e86;
-}
-
-.unsavedBtn {
-    background-color: #e5bd3b;
-}
-
-.unsavedBtn:hover {
-    background-color: #ad8f2b;
-    color: white;
+  height: 30px;
+  width: 90%;
+  background-color: #f1f3f4;
+  border: 1px solid #8c806e86;
 }
 
 .storyContainer {
-    z-index: 1;
-    --feedbackHeight: 120px;
-    --grammarMessageHeight: 80px;
-    --dictionaryWidth: 100%;
+  z-index: 1;
+  --feedbackHeight: 120px;
+  --grammarMessageHeight: 80px;
+  --dictionaryWidth: 100%;
 }
 
 .tickIcon {
@@ -318,19 +331,19 @@ background-color: lightblue;
 }
 
 .optionsBtn {
-    font-size: 14pt;
-    background-color: #e5bd3b;
-    border-style: none;
-    color: #464444;
-    font-size: 12pt;
-    margin: 0px;
-        margin-right: 40px;
-    border-radius: 2px 2px 2px 2px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background: #dfd9c800;
-    background-color: rgba(223, 217, 200, 0);
+  font-size: 14pt;
+  background-color: #e5bd3b;
+  border-style: none;
+  color: #464444;
+  font-size: 12pt;
+  margin: 0px;
+  margin-right: 40px;
+  border-radius: 2px 2px 2px 2px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: #dfd9c800;
+  background-color: rgba(223, 217, 200, 0);
 }
 
 .optionsBtn:hover {
@@ -435,7 +448,15 @@ background-color: lightblue;
     font-size: 10pt;
 }
 
-/* Add more here */
+.grammarToolbar {
+    background-color: #70a87f;
+    color: white;
+    display: flex;
+    padding-left: 20px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
 
 .selectErrorCheckbox {
   display: flex;
@@ -671,76 +692,3 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         width: 100%;
     }
 }
-
-
-.lds-grid {
-    display: inline-block;
-    position: relative;
-    width: 64px;
-    height: 64px;
-  }
-
-  .lds-grid div {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #437250;
-    animation: lds-grid 1.2s linear infinite;
-  }
-  .lds-grid div:nth-child(1) {
-    top: 6px;
-    left: 6px;
-    animation-delay: 0s;
-  }
-  .lds-grid div:nth-child(2) {
-    top: 6px;
-    left: 26px;
-    animation-delay: -0.4s;
-  }
-  .lds-grid div:nth-child(3) {
-    top: 6px;
-    left: 45px;
-    animation-delay: -0.8s;
-  }
-  .lds-grid div:nth-child(4) {
-    top: 26px;
-    left: 6px;
-    animation-delay: -0.4s;
-  }
-  .lds-grid div:nth-child(5) {
-    top: 26px;
-    left: 26px;
-    animation-delay: -0.8s;
-  }
-  .lds-grid div:nth-child(6) {
-    top: 26px;
-    left: 45px;
-    animation-delay: -1.2s;
-  }
-  .lds-grid div:nth-child(7) {
-    top: 45px;
-    left: 6px;
-    animation-delay: -0.8s;
-  }
-  .lds-grid div:nth-child(8) {
-    top: 45px;
-    left: 26px;
-    animation-delay: -1.2s;
-  }
-  .lds-grid div:nth-child(9) {
-    top: 45px;
-    left: 45px;
-    animation-delay: -1.6s;
-  }
-
-  /*
-  @keyframes lds-grid {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
-  */

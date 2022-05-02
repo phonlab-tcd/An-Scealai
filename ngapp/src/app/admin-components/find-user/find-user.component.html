@@ -3,13 +3,13 @@
     <div class='searchHeader'>
       {{ts.l.all_users}} ({{userCount}})
     </div>
-    
+
     <!-- Loading panel -->
     <div *ngIf="!dataLoaded" class="loaderContainer">
       <b>{{ts.l.compiling_data}}</b>
-      <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <grid-spinner></grid-spinner>
     </div>
-    
+
     <!-- Filter by role -->
     <div *ngIf="dataLoaded" class='searchResultsContainer'>
       <div class='filter'>

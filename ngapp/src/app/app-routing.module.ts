@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -11,10 +10,9 @@ import { TeamComponent } from './team/team.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from 'register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ReportAnIssueComponent } from './report_an_issue/report_an_issue.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -63,7 +61,6 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent},
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
-  { path: 'report_an_issue', component: ReportAnIssueComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
@@ -165,6 +162,10 @@ const routes: Routes = [
       }
     ]
   },
+  // { path: 'report-an-issue',
+  //   loadChildren: () =>
+  //     import('../report-an-issue/report-an-issue.module')
+  //     .then(m => m.ReportAnIssueModule) },
   { path: '', redirectTo: '/landing', pathMatch: 'full'},
 ];
 
