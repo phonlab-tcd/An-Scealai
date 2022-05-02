@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
 import { Story } from './story';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 import {QuillHighlightTag} from './services/quill-highlight.service';
 
 @Injectable({

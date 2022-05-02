@@ -1,4 +1,4 @@
-import { SynthesisService, Dialect } from 'src/app/services/synthesis.service';
+import { SynthesisService, Dialect } from 'app/services/synthesis.service';
 import { Subscription } from 'rxjs';
 
 export class SynthItem {

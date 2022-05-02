@@ -6,8 +6,8 @@ import {
   ChangeDetectorRef,
   SimpleChanges } from '@angular/core';
 import { SynthesisService, Dialect } from "../services/synthesis.service";
-import { SynthesisBankService } from "src/app/services/synthesis-bank.service";
-import { SynthItem } from 'src/app/synth-item';
+import { SynthesisBankService } from "app/services/synthesis-bank.service";
+import { SynthItem } from 'app/synth-item';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +19,7 @@ export class SynthItemComponent {
 
   @Input('synthItem') synthItem: SynthItem;
   @Input('i') i: number;
-  @ViewChild('audioElement') audioElement ;
+  @ViewChild('audioElement') audioElement;
 
   constructor(
     private synth: SynthesisService,
@@ -47,6 +47,6 @@ export class SynthItemComponent {
   }
 
   ready() {
-    return !!this.synthItem.audioUrl;
+    return this.synthItem && !!this.synthItem.audioUrl;
   }
 }

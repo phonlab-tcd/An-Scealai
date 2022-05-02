@@ -7,7 +7,7 @@ import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { StatsService } from '../../stats.service';
 import { StudentStats } from '../../studentStats';
-import { Chart } from 'node_modules/chart.js';
+import { Chart } from 'chart.js';
 import { TranslationService } from '../../translation.service';
 
 @Component({
@@ -166,8 +166,8 @@ export class TeacherStatsComponent implements OnInit {
             }],  
           }  
         },
-        responsive: true,
-        maintainAspectRatio: false
+        // responsive: true,
+        // maintainAspectRatio: false
       }); 
     }
 

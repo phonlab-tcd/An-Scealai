@@ -5,7 +5,7 @@ import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { TranslationService } from '../../translation.service';
 import { ClassroomService } from '../../classroom.service';
-import config from '../../../abairconfig.json';
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-teacher-student',

@@ -18,7 +18,7 @@
               <!-- Display synthesising (loading) -->
               <div *ngIf="!audioFinishedLoading" class="loaderContainer">
                   <b>{{ts.l.synthesising}}</b>
-                  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                  <grid-spinner></grid-spinner>
               </div>
               <!-- When synthesis finished loading -->
               <div *ngIf="audioFinishedLoading">

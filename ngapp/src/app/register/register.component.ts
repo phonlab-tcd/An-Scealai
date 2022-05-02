@@ -5,7 +5,7 @@ import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import config from '../../abairconfig.json';
+import config from 'abairconfig';
 
 
 type UsernameMessageKey = 'username_no_spaces' | 'username_no_special_chars';

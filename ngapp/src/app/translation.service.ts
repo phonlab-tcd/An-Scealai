@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import translation from './translation.json';
+import translation from './translation';
 import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 import { Observable } from 'rxjs';
 
 export enum LANGUAGE {

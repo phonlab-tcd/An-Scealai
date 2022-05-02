@@ -3,13 +3,13 @@
 </div>
 <div *ngIf="!graphGenerated" class="loaderContainer">
   <b>{{ts.l.compiling_data}}</b>
-  <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  <grid-spinner></grid-spinner>
   <div>(This may take a while!)</div>
 </div>
 <div class="bodyContainer">
   <div *ngIf="graphGenerated">{{ts.l.net_errors_corrected}}: {{netErrors}}</div>
   <div class="chart-container">
-    <canvas id="canvas"></canvas>    
+    <canvas id="canvas"></canvas>
   </div>
 </div>
 

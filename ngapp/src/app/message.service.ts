@@ -9,7 +9,7 @@ import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import { Message } from './message';
 import { User } from './user';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'
