@@ -14,6 +14,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterModule } from 'register/register.module';
+
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -27,7 +29,6 @@ import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 
@@ -82,7 +83,9 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     TechnologyComponent,
     LanguageComponent,
     LoginComponent,
-    RegisterComponent,
+//     RegisterComponent,
+//     RegisterFormComponent,
+//     WaitingForEmailVerificationComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
@@ -125,6 +128,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthItemComponent,
   ],
   imports: [
+    RegisterModule,
     ReportAnIssueModule,
     SpinnerModule,
     BrowserModule,

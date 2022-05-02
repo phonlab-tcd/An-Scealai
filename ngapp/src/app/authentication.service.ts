@@ -150,9 +150,7 @@ export class AuthenticationService {
       user)
       .pipe(
         map((data: TokenResponse) => {
-          if (data.token) {
-            this.saveToken(data.token);
-          }
+          if (data.token) this.saveToken(data.token);
           return data;
         })
       );
