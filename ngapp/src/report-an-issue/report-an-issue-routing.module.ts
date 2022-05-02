@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ReportAnIssueComponent } from './report-an-issue.component';
 import { MatCardModule } from '@angular/material/card';
 
-const routes: Routes = [{ path: 'report-an-issue', component: ReportAnIssueComponent }];
+import { ReportAnIssueComponent } from './report-an-issue.component';
+
+const routes: Routes = [
+  { path: '', pathMatch: 'full', component: ReportAnIssueComponent },
+];
 
 @NgModule({
   imports: [
