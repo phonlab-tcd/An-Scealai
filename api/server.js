@@ -11,8 +11,11 @@ const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
 
+const openRoute = require('./routes/open.route');
+const authRoute = require('./routes/auth.route');
+
 const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
+// const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -58,8 +61,11 @@ app.use(passport.initialize());
 
 app.get('/whoami',jwtAuthMw,(req,res)=>{return res.json(req.user)})
 
+app.use(openRoute);
+app.use(authRoute);
+
 app.use('/story', storyRoute);
-app.use('/user', userRoute);
+// app.use('/user', userRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
