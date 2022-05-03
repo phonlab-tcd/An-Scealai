@@ -7,8 +7,14 @@ import {
 } from '@angular/common/http';
 import {
   AuthenticationService
-} from 'src/app/authentication.service';
+} from 'app/authentication.service';
 import { Observable } from 'rxjs';
+
+function mkNewRequest(
+  request: HttpRequest<unknown>,
+  command: {setHeaders: any;}): HttpRequest<unknown> {
+  return request.clone(command);
+}
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -18,15 +24,11 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const idToken = this.auth.getToken();
-    if(idToken && request.url.indexOf('gramadoir') < 0) {
-        const newRequest = request.clone({
-          setHeaders: {
-            Authorization: idToken,
-          }
-        });
-        return next.handle(newRequest);
-      }
-    return next.handle(request);
+    const token = this.auth.getToken();
+    const req =
+      (token && request.url.indexOf('gramadoir') < 0) ?
+      mkNewRequest(request, {setHeaders: {Authorization: token}}) :
+      request;
+    return next.handle(req);
   }
 }
