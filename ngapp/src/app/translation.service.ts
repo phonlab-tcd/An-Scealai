@@ -23,16 +23,16 @@ export class TranslationService {
   baseUrl: string = config.baseurl;
 
   initLanguage() {
+    this.l = this.getLanguageFromCode('ga');
     if (this.auth.isLoggedIn()) {
       this.getUserLanguageCode().subscribe((res) => {
-        this.l = this.getLanguageFromCode(res.language);
+        if(res.language)
+          this.l = this.getLanguageFromCode(res.language);
       });
-    } else {
-      this.l = this.getLanguageFromCode('ga');
     }
   }
 
-  setLanguage(code: string) {
+  setLanguage(code: 'ga'|'en') {
     this.l = this.getLanguageFromCode(code);
 
     this.currentLanguage = (this.l.iso_code === 'en' ? LANGUAGE.ENGLISH : LANGUAGE.IRISH);
@@ -71,11 +71,10 @@ export class TranslationService {
   }
 
   updateUserLanguage(code : string) : Observable<any> {
-    return this.http.post(this.baseUrl + "user/setLanguage/" + this.auth.getUserDetails()._id, {language : code});
+    return this.http.post(this.baseUrl + "user/setLanguage/", {language : code});
   }
 
   getUserLanguageCode() : Observable<any> {
-    return this.http.get(this.baseUrl + "user/getLanguage/" + this.auth.getUserDetails()._id);
+    return this.http.get(this.baseUrl + "user/getLanguage/");
   }
-
 }

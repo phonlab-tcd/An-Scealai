@@ -2,7 +2,7 @@ import {
   Injectable,
 } from '@angular/core';
 import {
-  HttpClient,
+  HttpBackend, HttpClient,
 } from '@angular/common/http';
 import { Observable, Observer} from 'rxjs';
 import { StoryService } from './story.service';
@@ -305,7 +305,7 @@ export class GrammarService {
     private http: HttpClient,
     private engagement: EngagementService,
     private ts: TranslationService,
-  ) { }
+  ) {}
 
   string2GramadoirRuleId = (str: string): GramadoirRuleId => {
     if (!str) { return 'default'; }

@@ -4,6 +4,7 @@ const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
+const jwtmw = passport.authenticate('jwt', {session: false});
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
@@ -49,39 +50,34 @@ userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
+userRoutes.post('/login',passport.authenticate('local'),ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
-userRoutes.route('/setLanguage/:id').post((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(user) {
-            user.language = req.body.language;
-            user.save().then(() => {
-                res.status(200).json("Language set successfully");
-            }).catch(err => {
-                logger.error(err.stack || err);
-                res.status(400).send(err);
-            })
-        }
+userRoutes.get('/whoami',
+  jwtmw,
+  (req,res) => {
+    return res.json(req.user);
+});
+
+userRoutes.route('/setLanguage').post(
+  jwtmw,
+  (req, res) => {
+    req.user.language = req.body.language;
+    req.user.save().then(() => {
+        return res.status(200).json("Language set successfully");
+    }).catch(err => {
+        console.log(err);
+        return res.status(400).json(err);
     });
 });
 
-userRoutes.route('/getLanguage/:id').get((req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(err) {
-          logger.error(err.stack || err);
-          res.send(err);
-        }
-        if(user) {
-            res.json({"language" : user.language});
-        } else {
-            res.status(404).json("User not found");
-        }
-    });
-});
+userRoutes.route('/getLanguage').get(
+  jwtmw,
+  (req, res) => res.json(req.user.language)
+);
 
 userRoutes.route('/getUserByUsername/:username').get((req, res) => {
     User.find({"username" : req.params.username}, (err, user) => {

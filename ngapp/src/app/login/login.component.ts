@@ -105,10 +105,12 @@ export class LoginComponent implements OnInit {
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       this.auth.login(this.frozenCredentials).subscribe(
-        () => {
+        (res) => {
+          console.dir(res);
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
+          console.dir(err);
           for (const msg of err.error.messageKeys) {
             this.waitingErrorTextKeys.push(msg);
           }
@@ -131,15 +133,13 @@ export class LoginComponent implements OnInit {
       },
       (err) => {
         this.errorMsgKeys = err.error.messageKeys;
-        if (err.error.userStatus === 'Pending') {
+        if (err.error.messages.includes('email_not_verified')) {
           // THIS MAKES THE EMAIL BOX APPEAR
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
         } else if (err.status === 400) {
           this.loginError = true;
         }
-      },
-      () => {
       });
   }
 

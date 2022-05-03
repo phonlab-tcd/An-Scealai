@@ -78,12 +78,11 @@ export class AppComponent {
         this.teacherMessagesSum += entry[1];
       }
     });
-
-    if(this.auth.isLoggedIn()){
-    }
   }
 
-  // Swap value of checkVal, if changed to false set notificationShown to false
+  // Swap value of checkVal,
+  // if changed to false set
+  // notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
       this.checkVal = true;

@@ -9,7 +9,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
-require('./config/passport');
+require('./config/passport')(passport);
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -25,6 +25,7 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
+const jwtmw = passport.authenticate('jwt',{session: false});
 
 const dbURL = require('./utils/dbUrl');
 

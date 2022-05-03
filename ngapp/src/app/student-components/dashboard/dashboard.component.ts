@@ -216,7 +216,7 @@ export class DashboardComponent implements OnInit{
             updateGrammarErrorsError.message + '\n' +
             'See the browser console for more information');
         }
-        console.dir(updateGrammarErrorsError);
+        console.error(updateGrammarErrorsError);
       }
       if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
         this.grammarLoading = false;
@@ -305,15 +305,10 @@ export class DashboardComponent implements OnInit{
 
 
     // GET CLASSROOM ID
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      return;
-    }
+    const user = this.auth.getUserDetails();
     this.classroomService
-        .getClassroomOfStudent(
-          userDetails._id)
-        .subscribe(
-          (res) => {
+        .getClassroomOfStudent(user._id)
+        .subscribe(res=>{
             if (res) {
               this.classroomId = res._id;
             }
