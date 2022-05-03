@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService, TokenPayload, VerifyEmailRequest } from '../authentication.service';
+import { AuthenticationService, TokenPayload, VerifyEmailRequest } from 'app/authentication.service';
 import { Router } from '@angular/router';
-import { EventType } from '../event';
-import { EngagementService } from '../engagement.service';
-import { TranslationService } from '../translation.service';
+import { EventType } from 'app/event';
+import { EngagementService } from 'app/engagement.service';
+import { TranslationService } from 'app/translation.service';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
-import { UserService } from '../user.service';
+import { UserService } from 'app/user.service';
 import config from 'abairconfig';
 
 @Component({
@@ -110,7 +110,6 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          console.dir(err);
           for (const msg of err.error.messageKeys) {
             this.waitingErrorTextKeys.push(msg);
           }
@@ -132,13 +131,18 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/landing');
       },
       (err) => {
-        this.errorMsgKeys = err.error.messageKeys;
-        if (err.error.messages.includes('email_not_verified')) {
+        if (err.status === 404) {
+          this.errorMsgKeys = ['username_not_found'];
+        }
+        if (err.status === 401) {
+          this.errorMsgKeys = ['incorrect_password'];
+        }
+        if (err.error.userPending) {
+          this.errorMsgKeys= ['email_not_verified'];
           // THIS MAKES THE EMAIL BOX APPEAR
+          console.log('USER PENDING');
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
-        } else if (err.status === 400) {
-          this.loginError = true;
         }
       });
   }

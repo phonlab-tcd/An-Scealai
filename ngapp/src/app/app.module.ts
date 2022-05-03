@@ -28,7 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { LanguageComponent } from './language/language.component';
-import { LoginComponent } from './login/login.component';
+// import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 
@@ -82,10 +82,10 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     AboutComponent,
     TechnologyComponent,
     LanguageComponent,
-    LoginComponent,
-//     RegisterComponent,
-//     RegisterFormComponent,
-//     WaitingForEmailVerificationComponent,
+    //     LoginComponent,
+    //     RegisterComponent,
+    //     RegisterFormComponent,
+    //     WaitingForEmailVerificationComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,

@@ -35,7 +35,6 @@ opts.algorithms =       ['RS256']
 // opts.jsonWebTokenOptions = {}
 // opts.issuer =           'an-scéalaí-backend';
 // opts.audience =         'an-scéalaí-frontend';
-//
 
 function jwtCallback(payload, done) {
   User.findById(payload._id, (err,user) => {
@@ -50,14 +49,12 @@ function localCallback(username, password, done) {
       logger.error(err);
       return done({error: err }); 
     }
-  
     if(!user)
       return done({error: { messages: ['username_not_found', username]}, status: 404});
     if(!user.validPassword(password))
       return done({error: { messages: ['incorrect_password']}, status: 401});
     if(!user.status === 'Active')
       return done({error: { messages: ['activation_pending']}, email: user.email});
-  
     // If everything is correct, return user object
     logger.info('Successfully authenticated (by password) user: ' + username);
     return done(null, user);
@@ -68,7 +65,7 @@ module.exports = (passport) => {
   passport.use(new JwtStrategy(opts,jwtCallback));
   passport.use(new LocalStrategy(localCallback));
   passport.serializeUser((user,done)=>done(null,user._id));
-  passport.deserializeUser(
-    (id,done)=>User.findById(id,
-      (err,user)=>done(err,user)));
+  passport.deserializeUser((id,done)=>
+    User.findById(id,(err,user)=>
+      done(err,user)));
 }

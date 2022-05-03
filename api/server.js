@@ -11,8 +11,11 @@ const passport = require('passport');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport')(passport);
 
+const openRoute = require('./routes/open.route');
+const authRoute = require('./routes/auth.route');
+
 const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
+// const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -28,6 +31,7 @@ const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const jwtmw = passport.authenticate('jwt',{session: false});
 
 const dbURL = require('./utils/dbUrl');
+const jwtAuthMw = require('./utils/jwtAuthMw');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
@@ -52,12 +56,29 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+if(process.env.LOG_REQUESTS > 0) {
+  app.use((req,res,next) => {
+    logger.info({
+      url: req.originalUrl,
+      body: req.body,
+      params: req.params,
+      query: req.query,
+      auth: req.headers.authorization
+    });
+    next();
+  });
+}
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
+app.get('/whoami',jwtAuthMw,(req,res)=>{return res.json(req.user)})
+
+app.use(openRoute);
+app.use(authRoute);
+
 app.use('/story', storyRoute);
-app.use('/user', userRoute);
+// app.use('/user', userRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);

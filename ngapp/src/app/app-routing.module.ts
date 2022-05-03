@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from 'app/interceptors/auth.interceptor';
+import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -11,7 +11,8 @@ import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { LanguageComponent } from './language/language.component';
-import { LoginComponent } from './login/login.component';
+
+import { LoginComponent } from 'register/login/login.component';
 import { RegisterComponent } from 'register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -56,7 +57,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
-  { path: 'landing', component: LandingComponent},
+  { path: 'landing', component: LandingComponent },
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
@@ -164,11 +165,13 @@ const routes: Routes = [
       }
     ]
   },
-  // { path: 'report-an-issue',
-  //   loadChildren: () =>
-  //     import('../report-an-issue/report-an-issue.module')
-  //     .then(m => m.ReportAnIssueModule) },
-  { path: '', redirectTo: '/landing', pathMatch: 'full'},
+  {
+    path: 'report-an-issue',
+    loadChildren: () => import('report-an-issue/report-an-issue.module')
+      .then(m=>m.ReportAnIssueModule)
+  },
+  { path: '', redirectTo: 'landing', pathMatch: 'full', },
+  { path: '**', redirectTo: 'landing'},
 ];
 
 @NgModule({

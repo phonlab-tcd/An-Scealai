@@ -429,7 +429,6 @@ export class RegisterProfileComponent implements OnInit {
       howOftenWriting : this.howOftenWriting,
       synthOpinion : this.synthOpinion,
     };
-    
 
     this.profileService.create(profile).subscribe((res) => {
       if(userDetails.role === 'STUDENT') {
@@ -437,7 +436,6 @@ export class RegisterProfileComponent implements OnInit {
       } else if(userDetails.role === 'TEACHER') {
         this.router.navigateByUrl('/teacher/dashboard');
       }
-      
     });
 
   }

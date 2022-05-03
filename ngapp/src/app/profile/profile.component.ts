@@ -210,7 +210,7 @@ export class ProfileComponent implements OnInit {
     }
     
     await this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
-    await this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise()
+    await this.userService.updateUsername(this.updatedUsername).toPromise()
     this.auth.logout();
   }
 

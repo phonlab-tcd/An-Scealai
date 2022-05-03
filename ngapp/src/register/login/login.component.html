@@ -54,7 +54,6 @@
         </div>
 
         <button
-            (click)="login()"
             class="btn loginBtn"
             *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
           <div 
@@ -68,6 +67,10 @@
 </div>
 
 <!-- THE USER'S EMAIL HAS NOT BEEN VERIFIED YET -->
+<waiting-for-email-verification
+    *ngIf=waitingForEmailVerification
+>
+</waiting-for-email-verification>
 <div class="registerContainer" *ngIf="waitingForEmailVerification">
   <div class="formTitle">{{ts.l.verification}}</div><br>
   <div class="formContainer">

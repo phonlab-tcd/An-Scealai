@@ -447,33 +447,20 @@ module.exports.register = async (req, res) => {
 module.exports.login = function(req, res, next) {
   // assume passport.authenticate('local') has succeeded
   const user = req.user;
-  const resObj = {
-    userStatus: null,
-    messageKeys: [],
-    errors: [],
-    verificationStatus: user.status,
-  }
 
-  if(!user.validStatus()){
-    resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
-    user.status = 'Pending';
-    user.save();
-  }
-
-  if(user.status.match(pendingRegEx)){
+  if(user.status !== 'Active'){
     resObj.messageKeys.push('email_not_verified')
-    return res.status(400).json(resObj);
-  }
-  else if (user.status.match(activeRegEx)) {
-    res.status(200).json({
-      token: {
-        token: 'Bearer ' + user.generateJwt(),
-        expires: oneWeekFromNowMs(),
-      },
-      user: user,
+    return res.status(400).json({
+      userPending: true,
+      messageKeys: ['email_not_verified'],
     });
-    user.loginEvent(user._id);
-    return;
-  } 
-  return res.status(500);
+  }
+  res.status(200).json({
+    token: {
+      token: 'Bearer ' + user.generateJwt(),
+      expires: oneWeekFromNowMs(),
+    },
+    user: user,
+  });
+  user.loginEvent(user._id);
 };

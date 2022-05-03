@@ -20,9 +20,7 @@ declare var gtag;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent {
-  
   title: string = 'An Scéalaí';
   checkVal: boolean = false;
   notificationsShown : boolean = false;
@@ -70,7 +68,7 @@ export class AppComponent {
     this.notificationSerivce.messageEmitter.subscribe( (res) => {
       this.messagesForNotifications = res;
     });
-  
+
     this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
       this.teacherMessagesForNotifications = res;
       this.teacherMessagesSum = 0;
