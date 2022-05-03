@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ReportAnIssueComponent } from './report-an-issue.component';
 
 const routes: Routes = [
-  { path: '**', pathMatch: 'full', component: ReportAnIssueComponent },
+  { path: 'report-an-issue', pathMatch: 'full', component: ReportAnIssueComponent },
 ];
 
 @NgModule({

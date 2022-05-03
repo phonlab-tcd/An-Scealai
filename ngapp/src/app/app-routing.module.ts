@@ -56,7 +56,6 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'landing' },
   { path: 'landing', component: LandingComponent },
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },
@@ -167,8 +166,7 @@ const routes: Routes = [
   },
   {
     path: 'report-an-issue',
-    loadChildren: () =>
-      import('report-an-issue/report-an-issue.module')
+    loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
   },
   { path: '', redirectTo: 'landing', pathMatch: 'full', },
