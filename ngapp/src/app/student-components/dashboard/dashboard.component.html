@@ -319,8 +319,9 @@
     </div>
 </div>
 <app-synthesis-player
+    *ngIf=story.text
     #mySynthesisPlayer
-    [dialect]="story.dialect"
-    [text]="story.text"
+    [dialect]=story.dialect
+    [text]=story.text
     [storyId]="story._id">
 </app-synthesis-player>

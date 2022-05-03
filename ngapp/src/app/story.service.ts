@@ -43,7 +43,7 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    this.http.post(this.baseUrl + 'create', storyObj)
+    this.http.put(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);

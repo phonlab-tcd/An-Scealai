@@ -242,7 +242,6 @@ export class DashboardComponent implements OnInit{
 
   leathanCaolCheckBox(event: boolean) {
     this.quillHighlightService.showLeathanCaol = event;
-    console.log(this.quillHighlightService.showLeathanCaol, event);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
     if (!this.grammarTagsHidden) {
@@ -393,8 +392,6 @@ export class DashboardComponent implements OnInit{
       await saveStoryPromise;
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
-        console.count('STORY SAVED');
-        console.log(debounceId);
       } else if (debounceId === 'modal') {
         this.storySaved = true;
       }
