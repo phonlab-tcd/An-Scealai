@@ -1,0 +1,10 @@
+<register-form
+  [hidden]=successfulCredentials
+  (registerSuccess)="registerSuccess($event)"
+  >
+</register-form>
+<waiting-for-email-verification
+  *ngIf=successfulCredentials
+  [credentials]=successfulCredentials
+  >
+</waiting-for-email-verification>
