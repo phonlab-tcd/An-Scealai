@@ -82,10 +82,5 @@ userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
-function getLanguage(req, res) {
-  return res.json(req.user.language);
-}
-
-userRoutes.get('/getLanguage/:id', getLanguage);
 
 module.exports = userRoutes;

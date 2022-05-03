@@ -1,5 +1,2 @@
-const jwt = require('express-jwt');
-module.exports = jwt({
-  secret: 'sonJJxVqRC',
-  userProperty: 'user'
-});
+const passport = require('passport');
+module.exports = passport.authenticate('jwt', {session: false});

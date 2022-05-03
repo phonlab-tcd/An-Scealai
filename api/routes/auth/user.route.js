@@ -17,17 +17,17 @@ function getUserByUsername(req, res) {
   });
 }
 
-function setLanguage(req, res, next) {
+function patchLanguage(req, res, next) {
   req.user.language = req.body.language;
   req.user.save()
-    .then(res.json)
-    .catch(next)
+    .catch(e=>next(e))
+    .then(()=>res.json(req.user.language));
 }
 
 function deleteUserByUsername(req, res) {
   User.findOneAndRemove({"username": req.params.username})
-    .then(res.json)
-    .catch(next);
+    .catch(e=>next(e))
+    .then(()=>res.sendStatus(200));
 }
 
 function needValidUsername(req, res, next) {
@@ -45,21 +45,27 @@ function needValidUsername(req, res, next) {
 
 function updateUsername (req, res) {
   User.findByIdAndUpdate(req.user._id, {username: req.body.username })
-    .then(res.json)
-    .catch(next);
+    .catch(e=>next(e))
+    .then(()=>res.sendStatus(200));
 }
 
 function updatePassword(req, res) {
   console.log(req.user);
   req.user.setPassword(req.body.password);
   req.user.save()
-    .then(res.json)
-    .catch(next);
+    .catch((e)=>next(e))
+    .then(()=>res.sendStatus(200));
+}
+
+function getLanguage(req, res) {
+  return res.json(req.user.language);
 }
 
 userRoutes.use(auth)
+
+userRoutes.get('/language', getLanguage);
+userRoutes.patch('/language', patchLanguage);
 userRoutes.get('/profile', auth, ctrlProfile.profileRead);
-userRoutes.post('/setLanguage/:id', setLanguage);
 // TODO: breaking change!! does this break the frontend? (neimhin 02-05-2022)
 // this route now requires authentication
 userRoutes.get('/getUserByUsername/:username', getUserByUsername);

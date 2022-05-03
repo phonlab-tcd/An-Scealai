@@ -17,7 +17,9 @@ export class TranslationService {
 
   currentLanguage: LANGUAGE;
 
-  constructor(private auth : AuthenticationService, private http : HttpClient) { }
+  constructor(
+    private auth : AuthenticationService,
+    private http : HttpClient) { }
 
   l: any = '';
   baseUrl: string = config.baseurl;
@@ -58,7 +60,7 @@ export class TranslationService {
     }
     return null;
   }
-  
+
   getCurrentLanguage() : string {
     if(this.l) {
       return this.l.name;
@@ -67,14 +69,13 @@ export class TranslationService {
       this.setLanguage('ga');
       return "Gaeilge";
     }
-    
   }
 
-  updateUserLanguage(code : string) : Observable<any> {
-    return this.http.post(this.baseUrl + "user/setLanguage/", {language : code});
+  updateUserLanguage(code: string) : Observable<any> {
+    return this.http.patch(this.baseUrl + 'user/language', {language: code});
   }
 
   getUserLanguageCode() : Observable<any> {
-    return this.http.get(this.baseUrl + "user/getLanguage/");
+    return this.http.get(this.baseUrl + 'user/language');
   }
 }
