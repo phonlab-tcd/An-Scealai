@@ -5,10 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register.component';
 import { RegisterFormComponent } from './form.component';
 import { WaitingForEmailVerificationComponent } from './waiting-for-email-verification';
-
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
+    LoginComponent,
     RegisterComponent,
     RegisterFormComponent,
     WaitingForEmailVerificationComponent,
@@ -20,6 +21,8 @@ import { WaitingForEmailVerificationComponent } from './waiting-for-email-verifi
   ],
   exports: [
     RegisterComponent,
+    LoginComponent,
+    WaitingForEmailVerificationComponent,
   ],
 })
 export class RegisterModule { }

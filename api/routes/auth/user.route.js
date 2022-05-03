@@ -50,6 +50,7 @@ function updateUsername (req, res) {
 }
 
 function updatePassword(req, res) {
+  console.log(req.user);
   req.user.setPassword(req.body.password);
   req.user.save()
     .then(res.json)

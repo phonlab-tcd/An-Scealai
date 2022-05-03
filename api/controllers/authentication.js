@@ -487,9 +487,8 @@ module.exports.login = function(req, res) {
     resObj.messageKeys.push(info.message);
     return res.status(400).json(resObj);
   }
-
   if(!user.validStatus()){
-    logger.error('User,' + user.username + 'has an invalid no status property');
+    logger.error('User,' + user.username + 'has an invalid status property');
     resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
     user.status = 'Pending';
     user.save().catch(err => { 
@@ -497,11 +496,6 @@ module.exports.login = function(req, res) {
       resObj.errors.push(JSON.stringify(err));});
   }
 
-  if(user.status.match(pendingRegEx)){
-    resObj.messageKeys.push('email_not_verified')
-    resObj.userStatus = user.status;
-    return res.status(400).json(resObj);
-  }
   else if (user.status.match(activeRegEx)) {
     logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
     resObj.token = user.generateJwt();

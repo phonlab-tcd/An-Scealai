@@ -11,7 +11,8 @@ import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { LanguageComponent } from './language/language.component';
-import { LoginComponent } from './login/login.component';
+
+import { LoginComponent } from 'register/login/login.component';
 import { RegisterComponent } from 'register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';

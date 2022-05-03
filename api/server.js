@@ -55,6 +55,18 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+if(process.env.LOG_REQUESTS > 0) {
+  app.use((req,res,next) => {
+    logger.info({
+      url: req.originalUrl,
+      body: req.body,
+      params: req.params,
+      query: req.query,
+      auth: req.headers.authorization
+    });
+    next();
+  });
+}
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
