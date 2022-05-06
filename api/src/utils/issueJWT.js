@@ -26,7 +26,8 @@ encoded.payload = base64url(payloadObjString);
 signatureFunction.write(encoded.header + '.' + encoded.payload);
 signatureFunction.end();
 
-const PRIV_KEY = fs.readFileSync(__dirname + '/../priv_key.pem', 'utf8');
+const PRIV_KEY = fs.readFileSync(__dirname + '/../../priv_key.pem', 'utf8');
+const PUB_KEY = fs.readFileSync(__dirname + '/../../pub_key.pem', 'utf8');
 const signatureBase64 = signatureFunction.sign({
   key: PRIV_KEY,
   passphrase: 'top secret'
@@ -34,7 +35,6 @@ const signatureBase64 = signatureFunction.sign({
 const signatureBase64Url = base64url.fromBase64(signatureBase64);
 const jwtSignatureBase64 = base64url.toBase64(signatureBase64Url);
 
-const PUB_KEY = fs.readFileSync(__dirname + '/../pub_key.pem', 'utf8');
 
 const signatureIsValid = verifyFunction.verify(PUB_KEY, signatureBase64, 'base64');
 

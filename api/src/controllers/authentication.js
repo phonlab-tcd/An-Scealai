@@ -19,17 +19,15 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
-validUsernameRegEx = /^[a-z0-9]+$/i;
+const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
-
   if( !req.query.username || !req.query.email || !req.query.code ){
     return res.status(400).json("Please provide username, email and code in url params!");
   }
-
 
   // Authenticate User
   const user = await User.findOne({ username: req.query.username, email: req.query.email })
@@ -55,7 +53,7 @@ module.exports.generateNewPassword = async (req, res) => {
 
   user.save().catch(err => { logger.error(err); });
 
-  mailObj = {
+  const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: req.query.email,
     subject: 'New Password -- An Scéalaí',
@@ -149,15 +147,36 @@ module.exports.resetPassword = async (req, res) => {
     return res.status(500).json({
       messageKeys: [err.message]
     });
-
   }
-
 }
 
+function emailMessage(language, user, activationLink) {
+  switch(language) {
+    case 'en':
+      return `Dear ${user.username},\n\
+        Please use this link to verify your email address for An Scéalaí:\n\n\
+        ${activationLink}\n\n\
+        Once you have verified your email you will be able to log in again.\n\
+        \n\
+        Kindly,\n\
+        \n\
+        The An Scéalaí team`;
+    default:
+      return `A ${user.username}, a chara,\n\
+        Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, \
+        le do thoil:\n\n\
+        ${activationLink}\n\n\
+        A luaithe is a dheimhníonn tú do sheoladh rphoist \
+        beidh tú in ann logáil isteach arís.\n\
+        \n\
+        Le gach dea-ghuí,\n\
+        \n\
+        Foireann An Scéalaí`
+  }
+}
 
 async function sendVerificationEmail(username, password, email, baseurl, language) {
   return new Promise(async (resolve, reject) => {
-
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
 
     // Authenticate User
@@ -181,38 +200,19 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
     const activationLink = user
       .generateActivationLink(baseurl, language);
 
+    logger.info(activationLink);
+
     // Update user's email and verification code on the db
     await user.save()
       .catch(err => {
         reject(err);
       });
 
-    const emailMessage = (language === 'ga') ? 
-      // as gaeilge 
-      `A ${user.username}, a chara,\n\
-      Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, le do thoil:\n\n\
-      ${activationLink}\n\n\
-      A luaithe is a dheimhníonn tú do sheoladh rphoist beidh tú in ann logáil isteach arís.\n\
-      \n\
-      Le gach dea-ghuí,\n\
-      \n\
-      Foireann An Scéalaí`
-      :
-      // in english
-      `Dear ${user.username},\n\
-      Please use this link to verify your email address for An Scéalaí:\n\n\
-      ${activationLink}\n\n\
-      Once you have verified your email you will be able to log in again.\n\
-      \n\
-      Kindly,\n\
-      \n\
-      The An Scéalaí team`;
-
-    mailObj = {
+    const mailObj = {
       from: 'scealai.info@gmail.com',
       recipients: [email],
       subject: 'An Scéalaí account verification',
-      message: emailMessage,
+      message: emailMessage(language, user, activationLink),
     };
 
     try {
@@ -252,7 +252,6 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
 module.exports.verify = async (req, res) => {
   const payload = await verifyJwt(req.query.jwt);
   const user = await User.findById(payload._id);
-  
   if(!user)
     return res.status(404).json(`User with id: ${payload._id} not found`);
 

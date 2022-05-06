@@ -1,4 +1,3 @@
-
 // Best to initialize the logger first
 const logger = require('./logger');
 
@@ -6,14 +5,13 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
+import mongoose, { Types } from 'mongoose';
 const passport = require('passport');
-const errorHandler = require('./utils/errorHandler');
 require('./config/passport')(passport);
-
+const errorHandler = require('./utils/errorHandler');
 const openRoute = require('./routes/open.route');
 const authRoute = require('./routes/auth.route');
-
 const storyRoute = require('./routes/story.route');
 // const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
@@ -47,7 +45,7 @@ mongoose.connect(dbURL, {
     () => {
       logger.info('Database is connected');
     },
-    (err) => {
+    (err: Error) => {
       logger.error({
         msg: 'Cannot connect to the database. ',
         while: 'trying to connect to mongodb with mongoose',
@@ -56,8 +54,8 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
-if(process.env.LOG_REQUESTS > 0) {
-  app.use((req,res,next) => {
+if(process.env.LOG_REQUESTS) {
+  app.use((req: any, _: any, next: Function) => {
     logger.info({
       url: req.originalUrl,
       body: req.body,
@@ -72,7 +70,16 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
-app.get('/whoami',jwtAuthMw,(req,res)=>{return res.json(req.user)})
+import UserDocument from 'src/models/user';
+interface RequestWithAuthUser extends Request {
+  user: typeof UserDocument;
+}
+
+function echoUser(req: RequestWithAuthUser, res: any) {
+  res.json(req.user);
+}
+
+app.get('/whoami', jwtAuthMw, echoUser)
 
 app.use(openRoute);
 app.use(authRoute);

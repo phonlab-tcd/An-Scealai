@@ -4,11 +4,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
-const User = require('../models/user');
+import User from '../models/user'; 
 mongoose.model('User');
 
 const fs = require('fs');
-const pub_key_path = path.join(__dirname, '..', 'pub_key.pem');
+const pub_key_path = path.join(__dirname, '..', '..', 'pub_key.pem');
 const PUB_KEY = fs.readFileSync(pub_key_path, 'utf8');
 
 // ALL POSSIBLE JWT STRATEGY OPTIONS

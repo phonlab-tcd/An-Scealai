@@ -14,7 +14,7 @@ if(mail.couldNotCreate){
 
 const crypto = require('crypto');
 const express = require('express');
-let User = require('../../models/user');
+import User from '../../models/user';
 
 // const auth = require('../../utils/jwtAuthMw');
 

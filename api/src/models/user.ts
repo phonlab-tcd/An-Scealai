@@ -1,11 +1,37 @@
-const mongoose = require('mongoose');
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const generate_password = require('generate-password');
-const fs = require('fs');
-const { oneWeekFromNowMs } = require.main.require('./utils/time');
-const Event =  require.main.require('./models/event');
-const logger =  require.main.require('./logger');
+import mongoose from 'mongoose';
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import generate_password from 'generate-password';
+import fs from 'fs';
+import { oneWeekFromNowMs } from '../utils/time';
+import Event from './event';
+import caught from 'src/utils/caught';
+const logger = require('../logger');
+
+type BaseUrl = 'http://localhost:4000' | 'https://www.abair.ie/anscealaibackend';
+
+interface VerificationI {
+  code: string;
+  date: Date;
+}
+
+interface ResetPasswordI {
+  code: string;
+  date: Date;
+}
+
+interface UserDocument {
+  username: string;
+  email?: string;
+  role: 'ADMIN'|'TEACHER'|'STUDENT';
+  language: 'ga'|'en';
+  hash: string,
+  salt: string,
+  status: 'Pending'|'Active';
+  verification: VerificationI;
+  resetPassword: ResetPasswordI;
+  generateJwt: ()=>string;
+}
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -25,7 +51,7 @@ const resetPasswordSchema = new mongoose.Schema({
   }
 });
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema<UserDocument>({
   username: {
     type: String,
     required: true,
@@ -71,7 +97,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.loginEvent = (userId) => {
+userSchema.methods.loginEvent = (userId: mongoose.ObjectId) => {
   const event = new Event({
     type: "LOGIN",
     userId: userId,
@@ -81,7 +107,7 @@ userSchema.methods.loginEvent = (userId) => {
   event.save();
 };
 
-userSchema.methods.setPassword = function(password) {
+userSchema.methods.setPassword = function(password: string) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(
       password,
@@ -91,7 +117,7 @@ userSchema.methods.setPassword = function(password) {
       'sha512').toString('hex');
 };
 
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.validPassword = function(password: string) {
   return this.hash === crypto
       .pbkdf2Sync(
           password,
@@ -109,8 +135,8 @@ userSchema.methods.validStatus = function() {
   return this.status.match(allowableStatus);
 };
 
-const PRIV_KEY = fs.readFileSync(__dirname + '/../priv_key.pem','utf8');
-const PUB_KEY = fs.readFileSync(__dirname + '/../pub_key.pem','utf8');
+const PRIV_KEY = fs.readFileSync(__dirname + '/../../priv_key.pem','utf8');
+// const PUB_KEY = fs.readFileSync(__dirname + '/../../pub_key.pem','utf8');
 
 userSchema.methods.generateJwt = function() {
   return jwt.sign({
@@ -137,23 +163,34 @@ userSchema.methods.generateNewPassword = function() {
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
-userSchema.methods.generateResetPasswordLink = function(baseurl) {
+userSchema.methods.generateResetPasswordLink = function(baseurl: BaseUrl) {
   if ( ! this.resetPassword )
-    this.resetPassword = {};
-  this.resetPassword.code = this.generateJwt();
-  this.resetPassword.date = new Date();
+    this.resetPassword = {
+      code: this.generateJwt(),
+      date: new Date(),
+    };
   return `${baseurl}user/generateNewPassword?jwt=${this.resetPassword.code}`;
 };
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
-userSchema.methods.generateActivationLink = function(baseurl, language) {
-  // Make sure this.verification exists
-  if ( ! this.verification )
-    this.verification = {};
-  this.verification.code = this.generateJwt(); 
-  this.verification.date = new Date();
-  return `${baseurl}user/verify?jwt=${this.verification.code}`;
+userSchema.methods.generateActivationLink = function(baseurl: BaseUrl) {
+  logger.info(this.verification);
+  if (!this.verification.code)
+    this.verification = {
+      code: this.generateJwt(),
+      date: new Date(),
+    };
+
+  try {
+    return `${baseurl}user/verify?\
+      language=${this.language}&\
+      username=${this.username}&\
+      email=${this.email}&\
+      jwt=${this.verification.code}`;
+  } catch (e) {
+    logger.error(e)
+  }
 }
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

@@ -16,11 +16,13 @@ const timeFormat = 'DD-MM-YYYY HH:mm:ss';
 const errorFile = path.join(__dirname, 'logs/error.log');
 const combinedFile = path.join(__dirname, 'logs/combined.log');
 
+const colorizer = winston.format.colorize();
 const consoleFormat = winston.format.printf(
-    ({level, message, timestamp, ...metadata}) => {
+    ({level,          message,      timestamp, ...metadata}:
+     {level: string;  message: any; timestamp: Date;}) => {
       // TODO log the rest parameters in metadata
-      const msg = `${timestamp} [${level}] : ${JSON.stringify(message)}`;
-      return msg;
+      const msg = `${timestamp} [${level}] : ${JSON.stringify(message,null,2)}`;
+      return colorizer.colorize(level, msg);
     });
 
 // Create our logger object
@@ -29,7 +31,6 @@ logger = winston.createLogger({
     // This transport lets us log to the console
     new winston.transports.Console({
       format: winston.format.combine(
-          winston.format.colorize(),
           winston.format.timestamp({
             format: timeFormat,
           }),
@@ -105,3 +106,4 @@ logger.add(mongoTransport);
 // throw new Error('test error');
 
 module.exports = logger;
+export default logger;

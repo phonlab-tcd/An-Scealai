@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "TEST=1 jest --runInBand",
-    "start": "nodemon server.js",
+    "start": "tsnodemon src/server.js -x \"node dist/server.js\"",
     "start_prod": "DB=an-scealai PORT=4000 node server.js",
-    "start_qa": "DB=qa PORT=4002 node server.js"
+    "start_qa": "DB=qa PORT=4002 node server.js",
+    "build": "tsc"
   },
   "jest": {
     "preset": "@shelf/jest-mongodb",
@@ -50,6 +51,7 @@
     "stackify": "^1.0.17",
     "stackify-logger": "^3.0.11",
     "stream": "0.0.2",
+    "tsnodemon": "^1.2.2",
     "util": "^0.12.1",
     "uuid": "^3.3.2",
     "winston": "^3.3.3",
@@ -59,6 +61,7 @@
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.0",
+    "@types/jsonwebtoken": "^8.5.8",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^27.0.6",
