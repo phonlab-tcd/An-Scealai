@@ -55,7 +55,8 @@ import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-
+import { WaitingForEmailVerificationComponent } from 'register/waiting-for-email-verification';
+import {ReportAnIssueComponent} from "report-an-issue/report-an-issue.component";
 const routes: Routes = [
   { path: 'landing', component: LandingComponent },
   { path: 'about', component: AboutComponent},
@@ -66,6 +67,7 @@ const routes: Routes = [
   { path: 'sponsors', component: SponsorsComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
+  { path: 'waiting-for-email-verification', component: WaitingForEmailVerificationComponent},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
@@ -167,15 +169,18 @@ const routes: Routes = [
   },
   {
     path: 'report-an-issue',
-    loadChildren: () => import('report-an-issue/report-an-issue.module')
+    children: [{
+      path: '',
+      loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
+    }],
   },
   { path: '', redirectTo: 'landing', pathMatch: 'full', },
   { path: '**', redirectTo: 'landing'},
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routes,{enableTracing: true}) ],
   exports: [ RouterModule ],
   providers: [ 
     NotificationService,

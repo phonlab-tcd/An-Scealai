@@ -84,6 +84,8 @@ export class RegisterFormComponent implements OnInit {
         this.registerSuccess.emit(this.credentials);
       },
       err => {
+        console.error('REGISTRATION ERROR');
+        console.error
         if(err.error && err.error.messageKeys)
           this.errorTextKeys = err.error.messageKeys;
     });
