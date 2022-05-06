@@ -125,7 +125,7 @@ function countErrors(data, dataSet) {
         let errorsMap = new Map();
         data.forEach((d, index, array ) => {
             getGramadoirErrorsForText((dataSet === 'BEFORE') ? d.before : d.after).then(body => {
-                errors = JSON.parse(body)
+                const errors = JSON.parse(body) || [];
                 errors.forEach(error => {
                     let ruleStr =  error.ruleId.toString();
                     let ruleLabel = ruleStr.match("(?<=\/)(.*?)(?=\{|$)")[0];
@@ -200,7 +200,6 @@ function getGramadoirErrorsForText(text) {
         teacs: text.replace(/\n/g, " "),
         teanga: 'en',
     };
-
     let formData = querystring.stringify(form);
 
     return new Promise(function(resolve, reject) {
@@ -215,18 +214,12 @@ function getGramadoirErrorsForText(text) {
                 resolve(body);
             }
         });
-        
       });
-    
 }
 
 function mapToObj(inputMap) {
-    let obj = {};
-
-    inputMap.forEach(function(value, key){
-        obj[key] = value
-    });
-
+    const obj = {};
+    inputMap.forEach((value, key)=>{obj[key] = value});
     return obj;
 }
 

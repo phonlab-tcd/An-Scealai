@@ -183,11 +183,13 @@ userSchema.methods.generateActivationLink = function(baseurl: BaseUrl) {
     };
 
   try {
-    return `${baseurl}user/verify?\
-      language=${this.language}&\
-      username=${this.username}&\
-      email=${this.email}&\
-      jwt=${this.verification.code}`;
+    return ''.concat(
+      `${baseurl}user/verify?`,
+      `language=${this.language}&`,
+      `username=${this.username}&`,
+      `email=${this.email}&`,
+      `jwt=${this.verification.code}`,
+    );
   } catch (e) {
     logger.error(e)
   }
