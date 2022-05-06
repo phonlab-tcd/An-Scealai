@@ -14,42 +14,37 @@ export class StatsService {
   baseUrlStudents:string = config.baseurl + 'studentStats/';
 
   constructor(private http: HttpClient, private auth: AuthenticationService) { }
-  
-// *********************** Admin stats ************************************
+
+  // *********************** Admin stats ************************************
   getSynthesisData() : Observable<any> {
     return this.http.get(this.baseUrl + 'synthesisFixes');
   }
-  
+
   getProfileDataByDate(startDate: string, endDate: string): Observable<any> {
     console.log("start date: ", startDate);
     console.log("end date: ", endDate);
     return this.http.get(this.baseUrl + 'getProfileDataByDate/' + startDate + "/" + endDate);
   }
-  
+
   getFeatureDataByDate(startDate: string, endDate: string): Observable<any> {
     console.log("start date: ", startDate);
     console.log("end date: ", endDate);
     return this.http.get(this.baseUrl + 'getFeatureDataByDate/' + startDate + "/" + endDate);
   }
-  
+
   getFeatureDataSinceLog(date): Observable<any> {
     console.log("Date: ", date);
     return this.http.get(this.baseUrl + 'getFeatureDataSinceLog/' + date.toString());
   }
 
 
-// *********************** Student stats ************************************
-
-/*
-* Add a new student stat object to the db (called in profile component)
-*/
+  // *********************** Student stats ************************************
+  // Add a new student stat object to the db (called in profile component)
   addNewStatEntry(statObj: StudentStats): Observable<any> {
     return this.http.post(this.baseUrlStudents + 'create', statObj);
   }
-  
-/*
-* Return array of stats objects of the students in a given classroom
-*/
+
+ // Return array of stats objects of the students in a given classroom
   getStatsForClassroom(id: string): Observable<any> {
     return this.http.get(this.baseUrlStudents + 'getStatsByClassroom/' + id);
   }
