@@ -73,7 +73,9 @@
               </div>
               <!-- save button to check which grammar errors to use -->
               <div>
-                  <button class="modalBtn createBtnGreen" (click)="hideErrorSelectionModal()">{{ts.l.save}}</button>
+                  <button
+                    class="modalBtn createBtnGreen"
+                    (click)="hideErrorSelectionModal()">{{ts.l.save}}</button>
               </div>
             </div>
         </div>
@@ -95,7 +97,19 @@
                       <!-- show error name with array of how many errors the student has made over time. Hover over for date -->
                       <div class="eventBody mainEventBody" *ngFor="let error of student.grammarErrors | keyvalue">
                         <div>{{error.key}} : 
-                          <a (mouseover)="dateToDisplay = student.timeStamps[error.key][i]" title="{{dateToDisplay | date:'MMMM dd, yyyy h:mm aa'}}" style="display:inline-flex" *ngFor="let item of error.value; let i = index; last as isLast"> {{item}} <i *ngIf="!isLast" style="padding:4px"class="fa fa-arrow-right"></i></a>
+                          <a
+                            *ngFor="let item of error.value; let i = index; last as isLast"
+                            (mouseover)="dateToDisplay = student.timeStamps[error.key][i]"
+                            title="{{dateToDisplay | date:'MMMM dd, yyyy h:mm aa'}}"
+                            style="display:inline-flex"
+                          >
+                            {{item}}
+                            <i
+                              *ngIf="!isLast"
+                              style="padding:4px"
+                              class="fa fa-arrow-right"
+                            ></i>
+                          </a>
                         </div>
                       </div>
                   </div>
@@ -114,12 +128,27 @@
                     <div class="eventHeader">
                         <b>{{ts.l.total_grammar_errors}}</b>
                     </div>
-                    <div class="eventBody mainEventBody" *ngFor="let entry of totalStats | keyvalue">
+                    <div
+                      *ngFor="let entry of totalStats | keyvalue"
+                      class="eventBody mainEventBody"
+                    >
                       <div> {{entry.key}} : {{entry.value}}</div>
                     </div>
                     <!-- pie chart test -->
+                    <grid-spinner
+                      [hidden]="labelArray && dataArray">
+                    </grid-spinner>
                     <div class="chart">
-                      <canvas id="statChart" width="100%"> </canvas>
+                      <canvas
+                        *ngIf="labelArray && dataArray"
+                        id="doughnut"
+                        baseChart
+                        [labels]=labelArray
+                        [data]=dataArray
+                        [chartType]="'doughnut'"
+                        [colors]=colorValues
+                        >
+                      </canvas>
                     </div>
                 </div>
               </div>

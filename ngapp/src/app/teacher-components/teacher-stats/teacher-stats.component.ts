@@ -7,7 +7,6 @@ import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { StatsService } from '../../stats.service';
 import { StudentStats } from '../../studentStats';
-import { Chart } from 'chart.js';
 import { TranslationService } from '../../translation.service';
 
 @Component({
@@ -41,11 +40,6 @@ export class TeacherStatsComponent implements OnInit {
 
   ngOnInit() {
     this.getClassroom();
-    // Generate colors to fill the grammar error pie chart
-    for(let i = 0; i < 50; i++) {
-      let color: string = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-      this.colorValues.push(color);
-    }
     this.listOfGrammarErrors = this.statsService.listErrors();
     
     
@@ -68,6 +62,7 @@ export class TeacherStatsComponent implements OnInit {
   * call function to get list of students
   */
     getClassroom() {
+      console.log('GET CLASSROOM');
       this.getClassroomId().then((params) => {
         let id: string = params.id.toString();
         this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
@@ -106,6 +101,7 @@ export class TeacherStatsComponent implements OnInit {
   */  
     getStatsForStudents() {
       this.statsService.getStatsForClassroom(this.classroomId).subscribe( (res: StudentStats[]) => {
+        console.dir(res);
         this.stats = res;
         this.stats.sort((a, b) => a.studentUsername.toLowerCase().localeCompare(b.studentUsername.toLowerCase()));
         this.getStatsForClass();
@@ -131,49 +127,24 @@ export class TeacherStatsComponent implements OnInit {
           }
         }
       }
-  
+
+      console.log(this.totalStats);
       for (let entry of Array.from(this.totalStats.entries())) {
         this.graphLabels.push(entry[0]);
         this.graphValues.push(entry[1]);
       }
       this.createChart(this.graphLabels, this.graphValues);
     }
-    
+
+    labelArray: unknown;
+    dataArray: unknown;
+
     createChart(labels, values) {
-      
-      this.myChart = new Chart('statChart', {  
-        type: 'doughnut',  
-        data: {  
-          labels: labels,  
-          datasets: [  
-            {  
-              data: values,   
-              backgroundColor: this.colorValues,  
-              fill: true  
-            }  
-          ]  
-        },  
-        options: {  
-          legend: {  
-            display: true  
-          },  
-          scales: {  
-            xAxes: [{  
-              display: false  
-            }],  
-            yAxes: [{  
-              display: false  
-            }],  
-          }  
-        },
-        // responsive: true,
-        // maintainAspectRatio: false
-      }); 
+      this.labelArray = labels;
+      this.dataArray = values;
     }
 
-  /*
-  * Go back to dashboard when button clicked
-  */
+  // Go back to dashboard when button clicked
   goBack() {
     this.router.navigateByUrl('teacher/classroom/' + this.classroom._id);
   }

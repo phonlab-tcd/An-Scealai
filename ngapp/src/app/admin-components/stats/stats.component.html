@@ -6,7 +6,8 @@
   <grid-spinner></grid-spinner>
   <p>(This may take a while!)</p>
 </div>
-<div *ngIf="labelArray && dataArray" class="bodyContainer">
+<div *ngIf="labelArray"
+  class="bodyContainer">
   <h5>
     {{ts.l.net_errors_corrected}}: {{netErrors}}
   </h5>

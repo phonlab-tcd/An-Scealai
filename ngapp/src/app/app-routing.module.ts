@@ -169,11 +169,11 @@ const routes: Routes = [
   },
   {
     path: 'report-an-issue',
-    children: [{
-      path: '',
-      loadChildren: () => import('report-an-issue/report-an-issue.module')
-      .then(m=>m.ReportAnIssueModule)
-    }],
+    loadChildren: () => import('report-an-issue/report-an-issue.module')
+      .then(m=>m.ReportAnIssueModule),
+    ///children: [{
+    ///  path: '',
+    ///}],
   },
   { path: '', redirectTo: 'landing', pathMatch: 'full', },
   { path: '**', redirectTo: 'landing'},
