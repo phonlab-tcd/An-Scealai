@@ -1,7 +1,7 @@
 export default {
   iso_code: { ga: 'ga', en: 'en' },
   vowels_should_agree: {
-    ga: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan / Caol.',
+    ga: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan/Caol.',
     en: 'These vowels should be in agreement according to the Leathan/Caol rule.'
   },
   name: { ga: 'Gaeilge', en: 'English' },
