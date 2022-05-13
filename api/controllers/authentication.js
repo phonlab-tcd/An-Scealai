@@ -403,7 +403,7 @@ module.exports.verifyOldAccount = async (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
-  console.dir(req);
+  logger.info(`Attempting to register ${req.body.username}`);
   const resObj = {
     messageKeys: [],
     errors: [],
