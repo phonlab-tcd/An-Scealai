@@ -749,7 +749,7 @@ export default {
       "reset_password": "Pasfocal a athshocrú",
       "incorrect_password": "Pasfhocal mícheart.",
       "forgot_password": "An ndearna tú dearmad ar do phasfocal?",
-      "forgot_password_prose": "Scríobh isteach d'ainm úsáideora. Má tá seoladh ríomhphoist fíoraithe ar fáil seolfaimid treoracha chugat chun do phasfhocal a athshocrú. Mura bhfuil do seoladh ríomhphoist fíoraithe cheanna féin ba cheart duit teagmháil a dhéanam linn go díreach. B'fhéidir go mbeimid in ann do phasfhocal a athshocrú de láimh.",
+      "forgot_password_prose": "Scríobh isteach d'ainm úsáideora. Má tá seoladh ríomhphoist fíoraithe ar fáil seolfaimid treoracha chugat chun do phasfhocal a athshocrú. Mura bhfuil do seoladh ríomhphoist fíoraithe cheanna féin ba cheart duit teagmháil a dhéanamh linn go díreach. B'fhéidir go mbeimid in ann do phasfhocal a athshocrú de láimh.",
       "enter_password": "Scríobh isteach pasfhocal.",
       "my_stories" : "Mo Chuid Scéalta",
       "title" : "Teideal",
