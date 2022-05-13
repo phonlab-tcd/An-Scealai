@@ -14,7 +14,7 @@
               </div>
           </div>
       </div>
-      <form (submit)="login()">
+      <form (submit)=login()>
         <div class="form-group">
           <div class="formLabel"><label>{{ts.l.username}}</label></div>
           <!-- TODO placeholder text translation -->
@@ -54,7 +54,6 @@
         </div>
 
         <button
-            (click)="login()"
             class="btn loginBtn"
             *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
           <div 
