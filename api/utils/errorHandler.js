@@ -16,7 +16,7 @@ function errorHandler(err, req, res, next) {
   if(err.status)
     res.status(err.status);
 
-  logger.alert(err.stack || err);
+  logger.alert({err: err.stack || err, ip: req.socket.remoteAddress});
   console.error(err);
 
   if (!(err instanceof APIError))
@@ -25,7 +25,7 @@ function errorHandler(err, req, res, next) {
     return res.status(400).json(err.message);
   if (err instanceof API404Error )
     return res.status(404).json(err.message);
-  if (err instanceof API500Error) {/* Notify us */}
+  if (err instanceof API500Error) {/* TODO: Notify us */}
   // Handle other status codes in whatever ways we want
   return res.status(err.status).json(err.message);
 }
