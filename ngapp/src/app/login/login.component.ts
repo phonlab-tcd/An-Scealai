@@ -109,9 +109,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('register-profile');
         },
         (err) => {
-          for (const msg of err.error.messageKeys) {
-            this.waitingErrorTextKeys.push(msg);
-          }
+          this.waitingErrorTextKeys = err.error.messageKeys;
         },
         () => {
         });
@@ -130,9 +128,11 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/landing');
       },
       (err) => {
+        console.log(err);
         this.errorMsgKeys = err.error.messageKeys;
-        if (err.error.userStatus === 'Pending') {
+        if (err.error.messageKeys.includes('email_not_verified')) {
           // THIS MAKES THE EMAIL BOX APPEAR
+          this.emailToVerify = err.error.email ?? '';
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
         } else if (err.status === 400) {
