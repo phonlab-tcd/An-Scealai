@@ -1,6 +1,7 @@
 GREEN="\e[1;32m"
 RED="\e[1;31m"
 RESET_COLOR="\e[0m"
+set -o errexit
 
 current_branch=`git rev-parse --abbrev-ref HEAD`
 
@@ -29,4 +30,4 @@ ssh -t scealai@141.95.1.243 "
   TERM=xterm tmux at -t qa
   "
 
-curl https://www.abair.ie/qa/anscealaibackend/version
+curl https://www.abair.ie/qa/anscealaibackend/version | grep version
