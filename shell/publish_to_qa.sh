@@ -22,7 +22,7 @@ ssh -t scealai@141.95.1.243 "
   bash shell/reinstall.sh &&
   tmux kill-session -t qa &&
   tmux new-session -t qa -d &&
-  tmux send -t qa \"npm run start:qa\" &&
+  tmux send -t qa \"npm run start:qa\" C-m &&
   cp -r ngapp/qa_build/* dist/an-scealai/
   "
 
