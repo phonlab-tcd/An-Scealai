@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - '*'
-
 # 2 parallel jobs: build and test
 jobs:
   build:
@@ -19,7 +18,6 @@ jobs:
         with:
           add: 'ngapp/unpublished_dist'
           push: true
-          
   test:
     runs-on: ubuntu-latest
     steps:
@@ -29,4 +27,4 @@ jobs:
       - name: Install ngapp Dependencies
         run: npm install --prefix ngapp
       - name: ng test
-        run: npm run test --prefix ngapp
+        run: npm run test:ci --prefix ngapp
