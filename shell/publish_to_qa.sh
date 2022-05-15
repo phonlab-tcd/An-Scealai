@@ -9,7 +9,7 @@ current_branch=`git rev-parse --abbrev-ref HEAD`
 if [[ $BUILD_NG -gt 0 ]]; then
   npm run build:qa --prefix ngapp
   git add ngapp/qa_build
-  git commit -m "autocommit ngapp/qa_build"
+  git commit -m "autocommit ngapp/qa_build" || true
   git push
 fi
 
@@ -19,15 +19,17 @@ echo -e "${GREEN}PASSWORD REQUIRED$RESET_COLOR"
 ssh -t scealai@141.95.1.243 "
   echo \"kill tmux session\"
   tmux kill-session -t qa
-  cd an_scealai_qa && pwd &&
-  git pull && git rev-parse --abbrev-ref HEAD &&
-  git checkout $current_branch && git rev-parse --abbrev-ref HEAD &&
-  npm --prefix api install &&
-  npm --prefix ngapp install &&
-  tmux new-session -t qa -d &&
-  tmux send -t qa \"npm --prefix api run start:qa\" C-m &&
-  cp -r ngapp/qa_build/* dist/an-scealai/ &&
-  TERM=xterm tmux at -t qa
+  set -e
+  cd an_scealai_qa && pwd
+  git pull && git rev-parse --abbrev-ref HEAD
+  git checkout $current_branch && git rev-parse --abbrev-ref HEAD
+  npm --prefix api install
+  npm --prefix ngapp install
+  tmux new-session -t qa -d
+  tmux send -t qa \"npm --prefix api run start:qa\" C-m
+  cp -r ngapp/qa_build/* dist/an-scealai/
+  sleep 1
+  tmux capture-pane -p -e
   "
-
+echo -e "${GREEN}LIVE QA VERSION"
 curl https://www.abair.ie/qa/anscealaibackend/version | grep version
