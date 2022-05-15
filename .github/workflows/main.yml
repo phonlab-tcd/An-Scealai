@@ -34,4 +34,4 @@ jobs:
       - name: Install ngapp Dependencies
         run: npm install --prefix ngapp
       - name: ng test
-        run: npm run test:ci --prefix ngapp
+        run: npm run test --prefix ngapp
