@@ -47,7 +47,7 @@ if [ "$?" != "0" ]; then
 fi
 
 # BUILD PROD
-npm run build_prod --prefix ngapp
+npm run build:prod --prefix ngapp
 if [ "$?" != "0" ]; then
   echo -e "${RED}build failed. quitting.$RESET_COLOR"
   exit 1

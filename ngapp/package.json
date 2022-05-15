@@ -8,7 +8,7 @@
     "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & npm",
     "build:prod": "ng build --base-href /scealai/",
     "build:qa": "ng build --configuration=qa --base-href /qa/scealai/ --output-path qa_build",
-    "build_prod_local": "ng build --prod --output-path build_prod_local",
+    "build:prod:local": "ng build --base-href / --output-path build_prod_local",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
