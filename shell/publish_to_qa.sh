@@ -3,8 +3,6 @@ RED="\e[1;31m"
 RESET_COLOR="\e[0m"
 set -e
 
-# INSTALL
-bash shell/reinstall.sh
 # BUILD QA
 npm run build:qa --prefix ngapp
 
