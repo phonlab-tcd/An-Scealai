@@ -51,6 +51,7 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
