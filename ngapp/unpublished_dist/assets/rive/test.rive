@@ -1,0 +1,7 @@
+> object addScore javascript
+addScore();
+return '';
+< object
+
++ start
+- Hi this is from a string
