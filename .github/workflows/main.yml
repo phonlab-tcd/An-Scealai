@@ -24,7 +24,7 @@ jobs:
       - name: Install ngapp Dependencies
         run: npm install --prefix ngapp
       - name: build:prod
-        run: npm run buid:prod --prefix ngapp
+        run: npm run build:prod --prefix ngapp
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/unpublished_dist'
