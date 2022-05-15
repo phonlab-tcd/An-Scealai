@@ -28,8 +28,8 @@ ssh -t scealai@141.95.1.243 "
   tmux new-session -t qa -d
   tmux send -t qa \"npm --prefix api run start:qa\" C-m
   cp -r ngapp/qa_build/* dist/an-scealai/
-  sleep 1
+  sleep 3
   tmux capture-pane -p -e
   "
-echo -e "${GREEN}LIVE QA VERSION"
-curl https://www.abair.ie/qa/anscealaibackend/version | grep version
+echo -e "${GREEN}LIVE QA VERSION${RESET_COLOR}"
+curl https://www.abair.ie/qa/anscealaibackend/version 2> /dev/null | grep version
