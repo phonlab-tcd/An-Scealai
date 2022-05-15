@@ -1,15 +1,10 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Build Frontend
-
-# Controls when the workflow will run
+name: build and test frontend
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches:
       - '*'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# 2 parallel jobs: build and test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +20,7 @@ jobs:
           add: 'ngapp/unpublished_dist'
           push: true
           
-  test-frontend:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
