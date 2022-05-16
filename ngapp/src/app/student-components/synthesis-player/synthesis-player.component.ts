@@ -48,6 +48,7 @@ export class SynthesisPlayerComponent implements OnInit {
       s.dispose();
     })
     // just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
+    if(!this.text) return;
     setTimeout(()=>{
       this.synthItems =
         this.textProcessor
