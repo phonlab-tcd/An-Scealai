@@ -1,0 +1,146 @@
+<!-- Select the synthesis option for a story -->
+<div class="page">
+  <div class="bookContainerSynth">
+    <!--popup for update story option -->
+    <div class="{{modalClass}} modalContainer">
+      <div class="modalContent">
+          <div class="modalText">{{ts.l.save_changes_made_to_this_recording}}</div>
+          <div>
+              <button mat-button
+                class="modalBtn"
+                (click)="hideModal();">
+                  {{ts.l.cancel}}
+              </button>
+              <button mat-button
+                class="modalBtn createBtnGreen"
+                (click)="saveModal()">
+                  {{ts.l.save}}
+              </button>
+          </div>
+      </div>
+    </div>
+    <!-- back button to return to story and save button to send recordings to db-->
+    <div class="recordingBookHeader" *ngIf="story">
+      <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
+      <div></div>
+      <div class="bookTitle">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
+      <div class="recordingSaveIcon">
+        <div *ngIf="recordingSaved" class="recordingSavedIcon">
+          {{ts.l.saved}} <i class="fas fa-check"></i>
+        </div>
+        <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="saveRecordings()">
+          {{ts.l.save}} <i class="fas fa-save"></i>
+        </div>
+      </div>
+    </div>
+    <div class="recordingStoryContainer" *ngIf="story">
+      <div class="recordingStoryHeader">
+        {{ts.l.listen_record_compare}}
+      </div>
+      <div class="textFieldContainer">
+        <!--Main container for story -->
+          <div class="textContainerSynth">
+            <!-- Display synthesising (loading) -->
+            <div *ngIf="!audioFinishedLoading && !recordingsFinishedLoading" class="loaderContainer">
+                <b>{{ts.l.synthesising}}</b>
+                <grid-spinner></grid-spinner>
+            </div>
+            <!-- When synthesis finished loading -->
+            <div *ngIf="audioFinishedLoading">
+              <!-- loop through each section of text -->
+                <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer">
+                    <!-- play / pause synthesiser -->
+                    <div class="textCard">
+                      <div class="cardBody">
+                        <span
+                          *ngFor="let span of section.spans"
+                          [innerHTML]="span.outerHTML | safeHtml">
+                        </span>
+                        <ng-container [ngSwitch]=!!section.audio.paused>
+                          <button *ngSwitchCase=false
+                            (click)="stopSection(section)"
+                            class="playAudioBtn">
+                              <i class="fas fa-pause"></i>
+                          </button>
+                          <button *ngSwitchCase=true
+                            (click)="playSection(section)"
+                            class="playAudioBtn">
+                              <i class="fa fa-play"></i>
+                          </button>
+                        </ng-container>
+
+                        <!-- Recording button -->
+                        <ng-container [ngSwitch]=!!isRecording(section,index)>
+                          <button *ngSwitchCase=false
+                            class=recordingBtn
+                            (click)=recordAudio(index)>
+                              <i class="fas fa-microphone"></i>
+                          </button>
+                          <button *ngSwitchCase=true
+                            class="notRecordingBtn blink"
+                            (click)=stopRecording(index)>
+                              <i class="fas fa-stop-circle"></i>
+                          </button>
+                        </ng-container>
+                      </div>
+                      <ng-template [ngIf]=sectionAudioSources[index]>
+                        <hr>
+                        <!-- Audio player -->
+                        <div class="cardFooter">
+                          <audio [attr.src]="sectionAudioSources[index]"
+                            controls
+                            #audioTag>
+                          </audio>
+                          <button mat-button
+                            class="notRecordingBtn trashBtn"
+                            (click)="deleteRecording(index)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </div>
+                      </ng-template>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="footer btnContainer">
+            <mat-button-toggle-group
+              [disabled]=!audioFinishedLoading
+              (change)=changeSections(this[$event.value])>
+            <div class="footerText">
+              {{ts.l.listen_by}}
+            </div>
+              <mat-button-toggle
+                value=sentences>{{ts.l.sentence}}
+              </mat-button-toggle>
+              <mat-button-toggle [checked]=audioFinishedLoading
+                value=paragraphs>{{ts.l.paragraph}}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+            <mat-button-toggle
+                style="justify-content: right"
+              (click)="popupVisible = !popupVisible">
+                {{ts.l.options}}
+            </mat-button-toggle>
+          </div>
+          <div
+            class="optionsPopupRec"
+            [hidden]=!popupVisible
+          >
+            <button
+              mat-button
+              color=lightgreen
+              (click)=archive(story)>
+                {{ts.l.archive_recording}} <i class="fas fa-inbox"></i>
+            </button>
+            <button
+              mat-button
+              [color]="primary"
+              [routerLink]="['/record-yourself', 'archive', story._id]">
+                {{ts.l.go_to_archive}}
+                <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

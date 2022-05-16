@@ -1,0 +1,104 @@
+<div class=bookContainerSynth>
+<div class="recordingBookHeader" *ngIf="story">
+  <div
+    [routerLink]="['/record-yourself', 'archive', story._id]"
+    class="myStoriesBtn">
+    <i class="fa fa-chevron-left"></i>{{ts.l.archive}}
+  </div> 
+  <div></div>
+  <div class="bookTitleHistory">{{story?.title}}</div>
+  <div *ngIf="recordingMode" class="recordingSaveIcon">
+    <div *ngIf="recordingSaved" class="recordingSavedIcon">
+      {{ts.l.saved}} <i class="fas fa-check"></i>
+    </div>
+    <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="saveRecordings()">
+      {{ts.l.save}} <i class="fas fa-save"></i>
+    </div>
+  </div>
+</div>
+<div *ngIf="story">
+  <h2 class="recordingStoryHeader">
+    {{ts.l.listen_and_compare}}
+  </h2>
+  <div class="textFieldContainer">
+      <!--Main container for story -->
+      <div class="textContainerSynth">
+
+        <!-- Display synthesising (loading) -->
+        <div *ngIf="!audioFinishedLoading || !recordingsFinishedLoading" class="loaderContainer">
+            <b>{{ts.l.synthesising}}</b>
+            <grid-spinner></grid-spinner>
+        </div>
+
+        <!-- When synthesis finished loading -->
+        <div *ngIf="audioFinishedLoading && recordingsFinishedLoading">
+          <!-- loop through each paragraph of text -->
+            <div *ngFor="let p of paragraphs" class="paragraphContainer">
+              <!-- if paragraph option selected -->
+              <span *ngIf="sectionSplit==='paragraph'">
+                <!-- play / pause synthesiser -->
+                <div class="textCard">
+                  <div class="cardBody">
+                    <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
+                    <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                    <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                  </div>
+                  <hr class="dividerLine" *ngIf="paragraphToAudioSource[p.index]">
+                  <!-- Audio player -->
+                  <div class="cardFooter" *ngIf="paragraphToAudioSource[p.index]">
+                    <!-- play / pause student recorded audio -->
+                    <audio *ngIf="paragraphToAudioSource[p.index]" [src]="paragraphToAudioSource[p.index]" controls #audioTag class="audioPlayer"></audio>
+                    <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div> 
+                  </div>
+                </div>
+              </span>
+              <!-- if sentence option selected -->
+              <span *ngIf="sectionSplit==='sentence'">
+                <!-- loop thorugh each sentence in the paragraph -->
+                <div *ngFor="let s of p.sentences" class="sentenceContainer">
+                  <!-- play / pause synthesiser -->
+                  <div class="textCard">
+                    <div class="cardBody">
+                      <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
+                      <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
+                      <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
+                    </div>
+
+                    <ng-template
+                      [ngIf]=sentenceToAudioSource[s.index]>
+                      <hr>
+                      <!-- Audio player -->
+                      <!-- play / pause student audio -->
+                      <audio #audioTag
+                        [src]=sentenceToAudioSource[s.index]
+                        controls
+                        class=audioPlayer>
+                      </audio>
+                    </ng-template>
+                  </div>
+                </div>
+              </span>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+<!-- Choose paragraph or Sentence buttons -->
+<div class="footer">
+  <div class="btnContainer">
+    <div class="footerText">
+      {{ts.l.listen_by}}
+    </div>
+    <mat-button-toggle-group
+      [disabled]=!audioFinishedLoading
+      (change)=sentence_paragraph_selection($event.value)>
+      <mat-button-toggle
+        value=sentence>{{ts.l.sentence}}
+      </mat-button-toggle>
+      <mat-button-toggle [checked]=true
+        value=paragraph>{{ts.l.paragraph}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+</div>
