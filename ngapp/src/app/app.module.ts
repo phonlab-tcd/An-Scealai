@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-//import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+// import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { createCustomElement } from '@angular/elements';
@@ -51,7 +51,9 @@ import { TeacherStoryComponent } from './teacher-components/teacher-story/teache
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
+// import { RecordingComponent } from './student-components/recording/recording.component';
+// import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
+// import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
@@ -61,9 +63,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
-import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+// import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
@@ -74,18 +74,24 @@ import { FeatureStatsComponent } from './admin-components/feature-stats/feature-
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
+import { SafeHtmlPipeModule } from 'safe-html-pipe/module';
 
 @NgModule({
   declarations: [
+    // RegisterComponent,
+    // RegisterFormComponent,
+    // WaitingForEmailVerificationComponent,
+
+    // RecordingComponent,
+    // RecordingHistoryComponent,
+    // ViewRecordingComponent,
+
     AppComponent,
     LandingComponent,
     AboutComponent,
     TechnologyComponent,
     LanguageComponent,
     LoginComponent,
-//     RegisterComponent,
-//     RegisterFormComponent,
-//     WaitingForEmailVerificationComponent,
     DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
@@ -104,7 +110,6 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     AdminClassroomComponent,
     SynthesisComponent,
     StoryHistoryComponent,
-    RecordingComponent,
     RegisterProfileComponent,
     StoryDetailsComponent,
     StatsComponent,
@@ -116,9 +121,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     ResourcesComponent,
     TeamComponent,
     AboutLaraComponent,
-    RecordingHistoryComponent,
-    ViewRecordingComponent,
-    SafeHtmlPipe,
+    // SafeHtmlPipe,
     SponsorsComponent,
     SynthesisPlayerComponent,
     ProfileStatsComponent,
@@ -128,6 +131,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthItemComponent,
   ],
   imports: [
+    SafeHtmlPipeModule,
     RegisterModule,
     ReportAnIssueModule,
     SpinnerModule,

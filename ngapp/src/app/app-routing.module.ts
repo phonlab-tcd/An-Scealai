@@ -20,8 +20,8 @@ import { NewStoryComponent } from './student-components/new-story/new-story.comp
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 
-import { RecordingComponent } from './student-components/recording/recording.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
+// import { RecordingComponent } from './student-components/recording/recording.component';
+// import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { MessagesComponent } from './messages/messages.component';
 
@@ -47,7 +47,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { NotificationService } from './notification-service.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
+import { CanDeactivateDashboardGuard, } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
@@ -74,9 +74,9 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
-  { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
-  { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
+  // { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
+  // { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
+  // { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
@@ -168,6 +168,10 @@ const routes: Routes = [
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
   },
+  { 
+    path: 'record-yourself',
+    loadChildren: () => import('record-yourself/module')
+      .then(m => m.RecordYourselfModule) },
 ];
 
 @NgModule({
