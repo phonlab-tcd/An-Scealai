@@ -557,7 +557,7 @@ export class DashboardComponent implements OnInit{
 
   // route to synthesis
   goToRecording() {
-    this.router.navigateByUrl('/record-story/' + this.story._id);
+    this.router.navigateByUrl('/record-yourself/recording/' + this.story._id);
   }
 
   // set modalClass to visible fade
