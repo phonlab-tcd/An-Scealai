@@ -13,6 +13,15 @@ afterEach(async () => {
 afterAll(async () => {
   mongoose.connection.close();
 });
+
+describe('grammar utils', () => {
+  it(
+    `upsertGramadoirCacheItem should reject non array`,
+    async () => {
+      const gram = grammarUtils.upsertGramadoirCacheItem('blinks');
+      await expect(gram).rejects.toEqual(undefined);
+    });
+});
 describe('gramadoir log route', () => {
   it(
     `should create cache item with no grammar tags`,

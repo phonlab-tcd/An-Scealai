@@ -15,6 +15,7 @@ const User = require('../models/user');
 //
 //  @param {[quill-highlight-tag]} qtags
 async function upsertGramadoirCacheItem(text, qtags) {
+  if(!(qtags instanceof Array)) return Promise.reject();
   return new Promise((resolve,reject) => {
     GramadoirCache.findOneAndUpdate(
       { text: text },
