@@ -186,6 +186,7 @@ export class DashboardComponent implements OnInit{
     this.textUpdated.pipe(
       distinctUntilChanged(),
     ).subscribe(async () => {
+      console.dir(this.textUpdated);
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
@@ -194,6 +195,7 @@ export class DashboardComponent implements OnInit{
       await this.quillHighlightService
           .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
           .then((errTypes: object) => {
+            console.dir(errTypes);
             this.currentGrammarErrorTypes = errTypes;
             Object.keys(errTypes).forEach((k) => {
               this.grammarTagFilter[k] !== undefined ?
@@ -287,6 +289,7 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
+            this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
