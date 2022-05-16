@@ -13,7 +13,7 @@ const ObjectID = require('mongodb').ObjectID;
 
 const mail = require('../mail');
 
-if(mail.couldNotCreate){
+if(mail.couldNotCreate && !process.env.TEST){
   console.log("Could not create mail transporter which is required by the send_mail route. Refusing to continue.");
   process.exit(1);
 }
