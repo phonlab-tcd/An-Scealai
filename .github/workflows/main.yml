@@ -48,13 +48,10 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Start MonoDB
       - uses: supercharge/mongodb-github-action@1.2.0
         with:
           mongodb-version: 3.6
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - name: Install api Dependencies
-        run: npm install --prefix api
-      - name: test
-        run: npm run test --prefix api 
+      - run: npm install --prefix api
+      - run: npm run test --prefix api 
