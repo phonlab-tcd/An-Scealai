@@ -66,7 +66,8 @@ export class StoryService {
     const userDetails = this.auth.getUserDetails();
     if(!userDetails) {
       return new Observable(subscriber=>{
-        subscriber.error('User details not available');
+        subscriber.next([]);
+        subscriber.complete();
       });
     }
     const author = userDetails.username;
