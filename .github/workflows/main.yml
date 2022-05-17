@@ -31,6 +31,7 @@ jobs:
         run: npm run test:ci --prefix ngapp
       - name: build:prod
         run: npm run build:prod --prefix ngapp
+      - run: git pull
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/unpublished_dist'
