@@ -1,3 +1,8 @@
+.mat-sidenav-container {
+  margin: 30px;
+  border-radius: 10px;
+}
+
 .mat-button-toggle {
   background-color: lightgreen;
 }
@@ -6,138 +11,10 @@
   filter: brightness(85%);
 }
 
-.bookContainerSynth {
-  /* background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-   */
-  background:
-    linear-gradient(45deg, #dca 12%, transparent 0, transparent 88%, #dca 0),
-    linear-gradient(135deg, transparent 37%, #a85 0, #a85 63%, transparent 0),
-    linear-gradient(45deg, transparent 37%, #dca 0, #dca 63%, transparent 0)
-    #753;
-    background-size: 25px 25px;
-  margin-left: 15%;
-  z-index: 10;
-  border-radius: 5px;
-  width: 90%;
-  margin: 1%;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.bookContainerSynth {
-  width: 70%;
-  margin-left: 15%;
-  z-index: 10;
-  border-radius: 5px;
-  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  background-size: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.bookImg {
-  z-index: -10;
-  width: 90%;
-  height: 500px;
-  position: fixed;
-  right: 5%;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.modalContainer {
-    position: absolute;
-    margin-top: 0px;
-    z-index: 100;
-    height: 400px;
-    width: 100%;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.modalContent {
-    margin-top: 80px;
-    width: 80%;
-    margin-left: 10%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: #d1d1d1;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalText {
-    font-size: 14pt;
-    white-space: normal;
-}
-
-.bookTitle {
-    color: #261500; 
-    padding-right: 10%;
-    padding-top: 3px;
-    display: inline-block;
-    font-size: 16pt;
-}
-
-.bookTitleHistory {
-    color: #261500; 
-    padding-right: 37%;
-    padding-top: 3px;
-    display: inline-block;
-    font-size: 16pt;
-}
-
 .recordingStoryHeader {
   background-color: #70a87f;
   color: white;
   border-radius: 4px 4px 0px 0px;
-  width: 90%;
-  margin-left: 5%;
 }
 
 .myStoriesBtn {
@@ -176,24 +53,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     justify-content: space-between;
 }
 
-.textContainerSynth {
-    width: 90%;
-    margin-left: 5%;
-    height: 290px;
-    color: #261500;
-    background-color: #f7f2e7;
-    border: 1px solid #261500a2;
-    text-align: left;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 4px;
-    overflow: auto;
-}
-
-
 .historyTextContainerSynth {
     width: 90%;
-    margin-left: 5%;
     height: 360px;
     color: #261500;
     background-color: #f7f2e7;
@@ -219,7 +80,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .optionsPopupRec {
   z-index: 10;
-  position: absolute;
   right: 0;
   margin-top: 25px;
   display: flex;
@@ -238,7 +98,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .optionsPopupRec:after {
   content: '';
-  position: absolute;
   top: 0px;
   right: 60px;
   width: 0;
@@ -246,8 +105,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   border: 10px solid transparent;
   border-bottom-color: #f1e9d8;
   border-top: 0;
-  margin-left: -10px;
-  margin-top: -10px;
 }
 
 .recordingUnsavedIcon {
@@ -270,7 +127,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     color: white;
     border-radius: 4px;
     border: none;
-    margin-left: 4px;
     font-size: 10pt;
     padding: 4px;
     padding-left: 8px;
@@ -291,7 +147,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .footer {
-  margin-left: 5%;
   width: 90%;
   display: flex;
 }
@@ -337,13 +192,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     color: white;
     display: flex;
     width: 90%;
-    margin-left: 5%;
     padding: 5px;
 }
 
 .selectStoryFilter {
     font-size: 10pt;
-    margin-left: 5px;
 }
 
 .textCard {
@@ -366,7 +219,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   color: white;
   border-radius: 4px;
   border: none;
-  margin-left: 4px;
   font-size: 10pt;
   padding: 4px;
   padding-left: 10px;
@@ -383,7 +235,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   color: white;
   border-radius: 4px;
   border: none;
-  margin-left: 4px;
   font-size: 10pt;
   padding: 4px;
   padding-left: 8px;
@@ -392,13 +243,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .trashBtn {
   background-color: rgb(190, 10, 10);
-  font-size: 12pt;
-  padding-top: 2px;
-  padding-bottom: 2px;
 }
 
 .trashBtn:hover {
-  background-color: rgb(119, 5, 5);
+  filter: brightness(85%);
+  transition: 0.2s;
 }
 
 .blink {
@@ -451,9 +300,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   }
   .bookContainerSynth {
      width: 90%;
-     margin-left: 5%;
   }
-  
 }
 
 @media only screen and (min-width: 700px) {
@@ -461,14 +308,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
         z-index: -10;
         width: 630px;
         left: 50%;
-        margin-left: -315px;
     }
 
     .bookContainerSynth {
         width: 490px;
         position: fixed;
         left: 50%;
-        margin-left: -245px;
         margin-top: 20px;
     }
 }
@@ -479,7 +324,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       width: 800px;
       height: 600px;
       left: 50%;
-      margin-left: -400px;
   }
 
   .bookContainerSynth {
@@ -487,7 +331,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       height: 510px;
       position: fixed;
       left: 50%;
-      margin-left: -310px;
       margin-top: 20px;
   }
 
@@ -507,7 +350,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       width: 1000px;
       height: 740px;
       left: 50%;
-      margin-left: -500px;
   }
 
   .bookContainerSynth {
@@ -515,7 +357,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       height: 600px;
       position: fixed;
       left: 50%;
-      margin-left: -400px;
       margin-top: 30px;
   }
 
@@ -535,7 +376,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       width: 1200px;
       height: 850px;
       left: 50%;
-      margin-left: -600px;
   }
 
   .bookContainerSynth {
@@ -543,7 +383,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
       height: 730px;
       position: fixed;
       left: 50%;
-      margin-left: -490px;
       margin-top: 30px;
   }
 
@@ -576,7 +415,6 @@ Some pseudo-classes used to highlight text
   height: 22px;
   width: 0%;
   background: #0088ff6b;
-  position: absolute;
   transition: var(--trans);
 }
 
@@ -598,11 +436,6 @@ Some pseudo-classes used to highlight text
   background: #0088ff36;
   cursor: pointer;
 }
-.bookContentsContainer {
-    width: 80%;
-    margin-left: 10%;
-    z-index: 10;
-}
 
 .bookImg {
     z-index: -10;
@@ -611,14 +444,6 @@ Some pseudo-classes used to highlight text
     position: fixed;
     right: 5%;
 }
-
-.bookTitle {
-    color: #261500;
-    padding-right: 30px;
-    display: inline-block;
-    font-size: 18pt;
-}
-
 
 .myStoriesBtn {
     display: inline;
@@ -636,20 +461,19 @@ Some pseudo-classes used to highlight text
 }
 
 .contentsContainer {
-    padding-left: 3%;
-    padding-right: 3%;
-    height: 390px;
-    width: 80%;
-    margin-left: 10%;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  padding-left: 3%;
+  padding-right: 3%;
+  height: 390px;
+  width: 100%;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  border-radius: 5px 5px 5px 5px;
 }
 
 .contentsLinkContainer {
@@ -787,7 +611,6 @@ border-radius: 5px 5px 5px 5px;
 
 .optionsPopup:after {
 	content: '';
-	position: absolute;
 	top: 0px;
 	left: 60px;
 	width: 0;
@@ -846,12 +669,6 @@ border-radius: 5px 5px 5px 5px;
     .bookImg {
         display: none;
     }
-    .bookContentsContainer {
-        width: 95%;
-        padding-top: 10px;
-        margin-left: 2.5%;
-        z-index: 10;
-    }
     .contentsContainer {
        width: 90%;
        margin-left: 5%;
@@ -890,20 +707,16 @@ border-radius: 5px 5px 5px 5px;
         margin-right: 4px;
         border-radius: 5px 5px 5px 5px;
     }
-    
     .deleteBtn:hover {
         background-color: #ad8f2b;
     }
-    
     .deleteModeBtn {
         background-color: #dd000e;
     }
-    
+
     .deleteModeBtn:hover {
         background-color: #b7000a;
     }
-    
-    
     .trashImg {
         width: 20px;
     }
@@ -924,14 +737,6 @@ border-radius: 5px 5px 5px 5px;
         margin-left: -315px;
     }
 
-    .bookContentsContainer {
-        width: 560px;
-        position: fixed;
-        left: 50%;
-        margin-left: -280px;
-        padding-top: 40px;
-    }
-
     .optionsPopup {
         margin-left: 55px;
     }
@@ -948,7 +753,6 @@ border-radius: 5px 5px 5px 5px;
     }
 
     .bookContentsContainer {
-        width: 560px;
         position: fixed;
         left: 50%;
         margin-left: -280px;
@@ -960,11 +764,6 @@ border-radius: 5px 5px 5px 5px;
         margin-left: 55px;
     }
 
-}
-
-
-.page {
-  padding-top: 20px;
 }
 
 .bookImg {
@@ -998,7 +797,6 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .modalContainer {
-  position: absolute;
   margin-top: -10px;
   z-index: 100;
   height: 520px;
@@ -1006,22 +804,6 @@ border-radius: 5px 5px 5px 5px;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.5);
   text-align: center;
-}
-
-.bookTitle {
-  color: #261500; 
-  padding-right: 10%;
-  padding-top: 3px;
-  display: inline-block;
-  font-size: 16pt;
-}
-
-.bookTitleHistory {
-  color: #261500; 
-  padding-right: 37%;
-  padding-top: 3px;
-  display: inline-block;
-  font-size: 16pt;
 }
 
 .myStoriesBtn {
@@ -1060,16 +842,10 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .textContainerSynth {
-  width: 90%;
-  margin-left: 5%;
   height: 290px;
   color: #261500;
   background-color: #f7f2e7;
   border: 1px solid #261500a2;
-  text-align: left;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 4px;
   overflow: auto;
 }
 
@@ -1279,26 +1055,22 @@ animation: blinker 2s linear infinite;
 }
 
 @media only screen and (min-width: 1000px) and (min-height: 750px) {
-.bookImg {
-    z-index: -10;
-    width: 800px;
-    height: 600px;
-    left: 50%;
-    margin-left: -400px;
-}
-
-.bookContainerSynth {
-    width: 620px;
-    height: 510px;
-    position: fixed;
-    left: 50%;
-    margin-left: -310px;
-    margin-top: 20px;
-}
-
-.textContainerSynth {
-    height: 390px;
-}
+  .bookImg {
+      z-index: -10;
+      width: 800px;
+      height: 600px;
+      left: 50%;
+      margin-left: -400px;
+  }
+  
+  .bookContainerSynth {
+      width: 620px;
+      height: 510px;
+      position: fixed;
+      left: 50%;
+      margin-left: -310px;
+      margin-top: 20px;
+  }
 }
 
 @media only screen and (min-width: 1400px) and (min-height: 900px) {
@@ -1366,7 +1138,6 @@ Some pseudo-classes used to highlight text
   height: 22px;
   width: 0%;
   background: #0088ff6b;
-  position: absolute;
   transition: var(--trans);
 }
 

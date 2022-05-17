@@ -1,49 +1,36 @@
-import { Component           } from '@angular/core';
-import { OnInit              } from '@angular/core';
-import { EventEmitter        } from '@angular/core';
+import { Component          } from '@angular/core';
+import { OnInit             } from '@angular/core';
+import { EventEmitter       } from '@angular/core';
 
-import { ActivatedRoute      } from '@angular/router';
-import { Router              } from '@angular/router';
-import { DomSanitizer        } from '@angular/platform-browser';
-import { SafeUrl             } from '@angular/platform-browser';
-import { MatDialog           } from '@angular/material/dialog';
-import { Subject             } from 'rxjs';
-import { Story               } from 'app/story';
-import { EventType           } from 'app/event';
-import { Recording           } from 'app/recording';
+import { ActivatedRoute     } from '@angular/router';
+import { NavigationStart    } from '@angular/router';
+import { Event              } from '@angular/router';
+import { Router             } from '@angular/router';
+import { DomSanitizer       } from '@angular/platform-browser';
+import { SafeUrl            } from '@angular/platform-browser';
+import { MatDialog          } from '@angular/material/dialog';
+import { Subject            } from 'rxjs';
+import { Story              } from 'app/story';
+import { EventType          } from 'app/event';
+import { Recording          } from 'app/recording';
 
-import { SynthesisService    } from 'app/services/synthesis.service';
-import { Paragraph           } from 'app/services/synthesis.service';
-import { Sentence            } from 'app/services/synthesis.service';
-import { Section             } from 'app/services/synthesis.service';
+import { SynthesisService   } from 'app/services/synthesis.service';
+import { Paragraph          } from 'app/services/synthesis.service';
+import { Sentence           } from 'app/services/synthesis.service';
+import { Section            } from 'app/services/synthesis.service';
 
-import { TranslationService  } from 'app/translation.service';
-import { StoryService        } from 'app/story.service';
-import { RecordingService    } from 'app/recording.service';
-import { EngagementService   } from 'app/engagement.service';
+import { TranslationService } from 'app/translation.service';
+import { StoryService       } from 'app/story.service';
+import { RecordingService   } from 'app/recording.service';
+import { EngagementService  } from 'app/engagement.service';
 
-declare var MediaRecorder : any;
+declare var MediaRecorder: any;
 
 @Component({
-  selector: 'recording-component-save-story-dialog',
-  template: `
-<mat-dialog-content>
-  <h3>
-    {{ts.l.save_changes_made_to_this_recording}}
-  </h3>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>
-      {{ts.l.cancel}}
-  </button>
-  <button mat-button [mat-dialog-close]="true"
-    (click)=save.next(true)>
-      {{ts.l.save}}
-  </button>
-</mat-dialog-actions>
-`
+  selector:     'recording-component-save-story-dialog',
+  templateUrl:  './save-guard-dialog.html',
 })
-export class RecordingComponentSaveGuardDialog {
+export class RecordingSaveGuardDialog {
   constructor(
     public ts:              TranslationService,
   ) {}
@@ -54,7 +41,7 @@ export class RecordingComponentSaveGuardDialog {
 @Component({
   selector: 'app-recording',
   templateUrl: './component.html',
-  styleUrls: ['../module.css']
+  styleUrls: ['../module.css'],
 })
 export class RecordingComponent implements OnInit {
 
@@ -68,13 +55,23 @@ export class RecordingComponent implements OnInit {
     private recordingService: RecordingService,
     private synthesis:        SynthesisService,
     private engagement:       EngagementService,
-  ) { }
+  ) {
+    this.router.events.subscribe(
+      (event: Event)=>{
+        if(event instanceof NavigationStart) {
+          this.latestNavStart = event;
+          console.dir(event);
+        }
+      })
+  }
+
+  latestNavStart: NavigationStart;
+
   // Synthesis variables
   story: Story = new Story();
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   chosenSections: Section[];
-
 
   // Audio variables
   // NOTE: 'section' variables are pointers to corresponding variables
@@ -136,27 +133,38 @@ export class RecordingComponent implements OnInit {
       });
   }
 
+  showModal() {
+    const dialogRef = this.dialog.open(RecordingSaveGuardDialog);
+    dialogRef.componentInstance.save.subscribe(
+      async save => {
+        console.log(save);
+        await this.saveRecordings();
+        this.modalChoice.next(true);
+        this.router.navigateByUrl(this.latestNavStart.url);
+      }
+    );
+  }
+
   loadSynthesis(story: Story) {
-    this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
-      this.paragraphs = paragraphs;
-      this.sentences = sentences;
-      this.chosenSections = this.paragraphs;
-      this.audioFinishedLoading = true;
-    });
+    this.synthesis.synthesiseStory(story).then(
+      ([paragraphs, sentences]) => {
+        this.paragraphs = paragraphs;
+        this.sentences = sentences;
+        this.chosenSections = this.paragraphs;
+        this.audioFinishedLoading = true;
+      });
   }
 
   /**
    * Archives story.activeRecording by making a new, blank
    * up-to-date activeRecording for story.
-   * 
+   *
    * @param story - story whose activeRecording will be updated
    */
   archive(story: Story) {
-    
     if(story.activeRecording) {
       this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
     }
-    
     const newActiveRecording = new Recording(story);
     this.recordingService.create(newActiveRecording).subscribe(res => {
       if (res.recording) {
@@ -189,7 +197,7 @@ export class RecordingComponent implements OnInit {
   /**
    * Given some recording, gets audio data from the DB and saves it
    * in SafeUrl arrays to be displayed in <audio>s on the .html page
-   * 
+   *
    * @param recording - recording whose audio clips should be loaded
    */
   loadAudio(recording: Recording) {
@@ -350,18 +358,6 @@ export class RecordingComponent implements OnInit {
     section.removeHighlight();
   }
 
-  showModal() {
-    const dialogRef = this.dialog.open(RecordingComponentSaveGuardDialog);
-    dialogRef.componentInstance.save.subscribe(
-      async save => {
-        console.log(save);
-        await this.saveRecordings();
-        this.modalChoice.next(true);
-        this.goToDashboard();
-      }
-    );
-    // this.modalClass = "visibleFade";
-  }
 
   hideModal() {
     this.modalClass = "hiddenFade";
@@ -376,7 +372,7 @@ export class RecordingComponent implements OnInit {
     this.saveRecordings();
     this.modalChoice.next(true);
   }
-  
+
   goToDashboard() {
     this.router.navigateByUrl('/dashboard/' + this.story._id);
   }

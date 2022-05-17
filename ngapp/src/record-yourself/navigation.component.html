@@ -1,0 +1,27 @@
+<mat-drawer-container
+  class="bookContentsContainer">
+  <mat-drawer-content>
+    <div style="display: flex;">
+      <button mat-button
+        (click)="sidenav.opened=!sidenav.opened">
+        <span style="font-size: 25pt;">›</span></button>
+      <div style="width: 100%; padding: 2%;">
+        <router-outlet
+          (activated)="activatedComponentRef=$event">
+        </router-outlet>
+      </div>
+    </div>
+  </mat-drawer-content>
+  <mat-drawer #sidenav>
+    <div style="margin 10px">
+      <h3>{{ts.l.my_stories}}</h3>
+    </div>
+    <div *ngFor="let st of stories | async">
+      <button mat-button
+        [routerLink]="['/record-yourself','recording',st._id]"
+        (click)="sidenav.opened=!sidenav.opened">
+        {{st.title}}
+      </button>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

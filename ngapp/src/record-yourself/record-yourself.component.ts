@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./record-yourself.component.css']
 })
 export class RecordYourselfComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {
