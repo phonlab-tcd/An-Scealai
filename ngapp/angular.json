@@ -70,6 +70,7 @@
               "outputHashing": "all"
             },
             "dev": {
+              "aot": true,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
