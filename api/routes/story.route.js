@@ -37,8 +37,6 @@ let storyRoutes;
 // Scopes the imported functions to just this function
 (() => {  
   // ENDPOINT HANDLERS
-  const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
   const updateStoryAndCheckGrammar =
     require('../endpoints_functions/story/updateStoryAndCheckGrammar');
   const feedbackAudio =
@@ -48,7 +46,6 @@ let storyRoutes;
 
   storyRoutes = makeEndpoints({
     get: {
-      '/getStoryById/:id': getStoryById,
       '/feedbackAudio/:id': feedbackAudio,
     },
     post: {
@@ -57,6 +54,10 @@ let storyRoutes;
     },
   });
 })();
+
+storyRoutes.get(
+  '/getStoryById/:id',
+  require('../endpoints_functions/story/getStoryById'));
 
 // Create new story
 storyRoutes.route('/create').post(function(req, res) {
@@ -264,7 +265,7 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
       console.log(err);
-      res.json(err);
+      return res.json(err);
     }
     if(story) {
       if (req.body.activeRecording) {
