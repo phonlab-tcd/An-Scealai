@@ -175,10 +175,11 @@
 }
 
 .bookHeader {
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    padding-bottom: 5px;
+  display: flex;
+  margin-top: -2.5em;
+  flex-direction: column;
+  padding: 15px;
+  padding-bottom: 5px;
 }
 
 .headerUpper {
