@@ -10,9 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: npm install --prefix ngapp
       - run: sudo apt-get install parallel
-      - run: "parallel npm run --prefix ngapp ::: \"test:ci && echo 'TEST_FINISHED $?'\" \"build:prod && echo 'PROD_FINISHED $?'\" \"build:qa && echo 'QA_FINISHED $?'\""
+      - run: parallel npm install --prefix ::: api ngapp
+      - run: FUDGE=1 NO_EMAILS=1 npm run --prefix api start
+      - run: parallel npm run --prefix ngapp ::: e2e test:ci build:prod build:qa
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
