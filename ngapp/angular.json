@@ -125,6 +125,37 @@
             ],
             "scripts": []
           }
+        },
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "an-scealai:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "an-scealai:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": true
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "an-scealai:serve",
+            "watch": true,
+            "headless": true
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "an-scealai:serve:production"
+            }
+          }
         }
       }
     }

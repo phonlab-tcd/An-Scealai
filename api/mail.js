@@ -1,5 +1,3 @@
-
-
 const nodemailer = require("nodemailer");
 // Much of the following code was taken from this tutorial:
 // https://schadokar.dev/posts/how-to-send-email-in-nodejs/
@@ -38,6 +36,8 @@ try{
       });
 
       // send mail with defined transport object.
+      if(process.env.NO_EMAILS) return true;
+
       let mailStatus = await transporter.sendMail({
         from: from,
         to: recipients,

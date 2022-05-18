@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "exclude": [
-    "**/*.spec.ts",
+    "**/*spec.ts",
     "e2e/*",
     "src/test.ts",
     "src/environments/environment.prod.ts",

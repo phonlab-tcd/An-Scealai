@@ -4,7 +4,9 @@
     <div class="formContainer">
       <form (submit)="register()">
         <div class="form-group">
-          <div class="formLabel"><label>{{ts.l.username}}</label></div>
+          <div class="formLabel">
+            <label for="username">{{ts.l.username}}</label>
+          </div>
           <input
               type="text"
               class="form-control inputField {{usernameClass}}"

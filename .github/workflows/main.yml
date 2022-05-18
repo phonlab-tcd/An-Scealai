@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
       - name: Install ngapp Dependencies
         run: npm install --prefix ngapp
+      - run: apt-get install parallel
       - name: build:qa
         run: npm run build:qa --prefix ngapp
       - uses: EndBug/add-and-commit@v9
