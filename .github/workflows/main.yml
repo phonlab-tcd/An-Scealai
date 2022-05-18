@@ -10,8 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: sudo apt-get install parallel
-      - run: "parallel npm install --prefix ::: api ngapp"
+      - run: sudo apt-get install -y parallel
+      - run: parallel "sudo apt-get install -y mongodb-org" "parallel npm run i --prefix ::: api ngapp"
+      - run: bash mongotest/start.sh &
       - run: FUDGE=1 NO_EMAILS=1 npm run --prefix api start &
       - run: "parallel npm run --prefix ngapp ::: e2e test:ci build:prod build:qa"
       - uses: EndBug/add-and-commit@v9
