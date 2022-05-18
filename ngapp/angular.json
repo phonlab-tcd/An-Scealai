@@ -140,7 +140,7 @@
         "cypress-open": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "watch": true,
+            "watch": false,
             "headless": true
           }
         },
@@ -148,7 +148,7 @@
           "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "an-scealai:serve",
-            "watch": true,
+            "watch": false,
             "headless": true
           },
           "configurations": {
