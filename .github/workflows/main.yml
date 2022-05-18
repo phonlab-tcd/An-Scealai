@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: sudo apt-get install -y parallel
       - run: cat install_cmds | parallel
-      - run: bash mongotest/start.sh &
+      - run: mongod &
       - run: FUDGE=1 NO_EMAILS=1 npm run --prefix api start & npm run --prefix ngapp e2e
       - run: "parallel npm run --prefix ngapp ::: test:ci build:prod build:qa"
       - uses: EndBug/add-and-commit@v9
