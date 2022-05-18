@@ -5,36 +5,17 @@ on:
       - '*'
 # 2 parallel jobs: build and test
 jobs:
-  build-frontend-qa:
+  build-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - name: Install ngapp Dependencies
-        run: npm install --prefix ngapp
-      - run: apt-get install parallel
-      - name: build:qa
-        run: npm run build:qa --prefix ngapp
+      - run: npm install --prefix ngapp
+      - run: sudo apt-get install parallel 
+      - run: parallel npm run --prefix ngapp ::: test:ci build:prod build:qa
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
-          push: true
-
-  test-and-build-frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: browser-actions/setup-chrome@latest
-      - name: Install ngapp Dependencies
-        run: npm install --prefix ngapp
-      - name: ng test
-        run: npm run test:ci --prefix ngapp
-      - name: build:prod
-        run: npm run build:prod --prefix ngapp
-      - uses: EndBug/add-and-commit@v9
-        with:
-          add: 'ngapp/unpublished_dist'
           push: true
 
   test-backend:
