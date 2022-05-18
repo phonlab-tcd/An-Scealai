@@ -1,3 +1,0 @@
-sudo apt-get install -y mongodb-org
-npm i --prefix ngapp
-npm i --prefix api
