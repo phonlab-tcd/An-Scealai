@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm install --prefix ngapp
       - run: sudo apt-get install parallel
-      - run: "parallel npm run --prefix ngapp ::: test:ci build:prod build:qa"
+      - run: "parallel npm run --prefix ngapp ::: \"test:ci && echo 'TEST_FINISHED $?'\" \"build:prod && echo 'PROD_FINISHED $?'\" \"build:qa && echo 'QA_FINISHED $?'\""
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
