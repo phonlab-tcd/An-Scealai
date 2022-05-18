@@ -28,7 +28,7 @@ jobs:
       #      - uses: supercharge/mongodb-github-action@1.2.0
       #        with:
       #          mongodb-version: 3.6
-      - run: sudo apt-get install -y mongodb-org@3.6
+      - run: sudo apt-get install -y mongodb-org=3.6
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: sudo apt-get install -y parallel
