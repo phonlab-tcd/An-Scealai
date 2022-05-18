@@ -149,12 +149,12 @@
         <div *ngIf="auth.isLoggedIn()" 
           class="profileBtnContainer">
             <!-- username button -->
-            <a routerLink="/profile"
+            <button routerLink="/profile"
               (click)="changeCheck()"
               class="btn navbarBtn" >
                 {{auth.getUserDetails()?.username}}
                 <i class="fas fa-user"></i>
-            </a>
+            </button>
             <!-- notifications circle -->
             <div class="notificationBtn"
               *ngIf="
