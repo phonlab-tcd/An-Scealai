@@ -26,6 +26,7 @@ MongoClient.connect(dbUrl,
         console.log(
             'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
             'Please make sure that MongoDB is running.');
+        console.error(err);
         process.exit(1);
       }
       db = client.db(process.env.DB || config.DB);

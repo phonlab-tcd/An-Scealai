@@ -9,15 +9,17 @@ const ObjectID = require('mongodb').ObjectID;
 
 let Message = require('../models/message');
 
+const dbUrl = require('../utils/dbUrl')
 let db;
-MongoClient.connect('mongodb://localhost:27017/',
+MongoClient.connect(dbUrl,
   {useNewUrlParser: true, useUnifiedTopology: true},
   (err, client) => {
-  if (err) {
-    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
+    if (err) {
+      console.log('MongoDB Connection Error in ' + __filename + '. Please make sure that MongoDB is running.');
+      console.error(err);
+      process.exit(1);
+    }
+    db = client.db(process.env.DB || config.DB);
 });
 
 // Create new message in database
