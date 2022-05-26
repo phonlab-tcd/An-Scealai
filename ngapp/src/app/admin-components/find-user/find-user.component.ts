@@ -8,7 +8,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'app-find-user',
   templateUrl: './find-user.component.html',
-  styleUrls: ['./find-user.component.css']
+  styleUrls: ['./find-user.component.scss']
 })
 export class FindUserComponent implements OnInit {
 

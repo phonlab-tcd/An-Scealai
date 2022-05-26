@@ -17,7 +17,7 @@ import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template
 @Component({
   selector: 'app-book-contents',
   templateUrl: './book-contents.component.html',
-  styleUrls: ['./book-contents.component.css'],
+  styleUrls: ['./book-contents.component.scss'],
   providers: [
     FilterPipe,
   ],

@@ -9,7 +9,7 @@ import { TranslationService } from "app/translation.service";
   selector: 'app-synthesis-player',
   templateUrl: './synthesis-player.component.html',
   styleUrls: [
-    './synthesis-player.component.css',
+    './synthesis-player.component.scss',
     '../../app.component.css',
    ]
 })
