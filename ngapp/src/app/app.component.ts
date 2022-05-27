@@ -1,17 +1,26 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-// import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { AuthenticationService } from './authentication.service';
-import { StoryService } from './story.service';
-import { Story } from './story';
-import { Message } from './message';
-import { Classroom } from './classroom';
-import { NotificationService } from './notification-service.service';
-import { EngagementService } from './engagement.service';
-import { TranslationService } from './translation.service';
-import { MessageService } from './message.service';
-import { filter } from 'rxjs/operators';
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { Component              } from '@angular/core';
+import { OnInit                 } from '@angular/core';
+import { HostListener           } from '@angular/core';
+import { NavigationCancel       } from '@angular/router';
+import { Event                  } from '@angular/router';
+import { NavigationEnd          } from '@angular/router';
+import { NavigationError        } from '@angular/router';
+import { NavigationStart        } from '@angular/router';
+import { Router                 } from '@angular/router';
+
+import { filter                 } from 'rxjs/operators';
+import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
+// import { SlimLoadingBarService  } from 'ng2-slim-loading-bar';
+
+import { Story                  } from 'app/story';
+import { Message                } from 'app/message';
+import { Classroom              } from 'app/classroom';
+import { NotificationService    } from 'app/notification-service.service';
+import { EngagementService      } from 'app/engagement.service';
+import { TranslationService     } from 'app/translation.service';
+import { MessageService         } from 'app/message.service';
+import { AuthenticationService  } from 'app/authentication.service';
+import { StoryService           } from 'app/story.service';
 
 declare var gtag;
 
@@ -25,11 +34,11 @@ export class AppComponent {
   
   title: string = 'An Scéalaí';
   checkVal: boolean = false;
-  notificationsShown : boolean = false;
-  storiesForNotifications : Story[] = [];
+  notificationsShown: boolean = false;
+  storiesForNotifications: Story[] = [];
   messagesForNotifications: Message[] = [];  
   teacherMessagesForNotifications: Map<Classroom, number> = new Map();
-  wasInside : boolean = false;
+  wasInside: boolean = false;
   currentUser: string = '';
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
