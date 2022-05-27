@@ -1,4 +1,4 @@
-name: build and test frontend
+name: build qa, test frontend and build prod if ok, test backend
 on:
   push:
     branches:
@@ -14,6 +14,7 @@ jobs:
         run: npm install --prefix ngapp
       - name: build:qa
         run: npm run build:qa --prefix ngapp
+      - run: git pull
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
@@ -31,6 +32,7 @@ jobs:
         run: npm run test:ci --prefix ngapp
       - name: build:prod
         run: npm run build:prod --prefix ngapp
+      - run: git pull
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/unpublished_dist'
