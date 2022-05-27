@@ -64,8 +64,8 @@ type QuillHighlightTag = {
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.scss',
-    './../../gramadoir-tags.css',
-    './../../../quill.fonts.css',
+    './../../gramadoir-tags.scss',
+    './../../../quill.fonts.scss',
   ],
   encapsulation: ViewEncapsulation.None
 })
