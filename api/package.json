@@ -6,8 +6,8 @@
   "scripts": {
     "test": "TEST=1 jest --runInBand --forceExit",
     "start": "nodemon server.js",
-    "start_prod": "DB=an-scealai PORT=4000 node server.js",
-    "start_qa": "DB=qa PORT=4002 node server.js"
+    "start:prod": "DB=an-scealai PORT=4000 node server.js",
+    "start:qa": "DB=qa PORT=4002 node server.js"
   },
   "jest": {
     "preset": "@shelf/jest-mongodb",
