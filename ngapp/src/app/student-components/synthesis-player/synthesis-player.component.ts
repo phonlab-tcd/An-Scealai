@@ -10,7 +10,7 @@ import { TranslationService } from "app/translation.service";
   templateUrl: './synthesis-player.component.html',
   styleUrls: [
     './synthesis-player.component.scss',
-    '../../app.component.css',
+    '../../app.component.scss',
    ]
 })
 export class SynthesisPlayerComponent implements OnInit {
