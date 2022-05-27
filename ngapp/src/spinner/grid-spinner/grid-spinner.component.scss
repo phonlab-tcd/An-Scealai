@@ -4,6 +4,7 @@
   width: 64px;
   height: 64px;
 }
+
 .lds-grid div {
   position: absolute;
   width: 13px;
@@ -12,50 +13,21 @@
   background: #437250;
   animation: lds-grid 1.2s linear infinite;
 }
-.lds-grid div:nth-child(1) {
-  top: 6px;
-  left: 6px;
-  animation-delay: 0s;
+
+@function grid_indices_to_nth($row, $col, $width) {
+  @return ($row * $width) + $col + 1;
 }
-.lds-grid div:nth-child(2) {
-  top: 6px;
-  left: 26px;
-  animation-delay: -0.4s;
-}
-.lds-grid div:nth-child(3) {
-  top: 6px;
-  left: 45px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(4) {
-  top: 26px;
-  left: 6px;
-  animation-delay: -0.4s;
-}
-.lds-grid div:nth-child(5) {
-  top: 26px;
-  left: 26px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(6) {
-  top: 26px;
-  left: 45px;
-  animation-delay: -1.2s;
-}
-.lds-grid div:nth-child(7) {
-  top: 45px;
-  left: 6px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(8) {
-  top: 45px;
-  left: 26px;
-  animation-delay: -1.2s;
-}
-.lds-grid div:nth-child(9) {
-  top: 45px;
-  left: 45px;
-  animation-delay: -1.6s;
+
+@for $row from 0 through 2 {
+  @for $col from 0 through 2 {
+    $nth: grid_indices_to_nth($row, $col, 3);
+    $neg: (($nth % 2) - 0.5) * 2; // even -> -1, odd -> 1
+    .lds-grid div:nth-child(#{$nth}) {
+      top: #{$col * 20}px; 
+      left: #{$row * 20}px;
+      animation-delay: #{$nth * 0.1 * ($neg - 0.5)}s;
+    }
+  }
 }
 
 @keyframes lds-grid {
