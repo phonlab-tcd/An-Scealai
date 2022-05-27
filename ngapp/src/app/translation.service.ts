@@ -4,15 +4,15 @@ import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { Observable } from 'rxjs';
-import new_trans from './new_translation';
+import trans_pre from './translation';
 
 
-const new_translations = (()=>{
+const translations = /*iefe*/(()=>{
   const ga = {};
   const en = {};
-  for(const k of Object.keys(new_trans)) {
-    ga[k] = new_trans[k].ga;
-    en[k] = new_trans[k].en;
+  for(const k of Object.keys(trans_pre)) {
+    ga[k] = trans_pre[k].ga;
+    en[k] = trans_pre[k].en;
   }
   return {ga,en};
 })();
@@ -64,7 +64,7 @@ export class TranslationService {
   }
 
   getLanguageFromCode(code: 'ga'|'en'): object {
-    return new_translations[code] ?? new_translations['ga'];
+    return translations[code] ?? translations['ga'];
   }
 
   getCurrentLanguage() : string {

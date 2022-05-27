@@ -13,8 +13,8 @@
     "test:ci": "ng test --watch=false --browsers ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:open": "./node_modules/cypress/bin/cypress open",
+    "cypress:run":  "./node_modules/cypress/bin/cypress run"
   },
   "private": true,
   "peerDependencies": {
