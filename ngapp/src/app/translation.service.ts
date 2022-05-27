@@ -4,6 +4,19 @@ import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { Observable } from 'rxjs';
+import new_trans from './new_translation';
+
+
+const new_translations = (()=>{
+  const ga = {};
+  const en = {};
+  for(const k of Object.keys(new_trans)) {
+    ga[k] = new_trans[k].ga;
+    en[k] = new_trans[k].en;
+  }
+  return {ga,en};
+})();
+
 
 export enum LANGUAGE {
   ENGLISH = 0,
@@ -32,7 +45,7 @@ export class TranslationService {
     }
   }
 
-  setLanguage(code: string) {
+  setLanguage(code: 'ga'|'en') {
     this.l = this.getLanguageFromCode(code);
 
     this.currentLanguage = (this.l.iso_code === 'en' ? LANGUAGE.ENGLISH : LANGUAGE.IRISH);
@@ -50,15 +63,10 @@ export class TranslationService {
     return (this.l.name === "English");
   }
 
-  getLanguageFromCode(code: string): object {
-    for (const language of translation.languages) {
-      if (language.iso_code === code) {
-        return language;
-      }
-    }
-    return null;
+  getLanguageFromCode(code: 'ga'|'en'): object {
+    return new_translations[code] ?? new_translations['ga'];
   }
-  
+
   getCurrentLanguage() : string {
     if(this.l) {
       return this.l.name;

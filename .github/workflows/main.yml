@@ -1,8 +1,9 @@
-name: build and test frontend
+name: build qa, test frontend and build prod if ok, test backend
 on:
   push:
     branches:
       - '*'
+
 # 2 parallel jobs: build and test
 jobs:
   build-frontend:
@@ -17,6 +18,7 @@ jobs:
       - run: "parallel npm i --prefix ::: api ngapp"
       - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start & npm run --prefix ngapp e2e
       - run: "parallel npm run --prefix ngapp ::: test:ci build:prod build:qa"
+      - run: git pull
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
