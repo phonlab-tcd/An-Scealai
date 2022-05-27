@@ -1,4 +1,6 @@
 dist
+priv_key.pem
+pub_key.pem
 
 **/node_modules
 

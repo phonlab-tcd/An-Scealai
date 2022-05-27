@@ -18,7 +18,7 @@ var express = require('express');
 
 let User = require('../models/user');
 
-const auth = require('../utils/jwtAuthMw');
+const auth = require('../utils/authMiddleware');
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
@@ -43,7 +43,7 @@ let userRoutes;
     });
 })();
 
-userRoutes.get('/profile', auth, ctrlProfile.profileRead);
+userRoutes.get('/profile', auth.passwordmw, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 

@@ -1,8 +1,7 @@
-const auth = require('../utils/jwtAuthMw');
+const auth = require('../utils/authMiddleware');
 const gramadoirRoutes = require('express').Router();
 ////////////////////////////////////////////// POST
 gramadoirRoutes
   .route('/insert')
-  .post(auth, require('../endpoints_functions/gramadoir/insert'))
-////////////////////////////////////////////// GET
+  .post(auth.jwtmw, require('../endpoints_functions/gramadoir/insert'))
 module.exports = gramadoirRoutes;
