@@ -18,22 +18,8 @@ function fudgeVerification(username: string) {
   cy.request(`localhost:4000/user/fudgeVerification/${username}`);
 }
 
-
-describe('Virtual Registration (api only)', () => {
-  it('Register a student', () => {
-    const username = randomString();
-    const password = randomString();
-    const email = `${randomString(10)}@${randomString(10)}.${randomString(5,false)}`;
-    const role = 'STUDENT';
-    cy.request(
-      'POST',
-      `localhost:4000/user/register`,
-      { username, password, email });
-  });
-});
-
 describe('Register Teacher', () => {
-  it('Register as a teacher, sign in, log out, sign in', () => {
+  it('Visits the initial project page', () => {
     const username = randomString();
     const password = randomString();
     const email = `${randomString(10)}@${randomString(10)}.${randomString(5,false)}`;
@@ -53,7 +39,7 @@ describe('Register Teacher', () => {
     })
     cy.get('button').contains('Register').click();
     fudgeVerification(username);
-    cy.get('button').contains('Sign in').click();
+    cy.get('button.loginBtn').contains('Sign in').click();
     cy.get('button i.fa-user').click();
     cy.get('button').contains('Sign out').click();
     cy.get('.loginTextContainer a')
