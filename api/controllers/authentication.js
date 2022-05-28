@@ -437,6 +437,7 @@ module.exports.register = async (req, res) => {
 
   user.role = req.body.role;
 
+
   try {
     await user.save();
   } catch (err) {

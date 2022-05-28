@@ -15,7 +15,7 @@ function randomString(length:number=16,digits=true) {
 }
 
 function fudgeVerification(username: string) {
-  cy.request(`localhost:4000/user/fudgeVerification/${username}`);
+  return cy.request(`localhost:4000/user/fudgeVerification/${username}`);
 }
 
 describe('Register Teacher', () => {
@@ -38,7 +38,10 @@ describe('Register Teacher', () => {
       })
     })
     cy.get('button').contains('Register').click();
-    fudgeVerification(username);
+    fudgeVerification(username).should(response=>{
+        console.log(response);
+        cy.request(response.body);
+    });
     cy.get('button.loginBtn').contains('Sign in').click();
     cy.get('button i.fa-user').click();
     cy.get('button').contains('Sign out').click();

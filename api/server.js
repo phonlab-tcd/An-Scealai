@@ -63,12 +63,11 @@ if(process.env.FUDGE) {
   app.get('/user/fudgeVerification/:username', (req,res,next)=>{
     console.log(req.query);
     const User = require('./models/user');
-    User.findOneAndUpdate(
-      {username: req.params.username},
-      {$set: {status: 'Active'}}).then(
-        u => {logger.info(u);           res.json(u)},
-        e => {logger.error(e.stack);    res.json(e)},
-      );
+    User.findOne(
+      {username: req.params.username})
+        .then(
+            u=>{res.json(u.generateActivationLink())},
+            e=>{res.status(500).json(e)});
   });
 }
 app.use('/teacherCode', teacherCodeRoute);

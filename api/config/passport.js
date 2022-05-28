@@ -1,3 +1,5 @@
+module.exports.algorithm = 'RS256';
+
 const logger        = require('../logger');
 const passport      = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -40,10 +42,11 @@ function jwtCallback(payload, done) {
     return done(null, user ? user : false);
   });
 }
+
 const opts = {
   jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey:      PUB_KEY,
-  algorithms:       ['RS256'],
+  algorithms:       [module.exports.algorithm],
 }
 passport.use(new JwtStrategy(opts,jwtCallback));
 
