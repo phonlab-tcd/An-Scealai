@@ -12,7 +12,6 @@ const fs            = require('fs');
 const pub_key_path  = path.join(__dirname, '..', '..', 'pub_key.pem');
 const PUB_KEY       = fs.readFileSync(pub_key_path, 'utf8');
 
-mongoose.model('User');
 
 function verify(username, password, cb) {
   console.log(username);
