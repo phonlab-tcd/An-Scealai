@@ -43,7 +43,7 @@ function jwtCallback(payload, done) {
 (async () => {
   const opts = {
     jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey:      await keypair.pub(),
+    secretOrKey:      await keypair.pub,
     algorithms:       [module.exports.algorithm],
   }
   passport.use(new JwtStrategy(opts,jwtCallback));

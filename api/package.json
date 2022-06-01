@@ -4,16 +4,10 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "TEST=1 jest --runInBand --forceExit",
+    "test": "TEST=1 jest --runInBand --forceExit --rootDir src --silent",
     "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
-  },
-  "jest": {
-    "preset": "@shelf/jest-mongodb",
-    "setupFiles": [
-      "<rootDir>/utils/test-setup.js"
-    ]
   },
   "keywords": [],
   "author": "",
@@ -26,9 +20,7 @@
     "chai-arrays": "^2.2.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "express": "^4.17.0",
-    "express-jwt": "^5.3.1",
     "formidable": "^1.2.1",
     "generate-password": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
@@ -37,7 +29,7 @@
     "mongo-unit": "^2.0.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.13.8",
-    "multer": "^1.4.2",
+    "multer": "^1.4.4",
     "node-html-parser": "^1.4.9",
     "node-pandoc-promise": "^0.0.6",
     "nodemailer": "^6.6.1",
@@ -50,7 +42,7 @@
     "stackify-logger": "^3.0.11",
     "stream": "0.0.2",
     "util": "^0.12.1",
-    "uuid": "^3.3.2",
+    "uuid": "^8.3.2",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7",
     "winston-stackify": "^1.0.3"
@@ -59,12 +51,14 @@
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.0",
     "@types/express": "^4.17.13",
+    "@types/jest": "^27.5.1",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
-    "jest": "^27.0.6",
+    "jest": "^28.1.0",
     "mockingoose": "^2.15.2",
     "nodemon": "^2.0.13",
     "supertest": "^6.1.4",
+    "ts-jest": "^28.0.3",
     "ts-node": "^10.8.0"
   }
 }

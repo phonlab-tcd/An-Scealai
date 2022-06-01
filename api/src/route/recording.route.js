@@ -9,7 +9,7 @@ const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
-const logger = require('../util/logger.js');
+const logger = require('../util/logger');
 
 let VoiceRecording = require('../model/recording');
 let User = require('../model/user');

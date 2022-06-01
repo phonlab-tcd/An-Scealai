@@ -4,7 +4,8 @@ const cors              = require('cors');
 const mongoose          = require('mongoose');
 const passport          = require('passport');
 
-const logger            = require('./util/logger');
+import { Logger } from 'winston';
+const logger: Logger    = require('./util/logger');
 const errorHandler      = require('./util/errorHandler');
 const dbURL             = require('./util/dbUrl');
                           require('./config/passport');
