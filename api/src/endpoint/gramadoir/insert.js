@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { upsertGramadoirCacheItem, upsertStoryGramadoirVersion} = require('../../utils/grammar');
+const { upsertGramadoirCacheItem, upsertStoryGramadoirVersion} = require('../../util/grammar');
 
 module.exports = async (req, res, next) => {
   const cache_id =

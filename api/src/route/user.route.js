@@ -2,7 +2,7 @@
 // endpoint prefix = '/user'
 const logger = require('../util/logger');
 const generator = require('generate-password');
-const makeEndpoints = require('../utils/makeEndpoints');
+const makeEndpoints = require('../util/makeEndpoints');
 const passport = require('passport');
 
 const mail = require('../mail');
@@ -18,7 +18,7 @@ var express = require('express');
 
 let User = require('../models/user');
 
-const auth = require('../utils/authMiddleware');
+const auth = require('../util/authMiddleware');
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');

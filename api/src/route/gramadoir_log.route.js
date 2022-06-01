@@ -1,4 +1,4 @@
-const auth = require('../utils/authMiddleware');
+const auth = require('../util/authMiddleware');
 const gramadoirRoutes = require('express').Router();
 ////////////////////////////////////////////// POST
 gramadoirRoutes

@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Story = require('../models/story');
 const gramadoirModels = require('../models/gramadoir');
-const {removeAllCollections} = require('../utils/test-utils');
-const grammarUtils = require('../utils/grammar');
+const {removeAllCollections} = require('../util/test-utils');
+const grammarUtils = require('../util/grammar');
 
 afterEach(async () => {
   await removeAllCollections();

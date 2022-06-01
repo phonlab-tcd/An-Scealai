@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const errorHandler = require('./utils/errorHandler');
+const errorHandler = require('./util/errorHandler');
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
@@ -26,7 +26,7 @@ const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
-const dbURL = require('./utils/dbUrl');
+const dbURL = require('./util/dbUrl');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');

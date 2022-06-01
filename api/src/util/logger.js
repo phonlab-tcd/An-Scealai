@@ -1,6 +1,6 @@
 const winston = require('winston');
-const path = require('path');
-const mongodb = require('mongodb');
+const path    = require('path');
+const dbUrl   = require('./dbUrl')
 // var stackify = require('stackify-logger');
 // logger.error is console.error until the winston logger is created
 let logger = {error: console.error};
@@ -13,8 +13,8 @@ process.on('uncaughtException', (err) => {
 
 const timeFormat = 'DD-MM-YYYY HH:mm:ss';
 
-const errorFile = path.join(__dirname, 'logs/error.log');
-const combinedFile = path.join(__dirname, 'logs/combined.log');
+const errorFile = path.join(__dirname, '../../logs/error.log');
+const combinedFile = path.join(__dirname, '../../logs/combined.log');
 
 const consoleFormat = winston.format.printf(
     ({level, message, timestamp, ...metadata}) => {
@@ -81,7 +81,7 @@ logger = winston.createLogger({
 require('winston-mongodb');
 const mongoTransport = new winston.transports.MongoDB({
   level: 'info', // info is the default
-  db: require('./utils/dbUrl'),
+  db: dbUrl,
   collection: 'log', // default is 'log'
   options: { // modified version of default
     poolSize: 2, // default

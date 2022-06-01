@@ -1,5 +1,5 @@
 const Story = require('../../models/story');
-const {API404Error} = require('../../utils/APIError');
+const {API404Error} = require('../../util/APIError');
 
 async function getStoryById(req, res) {
   const story = await Story.findById(req.params.id);

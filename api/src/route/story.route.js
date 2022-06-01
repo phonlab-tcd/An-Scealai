@@ -6,14 +6,14 @@ const ObjectID = require('mongodb').ObjectID;
 const MongoClient = require('mongodb').MongoClient;
 const querystring = require('querystring');
 const request = require('request');
-const makeEndpoints = require('../utils/makeEndpoints');
+const makeEndpoints = require('../util/makeEndpoints');
 const { parse, stringify } = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
 const abairBaseUrl = require('../abair_base_url');
 const logger = require('../util/logger');
-const dbUrl = require('../utils/dbUrl');
+const dbUrl = require('../util/dbUrl');
 
 const config = require('../DB');
 const Story = require('../models/story');

@@ -1,5 +1,5 @@
 const Story = require('../../models/story');
-const {API404Error} = require('../../utils/APIError');
+const {API404Error} = require('../../util/APIError');
 const mongoose = require('mongoose');
 
 module.exports = async (req, res) => {

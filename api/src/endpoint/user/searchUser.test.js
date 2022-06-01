@@ -1,8 +1,8 @@
 const mockingoose = require('mockingoose');
 const searchUser = require('./searchUser');
 const User = require('../../models/user');
-const {API404Error, API400Error} = require('../../utils/APIError');
-const {makeFakeRes, json} = require('../../utils/makeFakeRes');
+const {API404Error, API400Error} = require('../../util/APIError');
+const {makeFakeRes, json} = require('../../util/makeFakeRes');
 
 
 describe('searchUser endpoint function', () => {

@@ -1,5 +1,5 @@
 const Story = require('../../models/story');
-const {requestGrammarTags} = require('../../utils/grammar');
+const {requestGrammarTags} = require('../../util/grammar');
 const logger = require('../../util/logger');
 
 module.exports = async (req, res) => {

@@ -1,8 +1,8 @@
 const mockingoose = require('mockingoose');
 const getStoryById = require('./getStoryById');
 const Story = require('../../models/story');
-const {API404Error} = require('../../utils/APIError');
-const {makeFakeRes, json} = require('../../utils/makeFakeRes');
+const {API404Error} = require('../../util/APIError');
+const {makeFakeRes, json} = require('../../util/makeFakeRes');
 
 describe('getStoryById endpoint function', () => {
   it('should throw an API404Error if no story with :id exists', async () => {

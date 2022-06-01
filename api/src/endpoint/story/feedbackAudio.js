@@ -5,7 +5,7 @@ const Story = require('../../models/story');
 
 
 const config = require('../../DB');
-const dbUrl = require('../../utils/dbUrl');
+const dbUrl = require('../../util/dbUrl');
 
 let db;
 mongodb.MongoClient.connect(dbUrl,
