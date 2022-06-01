@@ -1,15 +1,15 @@
-const logger = require('../../util/logger');
+const logger = require('./logger');
 const pair = {
   pub:  undefined,
   priv: undefined,
 }
 
+// export promises which resolve to public and private keys;
 const key_names = ['pub','priv'];
 key_names.map(name=>{
   module.exports[name] = () => {
     return new Promise((resolve) => {
       const tryit = () => {
-        console.log("TRY IT");
         if(pair[name]) return resolve(pair[name]);
         setTimeout(()=>{tryit()},1);
       };

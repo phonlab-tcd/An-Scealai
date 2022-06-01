@@ -95,7 +95,7 @@ userSchema.methods.validStatus = function() {
   return this.status.match(allowableStatus);
 };
 
-userSchema.methods.generateJwt = function() {
+userSchema.methods.generateJwt = async function() {
   const expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
   const payload = {
@@ -106,7 +106,7 @@ userSchema.methods.generateJwt = function() {
     exp: parseInt(
         expiry.getTime() / 1000 /* convert milliseconds to seconds */),
   };
-  return sign_jwt(payload);
+  return await sign_jwt(payload);
 };
 
 userSchema.methods.generateNewPassword = function() {
@@ -118,7 +118,7 @@ userSchema.methods.generateNewPassword = function() {
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
-userSchema.methods.generateResetPasswordLink = function(baseurl) {
+userSchema.methods.generateResetPasswordLink = async function(baseurl) {
   if ( ! this.resetPassword ) {
     this.resetPassword = {};
   }
@@ -126,7 +126,7 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
     username: this.username,
     email: this.email,
   };
-  this.resetPassword.code = sign_jwt(payload);
+  this.resetPassword.code = await sign_jwt(payload);
 
   this.resetPassword.date = new Date();
 
@@ -138,7 +138,7 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
-userSchema.methods.generateActivationLink = function(baseurl, language) {
+userSchema.methods.generateActivationLink = async function(baseurl, language) {
   // Make sure this.verification exists
   baseurl  = baseurl  || 'http://localhost:4000/';
   language = language || 'ga';
@@ -150,7 +150,7 @@ userSchema.methods.generateActivationLink = function(baseurl, language) {
     email: this.email,
   };
   // TODO: put date in jwt
-  this.verification.code = sign_jwt(payload);
+  this.verification.code = await sign_jwt(payload);
   this.verification.date = new Date();
   return `${baseurl}user/verify?` +
       `username=${this.username}` +

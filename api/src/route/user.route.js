@@ -5,7 +5,7 @@ const generator = require('generate-password');
 const makeEndpoints = require('../util/makeEndpoints');
 const passport = require('passport');
 
-const mail = require('../mail');
+const mail = require('../util/mail');
 if(mail.couldNotCreate && !process.env.TEST){
   logger.info(
     "Could not create mail transporter which is required by the user route. Refusing to continue.");
@@ -29,9 +29,9 @@ let userRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   const searchUser =
-    require('../endpoints_functions/user/searchUser');
+    require('../endpoint/user/searchUser');
   const getUserCount =
-    require('../endpoints_functions/user/getUserCount');
+    require('../endpoint/user/getUserCount');
 
     userRoutes = makeEndpoints({
       get: {

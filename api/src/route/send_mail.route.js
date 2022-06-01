@@ -11,7 +11,7 @@ const ObjectID = require('mongodb').ObjectID;
 //const request = require('request');
 //const { parse, stringify } = require('node-html-parser');
 
-const mail = require('../mail');
+const mail = require('../util/mail');
 
 if(mail.couldNotCreate && !process.env.TEST){
   console.log("Could not create mail transporter which is required by the send_mail route. Refusing to continue.");
@@ -80,7 +80,7 @@ else {
     });
 
     console.log(nodemailerResponse);
-    console.log("email sent successfully from /mail/report_issue_anon endpoint");
+    console.log("email sent successfully from /util/mail/report_issue_anon endpoint");
     res.status(200).json({ message: "Email sent successfully." });
   });
 

@@ -1,9 +1,9 @@
 #!/bin/sh
 pwd
-cat ./mongotest/mongotest.conf
+cat ./mongotest/conf.yml
 mkdir -p ./mongotest/logs
 echo "" > ./mongotest/logs/log
 mongod \
-  --config ./mongotest/mongotest.conf \
+  --config ./mongotest/conf.yml \
   --logpath ./mongotest/logs/log \
   --dbpath ./mongotest/db/

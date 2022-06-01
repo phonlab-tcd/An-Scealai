@@ -1,6 +1,6 @@
 const logger = require('../util/logger.js');
 
-const mail = require('../mail');
+const mail = require('../util/mail');
 if(mail.couldNotCreate){
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
 }
@@ -18,10 +18,10 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
-validUsernameRegEx = /^[a-z0-9]+$/i;
+const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
 
@@ -104,7 +104,7 @@ module.exports.resetPassword = async (req, res) => {
   }
   
   const resetPasswordLink = 
-    user.generateResetPasswordLink(req.body.baseurl);
+    await user.generateResetPasswordLink(req.body.baseurl);
 
   // Update user's email and verification code on the db
   await user.save()
@@ -504,11 +504,13 @@ module.exports.login = function(req, res) {
     return res.status(400).json(resObj);
   }
   else if (user.status.match(activeRegEx)) {
-    logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
-    resObj.token = user.generateJwt();
-    return res
-      .status(200)
-      .json(resObj);
+    (async () => {
+      logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
+      resObj.token = await user.generateJwt();
+      return res
+        .status(200)
+        .json(resObj);
+    })();
   } 
 
   // ELSE

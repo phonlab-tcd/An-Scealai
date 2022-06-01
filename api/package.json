@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "TEST=1 jest --runInBand --forceExit",
-    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.js",
+    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
   },
@@ -58,6 +58,7 @@
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.0",
+    "@types/express": "^4.17.13",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^27.0.6",

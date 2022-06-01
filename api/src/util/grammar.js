@@ -1,6 +1,6 @@
 
 const request = require('request');
-const abairBaseUrl = require('../abair_base_url');
+const abairBaseUrl = require('../util/abair_base_url');
 const logger = require('../util/logger');
 // querystring is native to node.js
 const querystring = require('querystring');

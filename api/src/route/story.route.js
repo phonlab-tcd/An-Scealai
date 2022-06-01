@@ -1,22 +1,23 @@
-const express = require('express');
-const multer = require('multer');
-const {Readable} = require('stream');
-const mongodb = require('mongodb');
-const ObjectID = require('mongodb').ObjectID;
-const MongoClient = require('mongodb').MongoClient;
-const querystring = require('querystring');
-const request = require('request');
-const makeEndpoints = require('../util/makeEndpoints');
-const { parse, stringify } = require('node-html-parser');
-const path = require('path');
-const fs = require('fs'); // file system
-const pandoc = require('node-pandoc-promise');
-const abairBaseUrl = require('../abair_base_url');
-const logger = require('../util/logger');
-const dbUrl = require('../util/dbUrl');
+const express       = require('express');
+const multer        = require('multer');
+const {Readable}    = require('stream');
+const mongodb       = require('mongodb');
+const ObjectID      = require('mongodb').ObjectID;
+const MongoClient   = require('mongodb').MongoClient;
+const querystring   = require('querystring');
+const request       = require('request');
+const { parse }     = require('node-html-parser');
+const { stringify } = require('node-html-parser');
+const path          = require('path');
+const fs            = require('fs');
+const pandoc        = require('node-pandoc-promise');
 
-const config = require('../util/DB');
-const Story = require('../model/story');
+const makeEndpoints = require('../util/makeEndpoints');
+const abairBaseUrl  = require('../util/abair_base_url');
+const logger        = require('../util/logger');
+const dbUrl         = require('../util/dbUrl');
+const config        = require('../util/DB');
+const Story         = require('../model/story');
 
 let db;
 MongoClient.connect(dbUrl,
@@ -24,7 +25,7 @@ MongoClient.connect(dbUrl,
     (err, client) => {
       if (err) {
         console.log(
-            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+            'MongoDB Connection Error in ./api/route/story.route.js\t\t' +
             'Please make sure that MongoDB is running.');
         process.exit(1);
       }
@@ -38,13 +39,13 @@ let storyRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
+    require('../endpoint/story/getStoryById');
   const updateStoryAndCheckGrammar =
-    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+    require('../endpoint/story/updateStoryAndCheckGrammar');
   const feedbackAudio =
-    require('../endpoints_functions/story/feedbackAudio');
+    require('../endpoint/story/feedbackAudio');
   const viewFeedback =
-    require('../endpoints_functions/story/viewFeedback');
+    require('../endpoint/story/viewFeedback');
 
   storyRoutes = makeEndpoints({
     get: {

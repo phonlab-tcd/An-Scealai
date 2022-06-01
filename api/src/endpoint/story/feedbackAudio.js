@@ -13,7 +13,7 @@ mongodb.MongoClient.connect(dbUrl,
     (err, client) => {
       if (err) {
         console.log(
-            'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+            'MongoDB Connection Error in ./api/route/story.route.js\t\t' +
             'Please make sure that MongoDB is running.');
         process.exit(1);
       }

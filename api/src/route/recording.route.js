@@ -20,7 +20,7 @@ MongoClient.connect('mongodb://localhost:27017/',
   (err, client) => {
   if (err) {
     console.log(
-      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
+      'MongoDB Connection Error in ./api/route/recording.route.js . Please make sure that MongoDB is running.');
     process.exit(1);
   }
   db = client.db('an-scealai');

@@ -1,5 +1,5 @@
-const config = require("../DB");
-const mongoose = require("mongoose");
+const config    = require("../util/DB");
+const mongoose  = require("mongoose");
 
 async function removeAllCollections() {
   // We only want to remove the collections if mongoose
@@ -15,7 +15,7 @@ async function removeAllCollections() {
   const collections = Object.keys(mongoose.connection.collections);
   for (const collectionName of collections) {
       const collection = mongoose.connection.collections[collectionName];
-      await collection.deleteMany();
+      await collection.deleteMany({});
   }
 }
 
