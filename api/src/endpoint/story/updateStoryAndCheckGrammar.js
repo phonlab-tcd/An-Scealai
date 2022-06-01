@@ -1,4 +1,4 @@
-const Story = require('../../models/story');
+const Story = require('../../model/story');
 const {requestGrammarTags} = require('../../util/grammar');
 const logger = require('../../util/logger');
 

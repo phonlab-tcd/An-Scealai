@@ -3,7 +3,7 @@ const supertest = require('supertest');
 const request = supertest(app);
 const {removeAllCollections} = require('../util/test-utils');
 const mongoose = require('mongoose');
-const User = require('../models/user');
+const User = require('../model/user');
 afterEach(async () => {
   await removeAllCollections();
 });

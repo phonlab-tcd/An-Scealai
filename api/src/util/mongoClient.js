@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const dbUrl = require('./dbUrl');
-const config = require('../DB');
+const config = require('./DB');
 
 let db;
 MongoClient.connect(dbUrl,

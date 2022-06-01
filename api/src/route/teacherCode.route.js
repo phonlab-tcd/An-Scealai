@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const teacherCodeRoutes = express.Router();
 
-let TeacherCode = require('../models/teacherCode');
+let TeacherCode = require('../model/teacherCode');
 
 teacherCodeRoutes.route('/create').post(function (req, res) {
     let teacherCode = new TeacherCode(req.body);

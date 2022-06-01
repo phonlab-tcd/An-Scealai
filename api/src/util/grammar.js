@@ -4,9 +4,9 @@ const abairBaseUrl = require('../abair_base_url');
 const logger = require('../util/logger');
 // querystring is native to node.js
 const querystring = require('querystring');
-const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
-const Story = require('../models/story');
-const User = require('../models/user');
+const { GramadoirCache, GramadoirStoryHistory } = require('../model/gramadoir');
+const Story = require('../model/story');
+const User = require('../model/user');
 
 
 //  @description - grammar tags into db

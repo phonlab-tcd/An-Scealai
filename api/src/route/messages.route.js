@@ -7,7 +7,7 @@ const { Readable } = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
 
-let Message = require('../models/message');
+let Message = require('../model/message');
 
 let db;
 MongoClient.connect('mongodb://localhost:27017/',

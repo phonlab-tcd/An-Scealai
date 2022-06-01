@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const studentStatsRoutes = express.Router();
 
-let StudentStats = require('../models/studentStats');
+let StudentStats = require('../model/studentStats');
 
 // Create new stat entry in database
 studentStatsRoutes.route('/create').post(function (req, res) {

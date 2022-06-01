@@ -8,8 +8,8 @@ const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
 const logger = require('../util/logger')
 
-let Event = require('../models/event');
-let User = require('../models/user');
+let Event = require('../model/event');
+let User = require('../model/user');
 
 
 engagementRoutes.route('/addEventForUser/:id').post((req, res) => {

@@ -4,10 +4,10 @@ const statsRoutes = express.Router();
 const querystring = require('querystring');
 const request = require('request');
 
-let Event = require('../models/event');
-let Story = require('../models/story');
-let Profile = require('../models/profile');
-let User = require('../models/user');
+let Event = require('../model/event');
+let Story = require('../model/story');
+let Profile = require('../model/profile');
+let User = require('../model/user');
 
 statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) => {
   let conditions = {}

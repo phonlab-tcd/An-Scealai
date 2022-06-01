@@ -11,8 +11,8 @@ const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 const logger = require('../util/logger.js');
 
-let VoiceRecording = require('../models/recording');
-let User = require('../models/user');
+let VoiceRecording = require('../model/recording');
+let User = require('../model/user');
 
 let db;
 MongoClient.connect('mongodb://localhost:27017/',

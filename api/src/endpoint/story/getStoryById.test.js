@@ -1,6 +1,6 @@
 const mockingoose = require('mockingoose');
 const getStoryById = require('./getStoryById');
-const Story = require('../../models/story');
+const Story = require('../../model/story');
 const {API404Error} = require('../../util/APIError');
 const {makeFakeRes, json} = require('../../util/makeFakeRes');
 

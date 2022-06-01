@@ -1,4 +1,4 @@
-const Story = require('../../models/story');
+const Story = require('../../model/story');
 const {API404Error} = require('../../util/APIError');
 const mongoose = require('mongoose');
 

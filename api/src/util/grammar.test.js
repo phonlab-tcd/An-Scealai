@@ -1,8 +1,8 @@
 const app = require('../server');
 const mongoose = require('mongoose');
-const User = require('../models/user');
-const Story = require('../models/story');
-const gramadoirModels = require('../models/gramadoir');
+const User = require('../model/user');
+const Story = require('../model/story');
+const gramadoirModels = require('../model/gramadoir');
 const {removeAllCollections} = require('../util/test-utils');
 const grammarUtils = require('../util/grammar');
 

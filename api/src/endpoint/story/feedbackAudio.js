@@ -1,10 +1,10 @@
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const path = require('path');
-const Story = require('../../models/story');
+const Story = require('../../model/story');
 
 
-const config = require('../../DB');
+const config = require('../../util/DB');
 const dbUrl = require('../../util/dbUrl');
 
 let db;

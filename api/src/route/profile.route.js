@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const profileRoutes = express.Router();
 
-let Profile = require('../models/profile');
+let Profile = require('../model/profile');
 
 profileRoutes.route('/create').post((req, res) => {
     Profile.updateOne({userId : req.body.userId}, req.body, {upsert : true}).then(upsertDetails => {

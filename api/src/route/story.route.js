@@ -15,8 +15,8 @@ const abairBaseUrl = require('../abair_base_url');
 const logger = require('../util/logger');
 const dbUrl = require('../util/dbUrl');
 
-const config = require('../DB');
-const Story = require('../models/story');
+const config = require('../util/DB');
+const Story = require('../model/story');
 
 let db;
 MongoClient.connect(dbUrl,

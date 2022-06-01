@@ -6,7 +6,7 @@ const querystring = require('querystring');
 const request = require('request');
 const { parse, stringify } = require('node-html-parser');
 
-let Models = require('../models/album');
+let Models = require('../model/album');
 
 let Recording = Models.Recording;
 let Album = Models.Album;

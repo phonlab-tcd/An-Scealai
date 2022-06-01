@@ -13,8 +13,8 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 
 // Require Chatbot model in our routes module
-let Models = require('../models/chatbot');
-let classModel = require('../models/classroom');
+let Models = require('../model/chatbot');
+let classModel = require('../model/classroom');
 var spellings;
 
 // For writing scripts

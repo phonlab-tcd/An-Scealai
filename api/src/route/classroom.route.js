@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const classroomRoutes = express.Router();
 
-let Classroom = require('../models/classroom');
+let Classroom = require('../model/classroom');
 
 classroomRoutes.route('/create').post((req, res) => {
     let classroom = new Classroom(req.body);

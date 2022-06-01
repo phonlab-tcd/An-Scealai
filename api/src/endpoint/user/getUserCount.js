@@ -1,4 +1,4 @@
-const User = require('../../models/user');
+const User = require('../../model/user');
 
 /**
  * Returns the total number of users on the DB, as well as individual

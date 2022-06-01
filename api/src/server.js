@@ -62,7 +62,7 @@ if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
   app.get('/user/fudgeVerification/:username', (req,res,next)=>{
     console.log(req.query);
-    const User = require('./models/user');
+    const User = require('./model/user');
     User.findOne(
       {username: req.params.username})
         .then(

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('../models/user');
+const User = require('../model/user');
 
 module.exports = async (view_name='gramadoir_view') => {
   await mongoose.connect('mongodb://localhost:27017/an-scealai');

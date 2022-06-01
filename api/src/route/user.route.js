@@ -16,7 +16,7 @@ var crypto = require('crypto');
 
 var express = require('express');
 
-let User = require('../models/user');
+let User = require('../model/user');
 
 const auth = require('../util/authMiddleware');
 
