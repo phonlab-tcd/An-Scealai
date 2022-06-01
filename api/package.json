@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "TEST=1 jest --runInBand --forceExit",
-    "start": "PEM_KEY_PASSPHRASE=dev nodemon server.js",
+    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.js",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
   },

@@ -9,7 +9,7 @@ const mongoose      = require('mongoose');
 const User          = require('../model/user');
 const path          = require('path');
 const fs            = require('fs');
-const keypair       = require('../src/utils/keypair');
+const keypair       = require('../util/keypair');
 
 function verify(username, password, cb) {
   console.log(username);

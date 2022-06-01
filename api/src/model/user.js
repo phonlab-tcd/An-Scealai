@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const crypto   = require('crypto');
+const mongoose          = require('mongoose');
+const crypto            = require('crypto');
 const generate_password = require('generate-password');
-const sign_jwt = require('../src/utils/sign-jwt');
+const sign_jwt          = require('../util/sign-jwt');
 
 const verificationSchema = new mongoose.Schema({
   code: {
