@@ -6,7 +6,7 @@ const multer = require('multer');
 const { Readable } = require('stream');
 const mongodb = require('mongodb');
 const ObjectID = require('mongodb').ObjectID;
-const logger = require('../logger')
+const logger = require('../util/logger')
 
 let Event = require('../models/event');
 let User = require('../models/user');

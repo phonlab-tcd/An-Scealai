@@ -3,7 +3,7 @@ const {
   API404Error,
   APIError,
   API500Error} = require('./APIError');
-const logger = require('../logger');
+const logger = require('../util/logger');
 
 /**
  * An express middleware for handling the different

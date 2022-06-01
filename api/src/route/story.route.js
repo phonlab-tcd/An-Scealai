@@ -12,7 +12,7 @@ const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
 const abairBaseUrl = require('../abair_base_url');
-const logger = require('../logger');
+const logger = require('../util/logger');
 const dbUrl = require('../utils/dbUrl');
 
 const config = require('../DB');

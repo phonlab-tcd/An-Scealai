@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../util/logger');
 const makeEndpoints = require('../utils/makeEndpoints');
 
 module.exports = makeEndpoints({

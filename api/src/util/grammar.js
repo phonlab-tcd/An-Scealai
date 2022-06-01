@@ -1,7 +1,7 @@
 
 const request = require('request');
 const abairBaseUrl = require('../abair_base_url');
-const logger = require('../logger');
+const logger = require('../util/logger');
 // querystring is native to node.js
 const querystring = require('querystring');
 const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
