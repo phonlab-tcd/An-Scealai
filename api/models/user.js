@@ -1,34 +1,7 @@
 const mongoose = require('mongoose');
 const crypto   = require('crypto');
-const sign     = (()=> {
-  const PRIV_KEY = (()=>{
-    const path 	        = require('path');
-    const fs            = require('fs');
-    const priv_key_path = path.join(__dirname,'..','..','priv_key.pem');
-    return fs.readFileSync(priv_key_path);
-  })();
-  const jwt = require('jsonwebtoken');
-  const { algorithm } = require('../config/passport');
-  const opts = { algorithm }
-  const key = {
-    key: PRIV_KEY,
-    passphrase: process.env.PEM_KEY_PASSPHRASE ||
-	  (()=>{
-            console.log("missing passphrase. please set PEM_KEY_PASPHRASE env var");
-	    process.exit(1);
-	  })(),
-  };
-  return function(payload) {
-    return jwt.sign(
-	    payload,
-	    {
-              key: PRIV_KEY,
-	      passphrase: process.env.PEM_KEY_PASSPHRASE,
-	    },
-	    opts);
-  }
-})()
 const generate_password = require('generate-password');
+const sign_jwt = require('../src/utils/sign-jwt');
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -133,7 +106,7 @@ userSchema.methods.generateJwt = function() {
     exp: parseInt(
         expiry.getTime() / 1000 /* convert milliseconds to seconds */),
   };
-  return sign(payload);
+  return sign_jwt(payload);
 };
 
 userSchema.methods.generateNewPassword = function() {
@@ -153,7 +126,7 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
     username: this.username,
     email: this.email,
   };
-  this.resetPassword.code = sign(payload);
+  this.resetPassword.code = sign_jwt(payload);
 
   this.resetPassword.date = new Date();
 
@@ -177,7 +150,7 @@ userSchema.methods.generateActivationLink = function(baseurl, language) {
     email: this.email,
   };
   // TODO: put date in jwt
-  this.verification.code = sign(payload);
+  this.verification.code = sign_jwt(payload);
   this.verification.date = new Date();
   return `${baseurl}user/verify?` +
       `username=${this.username}` +

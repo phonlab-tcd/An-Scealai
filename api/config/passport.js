@@ -9,9 +9,7 @@ const mongoose      = require('mongoose');
 const User          = require('../models/user');
 const path          = require('path');
 const fs            = require('fs');
-const pub_key_path  = path.join(__dirname, '..', '..', 'pub_key.pem');
-const PUB_KEY       = fs.readFileSync(pub_key_path, 'utf8');
-
+const keypair       = require('../src/utils/keypair');
 
 function verify(username, password, cb) {
   console.log(username);
@@ -42,14 +40,16 @@ function jwtCallback(payload, done) {
   });
 }
 
-const opts = {
-  jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey:      PUB_KEY,
-  algorithms:       [module.exports.algorithm],
-}
-passport.use(new JwtStrategy(opts,jwtCallback));
-
-passport.serializeUser((user,done)=>done(null,user._id));
-passport.deserializeUser((id,done)=>{
-  User.findById(id,(err,user)=>done(err,user));
-});
+(async () => {
+  const opts = {
+    jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey:      await keypair.pub(),
+    algorithms:       [module.exports.algorithm],
+  }
+  passport.use(new JwtStrategy(opts,jwtCallback));
+  
+  passport.serializeUser((user,done)=>done(null,user._id));
+  passport.deserializeUser((id,done)=>{
+    User.findById(id,(err,user)=>done(err,user));
+  });
+})();
