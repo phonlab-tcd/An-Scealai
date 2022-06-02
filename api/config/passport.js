@@ -1,15 +1,8 @@
-const logger        = require('../logger');
-const passport      = require('passport');
+const logger = require('../logger');
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const JwtStrategy   = require('passport-jwt').Strategy;
-const ExtractJwt    = require('passport-jwt').ExtractJwt;
-const mongoose      = require('mongoose');
-const User          = require('../models/user');
-const path          = require('path');
-const fs            = require('fs');
-const pub_key_path  = path.join(__dirname, '..', '..', 'pub_key.pem');
-const PUB_KEY       = fs.readFileSync(pub_key_path, 'utf8');
-
+const mongoose = require('mongoose');
+const User = require('../models/user');
 mongoose.model('User');
 
 function verify(username, password, cb) {
@@ -32,22 +25,14 @@ function verify(username, password, cb) {
     return cb(null, user);
   });
 }
+
 passport.use(new LocalStrategy(verify));
 
-function jwtCallback(payload, done) {
-  User.findById(payload._id, (err,user) => {
-    if (err) return done(err, false);
-    return done(null, user ? user : false);
-  });
-}
-const opts = {
-  jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey:      PUB_KEY,
-  algorithms:       ['RS256'],
-}
-passport.use(new JwtStrategy(opts,jwtCallback));
-
-passport.serializeUser((user,done)=>done(null,user._id));
+passport.serializeUser((user,done)=>{
+  done(null,user._id);
+});
 passport.deserializeUser((id,done)=>{
-  User.findById(id,(err,user)=>done(err,user));
+  User.findById(id, (err,user)=>{
+    done(err,user);
+  });
 });
