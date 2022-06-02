@@ -6,6 +6,7 @@
   "scripts": {
     "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --runInBand --forceExit --rootDir src --silent",
     "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
+    "start:e2e": "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
   },
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.0",
+    "@swc/core": "^1.2.196",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.5.1",
     "eslint": "^7.30.0",
