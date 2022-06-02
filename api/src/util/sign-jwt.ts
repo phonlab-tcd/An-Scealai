@@ -3,12 +3,12 @@ const jwt           = require('jsonwebtoken');
 const { algorithm } = require('../config/passport');
 const opts          = { algorithm }
 
-module.exports = (async function buildExport() {
+
+module.exports = async function sign_jwt(payload:object) {
   const key = {
     key: await keypair.priv,
     passphrase: process.env.PEM_KEY_PASSPHRASE,
   };
-  return function sign_jwt(payload) {
-    return jwt.sign(payload, key, opts);
-  }
-})();
+  console.log(key);
+  return jwt.sign(payload, key, opts);
+}

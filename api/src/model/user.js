@@ -1,7 +1,7 @@
 const mongoose          = require('mongoose');
 const crypto            = require('crypto');
 const generate_password = require('generate-password');
-const sign_jwt          = require('../util/sign-jwt');
+const sign_jwtP         = require('../util/sign-jwt');
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -67,24 +67,22 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+function hash(password,salt) {
+  return crypto.pbkdf2Sync(
+    password,
+    salt,
+    1000,
+    64,
+    'sha512').toString('hex');
+}
+
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
-  this.hash = crypto.pbkdf2Sync(
-      password,
-      this.salt,
-      1000,
-      64,
-      'sha512').toString('hex');
+  this.hash = hash(password,this.salt);
 };
 
 userSchema.methods.validPassword = function(password) {
-  return this.hash === crypto
-      .pbkdf2Sync(
-          password,
-          this.salt,
-          1000,
-          64,
-          'sha512').toString('hex');
+  return this.hash === hash(password,this.salt);
 };
 
 userSchema.methods.validStatus = function() {
@@ -106,6 +104,7 @@ userSchema.methods.generateJwt = async function() {
     exp: parseInt(
         expiry.getTime() / 1000 /* convert milliseconds to seconds */),
   };
+  const sign_jwt = await sign_jwtP;
   return await sign_jwt(payload);
 };
 
@@ -126,6 +125,7 @@ userSchema.methods.generateResetPasswordLink = async function(baseurl) {
     username: this.username,
     email: this.email,
   };
+  const sign_jwt = await sign_jwtP;
   this.resetPassword.code = await sign_jwt(payload);
 
   this.resetPassword.date = new Date();
@@ -150,6 +150,7 @@ userSchema.methods.generateActivationLink = async function(baseurl, language) {
     email: this.email,
   };
   // TODO: put date in jwt
+  const sign_jwt = await sign_jwtP;
   this.verification.code = await sign_jwt(payload);
   this.verification.date = new Date();
   return `${baseurl}user/verify?` +

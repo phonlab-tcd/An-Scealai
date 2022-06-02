@@ -54,13 +54,12 @@ module.exports.generateNewPassword = async (req, res) => {
 
   user.save().catch(err => { logger.error(err); });
 
-  mailObj = {
+  const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: req.query.email,
     subject: 'New Password -- An Scéalaí',
     body: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${new_password}`
   }
-
   const mailRes = mail.sendEmail(mailObj);
 
   res.status(200).send(`<h1>Password reset successfully</h1><ul><li>username:${req.query.username}</li><li>password:${new_password}</li></ul>`);
@@ -177,7 +176,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
 
     user.email = email;
 
-    const activationLink = user
+    const activationLink = await user
       .generateActivationLink(baseurl, language);
 
     // Update user's email and verification code on the db
@@ -207,7 +206,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
       \n\
       The An Scéalaí team`;
 
-    mailObj = {
+    const mailObj = {
       from: 'scealai.info@gmail.com',
       recipients: [email],
       subject: 'An Scéalaí account verification',
@@ -276,10 +275,14 @@ module.exports.verify = async (req, res) => {
     user.status = 'Active';
 
     await user.save();
-
+    const verificationPage = 
+      path.join(
+        __dirname,
+        '..', '..',
+        'asset', 'view', 'account_verification.html');
     return res
         .status(200)
-        .sendFile(path.join(__dirname, '../views/account_verification.html'));
+        .sendFile(verificationPage);
   }
 
 
@@ -475,7 +478,7 @@ module.exports.register = async (req, res) => {
 };
 
 
-module.exports.login = function(req, res) {
+module.exports.login = async function(req, res) {
   // assume passport.authenticate('local') has succeeded
   const user = req.user;
   const resObj = {
@@ -504,13 +507,11 @@ module.exports.login = function(req, res) {
     return res.status(400).json(resObj);
   }
   else if (user.status.match(activeRegEx)) {
-    (async () => {
-      logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
-      resObj.token = await user.generateJwt();
-      return res
-        .status(200)
-        .json(resObj);
-    })();
+    logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
+    resObj.token = await user.generateJwt();
+    return res
+      .status(200)
+      .json(resObj);
   } 
 
   // ELSE
