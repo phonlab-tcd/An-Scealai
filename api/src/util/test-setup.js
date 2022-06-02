@@ -6,3 +6,4 @@ process.env.TEST_MONGO_URL = (
   config.DB_AUTH_DETAILS +
   config.DB_HOSTNAME +
   config.TEST_DB_NAME );
+console.log(process.env.TEST_MONGO_URL);

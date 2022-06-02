@@ -15,26 +15,4 @@
       expect(await verify_jwt(jwt));
     });
   });
-
-  describe('password backward compatibility', ()=>{
-    jest.setTimeout(10000);
-    it('correctly hashes passwords made with legacy hash function', async () => {
-      const crypto = require('crypto');
-      const User = require('../model/user');
-      const password = crypto.randomBytes(10).toString('hex');
-      function salt() {
-        return crypto.randomBytes(16)
-          .toString('hex');
-      }
-      function hash(password:string,salt:string) {
-        return crypto.pbkdf2Sync(password,salt,1000,64,'sha512')
-          .toString('hex');
-      }
-      const my_salt = salt();
-      const my_hash = hash(password,my_salt);
-      const user = await User.create({username: 'a',hash: my_hash, salt: my_salt});
-      expect(user.validPassword(password));
-    });
-
-  });
 })();
