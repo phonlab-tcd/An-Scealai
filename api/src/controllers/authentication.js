@@ -1,3 +1,4 @@
+import { verificationEmailMessage } from 'src/util/verificationEmailMessage.ts;
 const logger = require('../util/logger');
 
 const mail = require('../util/mail');
@@ -179,32 +180,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
     const activationLink = await user
       .generateActivationLink(baseurl, language);
 
-    // Update user's email and verification code on the db
-    await user.save()
-      .catch(err => {
-        reject(err);
-      });
-
-    const emailMessage = (language === 'ga') ? 
-      // as gaeilge 
-      `A ${user.username}, a chara,\n\
-      Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, le do thoil:\n\n\
-      ${activationLink}\n\n\
-      A luaithe is a dheimhníonn tú do sheoladh rphoist beidh tú in ann logáil isteach arís.\n\
-      \n\
-      Le gach dea-ghuí,\n\
-      \n\
-      Foireann An Scéalaí`
-      :
-      // in english
-      `Dear ${user.username},\n\
-      Please use this link to verify your email address for An Scéalaí:\n\n\
-      ${activationLink}\n\n\
-      Once you have verified your email you will be able to log in again.\n\
-      \n\
-      Kindly,\n\
-      \n\
-      The An Scéalaí team`;
+    const emailMessage = verificatioEmailMessage(language,user.username,activationLink);
 
     const mailObj = {
       from: 'scealai.info@gmail.com',
