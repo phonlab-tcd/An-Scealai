@@ -59,20 +59,19 @@ export class AuthenticationService {
   public getLoggedInName: any = new Subject();
 
   public pendingUserPayload: LoginTokenPayload = null;
+  public jwtTokenName: 'scealai-token' = 'scealai-token';
 
   constructor(
     private http: HttpClient,
     private router: Router, ) { }
 
   private saveToken(token: string): void {
-    localStorage.setItem('scealai-token', token);
+    localStorage.setItem(this.jwtTokenName, token);
     this.token = token;
   }
 
   public getToken(): string {
-    if (!this.token) {
-      this.token = localStorage.getItem('scealai-token');
-    }
+    this.token = localStorage.getItem(this.jwtTokenName);
     return this.token;
   }
 
