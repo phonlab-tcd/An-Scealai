@@ -74,19 +74,20 @@ const errorsFileTransport: transport = new winston.transports.File({
 });
 
 
-// // Log to `log` collection in database
-// import 'winston-mongodb';
-// const mongoTransport: transport = new winston.transports.MongoDB({
-//   db: dbUrl,
-//   options: {
-//     useUnifiedTopology: true, // not default
-//   },
-// });
+// Log to `log` collection in database
+import 'winston-mongodb';
+const mongoTransport: transport = new winston.transports.MongoDB({
+  db: dbUrl,
+  options: {
+    useUnifiedTopology: true, // not default
+  },
+});
 
 const transports: transport[] = [
   consoleTransport,
   combinedFileTransport,
   errorsFileTransport,
+  mongoTransport,
 ];
 
 // Create our logger object

@@ -25,87 +25,82 @@ const recordingRoute    = require('./route/recording.route');
 const mailRoute         = require('./route/send_mail.route');
 const gramadoirLogRoute = require('./route/gramadoir_log.route');
 const synthesisRoute    = require('./route/synthesis.route');
+const auth              = require('./util/authMiddleware');
+const whoami            = require('./endpoint/user/whoami');
 
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-logger.info('DB url: ' + dbURL);
-mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+(async ()=>{
+  logger.info('DB url: ' + dbURL);
+  mongoose.Promise = global.Promise;
+  mongoose.set('useFindAndModify', false);
+  const opts = {
+    autoIndex: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: process.env.TIMEOUT,
+  };
+  await mongoose.connect(dbURL, opts);
 
-module.exports.dbClient = async function awaitClient(){ 
-}
-
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(
-    function mongooseConnectSuccess() {
-      logger.info('Database is connected');
-    },
-    function mongooseConnectError(err:any) {
-      logger.error({
-        msg: 'Cannot connect to the database. ',
-        while: 'trying to connect to mongodb with mongoose',
-        error: err,
-      });
-    });
-
-const app = express();
-app.use('/version', require('./route/version.route'));
-app.use(bodyParser.json());
-app.use(cors());
-app.use(passport.initialize());
-
-app.use('/story', storyRoute);
-app.use('/user', userRoute);
-if(process.env.FUDGE) {
-  console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  async function fugdeVerificationController(
-    req: any,
-    res: any, ) {
-      const User = require('./model/user');
-      async function handleUser(e:any,u: any) {
-      }
-      const username = req.params.username;
-      const query = {username};
-      const user = await User.findOne(query);
-      if(!user) return res.status(404).json('');
-      const link = await user.generateActivationLink();
-      console.log(link);
-      res.json(link);
+  const app = express();
+  app.use('/version', require('./route/version.route'));
+  app.use(bodyParser.json());
+  app.use(cors());
+  app.use(passport.initialize());
+  
+  app.use('/story', storyRoute);
+  app.use('/user', userRoute);
+  app.use('/user/whoami', auth.jwtmw, whoami);
+  if(process.env.FUDGE) {
+    console.log('ADD FUDGE VERIFICATION ENDPOINT');
+    async function fugdeVerificationController(
+      req: any,
+      res: any, ) {
+        const User = require('./model/user');
+        async function handleUser(e:any,u: any) {
+        }
+        const username = req.params.username;
+        const query = {username};
+        const user = await User.findOne(query);
+        if(!user) return res.status(404).json('');
+        const link = await user.generateActivationLink();
+        console.log(link);
+        res.json(link);
+    }
+    app.get(
+      '/user/fudgeVerification/:username',
+      fugdeVerificationController);
   }
-  app.get(
-    '/user/fudgeVerification/:username',
-    fugdeVerificationController);
-}
-app.use('/teacherCode', teacherCodeRoute);
-app.use('/classroom', classroomRoute);
-app.use('/Chatbot', chatbotRoute);
-app.use('/engagement', engagementRoute);
-app.use('/stats', statsRoute);
-app.use('/album', albumRoute);
-app.use('/profile', profileRoute);
-app.use('/messages', messageRoute);
-app.use('/studentStats', studentStatsRoute);
-app.use('/gramadoir', gramadoirLogRoute);
-app.use('/recordings', recordingRoute);
-app.use('/synthesis', synthesisRoute);
+  app.use('/teacherCode', teacherCodeRoute);
+  app.use('/classroom', classroomRoute);
+  app.use('/Chatbot', chatbotRoute);
+  app.use('/engagement', engagementRoute);
+  app.use('/stats', statsRoute);
+  app.use('/album', albumRoute);
+  app.use('/profile', profileRoute);
+  app.use('/messages', messageRoute);
+  app.use('/studentStats', studentStatsRoute);
+  app.use('/gramadoir', gramadoirLogRoute);
+  app.use('/recordings', recordingRoute);
+  app.use('/synthesis', synthesisRoute);
+  
+  app.use('/util/mail', mailRoute);
+  app.use('/log', require('./route/log.route'));
+  
+  const port = process.env.PORT || 4000;
+  
+  app.use(errorHandler);
+  
+  // We don't want to call app.listen while testing
+  // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
+  if (process.env.TEST != "1") {
+    app.listen(port, function(){
+        logger.info('Listening on port ' + port);
+    });
+  }
+  
+  module.exports = app;
+})();
 
-app.use('/util/mail', mailRoute);
-app.use('/log', require('./route/log.route'));
-
-const port = process.env.PORT || 4000;
-
-app.use(errorHandler);
-
-// We don't want to call app.listen while testing
-// See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (process.env.TEST != "1") {
-  app.listen(port, function(){
-      logger.info('Listening on port ' + port);
-  });
-}
-
-module.exports = app;
