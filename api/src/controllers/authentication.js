@@ -1,7 +1,7 @@
-import { verificationEmailMessage } from 'src/util/verificationEmailMessage.ts;
-const logger = require('../util/logger');
+const logger                    = require('../util/logger');
+const verificationEmailMessage  = require('../util/verificationEmailMessage.ts');
+const mail                      = require('../util/mail');
 
-const mail = require('../util/mail');
 if(mail.couldNotCreate){
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
 }
@@ -180,7 +180,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
     const activationLink = await user
       .generateActivationLink(baseurl, language);
 
-    const emailMessage = verificatioEmailMessage(language,user.username,activationLink);
+    const emailMessage = verificationEmailMessage(language,user.username,activationLink);
 
     const mailObj = {
       from: 'scealai.info@gmail.com',

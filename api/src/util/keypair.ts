@@ -17,7 +17,6 @@ module.exports = { pub, priv };
 function promised_prop(name: 'pub'|'priv'): Promise<string> {
   return new Promise(function promised_prop_callback(resolve) {
     function try_prop() {
-      console.log('TRY PROP');
       const val = pair[name];
       if (val === undefined) setTimeout(try_prop,1);
       else if(typeof val === "string") resolve(val);

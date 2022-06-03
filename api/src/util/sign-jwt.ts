@@ -8,6 +8,5 @@ module.exports = async function sign_jwt(payload:object) {
     key: await keypair.priv,
     passphrase: process.env.PEM_KEY_PASSPHRASE,
   };
-  console.log(key);
   return jwt.sign(payload, key, opts);
 }

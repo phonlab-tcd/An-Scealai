@@ -62,21 +62,19 @@ app.use('/story', storyRoute);
 app.use('/user', userRoute);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
-
-  function fugdeVerificationController(
+  async function fugdeVerificationController(
     req: any,
     res: any, ) {
-      console.log(req.query);
       const User = require('./model/user');
-      function handleUser(u: any) {
-        res.json(u.generateActivationLink());
+      async function handleUser(e:any,u: any) {
       }
-      function handleError(e: any) {
-        res.status(500).json(e);
-      }
-      const query = {username: req.params.username};
-      User.findOne(query)
-        .then(handleUser,handleError);
+      const username = req.params.username;
+      const query = {username};
+      const user = await User.findOne(query);
+      if(!user) return res.status(404).json('');
+      const link = await user.generateActivationLink();
+      console.log(link);
+      res.json(link);
   }
   app.get(
     '/user/fudgeVerification/:username',

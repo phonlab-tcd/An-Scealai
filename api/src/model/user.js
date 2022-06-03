@@ -1,7 +1,7 @@
 const mongoose          = require('mongoose');
 const crypto            = require('crypto');
 const generate_password = require('generate-password');
-const sign_jwtP         = require('../util/sign-jwt');
+const sign_jwt          = require('../util/sign-jwt');
 
 const verificationSchema = new mongoose.Schema({
   code: {
@@ -104,7 +104,6 @@ userSchema.methods.generateJwt = async function() {
     exp: parseInt(
         expiry.getTime() / 1000 /* convert milliseconds to seconds */),
   };
-  const sign_jwt = await sign_jwtP;
   return await sign_jwt(payload);
 };
 
@@ -125,9 +124,7 @@ userSchema.methods.generateResetPasswordLink = async function(baseurl) {
     username: this.username,
     email: this.email,
   };
-  const sign_jwt = await sign_jwtP;
   this.resetPassword.code = await sign_jwt(payload);
-
   this.resetPassword.date = new Date();
 
   return `${baseurl}user/generateNewPassword` +
@@ -142,17 +139,10 @@ userSchema.methods.generateActivationLink = async function(baseurl, language) {
   // Make sure this.verification exists
   baseurl  = baseurl  || 'http://localhost:4000/';
   language = language || 'ga';
-  if ( ! this.verification ) {
-    this.verification = {};
-  }
-  const payload = {
-    username: this.username,
-    email: this.email,
-  };
-  // TODO: put date in jwt
-  const sign_jwt = await sign_jwtP;
-  this.verification.code = await sign_jwt(payload);
-  this.verification.date = new Date();
+  const code = crypto.randomBytes(50).toString('hex');
+  const date = new Date();
+  this.verification = {code,date};
+  await this.save();
   return `${baseurl}user/verify?` +
       `username=${this.username}` +
       `&email=${this.email}` +

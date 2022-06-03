@@ -1,4 +1,4 @@
-export function verificationEmailMessage(language: 'ga'|'en', username: string, link: string) {
+module.exports =  function verificationEmailMessage(language: 'ga'|'en', username: string, link: string) {
   switch(language) {
     case 'en': 
       return `Dear ${username},\n\
