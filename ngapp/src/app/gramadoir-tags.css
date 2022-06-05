@@ -15,6 +15,11 @@
     border-radius: 3px;
 }
 
+[data-genitive-tag]:hover
+{
+    cursor: pointer;
+}
+
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
 }
@@ -22,6 +27,12 @@ span[data-gramadoir-tag-style-type]
 /*:not([data-vowel-agreement-tag])*/
 {
   border-radius: 3px;
+}
+
+span[data-gramadoir-tag-style-type]:hover
+/*:not([data-vowel-agreement-tag])*/
+{
+  cursor: pointer;
 }
 
 span:not[data-gramadoir-tag-style-type] {

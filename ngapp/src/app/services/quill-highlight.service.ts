@@ -10,10 +10,10 @@ import {
   DisagreeingVowelIndices,
 } from 'app/grammar.service';
 import {EngagementService} from "../engagement.service";
-import { reject } from 'lodash';
+import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
-import clone from 'lodash/clone';
+// import clone from 'lodash/clone';
 import { of } from 'rxjs';
 
 const Tooltip = Quill.import('ui/tooltip');
@@ -187,6 +187,10 @@ export class QuillHighlightService {
       .pipe(map(gTags => this.gramadoir2QuillTags(gTags, {})))
       .toPromise();
 
+    for (const tag of this.currentGenetiveHighlightTags) {
+      tag.messages.ga = 'Translation required';
+    }
+
     return currentGramadoirErrorTypes;
   }
 
@@ -234,8 +238,8 @@ export class QuillHighlightService {
         const ruleIdShort =
           this.grammar.string2GramadoirRuleId(tag.ruleId);
         currentGramadoirErrorTypes[ruleIdShort] ?
-        currentGramadoirErrorTypes[ruleIdShort]++ :
-        currentGramadoirErrorTypes[ruleIdShort] = 1;
+          currentGramadoirErrorTypes[ruleIdShort]++ :
+          currentGramadoirErrorTypes[ruleIdShort] = 1;
         const qTag: QuillHighlightTag = {
           start: + tag.fromx,
           length: + tag.tox + 1 - tag.fromx,
