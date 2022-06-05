@@ -61,7 +61,7 @@ let storyRoutes;
 // ***
 // TEMPORARY CORS WORKAROUND (@oisin)
 // -> need to contact christoph about CORS for the scéalaí server
-// -> for now, I need to test this with localhost
+// -> for now, using localhost in order to test it
 // ***
 storyRoutes.route('/genitive').post((req, res) => {
   console.log('REQ', req);
