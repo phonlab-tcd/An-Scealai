@@ -43,7 +43,7 @@ import { TeacherStudentComponent } from './teacher-components/teacher-student/te
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 
-import { AuthGuardService } from './auth-guard.service';
+import { AuthGuardService } from 'app/services/auth-guard';
 import { RoleGuardService } from 'app/services/role-guard';
 import { NotificationService } from 'app/services/notification';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
