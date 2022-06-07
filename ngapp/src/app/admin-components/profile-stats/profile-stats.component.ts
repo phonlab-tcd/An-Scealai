@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StatsService } from '../../stats.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { EngagementService } from 'app/services/engagement';
 import { EventType } from '../../event';
 

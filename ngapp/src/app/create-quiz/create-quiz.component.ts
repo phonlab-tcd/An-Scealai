@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { doesNotReject } from 'assert';
 import { AuthenticationService } from 'app/authentication.service';
 import { User } from '../user';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/services/translation';
 import config from 'abairconfig';
 
 const backendUrl = config.baseurl;

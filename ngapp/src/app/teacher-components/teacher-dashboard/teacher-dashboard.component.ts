@@ -4,7 +4,7 @@ import { AuthenticationService } from '../../authentication.service';
 import { Observable } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { NotificationService } from 'app/services/notification';
 
 @Component({

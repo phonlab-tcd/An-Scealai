@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 // import identifierModuleUrl from '@angular/compiler';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import config from 'abairconfig';
 
 @Component({

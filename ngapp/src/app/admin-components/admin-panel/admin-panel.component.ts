@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-admin-panel',

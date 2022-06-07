@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslationService } from 'app/translation.service';
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-report',

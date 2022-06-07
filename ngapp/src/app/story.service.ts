@@ -9,7 +9,7 @@ import { Observable, throwError } from 'rxjs';
 import { EngagementService } from 'app/services/engagement';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
-import { TranslationService } from './translation.service';
+import { TranslationService } from 'app/services/translation';
 import config from 'abairconfig';
 
 

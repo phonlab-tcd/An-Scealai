@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
 import { map } from 'rxjs/operators';
-import { TranslationService } from 'app/translation.service';
+import { TranslationService } from 'app/services/translation';
 import {
   GramadoirRuleId,
   GrammarService,

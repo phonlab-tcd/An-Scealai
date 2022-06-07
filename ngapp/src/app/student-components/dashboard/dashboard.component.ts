@@ -24,7 +24,7 @@ import { GrammarService           } from 'app/grammar.service';
 import { ReadableGramadoirRuleIds } from 'app/grammar.service';
 
 
-import { TranslationService       } from 'app/translation.service';
+import { TranslationService       } from 'app/services/translation';
 import { StatsService             } from 'app/stats.service';
 import { ClassroomService         } from 'app/classroom.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';

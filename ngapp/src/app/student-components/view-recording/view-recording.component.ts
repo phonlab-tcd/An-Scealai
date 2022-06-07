@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecordingService } from '../../recording.service';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { Story } from 'app/story';
 import { Recording } from 'app/recording';
 import { StoryService } from '../../story.service';

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-story-details',

@@ -6,7 +6,7 @@ import { Classroom } from '../../classroom';
 import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { StoryService } from '../../story.service';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';

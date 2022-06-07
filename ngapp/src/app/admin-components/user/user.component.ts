@@ -11,7 +11,7 @@ import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from 'app/services/engagement';
 import { Event } from '../../event';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { RecordingService } from '../../recording.service';
 import config from 'abairconfig';
 

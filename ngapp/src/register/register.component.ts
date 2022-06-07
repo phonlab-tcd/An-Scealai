@@ -3,7 +3,7 @@ import { AuthenticationService, RegistrationTokenPayload } from 'app/authenticat
 import { Router, ActivatedRoute } from '@angular/router';
 import { EngagementService } from 'app/services/engagement';
 import { EventType } from 'app/event';
-import { TranslationService } from 'app/translation.service';
+import { TranslationService } from 'app/services/translation';
 import { FormControl } from '@angular/forms';
 import config from 'abairconfig';
 

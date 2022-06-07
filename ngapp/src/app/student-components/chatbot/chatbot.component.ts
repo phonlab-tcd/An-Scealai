@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
 import { AuthenticationService } from 'app/authentication.service';
 import config from 'abairconfig';
-import { TranslationService } from 'app/translation.service';
+import { TranslationService } from 'app/services/translation';
 
 const backendUrl = config.baseurl;
 

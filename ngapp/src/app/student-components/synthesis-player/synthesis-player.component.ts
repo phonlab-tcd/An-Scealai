@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TextProcessingService } from 'app/services/text-processing.service';
 import { SynthesisService, Dialect } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
-import { TranslationService } from "app/translation.service";
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-synthesis-player',

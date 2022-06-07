@@ -3,7 +3,7 @@ import { AuthenticationService, TokenPayload, VerifyEmailRequest } from '../auth
 import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from 'app/services/engagement';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/services/translation';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
 import { UserService } from '../user.service';

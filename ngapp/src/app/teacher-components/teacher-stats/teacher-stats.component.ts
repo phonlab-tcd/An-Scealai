@@ -8,7 +8,7 @@ import { User } from '../../user';
 import { StatsService } from '../../stats.service';
 import { StudentStats } from '../../studentStats';
 import { Chart } from 'chart.js';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-teacher-stats',

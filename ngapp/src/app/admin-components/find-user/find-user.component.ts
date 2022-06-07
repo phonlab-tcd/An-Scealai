@@ -1,7 +1,7 @@
 import { Component, OnInit, } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 

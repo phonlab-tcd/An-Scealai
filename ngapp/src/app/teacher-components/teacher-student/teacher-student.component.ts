@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { ClassroomService } from '../../classroom.service';
 import config from 'abairconfig';
 

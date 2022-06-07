@@ -7,7 +7,7 @@ import { Event } from '../../event';
 import { Story } from '../../story';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import * as Diff from 'diff';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 
 @Component({
   selector: 'app-story-history',

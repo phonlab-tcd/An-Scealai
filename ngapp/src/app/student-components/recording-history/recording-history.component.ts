@@ -4,7 +4,7 @@ import { StoryService } from '../../story.service';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from 'app/services/engagement';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';

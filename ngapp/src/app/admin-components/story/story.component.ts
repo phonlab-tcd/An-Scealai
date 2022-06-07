@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import config from 'abairconfig';
 
 

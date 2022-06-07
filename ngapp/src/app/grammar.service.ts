@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Observable, Observer} from 'rxjs';
 import { StoryService } from './story.service';
-import { TranslationService } from 'app/translation.service';
+import { TranslationService } from 'app/services/translation';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { Story } from 'app/story';
 import { EngagementService } from 'app/services/engagement';

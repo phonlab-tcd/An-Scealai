@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../story.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/services/translation';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 
 @Component({

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import translation from './translation';
-import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
-import config from 'abairconfig';
 import { Observable } from 'rxjs';
-import trans_pre from './translation';
+import { AuthenticationService } from 'app/authentication.service';
+import config from 'abairconfig';
+import trans_pre from 'app/translation';
 
 
 const translations = /*iefe*/(()=>{
