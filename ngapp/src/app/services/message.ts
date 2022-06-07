@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Router     } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
-import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from './authentication.service';
-import { Observable } from 'rxjs';
-import { EngagementService } from 'app/services/engagement';
-import { EventType } from './event';
-import { TranslationService } from './translation.service';
-import { Message } from './message';
-import { User } from './user';
+import { Observable         } from 'rxjs';
+import { EventType          } from 'app/event';
+import { Message            } from 'app/message';
+import { EngagementService      } from 'app/services/engagement';
+import { TranslationService     } from 'app/translation.service';
+import { AuthenticationService  } from 'app/authentication.service';
 import config from 'abairconfig';
 
 @Injectable({

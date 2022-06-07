@@ -8,7 +8,7 @@ import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
-import { MessageService } from '../../message.service';
+import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
 

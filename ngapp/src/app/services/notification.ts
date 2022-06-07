@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { StoryService           } from 'app/story.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { ClassroomService       } from 'app/classroom.service';
-import { MessageService         } from 'app/message.service';
+import { MessageService         } from 'app/services/message';
 import { Story                  } from 'app/story';
 import { Classroom              } from 'app/classroom';
 import { Message                } from 'app/message';

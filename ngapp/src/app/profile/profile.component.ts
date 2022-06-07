@@ -12,7 +12,7 @@ import { StudentStats } from '../studentStats';
 import { StoryService } from '../story.service';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
-import { MessageService } from '../message.service';
+import { MessageService } from 'app/services/message';
 import { UserService } from '../user.service';
 import { RecordingService } from '../recording.service';
 

@@ -9,7 +9,7 @@ import { Classroom } from './classroom';
 import { NotificationService } from 'app/services/notification';
 import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from './translation.service';
-import { MessageService } from './message.service';
+import { MessageService } from 'app/services/message';
 import { filter } from 'rxjs/operators';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 

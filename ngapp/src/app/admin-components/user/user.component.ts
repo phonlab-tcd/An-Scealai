@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { StatsService } from '../../stats.service';
-import { MessageService } from '../../message.service';
+import { MessageService } from 'app/services/message';
 import { ProfileService } from '../../profile.service';
 import { UserService } from '../../user.service';
 import { Classroom } from '../../classroom';

@@ -10,7 +10,7 @@ import { ClassroomService } from 'app/classroom.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';
-import { MessageService } from '../message.service';
+import { MessageService } from 'app/services/message';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
 import { NotificationService } from 'app/services/notification';

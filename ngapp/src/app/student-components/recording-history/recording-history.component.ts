@@ -8,7 +8,7 @@ import { TranslationService } from '../../translation.service';
 import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from '../../message.service';
+import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from 'app/services/notification';
