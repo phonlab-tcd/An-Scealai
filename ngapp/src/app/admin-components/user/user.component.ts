@@ -6,7 +6,7 @@ import { StoryService } from '../../story.service';
 import { StatsService } from '../../stats.service';
 import { MessageService } from 'app/services/message';
 import { ProfileService } from '../../profile.service';
-import { UserService } from '../../user.service';
+import { UserService } from 'app/services/user';
 import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from 'app/services/engagement';

@@ -6,7 +6,7 @@ import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from 'app/services/translation';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';
-import { UserService } from '../user.service';
+import { UserService } from 'app/services/user';
 import config from 'abairconfig';
 
 @Component({

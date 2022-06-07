@@ -20,7 +20,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
 import { StoryService } from './story.service';
-import { UserService } from './user.service';
+import { UserService } from 'app/services/user';
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';

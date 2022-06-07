@@ -13,7 +13,7 @@ import { StoryService } from '../story.service';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
 import { MessageService } from 'app/services/message';
-import { UserService } from '../user.service';
+import { UserService } from 'app/services/user';
 import { RecordingService } from '../recording.service';
 
 @Component({

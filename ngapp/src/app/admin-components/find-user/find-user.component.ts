@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { User } from '../../user';
-import { UserService } from '../../user.service';
+import { UserService } from 'app/services/user';
 import { TranslationService } from 'app/services/translation';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
 import { Classroom } from '../../classroom';
 import { User } from '../../user';
-import { UserService } from '../../user.service';
+import { UserService } from 'app/services/user';
 
 @Component({
   selector: 'app-admin-classroom',

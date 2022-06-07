@@ -4,7 +4,7 @@ import { Classroom } from '../classroom';
 import { Observable } from 'rxjs';
 import { User } from '../user';
 import { Message } from '../message';
-import { UserService } from '../user.service';
+import { UserService } from 'app/services/user';
 import { TranslationService } from 'app/services/translation';
 import { ClassroomService } from 'app/classroom.service';
 import { Router, ActivatedRoute } from '@angular/router';

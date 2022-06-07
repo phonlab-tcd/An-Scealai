@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
 import { Observable } from 'rxjs';
 import { User } from '../../user';
-import { UserService } from '../../user.service';
+import { UserService } from 'app/services/user';
 import { TranslationService } from 'app/services/translation';
 import { StoryService } from '../../story.service';
 import { MessageService } from 'app/services/message';
