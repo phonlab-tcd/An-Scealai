@@ -38,7 +38,7 @@ describe('Register Teacher', () => {
     })
     cy.get('button').contains('Register').click();
     fudgeVerification(username);
-    cy.get('button.loginBtn').contains('Sign in').click();
+    cy.get('[data-cy="sign-in"]').click();
     cy.get('button i.fa-user').click();
   })
 })
