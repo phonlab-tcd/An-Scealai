@@ -8,7 +8,7 @@ import {
   GrammarService,
   GramadoirTag,
   DisagreeingVowelIndices,
-} from 'app/grammar.service';
+} from 'app/services/grammar';
 import {EngagementService} from 'app/services/engagement';
 import { reject } from 'lodash';
 import {AuthenticationService} from "../authentication.service";

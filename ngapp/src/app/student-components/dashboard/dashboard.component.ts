@@ -18,10 +18,10 @@ import { StoryService             } from 'app/services/story';
 import { EngagementService        } from 'app/services/engagement';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/services/notification';
-import { GrammarTag               } from 'app/grammar.service';
-import { GramadoirRuleId          } from 'app/grammar.service';
-import { GrammarService           } from 'app/grammar.service';
-import { ReadableGramadoirRuleIds } from 'app/grammar.service';
+import { GrammarTag               } from 'app/services/grammar';
+import { GramadoirRuleId          } from 'app/services/grammar';
+import { GrammarService           } from 'app/services/grammar';
+import { ReadableGramadoirRuleIds } from 'app/services/grammar';
 
 
 import { TranslationService       } from 'app/services/translation';

@@ -5,13 +5,13 @@ import {
   HttpClient,
 } from '@angular/common/http';
 import { Observable, Observer} from 'rxjs';
-import { StoryService } from 'app/services/story';
-import { TranslationService } from 'app/services/translation';
-import { HighlightTag } from 'angular-text-input-highlight';
-import { Story } from 'app/story';
-import { EngagementService } from 'app/services/engagement';
-import { EventType } from 'app/event';
-import { VowelAgreementIndex } from './services/quill-highlight.service';
+import { StoryService           } from 'app/services/story';
+import { TranslationService     } from 'app/services/translation';
+import { EngagementService      } from 'app/services/engagement';
+import { VowelAgreementIndex    } from 'app/services/quill-highlight.service';
+import { HighlightTag           } from 'angular-text-input-highlight';
+import { Story                  } from 'app/story';
+import { EventType              } from 'app/event';
 import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {

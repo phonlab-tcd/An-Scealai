@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { GrammarService } from './grammar.service';
+import { GrammarService } from 'app/services/grammar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
