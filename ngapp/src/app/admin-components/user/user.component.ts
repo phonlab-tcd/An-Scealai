@@ -9,7 +9,7 @@ import { ProfileService } from '../../profile.service';
 import { UserService } from '../../user.service';
 import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
 import { RecordingService } from '../../recording.service';

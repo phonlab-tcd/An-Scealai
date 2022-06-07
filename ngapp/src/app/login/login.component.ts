@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, TokenPayload, VerifyEmailRequest } from '../authentication.service';
 import { Router } from '@angular/router';
 import { EventType } from '../event';
-import { EngagementService } from '../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from '../translation.service';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 // import { StoryService } from '../story.service';

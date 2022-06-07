@@ -7,7 +7,7 @@ import { Story } from './story';
 import { Message } from './message';
 import { Classroom } from './classroom';
 import { NotificationService } from './notification-service.service';
-import { EngagementService } from './engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from './translation.service';
 import { MessageService } from './message.service';
 import { filter } from 'rxjs/operators';

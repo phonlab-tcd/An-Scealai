@@ -9,7 +9,7 @@ import {
   GramadoirTag,
   DisagreeingVowelIndices,
 } from 'app/grammar.service';
-import {EngagementService} from "../engagement.service";
+import {EngagementService} from 'app/services/engagement';
 import { reject } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';

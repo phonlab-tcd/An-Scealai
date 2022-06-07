@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
+import { Event, EventType, MouseOverGrammarSuggestionEvent } from 'app/event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';
-import { Story } from './story';
+import { AuthenticationService } from 'app/authentication.service';
+import { Story } from 'app/story';
 import config from 'abairconfig';
-import {QuillHighlightTag} from './services/quill-highlight.service';
+import {QuillHighlightTag} from 'app/services/quill-highlight.service';
 
 @Injectable({
   providedIn: 'root'

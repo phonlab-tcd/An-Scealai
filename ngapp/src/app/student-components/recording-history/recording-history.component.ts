@@ -3,7 +3,7 @@ import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { EventType } from '../../event';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from '../../translation.service';
 import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';

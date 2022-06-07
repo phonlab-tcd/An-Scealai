@@ -3,7 +3,7 @@ import { AuthenticationService } from '../authentication.service';
 import { ClassroomService } from '../classroom.service';
 import { FormControl } from '@angular/forms';
 import { Classroom } from '../classroom';
-import { EngagementService } from '../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
 import { NotificationService } from '../notification-service.service';

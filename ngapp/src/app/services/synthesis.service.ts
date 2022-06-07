@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Story } from '../story';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { EngagementService } from '../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { EventType } from '../event';
 import {
   Observable,

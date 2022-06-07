@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';

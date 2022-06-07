@@ -9,7 +9,7 @@ import { StoryService } from './story.service';
 import { TranslationService } from 'app/translation.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { Story } from 'app/story';
-import { EngagementService } from 'app/engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { EventType } from 'app/event';
 import { VowelAgreementIndex } from './services/quill-highlight.service';
 import config from 'abairconfig';

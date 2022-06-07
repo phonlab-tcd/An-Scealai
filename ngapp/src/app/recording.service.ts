@@ -5,7 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { Story } from './story';
 import { Recording } from './recording';
 import { EventType } from './event';
-import { EngagementService } from './engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import config from 'abairconfig';
 import { v4 as uuid } from 'uuid';
 

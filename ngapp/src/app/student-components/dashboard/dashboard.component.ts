@@ -15,7 +15,7 @@ import { EventType                } from 'app/event';
 import { Story                    } from 'app/story';
 
 import { StoryService             } from 'app/story.service';
-import { EngagementService        } from 'app/engagement.service';
+import { EngagementService        } from 'app/services/engagement';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
 import { GrammarTag               } from 'app/grammar.service';

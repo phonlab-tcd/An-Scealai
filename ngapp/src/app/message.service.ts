@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
-import { EngagementService } from './engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import { Message } from './message';

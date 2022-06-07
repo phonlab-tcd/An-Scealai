@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-import { EngagementService } from './engagement.service';
+import { EngagementService } from 'app/services/engagement';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';

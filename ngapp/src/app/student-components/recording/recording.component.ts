@@ -9,7 +9,7 @@ import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from 'app/services/engagement';
 
 declare var MediaRecorder : any;
 
