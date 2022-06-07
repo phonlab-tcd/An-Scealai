@@ -25,7 +25,7 @@ import { ReadableGramadoirRuleIds } from 'app/services/grammar';
 
 
 import { TranslationService       } from 'app/services/translation';
-import { StatsService             } from 'app/stats.service';
+import { StatsService             } from 'app/services/stats';
 import { ClassroomService         } from 'app/services/classroom';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
 import { QuillHighlightService    } from 'app/services/quill-highlight.service';

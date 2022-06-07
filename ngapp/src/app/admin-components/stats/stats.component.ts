@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { StatsService } from '../../stats.service';
+import { StatsService } from 'app/services/stats';
 import { TranslationService } from 'app/services/translation';
 
 @Component({

@@ -10,7 +10,7 @@ import { TranslationService } from 'app/services/translation';
 import { StoryService } from 'app/services/story';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
-import { StatsService } from '../../stats.service';
+import { StatsService } from 'app/services/stats';
 
 @Component({
   selector: 'app-teacher-classroom',

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
 import { StoryService } from 'app/services/story';
-import { StatsService } from '../../stats.service';
+import { StatsService } from 'app/services/stats';
 import { MessageService } from 'app/services/message';
 import { ProfileService } from 'app/services/profile';
 import { UserService } from 'app/services/user';

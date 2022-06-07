@@ -5,7 +5,7 @@ import { UserService } from 'app/services/user';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Classroom } from '../../classroom';
 import { User } from '../../user';
-import { StatsService } from '../../stats.service';
+import { StatsService } from 'app/services/stats';
 import { StudentStats } from '../../studentStats';
 import { Chart } from 'chart.js';
 import { TranslationService } from 'app/services/translation';
