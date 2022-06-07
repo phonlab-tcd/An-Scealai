@@ -12,7 +12,7 @@ import { ClassroomService } from 'app/services/classroom';
 import { EngagementService } from 'app/services/engagement';
 import { Event } from '../../event';
 import { TranslationService } from 'app/services/translation';
-import { RecordingService } from '../../recording.service';
+import { RecordingService } from 'app/services/recording';
 import config from 'abairconfig';
 
 @Component({

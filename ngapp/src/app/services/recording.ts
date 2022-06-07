@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';  
-import { Story } from './story';
-import { Recording } from './recording';
-import { EventType } from './event';
-import { EngagementService } from 'app/services/engagement';
+import { Observable } from 'rxjs';
+import { AuthenticationService  } from 'app/authentication.service';  
+import { EngagementService      } from 'app/services/engagement';
+import { Recording              } from 'app/recording';
 import config from 'abairconfig';
 import { v4 as uuid } from 'uuid';
 

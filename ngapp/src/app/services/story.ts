@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService      } from 'app/services/engagement';
 import { TranslationService     } from 'app/services/translation';
-import { RecordingService       } from 'app/recording.service';
+import { RecordingService       } from 'app/services/recording';
 import { AuthenticationService  } from 'app/authentication.service';
 import { EventType              } from 'app/event';
 import { Story                  } from 'app/story';

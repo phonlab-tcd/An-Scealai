@@ -11,7 +11,7 @@ import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
 import { ClassroomService } from 'app/services/classroom';
 import { NotificationService } from 'app/services/notification';
-import { RecordingService } from '../../recording.service';
+import { RecordingService } from 'app/services/recording';
 import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template
 
 @Component({

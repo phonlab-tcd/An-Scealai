@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RecordingService } from '../../recording.service';
+import { RecordingService } from 'app/services/recording';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { TranslationService } from 'app/services/translation';
 import { Story } from 'app/story';

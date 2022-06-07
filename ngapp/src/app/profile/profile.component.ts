@@ -14,7 +14,7 @@ import { Story } from '../story';
 import { ProfileService } from 'app/services/profile';
 import { MessageService } from 'app/services/message';
 import { UserService } from 'app/services/user';
-import { RecordingService } from '../recording.service';
+import { RecordingService } from 'app/services/recording';
 
 @Component({
   selector: 'app-profile',

@@ -13,7 +13,7 @@ import { Message } from '../../message';
 import { ClassroomService } from 'app/services/classroom';
 import { NotificationService } from 'app/services/notification';
 import { Recording } from '../../recording';
-import { RecordingService } from '../../recording.service';
+import { RecordingService } from 'app/services/recording';
 
 @Component({
   selector: 'app-recording-history',
