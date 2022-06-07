@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService, RegistrationTokenPayload } from 'app/authentication.service';
+import { AuthenticationService, RegistrationTokenPayload } from 'app/services/authentication';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EngagementService } from 'app/services/engagement';
 import { EventType } from 'app/event';

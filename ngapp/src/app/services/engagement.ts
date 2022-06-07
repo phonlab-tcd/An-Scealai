@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Event, EventType, MouseOverGrammarSuggestionEvent } from 'app/event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from 'app/authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import { Story } from 'app/story';
 import config from 'abairconfig';
 import {QuillHighlightTag} from 'app/services/quill-highlight.service';

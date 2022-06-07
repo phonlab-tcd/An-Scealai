@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from 'app/services/profile';
-import { AuthenticationService } from '../authentication.service'
+import { AuthenticationService } from 'app/services/authentication'
 import { Router } from '@angular/router';
 import { TranslationService } from 'app/services/translation';
 

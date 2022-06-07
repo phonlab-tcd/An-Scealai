@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslationService } from 'app/services/translation';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 
 @Component({
   selector: 'app-resources',

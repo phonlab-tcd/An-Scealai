@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import { ClassroomService } from 'app/services/classroom';
 import { FormControl } from '@angular/forms';
 import { Classroom } from '../classroom';

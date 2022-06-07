@@ -11,7 +11,7 @@ import {
 } from 'app/services/grammar';
 import {EngagementService} from 'app/services/engagement';
 import { reject } from 'lodash';
-import {AuthenticationService} from "../authentication.service";
+import {AuthenticationService} from 'app/services/authentication';
 import config from 'abairconfig';
 import clone from 'lodash/clone';
 

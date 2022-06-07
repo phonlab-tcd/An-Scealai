@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService  } from 'app/authentication.service';  
+import { AuthenticationService  } from 'app/services/authentication';  
 import { EngagementService      } from 'app/services/engagement';
 import { Recording              } from 'app/recording';
 import config from 'abairconfig';

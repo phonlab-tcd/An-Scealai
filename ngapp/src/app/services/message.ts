@@ -7,7 +7,7 @@ import { EventType          } from 'app/event';
 import { Message            } from 'app/message';
 import { EngagementService      } from 'app/services/engagement';
 import { TranslationService     } from 'app/services/translation';
-import { AuthenticationService  } from 'app/authentication.service';
+import { AuthenticationService  } from 'app/services/authentication';
 import config from 'abairconfig';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassroomService } from 'app/services/classroom';
-import { AuthenticationService } from '../../authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import { Observable } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';

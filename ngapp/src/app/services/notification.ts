@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { StoryService           } from 'app/services/story';
-import { AuthenticationService  } from 'app/authentication.service';
+import { AuthenticationService  } from 'app/services/authentication';
 import { ClassroomService       } from 'app/services/classroom';
 import { MessageService         } from 'app/services/message';
 import { Story                  } from 'app/story';

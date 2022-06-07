@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from 'app/authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import config from 'abairconfig';
 import trans_pre from 'app/translation';
 

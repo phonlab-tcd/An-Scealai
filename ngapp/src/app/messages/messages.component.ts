@@ -9,7 +9,7 @@ import { TranslationService } from 'app/services/translation';
 import { ClassroomService } from 'app/services/classroom';
 import { Router, ActivatedRoute } from '@angular/router';
 import { v4 as uuid } from 'uuid';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import { MessageService } from 'app/services/message';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from 'app/services/profile';

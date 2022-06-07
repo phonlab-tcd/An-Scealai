@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService, TokenPayload, VerifyEmailRequest } from '../authentication.service';
+import { AuthenticationService, TokenPayload, VerifyEmailRequest } from 'app/services/authentication';
 import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from 'app/services/engagement';

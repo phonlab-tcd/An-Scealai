@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
-import { AuthenticationService } from 'app/authentication.service';
+import { AuthenticationService } from 'app/services/authentication';
 import config from 'abairconfig';
 import { TranslationService } from 'app/services/translation';
 

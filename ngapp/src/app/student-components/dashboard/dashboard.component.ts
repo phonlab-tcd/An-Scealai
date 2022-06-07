@@ -16,7 +16,7 @@ import { Story                    } from 'app/story';
 
 import { StoryService             } from 'app/services/story';
 import { EngagementService        } from 'app/services/engagement';
-import { AuthenticationService    } from 'app/authentication.service';
+import { AuthenticationService    } from 'app/services/authentication';
 import { NotificationService      } from 'app/services/notification';
 import { GrammarTag               } from 'app/services/grammar';
 import { GramadoirRuleId          } from 'app/services/grammar';

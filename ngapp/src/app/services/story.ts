@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { EngagementService      } from 'app/services/engagement';
 import { TranslationService     } from 'app/services/translation';
 import { RecordingService       } from 'app/services/recording';
-import { AuthenticationService  } from 'app/authentication.service';
+import { AuthenticationService  } from 'app/services/authentication';
 import { EventType              } from 'app/event';
 import { Story                  } from 'app/story';
 import config from 'abairconfig';
