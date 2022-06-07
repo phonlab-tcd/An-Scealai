@@ -4,7 +4,8 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --runInBand --forceExit --rootDir src --silent",
+    "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
+    "test:silent": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
     "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
     "start:e2e": "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",

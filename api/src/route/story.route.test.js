@@ -1,6 +1,6 @@
 const app = require('../server');
 const supertest = require('supertest');
-const request = supertest(app);
+const request = supertest.agent(app);
 const {removeAllCollections} = require('../util/test-utils');
 const mongoose = require('mongoose');
 const Story = require('../model/story');

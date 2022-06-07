@@ -1,8 +1,9 @@
 require('./user');
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
 describe('user mongoose model', () => {
-  const User = mongoose.model('User');
-  it('uses the user model', () => {
-    expect(new User).toBeDefined();
+  it('uses the user model', async () => {
+    await expect(new User).toBeDefined();
   });
 });

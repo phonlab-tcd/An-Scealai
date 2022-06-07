@@ -1,116 +1,89 @@
-const app = require('../server');
-const supertest = require('supertest');
-const request = supertest(app);
-const {removeAllCollections} = require('../util/test-utils');
-const mongoose = require('mongoose');
 const User = require('../model/user');
-afterEach(async () => {
-  await removeAllCollections();
+const randomString = require('../util/randomString');
+const { removeCollection } = require('../util/test-utils');
+
+const app = require('../server');
+const request = require('supertest').agent(app);
+
+beforeAll(async ()=>{
+  await User.deleteMany({username: {$regex: '00000' }});
 });
 
 describe('user routes', () => {
   describe('user/searchUser/:searchString/:currentPage/:limit', () => {
-    it('returns a user if their username matches the search string', async () => {
-        const users = await User.create([
-            {username: 'alice'},
-            {username: 'bob'},
-            {username: 'carl'},
-        ]);
-
-        const SEARCH_STRING = 'a'
-        const res = await request.post(`/user/searchUser/`, {searchString: SEARCH_STRING});
-  
-        expect(res.status).toBe(200);
-        expect(res.body.users[0].username).toBe(users[0].username);
+    const url = '/user/searchUser/';
+    it('return a user ', async () => {
+      const randomUsers = Array(5).fill(undefined)
+        .map(_=>{return {username: randomString()}});
+      console.log(randomUsers);
+      randomUsers[0].username = '0000000' + randomUsers[0].username;
+      await User.create(randomUsers);
+      const { body } = await request
+        .post(url)
+        .send({searchString: randomUsers[0]})
+        .expect(200);
+      const { users } = body;
+      expect(users[0].username).toBe(randomUsers[0].username);
     });
 
     it('limits the number of users returned', async () => {
-        const users = await User.create([
-            {username: 'alice'},
-            {username: 'boba'},
-            {username: 'carl'},
-        ]);
-
-        const SEARCH_STRING = 'a'
-        const LIMIT = 2
-        const res = await request.post(
-          `/user/searchUser`,
-        ).send(
-          {
-            searchString: SEARCH_STRING,
-            limit: LIMIT
-          }
-        );
-
-        expect(res.status).toBe(200);
-        expect(res.body.users.length).toBe(LIMIT);
+      const searchString = randomString();
+      const users = ['alice','bob','carl'].map(u=>{return {username: searchString+u}});
+      await User.create(users);
+      const limit = 2
+      const res = await request
+        .post(url)
+        .send({searchString,limit});
+      expect(res.status).toBe(200);
+      expect(res.body.users.length).toBe(limit);
     });
 
     it('allows skipping through pages of results', async () => {
-        const users = await User.create([
-            {username: 'alice'},
-            {username: 'bob'},
-            {username: 'carl'},
-        ]);
-
-        const SEARCH_STRING = 'a'
-        const LIMIT = 1
-        const PAGE_NUMBER = 1
-        const res = await request.post(
-          `/user/searchUser`
-        ).send(
-          {
-            searchString: SEARCH_STRING,
-            limit: LIMIT,
-            currentPage: PAGE_NUMBER
-          }
-        );
-
-        expect(res.status).toBe(200);
-        // 2 names match 'a': [alice, carl]
-        // We limit page size to 1, and are on the 2nd page --> carl.
-        expect(res.body.users[0].username).toBe('carl');
+      const searchString = randomString();
+      const users = await User.create([
+          {username: searchString + 'alice'},
+          {username: searchString + 'bob'},
+          {username: searchString + 'carl'},
+      ]);
+      const limit = 1;
+      const currentPage = 1;
+      const body = {searchString,limit,currentPage};
+      const res = await request
+        .post(url)
+        .send(body)
+        .expect(200);
+      expect(res.body.users[0].username).toBe(searchString + 'bob');
     });
 
     it('allows filtering by user role', async () => {
+      const searchString = randomString();
       const users = await User.create([
-          {username: 'alice', role: 'TEACHER'},
-          {username: 'boba', role: 'STUDENT'},
-          {username: 'carl', role: 'ADMIN'},
+          {username: searchString + 'alice', role: 'TEACHER'},
+          {username: searchString + 'boba', role: 'STUDENT'},
+          {username: searchString + 'carl', role: 'ADMIN'},
       ]);
 
-      const SEARCH_STRING = 'a'
-      const res = await request.post(
-        `/user/searchUser`
-      ).send(
-        {
-          searchString: SEARCH_STRING,
-          roles: ['STUDENT', 'ADMIN']
-        }
-      );
-
-      expect(res.status).toBe(200);
-      expect(res.body.users[0].username).toBe('boba');
-      expect(res.body.users[1].username).toBe('carl');
+      const roles = ['STUDENT', 'ADMIN'];
+      const body = {searchString,roles};
+      const res = await request
+        .post(url)
+        .send(body)
+        .expect(200);
+      expect(res.body.users[0].username).toBe(searchString + 'boba');
+      expect(res.body.users[1].username).toBe(searchString + 'carl');
     });
 
     it('returns total count of results matching the search params', async () => {
-      await User.create([
-          {username: 'alice'},
-          {username: 'boba'},
-          {username: 'carl'},
-      ]);
-
-      const SEARCH_STRING = 'a'
-      const LIMIT = 1
-      const res = await request.post(
-        `/user/searchUser`
-      ).send(
-        {
-          searchString: SEARCH_STRING,
-          limit: LIMIT
-        }
-      );
+      const searchString = randomString();
+      const users = ['alice','boba','carl']
+        .map(n=>{return{username: searchString+n}});
+      await User.create(users);
+      const limit = 1;
+      const body = {searchString,limit};
+      const res = await request
+        .post(url)
+        .send(body)
+        .expect(200);
 
       expect(res.status).toBe(200);
       // limited to 1 result, but total count is 3, 

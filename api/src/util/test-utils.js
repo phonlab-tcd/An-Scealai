@@ -9,14 +9,23 @@ async function removeAllCollections() {
         `removeAllCollections was called but 
         the db in use is not the test db.\n
         mongoose.connection.name: ${mongoose.connection.name}\n
-        config.TEST_DB_NAME: ${config.TEST_DB_NAME}
-        `);
+        config.TEST_DB_NAME: ${config.TEST_DB_NAME}`);
   }
   const collections = Object.keys(mongoose.connection.collections);
   for (const collectionName of collections) {
-      const collection = mongoose.connection.collections[collectionName];
-      await collection.deleteMany({});
+      removeCollection(collectionName);
   }
 }
 
-module.exports = {removeAllCollections};
+async function removeCollection(collection) {
+  if (mongoose.connection.name !== config.TEST_DB_NAME) {
+    throw new Error(
+        `removeCollection was called but 
+        the db in use is not the test db.\n
+        mongoose.connection.name: ${mongoose.connection.name}\n
+        config.TEST_DB_NAME: ${config.TEST_DB_NAME}`);
+  }
+  mongoose.connection.collections[collection].deleteMany({});
+}
+
+module.exports = {removeCollection,removeAllCollections};
