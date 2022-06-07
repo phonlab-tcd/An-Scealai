@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 // import { User } from './user';
-import { Observable, of } from 'rxjs';
-import { User } from './user'
+import { Observable } from 'rxjs';
 import config from 'abairconfig';
+import { SearchUserEndpoint  } from '../../../api/src/endpoint/user/searchUser.js';
+import { SearchUserQueryBody } from '../../../api/src/endpoint/user/searchUser.js';
+import { Role } from 'role';
 
 @Injectable({
   providedIn: 'root'
@@ -22,16 +24,15 @@ export class UserService {
     return this.http.get(this.baseUrl + 'getUserByUsername/' + username);
   }
 
-  searchUser(searchString: string, pageNumber: number, limit: number, roles: string[]): Observable<any> {
-    return this.http.post(
-      this.baseUrl + `searchUser/`,
-      {
-        searchString: searchString,
-        limit: limit,
-        currentPage: pageNumber,
-        roles: roles
-      }
-    );
+  searchUser(
+    searchString: string,
+    pageNumber: number,
+    limit: number,
+    roles: Role[]): Observable<SearchUserEndpoint> {
+    const currentPage = pageNumber;
+    const body: SearchUserQueryBody = {searchString,limit,currentPage,roles};
+    const url = this.baseUrl + 'searchUser'
+    return this.http.post<SearchUserEndpoint>(url,body);
   }
 
   getUserCount(): Observable<any> {

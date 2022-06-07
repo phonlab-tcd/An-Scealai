@@ -1,4 +1,4 @@
-import Role from '../../../../ngapp/src/role';
+import { Role } from '../../../../ngapp/src/role';
 type User = {username:string;_id:string;language:string;role:string};
 export type SearchUserEndpoint = {
   users:User[];

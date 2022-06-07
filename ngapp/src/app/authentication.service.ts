@@ -53,25 +53,26 @@ export interface RegistrationTokenPayload {
   providedIn: 'root'
 })
 export class AuthenticationService {
+  constructor(
+    private http: HttpClient,
+    private router: Router, ) { }
 
   baseUrl: string = config.baseurl + 'user/';
   private token: string;
   public getLoggedInName: any = new Subject();
 
   public pendingUserPayload: LoginTokenPayload = null;
+  public jwtTokenName: 'scealai-token' = 'scealai-token';
 
-  constructor(
-    private http: HttpClient,
-    private router: Router, ) { }
 
   private saveToken(token: string): void {
-    localStorage.setItem('scealai-token', token);
+    localStorage.setItem(this.jwtTokenName, token);
     this.token = token;
   }
 
   getToken(): string {
     if (!this.token) {
-      this.token = localStorage.getItem('scealai-token');
+      this.token = localStorage.getItem(this.jwtTokenName);
     }
     return this.token;
   }
@@ -80,8 +81,8 @@ export class AuthenticationService {
     const token = this.getToken();
     let payload: any;
     if (token) {
-
       payload = token.split('.')[1];
+      if(!payload) return null;
       payload = window.atob(payload);
 
       this.getLoggedInName.next(JSON.parse(payload).username);
@@ -162,7 +163,7 @@ export class AuthenticationService {
 
   public logout(): void {
     this.token = '';
-    window.localStorage.removeItem('scealai-token');
+    window.localStorage.removeItem(this.jwtTokenName);
     this.router.navigateByUrl('/landing');
     // location.reload();
   }

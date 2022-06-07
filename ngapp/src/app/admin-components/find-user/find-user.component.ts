@@ -4,6 +4,8 @@ import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Role } from 'role';
+import { SearchUserEndpoint } from '../../../../../api/src/endpoint/user/searchUser';
 
 @Component({
   selector: 'app-find-user',
@@ -39,7 +41,7 @@ export class FindUserComponent implements OnInit {
   userCount: number = 0;
 
   // This array will store User objects to be displayed
-  userResults : User[] = [];
+  userResults: User[] = [];
   
   numberOfUsers : number = 0;
   resultCount: number = 0;
@@ -64,15 +66,25 @@ export class FindUserComponent implements OnInit {
     return true;
   }
 
+  private getRoles(): Role[] {
+    const roles: Role[] = [];
+    ['STUDENT','ADMIN','TEACHER'].forEach((r:Role)=>{
+      if(this.roleFilter[r]) roles.push(r);
+    });
+    return roles;
+  }
+
   searchUsers() {
     if (!this.validSearchText()) return;
     this.dataLoaded = false;
     this.userResults = [];
-    const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
-    this.userService.searchUser(this.searchText, this.currentPage, this.LIMIT, roles).subscribe((res: any) => {
-      this.userResults = res.users.map(userData => new User().fromJSON(userData));
-      this.resultCount = res.count;
-      this.dataLoaded = true;
+    const roles: Role[] = this.getRoles();
+    this.userService
+        .searchUser(this.searchText, this.currentPage, this.LIMIT, roles)
+        .subscribe((res: SearchUserEndpoint) => {
+          this.userResults = res.users.map(userData => new User().fromJSON(userData));
+          this.resultCount = res.count;
+          this.dataLoaded = true;
       });
   }
 
