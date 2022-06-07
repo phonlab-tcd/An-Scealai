@@ -14,7 +14,7 @@ import   Quill                      from 'quill';
 import { EventType                } from 'app/event';
 import { Story                    } from 'app/story';
 
-import { StoryService             } from 'app/story.service';
+import { StoryService             } from 'app/services/story';
 import { EngagementService        } from 'app/services/engagement';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/services/notification';

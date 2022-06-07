@@ -5,7 +5,7 @@ import { EventType } from '../event';
 import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from 'app/services/translation';
 // import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-// import { StoryService } from '../story.service';
+// import { StoryService } from 'app/services/story';
 import { UserService } from 'app/services/user';
 import config from 'abairconfig';
 

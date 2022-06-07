@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EngagementService } from 'app/services/engagement';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { Event } from '../../event';
 import { Story } from '../../story';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';

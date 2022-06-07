@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { StatsService } from '../../stats.service';
 import { MessageService } from 'app/services/message';
 import { ProfileService } from '../../profile.service';

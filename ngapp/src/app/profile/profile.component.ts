@@ -9,7 +9,7 @@ import { TranslationService } from 'app/services/translation';
 import { NotificationService } from 'app/services/notification';
 import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
-import { StoryService } from '../story.service';
+import { StoryService } from 'app/services/story';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
 import { MessageService } from 'app/services/message';

@@ -5,7 +5,7 @@ import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { TranslationService } from 'app/services/translation';
 import { Story } from 'app/story';
 import { Recording } from 'app/recording';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 
 @Component({
   selector: 'app-view-recording',

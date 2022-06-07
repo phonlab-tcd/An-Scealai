@@ -19,7 +19,7 @@ import { RegisterModule } from 'register/register.module';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
-import { StoryService } from './story.service';
+import { StoryService } from 'app/services/story';
 import { UserService } from 'app/services/user';
 
 import { AppComponent } from './app.component';

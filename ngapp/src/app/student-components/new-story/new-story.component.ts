@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { TranslationService } from 'app/services/translation';

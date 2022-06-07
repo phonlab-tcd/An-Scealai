@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from 'app/services/translation';
 import { UserService } from 'app/services/user';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Story } from '../../story';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { AuthenticationService, TokenPayload, UserDetails } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from 'app/services/engagement';

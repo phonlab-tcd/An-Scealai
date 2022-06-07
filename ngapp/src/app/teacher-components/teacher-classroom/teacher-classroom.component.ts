@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from 'app/services/user';
 import { TranslationService } from 'app/services/translation';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/services/story';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
