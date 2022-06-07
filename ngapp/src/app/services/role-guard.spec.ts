@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { RoleGuardService } from './role-guard.service';
+import { RoleGuardService } from 'app/services/role-guard';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
