@@ -1,12 +1,12 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { StoryService } from './story.service';
-import { MessageService } from './message.service';
-import { Story } from './story';
-import { Classroom } from './classroom';
-import { AuthenticationService } from './authentication.service';
-import { Message } from './message';
-import { ClassroomService } from './classroom.service';
+import { StoryService           } from 'app/story.service';
+import { AuthenticationService  } from 'app/authentication.service';
+import { ClassroomService       } from 'app/classroom.service';
+import { MessageService         } from 'app/message.service';
+import { Story                  } from 'app/story';
+import { Classroom              } from 'app/classroom';
+import { Message                } from 'app/message';
 
 @Injectable({
   providedIn: 'root'

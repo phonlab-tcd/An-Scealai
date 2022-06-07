@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
-import { NotificationService } from '../../notification-service.service';
+import { NotificationService } from 'app/services/notification';
 
 @Component({
   selector: 'app-teacher-dashboard',

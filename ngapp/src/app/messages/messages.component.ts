@@ -13,7 +13,7 @@ import { AuthenticationService } from '../authentication.service';
 import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
-import { NotificationService } from '../notification-service.service';
+import { NotificationService } from 'app/services/notification';
 
 declare var MediaRecorder : any;
 

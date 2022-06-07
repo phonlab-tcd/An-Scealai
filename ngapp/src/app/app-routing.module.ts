@@ -45,7 +45,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
-import { NotificationService } from './notification-service.service';
+import { NotificationService } from 'app/services/notification';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';

@@ -6,7 +6,7 @@ import { StoryService } from './story.service';
 import { Story } from './story';
 import { Message } from './message';
 import { Classroom } from './classroom';
-import { NotificationService } from './notification-service.service';
+import { NotificationService } from 'app/services/notification';
 import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from './translation.service';
 import { MessageService } from './message.service';

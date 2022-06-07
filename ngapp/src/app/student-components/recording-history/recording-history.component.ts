@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
-import { NotificationService } from '../../notification-service.service';
+import { NotificationService } from 'app/services/notification';
 import { Recording } from '../../recording';
 import { RecordingService } from '../../recording.service';
 

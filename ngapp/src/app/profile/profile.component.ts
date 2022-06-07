@@ -6,7 +6,7 @@ import { Classroom } from '../classroom';
 import { EngagementService } from 'app/services/engagement';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
-import { NotificationService } from '../notification-service.service';
+import { NotificationService } from 'app/services/notification';
 import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
 import { StoryService } from '../story.service';
