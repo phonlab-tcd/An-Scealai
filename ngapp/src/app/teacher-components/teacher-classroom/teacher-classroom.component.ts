@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ClassroomService } from 'app/classroom.service';
+import { ClassroomService } from 'app/services/classroom';
 import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
 import { Observable } from 'rxjs';

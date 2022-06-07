@@ -26,7 +26,7 @@ import { ReadableGramadoirRuleIds } from 'app/services/grammar';
 
 import { TranslationService       } from 'app/services/translation';
 import { StatsService             } from 'app/stats.service';
-import { ClassroomService         } from 'app/classroom.service';
+import { ClassroomService         } from 'app/services/classroom';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
 import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';

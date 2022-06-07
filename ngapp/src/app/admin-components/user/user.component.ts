@@ -8,7 +8,7 @@ import { MessageService } from 'app/services/message';
 import { ProfileService } from 'app/services/profile';
 import { UserService } from 'app/services/user';
 import { Classroom } from '../../classroom';
-import { ClassroomService } from '../../classroom.service';
+import { ClassroomService } from 'app/services/classroom';
 import { EngagementService } from 'app/services/engagement';
 import { Event } from '../../event';
 import { TranslationService } from 'app/services/translation';

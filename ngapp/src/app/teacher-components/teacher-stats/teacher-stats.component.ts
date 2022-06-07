@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClassroomService } from '../../classroom.service';
+import { ClassroomService } from 'app/services/classroom';
 import { AuthenticationService } from '../../authentication.service';
 import { UserService } from 'app/services/user';
 import { Router, ActivatedRoute } from '@angular/router';

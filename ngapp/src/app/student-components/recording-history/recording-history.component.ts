@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
-import { ClassroomService } from '../../classroom.service';
+import { ClassroomService } from 'app/services/classroom';
 import { NotificationService } from 'app/services/notification';
 import { Recording } from '../../recording';
 import { RecordingService } from '../../recording.service';

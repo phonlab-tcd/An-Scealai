@@ -9,7 +9,7 @@ import { ProfileService } from 'app/services/profile';
 import { Router } from '@angular/router';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';
-import { ClassroomService } from '../../classroom.service';
+import { ClassroomService } from 'app/services/classroom';
 import { NotificationService } from 'app/services/notification';
 import { RecordingService } from '../../recording.service';
 import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template

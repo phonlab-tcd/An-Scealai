@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { StoryService           } from 'app/services/story';
 import { AuthenticationService  } from 'app/authentication.service';
-import { ClassroomService       } from 'app/classroom.service';
+import { ClassroomService       } from 'app/services/classroom';
 import { MessageService         } from 'app/services/message';
 import { Story                  } from 'app/story';
 import { Classroom              } from 'app/classroom';
