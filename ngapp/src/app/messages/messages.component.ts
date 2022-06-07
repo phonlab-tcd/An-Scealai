@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';
 import { MessageService } from 'app/services/message';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ProfileService } from '../profile.service';
+import { ProfileService } from 'app/services/profile';
 import { NotificationService } from 'app/services/notification';
 
 declare var MediaRecorder : any;

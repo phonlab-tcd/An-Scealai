@@ -5,7 +5,7 @@ import { Story } from '../../story';
 import { StoryService } from 'app/services/story';
 import { StatsService } from '../../stats.service';
 import { MessageService } from 'app/services/message';
-import { ProfileService } from '../../profile.service';
+import { ProfileService } from 'app/services/profile';
 import { UserService } from 'app/services/user';
 import { Classroom } from '../../classroom';
 import { ClassroomService } from '../../classroom.service';

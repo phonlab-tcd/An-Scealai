@@ -5,7 +5,7 @@ import { AuthenticationService, TokenPayload, UserDetails } from '../../authenti
 import { EventType } from '../../event';
 import { EngagementService } from 'app/services/engagement';
 import { TranslationService } from 'app/services/translation';
-import { ProfileService } from '../../profile.service';
+import { ProfileService } from 'app/services/profile';
 import { Router } from '@angular/router';
 import { MessageService } from 'app/services/message';
 import { Message } from '../../message';

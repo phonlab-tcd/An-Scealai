@@ -11,7 +11,7 @@ import { StatsService } from '../stats.service';
 import { StudentStats } from '../studentStats';
 import { StoryService } from 'app/services/story';
 import { Story } from '../story';
-import { ProfileService } from '../profile.service';
+import { ProfileService } from 'app/services/profile';
 import { MessageService } from 'app/services/message';
 import { UserService } from 'app/services/user';
 import { RecordingService } from '../recording.service';

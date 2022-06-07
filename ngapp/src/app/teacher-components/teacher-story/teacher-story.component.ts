@@ -5,7 +5,7 @@ import { StoryService } from 'app/services/story';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from 'app/services/translation';
 import { UserService } from 'app/services/user';
-import { ProfileService } from '../../profile.service';
+import { ProfileService } from 'app/services/profile';
 import { AuthenticationService } from '../../authentication.service';
 import config from 'abairconfig';
 
