@@ -10,7 +10,11 @@
       "node",
       "jquery"
     ],
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@api/*": ["../../api/*"],
+      "@service/*": ["app/services/*"]
+    }
   },
   "files": [
     "src/test.ts",

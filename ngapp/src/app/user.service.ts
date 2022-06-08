@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-// import { User } from './user';
-import { Observable } from 'rxjs';
+import { Injectable           } from '@angular/core';
+import { HttpClient           } from '@angular/common/http';
+import { Observable           } from 'rxjs';
+import { Role                 } from 'role';
+import { SearchUserEndpoint   } from '../../../api/src/endpoint/user/searchUser';
+import { SearchUserQueryBody  } from '../../../api/src/endpoint/user/searchUser';
 import config from 'abairconfig';
-import { SearchUserEndpoint  } from '../../../api/src/endpoint/user/searchUser.js';
-import { SearchUserQueryBody } from '../../../api/src/endpoint/user/searchUser.js';
-import { Role } from 'role';
 
 @Injectable({
   providedIn: 'root'

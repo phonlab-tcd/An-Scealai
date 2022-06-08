@@ -28,7 +28,7 @@ import { TranslationService       } from 'app/translation.service';
 import { StatsService             } from 'app/stats.service';
 import { ClassroomService         } from 'app/classroom.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
-import { QuillHighlightService    } from 'app/services/quill-highlight.service';
+import { QuillHighlightService    } from '@service/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 

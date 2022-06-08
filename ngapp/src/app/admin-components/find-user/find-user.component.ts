@@ -1,11 +1,11 @@
 import { Component, OnInit, } from '@angular/core';
-import { User } from '../../user';
-import { UserService } from '../../user.service';
-import { TranslationService } from '../../translation.service';
+import { User } from 'app/user';
+import { UserService } from 'app/user.service';
+import { TranslationService } from 'app/translation.service';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Role } from 'role';
-import { SearchUserEndpoint } from '../../../../../api/src/endpoint/user/searchUser';
+import { SearchUserEndpoint } from '@api/src/endpoint/user/searchUser';
 
 @Component({
   selector: 'app-find-user',
@@ -13,8 +13,10 @@ import { SearchUserEndpoint } from '../../../../../api/src/endpoint/user/searchU
   styleUrls: ['./find-user.component.css']
 })
 export class FindUserComponent implements OnInit {
-
-  constructor(private userService: UserService, public ts: TranslationService) { }
+  constructor(
+    private userService: UserService,
+    public ts: TranslationService,
+  ) { }
   
   public searchText: string;
   public searchModelChanged: Subject<string> = new Subject<string>();
@@ -82,7 +84,8 @@ export class FindUserComponent implements OnInit {
     this.userService
         .searchUser(this.searchText, this.currentPage, this.LIMIT, roles)
         .subscribe((res: SearchUserEndpoint) => {
-          this.userResults = res.users.map(userData => new User().fromJSON(userData));
+          console.log(res);
+          this.userResults = res.users.map(u=>new User(u));
           this.resultCount = res.count;
           this.dataLoaded = true;
       });

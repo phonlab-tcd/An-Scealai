@@ -5,7 +5,9 @@
     "moduleResolution": "node",
     "outDir": "../out-tsc/app",
     "paths": {
-      "node_modules": ["../node_modules"]
+      "node_modules": ["../node_modules"],
+      "@api/*": ["../../api/*"],
+      "@service/*": ["./src/app/services/*"]
     },
     "types": [
       "jquery",

@@ -8,6 +8,10 @@
     "**/*.qa.ts"
   ],
   "compilerOptions": {
+    "paths": {
+      "@api/*": ["../../api/*"],
+      "@service/*": ["./app/services/*"]
+    },
     "baseUrl": "./src",
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
