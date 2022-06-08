@@ -28,7 +28,7 @@ let userRoutes;
 // Scopes the imported functions to just this function
 (() => {  
   // ENDPOINT HANDLERS
-  const searchUser =
+  const { searchUser } =
     require('../endpoint/user/searchUser');
   const getUserCount =
     require('../endpoint/user/getUserCount');

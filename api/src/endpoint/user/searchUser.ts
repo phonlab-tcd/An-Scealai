@@ -33,11 +33,11 @@ function sanitizeUser(u: typeof User): SanitizedUser{
   return {username,_id,role,status,language};
 }
 
-function asNum(x) {
+function asNum(x: any) {
   return Number(x) || parseInt(x);
 }
 
-function makeReqBody(req) {
+function makeReqBody(req: Express.Request) {
   const limit = (()=>{
     const l = asNum(req.body.limit);
     return l ? l : 20;
@@ -48,8 +48,8 @@ function makeReqBody(req) {
     else return num;
   })();
   const searchString = req.body.searchString ? req.body.searchString : '';
-  const defaultRoles = ['STUDENT','TEACHER','ADMIN'];
-  function validRoles(r) {
+  const defaultRoles: Role[] = ['STUDENT','TEACHER','ADMIN'];
+  function validRoles(r: any): Role[] {
     if (Array.isArray(r)) return r;
     if (defaultRoles.includes(r)) return [r.toUpperCase()];
     return defaultRoles;
@@ -60,13 +60,18 @@ function makeReqBody(req) {
   return { searchString, limit, currentPage, roles };
 }
 
-function query(searchString, roles) {
+type MongoQuery = {
+  username: {$regex: RegExp };
+  role:     {$in: Role[]};
+}
+
+function query(searchString: string, roles: Role[]): MongoQuery {
   const username = {$regex: new RegExp(searchString, 'i')};
   const role    = {$in: roles};
   return {username,role};
 }
 
-function paginateUsers(currentPage,limit,query) {
+function paginateUsers(currentPage:number,limit:number,query:MongoQuery) {
   return User
       .find(query)
       .sort({username: "asc"})
@@ -90,7 +95,6 @@ type ERes = Express.Response;
 type Res  = Promise<Express.Response<SearchUserEndpoint>>;
 export async function searchUser(req: EReq, res: ERes): Res{
   const validatedQuery = makeReqBody(req);
-  console.log(validatedQuery);
   const {searchString, roles, currentPage, limit} = validatedQuery;
   const mongoQuery = query(searchString, roles);
   const paginatedUsers = paginateUsers(currentPage, limit, mongoQuery);
@@ -100,5 +104,3 @@ export async function searchUser(req: EReq, res: ERes): Res{
   const users = usersFull.map(sanitizeUser);
   return res.json({users, count, validatedQuery});
 }
-
-module.exports = searchUser;
