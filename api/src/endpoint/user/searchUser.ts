@@ -1,5 +1,5 @@
 import Express from 'express';
-import { Role } from '../../../../ngapp/src/role';
+import { Role } from '@ngapp/role';
 export type SearchUserEndpoint = {
   users: SanitizedUser[];
   count:number;
