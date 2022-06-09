@@ -43,7 +43,7 @@ let userRoutes;
     });
 })();
 
-userRoutes.get('/profile', auth, ctrlProfile.profileRead);
+userRoutes.get('/profile', auth.jwtmw, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
