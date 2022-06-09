@@ -4,16 +4,11 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "TEST=1 jest --runInBand --forceExit",
+    "test": "TEST=1 jest --forceExit --silent --detectOpenHandles",
+    "test:v": "TEST=1 jest --forceExit --detectOpenHandles",
     "start": "nodemon server.js",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
-  },
-  "jest": {
-    "preset": "@shelf/jest-mongodb",
-    "setupFiles": [
-      "<rootDir>/utils/test-setup.js"
-    ]
   },
   "keywords": [],
   "author": "",
@@ -35,7 +30,7 @@
     "lodash": "^4.17.21",
     "logger": "^0.0.1",
     "mongo-unit": "^2.0.1",
-    "mongodb": "^3.6.9",
+    "mongodb": "^4.7.0",
     "mongoose": "^5.13.8",
     "multer": "^1.4.2",
     "node-html-parser": "^1.4.9",
@@ -56,7 +51,7 @@
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
-    "@shelf/jest-mongodb": "^2.2.0",
+    "@shelf/jest-mongodb": "^2.2.2",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
     "jest": "^27.0.6",

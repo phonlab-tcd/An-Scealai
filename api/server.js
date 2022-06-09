@@ -25,11 +25,7 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
-
 const dbURL = require('./utils/dbUrl');
-
-// use this to test where uncaughtExceptions get logged
-// throw new Error('test error');
 
 logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
