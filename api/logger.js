@@ -78,20 +78,22 @@ logger = winston.createLogger({
   },
 });
 
-require('winston-mongodb');
-const mongoTransport = new winston.transports.MongoDB({
-  level: 'info', // info is the default
-  db: require('./utils/dbUrl'),
-  collection: 'log', // default is 'log'
-  options: { // modified version of default
-    poolSize: 2, // default
-    useNewUrlParser: true, // default
-    useUnifiedTopology: true, // not default
-  },
-  handleExceptions: true,
-});
-logger.info('Adding MongoDB transport to logger');
-logger.add(mongoTransport);
+if(process.env.NODE_ENV !== 'test') {
+  require('winston-mongodb');
+  const mongoTransport = new winston.transports.MongoDB({
+    level: 'info', // info is the default
+    db: require('./utils/dbUrl'),
+    collection: 'log', // default is 'log'
+    options: { // modified version of default
+      poolSize: 2, // default
+      useNewUrlParser: true, // default
+      useUnifiedTopology: true, // not default
+    },
+    handleExceptions: true,
+  });
+  logger.info('Adding MongoDB transport to logger');
+  logger.add(mongoTransport);
+}
 
 // EXAMPLE LOGGER USAGE
 // logger.emerg('this is just a test');
