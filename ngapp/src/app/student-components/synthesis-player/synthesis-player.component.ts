@@ -9,8 +9,8 @@ import { TranslationService } from "app/translation.service";
   selector: 'app-synthesis-player',
   templateUrl: './synthesis-player.component.html',
   styleUrls: [
-    './synthesis-player.component.css',
-    '../../app.component.css',
+    './synthesis-player.component.scss',
+    '../../app.component.scss',
    ]
 })
 export class SynthesisPlayerComponent implements OnInit {

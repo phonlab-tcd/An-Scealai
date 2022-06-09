@@ -1,19 +1,23 @@
 {
   "defaultProject": "an-scealai",
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
-  },
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "an-scealai": {
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"cli": {
+		"analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
+	},
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"an-scealai": {
       "projectType": "application",
-      "schematics": {},
-      "root": "",
       "sourceRoot": "src",
       "prefix": "app",
-      "architect": {
+			"root": "",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss"
+				}
+			},
+			"architect": {
         "build": {
           "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
@@ -32,7 +36,7 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/angular-text-input-highlight/text-input-highlight.css",
-              "src/styles.css",
+							"src/styles.scss",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
               "node_modules/quill/dist/quill.snow.css"
@@ -44,89 +48,69 @@
               }
             ]
           },
-          "configurations": {
-            "production": {
+					"configurations": {
+						"production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "2.5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "5kb",
-                  "maximumError": "9kb"
-                }
+                { "type": "initial",            "maximumWarning": "500kb",  "maximumError": "2.5mb" },
+                { "type": "anyComponentStyle",  "maximumWarning": "5kb",    "maximumError": "9kb" }
               ],
               "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/abairconfig.ts",
-                  "with": "src/abairconfig.prod.ts"
-                }
+                { "replace": "src/environments/environment.ts",   "with": "src/environments/environment.prod.ts" },
+                { "replace": "src/abairconfig.ts",                "with": "src/abairconfig.prod.ts" }
               ],
-              "outputHashing": "all"
-            },
-            "dev": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
-            },
-            "qa": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/abairconfig.ts",
-                  "with": "src/abairconfig.qa.ts"
-                }
-              ]
+							"outputHashing": "all"
+						},
+						"dev": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						},
+						"qa": {
+							"fileReplacements": [
+								{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.prod.ts" },
+								{ "replace": "src/abairconfig.ts",              "with": "src/abairconfig.qa.ts" }
+							]
             }
-          }
-        },
-        "serve": {
-          "defaultConfiguration": "dev",
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "browserTarget": "an-scealai:build:production"
-            },
-            "dev": {
-              "browserTarget": "an-scealai:build:dev"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "an-scealai:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "scripts": []
-          }
-        },
+					}
+				},
+				"serve": {
+					"defaultConfiguration": "dev",
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "an-scealai:build:production"
+						},
+						"dev": {
+							"browserTarget": "an-scealai:build:dev"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "an-scealai:build"
+					}
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"main": "src/test.ts",
+						"polyfills": "src/polyfills.ts",
+						"tsConfig": "tsconfig.spec.json",
+						"karmaConfig": "src/karma.conf.js",
+						"assets": [
+							"src/favicon.ico",
+							"src/assets"
+						],
+						"styles": [
+							"src/styles.scss"
+						],
+						"scripts": []
+					}
+				},
         "cypress-run": {
           "builder": "@cypress/schematic:cypress",
           "options": {
@@ -158,7 +142,7 @@
             }
           }
         }
-      }
-    }
-  }
+			}
+		}
+	}
 }

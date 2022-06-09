@@ -14,7 +14,7 @@ declare var MediaRecorder : any;
 @Component({
   selector: 'app-teacher-story',
   templateUrl: './teacher-story.component.html',
-  styleUrls: ['./teacher-story.component.css']
+  styleUrls: ['./teacher-story.component.scss']
 })
 export class TeacherStoryComponent implements OnInit {
 

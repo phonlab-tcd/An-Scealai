@@ -31,6 +31,7 @@ function verify(username, password, cb) {
     return cb(null, user);
   });
 }
+
 passport.use(new LocalStrategy(verify));
 
 function jwtCallback(payload, done) {

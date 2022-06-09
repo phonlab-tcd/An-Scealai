@@ -10,7 +10,7 @@ import { SearchUserEndpoint } from '@api/src/endpoint/user/searchUser';
 @Component({
   selector: 'app-find-user',
   templateUrl: './find-user.component.html',
-  styleUrls: ['./find-user.component.css']
+  styleUrls: ['./find-user.component.scss']
 })
 export class FindUserComponent implements OnInit {
   constructor(
