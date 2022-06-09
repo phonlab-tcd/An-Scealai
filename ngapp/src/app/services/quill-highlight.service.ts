@@ -187,8 +187,11 @@ export class QuillHighlightService {
       .pipe(map(gTags => this.gramadoir2QuillTags(gTags, {})))
       .toPromise();
 
-    for (const tag of this.currentGenetiveHighlightTags) {
-      tag.messages.ga = 'Translation required';
+    for (const tag of this.currentGenetiveHighlightTags) { // TODO(oisin): use instead the userFriendlyMessage mapping in the 2quillTag function
+      tag.messages = {
+        en: 'Consider using the genitive.',
+        ga: 'Úsáid an tuiseal ginideach.'
+      }
     }
 
     return currentGramadoirErrorTypes;

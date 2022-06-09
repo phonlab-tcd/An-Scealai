@@ -494,10 +494,19 @@ export class GrammarService {
 
   genitiveDirectObservable(input: string): Observable<any> {
     // Temporarily using backend to get around CORS
+    // return this.http.post(
+    //   'http://localhost:4000/story/genitive',
+    //   {text: input}
+    // );
+    // When CORS is activated we should be able to use something like:
     return this.http.post(
-      'http://localhost:4000/story/genitive',
-      {text: input}
-    );
+      this.genitiveUrl,
+      this.genitiveXWwwFormUrlencodedRequestData(input),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+      });
   }
 
   async getVowelTagsForTextOnDatabase(id: string): Promise<HighlightTag[]> {
