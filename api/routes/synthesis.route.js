@@ -1,3 +1,4 @@
+const {describe,it} = require('../utils/inline-tests')();
 const express = require('express');
 const synthesisRoutes = express.Router();
 const logger = require('../logger');

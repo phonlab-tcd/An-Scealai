@@ -1,3 +1,4 @@
+const {describe,it} = require('../utils/inline-tests')();
 const express = require('express');
 const app = express();
 const logger = require('../logger');

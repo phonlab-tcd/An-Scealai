@@ -1,4 +1,4 @@
-const app = require('../server');
+const { app } = require('../server');
 const supertest = require('supertest');
 const request = supertest(app);
 const {removeAllCollections} = require('../utils/test-utils');

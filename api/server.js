@@ -1,4 +1,3 @@
-
 // Best to initialize the logger first
 const logger = require('./logger');
 
@@ -95,10 +94,11 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (process.env.TEST != 1) {
-  const server = app.listen(port, function(){
-      logger.info('Listening on port ' + port);
-  });
-}
 
-module.exports = app;
+module.exports.app = app;
+
+function listen() {
+  function listening(){logger.info(`Listening on port ${port}`)}
+  module.exports.server = app.listen(port, listening);
+}
+if (process.env.NODE_ENV !== 'test') listen();

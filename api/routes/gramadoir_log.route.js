@@ -1,3 +1,4 @@
+const {describe,it} = require('../utils/inline-tests')();
 const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 ////////////////////////////////////////////// POST

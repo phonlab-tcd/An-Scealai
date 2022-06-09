@@ -1,3 +1,4 @@
+const {describe,it} = require('../utils/inline-tests')();
 const logger = require('../logger');
 const makeEndpoints = require('../utils/makeEndpoints');
 

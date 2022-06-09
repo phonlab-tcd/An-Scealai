@@ -45,6 +45,8 @@ let storyRoutes;
     require('../endpoints_functions/story/feedbackAudio');
   const viewFeedback =
     require('../endpoints_functions/story/viewFeedback');
+  const title =
+    require('../endpoints_functions/story/title');
 
   storyRoutes = makeEndpoints({
     get: {

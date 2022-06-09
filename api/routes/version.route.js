@@ -1,3 +1,4 @@
+const {describe,it} = require('../utils/inline-tests')();
 const versionRoutes = require('express').Router();
 const path = require('path');
 

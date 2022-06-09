@@ -1,3 +1,5 @@
+const {describe,it} = require('../utils/inline-tests')();
+const awaitTeardown = require('../utils/awaitTeardown');
 // user.route.js 
 // endpoint prefix = '/user'
 const logger = require('../logger');
@@ -6,7 +8,7 @@ const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
 
 const mail = require('../mail');
-if(mail.couldNotCreate && !process.env.TEST){
+if(mail.couldNotCreate && !(process.env.NODE_ENV === 'test')){
   logger.info(
     "Could not create mail transporter which is required by the user route. Refusing to continue.");
   process.exit(1);
@@ -42,6 +44,34 @@ let userRoutes;
       }
     });
 })();
+
+describe('/user/searchUser', () => {
+  let request;
+  beforeAll(()=>{
+    const { app }   = require('../server');
+    const supertest = require('supertest');
+    request = supertest(app);
+  });
+
+  function aliceBobCarl() {
+    const prefix = crypto.randomBytes(32).toString('hex');
+    function to(username) { return {username: prefix+username}};
+    const users = ['alice','bob','carl'].map(to);
+    return {users,prefix};
+  }
+
+  it('returns a user if their username matches the search string', async () => {
+    const {users,prefix} = aliceBobCarl();
+    console.log(users);
+    await User.create(users);
+    const searchString = prefix
+    const response = await request.post(`/user/searchUser/`)
+      .send({searchString})
+      .expect(200);
+    expect(response.body.users[0].username).toBe(users[0].username);
+  });
+});
+
 
 userRoutes.get('/profile', auth, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
