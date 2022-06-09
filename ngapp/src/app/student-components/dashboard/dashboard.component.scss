@@ -1,3 +1,11 @@
+h1 {
+  white-space: nowrap;
+  overflow-x: none;
+  overflow-y: auto;
+  margin: auto;
+  padding: 2px;
+}
+
 .synthesisLoading {
   align: center;
   border-right: 2px solid orange;
@@ -175,10 +183,10 @@
 }
 
 .bookHeader {
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    padding-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  padding-bottom: 5px;
 }
 
 .headerUpper {

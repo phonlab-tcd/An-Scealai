@@ -58,6 +58,19 @@ app.use(passport.initialize());
 
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
+if(process.env.FUDGE) {
+  console.log('ADD FUDGE VERIFICATION ENDPOINT');
+  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
+    console.log(req.query);
+    const User = require('./models/user');
+    User.findOneAndUpdate(
+      {username: req.params.username},
+      {$set: {status: 'Active'}}).then(
+        u => {logger.info(u);           res.json(u)},
+        e => {logger.error(e.stack);    res.json(e)},
+      );
+  });
+}
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);

@@ -1,3 +1,6 @@
+.ql-editor {
+  min-height: 50vh;
+}
 /* Set droplist names - -item is the currently selected font, -label is the font's appearance in the droplist*/
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value='times-new-roman']::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value='times-new-roman']::before 

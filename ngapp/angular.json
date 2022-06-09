@@ -1,4 +1,5 @@
 {
+  "defaultProject": "an-scealai",
 	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
 	"cli": {
 		"analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
@@ -7,70 +8,56 @@
 	"newProjectRoot": "projects",
 	"projects": {
 		"an-scealai": {
-			"projectType": "application",
+      "projectType": "application",
+      "sourceRoot": "src",
+      "prefix": "app",
+			"root": "",
 			"schematics": {
 				"@schematics/angular:component": {
 					"style": "scss"
 				}
 			},
-			"root": "",
-			"sourceRoot": "src",
-			"prefix": "app",
 			"architect": {
-				"build": {
-					"defaultConfiguration": "production",
-					"builder": "@angular-devkit/build-angular:browser",
-					"options": {
-						"aot": true,
-						"outputPath": "unpublished_dist",
-						"index": "src/index.html",
-						"main": "src/main.ts",
-						"polyfills": "src/polyfills.ts",
-						"tsConfig": "tsconfig.app.json",
-						"assets": [
-							"src/favicon.ico",
-							"src/assets"
-						],
-						"styles": [
-							"node_modules/bootstrap/dist/css/bootstrap.min.css",
-							"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-							"node_modules/angular-text-input-highlight/text-input-highlight.css",
+        "build": {
+          "defaultConfiguration": "production",
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "aot": true,
+            "outputPath": "unpublished_dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/angular-text-input-highlight/text-input-highlight.css",
 							"src/styles.scss",
-							"node_modules/quill/dist/quill.core.css",
-							"node_modules/quill/dist/quill.bubble.css",
-							"node_modules/quill/dist/quill.snow.css"
-						],
-						"scripts": [
-							"./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-							{
-								"input": "node_modules/document-register-element/build/document-register-element.js"
-							}
-						]
-					},
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css"
+            ],
+            "scripts": [
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
+            ]
+          },
 					"configurations": {
 						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "2.5mb"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "5kb",
-									"maximumError": "9kb"
-								}
-							],
-							"fileReplacements": [
-								{
-									"replace": "src/environments/environment.ts",
-									"with": "src/environments/environment.prod.ts"
-								},
-								{
-									"replace": "src/abairconfig.ts",
-									"with": "src/abairconfig.prod.ts"
-								}
-							],
+              "budgets": [
+                { "type": "initial",            "maximumWarning": "500kb",  "maximumError": "2.5mb" },
+                { "type": "anyComponentStyle",  "maximumWarning": "5kb",    "maximumError": "9kb" }
+              ],
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts",   "with": "src/environments/environment.prod.ts" },
+                { "replace": "src/abairconfig.ts",                "with": "src/abairconfig.prod.ts" }
+              ],
 							"outputHashing": "all"
 						},
 						"dev": {
@@ -83,16 +70,10 @@
 						},
 						"qa": {
 							"fileReplacements": [
-								{
-									"replace": "src/environments/environment.ts",
-									"with": "src/environments/environment.prod.ts"
-								},
-								{
-									"replace": "src/abairconfig.ts",
-									"with": "src/abairconfig.qa.ts"
-								}
+								{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.prod.ts" },
+								{ "replace": "src/abairconfig.ts",              "with": "src/abairconfig.qa.ts" }
 							]
-						}
+            }
 					}
 				},
 				"serve": {
@@ -129,9 +110,39 @@
 						],
 						"scripts": []
 					}
-				}
+				},
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "an-scealai:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "an-scealai:serve:production"
+            }
+          }
+        },
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "watch": true,
+            "headless": false
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "an-scealai:serve",
+            "watch": false,
+            "headless": true
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "an-scealai:serve:production"
+            }
+          }
+        }
 			}
 		}
-	},
-	"defaultProject": "an-scealai"
+	}
 }
