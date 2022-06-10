@@ -1,6 +1,6 @@
 # An Scéalaí
 
-https://www.abair.tcd.ie/scealai/
+https://abair.ie/scealai/
 
 ### What is An Scéalaí?
 ###### *Taken from our User Guide*
