@@ -3,4 +3,6 @@ module.exports = {
   setupFiles: [ "<rootDir>/utils/test-setup.js" ],
   setupFilesAfterEnv: ["<rootDir>/utils/test-after-env.js"],
   collectCoverage: true,
+  forceExit: true,
+  detectOpenHandles: true,
 };

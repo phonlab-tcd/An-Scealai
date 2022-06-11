@@ -4,8 +4,8 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "TEST=1 jest --forceExit --silent --detectOpenHandles",
-    "test:v": "TEST=1 jest --forceExit --detectOpenHandles",
+    "test": "TEST=1 jest --silent",
+    "test:v": "TEST=1 jest",
     "start": "nodemon server.js",
     "start:prod": "DB=an-scealai PORT=4000 node server.js",
     "start:qa": "DB=qa PORT=4002 node server.js"
