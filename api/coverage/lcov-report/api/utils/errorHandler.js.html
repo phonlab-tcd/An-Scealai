@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.33% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/15</span>
+                <span class='fraction'>3/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.66% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/12</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.33% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/15</span>
+                <span class='fraction'>3/15</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,35 +94,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const {
   API400Error,
   API404Error,
@@ -137,19 +137,19 @@ const logger = require('../logger');
  * through this errorHandler, where we can add standard
  * handling rules for each type of error.
  */
-function errorHandler(err, req, res, next) {
-  if(err.status)
-    res.status(err.status);
+function <span class="fstat-no" title="function not covered" >errorHandler(</span>err, req, res, next) {
+<span class="cstat-no" title="statement not covered" >  if(err.status)</span>
+<span class="cstat-no" title="statement not covered" >    res.status(err.status);</span>
 &nbsp;
-  logger.alert({err: err.stack || <span class="branch-1 cbranch-no" title="branch not covered" >err,</span> ip: req.socket.remoteAddress});
-  console.error(err);
+<span class="cstat-no" title="statement not covered" >  logger.alert({err: err.stack || err, ip: req.socket.remoteAddress});</span>
+<span class="cstat-no" title="statement not covered" >  console.error(err);</span>
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!(err instanceof APIError))
+<span class="cstat-no" title="statement not covered" >  if (!(err instanceof APIError))</span>
 <span class="cstat-no" title="statement not covered" >      return res.send(err);</span>
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (err instanceof API400Error )
+<span class="cstat-no" title="statement not covered" >  if (err instanceof API400Error )</span>
 <span class="cstat-no" title="statement not covered" >    return res.status(400).json(err.message);</span>
-  if (err instanceof API404Error )
-    return res.status(404).json(err.message);
+<span class="cstat-no" title="statement not covered" >  if (err instanceof API404Error )</span>
+<span class="cstat-no" title="statement not covered" >    return res.status(404).json(err.message);</span>
 <span class="cstat-no" title="statement not covered" >  if (err instanceof API500Error) {/* TODO: Notify us */}</span>
   // Handle other status codes in whatever ways we want
 <span class="cstat-no" title="statement not covered" >  return res.status(err.status).json(err.message);</span>
@@ -163,7 +163,7 @@ module.exports = errorHandler;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Jun 11 2022 12:44:03 GMT+0100 (Irish Standard Time)
+                at Sat Jun 11 2022 12:56:07 GMT+0100 (Irish Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
