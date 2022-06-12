@@ -36,6 +36,7 @@
     "logger": "^0.0.1",
     "mongo-unit": "^2.0.1",
     "mongodb": "^3.6.9",
+    "mongodb-memory-server": "^8.6.0",
     "mongoose": "^5.13.8",
     "multer": "^1.4.2",
     "node-html-parser": "^1.4.9",
@@ -62,6 +63,7 @@
     "jest": "^27.0.6",
     "mockingoose": "^2.15.2",
     "nodemon": "^2.0.13",
-    "supertest": "^6.1.4"
+    "supertest": "^6.1.4",
+    "vitest": "^0.14.2"
   }
 }
