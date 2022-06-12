@@ -35,20 +35,24 @@ logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(
-    () => {
-      logger.info('Database is connected');
-    },
-    (err) => {
-      logger.error({
-        msg: 'Cannot connect to the database. ',
-        while: 'trying to connect to mongodb with mongoose',
-        error: err,
-      });
-    });
+async function prodConnection() {
+  const useNewUrlParser = true;
+  const useUnifiedTopology = true;
+  const serverSelectionTimeoutMS = 1000;
+  const heartbeatFrequencyMS = 100;
+  const opts = {
+    useNewUrlParser,
+    useUnifiedTopology,
+    heartbeatFrequencyMS,
+    serverSelectionTimeoutMS,
+  };
+  await mongoose.connect(dbURL, opts);
+  logger.info(`connected ${dbURL}`);
+}
+
+if(process.env.NODE_ENV !== 'test') {
+  prodConnection();
+}
 
 const app = express();
 app.use('/version', require('./routes/version.route'));
