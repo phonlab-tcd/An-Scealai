@@ -31,20 +31,25 @@ logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(
-    () => {
-      logger.info('Database is connected');
-    },
-    (err) => {
-      logger.error({
-        msg: 'Cannot connect to the database. ',
-        while: 'trying to connect to mongodb with mongoose',
-        error: err,
+function connect(){
+  mongoose.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }).then(
+      () => {
+        logger.info('Database is connected');
+      },
+      (err) => {
+        logger.error({
+          msg: 'Cannot connect to the database. ',
+          while: 'trying to connect to mongodb with mongoose',
+          error: err,
+        });
       });
-    });
+}
+
+if(process.env.NODE_ENV !== 'test') connect();
+
 
 const app = express();
 app.use('/version', require('./routes/version.route'));

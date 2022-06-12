@@ -1,6 +1,14 @@
 const config = require("../DB");
 const mongoose = require("mongoose");
 
+async function removeCollection(collection) {
+  collection = mongoose.connection.collections[collection];
+  console.log(mongoose.connection.collections);
+  console.log(collection);
+  
+  return await collection.deleteMany();
+}
+
 async function removeAllCollections() {
   // We only want to remove the collections if mongoose
   // is connected to the test db.
@@ -19,4 +27,7 @@ async function removeAllCollections() {
   }
 }
 
-module.exports = {removeAllCollections};
+module.exports = {
+  removeAllCollections,
+  removeCollection,
+};
