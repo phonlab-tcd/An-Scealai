@@ -14,11 +14,13 @@
     "setupFiles": [
       "<rootDir>/utils/test-setup.js"
     ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/utils/test-setup-per-file.js"
-    ],
     "forceExit": true,
-    "collectCoverage": false
+    "collectCoverage": false,
+    "setupFilesAfterEnv": [
+      "<rootDir>/utils/test-setup-after-env.js"
+    ],
+    "globalSetup": "<rootDir>/utils/test-global-setup.js",
+    "globalTeardown": "<rootDir>/utils/test-global-teardown.js"
   },
   "keywords": [],
   "author": "",

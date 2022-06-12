@@ -5,14 +5,15 @@ const Story = require('../models/story');
 const gramadoirModels = require('../models/gramadoir');
 const {removeAllCollections} = require('../utils/test-utils');
 const grammarUtils = require('../utils/grammar');
+const random = require('../utils/random');
 
-afterEach(async () => {
-  await removeAllCollections();
-});
+// afterEach(async () => {
+//   await removeAllCollections();
+// });
 
-afterAll(async () => {
-  mongoose.connection.close();
-});
+// afterAll(async () => {
+//   mongoose.connection.close();
+// });
 
 describe('grammar utils', () => {
   it(
@@ -26,19 +27,18 @@ describe('gramadoir log route', () => {
   it(
     `should create cache item with no grammar tags`,
     async () => {
-      const cacheItem = await gramadoirModels.GramadoirCache.create({
-        text: 'dia dhuit',
-        grammarTags: [],
-      });
+      const text = random.string();
+      const grammarTags = [];
+      const cacheItem = await gramadoirModels.GramadoirCache
+        .create({text,grammarTags});
   });
 
   it(
     `should create cache item with one
     error in QuillHighlightTag form`,
     async () => {
-      const cacheItem = await gramadoirModels.GramadoirCache.create({
-        text: 'dia dhuit',
-        grammarTags: [{
+      const text = random.string();
+      const grammarTags = [{
           start: 0,
           length: 3,
           type: 'CAPITALIZATION',
@@ -46,10 +46,11 @@ describe('gramadoir log route', () => {
             ga: 'mór!',
             en: 'big!',
             }
-          }],
-      });
+          }];
+      const cacheItem = await gramadoirModels.GramadoirCache
+        .create({text,grammarTags});
       expect(cacheItem).toBeDefined();
-      expect(cacheItem.text).toBe('dia dhuit');
+      expect(cacheItem.text).toBe(text);
       expect(cacheItem.grammarTags.length).toBe(1);
       expect(cacheItem.grammarTags[0].start).toBeDefined();
       expect(cacheItem.grammarTags[0].length).toBeDefined();
@@ -62,13 +63,12 @@ describe('gramadoir log route', () => {
     `upsertStoryGramadoirVersion should throw if
     userId,storyId,or gramId is invalid`,
     async () => {
+      const text = random.string();
+      const grammarTags = [];
       const [user,story,gram] = await Promise.all([
-        User.create({username: 'neimhin'}),
+        User.create({username:random.string()}),
         Story.create({}),
-        gramadoirModels.GramadoirCache.create({
-          text: 't',
-          grammarTags: [],
-        })
+        gramadoirModels.GramadoirCache.create({text,grammarTags})
       ]);
       let history = grammarUtils.upsertStoryGramadoirVersion(
         null,
@@ -94,13 +94,12 @@ describe('gramadoir log route', () => {
     `should create a new user and add a grammar error
     history item for that user`,
     async () => {
+      const text = random.string();
+      const grammarTags = [];
       const [user,story,gram] = await Promise.all([
-        User.create({username: 'neimhin'}),
+        User.create({username:random.string()}),
         Story.create({}),
-        gramadoirModels.GramadoirCache.create({
-          text: 't',
-          grammarTags: [],
-        })
+        gramadoirModels.GramadoirCache.create({text,grammarTags})
       ]);
       const history = grammarUtils.upsertStoryGramadoirVersion(
         story._id,

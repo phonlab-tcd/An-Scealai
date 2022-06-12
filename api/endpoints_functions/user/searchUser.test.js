@@ -3,6 +3,7 @@ const searchUser = require('./searchUser');
 const User = require('../../models/user');
 const {API404Error, API400Error} = require('../../utils/APIError');
 const {makeFakeRes, json} = require('../../utils/makeFakeRes');
+const random = require('../../utils/random');
 
 
 describe('searchUser endpoint function', () => {
@@ -61,10 +62,10 @@ describe('searchUser endpoint function', () => {
 const makeFakeUsers = () => {
   return [
       {
-        username: 'alice'
+        username: random.string() 
       },
       {
-        username: 'bob'
+        username: random.string() 
       }
   ];
 }
