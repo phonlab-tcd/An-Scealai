@@ -499,6 +499,7 @@ export class GrammarService {
     //   {text: input}
     // );
     // When CORS is activated we should be able to use something like:
+    console.log('It is this code');
     return this.http.post(
       this.genitiveUrl,
       this.genitiveXWwwFormUrlencodedRequestData(input),
