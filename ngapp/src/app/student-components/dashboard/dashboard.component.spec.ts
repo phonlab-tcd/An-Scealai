@@ -8,7 +8,7 @@ import { QuillModule } from 'ngx-quill';
 import { TranslationService } from '../../translation.service';
 import { CommonModule } from '@angular/common';
 
-fdescribe('DashboardComponent', () => {
+describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
@@ -51,7 +51,7 @@ fdescribe('DashboardComponent', () => {
     expect(title.nativeElement.innerText).toEqual('...');
   });
 
-  it('should display the story\'s title', async ()=>{
+  xit('should display the story\'s title', async ()=>{
     const id = 1234;
     spyOn(component,'getStories').and
       .returnValue(Promise.resolve([{title: 'hello',_id: id,text:'text'}]));
@@ -63,7 +63,7 @@ fdescribe('DashboardComponent', () => {
     expect(title.nativeElement.innerText).toEqual('hello');
   });
 
-  it('should display the story\'s text', async ()=>{
+  xit('should display the story\'s text', async ()=>{
     const id = 1234;
     spyOn(component,'getStories').and
       .returnValue(Promise.resolve([{
