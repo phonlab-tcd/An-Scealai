@@ -1,29 +1,20 @@
 dist
 
 **/node_modules
-session.vim
 
 .DS_Store
 
 ngapp/build_prod_local
 
-ngapp/build_prod_local
-
 /api/sendinblue.json
-
-**/logs/*
-
-ngapp/build_prod_local/
+./api/globalConfig.json
 
 session.vim
-
-/mongotest/logs/**
 
 /data/**
 
 /api/logs/**
-/api/sendinblue.json
-/api/globalConfig.json
+api/globalConfig.json
 /api/node_modules_backup_*
 
 /sshlogin

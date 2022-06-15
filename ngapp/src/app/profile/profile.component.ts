@@ -19,7 +19,7 @@ import { RecordingService } from '../recording.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
 
@@ -60,7 +60,6 @@ export class ProfileComponent implements OnInit {
         if (code.length > 0) {
           this.classroomService.getClassroomFromCode(code).subscribe(
             (res) => {
-              console.log(res);
               if (res.found) {
                 this.classroomCodeOutput = null;
                 this.foundClassroom = res.classroom;
@@ -108,7 +107,6 @@ export class ProfileComponent implements OnInit {
     });
     this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe(
       (res) => {
-        console.log('stat entry deleted');
       });
   }
 
@@ -142,20 +140,16 @@ export class ProfileComponent implements OnInit {
       this.storyService.getStoriesFor(userDetails.username).subscribe( (res: Story[]) => {
         for(let story of res) {
           this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
-            console.log(res);
           });
           this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
-            console.log(res);
           })
         }
       });
       
       this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
-        console.log(res);
       });
       
       this.statsService.deleteStats(userDetails._id).subscribe( (res) => {
-        console.log(res);
       });
     }
     
@@ -163,24 +157,19 @@ export class ProfileComponent implements OnInit {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
           this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
-            console.log(res);
           });
         }
       });
       
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
-        console.log(res)
       });
     }
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-      console.log(res);
     });  
     this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-      console.log(res);
     });
     this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-      console.log(res);
     });
     this.auth.logout();
   }
@@ -210,7 +199,11 @@ export class ProfileComponent implements OnInit {
     if(this.auth.getUserDetails().role === "STUDENT") {
       await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
       const stats = await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise()
-        .catch(err => console.log(`${this.auth.getUserDetails().username} doesn't have any associated studentStats!`));
+        .catch(err => {
+          console.error(
+            `${this.auth.getUserDetails().username} \
+              doesn't have any associated studentStats!`, err);
+        });
       if (stats) {
         await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
       }
@@ -229,7 +222,6 @@ export class ProfileComponent implements OnInit {
         } else {
           this.errorMessage = '';
           this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((res) => {
-            console.log(res);
           });
           this.auth.logout();
         }

@@ -9,7 +9,7 @@ import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import { Message } from './message';
 import { User } from './user';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,6 @@ export class MessageService {
       seenByRecipient: message.seenByRecipient,
     };
     
-    console.log(messageObj);
     this.http.post(this.baseUrl + 'create', messageObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);

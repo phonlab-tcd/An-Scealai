@@ -1,35 +1,44 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-//import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-import { NavigationCancel, Event, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { AuthenticationService } from './authentication.service';
-import { StoryService } from './story.service';
-import { Story } from './story';
-import { Message } from './message';
-import { Classroom } from './classroom';
-import { NotificationService } from './notification-service.service';
-import { EngagementService } from './engagement.service';
-import { TranslationService } from './translation.service';
-import { MessageService } from './message.service';
-import { filter } from 'rxjs/operators';
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { Component              } from '@angular/core';
+import { OnInit                 } from '@angular/core';
+import { HostListener           } from '@angular/core';
+import { NavigationCancel       } from '@angular/router';
+import { Event                  } from '@angular/router';
+import { NavigationEnd          } from '@angular/router';
+import { NavigationError        } from '@angular/router';
+import { NavigationStart        } from '@angular/router';
+import { Router                 } from '@angular/router';
+
+import { filter                 } from 'rxjs/operators';
+import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
+// import { SlimLoadingBarService  } from 'ng2-slim-loading-bar';
+
+import { Story                  } from 'app/story';
+import { Message                } from 'app/message';
+import { Classroom              } from 'app/classroom';
+import { NotificationService    } from 'app/notification-service.service';
+import { EngagementService      } from 'app/engagement.service';
+import { TranslationService     } from 'app/translation.service';
+import { MessageService         } from 'app/message.service';
+import { AuthenticationService  } from 'app/authentication.service';
+import { StoryService           } from 'app/story.service';
 
 declare var gtag;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 
 export class AppComponent {
   
   title: string = 'An Scéalaí';
   checkVal: boolean = false;
-  notificationsShown : boolean = false;
-  storiesForNotifications : Story[] = [];
+  notificationsShown: boolean = false;
+  storiesForNotifications: Story[] = [];
   messagesForNotifications: Message[] = [];  
   teacherMessagesForNotifications: Map<Classroom, number> = new Map();
-  wasInside : boolean = false;
+  wasInside: boolean = false;
   currentUser: string = '';
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
@@ -47,7 +56,7 @@ export class AppComponent {
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
     });
-    
+
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     );
@@ -58,41 +67,32 @@ export class AppComponent {
     });
   }
 
-/*
-* Set the page langauge
-* Get list of stories that have notifications
-*/
+  // Set the page langauge
+  // Get list of stories that have notifications
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
-    console.log(this.currentLanguage);
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
       this.storiesForNotifications = res;
-      console.log(this.storiesForNotifications);
     });
 
     this.notificationSerivce.messageEmitter.subscribe( (res) => {
       this.messagesForNotifications = res;
-      console.log(this.messagesForNotifications);
     });
   
     this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
       this.teacherMessagesForNotifications = res;
-      console.log(this.teacherMessagesForNotifications);
       this.teacherMessagesSum = 0;
       for (let entry of Array.from(this.teacherMessagesForNotifications.entries())) {
         this.teacherMessagesSum += entry[1];
       }
-      console.log(this.teacherMessagesSum);
     });
-    
+
     if(this.auth.isLoggedIn()){
-      console.log(this.auth.getUserDetails().username);
     }
   }
-/*
-* Swap value of checkVal, if changed to false set notificationShown to false
-*/
+
+  // Swap value of checkVal, if changed to false set notificationShown to false
   changeCheck() {
     if(this.checkVal === false) {
       this.checkVal = true;
@@ -101,8 +101,8 @@ export class AppComponent {
       this.notificationsShown = false;
     }
   }
-  
-// Set value to show notifications to true
+
+  // Set value to show notifications to true
   showNotifications() {
     this.notificationsShown = !this.notificationsShown;
   }
@@ -112,7 +112,7 @@ export class AppComponent {
     this.notificationsShown = false;
     this._router.navigateByUrl('/dashboard/' + id);
   }
-  
+
   goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl('/messages/' + id);
@@ -126,20 +126,18 @@ export class AppComponent {
       this.changeToEnglish();
     }
   }
-  
+
   changeToEnglish() {
     this.ts.setLanguage("en");
     this.currentLanguage = "English";
   }
-  
+
   changeToIrish() {
     this.ts.setLanguage("ga");
     this.currentLanguage = "Gaeilge";
   }
 
-/*
-* Change loading bar status based on current event
-*/
+  // Change loading bar status based on current event
   private navigationInterceptor(event: Event): void {
     /*
     if (event instanceof NavigationStart) {
@@ -157,13 +155,13 @@ export class AppComponent {
    */
   }
 
-// Keep track of where the user clicks
+  // Keep track of where the user clicks
   @HostListener('click')
   clickInside() {
     this.wasInside = true;
   }
 
-// Hide the notification container if user clicks on the page
+  // Hide the notification container if user clicks on the page
   @HostListener('document:click')
   clickout() {
     if (!this.wasInside) {
@@ -171,5 +169,4 @@ export class AppComponent {
     }
     this.wasInside = false;
   }
-  
 }

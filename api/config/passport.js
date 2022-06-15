@@ -1,37 +1,38 @@
 const logger = require('../logger');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var mongoose = require('mongoose');
-var User = require('../models/user');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+const User = require('../models/user');
 mongoose.model('User');
 
-passport.use(new LocalStrategy(
+function verify(username, password, cb) {
+  console.log(username);
+  User.findOne({username: username}, (err, user) => {
+    if(err)
+      return cb(err); 
 
-  function(username, password, done) {
-    User.findOne({ username: username}, function(err, user) {
+    if(!user)
+      return cb({ messageKeys: ['username_not_found'], status: 404},false);
 
-      if(err) { 
-        logger.error(err);
-        return done(err); 
-      }
+    if(!user.validPassword(password))
+      return cb({ messageKeys: ['incorrect_password'], status: 401},false);
 
-      // If user doesn't exist
-      if(!user) {
-        return done(null, false, {
-          message: 'username_not_found'
-        });
-      }
+    if(user.status !== 'Active')
+      return cb({messageKeys: ['email_not_verified'], email: user.email, status: 401},false);
 
-      // If password is wrong
-      if(!user.validPassword(password)) {
-        return done(null, false, {
-          message: 'incorrect_password'
-        });
-      }
+    // If everything is correct, return user object
+    logger.info('Successfully authenticated user: ' + username);
+    return cb(null, user);
+  });
+}
 
-      // If everything is correct, return user object
-      logger.info('Successfully authenticated user:' + username);
-      return done(null, user);
-    });
-  }
-));
+passport.use(new LocalStrategy(verify));
+
+passport.serializeUser((user,done)=>{
+  done(null,user._id);
+});
+passport.deserializeUser((id,done)=>{
+  User.findById(id, (err,user)=>{
+    done(err,user);
+  });
+});

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 // import { User } from './user';
 import { Observable, of } from 'rxjs';
 import { User } from './user'
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +20,6 @@ export class UserService {
 
   getUserByUsername(username: string): Observable<any> {
     return this.http.get(this.baseUrl + 'getUserByUsername/' + username);
-  }
-
-  getAllUsers(): Observable<any> {
-    return this.http.get(this.baseUrl + 'getAllUsers/');
   }
 
   searchUser(searchString: string, pageNumber: number, limit: number, roles: string[]): Observable<any> {

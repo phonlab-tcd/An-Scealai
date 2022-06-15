@@ -24,7 +24,7 @@ uses a fileReplacement to swap `abairconfig.json` for
 To load the build into the public folder run (**CAREFUL**):
 `rm ngapp/dist/an-scealai/*`
 `cp -r ngapp/qa_build/** ngapp/dist/an-scealai`.
-**ONLY DO THIS IF YOU ARE IN `/home/scealai/an_scealai_test/`**
+**ONLY DO THIS IF YOU ARE IN `/home/scealai/an_scealai_qa/`**
 
 # Backend QA setup
 The second url `https://abair.ie/qa/anscealaibackend` redirects

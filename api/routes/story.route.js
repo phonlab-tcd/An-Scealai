@@ -1,36 +1,17 @@
-const express = require('express');
 const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
-const ObjectID = require('mongodb').ObjectID;
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const querystring = require('querystring');
 const request = require('request');
-
 const makeEndpoints = require('../utils/makeEndpoints');
-const { parse, stringify } = require('node-html-parser');
+const { parse } = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
 const abairBaseUrl = require('../abair_base_url');
 const logger = require('../logger');
-const dbUrl = require('../utils/dbUrl');
-
-const config = require('../DB');
 const Story = require('../models/story');
-
-// let db;
-// MongoClient.connect(dbUrl,
-//     {useNewUrlParser: true, useUnifiedTopology: true},
-//     (err, client) => {
-//       if (err) {
-//         console.log(
-//             'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
-//             'Please make sure that MongoDB is running.');
-//         process.exit(1);
-//       }
-//       db = client.db(process.env.DB || config.DB);
-//     });
 
 
 let storyRoutes;
@@ -67,20 +48,6 @@ let storyRoutes;
     },
   });
 })();
-
-// Get story by a given author from DB
-/*
-storyRoutes.route('/:author').get(function (req, res) {
-  Story.find({"author": req.params.author}, function (err, stories) {
-    if(err) {
-      console.log(err);
-      res.json(err)
-    } else {
-      res.json(stories);
-    }
-  });
-});
-*/
 
 // Get stories by a given author after a certain date from DB
 storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
@@ -230,7 +197,7 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
         readableTrackStream.push(req.file.buffer);
         readableTrackStream.push(null);
         // get bucket (collection) for storing audio file
-        let bucket = new mongodb.GridFSBucket(db, {
+        let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
           bucketName: 'audioFeedback'
         });
         // get audio file from collection and save id to story audio id
@@ -426,7 +393,7 @@ function synthesiseStory(story) {
       body: formData,
       method: 'POST'
     }, function (err, resp, body) {
-      if(err) res.send(err);
+      if(err) resp.send(err);
       if(body) {
         // audioContainer is chunk of text made up of paragraphs
         let audioContainer = parse(body).querySelectorAll('.audio_paragraph');

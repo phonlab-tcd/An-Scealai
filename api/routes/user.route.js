@@ -1,14 +1,12 @@
 // user.route.js 
-//
 // endpoint prefix = '/user'
-
-
 const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
+const passport = require('passport');
 
 const mail = require('../mail');
-if(mail.couldNotCreate){
+if(mail.couldNotCreate && !process.env.TEST){
   logger.info(
     "Could not create mail transporter which is required by the user route. Refusing to continue.");
   process.exit(1);
@@ -16,16 +14,11 @@ if(mail.couldNotCreate){
 
 var crypto = require('crypto');
 
-
 var express = require('express');
-var jwt = require('express-jwt');
 
 let User = require('../models/user');
 
-var auth = jwt({
-  secret: 'sonJJxVqRC',
-  userProperty: 'payload'
-});
+const auth = require('../utils/jwtAuthMw');
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
@@ -50,12 +43,11 @@ let userRoutes;
     });
 })();
 
-userRoutes.get('/profile', auth, ctrlProfile.profileRead);
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', ctrlAuth.login);
+userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
 userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
@@ -68,7 +60,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
             user.save().then(() => {
                 res.status(200).json("Language set successfully");
             }).catch(err => {
-                console.log(err);
+                logger.error(err.stack || err);
                 res.status(400).send(err);
             })
         }
@@ -78,7 +70,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
 userRoutes.route('/getLanguage/:id').get((req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(err) {
-          console.log(err);
+          logger.error(err.stack || err);
           res.send(err);
         }
         if(user) {
@@ -99,21 +91,6 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
             res.json(user);
         } else {
             res.status(404).json("User not found");
-        }
-    });
-});
-
-// Endpoint to get all users from database
-userRoutes.route('/getAllUsers').get((req, res) => {
-    User.find({}, (err, users) => {
-        if(err) {
-          console.log(err);
-          res.send(err);
-        }
-        if(users) {
-            res.json(users);
-        } else {
-            res.status(404).json("No users exist on the database");
         }
     });
 });

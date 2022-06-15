@@ -7,7 +7,7 @@ import { TranslationService } from '../translation.service';
 @Component({
   selector: 'app-register-profile',
   templateUrl: './register-profile.component.html',
-  styleUrls: ['./register-profile.component.css']
+  styleUrls: ['./register-profile.component.scss']
 })
 export class RegisterProfileComponent implements OnInit {
 
@@ -380,7 +380,6 @@ export class RegisterProfileComponent implements OnInit {
         this.synthOpinion = p.synthOpinion;
       }
     }, (err) => {
-      console.log("No previous profile data associated with user.");
     });
     
   }
@@ -433,14 +432,11 @@ export class RegisterProfileComponent implements OnInit {
       synthOpinion : this.synthOpinion,
     };
     
-    console.log(profile);
 
     this.profileService.create(profile).subscribe((res) => {
       if(userDetails.role === 'STUDENT') {
-        console.log(res)
         this.router.navigateByUrl('/contents');
       } else if(userDetails.role === 'TEACHER') {
-        console.log(res)
         this.router.navigateByUrl('/teacher/dashboard');
       }
       

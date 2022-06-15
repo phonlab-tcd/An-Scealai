@@ -4,7 +4,7 @@ import { Classroom } from './classroom';
 import { User } from './user';
 import { UserService } from './user.service';
 import { Observable } from 'rxjs';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 @Injectable({
   providedIn: 'root'
@@ -76,8 +76,6 @@ export class ClassroomService {
  }
  
  setGrammarRules(classroomId: string, rules: string[]): Observable<any> {
-   console.log("rules to add:")
-   console.log( rules);
    return this.http.post(this.baseUrl + 'setGrammarRules/' + classroomId, {"grammarRules":rules});
  }
  

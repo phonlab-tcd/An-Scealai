@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { userInfo } from 'os';
-import { AuthenticationService } from 'src/app/authentication.service';
-import config from 'src/abairconfig.json';
-import { TranslationService } from 'src/app/translation.service';
+import { AuthenticationService } from 'app/authentication.service';
+import config from 'abairconfig';
+import { TranslationService } from 'app/translation.service';
 
 const backendUrl = config.baseurl;
 
 @Component({
   selector: 'app-chatbot',
   templateUrl: './chatbot.component.html',
-  styleUrls: ['./chatbot.component.css']
+  styleUrls: ['./chatbot.component.scss']
 })
 export class ChatbotComponent implements OnInit {
 

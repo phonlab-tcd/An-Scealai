@@ -24,15 +24,14 @@ const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
+const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
 const dbURL = require('./utils/dbUrl');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-
 logger.info('DB url: ' + dbURL);
-
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -52,12 +51,26 @@ mongoose.connect(dbURL, {
     });
 
 const app = express();
+app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
 app.use('/story', storyRoute);
 app.use('/user', userRoute);
+if(process.env.FUDGE) {
+  console.log('ADD FUDGE VERIFICATION ENDPOINT');
+  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
+    console.log(req.query);
+    const User = require('./models/user');
+    User.findOneAndUpdate(
+      {username: req.params.username},
+      {$set: {status: 'Active'}}).then(
+        u => {logger.info(u);           res.json(u)},
+        e => {logger.error(e.stack);    res.json(e)},
+      );
+  });
+}
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
@@ -67,7 +80,12 @@ app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
+app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
+
+const synthesisRoute = require('./routes/synthesis.route');
+app.use('/synthesis', synthesisRoute);
+
 app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 

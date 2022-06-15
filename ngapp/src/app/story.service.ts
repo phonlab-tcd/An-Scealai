@@ -4,13 +4,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
-import config from '../abairconfig.json';
+import config from 'abairconfig';
 
 
 @Injectable({
@@ -43,18 +43,19 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    console.log(storyObj);
     this.http.post(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-STORY"], storyObj);
-        //this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        //this.recordingService.addRecordingForLoggedInUser(storyObj);
-        this.router.navigateByUrl('/dashboard/' + res["id"]);
+        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+
+        // TODO should res['id'] really be using a string literal to reference a property?
+        this.router.navigateByUrl('/dashboard/' + res['id']);
       });
   }
 
   getStoriesFor(author : string) {
-    return this.http.get(this.baseUrl+author);
+    return this.http.get(this.baseUrl + author);
   }
 
   getStory(id: string) : Observable<any> {
@@ -63,10 +64,12 @@ export class StoryService {
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      return new Observable<Story[]>();
+    if(!userDetails) {
+      return new Observable(subscriber=>{
+        subscriber.next([]);
+        subscriber.complete();
+      });
     }
-
     const author = userDetails.username;
     return this.http.get<Story[]>(this.baseUrl + author);
   }
@@ -130,7 +133,6 @@ export class StoryService {
         // URL
         this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
-
 
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});

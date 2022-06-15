@@ -7,7 +7,9 @@ import { SynthesisService, Paragraph, Sentence, Section } from '../../services/s
 @Component({
   selector: 'app-synthesis',
   templateUrl: './synthesis.component.html',
-  styleUrls: ['./synthesis.component.css']
+  styleUrls: [
+    './synthesis.component.scss',
+  ]
 })
 export class SynthesisComponent implements OnInit {
 

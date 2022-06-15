@@ -9,7 +9,7 @@ import { EventType } from '../../event';
 @Component({
   selector: 'app-profile-stats',
   templateUrl: './profile-stats.component.html',
-  styleUrls: ['./profile-stats.component.css']
+  styleUrls: ['./profile-stats.component.scss']
 })
 export class ProfileStatsComponent implements OnInit {
   
@@ -46,7 +46,7 @@ export class ProfileStatsComponent implements OnInit {
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
     
-    return new Promise( (resolve, reject) => {
+    return new Promise<void>( (resolve, reject) => {
       this.statsService.getProfileDataByDate(startDate, endDate).subscribe( async (res) => {
         console.log("Profiles returned for given dates: ", res);
         await this.calculateStats(res);
@@ -195,7 +195,7 @@ export class ProfileStatsComponent implements OnInit {
       console.log(this.previousLogs);
       console.log("Last log: ", mostRecentLog);
       
-      new Promise( (resolve, reject) => {
+      new Promise<void>( (resolve, reject) => {
         this.statsService.getProfileDataByDate(mostRecentLog.date, "empty").subscribe( async (res) => {
           await this.calculateStats(res);
           console.log("Most recent added data: ", this.dataToDisplay);

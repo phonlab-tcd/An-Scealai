@@ -7,14 +7,14 @@ import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
-import config from '../../../abairconfig.json';
+import config from 'abairconfig';
 
 declare var MediaRecorder : any;
 
 @Component({
   selector: 'app-teacher-story',
   templateUrl: './teacher-story.component.html',
-  styleUrls: ['./teacher-story.component.css']
+  styleUrls: ['./teacher-story.component.scss']
 })
 export class TeacherStoryComponent implements OnInit {
 
@@ -146,7 +146,6 @@ export class TeacherStoryComponent implements OnInit {
 
         };
       };
-      console.log('got media successfully');
     }).catch();
   }
 

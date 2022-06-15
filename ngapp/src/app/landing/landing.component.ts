@@ -6,7 +6,7 @@ import { TranslationService } from '../translation.service';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.css']
+  styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit {
 
@@ -14,7 +14,6 @@ export class LandingComponent implements OnInit {
     public ts : TranslationService) { }
 
   ngOnInit() {
-    console.log('isLoggedIn():',this.auth.isLoggedIn());
     if(this.auth.isLoggedIn()) {  
       if(this.auth.getUserDetails().role === 'STUDENT') {
         this.router.navigateByUrl('/contents');

@@ -1,28 +1,33 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
-  },
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "an-scealai": {
-      "root": "",
-      "sourceRoot": "src",
+  "defaultProject": "an-scealai",
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"cli": {
+		"analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
+	},
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"an-scealai": {
       "projectType": "application",
+      "sourceRoot": "src",
       "prefix": "app",
-      "schematics": {},
-      "architect": {
+			"root": "",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss"
+				}
+			},
+			"architect": {
         "build": {
-          "defaultConfiguration": "dev",
+          "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "outputPath": "dist/an-scealai",
+            "outputPath": "unpublished_dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -30,155 +35,85 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
               "node_modules/angular-text-input-highlight/text-input-highlight.css",
+							"src/styles.scss",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
               "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
             ]
           },
-          "configurations": {
-            "dev": {
-              "aot": true,
-              "optimization": false,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "namedChunks": true,
-              "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": false,
-              "budgets": []
-            },
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/abairconfig.json",
-                  "with": "src/abairconfig.prod.json"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
+					"configurations": {
+						"production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ]
-            },
-            "qa": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/abairconfig.json",
-                  "with": "src/abairconfig.qa.json"
-                }
+                { "type": "initial",            "maximumWarning": "500kb",  "maximumError": "2.5mb" },
+                { "type": "anyComponentStyle",  "maximumWarning": "5kb",    "maximumError": "9kb" }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ]
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts",   "with": "src/environments/environment.prod.ts" },
+                { "replace": "src/abairconfig.ts",                "with": "src/abairconfig.prod.ts" }
+              ],
+							"outputHashing": "all"
+						},
+						"dev": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"vendorChunk": true,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						},
+						"qa": {
+							"fileReplacements": [
+								{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.prod.ts" },
+								{ "replace": "src/abairconfig.ts",              "with": "src/abairconfig.qa.ts" }
+							]
             }
-          }
-        },
-        "serve": {
-          "defaultConfiguration": "dev",
-          "builder": "@angular-devkit/build-angular:dev-server",
+					}
+				},
+				"serve": {
+					"defaultConfiguration": "dev",
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"browserTarget": "an-scealai:build:production"
+						},
+						"dev": {
+							"browserTarget": "an-scealai:build:dev"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "an-scealai:build"
+					}
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"main": "src/test.ts",
+						"polyfills": "src/polyfills.ts",
+						"tsConfig": "tsconfig.spec.json",
+						"karmaConfig": "karma.conf.js",
+						"assets": [
+							"src/favicon.ico",
+							"src/assets"
+						],
+						"styles": [
+							"src/styles.scss"
+						],
+						"scripts": []
+					}
+				},
+        "cypress-run": {
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "browserTarget": "an-scealai:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "an-scealai:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "an-scealai:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
-            ],
-            "scripts": [],
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "an-scealai-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "an-scealai:serve"
           },
           "configurations": {
@@ -187,17 +122,27 @@
             }
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        "cypress-open": {
+          "builder": "@cypress/schematic:cypress",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "watch": true,
+            "headless": false
+          }
+        },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "an-scealai:serve",
+            "watch": false,
+            "headless": true
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "an-scealai:serve:production"
+            }
           }
         }
-      }
-    }
-  },
-  "defaultProject": "an-scealai"
+			}
+		}
+	}
 }

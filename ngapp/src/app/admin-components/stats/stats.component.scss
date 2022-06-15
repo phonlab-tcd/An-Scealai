@@ -1,0 +1,32 @@
+.titleText {
+  font-size: 14pt;
+  margin-top: 20px;
+}
+
+.bodyContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+#canvas {
+  width: 600px;
+  height: 300px;
+}
+
+.loaderContainer {
+  position: absolute;
+  width: 90%;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-container {
+  width: 600px;
+  height: 600px;
+}

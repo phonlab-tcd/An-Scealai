@@ -12,7 +12,7 @@ import { TranslationService } from '../../translation.service';
 @Component({
   selector: 'app-story-history',
   templateUrl: './story-history.component.html',
-  styleUrls: ['./story-history.component.css']
+  styleUrls: ['./story-history.component.scss']
 })
 export class StoryHistoryComponent implements OnInit {
 

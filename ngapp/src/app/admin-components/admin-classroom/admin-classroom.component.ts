@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ClassroomService } from 'src/app/classroom.service';
+import { ClassroomService } from 'app/classroom.service';
 import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
@@ -8,7 +8,7 @@ import { UserService } from '../../user.service';
 @Component({
   selector: 'app-admin-classroom',
   templateUrl: './admin-classroom.component.html',
-  styleUrls: ['./admin-classroom.component.css']
+  styleUrls: ['./admin-classroom.component.scss']
 })
 export class AdminClassroomComponent implements OnInit {
 

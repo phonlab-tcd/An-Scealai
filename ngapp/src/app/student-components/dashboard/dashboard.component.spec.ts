@@ -26,4 +26,12 @@ describe('DashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should not save story without user input', (done) => {
+    setTimeout(
+      ()=>{
+        expect(component.saveStoryDebounceId).toBe(0)
+        done()
+      },300);
+  });
 });

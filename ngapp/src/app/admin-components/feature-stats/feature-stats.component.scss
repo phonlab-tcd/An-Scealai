@@ -1,0 +1,99 @@
+.content {
+    width: 100%;
+    padding: 3vh;
+    display: flex;
+    justify-content: space-around;
+}
+
+.container {
+  width: 900px;
+  background-color: white;
+  border-radius: 4px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.loaderContainer {
+    position: absolute;
+    width: 90%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dataOptions {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option {
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.option:hover {
+    color: #70a87f;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.header {
+  font-size: 16pt;
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+.datePicker {
+  padding-top: 10px;
+}
+
+.submitButton {
+    background-color: #70a87f;
+    color: white;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.submitButton:hover {
+    cursor: pointer;
+    background-color: #304e38;
+}
+
+.displayData {
+  padding: 20px;
+}
+
+.profileHeader {
+  text-align: center;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
+.featureName {
+  font-size: 14pt;
+  font-weight: bold;
+  text-align: center;
+}
+
+.featureValue {
+  font-size: 14pt;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  text-align: center;
+}

@@ -18,7 +18,7 @@ import { RecordingService } from '../../recording.service';
 @Component({
   selector: 'app-recording-history',
   templateUrl: './recording-history.component.html',
-  styleUrls: ['./recording-history.component.css']
+  styleUrls: ['./recording-history.component.scss']
 })
 export class RecordingHistoryComponent implements OnInit {
   
@@ -40,13 +40,11 @@ export class RecordingHistoryComponent implements OnInit {
     // get recordings for the story
     //this.paramid = this.route.snapshot.params.param2;
     //let id = this.route.snapshot.params.param1;
-    //console.log("STORY ID ", id);
     this.getStoryId().then(params => {
       this.storyId = params['id'];
       this.recordingService.getHistory(this.storyId).subscribe(recordings => {
         this.recordings = recordings;
         this.recordings.sort((a, b) => (a.date > b.date) ? -1 : 1)
-        console.log("RECORDINGS: ", this.recordings);
       })
     });
     
@@ -77,12 +75,10 @@ export class RecordingHistoryComponent implements OnInit {
     }
     
     goToDashboard() {
-      console.log(this.storyId);
       this.router.navigateByUrl('/dashboard/' + this.storyId);
     }
     
     viewRecording(id) {
-      console.log(id);
       this.router.navigateByUrl('/recording/' + id);
     }
 

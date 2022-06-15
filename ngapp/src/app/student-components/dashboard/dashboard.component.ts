@@ -1,39 +1,36 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
-import { StoryService } from '../../story.service';
-import { Story } from '../../story';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import { AuthenticationService } from '../../authentication.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { NotificationService } from '../../notification-service.service';
-import { HighlightTag, } from 'angular-text-input-highlight';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { EventType } from '../../event';
-import { EngagementService } from '../../engagement.service';
+import { Component                } from '@angular/core';
+import { OnInit                   } from '@angular/core';
+import { ViewEncapsulation        } from '@angular/core';
+import { ViewChild                } from '@angular/core';
+import { ActivatedRoute           } from '@angular/router';
+import { Router                   } from '@angular/router';
+import { SafeUrl                  } from '@angular/platform-browser';
+import { DomSanitizer             } from '@angular/platform-browser';
+import { Subject                  } from 'rxjs';
+import { distinctUntilChanged     } from 'rxjs/operators';
+import { HighlightTag             } from 'angular-text-input-highlight';
+import   Quill                      from 'quill';
 
-import {
-  GrammarTag,
-  GramadoirRuleId,
-  GrammarService,
-  ReadableGramadoirRuleIds,
-} from '../../grammar.service';
+import { EventType                } from 'app/event';
+import { Story                    } from 'app/story';
 
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
-import { TranslationService } from '../../translation.service';
-import { StatsService } from '../../stats.service';
-import { ClassroomService } from '../../classroom.service';
-import { GrammarCheckerComponent } from 'src/app/student-components/grammar-checker/grammar-checker.component';
-import Quill from 'quill';
-import { QuillHighlightService } from 'src/app/services/quill-highlight.service';
-import clone from 'lodash/clone';
-import config from 'src/abairconfig.json';
+import { StoryService             } from 'app/story.service';
+import { EngagementService        } from 'app/engagement.service';
+import { AuthenticationService    } from 'app/authentication.service';
+import { NotificationService      } from 'app/notification-service.service';
+import { GrammarTag               } from 'app/grammar.service';
+import { GramadoirRuleId          } from 'app/grammar.service';
+import { GrammarService           } from 'app/grammar.service';
+import { ReadableGramadoirRuleIds } from 'app/grammar.service';
+
+
+import { TranslationService       } from 'app/translation.service';
+import { StatsService             } from 'app/stats.service';
+import { ClassroomService         } from 'app/classroom.service';
+import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
+import { QuillHighlightService    } from 'app/services/quill-highlight.service';
+import   clone                      from 'lodash/clone';
+import   config                     from 'abairconfig';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -63,17 +60,82 @@ type QuillHighlightTag = {
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: [
-    './dashboard.component.css',
-    './../../gramadoir-tags.css'],
+    './dashboard.component.scss',
+    './../../gramadoir-tags.scss',
+    './../../../quill.fonts.scss',
+  ],
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
+  constructor(
+    protected sanitizer: DomSanitizer,
+    private storyService: StoryService,
+    private route: ActivatedRoute,
+    private auth: AuthenticationService,
+    private notifications: NotificationService,
+    private router: Router,
+    private engagement: EngagementService,
+    private grammar: GrammarService,
+    public ts: TranslationService,
+    public statsService: StatsService,
+    public classroomService: ClassroomService,
+    public quillHighlightService: QuillHighlightService,
+  ) {
+    this.textUpdated.pipe(
+      distinctUntilChanged(),
+    ).subscribe(async () => {
+      console.dir(this.textUpdated);
+      const textToCheck = this.story.text.replace(/\n/g, ' ');
+      if(!textToCheck) return;
+      const grammarCheckerTime = new Date();
+      this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+      this.grammarLoading = true;
+      try {
+        await this.quillHighlightService
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
+          .then((errTypes: object) => {
+            console.dir(errTypes);
+            this.currentGrammarErrorTypes = errTypes;
+            Object.keys(errTypes).forEach((k) => {
+              this.grammarTagFilter[k] !== undefined ?
+              this.grammarTagFilter[k] = this.grammarTagFilter[k] :
+              this.grammarTagFilter[k] = true;
+            });
+            this.quillHighlightService
+                .filterGramadoirTags(this.grammarTagFilter);
+            this.grammarTagsHidden ?
+            this.quillHighlightService
+                .clearAllGramadoirTags(this.quillEditor) :
+            this.quillHighlightService
+                .applyGramadoirTagFormatting(this.quillEditor);
+          });
+      } catch (updateGrammarErrorsError) {
+        if ( !this.grammarTagsHidden) {
+          window.alert(
+            'There was an error while trying to fetch grammar ' +
+            'suggestions from the Gramadóir server:\n' +
+            updateGrammarErrorsError.message + '\n' +
+            'See the browser console for more information');
+        }
+        console.dir(updateGrammarErrorsError);
+      }
+      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
+        this.grammarLoading = false;
+      }
+    });
+  }
 
-  // @ViewChild('grammarChecker') grammarChecker: GrammarCheckerComponent;
+  @ViewChild('mySynthesisPlayer')
+  synthesisPlayer: SynthesisPlayerComponent;
 
-  // So that we can use this in the template
   ReadableGramadoirRuleIds = ReadableGramadoirRuleIds;
+
+  titleStyle() {
+    return {
+      'font-style': this.storySaved ? 'normal' : 'italic'
+    };
+  }
 
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
@@ -115,6 +177,9 @@ export class DashboardComponent implements OnInit {
   words: string[] = [];
   wordCount = 0;
 
+  audioSources = [];
+
+  htmlDataIsReady = false;
   quillEditor: Quill;
   textUpdated: Subject<string> = new Subject<string>();
 
@@ -145,7 +210,7 @@ export class DashboardComponent implements OnInit {
       //  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
-      [{ font: [] }],
+      [{ font: ['sans-serif', 'serif', 'monospace', 'arial', 'times-new-roman'] }],
       [{ align: [] }],
       ['clean'],                                         // remove formatting button
       //  ['link', 'image', 'video']                        // link and image, video
@@ -153,62 +218,15 @@ export class DashboardComponent implements OnInit {
     // scrollingContainer: false,
   };
 
-  constructor(
-    protected sanitizer: DomSanitizer,
-    private storyService: StoryService,
-    private route: ActivatedRoute,
-    private auth: AuthenticationService,
-    private notifications: NotificationService,
-    private router: Router,
-    private engagement: EngagementService,
-    private grammar: GrammarService,
-    public ts: TranslationService,
-    public statsService: StatsService,
-    public classroomService: ClassroomService,
-    public quillHighlightService: QuillHighlightService,
-  ) {
-    this.textUpdated.pipe(
-      debounceTime(1500),
-      distinctUntilChanged(),
-    ).subscribe(async () => {
-      const textToCheck = this.story.text.replace(/\n/g, ' ');
-      if (textToCheck !== this.mostRecentGramadoirInput) {
-        const grammarCheckerTime = new Date();
-        this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-        this.grammarLoading = true;
-        try {
-        await this.quillHighlightService
-            .updateGrammarErrors(this.quillEditor, textToCheck)
-            .then((errTypes: object) => {
-              this.currentGrammarErrorTypes = errTypes;
-              Object.keys(errTypes).forEach((k) => {
-                this.grammarTagFilter[k] !== undefined ?
-                this.grammarTagFilter[k] = this.grammarTagFilter[k] :
-                this.grammarTagFilter[k] = true;
-              });
-              this.quillHighlightService
-                  .filterGramadoirTags(this.grammarTagFilter);
-              this.grammarTagsHidden ?
-              this.quillHighlightService
-                  .clearAllGramadoirTags(this.quillEditor) :
-              this.quillHighlightService
-                  .applyGramadoirTagFormatting(this.quillEditor);
-            });
-        } catch (updateGrammarErrorsError) {
-          if ( !this.grammarTagsHidden) {
-            window.alert(
-              'There was an error while trying to fetch grammar ' +
-              'suggestions from the Gramadóir server:\n' +
-              updateGrammarErrorsError.message + '\n' +
-              'See the browser console for more information');
-          }
-          console.dir(updateGrammarErrorsError);
-        }
-        if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
-          this.grammarLoading = false;
-        }
-      }
-    });
+  stringifySynth(i: number) {
+    if (this.audioSources[i]) {
+      return JSON.stringify(this.audioSources[i]);
+    }
+    return 'not defined';
+  }
+
+  onEditorCreated(q: Quill) {
+    this.quillEditor = q;
   }
 
   getSelectedMessage() {
@@ -270,18 +288,27 @@ export class DashboardComponent implements OnInit {
         // loop through the array of stories and check
         // if the id in the url matches one of them
         // if no html version exists yet, create one from the plain text
+        // TODO Woah that's gotta be slow (Neimhin 15 July 2021)
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
+            this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
               this.story.htmlText = this.story.text;
             }
+            this.htmlDataIsReady = true;
             break;
           }
         }
+        }).catch(error => {
+          this.story.text = JSON.stringify(error);
+          throw error;
+      }).catch(error => {
+        this.story.text = JSON.stringify(error);
       });
     });
+
 
     // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
@@ -448,29 +475,34 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-/*
-* set the url for the audio source feedback
-*/
+  /*
+  * set the url for the audio source feedback
+  */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
-  // Set story.text to most recent version of editor text and then switch to storyEditedAlt
-  storyEdited(q: any) {
+  // Set story.text to most recent version of
+  // editor text and then switch to storyEditedAlt
+  onContentChanged(q: {
+    editor: Quill;
+    html: string;
+    text: string;
+    content: any;
+    delta: any; // TODO actual type is Quill Delta
+    oldDelta: any; // TODO actual type is Quill Delta
+    source: 'user'|'api'|'silent'|undefined
+  }) {
     this.story.text = q.text;
-    this.textUpdated.next(q.text);
     this.getWordCount(q.text);
-    this.storyEdited = this.storyEditedAlt;
-  }
-
-  storyEditedAlt(q: any) {
-    this.story.text = q.text;
-    this.textUpdated.next(q.text);
-    this.getWordCount(q.text);
-    this.storySaved = false;
-    this.debounceSaveStory();
+    switch(q.source) {
+      case 'user':
+        this.storySaved = false;
+        this.textUpdated.next(q.text);
+        this.debounceSaveStory();
+    }
   }
 
 
@@ -522,7 +554,8 @@ export class DashboardComponent implements OnInit {
 
   // route to synthesis
   goToSynthesis() {
-    this.router.navigateByUrl('/synthesis/' + this.story._id);
+    this.synthesisPlayer.toggleHidden();
+    // this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
 
   // route to synthesis

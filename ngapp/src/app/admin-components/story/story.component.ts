@@ -4,13 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslationService } from '../../translation.service';
-import config from '../../../abairconfig.json';
+import config from 'abairconfig';
 
 
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
-  styleUrls: ['./story.component.css']
+  styleUrls: ['./story.component.scss']
 })
 export class StoryComponent implements OnInit {
 
@@ -46,7 +46,6 @@ export class StoryComponent implements OnInit {
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-      console.log(this.audioSource);
     });
   }
 

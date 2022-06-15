@@ -1,6 +1,6 @@
 # An Scéalaí
 
-https://www.abair.tcd.ie/scealai/
+https://abair.ie/scealai/
 
 ### What is An Scéalaí?
 ###### *Taken from our User Guide*
@@ -98,6 +98,21 @@ $ nodemon server.js
 
 
 # CHANGE LOG
+
+## v1.0.15
+LARA update
+
+## v1.0.12
+Avatar in Beta tab.
+
+## v1.0.11
+Abair 2 component with audio caching
+
+## v1.0.10
+Record gramadoir responses for stories throughout time.
+
+## v1.0.9
+we don't talk about v1.0.9
 
 ## v1.0.8
 bugfix: in `ngapp/src/app/engagement.service.ts`

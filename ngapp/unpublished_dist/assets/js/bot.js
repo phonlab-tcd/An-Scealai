@@ -4,6 +4,8 @@ var holdMessages = false;
 var thisVerb;
 var dictOn = false;
 
+// TODO request is very common variable name and shouldn't be used
+// in global scope
 var request = new XMLHttpRequest();
 let parser = new DOMParser();
 var currentSpellings;

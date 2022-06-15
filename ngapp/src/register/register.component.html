@@ -1,0 +1,90 @@
+<!-- register with username and password -->
+<div class="registerContainer" *ngIf="!waitingForEmailVerification">
+    <div class="formTitle">{{ts.l.register}}</div><br>
+    <div class="formContainer">
+      <form (submit)="register()">
+        <div class="form-group">
+          <div class="formLabel">
+            <label for="username">{{ts.l.username}}</label>
+          </div>
+          <input
+              type="text"
+              class="form-control inputField {{usernameClass}}"
+              name="username"
+              [formControl]="usernameInput">
+          <div  class="usernameErrorText">{{ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}</div>
+        </div>
+        <div class="form-group">
+          <div class="formLabel"><label>{{ts.l.email_address}}</label></div>
+          <input 
+               type="text" 
+               class="form-control inputField"
+               name="email" 
+               placeholder="mise@gmail.com"
+               [(ngModel)]="credentials.email">
+        </div>
+        <div class="form-group">
+          <div class="formLabel"><label>{{ts.l.create_password}}</label></div>
+          <input
+              type="password"
+              class="form-control inputField" 
+              name="password"
+              [(ngModel)]="credentials.password">
+        </div>
+        <div class="form-group">
+          <div class="formLabel"><label>{{ts.l.confirm_password}}</label></div>
+          <input 
+               type="password" 
+               class="form-control inputField"
+               name="password" 
+               [(ngModel)]="passwordConfirm">
+          <div *ngFor="let err of errorTextKeys" class="errorMessage">{{ ts.l[err] ? ts.l[err] : err }}</div>
+        </div>
+        <div class="form-group">
+          <div class="formLabel">{{ts.l.language}} :</div>
+          <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
+            <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
+            <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+          </div>
+          <div *ngIf="ts.inIrish()" class="languageButtonContainer">
+            <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
+            <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="termsOfUseContainer">
+            <div class="termsOfUseButton" (click)="toggleTerms()">*{{ts.l.agree_to_terms}}</div>
+            <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="btn loginBtn">{{ts.l.register}}</button>
+      </form>
+    </div>
+</div>
+
+<div class="registerContainer" *ngIf="waitingForEmailVerification">
+  <div class="formTitle">{{ts.l.verification}}</div><br>
+  <div class="formContainer">
+    <p class="formLabel">
+      {{ts.l.verify_email_prose}}
+    </p>
+    <p class="formLabel">
+      {{ts.l.username}}: <strong>{{frozenCredentials.username}}</strong>
+    </p>
+    <p class="formLabel">
+      {{ts.l.email_address}}: <strong>{{frozenCredentials.email}}</strong>
+    </p>
+    <button 
+      class="btn loginBtn"
+      data-cy=sign-in
+      (click)="login()">{{ts.l.sign_in}}
+    </button>
+    <div
+      *ngFor="let msg of loginErrorTextKeys"
+      class="errorMessage">
+      {{ ts.l[msg] ? ts.l[msg] : msg }}
+    </div>
+  </div>
+</div>
