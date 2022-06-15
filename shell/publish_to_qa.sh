@@ -24,7 +24,6 @@ ssh -t scealai@141.95.1.243 "
   git pull && git rev-parse --abbrev-ref HEAD
   git checkout $current_branch && git rev-parse --abbrev-ref HEAD
   npm --prefix api install
-  npm --prefix ngapp install
   tmux new-session -t qa -d
   tmux send -t qa \"npm --prefix api run start:qa\" C-m
   cp -r ngapp/qa_build/* dist/an-scealai/

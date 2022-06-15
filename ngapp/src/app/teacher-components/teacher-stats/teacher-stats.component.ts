@@ -13,7 +13,7 @@ import { TranslationService } from '../../translation.service';
 @Component({
   selector: 'app-teacher-stats',
   templateUrl: './teacher-stats.component.html',
-  styleUrls: ['./teacher-stats.component.css']
+  styleUrls: ['./teacher-stats.component.scss']
 })
 export class TeacherStatsComponent implements OnInit {
   teacherId: string = '';

@@ -1,0 +1,40 @@
+.lds-grid {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.lds-grid div {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #437250;
+  animation: lds-grid 1.2s linear infinite;
+}
+
+@function grid_indices_to_nth($row, $col, $width) {
+  @return ($row * $width) + $col + 1;
+}
+
+@for $row from 0 through 2 {
+  @for $col from 0 through 2 {
+    $nth: grid_indices_to_nth($row, $col, 3);
+    $neg: (($nth % 2) - 0.5) * 2; // even -> -1, odd -> 1
+    .lds-grid div:nth-child(#{$nth}) {
+      top: #{$col * 20}px; 
+      left: #{$row * 20}px;
+      animation-delay: #{$nth * 0.1 * ($neg - 0.5)}s;
+    }
+  }
+}
+
+@keyframes lds-grid {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

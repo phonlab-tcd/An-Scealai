@@ -89,8 +89,12 @@ export class QuillHighlightService {
 
   public showLeathanCaol = true;
   public showGenitive = true;
-  public mostRecentHoveredMessages: Messages | null =
-      null;
+  private mostRecentHoveredMessages: Messages | null = null;
+  public mostRecentHoveredMessage() {
+    const it = this.mostRecentHoveredMessages;
+    if(it) return it[this.ts.l.iso_code];
+    return null;
+  }
 
   constructor(
     private grammar: GrammarService,

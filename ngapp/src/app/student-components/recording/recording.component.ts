@@ -16,7 +16,7 @@ declare var MediaRecorder : any;
 @Component({
   selector: 'app-recording',
   templateUrl: './recording.component.html',
-  styleUrls: ['./recording.component.css']
+  styleUrls: ['./recording.component.scss']
 })
 export class RecordingComponent implements OnInit {
 

@@ -25,6 +25,7 @@ import { ReadableGramadoirRuleIds } from 'app/grammar.service';
 
 
 import { TranslationService       } from 'app/translation.service';
+import { MessageKey               } from 'app/translation.service';
 import { StatsService             } from 'app/stats.service';
 import { ClassroomService         } from 'app/classroom.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
@@ -60,9 +61,9 @@ type QuillHighlightTag = {
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: [
-    './dashboard.component.css',
-    './../../gramadoir-tags.css',
-    './../../../quill.fonts.css',
+    './dashboard.component.scss',
+    './../../gramadoir-tags.scss',
+    './../../../quill.fonts.scss',
   ],
   encapsulation: ViewEncapsulation.None
 })
@@ -369,7 +370,28 @@ export class DashboardComponent implements OnInit{
     });
   }
 
-  hideGrammarTags(){
+  instructionMessage() {
+    const key: MessageKey = 'hover_over_a_highlighted_word_for_a_grammar_suggestion';
+    return this.ts.message(key);
+  }
+
+  selectedGrammarSuggestion() {
+    return this.quillHighlightService.mostRecentHoveredMessage() ??
+            this.instructionMessage();
+  }
+
+  toggleGrammarButton() {
+    const key: MessageKey = this.grammarTagsHidden ?
+      'show_grammar_suggestions' :
+      'hide_grammar_suggestions' ;
+    return this.ts.message(key);
+  }
+
+  toggleGrammarTags() {
+    this.grammarTagsHidden ? this.showGrammarTags() : this.hideGrammarTags();
+  }
+
+  hideGrammarTags() {
     this.grammarTagsHidden = true;
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);

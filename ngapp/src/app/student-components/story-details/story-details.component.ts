@@ -7,7 +7,7 @@ import { TranslationService } from '../../translation.service';
 @Component({
   selector: 'app-story-details',
   templateUrl: './story-details.component.html',
-  styleUrls: ['./story-details.component.css']
+  styleUrls: ['./story-details.component.scss']
 })
 export class StoryDetailsComponent implements OnInit {
 

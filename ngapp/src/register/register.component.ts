@@ -12,7 +12,7 @@ type UsernameMessageKey = 'username_no_spaces' | 'username_no_special_chars';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
   constructor(

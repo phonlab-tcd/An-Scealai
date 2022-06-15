@@ -6,6 +6,10 @@ h1 {
   padding: 2px;
 }
 
+.optionsBtnContainer > * {
+  height: 2rem;
+}
+
 .synthesisLoading {
   align: center;
   border-right: 2px solid orange;
@@ -40,11 +44,10 @@ h1 {
 }
 
 .⚙ {
-  font-size: x-large;
+  font-size: xx-large;
   color: darkgrey;
   cursor: pointer;
-  padding-left: 5px;
-  padding-right: 5px;
+  align-items: center;
 }
 
 .⚙:hover {
@@ -58,7 +61,7 @@ h1 {
   width: 11em;
   height: 11em;
   border-radius: 50%;
-  --backgroundColor: cyan;
+  --backgroundColor: lightblue;
   background: var(--backgroundColor);
   background: -moz-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
   background: -webkit-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
@@ -123,7 +126,7 @@ h1 {
     --dictionaryHeight: 50vh;
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
-    background: url("assets/img/paperBg.jpg") no-repeat center center fixed; 
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
     -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
     box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
@@ -329,9 +332,12 @@ quill-editor {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  --options-btn-background-color: rgba(223, 217, 200, 0);
+  --options-btn-background-color-hover : #aeffc486;
 }
+
 .optionsBtnContainer:hover {
-    background-color: #ffd07587;
+  background-color: #ffd07587;
 }
 
 .optionsBtnIcon {
@@ -339,69 +345,60 @@ quill-editor {
 }
 
 .optionsBtn {
-  font-size: 14pt;
   background-color: #e5bd3b;
   border-style: none;
   color: #464444;
-  font-size: 12pt;
   margin: 0px;
-  margin-right: 40px;
-  border-radius: 2px 2px 2px 2px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   padding: 5px;
   background: #dfd9c800;
-  background-color: rgba(223, 217, 200, 0);
 }
 
 .optionsBtn:hover {
-  background-color: #aeffc486;
+  background-color: var(--options-btn-background-color-hover);
   color: #35322f;
   cursor: pointer;
 }
 
-.grammarOptionsBtns {
-  justify-content: center;
-  background-color: rgba(223, 217, 200, 0);
-}
 
-.grammarOptionsBtns:hover {
-  background-color: #aeffc486;
-  color: #35322f;
-  cursor: pointer;
-}
-
-.⚙ {
+.settingsIcon {
   color: darkgrey;
+  font-size: x-large;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  background-color: var(--options-btn-background-color);
 }
 
-.⚙:hover {
-    background-color: #aeffc4E6;
-    color: black;
+.settingsIcon:hover {
+  background-color: var(--options-btn-background-color-hover);
+  color: black;
 }
 
 .optionsBtnClicked {
-    background-color: #ad8f2b;
-    color: white;
+  background-color: #ad8f2b;
+  color: white;
 }
 
 .optionsPopup {
-    z-index: 10;
-    position: fixed;
-    margin-top: 25px;
-    display: flex;
-    padding: 4px;
-    padding-right: 0px;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    border-radius: 5px 5px 5px 5px;
-    }
+  z-index: 10;
+  position: fixed;
+  margin-top: 25px;
+  display: flex;
+  padding: 4px;
+  padding-right: 0px;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  border-radius: 5px 5px 5px 5px;
+}
 
 .optionsPopup:after {
 	content: '';
