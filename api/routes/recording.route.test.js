@@ -6,6 +6,7 @@ const randomString = require('../utils/random').string;
 beforeAll(()=>{
   let router = require('./recording.route');
   let app = require('express')()
+    .use(require('body-parser').json())
     .use(router);
   request = require('supertest')(app);
 });
@@ -15,8 +16,7 @@ function debug(it) {
   expect(1).toBe(it);
 }
 
-xdescribe('using gridfs', ()=>{
-  jest.setTimeout(200);
+fdescribe('using gridfs', ()=>{
   describe('POST /saveAudio/:storyId/:index/:uuid', ()=>{
     const story = new Story();
     const index = '1234';
@@ -48,8 +48,51 @@ xdescribe('using gridfs', ()=>{
     beforeAll(async ()=>{
       voice_recording = await VoiceRecording.create({});
     });
-    it('creates voice_recording',()=>{        expect(voice_recording).toBeDefined()                     });
-    it('400 bad VoiceRecording id',async()=>{ await request.post(url('bad id'))           .expect(400)  });
-    it('400 no body',async()=>{               await request.post(url(voice_recording._id)).expect(400)  });
+    const dummyBody=(d=1)=>{
+      const paragraphAudioIds = [d];
+      const paragraphIndices  = [d];
+      const sentenceAudioIds  = [d];
+      const sentenceIndices   = [d];
+      return {paragraphAudioIds,paragraphIndices,sentenceAudioIds,sentenceIndices}; 
+    }
+    it('creates voice_recording',()=>expect(voice_recording).toBeDefined());
+    it('400 bad VoiceRecording id',async()=>await request.post(url('bad id')).expect(400));
+    it('400 no body',async()=>{
+      // no body-parser -> no req.body
+      const request = require('supertest')(require('express')().use(require('./recording.route')));
+      await request.post(url(voice_recording._id)).expect(400)
+    });
+    it('200 good params',async()=>await request.post(url(voice_recording._id)).send(dummyBody()));
+    it('200 data matches',async()=>{
+      const body = dummyBody();
+      await request.post(url(voice_recording._id)).send(body);
+      const savedRecording = await VoiceRecording.findById(voice_recording._id);
+      for(const k of Object.keys(body)){
+        expect(savedRecording[k].toObject().map(Number))
+          .toEqual(body[k]);
+      }
+    });
+    it('200 idempotent',async()=>{
+      const body = dummyBody();
+      await request.post(url(voice_recording._id)).send(dummyBody(2)).expect(200);
+      await request.post(url(voice_recording._id)).send(body).expect(200);
+      const savedRecording = await VoiceRecording.findById(voice_recording._id);
+      for(const k of Object.keys(body)){
+        expect(savedRecording[k].toObject().map(Number))
+          .toEqual(body[k]);
+      }
+    });
+    it('200 handle race',async()=>{
+      const body = dummyBody();
+      await Promise.all([
+        request.post(url(voice_recording._id)).send(body).expect(200),
+        request.post(url(voice_recording._id)).send(body).expect(200),
+      ]);
+      const savedRecording = await VoiceRecording.findById(voice_recording._id);
+      for(const k of Object.keys(body)){
+        expect(savedRecording[k].toObject().map(Number))
+          .toEqual(body[k]);
+      }
+    });
   });
 });

@@ -1,4 +1,5 @@
 const config = require('../DB');
+jest.setTimeout(500);
 
 // Setup for mongo to connect to 'process.env.TEST_MONGO_URL' for tests.
 process.env.TEST_MONGO_URL = (
