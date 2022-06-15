@@ -8,7 +8,12 @@
       <!-- input the title -->
       <div class="formGroup" novalidate>
         <p class="formLabel">{{ts.l.title}}</p>
-        <input type="text" class="titleInput" formControlName="title" maxLength="35">
+        <input
+          data-cy=title
+          type="text"
+          class="titleInput"
+          formControlName="title"
+          maxLength="35">
         <!-- check for invalid title -->
         <div *ngIf="newStoryForm.controls['title'].invalid && (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" class="validationAlert">
           <div *ngIf="newStoryForm.controls['title'].errors.required">
@@ -27,7 +32,11 @@
       </div>
       <!-- Create button -->
       <div class="contentsBtnsContainer">
-        <button class="btn createBtn" type="submit" (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >{{ts.l.create}}</button>
+        <button
+          data-cy=create-story
+          class="btn createBtn"
+          type="submit"
+          (click)="addNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value)" [disabled]="newStoryForm.pristine || newStoryForm.invalid" >{{ts.l.create}}</button>
       </div>
     </form>
   </div>

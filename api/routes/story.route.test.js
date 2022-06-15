@@ -1,13 +1,10 @@
-const app = require('../server');
+const app       = require('express')()
+  .use(require('body-parser').json())
+  .use(require('./story.route'));
 const supertest = require('supertest');
-const request = supertest(app);
-const {removeAllCollections} = require('../utils/test-utils');
-const mongoose = require('mongoose');
-const Story = require('../models/story');
-
-afterEach(async () => {
-  await removeAllCollections();
-});
+const request   = supertest(app);
+const mongoose  = require('mongoose');
+const Story     = require('../models/story');
 
 describe('story routes', () => {
   describe('story/getStoryById/:id', () => {
@@ -17,7 +14,7 @@ describe('story routes', () => {
           title: 'Hello world!',
           text: 'Story is ainm dom.'});
 
-      const res = await request.get(`/story/getStoryById/${story._id}`);
+      const res = await request.get(`/getStoryById/${story._id}`);
 
       expect(res.status).toBe(200);
       expect(res.body.title).toBe(story.title);
@@ -29,7 +26,7 @@ describe('story routes', () => {
           const nonExistantStoryId = mongoose.Types.ObjectId();
 
           const res =
-            await request.get(`/story/getStoryById/${nonExistantStoryId}`);
+            await request.get(`/getStoryById/${nonExistantStoryId}`);
 
           expect(res.status).toBe(404);
           //expect(res.body)
@@ -37,23 +34,22 @@ describe('story routes', () => {
     });
   });
 
-  describe('story/create', () => {
+  describe('/create', () => {
     it('saves the story in the request body to the DB', async () => {
+      const author = Math.random().toString(20);
       const story = {
-        author: 'student-of-the-gaeilge',
+        author,
         title: 'Hello world!',
         text: 'Story is ainm dom.'};
-
-      const res = await request.post(`/story/create`).send(story);
-
-      expect(res.status).toBe(200);
-      const foundStory = await Story.findOne({author: story.author});
+      const res = await request.post(`/create`)
+        .send(story).expect(200);
+      const foundStory = await Story.findOne({author});
       expect(foundStory.title).toBe(story.title);
       expect(foundStory.text).toBe(story.text);
     });
   });
 
-  describe('/story/viewFeedback/:id', () => {
+  describe('/viewFeedback/:id', () => {
     it('sets the \'seenByStudent\' property for the ' +
       'story with given id to true',
     async () => {
@@ -63,7 +59,7 @@ describe('story routes', () => {
         },
       });
 
-      await request.post(`/story/viewFeedback/${story._id}`);
+      await request.post(`/viewFeedback/${story._id}`);
 
       const updatedStory = await Story.findById(story._id);
 
@@ -71,15 +67,15 @@ describe('story routes', () => {
     });
 
     it('status is 400 for an invalid id: 1234', async () => {
-      await request.post('/story/viewFeedback/1234')
+      await request.post('/viewFeedback/1234')
           .expect(400);
     });
   });
 
-  describe('/story/feedbackAudio/:id', () => {
+  describe('/feedbackAudio/:id', () => {
     it('requires a valid id param', async () => {
       return request
-          .get('/story/feedbackAudio/badId')
+          .get('/feedbackAudio/badId')
           .expect(400)
           .then((response) => {
             expect(response.body.invalidObjectId).toBe('badId');
