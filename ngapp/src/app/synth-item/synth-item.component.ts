@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-synth-item',
   templateUrl: './synth-item.component.html',
-  styleUrls: ['./synth-item.component.css']
+  styleUrls: ['./synth-item.component.scss']
 })
 export class SynthItemComponent {
 

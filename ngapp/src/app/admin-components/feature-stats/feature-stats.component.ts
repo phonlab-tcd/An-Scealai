@@ -8,7 +8,7 @@ import { EventType } from '../../event';
 @Component({
   selector: 'app-feature-stats',
   templateUrl: './feature-stats.component.html',
-  styleUrls: ['./feature-stats.component.css']
+  styleUrls: ['./feature-stats.component.scss']
 })
 export class FeatureStatsComponent implements OnInit {
   

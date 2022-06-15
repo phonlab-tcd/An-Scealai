@@ -10,7 +10,7 @@ import config from 'abairconfig';
 @Component({
   selector: 'app-teacher-student',
   templateUrl: './teacher-student.component.html',
-  styleUrls: ['./teacher-student.component.css']
+  styleUrls: ['./teacher-student.component.scss']
 })
 export class TeacherStudentComponent implements OnInit {
 

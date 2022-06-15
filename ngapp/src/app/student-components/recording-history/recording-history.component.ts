@@ -18,7 +18,7 @@ import { RecordingService } from '../../recording.service';
 @Component({
   selector: 'app-recording-history',
   templateUrl: './recording-history.component.html',
-  styleUrls: ['./recording-history.component.css']
+  styleUrls: ['./recording-history.component.scss']
 })
 export class RecordingHistoryComponent implements OnInit {
   
