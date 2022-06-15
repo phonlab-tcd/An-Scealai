@@ -40,46 +40,63 @@ describe('story routes', () => {
       const story = {
         author,
         title: 'Hello world!',
-        text: 'Story is ainm dom.'};
-      const res = await request.post(`/create`)
-        .send(story).expect(200);
-      const foundStory = await Story.findOne({author});
+        text: 'Story is ainm dom.'
+      };
+
+      const res = await request.post(`/create`).send(story);
+
+      expect(res.status).toBe(200);
+      const foundStory = await Story.findOne({author: story.author});
       expect(foundStory.title).toBe(story.title);
       expect(foundStory.text).toBe(story.text);
     });
   });
 
-  describe('/viewFeedback/:id', () => {
-    it('sets the \'seenByStudent\' property for the ' +
-      'story with given id to true',
-    async () => {
-      const story = await Story.create({
-        feedback: {
-          seenByStudent: false,
+  describe('GET /:author', () => {
+    const url=(author)=>`/${author}`
+    it('returns stories associated with only the author', async () => {
+      const AUTHOR_USERNAME = 'alice';
+      await Story.create([
+        {
+          title: 'Scéal 1',
+          text: 'Story 1 is ainm dom.',
+          author: AUTHOR_USERNAME
         },
-      });
-
-      await request.post(`/viewFeedback/${story._id}`);
-
-      const updatedStory = await Story.findById(story._id);
-
-      expect(updatedStory.feedback.seenByStudent);
-    });
-
-    it('status is 400 for an invalid id: 1234', async () => {
-      await request.post('/viewFeedback/1234')
-          .expect(400);
+        {            
+          title: 'Scéal 2',
+          text: 'Story eile atá ann.',
+          author: AUTHOR_USERNAME
+        },
+        {            
+          title: 'Scéal 3',
+          text: 'Bob wrote this one!',
+          author: 'bob'
+        },
+      ]);
+      const res = await request.get(url(AUTHOR_USERNAME)).expect(200);
+      expect(res.body.length).toBe(2);
+      // 2 alice stories, not bob's story
+      for(const story of res.body){
+        expect(story.author).toBe(AUTHOR_USERNAME);
+      }
     });
   });
 
-  describe('/feedbackAudio/:id', () => {
-    it('requires a valid id param', async () => {
-      return request
-          .get('/feedbackAudio/badId')
-          .expect(400)
-          .then((response) => {
-            expect(response.body.invalidObjectId).toBe('badId');
-          });
+  describe('/viewFeedback/:id', () => {
+    const url=(id)=>`/viewFeedback/${id}`;
+    it("sets the 'seenByStudent' property for the story with given id to true",async()=>{
+      const seenByStudent = false;
+      const story = await Story.create({feedback:{seenByStudent}});
+      await request.post(url(story._id));
+      const updatedStory = await Story.findById(story._id);
+      expect(updatedStory).toBeDefined();
+      expect(updatedStory.feedback.seenByStudent);
     });
+    it('400 bad ObjectId',async()=>await request.post(url('1234')).expect(400));
+  });
+
+  describe('GET /feedbackAudio/:id', () => {
+    const url=(id)=>`/feedbackAudio/${id}`;
+    it('requires a valid id param',async()=>await request.get(url('badId')).expect(400));
   });
 });
