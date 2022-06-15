@@ -4,9 +4,10 @@ const request = supertest(app);
 const {removeAllCollections} = require('../utils/test-utils');
 const mongoose = require('mongoose');
 const User = require('../models/user');
-afterEach(async () => {
-  await removeAllCollections();
-});
+
+// afterEach(async () => {
+//   await removeAllCollections();
+// });
 
 describe('user routes', () => {
   describe('user/searchUser/:searchString/:currentPage/:limit', () => {

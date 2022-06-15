@@ -5,15 +5,63 @@ const supertest = require('supertest');
 const request   = supertest(app);
 const mongoose  = require('mongoose');
 const Story     = require('../models/story');
+const randomString = require('../utils/randomString');
+const User = require('../models/user');
 
 describe('story routes', () => {
+  describe('PATCH /title/:id/:title', () => {
+    const username = randomString();
+    let token;
+    let user
+    beforeAll(async()=>{
+      user = await User.create({username});
+      token = 'Bearer ' + user.generateJwt();
+    });
+    const url = (id,title) => `/title/${id}/${title}`;
+    const req = (url) => request.patch(url);
+    function bearer(request){request.set('Authorization', token)}
+    it('400 with bad story id', async () => {
+      const id = 1234;
+      const title = randomString();
+      await req(url(id,title)).use(bearer).expect(400);
+    });
+    it('401 (unauthorized) without jwt', async () => {
+      const id = 1234;
+      const title = randomString();
+      await req(url(id,title)).expect(401);
+    });
+    it('401 with bad token', async () => {
+      const id = 1234;
+      const title = randomString();
+      await req(url(id,title))
+        .set('Authorization','Bearer bad')
+        .expect(401);
+    });
+    it('404 story doesn\'t exist', async ()=> {
+      const id = mongoose.Types.ObjectId();
+      console.log(id);
+      const title = randomString();
+      await req(url(id,title)).use(bearer).expect(404);
+    });
+    it('200 real story id, real jwt', async ()=> {
+      const story = await Story.create({studentId: user._id});
+      const title = randomString();
+      await req(url(story._id, title)).use(bearer).expect(200);
+    });
+    it('200 story title is updated', async ()=> {
+      let story = await Story.create({studentId: user._id});
+      const title = randomString();
+      await req(url(story._id, title)).use(bearer).expect(200);
+      story = await Story.findById(story._id);
+      expect(story.title).toBe(title);
+    });
+  });
   describe('story/getStoryById/:id', () => {
     it('returns a story that exists given its id', async () => {
       const story =
         await Story.create({
           title: 'Hello world!',
           text: 'Story is ainm dom.'});
-
       const res = await request.get(`/getStoryById/${story._id}`);
 
       expect(res.status).toBe(200);

@@ -26,7 +26,8 @@ describe('Register Teacher', () => {
     cy.get('div[class="nav"]').should('be.visible');;
     cy.get('label').click();
     cy.get('button[class="btn navbarBtn"]').contains('English').click();
-    cy.get('button[class="btn teacherRegisterBtn"]').contains('I am a teacher').click();
+    cy.get('button[class="btn teacherRegisterBtn"]').contains('I am a teacher')
+      .click();
     const username = randomString();
     cy.get('input[name="username"]').type(username);
     cy.get('input[name="email"]').type(`${randomString(10)}@${randomString(10)}.${randomString(5,false)}`);
