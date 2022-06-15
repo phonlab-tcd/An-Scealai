@@ -43,6 +43,7 @@
     "mongodb": "^3.6.9",
     "mongoose": "^5.13.8",
     "multer": "^1.4.2",
+    "node": "^17.7.2",
     "node-html-parser": "^1.4.9",
     "node-pandoc-promise": "^0.0.6",
     "nodemailer": "^6.6.1",
