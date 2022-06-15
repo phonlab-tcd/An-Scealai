@@ -57,11 +57,6 @@ fdescribe('using gridfs', ()=>{
     }
     it('creates voice_recording',()=>expect(voice_recording).toBeDefined());
     it('400 bad VoiceRecording id',async()=>await request.post(url('bad id')).expect(400));
-    it('400 no body',async()=>{
-      // no body-parser -> no req.body
-      const request = require('supertest')(require('express')().use(require('./recording.route')));
-      await request.post(url(voice_recording._id)).expect(400)
-    });
     it('200 good params',async()=>await request.post(url(voice_recording._id)).send(dummyBody()));
     it('200 data matches',async()=>{
       const body = dummyBody();
