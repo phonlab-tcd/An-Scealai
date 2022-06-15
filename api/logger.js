@@ -24,49 +24,51 @@ const consoleFormat = winston.format.printf(
     });
 
 // Create our logger object
-logger = winston.createLogger({
-  transports: [
-    // This transport lets us log to the console
-    new winston.transports.Console({
-      format: winston.format.combine(
-          winston.format.colorize(),
-          winston.format.timestamp({
-            format: timeFormat,
-          }),
-          winston.format.errors({stack: true}),
-          consoleFormat,
-      ),
-      handleExceptions: true,
-    }),
-    // This transport logs to the error file
-    new winston.transports.File({
-      format: winston.format.combine(
-          winston.format.timestamp({
-            format: timeFormat,
-          }),
-          winston.format.errors({stack: true}),
-          winston.format.json(),
-          // enumerateErrorFormat()
-      ),
-      filename: errorFile,
-      handleExceptions: true,
-      level: 'error',
-      timesamp: true,
-    }),
-    // This transport should be were everything gets sent
-    new winston.transports.File({
-      format: winston.format.combine(
-          winston.format.timestamp({
-            format: timeFormat,
-          }),
-          winston.format.errors({stack: true}),
-          winston.format.json(),
-      ),
-      timestamp: true,
-      filename: combinedFile,
-    }),
-  ],
-  levels: {
+let transports = [
+  // This transport lets us log to the console
+  new winston.transports.Console({
+    format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.timestamp({
+          format: timeFormat,
+        }),
+        winston.format.errors({stack: true}),
+        consoleFormat,
+    ),
+    handleExceptions: true,
+  }),
+  // This transport logs to the error file
+  new winston.transports.File({
+    format: winston.format.combine(
+        winston.format.timestamp({
+          format: timeFormat,
+        }),
+        winston.format.errors({stack: true}),
+        winston.format.json(),
+        // enumerateErrorFormat()
+    ),
+    filename: errorFile,
+    handleExceptions: true,
+    level: 'error',
+    timesamp: true,
+  }),
+  // This transport should be were everything gets sent
+  new winston.transports.File({
+    format: winston.format.combine(
+        winston.format.timestamp({
+          format: timeFormat,
+        }),
+        winston.format.errors({stack: true}),
+        winston.format.json(),
+    ),
+    timestamp: true,
+    filename: combinedFile,
+  }),
+];
+if(process.env.NODE_ENV === 'test') {
+  transports = [];
+}
+const levels = {
     emerg: 0,
     alert: 1,
     crit: 2,
@@ -75,7 +77,10 @@ logger = winston.createLogger({
     notice: 5,
     info: 6,
     debug: 7,
-  },
+  };
+logger = winston.createLogger({
+  transports,
+  levels,
 });
 
 require('winston-mongodb');
