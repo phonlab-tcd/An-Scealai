@@ -223,7 +223,10 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
         });
       }
 
-      if (sendEmailRes?.rejected?.length && sendEmailRes.rejected.length !== 0) {
+      if (sendEmailRes &&
+          sendEmailRes.rejected &&
+          sendEmailRes.rejected.length && 
+          sendEmailRes.rejected.length !== 0) {
         return reject({
           messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
         });
