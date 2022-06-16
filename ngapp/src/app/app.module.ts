@@ -13,6 +13,8 @@ import { MatCardModule } from '@angular/material/card'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 
@@ -74,6 +76,7 @@ import { FeatureStatsComponent } from './admin-components/feature-stats/feature-
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
+import { SaveGuardDialog } from './save-guard-dialog.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +105,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     TeacherStoryComponent,
     TeacherPanelComponent,
     AdminClassroomComponent,
+    SaveGuardDialog,
     SynthesisComponent,
     StoryHistoryComponent,
     RecordingComponent,
@@ -128,6 +132,8 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     SynthItemComponent,
   ],
   imports: [
+    MatDialogModule,
+    MatButtonModule,
     RegisterModule,
     ReportAnIssueModule,
     SpinnerModule,

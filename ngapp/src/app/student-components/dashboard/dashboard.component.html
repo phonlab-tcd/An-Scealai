@@ -8,28 +8,6 @@
       <span *ngIf="!storySaved">*</span>
     </h1>
 
-    <!-- MODAL -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent" *ngIf="story">
-        <div class="modalText">
-          {{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?
-        </div>
-
-        <div *ngIf="registrationError" class="errorMessage">
-          {{errorText}}
-        </div>
-
-        <div>
-          <button class="modalBtn" (click)="hideModal();">
-            {{ts.l.cancel}}
-          </button>
-          <button class="modalBtn createBtnGreen" (click)="saveModal()">
-            {{ts.l.save}}
-          </button>
-        </div>
-      </div>
-    </div>
-
     <div class="bookHeader">
       <div class="headerUpper">
 
@@ -215,7 +193,6 @@
               [modules]=quillToolbar
               placeholder=""
               [preserveWhitespace]=true
-              [debounceTime]=1500
               [(ngModel)]=story.htmlText
               (onContentChanged)=onContentChanged($event)
               (onEditorCreated)=onEditorCreated($event)

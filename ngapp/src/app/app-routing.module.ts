@@ -47,7 +47,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { NotificationService } from './notification-service.service';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
+import { CanDeactivateSaveGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
@@ -66,7 +66,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
+  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateSaveGuard] },
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
@@ -74,7 +74,7 @@ const routes: Routes = [
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
-  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
+  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateSaveGuard] },
   { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
