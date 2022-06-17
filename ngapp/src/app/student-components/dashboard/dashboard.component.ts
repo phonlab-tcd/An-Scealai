@@ -135,7 +135,9 @@ export class DashboardComponent extends SaveGuarded implements OnInit{
 
   dialog() { return this._dialog }
   dialogChoice() { return this.modalChoice }
-  async save() { return await this.saveStory('modal',null) }
+  async save() {
+    return await this.saveStory('modal',null);
+  }
   saved() { return this.storySaved }
 
   @ViewChild('mySynthesisPlayer')
@@ -380,6 +382,7 @@ export class DashboardComponent extends SaveGuarded implements OnInit{
         .applyGramadoirTagFormatting(this.quillEditor);
   }
 
+
   // Update story data (text and date) using story service
   // Add logged event for saved story  using engagement service
   async saveStory(debounceId: number | 'modal', finishedWritingTime: Date) {
@@ -414,12 +417,10 @@ export class DashboardComponent extends SaveGuarded implements OnInit{
 
     try {
       await saveStoryPromise;
-      if (debounceId === this.saveStoryDebounceId) {
+      if (debounceId === this.saveStoryDebounceId || debounceId === 'modal') {
         this.storySaved = true;
         console.count('STORY SAVED');
         console.log(debounceId);
-      } else if (debounceId === 'modal') {
-        this.storySaved = true;
       }
     }
     catch (error) {

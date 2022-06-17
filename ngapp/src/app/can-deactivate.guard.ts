@@ -11,6 +11,6 @@ export class CanDeactivateSaveGuard implements CanDeactivate<SaveGuarded> {
   canDeactivate(guarded: SaveGuarded): Observable<boolean> {
     if(guarded.saved()) { return of(true) };
     guarded.showDialog();
-    return guarded.dialogChoice();
+    return guarded.canDeactivate;
   }
 }
