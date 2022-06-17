@@ -1,12 +1,36 @@
-const app       = require('express')()
+const app           = require('express')()
   .use(require('body-parser').json())
   .use(require('./story.route'));
-const supertest = require('supertest');
-const request   = supertest(app);
-const mongoose  = require('mongoose');
-const Story     = require('../models/story');
+const supertest     = require('supertest');
+const request       = supertest(app);
+const mongoose      = require('mongoose');
+const { ObjectId }  = mongoose.Types;
+const Story         = require('../models/story');
 
 describe('story routes', () => {
+  describe('POST /updateActiveRecording/:id',()=>{
+    const url=(storyId)=>`/updateActiveRecording/${storyId}`;
+    it('bug regression test, double send \'Story not found\'',async()=>{
+      await request.post(url('1234'));
+      //make sure server is still running
+      await request.post('/create').send({}).expect(200);
+    });
+    it('400 bad story id',async()=>await request.post(url('1234')).expect(400));
+    it('404 random story id',async()=>await request.post(url(ObjectId())).expect(404));
+    xit('400 bad activeRecording id',async()=>{
+      const { _id } = await Story.create({});
+      await request.post(url(_id))
+        .send({activeRecording: '1234'}).expect(400);
+    });
+    it('200',async()=>{
+      const story = await Story.create({});
+      await request
+        .post(url(story._id))
+        .send({activeRecording: ObjectId()})
+        .expect(200);
+    });
+
+  });
   describe('story/getStoryById/:id', () => {
     it('returns a story that exists given its id', async () => {
       const story =
