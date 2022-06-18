@@ -3,10 +3,13 @@ const recordingRoutes = express.Router();
 const multer = require('multer');
 const ObjectID = require('mongodb').ObjectID;
 const logger = require('../logger.js');
-
-let VoiceRecording = require('../models/recording');
-
+const VoiceRecording = require('../models/recording');
 const voiceRecording = require('../utils/voiceRecording');
+
+// Update the audio ids and indices for a given recording
+recordingRoutes
+  .route('/updateTracks/:id')
+  .post(postUpdateTracks);
 
 recordingRoutes.route('/create').post((req, res) => {
     const recording = new VoiceRecording(req.body);
@@ -29,59 +32,12 @@ recordingRoutes.route('/:id').get(function(req, res) {
     });
 });
 
-// Update the audio ids and indices for a given recording
-recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
-    VoiceRecording.findById(req.params.id, function(err, recording) {
-        if(err) {
-          console.log(err);
-          return res.status(400).json(err);
-        }
-        if(recording) {
-            logger.info(`Request Paragraph audio ids: ${req.body.paragraphAudioIds}`);
-            logger.info(`Request Paragraph indices: ${req.body.paragraphIndices}`);
-            logger.info(`Stored Paragraph audio ids: ${recording.paragraphAudioIds}`);
-            logger.info(`Stored Paragraph indices: ${recording.paragraphIndices}`);
-          
-            if(req.body.paragraphAudioIds)
-                recording.paragraphAudioIds = req.body.paragraphAudioIds;
-            if(req.body.paragraphIndices)
-                recording.paragraphIndices = req.body.paragraphIndices;
-            if(req.body.sentenceAudioIds)
-                recording.sentenceAudioIds = req.body.sentenceAudioIds;
-            if(req.body.sentenceIndices)
-                recording.sentenceIndices = req.body.sentenceIndices;
-            
-            recording.save().then(
-              ok  =>  res.json('Update complete'),
-              err =>  res.status(400).send("Unable to update"));
-        }
-    });
-})
-
 const storage = multer.memoryStorage();
-const upload = multer({storage,
-  limits: {
-    fields: 1,
-    fileSize: 6000000,
-    files: 1,
-    parts: 2 }});
-recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post(
-  upload.single('audio'),
-  async (req, res) => {
-    const filename = "voice-rec-" + req.params.storyId.toString() + "-" + req.params.uuid.toString();
-    const metadata = {story:req.params.storyId,uuid:req.params.uuid};
-    if(!req.file || !req.file.buffer) return res.status(400).json('no file');
-    const [uploadErr,fileId] =
-      await voiceRecording
-        .upload(req.file.buffer,filename,metadata)
-        .then(id=>[null,id],e=>[e]);
-    if(uploadErr){
-      console.error(error);
-      return res.status(500).json(error);
-    }
-    const index = req.params.index;
-    return res.status(201).json({fileId,index});
-});
+const limits = { fields: 1, fileSize: 6000000, files: 1, parts: 2 };
+const upload = multer({storage,limits});
+recordingRoutes
+  .route('/saveAudio/:storyId/:index/:uuid')
+  .post(upload.single('audio'),postSaveAudio);
 
 recordingRoutes.route('/audio/:id').get((req, res) => {
     let audioId;
@@ -181,7 +137,51 @@ recordingRoutes.route('/deleteStoryRecording/:id').get(function(req, res) {
     });
 });
 
+async function postUpdateTracks(req,res,next) {
+  if(!req.body) return res.status(400).json('no body');
+  async function findRecording() {
+    try {       return [null,await VoiceRecording.findById(req.params.id)] }
+    catch (e) { return [e] }
+  }
+  const [error,recording] = await findRecording();
+  if(error)     return res.status(400).json(error);
+  if(!recording)return res.sendStatus(404);
+  logger.info(`Request Paragraph audio ids: ${req.body.paragraphAudioIds}`);
+  logger.info(`Request Paragraph indices:   ${req.body.paragraphIndices}`);
+  logger.info(`Stored Paragraph audio ids:  ${recording.paragraphAudioIds}`);
+  logger.info(`Stored Paragraph indices:    ${recording.paragraphIndices}`);
+  
+  if(req.body.paragraphAudioIds)
+    recording.paragraphAudioIds = req.body.paragraphAudioIds;
+  if(req.body.paragraphIndices)
+      recording.paragraphIndices = req.body.paragraphIndices;
+  if(req.body.sentenceAudioIds)
+      recording.sentenceAudioIds = req.body.sentenceAudioIds;
+  if(req.body.sentenceIndices)
+      recording.sentenceIndices = req.body.sentenceIndices;
+  
+  await recording.save();
+  return res.json('Update complete');
+}
 
+function getBucket(db=mongoose.connection.db,bucketName='voiceRecording') {
+  return new mongodb.GridFSBucket(db, {bucketName});
+}
 
+async function postSaveAudio(req, res){
+  const filename = "voice-rec-" + req.params.storyId.toString() + "-" + req.params.uuid.toString();
+  const metadata = {story:req.params.storyId,uuid:req.params.uuid};
+  if(!req.file || !req.file.buffer) return res.status(400).json('no file');
+  const [uploadErr,fileId] =
+    await voiceRecording
+      .upload(req.file.buffer,filename,metadata)
+      .then(id=>[null,id],e=>[e]);
+  if(uploadErr){
+    console.error(error);
+    return res.status(500).json(error);
+  }
+  const index = req.params.index;
+  return res.status(201).json({fileId,index});
+}
 
 module.exports = recordingRoutes;
