@@ -229,8 +229,10 @@ export class RecordingComponent implements OnInit {
       return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
     });
 
-    const paragraphResponses = await Promise.all(paragraph_promises);
-    const sentenceResponses = await Promise.all(sentence_promises);
+    const [paragraphResponses,sentenceResponses] = await Promise.all([
+      Promise.all(paragraph_promises),
+      Promise.all(sentence_promises),
+    ]);
 
     let paragraphIndices = [];
     let paragraphAudioIds = [];
@@ -259,7 +261,6 @@ export class RecordingComponent implements OnInit {
   }
   
   //--- UI Manipulation ---//
-
   isRecording(section: Section, index: number) {
     if (section instanceof Sentence) {
       return this.isRecordingSentence[index];
