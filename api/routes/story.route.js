@@ -221,25 +221,29 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
   });
 });
 
-storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if (err) {
-      console.log(err);
-      res.json(err);
-    }
-    if(story) {
-      if (req.body.activeRecording) {
-        story.activeRecording = req.body.activeRecording;
-      }
-      story.save().then(_ => {
-        res.json('Update complete');
-      }).catch(_ => {
-        res.status(400).send("Unable to update");
-      });
-    } else {
-      res.status(404).json({message: 'Story not found'});
-    }
-  });
+function to(promise) {
+  return promise.then(r=>[null,r],e=>[e])
+}
+
+const voiceRecording = require('../utils/voiceRecording');
+
+storyRoutes
+  .route('/updateActiveRecording/:id')
+  .post(async (req, res) => {
+    if (!req.body.activeRecording)  return res.status(400).json('no activeRecording id');
+    try { req.body.activeRecording = mongoose.Types.ObjectId(req.body.activeRecording) }
+    catch(e) {return res.status(400).json('bad activeRecording id') }
+    const [[storyErr,story],activeRecording] = await Promise.all([
+      to(Story.findById(req.params.id)),
+      voiceRecording.file(req.body.activeRecording).then(id=>id,_=>undefined),
+    ]);
+    console.log(storyErr,story,activeRecording);
+    if(storyErr)                    return res.status(400).json(storyErr);
+    if(!story)                      return res.status(404).json('story not found');
+    if(!activeRecording)            return res.status(404).json('recording not found');
+    const [saveErr] =               await to(story.save());
+    if(saveErr)                     return res.status(400).json(saveErr);
+    /* SUCCESS */                   return res.json('update complete');
 });
 
 storyRoutes
