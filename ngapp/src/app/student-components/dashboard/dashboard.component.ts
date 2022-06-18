@@ -8,8 +8,12 @@ import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
 import { Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
+import { debounceTime             } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
 import   Quill                      from 'quill';
+
+import { SaveGuarded              } from 'app/abstract-save-guarded-component';
+import { MatDialog                } from '@angular/material/dialog';
 
 import { EventType                } from 'app/event';
 import { Story                    } from 'app/story';
@@ -67,7 +71,7 @@ type QuillHighlightTag = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit{
+export class DashboardComponent extends SaveGuarded implements OnInit{
   constructor(
     protected sanitizer: DomSanitizer,
     private storyService: StoryService,
@@ -77,16 +81,19 @@ export class DashboardComponent implements OnInit{
     private router: Router,
     private engagement: EngagementService,
     private grammar: GrammarService,
+    private _dialog: MatDialog,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
     public quillHighlightService: QuillHighlightService,
   ) {
+    super()
     this.textUpdated.pipe(
+      debounceTime(1500),
       distinctUntilChanged(),
     ).subscribe(async () => {
-      console.dir(this.textUpdated);
       const textToCheck = this.story.text.replace(/\n/g, ' ');
+      console.dir(textToCheck);
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
@@ -125,6 +132,13 @@ export class DashboardComponent implements OnInit{
       }
     });
   }
+
+  dialog() { return this._dialog }
+  dialogChoice() { return this.modalChoice }
+  async save() {
+    return await this.saveStory('modal',null);
+  }
+  saved() { return this.storySaved }
 
   @ViewChild('mySynthesisPlayer')
   synthesisPlayer: SynthesisPlayerComponent;
@@ -368,6 +382,7 @@ export class DashboardComponent implements OnInit{
         .applyGramadoirTagFormatting(this.quillEditor);
   }
 
+
   // Update story data (text and date) using story service
   // Add logged event for saved story  using engagement service
   async saveStory(debounceId: number | 'modal', finishedWritingTime: Date) {
@@ -402,12 +417,10 @@ export class DashboardComponent implements OnInit{
 
     try {
       await saveStoryPromise;
-      if (debounceId === this.saveStoryDebounceId) {
+      if (debounceId === this.saveStoryDebounceId || debounceId === 'modal') {
         this.storySaved = true;
         console.count('STORY SAVED');
         console.log(debounceId);
-      } else if (debounceId === 'modal') {
-        this.storySaved = true;
       }
     }
     catch (error) {
@@ -418,6 +431,7 @@ export class DashboardComponent implements OnInit{
     try {
       if (saveAttempt === this.mostRecentAttemptToSaveStory) {
         this.storySaved = true;
+        this.modalChoice.next(true); // tell can-deactivate guard we can navigate
       }
     } catch (error) {
       window.alert('Error setting storySaved to true: ' + error.message);
@@ -495,6 +509,7 @@ export class DashboardComponent implements OnInit{
     oldDelta: any; // TODO actual type is Quill Delta
     source: 'user'|'api'|'silent'|undefined
   }) {
+    console.log('CONTENT CHANGED');
     this.story.text = q.text;
     this.getWordCount(q.text);
     switch(q.source) {

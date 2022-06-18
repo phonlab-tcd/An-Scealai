@@ -1,36 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
+import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
-import { AppComponent } from './app.component';
+import { SaveGuarded } from './abstract-save-guarded-component';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-class CanDeactivateDashboardGuard implements CanDeactivate<DashboardComponent> {
-  canDeactivate(
-    dashboard: DashboardComponent,
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
-    if(dashboard.storySaved) { return true };
-    dashboard.showModal();
-    return dashboard.modalChoice;
+export class CanDeactivateSaveGuard implements CanDeactivate<SaveGuarded> {
+  canDeactivate(guarded: SaveGuarded): Observable<boolean> {
+    if(guarded.saved()) { return of(true) };
+    guarded.showDialog();
+    return guarded.canDeactivate;
   }
 }
-
-@Injectable({
-  providedIn: 'root'
-})
-class CanDeactivateRecordingGuard implements CanDeactivate<RecordingComponent> {
-  canDeactivate(
-    recording: RecordingComponent
-  ): Observable<boolean> | boolean {
-    if(recording.recordingSaved) { return true };
-    recording.showModal();
-    return recording.modalChoice;
-  }
-}
-
-export {CanDeactivateDashboardGuard, CanDeactivateRecordingGuard};

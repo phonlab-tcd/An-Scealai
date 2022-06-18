@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
 import { RecordingService } from '../../recording.service';
@@ -10,6 +11,7 @@ import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { SaveGuarded } from 'app/abstract-save-guarded-component';
 
 declare var MediaRecorder : any;
 
@@ -18,12 +20,19 @@ declare var MediaRecorder : any;
   templateUrl: './recording.component.html',
   styleUrls: ['./recording.component.scss']
 })
-export class RecordingComponent implements OnInit {
-
-  constructor(private storyService: StoryService, public ts: TranslationService,
-              private sanitizer: DomSanitizer, private route: ActivatedRoute,
-              private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService, private engagement: EngagementService) { }
+export class RecordingComponent extends SaveGuarded implements OnInit {
+  constructor(
+    public ts: TranslationService,
+    private storyService: StoryService,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private router: Router,
+    private recordingService: RecordingService,
+    private synthesis: SynthesisService,
+    private engagement: EngagementService,
+    private _dialog: MatDialog,
+  ) {super()}
+  dialog() { return this._dialog }
   
   // Synthesis variables
   story: Story = new Story();
@@ -58,10 +67,11 @@ export class RecordingComponent implements OnInit {
   // UI variables
   modalClass : string = "hidden";
   modalChoice: Subject<boolean> = new Subject<boolean>();
+  dialogChoice() { return this.modalChoice }
   recordingSaved: boolean = true;
+  saved() { return this.recordingSaved }
   popupVisible = false;
   errorText : string;
-  registrationError : boolean;
   audioFinishedLoading: boolean = false;
 
   /*
@@ -220,14 +230,18 @@ export class RecordingComponent implements OnInit {
    * by paragraph / sentence indices which are stored in Recording object,
    * which is also saved to DB.
    */
-  async saveRecordings() {
-    const paragraph_promises = Object.entries(this.paragraphBlobs).map(async ([index, blob]) => {
-      return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
-    });
+  async save() {
+    const paragraph_promises = Object.entries(this.paragraphBlobs)
+      .map(async ([index,blob])=>
+           this.recordingService
+               .saveAudio(this.story._id, blob, index)
+               .toPromise());
 
-    const sentence_promises = Object.entries(this.sentenceBlobs).map(async ([index, blob]) => {
-      return this.recordingService.saveAudio(this.story._id, blob, index).toPromise();
-    });
+    const sentence_promises = Object.entries(this.sentenceBlobs)
+      .map(async ([index,blob]) =>
+        this.recordingService
+            .saveAudio(this.story._id, blob, index)
+            .toPromise());
 
     const [paragraphResponses,sentenceResponses] = await Promise.all([
       Promise.all(paragraph_promises),
@@ -254,10 +268,10 @@ export class RecordingComponent implements OnInit {
       sentenceIndices: sentenceIndices,
       sentenceAudioIds: sentenceAudioIds
     }
-
-    this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
-      this.recordingSaved = true;
-    });
+    this.recordingService
+      .update(this.story.activeRecording, trackData)
+      .subscribe(_=>this.recordingSaved=true);
+    this.modalChoice.next(true);
   }
   
   //--- UI Manipulation ---//
@@ -305,24 +319,13 @@ export class RecordingComponent implements OnInit {
     section.removeHighlight();
   }
 
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
+  // showModal() {
+  //   const dialogRef = this.dialog.open(SaveGuardDialog,{data: this});
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.dir(result);
+  //   });
+  // }
 
-  hideModal() {
-    this.modalClass = "hiddenFade";
-    this.modalChoice.next(false);
-  }
-
-  setModalChoice() {
-    this.modalChoice.next(true);
-  }
-
-  saveModal() {
-    this.saveRecordings();
-    this.modalChoice.next(true);
-  }
-  
   goToDashboard() {
     this.router.navigateByUrl('/dashboard/' + this.story._id);
   }
