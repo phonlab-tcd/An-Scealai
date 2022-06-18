@@ -70,6 +70,7 @@ recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post(
   async (req, res) => {
     const filename = "voice-rec-" + req.params.storyId.toString() + "-" + req.params.uuid.toString();
     const metadata = {story:req.params.storyId,uuid:req.params.uuid};
+    if(!req.file || !req.file.buffer) return res.status(400).json('no file');
     const [uploadErr,fileId] =
       await voiceRecording
         .upload(req.file.buffer,filename,metadata)
