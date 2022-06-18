@@ -2,26 +2,20 @@
 <img src="assets/img/book.png" class="bookImg">
 <div class="page">
   <div class="bookContainerSynth">
-    <!--popup for update story option -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent">
-          <div class="modalText">{{ts.l.save_changes_made_to_this_recording}}</div>
-          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-          <div>
-              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
-          </div>
-      </div>
-    </div>
+
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
-        <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
+        <div (click)="goToDashboard()" class="myStoriesBtn">
+          <i class="fa fa-chevron-left"></i>
+          {{ts.l.story}}
+        </div> 
         <div></div>
         <div class="bookTitle">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
         <div class="recordingSaveIcon">
           <div *ngIf="recordingSaved" class="recordingSavedIcon">
             {{ts.l.saved}} <i class="fas fa-check"></i>
           </div>
-          <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="saveRecordings()">
+          <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="save()">
             {{ts.l.save}} <i class="fas fa-save"></i>
           </div>
         </div>

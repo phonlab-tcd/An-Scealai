@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { stripGramadoirAttributesFromHtml } from './dashboard.component';
 import { DashboardComponent } from './dashboard.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -7,6 +9,27 @@ import { By } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
 import { TranslationService } from '../../translation.service';
 import { CommonModule } from '@angular/common';
+import clone from 'lodash/clone';
+
+const stripped = '<p><span>An shiopa</span></p>'
+const withTags = '<p><span data-gramadoir-tag-style-type="PREFIXT" data-gramadoir-tag="{&quot;start&quot;:0,&quot;length&quot;:9,&quot;type&quot;:&quot;PREFIXT&quot;,&quot;tooltip&quot;:null,&quot;messages&quot;:{&quot;en&quot;:&quot;Prefix /t/ missing&quot;,&quot;ga&quot;:&quot;Réamhlitir ‘t’ ar iarraidh&quot;}}">An shiopa</span></p>'
+
+describe('stripping gramadoir tags from html', ()=>{
+  it('doesn\'t modify input text', ()=>{
+    const withTagsClone = clone(withTags);
+    stripGramadoirAttributesFromHtml(withTags);
+    expect(withTagsClone).toEqual(withTags);
+  });
+  it('strips tags correctly', ()=>{
+    expect(stripGramadoirAttributesFromHtml(withTags)).toEqual(stripped);
+  });
+  it('returns empty string for falsey and invalid inputs', ()=>{
+    expect(stripGramadoirAttributesFromHtml(undefined)).toEqual('');
+    expect(stripGramadoirAttributesFromHtml('')).toEqual('');
+    expect(stripGramadoirAttributesFromHtml(0 as any)).toEqual('');
+    expect(stripGramadoirAttributesFromHtml(1 as any)).toEqual('');
+  });
+});
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -16,6 +39,7 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [
+        MatDialogModule,
         RouterTestingModule,
         HttpClientTestingModule,
         QuillModule,
