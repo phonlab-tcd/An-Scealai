@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RecordingComponent } from './recording.component';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,11 +10,18 @@ describe('RecordingComponent', () => {
   let fixture: ComponentFixture<RecordingComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [ RecordingComponent, SafeHtmlPipe ]
-    })
-    .compileComponents();
+    const imports = [
+      MatDialogModule,
+      RouterTestingModule,
+      HttpClientTestingModule,
+    ];
+    const declarations = [
+      RecordingComponent,
+      SafeHtmlPipe,
+    ];
+    TestBed
+      .configureTestingModule({imports,declarations})
+      .compileComponents();
   }));
 
   beforeEach(() => {

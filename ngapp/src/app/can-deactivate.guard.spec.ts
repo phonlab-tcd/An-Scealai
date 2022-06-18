@@ -1,15 +1,15 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
-import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
+import { CanDeactivateSaveGuard } from './can-deactivate.guard';
 
-describe('CanDeactivateGuard', () => {
+describe('CanDeactivateSaveGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CanDeactivateDashboardGuard, CanDeactivateRecordingGuard]
+      providers: [CanDeactivateSaveGuard]
     });
   });
 
-  it('should ...', inject([CanDeactivateDashboardGuard], (guard: CanDeactivateDashboardGuard) => {
+  it('should ...', inject([CanDeactivateSaveGuard], (guard: CanDeactivateSaveGuard) => {
     expect(guard).toBeTruthy();
   }));
 });
