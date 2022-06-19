@@ -23,51 +23,52 @@ const consoleFormat = winston.format.printf(
       return msg;
     });
 
-// Create our logger object
-let transports = [
   // This transport lets us log to the console
-  new winston.transports.Console({
-    format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.timestamp({
-          format: timeFormat,
-        }),
-        winston.format.errors({stack: true}),
-        consoleFormat,
-    ),
-    handleExceptions: true,
-  }),
+const console_transport = new winston.transports.Console({
+  format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.timestamp({
+        format: timeFormat,
+      }),
+      winston.format.errors({stack: true}),
+      consoleFormat,
+  ),
+  handleExceptions: true,
+});
+
   // This transport logs to the error file
-  new winston.transports.File({
-    format: winston.format.combine(
-        winston.format.timestamp({
-          format: timeFormat,
-        }),
-        winston.format.errors({stack: true}),
-        winston.format.json(),
-        // enumerateErrorFormat()
-    ),
-    filename: errorFile,
-    handleExceptions: true,
-    level: 'error',
-    timesamp: true,
-  }),
+const error_file_transport = new winston.transports.File({
+  format: winston.format.combine(
+      winston.format.timestamp({
+        format: timeFormat,
+      }),
+      winston.format.errors({stack: true}),
+      winston.format.json(),
+      // enumerateErrorFormat()
+  ),
+  filename: errorFile,
+  handleExceptions: true,
+  level: 'error',
+  timesamp: true,
+});
+
   // This transport should be were everything gets sent
-  new winston.transports.File({
-    format: winston.format.combine(
-        winston.format.timestamp({
-          format: timeFormat,
-        }),
-        winston.format.errors({stack: true}),
-        winston.format.json(),
-    ),
-    timestamp: true,
-    filename: combinedFile,
-  }),
-];
-if(process.env.NODE_ENV === 'test') {
-  transports = [];
-}
+const combined_file_transport = new winston.transports.File({
+  format: winston.format.combine(
+      winston.format.timestamp({
+        format: timeFormat,
+      }),
+      winston.format.errors({stack: true}),
+      winston.format.json(),
+  ),
+  timestamp: true,
+  filename: combinedFile,
+});
+
+// Create our logger object
+const transports = (process.env.NODE_ENV === 'test') ?
+  [console_transport] :
+  [console_transport, error_file_transport, combined_file_transport];
 const levels = {
     emerg: 0,
     alert: 1,

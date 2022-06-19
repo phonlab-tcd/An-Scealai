@@ -74,43 +74,44 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
 });
 
 
+function either(promise) {
+  return promise.then(s=>[null,s],e=>[e]);
+}
+
+const valid = {
+  update: {
+    text(t) { if(typeof t === 'string') return t; return undefined },
+  }
+};
+function option(t) { if(t)return t; return undefined }
+async function postUpdate (req, res){
+    const $set = {
+      text:         valid.update.text(req.body.text),
+      htmlText:     valid.update.text(req.body.htmlText),
+      title:        valid.update.text(req.body.title),
+      dialect:      valid.update.text(req.body.dialect),
+      lastUpdated:  option(req.body.lastUpdated),
+    }
+    const query = {_id: req.params.id};
+    const up = {$set};
+    const opts = {new:true,useFindAndModify:true};
+    const [err,update] = await either(Story.findOneAndUpdate(query,up,opts))
+    if (err) return res.status(400).json(err);
+    if (!update) return res.status(404).json();
+    return res.json(update);
+}
+
+function triedAsync(func) {
+  return async function(req,res,next){
+    try { await func(req,res,next) }
+    catch (e) { return next(e) }
+  }
+}
+
 // Update story by ID
 storyRoutes
-    .route('/update/:id')
-    .post((req, res) => {
-      Story.findById(req.params.id, function(err, story) {
-        if (err) {
-          console.log(err);
-          return res.json(err);
-        }
-        if (story === null) {
-          console.log('story is null!');
-        } else {
-          if (req.body.text) {
-            story.text = req.body.text;
-          }
-          if (req.body.htmlText) {
-            story.htmlText = req.body.htmlText;
-          }
-          if (req.body.lastUpdated) {
-            story.lastUpdated = req.body.lastUpdated;
-          }
-          if (req.body.dialect) {
-            story.dialect = req.body.dialect;
-          }
-          if (req.body.title) {
-            story.title = req.body.title;
-          }
-
-          story.save().then( (story) => {
-            res.json('Update complete');
-          }).catch( (err) => {
-            res.status(400).json(err);
-          });
-        }
-        // TODO This endpoint can hang here
-      });
-});
+  .route('/update/:id')
+  .post(triedAsync(postUpdate));
 
 // Update story author
 storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {

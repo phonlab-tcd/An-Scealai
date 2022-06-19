@@ -25,12 +25,14 @@ describe('story routes', () => {
       expect(res.body.text).not.toEqual(1);
     });
     it('accept partial update',async()=>{
-      await request.post(url(story._id)).send({text: 'hello',title: 'hello'}).expect(200);
+      await request.post(url(story._id))
+        .send({text: 'hello',title: 'hello'})
+        .expect(200);
       story = await Story.findById(story._id);
       expect(story.text).toEqual('hello');
       expect(story.title).toEqual('hello');
     });
-    it('is atomic',async()=>{
+    it('atomic',async()=>{
       const ress = await Promise.all([
         request.post(url(story._id)).send({text: '0'}).expect(200),
         request.post(url(story._id)).send({text: '1'}).expect(200),
