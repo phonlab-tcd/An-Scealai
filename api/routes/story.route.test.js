@@ -1,12 +1,48 @@
-const app       = require('express')()
-  .use(require('body-parser').json())
-  .use(require('./story.route'));
-const supertest = require('supertest');
-const request   = supertest(app);
-const mongoose  = require('mongoose');
-const Story     = require('../models/story');
+const app         = require('express')()
+                    .use(require('body-parser').json())
+                    .use(require('./story.route'));
+const supertest   = require('supertest');
+const request     = supertest(app);
+const mongoose    = require('mongoose');
+const Story       = require('../models/story');
+const {ObjectId}  = mongoose.Types;
+
 
 describe('story routes', () => {
+  describe('POST /update/:id', ()=>{
+    const url=id=>`/update/${id}`;
+    let story;
+    beforeAll(async()=>story=await Story.create({}));
+    it('400 bad id',    async()=>await(request.post(url(1234)      ).expect(400)));
+    it('404',           async()=>await(request.post(url(ObjectId())).expect(404)));
+    it('200 no change', async()=>await(request.post(url(story._id) ).expect(200)));
+    it('set text to \'\'',async()=>{
+      const res = await request.post(url(story._id)).send({text: ''}).expect(200);
+      expect(res.body.text).toEqual('');
+    });
+    it('don\'t set text to number',async()=>{
+      const res = await request.post(url(story._id)).send({text: 1}).expect(200);
+      expect(res.body.text).not.toEqual(1);
+    });
+    it('accept partial update',async()=>{
+      await request.post(url(story._id)).send({text: 'hello',title: 'hello'}).expect(200);
+      story = await Story.findById(story._id);
+      expect(story.text).toEqual('hello');
+      expect(story.title).toEqual('hello');
+    });
+    it('is atomic',async()=>{
+      const ress = await Promise.all([
+        request.post(url(story._id)).send({text: '0'}).expect(200),
+        request.post(url(story._id)).send({text: '1'}).expect(200),
+        request.post(url(story._id)).send({text: '2'}).expect(200),
+        request.post(url(story._id)).send({text: '3'}).expect(200),
+        request.post(url(story._id)).send({text: '4'}).expect(200),
+      ]);
+      ress.forEach((res,i)=>expect(res.body.text).toEqual(i.toString()));
+      const s = await Story.findById(story._id);
+      expect(s.text).toMatch(/^[01234]$/)
+    });
+  });
   describe('story/getStoryById/:id', () => {
     it('returns a story that exists given its id', async () => {
       const story =
