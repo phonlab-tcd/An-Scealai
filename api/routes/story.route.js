@@ -19,21 +19,17 @@ let storyRoutes;
 // Scopes the imported functions to just this function
 (() => {  
   // ENDPOINT HANDLERS
+  function ep(p) {return require('../endpoints_functions/story' + p)}
   // GET
-  const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
-  const author =
-    require('../endpoints_functions/story/author');
-  const feedbackAudio =
-    require('../endpoints_functions/story/feedbackAudio');
+  const getStoryById =                ep('/getStoryById');
+  const author =                      ep('/author');
+  const feedbackAudio =               ep('/feedbackAudio');
 
   // POST
-  const create =
-    require('../endpoints_functions/story/create');
-  const viewFeedback =
-    require('../endpoints_functions/story/viewFeedback');
-  const updateStoryAndCheckGrammar =
-    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+  const create =                      ep('/create');
+  const viewFeedback =                ep('/viewFeedback');
+  const updateStoryAndCheckGrammar =  ep('/updateStoryAndCheckGrammar');
+  const update =                      ep('/update');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -45,6 +41,7 @@ let storyRoutes;
       '/create': create,
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+      '/update/:id': update.post,
     },
   });
 })();
@@ -72,46 +69,6 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
     }
   });
 });
-
-
-function either(promise) {
-  return promise.then(s=>[null,s],e=>[e]);
-}
-
-const valid = {
-  update: {
-    text(t) { if(typeof t === 'string') return t; return undefined },
-  }
-};
-function option(t) { if(t)return t; return undefined }
-async function postUpdate (req, res){
-    const $set = {
-      text:         valid.update.text(req.body.text),
-      htmlText:     valid.update.text(req.body.htmlText),
-      title:        valid.update.text(req.body.title),
-      dialect:      valid.update.text(req.body.dialect),
-      lastUpdated:  option(req.body.lastUpdated),
-    }
-    const query = {_id: req.params.id};
-    const up = {$set};
-    const opts = {new:true,useFindAndModify:true};
-    const [err,update] = await either(Story.findOneAndUpdate(query,up,opts))
-    if (err) return res.status(400).json(err);
-    if (!update) return res.status(404).json();
-    return res.json(update);
-}
-
-function triedAsync(func) {
-  return async function(req,res,next){
-    try { await func(req,res,next) }
-    catch (e) { return next(e) }
-  }
-}
-
-// Update story by ID
-storyRoutes
-  .route('/update/:id')
-  .post(triedAsync(postUpdate));
 
 // Update story author
 storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
