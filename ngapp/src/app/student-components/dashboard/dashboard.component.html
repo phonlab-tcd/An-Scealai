@@ -1,12 +1,5 @@
 <!-- Display the written story along with edit options -->
 <div class="page bookContainer">
-    <!-- STORY TITLE -->
-    <h1 style="margin: auto;"
-      [ngStyle]=titleStyle()
-      data-cy=title>
-      {{story?.title ?? '...'}}
-      <span *ngIf="!storySaved">*</span>
-    </h1>
 
     <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
@@ -38,6 +31,14 @@
           <i class="fa fa-chevron-left backArrow"></i>
           {{ts.l.contents}}
         </div>
+
+        <!-- STORY TITLE -->
+        <p style="margin-right: 3em; margin-left: 3em; overflow: auto;"
+          [ngStyle]=titleStyle()
+          data-cy=title>
+          {{story?.title ?? '...'}}
+          <span *ngIf="!storySaved">*</span>
+        </p>
 
         <!-- SAVE ICON  -->
         <div class="saveIcon">
