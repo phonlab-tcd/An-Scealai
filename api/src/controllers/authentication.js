@@ -1,6 +1,7 @@
 const logger                    = require('../util/logger');
 const verificationEmailMessage  = require('../util/verificationEmailMessage.ts');
 const mail                      = require('../util/mail');
+const either                    = require('../util/either');
 
 if(mail.couldNotCreate){
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
@@ -160,27 +161,23 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
 
     // Authenticate User
-    const user = await User.findOne({ username: username })
-      .catch(
-        err => {
-          logger.error(err);
-          reject(err);
-        });
+    const user = await either(User.findOne({ username: username }));
+    if(user.err) throw new Error(user.err);
+    if(!user.ok) throw new Error(`user not found`);
 
     // Require valid password
-    if( !user.validPassword(password) ) {
+    if(!user.ok.validPassword(password)) {
       logger.error('Invalid password');
       reject({
         messageToUser: 'INVALID PASSWORD'
       });
     }
 
-    user.email = email;
+    user.ok.email = email;
 
-    const activationLink = await user
-      .generateActivationLink(baseurl, language);
+    const activationLink = await user.ok.generateActivationLink(baseurl, language);
 
-    const emailMessage = verificationEmailMessage(language,user.username,activationLink);
+    const emailMessage = verificationEmailMessage(language,user.ok.username,activationLink);
 
     const mailObj = {
       from: 'scealai.info@gmail.com',

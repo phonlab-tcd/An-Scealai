@@ -6,7 +6,6 @@ const dbUrl: string  = require('./dbUrl');
 
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', (err) => {
-  // logger.error({ title: "UNCAUGHT EXCEPTION", error: err } );
   console.error('uncaughtException', err);
 });
 
