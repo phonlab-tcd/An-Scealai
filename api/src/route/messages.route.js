@@ -9,16 +9,16 @@ const ObjectID = require('mongodb').ObjectID;
 
 let Message = require('../model/message');
 
-let db;
-MongoClient.connect('mongodb://localhost:27017/',
-  {useNewUrlParser: true, useUnifiedTopology: true},
-  (err, client) => {
-  if (err) {
-    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
-});
+// let db;
+// MongoClient.connect('mongodb://localhost:27017/',
+//   {useNewUrlParser: true, useUnifiedTopology: true},
+//   (err, client) => {
+//   if (err) {
+//     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+//     process.exit(1);
+//   }
+//   db = client.db('an-scealai');
+// });
 
 // Create new message in database
 messageRoutes.route('/create').post(function (req, res) {

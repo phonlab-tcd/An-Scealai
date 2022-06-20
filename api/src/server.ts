@@ -28,10 +28,13 @@ const synthesisRoute    = require('./route/synthesis.route');
 const auth              = require('./util/authMiddleware');
 const whoami            = require('./endpoint/user/whoami');
 
+
+export type EndpointArgs = [Express.Request,Express.Response,Function];
+
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-function connectDb() {
+async function connectDb() {
   logger.info('DB url: ' + dbURL);
   mongoose.Promise = global.Promise;
   mongoose.set('useFindAndModify', false);
@@ -41,9 +44,12 @@ function connectDb() {
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: process.env.TIMEOUT,
   };
-  mongoose.connect(dbURL, opts);
+  await mongoose.connect(dbURL, opts);
+  logger.info(`connected ${dbURL}`);
 }
-connectDb();
+
+if(process.env.NODE_ENV !== 'test')
+  connectDb();
 
 const app = express();
 app.use('/version', require('./route/version.route'));
@@ -56,23 +62,17 @@ app.use('/user', userRoute);
 app.use('/user/whoami', auth.jwtmw, whoami);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  async function fugdeVerificationController(
-    req: any,
-    res: any, ) {
+  async function fugdeVerificationController(req: any, res: any) {
       const User = require('./model/user');
-      async function handleUser(e:any,u: any) {
-      }
       const username = req.params.username;
       const query = {username};
       const user = await User.findOne(query);
-      if(!user) return res.status(404).json('');
+      if(!user) return res.status(404).json();
       const link = await user.generateActivationLink();
       console.log(link);
       res.json(link);
   }
-  app.get(
-    '/user/fudgeVerification/:username',
-    fugdeVerificationController);
+  app.get('/user/fudgeVerification/:username',fugdeVerificationController);
 }
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);

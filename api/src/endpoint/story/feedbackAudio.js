@@ -1,24 +1,6 @@
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
-const path = require('path');
 const Story = require('../../model/story');
-
-
-const config = require('../../util/DB');
-const dbUrl = require('../../util/dbUrl');
-
-let db;
-mongodb.MongoClient.connect(dbUrl,
-    {useNewUrlParser: true, useUnifiedTopology: true},
-    (err, client) => {
-      if (err) {
-        console.log(
-            'MongoDB Connection Error in ./api/route/story.route.js\t\t' +
-            'Please make sure that MongoDB is running.');
-        process.exit(1);
-      }
-      db = client.db(process.env.DB || config.DB);
-    });
 
 // storyRoutes.route('/feedbackAudio/:id').get(
 module.exports = async (req, res) => {
@@ -36,7 +18,7 @@ module.exports = async (req, res) => {
         let audioId;
         // get the audio id from the audio id set to the story
         try {
-          audioId = new mongodb.ObjectID(story.feedback.audioId);
+          audioId = mongoose.Types.ObjectID(story.feedback.audioId);
         } catch (err) {
           return res.status(400).json({
             message: 'Invalid trackID in URL parameter. ' +
@@ -47,7 +29,7 @@ module.exports = async (req, res) => {
         res.set('content-type', 'audio/mp3');
         res.set('accept-ranges', 'bytes');
         // get collection name for audio files
-        const bucket = new mongodb.GridFSBucket(db, {
+        const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
           bucketName: 'audioFeedback',
         });
         // create a new stream of file data using the bucket name

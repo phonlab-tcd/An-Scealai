@@ -10,7 +10,8 @@
   "compilerOptions": {
     "paths": {
       "@api/*": ["../../api/*"],
-      "@service/*": ["./app/services/*"]
+      "@service/*": ["./app/services/*"],
+      "@ngapp/*": ["./*"]
     },
     "baseUrl": "./src",
     "downlevelIteration": true,

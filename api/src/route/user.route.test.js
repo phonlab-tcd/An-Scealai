@@ -1,20 +1,20 @@
 const User = require('../model/user');
 const randomString = require('../util/randomString');
-const { removeCollection } = require('../util/test-utils');
 
 const app = require('../server');
-const request = require('supertest').agent(app);
+const request = require('supertest')(app);
 
-beforeAll(async ()=>{
-  await User.deleteMany({username: {$regex: '00000' }});
-});
+const arrayOfLength = n =>
+  Array(n).fill(undefined);
+
+const genRandomUsers = n =>
+  arrayOfLength(n).map(_=>({username: randomString()}));
 
 describe('user routes', () => {
   describe('user/searchUser/:searchString/:currentPage/:limit', () => {
     const url = '/user/searchUser/';
     it('return a user ', async () => {
-      const randomUsers = Array(5).fill(undefined)
-        .map(_=>{return {username: randomString()}});
+      const randomUsers = genRandomUsers(5);
       console.log(randomUsers);
       randomUsers[0].username = '0000000' + randomUsers[0].username;
       await User.create(randomUsers);

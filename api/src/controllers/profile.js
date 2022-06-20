@@ -1,42 +1,20 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
-module.exports.profileRead = function(req, res) {
-    if (!req.payload._id) {
-      res.status(401).json({
-        "message" : "UnauthorizedError: private profile"
-      });
-    } else {
-      User
-        .findById(req.payload._id)
-        .exec(function(err, user) {
-          res.status(200).json(user);
-        });
-    }
+const either=promise=>promise.then(ok=>({ok}),err=({err}));
+
+module.exports.viewUser = async function(req, res) {
+  if(!req.headers._id) return res.status(404).json({message: "User not found"});
+  const user = await either(User.findById(req.headers._id));
+  if(user.err) return res.status(400).json(user.err);
+  if(!user.ok) return res.status(404).json();
+  res.json(user.ok);
 };
 
-module.exports.viewUser = function(req, res) {
-  if(!req.headers._id) {
-    res.status(404).json({"message" : "User not found"});
-  } else {
-    User.findById(req.headers._id).exec(function(err, user) {
-      if(err) {
-        res.status(400).json({"message" : "User not found"});
-      }
-      if(user) {
-        res.status(200).json(user);
-      }
-    });
-  }
-};
-
-module.exports.getTeachers = function(req, res) {
-  User.find({'role':'TEACHER'}).exec(function(err, teachers) {
-    if(err) {
-      res.status(400).json({"message" : "Teachers not found"});
-    }
-    if(teachers) {
-      res.status(200).json(teachers);
-    }
-  });
+module.exports.getTeachers = async function(req, res) {
+  const role = 'TEACHER';
+  const teachers = await either(User.find({role}));
+  if(teachers.err) return res.status(400).json({message : "Teachers not found"});
+  if(!teachers.ok) return res.status(404).json();
+  return res.json(teachers.ok);
 };

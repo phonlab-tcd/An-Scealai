@@ -109,7 +109,7 @@ describe('Register Teacher', () => {
     const username = randomString();
     cy.get('input[name="username"]').type(username);
     cy.get('input[name="email"]').type(`${randomString(10)}@${randomString(10)}.${randomString(5,false)}`);
-    cy.get('input[name="password"]').then(pword=>{
+    cy.get('input[name="password"]').then((pword: HTMLElement[])=>{
       const password = randomString();
       [...pword].forEach(p=>{
         cy.wrap(p).type(password);
@@ -117,7 +117,7 @@ describe('Register Teacher', () => {
     })
     cy.get('button').contains('Register').click();
     fudgeVerification(username);
-    cy.get('[data-cy="sign-in"]').click();
+    cy.get('[data-cy=sign-in]').click();
     cy.get('button i.fa-user').click();
   })
 })

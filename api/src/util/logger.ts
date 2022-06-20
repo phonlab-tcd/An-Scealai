@@ -34,7 +34,7 @@ const levels = {
 };
 
 // Log to console 
-const consoleTransport: transport = new winston.transports.Console({
+const consoleTransport = new winston.transports.Console({
   format: winston.format.combine(
       winston.format.colorize(),
       winston.format.timestamp({
@@ -47,7 +47,7 @@ const consoleTransport: transport = new winston.transports.Console({
 });
 
 // Log level error and above to errorsFile 
-const combinedFileTransport: transport = new winston.transports.File({
+const combinedFileTransport = new winston.transports.File({
   format: winston.format.combine(
       winston.format.timestamp({
         format: timeFormat,
@@ -62,7 +62,7 @@ const combinedFileTransport: transport = new winston.transports.File({
 });
 
 // Log everything to combinedFile 
-const errorsFileTransport: transport = new winston.transports.File({
+const errorsFileTransport = new winston.transports.File({
   format: winston.format.combine(
       winston.format.timestamp({
         format: timeFormat,
@@ -76,14 +76,15 @@ const errorsFileTransport: transport = new winston.transports.File({
 
 // Log to `log` collection in database
 import 'winston-mongodb';
-const mongoTransport: transport = new winston.transports.MongoDB({
+const mongoTransport = new winston.transports.MongoDB({
   db: dbUrl,
   options: {
     useUnifiedTopology: true, // not default
   },
 });
 
-const transports: transport[] = [
+const transports: transport[] = 
+  process.env.NODE_ENV === 'test' ? [consoleTransport] : [
   consoleTransport,
   combinedFileTransport,
   errorsFileTransport,

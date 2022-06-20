@@ -20,8 +20,7 @@ export type SanitizedUser = {
 };
 
 const User            = require('../../model/user');
-// const { API404Error } = require('../../util/APIError');
-const { API400Error } = require('../../util/APIError');
+const ERROR = require('../../util/APIError');
 
 
 function sanitizeUser(u: typeof User): SanitizedUser{
@@ -55,8 +54,8 @@ function makeReqBody(req: Express.Request) {
     return defaultRoles;
   }
   const roles = validRoles(req.body.roles);
-  if (isNaN(limit) || limit <= 0 )            throw new API400Error('limit must be greater than 0');
-  if (isNaN(currentPage) || currentPage < 0)  throw new API400Error('currentPage must be 0 or greater');
+  if (isNaN(limit) || limit <= 0 )            throw new ERROR.API400Error('limit must be greater than 0');
+  if (isNaN(currentPage) || currentPage < 0)  throw new ERROR.API400Error('currentPage must be 0 or greater');
   return { searchString, limit, currentPage, roles };
 }
 

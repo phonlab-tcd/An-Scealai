@@ -4,12 +4,25 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
-    "test:silent": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
-    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
-    "start:e2e": "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
-    "start:prod": "DB=an-scealai PORT=4000 node server.js",
-    "start:qa": "DB=qa PORT=4002 node server.js"
+    "start":        "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
+    "start:e2e":    "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
+    "start:qa":     "PEM_KEY_PASSPHRASE=dev DB=qa PORT=4002 nodemon src/server.ts",
+    "test":         "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
+    "test:silent":  "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
+    "start:prod":   "DB=an-scealai PORT=4000 node server.js"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "setupFiles": [
+      "<rootDir>/util/test-setup.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/util/test-setup-per-file.js"
+    ],
+    "forceExit": true,
+    "collectCoverage": false,
+    "testEnvironment": "node",
+    "moduleFileExtensions": ["js", "mjs", "ts"]
   },
   "keywords": [],
   "author": "",
@@ -32,6 +45,7 @@
     "mongodb": "^3.6.9",
     "mongoose": "^5.13.8",
     "multer": "1.4.5-lts.1",
+    "node": "^17.7.2",
     "node-html-parser": "^1.4.9",
     "node-pandoc-promise": "^0.0.6",
     "nodemailer": "^6.6.1",
@@ -59,9 +73,10 @@
     "eslint-config-google": "^0.14.0",
     "jest": "^28.1.0",
     "mockingoose": "^2.15.2",
+    "mongodb-memory-server": "^8.6.0",
     "nodemon": "^2.0.13",
-    "supertest": "^6.1.4",
     "ts-jest": "^28.0.3",
-    "ts-node": "^10.8.0"
+    "ts-node": "^10.8.0",
+    "supertest": "^6.2.3"
   }
 }
