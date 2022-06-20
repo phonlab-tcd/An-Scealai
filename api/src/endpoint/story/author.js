@@ -11,5 +11,5 @@ module.exports = async (req, res) => {
   const stories = await either(Story.find({"author": req.params.author}));
   if (stories.err) throw new ERROR.API400Error(stories.err);
   if (!stories.ok) throw new ERROR.API404Error(`No stories written by ${req.params.author} were found.`);
-  return res.json(stories);
+  return res.json(stories.ok);
 }
