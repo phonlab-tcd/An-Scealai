@@ -130,42 +130,47 @@ export class ProfileStatsComponent implements OnInit {
     });
     let totalData = {};
     console.log("totals: ", totals);
-    totalData["age"] = await this.getTotals(totals["age"]);
-    totalData["country"] = await this.getTotals(totals["country"]);
-    totalData["county"] = await this.getTotals(totals["county"]);
-    totalData["dialectPreference"] = await this.getTotals(totals["dialectPreference"]);
-    totalData["gender"] = await this.getTotals(totals["gender"]);
-    totalData["fatherNativeTongue"] = await this.getTotals(totals["fatherNativeTongue"]);
-    totalData["irishMedia"] = await this.getTotals(totals["irishMedia"]);
-    totalData["howOftenMedia"] = await this.getTotals(totals["howOftenMedia"]);
-    totalData["irishReading"] = await this.getTotals(totals["irishReading"]);
-    totalData["howOftenReading"] = await this.getTotals(totals["howOftenReading"]);
-    totalData["irishWriting"] = await this.getTotals(totals["irishWriting"]);
-    totalData["howOftenWriting"] = await this.getTotals(totals["howOftenWriting"]);
-    totalData["immersionCourse"] = await this.getTotals(totals["immersionCourse"]);
-    totalData["motherNativeTongue"] = await this.getTotals(totals["motherNativeTongue"]);
-    totalData["nativeSpeakerStatus"] = await this.getTotals(totals["nativeSpeakerStatus"]);
-    totalData["notFromIreland"] = await this.getTotals(totals["notFromIreland"]);
-    totalData["otherCountryOfStudy"] = await this.getTotals(totals["otherCountryOfStudy"]);
-    totalData["otherLanguageProficiency"] = await this.getTotals(totals["otherLanguageProficiency"]);
-    totalData["otherLanguages"] = await this.getTotals(totals["otherLanguages"]);
-    totalData["otherPostgradStudies"] = await this.getTotals(totals["otherPostgradStudies"]);
-    totalData["otherStudies"] = await this.getTotals(totals["otherStudies"]);
-    totalData["postgradYear"] = await this.getTotals(totals["postgradYear"]);
-    totalData["primaryYear"] = await this.getTotals(totals["primaryYear"]);
-    totalData["secondaryYear"] = await this.getTotals(totals["secondaryYear"]);
-    totalData["speakWith"] = await this.getTotals(totals["speakWith"]);
-    totalData["speakingFrequency"] = await this.getTotals(totals["speakingFrequency"]);
-    totalData["spokenComprehensionLevel"] = await await this.getTotals(totals["spokenComprehensionLevel"]);
-    totalData["studentSchoolLevel"] = await this.getTotals(totals["studentSchoolLevel"]);
-    totalData["studentSchoolType"] = await this.getTotals(totals["studentSchoolType"]);
-    totalData["synthOpinion"] = await this.getTotals(totals["synthOpinion"]);
-    totalData["teacherPrimaryType"] = await this.getTotals(totals["teacherPrimaryType"]);
-    totalData["teacherSecondaryType"] = await this.getTotals(totals["teacherSecondaryType"]);
-    totalData["teacherSchoolTypes"] = await this.getTotals(totals["teacherSchoolTypes"]);
-    totalData["thirdLevelOption"] = await this.getTotals(totals["thirdLevelOption"]);
-    totalData["usaOption"] = await this.getTotals(totals["usaOption"]);
-    totalData["yearsOfIrish"] = await this.getTotals(totals["yearsOfIrish"]);
+    const keys = [
+      "age",													
+      "country",											
+      "county",												
+      "dialectPreference",						
+      "gender",												
+      "fatherNativeTongue",						
+      "irishMedia",										
+      "howOftenMedia",								
+      "irishReading",									
+      "howOftenReading",							
+      "irishWriting",									
+      "howOftenWriting",							
+      "immersionCourse",							
+      "motherNativeTongue",						
+      "nativeSpeakerStatus",					
+      "notFromIreland",								
+      "otherCountryOfStudy",					
+      "otherLanguageProficiency",			
+      "otherLanguages",								
+      "otherPostgradStudies",					
+      "otherStudies",									
+      "postgradYear",									
+      "primaryYear",									
+      "secondaryYear",								
+      "speakWith",										
+      "speakingFrequency",						
+      "spokenComprehensionLevel",			
+      "studentSchoolLevel",						
+      "studentSchoolType",						
+      "synthOpinion",									
+      "teacherPrimaryType",						
+      "teacherSecondaryType",					
+      "teacherSchoolTypes",						
+      "thirdLevelOption",							
+      "usaOption",										
+      "yearsOfIrish",									
+    ];
+    const promises = keys.map(k=>this.getTotals(totals[k]));
+    const results = await Promise.all(promises);
+    keys.forEach((k,i)=>{totalData[k] = results[i]});
 
     this.setDataToDisplay(totalData);
     return;
