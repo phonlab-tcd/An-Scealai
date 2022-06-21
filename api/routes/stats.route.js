@@ -21,7 +21,9 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) =>
     conditions = {"status":"Active"};
   }
   
-  User.find(conditions, (err, users) => {
+  const start = Date.now();
+  User.find(conditions, async (err, users) => {
+    console.log('first find', (Date.now()-start)/1000);
     if(err) {
       console.log(err);
       res.status(400).send("An error occurred while trying to find users by date");
@@ -30,38 +32,10 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) =>
       res.status(404).send({"message": "Users in this date range were not found"});  
     }
     else {
-      let ids = [];
-      users.forEach(user => {
-        ids.push(user["_id"]);
-      });
+      const ids = users.map(u=>u._id);;
       
-      function findProfile(id) {
-        return new Promise ((resolve) => {
-          Profile.find({"userId":id}, (err, profile) => {
-              if(err) {
-                console.log(err);
-                res.status(400).send("An error occurred while trying to find a profile with this user id");
-              }
-              if(!profile) {
-                res.status(404).send("Profile for this user id not found");  
-              }
-              else {
-                resolve(profile);
-              }
-          });
-        })
-      };
-      
-      async function getProfiles(ids) {
-        var profiles = [];
-        for (const id of ids) {
-          const profile = await findProfile(id);
-          profiles.push(profile);
-        }
-        res.status(200).json(profiles);
-      }
-
-      getProfiles(ids);
+      const profiles = await Promise.all(ids.map(id=>Profile.find({userId:id})));
+      res.json(profiles);
     }  
   });
     
