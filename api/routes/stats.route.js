@@ -9,36 +9,28 @@ let Story = require('../models/story');
 let Profile = require('../models/profile');
 let User = require('../models/user');
 
-statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) => {
-  let conditions = {}
-  if(req.params.startDate !== "empty" && req.params.endDate !== "empty") {
-    conditions = {"status":"Active", "verification.date": {'$gte': req.params.startDate, '$lte': req.params.endDate}};
-  }
-  else if (req.params.startDate !== "empty" && req.params.endDate === "empty") {
-    conditions = {"status":"Active", "verification.date": {'$gt': req.params.startDate}};
-  }
-  else {
-    conditions = {"status":"Active"};
-  }
-  
-  const start = Date.now();
-  User.find(conditions, async (err, users) => {
-    console.log('first find', (Date.now()-start)/1000);
-    if(err) {
-      console.log(err);
-      res.status(400).send("An error occurred while trying to find users by date");
-    }
-    if(!users) {
-      res.status(404).send({"message": "Users in this date range were not found"});  
-    }
-    else {
-      const ids = users.map(u=>u._id);;
-      
-      const profiles = await Promise.all(ids.map(id=>Profile.find({userId:id})));
+statsRoutes
+  .route('/getProfileDataByDate/:startDate/:endDate')
+  .get(async (req, res, next) => {
+    try {
+      const conditions = {status: "Active"};
+      if(req.params.startDate !== "empty" && req.params.endDate !== "empty") {
+        conditions["verification.date"] = {
+          $gte: req.params.startDate,
+          $lte: req.params.endDate,
+        };
+      }
+      else
+      if(req.params.startDate !== "empty" && req.params.endDate === "empty") {
+        conditions["verification.date"] = {
+          $gt: req.params.startDate,
+        };
+      }
+      const ids = (await User.find(conditions,{_id: 1})).map(u=>u._id);
+      const promises =  ids.map(id=>Profile.find({userId:id}).limit(1));
+      const profiles = await Promise.all(promises);
       res.json(profiles);
-    }  
-  });
-    
+    } catch(e){console.error(e);next(e)}
 });
 
 statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) => {
