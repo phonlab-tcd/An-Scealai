@@ -16,7 +16,10 @@ function randomString(length:number=16,digits=true) {
 }
 
 function fudgeVerification(username: string) {
-  cy.request(`localhost:4000/user/fudgeVerification/${username}`);
+  cy.request(`localhost:4000/user/fudgeVerification/${username}`)
+    .then(res=>{
+      cy.request(res.body);
+    });//cy.request(res.boy));
 }
 
 function newUser(): {username:string;email:string;password:string} {
