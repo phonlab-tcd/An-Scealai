@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
-const either=promise=>promise.then(ok=>({ok}),err=({err}));
+const either=promise=>promise.then(ok=>({ok}),err=>({err}));
 
 module.exports.viewUser = async function(req, res) {
   if(!req.headers._id) return res.status(404).json({message: "User not found"});

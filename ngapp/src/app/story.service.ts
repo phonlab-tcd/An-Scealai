@@ -11,6 +11,7 @@ import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
+import { OkResponse as StoryCreateOk } from '@api/src/endpoint/story/create';
 
 
 @Injectable({
@@ -44,17 +45,16 @@ export class StoryService {
       activeRecording: null
     };
     this.http.post(this.baseUrl + 'create', storyObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
-        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        // this.recordingService.addRecordingForLoggedInUser(storyObj);
-
-        // TODO should res['id'] really be using a string literal to reference a property?
-        this.router.navigateByUrl('/dashboard/' + res['id']);
-      });
+      .subscribe((res: StoryCreateOk)=> {
+        this.engagement
+            .addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        this.router
+            .navigateByUrl('/dashboard/' + res.id);
+      },/* TODO handle failure */);
   }
 
   getStoriesFor(author : string) {
+    /* TODO DEPRECATED (neimhin Thu 23 Jun 2022 14:23:15 IST) */
     return this.http.get(this.baseUrl + author);
   }
 

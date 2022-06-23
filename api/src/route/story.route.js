@@ -26,6 +26,7 @@ let storyRoutes;
 
   // POST
   const create                      = ep('/create');
+  console.log(create);
   const viewFeedback                = ep('/viewFeedback');
   const updateStoryAndCheckGrammar  = ep('/updateStoryAndCheckGrammar');
 
@@ -36,7 +37,7 @@ let storyRoutes;
       '/feedbackAudio/:id': feedbackAudio,
     },
     post: {
-      '/create': create,
+      '/create': create.post,
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
     },

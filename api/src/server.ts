@@ -1,4 +1,6 @@
 import { Logger } from 'winston';
+import Express from 'express';
+import { RequestHandler } from 'express';
 const express           = require('express');
 const bodyParser        = require('body-parser');
 const cors              = require('cors');
@@ -28,9 +30,6 @@ const synthesisRoute    = require('./route/synthesis.route');
 const auth              = require('./util/authMiddleware');
 const whoami            = require('./endpoint/user/whoami');
 
-
-export type EndpointArgs = [Express.Request,Express.Response,Function];
-
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
@@ -57,12 +56,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/story', storyRoute);
+app.use('/story', auth.jwtmw, storyRoute);
 app.use('/user', userRoute);
 app.use('/user/whoami', auth.jwtmw, whoami);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  async function fugdeVerificationController(req: any, res: any) {
+  const fugdeVerificationController: RequestHandler = 
+    async function (req, res) {
       const User = require('./model/user');
       const username = req.params.username;
       const query = {username};
@@ -71,7 +71,7 @@ if(process.env.FUDGE) {
       const link = await user.generateActivationLink();
       console.log(link);
       res.json(link);
-  }
+  };
   app.get('/user/fudgeVerification/:username',fugdeVerificationController);
 }
 app.use('/teacherCode', teacherCodeRoute);
