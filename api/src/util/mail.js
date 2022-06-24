@@ -14,14 +14,14 @@ const fs = require('fs');
 
 module.exports.sendEmail = "not yet created";
 
+const filepath = path.join(__dirname, '..', '..', 'sendinblue.json');
 // send mail with defined transport object.
 if(process.env.NO_EMAILS) {
   console.log('NO_EMAILS: sendEmail neutered');
   module.exports.sendEmail = ()=>true;
 } else {
   try{
-    console.log("Attempting to read sendinblue auth data from ./api/sendinblue.json");
-    let rawdata = fs.readFileSync(path.join(__dirname,'..','..','sendinblue.json'));
+    let rawdata = fs.readFileSync(filepath);
     let sendinblueData = JSON.parse(rawdata);
     const sendEmail = async (mailObj) => {
       const { from, recipients, subject, message } = mailObj;
@@ -54,7 +54,7 @@ if(process.env.NO_EMAILS) {
     module.exports.sendEmail = sendEmail;
 
   } catch(err) {
-    console.error("Failed to create email transport in ./api/util/mail.js. Have you created sendinblue.json ?");
+    console.error(`Failed to create email transport in ${__filename}. Have you created ${filepath}?`);
     console.error(err);
     module.exports.sendEmail = null;
     module.exports.couldNotCreate = true;

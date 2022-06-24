@@ -1,5 +1,4 @@
 import { Logger } from 'winston';
-import Express from 'express';
 import { RequestHandler } from 'express';
 const express           = require('express');
 const bodyParser        = require('body-parser');
@@ -34,7 +33,6 @@ const whoami            = require('./endpoint/user/whoami');
 // throw new Error('test error');
 
 async function connectDb() {
-  logger.info('DB url: ' + dbURL);
   mongoose.Promise = global.Promise;
   mongoose.set('useFindAndModify', false);
   const opts = {
@@ -56,24 +54,10 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/story', auth.jwtmw, storyRoute);
 app.use('/user', userRoute);
-app.use('/user/whoami', auth.jwtmw, whoami);
-if(process.env.FUDGE) {
-  console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  const fugdeVerificationController: RequestHandler = 
-    async function (req, res) {
-      const User = require('./model/user');
-      const username = req.params.username;
-      const query = {username};
-      const user = await User.findOne(query);
-      if(!user) return res.status(404).json();
-      const link = await user.generateActivationLink();
-      console.log(link);
-      res.json(link);
-  };
-  app.get('/user/fudgeVerification/:username',fugdeVerificationController);
-}
+app.use(auth.jwtmw);
+app.use('/story', storyRoute);
+app.use('/user/whoami', whoami);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);

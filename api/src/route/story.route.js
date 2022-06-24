@@ -26,7 +26,6 @@ let storyRoutes;
 
   // POST
   const create                      = ep('/create');
-  console.log(create);
   const viewFeedback                = ep('/viewFeedback');
   const updateStoryAndCheckGrammar  = ep('/updateStoryAndCheckGrammar');
 

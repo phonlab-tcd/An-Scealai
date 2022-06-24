@@ -43,6 +43,22 @@ let userRoutes;
     });
 })();
 
+if(process.env.FUDGE) {
+  logger.info('ADD FUDGE VERIFICATION ENDPOINT');
+  const fugdeVerificationController  = 
+    async function (req, res) {
+      const User = require('./model/user');
+      const username = req.params.username;
+      const query = {username};
+      const user = await User.findOne(query);
+      if(!user) return res.status(404).json();
+      const link = await user.generateActivationLink();
+      logger.info(link);
+      res.json(link);
+  };
+  userRoutes.get('/user/fudgeVerification/:username',fugdeVerificationController);
+}
+
 userRoutes.get('/viewUser', ctrlProfile.viewUser);
 userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
