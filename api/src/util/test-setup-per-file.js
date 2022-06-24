@@ -5,7 +5,7 @@ const mongodPromise = MongoMemoryServer.create();
 
 beforeAll(async ()=>{
   const mongod = await mongodPromise;
-  const uri = mongod.getUri();
+  const uri = mongod.getUri() + 'test';
   const useNewUrlParser = true;
   const useUnifiedTopology = true;
   const opts = {useNewUrlParser,useUnifiedTopology};

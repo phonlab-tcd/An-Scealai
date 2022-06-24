@@ -24,7 +24,7 @@ function makeEndpoints(mappings: RouterMethodMaps) {
           next(error);
         }
       }
-      router[httpMethod](endpoint,triedHandler);
+      (router as unknown as {[K in HttpMethod]: Function})[httpMethod](endpoint,triedHandler);
     }
   }
 

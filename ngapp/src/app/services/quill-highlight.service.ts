@@ -202,7 +202,7 @@ export class QuillHighlightService {
         storyUnderscoreId,
         tagData: grammarCheckerErrors,
       };
-      this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
+      this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe(console.log,console.error);
     })();
 
     return currentGramadoirErrorTypes;

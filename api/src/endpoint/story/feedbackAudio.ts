@@ -1,17 +1,15 @@
 import Story from '../../model/story';
 import mongoose from 'mongoose';
-import mongodb from 'mongodb';
 import Express from 'express';
 import Mongoose from 'mongoose';
-
-const ObjectId = mongoose.Types.ObjectId;
+const { GridFSBucket, ObjectId } = require('mongodb');
 
 type mwargs = [Express.Request, Express.Response, Function];
 type mw = (...args:mwargs)=>any;
 
 const dbConnection = ()=>mongoose.connection.db;
 const bucketName = 'audioFeedback';
-const audioFeedbackBucket = ()=> new mongodb.GridFSBucket(dbConnection(),{bucketName});
+const audioFeedbackBucket = ()=>new GridFSBucket(dbConnection(),{bucketName});
 
 // storyRoutes.route('/feedbackAudio/:id').get(
 const get: mw = async (req, res) => {
@@ -44,7 +42,7 @@ const get: mw = async (req, res) => {
         const bucket = audioFeedbackBucket();
         // create a new stream of file data using the bucket name
         const downloadStream = bucket.openDownloadStream(audioId);
-        downloadStream.on('data',  d=>res.write(d));
+        downloadStream.on('data',  (d:any)=>res.write(d));
         downloadStream.on('error',()=>res.sendStatus(404));
         downloadStream.on('end',  ()=>res.end());
       } else {

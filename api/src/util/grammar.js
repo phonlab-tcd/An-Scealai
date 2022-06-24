@@ -7,7 +7,12 @@ const querystring = require('querystring');
 const { GramadoirCache, GramadoirStoryHistory } = require('../model/gramadoir');
 const Story = require('../model/story');
 const User = require('../model/user');
+const API400Error = require('../util/APIError');
+const mongoose = require('mongoose');
 
+
+const mustBeArray=()=>new API400Error('qtags must be array');
+function reject(e) { return new Promise((_,rej)=>rej(e)) }
 
 //  @description - grammar tags into db
 //
@@ -15,7 +20,7 @@ const User = require('../model/user');
 //
 //  @param {[quill-highlight-tag]} qtags
 async function upsertGramadoirCacheItem(text, qtags) {
-  if(!(qtags instanceof Array)) return Promise.reject();
+  if(!(qtags instanceof Array)) return reject(mustBeArray());
   return new Promise((resolve,reject) => {
     GramadoirCache.findOneAndUpdate(
       { text: text },
@@ -28,43 +33,26 @@ async function upsertGramadoirCacheItem(text, qtags) {
   });
 }
 
-//  @description - story version grammar errors update 
-//
-//  @param {ObjectId} storyId
-//
-//  @param {ObjectId} userId
-//
-//  @param {ObjectId} gramadoirCacheId
-//
-//  @param {string | falsy} timestamp - falsy means now, string
-//      will be coerced to Date
-async function upsertStoryGramadoirVersion(
-  storyId, userId, gramadoirCacheId, timestamp) {
-  const story = Story.findOne({_id: storyId});
-  const user = User.findOne({_id: userId});
-  const gram = GramadoirCache.findOne({_id: gramadoirCacheId});
-  if(!(await story)) return new Promise((_,rej)=>rej(new Error('storyId invalid in upsertStoryGramadoirVersion')))
-  if(!(await user))  return new Promise((_,rej)=>rej(new Error('userId invalid in upsertStoryGramadoirVersion')))
-  if(!(await gram))  return new Promise((_,rej)=>rej(new Error('gramadoirCacheId invalid in upsertStoryGramadoirVersion')))
 
-  return new Promise((resolve,reject) => {
-    GramadoirStoryHistory.findOneAndUpdate(
-        { userId: userId,
-          storyId: storyId, },
-        { $push:
-          {versions:
-            { gramadoirCacheId: gramadoirCacheId,
-              timestamp: timestamp || new Date(),
-            }
-          }
-        },
-        { upsert: true, new: true },
-        (err)=>{
-          if(err) { return reject(err) }
-          return resolve();
-        }
-      );
-    });
+async function upsertStoryGramadoirVersion({storyId, userId, gramadoirCacheId, timestamp}) {
+  console.log('storyId',storyId);
+  console.log(await Story.find());
+  const story = await Story.findById(storyId);
+  const [user,gram] = await Promise.all([
+    User.findById(new mongoose.Types.ObjectId(userId)),
+    GramadoirCache.findById(gramadoirCacheId),
+  ]);
+  if(!story) return reject('storyId invalid in upsertStoryGramadoirVersion');
+  if(!user)  return reject('userId invalid in upsertStoryGramadoirVersion');
+  if(!gram)  return reject('gramadoirCacheId invalid in upsertStoryGramadoirVersion');
+
+  const query = {userId,storyId};
+  timestamp = timestamp || new Date();
+  const versions = {gramadoirCacheId,timestamp};
+  const operation = {$push: {versions}};
+  const opts = {upsert:true,new:true};
+  return GramadoirStoryHistory
+    .findOneAndUpdate(query,operation,opts);
 }
 
 /** @description - Get a promise which resolves to a
@@ -110,6 +98,8 @@ function requestGrammarTags(text, language) {
   });
 }
 
-module.exports.requestGrammarTags = requestGrammarTags;
-module.exports.upsertGramadoirCacheItem = upsertGramadoirCacheItem;
-module.exports.upsertStoryGramadoirVersion = upsertStoryGramadoirVersion;
+module.exports = {
+  requestGrammarTags,
+  upsertGramadoirCacheItem,
+  upsertStoryGramadoirVersion,
+};

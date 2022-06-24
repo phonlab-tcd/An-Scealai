@@ -1,57 +1,50 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+import { modelOptions, prop, getModelForClass, Ref} from '@typegoose/typegoose';
 
-const QuillHighlightTag = new Schema({
-  start: { type: Number, required: true }, 
-  length: { type: Number, required: true },
-  type: { type: String, required: true},
-  messages: { 
-    type: {
-      en: { type: String, required: true },
-      ga: { type: String, required: true }
-    }
-  },
-});
+class Messages {
+  @prop() ga?: string;
+  @prop() en?: string;
+}
 
-const GramadoirCache = new Schema({
-  text: {
-    type: String,
-    unique: true,
-  },
-  grammarTags: {
-    type: Array,
-    of: QuillHighlightTag,
-  },
-}, {
-  collection: 'gramadoir.cache'
-});
+class QuillHighlightTag {
+  @prop() start?: number;
+  @prop() length?: number;
+  @prop() type?: string; // TODO enumerate gramadoir tag types
+  @prop() messages?: Messages;
+}
 
-const GramadoirCacheLink = new Schema({
-  gramadoirCacheId: {
-    type: mongoose.ObjectId,
-  },
-  timestamp: {
-    type: Date,
-  }
-});
+@modelOptions({schemaOptions: {collection: 'gramadoir.cache'}})
+export class GramadoirCache {
+  @prop({unique: true, required: true})
+  text?: string;
+
+  @prop({type: ()=>[QuillHighlightTag]})
+  grammarTags?: [];
+}
+
+export class GramadoirCacheLink{
+  @prop({ref: ()=>GramadoirCache})
+  gramadoirCacheId: Ref<GramadoirCache>
+
+  @prop()
+  timestamp?: Date;
+}
 
 
-const GramadoirStoryHistory = new Schema({
-    userId: {
-      type: mongoose.ObjectId,
-    },
-    storyId: {
-      type: mongoose.ObjectId,
-    },
-    versions: {
-      type: [GramadoirCacheLink],
-      default: [],
-    },
-}, {
-    collection: 'gramadoir.story.history'
-});
+@modelOptions({schemaOptions: {collection: 'gramadoir.story.history'}})
+class GramadoirStoryHistory {
+    @prop({required: true})
+    userId?: mongoose.Types.ObjectId;
+
+    @prop({required: true})
+    storyId?: mongoose.Types.ObjectId;
+
+    @prop({type: ()=>[GramadoirCacheLink]})
+    versions?: [GramadoirCacheLink];
+}
+
 
 module.exports = {
-  GramadoirCache: mongoose.model('GramadoirCache', GramadoirCache),
-  GramadoirStoryHistory: mongoose.model('GramadoirInputText', GramadoirStoryHistory),
+  GramadoirCache:         getModelForClass(GramadoirCache),
+  GramadoirStoryHistory:  getModelForClass(GramadoirStoryHistory),
 }

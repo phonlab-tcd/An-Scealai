@@ -5,7 +5,7 @@ const supertest   = require('supertest');
 const request     = supertest(app);
 const mongoose    = require('mongoose');
 const {ObjectId}  = mongoose.Types;
-const Story       = require('../models/story');
+const Story       = require('../model/story');
 
 describe('story routes', () => {
   describe('story/getStoryById/:id', () => {

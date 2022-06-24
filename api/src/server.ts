@@ -24,7 +24,7 @@ const messageRoute      = require('./route/messages.route');
 const studentStatsRoute = require('./route/studentStats.route');
 const recordingRoute    = require('./route/recording.route');
 const mailRoute         = require('./route/send_mail.route');
-const gramadoirLogRoute = require('./route/gramadoir_log.route');
+const gramadoirLogRoute = require('./route/gramadoir.route');
 const synthesisRoute    = require('./route/synthesis.route');
 const auth              = require('./util/authMiddleware');
 const whoami            = require('./endpoint/user/whoami');
@@ -34,7 +34,6 @@ const whoami            = require('./endpoint/user/whoami');
 
 async function connectDb() {
   mongoose.Promise = global.Promise;
-  mongoose.set('useFindAndModify', false);
   const opts = {
     autoIndex: false,
     useNewUrlParser: true,
