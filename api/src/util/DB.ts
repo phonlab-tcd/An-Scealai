@@ -1,4 +1,4 @@
-module.exports = {
+export = {
   DB_URL_PREFIX: 'mongodb://',
   DB_AUTH_DETAILS: '',
   DB_HOSTNAME: process.env.DB_HOSTNAME || 'localhost:27017/',
