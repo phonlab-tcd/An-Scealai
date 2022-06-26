@@ -76,6 +76,7 @@ span:not[data-gramadoir-tag-style-type] {
 [data-gramadoir-tag-style-type="SEIMHIU"]
 {
     background-color: darkorchid;
+    color: white;
 }
 
 [data-gramadoir-tag-style-type="CLAOCHLU"]
