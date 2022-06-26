@@ -2,7 +2,8 @@
 <div class="page bookContainer">
     <!-- STORY TITLE -->
     <h1 style="margin: auto;"
-      [ngStyle]=titleStyle()>
+      [ngStyle]=titleStyle()
+      data-cy=title>
       {{story?.title ?? '...'}}
       <span *ngIf="!storySaved">*</span>
     </h1>

@@ -7,7 +7,7 @@ import { TranslationService } from '../translation.service';
 @Component({
   selector: 'app-register-profile',
   templateUrl: './register-profile.component.html',
-  styleUrls: ['./register-profile.component.css']
+  styleUrls: ['./register-profile.component.scss']
 })
 export class RegisterProfileComponent implements OnInit {
 

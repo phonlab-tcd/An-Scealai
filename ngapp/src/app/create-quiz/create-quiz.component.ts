@@ -11,7 +11,7 @@ const backendUrl = config.baseurl;
 @Component({
   selector: 'app-create-quiz',
   templateUrl: './create-quiz.component.html',
-  styleUrls: ['./create-quiz.component.css']
+  styleUrls: ['./create-quiz.component.scss']
 })
 export class CreateQuizComponent implements OnInit {
 

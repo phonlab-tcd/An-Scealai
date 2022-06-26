@@ -8,7 +8,7 @@ import { SynthesisService, Paragraph, Sentence, Section } from '../../services/s
   selector: 'app-synthesis',
   templateUrl: './synthesis.component.html',
   styleUrls: [
-    './synthesis.component.css',
+    './synthesis.component.scss',
   ]
 })
 export class SynthesisComponent implements OnInit {

@@ -28,13 +28,16 @@ let Story = new Schema({
     },
     feedback: {
         text: {
-            type: String
+            type: String,
+            default: null
         },
         seenByStudent: {
-            type: Boolean
+            type: Boolean,
+            default: null
         },
         audioId: {
-            type: String
+            type: String,
+            default: null
         }
     },
     activeRecording: {
