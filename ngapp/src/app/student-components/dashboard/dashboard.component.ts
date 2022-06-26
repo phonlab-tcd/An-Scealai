@@ -256,9 +256,21 @@ export class DashboardComponent implements OnInit{
     }
   }
 
+  genitiveCheckBox(event: boolean) {
+    this.quillHighlightService.showGenitive = event;
+    this.quillHighlightService
+        .clearAllGramadoirTags(this.quillEditor);
+    if (!this.grammarTagsHidden) {
+      this.quillHighlightService
+          .applyGramadoirTagFormatting(this.quillEditor);
+    }
+  }
+
   setAllCheckBoxes(value: boolean) {
     this.quillHighlightService
         .showLeathanCaol = value;
+    this.quillHighlightService
+        .showGenitive = value;
     Object.keys(this.grammarTagFilter)
         .forEach((k) => {
           this.grammarTagFilter[k] = value;
@@ -292,6 +304,7 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
+            console.dir(this.story);
             this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
@@ -433,7 +446,10 @@ export class DashboardComponent implements OnInit{
             '')
         .replace(
             /\s*data-vowel-agreement-tag="([^"])+"/g,
-            '');
+            '')
+        .replace(
+          /\s*data-genitive-tag="([^"])+"/g,
+          '');
   }
 
   debounceSaveStory() {
