@@ -85,5 +85,4 @@ export class TranslationService {
   getUserLanguageCode() : Observable<any> {
     return this.http.get(this.baseUrl + "user/getLanguage/" + this.auth.getUserDetails()._id);
   }
-
 }

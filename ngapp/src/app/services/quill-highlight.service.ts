@@ -167,7 +167,6 @@ export class QuillHighlightService {
     }
 
     grammarCheckerErrors.forEach((e, i) => {
-      console.log(grammarCheckerErrorsIrish[i].ruleId);
       e.messages.ga = grammarCheckerErrorsIrish[i].msg;
     });
     this.currentGramadoirHighlightTags = grammarCheckerErrors;
@@ -237,7 +236,6 @@ export class QuillHighlightService {
    */
   gramadoir2QuillTags(tagData: GramadoirTag[], currentGramadoirErrorTypes: object = {}): QuillHighlightTag[] {
     return tagData.map(tag => {
-        console.log(tag.ruleId);
         const ruleIdShort =
           this.grammar.string2GramadoirRuleId(tag.ruleId);
         currentGramadoirErrorTypes[ruleIdShort] ?
@@ -318,12 +316,11 @@ export class QuillHighlightService {
         disagreeingVowelIndices);
     }
 
-    for (const tagAttribute of ['data-gramadoir-tag', 'data-genitive-tag']) {
-        const tagElements: NodeListOf<Element> | [] = document.querySelectorAll(`[${tagAttribute}]`) || [];
-        tagElements.forEach((t: HTMLElement) => {
-            this.createGrammarPopup(quillEditor, t, tagAttribute);
-        });
-    }
+    const t1 = 'data-gramadoir-tag';
+    const t2 = 'data-genitive-tag';
+    const t3 = 'data-vowel-agreement-tag';
+    const tagElements = document.querySelectorAll(`[${t1}],[${t2}],[${t3}]`);
+    tagElements.forEach(t=>this.createGrammarPopup(quillEditor, t));
   }
 
   clearAllGramadoirTags(quillEditor: Quill) {
@@ -361,11 +358,54 @@ export class QuillHighlightService {
     private createGrammarPopup(
     quillEditor: Quill,
     tagElement: Element,
-    tagAttribute: string
     ) {
-    const unparsed = tagElement.getAttribute(tagAttribute);
-    const error = JSON.parse(unparsed);
+      const messages = {en: '',ga: ''};
+      let errorType: string;
+      let start = 0;
+      let length = 1;
+      type fn = (a:number,b:number)=>number;
+      const min:fn=(a,b)=>a<b?a:b;
+      const max:fn=(a,b)=>a>b?a:b;
+      // data-gramadoir-tag
+      (()=>{
+        const t1 = tagElement.getAttribute('data-gramadoir-tag');
+        if(t1) {
+          const parsed = JSON.parse(t1);
+          messages.en += '<hr>' + parsed.messages.en;
+          messages.ga += '<hr>' + parsed.messages.ga;
+          errorType = parsed.type;
+          start = parsed.start ?? start;
+          length = parsed.length ?? length;
+        }
+      })();
 
+      (()=>{
+        const t2 = tagElement.getAttribute('data-genitive-tag');
+        if(t2) {
+          const parsed = JSON.parse(t2);
+          messages.en += '<hr>' + parsed.messages.en;
+          messages.ga += '<hr>' + parsed.messages.ga;
+          start = parsed.start ?? start;
+          length = parsed.length ?? length;
+        }
+      })();
+
+      (()=>{
+        const t3 = tagElement.getAttribute('data-vowel-agreement-tag');
+        if(t3) {
+          const parsed = JSON.parse(t3);
+          console.log(parsed);
+          messages.en += '<hr>' + (this.ts.getLanguageFromCode('en')as any).vowels_should_agree;
+          messages.ga += '<hr>' + (this.ts.getLanguageFromCode('ga') as any).vowels_should_agree;
+          start = parsed.first;
+          length = parsed.second - parsed.first;
+        }
+      })();
+      messages.en = messages.en.replace(/^<hr>/,'');
+      messages.ga = messages.ga.replace(/^<hr>/,'');
+
+
+    const error: any = {start,length,messages,type: errorType};
     // Create a customised quill tooltip containing
     // a message about the grammar error
     error.tooltip = new Tooltip(quillEditor);
@@ -377,6 +417,7 @@ export class QuillHighlightService {
     });
 
     tagElement.addEventListener('mouseout', () => {
+      tagElement.removeAttribute('data-selected');
       error.tooltip.hide();
     });
   }
@@ -387,41 +428,16 @@ export class QuillHighlightService {
     tagElement: Element,
   )
   {
+    tagElement.setAttribute('data-selected','');
     this.outMessages = error.messages;
+    this.mostRecentHoveredMessages = error.messages;
 
     // for some reason bounds aren't calculated correctly until someone scrolls
     const scrollTop = quillEditor.root.scrollTop;
     quillEditor.root.scroll({top: + scrollTop + 1});
     quillEditor.root.scroll({top: + scrollTop});
 
-    const userFriendlyMsgs =
-      this.grammar
-          .userFriendlyGramadoirMessage[error.type];
-
-    const v: string = tagElement.getAttribute('data-vowel-agreement-tag');
-
-    let vowelAgreementMessage: string =
-      this.grammar
-          .getVowelAgreementUserMessage(v);
-
-    let mainMessagePart;
-    if (userFriendlyMsgs) {
-      this.mostRecentHoveredMessages =
-        userFriendlyMsgs;
-      mainMessagePart =
-        userFriendlyMsgs[this.ts.l.iso_code];
-    } else {
-      this.mostRecentHoveredMessages =
-        error.messages;
-      mainMessagePart =
-        error.messages[this.ts.l.iso_code];
-    }
-    if (vowelAgreementMessage) {
-      vowelAgreementMessage = '<hr>' + vowelAgreementMessage;
-    }
-    error.tooltip.root.innerHTML =
-      // Prefer user friendly message
-      mainMessagePart + vowelAgreementMessage;
+    error.tooltip.root.innerHTML = error.messages[this.ts.l.iso_code];
 
     error.tooltip.show();
     error.tooltip.position(quillEditor.getBounds(error.start, error.length));

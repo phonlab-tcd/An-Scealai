@@ -232,12 +232,13 @@
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
         style="background-color: #8FCAFF"
-        [hidden]="grammarTagsHidden || grammarLoading">
-        {{ quillHighlightService.mostRecentHoveredMessages ?
+        [hidden]="grammarTagsHidden || grammarLoading"
+        [innerHTML]="quillHighlightService.mostRecentHoveredMessages ?
             quillHighlightService.mostRecentHoveredMessages[ts.l.iso_code] :
               ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion ?
               ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion :
-              'hover_over_a_highlighted_word_for_a_grammar_suggestion'  }}
+              'hover_over_a_highlighted_word_for_a_grammar_suggestion'"
+        >
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
