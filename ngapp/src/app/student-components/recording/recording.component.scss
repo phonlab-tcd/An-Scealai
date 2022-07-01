@@ -1,6 +1,8 @@
+$corner-button-width: 10rem;
+$scealai-orange: #c15a2e;
+
 .bookContainerSynth {
     width: 70%;
-    height: 400px;
     margin-left: 15%;
     z-index: 10;
     border-radius: 5px;
@@ -16,14 +18,6 @@
 
 .page {
     padding-top: 20px;
-}
-
-.bookImg {
-    z-index: -10;
-    width: 90%;
-    height: 500px;
-    position: fixed;
-    right: 5%;
 }
 
 .hidden {
@@ -91,11 +85,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .bookTitle {
-    color: #261500; 
-    padding-right: 10%;
-    padding-top: 3px;
-    display: inline-block;
-    font-size: 16pt;
+  overflow: auto;
+  color: #261500; 
+  margin-left: 2em;
+  margin-right: 2em;
+  display: inline-block;
+  font-size: 16pt;
 }
 
 .bookTitleHistory {
@@ -115,39 +110,26 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .myStoriesBtn {
-    display: inline;
-    border-style: none;
-    color: #261500;
-    width: 100px;
-    font-size: 12pt;
-    padding-top: 10px;
-    padding-left: 5%;
+  white-space: nowrap;
+  display: inline;
+  border-style: none;
+  color: #261500;
+  width: $corner-button-width;
+  font-size: 12pt;
+  padding-top: 10px;
 }
 
 .myStoriesBtn:hover {
-    color: #c15a2e;
+    color: $scealai-orange;
     cursor: pointer;
     transition: color 0.5s;
 }
 
-
-.chatbotBtn {
-    display: inline;
-    float: right;
-    color: #261500;
-    border-style: none;
-    font-size: 12pt;
-    padding-top: 10px;
-    padding-right: 5%;
-}
-
-.chatbotBtn:hover {
-    color: #c15a2e;
-}
-
 .recordingBookHeader {
-    display: flex;
-    justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .textContainerSynth {
@@ -184,15 +166,16 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordingSaveIcon {
-    color: #261500;
-    border-style: none;
-    font-size: 11pt;
-    padding-right: 5%;
-    padding-top: 15px;
+  width: $corner-button-width;
+  color: #261500;
+  border-style: none;
+  font-size: 11pt;
+  padding-top: 15px;
 }
 
 .recordingSavedIcon {
-    color: #b3a995;
+  white-space: nowrap;
+  color: #b3a995;
 }
 
 .optionsPopupRec {
@@ -427,9 +410,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (max-width: 700px) { 
-  .bookImg {
-      display: none;
-  }
   .bookContentsContainer {
       width: 100%;
       padding-top: 10px;
@@ -443,13 +423,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (min-width: 700px) {
-    .bookImg {
-        z-index: -10;
-        width: 630px;
-        left: 50%;
-        margin-left: -315px;
-    }
-
     .bookContainerSynth {
         width: 490px;
         position: fixed;
@@ -460,17 +433,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (min-width: 1000px) and (min-height: 750px) {
-  .bookImg {
-      z-index: -10;
-      width: 800px;
-      height: 600px;
-      left: 50%;
-      margin-left: -400px;
-  }
-
   .bookContainerSynth {
       width: 620px;
-      height: 510px;
       position: fixed;
       left: 50%;
       margin-left: -310px;
@@ -488,17 +452,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (min-width: 1400px) and (min-height: 900px) {
-  .bookImg {
-      z-index: -10;
-      width: 1000px;
-      height: 740px;
-      left: 50%;
-      margin-left: -500px;
-  }
-
   .bookContainerSynth {
       width: 800px;
-      height: 600px;
       position: fixed;
       left: 50%;
       margin-left: -400px;
@@ -516,17 +471,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (min-width: 1900px) and (min-height: 1000px) {
-  .bookImg {
-      z-index: -10;
-      width: 1200px;
-      height: 850px;
-      left: 50%;
-      margin-left: -600px;
-  }
-
   .bookContainerSynth {
       width: 980px;
-      height: 730px;
       position: fixed;
       left: 50%;
       margin-left: -490px;
@@ -540,10 +486,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
   .textContainerSynth {
       height: 610px;
-  }
-
-  .myStoriesBtn {
-    width: 120px;
   }
 }
 

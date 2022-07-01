@@ -153,11 +153,12 @@ h1 {
 }
 
 .myStoriesBtn {
-    border-style: none;
-    color: #261500;
-    /*color: #b3a995;*/
-    font-size: 11pt;
-    padding: 5px;
+  white-space: nowrap;
+  border-style: none;
+  color: #261500;
+  /*color: #b3a995;*/
+  font-size: 11pt;
+  padding: 5px;
 }
 
 .myStoriesBtn:hover {
@@ -168,10 +169,11 @@ h1 {
 }
 
 .saveIcon {
-    color: #261500;
-    border-style: none;
-    font-size: 11pt;
-    padding: 5px;
+  white-space: nowrap;
+  color: #261500;
+  border-style: none;
+  font-size: 11pt;
+  padding: 5px;
 }
 
 .selectDialect {
