@@ -1,10 +1,10 @@
 const logger                    = require('../util/logger');
-const verificationEmailMessage  = require('../util/verificationEmailMessage.ts');
+const verificationEmailMessage  = require('../util/verificationEmailMessage');
 const mail                      = require('../util/mail');
 const either                    = require('../util/either');
 
 if(mail.couldNotCreate){
-  logger.error('Failed to create mail module in ./api/controllers/authentication.js');
+  logger.error(`Failed to create mail module in ${__filename}`);
 }
 
 // Used to generate confirmation code to confirm email address
