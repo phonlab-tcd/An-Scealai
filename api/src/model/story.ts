@@ -2,7 +2,6 @@ import { prop, getModelForClass, modelOptions} from '@typegoose/typegoose';
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
 class Feedback {
   @prop() text?: string;
   @prop() seenByStudent?: boolean;
@@ -23,4 +22,5 @@ class Story {
   @prop({default: {}})  feedback?: Feedback;
 }
 
-export = getModelForClass(Story); 
+export default getModelForClass(Story); 
+module.exports = getModelForClass(Story);
