@@ -9,62 +9,28 @@ let Story = require('../models/story');
 let Profile = require('../models/profile');
 let User = require('../models/user');
 
-statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get((req, res) => {
-  let conditions = {}
-  if(req.params.startDate !== "empty" && req.params.endDate !== "empty") {
-    conditions = {"status":"Active", "verification.date": {'$gte': req.params.startDate, '$lte': req.params.endDate}};
-  }
-  else if (req.params.startDate !== "empty" && req.params.endDate === "empty") {
-    conditions = {"status":"Active", "verification.date": {'$gt': req.params.startDate}};
-  }
-  else {
-    conditions = {"status":"Active"};
-  }
-  
-  User.find(conditions, (err, users) => {
-    if(err) {
-      console.log(err);
-      res.status(400).send("An error occurred while trying to find users by date");
-    }
-    if(!users) {
-      res.status(404).send({"message": "Users in this date range were not found"});  
-    }
-    else {
-      let ids = [];
-      users.forEach(user => {
-        ids.push(user["_id"]);
-      });
-      
-      function findProfile(id) {
-        return new Promise ((resolve) => {
-          Profile.find({"userId":id}, (err, profile) => {
-              if(err) {
-                console.log(err);
-                res.status(400).send("An error occurred while trying to find a profile with this user id");
-              }
-              if(!profile) {
-                res.status(404).send("Profile for this user id not found");  
-              }
-              else {
-                resolve(profile);
-              }
-          });
-        })
-      };
-      
-      async function getProfiles(ids) {
-        var profiles = [];
-        for (const id of ids) {
-          const profile = await findProfile(id);
-          profiles.push(profile);
-        }
-        res.status(200).json(profiles);
+statsRoutes
+  .route('/getProfileDataByDate/:startDate/:endDate')
+  .get(async (req, res, next) => {
+    try {
+      const conditions = {status: "Active"};
+      if(req.params.startDate !== "empty" && req.params.endDate !== "empty") {
+        conditions["verification.date"] = {
+          $gte: req.params.startDate,
+          $lte: req.params.endDate,
+        };
       }
-
-      getProfiles(ids);
-    }  
-  });
-    
+      else
+      if(req.params.startDate !== "empty" && req.params.endDate === "empty") {
+        conditions["verification.date"] = {
+          $gt: req.params.startDate,
+        };
+      }
+      const ids = (await User.find(conditions,{_id: 1})).map(u=>u._id);
+      const promises =  ids.map(id=>Profile.find({userId:id}).limit(1));
+      const profiles = await Promise.all(promises);
+      res.json(profiles);
+    } catch(e){console.error(e);next(e)}
 });
 
 statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) => {
