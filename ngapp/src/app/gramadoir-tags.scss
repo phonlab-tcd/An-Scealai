@@ -28,7 +28,7 @@
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
 }
-span[data-gramadoir-tag-style-type]
+[data-gramadoir-tag-style-type]
 /*:not([data-vowel-agreement-tag])*/
 {
   border-radius: 3px;
@@ -103,4 +103,12 @@ span:not[data-gramadoir-tag-style-type] {
 [data-gramadoir-tag-style-type="DROCHMHOIRF"]
 {
     background-color: #21E9E9;
+}
+
+[data-vowel-agreement-tag]
+{
+  border-radius: 0 !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  background-color: rgba(255,255,100,0.8);
 }

@@ -1,6 +1,36 @@
+@import './app/gramadoir-tags.scss';
+@import './quill.fonts.scss';
 
 html,body.rootBody {
   height: 100%;
+}
+
+.ql-container {
+  margin: auto;
+}
+
+.ql-editor {
+  background-color: white;
+  font-size: 14pt;
+  max-width: 210mm;
+  box-shadow: 0 0 0.3em 0.3em hsla(0,0%,0%,0.2);
+  margin: auto;
+  border-left: 0.5px solid white;
+  border-right: 0.5px solid white;
+  @media only screen and (min-width: 210mm) {
+    padding-left: 30mm !important;
+    padding-right: 30mm !important;
+  }
+  * {
+    padding-top:    0.5em !important;
+    padding-bottom: 0.5em !important;
+    max-width: 150mm;
+    margin: auto !important;
+  }
+  span {
+    padding-top:    0.1em !important;
+    padding-bottom: 0.1em !important;
+  }
 }
 
 html {
@@ -13,9 +43,9 @@ body.rootBody {
 body.rootBody {
    background: url("assets/img/paperBg.jpg") no-repeat center fixed;
  -webkit-background-size: cover;
- -moz-background-size: cover;
- -o-background-size: cover;
- background-size: cover;
+    -moz-background-size: cover;
+      -o-background-size: cover;
+         background-size: cover;
  font-family: "Open Sans";
 }
 
