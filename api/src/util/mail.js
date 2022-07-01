@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const logger = require('./logger');
 // Much of the following code was taken from this tutorial:
 // https://schadokar.dev/posts/how-to-send-email-in-nodejs/
 /**
@@ -9,20 +10,18 @@ const nodemailer = require("nodemailer");
  * @param {String} subject - Subject of the email
  * @param {String} message - message
  */
-const path = require('path');
-const fs = require('fs');
 
-module.exports.sendEmail = "not yet created";
-
-const filepath = path.join(__dirname, '..', '..', 'sendinblue.json');
 // send mail with defined transport object.
 if(process.env.NO_EMAILS) {
   console.log('NO_EMAILS: sendEmail neutered');
   module.exports.sendEmail = ()=>true;
-} else {
+} 
+else {
+  if(!process.env.SENDINBLUE_USERNAME || !process.env.SENDINBLUE_PASSWORD){
+    logger.error("env vars SENDINBLUE_USER and SENDINBLUE_PASS are required");
+    process.exit(1);
+  }
   try{
-    let rawdata = fs.readFileSync(filepath);
-    let sendinblueData = JSON.parse(rawdata);
     const sendEmail = async (mailObj) => {
       const { from, recipients, subject, message } = mailObj;
       try {
@@ -31,8 +30,8 @@ if(process.env.NO_EMAILS) {
           host: "smtp-relay.sendinblue.com",
           port: 587,
           auth: {
-            user: sendinblueData.user,
-            pass: sendinblueData.pass,
+            user: process.env.SENDINBLUE_USERNAME,
+            pass: process.env.SENDINBLUE_PASSWORD,
           },
         });
 
