@@ -130,37 +130,23 @@
       <!-- INLINE GRAMMAR CHECK -->
       <div
         style="display: flex;"
-         *ngIf="showOptions"
+        *ngIf="showOptions"
         (click)="this.dontToggle=true;">
         <span
-         class="optionsBtn optionsPopupBtn"
-          *ngIf="grammarTagsHidden; else HideGrammarTags"
-          (click)="showGrammarTags();">
-            {{  ts.l.show_grammar_suggestions ?
-                ts.l.show_grammar_suggestions :
-                'show_grammar_suggestions' }}
-          <i class="fas fa-spell-check optionsBtnIcon"></i>
-        </span>
-        <ng-template #HideGrammarTags>
-          <span 
-            class="optionsBtn optionsPopupBtn"
-            (click)="hideGrammarTags();">
-            {{  ts.l.hide_grammar_suggestions ?
-                ts.l.hide_grammar_suggestions :
-                'hide_grammar_suggestions' }}
+          class="optionsBtn optionsPopupBtn"
+          (click)="toggleGrammarTags();">
+            {{ toggleGrammarButton() }}
             <i class="fas fa-spell-check optionsBtnIcon"></i>
-          </span>
-          <div
-            class="optionsBtn optionsPopupBtn"
-            class="loader"
-            *ngIf="grammarLoading">
-          </div>
-        </ng-template>
+            <div
+              class="loader"
+              *ngIf="!grammarTagsHidden && grammarLoading">
+            </div>
+        </span>
         <span
           [hidden]="grammarTagsHidden"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
-          class="⚙">
-          ⚙
+          class="settingsIcon">
+            ⚙
         </span>
       </div>
 
@@ -234,21 +220,14 @@
       <div
         style="background-color: #8FCAFF"
         [hidden]="grammarTagsHidden || grammarLoading"
-        [innerHTML]="quillHighlightService.mostRecentHoveredMessages ?
-            quillHighlightService.mostRecentHoveredMessages[ts.l.iso_code] :
-              ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion ?
-              ts.l.hover_over_a_highlighted_word_for_a_grammar_suggestion :
-              'hover_over_a_highlighted_word_for_a_grammar_suggestion'"
-        >
+        [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
-                {{  ts.l.grammar_checker_settings ?
-                    ts.l.grammar_checker_settings :
-                    'grammar_checker_settings'}}
+                {{  ts.message('grammar_checker_settings') }}
               </h5>
               <div class="closeDictionaryBtn"
                 (click)="grammarSettingsHidden = true;">
@@ -270,26 +249,22 @@
             [(ngModel)]="quillHighlightService.showLeathanCaol"
             (ngModelChange)="leathanCaolCheckBox($event)"
             type="checkbox">
-          {{ ts.l.iso_code === 'ga' ? 
-            'Leathan/caol' :
-            'Broad/slender vowel agreement' }}
+          {{ ts.message('broad_slender_agreement') }}
         </div>
         <div style="margin: 2px;">
           <input 
             [(ngModel)]="quillHighlightService.showGenitive"
             (ngModelChange)="genitiveCheckBox($event)"
             type="checkbox">
-          {{ ts.l.iso_code === 'ga' ? 
-            'Tuiseal ginideach' :
-            'Genitive' }}
+          {{ ts.message('genitive') }}
         </div>
         <button
           (click)="setAllCheckBoxes(false)">
-          {{ ts.l.uncheck_all ? ts.l.uncheck_all : 'uncheck_all'}}
+          {{ ts.message('uncheck_all') }}
         </button>
         <button
           (click)="setAllCheckBoxes(true)">
-          {{ ts.l.check_all ? ts.l.check_all : 'check_all'}}
+          {{ ts.message('check_all') }}
         </button>
       </div>
     </div>

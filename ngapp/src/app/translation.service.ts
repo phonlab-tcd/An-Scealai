@@ -6,6 +6,7 @@ import config from 'abairconfig';
 import { Observable } from 'rxjs';
 import trans_pre from './translation';
 
+export type MessageKey = keyof typeof trans_pre;
 
 const translations = /*iefe*/(()=>{
   const ga = {};
@@ -34,6 +35,10 @@ export class TranslationService {
 
   l: any = '';
   baseUrl: string = config.baseurl;
+
+  public message(key: MessageKey) {
+    return this.l[key] ?? key;
+  }
 
   initLanguage() {
     if (this.auth.isLoggedIn()) {
