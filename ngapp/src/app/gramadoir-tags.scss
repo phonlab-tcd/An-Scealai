@@ -3,21 +3,26 @@
 }
 
 [data-selected] {
-  box-shadow: 2px 2px;
+  box-shadow: 2px 2px  2px gray;
   margin: 0.3em;
 }
 
 [data-vowel-agreement-tag]
 {
-  border-radius: 0;
   border: 1px solid gray;
+  border-radius: 0 !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  background-color: palegreen;
+  color: black;
+  cursor: pointer;
 }
 
 [data-genitive-tag]
 {
-    background-color: darkcyan;
-    color: white;
-    border-radius: 3px;
+  background-color: gold;
+  color: black;
+  border-radius: 3px;
 }
 
 [data-genitive-tag]:hover
@@ -27,11 +32,8 @@
 
 /* Gramadoir error tag colour coding */
 [data-gramadoir-tag-style-type] {
-}
-[data-gramadoir-tag-style-type]
-/*:not([data-vowel-agreement-tag])*/
-{
   border-radius: 3px;
+  color: black;
 }
 
 span[data-gramadoir-tag-style-type]:hover
@@ -40,21 +42,14 @@ span[data-gramadoir-tag-style-type]:hover
   cursor: pointer;
 }
 
-span:not[data-gramadoir-tag-style-type] {
-  border-radius: 0;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
 [data-gramadoir-tag-style-type]
 {
-    background-color: #FFA3A3;  /* lightpink */
+    background-color: lightpink;
 }
 
 [data-gramadoir-tag-style-type="rare"]
 {
-    background-color: steelblue;
-    color: white;
+    background-color: aliceblue;
 }
 
 [data-gramadoir-tag-style-type="vocabulary"]
@@ -74,14 +69,12 @@ span:not[data-gramadoir-tag-style-type] {
 
 [data-gramadoir-tag-style-type="genitive"]
 {
-    background-color: darkcyan;
-    color: white;
+    background-color: aquamarine;
 }
 
 [data-gramadoir-tag-style-type="SEIMHIU"]
 {
-    background-color: darkorchid;
-    color: white;
+    background-color: thistle;
 }
 
 [data-gramadoir-tag-style-type="CLAOCHLU"]
@@ -105,10 +98,3 @@ span:not[data-gramadoir-tag-style-type] {
     background-color: #21E9E9;
 }
 
-[data-vowel-agreement-tag]
-{
-  border-radius: 0 !important;
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-  background-color: rgba(255,255,100,0.8);
-}

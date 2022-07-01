@@ -218,8 +218,8 @@
 
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
-        style="background-color: #8FCAFF"
-        [hidden]="grammarTagsHidden || grammarLoading"
+        style="background-color: #8FCAFF; height: 3em; overflow-y: auto;"
+        [hidden]=grammarTagsHidden
         [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
@@ -235,7 +235,10 @@
               </div>
           </div>
         </span>
-        <div *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)" style="margin:2px;">
+        <div
+          *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)"
+          style="margin:2px;"
+          [attr.data-gramadoir-tag-style-type]=recipient.key>
           <input
               [(ngModel)]="grammarTagFilter[recipient.key]"
               (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
@@ -244,14 +247,18 @@
                ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] :
                recipient.key | lowercase}} ({{recipient.value}})
         </div> 
-        <div style="margin: 2px;">
+        <div style="margin: 2px;"
+          data-vowel-agreement-tag
+          >
           <input 
             [(ngModel)]="quillHighlightService.showLeathanCaol"
             (ngModelChange)="leathanCaolCheckBox($event)"
             type="checkbox">
           {{ ts.message('broad_slender_agreement') }}
         </div>
-        <div style="margin: 2px;">
+        <div style="margin: 2px;"
+          data-genitive-tag
+          >
           <input 
             [(ngModel)]="quillHighlightService.showGenitive"
             (ngModelChange)="genitiveCheckBox($event)"

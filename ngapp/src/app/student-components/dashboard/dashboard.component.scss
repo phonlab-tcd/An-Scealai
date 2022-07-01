@@ -219,11 +219,6 @@ h1 {
     padding-top: 10px;
 }
 
-quill-editor {
-  width: 100%;
-  height: 10vh;
-}
-
 .quill-editor-dict {
   /* dictionary view adds another toolbar worth of height */
   height: calc(var(--textfieldHeight) - 44px);

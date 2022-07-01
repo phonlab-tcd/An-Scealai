@@ -145,7 +145,6 @@ export class QuillHighlightService {
       grammarCheckerErrors = await grammarCheckerErrorsPromise;
       grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
     } catch (error) {
-      console.dir(error);
       gramadoirPromiseIrish =
         this.grammar.gramadoirDirectCadhanObservable(text, 'ga')
         .toPromise();
@@ -163,7 +162,6 @@ export class QuillHighlightService {
       grammarCheckerErrors = await grammarCheckerErrorsPromise;
       grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
       } catch (secondGramadoirError) {
-        console.dir(secondGramadoirError);
         window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
                      error.message +
                     '\n\nError 2:\n' + secondGramadoirError.message);
@@ -311,7 +309,6 @@ export class QuillHighlightService {
   }
 
   generateGramadoirTagTooltips(quillEditor: Quill) {
-
     if (this.showLeathanCaol) {
       const disagreeingVowelIndices =
         this.grammar.getDisagreeingVowelIndices(quillEditor.getText());
@@ -323,7 +320,10 @@ export class QuillHighlightService {
     const t1 = 'data-gramadoir-tag';
     const t2 = 'data-genitive-tag';
     const t3 = 'data-vowel-agreement-tag';
-    const tagElements = document.querySelectorAll(`[${t1}],[${t2}],[${t3}]`);
+    const tagElements = document.querySelectorAll(`
+      .ql-editor * [${t1}],
+      .ql-editor * [${t2}],
+      .ql-editor * [${t3}]`);
     tagElements.forEach(t=>this.createGrammarPopup(quillEditor, t));
   }
 
@@ -367,16 +367,13 @@ export class QuillHighlightService {
       let errorType: string;
       let start = 0;
       let length = 1;
-      type fn = (a:number,b:number)=>number;
-      const min:fn=(a,b)=>a<b?a:b;
-      const max:fn=(a,b)=>a>b?a:b;
       // data-gramadoir-tag
       (()=>{
         const t1 = tagElement.getAttribute('data-gramadoir-tag');
         if(t1) {
           const parsed = JSON.parse(t1);
-          messages.en += '<hr>' + parsed.messages.en;
-          messages.ga += '<hr>' + parsed.messages.ga;
+          messages.en += parsed.messages.en;
+          messages.ga += parsed.messages.ga;
           errorType = parsed.type;
           start = parsed.start ?? start;
           length = parsed.length ?? length;
@@ -398,13 +395,13 @@ export class QuillHighlightService {
         const t3 = tagElement.getAttribute('data-vowel-agreement-tag');
         if(t3) {
           const parsed = JSON.parse(t3);
-          console.log(parsed);
           messages.en += '<hr>' + (this.ts.getLanguageFromCode('en')as any).vowels_should_agree;
           messages.ga += '<hr>' + (this.ts.getLanguageFromCode('ga') as any).vowels_should_agree;
           start = parsed.first;
           length = parsed.second - parsed.first;
         }
       })();
+      // remove <hr> if it's at beginning
       messages.en = messages.en.replace(/^<hr>/,'');
       messages.ga = messages.ga.replace(/^<hr>/,'');
 
@@ -415,15 +412,11 @@ export class QuillHighlightService {
     error.tooltip = new Tooltip(quillEditor);
     error.tooltip.root.classList.add('custom-tooltip');
 
+    const show = ()=>this.mouseOverTagElem(quillEditor, error, tagElement);
+    const hide = ()=>error.tooltip.hide();
     // Add hover UI logic to the grammar error span element
-    tagElement.addEventListener('mouseover', () => {
-      this.mouseOverTagElem(quillEditor, error, tagElement);
-    });
-
-    tagElement.addEventListener('mouseout', () => {
-      tagElement.removeAttribute('data-selected');
-      error.tooltip.hide();
-    });
+    tagElement.addEventListener('mouseover',show);
+    tagElement.addEventListener('mouseout', hide);
   }
 
   private mouseOverTagElem(
@@ -432,6 +425,7 @@ export class QuillHighlightService {
     tagElement: Element,
   )
   {
+    document.querySelectorAll('[data-selected]').forEach(e=>e.removeAttribute('data-selected'));
     tagElement.setAttribute('data-selected','');
     this.outMessages = error.messages;
     this.mostRecentHoveredMessages = error.messages;
