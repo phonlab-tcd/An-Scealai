@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const multer = require('multer');
 const { Readable } = require('stream');
 const mongodb = require('mongodb');
+const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 const querystring = require('querystring');
 const request = require('request');
@@ -14,17 +15,17 @@ const logger = require('../logger.js');
 let VoiceRecording = require('../models/recording');
 let User = require('../models/user');
 
-let db;
-MongoClient.connect('mongodb://localhost:27017/',
-  { useNewUrlParser: true, useUnifiedTopology: true},
-  (err, client) => {
-  if (err) {
-    console.log(
-      'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
-    process.exit(1);
-  }
-  db = client.db('an-scealai');
-});
+// let db;
+// MongoClient.connect('mongodb://localhost:27017/',
+//   { useNewUrlParser: true, useUnifiedTopology: true},
+//   (err, client) => {
+//   if (err) {
+//     console.log(
+//       'MongoDB Connection Error in ./api/routes/recording.route.js . Please make sure that MongoDB is running.');
+//     process.exit(1);
+//   }
+//   db = client.db('an-scealai');
+// });
 
 recordingRoutes.route('/create').post((req, res) => {
     const recording = new VoiceRecording(req.body);
@@ -56,7 +57,7 @@ recordingRoutes.route('/updateTracks/:id').post(function (req, res) {
         }
         if(recording) {
           
-            let bucket = new mongodb.GridFSBucket(db, {
+            let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
                 bucketName: 'voiceRecording'
             });
             
@@ -113,7 +114,7 @@ recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
         readableTrackStream.push(req.file.buffer);
         readableTrackStream.push(null);
         // get bucket (collection) for storing audio file
-        let bucket = new mongodb.GridFSBucket(db, {
+        let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
             bucketName: 'voiceRecording'
         });
         // get audio file from collection and save id to story audio id
@@ -146,7 +147,7 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
     res.set('content-type', 'audio/mp3');
     res.set('accept-ranges', 'bytes');
     // get collection name for audio files
-    let bucket = new mongodb.GridFSBucket(db, {
+    let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
         bucketName: 'voiceRecording'
     });
     // create a new stream of file data using the bucket name
@@ -199,7 +200,7 @@ recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
           res.status(404).json({"message" : "Voice Recording does not exist"});
         }
           
-        let bucket = new mongodb.GridFSBucket(db, {
+        let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
             bucketName: 'voiceRecording'
         });
       

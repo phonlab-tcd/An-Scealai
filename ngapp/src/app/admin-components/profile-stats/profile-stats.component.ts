@@ -9,7 +9,7 @@ import { EventType } from '../../event';
 @Component({
   selector: 'app-profile-stats',
   templateUrl: './profile-stats.component.html',
-  styleUrls: ['./profile-stats.component.css']
+  styleUrls: ['./profile-stats.component.scss']
 })
 export class ProfileStatsComponent implements OnInit {
   

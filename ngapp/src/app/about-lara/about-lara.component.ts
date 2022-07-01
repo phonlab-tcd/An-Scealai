@@ -4,7 +4,7 @@ import { TranslationService } from '../translation.service';
 @Component({
   selector: 'app-about-lara',
   templateUrl: './about-lara.component.html',
-  styleUrls: ['./about-lara.component.css']
+  styleUrls: ['./about-lara.component.scss']
 })
 export class AboutLaraComponent implements OnInit {
 

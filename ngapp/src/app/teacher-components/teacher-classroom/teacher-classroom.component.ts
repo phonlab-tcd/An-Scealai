@@ -15,7 +15,7 @@ import { StatsService } from '../../stats.service';
 @Component({
   selector: 'app-teacher-classroom',
   templateUrl: './teacher-classroom.component.html',
-  styleUrls: ['./teacher-classroom.component.css']
+  styleUrls: ['./teacher-classroom.component.scss']
 })
 export class TeacherClassroomComponent implements OnInit {
 

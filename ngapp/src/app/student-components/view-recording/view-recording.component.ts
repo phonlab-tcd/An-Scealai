@@ -10,7 +10,7 @@ import { StoryService } from '../../story.service';
 @Component({
   selector: 'app-view-recording',
   templateUrl: './view-recording.component.html',
-  styleUrls: ['./view-recording.component.css']
+  styleUrls: ['./view-recording.component.scss']
 })
 export class ViewRecordingComponent implements OnInit {
 
