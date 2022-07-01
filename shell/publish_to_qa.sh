@@ -26,6 +26,9 @@ ssh -t scealai@141.95.1.243 "
   npm --prefix api install
   npm --prefix ngapp install
   tmux new-session -t qa -d
+  cd api
+  source export_sendinblue.sh
+  cd -
   tmux send -t qa \"npm --prefix api run start:qa\" C-m
   cp -r ngapp/qa_build/* dist/an-scealai/
   sleep 3
