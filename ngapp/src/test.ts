@@ -6,6 +6,10 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import {
+  environment
+} from  './environments/environment';
+console.log(environment);
 
 declare const require: any;
 
