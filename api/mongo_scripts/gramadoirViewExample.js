@@ -1,5 +1,5 @@
 ;(async () => {
-  const viewName = ''+Date.now();
+  const viewName = 'gramadoir_view'+Date.now();
   await require('../utils/gramadoirView')(viewName);
   const mongoose = require('mongoose');
   const { db } = mongoose.connection;
