@@ -5,6 +5,10 @@
     "moduleResolution": "node",
     "outDir": "../out-tsc/app",
     "paths": {
+      "GramadoirErrorLineChart": [
+        "dist/gramadoir-error-line-chart/gramadoir-error-line-chart",
+        "dist/gramadoir-error-line-chart"
+      ],
       "node_modules": ["../node_modules"]
     },
     "types": [

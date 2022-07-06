@@ -150,6 +150,37 @@
           }
         }
 			}
-		}
+		},
+    "GramadoirErrorLineChart": {
+      "projectType": "library",
+      "root": "projects/gramadoir-error-line-chart",
+      "sourceRoot": "projects/gramadoir-error-line-chart/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gramadoir-error-line-chart/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gramadoir-error-line-chart/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gramadoir-error-line-chart/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/gramadoir-error-line-chart/src/test.ts",
+            "tsConfig": "projects/gramadoir-error-line-chart/tsconfig.spec.json",
+            "karmaConfig": "projects/gramadoir-error-line-chart/karma.conf.js"
+          }
+        }
+      }
+    }
 	}
 }
