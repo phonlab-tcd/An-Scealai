@@ -4,31 +4,20 @@ import Quill from 'quill';
 import { map } from 'rxjs/operators';
 import { TranslationService } from 'app/translation.service';
 import {
-  GramadoirRuleId,
   GrammarService,
   GramadoirTag,
   DisagreeingVowelIndices,
 } from 'app/grammar.service';
 import {EngagementService} from "../engagement.service";
-import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
-// import clone from 'lodash/clone';
-import { of } from 'rxjs';
+import { QuillHighlightTag } from '../../quill-highlight-tag';
 
 const Tooltip = Quill.import('ui/tooltip');
 
 export type Messages = {
   en: string;
   ga: string;
-};
-
-export type QuillHighlightTag = {
-  start: number;
-  length: number;
-  type: GramadoirRuleId;
-  tooltip: any;
-  messages: Messages;
 };
 
 export enum VOWEL {
