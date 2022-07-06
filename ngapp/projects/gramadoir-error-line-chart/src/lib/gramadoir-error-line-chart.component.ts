@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { ChartConfiguration, ChartOptions } from "chart.js";
 import { BaseChartDirective } from 'ng2-charts';
 import config from '../../../../src/abairconfig';
-import { QuillHighlightTag } from '../../../../src/app/services/quill-highlight.service';
+import { QuillHighlightTag } from '../../../../src/quill-highlight-tag';
+import { GRAMADOIR_RULE_ID_VALUES, GramadoirRuleId } from '../../../../src/gramadoir-rule-id';
 const backendUrl = config.baseurl;
 
 type GramadoirCacheLink = {gramadoirCacheId: string; timestamp: Date};
@@ -23,6 +24,10 @@ function timeString(v:{timestamp: Date},i: number) {
   return i % 10 == 0 ?
     d.toLocaleDateString() + ' ' + ts :
     ts;
+}
+
+function countKey(s: GramadoirCacheItem, k: GramadoirRuleId) {
+  return s.grammarTags.filter(t=>t.type===k).length; 
 }
 
 @Component({
@@ -58,20 +63,27 @@ export class GramadoirErrorLineChartComponent {
     (async () => {
       this.storyHistory = await this.fetchStoryHistory(this.http, this._storyId);
       this.lineChartData.labels = this.storyHistory.versions.map(timeString);
+      const tagSets =
+        await Promise.all(this.storyHistory
+          .versions
+          .map(s=>this.fetchGramadoirCacheItem(this.http,s.gramadoirCacheId)));
+      let datasets = GRAMADOIR_RULE_ID_VALUES
+        .map(k=>({
+          data: this.lineChartData.labels.map((l,i)=>countKey(tagSets[i],k)),
+          label: k,
+        }));
+      datasets = datasets.filter(s=>s.data.filter(v=>v).length>0);
+      console.log(datasets);
+      this.lineChartData.datasets = datasets;
       this.chart.chart.update();
     })();
   }
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: ['a','b','c','d','e','f'],
     datasets: [
       {
         data: [ 65, 59, 80, 81, 56, 55, 40 ],
-        label: 'Series B',
-        fill: false,
-        tension: 0.5,
         borderColor: 'rgba(255,0,0,0.3)',
-        backgroundColor: 'rgba(255,0,0,0.3)'
       }
     ]
   };

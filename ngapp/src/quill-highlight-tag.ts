@@ -1,4 +1,4 @@
-import { GramadoirRuleId } from './app/grammar.service';
+import { GramadoirRuleId } from './gramadoir-rule-id';
 export type Messages = {
   en: string;
   ga: string;

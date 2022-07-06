@@ -132,6 +132,8 @@ describe('GramadoirErrorLineChartComponent', () => {
     fixture.detectChanges();
     spyOn(component,'fetchStoryHistory').and
       .returnValue(Promise.resolve(storyHistory));
+    spyOn(component,'fetchGramadoirCacheItem').and
+      .callFake((_,id:string)=>gramadoirCache[id]);
   });
 
   fit('should have label data after setting storyId', async ()=> {
