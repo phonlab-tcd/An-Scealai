@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GramadoirErrorLineChartComponent } from './gramadoir-error-line-chart.component';
+import { NgChartsModule } from 'ng2-charts';
 
 describe('GramadoirErrorLineChartComponent', () => {
   let component: GramadoirErrorLineChartComponent;
@@ -8,7 +9,8 @@ describe('GramadoirErrorLineChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GramadoirErrorLineChartComponent ]
+      declarations: [ GramadoirErrorLineChartComponent ],
+      imports: [ NgChartsModule.forRoot() ],
     })
     .compileComponents();
   });
