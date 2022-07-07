@@ -44,15 +44,16 @@ export type VowelAgreementIndex = {
 };
 
 const Parchment = Quill.import('parchment');
+const immutable=(x:any)=>Object.freeze(x);
 
-const ATTRIBUTES = [
+const ATTRIBUTES = immutable([
   'gramadoir-tag',
   'gramadoir-tag-style-type',
   'vowel-agreement-tag',
   'genitive-tag',
-];
+] as const);
 
-const nullAttrs = Object.freeze(Object.fromEntries(ATTRIBUTES.map(k=>[k,null])));
+const nullAttrs = immutable(Object.fromEntries(ATTRIBUTES.map(k=>[k])));
 
 (()=>{
   const opts = {scope: Parchment.Scope.INLINE};
