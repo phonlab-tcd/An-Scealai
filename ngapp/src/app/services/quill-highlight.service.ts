@@ -45,37 +45,22 @@ export type VowelAgreementIndex = {
 
 const Parchment = Quill.import('parchment');
 
-const gramadoirTag =
-  new Parchment.Attributor.Attribute(
-    'gramadoir-tag',
-    'data-gramadoir-tag',
-    {scope: Parchment.Scope.INLINE});
+const ATTRIBUTES = [
+  'gramadoir-tag',
+  'gramadoir-tag-style-type',
+  'vowel-agreement-tag',
+  'genitive-tag',
+];
 
-Quill.register(gramadoirTag);
+const nullAttrs = Object.freeze(Object.fromEntries(ATTRIBUTES.map(k=>[k,null])));
 
-const gramadoirTagStyleType =
-  new Parchment.Attributor.Attribute(
-    'gramadoir-tag-style-type',
-    'data-gramadoir-tag-style-type',
-    {scope: Parchment.Scope.INLINE});
-
-Quill.register(gramadoirTagStyleType);
-
-const vowelAgreementAttributor =
-  new Parchment.Attributor.Attribute(
-    'vowel-agreement-tag',
-    'data-vowel-agreement-tag',
-    {scope: Parchment.Scope.INLINE});
-
-Quill.register(vowelAgreementAttributor);
-
-const genitiveAttributor =
-  new Parchment.Attributor.Attribute(
-    'genitive-tag',
-    'data-genitive-tag',
-    {scope: Parchment.Scope.INLINE});
-
-Quill.register(genitiveAttributor);
+(()=>{
+  const opts = {scope: Parchment.Scope.INLINE};
+  const Attr = Parchment.Attributor.Attribute;
+  ATTRIBUTES
+    .map(a=>new Attr(a,`data-${a}`,opts))
+    .map(a=>Quill.register(a));
+})();
 
 @Injectable({
   providedIn: 'root'
@@ -333,30 +318,14 @@ export class QuillHighlightService {
     //  -> without doing this, a tooltip can live on past its
     //     corresponding highlight tag if the user stays hovering
     //     on the highlight tag while the grammar error is fixed.
-    document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+    document
+      .querySelectorAll('.custom-tooltip')
+      .forEach(elem=>elem.remove());
   }
 
   private clearGramadoirTagFormatting(quillEditor: Quill) {
-    quillEditor.formatText(
-        0, // from the very beginning of the text
-        quillEditor.getLength(), // to the very end of the text
-        {'gramadoir-tag': null} // delete all gramadoir-tag's on the parchment
-    );
-    quillEditor.formatText(
-        0, 
-        quillEditor.getLength(), 
-        {'gramadoir-tag-style-type': null} 
-    );
-    quillEditor.formatText(
-        0,
-        quillEditor.getLength(), 
-        {'vowel-agreement-tag': null}
-    );
-    quillEditor.formatText(
-        0, 
-        quillEditor.getLength(), 
-        {'genitive-tag': null}
-    );
+    const end = quillEditor.getLength();
+    quillEditor.formatText(0,end,nullAttrs);
   }
 
     private createGrammarPopup(
