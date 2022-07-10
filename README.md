@@ -99,6 +99,13 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.17
+- gramsrv
+- a4 writing area for quill
+- fix favicon vs baseHref bug
+- kill bookImg in recording pages
+(probably some more changes I'm forgetting at the moment -- Neimhin Sun 10 Jul 2022 15:54:51 IST)
+
 ## v1.0.15
 LARA update
 
