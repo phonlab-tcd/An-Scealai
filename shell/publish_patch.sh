@@ -71,4 +71,4 @@ cd An-Scealai &&
   bash reinstall.sh &&
   bash deploy_current_branch_without_building.sh"
 
-firefox "www.abair.ie/scealai"
+curl -X GET "www.abair.ie/anscealaibackend/version"
