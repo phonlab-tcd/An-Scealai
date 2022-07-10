@@ -68,7 +68,7 @@ ssh -t scealai@141.95.1.243 "
 cd An-Scealai &&
   git pull &&
   git checkout $new_api_version &&
-  bash reinstall.sh &&
-  bash deploy_current_branch_without_building.sh"
+  npm i --prefix api &&
+  bash shell/deploy_current_branch_without_building.sh"
 
 curl -X GET "www.abair.ie/anscealaibackend/version"
