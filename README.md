@@ -75,9 +75,9 @@ $ sudo mongod
 ```
 * If it still doesn't work, you may need to create a folder called `/data/db` or `C:\data\db` on Windows. This is where MongoDB will store files.
 ```bash
-$ mkdir /data
-$ mkdir /data/db
-$ sudo mongod --dbpath=/path/to/data/db/folder
+$ mkdir data
+$ mkdir data/db
+$ sudo mongod --dbpath=data/db
 ```
 (See https://stackoverflow.com/a/61423909 for more)
 #### Backend
