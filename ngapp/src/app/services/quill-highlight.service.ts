@@ -14,7 +14,11 @@ import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
 // import clone from 'lodash/clone';
-import { of } from 'rxjs';
+import { of, forkJoin, Observable, from } from 'rxjs';
+import { assert } from 'console';
+import { GramadoirUrl } from '../grammar.service'
+import { DashboardComponent } from 'app/student-components/dashboard/dashboard.component';
+const Tokenizer = require('sentence-tokenizer')
 
 const Tooltip = Quill.import('ui/tooltip');
 
@@ -86,6 +90,8 @@ export class QuillHighlightService {
   currentFilteredHighlightTags: QuillHighlightTag[] = [];
   currentGenetiveHighlightTags: QuillHighlightTag[] = [];
   outMessages: { ga: string, en: string } = null;
+  showingTags = false;
+  tokenizer = new Tokenizer('Chuck');
 
   public showLeathanCaol = true;
   public showGenitive = true;
@@ -110,7 +116,21 @@ export class QuillHighlightService {
     return this.outMessages[this.ts.l.iso_code];
   }
 
-  async updateGrammarErrors(quillEditor: Quill, text: string, storyUnderscoreId: string): Promise<object> {
+  makeGramadoirRequest(url: GramadoirUrl, sentencesWithOffsets, currentErrorTypes) {
+    return from(sentencesWithOffsets.map(async ([offset, sentence]) => {
+        const errorsEn = await this.grammar.gramadoirObservable(sentence, 'en', this.grammar.gramadoirUrl).toPromise();
+        this.grammar.addToGramadoirCache(sentence, 'en', errorsEn);
+        const errorsGa = await this.grammar.gramadoirObservable(sentence, 'ga', this.grammar.gramadoirUrl).toPromise();
+        this.grammar.addToGramadoirCache(sentence, 'ga', errorsGa);
+        const errorTags = this.gramadoir2QuillTags(errorsEn, currentErrorTypes, offset);
+        errorTags.forEach((e, i) => {
+            e.messages.ga = errorsGa[i].msg;
+        });
+        return errorTags;
+    }));
+  }
+
+  async updateGrammarErrors(quillEditor: Quill, text: string, grammarTagFilter): Promise<object> {
     // my tslint server keeps
     // asking me to brace these guys
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
@@ -127,64 +147,62 @@ export class QuillHighlightService {
 
     const currentGramadoirErrorTypes: object = {};
 
-    // First try get gramadoir errors using ABAIR hosted gramadoir
-    let grammarCheckerErrorsPromise =
-      this.grammar
-          .gramadoirDirectObservable(
-            text,
-            'en')
-          .pipe(
-            map(gTags => this.gramadoir2QuillTags(gTags, currentGramadoirErrorTypes))
-          ).toPromise();
+    console.log('text', text);
 
-
-    let grammarCheckerErrors;
-    let grammarCheckerErrorsIrish;
-
-    try {
-      grammarCheckerErrors = await grammarCheckerErrorsPromise;
-      grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
-    } catch (error) {
-      console.dir(error);
-      gramadoirPromiseIrish =
-        this.grammar.gramadoirDirectCadhanObservable(text, 'ga')
-        .toPromise();
-
-      // If request to ABAIR gramadoir fails, try Scannell's gramadoir server
-      grammarCheckerErrorsPromise =
-        this.grammar
-            .gramadoirDirectCadhanObservable(
-              text,
-              'en')
-            .pipe(
-              map(gTags => this.gramadoir2QuillTags(gTags, currentGramadoirErrorTypes))
-            ).toPromise();
-      try {
-      grammarCheckerErrors = await grammarCheckerErrorsPromise;
-      grammarCheckerErrorsIrish = await gramadoirPromiseIrish;
-      } catch (secondGramadoirError) {
-        console.dir(secondGramadoirError);
-        window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
-                     error.message +
-                    '\n\nError 2:\n' + secondGramadoirError.message);
-      }
+    // Sentence tokenization to make gramadoir requests for each sentence independently
+    this.tokenizer.setEntry(text);
+    const sentences = this.tokenizer.getSentences()
+    const sentencesWithOffsets = []
+    let lengthSum = 0
+    for (const s of sentences) {
+        // We need to add offsets because the fromx property returned by gramadoir will be relative to each sentence
+        sentencesWithOffsets.push([lengthSum, s]); 
+        lengthSum += s.length + 1;
     }
 
-    grammarCheckerErrors.forEach((e, i) => {
-      e.messages.ga = grammarCheckerErrorsIrish[i].msg;
-    });
-    this.currentGramadoirHighlightTags = grammarCheckerErrors;
+    this.currentGramadoirHighlightTags = [];
 
+    // First try making the request with the ABAIR hosted gramadoir, then if that fails try the Cadhan hosted gramadoir
+    try {
+        this.makeGramadoirRequest(
+            this.grammar.gramadoirUrl,
+            sentencesWithOffsets,
+            currentGramadoirErrorTypes
+        ).subscribe(async (errorTagsPromise: QuillHighlightTag[]) => {
+            const errorTags = await errorTagsPromise;
+            this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
+
+            this.currentFilteredHighlightTags =
+                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type]);
+            if (this.showingTags) {
+                this.applyGramadoirTagFormatting(quillEditor);
+            }
+        });
+    } catch (error) {
+        console.dir(error);
+        try {
+            /*
+        const perSentenceErrors = await this.makeGramadoirRequest(this.grammar.gramadoirCadhanUrl, sentencesWithOffsets, currentGramadoirErrorTypes);
+        this.currentGramadoirHighlightTags = perSentenceErrors.flat();
+        */
+        } catch (secondGramadoirError) {
+            console.dir(secondGramadoirError);
+            window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
+                        error.message +
+                        '\n\nError 2:\n' + secondGramadoirError.message);
+        }
+    }
+    /*
     ((sendGrammarErrorsToDb)=>{
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
       const body = {
         text,
         storyUnderscoreId,
-        tagData: grammarCheckerErrors,
+        tagData: errorTags,
       };
       this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
     })();
-
+    */
     this.currentGenetiveHighlightTags = await this.grammar
       .genitiveDirectObservable(text)
       .pipe(map(gTags => this.gramadoir2QuillTags(gTags, {})))
@@ -238,7 +256,7 @@ export class QuillHighlightService {
    * @param currentGramadoirErrorTypes - dictionary counting error types
    * @returns - QuillHighlightTags representing gramadoir tags
    */
-  gramadoir2QuillTags(tagData: GramadoirTag[], currentGramadoirErrorTypes: object = {}): QuillHighlightTag[] {
+  gramadoir2QuillTags(tagData: GramadoirTag[], currentGramadoirErrorTypes: object = {}, offset: number = 0): QuillHighlightTag[] {
     return tagData.map(tag => {
         const ruleIdShort =
           this.grammar.string2GramadoirRuleId(tag.ruleId);
@@ -246,7 +264,7 @@ export class QuillHighlightService {
           currentGramadoirErrorTypes[ruleIdShort]++ :
           currentGramadoirErrorTypes[ruleIdShort] = 1;
         const qTag: QuillHighlightTag = {
-          start: + tag.fromx,
+          start: + tag.fromx + offset,
           length: + tag.tox + 1 - tag.fromx,
           type: ruleIdShort,
           tooltip: null,

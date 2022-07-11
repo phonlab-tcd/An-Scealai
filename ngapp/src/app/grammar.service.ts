@@ -4,14 +4,14 @@ import {
 import {
   HttpClient,
 } from '@angular/common/http';
-import { Observable, Observer} from 'rxjs';
+import { Observable, Observer, of, from} from 'rxjs';
 import { StoryService } from './story.service';
 import { TranslationService } from 'app/translation.service';
 import { HighlightTag } from 'angular-text-input-highlight';
 import { Story } from 'app/story';
 import { EngagementService } from 'app/engagement.service';
 import { EventType } from 'app/event';
-import { VowelAgreementIndex } from './services/quill-highlight.service';
+import { VowelAgreementIndex, QuillHighlightTag } from './services/quill-highlight.service';
 import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
@@ -284,18 +284,27 @@ export enum LANGUAGE {
   IRISH = 1,
 }
 
+export type GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl' | 'https://cadhan.com/api/gramadoir/1.0';
+
 @Injectable({
   providedIn: 'root'
 })
 export class GrammarService {
-  gramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
-  gramadoirCadhanUrl = 'https://cadhan.com/api/gramadoir/1.0';
+  gramadoirUrl: GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
+  gramadoirCadhanUrl: GramadoirUrl = 'https://cadhan.com/api/gramadoir/1.0';
   genitiveUrl = 'https://phoneticsrv3.lcs.tcd.ie/gramsrv/api/grammar'
 
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
   consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
+
+  userFriendlyGramadoirMessage: {[ruleId: string]: { en: string; ga: string; } } = {
+    // CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
+    // Add more messages here
+  };
+
+  gramadoirCache: {[request: string]: Observable<any>} = {};
 
   constructor(
     private storyService: StoryService,
@@ -339,7 +348,7 @@ export class GrammarService {
   }
 
   gramadoirDirectObservable(input: string, language: 'en' | 'ga'): Observable<any> {
-  return this.http.post(
+    return this.http.post(
       this.gramadoirUrl,
       this.gramadoirXWwwFormUrlencodedRequestData(input, language),
       {
@@ -358,6 +367,32 @@ export class GrammarService {
             'Content-Type': 'application/x-www-form-urlencoded',
           }
         });
+  }
+
+  gramadoirObservable(
+    input: string,
+    language: 'en' | 'ga',
+    url: GramadoirUrl
+  ): Observable<any> {
+    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
+    if (encodedRequest in this.gramadoirCache) {
+      return this.gramadoirCache[encodedRequest];
+    }
+    return this.http.post(
+        url,
+        encodedRequest,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        }
+    );
+  }
+
+  addToGramadoirCache(input: string, language: 'en' | 'ga', errors) {
+    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
+    // Wrap errors in an extra array so that the observable returns an single array of errors rather than treating them as a stream
+    this.gramadoirCache[encodedRequest] = from([errors]); 
   }
 
   genitiveDirectObservable(input: string): Observable<any> {
