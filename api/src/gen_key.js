@@ -11,7 +11,7 @@ generateKeyPair('rsa', {
     type: 'pkcs8',
     format: 'pem',
     cipher: 'aes-256-cbc',
-    passphrase: 'top secret',
+    passphrase: process.env.PEM_KEY_PASSPHRASE,
   }
 }, (e, publicKey, privateKey) => {
   w(e); 

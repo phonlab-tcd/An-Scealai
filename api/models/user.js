@@ -1,7 +1,33 @@
-var mongoose = require('mongoose');
-var crypto = require('crypto');
-var jwt = require('jsonwebtoken');
-
+const mongoose = require('mongoose');
+const crypto   = require('crypto');
+const sign     = (()=> {
+  const PRIV_KEY = (()=>{
+    const path 	        = require('path');
+    const fs            = require('fs');
+    const priv_key_path = path.join(__dirname,'..','..','priv_key.pem');
+    return fs.readFileSync(priv_key_path);
+  })();
+  const jwt = require('jsonwebtoken');
+  const { algorithm } = require('../config/passport');
+  const opts = { algorithm }
+  const key = {
+    key: PRIV_KEY,
+    passphrase: process.env.PEM_KEY_PASSPHRASE ||
+	  (()=>{
+            console.log("missing passphrase. please set PEM_KEY_PASPHRASE env var");
+	    process.exit(1);
+	  })(),
+  };
+  return function(payload) {
+    return jwt.sign(
+	    payload,
+	    {
+              key: PRIV_KEY,
+	      passphrase: process.env.PEM_KEY_PASSPHRASE,
+	    },
+	    opts);
+  }
+})()
 const generate_password = require('generate-password');
 
 const verificationSchema = new mongoose.Schema({
@@ -99,15 +125,15 @@ userSchema.methods.validStatus = function() {
 userSchema.methods.generateJwt = function() {
   const expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
-
-  return jwt.sign({
+  const payload = {
     _id: this._id,
     username: this.username,
     role: this.role,
     language: this.language,
     exp: parseInt(
         expiry.getTime() / 1000 /* convert milliseconds to seconds */),
-  }, 'sonJJxVqRC'); // 5ecret
+  };
+  return sign(payload);
 };
 
 userSchema.methods.generateNewPassword = function() {
@@ -123,11 +149,11 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
   if ( ! this.resetPassword ) {
     this.resetPassword = {};
   }
-
-  this.resetPassword.code = jwt.sign({
+  const payload = {
     username: this.username,
     email: this.email,
-  }, 'sonJJxVqRC');
+  };
+  this.resetPassword.code = sign(payload);
 
   this.resetPassword.date = new Date();
 
@@ -141,16 +167,18 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
 // They must be saved with <document>.save();
 userSchema.methods.generateActivationLink = function(baseurl, language) {
   // Make sure this.verification exists
+  baseurl  = baseurl  || 'http://localhost:4000/';
+  language = language || 'ga';
   if ( ! this.verification ) {
     this.verification = {};
   }
-  this.verification.code = jwt.sign({
+  const payload = {
     username: this.username,
     email: this.email,
-  }, 'sonJJxVqRC');
-
+  };
+  // TODO: put date in jwt
+  this.verification.code = sign(payload);
   this.verification.date = new Date();
-
   return `${baseurl}user/verify?` +
       `username=${this.username}` +
       `&email=${this.email}` +

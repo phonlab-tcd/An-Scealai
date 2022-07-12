@@ -1,3 +1,5 @@
+module.exports.algorithm = 'RS256';
+
 const logger        = require('../logger');
 const passport      = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -10,7 +12,6 @@ const fs            = require('fs');
 const pub_key_path  = path.join(__dirname, '..', '..', 'pub_key.pem');
 const PUB_KEY       = fs.readFileSync(pub_key_path, 'utf8');
 
-mongoose.model('User');
 
 function verify(username, password, cb) {
   console.log(username);
@@ -40,10 +41,11 @@ function jwtCallback(payload, done) {
     return done(null, user ? user : false);
   });
 }
+
 const opts = {
   jwtFromRequest:   ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey:      PUB_KEY,
-  algorithms:       ['RS256'],
+  algorithms:       [module.exports.algorithm],
 }
 passport.use(new JwtStrategy(opts,jwtCallback));
 
