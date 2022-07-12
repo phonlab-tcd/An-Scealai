@@ -5,20 +5,20 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc",
-    "start":        "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
-    "start:e2e":    "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
-    "start:qa":     "PEM_KEY_PASSPHRASE=dev DB=qa PORT=4002 nodemon src/server.ts",
-    "test":         "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
-    "test:silent":  "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
-    "start:prod": "DB=an-scealai PORT=4000 node server.js"
+    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
+    "start:e2e": "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
+    "start:qa": "PEM_KEY_PASSPHRASE=dev DB=qa PORT=4002 nodemon src/server.ts",
+    "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
+    "test:silent": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
+    "start:prod": "DB=an-scealai PORT=4000 node ./dist/api/src/server.js"
   },
   "jest": {
     "preset": "ts-jest",
     "setupFiles": [
-      "<rootDir>/util/test-setup.js"
+      "<rootDir>/util/testSetup.js"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/util/test-setup-per-file.js"
+      "<rootDir>/util/testSetupPerFile.js"
     ],
     "forceExit": true,
     "collectCoverage": false,
@@ -42,6 +42,7 @@
     "chai-arrays": "^2.2.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.17.0",
     "formidable": "^1.2.1",
     "generate-password": "^1.6.0",
@@ -80,7 +81,7 @@
     "@types/mongodb": "^4.0.7",
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
-    "jest": "^28.1.0",
+    "jest": "^28.1.2",
     "mockingoose": "^2.15.2",
     "mongodb-memory-server": "^8.6.0",
     "nodemon": "^2.0.13",
