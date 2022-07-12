@@ -3,6 +3,7 @@ import { createLogger } from 'winston';
 import path    from 'path';
 import winston from 'winston';
 const dbUrl: string  = require('./dbUrl');
+const mongoose = require('mongoose');
 
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', (err) => {
@@ -72,22 +73,11 @@ const errorsFileTransport = new winston.transports.File({
   filename: combinedFile,
 });
 
-
-// Log to `log` collection in database
-import 'winston-mongodb';
-const mongoTransport = new winston.transports.MongoDB({
-  db: dbUrl,
-  options: {
-    useUnifiedTopology: true, // not default
-  },
-});
-
 const transports: transport[] = 
   process.env.NODE_ENV === 'test' ? [consoleTransport] : [
   consoleTransport,
   combinedFileTransport,
   errorsFileTransport,
-  mongoTransport,
 ];
 
 // Create our logger object

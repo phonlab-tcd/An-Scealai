@@ -1,7 +1,7 @@
 const User = require('../model/user');
 const randomString = require('../util/randomString');
 
-const app = require('../server');
+const app = require('../app_factory')();
 const request = require('supertest')(app);
 
 const arrayOfLength = n =>

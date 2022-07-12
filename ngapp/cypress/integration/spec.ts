@@ -1,3 +1,4 @@
+import { fudgeVerification } from '../fudge';
 declare var describe: any;
 declare var it: any;
 
@@ -14,16 +15,6 @@ function randomString(length:number=16,digits=true) {
  charactersLength)) % mod);
    }
    return result;
-}
-
-function fudgeVerification(username: string) {
-  return cy
-    .request(`localhost:4000/user/fudgeVerification/${username}`)
-    .should(response=>{
-      console.log(response);
-      cy.request(response.body);
-    });
-;
 }
 
 function randomEmail() {

@@ -5,12 +5,12 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc",
-    "start": "PEM_KEY_PASSPHRASE=dev nodemon src/server.ts",
-    "start:e2e": "PEM_KEY_PASSPHRASE=dev NO_EMAILS=1 FUDGE=1 nodemon src/server.ts",
-    "start:qa": "PEM_KEY_PASSPHRASE=dev DB=qa PORT=4002 nodemon src/server.ts",
-    "test": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src",
-    "test:silent": "PEM_KEY_PASSPHRASE=dev TEST=1 jest --forceExit --rootDir src --silent",
-    "start:prod": "DB=an-scealai PORT=4000 node ./dist/api/src/server.js"
+    "start": "nodemon src/server.ts",
+    "start:e2e": "IN_MEMORY_DB=1 NO_EMAILS=1 FUDGE=1 ts-node src/server.ts",
+    "start:qa": "DB=qa PORT=4002 ts-node src/server.ts",
+    "test": "jest --forceExit --rootDir src",
+    "test:silent": "jest --forceExit --rootDir src --silent",
+    "start:prod": "DB=an-scealai PORT=4000 ts-node --transpile-only src/server.ts"
   },
   "jest": {
     "preset": "ts-jest",

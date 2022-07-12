@@ -1,4 +1,4 @@
-const app               = require('../../server');
+const app               = require('../../app_factory')();
 const supertest         = require('supertest');
 const request           = supertest.agent(app);
 const User              = require('../../model/user');

@@ -1,3 +1,4 @@
+import { RequestHandler } from 'express';
 function build_app() {
   const express           = require('express');
   const bodyParser        = require('body-parser');
@@ -30,6 +31,21 @@ function build_app() {
   app.use('/version', versionRoute);
   app.use(bodyParser.json());
   app.use(cors());
+  if(process.env.FUDGE) {
+    console.log('ADD FUDGE VERIFICATION ENDPOINT');
+    const handler: RequestHandler = (req,res)=>{
+      console.log(req.query);
+      const User = require('./model/user');
+      const logger = require('./util/logger');
+      User.findOneAndUpdate(
+        {username: req.params.username},
+        {$set: {status: 'Active'}}).then(
+          (u:any) => {logger.info(u);           res.json(u)},
+          (e:any) => {logger.error(e.stack);    res.json(e)},
+        );
+    }
+    app.get('/user/fudgeVerification/:username', handler);
+  }
   app.use(passport.initialize());
   
   app.use('/user', userRoute);
