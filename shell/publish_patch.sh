@@ -47,7 +47,7 @@ if [ "$?" != "0" ]; then
 fi
 
 # BUILD PROD
-if [ -z $BUILD_NG ];
+if [ "$BUILD_NG" == "1" ];
 then
   npm run build:prod --prefix ngapp
   if [ "$?" != "0" ]; then
