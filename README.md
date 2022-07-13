@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.18
+- mongodb node driver@4.7.0
+
 ## v1.0.17
 - gramsrv
 - a4 writing area for quill
