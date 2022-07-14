@@ -7,7 +7,10 @@ const querystring = require('querystring');
 const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
 const Story = require('../models/story');
 const User = require('../models/user');
+const { API400Error } = require('./APIError');
 
+
+const either = Object.freeze([ok=>({ok}),err=>({err})]);
 
 //  @description - grammar tags into db
 //
@@ -15,17 +18,14 @@ const User = require('../models/user');
 //
 //  @param {[quill-highlight-tag]} qtags
 async function upsertGramadoirCacheItem(text, qtags) {
-  if(!(qtags instanceof Array)) return Promise.reject();
-  return new Promise((resolve,reject) => {
-    GramadoirCache.findOneAndUpdate(
-      { text: text },
-      { grammarTags: qtags },
-      { upsert: true, new: true },
-      (err,doc)=>{
-        if (err) { return reject(err) }
-        return resolve(doc)
-      });
-  });
+  if(!(qtags instanceof Array)) throw new API400Error('qtags must be array');
+  const query = {text};
+  const update = {grammarTags: qtags};
+  const opts = {upsert:true,new:true};
+  const cacheItem = await GramadoirCache.findOneAndUpdate(query,update,opts)
+    .then(...either);
+  if(cacheItem.err) throw cacheItem.err;
+  return cacheItem.ok;
 }
 
 //  @description - story version grammar errors update 
@@ -43,9 +43,9 @@ async function upsertStoryGramadoirVersion(
   const story = Story.findOne({_id: storyId});
   const user = User.findOne({_id: userId});
   const gram = GramadoirCache.findOne({_id: gramadoirCacheId});
-  if(!(await story)) return new Promise((_,rej)=>rej(new Error('storyId invalid in upsertStoryGramadoirVersion')))
-  if(!(await user))  return new Promise((_,rej)=>rej(new Error('userId invalid in upsertStoryGramadoirVersion')))
-  if(!(await gram))  return new Promise((_,rej)=>rej(new Error('gramadoirCacheId invalid in upsertStoryGramadoirVersion')))
+  if(!(await story)) throw new Error('storyId invalid in upsertStoryGramadoirVersion');
+  if(!(await user))  throw new Error('userId invalid in upsertStoryGramadoirVersion');
+  if(!(await gram))  throw new Error('gramadoirCacheId invalid in upsertStoryGramadoirVersion');
 
   return new Promise((resolve,reject) => {
     GramadoirStoryHistory.findOneAndUpdate(
