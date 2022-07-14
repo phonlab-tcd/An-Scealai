@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.19
+- endpoint `gramadoir/insert` not responding [BUGFIX]
+
 ## v1.0.18
 - mongodb node driver@4.7.0
 
