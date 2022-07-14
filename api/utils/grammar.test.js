@@ -15,27 +15,26 @@ afterAll(async () => {
 });
 
 describe('grammar utils', () => {
-  it(
-    `upsertGramadoirCacheItem should reject non array`,
-    async () => {
+  describe('upsertGramadoirCacheItem', ()=>{
+    it('reject non array', async () => {
       const gram = grammarUtils.upsertGramadoirCacheItem('blinks');
-      await expect(gram).rejects.toEqual(undefined);
+      await expect(gram).rejects.toBeDefined();
     });
-});
-describe('gramadoir log route', () => {
-  it(
-    `should create cache item with no grammar tags`,
-    async () => {
-      const cacheItem = await gramadoirModels.GramadoirCache.create({
-        text: 'dia dhuit',
-        grammarTags: [],
-      });
+    it('resolves', async () => {
+      const gram = grammarUtils.upsertGramadoirCacheItem('blinks', []);
+      await expect(gram).resolves.toBeDefined();
+    });
   });
+});
 
-  it(
-    `should create cache item with one
-    error in QuillHighlightTag form`,
-    async () => {
+describe('gramadoir mongoose models', () => {
+  describe('GramadoirCache', ()=>{
+    it('empty array', async () => {
+      const input = { text: 'dia dhuit', grammarTags: [] };
+      const cacheItem = await gramadoirModels.GramadoirCache.create(input);
+    });
+
+    it('QuillHighlightTag form', async () => {
       const cacheItem = await gramadoirModels.GramadoirCache.create({
         text: 'dia dhuit',
         grammarTags: [{
@@ -56,12 +55,11 @@ describe('gramadoir log route', () => {
       expect(cacheItem.grammarTags[0].type).toBeDefined();
       expect(cacheItem.grammarTags[0].messages.ga).toBeDefined();
       expect(cacheItem.grammarTags[0].messages.en).toBeDefined();
+    });
   });
 
-  it(
-    `upsertStoryGramadoirVersion should throw if
-    userId,storyId,or gramId is invalid`,
-    async () => {
+  describe('and upsertStoryGramadoirVersion', ()=>{
+    it('should throw if userId,storyId,or gramId is invalid', async () => {
       const [user,story,gram] = await Promise.all([
         User.create({username: 'neimhin'}),
         Story.create({}),
@@ -75,25 +73,22 @@ describe('gramadoir log route', () => {
         user._id,
         gram._id,
         new Date());
-      await expect(history).rejects.toBeDefined();
+      await expect(history).rejects.toThrow();
       history = grammarUtils.upsertStoryGramadoirVersion(
         story._id,
         null,
         gram._id,
         new Date()); expect(history).rejects.toBeDefined();
-      await expect(history).rejects.toBeDefined();
+      await expect(history).rejects.toThrow();
       history = grammarUtils.upsertStoryGramadoirVersion(
         story._id,
         user._id,
         null,
         new Date()); expect(history).rejects.toBeDefined();
-      await expect(history).rejects.toBeDefined();
+      await expect(history).rejects.toThrow();
     });
 
-  it(
-    `should create a new user and add a grammar error
-    history item for that user`,
-    async () => {
+    it('should create a new user and add a grammar error history item for that user', async () => {
       const [user,story,gram] = await Promise.all([
         User.create({username: 'neimhin'}),
         Story.create({}),
@@ -109,11 +104,5 @@ describe('gramadoir log route', () => {
         new Date());
       await expect(history).resolves.not.toThrow();
     });
-
-    it(
-      `should create a new gramadoir cache item`,
-      async () => {
-        const gram = grammarUtils.upsertGramadoirCacheItem('blinks', []);
-        await expect(gram).resolves.toBeDefined();
-      });
+  });
 });
