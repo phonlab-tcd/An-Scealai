@@ -5,6 +5,50 @@ export default {
   vowels_should_agree: {
     ga: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan/Caol.',
     en: 'These vowels should be in agreement according to the Leathan/Caol rule.' },
+  voice: {
+    ga: 'Caint',
+    en: 'Voice',
+  },
+  nemo_friendly_pmg_multidialect: {
+    ga: 'Pádraig',
+    en: 'Pádraig'
+  },
+  nemo_friendly_pmg: {
+    ga: 'Pádraig',
+    en: 'Pádraig'
+  },
+  nemo_friendly_nnc_multidialect: {
+    ga: 'Neasa',
+    en: 'Neasa'
+  },
+  nemo_friendly_nnc: {
+    ga: 'Neasa',
+    en: 'Neasa'
+  },
+  nemo_friendly_anb_multidialect: {
+    ga: 'Ailbhe',
+    en: 'Ailbhe'
+  },
+  nemo_friendly_anb: {
+    ga: 'Ailbhe',
+    en: 'Ailbhe'
+  },
+  nemo_friendly_snc_multidialect: {
+    ga: 'Sinéad',
+    en: 'Sinéad'
+  },
+  nemo_friendly_snc: {
+    ga: 'Sinéad',
+    en: 'Sinéad'
+  },
+  nemo_friendly_roisin_multidialect: {
+    ga: 'Róisín',
+    en: 'Róisín'
+  },
+  nemo_friendly_roisin: {
+    ga: 'Róisín',
+    en: 'Róisín'
+  },
   name: {
     ga: 'Gaeilge',
     en: 'English' },

@@ -18,23 +18,27 @@ interface APIv2Response {
   audioContent: string;
 }
 
-export const options = {
+type DataUriMimeType = 'audio/mp3' | 'audio/ogg' | 'audio/x-aiff' | 'audio/wav';
+const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
+  ['LINEAR16', 'audio/x-aiff'],
+  ['MP3', 'audio/mp3'],
+  ['OGG_OPUS', 'audio/ogg'],
+  ['mp3', 'audio/mp3'],
+  ['wav', 'audio/wav'],
+]);
+
+export type Voice = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
+export type AudioEncoding = typeof ApiOptions.api2.audioEncoding[number] | typeof ApiOptions.nemo.audioEncoding[number];
+
+export const ApiOptions = {
   api2: {
-    audioEncoding: ['LINEAR16', 'MP3', 'OGG_OPUS'],
+    base_url: 'https://www.abair.ie/api2/synthesise?',
+    audioEncoding: ['MP3','LINEAR16', 'OGG_OPUS'],
     outputType: ['JSON','HTML','JSON_WITH_TIMING'],
-    voice: [
-     'ga_UL_anb_nnmnkwii',
-     'ga_UL',
-     'ga_UL_anb_exthts',
-     'ga_CO',
-     'ga_CO_hts',
-     'ga_CO_pmg_nnmnkwii',
-     'ga_MU_nnc_exthts',
-     'ga_MU_nnc_nnmnkwii',
-     'ga_MU_cmg_nnmnkwii'
-    ],
+    voice:["ga_UL_anb_exthts","ga_UL_anb_nnmnkwii","ga_CO_pmc_exthts","ga_CO_pmc_exthts-WORLD","ga_CO_pmg_nnmnkwii","ga_CO_snc_exthts","ga_CO_snc_exthts-WORLD","ga_CO_snc_exthts-WORLD-44-48","ga_CO_snc_exthts-WORLD-44-48-full","ga_CO_snc_nnmnkwii","ga_MU_nnc_exthts","ga_MU_nnc_nnmnkwii","ga_MU_cmg_nnmnkwii"],
   },
   nemo: {
+    base_url: 'https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?',
     audioEncoding: ['mp3','wav'],
     outputType: ['JSON','HTML'],
     voice: [
@@ -57,10 +61,10 @@ export type Dialect = 'connemara' | 'kerry' | 'donegal';
 
 export interface SynthRequestObject {
   input: string;
-  voice?: typeof options.api2.voice[number]; // voice takes precedence over dialect. If a valid voice is given, ignore the dialect
+  voice?: typeof ApiOptions.api2.voice[number]; // voice takes precedence over dialect. If a valid voice is given, ignore the dialect
   dialect?: Dialect;
   speed?: number;
-  audioEncoding?: typeof options.api2.audioEncoding[number];
+  audioEncoding?: typeof ApiOptions.api2.audioEncoding[number];
 }
 
 @Injectable({
@@ -77,7 +81,7 @@ export class SynthesisService {
 
   baseUrl = config.baseurl;
 
-  api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof options.api2.voice[number] {
+  api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.api2.voice[number] {
     switch (dialect) {
       case 'connemara':
         return 'ga_CO_pmg_nnmnkwii';
@@ -88,93 +92,60 @@ export class SynthesisService {
     }
   }
 
-  synthesiseHtml(input: string, api: keyof typeof options = 'api2',...theRest): Observable<any> {
+  synthesiseHtml(input: string, ...theRest): Observable<any> {
     input = this.textProcessor.convertHtmlToPlainText(input);
-    return this.synthesiseTextApi2(input, ...theRest );
+    return this.synthesiseText(input, ...theRest );
   }
 
-  nemo_url(input,voice,audioEncoding) {
-    const url_base = 'https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?';
-    const fromObject = {
-  	  input,
-  	  voice,
-  	  audioEncoding,
-  	  outputType: 'JSON',
-    };
-    const params = new HttpParams({fromObject}).toString();
-    const url = url_base + params;
-    return url;
-  };
-
-  synthesiseTextNemo(
+  synthesiseText(
     input: string,
-    voice: typeof options.nemo.voice[number] = null,
-    audioEncoding: typeof options.api2.audioEncoding[number] = 'MP3',
-    speed: number = 1, ): Observable<any> {
-    const url = this.nemo_url(input,voice,audioEncoding);
-    const cachedUrl = this.synthBank.getAudioUrlOfSentence(url);
-    if(cachedUrl) { return of(cachedUrl) }
-
-
-    const encoding = audioEncoding.toLowerCase();
-    return this.http.get<{audioContent: string}>(url).pipe(
-     map(data=>this.prependAudioUrlPrefix(data.audioContent, encoding as any)),
-     tap(data=>this.synthBank.storeAudioUrlOfSentence(url,data) ) );
-  }
-
-  synthesiseTextApi2(
-    input: string,
-    dialect: Dialect = 'connemara',
-    voice: typeof options.api2.voice[number] = null,
-    audioEncoding: typeof options.api2.audioEncoding[number] = 'MP3',
-    speed: number = 1, ): Observable<any> {
+    api: keyof typeof ApiOptions = undefined,
+    voice: Voice = undefined,
+    audioEncoding: AudioEncoding = undefined,
+    ): Observable<any> {
   
     console.log('new synthesis');
     if (!input) {
       throw new Error('input required');
     }
+    if(!api) api = 'api2';
+    if(!voice) voice = ApiOptions[api].voice[0];
+    if(!audioEncoding) audioEncoding = ApiOptions[api].audioEncoding[0];
 
-    const url = this.api2_url(input,dialect,voice,audioEncoding,speed);
-    const storedUrl = this.synthBank.getAudioUrlOfSentence(url);
-    if (storedUrl) {
-      return of(storedUrl);
-    }
+    const url = this.request_url(input,api,voice,audioEncoding as AudioEncoding);
+    const cachedDataUri= this.synthBank.getAudioUrlOfSentence(url);
+    if (cachedDataUri) return of(cachedDataUri);
+    console.count('FETCHING DATA URI');
 
-    return this.http.get(url).pipe(
-     map((data: {audioContent: string}) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding.toLowerCase() as 'mp3' | 'wav' | 'ogg') ),
+    return this.http.post(this.baseUrl + 'proxy',{url}).pipe(
+     map((data: {audioContent: string}) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding)),
      tap(data=>this.synthBank.storeAudioUrlOfSentence(url,data) ) );
   }
 
 
-  api2_url(
+  request_url(
     input: string,
-    dialect: Dialect = 'connemara',
-    voice: typeof options.api2.voice[number] = null,
-    audioEncoding: typeof options.api2.audioEncoding[number] = 'MP3',
-    speed: number = 1,
+    api: keyof typeof ApiOptions = undefined,
+    voice: Voice = undefined,
+    audioEncoding: AudioEncoding = undefined,
   ): string {
-    const url_base = 'https://www.abair.ie/api2/synthesise?';
-
-    if ( voice && options.api2.voice.includes(voice) ) {
-      // use given voice
-    } else {
-      // get voice for given dialect
-      voice = this.api2_voice_from_dialect(dialect);
-    }
+    if ( !api ) api = 'api2';
+    const base_url = ApiOptions[api].base_url;
+    if ( !voice ) voice = ApiOptions[api].voice[0];
+    if ( !audioEncoding ) audioEncoding = ApiOptions[api].audioEncoding[0];
 
     const q = new HttpParams({fromObject: {
       input,
       voice,
       audioEncoding,
-      outputType: 'JSON_WITH_TIMING',
-      speed: "1",
+      outputType: 'JSON',
     }});
 
-    return url_base + q.toString();
+    return base_url + q.toString();
   }
 
-  prependAudioUrlPrefix(base64AudioData: string, encoding: 'mp3' | 'wav' | 'ogg'){
-    return 'data:audio/' + encoding + ';base64,' + base64AudioData;
+  prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding){
+    return 'data:' + audioEncodingToDataUriMimeType.get(encoding) + ';base64,' + base64AudioData;
   }
 
   /**

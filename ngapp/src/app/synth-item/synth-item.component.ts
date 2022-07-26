@@ -35,7 +35,7 @@ export class SynthItemComponent {
 
   public refresh() {
     this.synth_bank.remove(this.synthItem.requestUrl);
-    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
+    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.api,this.synthItem.voice,this.synth);
   }
 
   alternateColors(i: number): string {

@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 
@@ -144,6 +145,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatSelectModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({
