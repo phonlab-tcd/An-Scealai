@@ -12,16 +12,7 @@
           <!--Word Type Button Group(Could be good to use *ngFor idk)-->
           <div class="word-types">
             <div class="btn-group-sm" role="group">
-              <button type="button" (click)="selectWord('verb')" class="btn btn-primary">{{ts.l.verb}}</button>
-              <button type="button" (click)="selectWord('noun')" class="btn btn-primary">{{ts.l.noun}}</button>
-              <button type="button" (click)="selectWord('adjective')" class="btn btn-primary">{{ts.l.adjective}}</button>
-              <button type="button" (click)="selectWord('adverb')" class="btn btn-primary">{{ts.l.adverb}}</button>
-              <button type="button" (click)="selectWord('pronoun')" class="btn btn-primary">{{ts.l.pronoun}}</button>
-              <button type="button" (click)="selectWord('determiner')" class="btn btn-primary">{{ts.l.determiner}}</button>
-              <button type="button" (click)="selectWord('article')" class="btn btn-primary">{{ts.l.article}}</button>
-              <button type="button" (click)="selectWord('adposition')" class="btn btn-primary">{{ts.l.adposition}}</button>
-              <button type="button" (click)="selectWord('conjunction')" class="btn btn-primary">{{ts.l.conjunction}}</button>
-              <button type="button" (click)="selectWord('numeral')" class="btn btn-primary">{{ts.l.numeral}}</button>
+	      <button *ngFor="let type of wordTypes" type=button (click)=selectWord(type) class="btn btn-primary">{{ts.l[type]}}</button>
             </div>
           </div>
         </div>
@@ -53,11 +44,9 @@
         <div class="header">
           {{ts.l.pos_instructions}}
         </div>
-        <h6>
-          <ul>
-            <li>{{ts.l.pos_instructions_description_1}}</li>
-            <li>{{ts.l.pos_instructions_description_2}}</li>
-          </ul>
+        <h6 align="justify">
+            <p>{{ts.l.pos_instructions_description_1}}</p>
+            <p>{{ts.l.pos_instructions_description_2}}</p>
         </h6>
       </div>
     </div>
@@ -66,13 +55,13 @@
       <!--Chosen Words & Audio Playback-->
       <div *ngIf="wordBank.length > 0 && !bankHighlightsLoading" class="container">
         <div class="word-bank">
-          <app-synth-item class="synth" [synthItem]="posSynthRefresh()" [i]="0"></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+          <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
           <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
         </div>
       </div>
       <div *ngIf="wordBank.length > 0 && bankHighlightsLoading" class="container">
         <div class="word-bank">
-          <app-synth-item class="synth" [synthItem]="posSynthRefresh()" [i]="0"></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+          <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
           <div>{{createWordBankString(wordBank)}}</div>
         </div>
       </div>
