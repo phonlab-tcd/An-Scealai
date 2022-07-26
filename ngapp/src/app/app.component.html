@@ -120,7 +120,15 @@
           <button routerLink="/about-taidhgin" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_taidhgin_title}}</button>
         </div>
       </div>
-
+      <!--Prompts-->
+      <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
+        <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">{{ts.l.prompts}}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>
+          <button routerLink="/exam-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.sep_dropdown}}</button>
+        </div>
+      </div>
+      <!--ABAIR-->
       <div class="d-inline-block">
         <a
           href="https://www.abair.tcd.ie/"

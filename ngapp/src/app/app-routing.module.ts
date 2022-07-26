@@ -52,6 +52,8 @@ import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { PromptsComponent } from './prompts/prompts.component';
+import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -79,6 +81,8 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'prompts', component: PromptsComponent, canActivate: [AuthGuardService] },
+  { path: 'exam-prompts', component: StateExamPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
