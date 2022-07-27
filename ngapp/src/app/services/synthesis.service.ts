@@ -18,16 +18,49 @@ interface APIv2Response {
   audioContent: string;
 }
 
+export const pseudonymMap = new Map([
+  ['cmg', 'Tomás'],
+  ['nnc', 'Caitlín'],
+ // ['ulster-male??', 'Aodh'],
+  ['anb', 'Róisín'],
+  ['pmg', 'Macdara'],
+  ['snc', 'Anna'],
+  ['roisin', 'Gráinne'],
+] as const);
+
+
+export const voices = [
+//{api: 'api2', gender: 'm', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+  {api: 'api2', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'UL', algorithm: 'dnn'},
+  {api: 'api2', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
+  {api: 'api2', gender: 'female',shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
+  {api: 'api2', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
+  {api: 'api2', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
+
+//{api: 'nemo', gender: 'm', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+  {api: 'nemo', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
+  {api: 'nemo', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
+  {api: 'nemo', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
+] as const;
+
+export type Voice = typeof voices[number];
+
+export function getPseudonym(v: Voice) {
+  return pseudonymMap.get(v.shortCode);
+}
+
 type DataUriMimeType = 'audio/mp3' | 'audio/ogg' | 'audio/x-aiff' | 'audio/wav';
 const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
-  ['LINEAR16', 'audio/x-aiff'],
-  ['MP3', 'audio/mp3'],
-  ['OGG_OPUS', 'audio/ogg'],
-  ['mp3', 'audio/mp3'],
-  ['wav', 'audio/wav'],
+  ['LINEAR16',  'audio/x-aiff'],
+  ['MP3',       'audio/mp3'],
+  ['OGG_OPUS',  'audio/ogg'],
+  ['mp3',       'audio/mp3'],
+  ['wav',       'audio/wav'],
 ]);
 
-export type Voice = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
+export type VoiceCode = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
 export type AudioEncoding = typeof ApiOptions.api2.audioEncoding[number] | typeof ApiOptions.nemo.audioEncoding[number];
 
 export const ApiOptions = {
@@ -57,7 +90,7 @@ export const ApiOptions = {
   },
 } as const;
 
-export type Dialect = 'connemara' | 'kerry' | 'donegal';
+export type Dialect = 'UL' | 'MU' | 'CO';
 
 export interface SynthRequestObject {
   input: string;
@@ -100,7 +133,7 @@ export class SynthesisService {
   synthesiseText(
     input: string,
     api: keyof typeof ApiOptions = undefined,
-    voice: Voice = undefined,
+    voice: VoiceCode = undefined,
     audioEncoding: AudioEncoding = undefined,
     ): Observable<any> {
   
@@ -126,7 +159,7 @@ export class SynthesisService {
   request_url(
     input: string,
     api: keyof typeof ApiOptions = undefined,
-    voice: Voice = undefined,
+    voice: VoiceCode = undefined,
     audioEncoding: AudioEncoding = undefined,
   ): string {
     if ( !api ) api = 'api2';
@@ -145,6 +178,7 @@ export class SynthesisService {
   }
 
   prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding){
+    console.log(base64AudioData.slice(1000,1100));
     return 'data:' + audioEncodingToDataUriMimeType.get(encoding) + ';base64,' + base64AudioData;
   }
 
