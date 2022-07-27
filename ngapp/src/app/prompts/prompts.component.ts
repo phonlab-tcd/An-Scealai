@@ -20,7 +20,34 @@ import { SynthesisBankService } from 'app/services/synthesis-bank.service';
 })
 
 export class PromptsComponent implements OnInit {
-  @ViewChild('audioElement') audioElement;
+  tempWordDatabase = {
+    noun:        ['an chistin', 'an t-urlár', 'an fear', 'an bád'],
+    verb:        ['buail', 'ith', 'clois', 'tabhair'],
+    adjective:   ['ard', 'deas', 'mór', 'te'],
+    pronoun:     ['sé', 'mé', 'tú', 'sibh'],
+    determiner:  ['seo', 'a', 'cé', 'an'],
+    article:     ['an'],
+    adverb:      ['síos', 'mar', 'conas', 'siar'],
+    adposition:  ['le', 'sa'],
+    conjunction: ['agus', 'go'],
+    numeral:     ['trí', 'céad', 'triúr', 'ceathrar']
+  }
+
+  tempWordDatabaseEnglish = {
+    noun:        ['the kitchen', 'the floor', 'the man', 'the boat'],
+    verb:        ['to hit/meet', 'to eat', 'to listen', 'to give'],
+    adjective:   ['tall', 'nice', 'big', 'hot'],
+    pronoun:     ['him', 'I', 'you', 'you(plural)'],
+    determiner:  ['his/her/theirs', 'this', 'who', 'the'],
+    article:     ['the'],
+    adverb:      ['down', 'because', 'how', 'behind'],
+    adposition:  ['with', 'in'],
+    conjunction: ['and', 'to'],
+    numeral:     ['3', '100', '3(Person)', '4(People)']
+  }
+
+
+  // @ViewChild('audioElement') audioElement; // unused
 
   //Unsure whether some of this stuff should be in the constructor.
   WORD_PROMPT = 'Please choose a word type';
@@ -33,6 +60,7 @@ export class PromptsComponent implements OnInit {
   innerHTMLWordBank: string = '';
   bankHighlightsLoading: boolean = true;
   synthItem: SynthItem;
+  wordTypes = Object.keys(this.tempWordDatabase);
 
   constructor(
     private gs : GrammarService,
@@ -49,8 +77,8 @@ export class PromptsComponent implements OnInit {
 
   //Possible data leak?
   posSynthRefresh() {
+    if(this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
     this.synthItem = new SynthItem(this.arrayString, this.newStoryForm.get('dialect').value, this.synth);
-    return this.synthItem;
   }
   
   //Could perhaps use createForm() from the dashboard component instead
@@ -68,26 +96,17 @@ export class PromptsComponent implements OnInit {
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-  async selectWord(type: String) {
-    if (type === 'verb')          { this.givenWord = this.randomWord(this.tempWordDatabase.verbs); }
-    if (type === 'noun')          { this.givenWord = this.randomWord(this.tempWordDatabase.nouns); }
-    if (type === 'adjective')     { this.givenWord = this.randomWord(this.tempWordDatabase.adjectives); }
-    if (type === 'adverb')        { this.givenWord = this.randomWord(this.tempWordDatabase.adverbs); }
-    if (type === 'pronoun')       { this.givenWord = this.randomWord(this.tempWordDatabase.pronouns); }
-    if (type === 'determiner')    { this.givenWord = this.randomWord(this.tempWordDatabase.determiners); }
-    if (type === 'article')       { this.givenWord = this.randomWord(this.tempWordDatabase.articles); }
-    if (type === 'adposition')    { this.givenWord = this.randomWord(this.tempWordDatabase.adpositions); }
-    if (type === 'conjunction')   { this.givenWord = this.randomWord(this.tempWordDatabase.conjunctions); }
-    if (type === 'numeral')       { this.givenWord = this.randomWord(this.tempWordDatabase.numerals); }
+  async selectWord(type: keyof typeof this.tempWordDatabase) {
+    this.givenWord  = this.randomWord(this.tempWordDatabase[type]);
   }
   
-
 
   posConfirmation(isConfirmed: Boolean) {
     if(isConfirmed && this.givenWord != this.WORD_PROMPT){
       this.wordBank.push(this.givenWord);
       this.createWordBankString(this.wordBank);
       this.getBankHighlights();
+      this.posSynthRefresh();
     } else {
       this.givenWord = this.WORD_PROMPT;
     }
@@ -158,29 +177,4 @@ export class PromptsComponent implements OnInit {
     return wordList[Math.floor(Math.random() * wordList.length)];
   }
 
-  tempWordDatabase = {
-    nouns:        ['an chistin', 'an t-urlár', 'an fear', 'an bád'],
-    verbs:        ['buail', 'ith', 'clois', 'tabhair'],
-    adjectives:   ['ard', 'deas', 'mór', 'te'],
-    pronouns:     ['sé', 'mé', 'tú', 'sibh'],
-    determiners:  ['seo', 'a', 'cé', 'an'],
-    articles:     ['an'],
-    adverbs:      ['síos', 'mar', 'conas', 'siar'],
-    adpositions:  ['le', 'sa'],
-    conjunctions: ['agus', 'go'],
-    numerals:     ['trí', 'céad', 'triúr', 'ceathrar']
-  }
-
-  tempWordDatabaseEnglish = {
-    nouns:        ['the kitchen', 'the floor', 'the man', 'the boat'],
-    verbs:        ['to hit/meet', 'to eat', 'to listen', 'to give'],
-    adjectives:   ['tall', 'nice', 'big', 'hot'],
-    pronouns:     ['him', 'I', 'you', 'you(plural)'],
-    determiners:  ['his/her/theirs', 'this', 'who', 'the'],
-    articles:     ['the'],
-    adverbs:      ['down', 'because', 'how', 'behind'],
-    adpositions:  ['with', 'in'],
-    conjunctions: ['and', 'to'],
-    numerals:     ['3', '100', '3(Person)', '4(People)']
-  }
 }
