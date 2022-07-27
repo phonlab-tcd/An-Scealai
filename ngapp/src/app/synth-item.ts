@@ -1,10 +1,10 @@
-import { ApiOptions as SynthApiOptions, SynthesisService, Voice } from 'app/services/synthesis.service';
+import { ApiOptions as SynthApiOptions, SynthesisService, VoiceCode } from 'app/services/synthesis.service';
 import { Subscription } from 'rxjs';
 
 export class SynthItem {
   text: string;
   api: keyof typeof SynthApiOptions;
-  voice: Voice;
+  voice: VoiceCode;
   audioUrl: string = undefined;
   subscription: Subscription
   requestUrl: string;
@@ -12,7 +12,7 @@ export class SynthItem {
   constructor(
     text: string,
     api: keyof typeof SynthApiOptions,
-    voice: Voice,
+    voice: VoiceCode,
     private synth: SynthesisService,
   ){
     let validVoices;

@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TextProcessingService } from 'app/services/text-processing.service';
-import { Voice, ApiOptions as SynthApiOptions, SynthesisService, Dialect } from 'app/services/synthesis.service';
+import { VoiceCode, ApiOptions as SynthApiOptions, SynthesisService, Dialect, voices } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
-import { TranslationService } from "app/translation.service";
+import { TranslationService } from 'app/translation.service';
+import { voices as synthVoices, pseudonym } from 'app/services/synthesis.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -13,20 +15,25 @@ import { TranslationService } from "app/translation.service";
     '../../app.component.scss',
    ]
 })
-export class SynthesisPlayerComponent implements OnInit {
+export class SynthesisPlayerComponent implements OnInit, AfterViewInit {
   hideEntireSynthesisPlayer = true;
   synthItems: SynthItem[] = [];
   voice = 'pmg.multidialect';
+  pseudonym = pseudonym;
 
-  voices = [
-    ...SynthApiOptions.api2.voice.map(v=>({voice: v, api: 'api2'})),
-    ...SynthApiOptions.nemo.voice.map(v=>({voice: v, api: 'nemo'}))
-  ] as [{voice: Voice, api: keyof typeof SynthApiOptions}];
+  color(gender: 'male'|'female'): string {
+    return gender.startsWith('f') ? 'background-color: rgba(255,0,100,0.4)' : 'background-color: rgba(0,0,255,0.2)';
+
+  }
+
+  voices = synthVoices;
   selected = this.voices[0];
   
   @Input() storyId: string;
   @Input() text: string;
   @Input() dialect: Dialect;
+  @ViewChild('select') select: MatSelect;
+  
 
 
   toggleHidden() {
@@ -42,12 +49,16 @@ export class SynthesisPlayerComponent implements OnInit {
     public ts: TranslationService
     ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.refresh();
   }
 
+  ngAfterViewInit() {
+    this.select.selectionChange.subscribe(()=>this.refresh());
+  }
+
   getSynthItem(line: string) {
-    return new SynthItem(line,this.selected.api as 'api2'|'nemo',this.selected.voice,this.synth);
+    return new SynthItem(line,this.selected.api as 'api2'|'nemo',this.selected.code,this.synth);
   }
 
   refresh() {
@@ -61,7 +72,7 @@ export class SynthesisPlayerComponent implements OnInit {
       this.synthItems =
         this.textProcessor
             .sentences(this.text)
-        .map(l=>new SynthItem(l, this.selected.api as 'api2'|'nemo', this.selected.voice, this.synth));
+        .map(l=>this.getSynthItem(l));
       this.cdref.detectChanges();
     },50);
   }

@@ -47,7 +47,7 @@ export const voices = [
 
 export type Voice = typeof voices[number];
 
-export function getPseudonym(v: Voice) {
+export function pseudonym(v: Voice) {
   return pseudonymMap.get(v.shortCode);
 }
 
