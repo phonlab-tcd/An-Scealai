@@ -9,16 +9,16 @@
   </div>
   <div class=header>
     <div class=reload (click)=refresh()>&#8635;</div>
-    <mat-form-field appearance="fill" [style]="color(selected.gender)">
+    <mat-form-field appearance="fill" [style]="'background-color:' + color(selected.gender)">
       <mat-label>{{ts.message('voice')}}</mat-label>
-      <mat-select #select [(value)]=selected >
+      <mat-select [(value)]=selected (selectionChange)=refresh()>
 	      <mat-option
           *ngFor="let voice of voices"
           matNativeControl
           required
           data-gender={{voice.gender}}
           [value]=voice>
-            {{pseudonym(voice) + ' ' + voice.dialect + ' ' + voice.algorithm}}
+            {{voice.note + pseudonym(voice) + ' ' + voice.dialect + ' ' + voice.algorithm}}
         </mat-option>
       </mat-select>
     </mat-form-field>

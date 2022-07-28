@@ -12,17 +12,16 @@ import { MatSelect } from '@angular/material/select';
   templateUrl: './synthesis-player.component.html',
   styleUrls: [
     './synthesis-player.component.scss',
-    '../../app.component.scss',
+    // '../../app.component.scss',
    ]
 })
-export class SynthesisPlayerComponent implements OnInit, AfterViewInit {
+export class SynthesisPlayerComponent implements OnInit {
   hideEntireSynthesisPlayer = true;
   synthItems: SynthItem[] = [];
-  voice = 'pmg.multidialect';
   pseudonym = pseudonym;
 
   color(gender: 'male'|'female'): string {
-    return gender.startsWith('f') ? 'background-color: rgba(255,0,100,0.4)' : 'background-color: rgba(0,0,255,0.2)';
+    return gender.startsWith('f') ? 'rgba(255, 191, 194)' : 'rgba(194, 218, 255)';
 
   }
 
@@ -31,10 +30,6 @@ export class SynthesisPlayerComponent implements OnInit, AfterViewInit {
   
   @Input() storyId: string;
   @Input() text: string;
-  @Input() dialect: Dialect;
-  @ViewChild('select') select: MatSelect;
-  
-
 
   toggleHidden() {
     this.hideEntireSynthesisPlayer = !this.hideEntireSynthesisPlayer;
@@ -49,16 +44,10 @@ export class SynthesisPlayerComponent implements OnInit, AfterViewInit {
     public ts: TranslationService
     ) { }
 
-  ngOnInit() {
-    this.refresh();
-  }
-
-  ngAfterViewInit() {
-    this.select.selectionChange.subscribe(()=>this.refresh());
-  }
+  ngOnInit() { this.refresh() }
 
   getSynthItem(line: string) {
-    return new SynthItem(line,this.selected.api as 'api2'|'nemo',this.selected.code,this.synth);
+    return new SynthItem(line,this.selected,this.synth);
   }
 
   refresh() {

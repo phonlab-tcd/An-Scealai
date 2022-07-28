@@ -30,19 +30,26 @@ export const pseudonymMap = new Map([
 
 
 export const voices = [
-//{api: 'api2', gender: 'm', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
-  {api: 'api2', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'UL', algorithm: 'dnn'},
-  {api: 'api2', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
-  {api: 'api2', gender: 'female',shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
-  {api: 'api2', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
-  {api: 'api2', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
+//{api: 'api2', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'UL', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
 
-//{api: 'nemo', gender: 'm', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
-  {api: 'nemo', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
-  {api: 'nemo', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  {api: 'nemo', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  {api: 'nemo', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
-  {api: 'nemo', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
+  //{api: 'api2', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
+  {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmc_exthts', dialect: 'CO', algorithm: 'hts'},
+  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_exthts', dialect: 'CO', algorithm: 'hts'},
+  {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
+  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
+
+//{api: 'nemo', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gendesr: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
 ] as const;
 
 export type Voice = typeof voices[number];
@@ -132,24 +139,24 @@ export class SynthesisService {
 
   synthesiseText(
     input: string,
-    api: keyof typeof ApiOptions = undefined,
-    voice: VoiceCode = undefined,
+    voice: Voice = undefined,
+    useCache = true,
     audioEncoding: AudioEncoding = undefined,
     ): Observable<any> {
   
-    console.log('new synthesis');
-    if (!input) {
-      throw new Error('input required');
+    // VALIDATION
+    if (!input) throw new Error('input required');
+    if (!voice) voice = voices[0];
+    if(!audioEncoding) audioEncoding = ApiOptions[voice.api].audioEncoding[0];
+    const url = this.request_url(input,voice,audioEncoding as AudioEncoding);
+
+    // SHORTCUT?
+    if(useCache) {
+      const cachedDataUri = this.synthBank.getAudioUrlOfSentence(url);
+      if (cachedDataUri) return of(cachedDataUri);
     }
-    if(!api) api = 'api2';
-    if(!voice) voice = ApiOptions[api].voice[0];
-    if(!audioEncoding) audioEncoding = ApiOptions[api].audioEncoding[0];
 
-    const url = this.request_url(input,api,voice,audioEncoding as AudioEncoding);
-    const cachedDataUri= this.synthBank.getAudioUrlOfSentence(url);
-    if (cachedDataUri) return of(cachedDataUri);
-    console.count('FETCHING DATA URI');
-
+    // HIT THE API
     return this.http.post(this.baseUrl + 'proxy',{url}).pipe(
      map((data: {audioContent: string}) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding)),
      tap(data=>this.synthBank.storeAudioUrlOfSentence(url,data) ) );
@@ -158,23 +165,21 @@ export class SynthesisService {
 
   request_url(
     input: string,
-    api: keyof typeof ApiOptions = undefined,
-    voice: VoiceCode = undefined,
+    voice: Voice,
     audioEncoding: AudioEncoding = undefined,
   ): string {
-    if ( !api ) api = 'api2';
-    const base_url = ApiOptions[api].base_url;
-    if ( !voice ) voice = ApiOptions[api].voice[0];
-    if ( !audioEncoding ) audioEncoding = ApiOptions[api].audioEncoding[0];
-
-    const q = new HttpParams({fromObject: {
+    const options = ApiOptions[voice.api];
+    const base_url = options.base_url;
+    if ( !audioEncoding ) audioEncoding = options.audioEncoding[0];
+    
+    const fromObject = {
       input,
-      voice,
+      voice: voice.code,
       audioEncoding,
       outputType: 'JSON',
-    }});
-
-    return base_url + q.toString();
+    };
+    const query = new HttpParams({fromObject}).toString();
+    return base_url + query;
   }
 
   prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding){
