@@ -1,3 +1,4 @@
+ssh -t scealai@141.95.1.243 "echo hello"
 GREEN="\e[1;32m"
 RED="\e[1;31m"
 RESET_COLOR="\e[0m"
