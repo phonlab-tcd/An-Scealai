@@ -1,11 +1,22 @@
 <!--Irish Language support probably wrong(I used google translate)-->
 <div>
-    <div class="row">
-        <div class="col-lg-6">
-            <button (click)="randomPrompt(ts.l.sep_lchl_choices)">Get Prompt</button>
-            {{currentPrompt}}
+    <div class="container">
+        <div class="header">
+            {{ts.l.sep_header}}
         </div>
-        <div class="col-lg-6">
+        <div>
+            <p>{{ts.l.sep_explanation}}</p>
         </div>
+        <div class="button-div">
+            <button class="prompt-button" (click)="randomPrompt(ts.l.sep_lchl_choices)">{{ts.l.sep_get_prompt}}</button>
+        </div>
+        <div *ngIf="promptExists; else no_prompt" class="prompt">
+            {{ts.l.sep_lchl_choices[currentPromptIndex]}}
+        </div>
+        <ng-template #no_prompt>
+            <div class="prompt">
+                {{ts.l.sep_no_prompt}}
+            </div>
+        </ng-template>
     </div>
 </div>

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslationService } from 'app/translation.service';
-
 @Component({
   selector: 'app-state-exam-prompts',
   templateUrl: './state-exam-prompts.component.html',
   styleUrls: ['./state-exam-prompts.component.scss']
 })
 export class StateExamPromptsComponent implements OnInit {
-  currentPrompt: string;
+  currentPromptIndex: number;
+  promptExists: boolean = false;
+  userLevel: string;
 
   constructor(
     public ts: TranslationService,
@@ -17,9 +18,10 @@ export class StateExamPromptsComponent implements OnInit {
     console.log("State exam prompts init");
   }
 
+  //Try find a way to not have the arrays in ts service
   randomPrompt(promptArray: string[]) {
-    const index: number = Math.floor(Math.random() * promptArray.length);
-    this.currentPrompt = promptArray[index];
-    return this.currentPrompt;
+    this.promptExists = true;
+    this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
+    return this.currentPromptIndex;
   }
 }

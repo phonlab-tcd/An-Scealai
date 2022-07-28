@@ -2027,62 +2027,74 @@ export default {
     en: 'Secondly, make sure your story has no incorrect grammar(as indicated by the red highlighting over incorrect text). ' +
     'If you\'re unhappy with the story starter you can select "Reset Bank" to reset the word bank. ' +
     'You can then save your story by giving it a valid title, dialect and pressing "Save to Stories".' },
-    sep_dropdown: {
-      ga: 'Leideanna Scrúdaithe Stáit',
-      en: 'State Exam Prompts' },
-    sep_jc_choices: {
-      ga: [
-        "Nuair a chuala mo thuismitheoirí an scéal bhí siad ar buile liom… (2019)",
-        "Eachtra ghreannmhar a tharla le linn turas scoile. (2019)",
-        "Ní fhéadfainn é a chreidiúint nuair a chuala mé an scéal…   (2018)",
-        "Eachtra a tharla ar mo shlí abhaile ón scoil. (2018)",
-        "Ní raibh ach dhá nóiméad fágtha sa chluiche. Bhíomar chun deiridh.   Ansin tháinig an liathróid i mo threo…  (2017)",
-        "An uair a chuaigh mé féin agus mo chara ar strae i gcathair Bhaile Átha Cliath. (2017)"
-      ], 
-      en: [
-        "When my parents heard the story they were mad at me… (2019)",
-        "A funny incident that happened during a school trip. (2019)",
-        "I couldn't believe it when I heard the story… (2018)",
-        "An incident that happened on my way home from school. (2018)",
-        "There were only two minutes left in the game. We were behind. Then the ball came my way… (2017)",
-        "When me and my friend got lost in Dublin city. (2017)"
-      ]
-    },
-    sep_lcol_choices: {
-      ga: [
-        "Léigh mé an téacs ón stáisiún raidió. 'Tá an chéad duais sa chomórtas buaite agat.'   Níor chreid mé mo shúile (2021)",
-        "Bhí mé féin agus mo chara amuigh ag rith. Go tobann, thit mo chara i laige … (2021)",
-        "Dhúisigh mé i lár na hoíche. Bhí mé i leaba i mbarda ospidéil… (2020)",
-        "Bhuail m'fhón póca. D'fhreagair mé an fón… (2020)",
-        "Bhí mé féin agus mo chara san aerfort. Bhíomar ag súil go mór leis an turas go Páras. Chuir mé mo lámh i mo mhála. Ní raibh mo phas ná mo chuid airgid ann… (2019)",
-        "Tháinig an oíche mhór. Bhí an seó tallainne ag tosú agus bhí mé ag dul ar an stáitse… (2019)"
+  sep_dropdown: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Exam Prompts' },
+  sep_jc_choices: {
+    ga: [
+      "Nuair a chuala mo thuismitheoirí an scéal bhí siad ar buile liom… (2019)",
+      "Eachtra ghreannmhar a tharla le linn turas scoile. (2019)",
+      "Ní fhéadfainn é a chreidiúint nuair a chuala mé an scéal…   (2018)",
+      "Eachtra a tharla ar mo shlí abhaile ón scoil. (2018)",
+      "Ní raibh ach dhá nóiméad fágtha sa chluiche. Bhíomar chun deiridh.   Ansin tháinig an liathróid i mo threo…  (2017)",
+      "An uair a chuaigh mé féin agus mo chara ar strae i gcathair Bhaile Átha Cliath. (2017)"
+    ], 
+    en: [
+      "When my parents heard the story they were mad at me… (2019)",
+      "A funny incident that happened during a school trip. (2019)",
+      "I couldn't believe it when I heard the story… (2018)",
+      "An incident that happened on my way home from school. (2018)",
+      "There were only two minutes left in the game. We were behind. Then the ball came my way… (2017)",
+      "When me and my friend got lost in Dublin city. (2017)"
+    ]
+  },
+  sep_lcol_choices: {
+    ga: [
+      "Léigh mé an téacs ón stáisiún raidió. 'Tá an chéad duais sa chomórtas buaite agat.'   Níor chreid mé mo shúile (2021)",
+      "Bhí mé féin agus mo chara amuigh ag rith. Go tobann, thit mo chara i laige … (2021)",
+      "Dhúisigh mé i lár na hoíche. Bhí mé i leaba i mbarda ospidéil… (2020)",
+      "Bhuail m'fhón póca. D'fhreagair mé an fón… (2020)",
+      "Bhí mé féin agus mo chara san aerfort. Bhíomar ag súil go mór leis an turas go Páras. Chuir mé mo lámh i mo mhála. Ní raibh mo phas ná mo chuid airgid ann… (2019)",
+      "Tháinig an oíche mhór. Bhí an seó tallainne ag tosú agus bhí mé ag dul ar an stáitse… (2019)"
 
-      ], 
-      en: [
-        "I read the text from the radio station. 'You have won the first prize in the competition.' I could not believe my eyes (2021)",
-        "My friend and I were out running. Suddenly, my friend collapsed… (2021)",
-        "I woke up in the middle of the night. I was in a bed in a hospital ward… (2020)",
-        "My mobile phone rang. I answered the phone… (2020)",
-        "My friend and I were at the airport. We were really looking forward to the trip to Paris. I put my hand in my bag. My passport and money were not there… (2019)",
-        "The big night came. The talent show was starting and I was going on stage… (2019)"
-      ]
-    },
-    sep_lchl_choices: {
-      ga: [
-        "Crógacht. (2021)",
-        "Ar scáth a chéile a mhaireann na daoine. (2021)",
-        "Bíonn an fhírinne searbh. (2020)",
-        "Suaimhneas. (2020)",
-        "Faoiseamh. (2019)",
-        "Ní thagann ciall roimh aois. (2019)"
-      ], 
-      en: [
-        "Courage. (2021)",
-        "People live in each other's shadow. (2021)",
-        "The truth is bitter. (2020)",
-        "Peace. (2020)",
-        "Relief. (2019)",
-        "Sense does not come before age. (2019)"
-      ]
-    }
+    ], 
+    en: [
+      "I read the text from the radio station. 'You have won the first prize in the competition.' I could not believe my eyes (2021)",
+      "My friend and I were out running. Suddenly, my friend collapsed… (2021)",
+      "I woke up in the middle of the night. I was in a bed in a hospital ward… (2020)",
+      "My mobile phone rang. I answered the phone… (2020)",
+      "My friend and I were at the airport. We were really looking forward to the trip to Paris. I put my hand in my bag. My passport and money were not there… (2019)",
+      "The big night came. The talent show was starting and I was going on stage… (2019)"
+    ]
+  },
+  sep_lchl_choices: {
+    ga: [
+      "Crógacht. (2021)",
+      "Ar scáth a chéile a mhaireann na daoine. (2021)",
+      "Bíonn an fhírinne searbh. (2020)",
+      "Suaimhneas. (2020)",
+      "Faoiseamh. (2019)",
+      "Ní thagann ciall roimh aois. (2019)"
+    ], 
+    en: [
+      "Courage. (2021)",
+      "People live in each other's shadow. (2021)",
+      "The truth is bitter. (2020)",
+      "Peace. (2020)",
+      "Relief. (2019)",
+      "Sense does not come before age. (2019)"
+    ]
+  },
+  sep_get_prompt: {
+    ga: 'Faigh Leid',
+    en: 'Get Prompt' },
+  sep_header: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Examination Prompts' },
+  sep_explanation: {
+    ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
+    en: 'Press the button to recieve a topic or story starter to write about' },
+  sep_no_prompt: {
+    ga: 'Roghnaigh leid le do thoil',
+    en: 'Please choose a prompt' }
 }
