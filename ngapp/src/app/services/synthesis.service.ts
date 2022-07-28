@@ -5,8 +5,8 @@ import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import {
   Observable,
-  of,
-  Observer } from 'rxjs';
+  of
+} from 'rxjs';
 import {
   map,
   tap } from 'rxjs/operators';
@@ -28,31 +28,43 @@ export const pseudonymMap = new Map([
   ['roisin', 'Gráinne'],
 ] as const);
 
+type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
 
-export const voices = [
-//{api: 'api2', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
+const asVoice = (x: readonly Voice[])=>x;
+export const voices = asVoice([ // for extra type checking (typescript will check that codes are valid)
+//{api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???',                dialect: 'UL', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'UL', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
 
-  //{api: 'api2', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
-  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
-  {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmc_exthts', dialect: 'CO', algorithm: 'hts'},
-  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_exthts', dialect: 'CO', algorithm: 'hts'},
-  {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
-  {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
+// //{api: 'api2', note: '',        gender: 'male',   shortCode: '???', code: '???',              dialect: 'UL', algorithm: 'hts'},
+//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
+//   {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmc_exthts', dialect: 'CO', algorithm: 'hts'},
+//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_exthts', dialect: 'CO', algorithm: 'hts'},
+//   // {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
+//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
 
-//{api: 'nemo', gender: 'male', code: none,                  pseudonym: pseudonym.get('UL-male'),     dialect: 'UL',    algorithm: 'dnn'},
-  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
-  {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
-  {api: 'nemo', note: '[beta] ', gendesr: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
-] as const;
+// //{api: 'nemo', note: '',        gender: 'male',   shortCode: '???', code: '????'                dialect: 'UL', algorithm: 'multidialect'},
+//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
+//   {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
+//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
+] as const);
 
-export type Voice = typeof voices[number];
+type API = keyof typeof ApiOptions;
+
+type Voice = {
+  readonly code: VoiceCode;
+  readonly api: API;
+  readonly note: string;
+  readonly gender: 'male' | 'female';
+  readonly shortCode: PseudonymKey;
+  readonly dialect: 'UL'|'CO'|'MU';
+  readonly algorithm: string;
+};
 
 export function pseudonym(v: Voice) {
   return pseudonymMap.get(v.shortCode);
