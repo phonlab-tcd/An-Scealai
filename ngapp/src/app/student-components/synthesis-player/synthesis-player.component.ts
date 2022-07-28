@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TextProcessingService } from 'app/services/text-processing.service';
-import { VoiceCode, ApiOptions as SynthApiOptions, SynthesisService, Dialect, voices } from 'app/services/synthesis.service';
+import { VoiceCode, ApiOptions as SynthApiOptions, SynthesisService, Dialect, voices, Voice } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
 import { TranslationService } from 'app/translation.service';
 import { voices as synthVoices, pseudonym } from 'app/services/synthesis.service';
 import { MatSelect } from '@angular/material/select';
+import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -20,16 +21,11 @@ export class SynthesisPlayerComponent implements OnInit {
   synthItems: SynthItem[] = [];
   pseudonym = pseudonym;
 
-  color(gender: 'male'|'female'): string {
-    return gender.startsWith('f') ? 'rgba(255, 191, 194)' : 'rgba(194, 218, 255)';
-
-  }
-
-  voices = synthVoices;
-  selected = this.voices[0];
-  
   @Input() storyId: string;
   @Input() text: string;
+  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+
+  selected: Voice;
 
   toggleHidden() {
     this.hideEntireSynthesisPlayer = !this.hideEntireSynthesisPlayer;
@@ -50,7 +46,8 @@ export class SynthesisPlayerComponent implements OnInit {
     return new SynthItem(line,this.selected,this.synth);
   }
 
-  refresh() {
+  refresh(voice: Voice = undefined) {
+    if(voice) this.selected = voice;
     this.synthItems.map(s=>{
       s.audioUrl = undefined;
       s.dispose();

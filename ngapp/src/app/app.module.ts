@@ -75,6 +75,7 @@ import { FeatureStatsComponent } from './admin-components/feature-stats/feature-
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
+import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +128,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
     CreateQuizComponent,
     AboutTaidhginComponent,
     SynthItemComponent,
+    SynthVoiceSelectComponent,
   ],
   imports: [
     RegisterModule,

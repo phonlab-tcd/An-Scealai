@@ -9,19 +9,7 @@
   </div>
   <div class=header>
     <div class=reload (click)=refresh()>&#8635;</div>
-    <mat-form-field appearance="fill" [style]="'background-color:' + color(selected.gender)">
-      <mat-label>{{ts.message('voice')}}</mat-label>
-      <mat-select [(value)]=selected (selectionChange)=refresh()>
-	      <mat-option
-          *ngFor="let voice of voices"
-          matNativeControl
-          required
-          data-gender={{voice.gender}}
-          [value]=voice>
-            {{voice.note + pseudonym(voice) + ' ' + voice.dialect + ' ' + voice.algorithm}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <synth-voice-select (selectVoice)=refresh($event)></synth-voice-select>
     <div class=fast-synth (click)=goToFastSynthesiser()>
       {{ts.l['go_to_fast_synthesiser'] ? ts.l['go_to_fast_synthesiser'] : 'go_to_fast_synthesiser'}}
     </div>
