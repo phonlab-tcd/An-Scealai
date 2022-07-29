@@ -2096,5 +2096,14 @@ export default {
     en: 'Press the button to recieve a topic or story starter to write about' },
   sep_no_prompt: {
     ga: 'Roghnaigh leid le do thoil',
-    en: 'Please choose a prompt' }
+    en: 'Please choose a prompt' },
+  junior_certificate: {
+    ga: 'Teastas Sóisearach',
+    en: 'Junior Certificate' },
+  leaving_certificate_ol: {
+    ga: 'Ardteistiméireacht(GL)',
+    en: 'Leaving Certificate(OL)' },
+  leaving_certificate_hl: {
+    ga: 'Ardteistiméireacht(AL)',
+    en: 'Leaving Certificate(HL)' }
 }

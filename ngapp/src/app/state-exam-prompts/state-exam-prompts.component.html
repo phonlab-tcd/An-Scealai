@@ -7,14 +7,75 @@
         <div>
             <p>{{ts.l.sep_explanation}}</p>
         </div>
+        <!--Choose Level-->
         <div class="button-div">
-            <button class="prompt-button" (click)="randomPrompt(ts.l.sep_lchl_choices)">{{ts.l.sep_get_prompt}}</button>
+            <form [formGroup]="levelForm">
+                <div class="formGroup">
+                    <label class="formLabel">Choose a Level of Irish</label>
+                    <select formControlName="level" class="level-select">
+                    <option value="jc">{{ts.l.junior_certificate}}</option>
+                    <option value="lcol">{{ts.l.leaving_certificate_ol}}</option>
+                    <option value="lchl">{{ts.l.leaving_certificate_hl}}</option>
+                    </select>
+                </div>
+            </form>
+            <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
         </div>
-        <div *ngIf="promptExists; else no_prompt" class="prompt">
-            {{ts.l.sep_lchl_choices[currentPromptIndex]}}
+        <!--Prompt(Could be refined a bit)-->
+        <div *ngIf="promptExists; else noPrompt">
+            <div *ngIf="levelForm.controls['level'].value === 'jc'" class="prompt">
+                <i>"{{ts.l.sep_jc_choices[currentPromptIndex]}}"</i>
+            </div>
+            <div *ngIf="levelForm.controls['level'].value === 'lcol'" class="prompt">
+                <i>{{ts.l.sep_lcol_choices[currentPromptIndex]}}"</i>
+            </div>
+            <div *ngIf="levelForm.controls['level'].value ==='lchl'" class="prompt">
+                <i>"{{ts.l.sep_lchl_choices[currentPromptIndex]}}"</i>
+            </div>
+            <form [formGroup]="newStoryForm">
+                <!--Form input-->
+                <div class="inline-button-form">
+                    <div class="formGroup" novalidate>
+                    <p class="formLabel">{{ts.l.pos_save_name}}</p>
+                    <input
+                        data-cy=title
+                        type="text"
+                        class="titleInput"
+                        formControlName="title"
+                        maxLength="35">
+                        <!--Save story button-->
+                        <div class="confirmation-button">
+                            <button data-cy=create-story
+                            type="submit" 
+                            (click)="sepAddNewStory(newStoryForm.controls['title'].value, 
+                            newStoryForm.controls['dialect'].value, this.prompt)" 
+                            [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
+                            class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
+                        </div>
+                </div>
+                <!-- check for invalid title -->
+                <div *ngIf="newStoryForm.controls['title'].invalid && 
+                (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" 
+                class="validationAlert">
+                    <div *ngIf="newStoryForm.controls['title'].errors.required">
+                        *{{ts.l.title_required}}.
+                    </div>
+                </div>
+                </div>
+                <!-- Select dialect -->
+                <div class="formGroup">
+                  <p class="formLabel">{{ts.l.dialect}}</p>
+                  <select formControlName="dialect" class="dialectSelect">
+                    <option value="connemara">{{ts.l.connacht}}</option>
+                    <option value="donegal">{{ts.l.ulster}}</option>
+                    <option value="kerry">{{ts.l.munster}}</option>
+                  </select>
+                </div>
+              </form>
         </div>
-        <ng-template #no_prompt>
-            <div class="prompt">
+        <!--No Prompt-->
+        <ng-template #noPrompt>
+            <div *ngIf="promptExists === false" class="prompt">
                 {{ts.l.sep_no_prompt}}
             </div>
         </ng-template>

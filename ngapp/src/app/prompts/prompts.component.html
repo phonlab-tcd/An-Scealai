@@ -9,7 +9,7 @@
         </div>
         <div class="content">
           {{ts.l.pos_demand}}
-          <!--Word Type Button Group(Could be good to use *ngFor idk)-->
+          <!--Word Type Button Group-->
           <div class="word-types">
             <div class="btn-group-sm" role="group">
 	      <button *ngFor="let type of wordTypes" type=button (click)=selectWord(type) class="btn btn-primary">{{ts.l[type]}}</button>
