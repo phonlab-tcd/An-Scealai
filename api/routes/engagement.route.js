@@ -1,15 +1,18 @@
 const express = require('express');
-const app = express();
 const engagementRoutes = express.Router();
-const MongoClient = require('mongodb').MongoClient;
-const multer = require('multer');
-const { Readable } = require('stream');
-const mongodb = require('mongodb');
-const ObjectID = require('mongodb').ObjectID;
 const logger = require('../logger')
 
-let Event = require('../models/event');
-let User = require('../models/user');
+const Event = require('../models/event');
+const User = require('../models/user');
+const PlaySynthesis = require('../models/engagement.playSynthesis');
+console.log(PlaySynthesis);
+
+engagementRoutes.route('/addEvent/playSynthesis').post(async (req,res,next)=>{
+  const itWas = await PlaySynthesis.create(req.body).then(ok=>({ok}),anError=>({anError}));
+  console.log(itWas);
+  if(itWas.anError) return next(itWas.anError);
+  return res.json(itWas.ok);
+});
 
 
 engagementRoutes.route('/addEventForUser/:id').post((req, res) => {

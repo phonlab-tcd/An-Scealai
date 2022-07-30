@@ -305,7 +305,6 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
-            console.dir(this.story);
             this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
