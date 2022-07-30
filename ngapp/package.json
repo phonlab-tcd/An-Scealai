@@ -1,6 +1,6 @@
 {
   "name": "an-scealai",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "scripts": {
     "ng": "ng",
     "ng_version": "ng version",
