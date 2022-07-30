@@ -2,14 +2,11 @@ import {
   Component,
   Input,
   ViewChild,
-  AfterViewInit,
-  ChangeDetectorRef,
-  SimpleChanges, 
   ElementRef} from '@angular/core';
-import { SynthesisService, Dialect } from "../services/synthesis.service";
+import { SynthesisService } from "../services/synthesis.service";
 import { SynthesisBankService } from "app/services/synthesis-bank.service";
 import { SynthItem } from 'app/synth-item';
-import { Subscription } from 'rxjs';
+import { EngagementService } from 'app/engagement.service';
 
 @Component({
   selector: 'app-synth-item',
@@ -25,13 +22,14 @@ export class SynthItemComponent {
   constructor(
     private synth: SynthesisService,
     private synth_bank: SynthesisBankService,
-    private cdref: ChangeDetectorRef
+    private engagement: EngagementService,
   ) {}
 
   play() {
     if(this.audioElement.nativeElement) {
       this.audioElement.nativeElement.play()
     }
+    this.engagement.playSynthesis(this.synthItem);
   }
 
   public refresh() {
