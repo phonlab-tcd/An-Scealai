@@ -19,7 +19,7 @@ export class SynthItem {
       .synthesiseText(this.text,this.voice, useCache)
       .subscribe(
         audioUrl=>this.audioUrl = audioUrl,
-        error=>   {console.error(error);this.exceptions += error});
+        error=>   {console.error(error); this.exceptions += error});
   }
 
   dispose() { this.subscription.unsubscribe() }
