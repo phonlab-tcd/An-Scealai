@@ -88,6 +88,11 @@ app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 
 app.use('/proxy',async (req,res,next)=>{
+  function allowUrl(url) {
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
+    return !! allowedUrls.exec(url);
+  }
+  if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');
   const proxyRes = await require('axios').get(req.body.url).then(ok=>({ok}),err=>({err}));
   if(proxyRes.err) {
     console.error(proxyRes);

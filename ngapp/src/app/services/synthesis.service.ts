@@ -30,7 +30,7 @@ export const pseudonymMap = new Map([
 
 type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
 
-const asVoice = (x: readonly Voice[])=>x;
+const asVoice = (x: readonly VoiceChecks[])=>x;
 export const voices = asVoice([ // for extra type checking (typescript will check that codes are valid)
 //{api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???',                dialect: 'UL', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'UL', algorithm: 'dnn'},
@@ -46,17 +46,17 @@ export const voices = asVoice([ // for extra type checking (typescript will chec
 //   // {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
 //   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
 
-// //{api: 'nemo', note: '',        gender: 'male',   shortCode: '???', code: '????'                dialect: 'UL', algorithm: 'multidialect'},
-//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
-//   {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
-//   {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
+//{api: 'nemo', note: '',        gender: 'male',   shortCode: '???', code: '????'                dialect: 'UL', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
+  {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
 ] as const);
 
 type API = keyof typeof ApiOptions;
 
-type Voice = {
+type VoiceChecks = {
   readonly code: VoiceCode;
   readonly api: API;
   readonly note: string;
@@ -65,6 +65,8 @@ type Voice = {
   readonly dialect: 'UL'|'CO'|'MU';
   readonly algorithm: string;
 };
+
+export type Voice = typeof voices[number];
 
 export function pseudonym(v: Voice) {
   return pseudonymMap.get(v.shortCode);
