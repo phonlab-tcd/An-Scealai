@@ -10,7 +10,7 @@ import { QuillModule } from 'ngx-quill';
 import { TranslationService } from '../../translation.service';
 import { Story } from 'app/story';
 
-fdescribe('DashboardComponent', () => {
+describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   const qm = QuillModule.forRoot();
