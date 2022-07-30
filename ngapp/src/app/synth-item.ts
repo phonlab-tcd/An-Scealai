@@ -1,35 +1,26 @@
-import { SynthesisService, Dialect } from 'app/services/synthesis.service';
+import { ApiOptions as SynthApiOptions, SynthesisService, voices as synthVoices, Voice } from 'app/services/synthesis.service';
 import { Subscription } from 'rxjs';
 
 export class SynthItem {
-  text: string;
-  dialect: Dialect;
   audioUrl: string = undefined;
   subscription: Subscription
   requestUrl: string;
   exceptions: object[] = [];
   constructor(
-    text: string,
-    dialect: Dialect,
+    public text: string,
+    public voice: Voice = synthVoices[0],
     private synth: SynthesisService,
-  ){
-    this.text = ''+text;
-    this.dialect = ''+dialect as Dialect;
-    this.requestUrl = synth.api2_url(this.text,this.dialect);
+  ){ this.refresh() }
+
+  refresh(useCache = true) {
+    this.audioUrl = undefined;
+    this.requestUrl = this.synth.request_url(this.text,this.voice);
     this.subscription = this.synth
-      .synthesiseText(
-        this.text,
-        this.dialect)
+      .synthesiseText(this.text,this.voice, useCache)
       .subscribe(
-        (audioUrl) => {
-          this.audioUrl = audioUrl
-        },
-        (error)=>{
-          this.exceptions += error;
-        });
+        audioUrl=>this.audioUrl = audioUrl,
+        error=>   {console.error(error);this.exceptions += error});
   }
 
-  dispose() {
-    this.subscription.unsubscribe();
-  }
+  dispose() { this.subscription.unsubscribe() }
 }

@@ -24,18 +24,13 @@ export class AdminClassroomComponent implements OnInit {
     this.getClassroom();
   }
 
-  getClassroomId(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.route.params.subscribe(
-        params => {
-          resolve(params);
-      });
-    });
+  getClassroomId() {
+    return this.route.params.toPromise();
   }
 
   getClassroom() {
     this.getClassroomId().then((params) => {
-      let id: string = params.id.toString();
+      let id: string = params.id;
       this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
         this.classroom = res;
         this.getStudents();

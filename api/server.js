@@ -87,6 +87,20 @@ app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 
+app.use('/proxy',async (req,res,next)=>{
+  function allowUrl(url) {
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
+    return !! allowedUrls.exec(url);
+  }
+  if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');
+  const proxyRes = await require('axios').get(req.body.url).then(ok=>({ok}),err=>({err}));
+  if(proxyRes.err) {
+    console.error(proxyRes);
+    return res.status(+proxyRes.err.status || +proxyRes.err.response.status || 500).json(proxyRes.err);
+  }
+  res.json(proxyRes.ok.data);
+});
+
 const synthesisRoute = require('./routes/synthesis.route');
 app.use('/synthesis', synthesisRoute);
 

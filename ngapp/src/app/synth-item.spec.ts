@@ -14,6 +14,6 @@ describe('SynthItem', () => {
   }));
   it('should create an instance', () => {
     
-    expect(new SynthItem('hello','connemara',TestBed.inject(SynthesisService))).toBeTruthy();
+    expect(new SynthItem('hello',undefined,TestBed.inject(SynthesisService))).toBeTruthy();
   });
 });

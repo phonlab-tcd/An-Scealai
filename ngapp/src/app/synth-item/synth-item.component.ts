@@ -4,7 +4,8 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
-  SimpleChanges } from '@angular/core';
+  SimpleChanges, 
+  ElementRef} from '@angular/core';
 import { SynthesisService, Dialect } from "../services/synthesis.service";
 import { SynthesisBankService } from "app/services/synthesis-bank.service";
 import { SynthItem } from 'app/synth-item';
@@ -18,8 +19,8 @@ import { Subscription } from 'rxjs';
 export class SynthItemComponent {
 
   @Input('synthItem') synthItem: SynthItem;
-  @Input('i') i: number;
-  @ViewChild('audioElement') audioElement;
+  @Input('i') i: number = 0;
+  @ViewChild('audioElement') audioElement: ElementRef<HTMLAudioElement>;
 
   constructor(
     private synth: SynthesisService,
@@ -35,7 +36,7 @@ export class SynthItemComponent {
 
   public refresh() {
     this.synth_bank.remove(this.synthItem.requestUrl);
-    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
+    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.voice,this.synth);
   }
 
   alternateColors(i: number): string {
@@ -47,6 +48,6 @@ export class SynthItemComponent {
   }
 
   ready() {
-    return this.synthItem && !!this.synthItem.audioUrl;
+    return !!this.synthItem && !!this.synthItem.audioUrl;
   }
 }
