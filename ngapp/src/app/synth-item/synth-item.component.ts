@@ -16,6 +16,7 @@ import { EngagementService } from 'app/engagement.service';
 export class SynthItemComponent {
 
   @Input('synthItem') synthItem: SynthItem;
+  @Input() storyId: string;
   @Input('i') i: number = 0;
   @ViewChild('audioElement') audioElement: ElementRef<HTMLAudioElement>;
 
@@ -29,7 +30,7 @@ export class SynthItemComponent {
     if(this.audioElement.nativeElement) {
       this.audioElement.nativeElement.play()
     }
-    this.engagement.playSynthesis(this.synthItem);
+    this.engagement.playSynthesis(this.synthItem, this.storyId);
   }
 
   public refresh() {

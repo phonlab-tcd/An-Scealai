@@ -6,6 +6,7 @@ const props = {
   voice: Object,
   text: String,
   user: Object,
+  storyId: mongoose.Types.ObjectId,
 };
 const collection = 'engagement.playSynthesis';
 const PlaySynthesis = new mongoose.Schema(props, {collection: collection});

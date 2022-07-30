@@ -16,7 +16,10 @@
   </div>
   <hr>
   <div class="items">
-    <app-synth-item *ngFor="let si of synthItems; let i = index" [synthItem]="si" [i]="i">
+    <app-synth-item *ngFor="let si of synthItems; let i = index"
+      [synthItem]=si
+      [i]=i
+      [storyId]=storyId>
     </app-synth-item>
   </div>
 </div>
