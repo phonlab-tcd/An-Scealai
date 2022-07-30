@@ -103,11 +103,19 @@
 				},
 				"test": {
 					"builder": "@angular-devkit/build-angular:karma",
+          "configurations": {
+            "ci": {
+              "fileReplacements": [{
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.ci.ts"
+              }]
+            }
+          },
 					"options": {
 						"main": "src/test.ts",
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "tsconfig.spec.json",
-						"karmaConfig": "karma.conf.js",
+						"karmaConfig": "karma.conf.ts",
 						"assets": [
 							"src/favicon.ico",
 							"src/assets"
