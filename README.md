@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.21
+- recording engagement events for playing syntheses
+
 ## v1.0.20
 - adding nemo voices and dropdown menu for voices in synthesis-player
 
