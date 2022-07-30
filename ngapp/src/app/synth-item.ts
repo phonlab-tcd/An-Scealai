@@ -1,4 +1,4 @@
-import { ApiOptions as SynthApiOptions, SynthesisService, VoiceCode, voices as synthVoices, Voice } from 'app/services/synthesis.service';
+import { ApiOptions as SynthApiOptions, SynthesisService, voices as synthVoices, Voice } from 'app/services/synthesis.service';
 import { Subscription } from 'rxjs';
 
 export class SynthItem {

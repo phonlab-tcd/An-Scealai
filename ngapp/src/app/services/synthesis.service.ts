@@ -179,7 +179,7 @@ export class SynthesisService {
 
   request_url(
     input: string,
-    voice: Voice,
+    voice: Voice = voices[0],
     audioEncoding: AudioEncoding = undefined,
   ): string {
     const options = ApiOptions[voice.api];
