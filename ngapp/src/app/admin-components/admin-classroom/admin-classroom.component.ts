@@ -1,6 +1,8 @@
+import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
+import { firstValueFrom } from 'rxjs';
 import { Classroom } from '../../classroom';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
@@ -24,25 +26,22 @@ export class AdminClassroomComponent implements OnInit {
     this.getClassroom();
   }
 
-  getClassroomId() {
-    return this.route.params.toPromise();
+  private async getClassroomId(): Promise<string> {
+    const params = await firstValueFrom(this.route.params);
+    if(params.id) return params.id;
+    throw new Error('classroom id not in route params');
   }
 
-  getClassroom() {
-    this.getClassroomId().then((params) => {
-      let id: string = params.id;
-      this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
-        this.classroom = res;
-        this.getStudents();
-      });
-    });
+  private async getClassroom() {
+    const id = await this.getClassroomId();
+    this.classroom = await firstValueFrom(this.classroomService.getClassroom(id));
+    this.getStudents();
   }
 
-  getStudents() {
+  private getStudents() {
     for(let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe((res : User) => {
-        this.students.push(res);
-      });
+      this.userService.getUserById(id)
+        .subscribe(student => this.students.push(student));
     }
   }
 
