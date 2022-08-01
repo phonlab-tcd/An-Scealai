@@ -70,7 +70,8 @@ fi
 # DEPLOY ON LIVE SERVER
 echo -e "${GREEN}PASSWORD REQUIRED$RESET_COLOR"
 ssh -t scealai@141.95.1.243 "
-cd An-Scealai &&
+  cd An-Scealai &&
+  git stash &&
   git pull &&
   git checkout $new_api_version &&
   npm i --prefix api &&
