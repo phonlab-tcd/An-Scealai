@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { SynthItem } from './synth-item';
 import { AuthenticationService } from './authentication.service';
-import { Story } from './story';
+import { QuillHighlightTag } from './services/quill-highlight.service';
 import config from 'abairconfig';
-import {QuillHighlightTag} from './services/quill-highlight.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,18 @@ export class EngagementService {
   constructor(private http: HttpClient, private auth: AuthenticationService) { }
 
   baseUrl: string = config.baseurl + 'engagement/';
+
+  playSynthesis(si: SynthItem, storyId: string) {
+    const info = {
+      voice: si.voice,
+      text: si.text,
+      time: Date(),
+      user: this.auth.getUserDetails(),
+      storyId: storyId,
+    };
+    console.log(info);
+    this.http.post(this.baseUrl + 'addEvent/playSynthesis', info).subscribe();
+  };
 
   addEventForLoggedInUser(type: EventType, story?: object){
     this.addEventObservable(type, story).subscribe();

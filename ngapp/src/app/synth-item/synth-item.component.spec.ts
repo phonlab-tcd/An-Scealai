@@ -34,7 +34,7 @@ describe('SynthItemComponent', () => {
 
   it('should render when @Input synthItem is defined', () => {
     expect(fixture.debugElement.query(By.css('.left'))).toBeTruthy();
-    component.synthItem = new SynthItem('dia duit','connemara', TestBed.inject(SynthesisService));
+    component.synthItem = new SynthItem('dia duit',undefined,TestBed.inject(SynthesisService));
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.right'))).toBeTruthy();
   });

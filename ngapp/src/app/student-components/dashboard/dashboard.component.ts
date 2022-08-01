@@ -86,7 +86,6 @@ export class DashboardComponent implements OnInit{
     this.textUpdated.pipe(
       distinctUntilChanged(),
     ).subscribe(async () => {
-      console.dir(this.textUpdated);
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
@@ -182,7 +181,7 @@ export class DashboardComponent implements OnInit{
 
   htmlDataIsReady = false;
   quillEditor: Quill;
-  textUpdated: Subject<string> = new Subject<string>();
+  private textUpdated= new Subject<void | string>();
 
   dialects = [
     {
@@ -305,7 +304,6 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
-            console.dir(this.story);
             this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {

@@ -75,9 +75,9 @@ $ sudo mongod
 ```
 * If it still doesn't work, you may need to create a folder called `/data/db` or `C:\data\db` on Windows. This is where MongoDB will store files.
 ```bash
-$ mkdir /data
-$ mkdir /data/db
-$ sudo mongod --dbpath=/path/to/data/db/folder
+$ mkdir data
+$ mkdir data/db
+$ sudo mongod --dbpath=data/db
 ```
 (See https://stackoverflow.com/a/61423909 for more)
 #### Backend
@@ -98,6 +98,25 @@ $ nodemon server.js
 
 
 # CHANGE LOG
+
+## v1.0.21
+- recording engagement events for playing syntheses
+
+## v1.0.20
+- adding nemo voices and dropdown menu for voices in synthesis-player
+
+## v1.0.19
+- endpoint `gramadoir/insert` not responding [BUGFIX]
+
+## v1.0.18
+- mongodb node driver@4.7.0
+
+## v1.0.17
+- gramsrv
+- a4 writing area for quill
+- fix favicon vs baseHref bug
+- kill bookImg in recording pages
+(probably some more changes I'm forgetting at the moment -- Neimhin Sun 10 Jul 2022 15:54:51 IST)
 
 ## v1.0.15
 LARA update

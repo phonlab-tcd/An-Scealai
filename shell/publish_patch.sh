@@ -47,10 +47,15 @@ if [ "$?" != "0" ]; then
 fi
 
 # BUILD PROD
-npm run build:prod --prefix ngapp
-if [ "$?" != "0" ]; then
-  echo -e "${RED}build failed. quitting.$RESET_COLOR"
-  exit 1
+if [ "$BUILD_NG" == "1" ];
+then
+  npm run build:prod --prefix ngapp
+  if [ "$?" != "0" ]; then
+    echo -e "${RED}build failed. quitting.$RESET_COLOR"
+    exit 1
+  fi
+else
+  echo -e "${GREEN}skipping build.$RESET_COLOR"
 fi
 
 # PUSH UPDATES
@@ -68,7 +73,7 @@ ssh -t scealai@141.95.1.243 "
 cd An-Scealai &&
   git pull &&
   git checkout $new_api_version &&
-  bash reinstall.sh &&
-  bash deploy_current_branch_without_building.sh"
+  npm i --prefix api &&
+  bash shell/deploy_current_branch_without_building.sh"
 
-firefox "www.abair.ie/scealai"
+curl -X GET "www.abair.ie/anscealaibackend/version"
