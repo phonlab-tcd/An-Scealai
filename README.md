@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.0.22
+- [BUGFIX] admin-component classroom view not loading
+
 ## v1.0.21
 - recording engagement events for playing syntheses
 
