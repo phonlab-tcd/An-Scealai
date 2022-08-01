@@ -2,7 +2,8 @@ name: build qa, test frontend and build prod if ok, test backend
 on:
   push:
     branches:
-      - '*'
+      - '**'
+      - '!**.no-actions'
 
 # parallel jobs 
 jobs:
