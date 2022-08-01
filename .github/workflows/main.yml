@@ -4,9 +4,21 @@ on:
     branches:
       - '*'
 
-# 2 parallel jobs: build and test
+# parallel jobs 
 jobs:
-  build-frontend:
+
+  test-jasmine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: supercharge/mongodb-github-action@1.2.0
+        with:
+          mongodb-version: 3.6
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm i --prefix ngapp
+      - run: npm run --prefix ngapp test:ci
+
+  test-cypress:
     runs-on: ubuntu-latest
     steps:
       - uses: supercharge/mongodb-github-action@1.2.0
@@ -19,11 +31,30 @@ jobs:
       - run: npx --prefix ngapp node -v
       - run: "parallel npm i --prefix ::: api ngapp"
       - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start & npm run --prefix ngapp e2e
-      - run: "parallel npm run --prefix ngapp ::: test:ci build:prod build:qa"
+
+  build-frontend-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm i --prefix ngapp
+      - run: npm run --prefix ngapp build:qa
       - run: git pull
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'ngapp/qa_build'
+          push: true
+
+  build-frontend-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm run --prefix ngapp build:prod
+      - run: git pull
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: 'ngapp/unpublished_dist'
           push: true
 
   test-backend:
