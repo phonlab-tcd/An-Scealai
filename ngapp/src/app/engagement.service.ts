@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { SynthItem } from './synth-item';
 import { AuthenticationService } from './authentication.service';
 import { QuillHighlightTag } from './services/quill-highlight.service';
-import { StoryService } from './story.service';
 import config from 'abairconfig';
 
 @Injectable({
@@ -13,7 +12,7 @@ import config from 'abairconfig';
 })
 export class EngagementService {
 
-  constructor(private http: HttpClient, private auth: AuthenticationService, private story: StoryService) { }
+  constructor(private http: HttpClient, private auth: AuthenticationService) { }
 
   baseUrl: string = config.baseurl + 'engagement/';
 
