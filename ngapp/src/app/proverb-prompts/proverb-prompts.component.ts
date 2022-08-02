@@ -3,14 +3,13 @@ import { TranslationService } from 'app/translation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StoryService } from 'app/story.service';
 import { AuthenticationService } from 'app/authentication.service';
-import { NewStoryComponent } from 'app/student-components/new-story/new-story.component';
 
 @Component({
-  selector: 'app-state-exam-prompts',
-  templateUrl: './state-exam-prompts.component.html',
-  styleUrls: ['./state-exam-prompts.component.scss']
+  selector: 'app-proverb-prompts',
+  templateUrl: './proverb-prompts.component.html',
+  styleUrls: ['./proverb-prompts.component.scss']
 })
-export class StateExamPromptsComponent implements OnInit {
+export class ProverbPromptsComponent implements OnInit {
   currentPromptIndex: number;
   promptExists: boolean = false;
   userLevel: string;
@@ -18,22 +17,20 @@ export class StateExamPromptsComponent implements OnInit {
   currentPromptBank: string[];
   newStoryForm: FormGroup;
   prompt: string;
-  levelPreferences: string[] = ['jc', 'lcol', 'lchl'];
   dialectPreferences: string[] = ['connemara', 'donegal', 'kerry']
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthenticationService,
     private storyService: StoryService,
-    public ts: TranslationService,
-  ) { this.sepCreateForm(); }
+    public ts: TranslationService,) 
+    { this.ppCreateForm(); }
 
   ngOnInit(): void {
-    console.log("State exam prompts init");
-    console.log(this.promptExists);
+    console.log("Proverb prompts init...");
   }
 
-  sepCreateForm() {
+  ppCreateForm() {
     this.levelForm = this.fb.group({
       level: ['jc']
     });
@@ -43,22 +40,13 @@ export class StateExamPromptsComponent implements OnInit {
     });
   }
 
-  sepAddNewStory(title, dialect, text) {
+  ppAddNewStory(title, dialect, text) {
     let date = new Date();
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-  returnLevel(level: string) {
-    if(level === 'jc'){
-      return this.ts.l.sep_jc_choices;
-    } else if (level == 'lcol'){
-      return this.ts.l.sep_lcol_choices;
-    } else {
-      return this.ts.l.sep_lchl_choices;
-    }
-  }
 
   currentPrompt() {
     let bank = this.levelForm.controls['level'].value;

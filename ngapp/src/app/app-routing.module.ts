@@ -54,6 +54,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
+import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -83,6 +84,7 @@ const routes: Routes = [
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'prompts', component: PromptsComponent, canActivate: [AuthGuardService] },
   { path: 'exam-prompts', component: StateExamPromptsComponent, canActivate: [AuthGuardService] },
+  { path: 'proverb-prompts', component: ProverbPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],

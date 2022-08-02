@@ -76,6 +76,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
+import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +131,7 @@ import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-promp
     SynthItemComponent,
     PromptsComponent,
     StateExamPromptsComponent,
+    ProverbPromptsComponent,
   ],
   imports: [
     RegisterModule,

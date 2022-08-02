@@ -2,24 +2,19 @@
 <div>
     <div class="container">
         <div class="header">
-            {{ts.l.sep_header}}
+            {{ts.l.pp_header}}
         </div>
         <div>
-            <p>{{ts.l.sep_explanation}}</p>
+            <p>{{ts.l.pp_explanation}}</p>
         </div>
         <!--Choose Level-->
         <div class="button-div">
-            <form [formGroup]="levelForm">
-                <div class="formGroup">
-                    <label class="formLabel">{{ts.l.sep_level}}</label>
-                    <select formControlName="level" class="level-select">
-                    <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp" >{{ts.l.sep_level_preferences[i]}}</option>
-                    </select>
-                </div>
-            </form>
-            <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
+            <div class="formGroup">
+                <p class="formLabel"><i>{{ts.l.pp_selected_dialect}}</i></p>
+            </div>
+            <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.pp_get_prompt}}</button>
         </div>
-        <!--Prompt(-->
+        <!--Prompt-->
         <div *ngIf="promptExists; else noPrompt">
             <div *ngFor="let lp of levelPreferences;">
                 <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
@@ -41,7 +36,7 @@
                         <div class="confirmation-button">
                             <button data-cy=create-story
                             type="submit" 
-                            (click)="sepAddNewStory(newStoryForm.controls['title'].value, 
+                            (click)="ppAddNewStory(newStoryForm.controls['title'].value, 
                             newStoryForm.controls['dialect'].value, this.prompt)" 
                             [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
                             class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
@@ -58,17 +53,17 @@
                 </div>
                 <!-- Select dialect -->
                 <div class="formGroup">
-                  <p class="formLabel">{{ts.l.dialect}}</p>
-                  <select formControlName="dialect" class="dialectSelect">
-                    <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">{{ts.l.prompts_dialect_preferences[i]}}</option>
-                  </select>
-                </div>
+                    <p class="formLabel">{{ts.l.dialect}}</p>
+                    <select formControlName="dialect" class="dialectSelect">
+                      <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">{{ts.l.prompts_dialect_preferences[i]}}</option>
+                    </select>
+                  </div>
               </form>
         </div>
         <!--No Prompt-->
         <ng-template #noPrompt>
             <div *ngIf="promptExists === false" class="prompt">
-                {{ts.l.sep_no_prompt}}
+                {{ts.l.pp_no_prompt}}
             </div>
         </ng-template>
     </div>

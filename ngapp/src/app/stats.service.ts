@@ -150,7 +150,7 @@ export class StatsService {
       {error: "SYNTHETIC", description: "The synthetic (combined) form, with a given ending, is often used here", type: "ECLIPSIS", checked: false},
       {error: "URU", description: "Eclipsis missing", type: "ECLIPSIS", checked: false},
       
-      {error: "LLAES", description: "Aspirate mutation missin", type: "SPECIFICLANGUAGE", checked: false},
+      {error: "LLAES", description: "Aspirate mutation missing", type: "SPECIFICLANGUAGE", checked: false},
       {error: "NESSATREYLYANS", description: "Second (soft) mutation missing", type: "SPECIFICLANGUAGE", checked: false},
       {error: "TRESSATREYLYANS", description: "Third (breathed) mutation missing", type: "SPECIFICLANGUAGE", checked: false},
       {error: "PESWARATREYLYANS", description: "Fourth (hard) mutation missing", type: "SPECIFICLANGUAGE", checked: false},

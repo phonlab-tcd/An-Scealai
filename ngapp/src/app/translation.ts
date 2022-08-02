@@ -2091,6 +2091,9 @@ export default {
   sep_header: {
     ga: 'Leideanna Scrúdaithe Stáit',
     en: 'State Examination Prompts' },
+  sep_level: {
+    ga: 'Roghnaigh Leibhéal Gaeilge',
+    en: 'Choose a Level of Irish' },
   sep_explanation: {
     ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
     en: 'Press the button to recieve a topic or story starter to write about' },
@@ -2105,5 +2108,30 @@ export default {
     en: 'Leaving Certificate(OL)' },
   leaving_certificate_hl: {
     ga: 'Ardteistiméireacht(AL)',
-    en: 'Leaving Certificate(HL)' }
+    en: 'Leaving Certificate(HL)' },
+  pp_dropdown: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  pp_get_prompt: {
+    ga: 'Faigh Seanfhocal',
+    en: 'Get Proverb' },
+  pp_header: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  pp_explanation: {
+    ga: 'Brúigh an cnaipe chun seanfhocal a fháil le scríobh faoi/úsáid',
+    en: 'Press the button to recieve a proverb to write about/use' },
+  pp_no_prompt: {
+    ga: 'Roghnaigh seanfhocal le do thoil',
+    en: 'Please choose a proverb' },
+  pp_selected_dialect: {
+    ga: 'Canúint Roghnaithe: ',
+    en: 'Selected Dialect: ' },
+  sep_level_preferences: {
+    ga: ['Teastas Sóisearach', 'Ardteistiméireacht(GL)', 'Ardteistiméireacht(AL)'],
+    en: ['Junior Certificate', 'Leaving Certificate(OL)', 'LeavingCertificate(HL)'],
+  },
+  prompts_dialect_preferences: {
+    ga: ['Connachta', 'Ulaidh', 'Mumha'],
+    en: ['Connacht', 'Ulster', 'Munster']}
 }
