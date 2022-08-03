@@ -2133,5 +2133,48 @@ export default {
   },
   prompts_dialect_preferences: {
     ga: ['Connachta', 'Ulaidh', 'Mumha'],
-    en: ['Connacht', 'Ulster', 'Munster']}
+    en: ['Connacht', 'Ulster', 'Munster'] },
+  pp_munster: {
+    ga: [
+      "Is minic a bhíonn ciúin ciontach",
+      "Tosnú maith leath na hoibre",
+      "Níor tógadh an Róimh in aon ló"
+
+    ], 
+    en: [
+      "Silence is often guilty",
+      "Half the work is well done",
+      "Rome was not built in a day"
+    ]
+  },
+  pp_connacht: {
+    ga: [
+      "Is fada an bóthar nach bhfuil casadh ann",
+      "Namhaid an cheird gan í a fhoghlaim",
+      "Ní bhíonn in aon rud ach seal"
+
+
+    ], 
+    en: [
+      "The road is long and there are no turns",
+      "The enemy of the trade is not to learn it",
+      "Nothing is but a turn"
+    ]
+  },
+  pp_ulster: {
+    ga: [
+      "Bíonn blas ar an bheagán",
+      "Cha raibh séasúr fliuch gann riamh",
+      "An rud a scríobhas an púca, léann sé féin é"
+
+    ], 
+    en: [
+      "The little tastes good",
+      "Wet season has never been short",
+      "What the puck writes, he reads"
+    ]
+  },
+  pp_other: {
+    ga: 'Eile',
+    en: 'Other' }
 }

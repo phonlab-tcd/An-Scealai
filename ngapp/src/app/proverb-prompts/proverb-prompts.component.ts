@@ -3,11 +3,12 @@ import { TranslationService } from 'app/translation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StoryService } from 'app/story.service';
 import { AuthenticationService } from 'app/authentication.service';
+import { ProfileService } from 'app/profile.service';
 
 @Component({
   selector: 'app-proverb-prompts',
   templateUrl: './proverb-prompts.component.html',
-  styleUrls: ['./proverb-prompts.component.scss']
+  styleUrls: ['./proverb-prompts.component.scss'],
 })
 export class ProverbPromptsComponent implements OnInit {
   currentPromptIndex: number;
@@ -17,23 +18,33 @@ export class ProverbPromptsComponent implements OnInit {
   currentPromptBank: string[];
   newStoryForm: FormGroup;
   prompt: string;
-  dialectPreferences: string[] = ['connemara', 'donegal', 'kerry']
+  dialectPreferences: string[] = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh", "", "Other"];
+  dialectPreference: string;
+  randomDialectChoice: number;
 
   constructor(
     private fb: FormBuilder,
+    private profileService: ProfileService,
     private auth: AuthenticationService,
     private storyService: StoryService,
     public ts: TranslationService,) 
     { this.ppCreateForm(); }
 
   ngOnInit(): void {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
     console.log("Proverb prompts init...");
+    this.profileService.getForUser(userDetails._id).subscribe((res) => {
+      if(res) {
+        let p = res.profile;
+        this.dialectPreference = p.dialectPreference;
+      }
+    }, (err) => {
+    });
   }
 
   ppCreateForm() {
-    this.levelForm = this.fb.group({
-      level: ['jc']
-    });
     this.newStoryForm = this.fb.group({
       title: ['', Validators.required],
       dialect: ['connemara']
@@ -47,15 +58,42 @@ export class ProverbPromptsComponent implements OnInit {
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-
-  currentPrompt() {
-    let bank = this.levelForm.controls['level'].value;
-    if(bank === 'jc'){
-      this.currentPromptBank = this.ts.l.sep_jc_choices;
-    } else if(bank === 'lcol') {
-      this.currentPromptBank = this.ts.l.sep_lcol_choices;
+  //selectedDialect don't work
+  returnDialect() {
+    if(this.dialectPreference === "Gaeilge Mumha"){
+      return this.ts.l.pp_munster;
+    } else if (this.dialectPreference === "Gaeilge Chonnact"){
+      return this.ts.l.pp_connacht;
+    } else if (this.dialectPreference === "Gaeilge Uladh") {
+      return this.ts.l.pp_ulster;
     } else {
-      this.currentPromptBank = this.ts.l.sep_lchl_choices;
+      return this.currentPromptBank;
+    }
+  }
+
+  //For randomPrompt()
+  currentPrompt() {
+    let bank = this.dialectPreference;
+    if(bank === "Gaeilge Uladh"){
+      this.currentPromptBank = this.ts.l.pp_munster;
+    } else if(bank === "Gaeilge Chonnact") {
+      this.currentPromptBank = this.ts.l.pp_connacht;
+    } else if (bank === "Gaeilge Uladh"){
+      this.currentPromptBank = this.ts.l.pp_ulster;
+    } else {
+      this.currentPromptBank = this.randomDialect(Math.floor(Math.random() * 3));
+      console.log(this.currentPromptBank);
+      
+    }
+  }
+
+  randomDialect(choice: number){
+    if(choice === 0) {
+      return this.ts.l.pp_munster;
+    }else if(choice === 1) {
+      return this.ts.l.pp_connacht;
+    } else {
+      return this.ts.l.pp_ulster;
     }
   }
 

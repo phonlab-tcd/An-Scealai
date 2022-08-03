@@ -10,15 +10,17 @@
         <!--Choose Level-->
         <div class="button-div">
             <div class="formGroup">
-                <p class="formLabel"><i>{{ts.l.pp_selected_dialect}}</i></p>
+                <p class="formLabel"><i>
+                    {{ts.l.pp_selected_dialect}}{{dialectPreference !== '' || null || "Other" ? dialectPreference : ts.l.pp_other}}
+                </i></p>
             </div>
             <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.pp_get_prompt}}</button>
         </div>
         <!--Prompt-->
         <div *ngIf="promptExists; else noPrompt">
-            <div *ngFor="let lp of levelPreferences;">
-                <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
-                    <i>"{{returnLevel(lp)[currentPromptIndex]}}"</i>
+            <div *ngFor="let dp of dialectPreferences;">
+                <div *ngIf="dialectPreference === dp" class="prompt">
+                    <i>"{{returnDialect(dp)[currentPromptIndex]}}"</i>
                 </div>
             </div>
             <form [formGroup]="newStoryForm">
