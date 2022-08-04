@@ -1,8 +1,8 @@
-const logger = require('../logger.js');
+const logger = require('../logger');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){
-  logger.error('Failed to create mail module in ./api/controllers/authentication.js');
+  logger.error(`Failed to create mail module in ${__filename}`);
 }
 
 // Used to generate confirmation code to confirm email address
@@ -18,10 +18,9 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
-// /<pattern>/i => ignore case
-validUsernameRegEx = /^[a-z0-9]+$/i;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
+const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
 

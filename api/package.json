@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.22",
   "description": "The backend API for An Scéalaí.",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
     "test": "TEST=1 jest",
     "start": "nodemon server.ts",
@@ -13,10 +13,10 @@
   "jest": {
     "preset": "@shelf/jest-mongodb",
     "setupFiles": [
-      "<rootDir>/utils/test-setup.js"
+      "<rootDir>/utils/test-setup.ts"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/utils/test-setup-per-file.js"
+      "<rootDir>/utils/test-setup-per-file.ts"
     ],
     "forceExit": true,
     "collectCoverage": false
