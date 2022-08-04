@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "TEST=1 jest",
-    "start": "nodemon server.js",
-    "start:prod": "DB=an-scealai PORT=4000 node server.js",
-    "start:qa": "DB=qa PORT=4002 node server.js"
+    "start": "nodemon server.ts",
+    "start:prod": "DB=an-scealai PORT=4000 ts-node --transpile-only server.ts",
+    "start:qa": "DB=qa PORT=4002 ts-node server.ts",
+    "check": "ts-node --typeCheck server.ts"
   },
   "jest": {
     "preset": "@shelf/jest-mongodb",
@@ -54,6 +55,7 @@
     "stackify": "^1.0.17",
     "stackify-logger": "^3.0.11",
     "stream": "0.0.2",
+    "ts-node": "^10.9.1",
     "util": "^0.12.1",
     "uuid": "^3.3.2",
     "winston": "^3.3.3",
