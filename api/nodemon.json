@@ -1,3 +1,0 @@
-{
-  "exec": "ts-node --transpile-only server.ts"
-}

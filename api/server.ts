@@ -1,4 +1,3 @@
-import Express from 'express';
 
 // Best to initialize the logger first
 const logger = require('./logger');
@@ -65,7 +64,7 @@ app.use('/story', storyRoute);
 app.use('/user', userRoute);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  const fudgeHandler: Express.RequestHandler =  (req,res,next)=>{
+  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
     console.log(req.query);
     const User = require('./models/user');
     User.findOneAndUpdate(
@@ -74,8 +73,7 @@ if(process.env.FUDGE) {
         u => {logger.info(u);           res.json(u)},
         e => {logger.error(e.stack);    res.json(e)},
       );
-  }
-  app.get('/user/fudgeVerification/:username', fudgeHandler);
+  });
 }
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
@@ -89,9 +87,8 @@ app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 
-
-const proxyHandler: Express.RequestHandler = async (req,res,next)=>{
-  function allowUrl(url: string) {
+app.use('/proxy',async (req,res,next)=>{
+  function allowUrl(url) {
     const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
     return !! allowedUrls.exec(url);
   }
@@ -102,9 +99,7 @@ const proxyHandler: Express.RequestHandler = async (req,res,next)=>{
     return res.status(+proxyRes.err.status || +proxyRes.err.response.status || 500).json(proxyRes.err);
   }
   res.json(proxyRes.ok.data);
-};
-
-app.use('/proxy', proxyHandler);
+});
 
 const synthesisRoute = require('./routes/synthesis.route');
 app.use('/synthesis', synthesisRoute);
@@ -118,8 +113,8 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (process.env.TEST !== '1') {
-  const server = app.listen(port, function() {
+if (process.env.TEST != 1) {
+  const server = app.listen(port, function(){
       logger.info('Listening on port ' + port);
   });
 }
