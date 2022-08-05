@@ -77,6 +77,7 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
 import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
+import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.compo
     PromptsComponent,
     StateExamPromptsComponent,
     ProverbPromptsComponent,
+    LaraPromptsComponent,
   ],
   imports: [
     RegisterModule,

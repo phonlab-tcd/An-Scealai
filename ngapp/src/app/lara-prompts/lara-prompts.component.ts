@@ -6,29 +6,29 @@ import { AuthenticationService } from 'app/authentication.service';
 import { ProfileService } from 'app/profile.service';
 
 @Component({
-  selector: 'app-proverb-prompts',
-  templateUrl: './proverb-prompts.component.html',
-  styleUrls: ['./proverb-prompts.component.scss'],
+  selector: 'app-lara-prompts',
+  templateUrl: './lara-prompts.component.html',
+  styleUrls: ['./lara-prompts.component.scss']
 })
-
-export class ProverbPromptsComponent implements OnInit {
-  data = {
-    pp_munster: [
-      "Is minic a bhíonn ciúin ciontach",
-      "Tosnú maith leath na hoibre",
-      "Níor tógadh an Róimh in aon ló"
-    ], 
-    pp_connacht: [
-        "Is fada an bóthar nach bhfuil casadh ann",
-        "Namhaid an cheird gan í a fhoghlaim",
-        "Ní bhíonn in aon rud ach seal"
-    ],
-    pp_ulster: [
-        "Bíonn blas ar an bheagán",
-        "Cha raibh séasúr fliuch gann riamh",
-        "An rud a scríobhas an púca, léann sé féin é"
-    ]
-  }
+export class LaraPromptsComponent implements OnInit {
+  data = [
+    "Is ar oileán Thoraí a bhí a dhún ag Balor…",
+    "Chaith Naomh Pádraig an lá sin i bhfochair Chaoilte, gur mhínigh sé soiscéal Nimhe dó…",
+    "Colorado a bhí ar an tseanduine seo…",
+    "An Druma Mór: Bean bhocht a bhí ina cónaí léi féin ba ea Beagaide…",
+    "Mar a Baisteadh Fionn: Bhí rí ann fadó go raibh Éire faoina smacht aige…",
+    "Fairceallach Fhinn Mhic Chumhaill: Lá dá raibh bhí Fionn agus na Fianna ag fiach…",
+    "Pósadh ar an mBlascaod Mór: Nuair a bhídís chun pósadh san oileán fadó cleamhnaistí a dheintí…",
+    "An seilide agus an míol mór: Baineann an scéal seo le seilidín glic…",
+    "An Prionsa Beag: Nuair a bhí mé sé  bliana d’aois chonaic mé, uair amháin, pictiúr iontach i leabhar i dtaobh na foraoise darbh ainm ‘Scéalta fíora’…",
+    "Cinnín Óir agus na Trí Bhéar: Lá amháin rinne Mamaí Béar leite…",
+    "Na Trí Mhuicín: Bhí na trí mhuicín ina suí go moch ar maidin…",
+    "Cochaillín Dearg: Bhí Cochaillín Dearg ina suí go moch ar maidin…",
+    "An Píobaire Breac: I mbaile álainn Hamelin bhí gach duine sona sásta…",
+    "An Lacha Bheag Ghránna: Bhí seacht n-uibhe sa nead ag Mamaí Lacha…",
+    "Na Trí Ghabhar Chliste: ‘Tá ocras orm,’arsa Séimín, an gabhar beag…",
+    "An Tornapa Mór Millteach: ‘Ó, céard seo?’ arsa an feirmeoir…"
+  ]
 
   currentPromptIndex: number;
   promptExists: boolean = false;
@@ -80,42 +80,13 @@ export class ProverbPromptsComponent implements OnInit {
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-  //selectedDialect don't work
-  returnDialect(dialect: string) {
-    if(dialect === "Gaeilge Mumha"){
-      return this.data.pp_munster;
-    } else if (dialect === "Gaeilge Chonnact"){
-      return this.data.pp_connacht;
-    } else {
-      return this.data.pp_ulster;
-    }
-  }
-
-  //For randomPrompt()
-  currentPrompt() {
-    this.promptExists = true;
-    this.dialectPreference = this.dialectForm.controls['dialect'].value;
-    if(this.dialectPreference === "Gaeilge Uladh"){
-      this.currentPromptBank = this.data.pp_munster;
-    } else if(this.dialectPreference === "Gaeilge Chonnact") {
-      this.currentPromptBank = this.data.pp_connacht;
-    } else {
-      this.currentPromptBank = this.data.pp_ulster;
-    }
-  }
-
-  randomDialect(choice: number){
-    if(choice === 0) {
-      return this.data.pp_munster;
-    }else if(choice === 1) {
-      return this.data.pp_connacht;
-    } else {
-      return this.data.pp_ulster;
-    }
+  returnStory() {
+    return 
   }
 
   //Try find a way to not have the arrays in ts service
   randomPrompt(promptArray: string[]) {
+    this.promptExists = true;
     this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
     this.prompt = this.currentPromptBank[this.currentPromptIndex];
     return this.currentPromptIndex;

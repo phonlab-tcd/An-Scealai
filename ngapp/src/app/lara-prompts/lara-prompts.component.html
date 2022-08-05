@@ -1,0 +1,63 @@
+<!--Irish Language support probably wrong(I used google translate)-->
+<div>
+    <div class="container">
+        <div class="header">
+            {{ts.l.lp_header}}
+        </div>
+        <div>
+            <p>{{ts.l.lp_explanation}}</p>
+        </div>
+        <!--Choose Dialect-->
+        <div class="button-div">
+            <button class="prompt-button" (click)="randomPrompt(data);">{{ts.l.lp_get_prompt}}</button>
+        </div>
+        <!--Prompt-->
+        <div *ngIf="promptExists; else noPrompt">
+            <i>"{{data[currentPromptIndex]}}"</i>
+            <form [formGroup]="newStoryForm">
+                <!--Form input-->
+                <div>
+                    <div class="formGroup" novalidate>
+                    <p class="formLabel">{{ts.l.pos_save_name}}</p>
+                    <input
+                        data-cy=title
+                        type="text"
+                        class="titleInput"
+                        formControlName="title"
+                        maxLength="35">
+                        <!--Save story button-->
+                        <div class="confirmation-button">
+                            <button data-cy=create-story
+                            type="submit" 
+                            (click)="ppAddNewStory(newStoryForm.controls['title'].value, 
+                            newStoryForm.controls['dialect'].value, this.prompt)" 
+                            [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
+                            class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
+                        </div>
+                </div>
+                <!-- check for invalid title -->
+                <div *ngIf="newStoryForm.controls['title'].invalid && 
+                (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" 
+                class="validationAlert">
+                    <div *ngIf="newStoryForm.controls['title'].errors.required">
+                        *{{ts.l.title_required}}.
+                    </div>
+                </div>
+                </div>
+                <!-- Select dialect -->
+                <div class="formGroup">
+                    <p class="formLabel">{{ts.l.dialect}}</p>
+                    <select formControlName="dialect" class="dialectSelect">
+                      <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">{{ts.l.prompts_dialect_preferences[i]}}</option>
+                    </select>
+                  </div>
+              </form>
+        </div>
+        <!--No Prompt-->
+        <ng-template #noPrompt>
+            <div *ngIf="promptExists === false" class="prompt">
+                {{ts.l.pp_no_prompt}}
+            </div>
+        </ng-template>
+    </div>
+</div>

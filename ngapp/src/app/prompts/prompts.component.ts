@@ -1,16 +1,13 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation,  } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation,  } from '@angular/core';
 import { GrammarService } from 'app/grammar.service';
-import { List } from 'lodash';
 import { TranslationService } from '../translation.service';
-import { HighlightTag } from 'angular-text-input-highlight';
 import { StoryService } from '../story.service'
 import { AuthenticationService } from 'app/authentication.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
-import { SynthesisService, Dialect } from 'app/services/synthesis.service';
+import { SynthesisService } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
-import { SynthesisBankService } from 'app/services/synthesis-bank.service';
+
 
 @Component({
   selector: 'app-prompts',
