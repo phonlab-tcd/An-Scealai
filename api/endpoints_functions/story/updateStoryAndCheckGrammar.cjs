@@ -1,6 +1,6 @@
 const Story = require('../../models/story');
 const {requestGrammarTags} = require('../../utils/grammar');
-const logger = require('../../logger');
+const logger = require('../../logger.cjs');
 
 module.exports = async (req, res) => {
   const storyUpdate = new Story(req.body);

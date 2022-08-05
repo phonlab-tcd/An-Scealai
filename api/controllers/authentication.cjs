@@ -1,4 +1,4 @@
-const logger = require('../logger.js');
+const logger = require('../logger.cjs.js');
 
 const mail = require('../mail');
 if(mail.couldNotCreate){

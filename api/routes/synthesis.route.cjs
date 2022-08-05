@@ -1,6 +1,6 @@
 const express = require('express');
 const synthesisRoutes = express.Router();
-const logger = require('../logger');
+const logger = require('../logger.cjs');
 
 
 // ENDPOINTS

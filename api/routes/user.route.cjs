@@ -1,6 +1,6 @@
 // user.route.js 
 // endpoint prefix = '/user'
-const logger = require('../logger');
+const logger = require('../logger.cjs');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');

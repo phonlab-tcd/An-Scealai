@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../logger.cjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');

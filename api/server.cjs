@@ -1,6 +1,6 @@
 
 // Best to initialize the logger first
-const logger = require('./logger');
+const logger = require('./logger.cjs');
 
 const express = require('express');
 const path = require('path');

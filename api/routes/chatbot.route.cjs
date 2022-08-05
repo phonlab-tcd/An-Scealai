@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../logger.cjs');
 const express = require('express');
 const app = express();
 const chatbotRoute = express.Router();

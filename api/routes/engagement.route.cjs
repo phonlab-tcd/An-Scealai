@@ -1,6 +1,6 @@
 const express = require('express');
 const engagementRoutes = express.Router();
-const logger = require('../logger')
+const logger = require('../logger.cjs')
 
 const Event = require('../models/event');
 const User = require('../models/user');

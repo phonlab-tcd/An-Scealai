@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const logger = require('../logger');
+const logger = require('../logger.cjs');
 const albumRoutes = express.Router();
 const querystring = require('querystring');
 const request = require('request');
