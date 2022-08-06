@@ -2,7 +2,7 @@ const {
   API400Error,
   API404Error,
   APIError,
-  API500Error} = require('./APIError');
+  API500Error} = require('./APIError.cjs');
 const logger = require('../logger.cjs');
 
 /**

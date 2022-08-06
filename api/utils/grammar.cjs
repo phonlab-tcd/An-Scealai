@@ -1,13 +1,13 @@
 
 const request = require('request');
-const abairBaseUrl = require('../abair_base_url');
+const abairBaseUrl = require('../abair_base_url.cjs');
 const logger = require('../logger.cjs');
 // querystring is native to node.js
 const querystring = require('querystring');
 const { GramadoirCache, GramadoirStoryHistory } = require('../models/gramadoir');
-const Story = require('../models/story');
-const User = require('../models/user');
-const { API400Error } = require('./APIError');
+const Story = require('../models/story.cjs');
+const User = require('../models/user.cjs');
+const { API400Error } = require('./APIError.cjs');
 
 
 const either = Object.freeze([ok=>({ok}),err=>({err})]);

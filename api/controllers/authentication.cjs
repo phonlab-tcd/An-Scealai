@@ -267,7 +267,7 @@ module.exports.verify = async (req, res) => {
     .catch(err => {
       logger.error({
         error: err,
-        endpoint: '/user/verify'
+        endpoint: '/user.cjs/verify'
       });
     });
   
@@ -352,7 +352,7 @@ module.exports.verifyOldAccount = async (req, res) => {
             });
       } catch (err) {
         logger.error({
-          endpoint: '/user/verifyOldAccount',
+          endpoint: '/user.cjs/verifyOldAccount',
           error: err,
         });
       }

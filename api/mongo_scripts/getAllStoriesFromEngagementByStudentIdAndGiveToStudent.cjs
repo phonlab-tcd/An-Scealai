@@ -12,10 +12,10 @@ if (!studentId || !username) {
 }
 
 const Engagement = require('../models/event');
-const User = require('../models/user');
-const Story = require('../models/story');
+const User = require('../models/user.cjs');
+const Story = require('../models/story.cjs');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const config = require('../DB.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

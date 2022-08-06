@@ -8,11 +8,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const errorHandler = require('./utils/errorHandler');
-require('./config/passport');
+const errorHandler = require('./utils/errorHandler.cjs');
+require('./config/passport.cjs');
 
-const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
+const storyRoute = require('./routes//story.route.cjs');
+const userRoute = require('./routes/user.cjs.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -26,7 +26,7 @@ const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 
-const dbURL = require('./utils/dbUrl');
+const dbURL = require('./utils/dbUrl.cjs');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
@@ -60,13 +60,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 
-app.use('/story', storyRoute);
-app.use('/user', userRoute);
+app.use('/story.cjs', storyRoute);
+app.use('/user.cjs', userRoute);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
+  app.get('/user.cjs/fudgeVerification/:username', (req,res,next)=>{
     console.log(req.query);
-    const User = require('./models/user');
+    const User = require('./models/user.cjs');
     User.findOneAndUpdate(
       {username: req.params.username},
       {$set: {status: 'Active'}}).then(

@@ -1,5 +1,5 @@
-const User = require('../../models/user');
-const {API404Error, API400Error} = require('../../utils/APIError');
+const User = require('../../models/user.cjs');
+const {API404Error, API400Error} = require('../../utils/APIError.cjs');
 
 /**
  * Search for users in the DB whose usernames match a search string.

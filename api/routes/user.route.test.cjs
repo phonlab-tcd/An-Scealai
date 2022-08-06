@@ -3,7 +3,7 @@ const supertest = require('supertest');
 const request = supertest(app);
 const {removeAllCollections} = require('../utils/test-utils');
 const mongoose = require('mongoose');
-const User = require('../models/user');
+const User = require('../models/user.cjs');
 afterEach(async () => {
   await removeAllCollections();
 });
@@ -18,7 +18,7 @@ describe('user routes', () => {
         ]);
 
         const SEARCH_STRING = 'a'
-        const res = await request.post(`/user/searchUser/`, {searchString: SEARCH_STRING});
+        const res = await request.post(`/user.cjs/searchUser/`, {searchString: SEARCH_STRING});
   
         expect(res.status).toBe(200);
         expect(res.body.users[0]).toBeDefined();
@@ -35,7 +35,7 @@ describe('user routes', () => {
         const SEARCH_STRING = 'a'
         const LIMIT = 2
         const res = await request.post(
-          `/user/searchUser`,
+          `/user.cjs/searchUser`,
         ).send(
           {
             searchString: SEARCH_STRING,
@@ -58,7 +58,7 @@ describe('user routes', () => {
         const LIMIT = 1
         const PAGE_NUMBER = 1
         const res = await request.post(
-          `/user/searchUser`
+          `/user.cjs/searchUser`
         ).send(
           {
             searchString: SEARCH_STRING,
@@ -82,7 +82,7 @@ describe('user routes', () => {
 
       const SEARCH_STRING = 'a'
       const res = await request.post(
-        `/user/searchUser`
+        `/user.cjs/searchUser`
       ).send(
         {
           searchString: SEARCH_STRING,
@@ -108,7 +108,7 @@ describe('user routes', () => {
       const SEARCH_STRING = 'a'
       const LIMIT = 1
       const res = await request.post(
-        `/user/searchUser`
+        `/user.cjs/searchUser`
       ).send(
         {
           searchString: SEARCH_STRING,

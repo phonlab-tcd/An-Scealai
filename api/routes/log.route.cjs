@@ -1,5 +1,5 @@
 const logger = require('../logger.cjs');
-const makeEndpoints = require('../utils/makeEndpoints');
+const makeEndpoints = require('../utils/makeEndpoints.cjs');
 
 module.exports = makeEndpoints({
   get: {

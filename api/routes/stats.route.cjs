@@ -5,9 +5,9 @@ const querystring = require('querystring');
 const request = require('request');
 
 let Event = require('../models/event');
-let Story = require('../models/story');
+let Story = require('../models/story.cjs');
 let Profile = require('../models/profile');
-let User = require('../models/user');
+let User = require('../models/user.cjs');
 
 statsRoutes
   .route('/getProfileDataByDate/:startDate/:endDate')

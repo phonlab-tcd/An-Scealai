@@ -1,7 +1,7 @@
 const mockingoose = require('mockingoose');
 const getStoryById = require('./getStoryById');
-const Story = require('../../models/story');
-const {API404Error} = require('../../utils/APIError');
+const Story = require('../../models/story.cjs');
+const {API404Error} = require('../../utils/APIError.cjs');
 const {makeFakeRes, json} = require('../../utils/makeFakeRes');
 
 describe('getStoryById endpoint function', () => {

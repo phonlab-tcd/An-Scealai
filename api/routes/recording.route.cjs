@@ -13,7 +13,7 @@ const { parse, stringify } = require('node-html-parser');
 const logger = require('../logger.cjs.js');
 
 let VoiceRecording = require('../models/recording');
-let User = require('../models/user');
+let User = require('../models/user.cjs');
 
 // let db;
 // MongoClient.connect('mongodb://localhost:27017/',

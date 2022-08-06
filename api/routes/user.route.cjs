@@ -1,8 +1,8 @@
 // user.route.js 
-// endpoint prefix = '/user'
+// endpoint prefix = '/user.cjs'
 const logger = require('../logger.cjs');
 const generator = require('generate-password');
-const makeEndpoints = require('../utils/makeEndpoints');
+const makeEndpoints = require('../utils/makeEndpoints.cjs');
 const passport = require('passport');
 
 const mail = require('../mail');
@@ -16,7 +16,7 @@ var crypto = require('crypto');
 
 var express = require('express');
 
-let User = require('../models/user');
+let User = require('../models/user.cjs');
 
 const auth = require('../utils/jwtAuthMw');
 
@@ -29,9 +29,9 @@ let userRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   const searchUser =
-    require('../endpoints_functions/user/searchUser');
+    require('../endpoints_functions/user.cjs/searchUser');
   const getUserCount =
-    require('../endpoints_functions/user/getUserCount');
+    require('../endpoints_functions/user.cjs/getUserCount');
 
     userRoutes = makeEndpoints({
       get: {

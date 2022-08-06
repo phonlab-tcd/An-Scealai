@@ -9,9 +9,9 @@ if (!username) {
   process.exit(1);
 }
 
-const Story = require('../models/story');
+const Story = require('../models/story.cjs');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const config = require('../DB.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

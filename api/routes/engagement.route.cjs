@@ -3,7 +3,7 @@ const engagementRoutes = express.Router();
 const logger = require('../logger.cjs')
 
 const Event = require('../models/event');
-const User = require('../models/user');
+const User = require('../models/user.cjs');
 const PlaySynthesis = require('../models/engagement.playSynthesis');
 console.log(PlaySynthesis);
 

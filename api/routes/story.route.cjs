@@ -4,14 +4,14 @@ const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const querystring = require('querystring');
 const request = require('request');
-const makeEndpoints = require('../utils/makeEndpoints');
+const makeEndpoints = require('../utils/makeEndpoints.cjs');
 const { parse } = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
-const abairBaseUrl = require('../abair_base_url');
+const abairBaseUrl = require('../abair_base_url.cjs');
 const logger = require('../logger.cjs');
-const Story = require('../models/story');
+const Story = require('../models/story.cjs');
 
 
 let storyRoutes;
@@ -21,19 +21,19 @@ let storyRoutes;
   // ENDPOINT HANDLERS
   // GET
   const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
+    require('../endpoints_functions/story.cjs/getStoryById');
   const author =
-    require('../endpoints_functions/story/author');
+    require('../endpoints_functions/story.cjs/author');
   const feedbackAudio =
-    require('../endpoints_functions/story/feedbackAudio');
+    require('../endpoints_functions/story.cjs/feedbackAudio');
 
   // POST
   const create =
-    require('../endpoints_functions/story/create');
+    require('../endpoints_functions/story.cjs/create');
   const viewFeedback =
-    require('../endpoints_functions/story/viewFeedback');
+    require('../endpoints_functions/story.cjs/viewFeedback');
   const updateStoryAndCheckGrammar =
-    require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+    require('../endpoints_functions/story.cjs/updateStoryAndCheckGrammar');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -247,7 +247,7 @@ storyRoutes
     .get(async (req, res) => {
       try {
         logger.info({
-          endpoint: '/story/downloadStory',
+          endpoint: '/story.cjs/downloadStory',
           params: req.params,
         });
 
@@ -293,7 +293,7 @@ storyRoutes
         res.sendFile(filename, (sendFileErr) => {
           if (sendFileErr) {
             logger.error({
-              endpoint: '/story/downloadStory',
+              endpoint: '/story.cjs/downloadStory',
               while: 'sending the file:' + filename,
               error: sendFileErr,
             });
@@ -303,7 +303,7 @@ storyRoutes
           fs.unlink(filename, (err) => {
             if (err) {
               logger.error({
-                endpoint: '/story/downloadStory',
+                endpoint: '/story.cjs/downloadStory',
                 while: 'trying to delete file:' + filename,
                 error: err,
               });

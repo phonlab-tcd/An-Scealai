@@ -5,9 +5,9 @@ const password = process.argv[3];
 
 console.log('username:',username,'\npassword:',password);
 
-const User = require('../models/user');
+const User = require('../models/user.cjs');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const config = require('../DB.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

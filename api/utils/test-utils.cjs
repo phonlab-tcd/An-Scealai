@@ -1,4 +1,4 @@
-const config = require("../DB");
+const config = require("../DB.cjs");
 const mongoose = require("mongoose");
 
 async function removeAllCollections() {

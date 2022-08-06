@@ -1,11 +1,11 @@
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const path = require('path');
-const Story = require('../../models/story');
+const Story = require('../../models/story.cjs');
 
 
-const config = require('../../DB');
-const dbUrl = require('../../utils/dbUrl');
+const config = require('../../DB.cjs');
+const dbUrl = require('../../utils/dbUrl.cjs');
 
 // let db;
 // mongodb.MongoClient.connect(dbUrl,
@@ -13,7 +13,7 @@ const dbUrl = require('../../utils/dbUrl');
 //     (err, client) => {
 //       if (err) {
 //         console.log(
-//             'MongoDB Connection Error in ./api/routes/story.route.js\t\t' +
+//             'MongoDB Connection Error in ./api/routes//story.route.cjs.js\t\t' +
 //             'Please make sure that MongoDB is running.');
 //         process.exit(1);
 //       }

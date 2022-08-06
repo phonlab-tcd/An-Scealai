@@ -86,7 +86,7 @@ logger = winston.createLogger({
 require('winston-mongodb');
 const mongoTransport = new winston.transports.MongoDB({
   level: 'info', // info is the default
-  db: require('./utils/dbUrl'),
+  db: require('./utils/dbUrl.cjs'),
   collection: 'log', // default is 'log'
   options: { // modified version of default
     poolSize: 2, // default

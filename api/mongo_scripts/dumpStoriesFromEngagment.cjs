@@ -6,7 +6,7 @@ console.log('username:', username);
 
 const Engagement = require('../models/event');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const config = require('../DB.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

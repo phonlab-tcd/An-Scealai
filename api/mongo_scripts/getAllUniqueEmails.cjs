@@ -3,9 +3,9 @@ const myArgs = process.argv.slice(2);
 
 const outputFile = myArgs[0];
 
-const User = require('../models/user');
+const User = require('../models/user.cjs');
 const mongoose = require('mongoose');
-const config = require('../DB');
+const config = require('../DB.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

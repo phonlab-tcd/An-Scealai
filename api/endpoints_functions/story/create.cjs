@@ -1,5 +1,5 @@
-const Story = require('../../models/story');
-const {API500Error} = require('../../utils/APIError');
+const Story = require('../../models/story.cjs');
+const {API500Error} = require('../../utils/APIError.cjs');
 
 /**
  * Creates a new story document on the DB.

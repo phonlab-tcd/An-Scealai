@@ -1,4 +1,4 @@
-const User = require('../../models/user');
+const User = require('../../models/user.cjs');
 
 /**
  * Returns the total number of users on the DB, as well as individual

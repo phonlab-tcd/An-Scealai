@@ -1,10 +1,10 @@
 const app       = require('express')()
   .use(require('body-parser').json())
-  .use(require('./story.route'));
+  .use(require('.//story.route.cjs'));
 const supertest = require('supertest');
 const request   = supertest(app);
 const mongoose  = require('mongoose');
-const Story     = require('../models/story');
+const Story     = require('../models/story.cjs');
 
 describe('story routes', () => {
   describe('story/getStoryById/:id', () => {

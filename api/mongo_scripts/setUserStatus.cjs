@@ -23,9 +23,9 @@ if ( !status.match(statusEnumRegex)) {
   }
 }
 
-const User = require('../models/user');
+const User = require('../models/user.cjs');
 const mongoose = require('mongoose');
-const dbUrl = require('../utils/dbUrl');
+const dbUrl = require('../utils/dbUrl.cjs');
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
