@@ -18,10 +18,10 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
-validUsernameRegEx = /^[a-z0-9]+$/i;
+const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
 
@@ -54,7 +54,7 @@ module.exports.generateNewPassword = async (req, res) => {
 
   user.save().catch(err => { logger.error(err); });
 
-  mailObj = {
+  const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: req.query.email,
     subject: 'New Password -- An Scéalaí',
@@ -207,7 +207,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
       \n\
       The An Scéalaí team`;
 
-    mailObj = {
+    const mailObj = {
       from: 'scealai.info@gmail.com',
       recipients: [email],
       subject: 'An Scéalaí account verification',
@@ -292,7 +292,7 @@ module.exports.verify = async (req, res) => {
 module.exports.verifyOldAccount = async (req, res) => {
   try {
     const resObj = {
-      messageKeys: [],
+      messageKeys: [] as any[],
       errors: [],
     };
     // API CALL REQUIREMENTS
@@ -383,7 +383,7 @@ module.exports.verifyOldAccount = async (req, res) => {
       resObj.messageKeys.push(
           'An error occurred while trying to send a verification email.');
       if (mailErr.messageToUser) {
-        resObj.messageKeys.push(mailErr.messageToUser);
+        resObj.messageKeys.push(ggmailErr.messageToUser);
       }
       return res
           .status(500)
@@ -392,8 +392,8 @@ module.exports.verifyOldAccount = async (req, res) => {
   } catch (error) {
     const messageKeys = ['An unknown error occurred'];
     console.dir(error);
-    if (error.messageToUser) {
-      messageKeys.push(error.messageToUser);
+    if ((error as any)?.messageToUser) {
+      messageKeys.push((error as any).messageToUser);
     }
     return res
         .status(500)
@@ -408,8 +408,8 @@ module.exports.verifyOldAccount = async (req, res) => {
 module.exports.register = async (req, res) => {
   logger.info(`Attempting to register ${req.body.username}`);
   const resObj = {
-    messageKeys: [],
-    errors: [],
+    messageKeys: [] as any[],
+    errors: [] as any[],
   };
 
   console.dir(req.body);
@@ -445,9 +445,9 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     resObj.errors.push(err);
     logger.error(err);
-    if (err.code) {
-      logger.error('Mongo error. Error code: ' + err.code);
-      if (err.code === 11000) {
+    if ((err as any)?.code) {
+      logger.error('Mongo error. Error code: ' + (err as any).code);
+      if ((err as any).code === 11000) {
         resObj.messageKeys.push('username_taken_msg');
         return res
             .status(400)
@@ -467,8 +467,8 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     logger.error(err);
     resObj.errors.push(err);
-    if (err.messageToUser) {
-      resObj.messageKeys.push(err.messageToUser);
+    if ((err as any)?.messageToUser) {
+      resObj.messageKeys.push((err as any).messageToUser);
     }
     return res.status(500).json(resObj);
   }
@@ -518,3 +518,5 @@ module.exports.login = function(req, res) {
   logger.error('User, ' + user.username + ' has an invalid status: ' + user.status + '. Should be Pending or Active.');
   return res.status(500).json(resObj);
 };
+
+export = module.exports;

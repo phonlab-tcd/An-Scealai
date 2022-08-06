@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
 require('./config/passport');
 
@@ -93,7 +94,7 @@ app.use('/proxy',async (req,res,next)=>{
     return !! allowedUrls.exec(url);
   }
   if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');
-  const proxyRes = await require('axios').get(req.body.url).then(ok=>({ok}),err=>({err}));
+  const proxyRes = await axios.get(req.body.url).then(ok=>({ok}),err=>({err}));
   if(proxyRes.err) {
     console.error(proxyRes);
     return res.status(+proxyRes.err.status || +proxyRes.err.response.status || 500).json(proxyRes.err);
@@ -113,7 +114,7 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (process.env.TEST != 1) {
+if (Number(process.env.TEST) < 1) {
   const server = app.listen(port, function(){
       logger.info('Listening on port ' + port);
   });

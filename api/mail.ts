@@ -12,8 +12,6 @@ const nodemailer = require("nodemailer");
 const path = require('path');
 const fs = require('fs');
 
-module.exports.sendEmail = "not yet created";
-
 // send mail with defined transport object.
 if(process.env.NO_EMAILS) {
   console.log('NO_EMAILS: sendEmail neutered');
@@ -72,3 +70,4 @@ sendEmail(mailObj).then((res) => {
   console.log(res);
 });
 */
+export = module.exports;

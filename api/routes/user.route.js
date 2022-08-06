@@ -97,7 +97,7 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
 
 // Delete user by username
 userRoutes.route('/deleteUser/:username').get(function(req, res) {
-    User.findOneAndRemove({"username": req.params.username}, function(err, user) {
+    User.findOneAndRemove({"username": req.params.username}, null, function(err, user) {
         if(err) {
           console.log(err);
           res.send(err);
