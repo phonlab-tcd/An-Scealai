@@ -44,9 +44,7 @@ export class MessageService {
       });
   }
   
-  /*
-  * Return messages from the database for the logged in user
-  */
+  // Return messages from the database for the logged in user
   getMessagesForLoggedInUser(): Observable<any> {
     let id = this.auth.getUserDetails()._id;
     return this.http.get(this.baseUrl + 'viewMessges/' + id);
