@@ -6,9 +6,9 @@
   "scripts": {
     "test": ". ./load keys/dev && TEST=1 jest",
     "start": ". ./load keys/dev && nodemon server.ts",
-    "start:nocheck": ". ./load keys/dev && nodemon -T server.ts",
+    "start:nocheck": ". ./load keys/dev && nodemon --transpile-only server.ts",
     "start:prod": ". ./load keys && DB=an-scealai PORT=4000 ts-node --transpile-only server.js",
-    "start:qa": "./load keys/dev && DB=qa PORT=4002 ts-node server.ts"
+    "start:qa": ". ./load keys/dev && DB=qa PORT=4002 ts-node --transpile-only server.ts"
   },
   "jest": {
     "preset": "ts-jest/presets/default",
