@@ -31,7 +31,7 @@ describe('verify jwt',()=>{
     const user = await User.create({username})
     const jwt = user.generateJwt();
     const response = await request.get('/')
-      .set('Cookie',[`token=${jwt}`])
+      .set('Authorization',`Bearer ${jwt}`)
       .expect(200);
     expect(response.body.username).toEqual(username);
   })

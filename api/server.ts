@@ -13,11 +13,8 @@ const errorHandler = require('./utils/errorHandler');
 const checkJwt = require('./utils/jwtAuthMw');
 require('./config/passport');
 
-const openRoute = require('./routes/open.route');
-const authRoute = require('./routes/auth.route');
-
 const storyRoute = require('./routes/story.route');
-// const userRoute = require('./routes/user.route');
+const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -69,13 +66,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
-
-app.use((req,res,next)=>{
-  console.log(req.cookies);
-  console.log(req.signedCookies);
-  res.cookie('sillyCookie','sillyValue',{signed: true, path: '/'});
-  next();
-});
 
 app.use('/user', userRoute);
 if(process.env.FUDGE) {
