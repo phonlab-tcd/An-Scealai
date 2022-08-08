@@ -4,11 +4,11 @@
   "description": "The backend API for An Scéalaí.",
   "main": "server.js",
   "scripts": {
-    "test": ". ./load keys/dev && TEST=1 jest",
-    "start": ". ./load keys/dev && nodemon server.ts",
-    "start:nocheck": ". ./load keys/dev && nodemon -T server.ts",
-    "start:prod": ". ./load keys && DB=an-scealai PORT=4000 ts-node --transpile-only server.js",
-    "start:qa": "./load keys/dev && DB=qa PORT=4002 ts-node server.ts"
+    "test": "source ./load keys/dev && TEST=1 jest",
+    "start": "source ./load keys/dev && nodemon server.ts",
+    "start:nocheck": "source ./load keys/dev && nodemon -T server.ts",
+    "start:prod": "source ./load keys && DB=an-scealai PORT=4000 ts-node --transpile-only server.js",
+    "start:qa": "source ./load keys/dev && DB=qa PORT=4002 ts-node server.ts"
   },
   "jest": {
     "preset": "ts-jest/presets/default",
