@@ -63,7 +63,14 @@ app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
-app.use(require('cookie-parser')());
+app.use(require('cookie-parser')('big secret'));
+
+app.use((req,res,next)=>{
+  console.log(req.cookies);
+  console.log(req.signedCookies);
+  res.cookie('sillyCookie','sillyValue',{signed: true, path: '/'});
+  next();
+});
 
 app.use('/user', userRoute);
 if(process.env.FUDGE) {

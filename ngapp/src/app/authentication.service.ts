@@ -69,7 +69,7 @@ export class AuthenticationService {
     this.token = token;
   }
 
-  getToken(): string {
+  public getToken(): string {
     if (!this.token) {
       this.token = localStorage.getItem('scealai-token');
     }
