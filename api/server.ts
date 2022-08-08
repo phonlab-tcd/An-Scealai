@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
+const checkJwt = require('./utils/jwtAuthMw');
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
@@ -56,12 +57,14 @@ if(process.env.NODE_ENV !== 'test') {
 }
 
 const app = express();
+if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+app.use('/whoami',checkJwt, (req,res)=>{res.json(req.user)})
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
+app.use(require('cookie-parser')());
 
-app.use('/story', storyRoute);
 app.use('/user', userRoute);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
@@ -76,6 +79,9 @@ if(process.env.FUDGE) {
       );
   });
 }
+
+app.use(checkJwt);
+app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
@@ -114,7 +120,7 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (Number(process.env.TEST) < 1) {
+if (!process.env.TEST) {
   const server = app.listen(port, function(){
       logger.info('Listening on port ' + port);
   });

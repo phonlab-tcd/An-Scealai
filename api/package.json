@@ -37,6 +37,7 @@
     "bson": "^4.4.0",
     "chai-arrays": "^2.2.0",
     "connect-multiparty": "^2.2.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.0",
     "express-jwt": "^7.7.5",

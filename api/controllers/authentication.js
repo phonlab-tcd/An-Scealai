@@ -508,6 +508,10 @@ module.exports.login = function(req, res) {
   else if (user.status.match(activeRegEx)) {
     logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
     resObj.token = user.generateJwt();
+    res.cookie('token',resObj.token,{
+      maxAge: 15*60,
+      httpOnly: true,
+    });
     return res
       .status(200)
       .json(resObj);
