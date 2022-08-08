@@ -7,8 +7,7 @@ let logger = {error: console.error};
 
 // TODO: I'm not sure if this line should be included
 process.on('uncaughtException', (err) => {
-  // logger.error({ title: "UNCAUGHT EXCEPTION", error: err } );
-  console.dir(err);
+  console.error(err);
 });
 
 const timeFormat = 'DD-MM-YYYY HH:mm:ss';
@@ -50,7 +49,6 @@ let transports = [
     filename: errorFile,
     handleExceptions: true,
     level: 'error',
-    timesamp: true,
   }),
   // This transport should be were everything gets sent
   new winston.transports.File({
@@ -61,7 +59,6 @@ let transports = [
         winston.format.errors({stack: true}),
         winston.format.json(),
     ),
-    timestamp: true,
     filename: combinedFile,
   }),
 ];
@@ -93,9 +90,7 @@ const mongoTransport = new winston.transports.MongoDB({
     useNewUrlParser: true, // default
     useUnifiedTopology: true, // not default
   },
-  handleExceptions: true,
 });
-logger.info('Adding MongoDB transport to logger');
 logger.add(mongoTransport);
 
 // EXAMPLE LOGGER USAGE

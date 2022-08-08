@@ -70,4 +70,3 @@ sendEmail(mailObj).then((res) => {
   console.log(res);
 });
 */
-export = module.exports;

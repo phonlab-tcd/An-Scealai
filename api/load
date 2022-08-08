@@ -1,0 +1,4 @@
+# export keys so that they are available in child processes (e.g. in process.env for node apps)
+# NOTE: this file should be sourced, `. ./load <key_dir>` or `source ./load <key_dir>`, not run
+export PUBLIC_KEY=`cat $1/jwtRS256.key.pub`
+export PRIVATE_KEY=`cat $1/jwtRS256.key`
