@@ -13,8 +13,11 @@ const errorHandler = require('./utils/errorHandler');
 const checkJwt = require('./utils/jwtAuthMw');
 require('./config/passport');
 
+const openRoute = require('./routes/open.route');
+const authRoute = require('./routes/auth.route');
+
 const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
+// const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -27,8 +30,10 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
+const synthesisRoute = require('./routes/synthesis.route');
 
 const dbURL = require('./utils/dbUrl');
+const jwtAuthMw = require('./utils/jwtAuthMw');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
@@ -58,7 +63,7 @@ if(process.env.NODE_ENV !== 'test') {
 
 const app = express();
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
-app.use('/whoami',checkJwt, (req,res)=>{res.json(req.user)})
+app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
@@ -115,7 +120,6 @@ app.use('/proxy',async (req,res,next)=>{
   res.json(proxyRes.ok.data);
 });
 
-const synthesisRoute = require('./routes/synthesis.route');
 app.use('/synthesis', synthesisRoute);
 
 app.use('/mail', mailRoute);
