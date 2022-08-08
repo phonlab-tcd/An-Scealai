@@ -27,6 +27,7 @@ jobs:
       - run: sudo apt-get install -y parallel
       - run: npm -v
       - run: npx --prefix ngapp node -v
+      - run: (cd api/keys/dev && ./jwtRS256-gen.sh)
       - run: "parallel npm i --prefix ::: api ngapp"
       - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start & npm run --prefix ngapp e2e
 
