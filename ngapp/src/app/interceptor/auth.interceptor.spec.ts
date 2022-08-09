@@ -12,7 +12,7 @@ import { AuthInterceptor          } from './auth.interceptor';
 import { AuthenticationService    } from '../authentication.service';
 import { Observable               } from 'rxjs';
 
-fdescribe('AuthInterceptor', () => {
+describe('AuthInterceptor', () => {
   let http: HttpClient;
   beforeEach(() => {
     TestBed.configureTestingModule({
