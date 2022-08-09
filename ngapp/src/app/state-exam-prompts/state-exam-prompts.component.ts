@@ -3,7 +3,6 @@ import { TranslationService } from 'app/translation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StoryService } from 'app/story.service';
 import { AuthenticationService } from 'app/authentication.service';
-import { NewStoryComponent } from 'app/student-components/new-story/new-story.component';
 
 @Component({
   selector: 'app-state-exam-prompts',

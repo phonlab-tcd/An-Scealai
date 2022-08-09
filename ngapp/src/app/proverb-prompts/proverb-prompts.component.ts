@@ -49,6 +49,7 @@ export class ProverbPromptsComponent implements OnInit {
     public ts: TranslationService,) 
     { this.ppCreateForm(); }
 
+  //I belive the auth service and it's ngOnInit spotlight are redundant, will maybe remove later.
   ngOnInit(): void {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;

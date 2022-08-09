@@ -78,6 +78,7 @@ import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
 import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
 import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
+import { StoryPromptsComponent } from './story-prompts/story-prompts.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
     StateExamPromptsComponent,
     ProverbPromptsComponent,
     LaraPromptsComponent,
+    StoryPromptsComponent,
   ],
   imports: [
     RegisterModule,
