@@ -81,6 +81,7 @@ export class AuthenticationService {
     if (token) {
 
       payload = token.split('.')[1];
+      if(!payload) return null;
       payload = window.atob(payload);
 
       this.getLoggedInName.next(JSON.parse(payload).username);
