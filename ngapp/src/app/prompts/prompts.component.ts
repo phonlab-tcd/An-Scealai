@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation,  } from '@angular/core';
+import { Component, OnInit, SimpleChanges, ViewEncapsulation,  } from '@angular/core';
 import { GrammarService } from 'app/grammar.service';
 import { TranslationService } from '../translation.service';
 import { StoryService } from '../story.service'
@@ -30,7 +30,25 @@ export class PromptsComponent implements OnInit {
     numeral:     ['trí', 'céad', 'triúr', 'ceathrar']
   }
 
-  tempWordDatabaseEnglish = {
+  //This is for the highlighting of buttons based on whether they can be used next in the sentence.
+  //It is not so easy with such loosely defined word types. I have also never done computational morphology before.
+  //Don't have the following properly defined in tempWordDatabase: subject, object, 
+  //'dir.object', 'ind.object', 'local modifier', 'modal modifier', 'temportal modifier''etc.', 'dir.pronominal object'
+  /**
+  subject: string[] = ['pronoun', 'noun'];
+  object: string[] = ['pronoun', 'noun'];
+
+  wordOrder = [
+    ['verb', this.subject, this.object],
+    ['verb', this.subject, 'dir.object', 'ind.object', 'local modifier', 'modal modifier', 'temportal modifier'],
+    ['verb', this.subject, 'ind.object', 'etc.', 'dir.pronominal object'],
+  ]
+   */
+  //I realize there is too much nuance between words that would take too long to accomodate for, I will try
+  //it the slow way using Gramadoir.
+
+  
+  /** tempWordDatabaseEnglish = {
     noun:        ['the kitchen', 'the floor', 'the man', 'the boat'],
     verb:        ['to hit/meet', 'to eat', 'to listen', 'to give'],
     adjective:   ['tall', 'nice', 'big', 'hot'],
@@ -41,7 +59,7 @@ export class PromptsComponent implements OnInit {
     adposition:  ['with', 'in'],
     conjunction: ['and', 'to'],
     numeral:     ['3', '100', '3(Person)', '4(People)']
-  }
+  } */
 
 
   // @ViewChild('audioElement') audioElement; // unused
@@ -59,6 +77,9 @@ export class PromptsComponent implements OnInit {
   synthItem: SynthItem;
   wordTypes = Object.keys(this.tempWordDatabase);
 
+  buttonsLoading: boolean = false;
+  errorButtons: string[];
+
   constructor(
     private gs : GrammarService,
     private storyService: StoryService,
@@ -72,7 +93,6 @@ export class PromptsComponent implements OnInit {
     console.log("pos-prompt-init");
   }
 
-  //Possible data leak?
   posSynthRefresh() {
     if(this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
     this.synthItem = new SynthItem(this.arrayString, this.newStoryForm.get('dialect').value, this.synth);
@@ -96,7 +116,35 @@ export class PromptsComponent implements OnInit {
   async selectWord(type: keyof typeof this.tempWordDatabase) {
     this.givenWord  = this.randomWord(this.tempWordDatabase[type]);
   }
-  
+
+  //Slow way of checking first word in each word type list to give button "viability" color.
+  /** Note: Doesn't work currently, just leaving here incase I use it. Even if it did work however,
+   * it would be extremely slow most likely
+  async buttonHighlighting() {
+    this.buttonsLoading = true;
+    for(let key in this.tempWordDatabase){
+      let first = this.tempWordDatabase[key][0];
+      let next = this.gs.gramadoirDirectObservable(this.arrayString + " " + first, 'ga');
+      let error;
+      next.subscribe(res => {
+      console.log(res,'<CHECKING FOR ERRORS>');
+        error = res.map(element => 
+          new Object(
+            {
+              errorText: String(element.errortext)
+            }
+          )
+        )
+      });
+      //if(error[-1].errorText !== "undefined" || undefined) {
+        this.errorButtons.push(this.wordTypes[-1]);
+        console.log(this.errorButtons, '(NEW BUTTON ADDED)');
+      //} else {
+      //  console.log('(NO ERROR)');
+      //}
+      //console.log(error[0].errorText,"<ERROR ERROR ERROR>");
+    }
+  } */
 
   posConfirmation(isConfirmed: Boolean) {
     if(isConfirmed && this.givenWord != this.WORD_PROMPT){
@@ -139,7 +187,6 @@ export class PromptsComponent implements OnInit {
           + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
 
           newStart = this.indiceValues[i].tox + 1;
-          console.log(newStart, '(Should have newStart in it)');
         }
         this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
       } else {

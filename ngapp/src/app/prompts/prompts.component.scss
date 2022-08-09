@@ -8,6 +8,8 @@
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    animation-duration: 1.5s;
+    animation-name: fadeIn;
 }
 
 .header {
@@ -87,6 +89,7 @@
     margin-top: 0px;
 }
 
+
 @media only screen and (max-width: 700px) {
     .container {
         width: 95%;
@@ -96,5 +99,17 @@
     }
     .header {
         font-size: 15pt;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0%;
+        transform: translateY(100px);
+    }
+
+    to {
+        opacity: 100%;
+        transform: translateY(0px);
     }
 }

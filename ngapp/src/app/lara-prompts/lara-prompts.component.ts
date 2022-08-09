@@ -34,7 +34,6 @@ export class LaraPromptsComponent implements OnInit {
   promptExists: boolean = false;
   userLevel: string;
   dialectForm: FormGroup;
-  currentPromptBank: string[];
   newStoryForm: FormGroup;
   prompt: string;
   dialectPreferences: string[] = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh"];
@@ -80,15 +79,11 @@ export class LaraPromptsComponent implements OnInit {
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-  returnStory() {
-    return 
-  }
-
   //Try find a way to not have the arrays in ts service
   randomPrompt(promptArray: string[]) {
     this.promptExists = true;
     this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
-    this.prompt = this.currentPromptBank[this.currentPromptIndex];
+    this.prompt = this.data[this.currentPromptIndex]; //Problem
     return this.currentPromptIndex;
   }
 }

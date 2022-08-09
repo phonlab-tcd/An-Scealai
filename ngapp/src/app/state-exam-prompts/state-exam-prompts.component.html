@@ -58,10 +58,12 @@
                 </div>
                 <!-- Select dialect -->
                 <div class="formGroup">
-                  <p class="formLabel">{{ts.l.dialect}}</p>
-                  <select formControlName="dialect" class="dialectSelect">
-                    <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">{{ts.l.prompts_dialect_preferences[i]}}</option>
-                  </select>
+                    <p class="formLabel">{{ts.l.dialect}}</p>
+                        <select formControlName="dialect" class="dialectSelect">
+                            <option value="connemara">{{ts.l.connacht}}</option>
+                            <option value="donegal">{{ts.l.ulster}}</option>
+                            <option value="kerry">{{ts.l.munster}}</option>                  
+                        </select>
                 </div>
               </form>
         </div>
