@@ -7,11 +7,6 @@ const passport = require('passport');
 const checkJwt = require('../utils/jwtAuthMw');
 
 const mail = require('../mail');
-if(mail.couldNotCreate && !process.env.TEST){
-  logger.info(
-    "Could not create mail transporter which is required by the user route. Refusing to continue.");
-  process.exit(1);
-}
 
 var crypto = require('node:crypto');
 

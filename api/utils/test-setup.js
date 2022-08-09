@@ -1,3 +1,4 @@
+require('../keys/dev/load');
 const config = require('../DB');
 
 // Setup for mongo to connect to 'process.env.TEST_MONGO_URL' for tests.

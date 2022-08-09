@@ -1,3 +1,5 @@
+if(process.env.NODE_ENV==='prod') require('./keys/load');
+else require('./keys/dev/load');
 
 // Best to initialize the logger first
 const logger = require('./logger');
@@ -121,7 +123,7 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (!process.env.TEST) {
+if (!(process.env.NODE_ENV === 'test')) {
   const server = app.listen(port, function(){
       logger.info('Listening on port ' + port);
   });
