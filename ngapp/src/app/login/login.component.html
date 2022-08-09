@@ -55,7 +55,7 @@
 
         <button
             class="btn loginBtn"
-            data-cy=sign-in
+            data-cy="sign-in"
             *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent">{{ts.l.sign_in}}</button>
           <div 
                *ngFor="let errorMsgKey of errorMsgKeys" 
