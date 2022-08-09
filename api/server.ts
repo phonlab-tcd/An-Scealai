@@ -27,7 +27,6 @@ const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
-const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 
@@ -114,7 +113,6 @@ app.use('/proxy',async (req,res,next)=>{
 
 app.use('/synthesis', synthesisRoute);
 
-app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
