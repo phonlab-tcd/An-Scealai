@@ -23,9 +23,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler) {
     const Authorization = authHeader(this.auth.getToken());
-    console.log(Authorization);
-    console.log(request.url);
-    console.log(isGramadoirRequest(request));
     if(Authorization && !isGramadoirRequest(request)) {
       const newRequest = request.clone({setHeaders: {Authorization}});
       return next.handle(newRequest);
