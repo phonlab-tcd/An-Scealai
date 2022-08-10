@@ -1,17 +1,25 @@
 import { NgModule } from '@angular/core';
-import { RegisterComponent } from 'register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegisterComponent } from './register.component';
+import { RegisterFormComponent } from './form.component';
+import { WaitingForEmailVerificationComponent } from './waiting-for-email-verification';
+
+
 @NgModule({
+  declarations: [
+    RegisterComponent,
+    RegisterFormComponent,
+    WaitingForEmailVerificationComponent,
+  ],
   imports: [
-    ReactiveFormsModule,
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
   ],
-  declarations: [
+  exports: [
     RegisterComponent,
   ],
 })
-export class RegisterModule {}
+export class RegisterModule { }

@@ -4,15 +4,11 @@ const logger = require('../logger');
 const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
+const checkJwt = require('../utils/jwtAuthMw');
 
 const mail = require('../mail');
-if(mail.couldNotCreate && !process.env.TEST){
-  logger.info(
-    "Could not create mail transporter which is required by the user route. Refusing to continue.");
-  process.exit(1);
-}
 
-var crypto = require('crypto');
+var crypto = require('node:crypto');
 
 var express = require('express');
 
@@ -43,8 +39,6 @@ let userRoutes;
     });
 })();
 
-userRoutes.get('/viewUser', ctrlProfile.viewUser);
-userRoutes.get('/teachers', ctrlProfile.getTeachers);
 
 userRoutes.post('/register', ctrlAuth.register);
 userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
@@ -53,7 +47,10 @@ userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
 
-userRoutes.route('/setLanguage/:id').post((req, res) => {
+userRoutes.get('/viewUser', checkJwt, ctrlProfile.viewUser);
+userRoutes.get('/teachers', checkJwt, ctrlProfile.getTeachers);
+
+userRoutes.route('/setLanguage/:id').post(checkJwt,(req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(user) {
             user.language = req.body.language;
@@ -67,7 +64,7 @@ userRoutes.route('/setLanguage/:id').post((req, res) => {
     });
 });
 
-userRoutes.route('/getLanguage/:id').get((req, res) => {
+userRoutes.route('/getLanguage/:id').get(checkJwt,(req, res) => {
     User.findById(req.params.id, (err, user) => {
         if(err) {
           logger.error(err.stack || err);
@@ -81,7 +78,7 @@ userRoutes.route('/getLanguage/:id').get((req, res) => {
     });
 });
 
-userRoutes.route('/getUserByUsername/:username').get((req, res) => {
+userRoutes.route('/getUserByUsername/:username').get(checkJwt,(req, res) => {
     User.find({"username" : req.params.username}, (err, user) => {
         if(err) {
           console.log(err);
@@ -97,7 +94,7 @@ userRoutes.route('/getUserByUsername/:username').get((req, res) => {
 
 // Delete user by username
 userRoutes.route('/deleteUser/:username').get(function(req, res) {
-    User.findOneAndRemove({"username": req.params.username}, function(err, user) {
+    User.findOneAndRemove({"username": req.params.username}, null, function(err, user) {
         if(err) {
           console.log(err);
           res.send(err);

@@ -16,6 +16,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
+import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -168,7 +170,8 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     UserService,
     MatDatepickerModule,
     MatNativeDateModule,
-    {provide : LocationStrategy , useClass: HashLocationStrategy}
+    {provide : LocationStrategy , useClass: HashLocationStrategy },
+    {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ],
   bootstrap: [
     AppComponent,

@@ -1,4 +1,3 @@
-ssh -t scealai@141.95.1.243 "echo hello"
 GREEN="\e[1;32m"
 RED="\e[1;31m"
 RESET_COLOR="\e[0m"
@@ -22,6 +21,7 @@ ssh -t scealai@141.95.1.243 "
   tmux kill-session -t qa
   set -e
   cd an_scealai_qa && pwd
+  git stash
   git pull && git rev-parse --abbrev-ref HEAD
   git checkout $current_branch && git rev-parse --abbrev-ref HEAD
   npm --prefix api install

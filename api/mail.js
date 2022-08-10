@@ -12,8 +12,6 @@ const nodemailer = require("nodemailer");
 const path = require('path');
 const fs = require('fs');
 
-module.exports.sendEmail = "not yet created";
-
 // send mail with defined transport object.
 if(process.env.NO_EMAILS) {
   console.log('NO_EMAILS: sendEmail neutered');
@@ -54,10 +52,9 @@ if(process.env.NO_EMAILS) {
     module.exports.sendEmail = sendEmail;
 
   } catch(err) {
-    console.error("Failed to create email transport in ./api/mail.js. Have you created sendinblue.json ?");
     console.error(err);
-    module.exports.sendEmail = null;
-    module.exports.couldNotCreate = true;
+    console.error("Failed to create email transport in ./api/mail.js. Have you created sendinblue.json ?");
+    process.exit(1);
   }
 }
 /* EXAMPLE OF HOW TO USE THE sendEmail function

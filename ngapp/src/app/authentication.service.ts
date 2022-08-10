@@ -59,20 +59,19 @@ export class AuthenticationService {
   public getLoggedInName: any = new Subject();
 
   public pendingUserPayload: LoginTokenPayload = null;
+  public jwtTokenName = 'scealai-token' as const;
 
   constructor(
     private http: HttpClient,
     private router: Router, ) { }
 
   private saveToken(token: string): void {
-    localStorage.setItem('scealai-token', token);
+    localStorage.setItem(this.jwtTokenName, token);
     this.token = token;
   }
 
-  getToken(): string {
-    if (!this.token) {
-      this.token = localStorage.getItem('scealai-token');
-    }
+  public getToken(): string {
+    this.token = localStorage.getItem(this.jwtTokenName);
     return this.token;
   }
 
@@ -82,6 +81,7 @@ export class AuthenticationService {
     if (token) {
 
       payload = token.split('.')[1];
+      if(!payload) return null;
       payload = window.atob(payload);
 
       this.getLoggedInName.next(JSON.parse(payload).username);
