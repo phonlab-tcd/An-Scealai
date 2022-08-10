@@ -99,6 +99,10 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.1.0
+- backend authentication (user must have valid jwt to access resources)
+- auth interceptor applies jwt to requests
+
 ## v1.0.22
 - [BUGFIX] admin-component classroom view not loading
 
