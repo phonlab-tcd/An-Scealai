@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.1.0",
   "description": "The backend API for An Scéalaí.",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
     "test": "jest",
     "start": "nodemon -x ts-node server.ts",
