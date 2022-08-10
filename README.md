@@ -99,6 +99,12 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.1.2
+- [BUGFIX] download story button downloads with javascript to enable authentication
+
+## v1.1.1
+- update "main" field in api/package.json
+
 ## v1.1.0
 - backend authentication (user must have valid jwt to access resources)
 - auth interceptor applies jwt to requests
