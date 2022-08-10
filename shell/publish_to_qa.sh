@@ -22,6 +22,7 @@ ssh -t scealai@141.95.1.243 "
   set -e
   cd an_scealai_qa && pwd
   git pull && git rev-parse --abbrev-ref HEAD
+  git stash
   git checkout $current_branch && git rev-parse --abbrev-ref HEAD
   npm --prefix api install
   tmux new-session -t qa -d
