@@ -1,0 +1,21 @@
+<div class="formTitle">{{ts.l.verification}}</div>
+<br>
+<div class="formContainer">
+  <p class="formLabel">
+    {{ts.l.verify_email_prose}}
+  </p>
+  <p class="formLabel">{{ts.l.username}}:
+    <strong>{{credentials.username}}</strong>
+  </p>
+  <p class="formLabel">
+    {{ts.l.email_address}}:
+    <strong>{{credentials.email}}</strong>
+  </p>
+  <div *ngFor="let errorKey of errorKeys" class="errorMessage">
+    {{ts.l[errorKey]}}<br>
+  </div>
+  <button 
+    data-cy=sign-in
+    class="btn loginBtn"
+    (click)="login(credentials)">{{ts.l.sign_in}}</button>
+</div>
