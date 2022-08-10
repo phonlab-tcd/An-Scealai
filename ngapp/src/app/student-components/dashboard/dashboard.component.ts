@@ -182,7 +182,7 @@ export class DashboardComponent implements OnInit{
 
   htmlDataIsReady = false;
   quillEditor: Quill;
-  textUpdated: Subject<string> = new Subject<string>();
+  textUpdated = new Subject<string|void>();
 
   dialects = [
     {
