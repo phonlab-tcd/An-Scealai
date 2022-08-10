@@ -29,7 +29,11 @@ export class StoryPromptsComponent implements OnInit {
     theme: ['Pléisiúr Dé', 'Nathair Nimhe ag Imeacht Thart sa Cheantar', 'Iarnóin deas Suimhneach'],
   }
 
-  currentPromptIndex: number;
+  chosenCharacter: string;
+  chosenSetting: string;
+  chosenTheme: string;
+
+  currentPromptIndex: number[];
   promptExists: boolean = false;
   userLevel: string;
   levelForm: FormGroup;
@@ -61,39 +65,47 @@ export class StoryPromptsComponent implements OnInit {
     });
   }
 
-  sepAddNewStory(title, dialect, text) {
+  spAddNewStory(title, dialect, text) {
     let date = new Date();
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
+  //Redundant?
   returnLevel(level: string) {
     if(level === 'jc'){
-      return this.dataHl;
+      return this.dataJc;
     } else if (level == 'lcol'){
       return this.dataOl;
     } else {
-      return this.dataJc;
+      return this.dataHl;
     }
   }
 
   currentPrompt() {
     let bank = this.levelForm.controls['level'].value;
     if(bank === 'jc'){
-      this.currentPromptBank = this.dataHl;
+      this.currentPromptBank = this.dataJc;
     } else if(bank === 'lcol') {
       this.currentPromptBank = this.dataOl;
     } else {
-      this.currentPromptBank = this.dataJc;
+      this.currentPromptBank = this.dataHl;
     }
   }
 
-  //Try find a way to not have the arrays in ts service
-  randomPrompt(promptArray: string[]) {
+  randomPrompt(promptArray: { character: string[]; setting: string[]; theme: string[]; }) {
     this.promptExists = true;
-    this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
-    this.prompt = this.currentPromptBank[this.currentPromptIndex];
-    return this.currentPromptIndex;
+    this.currentPromptIndex = [];
+    for(let i = 0; i < 3; i++){
+      this.currentPromptIndex.push(Math.floor(Math.random() * Object.keys(promptArray).length));
+    }
+    
+    this.chosenCharacter = promptArray.character[this.currentPromptIndex[0]];
+    this.chosenSetting = promptArray.setting[this.currentPromptIndex[1]];
+    this.chosenTheme = promptArray.theme[this.currentPromptIndex[2]];
+    this.prompt = "[Carachtar: " + this.chosenCharacter + 
+    "] [Suíomhanna: " + this.chosenSetting + 
+    "] [Téama: " + this.chosenTheme + "]";
   }
 }

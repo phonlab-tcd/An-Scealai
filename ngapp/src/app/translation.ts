@@ -2094,4 +2094,19 @@ export default {
   lp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Story' },
+  sp_dropdown: {
+    ga: 'Leideanna Scealaí',
+    en: 'Story Prompts' },
+  sp_character: {
+    ga: 'Carachtar',
+    en: 'Character' },
+  sp_setting: {
+    ga: 'Suíomhanna',
+    en: 'Setting' },
+  sp_theme: {
+    ga: 'Téama',
+    en: 'Theme' },
+  sp_explanation: {
+    ga: 'Cliceáil an cnaipe chun roinnt topaicí a fháil do do scéal!',
+    en: 'Click the button to get some topics for your story!' }
 }

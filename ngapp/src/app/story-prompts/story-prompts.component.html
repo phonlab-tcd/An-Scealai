@@ -2,10 +2,10 @@
 <div>
     <div class="container">
         <div class="header">
-            {{ts.l.sep_header}}
+            {{ts.l.sp_dropdown}}
         </div>
         <div>
-            <p>{{ts.l.sep_explanation}}</p>
+            <p>{{ts.l.sp_explanation}}</p>
         </div>
         <!--Choose Level-->
         <div class="button-div">
@@ -22,8 +22,13 @@
         <!--Prompt(-->
         <div *ngIf="promptExists; else noPrompt">
             <div *ngFor="let lp of levelPreferences;">
-                <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
-                    <i>"{{returnLevel(lp)[currentPromptIndex]}}"</i>
+                <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
+                    <p>{{ts.l.sp_character}}</p>
+                    <i class="character">{{chosenCharacter}}</i>
+                    <p>{{ts.l.sp_setting}}</p>
+                    <i class="setting">{{chosenSetting}}</i>
+                    <p>{{ts.l.sp_theme}}</p>
+                    <i class="theme">{{chosenTheme}}</i>
                 </div>
             </div>
             <form [formGroup]="newStoryForm">
@@ -41,7 +46,7 @@
                         <div class="confirmation-button">
                             <button data-cy=create-story
                             type="submit" 
-                            (click)="sepAddNewStory(newStoryForm.controls['title'].value, 
+                            (click)="spAddNewStory(newStoryForm.controls['title'].value, 
                             newStoryForm.controls['dialect'].value, this.prompt)" 
                             [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
                             class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>

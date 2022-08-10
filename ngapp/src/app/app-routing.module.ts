@@ -56,6 +56,7 @@ import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
 import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
 import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
+import { StoryPromptsComponent } from './story-prompts/story-prompts.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -87,6 +88,7 @@ const routes: Routes = [
   { path: 'exam-prompts', component: StateExamPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'proverb-prompts', component: ProverbPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'lara-prompts', component: LaraPromptsComponent, canActivate: [AuthGuardService] },
+  { path: 'story-prompts', component: StoryPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
