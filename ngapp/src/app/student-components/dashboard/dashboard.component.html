@@ -78,14 +78,15 @@
           *ngIf="showOptions"
           style="display: flex;"
           (click)="dontToggle=true">
-        <a 
+        <button 
+          (click)=downloadStory()
           style="text-decoration: none;"
           class="optionsBtn optionsPopupBtn"
           target="_blank"
           href="{{downloadStoryUrl()}}">
           Download
           <i class="fas fa-download optionsBtnIcon"></i>
-        </a>
+        </button>
         <select 
              #downloadFormatOption
              style="border-end-end-radius: 0; background: rgba(0,0,0,0);"

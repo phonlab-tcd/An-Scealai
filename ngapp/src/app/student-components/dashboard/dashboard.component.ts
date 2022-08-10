@@ -6,6 +6,7 @@ import { ActivatedRoute           } from '@angular/router';
 import { Router                   } from '@angular/router';
 import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
+import { HttpClient               } from '@angular/common/http';
 import { Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
@@ -70,6 +71,7 @@ type QuillHighlightTag = {
 
 export class DashboardComponent implements OnInit{
   constructor(
+    private http: HttpClient,
     protected sanitizer: DomSanitizer,
     private storyService: StoryService,
     private route: ActivatedRoute,
@@ -124,6 +126,24 @@ export class DashboardComponent implements OnInit{
         this.grammarLoading = false;
       }
     });
+  }
+
+
+  downloadMimeType() {
+    return 'application/' + this.downloadStoryFormat.split('.')[1];
+  }
+
+  downloadStory() {
+    this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
+      .subscribe(data=>{
+        console.log(data);
+        const elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(data);
+        elem.download = this.story.title;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+      });
   }
 
   @ViewChild('mySynthesisPlayer')
