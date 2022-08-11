@@ -88,7 +88,8 @@ export class PromptsComponent implements OnInit {
     let date = new Date();
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
-    this.storyService.saveStory(studentId, title, date, dialect, text, username);
+    let createdWithPrompts = true;
+    this.storyService.saveStoryPrompt(studentId, title, date, dialect, text, username, createdWithPrompts);
   }
 
   async selectWord(type: keyof typeof this.tempWordDatabase) {

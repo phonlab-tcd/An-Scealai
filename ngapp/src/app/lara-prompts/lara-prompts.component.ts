@@ -3,7 +3,6 @@ import { TranslationService } from 'app/translation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StoryService } from 'app/story.service';
 import { AuthenticationService } from 'app/authentication.service';
-import { ProfileService } from 'app/profile.service';
 
 @Component({
   selector: 'app-lara-prompts',
@@ -42,24 +41,13 @@ export class LaraPromptsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private profileService: ProfileService,
     private auth: AuthenticationService,
     private storyService: StoryService,
     public ts: TranslationService,) 
     { this.ppCreateForm(); }
 
   ngOnInit(): void {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-
     console.log("Proverb prompts init...");
-    this.profileService.getForUser(userDetails._id).subscribe((res) => {
-      if(res) {
-        let p = res.profile;
-        this.dialectPreference = p.dialectPreference;
-      }
-    }, (err) => {
-    });
   }
 
   ppCreateForm() {
@@ -76,7 +64,8 @@ export class LaraPromptsComponent implements OnInit {
     let date = new Date();
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
-    this.storyService.saveStory(studentId, title, date, dialect, text, username);
+    let createdWithPrompts = true;
+    this.storyService.saveStoryPrompt(studentId, title, date, dialect, text, username, createdWithPrompts);
   }
 
   //Try find a way to not have the arrays in ts service

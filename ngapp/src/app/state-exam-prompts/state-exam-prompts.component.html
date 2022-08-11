@@ -19,7 +19,7 @@
             </form>
             <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
         </div>
-        <!--Prompt(-->
+        <!--Prompt-->
         <div *ngIf="promptExists; else noPrompt">
             <div *ngFor="let lp of levelPreferences;">
                 <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">

@@ -26,6 +26,10 @@ let Story = new Schema({
     studentId: {
         type: String
     },
+    createdWithPrompts: {
+        type: Boolean,
+        default: false
+    },
     feedback: {
         text: {
             type: String,

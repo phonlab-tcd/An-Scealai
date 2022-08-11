@@ -69,7 +69,8 @@ export class StoryPromptsComponent implements OnInit {
     let date = new Date();
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
-    this.storyService.saveStory(studentId, title, date, dialect, text, username);
+    let createdWithPrompts = true;
+    this.storyService.saveStoryPrompt(studentId, title, date, dialect, text, username, createdWithPrompts);
   }
 
   returnLevel(level: string) {

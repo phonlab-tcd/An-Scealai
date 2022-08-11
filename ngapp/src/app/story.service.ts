@@ -54,6 +54,31 @@ export class StoryService {
       });
   }
 
+  //Tried making it polymorphic with saveStory() but it didn't work (made a different method so it didn't break whole website) - Fionn
+  saveStoryPrompt(studentId, title, date, dialect, text, author, isPrompt: boolean) {
+    const storyObj = {
+      title: title,
+      date: date,
+      dialect: dialect,
+      text: text,
+      htmlText: text,
+      author: author,
+      studentId: studentId,
+      lastUpdated: new Date(),
+      activeRecording: null,
+      createdWithPrompts: isPrompt,
+    };
+    this.http.post(this.baseUrl + 'create', storyObj)
+      .subscribe(res => {
+        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+
+        // TODO should res['id'] really be using a string literal to reference a property?
+        this.router.navigateByUrl('/dashboard/' + res['id']);
+      });
+  }
+
   getStoriesFor(author : string) {
     return this.http.get(this.baseUrl + author);
   }
