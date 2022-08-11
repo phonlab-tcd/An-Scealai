@@ -79,7 +79,7 @@ export class StateExamPromptsComponent implements OnInit {
   returnLevel(level: string) {
     if(level === 'jc'){
       return this.data.sep_jc_choices;
-    } else if (level == 'lcol'){
+    } else if (level === 'lcol'){
       return this.data.sep_lcol_choices;
     } else {
       return this.data.sep_lchl_choices;

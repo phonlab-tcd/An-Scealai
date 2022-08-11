@@ -51,7 +51,7 @@ export class StoryPromptsComponent implements OnInit {
   ) { this.sepCreateForm(); }
 
   ngOnInit(): void {
-    console.log("State exam prompts init");
+    console.log("Story prompts prompts init");
     console.log(this.promptExists);
   }
 
@@ -72,11 +72,10 @@ export class StoryPromptsComponent implements OnInit {
     this.storyService.saveStory(studentId, title, date, dialect, text, username);
   }
 
-  //Redundant?
   returnLevel(level: string) {
     if(level === 'jc'){
       return this.dataJc;
-    } else if (level == 'lcol'){
+    } else if (level === 'lcol'){
       return this.dataOl;
     } else {
       return this.dataHl;

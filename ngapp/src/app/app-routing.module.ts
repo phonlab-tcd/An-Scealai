@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -52,7 +53,7 @@ import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import { PromptsComponent } from './prompts/prompts.component';
+//import { PromptsComponent } from './prompts/prompts.component';
 import { StateExamPromptsComponent } from './state-exam-prompts/state-exam-prompts.component';
 import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.component';
 import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
@@ -84,7 +85,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  { path: 'prompts', component: PromptsComponent, canActivate: [AuthGuardService] },
+  //{ path: 'prompts', component: PromptsComponent, canActivate: [AuthGuardService] }, Not Enough Content.
   { path: 'exam-prompts', component: StateExamPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'proverb-prompts', component: ProverbPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'lara-prompts', component: LaraPromptsComponent, canActivate: [AuthGuardService] },
@@ -182,7 +183,7 @@ const routes: Routes = [
 
 @NgModule({
   imports:    [ RouterModule.forRoot(routes) ],
-  exports:    [ RouterModule ],
+  exports:    [ RouterModule, MatBadgeModule ],
   providers:  [ NotificationService ]
 })
 export class AppRoutingModule { }

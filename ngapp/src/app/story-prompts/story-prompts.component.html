@@ -23,12 +23,13 @@
         <div *ngIf="promptExists; else noPrompt">
             <div *ngFor="let lp of levelPreferences;">
                 <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
+                    <!--Calling methods so it updates on form selection change(prob a bit of redundant code)-->
                     <p>{{ts.l.sp_character}}</p>
-                    <i class="character">{{chosenCharacter}}</i>
+                    <i class="character">{{returnLevel(lp).character[this.currentPromptIndex[0]]}}</i>
                     <p>{{ts.l.sp_setting}}</p>
-                    <i class="setting">{{chosenSetting}}</i>
+                    <i class="setting">{{returnLevel(lp).setting[this.currentPromptIndex[1]]}}</i>
                     <p>{{ts.l.sp_theme}}</p>
-                    <i class="theme">{{chosenTheme}}</i>
+                    <i class="theme">{{returnLevel(lp).theme[this.currentPromptIndex[2]]}}</i>
                 </div>
             </div>
             <form [formGroup]="newStoryForm">

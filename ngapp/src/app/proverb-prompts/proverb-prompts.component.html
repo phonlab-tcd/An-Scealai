@@ -22,7 +22,7 @@
         <!--Prompt-->
         <div *ngIf="promptExists; else noPrompt">
             <div *ngFor="let dp of dialectPreferences;">
-                <div *ngIf="dialectPreference === dp" class="prompt">
+                <div *ngIf="dialectForm.controls['dialect'].value === dp" class="prompt">
                     <i>"{{returnDialect(dp)[currentPromptIndex]}}"</i>
                 </div>
             </div>

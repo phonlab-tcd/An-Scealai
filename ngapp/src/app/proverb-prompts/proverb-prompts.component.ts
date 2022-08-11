@@ -3,7 +3,6 @@ import { TranslationService } from 'app/translation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StoryService } from 'app/story.service';
 import { AuthenticationService } from 'app/authentication.service';
-import { ProfileService } from 'app/profile.service';
 
 @Component({
   selector: 'app-proverb-prompts',
@@ -38,12 +37,10 @@ export class ProverbPromptsComponent implements OnInit {
   newStoryForm: FormGroup;
   prompt: string;
   dialectPreferences: string[] = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh"];
-  dialectPreference: string;
   randomDialectChoice: number;
 
   constructor(
     private fb: FormBuilder,
-    private profileService: ProfileService,
     private auth: AuthenticationService,
     private storyService: StoryService,
     public ts: TranslationService,) 
@@ -51,17 +48,7 @@ export class ProverbPromptsComponent implements OnInit {
 
   //I belive the auth service and it's ngOnInit spotlight are redundant, will maybe remove later.
   ngOnInit(): void {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-
     console.log("Proverb prompts init...");
-    this.profileService.getForUser(userDetails._id).subscribe((res) => {
-      if(res) {
-        let p = res.profile;
-        this.dialectPreference = p.dialectPreference;
-      }
-    }, (err) => {
-    });
   }
 
   ppCreateForm() {
@@ -94,29 +81,19 @@ export class ProverbPromptsComponent implements OnInit {
 
   //For randomPrompt()
   currentPrompt() {
-    this.promptExists = true;
-    this.dialectPreference = this.dialectForm.controls['dialect'].value;
-    if(this.dialectPreference === "Gaeilge Uladh"){
+    let bank = this.dialectForm.controls['dialect'].value;
+    if(bank === "Gaeilge Uladh"){
       this.currentPromptBank = this.data.pp_munster;
-    } else if(this.dialectPreference === "Gaeilge Chonnact") {
+    } else if(bank === "Gaeilge Chonnact") {
       this.currentPromptBank = this.data.pp_connacht;
     } else {
       this.currentPromptBank = this.data.pp_ulster;
     }
   }
 
-  randomDialect(choice: number){
-    if(choice === 0) {
-      return this.data.pp_munster;
-    }else if(choice === 1) {
-      return this.data.pp_connacht;
-    } else {
-      return this.data.pp_ulster;
-    }
-  }
-
   //Try find a way to not have the arrays in ts service
   randomPrompt(promptArray: string[]) {
+    this.promptExists = true;
     this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
     this.prompt = this.currentPromptBank[this.currentPromptIndex];
     return this.currentPromptIndex;

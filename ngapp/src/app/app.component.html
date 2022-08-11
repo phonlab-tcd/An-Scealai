@@ -122,9 +122,15 @@
       </div>
       <!--Prompts-->
       <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
-        <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">{{ts.l.prompts}}</button>
+        <button 
+        matBadge="Beta" 
+        matBadgeSize="small"
+        matBadgePosition="before"
+        matBadgeColor="accent"
+        class="btn navbarBtn" 
+        ngbDropdownToggle onclick="this.blur();">{{ts.l.prompts}}</button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>
+          <!--<button routerLink="/prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>--> <!--Not enough content-->
           <button routerLink="/exam-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.sep_dropdown}}</button>
           <button routerLink="/proverb-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.pp_dropdown}}</button>
           <button routerLink="/lara-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.lp_dropdown}}</button>
