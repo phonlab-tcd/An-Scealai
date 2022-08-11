@@ -21,7 +21,7 @@
         <!-- list of stories -->
         <div class="classBody" *ngIf="!viewNoFeedback">
           <div class="classroomCard" *ngFor="let story of stories" (click)="goToStory(story._id)">
-            <div class="storyTitle">{{story.title}}</div>
+            <div class="storyTitle">{{story.title}}<div style="color: rgba(255, 255, 255, 0.4); margin-left: 8px;" *ngIf="story.createdWithPrompts">{{ts.l.dashboard_prompts}}</div></div>
             <div> {{story.lastUpdated | date:'MMMM dd,  yyyy h:mm aa' }} </div>
             <div><i class="fas fa-arrow-right arrow"></i></div>
           </div>

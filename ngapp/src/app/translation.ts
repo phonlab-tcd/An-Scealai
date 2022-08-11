@@ -2108,5 +2108,8 @@ export default {
     en: 'Theme' },
   sp_explanation: {
     ga: 'Cliceáil an cnaipe chun roinnt topaicí a fháil do do scéal!',
-    en: 'Click the button to get some topics for your story!' }
+    en: 'Click the button to get some topics for your story!' },
+  dashboard_prompts: {
+    ga: '(Déanta le leideanna)',
+    en: '(Made using prompts)' }
 }
