@@ -38,7 +38,7 @@
           data-cy=title>
           {{story?.title ?? '...'}}
           <span *ngIf="!storySaved">*</span>
-          <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">(Created using prompts)</span>
+          <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">{{ts.l.dashboard_prompts}}</span>
         </p>
 
         <!-- SAVE ICON  -->
