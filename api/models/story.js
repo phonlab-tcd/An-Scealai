@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Story = new Schema({
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
     title: {
         type: String
     },
@@ -20,10 +25,7 @@ let Story = new Schema({
     htmlText: {
         type: String
     },
-    author: {
-        type: String
-    },
-    studentId: {
+    author: { // DEPRECATED
         type: String
     },
     feedback: {
