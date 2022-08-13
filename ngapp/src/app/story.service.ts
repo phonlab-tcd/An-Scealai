@@ -39,8 +39,7 @@ export class StoryService {
       text: text,
       htmlText: text,
       author: author,
-      studentId: studentId, // DEPRECATED
-      owner: studentId,
+      studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
     };

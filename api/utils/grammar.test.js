@@ -5,9 +5,6 @@ const Story = require('../models/story');
 const gramadoirModels = require('../models/gramadoir');
 const {removeAllCollections} = require('../utils/test-utils');
 const grammarUtils = require('../utils/grammar');
-const { ObjectId } = require('bson');
-
-let newStory = ()=>Story.create({owner: ObjectId()});
 
 afterEach(async () => {
   await removeAllCollections();
@@ -65,7 +62,7 @@ describe('gramadoir mongoose models', () => {
     it('should throw if userId,storyId,or gramId is invalid', async () => {
       const [user,story,gram] = await Promise.all([
         User.create({username: 'neimhin'}),
-        newStory(),
+        Story.create({}),
         gramadoirModels.GramadoirCache.create({
           text: 't',
           grammarTags: [],
@@ -94,7 +91,7 @@ describe('gramadoir mongoose models', () => {
     it('should create a new user and add a grammar error history item for that user', async () => {
       const [user,story,gram] = await Promise.all([
         User.create({username: 'neimhin'}),
-        newStory(),
+        Story.create({}),
         gramadoirModels.GramadoirCache.create({
           text: 't',
           grammarTags: [],
