@@ -59,7 +59,7 @@ export class StoryService {
   }
 
   getStory(id: string) : Observable<any> {
-    return this.http.get(this.baseUrl + 'getStoryById/' + id);
+    return this.http.get(this.baseUrl + 'withId/' + id);
   }
 
   getStoriesForLoggedInUser(): Observable<Story[]> {

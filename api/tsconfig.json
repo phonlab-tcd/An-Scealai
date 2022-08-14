@@ -6,7 +6,8 @@
     "noImplicitAny": false,
     "allowJs": true,
     "checkJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "types": ["node"]
   },
   "exclude": [
     "utils/test-setup-per-file.js",
