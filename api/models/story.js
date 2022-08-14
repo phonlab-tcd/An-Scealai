@@ -1,52 +1,56 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-let Story = new Schema({
+let Story = new Schema(
+  {
     owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     title: {
-        type: String
+      type: String,
     },
     date: {
-        type: Date
+      type: Date,
     },
     lastUpdated: {
-      type: Date
+      type: Date,
     },
     dialect: {
-        type: String
+      type: String,
     },
     text: {
-        type: String
+      type: String,
     },
     htmlText: {
-        type: String
+      type: String,
     },
-    author: { // DEPRECATED
-        type: String
+    author: {
+      // DEPRECATED
+      type: String,
     },
     feedback: {
-        text: {
-            type: String,
-            default: null
-        },
-        seenByStudent: {
-            type: Boolean,
-            default: null
-        },
-        audioId: {
-            type: String,
-            default: null
-        }
+      text: {
+        type: String,
+        default: null,
+      },
+      seenByStudent: {
+        type: Boolean,
+        default: null,
+      },
+      audioId: {
+        type: String,
+        default: null,
+      },
     },
     activeRecording: {
-        type: String
-    }
-}, {
-    collection: 'story'
-});
+      type: String,
+    },
+  },
+  {
+    collection: "story",
+  }
+);
 
-module.exports = mongoose.model('Story', Story);
+module.exports = mongoose.model("Story", Story);
