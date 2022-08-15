@@ -2111,5 +2111,14 @@ export default {
     en: 'Click the button to get some topics for your story!' },
   dashboard_prompts: {
     ga: '(Déanta le leideanna)',
-    en: '(Made using prompts)' }
+    en: '(Made using prompts)' },
+  gp_dropdown: {
+    ga: 'Leideanna Cineálach',
+    en: 'General Prompts' },
+  gp_explanation: {
+    ga: 'Brúigh an cnaipe chun tús scéil cineálach a fháil, agus críochnaigh tú féin é!',
+    en: 'Press the button to get a generic story starter, and finish it yourself!' },
+  gp_get_prompt: {
+    ga: 'Faigh Scéal',
+    en: 'Get Starter' },
 }

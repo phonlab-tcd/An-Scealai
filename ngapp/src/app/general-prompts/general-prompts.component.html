@@ -2,30 +2,18 @@
 <div>
     <div class="container">
         <div class="header">
-            {{ts.l.sep_header}}
+            {{ts.l.gp_dropdown}}
         </div>
         <div>
-            <p>{{ts.l.sep_explanation}}</p>
+            <p>{{ts.l.gp_explanation}}</p>
         </div>
         <!--Choose Level-->
         <div class="button-div">
-            <form [formGroup]="levelForm">
-                <div class="formGroup">
-                    <label class="formLabel">{{ts.l.sep_level}}</label>
-                    <select formControlName="level" class="level-select">
-                    <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp" >{{ts.l.sep_level_preferences[i]}}</option>
-                    </select>
-                </div>
-            </form>
-            <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
+            <button class="prompt-button" (click)="randomPrompt(data)">{{ts.l.sep_get_prompt}}</button>
         </div>
         <!--Prompt-->
-        <div *ngIf="promptExists; else noPrompt">
-            <div *ngFor="let lp of levelPreferences;">
-                <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
-                    <i>"{{returnLevel(lp)[currentPromptIndex]}}"</i>
-                </div>
-            </div>
+        <div class="prompt-box" *ngIf="promptExists; else noPrompt">
+            <i class="prompt">{{prompt}}</i>
             <form [formGroup]="newStoryForm">
                 <!--Form input-->
                 <div>
@@ -41,7 +29,7 @@
                     <div class="confirmation-button">
                         <button data-cy=create-story
                         type="submit" 
-                        (click)="sepAddNewStory(newStoryForm.controls['title'].value, 
+                        (click)="gpAddNewStory(newStoryForm.controls['title'].value, 
                         newStoryForm.controls['dialect'].value, this.prompt)" 
                         [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
                         class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>

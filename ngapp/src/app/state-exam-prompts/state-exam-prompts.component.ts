@@ -56,7 +56,6 @@ export class StateExamPromptsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("State exam prompts init");
-    console.log(this.promptExists);
   }
 
   sepCreateForm() {
