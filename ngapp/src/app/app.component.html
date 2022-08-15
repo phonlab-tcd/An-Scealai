@@ -121,7 +121,7 @@
         </div>
       </div>
       <!--Prompts-->
-      <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
+      <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
         <button 
         matBadge="Beta" 
         matBadgeSize="small"
