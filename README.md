@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.1.3
+- begin to attribute ownership to all new stories
+
 ## v1.1.2
 - [BUGFIX] download story button downloads with javascript to enable authentication
 
