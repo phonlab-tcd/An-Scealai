@@ -5,6 +5,7 @@ const supertest = require('supertest');
 const request   = supertest(app);
 const mongoose  = require('mongoose');
 const Story     = require('../models/story');
+const { ObjectId } = require('bson');
 
 describe('story routes', () => {
   describe('story/getStoryById/:id', () => {
@@ -34,13 +35,26 @@ describe('story routes', () => {
     });
   });
 
-  describe('/create', () => {
+  describe('POST /create', () => {
+    it('400 no studentId field and no owner field', async()=>{
+      await request.post('/create').send({}).expect(400);
+    });
+    
+    it('200 valid owner',async()=>{
+      await request.post('/create').send({owner: ObjectId()}).expect(200)
+    });
+
+    it('200 valid studentId (backward compatibility',async()=>{
+      await request.post('/create').send({studentId: ObjectId()}).expect(200)
+    });
+
     it('saves the story in the request body to the DB', async () => {
       const author = Math.random().toString(20);
       const story = {
         author,
         title: 'Hello world!',
-        text: 'Story is ainm dom.'
+        text: 'Story is ainm dom.',
+        owner: ObjectId(),
       };
 
       const res = await request.post(`/create`).send(story);
