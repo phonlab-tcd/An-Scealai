@@ -412,7 +412,6 @@ module.exports.register = async (req, res) => {
     errors: [],
   };
 
-  console.dir(req.body);
   // REQUIREMENTS
   if (!req.body.username || !req.body.password || !req.body.email) {
     resObj.messageKeys.push('username_password_and_email_required');
