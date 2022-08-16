@@ -20,8 +20,10 @@ let storyRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   // GET
-  const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
+  const withId =
+    require('../endpoints_functions/story/withId');
+  // const myStudentsStory =
+  //   require('../endpoints_functions/story/myStudentsStory');
   const author =
     require('../endpoints_functions/story/author');
   const feedbackAudio =
@@ -37,7 +39,8 @@ let storyRoutes;
 
   storyRoutes = makeEndpoints({
     get: {
-      '/getStoryById/:id': getStoryById,
+      '/withId/:id': withId,
+      // '/myStudentsStory/:id': myStudentsStory,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
     },

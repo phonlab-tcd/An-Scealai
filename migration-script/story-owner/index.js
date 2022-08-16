@@ -57,5 +57,4 @@ async function main() {
 module.export = main;
 if(require.main === module) 
     main()
-   
-    ``
+    .then(process.exit,process.exit);
