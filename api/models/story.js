@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Story = new Schema({
+    owner: {
+        type: mongoose.Types.ObjectId,
+        // required: true, // TODO, make required
+        // ref: 'User', // TODO, validate relation to users collection
+    },
     title: {
         type: String
     },
