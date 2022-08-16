@@ -2121,4 +2121,7 @@ export default {
   gp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Starter' },
+  sp_change: {
+    ga: 'Athrú',
+    en: 'Change' },
 }

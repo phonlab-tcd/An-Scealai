@@ -80,6 +80,7 @@ import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.compo
 import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
 import { StoryPromptsComponent } from './story-prompts/story-prompts.component';
 import { GeneralPromptsComponent } from './general-prompts/general-prompts.component';
+import { DictglossComponent } from './dictgloss/dictgloss.component';
 
 @NgModule({
   declarations: [
@@ -138,6 +139,7 @@ import { GeneralPromptsComponent } from './general-prompts/general-prompts.compo
     LaraPromptsComponent,
     StoryPromptsComponent,
     GeneralPromptsComponent,
+    DictglossComponent,
   ],
   imports: [
     RegisterModule,

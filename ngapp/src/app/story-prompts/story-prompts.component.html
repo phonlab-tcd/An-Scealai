@@ -24,12 +24,21 @@
             <div *ngFor="let lp of levelPreferences;">
                 <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
                     <!--Calling methods so it updates on form selection change(prob a bit of redundant code)-->
-                    <p>{{ts.l.sp_character}}</p>
-                    <i class="character">{{returnLevel(lp).character[this.currentPromptIndex[0]]}}</i>
-                    <p>{{ts.l.sp_setting}}</p>
-                    <i class="setting">{{returnLevel(lp).setting[this.currentPromptIndex[1]]}}</i>
-                    <p>{{ts.l.sp_theme}}</p>
-                    <i class="theme">{{returnLevel(lp).theme[this.currentPromptIndex[2]]}}</i>
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_character}}</p>
+                        <button (click)="change('character')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="character">{{this.chosenCharacter}}</i>
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_setting}}</p>
+                        <button (click)="change('setting')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="setting">{{this.chosenSetting}}</i>
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_theme}}</p>
+                        <button (click)="change('theme')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="theme">{{this.chosenTheme}}</i>
                 </div>
             </div>
             <form [formGroup]="newStoryForm">
@@ -43,6 +52,15 @@
                         class="titleInput"
                         formControlName="title"
                         maxLength="35"/>
+                        <!-- Select dialect -->
+                        <div class="formGroup">
+                            <p class="formLabel">{{ts.l.dialect}}</p>
+                                <select formControlName="dialect" class="dialectSelect">
+                                    <option value="connemara">{{ts.l.connacht}}</option>
+                                    <option value="donegal">{{ts.l.ulster}}</option>
+                                    <option value="kerry">{{ts.l.munster}}</option>                  
+                                </select>
+                        </div>
                         <!--Save story button-->
                         <div class="confirmation-button">
                             <button data-cy=create-story
@@ -61,15 +79,6 @@
                         *{{ts.l.title_required}}.
                     </div>
                 </div>
-                </div>
-                <!-- Select dialect -->
-                <div class="formGroup">
-                    <p class="formLabel">{{ts.l.dialect}}</p>
-                        <select formControlName="dialect" class="dialectSelect">
-                            <option value="connemara">{{ts.l.connacht}}</option>
-                            <option value="donegal">{{ts.l.ulster}}</option>
-                            <option value="kerry">{{ts.l.munster}}</option>                  
-                        </select>
                 </div>
               </form>
         </div>

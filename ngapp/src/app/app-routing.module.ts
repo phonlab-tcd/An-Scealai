@@ -59,6 +59,7 @@ import { ProverbPromptsComponent } from './proverb-prompts/proverb-prompts.compo
 import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
 import { StoryPromptsComponent } from './story-prompts/story-prompts.component';
 import { GeneralPromptsComponent } from './general-prompts/general-prompts.component';
+import { DictglossComponent } from './dictgloss/dictgloss.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -92,6 +93,7 @@ const routes: Routes = [
   { path: 'lara-prompts', component: LaraPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'story-prompts', component: StoryPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'general-prompts', component: GeneralPromptsComponent, canActivate: [AuthGuardService]},
+  { path: 'dictgloss', component: DictglossComponent, canActivate: [AuthGuardService] },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],

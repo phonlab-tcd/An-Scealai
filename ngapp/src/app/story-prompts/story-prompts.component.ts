@@ -94,6 +94,24 @@ export class StoryPromptsComponent implements OnInit {
     }
   }
 
+  change(type: string) {
+    if(type === 'character'){
+      this.currentPromptIndex[0] = Math.floor(Math.random() * this.currentPromptBank.character.length)
+      this.chosenCharacter = this.currentPromptBank.setting[this.currentPromptIndex[0]];
+    } else if (type === 'setting') {
+      this.currentPromptIndex[1] = Math.floor(Math.random() * this.currentPromptBank.setting.length)
+      this.chosenSetting = this.currentPromptBank.setting[this.currentPromptIndex[1]];
+    } else {
+      this.currentPromptIndex[2] = Math.floor(Math.random() * this.currentPromptBank.theme.length)
+      this.chosenTheme = this.currentPromptBank.theme[this.currentPromptIndex[2]];
+    }
+    
+    this.prompt = 
+    "[Carachtar: " + this.chosenCharacter + 
+    "] [Suíomhanna: " + this.chosenSetting + 
+    "] [Téama: " + this.chosenTheme + "]";
+  }
+
   randomPrompt(promptArray: { character: string[]; setting: string[]; theme: string[]; }) {
     this.promptExists = true;
     this.currentPromptIndex = [];
@@ -104,7 +122,8 @@ export class StoryPromptsComponent implements OnInit {
     this.chosenCharacter = promptArray.character[this.currentPromptIndex[0]];
     this.chosenSetting = promptArray.setting[this.currentPromptIndex[1]];
     this.chosenTheme = promptArray.theme[this.currentPromptIndex[2]];
-    this.prompt = "[Carachtar: " + this.chosenCharacter + 
+    this.prompt = 
+    "[Carachtar: " + this.chosenCharacter + 
     "] [Suíomhanna: " + this.chosenSetting + 
     "] [Téama: " + this.chosenTheme + "]";
   }
