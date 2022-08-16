@@ -99,6 +99,9 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.1.4
+- stricter authorization on /story/withId/:id endpoint
+
 ## v1.1.3
 - begin to attribute ownership to all new stories
 
