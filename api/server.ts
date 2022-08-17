@@ -36,7 +36,6 @@ const jwtAuthMw = require('./utils/jwtAuthMw');
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -52,7 +51,6 @@ async function prodConnection() {
     serverSelectionTimeoutMS,
   };
   await mongoose.connect(dbURL, opts);
-  logger.info(`connected ${dbURL}`);
 }
 
 if(process.env.NODE_ENV !== 'test') {
