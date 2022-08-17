@@ -64,18 +64,12 @@ userRoutes.route('/setLanguage/:id').post(checkJwt,(req, res) => {
     });
 });
 
-userRoutes.route('/getLanguage/:id').get(checkJwt,(req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if(err) {
-          logger.error(err.stack || err);
-          res.send(err);
-        }
-        if(user) {
-            res.json({"language" : user.language});
-        } else {
-            res.status(404).json("User not found");
-        }
-    });
+userRoutes.route('/getLanguage/:id').get(checkJwt, (req, res) => {
+    User.findById(req.user._id)
+      .then(
+        user => user ? res.json({language: user.language}) : res.status(404).json("User not found"),
+        err  => { console.error(err); res.status(400).json(err); }
+      );
 });
 
 userRoutes.route('/getUserByUsername/:username').get(checkJwt,(req, res) => {

@@ -1,15 +1,14 @@
+const { ObjectId } = require('bson');
 const express = require('express');
-const app = express();
 const profileRoutes = express.Router();
 
 let Profile = require('../models/profile');
 
 profileRoutes.route('/create').post((req, res) => {
-    Profile.updateOne({userId : req.body.userId}, req.body, {upsert : true}).then(upsertDetails => {
-        res.status(200).send(upsertDetails);
-    }).catch(err => {
-        res.status(400).send(err);
-    });
+    req.body.owner = new ObjectId(req.user._id);
+    Profile.updateOne({userId : req.user._id}, req.body, {upsert : true})
+        .then(  upsertDetails=>res.status(200).send(upsertDetails),
+                err          =>res.status(400).send(err));
 });
 
 profileRoutes.route('/get/:id').get((req, res) => {
@@ -28,27 +27,16 @@ profileRoutes.route('/get/:id').get((req, res) => {
 });
 
 profileRoutes.route('/getForUser/:id').get((req, res) => {
-    Profile.findOne({"userId" : req.params.id}, (err, profile) => {
-        if(err) {
-          console.log(err);
-          res.status(400).send("An error occurred while trying to find this profile");
-        }
-        if(!profile) {
-          console.log(profile)
-          res.status(404).send("Profile with given ID not found");  
-        }
-        else {
-          console.log(profile)
-          res.status(200).json({"profile" : profile});
-        }
-        
-        
-    });
+    Profile.findOne({"userId" : req.user._id})
+      .then(
+        profile => res.status(profile ? 200 : 404).json({profile}),
+        err     => res.status(400).send("An error occurred while trying to find this profile"),
+      );
 });
 
 // Delete profile by user ID
 profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
-    Profile.findOneAndRemove({"userId": req.params.id}, function(err, profile) {
+    Profile.findOneAndRemove({"userId": req.user._id}, function(err, profile) {
         if(err) {
           console.log(err);
           res.json(err);

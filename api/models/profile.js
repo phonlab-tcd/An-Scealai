@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let Profile = new Schema({
     userId : String,
+    owner: { type: mongoose.Types.ObjectId, ref: 'User' },
     gender : String,
     age : String,
     county : String,
