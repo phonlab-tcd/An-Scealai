@@ -3,6 +3,6 @@ const config = require('../DB');
 module.exports =
   process.env.TEST_MONGO_URL ||
   (process.env.DB_URL_PREFIX   || config.DB_URL_PREFIX   ) +
-  (process.env.DB_AUTH_DETAILS || config.DB_AUTH_DETAILS ) +
+  (process.env.DB_AUTH_DETAILS || config.DB_AUTH_DETAILS ) + '@' +
   (process.env.DB_HOSTNAME     || config.DB_HOSTNAME     ) +
   (process.env.DB              || config.DB              );
