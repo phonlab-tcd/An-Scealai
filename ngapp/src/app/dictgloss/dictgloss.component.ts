@@ -12,7 +12,6 @@ export class DictglossComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  /**
   //HB no point in showing the controls anyway as it is now, only the last sentence can be played again.
   //Instead a button to replay everything.
   //Do we want to be able to replay at all? Replay each sentence separately?
@@ -28,47 +27,7 @@ export class DictglossComponent implements OnInit {
 
 
 
-  texts = [
-    {
-      "name": "test",
-      "txt": "test/story.txt",
-      "wavs":
-        [
-          "test/audio/wav/paragraph_1.wav",
-          "test/audio/wav/paragraph_2.wav"
-        ]
-    },
-
-    {
-      "name": "Mo Sgéal Féin First paragraph",
-      "txt": "test/msf/msf_1-9.txt",
-      "wavs":
-        [
-          "test/msf/tcd_ga_mu_mnl_msf_0001.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0002.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0003.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0004.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0005.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0006.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0007.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0008.wav",
-          "test/msf/tcd_ga_mu_mnl_msf_0009.wav"
-        ]
-    },
-
-    {
-      "name": "dictogloss test",
-      "txt": "http://www.abair.tcd.ie/anscealai/stories/users/harald/dictgloss-test/ga_CM/story.txt",
-      "wavs":
-        [
-          "http://www.abair.tcd.ie/anscealai/stories/users/harald/dictgloss-test/ga_CM/audio/wav/paragraph_2.wav",
-          "http://www.abair.tcd.ie/anscealai/stories/users/harald/dictgloss-test/ga_CM/audio/wav/paragraph_3.wav",
-          "http://www.abair.tcd.ie/anscealai/stories/users/harald/dictgloss-test/ga_CM/audio/wav/paragraph_4.wav",
-          "http://www.abair.tcd.ie/anscealai/stories/users/harald/dictgloss-test/ga_CM/audio/wav/paragraph_5.wav"
-        ]
-    }
-
-  ]
+  texts: string;
 
 
 
@@ -89,14 +48,14 @@ export class DictglossComponent implements OnInit {
       var text = JSON.parse(sp.get("text"))
       console.log(text);
       console.log("text.name: " + text.name);
-      dictgloss(text);
+      this.dictgloss(text);
     } else {
-      console.log("Loading texts from " + texts);
-      this.selectorLoad();
+      console.log("Loading texts from " + this.texts);
     }
   }
 
-
+  wrong_words_div: any;
+  words: string[] = [];
   displayText(text) {
     console.log("displayText: " + text);
     var container = document.getElementById(this.container_id);
@@ -108,16 +67,16 @@ export class DictglossComponent implements OnInit {
     container.appendChild(input_div);
 
     //global div for wrong guesses
-    wrong_words_div = document.createElement("div");
-    container.appendChild(wrong_words_div);
+    this.wrong_words_div = document.createElement("div");
+    container.appendChild(this.wrong_words_div);
 
     //global list of words
-    words = [];
+    this.words = [];
 
 
     //split text by newline and loop over list..
     var text_sentences = text.split(/\n+/);
-    displaySentences(text_sentences, words_div);
+    this.displaySentences(text_sentences, words_div);
 
 
 
@@ -132,14 +91,14 @@ export class DictglossComponent implements OnInit {
 
   displaySentences(text_sentences, sentences_div) {
     var counter = 0;
-    for (i in text_sentences) {
+    for (let i in text_sentences) {
       var sentence = text_sentences[i];
 
       console.log("Counter: " + counter);
 
 
       var text_words = sentence.split(/\s+/);
-      counter = displayWords(text_words, sentences_div, counter);
+      var counter = this.displayWords(text_words, sentences_div, counter);
 
       var br = document.createElement("hr");
       sentences_div.appendChild(br);
@@ -149,12 +108,13 @@ export class DictglossComponent implements OnInit {
 
   displayWords(text_words, words_div, counter) {
     //console.log(text_words);
-    for (i in text_words) {
+    let iCounter: number;
+    for (let i in text_words) {
       var word = text_words[i];
 
       //if the word begins or ends with punctuation, add label(s) before or after
       var prepunctRegexp = /^(["'])(.+)$/;
-      match = prepunctRegexp.exec(word);
+      var match = prepunctRegexp.exec(word);
       if (match) {
         var prepunct = match[0];
         word = match[1];
@@ -163,7 +123,7 @@ export class DictglossComponent implements OnInit {
 
         var prepunct_label = document.createElement("button");
         prepunct_label.innerText = prepunct;
-        prepunct_label.style = "height:2em;width:2em;color:blue;";
+        prepunct_label.setAttribute("style", "height:2em;width:2em;color:blue;"); //COULD NOT WORK - FIONN
         words_div.appendChild(prepunct_label);
 
       }
@@ -183,12 +143,12 @@ export class DictglossComponent implements OnInit {
       }
 
       //global word list should not contain punctuation
-      words.push(word);
+      this.words.push(word);
 
       //make the word label
       var labelwidth = word.length + 1;
       //console.log(word+": "+labelwidth);
-      label = document.createElement("button");
+      var label = document.createElement("button");
       var labelid = +i + +counter;
       label.id = "word_" + labelid;
       //console.log("label.id: "+label.id);
@@ -199,12 +159,12 @@ export class DictglossComponent implements OnInit {
 
 
       //The defaultText is what we want to begin with
-      label.innerText = defaultText;
+      label.innerText = this.defaultText;
       //just for testing
       //label.innerText = word;
 
 
-      label.style = "height:2em;width:" + labelwidth + "em;color:blue;";
+      label.setAttribute("style", "height:2em;width:" + labelwidth + "em;color:blue;"); //Could not work - Fionn
 
       //If user clicks the label, show first letter as hint
       label.setAttribute("onclick", "document.getElementById(\"" + label.id + "\").innerText = \"" + word.charAt(0) + "\";");
@@ -217,175 +177,165 @@ export class DictglossComponent implements OnInit {
         //console.log("Appending label for: "+punct);
         words_div.appendChild(punct_label);
       }
-
+      iCounter++;
     }
     //+ before number makes js see it as a number and not a string ..
-    return +counter + +i + 1;
+    return +counter + +iCounter + 1;
   }
 
-  selectorLoad() {
-    var selectorDiv = document.getElementById("selectorDiv");
-    selectorDiv.setAttribute("style", "display:block");
-    var selector = document.getElementById("textSelector");
-    for (let text of texts) {
-      console.log("TEXT NAME: " + text.name);
-      var opt = document.createElement("option");
-      opt.text = text.name;
-      selector.options.add(opt);
+
+  audio_urls: any;
+  dictglossLoad() {
+    console.log("dictglossLoad()");
+
+    var selector = document.getElementById("textSelector") as HTMLInputElement;
+    this.texts = selector.value;
+    console.log('The input text is: ', this.texts);
+    var selectedText = this.texts;
+    this.dictgloss(selectedText);
+  }
+
+  dictgloss(text) {
+    var text_url = text.txt;
+    console.log("text_url: " + text_url);
+
+    this.audio_urls = text.wavs;
+    console.log("audio_urls: " + this.audio_urls);
+
+    document.getElementById("url_display").innerText = "Audio Playback";
+    document.getElementById("dictgloss_container").innerHTML = "";
+
+    this.loadAudioUrls();
+    this.getTextFromUrl(text_url);
+
+    if (this.show_text_input_immediately) {
+      this.showTextInputs();
     }
+
+
+  }
+
+  showTextInputs() {
+    var container = document.getElementById(this.container_id);
+    container.setAttribute("style", "display:block");
   }
 
 
-var audio_urls;
-dictglossLoad() {
-  console.log("dictglossLoad()");
-
-  var selector = document.getElementById("textSelector");
-  var selectedText = texts[selector.selectedIndex - 1];
-  console.log("selectedText: " + selectedText.name);
-  dictgloss(selectedText);
-}
-
-dictgloss(text) {
-  var text_url = text.txt;
-  console.log("text_url: " + text_url);
-
-  audio_urls = text.wavs;
-  console.log("audio_urls: " + audio_urls);
-
-  document.getElementById("url_display").innerText = text_url;
-  document.getElementById("dictgloss_container").innerHtml = "";
-
-  loadAudioUrls();
-  getTextFromUrl(text_url);
-
-  if (show_text_input_immediately) {
-    showTextInputs();
-  }
-
-
-}
-
-showTextInputs() {
-  var container = document.getElementById(container_id);
-  container.setAttribute("style", "display:block");
-}
-
-
-getTextFromUrl(url) {
-  if (url.endsWith("txt")) {
-    content_type = "text";
-  } else {
-    content_type = "html";
-  }
-
-  if (content_type == "text") {
-    getTextFromTxtUrl(url);
-  } else {
-    getTextFromHtmlUrl(url);
-  }
-}
-
-getTextFromTxtUrl(url) {
-  console.log("getTextFromUrl: " + url);
-
-  reqListener() {
-    var text = this.responseText.trim();
-    //console.log(text);
-    displayText(text);
-  }
-
-  var xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", reqListener);
-  xhr.open("GET", url);
-  xhr.send();
-
-}
-
-getTextFromHtmlUrl(url) {
-  var xhr = new XMLHttpRequest();
-  xhr.onload = () {
-    console.log(this.responseXML);
-    //text = this.responseXML.body.textContent.trim();
-    //text = text.replace(/\s+/g," ");
-    //displayText(text);
-
-    var paragraphs = this.responseXML.body.getElementsByTagName("p");
-    console.log(paragraphs);
-
-    var par_text_list = [];
-    for (let par of paragraphs) {
-      var par_text = par.textContent.trim();
-      par_text = par_text.replace(/\s+/g, " ");
-      par_text_list.push(par_text);
-    }
-    text = par_text_list.join("\n");
-    displayText(text);
-
-  }
-  xhr.open("GET", url);
-  xhr.responseType = "document";
-  xhr.send();
-}
-
-
-checkWord(element, event) {
-  if (event.keyCode == 13) {
-    word = element.value;
-    console.log("checkWord: " + word);
-
-    if (words.indexOf(word) == -1) {
-      //If the typed word is not in the words list
-      var wrongWordElement = document.createElement("div");
-      wrongWordElement.innerText = word;
-      wrong_words_div.appendChild(wrongWordElement);
+  getTextFromUrl(url) {
+    if (url.endsWith("txt")) {
+      var content_type = "text";
     } else {
-      //If the word is found, loop through the list and show the word in the right position
-      var start_index = 0;
-      while (words.indexOf(word, start_index) != -1) {
-        word_index = words.indexOf(word, start_index);
-        console.log("Found " + word + " at " + word_index + " in " + words);
-        var wordElement = document.getElementById("word_" + word_index);
-        wordElement.innerText = word;
-        start_index = word_index + 1;
-      }
+      var content_type = "html";
     }
-    element.value = "";
-    element.focus();
+
+    if (content_type == "text") {
+      this.getTextFromTxtUrl(url);
+    } else {
+      this.getTextFromHtmlUrl(url);
+    }
+  }
+
+  getTextFromTxtUrl(url) {
+    console.log("getTextFromUrl: " + url);
+
+    function reqListener() {
+      var text = this.responseText.trim();
+      //console.log(text);
+      this.displayText(text);
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("load", reqListener);
+    xhr.open("GET", url);
+    xhr.send();
 
   }
 
-}
+  
+  getTextFromHtmlUrl(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      //console.log(this.responseXML);
+      //text = this.responseXML.body.textContent.trim();
+      //text = text.replace(/\s+/g," ");
+      //displayText(text);
 
-var playingIndex;
-loadAudioUrls() {
-  audio = document.getElementById("audio_player");
-  audio.pause();
+      var paragraphs = document.getElementsByTagName("p");
+      console.log(paragraphs);
 
-  if (show_audio_controls) {
-    audio.setAttribute("controls", "true");
+      var par_text_list = [];
+      for (let i = 0; i < paragraphs.length; i++) {
+        var par_text = paragraphs[i].textContent.trim();
+        par_text = par_text.replace(/\s+/g, " ");
+        par_text_list.push(par_text);
+      }
+      var text = par_text_list.join("\n");
+      this.displayText(text);
+
+    }
+    xhr.open("GET", url);
+    xhr.responseType = "document";
+    xhr.send();
   }
-  if (show_replay_button) {
-    replayButton = document.getElementById("replayButton");
-    replayButton.setAttribute("style", "display:block");
+
+
+  checkWord(element, event) {
+    if (event.keyCode == 13) {
+      let word = element.value;
+      console.log("checkWord: " + word);
+
+      if (this.words.indexOf(word) == -1) {
+        //If the typed word is not in the words list
+        var wrongWordElement = document.createElement("div");
+        wrongWordElement.innerText = word;
+        this.wrong_words_div.appendChild(wrongWordElement);
+      } else {
+        //If the word is found, loop through the list and show the word in the right position
+        var start_index = 0;
+        while (this.words.indexOf(word, start_index) != -1) {
+          let word_index = this.words.indexOf(word, start_index);
+          console.log("Found " + word + " at " + word_index + " in " + this.words);
+          var wordElement = document.getElementById("word_" + word_index);
+          wordElement.innerText = word;
+          start_index = word_index + 1;
+        }
+      }
+      element.value = "";
+      element.focus();
+
+    }
+
+  }
+  
+
+  playing_index: any;
+  loadAudioUrls() {
+    let audio = document.getElementById("audio_player") as HTMLAudioElement;
+    audio.pause();
+
+    if (this.show_audio_controls) {
+      audio.setAttribute("controls", "true");
+    }
+    if (this.show_replay_button) {
+      let replayButton = document.getElementById("replayButton");
+      replayButton.setAttribute("style", "display:block");
+    }
+
+    audio.addEventListener("ended", this.playNext);
+    this.playing_index = -1;
+    this.playNext();
   }
 
-  audio.addEventListener("ended", playNext);
-  playing_index = -1;
-  playNext();
-}
-
-playNext() {
-  audio = document.getElementById("audio_player");
-  playing_index++;
-  if (playing_index < audio_urls.length) {
-    var audio_url = audio_urls[playing_index];
-    console.log("Playing: " + audio_url);
-    audio.src = audio_url;
-    audio.play();
-  } else {
-    showTextInputs();
+  playNext() {
+    let audio = document.getElementById("audio_player") as HTMLAudioElement;
+    this.playing_index++;
+    if (this.playing_index < this.audio_urls.length) {
+      var audio_url = this.audio_urls[this.playing_index];
+      console.log("Playing: " + audio_url);
+      audio.src = audio_url;
+      audio.play();
+    } else {
+      this.showTextInputs();
+    }
   }
-}
-*/
 }
