@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation,  } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, } from '@angular/core';
 import { GrammarService } from 'app/grammar.service';
 import { TranslationService } from '../translation.service';
 import { StoryService } from '../story.service'
@@ -18,7 +18,7 @@ import { SynthItem } from 'app/synth-item';
 
 export class PromptsComponent implements OnInit {
   tempWordDatabase = {
-    noun:        [
+    noun: [
       'an t-asal',
       'an t-ábhar',
       'an t-aerfort',
@@ -83,7 +83,7 @@ export class PromptsComponent implements OnInit {
       'an post',
       'an rothar',
       'an scannán	',
-      'an Taoiseach 	',
+      'an Taoiseach',
       'an t-údar',
       'an Stáit	',
       'an tarbh	',
@@ -91,9 +91,9 @@ export class PromptsComponent implements OnInit {
       'an tinteán	',
       'an sionnach 	',
       'an tóramh	',
-      'an sliotar',		
+      'an sliotar',
     ],
-    verb:        [
+    verb: [
       'Abair',
       'Bain',
       'Béic',
@@ -222,85 +222,85 @@ export class PromptsComponent implements OnInit {
       'Socraigh',
       'Taiste',
     ],
-    adjective:   [
-    'beag',
-    'mór',
-    'maith',
-    'dubh',
-    'bán',
-    'dearg',
-    'buí',
-    'bándearg',
-    'glas',
-    'uaine',
-    'gorm',
-    'ard',
-    'íseal',
-    'lán',
-    'folamh',
-    'ciúin',
-    'cainteach',
-    'costasach',
-    'saor',
-    'cliste',
-    'dúr',
-    'cumasach',
-    'ceolmhar',
-    'cneasta',
-    'cineálta',
-    'trodach',
-    'maol',
-    'gruaigeach',
-    'saibhir',
-    'bocht',
-    'leathan ',
-    'caol',
-    'óg',
-    'aosta',
-    'greannmhar',
-    'dáiríre',
-    'maith ',
-    'olc',
-    'folamh',
-    'fada',
-    'gearr',
-    'tirim',
-    'fliuch',
-    'grianmhar',
-    'scamallach',
-    'milis',
-    'ceomhar',
-    'searbh',
-    'sean',
-    'láidir',
-    'lag',
-    'stuama',
-    'deas',
-    'téagartha',
-    'sásta',
-    'míshásta',
-    'dorcha',
-    'geal',
-    'fuar',
-    'te',
-    'dóite',
-    'cróga',
-    'leisciúil',
-    'gnóthach',
-    'fonnmhar',
-    'glic',
-    'gníomhach',
-    'stadach',
-    'béasach',
-    'uaigneach',
-    'buíoch',
-    'dóchasach',
-    'álainn',
-    'uafásach',
-    'amaideach',
-    'aineola',
+    adjective: [
+      'beag',
+      'mór',
+      'maith',
+      'dubh',
+      'bán',
+      'dearg',
+      'buí',
+      'bándearg',
+      'glas',
+      'uaine',
+      'gorm',
+      'ard',
+      'íseal',
+      'lán',
+      'folamh',
+      'ciúin',
+      'cainteach',
+      'costasach',
+      'saor',
+      'cliste',
+      'dúr',
+      'cumasach',
+      'ceolmhar',
+      'cneasta',
+      'cineálta',
+      'trodach',
+      'maol',
+      'gruaigeach',
+      'saibhir',
+      'bocht',
+      'leathan ',
+      'caol',
+      'óg',
+      'aosta',
+      'greannmhar',
+      'dáiríre',
+      'maith ',
+      'olc',
+      'folamh',
+      'fada',
+      'gearr',
+      'tirim',
+      'fliuch',
+      'grianmhar',
+      'scamallach',
+      'milis',
+      'ceomhar',
+      'searbh',
+      'sean',
+      'láidir',
+      'lag',
+      'stuama',
+      'deas',
+      'téagartha',
+      'sásta',
+      'míshásta',
+      'dorcha',
+      'geal',
+      'fuar',
+      'te',
+      'dóite',
+      'cróga',
+      'leisciúil',
+      'gnóthach',
+      'fonnmhar',
+      'glic',
+      'gníomhach',
+      'stadach',
+      'béasach',
+      'uaigneach',
+      'buíoch',
+      'dóchasach',
+      'álainn',
+      'uafásach',
+      'amaideach',
+      'aineola',
     ],
-    pronoun:     [
+    pronoun: [
       'Mé',
       'Tú',
       'Sé',
@@ -390,9 +390,9 @@ export class PromptsComponent implements OnInit {
       'tharaibh',
       'tharstu',
     ],
-    determiner:  ['seo', 'a', 'cé', 'an'],
-    article:     ['an', 'na'],
-    adverb:      [
+    determiner: ['seo', 'a', 'cé', 'an'],
+    article: ['an', 'na'],
+    adverb: [
       'inniu',
       'inné',
       'amárach',
@@ -430,13 +430,13 @@ export class PromptsComponent implements OnInit {
       'chomh maith',
       'ach oiread',
     ],
-    adposition:  ['le', 'sa'],
+    adposition: ['le', 'sa'],
     conjunction: [
       'agus',
       'go',
       'ach',
     ],
-    numeral:     [
+    numeral: [
       'a haon 	',
       'an chéad	',
       'duine',
@@ -469,7 +469,7 @@ export class PromptsComponent implements OnInit {
       'deichniúr',
     ]
   }
-  
+
   /** tempWordDatabaseEnglish = {
     noun:        ['the kitchen', 'the floor', 'the man', 'the boat'],
     verb:        ['to hit/meet', 'to eat', 'to listen', 'to give'],
@@ -489,7 +489,7 @@ export class PromptsComponent implements OnInit {
   arrayString = '';
   newStoryForm: FormGroup;
   bankHighlights: Observable<any>;
-  indiceValues: {fromx: number; tox: number}[] = [];
+  indiceValues: { fromx: number; tox: number }[] = [];
   innerHTMLWordBank: string = '';
   bankHighlightsLoading: boolean = true;
   synthItem: SynthItem;
@@ -499,23 +499,23 @@ export class PromptsComponent implements OnInit {
   errorButtons: string[];
 
   constructor(
-    private gs : GrammarService,
+    private gs: GrammarService,
     private storyService: StoryService,
     private auth: AuthenticationService,
     private fb: FormBuilder,
-    public ts : TranslationService,
+    public ts: TranslationService,
     private synth: SynthesisService,
-    ) { this.posCreateForm(); }
+  ) { this.posCreateForm(); }
 
   ngOnInit(): void {
     console.log("pos-prompt-init");
   }
 
   posSynthRefresh() {
-    if(this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
+    if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
     this.synthItem = new SynthItem(this.arrayString, this.newStoryForm.get('dialect').value, this.synth);
   }
-  
+
   //Could perhaps use createForm() from the dashboard component instead
   posCreateForm() {
     this.newStoryForm = this.fb.group({
@@ -533,11 +533,11 @@ export class PromptsComponent implements OnInit {
   }
 
   async selectWord(type: keyof typeof this.tempWordDatabase) {
-    this.givenWord  = this.randomWord(this.tempWordDatabase[type]);
+    this.givenWord = this.randomWord(this.tempWordDatabase[type]);
   }
 
   posConfirmation(isConfirmed: Boolean) {
-    if(isConfirmed && this.givenWord != this.WORD_PROMPT){
+    if (isConfirmed && this.givenWord != this.WORD_PROMPT) {
       this.wordBank.push(this.givenWord);
       this.createWordBankString(this.wordBank);
       this.getBankHighlights();
@@ -548,15 +548,15 @@ export class PromptsComponent implements OnInit {
   }
 
   //While this is loading the text should be shown unhighlighted.
-  async getBankHighlights(){
+  async getBankHighlights() {
     this.bankHighlightsLoading = true;
     this.bankHighlights = this.gs.gramadoirDirectObservable(this.arrayString, 'ga');
     this.bankHighlights.subscribe(res => {
-      console.log(res,'<SUBSCRIBE STRING>');
-      this.indiceValues = res.map(element => 
+      console.log(res, '<SUBSCRIBE STRING>');
+      this.indiceValues = res.map(element =>
         new Object(
           {
-            fromx: Number(element.fromx), 
+            fromx: Number(element.fromx),
             tox: Number(element.tox)
           }
         )
@@ -566,15 +566,15 @@ export class PromptsComponent implements OnInit {
         let newStart: number = 0;
         let lastBitToAdd: number = 0;
         this.innerHTMLWordBank = '';
-        for(var i = 0; i < this.indiceValues.length; i++){
+        for (var i = 0; i < this.indiceValues.length; i++) {
           let nonHighlightStart: number = newStart;
           let highlightStart: number = this.indiceValues[i].fromx;
           let highlightEnd: number = this.indiceValues[i].tox + 1;
           lastBitToAdd = highlightEnd;
-          
-          this.innerHTMLWordBank += 
-          this.arrayString.slice(nonHighlightStart, highlightStart)
-          + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
+
+          this.innerHTMLWordBank +=
+            this.arrayString.slice(nonHighlightStart, highlightStart)
+            + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
 
           newStart = this.indiceValues[i].tox + 1;
         }
@@ -584,12 +584,12 @@ export class PromptsComponent implements OnInit {
       }
       this.bankHighlightsLoading = false;
     });
-  } 
-  
-  createWordBankString(array: Array<string>){
+  }
+
+  createWordBankString(array: Array<string>) {
     let arrayString = '';
-    if (array.length > 0){
-      for(var i = 0; i < array.length; i++){
+    if (array.length > 0) {
+      for (var i = 0; i < array.length; i++) {
         arrayString += array[i];
         arrayString += ' ';
       }
@@ -600,14 +600,14 @@ export class PromptsComponent implements OnInit {
     return arrayString;
   }
 
-  resetWordBank(){
+  resetWordBank() {
     this.wordBank = [];
     this.indiceValues = [];
     this.createWordBankString(this.wordBank);
     this.getBankHighlights();
   }
 
-  randomWord(wordList: Array<string>){
+  randomWord(wordList: Array<string>) {
     return wordList[Math.floor(Math.random() * wordList.length)];
   }
 

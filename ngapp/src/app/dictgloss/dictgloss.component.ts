@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SynthItem } from 'app/synth-item';
+import { SynthesisService } from 'app/services/synthesis.service';
+import { TranslationService } from 'app/translation.service';
 
 @Component({
   selector: 'app-dictgloss',
@@ -8,7 +11,10 @@ import { Component, OnInit } from '@angular/core';
 
 export class DictglossComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private synth: SynthesisService,
+    public ts: TranslationService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -17,23 +23,9 @@ export class DictglossComponent implements OnInit {
   //Do we want to be able to replay at all? Replay each sentence separately?
   show_audio_controls: boolean = false;
   show_replay_button: boolean = true;
-
-
   //If false, text inputs only appear after the last sound file has been played
   show_text_input_immediately: boolean = false;
-
-
-
-
-
-
   texts: string;
-
-
-
-
-
-
   container_id: string = "dictgloss_container";
   defaultText: string = "--";
 
@@ -83,7 +75,7 @@ export class DictglossComponent implements OnInit {
     //Word input field
     var word_input = document.createElement("input");
     word_input.type = "entry";
-    word_input.setAttribute("onkeydown", "checkWord(this,event);");
+    word_input.setAttribute("onkeydown", "checkWord(this, event);");
     input_div.appendChild(word_input);
 
     word_input.focus();
@@ -185,34 +177,48 @@ export class DictglossComponent implements OnInit {
 
 
   audio_urls: any;
+  showReplay: boolean = false;
+  synthItem: SynthItem;
   dictglossLoad() {
     console.log("dictglossLoad()");
-
+    /*
+    if (this.texts !== undefined){
+      this.showReplay = true;
+    }
+    **/
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
-    console.log('The input text is: ', this.texts);
-    var selectedText = this.texts;
-    this.dictgloss(selectedText);
+    this.dictglossSynthRefresh();
+
+    console.log('The input text is:', this.texts);
+    this.dictgloss(this.texts);
+  }
+
+  dictglossSynthRefresh() {
+    if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
+    this.synthItem = new SynthItem(this.texts, 'connemara', this.synth);
+    console.log("REQUEST URL:",this.synthItem.requestUrl);  //Could be not working as you need to use this variable from this.synthItem instead of audioUrl
+    
   }
 
   dictgloss(text) {
-    var text_url = text.txt;
+    var text_url = this.synthItem.audioUrl;
     console.log("text_url: " + text_url);
 
-    this.audio_urls = text.wavs;
+    this.audio_urls = this.synthItem.audioUrl;    //Make Synth (UNDEFINED!?!?!)
     console.log("audio_urls: " + this.audio_urls);
 
+    
     document.getElementById("url_display").innerText = "Audio Playback";
-    document.getElementById("dictgloss_container").innerHTML = "";
+    document.getElementById(this.container_id).innerHTML = "";
 
     this.loadAudioUrls();
-    this.getTextFromUrl(text_url);
+    
+    this.getTextFromUrl(this.audio_urls);
 
     if (this.show_text_input_immediately) {
       this.showTextInputs();
     }
-
-
   }
 
   showTextInputs() {
@@ -241,6 +247,8 @@ export class DictglossComponent implements OnInit {
     function reqListener() {
       var text = this.responseText.trim();
       //console.log(text);
+      console.log("MADE IT TO getTextFromTextUrl");
+      
       this.displayText(text);
     }
 
@@ -258,7 +266,8 @@ export class DictglossComponent implements OnInit {
       //console.log(this.responseXML);
       //text = this.responseXML.body.textContent.trim();
       //text = text.replace(/\s+/g," ");
-      //displayText(text);
+      this.displayText(this.synthItem.audioUrl);
+      console.log("MADE IT TO getTextFromHtmlUrl");
 
       var paragraphs = document.getElementsByTagName("p");
       console.log(paragraphs);
@@ -310,7 +319,7 @@ export class DictglossComponent implements OnInit {
 
   playing_index: any;
   loadAudioUrls() {
-    let audio = document.getElementById("audio_player") as HTMLAudioElement;
+    let audio = new Audio(this.synthItem.audioUrl);
     audio.pause();
 
     if (this.show_audio_controls) {
@@ -321,11 +330,11 @@ export class DictglossComponent implements OnInit {
       replayButton.setAttribute("style", "display:block");
     }
 
-    audio.addEventListener("ended", this.playNext);
-    this.playing_index = -1;
-    this.playNext();
+    //audio.addEventListener("ended", this.playNext);
+    //this.playing_index = -1;
+    //this.playNext();
   }
-
+/** 
   playNext() {
     let audio = document.getElementById("audio_player") as HTMLAudioElement;
     this.playing_index++;
@@ -338,4 +347,5 @@ export class DictglossComponent implements OnInit {
       this.showTextInputs();
     }
   }
+  */
 }
