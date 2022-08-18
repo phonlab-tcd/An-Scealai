@@ -67,7 +67,10 @@ export class DictglossComponent implements OnInit {
 
 
     //split text by newline and loop over list..
-    var text_sentences = text.split(/\n+/);
+    //var text_sentences = text.split(/\n+/);
+
+    //split text by full stops and loop over list..
+    var text_sentences = text.split(". " || ".");
     this.displaySentences(text_sentences, words_div);
 
 
@@ -100,7 +103,7 @@ export class DictglossComponent implements OnInit {
 
   displayWords(text_words, words_div, counter) {
     //console.log(text_words);
-    let iCounter: number;
+    var iSubstitute;
     for (let i in text_words) {
       var word = text_words[i];
 
@@ -115,7 +118,7 @@ export class DictglossComponent implements OnInit {
 
         var prepunct_label = document.createElement("button");
         prepunct_label.innerText = prepunct;
-        prepunct_label.setAttribute("style", "height:2em;width:2em;color:blue;"); //COULD NOT WORK - FIONN
+        prepunct_label.setAttribute("style", "height:2em;width:2em;color:blue;"); //COULD POSSIBLY NOT WORK - FIONN
         words_div.appendChild(prepunct_label);
 
       }
@@ -143,7 +146,7 @@ export class DictglossComponent implements OnInit {
       var label = document.createElement("button");
       var labelid = +i + +counter;
       label.id = "word_" + labelid;
-      //console.log("label.id: "+label.id);
+      console.log("label.id: "+label.id);
 
       //console.log("Pushed "+label.id+" to words list: "+words.length);
 
@@ -168,11 +171,12 @@ export class DictglossComponent implements OnInit {
       if (punct_label) {
         //console.log("Appending label for: "+punct);
         words_div.appendChild(punct_label);
-      }
-      iCounter++;
+      } 
+      iSubstitute = i;
     }
     //+ before number makes js see it as a number and not a string ..
-    return +counter + +iCounter + 1;
+    //I honestly had no idea how this initially was meant to work - Fionn
+    return +counter + + iSubstitute + 1;
   }
 
 
@@ -208,13 +212,13 @@ export class DictglossComponent implements OnInit {
     this.audio_urls = this.synthItem.audioUrl;    //Make Synth (UNDEFINED!?!?!)
     console.log("audio_urls: " + this.audio_urls);
 
-    
     document.getElementById("url_display").innerText = "Audio Playback";
     document.getElementById(this.container_id).innerHTML = "";
 
     this.loadAudioUrls();
     
-    this.getTextFromUrl(this.audio_urls);
+    this.getTextFromText(text);
+    //this.getTextFromUrl(this.audio_urls);
 
     if (this.show_text_input_immediately) {
       this.showTextInputs();
@@ -247,7 +251,7 @@ export class DictglossComponent implements OnInit {
     function reqListener() {
       var text = this.responseText.trim();
       //console.log(text);
-      console.log("MADE IT TO getTextFromTextUrl");
+      console.log("MADE IT TO getTextFromTxtUrl");
       
       this.displayText(text);
     }
@@ -257,6 +261,20 @@ export class DictglossComponent implements OnInit {
     xhr.open("GET", url);
     xhr.send();
 
+  }
+
+  getTextFromText(text) {
+    console.log("getTextFromText: " + text);
+    this.displayText(text);
+    var paragraphs = document.getElementsByTagName("p");
+    var par_text_list = [];
+    for (let i = 0; i < paragraphs.length; i++) {
+      var par_text = paragraphs[i].textContent.trim();
+      par_text = par_text.replace(/\s+/g, " ");
+      par_text_list.push(par_text);
+    }
+    var newText = par_text_list.join("\n");
+    this.displayText(newText);
   }
 
   
