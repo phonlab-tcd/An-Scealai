@@ -153,12 +153,17 @@ export class QuillHighlightService {
     this.tokenizer.setEntry(text);
     const sentences = this.tokenizer.getSentences()
     const sentencesWithOffsets = []
-    let lengthSum = 0
+
+    // We need to find the right offset for each sentence, because the gramadoir 'fromx' and 'tox' is relative to the sentence
+    // The idea here is to iterate through the tokenized sentences and match them in the original text, to get their offsets
+    // Once we have an offset for each sentence, we can apply the 'fromx' 'tox' relative to that.
+    let i = 0
     for (const s of sentences) {
-        // We need to add offsets because the fromx property returned by gramadoir will be relative to each sentence
-        sentencesWithOffsets.push([lengthSum, s]); 
-        lengthSum += s.length + 1;
-    }
+      const sIndex = text.slice(i).indexOf(s);
+      const offset = i + sIndex;
+      sentencesWithOffsets.push([offset, s]); 
+      i = offset + s.length;
+  }
 
     this.currentGramadoirHighlightTags = [];
 
@@ -173,7 +178,7 @@ export class QuillHighlightService {
             this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
 
             this.currentFilteredHighlightTags =
-                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type]);
+                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type] = true);
             if (this.showingTags) {
                 this.applyGramadoirTagFormatting(quillEditor);
             }
@@ -181,10 +186,20 @@ export class QuillHighlightService {
     } catch (error) {
         console.dir(error);
         try {
-            /*
-        const perSentenceErrors = await this.makeGramadoirRequest(this.grammar.gramadoirCadhanUrl, sentencesWithOffsets, currentGramadoirErrorTypes);
-        this.currentGramadoirHighlightTags = perSentenceErrors.flat();
-        */
+          this.makeGramadoirRequest(
+            this.grammar.gramadoirCadhanUrl,
+            sentencesWithOffsets,
+            currentGramadoirErrorTypes
+          ).subscribe(async (errorTagsPromise: QuillHighlightTag[]) => {
+            const errorTags = await errorTagsPromise;
+            this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
+
+            this.currentFilteredHighlightTags =
+                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type] = true);
+            if (this.showingTags) {
+                this.applyGramadoirTagFormatting(quillEditor);
+            }
+          });
         } catch (secondGramadoirError) {
             console.dir(secondGramadoirError);
             window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
@@ -192,6 +207,7 @@ export class QuillHighlightService {
                         '\n\nError 2:\n' + secondGramadoirError.message);
         }
     }
+    // TODO: uncomment
     /*
     ((sendGrammarErrorsToDb)=>{
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
