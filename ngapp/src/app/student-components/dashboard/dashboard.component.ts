@@ -19,7 +19,6 @@ import { StoryService             } from 'app/story.service';
 import { EngagementService        } from 'app/engagement.service';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
-import { GrammarTag               } from 'app/grammar.service';
 import { GramadoirRuleId          } from 'app/grammar.service';
 import { GrammarService           } from 'app/grammar.service';
 import { ReadableGramadoirRuleIds } from 'app/grammar.service';
@@ -169,7 +168,6 @@ export class DashboardComponent implements OnInit{
   audioSource: SafeUrl;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
-  chosenTag: GrammarTag;
   mostRecentGramadoirRequestTime = null;
   grammarLoading = true;
   grammarSelected = true;
