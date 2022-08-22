@@ -261,18 +261,19 @@ const GRAMADOIR_RULE_ID_VALUES: string[] = [
   'default']; // Add more valid types here
 
 
-const IGNORE_THESE_GRAMMAR_MESSAGES: string[] = [
-  // # TRANSLATORS: Rules specific to the Cornish language (kw)
-  'NESSATREYLYANS',     // 'Second (soft) mutation missing'
-  'TRESSATREYLYANS',    // 'Third (breathed) mutation missing'
-  'PESWARATREYLYANS',   // 'Fourth (hard) mutation missing'
-  'PYMPESTREYLYANS',    // 'Fifth (mixed) mutation missing'
-  'PYMPESTREYLYANSTH',  // 'Fifth (mixed) mutation after \'th missing'
-  // # TRANSLATORS: Rules specific to the Welsh language (cy)
-  'LLAES',              // 'Aspirate mutation missing'
-  // # TRANSLATORS: Rules specific to the Igbo language (ig)
-  'VOWELHARMONY',       // 'This word violates the rules of Igbo vowel harmony'
-];
+// const IGNORE_THESE_GRAMMAR_MESSAGES: string[] = [
+//   // # TRANSLATORS: Rules specific to the Cornish language (kw)
+//   'NESSATREYLYANS',     // 'Second (soft) mutation missing'
+//   'TRESSATREYLYANS',    // 'Third (breathed) mutation missing'
+//   'PESWARATREYLYANS',   // 'Fourth (hard) mutation missing'
+//   'PYMPESTREYLYANS',    // 'Fifth (mixed) mutation missing'
+//   'PYMPESTREYLYANSTH',  // 'Fifth (mixed) mutation after \'th missing'
+//   // # TRANSLATORS: Rules specific to the Welsh language (cy)
+//   'LLAES',              // 'Aspirate mutation missing'
+//   // # TRANSLATORS: Rules specific to the Igbo language (ig)
+//   'VOWELHARMONY',       // 'This word violates the rules of Igbo vowel harmony'
+// ];
+
 // Makes a union type using the values
 // from the array above, see:
 // https://www.typescriptlang.org/docs/handbook/2/indexeda
@@ -295,11 +296,6 @@ export class GrammarService {
   slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
   consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
   ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
-
-  userFriendlyGramadoirMessage: {[ruleId: string]: { en: string; ga: string; } } = {
-    // CAIGHDEAN: {en: 'non-standard usage', ga: 'TODO'}
-    // Add more messages here
-  };
 
   constructor(
     private storyService: StoryService,
