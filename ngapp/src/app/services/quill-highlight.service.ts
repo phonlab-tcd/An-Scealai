@@ -14,7 +14,7 @@ import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
 // import clone from 'lodash/clone';
-import { of, forkJoin, Observable, from } from 'rxjs';
+import { from } from 'rxjs';
 import { assert } from 'console';
 import { GramadoirUrl } from '../grammar.service'
 import { DashboardComponent } from 'app/student-components/dashboard/dashboard.component';
@@ -146,8 +146,6 @@ export class QuillHighlightService {
       .toPromise();
 
     const currentGramadoirErrorTypes: object = {};
-
-    console.log('text', text);
 
     // Sentence tokenization to make gramadoir requests for each sentence independently
     this.tokenizer.setEntry(text);

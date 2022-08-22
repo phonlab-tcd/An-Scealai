@@ -4,15 +4,10 @@ import {
 import {
   HttpClient,
 } from '@angular/common/http';
-import { Observable, Observer, of, from} from 'rxjs';
+import { Observable, from} from 'rxjs';
 import { StoryService } from './story.service';
 import { TranslationService } from 'app/translation.service';
-import { HighlightTag } from 'angular-text-input-highlight';
-import { Story } from 'app/story';
 import { EngagementService } from 'app/engagement.service';
-import { EventType } from 'app/event';
-import { VowelAgreementIndex, QuillHighlightTag } from './services/quill-highlight.service';
-import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
   broadFirst: boolean;
