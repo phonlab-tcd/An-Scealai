@@ -21,6 +21,7 @@ import { TranslationService     } from 'app/translation.service';
 import { MessageService         } from 'app/message.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
+import   disableGoogleAnalytics   from 'disableGoogleAnalytics';
 
 declare var gtag;
 
@@ -68,6 +69,7 @@ export class AppComponent {
   // Set the page langauge
   // Get list of stories that have notifications
   ngOnInit() {
+    disableGoogleAnalytics();
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
