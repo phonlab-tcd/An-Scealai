@@ -375,13 +375,6 @@ export class GrammarService {
       });
   }
 
-  getVowelAgreementUserMessage(unparsedTag: string | null ): string {
-    if (!unparsedTag) { return ''; }
-    return  this.ts.l.vowels_should_agree ?
-            this.ts.l.vowels_should_agree :
-            'vowels_should_agree';
-  }
-
   // Takes in a story text and return an
   // array of vowel tags showing slender/broad
   // errors around consonants of words in the text
