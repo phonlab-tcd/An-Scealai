@@ -171,6 +171,7 @@ const routes: Routes = [
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
   },
+  { path: 'privacy-preferences', loadChildren: () => import('./privacy-preferences/privacy-preferences.module').then(m => m.PrivacyPreferencesModule) },
 ];
 
 @NgModule({
