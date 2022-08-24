@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 
-const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: ObjectId, storyId: ObjectId, sentences: Array}))
+const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: ObjectId, storyId: ObjectId, sentences: Array, timestamp:Date}))
 
 module.exports = async (req, res, next) => {
   const sentences = req.body.sentences;
@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
   const userId = mongoose.mongo.ObjectId(req.user._id);
 
   
-  await model.create({owner: userId, storyId: storyId, sentences: sentences} )
+  await model.create({owner: userId, storyId: storyId, sentences: sentences, timestamp: new Date()} )
   
   res.json()
 
