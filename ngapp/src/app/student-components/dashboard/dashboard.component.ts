@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit{
       this.grammarLoading = true;
       try {
         await this.quillHighlightService
-          .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter)
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
           .then((errTypes: object) => {
             console.dir(errTypes);
             this.currentGrammarErrorTypes = errTypes;

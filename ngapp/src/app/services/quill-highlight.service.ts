@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
-import { map } from 'rxjs/operators';
+import { map, retry } from 'rxjs/operators';
 import { TranslationService } from 'app/translation.service';
 import {
   GramadoirRuleId,
@@ -118,19 +118,19 @@ export class QuillHighlightService {
 
   makeGramadoirRequest(url: GramadoirUrl, sentencesWithOffsets, currentErrorTypes) {
     return from(sentencesWithOffsets.map(async ([offset, sentence]) => {
-        const errorsEn = await this.grammar.gramadoirObservable(sentence, 'en', this.grammar.gramadoirUrl).toPromise();
+        const get = (lang)=> this.grammar.gramadoirObservable(sentence, lang, this.grammar.gramadoirUrl).pipe(retry(2)).toPromise();
+        const [errorsEn, errorsGa] = await Promise.all([get('en'),get('ga')]);
         this.grammar.addToGramadoirCache(sentence, 'en', errorsEn);
-        const errorsGa = await this.grammar.gramadoirObservable(sentence, 'ga', this.grammar.gramadoirUrl).toPromise();
         this.grammar.addToGramadoirCache(sentence, 'ga', errorsGa);
         const errorTags = this.gramadoir2QuillTags(errorsEn, currentErrorTypes, offset);
         errorTags.forEach((e, i) => {
             e.messages.ga = errorsGa[i].msg;
         });
-        return errorTags;
+        return [errorTags,sentence];
     }));
   }
 
-  async updateGrammarErrors(quillEditor: Quill, text: string, grammarTagFilter): Promise<object> {
+  async updateGrammarErrors(quillEditor: Quill, text: string, grammarTagFilter, storyId:string): Promise<object> {
     // my tslint server keeps
     // asking me to brace these guys
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
@@ -166,57 +166,34 @@ export class QuillHighlightService {
     this.currentGramadoirHighlightTags = [];
 
     // First try making the request with the ABAIR hosted gramadoir, then if that fails try the Cadhan hosted gramadoir
-    try {
-        this.makeGramadoirRequest(
-            this.grammar.gramadoirUrl,
-            sentencesWithOffsets,
-            currentGramadoirErrorTypes
-        ).subscribe(async (errorTagsPromise: QuillHighlightTag[]) => {
-            const errorTags = await errorTagsPromise;
-            this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
+    const errorTagsArray = [];
+    await this.makeGramadoirRequest(
+        this.grammar.gramadoirUrl,
+        sentencesWithOffsets,
+        currentGramadoirErrorTypes
+    ).subscribe(async promise => {
+        errorTagsArray.push(promise);
+        const errorTags = (await promise)[0];
+        console.log(errorTags);
+  
+        this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
 
-            this.currentFilteredHighlightTags =
-                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type] = true);
-            if (this.showingTags) {
-                this.applyGramadoirTagFormatting(quillEditor);
-            }
-        });
-    } catch (error) {
-        console.dir(error);
-        try {
-          this.makeGramadoirRequest(
-            this.grammar.gramadoirCadhanUrl,
-            sentencesWithOffsets,
-            currentGramadoirErrorTypes
-          ).subscribe(async (errorTagsPromise: QuillHighlightTag[]) => {
-            const errorTags = await errorTagsPromise;
-            this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
-
-            this.currentFilteredHighlightTags =
-                this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type] = true);
-            if (this.showingTags) {
-                this.applyGramadoirTagFormatting(quillEditor);
-            }
-          });
-        } catch (secondGramadoirError) {
-            console.dir(secondGramadoirError);
-            window.alert('Failed to fetch grammar suggestions:\nError 1:\n' +
-                        error.message +
-                        '\n\nError 2:\n' + secondGramadoirError.message);
-        }
-    }
-    // TODO: uncomment
-    /*
-    ((sendGrammarErrorsToDb)=>{
+        this.currentFilteredHighlightTags =
+            this.currentGramadoirHighlightTags.filter(tag => grammarTagFilter[tag.type] = true);
+        if (this.showingTags) {
+            this.applyGramadoirTagFormatting(quillEditor);
+        }      
+    },err=>{},
+    async ()=>{
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
       const body = {
-        text,
-        storyUnderscoreId,
-        tagData: errorTags,
+        storyId,
+        sentences: (await Promise.all(errorTagsArray)).map(([errors, sentence]) => ({errors, sentence})),
       };
       this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
-    })();
-    */
+    }
+  );
+    
     this.currentGenetiveHighlightTags = await this.grammar
       .genitiveDirectObservable(text)
       .pipe(map(gTags => this.gramadoir2QuillTags(gTags, {})))
@@ -261,7 +238,6 @@ export class QuillHighlightService {
          'vowel-agreement-tag': secondVowelAttributeValue,
        },
        'api');
-
   }
 
   /**
