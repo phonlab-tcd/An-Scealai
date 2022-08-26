@@ -151,11 +151,8 @@ export class QuillHighlightService {
     const currentGramadoirErrorTypes: object = {};
 
     // Sentence tokenization to make gramadoir requests for each sentence independently
-    const doc = nlp.readDoc(text);
-    const sentences = doc.sentences().out();
+    const sentences = nlp.readDoc(text).sentences().out();
     const sentencesWithOffsets = []
-
-    console.log('Toked sentences', sentences)
 
     // We need to find the right offset for each sentence, because the gramadoir 'fromx' and 'tox' is relative to the sentence
     // The idea here is to iterate through the tokenized sentences and match them in the original text, to get their offsets
