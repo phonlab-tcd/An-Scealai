@@ -1,0 +1,25 @@
+<div
+    style="width: 100% - 40px; margin: 10px; background-color: #14ff004a; border: 2px;"
+    [hidden]="hideEntireSynthesisPlayer"
+    class=synth>
+  <div>
+    <h1>{{ts.l['listen_back_to_your_story'] ? ts.l['listen_back_to_your_story'] : 'listen_back_to_your_story'}}</h1>
+    <p>({{ts.l['dnn_synthesiser'] ? ts.l['dnn_synthesiser'] : 'dnn_synthesiser' }})</p>
+
+  </div>
+  <div class=header>
+    <div class=reload (click)=refresh()>&#8635;</div>
+    <synth-voice-select (selectVoice)=refresh($event)></synth-voice-select>
+    <div class=fast-synth (click)=goToFastSynthesiser()>
+      {{ts.l['go_to_fast_synthesiser'] ? ts.l['go_to_fast_synthesiser'] : 'go_to_fast_synthesiser'}}
+    </div>
+  </div>
+  <hr>
+  <div class="items">
+    <app-synth-item *ngFor="let si of synthItems; let i = index"
+      [synthItem]=si
+      [i]=i
+      [storyId]=storyId>
+    </app-synth-item>
+  </div>
+</div>

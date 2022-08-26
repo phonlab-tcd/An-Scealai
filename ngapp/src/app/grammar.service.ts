@@ -4,7 +4,8 @@ import {
 import {
   HttpClient,
 } from '@angular/common/http';
-import { Observable, from} from 'rxjs';
+import { tap } from "rxjs/operators";
+import { Observable, of } from 'rxjs';
 import { StoryService } from './story.service';
 import { TranslationService } from 'app/translation.service';
 import { EngagementService } from 'app/engagement.service';
@@ -352,6 +353,23 @@ export class GrammarService {
         }
     });
   }
+  
+  scealaiGramadoir(input: string) {
+    console.trace();
+    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, 'ga');
+    if (encodedRequest in this.gramadoirCache) {
+      return this.gramadoirCache[encodedRequest];
+    }
+    type T = GramadoirTag[];
+    return this.http.post<any>(
+      'https://www.abair.ie/cgi-bin/scealai-gramadoir.pl',
+      `teacs=${encodeURIComponent(input)}&teanga=ga`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        }
+      }).pipe(tap(d=>this.addToGramadoirCache(input,d)))
+  }
 
   gramadoirDirectCadhanObservable(input: string, language: 'en' | 'ga'): Observable<any> {
     return this.http.post(
@@ -384,10 +402,9 @@ export class GrammarService {
     );
   }
 
-  addToGramadoirCache(input: string, language: 'en' | 'ga', errors) {
-    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
-    // Wrap errors in an extra array so that the observable returns an single array of errors rather than treating them as a stream
-    this.gramadoirCache[encodedRequest] = from([errors]); 
+  addToGramadoirCache(input: string, errors) {
+    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, 'ga');
+    this.gramadoirCache[encodedRequest] = of(errors); 
   }
 
   genitiveDirectObservable(input: string): Observable<any> {

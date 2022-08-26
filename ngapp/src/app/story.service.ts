@@ -49,7 +49,7 @@ export class StoryService {
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
         // this.recordingService.addRecordingForLoggedInUser(storyObj);
 
-        this.router.navigateByUrl('/dashboard/' + res.id);
+        this.router.navigateByUrl('/edit-story/' + res.id);
       });
   }
 

@@ -106,7 +106,7 @@ export class AppComponent {
   // Hide notifications and route to story dashboard component
   goToStory(id : string) {
     this.notificationsShown = false;
-    this._router.navigateByUrl('/dashboard/' + id);
+    this._router.navigateByUrl('/edit-story/' + id);
   }
 
   goToMessages(id: string) {

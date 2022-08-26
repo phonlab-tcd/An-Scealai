@@ -17,7 +17,6 @@ import { RegisterComponent } from 'register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
@@ -49,7 +48,7 @@ import { TeacherStatsComponent } from './teacher-components/teacher-stats/teache
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
 import { NotificationService } from './notification-service.service';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
+import { LegacySynthPage } from './synthesis/legacy-synth-page/synthesis.component';
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
 import { StopSoundGuard } from './stop-sound.guard';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
@@ -69,11 +68,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
-  { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
+  { path: 'synthesis/:id', component: LegacySynthPage, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
   { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
@@ -170,6 +168,12 @@ const routes: Routes = [
     path: 'report-an-issue',
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
+  },
+  { 
+    path: 'edit-story',
+    loadChildren: () => import('app/edit-story-page/edit-story-page.module').then(m=>m.EditStoryPageModule),
+    // canActivate: [AuthGuardService],
+    // canDeactivate: [CanDeactivateDashboardGuard]
   },
 ];
 

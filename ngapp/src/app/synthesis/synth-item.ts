@@ -1,0 +1,27 @@
+import { SynthService, voices as synthVoices, Voice } from './synth.service';
+import { Subscription } from 'rxjs';
+
+export class SynthItem {
+  audioUrl: string = undefined;
+  subscription: Subscription
+  requestUrl: string;
+  exceptions: object[] = [];
+  constructor(
+    public text: string,
+    public voice: Voice = synthVoices[0],
+    private synth: SynthService,
+  ){ this.refresh() }
+
+  refresh(useCache = true) {
+    this.audioUrl = undefined;
+    this.requestUrl = this.synth.request_url(this.text,this.voice);
+    this.subscription = this.synth
+      .synthesiseText(this.text,this.voice, useCache)
+      .subscribe({
+        next: audioUrl=>this.audioUrl = audioUrl,
+        error: error=>   {console.error(error); this.exceptions += error},
+      });
+  }
+
+  dispose() { this.subscription.unsubscribe() }
+}

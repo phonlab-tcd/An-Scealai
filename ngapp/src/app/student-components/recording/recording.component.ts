@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
-import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import { SynthService, Paragraph, Sentence, Section } from '../../synthesis/synth.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 
@@ -23,7 +23,7 @@ export class RecordingComponent implements OnInit {
   constructor(private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService, private engagement: EngagementService) { }
+              private synthesis: SynthService, private engagement: EngagementService) { }
   
   // Synthesis variables
   story: Story = new Story();
@@ -323,6 +323,6 @@ export class RecordingComponent implements OnInit {
   }
   
   goToDashboard() {
-    this.router.navigateByUrl('/dashboard/' + this.story._id);
+    this.router.navigateByUrl('/edit-story/' + this.story._id);
   }
 }

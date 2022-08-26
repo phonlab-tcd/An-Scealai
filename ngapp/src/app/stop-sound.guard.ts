@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { SynthesisService } from './services/synthesis.service';
+import { LegacySynthPage } from './synthesis/legacy-synth-page/synthesis.component';
+import { SynthService } from './synthesis/synth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StopSoundGuard implements CanDeactivate<SynthesisComponent> {
+export class StopSoundGuard implements CanDeactivate<LegacySynthPage> {
   
-  canDeactivate(
-    synthesis: SynthesisComponent,
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
+  canDeactivate(synthesis: LegacySynthPage): Observable<boolean> | boolean {
     for (const section of synthesis.chosenSections) {
       section.stop();
     }

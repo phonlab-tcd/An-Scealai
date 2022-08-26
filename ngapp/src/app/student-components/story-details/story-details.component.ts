@@ -51,7 +51,7 @@ export class StoryDetailsComponent implements OnInit {
         .subscribe({
           complete: () => {
             if (this.story._id) {
-              this.router.navigateByUrl('/dashboard/' + this.story._id);
+              this.router.navigateByUrl('/edit-story/' + this.story._id);
             }
           },
         });

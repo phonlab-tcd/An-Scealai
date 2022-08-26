@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
+import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
+import { EditStoryComponent } from './edit-story-page/edit-story/component';
 import { RecordingComponent } from './student-components/recording/recording.component';
-import { AppComponent } from './app.component';
 
 @Injectable({
   providedIn: 'root'
 })
-class CanDeactivateDashboardGuard implements CanDeactivate<DashboardComponent> {
-  canDeactivate(
-    dashboard: DashboardComponent,
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
-    if(dashboard.storySaved) { return true };
-    dashboard.showModal();
-    return dashboard.modalChoice;
+class CanDeactivateDashboardGuard implements CanDeactivate<EditStoryComponent> {
+  canDeactivate(editStoryComponent: EditStoryComponent) {
+    if(editStoryComponent.storySaved) { return true };
+    editStoryComponent.showModal();
+    return editStoryComponent.modalChoice;
   }
 }
 

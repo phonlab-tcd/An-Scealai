@@ -14,7 +14,8 @@ function authHeader(token: string) {
 function isGramadoirRequest(request: HttpRequest<unknown>) {
   return request.url.includes('gramsrv') ||
     request.url.includes('cadhan') ||
-    request.url.includes('api-gramadoir');
+    request.url.includes('api-gramadoir') ||
+    request.url.includes('scealai-gramadoir');
 }
 
 @Injectable()

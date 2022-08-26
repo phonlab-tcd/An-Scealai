@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 //import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
-import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
@@ -35,11 +34,9 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { NewStoryComponent } from './student-components/new-story/new-story.component';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
 import { TeachersComponent } from './admin-components/teachers/teachers.component';
@@ -69,15 +66,14 @@ import { ViewRecordingComponent } from './student-components/view-recording/view
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { QuillModule } from 'ngx-quill';
 import { SpinnerModule } from 'spinner/spinner.module';
-import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import { SynthItemComponent } from './synth-item/synth-item.component';
-import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { EditStoryPageModule } from './edit-story-page/edit-story-page.module';
+
+import { SynthModule } from "./synthesis/synth.module";
 
 @NgModule({
   declarations: [
@@ -87,10 +83,6 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     TechnologyComponent,
     LanguageComponent,
     LoginComponent,
-//     RegisterComponent,
-//     RegisterFormComponent,
-//     WaitingForEmailVerificationComponent,
-    DashboardComponent,
     BookContentsComponent,
     ChatbotComponent,
     NewStoryComponent,
@@ -106,7 +98,6 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     TeacherStoryComponent,
     TeacherPanelComponent,
     AdminClassroomComponent,
-    SynthesisComponent,
     StoryHistoryComponent,
     RecordingComponent,
     RegisterProfileComponent,
@@ -124,15 +115,13 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     ViewRecordingComponent,
     SafeHtmlPipe,
     SponsorsComponent,
-    SynthesisPlayerComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
     CreateQuizComponent,
     AboutTaidhginComponent,
-    SynthItemComponent,
-    SynthVoiceSelectComponent,
   ],
   imports: [
+    SynthModule,
     RegisterModule,
     ReportAnIssueModule,
     SpinnerModule,
@@ -152,18 +141,7 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     MatSelectModule,
     NgbModule,
     NgbDropdownModule,
-    QuillModule.forRoot({
-      customOptions: [{
-        import: 'formats/font',
-        whitelist: [
-          'sans-serif',         // @quill-font
-          'serif',              // @quill-font
-          'monospace',          // @quill-font
-          'arial',              // @quill-font
-          'times-new-roman',    // @quill-font
-        ]
-      }],
-    })
+    EditStoryPageModule
   ],
   providers: [
     StoryService,

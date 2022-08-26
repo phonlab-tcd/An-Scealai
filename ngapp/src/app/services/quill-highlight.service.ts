@@ -10,14 +10,11 @@ import {
   DisagreeingVowelIndices,
 } from 'app/grammar.service';
 import {EngagementService} from "../engagement.service";
-import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
 // import clone from 'lodash/clone';
 import { from } from 'rxjs';
-import { assert } from 'console';
 import { GramadoirUrl } from '../grammar.service'
-import { DashboardComponent } from 'app/student-components/dashboard/dashboard.component';
 
 import * as Wink from 'wink-nlp';
 import * as Model from 'wink-eng-lite-web-model';
@@ -122,15 +119,12 @@ export class QuillHighlightService {
 
   makeGramadoirRequest(url: GramadoirUrl, sentencesWithOffsets, currentErrorTypes) {
     return from(sentencesWithOffsets.map(async ([offset, sentence],idx) => {
-        const get = (lang)=> this.grammar.gramadoirObservable(sentence, lang, this.grammar.gramadoirUrl).pipe(retry(2)).toPromise();
-        const [errorsEn, errorsGa] = await Promise.all([get('en'),get('ga')]);
-        this.grammar.addToGramadoirCache(sentence, 'en', errorsEn);
-        this.grammar.addToGramadoirCache(sentence, 'ga', errorsGa);
-        const errorTags = this.gramadoir2QuillTags(errorsEn, currentErrorTypes, offset);
-        errorTags.forEach((e, i) => {
-            e.messages.ga = errorsGa[i].msg;
+        const {en,ga} = await this.grammar.scealaiGramadoir(sentence).toPromise();
+        const qTags = this.gramadoir2QuillTags(en);
+        qTags.forEach((e, i) => {
+          e.messages.ga = ga[i].msg;
         });
-        return [errorTags,sentence,idx];
+        return [qTags,sentence,idx];
     }));
   }
 

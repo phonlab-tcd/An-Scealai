@@ -75,7 +75,7 @@ export class RecordingHistoryComponent implements OnInit {
     }
     
     goToDashboard() {
-      this.router.navigateByUrl('/dashboard/' + this.storyId);
+      this.router.navigateByUrl('/edit-story/' + this.storyId);
     }
     
     viewRecording(id) {
