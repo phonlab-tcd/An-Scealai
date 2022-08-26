@@ -138,10 +138,6 @@
           (click)="toggleGrammarTags();">
             {{ toggleGrammarButton() }}
             <i class="fas fa-spell-check optionsBtnIcon"></i>
-            <div
-              class="loader"
-              *ngIf="quillHighlightService.showingTags && grammarLoading">
-            </div>
         </span>
         <span
           [hidden]="!quillHighlightService.showingTags"

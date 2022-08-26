@@ -92,7 +92,6 @@ export class DashboardComponent implements OnInit{
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-      this.grammarLoading = true;
       try {
         await this.quillHighlightService
           .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
@@ -109,9 +108,6 @@ export class DashboardComponent implements OnInit{
             'See the browser console for more information');
         }
         console.dir(updateGrammarErrorsError);
-      }
-      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
-        this.grammarLoading = false;
       }
     });
   }
@@ -158,7 +154,6 @@ export class DashboardComponent implements OnInit{
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   mostRecentGramadoirRequestTime = null;
-  grammarLoading = true;
   grammarSelected = true;
   grammarTagsHidden = true;
   grammarSettingsHidden = false;

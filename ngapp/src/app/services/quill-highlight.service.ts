@@ -161,7 +161,7 @@ export class QuillHighlightService {
       const offset = i + sIndex;
       sentencesWithOffsets.push([offset, s]); 
       i = offset + s.length;
-  }
+    }
 
     this.currentGramadoirHighlightTags = [];
 
