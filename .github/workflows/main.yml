@@ -1,4 +1,4 @@
-name: build qa, test frontend and build prod if ok, test backend
+name: on-push
 on:
   push:
     branches:
@@ -7,7 +7,6 @@ on:
 
 # parallel jobs 
 jobs:
-
   test-jasmine:
     runs-on: ubuntu-latest
     steps:
