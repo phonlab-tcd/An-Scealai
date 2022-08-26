@@ -120,7 +120,7 @@ export class QuillHighlightService {
   }
 
   makeGramadoirRequest(url: GramadoirUrl, sentencesWithOffsets, currentErrorTypes) {
-    return from(sentencesWithOffsets.map(async ([offset, sentence]) => {
+    return from(sentencesWithOffsets.map(async ([offset, sentence],idx) => {
         const get = (lang)=> this.grammar.gramadoirObservable(sentence, lang, this.grammar.gramadoirUrl).pipe(retry(2)).toPromise();
         const [errorsEn, errorsGa] = await Promise.all([get('en'),get('ga')]);
         this.grammar.addToGramadoirCache(sentence, 'en', errorsEn);
@@ -129,7 +129,7 @@ export class QuillHighlightService {
         errorTags.forEach((e, i) => {
             e.messages.ga = errorsGa[i].msg;
         });
-        return [errorTags,sentence];
+        return [errorTags,sentence,idx];
     }));
   }
 
@@ -173,7 +173,8 @@ export class QuillHighlightService {
         this.grammar.gramadoirUrl,
         sentencesWithOffsets,
         currentGramadoirErrorTypes
-    ).subscribe(async promise => {
+    ).subscribe({
+      next: async promise => {
         errorTagsArray.push(promise);
         const errorTags = (await promise)[0];
         console.log(errorTags);
@@ -185,16 +186,19 @@ export class QuillHighlightService {
         if (this.showingTags) {
             this.applyGramadoirTagFormatting(quillEditor);
         }      
-    },err=>{},
-    async ()=>{
-      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
-      const body = {
-        storyId,
-        sentences: (await Promise.all(errorTagsArray)).map(([errors, sentence]) => ({errors, sentence})),
-      };
-      this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
+      },
+      complete: 
+        async ()=>{
+        const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
+        const body = {
+          storyId,
+          sentences: (await Promise.all(errorTagsArray))
+            .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
+            .map(([errors, sentence]) => ({errors, sentence})),
+        };
+        this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
     }
-  );
+  });
     
     this.currentGenetiveHighlightTags = await this.grammar
       .genitiveDirectObservable(text)
