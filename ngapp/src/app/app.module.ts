@@ -80,6 +80,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -133,6 +134,7 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     AboutTaidhginComponent,
     SynthItemComponent,
     SynthVoiceSelectComponent,
+    StatsDashboardComponent,
   ],
   imports: [
     RegisterModule,
