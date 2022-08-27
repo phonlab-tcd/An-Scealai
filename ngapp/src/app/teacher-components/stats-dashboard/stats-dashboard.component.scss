@@ -1,0 +1,26 @@
+.content {
+    display: flex;
+    width: 90%;
+    background: white;
+    border-radius: 5px;
+    margin-left: 5%;
+    padding: 20px;
+}
+
+.stats-card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats-card:hover {
+    cursor: pointer;
+}
+
+.stats-card-fullscreen {
+    position: fixed;
+    width: 88%;
+    height: 60vh;
+    z-index: 10;
+    top: 15vh;
+    left: 5%;
+}
