@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { SingletonService } from './singleton.service';
 
 @Component({
-  selector: 'app-privacy-preferences',
+  selector: 'privacy-preferences',
   templateUrl: './privacy-preferences.component.html',
-  styleUrls: ['./privacy-preferences.component.scss']
+  styleUrls: ['./style.scss'],
+  host: { class: "centeredA4" },
 })
-export class PrivacyPreferencesComponent implements OnInit {
-
+export class PrivacyPreferencesComponent {
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

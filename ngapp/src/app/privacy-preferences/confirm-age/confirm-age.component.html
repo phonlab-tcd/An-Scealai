@@ -1,0 +1,8 @@
+<mat-card>
+    <h3 align="left">Confirm your age.</h3>
+    <p align="justify">{{ageProse.short}}</p>
+    <p align="justify">{{ageProse.full}}</p>
+    <mat-button-toggle-group>
+        <mat-button-toggle *ngFor="let option of ageProse.settings" (click)="singleton.age.next(option.value)">{{option.display}}</mat-button-toggle>
+    </mat-button-toggle-group>
+</mat-card>

@@ -1,0 +1,25 @@
+<div style="
+    max-width: 210mm;
+    margin: auto;
+    margin-bottom: 2em;
+    background-color: rgba(255, 224, 192, 0.3)">
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h5>{{forGroup}}</h5>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p align="justify">{{data.short}}</p>
+        <p align="justify" matExpansionPanelContent innerHtml={{data.full}}></p>
+        <p align="justify" class="exception" *ngIf=disabled>
+            This feature can only be enabled by users who are over the age of digital consent (16 years).
+            Don't worry! You will still be able to use the website as normal.
+        </p>
+        <mat-button-toggle-group
+            #group
+            [disabled]=disabled
+            (change)="choose($event)">
+            <mat-button-toggle *ngFor="let option of data.options" [value]=option.value> {{option.display}} </mat-button-toggle>
+        </mat-button-toggle-group>
+    </mat-expansion-panel>
+</div>

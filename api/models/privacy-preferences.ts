@@ -1,22 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
-const { EventEnum } = require('./event');
-const { GoogleAnalyticsConsentPrompt } = require('../google-analytics-prompt');
 
-const GoogleAnalytics = new Schema({
-  prompt: {type: String, enum: Object.keys(GoogleAnalyticsConsentPrompt)},
-  accepted: Boolean,
-},{_id:false});
 
-const Engagement = new Schema({
-  acceptedEventTypes: [EventEnum],
-},{_id:false});
+const Consent = new Schema({
+  option: {type: String, enum: ["accept","reject"]},
+  proseId: {type: ObjectId, ref: 'PrivacyPreferencesProse'},
+},{_id: false})
 
 const PrivacyPreferences = new Schema({
   owner: { type: ObjectId, ref: 'User' },
-  googleAnalytics: GoogleAnalytics,
-  engagement: Engagement,
+  'Google Analytics': Consent,
+  'Engagement': Consent,
+  'Cloud Storage': Consent,
 }, {
   collection: "privacyPreferences"
 });
