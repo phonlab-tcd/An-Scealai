@@ -28,6 +28,7 @@ let storyRoutes;
     require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
+  const mine = require('../endpoints_functions/story/mine');
 
   // POST
   const create =
@@ -43,6 +44,7 @@ let storyRoutes;
       // '/myStudentsStory/:id': myStudentsStory,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
+      "/mine": mine,
     },
     post: {
       '/create': create,

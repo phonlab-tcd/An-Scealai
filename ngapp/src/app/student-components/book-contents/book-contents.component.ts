@@ -57,7 +57,7 @@ export class BookContentsComponent implements OnInit {
     }
     // get stories for the user
     this.storyService
-      .getStoriesForLoggedInUser()
+      .getMyStories()
       .subscribe(
         (data) => {
           this.stories = data.map(storyData => new Story().fromJSON(storyData));

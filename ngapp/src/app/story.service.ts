@@ -61,16 +61,8 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'withId/' + id);
   }
 
-  getStoriesForLoggedInUser(): Observable<Story[]> {
-    const userDetails = this.auth.getUserDetails();
-    if(!userDetails) {
-      return new Observable(subscriber=>{
-        subscriber.next([]);
-        subscriber.complete();
-      });
-    }
-    const author = userDetails.username;
-    return this.http.get<Story[]>(this.baseUrl + author);
+  getMyStories() {
+    return this.http.get<Story[]>(this.baseUrl + 'mine');
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {

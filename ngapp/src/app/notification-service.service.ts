@@ -44,7 +44,7 @@ export class NotificationService {
         }
         this.messageEmitter.emit(this.messages);
       });
-      this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
+      this.storyService.getMyStories().subscribe(res=> {
         this.stories = [];
         let stories = res;
         for(let story of stories) {

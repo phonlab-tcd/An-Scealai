@@ -311,6 +311,7 @@ export class DashboardComponent implements OnInit{
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
     this.getStories().then(stories => {
+      console.log('STORIES',stories);
       this.stories = stories;
       // Get the story id from the URL in the same way
       this.getStoryId().then(params => {
@@ -358,19 +359,10 @@ export class DashboardComponent implements OnInit{
 
   // return the student's set of
   // stories using the story service
-  getStories(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storyService
-          .getStoriesForLoggedInUser()
-          .subscribe({
-            next: (stories: Story[]) => {
-              resolve(stories);
-            },
-            error: (error: Error) => {
-              reject(error);
-            },
-          });
-    });
+  getStories() {
+    return this.storyService
+        .getMyStories()
+	      .toPromise();
   }
 
   // return the url params (which contains the id,
