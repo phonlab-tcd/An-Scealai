@@ -4,7 +4,6 @@ import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from 'abairconfig';
-import { NgbCalendarIslamicCivil } from '@ng-bootstrap/ng-bootstrap';
 
 export interface UserDetails {
   _id: string;
