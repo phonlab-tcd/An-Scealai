@@ -98,7 +98,7 @@ userSchema.methods.validStatus = function() {
 
 userSchema.methods.generateJwt = function() {
   const expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
+  expiry.setDate(expiry.getDate() + 1); // now + 24 hours
   let exp = expiry.getTime() / 1000; 
 
   return jwt.sign({

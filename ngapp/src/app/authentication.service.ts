@@ -4,6 +4,7 @@ import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from 'abairconfig';
+import { NgbCalendarIslamicCivil } from '@ng-bootstrap/ng-bootstrap';
 
 export interface UserDetails {
   _id: string;
@@ -49,6 +50,16 @@ export interface RegistrationTokenPayload {
   language: 'en' | 'ga'; // english | gaeilge
 }
 
+function decodeJwt(token): {claims: object; payload: object} {
+  try {
+    const [claims,payload] = token.split('.').slice(0,2).map(x=>JSON.parse(window.atob(x)));
+    return {claims,payload};
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,13 +71,24 @@ export class AuthenticationService {
 
   public pendingUserPayload: LoginTokenPayload = null;
   public jwtTokenName = 'scealai-token' as const;
+  private jwt$ = new Subject<string>();
+  private jwtPayload$ = new Subject<object>();
+
 
   constructor(
     private http: HttpClient,
-    private router: Router, ) { }
+    private router: Router, ) {
+      this.jwt$.subscribe(token=>{
+        const {payload} = decodeJwt(token);
+        this.jwtPayload$.next(payload);
+      });
+      this.jwtPayload$.subscribe(p=>this.handleExpiration(p));
+      this.jwt$.next(this.getToken());
+    }
 
   private saveToken(token: string): void {
     localStorage.setItem(this.jwtTokenName, token);
+    this.jwt$.next(token);
     this.token = token;
   }
 
@@ -77,27 +99,18 @@ export class AuthenticationService {
 
   public getUserDetails(): UserDetails {
     const token = this.getToken();
-    let payload: any;
-    if (token) {
-
-      payload = token.split('.')[1];
-      if(!payload) return null;
-      payload = window.atob(payload);
-
-      this.getLoggedInName.next(JSON.parse(payload).username);
-
-      return JSON.parse(payload);
-
-    } else {
-      return null;
-    }
+    if(!token) return null;
+    const { payload} = decodeJwt(token) as {payload: UserDetails};
+    if(!payload) return null;
+    this.getLoggedInName.next(payload.username);
+    return payload;
   }
 
   public isLoggedIn(): boolean {
     const user = this.getUserDetails();
 
     if (user) {
-      return user.exp > Date.now() / 1000;
+      return user.exp > (Date.now() / 1000);
     } else {
       return false;
     }
@@ -142,6 +155,17 @@ export class AuthenticationService {
 
   public register(user: TokenPayload | RegistrationTokenPayload): Observable<any> {
     return this.request('post', 'register', user);
+  }
+
+  private tokenExpirationTimeoutId;
+
+  private handleExpiration(payload){
+    clearTimeout(this.tokenExpirationTimeoutId);
+    if(!payload) return;
+    var expiresIn = (Number(payload['exp']) - ((new Date()).getTime()/1000)) * 1000;
+    this.tokenExpirationTimeoutId = setTimeout(
+      ()=>{window.alert("Your session has expired! You have been logged out automatically.")},
+      expiresIn);
   }
 
   public login(user: TokenPayload | LoginTokenPayload): Observable<any> {
