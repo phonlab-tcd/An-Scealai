@@ -78,10 +78,10 @@ export class AuthenticationService {
     private http: HttpClient,
     private router: Router, ) {
       this.jwt$.subscribe(token=>{
-        const {payload} = decodeJwt(token);
-        this.jwtPayload$.next(payload);
+        const decoded = decodeJwt(token);
+        if(decoded?.payload) this.jwtPayload$.next(decoded.payload);
       });
-      this.jwtPayload$.subscribe(p=>this.handleExpiration(p));
+      this.jwtPayload$.subscribe(p=>this.handleExpiration(p['exp']));
       this.jwt$.next(this.getToken());
     }
 
@@ -158,12 +158,14 @@ export class AuthenticationService {
 
   private tokenExpirationTimeoutId;
 
-  private handleExpiration(payload){
+  private handleExpiration(exp){
     clearTimeout(this.tokenExpirationTimeoutId);
-    if(!payload) return;
-    var expiresIn = (Number(payload['exp']) - ((new Date()).getTime()/1000)) * 1000;
+    const expSecs = Number(exp);
+    if(!expSecs) return;
+    const expMs = expSecs * 1000;
+    const expiresIn = (expMs - Date.now());
     this.tokenExpirationTimeoutId = setTimeout(
-      ()=>{window.alert("Your session has expired! You have been logged out automatically.")},
+      ()=>{window.alert("Your session has expired! You have been logged out automatically. If you navigate away from this page all unsaved data will be lost.")},
       expiresIn);
   }
 
