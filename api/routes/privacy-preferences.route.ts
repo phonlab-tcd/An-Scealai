@@ -9,5 +9,6 @@ const ep=(p,method='get')=>require('../endpoints_functions/privacy-preferences' 
 const route=(p,method)=>router.route(p)[method](ep(p,method));
 
 route('','post');
+route('','get');
 
 export = router;

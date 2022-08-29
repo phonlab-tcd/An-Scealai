@@ -5,7 +5,7 @@ const ObjectId = Schema.Types.ObjectId;
 
 const Consent = new Schema({
   option: {type: String, enum: ["accept","reject"]},
-  proseId: {type: ObjectId, ref: 'PrivacyPreferencesProse'},
+  prose: String,
 },{_id: false})
 
 const PrivacyPreferences = new Schema({
