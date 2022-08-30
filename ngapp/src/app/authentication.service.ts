@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import jwtDecode from "jwt-decode";
 import config from 'abairconfig';
 
 export interface UserDetails {
@@ -49,16 +50,6 @@ export interface RegistrationTokenPayload {
   language: 'en' | 'ga'; // english | gaeilge
 }
 
-function decodeJwt(token): {claims: object; payload: object} {
-  try {
-    const [claims,payload] = token.split('.').slice(0,2).map(x=>JSON.parse(window.atob(x)));
-    return {claims,payload};
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -72,14 +63,16 @@ export class AuthenticationService {
   public jwtTokenName = 'scealai-token' as const;
   private jwt$ = new Subject<string>();
   private jwtPayload$ = new Subject<object>();
+  public jwtPayload$sub(observer){ return this.jwtPayload$.subscribe(observer); }
 
 
   constructor(
     private http: HttpClient,
     private router: Router, ) {
       this.jwt$.subscribe(token=>{
-        const decoded = decodeJwt(token);
-        if(decoded?.payload) this.jwtPayload$.next(decoded.payload);
+        const payload = jwtDecode(token);
+        console.log("PAYLOAD",payload);
+        if(payload instanceof Object) this.jwtPayload$.next(payload);
       });
       this.jwtPayload$.subscribe(p=>this.handleExpiration(p['exp']));
       this.jwt$.next(this.getToken());
@@ -99,7 +92,7 @@ export class AuthenticationService {
   public getUserDetails(): UserDetails {
     const token = this.getToken();
     if(!token) return null;
-    const { payload} = decodeJwt(token) as {payload: UserDetails};
+    const payload = jwtDecode(token) as UserDetails;
     if(!payload) return null;
     this.getLoggedInName.next(payload.username);
     return payload;
