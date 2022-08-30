@@ -65,6 +65,7 @@ const jwtTokenName = Object.freeze('scealai-token' as const);
   providedIn: 'root'
 })
 export class AuthenticationService {
+  public jwtTokenName = jwtTokenName;
 
   baseUrl: string = config.baseurl + 'user/';
   private token: string;

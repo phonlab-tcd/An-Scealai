@@ -13,7 +13,7 @@ export class RoleGuardService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean {
       const expectedRole = route.data.expectedRole;
       const token = localStorage.getItem('scealai-token');
-      const tokenPayload = decode(token);
+      const tokenPayload = decode(token) as {role?: string};
 
       if (!this.auth.isLoggedIn() || tokenPayload.role !== expectedRole) {
         this.router.navigateByUrl('/landing');
