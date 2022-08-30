@@ -1,5 +1,9 @@
 <!-- main page where all of the components are displayed over -->
 <!-- <ng2-slim-loading-bar color="green"></ng2-slim-loading-bar> -->
+Age {{ singleton.age | async }} <br>
+Engagement {{ consent.userAccepts$("Engagement") | async}} <br>
+Google Analytics {{ consent.userAccepts$("Google Analytics") | async}} <br>
+Cloud Storage {{ consent.userAccepts$("Cloud Storage") | async}} <br>
 <div class="page">
   <!-- nav bar at the top of the page -->
   <div class="nav">

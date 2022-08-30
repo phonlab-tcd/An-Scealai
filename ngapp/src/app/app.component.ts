@@ -21,6 +21,8 @@ import { TranslationService     } from 'app/translation.service';
 import { MessageService         } from 'app/message.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
+import { ConsentService         } from 'app/services/consent.service';
+import { SingletonService       } from 'app/privacy-preferences/singleton.service';
 
 declare var gtag;
 
@@ -49,6 +51,10 @@ export class AppComponent {
     private notificationSerivce : NotificationService,
     private engagement: EngagementService,
     public ts: TranslationService,
+    
+    // TODO remove
+    public consent: ConsentService,
+    public singleton: SingletonService,
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {

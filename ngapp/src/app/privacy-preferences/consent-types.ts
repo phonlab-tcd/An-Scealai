@@ -32,12 +32,16 @@ export const consentTypes = Object.freeze({
             In order for An Scéalaí to function normally
             it is required that you consent to having your data
             processed on our private cloud infrastructure.
-            Unfortunately, at this time, you will not be able to use An Scéalaí
+            Unfortunately, at this time, most of the pages on the An Scéalaí site will be inaccessible
             if you decide not to allow An Scéalaí to process your data in this way.
         `,
         allowUnder16: true,
         options: acceptReject,
     },
 } as const);
+
+export function proseOf(t: ConsentGroup) {
+  return `<p>${consentTypes[t].short}</p><p>${consentTypes[t].full}</p>`;
+}
 
 export type ConsentGroup = keyof typeof consentTypes;

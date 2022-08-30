@@ -1,10 +1,11 @@
-import type { ConsentGroup } from '../consent-types';
+import { ConsentGroup, proseOf } from '../consent-types';
 import { consentTypes } from '../consent-types';
 import { Attribute, Component } from '@angular/core';
 import { SingletonService } from '../singleton.service';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import   config from '../../../abairconfig';
+import { ConsentService } from '../../services/consent.service';
 
 const not = x => x === false;
 
@@ -22,6 +23,7 @@ export class ConsentGroupComponent {
     @Attribute('for') public forGroup: ConsentGroup,
     public singleton: SingletonService,
     private http: HttpClient,
+    private consent: ConsentService,
     ) {
     this.data = consentTypes[forGroup];
     this.singleton.age.subscribe(a=>
@@ -31,9 +33,11 @@ export class ConsentGroupComponent {
   }
 
   choose(event) {
-    const body =  {forGroup: this.forGroup, option: event.value, prose: `<p>${this.data.short}</p><p>${this.data.full}</p>`};
+    const body =  {forGroup: this.forGroup, option: event.value, prose: proseOf(this.forGroup)};
     console.log(body);
-    this.http.post(config.baseurl + 'privacy-preferences', body ).subscribe();
+    this.http.post(config.baseurl + 'privacy-preferences', body ).subscribe(ok=>{
+      this.consent.userAccepts$(this.forGroup).next(event.value === "accept");
+    });
   }
 
   not = not;

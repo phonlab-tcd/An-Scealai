@@ -6,5 +6,12 @@
     background-color: rgba(255,255,255,0.1);
 }
 .mat-card,.mat-expansion-panel, .mat-button-toggle-group {
+    margin: auto;
     margin-bottom: 2em;
+}
+
+.exception {
+    background-color: rgba(255, 166, 0, 0.37);
+    padding: 2mm;
+    border-radius: 2mm;
 }

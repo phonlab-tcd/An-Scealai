@@ -10,5 +10,7 @@ const route=(p,method)=>router.route(p)[method](ep(p,method));
 
 route('','post');
 route('','get');
+route('/age','get');
+route('/age','post');
 
 export = router;

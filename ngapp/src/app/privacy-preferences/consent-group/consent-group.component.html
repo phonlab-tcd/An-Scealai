@@ -11,15 +11,19 @@
         </mat-expansion-panel-header>
         <p align="justify">{{data.short}}</p>
         <p align="justify" matExpansionPanelContent innerHtml={{data.full}}></p>
-        <p align="justify" class="exception" *ngIf=disabled>
-            This feature can only be enabled by users who are over the age of digital consent (16 years).
-            Don't worry! You will still be able to use the website as normal.
-        </p>
-        <mat-button-toggle-group
-            #group
-            [disabled]=disabled
-            (change)="choose($event)">
-            <mat-button-toggle *ngFor="let option of data.options" [value]=option.value> {{option.display}} </mat-button-toggle>
-        </mat-button-toggle-group>
-    </mat-expansion-panel>
+        <div style="height: 5em">
+            <p align="justify" class="exception" *ngIf="disabled; else buttonChoice">
+                This feature can only be enabled by users who are over the age of digital consent (16 years).
+                Don't worry! You will still be able to use the website as normal.
+            </p>
+            <ng-template #buttonChoice>
+                <mat-button-toggle-group
+                    #group
+                    [disabled]=disabled
+                    (change)="choose($event)">
+                    <mat-button-toggle *ngFor="let option of data.options" [value]=option.value> {{option.display}} </mat-button-toggle>
+                </mat-button-toggle-group>
+            </ng-template>
+        </div>
+</mat-expansion-panel>
 </div>

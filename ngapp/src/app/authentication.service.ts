@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
+import { Observable , BehaviorSubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from 'abairconfig';
@@ -73,13 +73,16 @@ export class AuthenticationService {
   public loggedInAs$subscribe(observer) {
     return this.loggedInAs$.subscribe(observer);
   }
-  private loggedInAs$ = new Subject();
+  private loggedInAs$ = new BehaviorSubject(jwtPayload(this.getToken()));
 
   public pendingUserPayload: LoginTokenPayload = null;
 
   constructor(
     private http: HttpClient,
-    private router: Router, ) { }
+    private router: Router, ) {
+    const token = this.getToken();
+    if(token) this.loggedInAs$.next(jwtPayload(token));
+  }
 
   private saveToken(token: string): void {
     localStorage.setItem(jwtTokenName, token);
