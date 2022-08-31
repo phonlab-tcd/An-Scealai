@@ -140,7 +140,6 @@ export class TeacherStatsComponent implements OnInit {
     }
     
     createChart(labels, values) {
-      
       this.myChart = new Chart('statChart', {  
         type: 'doughnut',  
         data: {  
