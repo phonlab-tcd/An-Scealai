@@ -96,17 +96,15 @@ userSchema.methods.validStatus = function() {
   return this.status.match(allowableStatus);
 };
 
-userSchema.methods.generateJwt = function() {
-  const expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
-  let exp = expiry.getTime() / 1000; 
+const hoursFromNowInSeconds = Object.freeze(n => Math.floor(Date.now() / 1000) + (60 * 60 * n));
 
+userSchema.methods.generateJwt = function() {
   return jwt.sign({
     _id: this._id,
     username: this.username,
     role: this.role,
     language: this.language,
-    exp
+    exp: hoursFromNowInSeconds(24),
   }, process.env.PRIVATE_KEY, {algorithm: 'RS256'}) // 5ecret
 };
 
