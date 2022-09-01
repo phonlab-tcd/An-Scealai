@@ -46,22 +46,15 @@ export class DictglossComponent implements OnInit {
     }
   }
 
-  wrong_words_div: any;
+  wrong_words_div: string;
   words: string[] = [];
+  hasText: boolean = false;
+  hasIncorrect: boolean = false;
+  guess: string = '';
   displayText(text) {
+    this.hasText = true;
     console.log("displayText: " + text);
-    var container = document.getElementById(this.container_id);
-    container.innerHTML = "";
-
-    var words_div = document.createElement("div");
-    container.appendChild(words_div);
-    var input_div = document.createElement("div");
-    container.appendChild(input_div);
-
-    //global div for wrong guesses
-    this.wrong_words_div = document.createElement("div");
-    container.appendChild(this.wrong_words_div);
-
+    
     //global list of words
     this.words = [];
 
@@ -70,20 +63,32 @@ export class DictglossComponent implements OnInit {
     //var text_sentences = text.split(/\n+/);
 
     //split text by full stops and loop over list..
-    var text_sentences = text.split(". " || ".");
-    this.displaySentences(text_sentences, words_div);
+    var text_sentences: string[] = text.split(".");
+    console.log("Text sentences:", text_sentences);
+    for(let i = 0; i < text_sentences.length; i++){
+      let curr = text_sentences[i].split(" " || ",");
+      this.words = this.words.concat(curr);
+    }
 
+    for(let i = 0 ; i < this.words.length; i++){
+      if(this.words[i] === ''){
+        this.words.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
+      }
+    }
 
+    console.log("WORDS SPLIT", this.words);
 
     //Word input field
-    var word_input = document.createElement("input");
-    word_input.type = "entry";
-    word_input.setAttribute("onkeydown", "checkWord(this, event);");
-    input_div.appendChild(word_input);
+    var word_input = document.getElementById("guesses_input") as HTMLInputElement;
+    this.guess = word_input.value;
 
     word_input.focus();
   }
 
+  /*
   displaySentences(text_sentences, sentences_div) {
     var counter = 0;
     for (let i in text_sentences) {
@@ -99,11 +104,12 @@ export class DictglossComponent implements OnInit {
       sentences_div.appendChild(br);
     }
   }
+*/
 
-
+  /*
   displayWords(text_words, words_div, counter) {
     //console.log(text_words);
-    var iSubstitute;
+    var iSubstitute: any;
     for (let i in text_words) {
       var word = text_words[i];
 
@@ -178,7 +184,7 @@ export class DictglossComponent implements OnInit {
     //I honestly had no idea how this initially was meant to work - Fionn
     return +counter + + iSubstitute + 1;
   }
-
+*/
 
   audio_urls: any;
   showReplay: boolean = false;
@@ -192,17 +198,19 @@ export class DictglossComponent implements OnInit {
     **/
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
+    if(this.texts.length !== 0){
+      this.hasText = true;
+    }
     this.dictglossSynthRefresh();
 
     console.log('The input text is:', this.texts);
-    this.dictgloss(this.texts);
+    this.displayText(this.texts);
   }
 
   dictglossSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
     this.synthItem = new SynthItem(this.texts, 'connemara', this.synth);
     console.log("REQUEST URL:",this.synthItem.requestUrl);  //Could be not working as you need to use this variable from this.synthItem instead of audioUrl
-    
   }
 
   dictgloss(text) {
@@ -214,23 +222,15 @@ export class DictglossComponent implements OnInit {
 
     document.getElementById("url_display").innerText = "Audio Playback";
     document.getElementById(this.container_id).innerHTML = "";
-
-    this.loadAudioUrls();
-    
-    this.getTextFromText(text);
-    //this.getTextFromUrl(this.audio_urls);
-
-    if (this.show_text_input_immediately) {
-      this.showTextInputs();
-    }
   }
 
+  /** 
   showTextInputs() {
     var container = document.getElementById(this.container_id);
     container.setAttribute("style", "display:block");
   }
-
-
+  */
+  /** 
   getTextFromUrl(url) {
     if (url.endsWith("txt")) {
       var content_type = "text";
@@ -244,7 +244,8 @@ export class DictglossComponent implements OnInit {
       this.getTextFromHtmlUrl(url);
     }
   }
-
+  */
+/**
   getTextFromTxtUrl(url) {
     console.log("getTextFromUrl: " + url);
 
@@ -262,7 +263,7 @@ export class DictglossComponent implements OnInit {
     xhr.send();
 
   }
-
+  */
   getTextFromText(text) {
     console.log("getTextFromText: " + text);
     this.displayText(text);
@@ -277,7 +278,7 @@ export class DictglossComponent implements OnInit {
     this.displayText(newText);
   }
 
-  
+  /**
   getTextFromHtmlUrl(url) {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
@@ -305,36 +306,28 @@ export class DictglossComponent implements OnInit {
     xhr.send();
   }
 
+  */
 
-  checkWord(element, event) {
-    if (event.keyCode == 13) {
-      let word = element.value;
-      console.log("checkWord: " + word);
-
-      if (this.words.indexOf(word) == -1) {
-        //If the typed word is not in the words list
-        var wrongWordElement = document.createElement("div");
-        wrongWordElement.innerText = word;
-        this.wrong_words_div.appendChild(wrongWordElement);
-      } else {
-        //If the word is found, loop through the list and show the word in the right position
-        var start_index = 0;
-        while (this.words.indexOf(word, start_index) != -1) {
-          let word_index = this.words.indexOf(word, start_index);
-          console.log("Found " + word + " at " + word_index + " in " + this.words);
-          var wordElement = document.getElementById("word_" + word_index);
-          wordElement.innerText = word;
-          start_index = word_index + 1;
-        }
+  //checkWord(word)
+  checkWord(word: string) {
+    if (this.words.indexOf(word) == -1) {
+      //If the typed word is not in the words list
+      this.hasIncorrect = true;
+      this.wrong_words_div = this.wrong_words_div + word + "\n";
+    } else {
+      //If the word is found, loop through the list and show the word in the right position
+      var start_index = 0;
+      while (this.words.indexOf(word, start_index) != -1) {
+        let word_index = this.words.indexOf(word, start_index);
+        console.log("Found " + word + " at " + word_index + " in " + this.words);
+        var wordElement = document.getElementById("word_" + word_index);
+        wordElement.innerText = word;
+        start_index = word_index + 1;
       }
-      element.value = "";
-      element.focus();
-
     }
-
   }
   
-
+  /**
   playing_index: any;
   loadAudioUrls() {
     let audio = new Audio(this.synthItem.audioUrl);
@@ -352,6 +345,7 @@ export class DictglossComponent implements OnInit {
     //this.playing_index = -1;
     //this.playNext();
   }
+   */
 /** 
   playNext() {
     let audio = document.getElementById("audio_player") as HTMLAudioElement;
