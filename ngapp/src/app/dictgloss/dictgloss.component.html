@@ -13,7 +13,7 @@
         <button *ngFor="let i of words">{{i}}</button>
         <hr>
         <input id="guesses_input">
-        <button style="margin:4px;" (click)="checkWord(guess);">✔️</button>
+        <button style="margin:4px;" (click)="checkWord();">✔️</button>
         <div *ngIf="hasIncorrect">
             {{this.wrong_words_div}}
         </div>
