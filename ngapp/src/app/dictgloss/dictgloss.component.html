@@ -4,9 +4,8 @@
         <input id="textSelector">
         <button style="margin:4px;" (click)="dictglossLoad();">✔️</button>
     </div>
-    <!--<div *ngIf="showReplay">-->
-    <hr>
     <div *ngIf="hasText">
+        <hr>
         <h3>Audio Playback</h3>
         <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
         <hr>

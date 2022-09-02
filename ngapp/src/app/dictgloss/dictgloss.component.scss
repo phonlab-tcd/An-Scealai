@@ -12,6 +12,14 @@
     animation-name: fadeIn;
 }
 
+button {
+    border-radius: 4px;
+    border-color: rgba($color: #008f13, $alpha: 1.0);
+    box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+    border-style: solid;
+    background-color: rgba($color: rgba(131, 255, 131, 0.459), $alpha: 1.0);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0%;

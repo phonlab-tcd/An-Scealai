@@ -56,10 +56,11 @@ export class DictglossComponent implements OnInit {
     this.hasText = true;
     console.log("displayText: " + text);
     
-    //global list of words
+    //global lists of words
     this.words = [];
     this.shownWords = [];
     this.wrongWords = [];
+    this.wrong_words_div = "";
 
 
     //split text by newline and loop over list..
@@ -107,11 +108,13 @@ export class DictglossComponent implements OnInit {
 
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);
+    selector.value = "";
   }
 
   dictglossSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
     this.synthItem = new SynthItem(this.texts, 'connemara', this.synth);
+    this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
 
@@ -138,5 +141,6 @@ export class DictglossComponent implements OnInit {
         start_index = word_index + 1;
       }
     }
+    word_input.value = "";
   }
 }
