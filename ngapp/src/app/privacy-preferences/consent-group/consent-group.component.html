@@ -9,8 +9,8 @@
                 <h5>{{forGroup}}</h5>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <p align="justify">{{data.short}}</p>
-        <p align="justify" matExpansionPanelContent innerHtml={{data.full}}></p>
+        <p align="justify">{{data.prose[ts.l.iso_code].short}}</p>
+        <p align="justify" matExpansionPanelContent innerHtml={{data.prose[ts.l.iso_code].full}}></p>
         <div style="height: 5em">
             <p align="justify" class="exception" *ngIf="disabled; else buttonChoice">
                 This feature can only be enabled by users who are over the age of digital consent (16 years).
@@ -21,7 +21,8 @@
                     #group
                     [disabled]=disabled
                     (change)="choose($event)">
-                    <mat-button-toggle *ngFor="let option of data.options" [value]=option.value> {{option.display}} </mat-button-toggle>
+                    <mat-button-toggle value="reject"> {{ ts.message('reject') }} </mat-button-toggle>
+                    <mat-button-toggle value="accept"> {{ ts.message('accept') }} </mat-button-toggle>
                 </mat-button-toggle-group>
             </ng-template>
         </div>

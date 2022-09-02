@@ -23,6 +23,7 @@ import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
 import { ConsentService         } from 'app/services/consent.service';
 import { SingletonService       } from 'app/privacy-preferences/singleton.service';
+import { GoogleAnalytics        } from 'app/services/google-analytics';
 
 declare var gtag;
 
@@ -43,18 +44,21 @@ export class AppComponent {
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
 
+  window = window;
+
   constructor(
     //private _loadingBar: SlimLoadingBarService, 
     private _router: Router,
     public auth: AuthenticationService,
     private storyService: StoryService,
     private notificationSerivce : NotificationService,
-    private engagement: EngagementService,
+    public engagement: EngagementService,
     public ts: TranslationService,
     
     // TODO remove
     public consent: ConsentService,
     public singleton: SingletonService,
+    public ga: GoogleAnalytics,
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {
@@ -74,6 +78,7 @@ export class AppComponent {
   // Set the page langauge
   // Get list of stories that have notifications
   ngOnInit() {
+    this.ga.disable();
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
     this.notificationSerivce.storyEmitter.subscribe( (res) => {

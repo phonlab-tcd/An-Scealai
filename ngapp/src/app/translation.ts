@@ -364,6 +364,18 @@ export default {
   age: {
     ga: 'Aois',
     en: 'Age' },
+  i_am_under_16: {
+    ga: 'TODO',
+    en: 'I am under 16' },
+  i_am_over_16: {
+    ga: 'TODO',
+    en: 'I am over 16' },
+  accept: {
+    ga: 'TODO',
+    en: 'Accept' },
+  reject: {
+    ga: 'TODO',
+    en: 'Reject' },
   county: {
     ga: 'Contae',
     en: 'County' },

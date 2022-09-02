@@ -1,18 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
-import { Observable } from 'rxjs';
+import { EmptyError, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SynthItem } from './synth-item';
 import { AuthenticationService } from './authentication.service';
 import { QuillHighlightTag } from './services/quill-highlight.service';
 import config from 'abairconfig';
+import { ConsentService } from './services/consent.service';
+
+const empty = ()=>new Observable(obs=>obs.complete);
 
 @Injectable({
   providedIn: 'root'
 })
 export class EngagementService {
+  private fakeHttp = {
+    post: empty,
+    get: empty,
+    patch: empty,
+  };
 
-  constructor(private http: HttpClient, private auth: AuthenticationService) { }
+  http: HttpClient | typeof this.fakeHttp;
+
+  disable() { this.http = this.fakeHttp }
+  enable()  { this.http = this.realHttp }
+
+  constructor(
+    public realHttp: HttpClient,
+    private auth: AuthenticationService,
+    private consent: ConsentService,
+    ) { 
+    this.http = realHttp;
+    this.consent.consentTypes["Engagement"].emitter.subscribe(accept=>{
+      accept?this.enable():this.disable()
+    });
+  }
 
   baseUrl: string = config.baseurl + 'engagement/';
 

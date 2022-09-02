@@ -1,8 +1,9 @@
 <mat-card>
     <h3 align="left">Confirm your age</h3>
-    <p align="justify">{{ageProse.short}}</p>
-    <p align="justify">{{ageProse.full}}</p>
+    <p align="justify">{{ ageProse[ts.l.iso_code].short }}</p>
+    <p align="justify">{{ ageProse[ts.l.iso_code].full  }}</p>
     <mat-button-toggle-group (change)="choose($event)">
-        <mat-button-toggle *ngFor="let option of ageProse.settings" [value]="option.value">{{option.display}}</mat-button-toggle>
+        <mat-button-toggle value="under16">{{ ts.message('i_am_under_16') }} </mat-button-toggle>
+        <mat-button-toggle value="over16"> {{ ts.message('i_am_over_16') }}  </mat-button-toggle>
     </mat-button-toggle-group>
 </mat-card>
