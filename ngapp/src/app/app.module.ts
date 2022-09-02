@@ -78,6 +78,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -150,6 +151,7 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     MatNativeDateModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatDialogModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({

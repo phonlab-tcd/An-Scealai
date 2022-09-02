@@ -3,6 +3,7 @@ import { SingletonService } from '../singleton.service';
 import { HttpClient } from '@angular/common/http';
 import config from '../../../abairconfig';
 import { TranslationService } from '../../translation.service';
+import { EngagementService } from "../../engagement.service";
 
 @Component({
   selector: 'confirm-age',
@@ -10,7 +11,12 @@ import { TranslationService } from '../../translation.service';
   styleUrls: ['./../style.scss']
 })
 export class ConfirmAgeComponent {
-  constructor(public singleton: SingletonService,private http: HttpClient,public ts: TranslationService){}
+  constructor(
+    public singleton: SingletonService,
+    private http: HttpClient,
+    public ts: TranslationService,
+    public engagement: EngagementService) {}
+
   ageProse = Object.freeze({
     en:{
       short: "If you are under the age of digital consent, you can  still use An Séalaí, but we will only process data necessary for the normal functioning of the website features.",
@@ -28,7 +34,6 @@ export class ConfirmAgeComponent {
   } as const);
 
   choose(event){
-    console.log(event);
     this.singleton.age.next(event.value);
     this.http.post(config.baseurl + 'privacy-preferences/age',{range:event.value}).subscribe();
   }

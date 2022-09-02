@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../authentication.service';
-import { Subject } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import config from "../../abairconfig";
 import { SingletonService } from "../privacy-preferences/singleton.service";
 import { GoogleAnalytics } from './google-analytics';
-import { EngagementService } from 'app/engagement.service';
-
+import { EngagementService } from '../engagement.service';
+import { MatDialog } from "@angular/material/dialog";
+import { TryingToUseFeaturesThatRequireConsentComponent } from "../trying-to-use-features-that-require-consent/trying-to-use-features-that-require-consent.component"
 export interface ConsentData {
   readonly prose: {
     readonly en: {short: string;full: string};
@@ -18,37 +20,50 @@ export interface ConsentData {
   readonly allowUnder16: boolean;
 }
 
+export const consentKey = ["Google Analytics", "Engagement", "Cloud Storage"] as const;
+
+const httpMethods = ['request','post','get','patch','options','jsonp','delete','head','put'] as const;
+
+function fakeHttpFunc<T>() {
+  return of(undefined) as Observable<any>;
+}
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConsentService {
-  constructor(
-    private auth: AuthenticationService,
-    private http: HttpClient,
-    private singleton: SingletonService,
-    private ga: GoogleAnalytics,
-    private engagement: EngagementService,
-  ) {
+  private fakeHttp = {
+    post: function<T>(): Observable<T> { return of(undefined) as Observable<any> },
+    get: function<T>(): Observable<T> { return of(undefined) as Observable<any> },
+  }
+  public http: HttpClient | typeof this.fakeHttp;
 
+  constructor(
+    private engagement: EngagementService,
+    private auth: AuthenticationService,
+    private realHttp: HttpClient,
+    private singleton: SingletonService,
+    private dialog: MatDialog,
+  ) {
+    this.http = this.realHttp;
+
+    this.dialog.open(TryingToUseFeaturesThatRequireConsentComponent);
     // synchronise preferences
     this.auth.loggedInAs$subscribe( async () => {
-      console.log(this);
-      console.log(this.consentTypes);
         const privacyPreferences = await this.http.get(config.baseurl + 'privacy-preferences').toPromise();
-        if (!privacyPreferences) return Object.entries(this.consentTypes).forEach(([_,o])=>o.disable()); // disable all, not logged in
-        Object.entries(this.consentTypes).forEach(([t,o]) => {
+        Object.entries(this.consentTypes).forEach(([t,o])=>{
           const pp = privacyPreferences[t];
-          const enabled = pp.option === "accept" && pp.prose === JSON.stringify(pp.prose);
+          const enabled = pp.option === "accept" && pp.prose === JSON.stringify(o.prose);
+          if(enabled)  o.enable();
+          else o.disable();
+          //TODO remove emitters
           o.emitter.next(enabled);
         });
-      }
-    );
+      });
 
     this.singleton.age.subscribe(a => {
       if (a !== "under16") return;
       Object.entries(this.consentTypes).forEach(([t,o]) => {
         if (!o.allowUnder16) {
-          console.log("rejecting", t)
           o.emitter.next(false);
           this.http.post(config.baseurl + 'privacy-preferences', { forGroup: t, option: "reject", prose: JSON.stringify(o.prose) }).subscribe();
         }
@@ -76,8 +91,8 @@ export class ConsentService {
         },
       },
       allowUnder16: false,
-      enable: () => this.ga.disable(false),
-      disable: () => this.ga.disable(true),
+      enable: () => GoogleAnalytics.disable(false),
+      disable: () => GoogleAnalytics.disable(true),
       emitter: new Subject<boolean>(),
     },
     'Engagement': {
@@ -121,8 +136,8 @@ export class ConsentService {
         }
       },
       allowUnder16: true,
-      enable: function ()  { console.error('not yet implemented') },
-      disable: function () { console.error('not yet implemented') },
+      enable: function ()  { this.http = this.realHttp },
+      disable: function () { this.http = this.fakeHttp },
       emitter: new Subject<boolean>(),
     },
   } as const;

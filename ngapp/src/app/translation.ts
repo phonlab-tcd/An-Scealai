@@ -364,6 +364,14 @@ export default {
   age: {
     ga: 'Aois',
     en: 'Age' },
+  trying_to_use_feature_that_requires_consent: {
+    ga: 'TODO',
+    en: 'You are trying to use a feature which requires your explicit consent. To use this feature you must enable Cloud Storage in your privacy preferences.'
+  },
+  go_to_privacy_preferences_page: {
+    ga: 'TODO',
+    en: 'TODO',
+  },
   i_am_under_16: {
     ga: 'TODO',
     en: 'I am under 16' },

@@ -23,7 +23,6 @@ export class ConsentGroupComponent {
     public singleton: SingletonService,
     private http: HttpClient,
     private consent: ConsentService,
-    private ga: GoogleAnalytics,
     public ts: TranslationService,
     ) {
       this.data = this.consent.consentTypes[this.forGroup];

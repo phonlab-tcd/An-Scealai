@@ -1,16 +1,10 @@
 import { Component              } from '@angular/core';
-import { OnInit                 } from '@angular/core';
 import { HostListener           } from '@angular/core';
-import { NavigationCancel       } from '@angular/router';
 import { Event                  } from '@angular/router';
 import { NavigationEnd          } from '@angular/router';
-import { NavigationError        } from '@angular/router';
-import { NavigationStart        } from '@angular/router';
 import { Router                 } from '@angular/router';
 
 import { filter                 } from 'rxjs/operators';
-import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
-// import { SlimLoadingBarService  } from 'ng2-slim-loading-bar';
 
 import { Story                  } from 'app/story';
 import { Message                } from 'app/message';
@@ -18,7 +12,6 @@ import { Classroom              } from 'app/classroom';
 import { NotificationService    } from 'app/notification-service.service';
 import { EngagementService      } from 'app/engagement.service';
 import { TranslationService     } from 'app/translation.service';
-import { MessageService         } from 'app/message.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
 import { ConsentService         } from 'app/services/consent.service';
@@ -58,8 +51,8 @@ export class AppComponent {
     // TODO remove
     public consent: ConsentService,
     public singleton: SingletonService,
-    public ga: GoogleAnalytics,
   ) {
+    console.log('app component',this.engagement);
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
@@ -69,6 +62,7 @@ export class AppComponent {
       filter(event => event instanceof NavigationEnd)
     );
     navEndEvents.subscribe((event: NavigationEnd) => {
+      console.log(event);
       gtag('config', 'UA-178889778-1', {
         'page_path' : event.urlAfterRedirects
       });
@@ -78,7 +72,7 @@ export class AppComponent {
   // Set the page langauge
   // Get list of stories that have notifications
   ngOnInit() {
-    this.ga.disable();
+    GoogleAnalytics.disable();
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
