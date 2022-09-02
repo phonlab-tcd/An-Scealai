@@ -10,7 +10,7 @@
         <h3>Audio Playback</h3>
         <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
         <hr>
-        <button *ngFor="let i of words">{{i}}</button>
+        <button *ngFor="let i of shownWords; let index = index" (click)="shownWords[index] = words[index].slice(0, 1);">{{i}}</button>
         <hr>
         <input id="guesses_input">
         <button style="margin:4px;" (click)="checkWord();">✔️</button>

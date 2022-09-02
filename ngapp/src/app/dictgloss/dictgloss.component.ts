@@ -47,6 +47,8 @@ export class DictglossComponent implements OnInit {
 
   wrong_words_div: string = '';
   words: string[] = [];
+  shownWords: string[] = [];
+  wrongWords: string[] = [];
   hasText: boolean = false;
   hasIncorrect: boolean = false;
   guess: string;
@@ -56,6 +58,8 @@ export class DictglossComponent implements OnInit {
     
     //global list of words
     this.words = [];
+    this.shownWords = [];
+    this.wrongWords = [];
 
 
     //split text by newline and loop over list..
@@ -69,12 +73,15 @@ export class DictglossComponent implements OnInit {
       this.words = this.words.concat(curr);
     }
 
+    //Gets rid of multiple spaces
     for(let i = 0 ; i < this.words.length; i++){
       if(this.words[i] === ''){
         this.words.splice(i, 1);
         if(i > 0){
           i--;
         }
+      } else {
+        this.shownWords.push("...");
       }
     }
 
@@ -116,18 +123,18 @@ export class DictglossComponent implements OnInit {
 
     console.log(word);
     
-    if (this.words.indexOf(word) == -1) {
+    if (this.words.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       this.hasIncorrect = true;
       this.wrong_words_div += word + "\n";
+      this.wrongWords.push(word);
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
       while (this.words.indexOf(word, start_index) != -1) {
         let word_index = this.words.indexOf(word, start_index);
-        console.log("Found " + word + " at " + word_index + " in " + this.words);
-        var wordElement = document.getElementById("word_" + word_index);
-        wordElement.innerText = word;
+        //console.log("Found " + word + " at " + word_index + " in " + this.words); commented out because user could see in console
+        this.shownWords[word_index] = this.words[word_index];
         start_index = word_index + 1;
       }
     }
