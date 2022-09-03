@@ -6,7 +6,7 @@ import { EngagementService } from './engagement.service';
 import { EventType } from './event';
 import { Message } from './message';
 import config from 'abairconfig';
-import { ConsentService } from './services/consent.service';
+import { ConsentService } from './privacy-preferences/consent.service';
 
 @Injectable({
   providedIn: 'root'

@@ -14,8 +14,6 @@ import { EngagementService      } from 'app/engagement.service';
 import { TranslationService     } from 'app/translation.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
-import { ConsentService         } from 'app/services/consent.service';
-import { SingletonService       } from 'app/privacy-preferences/singleton.service';
 import { GoogleAnalytics        } from 'app/services/google-analytics';
 
 declare var gtag;
@@ -43,14 +41,9 @@ export class AppComponent {
     //private _loadingBar: SlimLoadingBarService, 
     private _router: Router,
     public auth: AuthenticationService,
-    private storyService: StoryService,
     private notificationSerivce : NotificationService,
     public engagement: EngagementService,
     public ts: TranslationService,
-    
-    // TODO remove
-    public consent: ConsentService,
-    public singleton: SingletonService,
   ) {
     console.log('app component',this.engagement);
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;

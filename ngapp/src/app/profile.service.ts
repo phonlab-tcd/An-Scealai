@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import config from 'abairconfig';
-import { ConsentService } from "./services/consent.service";
+import { ConsentService } from "./privacy-preferences/consent.service";
 
 @Injectable({providedIn: 'root'})
 export class ProfileService {

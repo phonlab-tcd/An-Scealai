@@ -287,7 +287,7 @@ export default {
     ga: "Scríobh isteach d'ainm úsáideora",
     en: 'Enter username' },
   change_password: {
-    ga: 'Athraigh do phasfhocal',
+    ga: 'Athraigh mo phasfhocal',
     en: 'Change password' },
   you_will_have_to_login_password: {
     ga: 'Beidh ort logáil isteach arís le do phasfhocal nua',
@@ -365,24 +365,28 @@ export default {
     ga: 'Aois',
     en: 'Age' },
   trying_to_use_feature_that_requires_consent: {
-    ga: 'TODO',
+    ga: undefined,
     en: 'You are trying to use a feature which requires your explicit consent. To use this feature you must enable Cloud Storage in your privacy preferences.'
   },
+  privacy_preferences: {
+    ga: undefined,
+    en: 'Privacy preferences',
+  },
   go_to_privacy_preferences_page: {
-    ga: 'TODO',
-    en: 'TODO',
+    ga: undefined,
+    en: undefined,
   },
   i_am_under_16: {
-    ga: 'TODO',
+    ga: undefined,
     en: 'I am under 16' },
   i_am_over_16: {
-    ga: 'TODO',
+    ga: undefined,
     en: 'I am over 16' },
   accept: {
-    ga: 'TODO',
+    ga: undefined,
     en: 'Accept' },
   reject: {
-    ga: 'TODO',
+    ga:  undefined,
     en: 'Reject' },
   county: {
     ga: 'Contae',

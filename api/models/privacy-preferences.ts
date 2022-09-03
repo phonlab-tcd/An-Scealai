@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-
 const Consent = new Schema({
   option: {type: String, enum: ["accept","reject"]},
   prose: String,

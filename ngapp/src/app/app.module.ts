@@ -14,6 +14,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from "@angular/material/button";
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
@@ -78,7 +80,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { ConsentService } from './privacy-preferences/consent.service';
 
 @NgModule({
   declarations: [
@@ -141,11 +143,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    // SlimLoadingBarModule,
     FormsModule,
     TextInputHighlightModule,
     BrowserAnimationsModule,
     MatExpansionModule,
+    MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -168,6 +170,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     })
   ],
   providers: [
+    ConsentService,
     StoryService,
     UserService,
     MatDatepickerModule,

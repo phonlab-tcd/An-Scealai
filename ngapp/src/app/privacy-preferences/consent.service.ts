@@ -1,23 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../authentication.service';
 import type { Observable } from 'rxjs';
-import { of, Subject } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import config from "../../abairconfig";
-import { SingletonService } from "../privacy-preferences/singleton.service";
-import { GoogleAnalytics } from './google-analytics';
+import { GoogleAnalytics } from 'app/services/google-analytics';
 import { EngagementService } from '../engagement.service';
 import { MatDialog } from "@angular/material/dialog";
-import { TryingToUseFeaturesThatRequireConsentComponent } from "../trying-to-use-features-that-require-consent/trying-to-use-features-that-require-consent.component"
+import { TryingToUseFeaturesThatRequireConsentComponent } from "./trying-to-use-features-that-require-consent.dialog.component"
+import { PleaseSpecifyPrivacyPreferences } from "./please-specify-privacy-preferences.dialog.component";
+
 export interface ConsentData {
-  readonly prose: {
-    readonly en: {short: string;full: string};
-    readonly ga: {short: string;full: string};
+  prose: {
+    en: {short: string;full: string};
+    ga: {short: string;full: string};
   };
-  readonly emitter: any;
-  readonly disable: Function;
-  readonly enable: Function;
-  readonly allowUnder16: boolean;
+  disable: Function;
+  enable: Function;
+  allowUnder16: boolean;
+  isEnabled: ()=>boolean;
 }
 
 export const consentKey = ["Google Analytics", "Engagement", "Cloud Storage"] as const;
@@ -31,40 +32,47 @@ function fakeHttpFunc<T>() {
   providedIn: 'root',
 })
 export class ConsentService {
+  private fakeHttpFunc() {
+    this.dialog.open(TryingToUseFeaturesThatRequireConsentComponent);
+    return of(undefined) as Observable<any>;
+  }
   private fakeHttp = {
-    post: function<T>(): Observable<T> { return of(undefined) as Observable<any> },
-    get: function<T>(): Observable<T> { return of(undefined) as Observable<any> },
+    post: fakeHttpFunc,
+    get: fakeHttpFunc,
   }
   public http: HttpClient | typeof this.fakeHttp;
+
+  age = (()=>{
+    const subject = new BehaviorSubject<"under16"|"over16">(undefined);
+    this.realHttp.get<"under16"|"over16">(config.baseurl + 'privacy-preferences/age')
+      .subscribe((body)=>subject.next(body));
+    return subject;
+  })();
 
   constructor(
     private engagement: EngagementService,
     private auth: AuthenticationService,
-    private realHttp: HttpClient,
-    private singleton: SingletonService,
+    public realHttp: HttpClient,
     private dialog: MatDialog,
   ) {
     this.http = this.realHttp;
 
-    this.dialog.open(TryingToUseFeaturesThatRequireConsentComponent);
     // synchronise preferences
     this.auth.loggedInAs$subscribe( async () => {
         const privacyPreferences = await this.http.get(config.baseurl + 'privacy-preferences').toPromise();
+        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true});
         Object.entries(this.consentTypes).forEach(([t,o])=>{
           const pp = privacyPreferences[t];
           const enabled = pp.option === "accept" && pp.prose === JSON.stringify(o.prose);
           if(enabled)  o.enable();
           else o.disable();
-          //TODO remove emitters
-          o.emitter.next(enabled);
         });
       });
 
-    this.singleton.age.subscribe(a => {
+    this.age.subscribe(a => {
       if (a !== "under16") return;
       Object.entries(this.consentTypes).forEach(([t,o]) => {
         if (!o.allowUnder16) {
-          o.emitter.next(false);
           this.http.post(config.baseurl + 'privacy-preferences', { forGroup: t, option: "reject", prose: JSON.stringify(o.prose) }).subscribe();
         }
       })
@@ -93,7 +101,7 @@ export class ConsentService {
       allowUnder16: false,
       enable: () => GoogleAnalytics.disable(false),
       disable: () => GoogleAnalytics.disable(true),
-      emitter: new Subject<boolean>(),
+      isEnabled: () => GoogleAnalytics.isEnabled(),
     },
     'Engagement': {
       prose: {
@@ -115,7 +123,7 @@ export class ConsentService {
       allowUnder16: false,
       enable:  () => { this.engagement.enable()  },
       disable: () => { this.engagement.disable() },
-      emitter: new Subject<boolean>(),
+      isEnabled: () => this.engagement.http === this.engagement.realHttp,
     },
     'Cloud Storage': {
       prose: {
@@ -136,10 +144,9 @@ export class ConsentService {
         }
       },
       allowUnder16: true,
-      enable: function ()  { this.http = this.realHttp },
-      disable: function () { this.http = this.fakeHttp },
-      emitter: new Subject<boolean>(),
+      enable:  () => this.http = this.realHttp,
+      disable:  () => this.http = this.fakeHttp,
+      isEnabled: () => this.http === this.realHttp,
     },
   } as const;
 }
-

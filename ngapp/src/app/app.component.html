@@ -1,22 +1,6 @@
 <!-- main page where all of the components are displayed over -->
 
-
 <!-- <ng2-slim-loading-bar color="green"></ng2-slim-loading-bar> -->
-<h1>Age</h1> {{ singleton.age | async }} <br>
-<div>
-  <h1>Engagement</h1> 
-  Consent: {{ consent.consentTypes["Engagement"].emitter | async}} <br>
-  Enabled: {{ engagement.http === engagement.realHttp }} <br>
-<div>
-  <h1>Google Analytics </h1>
-    Consent: {{ consent.consentTypes["Google Analytics"].emitter | async}} <br>
-    Enabled: {{ !window['ga-disable-UA-178889778-1'] }} <br>
-</div>
-<div>
-  <h1>Cloud Storage</h1>
-  Consent: {{ consent.consentTypes["Cloud Storage"].emitter | async}} <br>
-  Enabled: unknown
-</div>
 <div class="page">
   <!-- nav bar at the top of the page -->
   <div class="nav">

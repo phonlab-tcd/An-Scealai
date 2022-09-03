@@ -74,6 +74,15 @@ button:focus, input:focus, audio:focus{
   outline: 0;
 }
 
+.mat-delete {
+  background-color: red;
+  color: white;
+}
+
+.mat-secondary {
+  background-color: #fdd798;
+}
+
 .add-personal-topics{
   position: relative;
   border-radius: 5px;

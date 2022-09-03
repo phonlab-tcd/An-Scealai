@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SingletonService } from '../singleton.service';
+import { ConsentService } from '../consent.service';
 import { HttpClient } from '@angular/common/http';
 import config from '../../../abairconfig';
 import { TranslationService } from '../../translation.service';
@@ -12,7 +12,7 @@ import { EngagementService } from "../../engagement.service";
 })
 export class ConfirmAgeComponent {
   constructor(
-    public singleton: SingletonService,
+    private consent: ConsentService,
     private http: HttpClient,
     public ts: TranslationService,
     public engagement: EngagementService) {}
@@ -34,7 +34,7 @@ export class ConfirmAgeComponent {
   } as const);
 
   choose(event){
-    this.singleton.age.next(event.value);
+    this.consent.age.next(event.value);
     this.http.post(config.baseurl + 'privacy-preferences/age',{range:event.value}).subscribe();
   }
 }

@@ -6,7 +6,6 @@ import { SynthItem } from './synth-item';
 import { AuthenticationService } from './authentication.service';
 import { QuillHighlightTag } from './services/quill-highlight.service';
 import config from 'abairconfig';
-import { ConsentService } from './services/consent.service';
 
 const empty = ()=>of(undefined);
 

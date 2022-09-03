@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Story } from './story';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from './authentication.service';
-import { Observable, throwError } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
+import { Observable } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
 import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
-import { ConsentService } from './services/consent.service';
+import { ConsentService } from './privacy-preferences/consent.service';
 
 
 @Injectable({
