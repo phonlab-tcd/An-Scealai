@@ -45,6 +45,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
+import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -163,6 +164,10 @@ const routes: Routes = [
       {
         path: 'teacher-stats/:id',
         component: TeacherStatsComponent,
+      },
+      {
+        path: 'stats-dashboard',
+        component: StatsDashboardComponent,
       }
     ]
   },

@@ -19,6 +19,8 @@ import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
+
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
@@ -78,6 +80,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -131,6 +134,7 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
     AboutTaidhginComponent,
     SynthItemComponent,
     SynthVoiceSelectComponent,
+    StatsDashboardComponent,
   ],
   imports: [
     RegisterModule,
@@ -163,7 +167,8 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
           'times-new-roman',    // @quill-font
         ]
       }],
-    })
+    }),
+    NgramDistributionModule
   ],
   providers: [
     StoryService,
