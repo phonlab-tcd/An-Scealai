@@ -14,10 +14,15 @@
                     <hr>
                     <button *ngFor="let i of shownWords; let index = index" (click)="firstChar(index);">{{i}}</button>
                     <hr>
-                    <input id="guesses_input">
-                    <button style="margin:4px;" (click)="checkWord();">✔️</button>
-                    <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
+                    <div *ngIf="!allGuessed; else correct;">
+                        <input id="guesses_input">
+                        <button style="margin:4px;" (click)="checkWord();">✔️</button>
+                        <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
+                        </div>
                     </div>
+                    <ng-template #correct>
+                        You Got them all right!
+                    </ng-template>
                 </div>
             </div>
         </div>

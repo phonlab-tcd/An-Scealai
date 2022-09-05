@@ -123,7 +123,10 @@ export class DictglossComponent implements OnInit {
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
 
+  allGuessed: boolean = false;
+  guessCheck: boolean = false;
   checkWord() {
+    this.allGuessed = false;
     //Word input field
     let word: string;
     var word_input = document.getElementById("guesses_input") as HTMLInputElement;
@@ -145,6 +148,17 @@ export class DictglossComponent implements OnInit {
         this.shownWords[word_index] = this.words[word_index];
         start_index = word_index + 1;
       }
+    }
+
+    this.guessCheck = true;
+    for(let i = 0; i < this.words.length; i++){
+      if(this.words[i] !== this.shownWords[i]){
+        this.guessCheck = false;
+        break;
+      }
+    }
+    if(this.guessCheck){
+      this.allGuessed = true;
     }
     word_input.value = "";
   }
