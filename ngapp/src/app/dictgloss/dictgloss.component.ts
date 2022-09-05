@@ -64,6 +64,7 @@ export class DictglossComponent implements OnInit {
     this.wrongWords = [];
     this.wordsPunc = [];
     this.synthText = '';
+    this.nonPuncWordsIndex = -1;
     this.wrong_words_div = "";
     
     this.words = text.split(/[ .,";!?(){}\r\n\t\s]+/);
@@ -78,7 +79,16 @@ export class DictglossComponent implements OnInit {
           i--;
         }
       } else {
-        this.shownWords.push("...");
+        this.shownWords.push("..."); //For every word add in a '...'
+      }
+    }
+    
+    for(let i = 0 ; i < this.wordsPunc.length; i++){
+      if(this.wordsPunc[i] === ''){
+        this.wordsPunc.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
       }
     }
 
@@ -104,6 +114,7 @@ export class DictglossComponent implements OnInit {
   showReplay: boolean = false;
   synthItem: SynthItem;
   dictglossLoad() {
+    this.allGuessed = false;
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
 
@@ -121,6 +132,21 @@ export class DictglossComponent implements OnInit {
     this.synthItem = new SynthItem(this.synthText, 'connemara', this.synth);
     this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
     console.log("REQUEST URL:",this.synthItem.requestUrl);
+  }
+
+  nonPuncWordsIndex: number;
+  isNotPunctuated(index: number) {
+    this.nonPuncWordsIndex++;
+    console.log(index, this.nonPuncWordsIndex);
+    
+    console.log(this.wordsPunc[index], this.words[this.nonPuncWordsIndex]);
+    
+    if(this.wordsPunc[index] === this.words[this.nonPuncWordsIndex] && this.words[this.nonPuncWordsIndex] !== undefined){
+      return true;
+    } else {
+      this.nonPuncWordsIndex--; //Dangerous as can go to -1
+      return false;
+    }
   }
 
   allGuessed: boolean = false;
@@ -144,7 +170,6 @@ export class DictglossComponent implements OnInit {
       var start_index = 0;
       while (this.words.indexOf(word, start_index) != -1) {
         let word_index = this.words.indexOf(word, start_index);
-        //console.log("Found " + word + " at " + word_index + " in " + this.words); commented out because user could see in console
         this.shownWords[word_index] = this.words[word_index];
         start_index = word_index + 1;
       }

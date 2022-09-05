@@ -10,8 +10,17 @@
                 <div *ngIf="hasText">
                     <hr>
                     <h3>Audio Playback</h3>
-                    <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                    <div class="playback">
+                        <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                    </div>
                     <hr>
+                    <!--
+                    <div *ngFor="let i of wordsPunc; let index = index">
+                        <button *ngIf="isNotPunctuated(index); else punctuated;" (click)="firstChar(index);">{{shownWords[nonPuncWordsIndex]}}</button>
+                        <ng-template #punctuated>{{wordsPunc[index]}}</ng-template>
+                    </div>
+                    -->
+
                     <button *ngFor="let i of shownWords; let index = index" (click)="firstChar(index);">{{i}}</button>
                     <hr>
                     <div *ngIf="!allGuessed; else correct;">
@@ -31,7 +40,7 @@
                 <h3>How to use</h3>
                 <h6>1. Enter an Irish passage into the first text input.&ensp;</h6>
                 <h6>2. Listen to the voice synthesis that is given from the passage.&ensp;</h6>
-                <h6>3. Try to rewrite it by ear.&ensp;</h6>
+                <h6>3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).&ensp;</h6>
                 <h6>Tip: If you're stuck, you can click on one of the spaces where the words go and get the first letter of it
                     (this will help as it's case sensitive).&ensp;</h6>
             </div>
