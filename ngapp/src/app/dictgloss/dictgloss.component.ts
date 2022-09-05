@@ -49,8 +49,10 @@ export class DictglossComponent implements OnInit {
   words: string[] = [];
   shownWords: string[] = [];
   wrongWords: string[] = [];
+  wordsPunc: string[] = [];
   hasText: boolean = false;
   hasIncorrect: boolean = false;
+  synthText: string;
   guess: string;
   displayText(text) {
     this.hasText = true;
@@ -60,24 +62,13 @@ export class DictglossComponent implements OnInit {
     this.words = [];
     this.shownWords = [];
     this.wrongWords = [];
+    this.wordsPunc = [];
+    this.synthText = '';
     this.wrong_words_div = "";
-
-
-    //split text by newline and loop over list..
-    //var text_sentences = text.split(/\n+/);
-
-    //split text by full stops and loop over list..
-    /*
-    var text_sentences: string[] = text.split(".");
-    console.log("Text sentences:", text_sentences);
-    for(let i = 0; i < text_sentences.length; i++){
-      let curr = text_sentences[i].split(" " || ",");
-      this.words = this.words.concat(curr);
-    }
-    */
     
-    this.words = text.split(/([ .,'";!?(){}]+)/g);
-    
+    this.words = text.split(/[ .,";!?(){}\r\n\t\s]+/);
+    this.wordsPunc = text.split(/([ .,";!?(){}\r\n\t\s]+)/g);
+
     this.texts = '';
     //Gets rid of multiple spaces
     for(let i = 0 ; i < this.words.length; i++){
@@ -87,31 +78,38 @@ export class DictglossComponent implements OnInit {
           i--;
         }
       } else {
-        this.texts += this.words[i] + " "; //Trying to fix the speech synthesis not working when theres punctuation.
         this.shownWords.push("...");
       }
     }
-    console.log(this.texts);
+
+    for(let i = 0; i < this.words.length; i++){
+      this.synthText += this.words[i] + " ";
+    }
+
+    console.log('This is the synth input', this.synthText);
+    this.dictglossSynthRefresh();
     
-    console.log("WORDS SPLIT", this.words);
+    console.log("WORDS: ", this.words);
+    console.log("PUNCTUATED WORDS: ", this.wordsPunc);
+    
+  }
+
+  firstChar(index: number) {
+    if(this.shownWords[index] !== this.words[index]){
+      this.shownWords[index] = this.words[index].slice(0, 1);
+    }
   }
 
   audio_urls: any;
   showReplay: boolean = false;
   synthItem: SynthItem;
   dictglossLoad() {
-    console.log("dictglossLoad()");
-    /*
-    if (this.texts !== undefined){
-      this.showReplay = true;
-    }
-    **/
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
+
     if(this.texts.length !== 0){
       this.hasText = true;
     }
-    this.dictglossSynthRefresh();
 
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);
@@ -120,7 +118,7 @@ export class DictglossComponent implements OnInit {
 
   dictglossSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
-    this.synthItem = new SynthItem(this.texts, 'connemara', this.synth);
+    this.synthItem = new SynthItem(this.synthText, 'connemara', this.synth);
     this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
@@ -136,7 +134,7 @@ export class DictglossComponent implements OnInit {
     if (this.words.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       this.hasIncorrect = true;
-      this.wrong_words_div += word + "\n";
+      this.wrong_words_div += word + "<br>";
       this.wrongWords.push(word);
     } else {
       //If the word is found, loop through the list and show the word in the right position
