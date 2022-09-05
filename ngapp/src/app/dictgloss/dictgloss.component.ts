@@ -67,13 +67,18 @@ export class DictglossComponent implements OnInit {
     //var text_sentences = text.split(/\n+/);
 
     //split text by full stops and loop over list..
+    /*
     var text_sentences: string[] = text.split(".");
     console.log("Text sentences:", text_sentences);
     for(let i = 0; i < text_sentences.length; i++){
       let curr = text_sentences[i].split(" " || ",");
       this.words = this.words.concat(curr);
     }
-
+    */
+    
+    this.words = text.split(/([ .,'";!?(){}]+)/g);
+    
+    this.texts = '';
     //Gets rid of multiple spaces
     for(let i = 0 ; i < this.words.length; i++){
       if(this.words[i] === ''){
@@ -82,10 +87,12 @@ export class DictglossComponent implements OnInit {
           i--;
         }
       } else {
+        this.texts += this.words[i] + " "; //Trying to fix the speech synthesis not working when theres punctuation.
         this.shownWords.push("...");
       }
     }
-
+    console.log(this.texts);
+    
     console.log("WORDS SPLIT", this.words);
   }
 

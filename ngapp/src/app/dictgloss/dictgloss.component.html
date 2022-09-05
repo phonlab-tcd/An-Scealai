@@ -1,20 +1,35 @@
-<div class="container">
-    <div id="selectorDiv" style="display:block">
-        <h3>Dictogloss</h3>
-        <input id="textSelector">
-        <button style="margin:4px;" (click)="dictglossLoad();">✔️</button>
-    </div>
-    <div *ngIf="hasText">
-        <hr>
-        <h3>Audio Playback</h3>
-        <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
-        <hr>
-        <button *ngFor="let i of shownWords; let index = index" (click)="shownWords[index] = words[index].slice(0, 1);">{{i}}</button>
-        <hr>
-        <input id="guesses_input">
-        <button style="margin:4px;" (click)="checkWord();">✔️</button>
-        <div *ngIf="hasIncorrect">
-            {{this.wrong_words_div}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="container">
+                <div id="selectorDiv" style="display:block">
+                    <h3>Dictogloss</h3>
+                    <input id="textSelector">
+                    <button style="margin:4px;" (click)="dictglossLoad();">✔️</button>
+                </div>
+                <div *ngIf="hasText">
+                    <hr>
+                    <h3>Audio Playback</h3>
+                    <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                    <hr>
+                    <button *ngFor="let i of shownWords; let index = index" (click)="shownWords[index] = words[index].slice(0, 1);">{{i}}</button>
+                    <hr>
+                    <input id="guesses_input">
+                    <button style="margin:4px;" (click)="checkWord();">✔️</button>
+                    <div *ngIf="hasIncorrect">
+                        {{this.wrong_words_div}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="container">
+                <h3>How to use</h3>
+                <h6>1. Enter an Irish passage into the first text input.&ensp;</h6>
+                <h6>2. Listen to the voice synthesis that is given from the passage.&ensp;</h6>
+                <h6>3. Try to rewrite it by ear.&ensp;</h6>
+                <h6>Tip: If you're stuck, you can click on one of the spaces where the words go and get the first letter of it(this will help as it's case sensitive).&ensp;</h6>
+            </div>
         </div>
     </div>
-</div>
+</div>    
