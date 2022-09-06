@@ -28,7 +28,7 @@ export class EngagementService {
     public realHttp: HttpClient,
     private auth: AuthenticationService,
     ) { 
-    this.http = realHttp;
+    this.http = this.fakeHttp;
   }
 
   baseUrl: string = config.baseurl + 'engagement/';
