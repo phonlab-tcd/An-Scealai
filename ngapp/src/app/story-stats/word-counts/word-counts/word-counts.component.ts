@@ -32,34 +32,7 @@ export class WordCountsComponent implements OnInit {
   async ngOnInit() {
     
     await this.getStats();
-    
-    const canvasElem = document.getElementById('word-count-chart') as HTMLCanvasElement;
-    const ctx = canvasElem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: this.X_DATA,
-            datasets: [{
-                label: 'Average Word Count Per Student',
-                data: this.Y_DATA,
-                backgroundColor: this.Y_DATA.map(_ => LIGHT_RED),
-                borderColor: this.Y_DATA.map(_ => RED),
-                borderWidth: 1
-            }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-                display: true,
-                stacked: true,
-                ticks: {
-                    beginAtZero: true,
-                    stepSize: 1
-                }
-            }]
-          }
-        }
-    });
+    await this.makeCharts();
   }
   
   // For each classroom of logged-in teacher, get average word count for each student (over all stories)
@@ -74,7 +47,8 @@ export class WordCountsComponent implements OnInit {
         let statsEntry = {
           classroomTitle: this.classrooms[entry].title,
           studentNames: [],
-          averageWordCounts: []
+          averageWordCounts: [],
+          chartId: "chartId_" + entry
         }
         
         // get student usernames and word count averages
@@ -90,5 +64,41 @@ export class WordCountsComponent implements OnInit {
           this.stats.push(statsEntry);
       }
     }
-  }  
+  }
+  
+  private async makeCharts() {
+    // wait for HTML to render before adding charts (need dynamically created ids)
+    setTimeout(() => {
+      for (let entry in this.stats) {
+        let canvasElem = document.getElementById(this.stats[entry].chartId) as HTMLCanvasElement;
+        let ctx = canvasElem.getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this.stats[entry].studentNames,
+                datasets: [{
+                    label: 'Average Word Counts For ' + this.stats[entry].classroomTitle,
+                    data: this.stats[entry].averageWordCounts,
+                    backgroundColor: this.Y_DATA.map(_ => LIGHT_RED),
+                    borderColor: this.Y_DATA.map(_ => RED),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+              scales: {
+                yAxes: [{
+                    display: true,
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1
+                    }
+                }]
+              }
+            }
+        });
+      }
+    }, 1)
+  }
+  
 }

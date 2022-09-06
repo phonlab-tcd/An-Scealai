@@ -23,7 +23,8 @@ module.exports = async (req, res) => {
     }
 
     console.log('Word counts: ', wordCounts);
-    const average = wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length;
+    const average = Math.round(wordCounts.reduce((a, b) => a + b, 0)
+     / wordCounts.length);
     console.log('Average: ', average);
 
     res.status(200).json({avgWordCount: average});
