@@ -4,7 +4,9 @@ const PrivacyPreferences = require("../models/privacy-preferences");
 export const post: RequestHandler = async function (req,res,next) {
   if(typeof req.body.prose !== "string") return res.status(400).json("field `prose` must be a string");
   const $set = {};
-  $set[req.body.forGroup] = {option: req.body.option, prose: req.body.prose};
+  const group = req.body.forGroup;
+  $set[group + ".option"] = req.body.option;
+  $set[group + ".prose"]  = req.body.prose;
 
   const doc = await PrivacyPreferences
     .findOneAndUpdate(
