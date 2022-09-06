@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
@@ -8,12 +8,13 @@ const Consent = new Schema({
 },{_id: false})
 
 const PrivacyPreferences = new Schema({
-  owner: { type: ObjectId, ref: 'User' },
-  'Google Analytics': Consent,
-  'Engagement': Consent,
-  'Cloud Storage': Consent,
+  owner: { type: ObjectId, ref: "User" },
+  "Google Analytics": Consent,
+  "Engagement": Consent,
+  "Cloud Storage": Consent,
+  "Linguistics Research": Consent,
 }, {
   collection: "privacyPreferences"
 });
 
-export = mongoose.model('PrivacyPreferences', PrivacyPreferences);
+export = mongoose.model("PrivacyPreferences", PrivacyPreferences);

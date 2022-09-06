@@ -79,11 +79,11 @@ export class ConsentService {
 
   }
 
-  savePreference(forGroup: ConsentGroup,option: "accept"|"reject") {
+  savePreference(forGroup: ConsentGroup, option: "accept"|"reject") {
     this.realHttp.post(config.baseurl + "privacy-preferences",{
       forGroup,
       option,
-      prose: translation[forGroup],
+      prose: JSON.stringify(translation[forGroup]),
     }).subscribe();
   }
 
