@@ -13,6 +13,7 @@ import { ConsentGroupComponent } from './consent-group/consent-group.component';
 import { ConfirmAgeComponent } from './confirm-age/confirm-age.component';
 import { TryingToUseFeaturesThatRequireConsentComponent } from './trying-to-use-features-that-require-consent.dialog.component';
 import { PleaseSpecifyPrivacyPreferences } from './please-specify-privacy-preferences.dialog.component';
+import { Translation } from "../ts.directive";
 
 const dialogs = [
   TryingToUseFeaturesThatRequireConsentComponent,
@@ -23,6 +24,7 @@ const dialogs = [
     PrivacyPreferencesComponent,
     ConsentGroupComponent,
     ConfirmAgeComponent,
+    Translation,
     ...dialogs
   ],
   imports: [

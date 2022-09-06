@@ -5,7 +5,7 @@
         </mat-panel-title>
         <mat-slide-toggle disabled="1" [checked]="data.isEnabled()"></mat-slide-toggle>
     </mat-expansion-panel-header>
-    <p align="justify">{{ts.message(forGroup).short }}</p>
+    <p align="justify" [ts]="'i_am_under_16'"></p>
     <p align="justify" matExpansionPanelContent innerHtml={{ts.l[forGroup].full}}></p>
     <div style="height: 5em">
         <p align="justify" class="exception" *ngIf=disabled>

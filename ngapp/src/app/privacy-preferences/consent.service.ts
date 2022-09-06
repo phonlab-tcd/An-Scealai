@@ -2,7 +2,7 @@ import { Injectable, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../authentication.service';
 import type { Observable } from 'rxjs';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, Subject } from 'rxjs';
 import config from "../../abairconfig";
 import { GoogleAnalytics } from 'app/services/google-analytics';
 import { EngagementService } from '../engagement.service';
@@ -20,11 +20,6 @@ export interface ConsentData {
 export const consentKey = ["Google Analytics", "Engagement", "Cloud Storage", "Linguistics Research"] as const;
 export type ConsentGroup = typeof consentKey[number];
 
-const httpMethods = ['request','post','get','patch','options','jsonp','delete','head','put'] as const;
-
-function fakeHttpFunc<T>() {
-  return of(undefined) as Observable<any>;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -34,16 +29,27 @@ export class ConsentService {
     return of(undefined) as Observable<any>;
   }
   private fakeHttp = {
-    post: fakeHttpFunc,
-    get: fakeHttpFunc,
+    post: () => this.fakeHttpFunc(),
+    get:  () => this.fakeHttpFunc(),
   }
   public http: HttpClient | typeof this.fakeHttp;
-  public linguisticsResearchEnabled$ = new BehaviorSubject<boolean>(true);
+  private privacyPreferences$ = new Subject<any>();
+
+  public linguisticsResearchEnabled$ = (()=>{
+    const subject = new BehaviorSubject<boolean>(false);
+    this.privacyPreferences$.subscribe(({'Linguistics Research': {option}})=>
+      this.linguisticsResearchEnabled$.next(option === "accept")
+    );
+    return subject;
+  })();
+
 
   age = (()=>{
     const subject = new BehaviorSubject<"under16"|"over16">(undefined);
-    this.realHttp.get<"under16"|"over16">(config.baseurl + 'privacy-preferences/age')
+    this.auth.loggedInAs$subscribe(()=>{
+      this.realHttp.get<"under16"|"over16">(config.baseurl + 'privacy-preferences/age')
       .subscribe((body)=>subject.next(body));
+    });
     return subject;
   })();
 
@@ -55,10 +61,13 @@ export class ConsentService {
   ) {
     this.http = this.realHttp;
 
+    this.privacyPreferences$.subscribe();
+
     // synchronise preferences
     this.auth.loggedInAs$subscribe( async () => {
+      this.realHttp.get(config.baseurl + 'privacy-preferences').subscribe(pp=>this.privacyPreferences$.next(pp));
         const privacyPreferences = await this.http.get(config.baseurl + 'privacy-preferences').toPromise();
-        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true});
+        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true}); // disableClose so that only way to close is to click 'ok' and go to pp page
         this.linguisticsResearchEnabled$.next(privacyPreferences["Linguistics Research"]?.option === "accept");
         Object.entries(this.consentTypes).forEach(([t,o])=>{
           const pp = privacyPreferences[t];

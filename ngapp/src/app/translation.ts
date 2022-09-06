@@ -416,14 +416,14 @@ export default {
   'Cloud Storage': {
     en: {
       name: 'Cloud Storage',
-      short: "Store your documents and messages securely on An Scéalaís database in the cloud.",
+      short: "Store your documents and messages securely on <em>An Scéalaí's</em> database in the cloud.",
       full: `
-        The An Scéalaí website uses a backend server to enable most of its functionality.
-        In order for An Scéalaí to function normally
+        The <em>An Scéalaí</em> website uses a backend server to enable most of its functionality.
+        In order for <em>An Scéalaí</em> to function normally
         it is required that you consent to having your data
         processed on our private cloud infrastructure.
-        Unfortunately, at this time, most of the pages on the An Scéalaí site will be inaccessible
-        if you decide not to allow An Scéalaí to process your data in this way.
+        Unfortunately, at this time, most of the pages on the <em>An Scéalaí</em> site will be inaccessible
+        if you decide not to allow <em>An Scéalaí</em> to process your data in this way.
       `,
     },
     ga: {
@@ -459,7 +459,7 @@ export default {
         you can  still use An Séalaí, but we will only process data necessary for the normal functioning of the website features.
         Data protection law is different for people below the age of digital consent. We assume the age of digital consent
         In order to ensure that we are complying with the law on data protection we need to know if you are below the age of digital consent.
-        All of the features of An Scéalaí will continue to work either way,
+        All of the features of <em>An Scéalaí</em> will continue to work either way,
         but users above the age of digital consent have the option to enable additional data processing.`,
 
     ga: undefined,

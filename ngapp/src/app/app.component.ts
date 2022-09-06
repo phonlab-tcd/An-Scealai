@@ -14,7 +14,6 @@ import { EngagementService      } from 'app/engagement.service';
 import { TranslationService     } from 'app/translation.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
-import { GoogleAnalytics        } from 'app/services/google-analytics';
 
 declare var gtag;
 
@@ -65,7 +64,6 @@ export class AppComponent {
   // Set the page langauge
   // Get list of stories that have notifications
   ngOnInit() {
-    GoogleAnalytics.disable();
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
     this.notificationSerivce.storyEmitter.subscribe( (res) => {
