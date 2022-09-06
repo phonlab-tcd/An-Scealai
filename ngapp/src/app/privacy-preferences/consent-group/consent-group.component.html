@@ -1,16 +1,16 @@
 <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
         <mat-panel-title>
-            <h5>{{forGroup}}</h5>
+            <h5>{{ ts.message(forGroup).name}}</h5>
         </mat-panel-title>
-        <mat-slide-toggle disabled="true" [checked]="data.isEnabled()"></mat-slide-toggle>
+        <mat-slide-toggle disabled="1" [checked]="data.isEnabled()"></mat-slide-toggle>
     </mat-expansion-panel-header>
-    <p align="justify">{{data.prose[ts.l.iso_code].short}}</p>
-    <p align="justify" matExpansionPanelContent innerHtml={{data.prose[ts.l.iso_code].full}}></p>
+    <p align="justify">{{ts.message(forGroup).short }}</p>
+    <p align="justify" matExpansionPanelContent innerHtml={{ts.l[forGroup].full}}></p>
     <div style="height: 5em">
         <p align="justify" class="exception" *ngIf=disabled>
-            This feature can only be enabled by users who are over the age of digital consent (16 years).
-            Don't worry! You will still be able to use the website as normal.
+            {{ ts.message('only_for_users_over_16')}}
+
         </p>
         <mat-button-toggle-group
         [disabled]=disabled

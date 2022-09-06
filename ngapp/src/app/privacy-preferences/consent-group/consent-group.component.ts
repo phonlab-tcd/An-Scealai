@@ -1,6 +1,6 @@
 import { Attribute, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConsentService, ConsentData } from '../consent.service';
+import { ConsentService, ConsentData, ConsentGroup } from '../consent.service';
 import { TranslationService } from "../../translation.service";
 import   config from '../../../abairconfig';
 
@@ -16,23 +16,21 @@ export class ConsentGroupComponent {
   data: ConsentData;
 
   constructor(
-    @Attribute('for') public forGroup: string,
+    @Attribute('for') public forGroup: ConsentGroup,
     private http: HttpClient,
     public consent: ConsentService,
     public ts: TranslationService,
     ) {
-      this.data = this.consent.consentTypes[this.forGroup];
+      this.data = this.consent.consentTypes.get(this.forGroup);
       this.consent.age.subscribe(a=>
-        this.disabled = not(this.consent.consentTypes[this.forGroup].allowUnder16) && a === "under16"
+        this.disabled = not(this.data.allowUnder16) && a === "under16"
       );
 
   }
 
   choose(event) {
-    const body =  {forGroup: this.forGroup, option: event.value, prose: JSON.stringify(this.consent.consentTypes[this.forGroup].prose)};
     const accept = event.value === "accept";
     accept ? this.data.enable() : this.data.disable();
-    this.http.post(config.baseurl + 'privacy-preferences', body ).subscribe();
   }
 
   not = not;

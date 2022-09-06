@@ -366,16 +366,109 @@ export default {
     en: 'Age' },
   trying_to_use_feature_that_requires_consent: {
     ga: undefined,
-    en: 'You are trying to use a feature which requires your explicit consent. To use this feature you must enable Cloud Storage in your privacy preferences.'
-  },
+    en:  `You are trying to use a feature
+          that is disabled because you haven't agreed
+          to let An Séalaí process your data.
+          Go to the privacy preferences if you want to enable this feature.`  },
   privacy_preferences: {
     ga: undefined,
     en: 'Privacy preferences',
   },
   go_to_privacy_preferences_page: {
     ga: undefined,
-    en: undefined,
+    en:  `You have not specified your privacy preferences for An Scéalaí.
+          Please go to the privacy preferences page now set your preferences.`,
   },
+  'Google Analytics': {
+    en:{
+      name: 'Google Analytics',
+      short: "Send anonymous usage data to An Scéalaí's Google Analytics account.",
+      full: `
+        By enabling this feature you agree to have anonymous data about how you interact with the An Scéalaí platform processed by Google Analytics.
+        Google Analytics will be allowed to process information about which pages of the website you visit,
+        how long you spend on each page, your approximate geographic location, and the devices you use to access the site.
+        This data will be anonymised and it will not be possible for Google Analytics or An Scéalaí link this data to your account.
+        Please consider enabling this feature to help the An Scéalaí development team can continue to improve you experience with the site.
+        `, },
+    ga: {
+      name: 'Google Analytics',
+      short: undefined,
+      full: undefined, }
+  },
+  'Engagement': {
+    en: {
+      name: 'Engagement',
+      short: "Allow An Scéalaí to store additional data about how you use the website.",
+      full: `
+        An Scéalaí can record fine-grained information about the features of the website you use.
+        This data is not anonymised, and An Scéalaí <b>can</b> link the recorded data to your account.
+        This data will not be processed by any third parties, unless you release the data explicitly in the future.
+        If you do nothing, the data will never be shared with a third party.
+        Please consider enabling this feature to help the An Scéalaí development team improve the tools offered on the website.
+        `,
+    },
+    ga: {
+      name: undefined,
+      short: undefined,
+      full: undefined,
+    }
+  },
+  'Cloud Storage': {
+    en: {
+      name: 'Cloud Storage',
+      short: "Store your documents and messages securely on An Scéalaís database in the cloud.",
+      full: `
+        The An Scéalaí website uses a backend server to enable most of its functionality.
+        In order for An Scéalaí to function normally
+        it is required that you consent to having your data
+        processed on our private cloud infrastructure.
+        Unfortunately, at this time, most of the pages on the An Scéalaí site will be inaccessible
+        if you decide not to allow An Scéalaí to process your data in this way.
+      `,
+    },
+    ga: {
+      name: undefined,
+      short: undefined,
+      full: undefined,
+    }
+  },
+  'Linguistics Research': {
+    en: {
+      name: 'Linguistics Research',
+      short: `
+        Release your data to be used by language 
+        researchers at the Phonetics and Speech Lab
+        in Trinity College Dublin.`,
+      full: `
+        TODO
+      `,
+    },
+    ga: {
+      name: undefined,
+      short: undefined,
+      full: undefined,
+    }
+  },
+  confirm_your_age: {
+    en: "Confirm your age",
+    ga: undefined,
+  },
+  confirm_your_age_prose: {
+    en: `
+        If you are under the age of digital consent,
+        you can  still use An Séalaí, but we will only process data necessary for the normal functioning of the website features.
+        Data protection law is different for people below the age of digital consent. We assume the age of digital consent
+        In order to ensure that we are complying with the law on data protection we need to know if you are below the age of digital consent.
+        All of the features of An Scéalaí will continue to work either way,
+        but users above the age of digital consent have the option to enable additional data processing.`,
+
+    ga: undefined,
+  },
+  only_for_users_over_16: {
+    en:  `This feature can only be enabled by users
+          who are over the age of digital consent (16 years).
+          Don't worry! You will still be able to use the website as normal.`,
+    ga: undefined },
   i_am_under_16: {
     ga: undefined,
     en: 'I am under 16' },
