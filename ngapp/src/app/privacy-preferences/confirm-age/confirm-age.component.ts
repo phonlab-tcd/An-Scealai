@@ -13,19 +13,8 @@ import { EngagementService } from "../../engagement.service";
 export class ConfirmAgeComponent {
   constructor(
     private consent: ConsentService,
-    private http: HttpClient,
-    public ts: TranslationService,
-    public engagement: EngagementService) {}
+    private http: HttpClient) {}
 
-  ageProse = Object.freeze({
-    en:{
-
-    },
-    ga: {
-      short: "todo",
-      full: "todo",
-    },
-  } as const);
 
   choose(event){
     this.consent.age.next(event.value);

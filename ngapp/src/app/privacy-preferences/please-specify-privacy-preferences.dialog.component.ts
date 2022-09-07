@@ -5,11 +5,11 @@ import { TranslationService } from "../translation.service";
     selector: 'please-specify-privacy-preferences',
     template: `
       <div mat-dialog-content>
-        {{ ts.message('go_to_privacy_preferences_page') }}
+        <transl key=go_to_privacy_preferences_page></transl>
       </div>
       <div mat-dialog-actions>
         <button mat-button mat-dialog-close routerLink="/privacy-preferences">
-          Ok
+          <transl key=ok></transl>
         </button>
       </div>
     `,

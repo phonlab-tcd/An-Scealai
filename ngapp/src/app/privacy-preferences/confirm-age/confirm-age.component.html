@@ -1,8 +1,8 @@
 <mat-card>
-    <h3 align="left">{{ ts.message('confirm_your_age') }}</h3>
-    <p align="justify" innerHTML="{{ts.message('confirm_your_age_prose')}}"></p>
+    <h3 align="left"><transl key=confirm_your_age></transl></h3>
+    <p align="justify"><transl key=confirm_your_age_prose></transl></p>
     <mat-button-toggle-group (change)="choose($event)">
-        <mat-button-toggle value="under16">{{ ts.message('i_am_under_16') }} </mat-button-toggle>
-        <mat-button-toggle value="over16"> {{ ts.message('i_am_over_16') }}  </mat-button-toggle>
+        <mat-button-toggle value="under16"> <transl key=i_am_under_16></transl></mat-button-toggle>
+        <mat-button-toggle value="over16">  <transl key=i_am_over_16> </transl></mat-button-toggle>
     </mat-button-toggle-group>
 </mat-card>

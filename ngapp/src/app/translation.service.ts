@@ -49,6 +49,7 @@ export class TranslationService {
     if (this.auth.isLoggedIn()) {
       this.getUserLanguageCode().subscribe((res) => {
         this.l = this.getLanguageFromCode(res.language);
+        this.languageCode$.next(res.language);
       });
     } else {
       this.l = this.getLanguageFromCode('ga');

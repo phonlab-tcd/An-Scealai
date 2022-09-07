@@ -1,12 +1,13 @@
 <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
         <mat-panel-title>
-            <h5>{{ ts.message(forGroup).name}}</h5>
+            <h5><transl [key]="forGroup"></transl></h5>
         </mat-panel-title>
         <mat-slide-toggle disabled="1" [checked]="data.isEnabled()"></mat-slide-toggle>
     </mat-expansion-panel-header>
-    <p align="justify" [ts]="'i_am_under_16'"></p>
-    <p align="justify" matExpansionPanelContent innerHtml={{ts.l[forGroup].full}}></p>
+    <p align="justify" matExpansionPanelContent>
+      <transl [key]="forGroup+'.prose'"></transl>
+    </p>
     <div style="height: 5em">
         <p align="justify" class="exception" *ngIf=disabled>
             {{ ts.message('only_for_users_over_16')}}

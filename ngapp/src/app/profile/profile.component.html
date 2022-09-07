@@ -24,6 +24,7 @@
                 <button class="modalBtn createBtnGreen" (click)="hideModal(); updateUsernameMode=false;">{{ts.l.cancel}}</button>
             </div>
         </div>
+        
         <!-- Popup for changing email -->
         <div *ngIf="updateEmailMode" class="modalContent">
             <pre class="modalText">Update email</pre>
@@ -100,8 +101,8 @@
           </div>
         </div>
         <button mat-button color="delete" (click)="deleteAccountMode=true; showModal()"> {{ts.l.delete_my_account}} </button>
-        <button mat-button color="secondary" (click)="updatePasswordMode=true;errorMessage='';showModal()"> {{ts.l.change_password}} </button>
-        <button routerLink="/privacy-preferences" mat-button>{{ts.message('privacy_preferences')}}</button>
+        <button mat-button color="secondary" (click)="updatePasswordMode=true; errorMessage='';showModal()" > {{ts.l.change_password}} </button>
+        <button routerLink="/privacy-preferences" color="primary" mat-button>{{ts.message('privacy_preferences')}}</button>
         <!-- sign out and profile information -->
         <div class="btnContainer">
           <button routerLink="/register-profile" class="btn logoutBtn">{{ts.l.my_info}}</button>

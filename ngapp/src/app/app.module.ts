@@ -81,7 +81,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { ConsentService } from './privacy-preferences/consent.service';
-
+import { TranslationModule  } from "./translation/module"
 @NgModule({
   declarations: [
     AppComponent,

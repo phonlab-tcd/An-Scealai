@@ -1,4 +1,7 @@
 export default {
+  ok: {
+    en: 'Okay',
+    ga: 'Ceart go leor' }, // TODO VERIFY
   iso_code: {
     ga: 'ga',
     en: 'en' },
@@ -7,48 +10,37 @@ export default {
     en: 'These vowels should be in agreement according to the Leathan/Caol rule.' },
   voice: {
     ga: 'Caint',
-    en: 'Voice',
-  },
+    en: 'Voice' },
   nemo_friendly_pmg_multidialect: {
     ga: 'Pádraig',
-    en: 'Pádraig'
-  },
+    en: 'Pádraig'},
   nemo_friendly_pmg: {
     ga: 'Pádraig',
-    en: 'Pádraig'
-  },
+    en: 'Pádraig'},
   nemo_friendly_nnc_multidialect: {
     ga: 'Neasa',
-    en: 'Neasa'
-  },
+    en: 'Neasa'},
   nemo_friendly_nnc: {
     ga: 'Neasa',
-    en: 'Neasa'
-  },
+    en: 'Neasa'},
   nemo_friendly_anb_multidialect: {
     ga: 'Ailbhe',
-    en: 'Ailbhe'
-  },
+    en: 'Ailbhe'},
   nemo_friendly_anb: {
     ga: 'Ailbhe',
-    en: 'Ailbhe'
-  },
+    en: 'Ailbhe'},
   nemo_friendly_snc_multidialect: {
     ga: 'Sinéad',
-    en: 'Sinéad'
-  },
+    en: 'Sinéad'},
   nemo_friendly_snc: {
     ga: 'Sinéad',
-    en: 'Sinéad'
-  },
+    en: 'Sinéad'},
   nemo_friendly_roisin_multidialect: {
     ga: 'Róisín',
-    en: 'Róisín'
-  },
+    en: 'Róisín'},
   nemo_friendly_roisin: {
     ga: 'Róisín',
-    en: 'Róisín'
-  },
+    en: 'Róisín'},
   name: {
     ga: 'Gaeilge',
     en: 'English' },
@@ -365,121 +357,206 @@ export default {
     ga: 'Aois',
     en: 'Age' },
   trying_to_use_feature_that_requires_consent: {
-    ga: undefined,
-    en:  `You are trying to use a feature
-          that is disabled because you haven't agreed
-          to let An Séalaí process your data.
-          Go to the privacy preferences if you want to enable this feature.`  },
+    ga: `
+      Tá tú ag iarraidh gné atá díchumasaithe a úsáid
+      mar níor aontaigh tú ligean do <em>An Séalaí</em> do shonraí a phróiseáil.
+      Téigh go dtí an leathanach sainroghanna príobháideachais
+      más mian leat an ghné seo a chumasú.`,
+    en:  `
+      You are trying to use a feature
+      that is disabled because you haven't agreed
+      to let An Séalaí process your data.
+      Go to the privacy preferences if you want to enable this feature.`  },
   privacy_preferences: {
-    ga: undefined,
-    en: 'Privacy preferences',
-  },
+    ga: `Sainroghanna príobháideachais`,
+    en: 'Privacy preferences' },
   go_to_privacy_preferences_page: {
-    ga: undefined,
-    en:  `You have not specified your privacy preferences for An Scéalaí.
-          Please go to the privacy preferences page now set your preferences.`,
-  },
+    ga: `
+      Níl do shainroghanna príobháideachais
+      le haghaidh An Scéalaí sonraithe agat.
+      Téigh go dtí an leathanach sainroghanna príobháideachais
+      anois le do chuid sainroghanna a shocrú.`,
+    en:  `
+      You have not specified your privacy preferences
+      for <em>An Scéalaí</em>.
+      Please go to the privacy preferences page now set your preferences.` },
   'Google Analytics': {
-    en:{
-      name: 'Google Analytics',
-      short: "Send anonymous usage data to An Scéalaí's Google Analytics account.",
-      full: `
+    en: 'Google Analytics',
+    ga: 'Google Analytics (anailísíocht)' },
+  'Google Analytics.prose': {
+    en: `
+      <p>
+        Send anonymous usage data \
+        to <em>An Scéalaí's</em> Google Analytics account.
+      </p>
+      <p>
         By enabling this feature you agree to have anonymous data about how you interact with the An Scéalaí platform processed by Google Analytics.
         Google Analytics will be allowed to process information about which pages of the website you visit,
         how long you spend on each page, your approximate geographic location, and the devices you use to access the site.
-        This data will be anonymised and it will not be possible for Google Analytics or An Scéalaí link this data to your account.
-        Please consider enabling this feature to help the An Scéalaí development team can continue to improve you experience with the site.
-        `, },
-    ga: {
-      name: 'Google Analytics',
-      short: undefined,
-      full: undefined, }
-  },
+        This data will be anonymised and it will not be possible for Google Analytics or <em>An Scéalaí</em> to link this data to your account.
+        Please consider enabling this feature to help the <em>An Scéalaí</em> development team can continue to improve you experience with the site.
+      </p>
+      `, 
+    ga: `
+      <p>
+        Seol sonraí úsáide gan ainm chuig cuntas
+        Google Analytics <em>An Séalaí</em>.
+      </p>
+      <p>
+        Trí an ghné seo a chumasú aontaíonn
+        tú sonraí gan ainm a bheith agat faoin gcaoi a n-idirghníomhaíonn tú
+        leis an ardán <em>An Séalaí</em> arna phróiseáil ag Google Analytics.
+        Beidh cead ag Google Analytics súil a choinneáil
+        ar na leathanaigh ar <em>An Séalaí</em> a dtugann tú cuairt orthu.
+        Beidh na sonraí seo gan ainm agus ní bheidh sé indéanta
+        do Google Analytics nó An Scéalaí na sonraí seo a nascadh le do chuntas.
+        Déan machnamh le do thoil ar an ngné seo
+        a chumasú chun cabhrú le foireann forbartha <em>An Scéalaí</em>
+        leanúint ar aghaidh ag feabhsú do thaithí ar an suíomh.
+      </p>
+    `},
   'Engagement': {
-    en: {
-      name: 'Engagement',
-      short: "Allow An Scéalaí to store additional data about how you use the website.",
-      full: `
+    en: 'Engagement',
+    ga: 'Rannpháirtíocht', },
+  'Engagement.prose': {
+    en: `
+      <p>
+        Allow An Scéalaí to store additional data about how you use the website.
+      </p>
+      <p>
         An Scéalaí can record fine-grained information about the features of the website you use.
         This data is not anonymised, and An Scéalaí <b>can</b> link the recorded data to your account.
         This data will not be processed by any third parties, unless you release the data explicitly in the future.
         If you do nothing, the data will never be shared with a third party.
         Please consider enabling this feature to help the An Scéalaí development team improve the tools offered on the website.
-        `,
-    },
-    ga: {
-      name: undefined,
-      short: undefined,
-      full: undefined,
-    }
-  },
+      </p>`,
+    ga: `
+      <p>
+        Lig do <em>An Scéalaí</em> sonraí breise a stóráil faoin gcaoi a n-úsáideann tú an suíomh Gréasáin.
+      </p>
+      <p>
+        Is féidir le <em>An Scéalaí</em> eolas mín a thaifeadadh faoi ghnéithe an tsuímh Ghréasáin a úsáideann tú.
+        Níl na sonraí seo anaithnid, agus is féidir le <em>An Séalaí</em> na sonraí taifeadta a nascadh le do chuntas.
+        Ní dhéanfaidh aon tríú páirtithe na sonraí seo a phróiseáil, ach amháin má scaoileann tú na sonraí go sainráite.
+        Mura ndéanann tú tada, ní roinnfear na sonraí go deo le tríú páirtí.
+        Déan machnamh le do thoil ar an ngné seo a chumasú chun cabhrú le foireann forbartha “An Scéalaí” na huirlisí atá ar fáil ar an suíomh gréasáin a fheabhsú.
+      </p>` },
   'Cloud Storage': {
-    en: {
-      name: 'Cloud Storage',
-      short: "Store your documents and messages securely on <em>An Scéalaí's</em> database in the cloud.",
-      full: `
+    en: 'Cloud Storage',
+    ga: 'Stóráil Scamall',
+  },
+  'Cloud Storage.prose': {
+    en: `
+      <p>
+        Store your documents and messages securely on <em>An Scéalaí's</em> database in the cloud.
+      </p>
+      <p>
         The <em>An Scéalaí</em> website uses a backend server to enable most of its functionality.
         In order for <em>An Scéalaí</em> to function normally
         it is required that you consent to having your data
         processed on our private cloud infrastructure.
         Unfortunately, at this time, most of the pages on the <em>An Scéalaí</em> site will be inaccessible
         if you decide not to allow <em>An Scéalaí</em> to process your data in this way.
-      `,
-    },
-    ga: {
-      name: undefined,
-      short: undefined,
-      full: undefined,
-    }
-  },
+      </p> `,
+    ga: `
+      <p>
+        Stóráil do dhoiciméid agus do theachtaireachtaí go slán ar bhunachar sonraí <em>An Séalaí</em> sa scamall.
+      </p>
+      <p>
+        Úsáideann suíomh gréasáin <em>An Séalaí</em> freastalaí backend chun an chuid is mó dá fheidhmiúlacht a chumasú.
+        Chun go bhfeidhmeoidh <em>An Scéalaí</em> de ghnáth ní mór duit toiliú le do shonraí a phróiseáil ar ár n-infrastruchtúr néal príobháideach.
+        Ar an drochuair, ag an am seo, beidh an chuid is mó de na leathanaigh ar shuíomh <em>An Séalaí</em> dorochtana má shocraíonn tú gan cead a thabhairt do <em>An Séalaí</em> do shonraí a phróiseáil ar an mbealach seo.
+      </p> ` },
+  test: {en: 'en',ga: 'ga'},
   'Linguistics Research': {
-    en: {
-      name: 'Linguistics Research',
-      short: `
+    en: 'Linguistics Research',
+    ga: 'Taighde Teangeolaíochta' },
+  'Linguistics Research.prose': {
+    en: `
+      <p>
         Release your data to be used by language 
         researchers at the Phonetics and Speech Lab
-        in Trinity College Dublin.`,
-      full: `
-        TODO
-      `,
-    },
-    ga: {
-      name: undefined,
-      short: undefined,
-      full: undefined,
-    }
-  },
+        in Trinity College Dublin.
+      </p>
+      <p>
+        <em>An Scéalaí</em> is developed and maintained
+        by the Phonetics and Speech Laboratory at Trinity College Dublin.
+        The same lab produces a suite of speech technologies for Irish,
+        some of which are integrated into <em>An Scéalaí.</em>
+        You can help the lab improve the technologies they produce
+        by releasing your data for research purposes.
+        By accepting these terms
+        you are giving consent for <b>all</b> data
+        you have saved on the <em>An Scéalaí</em> platform
+        (voice recordings, messages, stories)
+        to be used by researchers at the lab.
+      </p>`,
+    ga: `
+      <p>
+        Scaoil do shonraí le húsáid ag taighdeoirí teanga 
+        sa tSaotharlann Foghraíochta agus Urlabhra
+        i gColáiste na Tríonóide, Baile Átha Cliath.
+      </p>
+      <p>
+        Tá <em>An Scéalaí</em> á fhorbairt agus á chothabháil
+        ag an tSaotharlann Foghraíochta agus Urlabhra i gColáiste na Tríonóide, Baile Átha Cliath.
+        Táirgeann an saotharlann céanna sraith de theicneolaíochtaí cainte don Ghaeilge,
+        cuid acu atá fite fuaite le <em>An Scéalaí</em>.
+        Is féidir leat cabhrú leis an tsaotharlann na teicneolaíochtaí
+        a tháirgeann siad a fheabhsú trí do shonraí a scaoileadh chun críocha taighde.
+        Trí ghlacadh leis na téarmaí seo tá tú ag ceadú na sonraí <b>go léir</b>
+        atá sábháilte agat ar ardán <em>An Scéalaí</em>
+        (taifeadtaí gutha, teachtaireachtaí, scéalta)
+        a úsáid ag taighdeoirí sa tsaotharlann.
+      </p>
+      ` },
   confirm_your_age: {
     en: "Confirm your age",
-    ga: undefined,
-  },
+    ga: `Deimhnigh d'aois` },
   confirm_your_age_prose: {
     en: `
-        If you are under the age of digital consent,
-        you can  still use An Séalaí, but we will only process data necessary for the normal functioning of the website features.
-        Data protection law is different for people below the age of digital consent. We assume the age of digital consent
-        In order to ensure that we are complying with the law on data protection we need to know if you are below the age of digital consent.
-        All of the features of <em>An Scéalaí</em> will continue to work either way,
-        but users above the age of digital consent have the option to enable additional data processing.`,
+      If you are under the age of digital consent,
+      you can  still use <em>An Séalaí</em>, but we will only process data necessary for the normal functioning of the website features.
+      Data protection law is different for people below the age of digital consent. We assume the age of digital consent
+      In order to ensure that we are complying with the law on data protection we need to know if you are below the age of digital consent.
+      All of the features of <em>An Scéalaí</em> will continue to work either way,
+      but users above the age of digital consent have the option to enable additional data processing.`,
 
-    ga: undefined,
-  },
+    ga: `
+      Má tá tú faoi bhun aois an toilithe dhigitigh,
+      is féidir leat <em>An Séalaí</em> a úsáid go fóill,
+      ach ní phróiseálfaimid ach na sonraí
+      atá riachtanach do ghnáthfheidhmiú ghnéithe an tsuímh Ghréasáin.
+      Tá an dlí um chosaint sonraí difriúil do dhaoine faoi bhun aois an toilithe dhigitigh.
+      Glacaimid leis gurb é 16 bliana an aois toilithe digiteach
+      (cé go bhféadfadh sé a bheith níos ísle i roinnt tíortha).
+      Chun a chinntiú go bhfuil an dlí maidir le
+      cosaint sonraí á chomhlíonadh againn ní mór dúinn fios a bheith againn
+      má tá tú faoi bhun aois an toilithe dhigitigh.
+      Leanfaidh gnéithe uile <em>An Scéalaí</em> ag obair ar an dá bhealach,
+      ach tá an rogha ag úsáideoirí atá os cionn aois an toilithe dhigitigh
+      próiseáil sonraí breise a chumasú.` },
   only_for_users_over_16: {
-    en:  `This feature can only be enabled by users
-          who are over the age of digital consent (16 years).
-          Don't worry! You will still be able to use the website as normal.`,
-    ga: undefined },
+    en: `
+      This feature can only be enabled by users
+      who are over the age of digital consent (16 years).
+      Don't worry! You will still be able to use the website as normal.`,
+    ga: `
+      Ní féidir an ghné seo a chumasú
+      ach amháin ag úsáideoirí atá os cionn aois toilithe digiteach (16 bliana).
+      Ná bí buartha!
+      Beidh tú fós in ann an suíomh gréasáin a úsáid mar is gnách.`},
   i_am_under_16: {
-    ga: undefined,
-    en: 'I am under 16' },
+    en: 'I am under 16',
+    ga: `Tá mé faoi sé bliana déag` },
   i_am_over_16: {
-    ga: undefined,
-    en: 'I am over 16' },
+    en: 'I am over 16',
+    ga: `Tá mé os cionn sé bliana déag` },
   accept: {
-    ga: undefined,
+    ga: `Glac leis`,
     en: 'Accept' },
   reject: {
-    ga:  undefined,
+    ga:  `Diúltaigh`,
     en: 'Reject' },
   county: {
     ga: 'Contae',
@@ -1981,7 +2058,7 @@ export default {
     en: 'The system will be extended as the appropriate language technologies are developed – our longer term ambition is that <i>Taidhgín</i> will be able to understand the spoken language of the user and be able to converse using high quality native-like synthetic speech.' },
   how_to_tquiz: {
     ga: 'Fáilte go ‘cruthaigh do quiz-bat’ féin ar leathanach <i>Thaidhgín</i>.<br><br>Bain úsáid as an leathanach seo chun do chuid quizeanna féin a chruthú agus a rith laistigh den bhat <i>‘Tadhgín’</i>.<br><br>Níl le déanamh agat ach ainm do quiz, do chuid ceisteanna agus do chuid freagraí a líonadh isteach agus beidh tú réidh le rocáil!!<br><br>Is féidir cur le líon na gceisteanna ag baint úsáide as an gcnaipe “Ceist nua” agus is féidir na freagraí ar fad a bheadh inghlactha a líonadh isteach ag baint úsáide as an gcnaipe “Cuir Freagraí”.<br><br>Nuair a bheidh deireadh déanta agat, cliceáil ar “Déanta” chun an quiz a shábháil. (Beidh sé de rogha agat freisin do quiz a íoslódáil mar chomhad .txt ar son do thaifead féin). Chomh luath is a bhíonn an quiz sábháilte agat is féidir é a roghnú agus é a rith ar leathanach <i>Taidhgín</i> faoi “Topaicí Pearsanta”.<br><br>Is féidir le múinteoirí quizeanna a chruthú le roinnt (a) lena ranganna féin agus (b) go poiblí.<br><br>Is féidir le daltaí quizeanna a chruthú freisin mar chleachtadh agus mar spraoi!',
-    en: "Welcome to the 'create your own quiz-bot' <i>Taidhgín</i> page.<br><br> Use this page to create your own quizzes which you can then run within the <i>Taidhgín</i> bot 💬. All you need to do is fill  in the name of your quiz, your questions, and your answers and you're good to go! You can add more questions with the 'Add Question' button, and you can add multiple acceptable answers with the 'Add Answer' button. <br><br>Once you have finished creating your quiz, click on 'Done' and then on 'yes' to save it. (You will also have the option to download the script as a .txt file for your own records). Once your quiz has been saved you can select it and run it on the <i>Taidhgín</i> page under 'Your Quizzes'. <br><br>Teachers can create quizzes and assign them to their class. There is also an option to share your quiz with the wider <i>An Scealaí</i> community. Students can create quizzes for practice and for fun 📖😄." },
+    en: "Welcome to the 'create your own quiz-bot' <i>Taidhgín</i> page.<br><br> Use this page to create your own quizzes which you can then run within the <i>Taidhgín</i> bot 💬. All you need to do is fill  in the name of your quiz, your questions, and your answers and you're good to go! You can add more questions with the 'Add Question' button, and you can add multiple acceptable answers with the 'Add Answer' button. <br><br>Once you have finished creating your quiz, click on 'Done' and then on 'yes' to save it. (You will also have the option to download the script as a .txt file for your own records). Once your quiz has been saved you can select it and run it on the <i>Taidhgín</i> page under 'Your Quizzes'. <br><br>Teachers can create quizzes and assign them to their class. There is also an option to share your quiz with the wider <em>An Scéalaí</em> community. Students can create quizzes for practice and for fun 📖😄." },
   how_to_tquiz_title: {
     ga: 'Treoracha ℹ️',
     en: 'How to Use! ℹ️' },
