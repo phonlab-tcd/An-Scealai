@@ -64,30 +64,25 @@ export class DictglossComponent implements OnInit {
     this.wrongWords = [];
     this.wordsPunc = [];
     this.synthText = '';
-    this.nonPuncWordsIndex = -1;
     this.wrong_words_div = "";
     
-    this.words = text.split(/[ .,";!?(){}\r\n\t\s]+/);
-    this.wordsPunc = text.split(/([ .,";!?(){}\r\n\t\s]+)/g);
+    this.words = text.split(/[^a-zA-Z0-9]+/);
+    this.wordsPunc = text.split(/([^a-zA-Z0-9]+)/g);
 
     this.texts = '';
+
     //Gets rid of multiple spaces
-    for(let i = 0 ; i < this.words.length; i++){
-      if(this.words[i] === ''){
-        this.words.splice(i, 1);
-        if(i > 0){
-          i--;
-        }
-      } else {
-        this.shownWords.push("..."); //For every word add in a '...'
-      }
-    }
-    
     for(let i = 0 ; i < this.wordsPunc.length; i++){
       if(this.wordsPunc[i] === ''){
         this.wordsPunc.splice(i, 1);
         if(i > 0){
           i--;
+        }
+      } else {
+        if(/[^a-zA-Z0-9]+/.test(this.wordsPunc[i])){
+          this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
+        } else {
+          this.shownWords.push("..."); //For every word add in a '...'
         }
       }
     }
@@ -101,12 +96,14 @@ export class DictglossComponent implements OnInit {
     
     console.log("WORDS: ", this.words);
     console.log("PUNCTUATED WORDS: ", this.wordsPunc);
+    console.log("SHOWN WORDS: ", this.shownWords);
+    
     
   }
 
   firstChar(index: number) {
-    if(this.shownWords[index] !== this.words[index]){
-      this.shownWords[index] = this.words[index].slice(0, 1);
+    if(this.shownWords[index] !== this.wordsPunc[index]){
+      this.shownWords[index] = this.wordsPunc[index].slice(0, 1);
     }
   }
 
@@ -134,25 +131,18 @@ export class DictglossComponent implements OnInit {
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
 
-  nonPuncWordsIndex: number;
-  isNotPunctuated(index: number) {
-    this.nonPuncWordsIndex++;
-    console.log(index, this.nonPuncWordsIndex);
-    
-    console.log(this.wordsPunc[index], this.words[this.nonPuncWordsIndex]);
-    
-    if(this.wordsPunc[index] === this.words[this.nonPuncWordsIndex] && this.words[this.nonPuncWordsIndex] !== undefined){
-      return true;
-    } else {
-      this.nonPuncWordsIndex--; //Dangerous as can go to -1
+  //nonPuncWordsIndex: number;
+  isNotPunctuated(i: string) {
+    if(/[^a-zA-Z0-9]+/.test(i)){
       return false;
+    } else {
+      return true;
     }
   }
 
   allGuessed: boolean = false;
   guessCheck: boolean = false;
   checkWord() {
-    this.allGuessed = false;
     //Word input field
     let word: string;
     var word_input = document.getElementById("guesses_input") as HTMLInputElement;
@@ -160,7 +150,7 @@ export class DictglossComponent implements OnInit {
 
     console.log(word);
     
-    if (this.words.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
+    if (this.wordsPunc.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       this.hasIncorrect = true;
       this.wrong_words_div += word + "<br>";
@@ -168,16 +158,16 @@ export class DictglossComponent implements OnInit {
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
-      while (this.words.indexOf(word, start_index) != -1) {
-        let word_index = this.words.indexOf(word, start_index);
-        this.shownWords[word_index] = this.words[word_index];
+      while (this.wordsPunc.indexOf(word, start_index) !== -1) {
+        let word_index = this.wordsPunc.indexOf(word, start_index);
+        this.shownWords[word_index] = this.wordsPunc[word_index];
         start_index = word_index + 1;
       }
     }
 
     this.guessCheck = true;
-    for(let i = 0; i < this.words.length; i++){
-      if(this.words[i] !== this.shownWords[i]){
+    for(let i = 0; i < this.wordsPunc.length; i++){
+      if(this.wordsPunc[i] !== this.shownWords[i]){
         this.guessCheck = false;
         break;
       }
@@ -186,5 +176,18 @@ export class DictglossComponent implements OnInit {
       this.allGuessed = true;
     }
     word_input.value = "";
+  }
+
+  generalCheck(){
+    this.guessCheck = true;
+    for(let i = 0; i < this.wordsPunc.length; i++){
+      if(this.wordsPunc[i] !== this.shownWords[i]){
+        this.guessCheck = false;
+        break;
+      }
+    }
+    if(this.guessCheck){
+      this.allGuessed = true;
+    }
   }
 }

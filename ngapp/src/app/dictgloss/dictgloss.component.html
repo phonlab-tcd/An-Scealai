@@ -14,14 +14,13 @@
                         <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
                     </div>
                     <hr>
-                    <!--
-                    <div *ngFor="let i of wordsPunc; let index = index">
-                        <button *ngIf="isNotPunctuated(index); else punctuated;" (click)="firstChar(index);">{{shownWords[nonPuncWordsIndex]}}</button>
-                        <ng-template #punctuated>{{wordsPunc[index]}}</ng-template>
+                    <div class="buttons-and-templates">
+                        <div *ngFor="let i of wordsPunc; let index = index">
+                            <button style="margin: 2px;" *ngIf="isNotPunctuated(i); else punctuated;" (click)="firstChar(index); generalCheck();">{{shownWords[index]}}</button>
+                            <ng-template style="margin: 2px;"#punctuated>{{i}}</ng-template>
+                        </div>
                     </div>
-                    -->
-
-                    <button *ngFor="let i of shownWords; let index = index" (click)="firstChar(index);">{{i}}</button>
+                    <!--<button *ngFor="let i of shownWords; let index = index" (click)="firstChar(index);">{{i}}</button>-->
                     <hr>
                     <div *ngIf="!allGuessed; else correct;">
                         <input id="guesses_input">
@@ -29,8 +28,8 @@
                         <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
                         </div>
                     </div>
-                    <ng-template #correct>
-                        You Got them all right!
+                    <ng-template  #correct>
+                        <i><h1 class="victory">You filled in all the blanks!</h1></i>
                     </ng-template>
                 </div>
             </div>
