@@ -18,17 +18,6 @@ export class DictglossComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  //HB no point in showing the controls anyway as it is now, only the last sentence can be played again.
-  //Instead a button to replay everything.
-  //Do we want to be able to replay at all? Replay each sentence separately?
-  show_audio_controls: boolean = false;
-  show_replay_button: boolean = true;
-  //If false, text inputs only appear after the last sound file has been played
-  show_text_input_immediately: boolean = false;
-  texts: string;
-  container_id: string = "dictgloss_container";
-  defaultText: string = "--";
-
 
   init() {
     //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
@@ -45,6 +34,8 @@ export class DictglossComponent implements OnInit {
     }
   }
 
+  //I recognise that using parallel arrays wasn't the most intuitive move - Fionn
+  texts: string;
   wrong_words_div: string = '';
   words: string[] = [];
   shownWords: string[] = [];
@@ -54,6 +45,7 @@ export class DictglossComponent implements OnInit {
   hasIncorrect: boolean = false;
   synthText: string;
   guess: string;
+
   displayText(text) {
     this.hasText = true;
     console.log("displayText: " + text);
@@ -131,7 +123,6 @@ export class DictglossComponent implements OnInit {
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
 
-  //nonPuncWordsIndex: number;
   isNotPunctuated(i: string) {
     if(/[^a-zA-Z0-9]+/.test(i)){
       return false;
@@ -178,6 +169,7 @@ export class DictglossComponent implements OnInit {
     word_input.value = "";
   }
 
+  //For if there is a single letter word that is pressed last.
   generalCheck(){
     this.guessCheck = true;
     for(let i = 0; i < this.wordsPunc.length; i++){

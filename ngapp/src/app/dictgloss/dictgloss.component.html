@@ -1,3 +1,4 @@
+<!--Irish Language support probably wrong(I used google translate)-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
@@ -9,7 +10,7 @@
                 </div>
                 <div *ngIf="hasText">
                     <hr>
-                    <h3>Audio Playback</h3>
+                    <h3>{{ts.l.dictgloss_audio}}</h3>
                     <div class="playback">
                         <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
                     </div>
@@ -20,7 +21,6 @@
                             <ng-template style="margin: 2px;"#punctuated>{{i}}</ng-template>
                         </div>
                     </div>
-                    <!--<button *ngFor="let i of shownWords; let index = index" (click)="firstChar(index);">{{i}}</button>-->
                     <hr>
                     <div *ngIf="!allGuessed; else correct;">
                         <input id="guesses_input">
@@ -29,19 +29,18 @@
                         </div>
                     </div>
                     <ng-template  #correct>
-                        <i><h1 class="victory">You filled in all the blanks!</h1></i>
+                        <i><h1 class="victory">{{ts.l.dictgloss_victory}}</h1></i>
                     </ng-template>
                 </div>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="container">
-                <h3>How to use</h3>
-                <h6>1. Enter an Irish passage into the first text input.&ensp;</h6>
-                <h6>2. Listen to the voice synthesis that is given from the passage.&ensp;</h6>
-                <h6>3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).&ensp;</h6>
-                <h6>Tip: If you're stuck, you can click on one of the spaces where the words go and get the first letter of it
-                    (this will help as it's case sensitive).&ensp;</h6>
+                <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
+                <h6>{{ts.l.dictgloss_1}}&ensp;</h6>
+                <h6>{{ts.l.dictgloss_2}}&ensp;</h6>
+                <h6>{{ts.l.dictgloss_3}}&ensp;</h6>
+                <h6>{{ts.l.dictgloss_tip}}&ensp;</h6>
             </div>
         </div>
     </div>

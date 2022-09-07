@@ -2124,4 +2124,25 @@ export default {
   sp_change: {
     ga: 'Athrú',
     en: 'Change' },
+  dictgloss_usage: {
+    ga: 'Conas Dictogloss a úsáid',
+    en: 'How to use Dictogloss' },
+  dictgloss_1: {
+    ga: '1. Cuir sliocht Gaeilge isteach sa chéad ionchur téacs.',
+    en: '1. Enter an Irish passage into the first text input.' },
+  dictgloss_2: {
+    ga: '2. Éist leis an tsintéis gutha a thugtar ón sliocht.',
+    en: '2. Listen to the voice synthesis that is given from the passage.' },
+  dictgloss_3: {
+    ga: '3. Déan iarracht é a athscríobh de chluas (is féidir leat an chéad litir de gach focal a fheiceáil trí chliceáil ar a spás).',
+    en: '3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).' },
+  dictgloss_tip: {
+    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh(cabhróidh sé seo mar is cás íogair é).',
+    en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it(this will help as it\'s case sensitive).' },
+  dictgloss_victory: {
+    ga: 'Líon tú na bearnaí go léir!',
+    en: 'You filled in all the blanks!' },
+  dictgloss_audio: {
+    ga: 'Athsheinm Fuaime',
+    en: 'Audio Playback' }
 }
