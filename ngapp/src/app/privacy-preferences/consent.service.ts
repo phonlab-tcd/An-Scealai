@@ -10,6 +10,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { TryingToUseFeaturesThatRequireConsentComponent } from "./trying-to-use-features-that-require-consent.dialog.component"
 import { PleaseSpecifyPrivacyPreferences } from "./please-specify-privacy-preferences.dialog.component";
 import translation from "../translation";
+import { PrivacyPreferencesComponent } from './privacy-preferences.component';
+import { ConsentGroupComponent } from './consent-group/consent-group.component';
 export interface ConsentData {
   disable: Function;
   enable: Function;
@@ -50,6 +52,13 @@ export class ConsentService {
       this.realHttp.get<"under16"|"over16">(config.baseurl + 'privacy-preferences/age')
       .subscribe((body)=>subject.next(body));
     });
+    // disable data processing if under 16
+    subject.subscribe(age_v=>{
+      if(age_v === "over16") return;
+      this.consentTypes.forEach(ct=>{
+        if(!ct.allowUnder16) return ct.disable();
+      });
+    });
     return subject;
   })();
 
@@ -60,6 +69,7 @@ export class ConsentService {
     private dialog: MatDialog,
   ) {
     this.http = this.realHttp;
+    this.dialog.open(ConsentGroupComponent,{});
 
     this.privacyPreferences$.subscribe();
 

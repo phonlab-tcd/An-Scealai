@@ -1,10 +1,11 @@
-import { Input, ElementRef, Attribute, Component } from '@angular/core';
+import { Input, ElementRef, Attribute, Component, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessageKey, TranslationService } from "../translation.service";
 
 @Component({
   selector: 'transl',
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Transl {
   private _sub: Subscription;

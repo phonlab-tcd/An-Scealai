@@ -16,5 +16,5 @@ import { TranslationService } from "../translation.service";
   
   })
   export class PleaseSpecifyPrivacyPreferences {
-    constructor(public ts: TranslationService) {}
+    constructor() {}
   }

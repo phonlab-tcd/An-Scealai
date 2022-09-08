@@ -5,10 +5,12 @@ import { TranslationService } from 'app/translation.service';
   selector: 'app-trying-to-use-features-that-require-consent',
   template: `
     <div mat-dialog-content>
-      <transl [key]="'trying_to_use_feature_that_requires_consent'"></transl>
+      <transl key=trying_to_use_feature_that_requires_consent></transl>
     </div>
     <div mat-dialog-close routerLink="/privacy-preferences">
-      <transl [key]="'go_to_privacy_preferences_page'"></transl>
+      <button mat-buton color=primary>
+        <transl key=go_to_privacy_preferences_page></transl>
+      </button>
     </div>
   `
 })
