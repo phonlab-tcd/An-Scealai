@@ -45,6 +45,8 @@ export class DictglossComponent implements OnInit {
   hasIncorrect: boolean = false;
   synthText: string;
   guess: string;
+  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
+  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
 
   displayText(text) {
     this.hasText = true;
@@ -58,8 +60,8 @@ export class DictglossComponent implements OnInit {
     this.synthText = '';
     this.wrong_words_div = "";
     
-    this.words = text.split(/[^a-zA-Z0-9]+/);
-    this.wordsPunc = text.split(/([^a-zA-Z0-9]+)/g);
+    this.words = text.split(this.regex);
+    this.wordsPunc = text.split(this.regexg);
 
     this.texts = '';
 
@@ -71,12 +73,30 @@ export class DictglossComponent implements OnInit {
           i--;
         }
       } else {
-        if(/[^a-zA-Z0-9]+/.test(this.wordsPunc[i])){
+        if(this.regex.test(this.wordsPunc[i])){
           this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
         } else {
           this.shownWords.push("..."); //For every word add in a '...'
         }
       }
+    }
+
+    for(let i = 0 ; i < this.words.length; i++){
+      if(this.words[i] === ''){
+        this.words.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
+      }
+    }
+
+    //Gets rid of first character space that breaks program
+    if(this.words[0] == " "){
+      this.words.splice(0, 1);
+    }
+    
+    if(this.wordsPunc[0] == " "){
+      this.wordsPunc.splice(0, 1);
     }
 
     for(let i = 0; i < this.words.length; i++){
@@ -124,7 +144,7 @@ export class DictglossComponent implements OnInit {
   }
 
   isNotPunctuated(i: string) {
-    if(/[^a-zA-Z0-9]+/.test(i)){
+    if(this.regex.test(i)){
       return false;
     } else {
       return true;
