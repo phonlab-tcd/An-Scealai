@@ -31,11 +31,18 @@
     color: darkolivegreen;
 }
 
-button {
+.button-guessed {
     border-radius: 4px;
-    border-color: rgba($color: #008f13, $alpha: 1.0);
     border-style: solid;
+    border-color: rgba($color: #008f13, $alpha: 1.0);
     background-color: rgba($color: rgba(131, 255, 131, 0.459), $alpha: 1.0);
+}
+
+.button-unguessed {
+    border-radius: 4px;
+    border-style: solid;
+    border-color: rgba($color: #8f0000, $alpha: 1.0);
+    background-color: rgba($color: rgba(255, 131, 131, 0.459), $alpha: 1.0);
 }
 
 @keyframes fadeIn {

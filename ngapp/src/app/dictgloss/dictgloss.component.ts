@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SynthItem } from 'app/synth-item';
 import { SynthesisService } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-dictgloss',
@@ -49,7 +50,6 @@ export class DictglossComponent implements OnInit {
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
 
   displayText(text) {
-    this.hasText = true;
     console.log("displayText: " + text);
     
     //global lists of words
@@ -76,7 +76,11 @@ export class DictglossComponent implements OnInit {
         if(this.regex.test(this.wordsPunc[i])){
           this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
         } else {
-          this.shownWords.push("..."); //For every word add in a '...'
+          let dashes = "";
+          for(let j = 0; j < this.wordsPunc[i].length; j++){
+            dashes += '-';  //For every character, adds a dash.
+          }
+          this.shownWords.push(dashes); //For every word add the dashes.
         }
       }
     }
@@ -127,9 +131,22 @@ export class DictglossComponent implements OnInit {
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
 
-    if(this.texts.length !== 0){
-      this.hasText = true;
+    let isValid = false;
+    for(let i = 0; i < this.texts.length; i++){
+      if(this.texts[i] !== " "){
+        isValid = true;
+        break;
+      }
     }
+
+    if(this.texts.length > 0 && isValid){
+      this.hasText = true;
+    } else {
+      this.hasText = false;
+    }
+
+    console.log(this.texts.length, this.hasText);
+    
 
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);

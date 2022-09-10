@@ -6,7 +6,7 @@
                 <div id="selectorDiv" style="display:block">
                     <h3>Dictogloss</h3>
                     <input id="textSelector">
-                    <button style="margin:4px;" (click)="dictglossLoad();">✔️</button>
+                    <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">✔️</button>
                 </div>
                 <div *ngIf="hasText">
                     <hr>
@@ -17,14 +17,27 @@
                     <hr>
                     <div class="buttons-and-templates">
                         <div *ngFor="let i of wordsPunc; let index = index">
-                            <button style="margin: 2px;" *ngIf="isNotPunctuated(i); else punctuated;" (click)="firstChar(index); generalCheck();">{{shownWords[index]}}</button>
+                            <div *ngIf="isNotPunctuated(i); else punctuated;">
+                                <button 
+                                class="button-unguessed"
+                                *ngIf="shownWords[index] !== wordsPunc[index];" 
+                                (click)="firstChar(index); generalCheck();">
+                                    {{shownWords[index]}}
+                                </button>
+                                <button 
+                                class="button-guessed"
+                                *ngIf="shownWords[index] === wordsPunc[index];" 
+                                (click)="firstChar(index); generalCheck();">
+                                    {{shownWords[index]}}
+                                </button>
+                            </div>
                             <ng-template style="margin: 2px;"#punctuated>{{i}}</ng-template>
                         </div>
                     </div>
                     <hr>
                     <div *ngIf="!allGuessed; else correct;">
                         <input id="guesses_input">
-                        <button style="margin:4px;" (click)="checkWord();">✔️</button>
+                        <button style="margin:4px; border-radius: 4px;" (click)="checkWord();">✔️</button>
                         <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
                         </div>
                     </div>
