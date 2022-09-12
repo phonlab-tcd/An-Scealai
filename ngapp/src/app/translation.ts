@@ -2144,5 +2144,8 @@ export default {
     en: 'You filled in all the blanks!' },
   dictgloss_audio: {
     ga: 'Athsheinm Fuaime',
-    en: 'Audio Playback' }
+    en: 'Audio Playback' },
+  dictogloss_error: {
+    ga: '*Sliocht Neamhbhailí',
+    en: '*Invalid Passage' },
 }

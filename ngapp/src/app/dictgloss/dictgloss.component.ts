@@ -108,7 +108,9 @@ export class DictglossComponent implements OnInit {
     }
 
     console.log('This is the synth input', this.synthText);
-    this.dictglossSynthRefresh();
+    if(this.hasText){
+      this.dictglossSynthRefresh();
+    }
     
     console.log("WORDS: ", this.words);
     console.log("PUNCTUATED WORDS: ", this.wordsPunc);
@@ -126,6 +128,7 @@ export class DictglossComponent implements OnInit {
   audio_urls: any;
   showReplay: boolean = false;
   synthItem: SynthItem;
+  errorText: boolean;
   dictglossLoad() {
     this.allGuessed = false;
     var selector = document.getElementById("textSelector") as HTMLInputElement;
@@ -141,8 +144,10 @@ export class DictglossComponent implements OnInit {
 
     if(this.texts.length > 0 && isValid){
       this.hasText = true;
+      this.errorText = false;
     } else {
       this.hasText = false;
+      this.errorText = true;
     }
 
     console.log(this.texts.length, this.hasText);

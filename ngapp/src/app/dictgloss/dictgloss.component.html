@@ -8,6 +8,7 @@
                     <input id="textSelector">
                     <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">✔️</button>
                 </div>
+                <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
                 <div *ngIf="hasText">
                     <hr>
                     <h3>{{ts.l.dictgloss_audio}}</h3>
