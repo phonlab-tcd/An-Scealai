@@ -175,14 +175,35 @@ export class DictglossComponent implements OnInit {
 
   allGuessed: boolean = false;
   guessCheck: boolean = false;
-  checkWord() {
+  async delimitPotentialWords(){
     //Word input field
-    let word: string;
     var word_input = document.getElementById("guesses_input") as HTMLInputElement;
-    word = word_input.value;
+    let wordList = word_input.value.split(this.regex);
 
-    console.log(word);
+    for(let i = 0 ; i < wordList.length; i++){
+      if(wordList[i] === ''){
+        wordList.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
+      }
+    }
+
+    //Gets rid of first character space that breaks program
+    if(wordList[0] == " "){
+      wordList.splice(0, 1);
+    }
+
+    console.log(wordList);
     
+    for(let word = 0; word < wordList.length; word++){
+      console.log(wordList[word]);
+      this.checkWord(wordList[word]);
+    }
+    word_input.value = "";
+  }
+
+  checkWord(word: string) {
     if (this.wordsPunc.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       this.hasIncorrect = true;
@@ -208,7 +229,6 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.allGuessed = true;
     }
-    word_input.value = "";
   }
 
   //For if there is a single letter word that is pressed last.

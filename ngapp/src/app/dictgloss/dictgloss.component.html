@@ -38,7 +38,7 @@
                     <hr>
                     <div *ngIf="!allGuessed; else correct;">
                         <input id="guesses_input">
-                        <button style="margin:4px; border-radius: 4px;" (click)="checkWord();">✔️</button>
+                        <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">✔️</button>
                         <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
                         </div>
                     </div>
