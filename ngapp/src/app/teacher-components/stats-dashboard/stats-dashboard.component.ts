@@ -10,6 +10,8 @@ export class StatsDashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {}
+
+  sampleTexts = ['Hello there. The cat sat on the mat.', 'The dog sat on the frog.', 'The frog sat on the dog'];
   
 
   toggleFullscreen(event: MouseEvent): void {
