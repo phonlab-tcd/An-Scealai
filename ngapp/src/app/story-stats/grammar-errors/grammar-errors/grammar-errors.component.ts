@@ -3,9 +3,6 @@ import { Chart } from "chart.js";
 import { firstValueFrom } from "rxjs";
 import { UserService } from "../../../user.service";
 
-const LIGHT_RED = "rgba(255, 204, 203, 1)";
-const RED = "rgba(255, 114, 111, 1)";
-
 @Component({
   selector: "app-grammar-errors",
   templateUrl: "./grammar-errors.component.html",
@@ -19,14 +16,14 @@ export class GrammarErrorsComponent implements OnInit {
   charts: any[] = [];
 
   async ngOnInit() {
-    await this.getStats();
+    await this.getGrammarErrors();
     await this.makeCharts();
   }
 
-  // Get grammar errors for each student
-  private async getStats() {
+  // Get grammar errors for a given student
+  private async getGrammarErrors() {
     this.studentErrors = await firstValueFrom(
-      this.userService.getGrammarErrors("id number")
+      this.userService.getGrammarErrors("id number goes here")
     );
     console.log(this.studentErrors);
   }
@@ -35,7 +32,6 @@ export class GrammarErrorsComponent implements OnInit {
   private async makeCharts() {
     let labels = new Set<string>();
     let datasets = [];
-    let i = 0;
 
     // loop through each error and create data structures for chart
     for (let [key, value] of Object.entries(this.studentErrors)) {
