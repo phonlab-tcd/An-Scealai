@@ -34,7 +34,7 @@ let userRoutes;
   userRoutes = makeEndpoints({
     get: {
       '/count': getUserCount,
-      '/getGrammarErrors': getGrammarErrors,
+      '/getGrammarErrors/:id': getGrammarErrors,
     },
     post: {
       '/searchUser': searchUser,
