@@ -22,9 +22,6 @@ export class WordCountsComponent implements OnInit {
   constructor(private storyService: StoryService, private auth: AuthenticationService,
   private classroomService: ClassroomService, private userService: UserService) { }
   
-  X_DATA = [1, 2, 3, 4, 5];
-  Y_DATA = [5, 4, 3, 2, 1];
-  
   classrooms:any;
   stats:any[] = [];
   charts:any[] = [];
@@ -79,8 +76,8 @@ export class WordCountsComponent implements OnInit {
                 datasets: [{
                     label: 'Average Word Counts For ' + this.stats[entry].classroomTitle,
                     data: this.stats[entry].averageWordCounts,
-                    backgroundColor: this.Y_DATA.map(_ => LIGHT_RED),
-                    borderColor: this.Y_DATA.map(_ => RED),
+                    backgroundColor: this.stats[entry].averageWordCounts.map(_ => LIGHT_RED),
+                    borderColor: this.stats[entry].averageWordCounts.map(_ => RED),
                     borderWidth: 1
                 }]
             },
