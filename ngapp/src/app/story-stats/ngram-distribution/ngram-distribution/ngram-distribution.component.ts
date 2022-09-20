@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
-import { map } from 'lodash';
 
 import * as Wink from 'wink-nlp';
 import * as Model from 'wink-eng-lite-web-model';
@@ -25,10 +24,17 @@ export class NgramDistributionComponent implements OnInit {
   // Will count n-grams from this set of strings 'texts'. These will in practice be story texts.
   @Input() texts = [];
 
+  selectedN: number = 1;
+  ngramChart: Chart;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.loadNgramChart();
+  }
 
+  loadNgramChart() {
+    console.log('loadNgramChart running');
     const allTextsAsTokens = this.texts.map(text =>
       nlp.readDoc(text).tokens().out() // this converts text -> array of tokens
         .filter(token => !STOP_WORDS.includes(token))
@@ -36,7 +42,7 @@ export class NgramDistributionComponent implements OnInit {
     );
 
     const ngramCounts = allTextsAsTokens
-      .map(tokens => NLPUtils.string.bong(tokens)) // bong <-> bag of n-grams :^)
+      .map(tokens => NLPUtils.string.bong(tokens, this.selectedN)) // bong <-> bag of n-grams :^)
       .reduce(sumCountDicts, {});
 
     const sortedNgramCounts = reverseSortObject(ngramCounts);
@@ -47,7 +53,8 @@ export class NgramDistributionComponent implements OnInit {
 
     const canvasElem = document.getElementById('ngram-chart') as HTMLCanvasElement;
     const ctx = canvasElem.getContext('2d');
-    const myChart = new Chart(ctx, {
+    if (this.ngramChart) { this.ngramChart.destroy(); } // remove if there is some existing chart 
+    this.ngramChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: X_DATA,
