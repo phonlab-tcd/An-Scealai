@@ -20,6 +20,7 @@ import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
+import { GrammarErrorsModule } from 'app/story-stats/grammar-errors/grammar-errors.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -168,7 +169,8 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
         ]
       }],
     }),
-    NgramDistributionModule
+    NgramDistributionModule,
+    GrammarErrorsModule
   ],
   providers: [
     StoryService,

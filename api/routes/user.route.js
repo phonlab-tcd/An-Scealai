@@ -22,21 +22,24 @@ var ctrlAuth = require('../controllers/authentication');
 let userRoutes;
 // Immediately Invoked Function Expression.
 // Scopes the imported functions to just this function
-(() => {  
+(() => {
   // ENDPOINT HANDLERS
   const searchUser =
     require('../endpoints_functions/user/searchUser');
   const getUserCount =
     require('../endpoints_functions/user/getUserCount');
+  const getGrammarErrors =
+    require('../endpoints_functions/user/getGrammarErrors');
 
-    userRoutes = makeEndpoints({
-      get: {
-        '/count': getUserCount,
-      },
-      post: {
-        '/searchUser': searchUser,
-      }
-    });
+  userRoutes = makeEndpoints({
+    get: {
+      '/count': getUserCount,
+      '/getGrammarErrors': getGrammarErrors,
+    },
+    post: {
+      '/searchUser': searchUser,
+    },
+  });
 })();
 
 
