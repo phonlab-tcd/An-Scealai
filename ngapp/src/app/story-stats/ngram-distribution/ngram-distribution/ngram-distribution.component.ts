@@ -34,7 +34,6 @@ export class NgramDistributionComponent implements OnInit {
   }
 
   loadNgramChart() {
-    console.log('loadNgramChart running');
     const allTextsAsTokens = this.texts.map(text =>
       nlp.readDoc(text).tokens().out() // this converts text -> array of tokens
         .filter(token => !STOP_WORDS.includes(token))
@@ -46,9 +45,8 @@ export class NgramDistributionComponent implements OnInit {
       .reduce(sumCountDicts, {});
 
     const sortedNgramCounts = reverseSortObject(ngramCounts);
-    console.log('sorted', sortedNgramCounts);
     
-    const X_DATA = sortedNgramCounts.map(entry => entry.key.replace(',', ' '));
+    const X_DATA = sortedNgramCounts.map(entry => entry.key.replaceAll(',', ' '));
     const Y_DATA = sortedNgramCounts.map(entry => ngramCounts[entry.key]);
 
     const canvasElem = document.getElementById('ngram-chart') as HTMLCanvasElement;
