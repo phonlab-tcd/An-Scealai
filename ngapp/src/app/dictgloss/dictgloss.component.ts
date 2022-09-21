@@ -42,12 +42,14 @@ export class DictglossComponent implements OnInit {
   shownWords: string[] = [];
   wrongWords: string[] = [];
   wordsPunc: string[] = [];
+  wordsPuncLower: string[] = [];
   hasText: boolean = false;
   hasIncorrect: boolean = false;
   synthText: string;
   guess: string;
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
+  showInfo: boolean = false;
 
   displayText(text) {
     console.log("displayText: " + text);
@@ -57,10 +59,12 @@ export class DictglossComponent implements OnInit {
     this.shownWords = [];
     this.wrongWords = [];
     this.wordsPunc = [];
+    this.wordsPuncLower = [];
     this.synthText = '';
     this.wrong_words_div = "";
     
     this.words = text.split(this.regex);
+    this.wordsPuncLower = text.toLowerCase().split(this.regexg);
     this.wordsPunc = text.split(this.regexg);
 
     this.texts = '';
@@ -121,7 +125,7 @@ export class DictglossComponent implements OnInit {
 
   firstChar(index: number) {
     if(this.shownWords[index] !== this.wordsPunc[index]){
-      this.shownWords[index] = this.wordsPunc[index].slice(0, 1);
+      this.shownWords[index] = this.wordsPunc[index].slice(0, 1) + this.shownWords[index].slice(1);
     }
   }
 
@@ -196,6 +200,7 @@ export class DictglossComponent implements OnInit {
 
     console.log(wordList);
     
+    //For multiple words entered at once
     for(let word = 0; word < wordList.length; word++){
       console.log(wordList[word]);
       this.checkWord(wordList[word]);
@@ -204,16 +209,21 @@ export class DictglossComponent implements OnInit {
   }
 
   checkWord(word: string) {
-    if (this.wordsPunc.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
+    if (this.wordsPuncLower.indexOf(word.toLowerCase()) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
+      //If wrong words list is empty, add word with no comma, else add it with comma in front of word
       this.hasIncorrect = true;
-      this.wrong_words_div += word + "<br>";
+      if(this.wrong_words_div.length !== 0){
+        this.wrong_words_div += ", " + word;
+      } else {
+        this.wrong_words_div += word;
+      }
       this.wrongWords.push(word);
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
-      while (this.wordsPunc.indexOf(word, start_index) !== -1) {
-        let word_index = this.wordsPunc.indexOf(word, start_index);
+      while (this.wordsPuncLower.indexOf(word.toLowerCase(), start_index) !== -1) {
+        let word_index = this.wordsPuncLower.indexOf(word.toLowerCase(), start_index);
         this.shownWords[word_index] = this.wordsPunc[word_index];
         start_index = word_index + 1;
       }

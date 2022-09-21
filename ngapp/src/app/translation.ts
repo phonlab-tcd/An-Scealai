@@ -2137,8 +2137,8 @@ export default {
     ga: '3. Déan iarracht é a athscríobh de chluas (is féidir leat an chéad litir de gach focal a fheiceáil trí chliceáil ar a spás).',
     en: '3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).' },
   dictgloss_tip: {
-    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh(cabhróidh sé seo mar is cás íogair é).',
-    en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it(this will help as it\'s case sensitive).' },
+    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
+    en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it.' },
   dictgloss_victory: {
     ga: 'Líon tú na bearnaí go léir!',
     en: 'You filled in all the blanks!' },
@@ -2146,6 +2146,18 @@ export default {
     ga: 'Athsheinm Fuaime',
     en: 'Audio Playback' },
   dictogloss_error: {
-    ga: '*Sliocht Neamhbhailí',
-    en: '*Invalid Passage' },
+    ga: '*Iontráil Scéal Anseo',
+    en: '*Enter Story Here' },
+  dictgloss_enter_story: {
+    ga: /*'Cuir isteach scéal'*/ '✔️', 
+    en: /*'Enter story'*/ '✔️' },
+  dictgloss_guess: {
+    ga: /*'Cuir isteach focal'*/ '❓',
+    en: /*'Enter word'*/ '❓' },
+  dictogloss_new: {
+    ga: 'Dictogloss nua',
+    en: 'New Dictogloss' },
+  dictogloss_return: {
+    ga: 'Téigh go dtí mo scéalta',
+    en: 'Go to my stories' },
 }

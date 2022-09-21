@@ -46,7 +46,7 @@
       <a *ngIf="
         auth.isLoggedIn() &&
         auth.getUserDetails().role === 'STUDENT'"
-        routerLink="/contents"
+        routerLink="/landing"
         class="navBtn"
         (click)="changeCheck()">
           {{ts.l.my_stories}}
