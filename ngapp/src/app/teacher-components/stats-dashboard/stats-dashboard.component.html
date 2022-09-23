@@ -8,13 +8,13 @@
             <app-ngram-distribution></app-ngram-distribution>
         </mat-card-content>
     </mat-card>
-    <mat-card class="stats-card">
+    <mat-card class="stats-card" *ngIf="dataLoaded">
         <mat-card-header class="stats-card-header">
             <mat-card-title>Average Word Counts</mat-card-title>
             <i class="fa fa-expand" aria-hidden="true"></i>
         </mat-card-header>
         <mat-card-content>
-            <app-word-counts></app-word-counts>
+            <app-word-counts [data]="stats"></app-word-counts>
         </mat-card-content>
     </mat-card>
 </div>
