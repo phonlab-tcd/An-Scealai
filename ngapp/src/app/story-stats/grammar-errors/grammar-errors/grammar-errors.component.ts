@@ -1,7 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Chart } from "chart.js";
-import { firstValueFrom } from "rxjs";
-import { UserService } from "../../../user.service";
 
 @Component({
   selector: "app-grammar-errors",
@@ -9,23 +7,13 @@ import { UserService } from "../../../user.service";
   styleUrls: ["./grammar-errors.component.scss"],
 })
 export class GrammarErrorsComponent implements OnInit {
-  constructor(private userService: UserService) {}
+  constructor() {}
 
-  studentErrors: any;
-  stats: any[] = [];
-  charts: any[] = [];
+  @Input() data:any;
+  chart: any;
 
   async ngOnInit() {
-    await this.getGrammarErrors();
     await this.makeCharts();
-  }
-
-  // Get grammar errors for a given student
-  private async getGrammarErrors() {
-    this.studentErrors = await firstValueFrom(
-      this.userService.getGrammarErrors("id number goes here")
-    );
-    console.log(this.studentErrors);
   }
 
   // create a time series chart for a student's grammar erros
@@ -34,7 +22,7 @@ export class GrammarErrorsComponent implements OnInit {
     let datasets = [];
 
     // loop through each error and create data structures for chart
-    for (let [key, value] of Object.entries(this.studentErrors)) {
+    for (let [key, value] of Object.entries(this.data)) {
       Object.keys(value).forEach((item) => labels.add(item));
       let dict = {
         label: key,
@@ -47,7 +35,7 @@ export class GrammarErrorsComponent implements OnInit {
 
     let canvasElem = document.getElementById("grammar-errors-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext("2d");
-    const chart = new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: "line",
       data: {
         labels: Array.from(labels),

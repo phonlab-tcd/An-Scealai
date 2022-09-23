@@ -8,13 +8,13 @@
             <app-ngram-distribution></app-ngram-distribution>
         </mat-card-content>
     </mat-card>
-    <mat-card class="stats-card">
+    <mat-card class="stats-card" *ngIf="grammarErrorsLoaded">
         <mat-card-header class="stats-card-header">
             <mat-card-title>Grammar Errors</mat-card-title>
-            <i class="fa fa-expand" aria-hidden="true"></i>
+            <i class="fa fa-expand" aria-hidden="true" (click)="toggleFullscreen($event);"></i>
         </mat-card-header>
         <mat-card-content>
-            <app-grammar-errors></app-grammar-errors>
+            <app-grammar-errors [data]="studentErrors"></app-grammar-errors>
         </mat-card-content>
     </mat-card>
 </div>

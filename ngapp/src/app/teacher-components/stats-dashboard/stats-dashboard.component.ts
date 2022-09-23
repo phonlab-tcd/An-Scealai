@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { firstValueFrom } from "rxjs";
+import { UserService } from "../../user.service";
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -6,12 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stats-dashboard.component.scss']
 })
 export class StatsDashboardComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {}
   
+  studentErrors: any;
+  grammarErrorsLoaded: boolean = false;
 
+  constructor(private userService: UserService) { }
+
+  async ngOnInit() {
+    await this.getGrammarErrors();
+  }
+  
   toggleFullscreen(event: MouseEvent): void {
     // Make the card fullscreen via CSS
     const targetElem = event.target as HTMLElement;
@@ -27,5 +33,15 @@ export class StatsDashboardComponent implements OnInit {
       canvasElem.style.cssText = `width: ${cardElem.offsetWidth}px;`;
     }
   }
+  
+  // Get grammar errors for a given student
+  private async getGrammarErrors() {
+    this.studentErrors = await firstValueFrom(
+      this.userService.getGrammarErrors("id number goes here")
+    );
+    console.log(this.studentErrors);
+    this.grammarErrorsLoaded = true;
+  }
+
 
 }
