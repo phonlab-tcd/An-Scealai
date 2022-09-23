@@ -1,47 +1,63 @@
 <!--Irish Language support probably wrong(I used google translate)-->
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="container">
-                <div id="selectorDiv" style="display:block">
-                    <h3>Dictogloss</h3>
-                    <input id="textSelector">
-                    <button style="margin:4px;" (click)="dictglossLoad();">✔️</button>
-                </div>
-                <div *ngIf="hasText">
-                    <hr>
-                    <h3>{{ts.l.dictgloss_audio}}</h3>
-                    <div class="playback">
-                        <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
-                    </div>
-                    <hr>
-                    <div class="buttons-and-templates">
-                        <div *ngFor="let i of wordsPunc; let index = index">
-                            <button style="margin: 2px;" *ngIf="isNotPunctuated(i); else punctuated;" (click)="firstChar(index); generalCheck();">{{shownWords[index]}}</button>
-                            <ng-template style="margin: 2px;"#punctuated>{{i}}</ng-template>
-                        </div>
-                    </div>
-                    <hr>
-                    <div *ngIf="!allGuessed; else correct;">
-                        <input id="guesses_input">
-                        <button style="margin:4px;" (click)="checkWord();">✔️</button>
-                        <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
-                        </div>
-                    </div>
-                    <ng-template  #correct>
-                        <i><h1 class="victory">{{ts.l.dictgloss_victory}}</h1></i>
-                    </ng-template>
-                </div>
-            </div>
+    <div class="container">
+        <div id="selectorDiv" style="display:block">
+            <h3>Dictogloss</h3>
+            <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true;">{{ts.l.dictgloss_usage}}?</p>
+            <input id="textSelector">
+            <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
         </div>
-        <div class="col-lg-6">
-            <div class="container">
-                <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
-                <h6>{{ts.l.dictgloss_1}}&ensp;</h6>
-                <h6>{{ts.l.dictgloss_2}}&ensp;</h6>
-                <h6>{{ts.l.dictgloss_3}}&ensp;</h6>
-                <h6>{{ts.l.dictgloss_tip}}&ensp;</h6>
+        <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
+        <div *ngIf="hasText">
+            <hr>
+            <h3>{{ts.l.dictgloss_audio}}</h3>
+            <div class="playback">
+                <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
             </div>
+            <hr>
+            <div class="buttons-and-templates">
+                <div *ngFor="let i of wordsPunc; let index = index">
+                    <div *ngIf="isNotPunctuated(i); else punctuated;">
+                        <button 
+                        class="button-unguessed"
+                        *ngIf="shownWords[index] !== wordsPunc[index] && !(this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1));" 
+                        (click)="firstChar(index); generalCheck();">
+                            <h5>{{shownWords[index]}}</h5>
+                        </button>
+                        <button 
+                        class="button-pressed"
+                        *ngIf="shownWords[index] !== wordsPunc[index] && this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1);">
+                            <h5>{{shownWords[index]}}</h5>
+                        </button>
+                        <button 
+                        class="button-guessed"
+                        *ngIf="shownWords[index] === wordsPunc[index];">
+                            <h5>{{shownWords[index]}}</h5>
+                        </button>
+                    </div>
+                    <ng-template #punctuated><b><h5 style="margin: 2px;">{{i}}</h5></b></ng-template>
+                </div>
+            </div>
+            <hr>
+            <div *ngIf="!allGuessed; else correct;">
+                <input id="guesses_input">
+                <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
+                <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
+                </div>
+            </div>
+            <ng-template  #correct>
+                <i><h2 class="victory">{{ts.l.dictgloss_victory}}</h2></i>
+                <button class="victory-button" (click)="hasText = false;">{{ts.l.dictogloss_new}}</button>
+                <button class="victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictogloss_return}}</button>
+            </ng-template>
         </div>
     </div>
-</div>    
+    <div *ngIf="showInfo" style="max-width: 600px; height: 280px;" class="container">
+        <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
+        <h5>{{ts.l.dictgloss_1}}&ensp;</h5>
+        <h5>{{ts.l.dictgloss_2}}&ensp;</h5>
+        <h5>{{ts.l.dictgloss_3}}&ensp;</h5>
+        <h5>{{ts.l.dictgloss_tip}}&ensp;</h5>
+        <div class="infoBoxButton" (click)="showInfo = false;">❌</div>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 .container {
-    width: 600px;
+    max-width: 900px;
     background-color: white;
     border-radius: 4px;
     padding-top: 20px;
@@ -14,9 +14,37 @@
 
 .playback {
     display: inline-block;
-    /* float:left;  remove */
     margin: 10px 10px 0 0;
     padding: 5px 10px
+}
+
+.infoBoxButton {
+    width: 24px;
+    position: relative;
+    background-color:#b90202;
+    border-radius: 4px;
+    top: -280px + 23px;
+    left: 600px - 40px;
+}
+
+.infoButtonText {
+    background-color: lightblue;
+    font-size: x-small;
+    margin: 4px auto 4px auto;
+    padding: 2px;
+    border-radius: 4px;
+    max-width: fit-content;
+    animation-duration: 1s;
+    animation-name: fadeInButton;
+}
+
+.infoBoxButton, .infoButtonText:hover {
+    cursor: pointer;
+}
+
+.victory {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: darkolivegreen;
 }
 
 .buttons-and-templates {
@@ -25,17 +53,39 @@
     flex-direction: row;
 }
 
-.victory {
-    font-size: large;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: darkolivegreen;
+.button-guessed {
+    max-height: min-content;
+    margin-top: 4px;
+    border-radius: 4px;
+    border-style: solid;
+    border-color: rgba($color: #008f13, $alpha: 1.0);
+    background-color: rgba($color: rgba(131, 255, 131, 0.459), $alpha: 1.0);
 }
 
-button {
+.button-pressed {
+    max-height: min-content;
+    margin-top: 4px;
     border-radius: 4px;
-    border-color: rgba($color: #008f13, $alpha: 1.0);
     border-style: solid;
-    background-color: rgba($color: rgba(131, 255, 131, 0.459), $alpha: 1.0);
+    border-color: rgba($color: #8f6200, $alpha: 1.0);
+    background-color: rgba($color: rgba(255, 199, 46, 0.671), $alpha: 1.0);
+}
+
+.button-unguessed {
+    max-height: min-content;
+    margin-top: 4px;
+    border-radius: 4px;
+    border-style: solid;
+    border-color: rgba($color: #8f0000, $alpha: 1.0);
+    background-color: rgba($color: rgba(255, 131, 131, 0.459), $alpha: 1.0);
+}
+
+.victory-button {
+    border-width: 2px;
+    font-size: 14px;
+    background-color: rgba(112, 168, 127, 0.1);
+    border-color: rgb(112, 168, 127);
+    border-style: solid;
 }
 
 @keyframes fadeIn {
@@ -47,5 +97,15 @@ button {
     to {
         opacity: 100%;
         transform: translateY(0px) scale(1);
+    }
+}
+
+@keyframes fadeInButton {
+    from {
+        opacity: 0%;
+    }
+
+    to {
+        opacity: 100%;
     }
 }

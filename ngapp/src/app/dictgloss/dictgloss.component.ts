@@ -3,6 +3,7 @@ import { SynthItem } from 'app/synth-item';
 import { SynthesisService } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
 import { voices as synthVoices } from 'app/services/synthesis.service';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-dictgloss',
@@ -42,13 +43,16 @@ export class DictglossComponent implements OnInit {
   shownWords: string[] = [];
   wrongWords: string[] = [];
   wordsPunc: string[] = [];
+  wordsPuncLower: string[] = [];
   hasText: boolean = false;
   hasIncorrect: boolean = false;
   synthText: string;
   guess: string;
+  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
+  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
+  showInfo: boolean = false;
 
   displayText(text) {
-    this.hasText = true;
     console.log("displayText: " + text);
     
     //global lists of words
@@ -56,11 +60,13 @@ export class DictglossComponent implements OnInit {
     this.shownWords = [];
     this.wrongWords = [];
     this.wordsPunc = [];
+    this.wordsPuncLower = [];
     this.synthText = '';
     this.wrong_words_div = "";
     
-    this.words = text.split(/[^a-zA-Z0-9]+/);
-    this.wordsPunc = text.split(/([^a-zA-Z0-9]+)/g);
+    this.words = text.split(this.regex);
+    this.wordsPuncLower = text.toLowerCase().split(this.regexg);
+    this.wordsPunc = text.split(this.regexg);
 
     this.texts = '';
 
@@ -72,12 +78,34 @@ export class DictglossComponent implements OnInit {
           i--;
         }
       } else {
-        if(/[^a-zA-Z0-9]+/.test(this.wordsPunc[i])){
+        if(this.regex.test(this.wordsPunc[i])){
           this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
         } else {
-          this.shownWords.push("..."); //For every word add in a '...'
+          let dashes = "";
+          for(let j = 0; j < this.wordsPunc[i].length; j++){
+            dashes += '-';  //For every character, adds a dash.
+          }
+          this.shownWords.push(dashes); //For every word add the dashes.
         }
       }
+    }
+
+    for(let i = 0 ; i < this.words.length; i++){
+      if(this.words[i] === ''){
+        this.words.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
+      }
+    }
+
+    //Gets rid of first character space that breaks program
+    if(this.words[0] == " "){
+      this.words.splice(0, 1);
+    }
+    
+    if(this.wordsPunc[0] == " "){
+      this.wordsPunc.splice(0, 1);
     }
 
     for(let i = 0; i < this.words.length; i++){
@@ -85,7 +113,9 @@ export class DictglossComponent implements OnInit {
     }
 
     console.log('This is the synth input', this.synthText);
-    this.dictglossSynthRefresh();
+    if(this.hasText){
+      this.dictglossSynthRefresh();
+    }
     
     console.log("WORDS: ", this.words);
     console.log("PUNCTUATED WORDS: ", this.wordsPunc);
@@ -96,21 +126,37 @@ export class DictglossComponent implements OnInit {
 
   firstChar(index: number) {
     if(this.shownWords[index] !== this.wordsPunc[index]){
-      this.shownWords[index] = this.wordsPunc[index].slice(0, 1);
+      this.shownWords[index] = this.wordsPunc[index].slice(0, 1) + this.shownWords[index].slice(1);
     }
   }
 
   audio_urls: any;
   showReplay: boolean = false;
   synthItem: SynthItem;
+  errorText: boolean;
   dictglossLoad() {
     this.allGuessed = false;
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
 
-    if(this.texts.length !== 0){
-      this.hasText = true;
+    let isValid = false;
+    for(let i = 0; i < this.texts.length; i++){
+      if(this.texts[i] !== " "){
+        isValid = true;
+        break;
+      }
     }
+
+    if(this.texts.length > 0 && isValid){
+      this.hasText = true;
+      this.errorText = false;
+    } else {
+      this.hasText = false;
+      this.errorText = true;
+    }
+
+    console.log(this.texts.length, this.hasText);
+    
 
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);
@@ -125,7 +171,7 @@ export class DictglossComponent implements OnInit {
   }
 
   isNotPunctuated(i: string) {
-    if(/[^a-zA-Z0-9]+/.test(i)){
+    if(this.regex.test(i)){
       return false;
     } else {
       return true;
@@ -134,24 +180,51 @@ export class DictglossComponent implements OnInit {
 
   allGuessed: boolean = false;
   guessCheck: boolean = false;
-  checkWord() {
+  async delimitPotentialWords(){
     //Word input field
-    let word: string;
     var word_input = document.getElementById("guesses_input") as HTMLInputElement;
-    word = word_input.value;
+    let wordList = word_input.value.split(this.regex);
 
-    console.log(word);
+    for(let i = 0 ; i < wordList.length; i++){
+      if(wordList[i] === ''){
+        wordList.splice(i, 1);
+        if(i > 0){
+          i--;
+        }
+      }
+    }
+
+    //Gets rid of first character space that breaks program
+    if(wordList[0] == " "){
+      wordList.splice(0, 1);
+    }
+
+    console.log(wordList);
     
-    if (this.wordsPunc.indexOf(word) == -1 && !this.wrongWords.includes(word)) {
+    //For multiple words entered at once
+    for(let word = 0; word < wordList.length; word++){
+      console.log(wordList[word]);
+      this.checkWord(wordList[word]);
+    }
+    word_input.value = "";
+  }
+
+  checkWord(word: string) {
+    if (this.wordsPuncLower.indexOf(word.toLowerCase()) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
+      //If wrong words list is empty, add word with no comma, else add it with comma in front of word
       this.hasIncorrect = true;
-      this.wrong_words_div += word + "<br>";
+      if(this.wrong_words_div.length !== 0){
+        this.wrong_words_div += ", " + word;
+      } else {
+        this.wrong_words_div += word;
+      }
       this.wrongWords.push(word);
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
-      while (this.wordsPunc.indexOf(word, start_index) !== -1) {
-        let word_index = this.wordsPunc.indexOf(word, start_index);
+      while (this.wordsPuncLower.indexOf(word.toLowerCase(), start_index) !== -1) {
+        let word_index = this.wordsPuncLower.indexOf(word.toLowerCase(), start_index);
         this.shownWords[word_index] = this.wordsPunc[word_index];
         start_index = word_index + 1;
       }
@@ -167,7 +240,6 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.allGuessed = true;
     }
-    word_input.value = "";
   }
 
   //For if there is a single letter word that is pressed last.
