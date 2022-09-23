@@ -1,30 +1,22 @@
 const express = require('express');
-const app = express();
 const messageRoutes = express.Router();
-const MongoClient = require('mongodb').MongoClient;
 const multer = require('multer');
 const { Readable } = require('stream');
 const mongodb = require('mongodb');
-const ObjectID = require('mongodb').ObjectID;
+const mongoose = require('mongoose');
+const ObjectID = require('mongodb').ObjectId;
 
 let Message = require('../models/message');
 
-// let db;
-// MongoClient.connect('mongodb://localhost:27017/',
-//   {useNewUrlParser: true, useUnifiedTopology: true},
-//   (err, client) => {
-//   if (err) {
-//     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
-//     process.exit(1);
-//   }
-//   db = client.db('an-scealai');
-// });
+// lazily get a connection to the database when needed;
+const db = ()=>mongoose.connection.db;
+const newBucket = ()=>new mongodb.GridFSBucket(db(),{bucketName: 'audioMessage'});
 
 // Create new message in database
 messageRoutes.route('/create').post(function (req, res) {
     let message = new Message(req.body);
     message.save().then(message => {
-        res.status(200).json({'message': 'message added successfully'});
+        res.json({message});
     })
     .catch(err => {
         res.status(400).send("unable to save to DB");
@@ -114,10 +106,7 @@ messageRoutes.route('/addMessageAudio/:id').post((req, res) => {
                 readableTrackStream.push(req.file.buffer);
                 readableTrackStream.push(null);
 
-                let bucket = new mongodb.GridFSBucket(db, {
-                    bucketName: 'audioMessage'
-                });
-
+                let bucket = newBucket();
                 let uploadStream = bucket.openUploadStream("audio-for-message-" + message._id.toString());
                 message.audioId = uploadStream.id;
                 message.save();
@@ -157,10 +146,7 @@ messageRoutes.route('/messageAudio/:id').get((req, res) => {
                 res.set('content-type', 'audio/mp3');
                 res.set('accept-ranges', 'bytes');
 
-                let bucket = new mongodb.GridFSBucket(db, {
-                    bucketName: 'audioMessage'
-                });
-            
+                let bucket = newBucket();
                 let downloadStream = bucket.openDownloadStream(audioId);
             
                 downloadStream.on('data', (chunk) => {
@@ -197,10 +183,7 @@ messageRoutes.route('/deleteMessageAudio/:id').get((req, res) => {
                   return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
               }
 
-              let bucket = new mongodb.GridFSBucket(db, {
-                  bucketName: 'audioMessage'
-              });
-          
+              let bucket = newBucket();
               let downloadStream = bucket.delete(audioId);
               res.status(200).json({"message" : "Audio deleted successfully"});  
           }

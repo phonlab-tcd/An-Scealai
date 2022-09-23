@@ -6,6 +6,7 @@ import { ActivatedRoute           } from '@angular/router';
 import { Router                   } from '@angular/router';
 import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
+import { HttpClient               } from '@angular/common/http';
 import { Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
@@ -18,7 +19,6 @@ import { StoryService             } from 'app/story.service';
 import { EngagementService        } from 'app/engagement.service';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
-import { GrammarTag               } from 'app/grammar.service';
 import { GramadoirRuleId          } from 'app/grammar.service';
 import { GrammarService           } from 'app/grammar.service';
 import { ReadableGramadoirRuleIds } from 'app/grammar.service';
@@ -70,6 +70,7 @@ type QuillHighlightTag = {
 
 export class DashboardComponent implements OnInit{
   constructor(
+    private http: HttpClient,
     protected sanitizer: DomSanitizer,
     private storyService: StoryService,
     private route: ActivatedRoute,
@@ -86,7 +87,6 @@ export class DashboardComponent implements OnInit{
     this.textUpdated.pipe(
       distinctUntilChanged(),
     ).subscribe(async () => {
-      console.dir(this.textUpdated);
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
@@ -127,6 +127,24 @@ export class DashboardComponent implements OnInit{
     });
   }
 
+
+  downloadMimeType() {
+    return 'application/' + this.downloadStoryFormat.split('.')[1];
+  }
+
+  downloadStory() {
+    this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
+      .subscribe(data=>{
+        console.log(data);
+        const elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(data);
+        elem.download = this.story.title;
+        document.body.appendChild(elem);
+        elem.click();
+        document.body.removeChild(elem);
+      });
+  }
+
   @ViewChild('mySynthesisPlayer')
   synthesisPlayer: SynthesisPlayerComponent;
 
@@ -150,7 +168,6 @@ export class DashboardComponent implements OnInit{
   audioSource: SafeUrl;
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
-  chosenTag: GrammarTag;
   mostRecentGramadoirRequestTime = null;
   grammarLoading = true;
   grammarSelected = true;
@@ -182,7 +199,7 @@ export class DashboardComponent implements OnInit{
 
   htmlDataIsReady = false;
   quillEditor: Quill;
-  textUpdated = new Subject<string|void>();
+  private textUpdated= new Subject<void | string>();
 
   dialects = [
     {
@@ -305,7 +322,6 @@ export class DashboardComponent implements OnInit{
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
-            console.dir(this.story);
             this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {

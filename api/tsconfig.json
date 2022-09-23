@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "dist",
+    "module": "CommonJS",
+    "noImplicitAny": false,
+    "allowJs": true,
+    "checkJs": true,
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "exclude": [
+    "utils/test-setup-per-file.js",
+    "utils/test-setup.js",
+    "utils/test-utils.js",
+    "**/*.test.js",
+    "**/*.test.ts", 
+    "dist/*"]
+}

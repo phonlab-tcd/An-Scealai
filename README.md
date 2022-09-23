@@ -99,6 +99,31 @@ $ nodemon server.js
 
 # CHANGE LOG
 
+## v1.1.4
+- stricter authorization on /story/withId/:id endpoint
+
+## v1.1.3
+- begin to attribute ownership to all new stories
+
+## v1.1.2
+- [BUGFIX] download story button downloads with javascript to enable authentication
+
+## v1.1.1
+- update "main" field in api/package.json
+
+## v1.1.0
+- backend authentication (user must have valid jwt to access resources)
+- auth interceptor applies jwt to requests
+
+## v1.0.22
+- [BUGFIX] admin-component classroom view not loading
+
+## v1.0.21
+- recording engagement events for playing syntheses
+
+## v1.0.20
+- adding nemo voices and dropdown menu for voices in synthesis-player
+
 ## v1.0.19
 - endpoint `gramadoir/insert` not responding [BUGFIX]
 

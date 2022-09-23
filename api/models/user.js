@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var crypto = require('crypto');
+var crypto = require('node:crypto');
 var jwt = require('jsonwebtoken');
 
 const generate_password = require('generate-password');
@@ -99,15 +99,15 @@ userSchema.methods.validStatus = function() {
 userSchema.methods.generateJwt = function() {
   const expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
+  let exp = expiry.getTime() / 1000; 
 
   return jwt.sign({
     _id: this._id,
     username: this.username,
     role: this.role,
     language: this.language,
-    exp: parseInt(
-        expiry.getTime() / 1000 /* convert milliseconds to seconds */),
-  }, 'sonJJxVqRC'); // 5ecret
+    exp
+  }, process.env.PRIVATE_KEY, {algorithm: 'RS256'}) // 5ecret
 };
 
 userSchema.methods.generateNewPassword = function() {

@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MatBadgeModule } from '@angular/material/badge';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
@@ -43,6 +46,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
+import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -175,6 +179,10 @@ const routes: Routes = [
       {
         path: 'teacher-stats/:id',
         component: TeacherStatsComponent,
+      },
+      {
+        path: 'stats-dashboard',
+        component: StatsDashboardComponent,
       }
     ]
   },
@@ -187,7 +195,12 @@ const routes: Routes = [
 
 @NgModule({
   imports:    [ RouterModule.forRoot(routes) ],
-  exports:    [ RouterModule, MatBadgeModule ],
-  providers:  [ NotificationService ]
+  exports:    [
+	  RouterModule,
+	  MatBadgeModule, // TODO why is this here ? (Neimhin 23 Sep 2022 15:20:02)
+  ],
+  providers: [ 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    NotificationService ],
 })
 export class AppRoutingModule { }

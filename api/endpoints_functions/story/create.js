@@ -10,7 +10,7 @@ const {API500Error} = require('../../utils/APIError');
  * @returns {id: the id of the created story}
  */
 module.exports = async (req, res) => {
-    const story = await Story.create(req.body);
+    const story = await Story.create({...req.body, owner: req.user._id});
     if (!story) {
         throw new API500Error('Unable to save story to DB.')
     }

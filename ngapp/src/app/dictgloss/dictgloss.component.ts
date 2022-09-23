@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SynthItem } from 'app/synth-item';
 import { SynthesisService } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
+import { voices as synthVoices } from 'app/services/synthesis.service';
 
 @Component({
   selector: 'app-dictgloss',
@@ -118,7 +119,7 @@ export class DictglossComponent implements OnInit {
 
   dictglossSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
-    this.synthItem = new SynthItem(this.synthText, 'connemara', this.synth);
+    this.synthItem = new SynthItem(this.synthText, synthVoices[0], this.synth);
     this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }

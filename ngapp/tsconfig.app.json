@@ -5,7 +5,10 @@
     "e2e/*",
     "src/test.ts",
     "src/environments/environment.prod.ts",
-    "**/*.qa.ts"
+    "src/environments/environement.ci.ts",
+    "**/*.qa.ts",
+    "cypress/*",
+    "karma.conf.ts"
   ],
   "compilerOptions": {
     "baseUrl": "./src",

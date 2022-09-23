@@ -14,8 +14,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUserById(id: string): Observable<any> {
-    return this.http.get(this.baseUrl + 'viewUser', {headers: {_id : id}});
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(this.baseUrl + 'viewUser', {headers: {_id: id}});
   }
 
   getUserByUsername(username: string): Observable<any> {
@@ -39,11 +39,11 @@ export class UserService {
   }
 
   deleteUser(username: string): Observable<any> {
-    return this.http.get(this.baseUrl + 'deleteUser/' + username);
+    return this.http.delete(this.baseUrl + username);
   }
 
-  updateUsername(id: string, username: string): Observable<any> {
-    return this.http.post(this.baseUrl + 'updateUsername/' + id, { username });
+  updateUsername(username: string): Observable<any> {
+    return this.http.patch(this.baseUrl + 'username', { username });
   }
 
   updatePassword(id: string, password: string): Observable<any> {

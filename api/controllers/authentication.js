@@ -18,10 +18,10 @@ var sendJSONresponse = function(res, status, content) {
     res.json(content);
 };
 
-pendingRegEx = /^Pending$/;
-activeRegEx = /^Active$/;
+const pendingRegEx = /^Pending$/;
+const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
-validUsernameRegEx = /^[a-z0-9]+$/i;
+const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 module.exports.generateNewPassword = async (req, res) => {
 
@@ -54,7 +54,7 @@ module.exports.generateNewPassword = async (req, res) => {
 
   user.save().catch(err => { logger.error(err); });
 
-  mailObj = {
+  const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: req.query.email,
     subject: 'New Password -- An Scéalaí',
@@ -207,7 +207,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
       \n\
       The An Scéalaí team`;
 
-    mailObj = {
+    const mailObj = {
       from: 'scealai.info@gmail.com',
       recipients: [email],
       subject: 'An Scéalaí account verification',
@@ -392,7 +392,7 @@ module.exports.verifyOldAccount = async (req, res) => {
   } catch (error) {
     const messageKeys = ['An unknown error occurred'];
     console.dir(error);
-    if (error.messageToUser) {
+    if (error?.messageToUser) {
       messageKeys.push(error.messageToUser);
     }
     return res
@@ -412,7 +412,6 @@ module.exports.register = async (req, res) => {
     errors: [],
   };
 
-  console.dir(req.body);
   // REQUIREMENTS
   if (!req.body.username || !req.body.password || !req.body.email) {
     resObj.messageKeys.push('username_password_and_email_required');
@@ -445,7 +444,7 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     resObj.errors.push(err);
     logger.error(err);
-    if (err.code) {
+    if (err?.code) {
       logger.error('Mongo error. Error code: ' + err.code);
       if (err.code === 11000) {
         resObj.messageKeys.push('username_taken_msg');
@@ -467,7 +466,7 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     logger.error(err);
     resObj.errors.push(err);
-    if (err.messageToUser) {
+    if (err?.messageToUser) {
       resObj.messageKeys.push(err.messageToUser);
     }
     return res.status(500).json(resObj);

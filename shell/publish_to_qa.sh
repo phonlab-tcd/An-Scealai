@@ -21,12 +21,15 @@ ssh -t scealai@141.95.1.243 "
   tmux kill-session -t qa
   set -e
   cd an_scealai_qa && pwd
+  git stash
   git pull && git rev-parse --abbrev-ref HEAD
   git stash
   git checkout $current_branch && git rev-parse --abbrev-ref HEAD
   npm --prefix api install
   tmux new-session -t qa -d
   tmux send -t qa \"npm --prefix api run start:qa\" C-m
+  tmux new-window -t qa
+  tmux send -t qa \"mongod --port 27018 --dbpath ../qa-data-mongod\"
   cp -r ngapp/qa_build/* dist/an-scealai/
   sleep 3
   tmux capture-pane -p -e

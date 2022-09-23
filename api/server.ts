@@ -1,3 +1,5 @@
+if(process.env.NODE_ENV==='prod') require('./keys/load');
+else require('./keys/dev/load');
 
 // Best to initialize the logger first
 const logger = require('./logger');
@@ -8,7 +10,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
+const checkJwt = require('./utils/jwtAuthMw');
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
@@ -23,15 +27,15 @@ const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
 const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
-const mailRoute = require('./routes/send_mail.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
+const synthesisRoute = require('./routes/synthesis.route');
 
 const dbURL = require('./utils/dbUrl');
+const jwtAuthMw = require('./utils/jwtAuthMw');
 
 // use this to test where uncaughtExceptions get logged
 // throw new Error('test error');
 
-logger.info('DB url: ' + dbURL);
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 
@@ -47,7 +51,6 @@ async function prodConnection() {
     serverSelectionTimeoutMS,
   };
   await mongoose.connect(dbURL, opts);
-  logger.info(`connected ${dbURL}`);
 }
 
 if(process.env.NODE_ENV !== 'test') {
@@ -55,12 +58,14 @@ if(process.env.NODE_ENV !== 'test') {
 }
 
 const app = express();
+if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(passport.initialize());
+app.use(require('cookie-parser')('big secret'));
 
-app.use('/story', storyRoute);
 app.use('/user', userRoute);
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
@@ -75,6 +80,9 @@ if(process.env.FUDGE) {
       );
   });
 }
+
+app.use(checkJwt);
+app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
@@ -87,10 +95,22 @@ app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 
-const synthesisRoute = require('./routes/synthesis.route');
+app.use('/proxy',async (req,res,next)=>{
+  function allowUrl(url) {
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
+    return !! allowedUrls.exec(url);
+  }
+  if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');
+  const proxyRes = await axios.get(req.body.url).then(ok=>({ok}),err=>({err}));
+  if(proxyRes.err) {
+    console.error(proxyRes);
+    return res.status(+proxyRes.err.status || +proxyRes.err.response.status || 500).json(proxyRes.err);
+  }
+  res.json(proxyRes.ok.data);
+});
+
 app.use('/synthesis', synthesisRoute);
 
-app.use('/mail', mailRoute);
 app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
@@ -99,7 +119,7 @@ app.use(errorHandler);
 
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
-if (process.env.TEST != 1) {
+if (!(process.env.NODE_ENV === 'test')) {
   const server = app.listen(port, function(){
       logger.info('Listening on port ' + port);
   });

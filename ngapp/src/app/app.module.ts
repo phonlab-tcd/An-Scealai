@@ -13,8 +13,13 @@ import { MatCardModule } from '@angular/material/card'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
+import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -81,6 +86,8 @@ import { LaraPromptsComponent } from './lara-prompts/lara-prompts.component';
 import { StoryPromptsComponent } from './story-prompts/story-prompts.component';
 import { GeneralPromptsComponent } from './general-prompts/general-prompts.component';
 import { DictglossComponent } from './dictgloss/dictgloss.component';
+import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -140,6 +147,8 @@ import { DictglossComponent } from './dictgloss/dictgloss.component';
     StoryPromptsComponent,
     GeneralPromptsComponent,
     DictglossComponent,
+    SynthVoiceSelectComponent,
+    StatsDashboardComponent,
   ],
   imports: [
     RegisterModule,
@@ -158,6 +167,7 @@ import { DictglossComponent } from './dictgloss/dictgloss.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatSelectModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({
@@ -171,14 +181,16 @@ import { DictglossComponent } from './dictgloss/dictgloss.component';
           'times-new-roman',    // @quill-font
         ]
       }],
-    })
+    }),
+    NgramDistributionModule
   ],
   providers: [
     StoryService,
     UserService,
     MatDatepickerModule,
     MatNativeDateModule,
-    {provide : LocationStrategy , useClass: HashLocationStrategy}
+    {provide : LocationStrategy , useClass: HashLocationStrategy },
+    {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ],
   bootstrap: [
     AppComponent,

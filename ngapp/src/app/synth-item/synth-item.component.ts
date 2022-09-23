@@ -2,13 +2,11 @@ import {
   Component,
   Input,
   ViewChild,
-  AfterViewInit,
-  ChangeDetectorRef,
-  SimpleChanges } from '@angular/core';
-import { SynthesisService, Dialect } from "../services/synthesis.service";
+  ElementRef} from '@angular/core';
+import { SynthesisService } from "../services/synthesis.service";
 import { SynthesisBankService } from "app/services/synthesis-bank.service";
 import { SynthItem } from 'app/synth-item';
-import { Subscription } from 'rxjs';
+import { EngagementService } from 'app/engagement.service';
 
 @Component({
   selector: 'app-synth-item',
@@ -18,24 +16,26 @@ import { Subscription } from 'rxjs';
 export class SynthItemComponent {
 
   @Input('synthItem') synthItem: SynthItem;
-  @Input('i') i: number;
-  @ViewChild('audioElement') audioElement;
+  @Input() storyId: string;
+  @Input('i') i: number = 0;
+  @ViewChild('audioElement') audioElement: ElementRef<HTMLAudioElement>;
 
   constructor(
     private synth: SynthesisService,
     private synth_bank: SynthesisBankService,
-    private cdref: ChangeDetectorRef
+    private engagement: EngagementService,
   ) {}
 
   play() {
     if(this.audioElement.nativeElement) {
       this.audioElement.nativeElement.play()
     }
+    this.engagement.playSynthesis(this.synthItem, this.storyId);
   }
 
   public refresh() {
     this.synth_bank.remove(this.synthItem.requestUrl);
-    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.dialect,this.synth);
+    this.synthItem = new SynthItem(this.synthItem.text,this.synthItem.voice,this.synth);
   }
 
   alternateColors(i: number): string {
@@ -47,6 +47,6 @@ export class SynthItemComponent {
   }
 
   ready() {
-    return this.synthItem && !!this.synthItem.audioUrl;
+    return !!this.synthItem && !!this.synthItem.audioUrl;
   }
 }

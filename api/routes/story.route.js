@@ -20,8 +20,10 @@ let storyRoutes;
 (() => {  
   // ENDPOINT HANDLERS
   // GET
-  const getStoryById =
-    require('../endpoints_functions/story/getStoryById');
+  const withId =
+    require('../endpoints_functions/story/withId');
+  // const myStudentsStory =
+  //   require('../endpoints_functions/story/myStudentsStory');
   const author =
     require('../endpoints_functions/story/author');
   const feedbackAudio =
@@ -37,7 +39,8 @@ let storyRoutes;
 
   storyRoutes = makeEndpoints({
     get: {
-      '/getStoryById/:id': getStoryById,
+      '/withId/:id': withId,
+      // '/myStudentsStory/:id': myStudentsStory,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
     },
@@ -85,30 +88,27 @@ storyRoutes
         }
         if (story === null) {
           console.log('story is null!');
-        } else {
-          if (req.body.text) {
-            story.text = req.body.text;
-          }
-          if (req.body.htmlText) {
-            story.htmlText = req.body.htmlText;
-          }
-          if (req.body.lastUpdated) {
-            story.lastUpdated = req.body.lastUpdated;
-          }
-          if (req.body.dialect) {
-            story.dialect = req.body.dialect;
-          }
-          if (req.body.title) {
-            story.title = req.body.title;
-          }
-
-          story.save().then( (story) => {
-            res.json('Update complete');
-          }).catch( (err) => {
-            res.status(400).json(err);
-          });
+          return res.status(404).json('story not found');
         }
-        // TODO This endpoint can hang here
+        if (req.body.text) {
+          story.text = req.body.text;
+        }
+        if (req.body.htmlText) {
+          story.htmlText = req.body.htmlText;
+        }
+        if (req.body.lastUpdated) {
+          story.lastUpdated = req.body.lastUpdated;
+        }
+        if (req.body.dialect) {
+          story.dialect = req.body.dialect;
+        }
+        if (req.body.title) {
+          story.title = req.body.title;
+        }
+        if( story.studentId) story.owner = story.studentId;
+        story.save().then(
+          (ok) => res.json('Update complete'),
+          (err)=> res.status(400).json(err));
       });
 });
 
