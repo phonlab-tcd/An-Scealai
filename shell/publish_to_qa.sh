@@ -27,6 +27,7 @@ ssh -t scealai@141.95.1.243 "
   npm --prefix api install
   tmux new-session -t qa -d
   tmux send -t qa \"npm --prefix api run start:qa\" C-m
+  tmux new-window -t qa
   tmux send -t qa \"mongod --port 27018 --dbpath ../qa-data-mongod\"
   cp -r ngapp/qa_build/* dist/an-scealai/
   sleep 3
