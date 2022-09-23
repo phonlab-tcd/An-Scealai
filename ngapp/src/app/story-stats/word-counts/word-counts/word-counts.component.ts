@@ -15,31 +15,30 @@ const RED = 'rgba(255, 114, 111, 1)';
 export class WordCountsComponent implements OnInit {
   
   @Input() data:any;
+  charts:any[] = [];
 
   constructor() { }
-  
-  charts:any[] = [];
 
   async ngOnInit() {
     console.log(this.data);
-    await this.makeCharts();
+    this.makeCharts();
   }
   
-  private async makeCharts() {
+  private makeCharts() {
     // wait for HTML to render before adding charts (need dynamically created ids)
     setTimeout(() => {
-      for (let entry in this.data) {
-        let canvasElem = document.getElementById(this.data[entry].chartId) as HTMLCanvasElement;
+      for (let entry of this.data) {
+        let canvasElem = document.getElementById(entry.chartId) as HTMLCanvasElement;
         let ctx = canvasElem.getContext('2d');
         let myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: this.data[entry].studentNames,
+                labels: entry.studentNames,
                 datasets: [{
-                    label: 'Average Word Counts For ' + this.data[entry].classroomTitle,
-                    data: this.data[entry].averageWordCounts,
-                    backgroundColor: this.data[entry].averageWordCounts.map(_ => LIGHT_RED),
-                    borderColor: this.data[entry].averageWordCounts.map(_ => RED),
+                    label: 'Average Word Counts For ' + entry.classroomTitle,
+                    data: entry.averageWordCounts,
+                    backgroundColor: entry.averageWordCounts.map(_ => LIGHT_RED),
+                    borderColor: entry.averageWordCounts.map(_ => RED),
                     borderWidth: 1
                 }]
             },

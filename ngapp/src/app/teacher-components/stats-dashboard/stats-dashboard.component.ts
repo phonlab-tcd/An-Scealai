@@ -20,7 +20,7 @@ export class StatsDashboardComponent implements OnInit {
   dataLoaded:boolean = false;
 
   ngOnInit(): void {
-    this.getStats();
+    this.getWordCounts();
   }
   
 
@@ -42,8 +42,7 @@ export class StatsDashboardComponent implements OnInit {
   
   
   // For each classroom of logged-in teacher, get average word count for each student (over all stories)
-  private async getStats() {
-    
+  private async getWordCounts() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
 
     for (let entry in this.classrooms) {
@@ -65,12 +64,12 @@ export class StatsDashboardComponent implements OnInit {
 
           const wordCountResponse = await firstValueFrom(this.storyService.averageWordCount(userId));
           statsEntry.averageWordCounts.push(wordCountResponse.avgWordCount);
-        }
-          console.log(statsEntry);  
+        } 
           this.stats.push(statsEntry);
       }
     }
-    this.dataLoaded = true;
+    if (this.stats.length > 0) 
+      this.dataLoaded = true;
   }
 
 }
