@@ -1,4 +1,28 @@
-#canvas {
-  height:200px;
-  width:400px;
+canvas {
+  height: 200px;
+  width: 400px;
+}
+
+ngb-carousel {
+  width: 400px; // can we change this to work with full screen mat card? 
+}
+
+.carousel-indicators {
+  margin-bottom: -20px;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: black;
+}
+
+.carousel-control-next-icon{
+  /*background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')*/
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNNSAzbDMuMDU3LTMgMTEuOTQzIDEyLTExLjk0MyAxMi0zLjA1Ny0zIDktOXoiLz48L3N2Zz4=');
+  margin-left: 40px;
+}
+
+.carousel-control-prev-icon{
+  /*background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')*/
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTYuNjcgMGwyLjgzIDIuODI5LTkuMzM5IDkuMTc1IDkuMzM5IDkuMTY3LTIuODMgMi44MjktMTIuMTctMTEuOTk2eiIvPjwvc3ZnPg==');
+  margin-right: 40px;
 }

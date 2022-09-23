@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Chart } from 'chart.js';
 import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../../story.service';
@@ -14,6 +14,7 @@ const RED = 'rgba(255, 114, 111, 1)';
 @Component({
   selector: 'app-word-counts',
   templateUrl: './word-counts.component.html',
+  encapsulation: ViewEncapsulation.None, // to override the bootstrap image carousel css
   styleUrls: ['./word-counts.component.scss']
 })
 
@@ -88,7 +89,7 @@ export class WordCountsComponent implements OnInit {
                     stacked: true,
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 1
+                        stepSize: 40
                     }
                 }]
               }

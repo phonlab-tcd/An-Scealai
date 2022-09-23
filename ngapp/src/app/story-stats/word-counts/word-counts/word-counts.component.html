@@ -1,11 +1,7 @@
-
-<ngb-carousel #carousel height="200" width="400" interval=0 wrap=true>
+<ngb-carousel #carousel  interval=0 wrap=true>
   <ng-template ngbSlide *ngFor="let chart of stats">
-    <div style="background-color: white; height: 200px;">
-        <canvas id="{{chart.chartId}}" width="400" height="200"></canvas>
-    </div>
-    <div class="carousel-caption">
-      <p>{{chart.chartId}}</p>
+    <div>
+        <canvas id="{{chart.chartId}}" ></canvas>
     </div>
   </ng-template>
 </ngb-carousel>
