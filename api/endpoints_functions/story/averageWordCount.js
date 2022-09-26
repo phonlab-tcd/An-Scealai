@@ -1,4 +1,9 @@
 const Story = require('../../models/story');
+const winkNLP = require( 'wink-nlp' );
+const model = require('wink-eng-lite-web-model');
+
+const nlp = winkNLP( model );
+const STOP_WORDS = ['.', ',', '?', '!', '\n'];
 
 /**
  * Add two numbers.
@@ -11,17 +16,13 @@ module.exports = async (req, res) => {
   if (stories.length > 0) {
     const wordCounts = [];
 
-    for (let i = 0; i < stories.length; i++) {
-      const words = [];
-      const str = stories[i].text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
-      str.map((s) => {
-        const trimStr = s.trim();
-        if (trimStr.length > 0) {
-          words.push(trimStr);
-        }
-      });
-      wordCounts.push(words.length);
-    }
+    stories.forEach((story) => {
+      const textTokens = nlp.readDoc(story.text).tokens()
+          .out()
+          .filter((token) => !STOP_WORDS.includes(token));
+
+      wordCounts.push(textTokens.length);
+    });
 
     const average = Math.round(wordCounts.reduce((a, b) => a + b, 0) /
      wordCounts.length);
