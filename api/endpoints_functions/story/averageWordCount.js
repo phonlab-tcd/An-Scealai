@@ -3,7 +3,7 @@ const winkNLP = require( 'wink-nlp' );
 const model = require('wink-eng-lite-web-model');
 
 const nlp = winkNLP( model );
-const STOP_WORDS = ['.', ',', '?', '!', '\n'];
+const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
 
 /**
  * Add two numbers.
@@ -21,6 +21,9 @@ module.exports = async (req, res) => {
           .out()
           .filter((token) => !STOP_WORDS.includes(token));
 
+      textTokens.forEach((token) => {
+        console.log(token);
+      });
       wordCounts.push(textTokens.length);
     });
 
