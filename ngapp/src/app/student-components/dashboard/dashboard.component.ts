@@ -68,7 +68,7 @@ type QuillHighlightTag = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     protected sanitizer: DomSanitizer,
@@ -200,6 +200,9 @@ export class DashboardComponent implements OnInit{
   htmlDataIsReady = false;
   quillEditor: Quill;
   private textUpdated= new Subject<void | string>();
+  
+  // DICTIONARY LOOKUPS
+  wordLookedUp:string = '';
 
   dialects = [
     {
@@ -355,7 +358,7 @@ export class DashboardComponent implements OnInit{
             }
           });
   }
-
+  
   // return the student's set of
   // stories using the story service
   getStories(): Promise<any> {
@@ -506,10 +509,24 @@ export class DashboardComponent implements OnInit{
   }
 
   showDictionary() {
-    if (!!this.dictionaryVisible === false) {
-      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
-    }
     this.dictionaryVisible = !this.dictionaryVisible;
+  }
+  
+  lookupWord() {
+    if(this.wordLookedUp) {
+      let frameObj = document.getElementById('dictiframe');
+      frameObj['src'] = "https://www.teanglann.ie/en/eid/" + this.wordLookedUp;
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
+    }
+    else {
+      alert("Please input a word to lookup");
+    }
+  }
+  
+  clearDictInput() {
+    if(this.wordLookedUp) {
+      this.wordLookedUp = "";
+    }
   }
 
   // Get audio feedback with function call

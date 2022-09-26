@@ -688,6 +688,31 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     cursor: pointer;
 }
 
+.dictionaryInput {
+  background-color: #70a87f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+  gap: 1rem;
+}
+
+
+.searchDictionaryBtn {
+    background-color: #e5bd3b;
+    border-style: none;
+    color: white;
+    font-size: 12pt;
+    margin: 0px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.searchDictionaryBtn:hover {
+    background-color: #ad8f2b;
+    color: white;
+}
+
 @media only screen and (max-width: 750px) {
     .dictionaryModeContainer {
         flex-direction: column-reverse;

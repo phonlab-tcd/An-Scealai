@@ -294,9 +294,14 @@
           {{ts.l.external_links}}
         </div>
       </div>
+      <div *ngIf="selectTeanglann" class="dictionaryInput">
+        <label for="dictlookup">Look up:</label>
+        <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
+        <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+      </div>
 
       <!-- TEANGLANN -->
-      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en" id="dictiframe"></iframe>
 
       <!-- EXTERNAL LINKS -->
       <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
