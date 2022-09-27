@@ -63,6 +63,10 @@ export class RecordingComponent implements OnInit {
   errorText : string;
   registrationError : boolean;
   audioFinishedLoading: boolean = false;
+  
+  // ASR variables
+  url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
+  sectionSpeechRecognition: string[] = [];
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
@@ -189,6 +193,14 @@ export class RecordingComponent implements OnInit {
         this.sectionChunks[index].push(e.data);
         if(this.recorder.state == 'inactive') {
         };
+        const reader = new FileReader();
+        reader.readAsDataURL(e.data);
+        let encodedAudio = "";
+        reader.onloadend = function () {
+          // convert audio to base64
+          encodedAudio = (<string>reader.result).split(";base64,")[1];
+          this.getTranscription(encodedAudio, index);
+        }.bind(this);
       };
     }).catch();
   }
@@ -203,6 +215,32 @@ export class RecordingComponent implements OnInit {
       this.sectionAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
       this.recordingSaved = false;
     }, 500);
+  }
+  
+  /* send audio to the ASR system and get transcription */
+  getTranscription(audioData:string, index:number) {
+    const rec_req = {
+      recogniseBlob: audioData,
+      developer: true,
+    };
+
+    fetch(this.url_ASR_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rec_req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      //let transcription = data["transcriptions"]["test_model"]["hypotheses"][0]["utterance"];
+      let transcription = "test";
+      console.log(transcription);
+      this.sectionSpeechRecognition[index] = transcription;
+      console.log(this.sectionSpeechRecognition);
+  
+    });
   }
 
   deleteRecording(index: number) {

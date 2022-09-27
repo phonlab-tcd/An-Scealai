@@ -52,6 +52,8 @@
                           <button *ngIf="isRecording(section, index)" class="notRecordingBtn blink" (click)="stopRecording(index);"><i class="fas fa-stop-circle"></i></button>
                         </div>
                         <hr class="dividerLine" *ngIf="sectionAudioSources[index]">
+                        <!-- Speech Recognition -->
+                        <div class="recognisedSpeech" *ngIf="sectionSpeechRecognition[index]"> {{ sectionSpeechRecognition[index] }} </div>
                         <!-- Audio player -->
                         <div class="cardFooter" *ngIf="sectionAudioSources[index]">
                           <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer"></audio>
