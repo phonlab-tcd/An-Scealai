@@ -53,7 +53,10 @@
                         </div>
                         <hr class="dividerLine" *ngIf="sectionAudioSources[index]">
                         <!-- Speech Recognition -->
-                        <div class="recognisedSpeech" *ngIf="sectionSpeechRecognition[index]"> {{ sectionSpeechRecognition[index] }} </div>
+                        <div *ngIf="isTranscribing[index]" class="recognisedSpeech">
+                          <div class="dot-flashing"></div>
+                        </div>
+                        <div *ngIf="sectionTranscriptions[index]" class="recognisedSpeech"> {{ sectionTranscriptions[index] }} </div>
                         <!-- Audio player -->
                         <div class="cardFooter" *ngIf="sectionAudioSources[index]">
                           <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer"></audio>
