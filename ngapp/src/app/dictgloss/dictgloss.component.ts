@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SynthItem } from 'app/synth-item';
-import { SynthesisService } from 'app/services/synthesis.service';
+import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
-import { voices as synthVoices } from 'app/services/synthesis.service';
-import { timeStamp } from 'console';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
 
 @Component({
   selector: 'app-dictgloss',
@@ -14,9 +14,10 @@ import { timeStamp } from 'console';
 export class DictglossComponent implements OnInit {
 
   constructor(
+    private fb: FormBuilder,
     private synth: SynthesisService,
     public ts: TranslationService,
-  ) { }
+  ) { this.dictglossCreateForm(); }
 
   ngOnInit(): void {
   }
@@ -38,12 +39,14 @@ export class DictglossComponent implements OnInit {
 
   //I recognise that using parallel arrays wasn't the most intuitive move - Fionn
   texts: string;
+  synthForm: FormGroup;
   wrong_words_div: string = '';
   words: string[] = [];
   shownWords: string[] = [];
   wrongWords: string[] = [];
   wordsPunc: string[] = [];
   wordsPuncLower: string[] = [];
+  sentences: string[] = [];
   hasText: boolean = false;
   hasIncorrect: boolean = false;
   synthText: string;
@@ -51,6 +54,12 @@ export class DictglossComponent implements OnInit {
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
   showInfo: boolean = false;
+
+  dictglossCreateForm(){
+    this.synthForm = this.fb.group({
+      dialect: ['connemara']
+    });
+  }
 
   displayText(text) {
     console.log("displayText: " + text);
@@ -67,7 +76,7 @@ export class DictglossComponent implements OnInit {
     this.words = text.split(this.regex);
     this.wordsPuncLower = text.toLowerCase().split(this.regexg);
     this.wordsPunc = text.split(this.regexg);
-
+    this.sentences = text.split('.');
     this.texts = '';
 
     //Gets rid of multiple spaces
@@ -114,7 +123,8 @@ export class DictglossComponent implements OnInit {
 
     console.log('This is the synth input', this.synthText);
     if(this.hasText){
-      this.dictglossSynthRefresh();
+      //this.dictglossSynthRefresh();
+      this.collateSynths(this.sentences);
     }
     
     console.log("WORDS: ", this.words);
@@ -162,10 +172,36 @@ export class DictglossComponent implements OnInit {
     this.displayText(this.texts);
     selector.value = "";
   }
+  
+  selected: Voice = voices[0];
+  synthItems: SynthItem[] = [];
+  collateSynths(sentences: string[]){
+    // if(this.synthItems.length === 0){
+      for(let i = 0; i < sentences.length; i++){
+        this.synthItems.push(this.getSynthItem(sentences[i]));
+        console.log(this.synthItems[i]);
+      }
+      console.log(this.synthItems);
+      
+    // }
+  }
+
+  // refresh(voice: Voice = undefined) {
+  //   if(voice) this.selected = voice;
+  //   this.synthItems.map(s => {
+  //     s.audioUrl = undefined;
+  //     s.dispose();
+  //   })
+  // }
+
+  getSynthItem(line: string) {
+    return new SynthItem(line,this.selected,this.synth);
+  }
 
   dictglossSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
-    this.synthItem = new SynthItem(this.synthText, synthVoices[0], this.synth);
+    //this.synthItem.voice = this.synth.api2_voice_from_dialect('connemara');
+    //this.synthItem = new SynthItem(this.synthText, this.voices[1], this.synth);
     this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
     console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
@@ -209,6 +245,8 @@ export class DictglossComponent implements OnInit {
     word_input.value = "";
   }
 
+  wrongCount: number = 0;
+  rightCount: number = 0;
   checkWord(word: string) {
     if (this.wordsPuncLower.indexOf(word.toLowerCase()) == -1 && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
@@ -220,6 +258,7 @@ export class DictglossComponent implements OnInit {
         this.wrong_words_div += word;
       }
       this.wrongWords.push(word);
+      this.wrongCount++;
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
@@ -228,6 +267,7 @@ export class DictglossComponent implements OnInit {
         this.shownWords[word_index] = this.wordsPunc[word_index];
         start_index = word_index + 1;
       }
+      this.rightCount++;
     }
 
     this.guessCheck = true;

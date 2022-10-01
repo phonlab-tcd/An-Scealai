@@ -12,7 +12,19 @@
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
             <div class="playback">
-                <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                <app-synth-item *ngFor="let si in synthItems; let i = index" 
+                [synthItem]=si 
+                [i]=i 
+                [storyId]="Dictogloss">
+                </app-synth-item>
+                <div class="formGroup">
+                    <p class="formLabel">{{ts.l.dialect}}</p>
+                    <select formControlName="dialect" class="dialectSelect">
+                        <option value="connemara">{{ts.l.connacht}}</option>
+                        <option value="donegal">{{ts.l.ulster}}</option>
+                        <option value="kerry">{{ts.l.munster}}</option>
+                    </select>
+                </div>
             </div>
             <hr>
             <div class="buttons-and-templates">
