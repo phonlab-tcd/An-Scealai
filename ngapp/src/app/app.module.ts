@@ -88,6 +88,7 @@ import { GeneralPromptsComponent } from './general-prompts/general-prompts.compo
 import { DictglossComponent } from './dictgloss/dictgloss.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
+import { TeacherDictglossComponent } from './teacher-components/teacher-dictgloss/teacher-dictgloss.component';
 
 @NgModule({
   declarations: [
@@ -149,6 +150,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     DictglossComponent,
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
+    TeacherDictglossComponent,
   ],
   imports: [
     RegisterModule,
