@@ -2198,10 +2198,28 @@ export default {
   dictgloss_guess: {
     ga: /*'Cuir isteach focal'*/ '❓',
     en: /*'Enter word'*/ '❓' },
-  dictogloss_new: {
+  dictgloss_new: {
     ga: 'Dictogloss nua',
     en: 'New Dictogloss' },
-  dictogloss_return: {
+  dictgloss_return: {
     ga: 'Téigh go dtí mo scéalta',
     en: 'Go to my stories' },
+  dictgloss_correct: {
+    ga: 'Ceart',
+    en: 'Correct' },
+  dictgloss_incorrect: {
+    ga: 'Mícheart',
+    en: 'Incorrect' },
+  dictgloss_guessed1: {
+    ga: 'Tá ',
+    en: 'You\'ve guessed ' },
+  dictgloss_guessed2: {
+    ga: ' as ',
+    en: ' out of ' },
+  dictgloss_guessed3: {
+    ga: ' buille faoi thuairim agat.',
+    en: '.' },
+  dictgloss_final_time: {
+    ga: 'Chríochnaigh tú i ',
+    en: 'You finished in ' },
 }

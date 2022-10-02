@@ -4,6 +4,8 @@ import { SynthesisService, Voice, voices } from 'app/services/synthesis.service'
 import { TranslationService } from 'app/translation.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
+import { stringify } from 'querystring';
+import { timeline } from 'console';
 
 @Component({
   selector: 'app-dictgloss',
@@ -61,6 +63,28 @@ export class DictglossComponent implements OnInit {
     });
   }
 
+  totalTime: number = 0;
+  interval: any;
+  startTimer(){
+    this.interval = setInterval(() => {
+      this.totalTime++;
+    },1000)
+  }
+
+  pauseTimer(){
+    clearInterval(this.interval);
+  }
+
+  resetTimer(){
+    this.totalTime = 0;
+  }
+
+  displayTime(totalTime: number): string{
+    let time: string;
+    time = Math.floor(totalTime / 60).toString() + ":" + (totalTime % 60).toString();
+    return time;
+  }
+
   displayText(text) {
     console.log("displayText: " + text);
     
@@ -72,6 +96,8 @@ export class DictglossComponent implements OnInit {
     this.wordsPuncLower = [];
     this.synthText = '';
     this.wrong_words_div = "";
+    this.rightCount = 0;
+    this.wrongCount = 0;
     
     this.words = text.split(this.regex);
     this.wordsPuncLower = text.toLowerCase().split(this.regexg);
@@ -145,6 +171,8 @@ export class DictglossComponent implements OnInit {
   synthItem: SynthItem;
   errorText: boolean;
   dictglossLoad() {
+    this.resetTimer();
+    this.startTimer();
     this.allGuessed = false;
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
@@ -248,7 +276,14 @@ export class DictglossComponent implements OnInit {
   wrongCount: number = 0;
   rightCount: number = 0;
   checkWord(word: string) {
-    if (this.wordsPuncLower.indexOf(word.toLowerCase()) == -1 && !this.wrongWords.includes(word)) {
+    let isIn = this.wordsPuncLower.indexOf(word.toLowerCase()) != -1;
+    let index = this.wordsPuncLower.indexOf(word.toLowerCase());
+    if(!isIn) { 
+      this.wrongCount++; 
+    } else if (isIn && this.shownWords[index] != this.wordsPunc[index]) {
+      this.rightCount++;
+    }
+    if (!isIn && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       //If wrong words list is empty, add word with no comma, else add it with comma in front of word
       this.hasIncorrect = true;
@@ -258,7 +293,6 @@ export class DictglossComponent implements OnInit {
         this.wrong_words_div += word;
       }
       this.wrongWords.push(word);
-      this.wrongCount++;
     } else {
       //If the word is found, loop through the list and show the word in the right position
       var start_index = 0;
@@ -267,7 +301,6 @@ export class DictglossComponent implements OnInit {
         this.shownWords[word_index] = this.wordsPunc[word_index];
         start_index = word_index + 1;
       }
-      this.rightCount++;
     }
 
     this.guessCheck = true;
@@ -278,6 +311,7 @@ export class DictglossComponent implements OnInit {
       }
     }
     if(this.guessCheck){
+      this.pauseTimer();
       this.allGuessed = true;
     }
   }
@@ -292,6 +326,7 @@ export class DictglossComponent implements OnInit {
       }
     }
     if(this.guessCheck){
+      this.pauseTimer();
       this.allGuessed = true;
     }
   }

@@ -12,11 +12,8 @@
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
             <div class="playback">
-                <app-synth-item *ngFor="let si in synthItems; let i = index" 
-                [synthItem]=si 
-                [i]=i 
-                [storyId]="Dictogloss">
-                </app-synth-item>
+                <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                <!-- Select dialect -->
                 <div class="formGroup">
                     <p class="formLabel">{{ts.l.dialect}}</p>
                     <select formControlName="dialect" class="dialectSelect">
@@ -52,15 +49,24 @@
             </div>
             <hr>
             <div *ngIf="!allGuessed; else correct;">
+                <div><b>{{displayTime(totalTime)}}</b></div>
                 <input id="guesses_input">
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
+                <div>
+                    <b style="color:green; padding-right: 1em;">{{ts.l.dictgloss_correct}}: {{rightCount}}</b>
+                    <b style="color:red;padding-left: 1em;">{{ts.l.dictgloss_incorrect}}: {{wrongCount}}</b>
+                </div>
+                <div>
+                    <b>{{ts.l.dictgloss_guessed1}}{{rightCount}}{{ts.l.dictgloss_guessed2}}{{words.length}}{{ts.l.dictgloss_guessed3}}</b>
+                </div>
                 <div [innerHtml]="wrong_words_div" *ngIf="hasIncorrect">
                 </div>
             </div>
             <ng-template  #correct>
                 <i><h2 class="victory">{{ts.l.dictgloss_victory}}</h2></i>
-                <button class="victory-button" (click)="hasText = false;">{{ts.l.dictogloss_new}}</button>
-                <button class="victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictogloss_return}}</button>
+                <b><h2>{{ts.l.dictgloss_final_time}}{{displayTime(totalTime)}}</h2></b>
+                <button class="victory-button" (click)="hasText = false;">{{ts.l.dictgloss_new}}</button>
+                <button class="victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictgloss_return}}</button>
             </ng-template>
         </div>
     </div>
