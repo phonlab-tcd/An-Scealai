@@ -34,3 +34,23 @@
     white-space: normal;
     color: black;
 }
+
+.codeView {
+    background-color: #d1d1d1;
+    border: 1px solid #999999;
+    border-radius: 4px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 16px;
+}
+
+
+.deleteRedBtn {
+    background-color: #c40021;
+    color: white;
+}
+
+.deleteRedBtn:hover {
+    background-color: #8f0018;
+}

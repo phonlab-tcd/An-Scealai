@@ -29,12 +29,8 @@ export class TeacherClassroomComponent implements OnInit {
               private dialogService: DialogService) { }
   
   classroom : Classroom;
-  modalClass : string = "hidden";
-  shareModalClass : string = "hidden";
-  deleteModalClass : string = "hidden";
   students : User[] = [];
   studentIds: String[] = [];
-  errorText : string;
   registrationError : boolean = false;
   newTitle: string;
   unreadMessages: number = 0;
@@ -106,11 +102,10 @@ export class TeacherClassroomComponent implements OnInit {
 * Edit the title of the classroom with classroom service 
 */
   editTitle() {
-    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe((res) => {
+    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe(() => {
       this.getClassroom();
-      this.hideModal();
     }, (err) => {
-      this.showError(err);
+      alert(err);
     });
   }
 
@@ -139,51 +134,44 @@ export class TeacherClassroomComponent implements OnInit {
   goToStats() {
     this.router.navigateByUrl('/teacher/teacher-stats/' + this.classroom._id);
   }
-
-/*
-* Set modal to visible
-*/
-  showModal() {
-    this.newTitle = this.classroom.title;
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
-  }
-
-  showShareModal() {
-    this.shareModalClass = "visibleFade";
-  }
-
-  hideShareModal() {
-    this.shareModalClass = "hiddenFade";
-  }
-
-  showDeleteModal() {
-    this.deleteModalClass = "visibleFade";
-  }
-
-  hideDeleteModal() {
-    this.deleteModalClass = "hiddenFade";
-  }
-
-  showError(err) {
-    this.errorText = err.message;
-    this.registrationError = true;
-  }
   
   openCodeDialog() {
     this.dialogService.openDialog({
       type: 'shareCode',
       title: this.ts.l.classroom_code,
-      message: '',
-      confirmText: this.ts.l.yes,
-      cancelText: this.ts.l.no
-    }).subscribe((res) => {
+      data: this.classroom.code,
+      confirmText: this.ts.l.done,
+    }, "10%").subscribe(() => {});
+  }
+  
+  openUpdateClassroomDialog() {
+    this.dialogService.openDialog({
+      type: 'updateClassroom',
+      title: this.ts.l.edit_classroom_title,
+      cancelText: this.ts.l.cancel,
+      confirmText: this.ts.l.save,
+    }, "30%").subscribe((res) => {
       console.log(res);
+      if(res) {
+        this.newTitle = res;
+        this.editTitle();
+      }
     });
   }
-
+  
+  openDeleteClassroomDialog() {
+    this.dialogService.openDialog({
+      type: 'simpleConfirm',
+      title: this.ts.l.sure_you_want_to_delete_code,
+      cancelText: this.ts.l.cancel,
+      confirmText: this.ts.l.delete,
+    }, "30%").subscribe((res) => {
+      console.log(res);
+      if(res) {
+        this.newTitle = res;
+        this.editTitle();
+      }
+    });
+  }
   
 }

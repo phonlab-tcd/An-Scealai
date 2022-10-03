@@ -17,9 +17,8 @@ export class ConfirmDialogComponent implements OnInit {
               public ts: TranslationService,
               public auth: AuthenticationService) { }
   
-  updatedUsername:string = "";
-  newPassword: string = "";
-  newPasswordConfirm: string = "";
+  textInput:string = "";
+  textInput2: string = "";
 
   ngOnInit(): void {
   }

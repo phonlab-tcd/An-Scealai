@@ -1,7 +1,8 @@
 export interface Dialog {
   type:string;
   title:string;
-  message:string;
+  message?:string;
+  data?:any;
   confirmText:string;
-  cancelText:string;
+  cancelText?:string;
 };

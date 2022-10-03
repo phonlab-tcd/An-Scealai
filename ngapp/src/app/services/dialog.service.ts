@@ -11,11 +11,11 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
   
-  openDialog(data:Dialog): Observable<any> {
+  openDialog(data:Dialog, width?:string): Observable<any> {
      
     return this.dialog.open(ConfirmDialogComponent, {
       data,
-      width: '50%',
+      width: width? width : '50%',
       disableClose: true
     }).afterClosed();
   }
