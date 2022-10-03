@@ -6,7 +6,7 @@
   {{data?.message}}
 </div>
 
-<div *ngIf="data?.changeUsername">
+<div *ngIf="data?.type == 'updateUsername'">
   <br><div class="modalText"> {{ts.l.current_username}}: <i>{{auth.getUserDetails().username}}</i></div><br>
   <div class="modalText"> {{ts.l.new_username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="updatedUsername"></div>
   <div mat-dialog-actions [align]="'end'">
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div *ngIf="data?.changePassword">
+<div *ngIf="data?.type == 'updatePassword'">
   <br><div class="modalText"> {{ts.l.new_password}}: <input type="password" name="password" [(ngModel)]="newPassword"></div><br>
   <div class="modalText"> {{ts.l.confirm_password}}: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
   <div mat-dialog-actions [align]="'end'">
@@ -24,9 +24,18 @@
   </div>
 </div>
 
-<div *ngIf="!data?.changeUsername && !data?.changePassword">
+<div *ngIf="data?.type == 'simpleConfirm'">
   <div mat-dialog-actions [align]="'end'">
     <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="false"> {{data?.cancelText}} </button>
     <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="true"> {{data?.confirmText}} </button>
+  </div>
+</div>
+
+<div *ngIf="data?.type == 'shareCode'">
+  <br><div class="modalText"> {{ts.l.new_password}}: <input type="password" name="password" [(ngModel)]="newPassword"></div><br>
+  <div class="modalText"> {{ts.l.confirm_password}}: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
+  <div mat-dialog-actions [align]="'end'">
+    <button class="modalBtn confirmBtnGreen" [mat-dialog-close]=""> {{data?.cancelText}} </button>
+    <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="[newPassword, newPasswordConfirm]"> {{data?.confirmText}} </button>
   </div>
 </div>

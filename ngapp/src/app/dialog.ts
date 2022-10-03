@@ -1,8 +1,7 @@
 export interface Dialog {
+  type:string;
   title:string;
   message:string;
-  changeUsername?:boolean;
-  changePassword?:boolean;
   confirmText:string;
   cancelText:string;
 };

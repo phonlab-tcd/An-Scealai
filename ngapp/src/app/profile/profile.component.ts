@@ -217,6 +217,7 @@ export class ProfileComponent implements OnInit {
   
   openDeleteDialog() {
     this.dialogService.openDialog({
+      type: 'simpleConfirm',
       title: this.ts.l.are_you_sure,
       message: this.auth.getUserDetails().role === 'STUDENT' ? this.ts.l.this_includes_story_data : this.ts.l.this_includes_personal_data,
       confirmText: this.ts.l.yes,
@@ -231,9 +232,9 @@ export class ProfileComponent implements OnInit {
   
   openUpdateUsernameDialog() {
     this.dialogService.openDialog({
+      type: 'updateUsername',
       title: this.ts.l.change_username,
       message: this.ts.l.you_will_have_to_login,
-      changeUsername: true,
       confirmText: this.ts.l.save,
       cancelText: this.ts.l.cancel
     }).subscribe((res) => {
@@ -245,9 +246,9 @@ export class ProfileComponent implements OnInit {
   
   openUpdatePasswordDialog() {
     this.dialogService.openDialog({
+      type: 'updatePassword',
       title: this.ts.l.change_password,
       message: this.ts.l.you_will_have_to_login_password,
-      changePassword: true,
       confirmText: this.ts.l.save,
       cancelText: this.ts.l.cancel
     }).subscribe((res) => {

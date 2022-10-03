@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
-import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
-import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
@@ -11,6 +9,7 @@ import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -20,14 +19,14 @@ import { StatsService } from '../../stats.service';
 export class TeacherClassroomComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private http: HttpClient,
               private classroomService: ClassroomService,
               private router: Router,
               private userService: UserService,
               public ts : TranslationService,
               private messageService: MessageService,
               private storyService : StoryService,
-              private statsService : StatsService) { }
+              private statsService : StatsService,
+              private dialogService: DialogService) { }
   
   classroom : Classroom;
   modalClass : string = "hidden";
@@ -172,6 +171,18 @@ export class TeacherClassroomComponent implements OnInit {
   showError(err) {
     this.errorText = err.message;
     this.registrationError = true;
+  }
+  
+  openCodeDialog() {
+    this.dialogService.openDialog({
+      type: 'shareCode',
+      title: this.ts.l.classroom_code,
+      message: '',
+      confirmText: this.ts.l.yes,
+      cancelText: this.ts.l.no
+    }).subscribe((res) => {
+      console.log(res);
+    });
   }
 
   
