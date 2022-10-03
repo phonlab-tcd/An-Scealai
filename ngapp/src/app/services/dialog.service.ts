@@ -11,7 +11,8 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
   
-  confirmDialog(data: Dialog): Observable<boolean> {
+  openDialog(data:Dialog): Observable<any> {
+     
     return this.dialog.open(ConfirmDialogComponent, {
       data,
       width: '50%',

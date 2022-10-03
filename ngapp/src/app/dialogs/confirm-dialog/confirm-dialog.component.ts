@@ -1,6 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Dialog } from '../../dialog'
+import { TranslationService } from '../../translation.service';
+import { AuthenticationService } from '../../authentication.service';
+
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -9,7 +12,14 @@ import { Dialog } from '../../dialog'
 })
 export class ConfirmDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Dialog) { }
+  constructor(@Inject(MAT_DIALOG_DATA) 
+              public data: Dialog, 
+              public ts: TranslationService,
+              public auth: AuthenticationService) { }
+  
+  updatedUsername:string = "";
+  newPassword: string = "";
+  newPasswordConfirm: string = "";
 
   ngOnInit(): void {
   }

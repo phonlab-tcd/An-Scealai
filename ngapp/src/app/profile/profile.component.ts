@@ -24,17 +24,11 @@ import { DialogService } from '../services/dialog.service';
 })
 export class ProfileComponent implements OnInit {
 
-  editMode: boolean;
   classroomCodeOutput: string;
   codeInput : FormControl;
   foundClassroom: Classroom;
   classroom: Classroom;
   statObj: StudentStats = new StudentStats();
-  modalClass: 'hidden' | 'hiddenFade' | 'visibleFade' = 'hidden';
-  updateUsernameMode = false;
-  updateEmailMode = false;
-  updatePasswordMode = false;
-  deleteAccountMode = false;
   updatedUsername: string;
   errorMessage = '';
   newPassword: string;
@@ -54,7 +48,6 @@ export class ProfileComponent implements OnInit {
               public dialogService: DialogService) { }
 
   ngOnInit() {
-    this.editMode = false;
     this.codeInput = new FormControl();
     this.getClassroom();
     this.codeInput.valueChanges.subscribe(
@@ -112,14 +105,6 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-  toggleEditMode() {
-    if (this.editMode) {
-      this.editMode = false;
-    } else {
-      this.editMode = true;
-    }
-  }
-
   logout() {
     this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
     this.auth.logout();
@@ -141,8 +126,7 @@ export class ProfileComponent implements OnInit {
 
       this.storyService.getStoriesFor(userDetails.username).subscribe( (res: Story[]) => {
         for(let story of res) {
-          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
-          });
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {});
           this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
           })
         }
@@ -158,21 +142,16 @@ export class ProfileComponent implements OnInit {
     if(userDetails.role === "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
-          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
-          });
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {});
         }
       });
       
-      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {
-      });
+      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {});
     }
     
-    this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {
-    });  
-    this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {
-    });
-    this.userService.deleteUser(userDetails.username).subscribe( (res) => {
-    });
+    this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {});  
+    this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {});
+    this.userService.deleteUser(userDetails.username).subscribe( (res) => {});
     this.auth.logout();
   }
   
@@ -180,6 +159,7 @@ export class ProfileComponent implements OnInit {
   * Update account username and all data associated with it
   */
   async updateUsername() {
+    console.log(this.updatedUsername)
     if (!this.updatedUsername){
       this.errorMessage = this.ts.l.please_input_a_new_username;
       return
@@ -189,7 +169,7 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = this.ts.l.username_no_special_chars;
       return;
     }
-      
+    
     const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
     
     if (studentsWithThisUsername.length > 0) {
@@ -197,7 +177,7 @@ export class ProfileComponent implements OnInit {
       this.updatedUsername = "";
       return
     }
-
+    
     if(this.auth.getUserDetails().role === "STUDENT") {
       await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
       const stats = await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise()
@@ -234,24 +214,49 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = this.ts.l.please_input_a_new_password_confirm;
     }
   }
-
-  showModal() {
-    this.modalClass = 'visibleFade';
-  }
-
-  hideModal() {
-    this.modalClass = 'hiddenFade';
-    this.updatePasswordMode = false;
-  }
   
-  openDialog() {
-    this.dialogService.confirmDialog({
-      title: 'Are you sure',
-      message: 'Are you sure you want to quit',
-      confirmText: 'yes',
-      cancelText: 'no'
+  openDeleteDialog() {
+    this.dialogService.openDialog({
+      title: this.ts.l.are_you_sure,
+      message: this.auth.getUserDetails().role === 'STUDENT' ? this.ts.l.this_includes_story_data : this.ts.l.this_includes_personal_data,
+      confirmText: this.ts.l.yes,
+      cancelText: this.ts.l.no
     }).subscribe((res) => {
       console.log(res);
+      if(res) {
+        this.deleteAccount();
+      }
+    });
+  }
+  
+  openUpdateUsernameDialog() {
+    this.dialogService.openDialog({
+      title: this.ts.l.change_username,
+      message: this.ts.l.you_will_have_to_login,
+      changeUsername: true,
+      confirmText: this.ts.l.save,
+      cancelText: this.ts.l.cancel
+    }).subscribe((res) => {
+      this.errorMessage = "";
+      this.updatedUsername = res;
+      this.updateUsername();
+    });
+  }
+  
+  openUpdatePasswordDialog() {
+    this.dialogService.openDialog({
+      title: this.ts.l.change_password,
+      message: this.ts.l.you_will_have_to_login_password,
+      changePassword: true,
+      confirmText: this.ts.l.save,
+      cancelText: this.ts.l.cancel
+    }).subscribe((res) => {
+      this.errorMessage = "";
+      if(res) {
+        this.newPassword = res[0];
+        this.newPasswordConfirm = res[1];
+        this.updatePassword();
+      }
     });
   }
 }
