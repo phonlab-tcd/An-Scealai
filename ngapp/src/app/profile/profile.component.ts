@@ -15,6 +15,7 @@ import { ProfileService } from '../profile.service';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
 import { RecordingService } from '../recording.service';
+import { DialogService } from '../services/dialog.service';
 
 @Component({
   selector: 'app-profile',
@@ -49,7 +50,8 @@ export class ProfileComponent implements OnInit {
               public messageService: MessageService,
               public userService: UserService,
               public statsService: StatsService,
-              public recordingService: RecordingService) { }
+              public recordingService: RecordingService,
+              public dialogService: DialogService) { }
 
   ngOnInit() {
     this.editMode = false;
@@ -240,5 +242,16 @@ export class ProfileComponent implements OnInit {
   hideModal() {
     this.modalClass = 'hiddenFade';
     this.updatePasswordMode = false;
+  }
+  
+  openDialog() {
+    this.dialogService.confirmDialog({
+      title: 'Are you sure',
+      message: 'Are you sure you want to quit',
+      confirmText: 'yes',
+      cancelText: 'no'
+    }).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

@@ -14,6 +14,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
@@ -81,6 +84,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -135,6 +139,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     SynthItemComponent,
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     RegisterModule,
@@ -154,6 +159,8 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     MatNativeDateModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatDialogModule,
+    MatIconModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({
