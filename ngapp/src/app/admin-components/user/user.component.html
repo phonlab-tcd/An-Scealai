@@ -1,16 +1,5 @@
 <!-- Dislay profile and activity summary for a given user -->
 <div class="content" *ngIf="user">
-  <!-- Popup for deleting account -->
-  <div class="{{modalClass}} modalContainer">
-      <div class="modalContent">
-          <pre class="modalText">{{ts.l.are_you_sure}}</pre>
-          <pre>{{ts.l.this_includes_story_data}}</pre>
-          <div>
-              <button class="modalBtn createBtnGreen" (click)="deleteAccount()">{{ts.l.yes}}</button>
-              <button class="modalBtn createBtnGreen" (click)="hideModal()">{{ts.l.no}}</button>
-          </div>
-      </div>
-  </div>
   <!-- User profile summary -->
   <div class="generateCodeTitle">{{ts.l.profile_summary}}: '{{user.username}}'</div>
   <div class="userInfoDisplay">
@@ -21,7 +10,7 @@
   </div>
   <!-- delete account -->
   <div class="buttonContainer">
-    <button class="btn deleteAccountButton" (click)="showModal()"> {{ts.l.delete_this_account}} </button>
+    <button class="btn deleteAccountButton" (click)="openDeleteDialog()"> {{ts.l.delete_this_account}} </button>
   </div>
   <!-- Main info container -->
   <div class="contentBody">

@@ -14,6 +14,7 @@ import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
 import { RecordingService } from '../../recording.service';
 import config from 'abairconfig';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-user',
@@ -34,7 +35,8 @@ export class UserComponent implements OnInit {
               private messageService: MessageService,
               private profileService: ProfileService,
               private userService: UserService,
-              private recordingService: RecordingService) { }
+              private recordingService: RecordingService,
+              private dialogService: DialogService) { }
 
   user: any;
   stories: Story[];
@@ -43,8 +45,6 @@ export class UserComponent implements OnInit {
   eventSelected = {};
   allEvents: Event[] = [];
   maximised : boolean = false;
-  modalClass : string = "hidden";
-
   baseUrl: string = config.baseurl;
 
   ngOnInit() {
@@ -170,7 +170,7 @@ export class UserComponent implements OnInit {
     this.router.navigateByUrl('admin/story/' + storyId.toString());
   }
 
-  goToClassroom(classroomId) {
+  goToClassroom(classroomId:string) {
     this.router.navigateByUrl('admin/classroom/' + classroomId);
   }
   
@@ -180,54 +180,52 @@ export class UserComponent implements OnInit {
     if(this.user.role === 'STUDENT') {
       this.classroomService.getClassroomOfStudent(this.user._id).subscribe((res) => {
         if(res) {
-          this.classroomService.removeStudentFromClassroom(res._id, this.user._id).subscribe(res => {
-          });
+          this.classroomService.removeStudentFromClassroom(res._id, this.user._id).subscribe(() => {});
         }
       });
       
-      this.statsService.deleteStats(this.user._id).subscribe( (res) => {
-      });
+      this.statsService.deleteStats(this.user._id).subscribe( () => {});
       
       this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
         for(let story of res) {
-          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {
-          });
-          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
-          })
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe(() => {});
+          this.recordingService.deleteStoryRecording(story._id).subscribe( () => {})
         }
       });
     
-      this.storyService.deleteAllStories(this.user.username).subscribe( (res) => {
-      });
+      this.storyService.deleteAllStories(this.user.username).subscribe( () => {});
     }
     if(this.user.role === "TEACHER") {
       if(this.classrooms) {
         for(let classroom of this.classrooms) {
-          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {
-          });
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( () => {});
         }
         
       }
-      this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( (res) => {
-      });  
+      this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( () => {});  
     }
     
-    this.messageService.deleteAllMessages(this.user._id).subscribe( (res) => {
-    });  
-    this.profileService.deleteProfile(this.user._id).subscribe( (res) => {
-    });
-    this.userService.deleteUser(this.user.username).subscribe( (res) => {
-    });
+    this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});  
+    this.profileService.deleteProfile(this.user._id).subscribe( () => {});
+    this.userService.deleteUser(this.user.username).subscribe( () => {});
     
     this.router.navigateByUrl('admin/find-user');
     
   }
   
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
+  openDeleteDialog() {
+    this.dialogService.openDialog({
+      type: 'simpleConfirm',
+      title: this.ts.l.are_you_sure,
+      message: this.ts.l.this_includes_story_data,
+      confirmText: this.ts.l.yes,
+      cancelText: this.ts.l.no
+    }).subscribe((res) => {
+      console.log(res);
+      if(res) {
+        //this.deleteAccount();
+        alert('delete account')
+      }
+    });
   }
 }
