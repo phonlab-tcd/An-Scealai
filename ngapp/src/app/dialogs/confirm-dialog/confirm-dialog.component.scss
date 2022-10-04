@@ -4,6 +4,10 @@
   align-items: center;
 }
 
+.centerDialog {
+  text-align: center;
+}
+
 .modalBtn {
     padding: 5px;
     padding-left: 10px;
@@ -53,4 +57,9 @@
 
 .deleteRedBtn:hover {
     background-color: #8f0018;
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
 }

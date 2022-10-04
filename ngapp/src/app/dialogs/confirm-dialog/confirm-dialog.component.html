@@ -2,7 +2,7 @@
   <h2 mat-dialog-title>{{data?.title}} </h2>
 </div>
 
-<div mat-dialog-content>
+<div *ngIf="data?.message" mat-dialog-content>
   {{data?.message}}
 </div>
 
@@ -38,10 +38,10 @@
   </div>
 </div>
 
-<div *ngIf="data?.type == 'updateClassroom'">
+<div *ngIf="data?.type == 'updateText'" class="centerDialog">
   <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInput">
-  <div mat-dialog-actions [align]="'end'">
-    <button class="modalBtn confirmBtnGreen" [mat-dialog-close]=""> {{data?.cancelText}} </button>
+  <div mat-dialog-actions [align]="'center'">
+    <button class="modalBtn deleteRedBtn" [mat-dialog-close]=""> {{data?.cancelText}} </button>
     <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInput"> {{data?.confirmText}} </button>
   </div>
 </div>

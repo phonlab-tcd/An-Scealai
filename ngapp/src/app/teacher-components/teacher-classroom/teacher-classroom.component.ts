@@ -146,12 +146,11 @@ export class TeacherClassroomComponent implements OnInit {
   
   openUpdateClassroomDialog() {
     this.dialogService.openDialog({
-      type: 'updateClassroom',
+      type: 'updateText',
       title: this.ts.l.edit_classroom_title,
       cancelText: this.ts.l.cancel,
       confirmText: this.ts.l.save,
     }, "30%").subscribe((res) => {
-      console.log(res);
       if(res) {
         this.newTitle = res;
         this.editTitle();
@@ -166,10 +165,8 @@ export class TeacherClassroomComponent implements OnInit {
       cancelText: this.ts.l.cancel,
       confirmText: this.ts.l.delete,
     }, "30%").subscribe((res) => {
-      console.log(res);
       if(res) {
-        this.newTitle = res;
-        this.editTitle();
+        this.deleteClassroom();
       }
     });
   }
