@@ -2222,4 +2222,13 @@ export default {
   dictgloss_final_time: {
     ga: 'Chríochnaigh tú i ',
     en: 'You finished in ' },
+  teacher_send_dictgloss: {
+    ga: 'Seol Dictogloss',
+    en: 'Send Dictogloss' },
+  teacher_send_dictgloss_info: {
+    ga: 'Scríobh sliocht sa bhosca téacs ar mhaith leat go ndéanfadh an mac léinn seo éisteacht Dictogloss air.',
+    en: 'Write a passage in the text box that you would like this student to do a Dictogloss listening on.' },
+  teacher_go_to_dashboard: {
+    ga: 'Téigh go dtí an Deais',
+    en: 'Go to Dashboard' },
 }

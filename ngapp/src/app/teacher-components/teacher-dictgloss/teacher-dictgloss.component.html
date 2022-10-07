@@ -1,1 +1,9 @@
-<p>teacher-dictgloss works!</p>
+<div class="container">
+    <h1>{{ts.l.teacher_send_dictgloss}}</h1>
+    <p>{{ts.l.teacher_send_dictgloss_info}}</p>
+    <input>
+    <div style="margin-top: 8px;">
+        <button class="backButton" (click)="goToDashboard()">{{ts.l.teacher_go_to_dashboard}}</button>
+        <button class="backButton" (click)="sendDictgloss(); goToDashboard();">{{ts.l.teacher_send_dictgloss}}</button>
+    </div>
+</div>

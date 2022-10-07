@@ -47,6 +47,7 @@ import { TeacherStudentComponent } from './teacher-components/teacher-student/te
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
+import { TeacherDictglossComponent } from './teacher-components/teacher-dictgloss/teacher-dictgloss.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -98,6 +99,7 @@ const routes: Routes = [
   { path: 'story-prompts', component: StoryPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'general-prompts', component: GeneralPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'dictgloss', component: DictglossComponent, canActivate: [AuthGuardService] },
+  { path: 'teacher-dictgloss', component: TeacherDictglossComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],

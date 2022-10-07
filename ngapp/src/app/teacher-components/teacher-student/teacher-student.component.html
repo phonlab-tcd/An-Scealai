@@ -13,7 +13,7 @@
           <!-- filter by checkbox -->
           <div class="filter"> {{ts.l.filter_by}}: </div>
           <div class="checkbox"> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> {{ts.l.no_feedback_given}} ({{storiesWithoutFeedback.length}})</div>
-          <div><button class="dictglossButton">Send Dictogloss</button></div>
+          <div><button routerLink="/teacher-dictgloss" class="dictglossButton">{{ts.l.teacher_send_dictgloss}}</button></div>
         </div>
         <div class="classroomKey">
           <div class="title">{{ts.l.title}}</div>
