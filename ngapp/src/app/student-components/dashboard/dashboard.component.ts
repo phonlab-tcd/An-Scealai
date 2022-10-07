@@ -7,7 +7,7 @@ import { Router                   } from '@angular/router';
 import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
 import { HttpClient               } from '@angular/common/http';
-import { Subject                  } from 'rxjs';
+import { firstValueFrom, Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
 import   Quill                      from 'quill';
@@ -182,6 +182,10 @@ export class DashboardComponent implements OnInit {
   teacherSelectedErrors: string[] = [];
   classroomId: string;
   selectTeanglann = true;
+  defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
+    `data:text/html;charset=utf-8,` +
+    `Search for words in Irish or English from <i>Foclóir Gaeilge-Béarla Ó Dónaill</i> using the search bar above.`
+  );
 
   downloadStoryFormat = '.pdf';
 
@@ -507,15 +511,31 @@ export class DashboardComponent implements OnInit {
       this.saveStory(myId, finishedWritingTime);
     }
   }
-
-  showDictionary() {
-    this.dictionaryVisible = !this.dictionaryVisible;
-  }
   
-  lookupWord() {
+  async lookupWord() {
     if(this.wordLookedUp) {
-      let frameObj = document.getElementById('dictiframe');
-      frameObj['src'] = "https://www.teanglann.ie/en/eid/" + this.wordLookedUp;
+      const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
+      const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
+      const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
+      
+      // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
+      const exampleLinks = teanglannDoc.querySelectorAll('.ex > .head > a');
+      exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
+      `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
+
+      const moreExamplesLink = teanglannDoc.querySelector('.moar');
+      moreExamplesLink?.remove(); // this requires teanglann javascript to work, so can just remove.
+      
+      const resultsContainer = teanglannDoc.querySelector('.listings') as HTMLDivElement;
+      resultsContainer.style.cssText += 'margin-right: 0px; padding: 10px;';
+
+      const frameObj = document.getElementById('dictiframe') as HTMLIFrameElement;
+      frameObj.src = 
+        "data:text/html;charset=utf-8," +
+        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/template.css">` +
+        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
+        resultsContainer.outerHTML;
+
       this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
     }
     else {

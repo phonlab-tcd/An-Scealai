@@ -123,9 +123,10 @@ h1 {
     --bookContainerHeight: 40vh;
     --bookContainerWidth: 95%;
     --textfieldHeight: calc(var(--bookContainerHeight));
-    --dictionaryHeight: 50vh;
+    --dictionaryHeight: 80vh;
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
+    margin-bottom: 2.5%;
     background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
     -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
@@ -276,6 +277,8 @@ quill-editor {
 .dictionaryIframe {
   height: var(--dictionaryHeight);
   width: 100%;
+  border-radius: 0px 0px 5px 5px;
+  background: white;
 }
 
 .dictionaryVisibleTextField {

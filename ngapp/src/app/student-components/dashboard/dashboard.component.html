@@ -116,7 +116,7 @@
       <div
         *ngIf="showOptions"
         class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; showDictionary();">
+        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
           {{ts.l.dictionary}}
         <i class="fas fa-book optionsBtnIcon"></i>
       </div>
@@ -301,7 +301,12 @@
       </div>
 
       <!-- TEANGLANN -->
-      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en" id="dictiframe"></iframe>
+      <iframe
+        *ngIf="selectTeanglann" 
+        class="dictionaryIframe" 
+        id="dictiframe"
+        [src]="defaultDictIframeText"
+      ></iframe>
 
       <!-- EXTERNAL LINKS -->
       <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
