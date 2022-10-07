@@ -29,7 +29,6 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
-const dictionaryRoute = require('./routes/dictionary.route');
 
 const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw');
@@ -95,7 +94,6 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
-app.use('/dictionary', dictionaryRoute);
 
 app.use('/proxy',async (req,res,next)=>{
   function allowUrl(url) {
