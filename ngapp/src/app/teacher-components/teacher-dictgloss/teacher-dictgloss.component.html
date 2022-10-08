@@ -6,4 +6,8 @@
         <button class="backButton" (click)="goToDashboard()">{{ts.l.teacher_go_to_dashboard}}</button>
         <button class="backButton" (click)="sendDictgloss(); goToDashboard();">{{ts.l.teacher_send_dictgloss}}</button>
     </div>
+    <div class="classroomCard" *ngFor="let student of students">
+        <div class="classroomTitle">{{student.username}}</div>
+        <i class="fas fa-arrow-right arrow"> {{numOfStories.get(student.username)}} </i>
+      </div>
 </div>
