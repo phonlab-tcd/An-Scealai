@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { Chart } from 'chart.js';
 
 import * as Wink from 'wink-nlp';
@@ -28,13 +27,10 @@ export class NgramDistributionComponent implements OnInit {
   selectedN: number = 1;
   ngramChart: Chart;
 
-  constructor(
-    public dialogRef: MatDialogRef<NgramDistributionComponent>
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.loadNgramChart();
-    console.log('dialogref', this.dialogRef);
   }
 
   loadNgramChart() {
