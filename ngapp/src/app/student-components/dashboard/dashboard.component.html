@@ -138,13 +138,9 @@
           (click)="toggleGrammarTags();">
             {{ toggleGrammarButton() }}
             <i class="fas fa-spell-check optionsBtnIcon"></i>
-            <div
-              class="loader"
-              *ngIf="!grammarTagsHidden && grammarLoading">
-            </div>
         </span>
         <span
-          [hidden]="grammarTagsHidden"
+          [hidden]="!quillHighlightService.showingTags"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
           class="settingsIcon">
             ⚙
@@ -220,11 +216,11 @@
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
         style="background-color: #8FCAFF"
-        [hidden]="grammarTagsHidden || grammarLoading"
+        [hidden]="!quillHighlightService.showingTags || grammarLoading"
         [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
