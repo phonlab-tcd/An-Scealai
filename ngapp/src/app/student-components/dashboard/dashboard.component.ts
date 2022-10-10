@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
   selectTeanglann = true;
   defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
     `data:text/html;charset=utf-8,` +
-    `Search for words in Irish or English from <i>Foclóir Gaeilge-Béarla Ó Dónaill</i> using the search bar above.`
+    this.ts.l.search_for_words_in_dictionary
   );
 
   downloadStoryFormat = '.pdf';

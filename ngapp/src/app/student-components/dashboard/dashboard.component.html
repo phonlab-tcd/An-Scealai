@@ -295,7 +295,7 @@
         </div>
       </div>
       <div *ngIf="selectTeanglann" class="dictionaryInput">
-        <label for="dictlookup">Look up:</label>
+        <label for="dictlookup">{{ts.l.search}}:</label>
         <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
         <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
       </div>

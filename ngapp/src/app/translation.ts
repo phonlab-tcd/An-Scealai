@@ -1986,6 +1986,12 @@ export default {
     ga: 'Gaeilge Version',
     en: "Don't forget to name your quiz." },
   shuffle_questions: {
-    ga: ' shuffle questions',
-    en: ' shuffle questions' }
+    ga: 'shuffle questions',
+    en: 'shuffle questions' },
+  search: {
+    ga: 'Cuardaigh',
+    en: 'Search' },
+  search_for_words_in_dictionary: {
+    ga: 'Cuardaigh focail ó teanglann.ie i mBéarla nó i nGaeilge. Úsáid an Barra Cuardaigh thuas',
+    en: 'Search for words in Irish or English from Foclóir Gaeilge-Béarla Ó Dónaill using the search bar above' },    
 }
