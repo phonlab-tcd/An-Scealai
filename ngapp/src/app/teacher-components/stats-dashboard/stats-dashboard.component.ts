@@ -1,4 +1,9 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { StoryService } from '../../story.service';
+import { AuthenticationService } from '../../authentication.service';
+import { ClassroomService } from '../../classroom.service';
+import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgramDistributionComponent } from 'app/story-stats/ngram-distribution/ngram-distribution/ngram-distribution.component';
 
@@ -10,10 +15,20 @@ import { NgramDistributionComponent } from 'app/story-stats/ngram-distribution/n
 export class StatsDashboardComponent implements OnInit {
 
   constructor(
-    public dialog: MatDialog
+    private storyService: StoryService,
+    private auth: AuthenticationService,
+    private classroomService: ClassroomService,
+    private userService: UserService,
+    private dialog: MatDialog,
   ) { }
 
-  ngOnInit(): void {}
+  classrooms:any;
+  stats:any[] = [];
+  dataLoaded:boolean = false;
+
+  ngOnInit(): void {
+    this.getWordCounts();
+  }
 
   dialogRef: MatDialogRef<unknown>;
 
@@ -31,6 +46,38 @@ export class StatsDashboardComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(_ => {
         this.dialogRef = undefined;
     });
+
+  }
+  
+  // For each classroom of logged-in teacher, get average word count for each student (over all stories)
+  private async getWordCounts() {
+    this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
+
+    for (let entry in this.classrooms) {
+      // only consider classrooms that have at least one student
+      if (this.classrooms[entry].studentIds.length > 0) {
+        // stats object created for each classroom
+        let statsEntry = {
+          classroomTitle: this.classrooms[entry].title,
+          studentNames: [],
+          averageWordCounts: [],
+          chartId: "chartId_" + entry
+        }
+        
+        // get student usernames and word count averages
+        for (let key in this.classrooms[entry].studentIds) {
+          const userId = this.classrooms[entry].studentIds[key];
+          const usernameResponse = await firstValueFrom(this.userService.getUserById(userId));
+          statsEntry.studentNames.push(usernameResponse.username);
+
+          const wordCountResponse = await firstValueFrom(this.storyService.averageWordCount(userId));
+          statsEntry.averageWordCounts.push(wordCountResponse.avgWordCount);
+        } 
+          this.stats.push(statsEntry);
+      }
+    }
+    if (this.stats.length > 0) 
+      this.dataLoaded = true;
   }
 
 }

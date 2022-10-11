@@ -21,6 +21,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
+import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -170,7 +171,8 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
         ]
       }],
     }),
-    NgramDistributionModule
+    NgramDistributionModule,
+    WordCountsModule
   ],
   providers: [
     StoryService,

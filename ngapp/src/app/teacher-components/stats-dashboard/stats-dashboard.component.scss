@@ -1,5 +1,9 @@
 .content {
     display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
     width: 90%;
     background: white;
     border-radius: 5px;
@@ -19,8 +23,14 @@ i:hover {
     margin-right: -1px;
 }
 
-.stats-card-fullscreen {
-    width: 90%;
-    z-index: 10;
-    left: 5%;
+mat-card {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-card-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
