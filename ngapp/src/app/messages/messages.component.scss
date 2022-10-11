@@ -169,7 +169,7 @@ label {
 
 .textFieldNewMessage {
   width: 100%;
-  height: 350px;
+  height: auto;
   resize: none;
   z-index: 1;
   padding-left: 8px;
@@ -229,7 +229,7 @@ label {
 
 .subjectNewMessage {
   display: flex;
-  width: 600px;
+  width: 80%;
   margin-bottom: 10px;
 }
 

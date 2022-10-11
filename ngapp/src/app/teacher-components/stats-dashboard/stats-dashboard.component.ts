@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
 import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
 import { UserService } from '../../user.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NgramDistributionComponent } from 'app/story-stats/ngram-distribution/ngram-distribution/ngram-distribution.component';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -12,9 +14,14 @@ import { UserService } from '../../user.service';
 })
 export class StatsDashboardComponent implements OnInit {
 
-  constructor(private storyService: StoryService, private auth: AuthenticationService,
-  private classroomService: ClassroomService, private userService: UserService) { }
-  
+  constructor(
+    private storyService: StoryService,
+    private auth: AuthenticationService,
+    private classroomService: ClassroomService,
+    private userService: UserService,
+    private dialog: MatDialog,
+  ) { }
+
   classrooms:any;
   stats:any[] = [];
   dataLoaded:boolean = false;
@@ -22,24 +29,25 @@ export class StatsDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getWordCounts();
   }
-  
 
-  toggleFullscreen(event: MouseEvent): void {
-    // Make the card fullscreen via CSS
-    const targetElem = event.target as HTMLElement;
-    const cardElem = targetElem.closest('.stats-card') as HTMLElement; // They may have clicked on a descendent of the mat card
-    const canvasElem = cardElem.querySelector('canvas');
-    if (cardElem.classList.contains('stats-card-fullscreen')) {
-      cardElem.classList.remove('stats-card-fullscreen');
-      canvasElem.style.cssText = `width: 400px; height: 200px;`;
-    } else {
-      cardElem.classList.add('stats-card-fullscreen');
-      canvasElem.width = cardElem.offsetWidth;
-      canvasElem.height = 400;
-      canvasElem.style.cssText = `width: ${cardElem.offsetWidth}px;`;
-    }
+  dialogRef: MatDialogRef<unknown>;
+
+  sampleTexts = [
+    'Hello there. The cat sat on the mat.',
+    'The dog sat on the frog.',
+    'The frog sat on the dog'
+  ];
+
+  openModal(templateRef: TemplateRef<unknown>) {
+    this.dialogRef = this.dialog.open(templateRef, {
+         width: '60%',
+    });
+
+    this.dialogRef.afterClosed().subscribe(_ => {
+        this.dialogRef = undefined;
+    });
+
   }
-  
   
   // For each classroom of logged-in teacher, get average word count for each student (over all stories)
   private async getWordCounts() {

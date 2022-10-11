@@ -8,7 +8,7 @@
     "start": "nodemon -x ts-node server.ts",
     "start:nocheck": "nodemon -x ts-node --transpile-only server.ts",
     "start:prod": "DB=an-scealai PORT=4000 NODE_ENV=prod ts-node --transpile-only server.ts",
-    "start:qa": "DB=qa         PORT=4002 ts-node --transpile-only server.ts"
+    "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 ts-node --transpile-only server.ts"
   },
   "jest": {
     "preset": "ts-jest/presets/default",

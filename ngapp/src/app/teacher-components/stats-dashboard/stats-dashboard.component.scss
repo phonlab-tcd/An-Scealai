@@ -16,8 +16,11 @@
     justify-content: space-between;
 }
 
-.stats-card:hover {
+i:hover {
     cursor: pointer;
+    font-size: larger;
+    margin-top: -1px;
+    margin-right: -1px;
 }
 
 .stats-card-fullscreen {
