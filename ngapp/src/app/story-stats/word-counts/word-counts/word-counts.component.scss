@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 canvas {
   height: 200px;
   width: 400px;
@@ -5,6 +11,10 @@ canvas {
 
 ngb-carousel {
   width: 400px; // can we change this to work with full screen mat card? 
+}
+
+ngb-carousel:focus {
+  outline: none;
 }
 
 .carousel-indicators {
