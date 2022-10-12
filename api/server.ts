@@ -97,7 +97,7 @@ app.use('/recordings', recordingRoute);
 
 app.use('/proxy',async (req,res,next)=>{
   function allowUrl(url) {
-    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie/;
     return !! allowedUrls.exec(url);
   }
   if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');

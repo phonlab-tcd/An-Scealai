@@ -7,7 +7,7 @@ import { Router                   } from '@angular/router';
 import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
 import { HttpClient               } from '@angular/common/http';
-import { Subject                  } from 'rxjs';
+import { firstValueFrom, Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
 import   Quill                      from 'quill';
@@ -68,7 +68,7 @@ type QuillHighlightTag = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     protected sanitizer: DomSanitizer,
@@ -166,6 +166,10 @@ export class DashboardComponent implements OnInit{
   teacherSelectedErrors: string[] = [];
   classroomId: string;
   selectTeanglann = true;
+  defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
+    `data:text/html;charset=utf-8,` +
+    this.ts.l.search_for_words_in_dictionary
+  );
 
   downloadStoryFormat = '.pdf';
 
@@ -184,6 +188,9 @@ export class DashboardComponent implements OnInit{
   htmlDataIsReady = false;
   quillEditor: Quill;
   private textUpdated= new Subject<void | string>();
+  
+  // DICTIONARY LOOKUPS
+  wordLookedUp:string = '';
 
   dialects = [
     {
@@ -339,7 +346,7 @@ export class DashboardComponent implements OnInit{
             }
           });
   }
-
+  
   // return the student's set of
   // stories using the story service
   getStories(): Promise<any> {
@@ -488,12 +495,42 @@ export class DashboardComponent implements OnInit{
       this.saveStory(myId, finishedWritingTime);
     }
   }
+  
+  async lookupWord() {
+    if(this.wordLookedUp) {
+      const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
+      const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
+      const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
+      
+      // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
+      const exampleLinks = teanglannDoc.querySelectorAll('.ex > .head > a');
+      exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
+      `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
 
-  showDictionary() {
-    if (!!this.dictionaryVisible === false) {
-      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
+      const moreExamplesLink = teanglannDoc.querySelector('.moar');
+      moreExamplesLink?.remove(); // this requires teanglann javascript to work, so can just remove.
+      
+      const resultsContainer = teanglannDoc.querySelector('.listings') as HTMLDivElement;
+      resultsContainer.style.cssText += 'margin-right: 0px; padding: 10px;';
+
+      const frameObj = document.getElementById('dictiframe') as HTMLIFrameElement;
+      frameObj.src = 
+        "data:text/html;charset=utf-8," +
+        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/template.css">` +
+        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
+        resultsContainer.outerHTML;
+
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
     }
-    this.dictionaryVisible = !this.dictionaryVisible;
+    else {
+      alert(this.ts.l.enter_a_word_to_lookup);
+    }
+  }
+  
+  clearDictInput() {
+    if(this.wordLookedUp) {
+      this.wordLookedUp = "";
+    }
   }
 
   // Get audio feedback with function call

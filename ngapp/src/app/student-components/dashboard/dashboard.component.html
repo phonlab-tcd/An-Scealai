@@ -116,7 +116,7 @@
       <div
         *ngIf="showOptions"
         class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; showDictionary();">
+        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
           {{ts.l.dictionary}}
         <i class="fas fa-book optionsBtnIcon"></i>
       </div>
@@ -290,9 +290,19 @@
           {{ts.l.external_links}}
         </div>
       </div>
+      <div *ngIf="selectTeanglann" class="dictionaryInput">
+        <label for="dictlookup">{{ts.l.search}}:</label>
+        <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
+        <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+      </div>
 
       <!-- TEANGLANN -->
-      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+      <iframe
+        *ngIf="selectTeanglann" 
+        class="dictionaryIframe" 
+        id="dictiframe"
+        [src]="defaultDictIframeText"
+      ></iframe>
 
       <!-- EXTERNAL LINKS -->
       <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
