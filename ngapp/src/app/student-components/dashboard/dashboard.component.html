@@ -158,7 +158,7 @@
       -->
 
       <!-- RECORDINGS -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+      <div *ngIf="showOptions" [hidden]="story.text.length === 0" class="optionsBtn optionsPopupBtn"
         (click)="this.dontToggle=true; goToRecording()">
         {{ts.l.recordings}}
         <i class="fas fa-microphone optionsBtnIcon"></i>
