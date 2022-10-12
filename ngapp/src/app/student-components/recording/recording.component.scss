@@ -326,10 +326,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 100%;
 }
 
-.recognisedSpeech {
-  padding-bottom: 20px;
+.recognisedSpeechContainer {
+  padding-bottom: 25px;
   color: #70a87f;
   font-style: italic;
+}
+
+.speechTranscription {
+  height:10px;
 }
 
 /**

@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
 import { Subject } from 'rxjs';
-import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import { SynthesisService, Paragraph, Sentence, Section, Voice } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 
@@ -70,6 +70,7 @@ export class RecordingComponent implements OnInit {
   paragraphTranscriptions: string[] = []
   sectionTranscriptions: string[] = [];
   isTranscribing: boolean[] = [false];
+  synthVoiceConfig: Voice;
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
@@ -95,6 +96,7 @@ export class RecordingComponent implements OnInit {
           this.archive(this.story);
         }
       });
+      this.synthVoiceConfig = {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'MU', algorithm: 'dnn'};
   }
 
   loadSynthesis(story: Story) {
@@ -259,6 +261,13 @@ export class RecordingComponent implements OnInit {
       
       this.isTranscribing[index] = false;
     });
+  }
+  
+  synthesiseRecognisedText(text:string) {    
+    this.synthesis.synthesiseText(text, this.synthVoiceConfig).subscribe((res) => {
+      let audio = new Audio(res);
+      audio.play(); 
+    })    
   }
 
   deleteRecording(index: number) {
