@@ -1993,5 +1993,8 @@ export default {
     en: 'Search' },
   search_for_words_in_dictionary: {
     ga: 'Cuardaigh focail ó teanglann.ie i mBéarla nó i nGaeilge. Úsáid an Barra Cuardaigh thuas',
-    en: 'Search for words in Irish or English from Foclóir Gaeilge-Béarla Ó Dónaill using the search bar above' },    
+    en: 'Search for words in Irish or English from Foclóir Gaeilge-Béarla Ó Dónaill using the search bar above' },
+  enter_a_word_to_lookup: {
+    ga: 'Líon isteach focal le cuardach',
+    en: 'Please enter a word to lookup' },    
 }

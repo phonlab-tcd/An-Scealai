@@ -539,7 +539,7 @@ export class DashboardComponent implements OnInit {
       this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
     }
     else {
-      alert("Please input a word to lookup");
+      alert(this.ts.l.enter_a_word_to_lookup);
     }
   }
   
