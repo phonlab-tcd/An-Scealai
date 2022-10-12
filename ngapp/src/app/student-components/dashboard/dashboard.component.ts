@@ -84,6 +84,7 @@ export class DashboardComponent implements OnInit {
     public classroomService: ClassroomService,
     public quillHighlightService: QuillHighlightService,
   ) {
+
     this.textUpdated.pipe(
       distinctUntilChanged(),
     ).subscribe(async () => {
@@ -91,28 +92,15 @@ export class DashboardComponent implements OnInit {
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-      this.grammarLoading = true;
       try {
         await this.quillHighlightService
-          .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
           .then((errTypes: object) => {
             console.dir(errTypes);
             this.currentGrammarErrorTypes = errTypes;
-            Object.keys(errTypes).forEach((k) => {
-              this.grammarTagFilter[k] !== undefined ?
-              this.grammarTagFilter[k] = this.grammarTagFilter[k] :
-              this.grammarTagFilter[k] = true;
-            });
-            this.quillHighlightService
-                .filterGramadoirTags(this.grammarTagFilter);
-            this.grammarTagsHidden ?
-            this.quillHighlightService
-                .clearAllGramadoirTags(this.quillEditor) :
-            this.quillHighlightService
-                .applyGramadoirTagFormatting(this.quillEditor);
           });
       } catch (updateGrammarErrorsError) {
-        if ( !this.grammarTagsHidden) {
+        if ( !this.quillHighlightService.showingTags) {
           window.alert(
             'There was an error while trying to fetch grammar ' +
             'suggestions from the Gramadóir server:\n' +
@@ -120,9 +108,6 @@ export class DashboardComponent implements OnInit {
             'See the browser console for more information');
         }
         console.dir(updateGrammarErrorsError);
-      }
-      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
-        this.grammarLoading = false;
       }
     });
   }
@@ -169,7 +154,6 @@ export class DashboardComponent implements OnInit {
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   mostRecentGramadoirRequestTime = null;
-  grammarLoading = true;
   grammarSelected = true;
   grammarTagsHidden = true;
   grammarSettingsHidden = false;
@@ -264,7 +248,7 @@ export class DashboardComponent implements OnInit {
         .filterGramadoirTags(this.grammarTagFilter);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.grammarTagsHidden) {
+    if (this.quillHighlightService.showingTags) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -275,7 +259,7 @@ export class DashboardComponent implements OnInit {
     console.log(this.quillHighlightService.showLeathanCaol, event);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.grammarTagsHidden) {
+    if (!this.quillHighlightService.showingTags) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -285,7 +269,7 @@ export class DashboardComponent implements OnInit {
     this.quillHighlightService.showGenitive = event;
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.grammarTagsHidden) {
+    if (!this.quillHighlightService.showingTags) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -304,7 +288,7 @@ export class DashboardComponent implements OnInit {
         .filterGramadoirTags(this.grammarTagFilter);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.grammarTagsHidden) {
+    if (!this.quillHighlightService.showingTags) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -404,24 +388,24 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleGrammarButton() {
-    const key: MessageKey = this.grammarTagsHidden ?
-      'show_grammar_suggestions' :
-      'hide_grammar_suggestions' ;
+    const key: MessageKey = this.quillHighlightService.showingTags ?
+    'hide_grammar_suggestions' :
+      'show_grammar_suggestions';
     return this.ts.message(key);
   }
 
   toggleGrammarTags() {
-    this.grammarTagsHidden ? this.showGrammarTags() : this.hideGrammarTags();
+    this.quillHighlightService.showingTags ? this.hideGrammarTags() : this.showGrammarTags();
   }
 
   hideGrammarTags() {
-    this.grammarTagsHidden = true;
+    this.quillHighlightService.showingTags = false;
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
   }
 
   showGrammarTags(){
-    this.grammarTagsHidden = false;
+    this.quillHighlightService.showingTags = true;
     this.quillHighlightService
         .applyGramadoirTagFormatting(this.quillEditor);
   }

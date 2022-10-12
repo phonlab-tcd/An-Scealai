@@ -17,7 +17,7 @@ const Story = require('../models/story');
 let storyRoutes;
 // Immediately Invoked Function Expression.
 // Scopes the imported functions to just this function
-(() => {  
+(() => {
   // ENDPOINT HANDLERS
   // GET
   const withId =
@@ -28,6 +28,8 @@ let storyRoutes;
     require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
+  const averageWordCount =
+    require('../endpoints_functions/story/averageWordCount');
 
   // POST
   const create =
@@ -43,6 +45,7 @@ let storyRoutes;
       // '/myStudentsStory/:id': myStudentsStory,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
+      '/averageWordCount/:studentId': averageWordCount,
     },
     post: {
       '/create': create,

@@ -18,8 +18,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
+import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -154,6 +156,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     MatNativeDateModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatDialogModule,
     NgbModule,
     NgbDropdownModule,
     QuillModule.forRoot({
@@ -168,7 +171,8 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
         ]
       }],
     }),
-    NgramDistributionModule
+    NgramDistributionModule,
+    WordCountsModule
   ],
   providers: [
     StoryService,
@@ -177,6 +181,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     MatNativeDateModule,
     {provide : LocationStrategy , useClass: HashLocationStrategy },
     {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide : MatDialogRef, useValue: {}},
   ],
   bootstrap: [
     AppComponent,
