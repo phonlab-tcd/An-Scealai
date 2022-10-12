@@ -22,6 +22,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
+import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -172,7 +173,8 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
       }],
     }),
     NgramDistributionModule,
-    WordCountsModule
+    WordCountsModule,
+    GrammarPieChartModule
   ],
   providers: [
     StoryService,

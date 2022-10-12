@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const querystring = require('querystring');
 const request = require('request');
 const makeEndpoints = require('../utils/makeEndpoints');
-const { parse } = require('node-html-parser');
+const {parse} = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
@@ -30,6 +30,8 @@ let storyRoutes;
     require('../endpoints_functions/story/feedbackAudio');
   const averageWordCount =
     require('../endpoints_functions/story/averageWordCount');
+  const countGrammarErrors =
+    require('../endpoints_functions/story/countGrammarErrors');
 
   // POST
   const create =
@@ -46,6 +48,7 @@ let storyRoutes;
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
       '/averageWordCount/:studentId': averageWordCount,
+      '/countGrammarErrors/:id': countGrammarErrors,
     },
     post: {
       '/create': create,

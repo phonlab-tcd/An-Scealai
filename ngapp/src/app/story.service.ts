@@ -144,4 +144,8 @@ export class StoryService {
   averageWordCount(studentId:string) : Observable<any> {
     return this.http.get(this.baseUrl + "averageWordCount/" + studentId);
   }
+  
+  countGrammarErrors(studentId:string) : Observable<any> {
+    return this.http.get(this.baseUrl + "countGrammarErrors/" + studentId);
+  }
 }

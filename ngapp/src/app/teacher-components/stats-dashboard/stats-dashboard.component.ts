@@ -25,9 +25,12 @@ export class StatsDashboardComponent implements OnInit {
   classrooms:any;
   stats:any[] = [];
   dataLoaded:boolean = false;
+  grammarErrorCounts: any;
 
-  ngOnInit(): void {
-    this.getWordCounts();
+  async ngOnInit() {
+    await this.getWordCounts();
+    await this.countGrammarErrors();
+    this.dataLoaded = true;
   }
 
   dialogRef: MatDialogRef<unknown>;
@@ -49,7 +52,9 @@ export class StatsDashboardComponent implements OnInit {
 
   }
   
-  // For each classroom of logged-in teacher, get average word count for each student (over all stories)
+  /*
+  * For each classroom of logged-in teacher, get average word count for each student (over all stories)
+  */
   private async getWordCounts() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
 
@@ -76,8 +81,13 @@ export class StatsDashboardComponent implements OnInit {
           this.stats.push(statsEntry);
       }
     }
-    if (this.stats.length > 0) 
-      this.dataLoaded = true;
+  }
+  
+  /*
+  * Get grammar error counts for a given student ID
+  */
+  private async countGrammarErrors() {
+    this.grammarErrorCounts = await firstValueFrom(this.storyService.countGrammarErrors("id"));
   }
 
 }
