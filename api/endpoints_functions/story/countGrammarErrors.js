@@ -32,7 +32,7 @@ const unique = errorSet.filter(
 
 const errorDict = {};
 
-// create a dictionary of errors and dates that the error was made
+// create a dictionary of errors and counts
 for (const entry of unique) {
   if (entry.error in errorDict) {
     errorDict[entry.error] += 1;
@@ -42,7 +42,7 @@ for (const entry of unique) {
 }
 
 /**
- * Returns a dictionary of errors and dates for a given student
+ * Returns a dictionary of errors and their counts for a given student/story id
  *
  * @param {Object} req
  * @param {Object} res
