@@ -8,7 +8,7 @@ import { Chart } from 'chart.js';
 })
 export class GrammarPieChartComponent implements OnInit {
   
-  @Input() data:any;
+  @Input() data:Object;
   dataLabels:string[] = [];
   dataValues:number[] = [];
   backgroundColors:string[] = [];
@@ -16,12 +16,14 @@ export class GrammarPieChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.dataLabels = Object.keys(this.data);
-    this.dataValues = Object.values(this.data);
-    for(let i = 0; i < this.dataValues.length; i++) {
-      this.backgroundColors.push("#" + ((Math.random() * 0xffffff) << 0).toString(16));
+    if(this.data) {
+      this.dataLabels = Object.keys(this.data);
+      this.dataValues = Object.values(this.data);
+      for(let i = 0; i < this.dataValues.length; i++) {
+        this.backgroundColors.push("#" + ((Math.random() * 0xffffff) << 0).toString(16));
+      }
+      this.makePieChart()
     }
-    this.makePieChart()
   }
   
   private makePieChart() {
