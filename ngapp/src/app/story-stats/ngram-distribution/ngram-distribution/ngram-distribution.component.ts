@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Chart } from 'chart.js';
 
 import * as Wink from 'wink-nlp';
@@ -30,6 +30,10 @@ export class NgramDistributionComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.loadNgramChart();
+  }
+
+  ngOnChanges(_) {
     this.loadNgramChart();
   }
 
@@ -74,7 +78,8 @@ export class NgramDistributionComponent implements OnInit {
                     stepSize: 1
                 }
             }]
-          }
+          },
+          responsive: true
         }
     });
   }
