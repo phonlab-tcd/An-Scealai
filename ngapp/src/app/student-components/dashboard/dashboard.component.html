@@ -116,7 +116,7 @@
       <div
         *ngIf="showOptions"
         class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; showDictionary();">
+        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
           {{ts.l.dictionary}}
         <i class="fas fa-book optionsBtnIcon"></i>
       </div>
@@ -138,13 +138,9 @@
           (click)="toggleGrammarTags();">
             {{ toggleGrammarButton() }}
             <i class="fas fa-spell-check optionsBtnIcon"></i>
-            <div
-              class="loader"
-              *ngIf="!grammarTagsHidden && grammarLoading">
-            </div>
         </span>
         <span
-          [hidden]="grammarTagsHidden"
+          [hidden]="!quillHighlightService.showingTags"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
           class="settingsIcon">
             ⚙
@@ -162,7 +158,7 @@
       -->
 
       <!-- RECORDINGS -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+      <div *ngIf="showOptions" [hidden]="story.text.length === 0" class="optionsBtn optionsPopupBtn"
         (click)="this.dontToggle=true; goToRecording()">
         {{ts.l.recordings}}
         <i class="fas fa-microphone optionsBtnIcon"></i>
@@ -220,11 +216,11 @@
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
         style="background-color: #8FCAFF"
-        [hidden]="grammarTagsHidden || grammarLoading"
+        [hidden]="!quillHighlightService.showingTags || grammarLoading"
         [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
@@ -294,9 +290,19 @@
           {{ts.l.external_links}}
         </div>
       </div>
+      <div *ngIf="selectTeanglann" class="dictionaryInput">
+        <label for="dictlookup">{{ts.l.search}}:</label>
+        <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
+        <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+      </div>
 
       <!-- TEANGLANN -->
-      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+      <iframe
+        *ngIf="selectTeanglann" 
+        class="dictionaryIframe" 
+        id="dictiframe"
+        [src]="defaultDictIframeText"
+      ></iframe>
 
       <!-- EXTERNAL LINKS -->
       <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
