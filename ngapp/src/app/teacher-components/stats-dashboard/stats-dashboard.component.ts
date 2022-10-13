@@ -28,8 +28,12 @@ export class StatsDashboardComponent implements OnInit {
   grammarErrorCounts: any;
 
   async ngOnInit() {
+    this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
     await this.getWordCounts();
-    await this.countGrammarErrors();
+
+    //await this.countGrammarErrorsStudent(this.classrooms[0].studentIds[0]);     // get pie chart for student
+    await this.countGrammarErrorsClassroom(this.classrooms[0]);               // get pie chart for class
+        
     this.dataLoaded = true;
   }
 
@@ -56,8 +60,7 @@ export class StatsDashboardComponent implements OnInit {
   * For each classroom of logged-in teacher, get average word count for each student (over all stories)
   */
   private async getWordCounts() {
-    this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
-
+    
     for (let entry in this.classrooms) {
       // only consider classrooms that have at least one student
       if (this.classrooms[entry].studentIds.length > 0) {
@@ -86,8 +89,28 @@ export class StatsDashboardComponent implements OnInit {
   /*
   * Get grammar error counts for a given student ID
   */
-  private async countGrammarErrors() {
-    this.grammarErrorCounts = await firstValueFrom(this.storyService.countGrammarErrors("id"));
+  private async countGrammarErrorsStudent(id:string) {
+    // for now just get stats for the first student in the first classroom
+    this.grammarErrorCounts = await firstValueFrom(this.storyService.countGrammarErrors(id));
+  }
+  
+  /*
+  * Get grammar error counts for a given classroom
+  */
+  private async countGrammarErrorsClassroom(classroom) {
+    const classErrors = {};
+    // get error count object for each student in class and add to class error dict
+    for (const id of classroom.studentIds) {
+      const errorDict = await firstValueFrom(this.storyService.countGrammarErrors(id));
+      for (const [errorName, errorCount] of Object.entries(errorDict)) {
+          if (!classErrors[errorName]) {
+              classErrors[errorName] = 0;
+          }
+          classErrors[errorName] += errorCount;
+      }
+    }
+    
+    this.grammarErrorCounts = classErrors;
   }
 
 }
