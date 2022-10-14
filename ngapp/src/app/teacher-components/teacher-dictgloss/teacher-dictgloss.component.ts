@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslationService } from 'app/translation.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ClassroomService } from 'app/classroom.service';
 import { Classroom } from '../../classroom';
 import { MessageService } from 'app/message.service';
 import { UserService } from 'app/user.service';
 import { User } from 'app/user';
+import { AuthenticationService } from 'app/authentication.service';
 import { Message } from 'app/message';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-teacher-dictgloss',
@@ -18,31 +19,21 @@ export class TeacherDictglossComponent implements OnInit {
 
   constructor(
     public ts: TranslationService,
+    private auth: AuthenticationService,
     private classroomService: ClassroomService,
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private messageService: MessageService,
-  ) {}
-
-  //used for creating a new message
-  message: Message = {
-    _id: '',
-    id: '',
-    subject: '',
-    date: new Date(),
-    senderId: '',
-    senderUsername: '',
-    recipientId: '',
-    text: '',
-    seenByRecipient: false,
-    audioId: ''
-  };
+  ) { this.tdCreateForm(); }
 
   students: User[] = [];
   studentIds: string[] = [];
-  sendTo: String[] = [];
-  classroom : Classroom;
+  sendTo: string[] = [];
+  newStoryForm: FormGroup;
+  classroom: Classroom;
+  allSelected: boolean = false;
 
 
   
@@ -50,9 +41,52 @@ export class TeacherDictglossComponent implements OnInit {
   ngOnInit(): void {
     this.getClassroom();
     console.log(this.students);
+    console.log(this.studentIds);
+    
+  }
+
+  tdCreateForm() {
+    this.newStoryForm = this.fb.group({
+      passage: ['', Validators.required],
+    });
   }
 
   sendDictgloss(){
+    let passage = this.newStoryForm.get('passage').value;
+
+    console.log(passage);
+    console.log(this.sendTo);
+
+    let message: Message = {
+      _id: "", //Check these
+      id: "",
+      subject: "New Dictogloss",
+      date: new Date,
+      senderId: this.auth.getUserDetails()._id, //Teacher ID
+      senderUsername: this.auth.getUserDetails().username, //Teacher Username
+      recipientId: "",
+      text: passage,
+      seenByRecipient: false,
+      audioId: "",
+    }
+
+    for(let student of this.sendTo){
+      message.recipientId = student;
+      this.messageService.saveMessage(message);
+    }
+  }
+
+  selectAllStudents(){
+    this.allSelected = this.allSelected? false:true;
+    for(let student of this.studentIds){
+      let isNotIn: boolean = this.sendTo.indexOf(student) == -1;
+      if(this.allSelected && isNotIn){
+        this.sendTo.push(student)
+      } else {
+        this.sendTo.splice(this.sendTo.indexOf(student), 1);
+      }
+    }
+    console.log("All students selected/deselected: ", this.sendTo);
     
   }
 

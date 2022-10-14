@@ -17,9 +17,35 @@
     display: inline-block;
 }
 
+.classroomCluster {
+    background-color: darkgrey;
+    border-style: solid;
+    border-color: black;
+    margin: 4px 8px 4px 8px;
+    border-radius: 5px;
+    justify-content: center;
+    display: inline-block;
+}
+
+.select {
+    
+}
+
+.selectButton {
+    font-size: 12pt;
+    margin: 4px 2px 4px 2px;
+    background-color: #a8707086;
+    border-color: #a88070;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 .headerIconBtnNotSelected {
     font-size: 12pt;
-    margin: 4px 2px 0px 2px;
+    margin: 4px 2px 4px 2px;
     background-color: #a8707086;
     border-color: #a88070;
     border-style: solid;
@@ -31,7 +57,7 @@
 
 .headerIconBtnSelected {
     font-size: 12pt;
-    margin: 4px 2px 0px 2px;
+    margin: 4px 2px 4px 2px;
     background-color: #49ff528c;
     border-color: #70a878;
     border-style: solid;
