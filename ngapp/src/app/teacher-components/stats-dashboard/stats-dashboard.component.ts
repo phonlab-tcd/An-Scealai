@@ -5,7 +5,8 @@ import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
 import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { NgramDistributionComponent } from 'app/story-stats/ngram-distribution/ngram-distribution/ngram-distribution.component';
+import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
+import { Classroom } from 'app/classroom'
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -22,9 +23,12 @@ export class StatsDashboardComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  classrooms:any;
-  stats:any[] = [];
-  dataLoaded:boolean = false;
+
+  classrooms: Classroom[];
+  classroomTitle = 'Select a classroom'; // By default we'll display this
+  stats: any[] = [];
+  dataLoaded: boolean = false;
+  textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number};
 
   async ngOnInit() {
@@ -39,21 +43,27 @@ export class StatsDashboardComponent implements OnInit {
 
   dialogRef: MatDialogRef<unknown>;
 
-  sampleTexts = [
-    'Hello there. The cat sat on the mat.',
-    'The dog sat on the frog.',
-    'The frog sat on the dog'
-  ];
-
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
          width: '60%',
     });
-
     this.dialogRef.afterClosed().subscribe(_ => {
         this.dialogRef = undefined;
     });
+  }
 
+  async openClassroomSelector() {
+    const classroomDialogRef = this.dialog.open(
+      ClassroomSelectorComponent,
+      { width: '60%' }
+    );
+    const classroom = await firstValueFrom(classroomDialogRef.afterClosed());
+    this.classroomTitle = classroom.title;
+    const storyTextPromises = classroom.studentIds.map(async (id) => {
+      const stories = await firstValueFrom(this.storyService.getStoriesByOwner(id));
+      return stories.map(story => story.text);
+    });
+    this.textsToAnalyse = (await Promise.all(storyTextPromises)).flat();
   }
   
   /*

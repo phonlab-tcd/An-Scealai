@@ -19,6 +19,7 @@ import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
@@ -84,6 +85,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
+import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard/classroom-selector/classroom-selector.component';
 
 @NgModule({
   declarations: [
@@ -138,6 +140,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     SynthItemComponent,
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
+    ClassroomSelectorComponent,
   ],
   imports: [
     RegisterModule,
@@ -157,6 +160,7 @@ import { StatsDashboardComponent } from './teacher-components/stats-dashboard/st
     MatNativeDateModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatButtonModule,
     MatDialogModule,
     NgbModule,
     NgbDropdownModule,

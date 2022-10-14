@@ -57,6 +57,10 @@ export class StoryService {
     return this.http.get(this.baseUrl + author);
   }
 
+  getStoriesByOwner(owner: string) : Observable<any>  {
+    return this.http.get(this.baseUrl + 'owner/' + owner);
+  }
+
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
   }
