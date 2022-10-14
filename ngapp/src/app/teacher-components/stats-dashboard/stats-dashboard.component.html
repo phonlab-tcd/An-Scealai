@@ -39,7 +39,7 @@
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>
                 <mat-card-content>
-                    <app-grammar-pie-chart [data]="grammarErrorCounts"></app-grammar-pie-chart>
+                    <app-grammar-pie-chart [errorCounts]="grammarErrorCounts"></app-grammar-pie-chart>
                 </mat-card-content>
             </ng-template>
         </mat-card>

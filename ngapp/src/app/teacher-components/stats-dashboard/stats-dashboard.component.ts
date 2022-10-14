@@ -7,6 +7,9 @@ import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Classroom } from 'app/classroom'
+import { Story } from 'app/story';
+import { HttpClient } from '@angular/common/http';
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -21,21 +24,20 @@ export class StatsDashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private userService: UserService,
     private dialog: MatDialog,
+    private http: HttpClient,
   ) { }
 
   classrooms: Classroom[];
+  classroomStories: Story[];
   classroomTitle = 'Select a classroom'; // By default we'll display this
   stats: any[] = [];
   dataLoaded: boolean = false;
   textsToAnalyse: string[] = [];
-  grammarErrorCounts: {[type: string]: number};
+  grammarErrorCounts: {[type: string]: number} = {};
 
   async ngOnInit() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
     await this.getWordCounts();
-
-    //await this.countGrammarErrorsStudent(this.classrooms[0].studentIds[0]);     // get pie chart for student
-    await this.countGrammarErrorsClassroom(this.classrooms[0]);               // get pie chart for class
         
     this.dataLoaded = true;
   }
@@ -58,11 +60,23 @@ export class StatsDashboardComponent implements OnInit {
     );
     const classroom = await firstValueFrom(classroomDialogRef.afterClosed());
     this.classroomTitle = classroom.title;
-    const storyTextPromises = classroom.studentIds.map(async (id) => {
-      const stories = await firstValueFrom(this.storyService.getStoriesByOwner(id));
-      return stories.map(story => story.text);
-    });
-    this.textsToAnalyse = (await Promise.all(storyTextPromises)).flat();
+    this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
+      await firstValueFrom(this.storyService.getStoriesByOwner(id))
+    ))).flat();
+    this.textsToAnalyse = this.classroomStories.map(story => story.text);
+
+    this.grammarErrorCounts = (await Promise.all(this.classroomStories.map(async story =>
+      await firstValueFrom(
+        this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
+      )
+    ))).reduce(this.countDictSum, {});
+  }
+
+  countDictSum(A, B) {
+    for (const key of Object.keys(B)) {
+      A[key] = A[key] ? A[key] + B[key] : B[key] 
+    }
+    return A;
   }
   
   /*
@@ -102,24 +116,4 @@ export class StatsDashboardComponent implements OnInit {
     // for now just get stats for the first student in the first classroom
     this.grammarErrorCounts = await firstValueFrom(this.storyService.countGrammarErrors(id));
   }
-  
-  /*
-  * Get grammar error counts for a given classroom
-  */
-  private async countGrammarErrorsClassroom(classroom) {
-    const classErrors = {};
-    // get error count object for each student in class and add to class error dict
-    for (const id of classroom.studentIds) {
-      const errorDict = await firstValueFrom(this.storyService.countGrammarErrors(id));
-      for (const [errorName, errorCount] of Object.entries(errorDict)) {
-          if (!classErrors[errorName]) {
-              classErrors[errorName] = 0;
-          }
-          classErrors[errorName] += errorCount;
-      }
-    }
-    
-    this.grammarErrorCounts = classErrors;
-  }
-
 }

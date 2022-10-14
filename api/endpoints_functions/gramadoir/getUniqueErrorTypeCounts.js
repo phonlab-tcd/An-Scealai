@@ -31,6 +31,11 @@ const UniqueStoryErrors = mongoose.model(
 async function getUniqueErrorTypeCounts(req, res, next) {
   const storyId = new mongoose.mongo.ObjectId(req.params.storyId);
   const uniqueStoryErrors = await UniqueStoryErrors.findOne({"storyId": storyId});
+  if (!uniqueStoryErrors) {
+    // Old stories won't have new logging yet.
+    // TODO: migrate old stories to have grammar counts and replace this with a 404
+    res.json({});
+  }
   const errorTypeCounts = uniqueStoryErrors.sentenceErrors
     .map(se => se.grammarErrors)
     .flat()
@@ -39,8 +44,7 @@ async function getUniqueErrorTypeCounts(req, res, next) {
       return countDict;
     }, {});
 
-  res.json({errorTypeCounts: errorTypeCounts});
+  res.json(errorTypeCounts);
 }
-
 
 module.exports = {SentenceError, UniqueStoryErrors, getUniqueErrorTypeCounts};

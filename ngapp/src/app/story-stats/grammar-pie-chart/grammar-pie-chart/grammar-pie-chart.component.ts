@@ -9,36 +9,31 @@ import config from 'abairconfig';
 })
 export class GrammarPieChartComponent implements OnInit {
   
-  @Input() data:Object;
-  dataLabels:string[] = [];
-  dataValues:number[] = [];
-  backgroundColors:string[] = [];
+  @Input() errorCounts: {[type: string]: number} = {};
 
   constructor(
   ) { }
 
   ngOnInit(): void {
-    if(this.data) {
-      this.dataLabels = Object.keys(this.data);
-      this.dataValues = Object.values(this.data);
-      for(let i = 0; i < this.dataValues.length; i++) {
-        this.backgroundColors.push("#" + ((Math.random() * 0xffffff) << 0).toString(16));
-      }
-      this.makePieChart()
-    }
+    this.loadPieChart();
+  }
+
+  ngOnChanges(_) {
+    this.loadPieChart();
   }
   
-  private makePieChart() {
+  private loadPieChart() {
     let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: this.dataLabels,
+            labels: Object.keys(this.errorCounts),
             datasets: [{
                 label: 'Grammar Error Counts ',
-                data: this.dataValues,
-                backgroundColor: this.backgroundColors,
+                data: Object.values(this.errorCounts),
+                // TODO: replace these colours with correct gramadoir error colour-coding
+                backgroundColor: Object.keys(this.errorCounts).map(_ => `#${((Math.random() * 0xffffff) << 0).toString(16)}`),
             }]
         },
     });
