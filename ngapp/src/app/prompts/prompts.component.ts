@@ -469,19 +469,6 @@ export class PromptsComponent implements OnInit {
     ]
   }
 
-  /** tempWordDatabaseEnglish = {
-    noun:        ['the kitchen', 'the floor', 'the man', 'the boat'],
-    verb:        ['to hit/meet', 'to eat', 'to listen', 'to give'],
-    adjective:   ['tall', 'nice', 'big', 'hot'],
-    pronoun:     ['him', 'I', 'you', 'you(plural)'],
-    determiner:  ['his/her/theirs', 'this', 'who', 'the'],
-    article:     ['the'],
-    adverb:      ['down', 'because', 'how', 'behind'],
-    adposition:  ['with', 'in'],
-    conjunction: ['and', 'to'],
-    numeral:     ['3', '100', '3(Person)', '4(People)']
-  } */
-
   WORD_PROMPT = 'Please choose a word type';
   givenWord = 'Please choose a word type';
   wordBank = [];

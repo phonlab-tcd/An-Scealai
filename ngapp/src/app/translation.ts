@@ -2231,4 +2231,13 @@ export default {
   teacher_go_to_dashboard: {
     ga: 'Téigh go dtí an Deais',
     en: 'Go to Dashboard' },
+  dictgloss_required: {
+    ga: 'Dictogloss ag teastáil',
+    en: 'Dictogloss required' },
+  teacher_selected: {
+    ga: 'Roghnú go léir',
+    en: 'Select All' },
+  teacher_deselected: {
+    ga: 'Díroghnaigh go léir',
+    en: 'Deselect All' },
 }
