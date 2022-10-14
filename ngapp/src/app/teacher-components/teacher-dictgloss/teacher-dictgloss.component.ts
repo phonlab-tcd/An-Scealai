@@ -7,6 +7,7 @@ import { Classroom } from '../../classroom';
 import { MessageService } from 'app/message.service';
 import { UserService } from 'app/user.service';
 import { User } from 'app/user';
+import { Message } from 'app/message';
 
 @Component({
   selector: 'app-teacher-dictgloss',
@@ -18,26 +19,49 @@ export class TeacherDictglossComponent implements OnInit {
   constructor(
     public ts: TranslationService,
     private classroomService: ClassroomService,
-    private http: HttpClient,
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
   ) {}
 
+  //used for creating a new message
+  message: Message = {
+    _id: '',
+    id: '',
+    subject: '',
+    date: new Date(),
+    senderId: '',
+    senderUsername: '',
+    recipientId: '',
+    text: '',
+    seenByRecipient: false,
+    audioId: ''
+  };
+
   students: User[] = [];
-  studentIds: String[] = [];
+  studentIds: string[] = [];
+  sendTo: String[] = [];
   classroom : Classroom;
+
+
+  
 
   ngOnInit(): void {
     this.getClassroom();
     console.log(this.students);
-    console.log(this.classroom);
-    
   }
 
   sendDictgloss(){
     
+  }
+
+  sendList(id: string){
+    if(!this.sendTo.includes(id)){
+      this.sendTo.push(id);
+    } else {
+      this.sendTo.splice(this.sendTo.indexOf(id), 1);
+    } 
   }
 
   getClassroom() {

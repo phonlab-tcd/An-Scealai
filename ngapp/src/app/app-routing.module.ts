@@ -99,7 +99,6 @@ const routes: Routes = [
   { path: 'story-prompts', component: StoryPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'general-prompts', component: GeneralPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'dictgloss', component: DictglossComponent, canActivate: [AuthGuardService] },
-  { path: 'teacher-dictgloss', component: TeacherDictglossComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -181,6 +180,10 @@ const routes: Routes = [
       {
         path: 'teacher-stats/:id',
         component: TeacherStatsComponent,
+      },
+      {
+        path: 'teacher-dictgloss/:id', 
+        component: TeacherDictglossComponent
       },
       {
         path: 'stats-dashboard',

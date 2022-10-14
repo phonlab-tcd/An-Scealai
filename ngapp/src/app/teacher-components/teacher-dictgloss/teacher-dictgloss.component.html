@@ -7,7 +7,7 @@
         <button class="backButton" (click)="sendDictgloss(); goToDashboard();">{{ts.l.teacher_send_dictgloss}}</button>
     </div>
     <div class="classroomCard" *ngFor="let student of students">
-        <div class="classroomTitle">{{student.username}}</div>
-        <i class="fas fa-arrow-right arrow"> {{numOfStories.get(student.username)}} </i>
-      </div>
+        <button *ngIf="sendTo.indexOf(student._id) == -1;" class="headerIconBtnNotSelected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
+        <button *ngIf="sendTo.indexOf(student._id) != -1;" class="headerIconBtnSelected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
+    </div>
 </div>

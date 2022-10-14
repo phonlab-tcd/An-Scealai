@@ -141,6 +141,10 @@ export class TeacherClassroomComponent implements OnInit {
     this.router.navigateByUrl('/teacher/teacher-stats/' + this.classroom._id);
   }
 
+  goToDictgloss() {
+    this.router.navigateByUrl('/teacher/teacher-dictgloss/' + this.classroom._id);
+  }
+
 /*
 * Set modal to visible
 */

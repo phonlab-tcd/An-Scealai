@@ -12,6 +12,35 @@
     animation-name: fadeIn;
 }
 
+.classroomCard {
+    justify-content: center;
+    display: inline-block;
+}
+
+.headerIconBtnNotSelected {
+    font-size: 12pt;
+    margin: 4px 2px 0px 2px;
+    background-color: #a8707086;
+    border-color: #a88070;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.headerIconBtnSelected {
+    font-size: 12pt;
+    margin: 4px 2px 0px 2px;
+    background-color: #49ff528c;
+    border-color: #70a878;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0%;

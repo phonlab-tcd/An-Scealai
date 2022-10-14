@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 import { SynthesisService } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
 
-
 @Component({
   selector: 'app-prompts',
   templateUrl: './prompts.component.html',
