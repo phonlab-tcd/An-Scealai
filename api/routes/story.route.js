@@ -24,6 +24,8 @@ let storyRoutes;
     require('../endpoints_functions/story/withId');
   // const myStudentsStory =
   //   require('../endpoints_functions/story/myStudentsStory');
+  const ownerId =
+    require('../endpoints_functions/story/ownerId');
   const author =
     require('../endpoints_functions/story/author');
   const feedbackAudio =
@@ -45,6 +47,7 @@ let storyRoutes;
     get: {
       '/withId/:id': withId,
       // '/myStudentsStory/:id': myStudentsStory,
+      '/owner/:id': ownerId,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
       '/averageWordCount/:studentId': averageWordCount,

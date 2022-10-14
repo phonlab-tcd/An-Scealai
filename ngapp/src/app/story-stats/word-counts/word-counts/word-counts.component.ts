@@ -52,7 +52,8 @@ export class WordCountsComponent implements OnInit {
                         stepSize: 40
                     }
                 }]
-              }
+              },
+              responsive: true
             }
         });
       }
