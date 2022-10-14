@@ -25,7 +25,7 @@ export class StatsDashboardComponent implements OnInit {
   classrooms:any;
   stats:any[] = [];
   dataLoaded:boolean = false;
-  grammarErrorCounts: any;
+  grammarErrorCounts: {[type: string]: number};
 
   async ngOnInit() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));

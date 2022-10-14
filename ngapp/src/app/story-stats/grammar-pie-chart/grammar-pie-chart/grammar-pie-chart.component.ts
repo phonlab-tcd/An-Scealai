@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
+import config from 'abairconfig';
 
 @Component({
   selector: 'app-grammar-pie-chart',
@@ -13,7 +14,8 @@ export class GrammarPieChartComponent implements OnInit {
   dataValues:number[] = [];
   backgroundColors:string[] = [];
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
     if(this.data) {
