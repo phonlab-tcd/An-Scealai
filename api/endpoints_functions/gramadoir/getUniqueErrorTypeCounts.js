@@ -34,7 +34,7 @@ async function getUniqueErrorTypeCounts(req, res, next) {
   if (!uniqueStoryErrors) {
     // Old stories won't have new logging yet.
     // TODO: migrate old stories to have grammar counts and replace this with a 404
-    res.json({});
+    return res.json({});  // Without the 'return' the code procedes to the end, making the backend crash
   }
   const errorTypeCounts = uniqueStoryErrors.sentenceErrors
     .map(se => se.grammarErrors)
