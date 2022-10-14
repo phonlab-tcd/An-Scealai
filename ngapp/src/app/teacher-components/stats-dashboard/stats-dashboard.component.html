@@ -33,7 +33,6 @@
                 </mat-card-content>
             </ng-template>
         </mat-card>
-<<<<<<< HEAD
         <mat-card class="stats-card" *ngIf="dataLoaded">
             <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
@@ -46,20 +45,5 @@
                 </mat-card-content>
             </ng-template>
         </mat-card>
-=======
-        <!-- Grammar Error Pie Chart -->
-      <mat-card class="stats-card" *ngIf="dataLoaded">
-          <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
-              <mat-card-header class="stats-card-header">
-                  <mat-card-title>Grammar Errors</mat-card-title>
-                  <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
-                  <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
-              </mat-card-header>
-              <mat-card-content>
-                  <app-grammar-pie-chart [data]="grammarErrorCounts"></app-grammar-pie-chart>
-              </mat-card-content>
-          </ng-template>
-      </mat-card>
->>>>>>> a11e792d1f0ade87aeca04b80f12100b737c28f6
     </div>
 </div>
