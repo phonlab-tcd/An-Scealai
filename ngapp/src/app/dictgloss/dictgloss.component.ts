@@ -200,6 +200,35 @@ export class DictglossComponent implements OnInit {
     this.displayText(this.texts);
     selector.value = "";
   }
+
+  dictglossFromMessages(text: string) {
+    this.resetTimer();
+    this.startTimer();
+    this.allGuessed = false;
+    this.texts = text;
+
+    let isValid = false;
+    for(let i = 0; i < this.texts.length; i++){
+      if(this.texts[i] !== " "){
+        isValid = true;
+        break;
+      }
+    }
+
+    if(this.texts.length > 0 && isValid){
+      this.hasText = true;
+      this.errorText = false;
+    } else {
+      this.hasText = false;
+      this.errorText = true;
+    }
+
+    console.log(this.texts.length, this.hasText);
+    
+
+    console.log('The input text is:', this.texts);
+    this.displayText(this.texts);
+  }
   
   selected: Voice = voices[0];
   synthItems: SynthItem[] = [];
