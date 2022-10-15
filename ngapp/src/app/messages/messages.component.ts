@@ -336,8 +336,8 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  sendToDictgloss(text: string){
-    this.router.navigateByUrl('/dictgloss');
+  sendToDictgloss(passage: string){
+    this.router.navigateByUrl('/dictgloss', {state: {text: passage} });
   }
   
   /*

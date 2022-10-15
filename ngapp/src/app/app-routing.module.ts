@@ -98,7 +98,7 @@ const routes: Routes = [
   { path: 'lara-prompts', component: LaraPromptsComponent, canActivate: [AuthGuardService] },
   { path: 'story-prompts', component: StoryPromptsComponent, canActivate: [AuthGuardService]},
   { path: 'general-prompts', component: GeneralPromptsComponent, canActivate: [AuthGuardService]},
-  { path: 'dictgloss', component: DictglossComponent, canActivate: [AuthGuardService] },
+  { path: 'dictgloss', component: DictglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],

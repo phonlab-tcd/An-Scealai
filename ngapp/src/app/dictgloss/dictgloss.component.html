@@ -14,14 +14,16 @@
             <div class="playback">
                 <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
                 <!-- Select dialect -->
-                <div class="formGroup">
-                    <p class="formLabel">{{ts.l.dialect}}</p>
-                    <select formControlName="dialect" class="dialectSelect">
-                        <option value="connemara">{{ts.l.connacht}}</option>
-                        <option value="donegal">{{ts.l.ulster}}</option>
-                        <option value="kerry">{{ts.l.munster}}</option>
-                    </select>
-                </div>
+                <form [formGroup]="synthForm">
+                    <div class="formGroup">
+                        <p class="formLabel">{{ts.l.dialect}}</p>
+                        <select formControlName="dialect" class="dialectSelect">
+                            <option value="connemara">{{ts.l.connacht}}</option>
+                            <option value="donegal">{{ts.l.ulster}}</option>
+                            <option value="kerry">{{ts.l.munster}}</option>
+                        </select>
+                    </div>
+                </form>
             </div>
             <hr>
             <div class="buttons-and-templates">

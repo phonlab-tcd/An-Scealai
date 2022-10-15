@@ -4,8 +4,13 @@ import { SynthesisService, Voice, voices } from 'app/services/synthesis.service'
 import { TranslationService } from 'app/translation.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
-import { stringify } from 'querystring';
-import { timeline } from 'console';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'app/authentication.service';
+import { Message } from 'app/message';
+import { UserService } from 'app/user.service';
+import { ClassroomService } from 'app/classroom.service';
+import { Classroom } from 'app/classroom';
+import { MessageService } from 'app/message.service';
 
 @Component({
   selector: 'app-dictgloss',
@@ -17,11 +22,57 @@ export class DictglossComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private messageService: MessageService,
+    private classroomService: ClassroomService,
+    private userService: UserService,
+    private auth: AuthenticationService,
     private synth: SynthesisService,
+    private router: Router,
+    public activatedRoute: ActivatedRoute,
     public ts: TranslationService,
-  ) { this.dictglossCreateForm(); }
+  ) { 
+    this.dictglossCreateForm(); 
+    try {
+      this.texts = this.router.getCurrentNavigation().extras.state.text;
+      this.dictglossFromMessages(this.texts);
+      console.log("Generated from message.")
+      this.generatedFromMessages = true;
+    } catch {
+      console.log("Not generated from message.")
+      this.generatedFromMessages = false;
+    }
+  } 
 
+  generatedFromMessages: boolean;
+
+  isTeacher: boolean;
+  teacherName: string;
+  teacherId: string;
+
+  isStudent: boolean;
+  studentId: string;
+  classroom: any;
   ngOnInit(): void {
+    const userDetails = this.auth.getUserDetails();
+    
+    // Return if user not logged in to avoid calling null.role (which results in error)
+    if (!userDetails) return;
+
+    if(userDetails.role === "TEACHER") {
+      this.isTeacher = true;
+      this.teacherId = this.auth.getUserDetails()._id;
+    }
+    if(userDetails.role === "STUDENT") {
+      this.studentId = this.auth.getUserDetails()._id;
+      this.classroomService.getClassroomOfStudent(this.studentId).subscribe((res: Classroom) => {
+        this.classroom = res;
+        this.teacherId = this.classroom.teacherId;
+        this.userService.getUserById(this.teacherId).subscribe( (res) => {
+          this.teacherName = res.username;
+        });
+      });
+      this.isStudent = true;
+    }
   }
 
   init() {
@@ -56,6 +107,30 @@ export class DictglossComponent implements OnInit {
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
   showInfo: boolean = false;
+
+  sendDictglossReport(){
+    if(this.isStudent){
+      let message: Message = {
+        _id: "", //Check these
+        id: "",
+        subject: "Student Finished Dictogloss!",
+        date: new Date,
+        senderId: "",
+        senderUsername: "", //Teacher Username
+        recipientId: "", //Teacher Id
+        text: 
+        "The final time was: \t" + this.displayTime(this.totalTime) + "\n" + 
+        "Correct guesses:\t\t" + this.rightCount + "\n" +
+        "Incorrect guesses:\t" + this.wrongCount,
+        seenByRecipient: false,
+        audioId: "",
+      }
+
+      message.senderId = this.studentId;
+      message.recipientId = this.teacherId;
+      this.messageService.saveMessage(message);
+    }
+  }
 
   dictglossCreateForm(){
     this.synthForm = this.fb.group({
@@ -171,6 +246,7 @@ export class DictglossComponent implements OnInit {
   synthItem: SynthItem;
   errorText: boolean;
   dictglossLoad() {
+    this.generatedFromMessages = false;
     this.resetTimer();
     this.startTimer();
     this.allGuessed = false;
@@ -342,6 +418,8 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.pauseTimer();
       this.allGuessed = true;
+      if(this.generatedFromMessages){ this.sendDictglossReport(); }
+      this.generatedFromMessages = false;
     }
   }
 
@@ -357,6 +435,8 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.pauseTimer();
       this.allGuessed = true;
+      if(this.generatedFromMessages){ this.sendDictglossReport(); }
+      this.generatedFromMessages = false;
     }
   }
 }
