@@ -10,6 +10,7 @@ import config from 'abairconfig';
 export class GrammarPieChartComponent implements OnInit {
   
   @Input() errorCounts: {[type: string]: number} = {};
+  pieChart: Chart;
 
   constructor(
   ) { }
@@ -25,7 +26,8 @@ export class GrammarPieChartComponent implements OnInit {
   private loadPieChart() {
     let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
-    let myChart = new Chart(ctx, {
+    if (this.pieChart) { this.pieChart.destroy(); } 
+    this.pieChart = new Chart(ctx, {
         type: 'pie',
         data: {
             labels: Object.keys(this.errorCounts),
