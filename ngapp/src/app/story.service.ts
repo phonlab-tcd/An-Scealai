@@ -80,8 +80,8 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'update/' + story._id, story);
   }
   
-  getStoriesForClassroom(author: string, date): Observable<any> {
-    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  getStoriesForClassroom(owner: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
   updateStory(updateData: any, id: string): Observable<any> {
