@@ -57,8 +57,8 @@ export class StoryService {
     return this.http.get(this.baseUrl + author);
   }
 
-  getStoriesByOwner(owner: string) : Observable<any>  {
-    return this.http.get(this.baseUrl + 'owner/' + owner);
+  getStoriesByOwner(owner: string) : Observable<Story[]>  {
+    return this.http.get<Story[]>(this.baseUrl + 'owner/' + owner);
   }
 
   getStory(id: string) : Observable<any> {
@@ -73,8 +73,7 @@ export class StoryService {
         subscriber.complete();
       });
     }
-    const author = userDetails.username;
-    return this.http.get<Story[]>(this.baseUrl + author);
+    return this.getStoriesByOwner(userDetails._id);
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {
