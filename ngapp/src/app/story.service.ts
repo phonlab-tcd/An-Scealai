@@ -57,8 +57,8 @@ export class StoryService {
     return this.http.get(this.baseUrl + author);
   }
 
-  getStoriesByOwner(owner: string) : Observable<any>  {
-    return this.http.get(this.baseUrl + 'owner/' + owner);
+  getStoriesByOwner(owner: string) : Observable<Story[]>  {
+    return this.http.get<Story[]>(this.baseUrl + 'owner/' + owner);
   }
 
   getStory(id: string) : Observable<any> {
@@ -73,16 +73,15 @@ export class StoryService {
         subscriber.complete();
       });
     }
-    const author = userDetails.username;
-    return this.http.get<Story[]>(this.baseUrl + author);
+    return this.getStoriesByOwner(userDetails._id);
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'update/' + story._id, story);
   }
   
-  getStoriesForClassroom(author: string, date): Observable<any> {
-    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  getStoriesForClassroom(owner: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
   updateStory(updateData: any, id: string): Observable<any> {

@@ -62,8 +62,8 @@ let storyRoutes;
 })();
 
 // Get stories by a given author after a certain date from DB
-storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
-  Story.find({"author": req.params.author, date: {$gte: req.params.date}}, function (err, stories) {
+storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function (req, res) {
+  Story.find({"owner": req.params.owner, date: {$gte: req.params.date}}, function (err, stories) {
     if(err) {
       console.log(err);
       res.json(err)
