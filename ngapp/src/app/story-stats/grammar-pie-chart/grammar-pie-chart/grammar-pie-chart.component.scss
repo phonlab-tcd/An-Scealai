@@ -1,0 +1,19 @@
+.chartContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.legendContainer {
+  overflow-y: scroll;
+}
+
+.legendPair {
+  display: flex;
+  flex-direction: row;
+  gap:0.5rem;
+}
+
+.legendMarker {
+  width: 30px;
+  height: 10px;
+}

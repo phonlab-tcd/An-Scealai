@@ -1,3 +1,12 @@
-<div>
+<div class="chartContainer">
+    <div class="legendContainer" *ngIf="legendItems.length > 0">
+      <div *ngFor="let item of legendItems">
+        <div class="legendPair" (click)="setDataVisibility(item.index)">
+          <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
+                                    [style.borderColor]="item.strokeStyle"></div> 
+          <div>{{item.text}}</div>
+        </div>
+      </div>
+    </div>
     <canvas id="grammar-pie-chart" width="400" height="200"></canvas>
 </div>
