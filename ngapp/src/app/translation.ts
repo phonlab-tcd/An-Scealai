@@ -1996,5 +1996,8 @@ export default {
     en: 'Search for words in Irish or English from Foclóir Gaeilge-Béarla Ó Dónaill using the search bar above' },
   enter_a_word_to_lookup: {
     ga: 'Líon isteach focal le cuardach',
-    en: 'Please enter a word to lookup' },    
+    en: 'Please enter a word to lookup' }, 
+  add_students_for_statistics: {
+    ga: 'Add students to a classroom to view their statistics',
+    en: 'Add students to a classroom to view their statistics' }     
 }

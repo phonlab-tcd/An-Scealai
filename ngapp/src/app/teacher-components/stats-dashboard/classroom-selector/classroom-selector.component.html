@@ -4,8 +4,11 @@
         <i class="fa fa-times xbutton" (click)="closeDialog(null)"></i>
     </div>
 </div>
-<div class="classroom-card-container">
+<div class="classroom-card-container" *ngIf="classrooms && classrooms.length > 0; else noClassrooms" >
     <div *ngFor="let classroom of classrooms" class="classroom-card" (click)="closeDialog(classroom)">
         <div class="class-title">{{classroom.title}}</div>
     </div>
 </div>
+<ng-template #noClassrooms>
+    <div class="noClassrooms"> {{ts.l.add_students_for_statistics}}</div>
+</ng-template>

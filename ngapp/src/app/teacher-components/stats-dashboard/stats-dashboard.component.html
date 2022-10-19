@@ -21,7 +21,7 @@
             </ng-template>
         </mat-card>
         <!-- Word Count Graph -->
-        <mat-card class="stats-card" *ngIf="dataLoaded">
+        <mat-card class="stats-card">
             <ng-template #wordCountTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>Average Word Counts</mat-card-title>
@@ -29,11 +29,12 @@
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>
                 <mat-card-content>
-                    <app-word-counts [data]="stats"></app-word-counts>
+                    <app-word-counts [wordCountData]="wordCountData"></app-word-counts>
                 </mat-card-content>
             </ng-template>
         </mat-card>
-        <mat-card class="stats-card" *ngIf="dataLoaded">
+        <!-- Grammar Pie Chart -->
+        <mat-card class="stats-card">
             <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>Grammar Errors</mat-card-title>

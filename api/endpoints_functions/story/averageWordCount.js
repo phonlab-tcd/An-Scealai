@@ -12,7 +12,7 @@ const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
  * @return {Object} Student's average word count
  */
 module.exports = async (req, res) => {
-  const stories = await Story.find({'studentId': req.params.studentId});
+  const stories = await Story.find({'owner': req.params.studentId});
   if (stories.length > 0) {
     const wordCounts = [];
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClassroomService } from '../../../classroom.service';
+import { TranslationService } from '../../../translation.service';
 import { AuthenticationService } from 'app/authentication.service';
 import { Classroom } from 'app/classroom';
 import { firstValueFrom } from 'rxjs';
@@ -16,6 +17,7 @@ export class ClassroomSelectorComponent implements OnInit {
     public dialogRef: MatDialogRef<ClassroomSelectorComponent>,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
+    private ts: TranslationService
   ) { }
 
   classrooms: Classroom[];
