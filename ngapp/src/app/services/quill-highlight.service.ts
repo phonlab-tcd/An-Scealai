@@ -14,15 +14,10 @@ import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
 import config from 'abairconfig';
 // import clone from 'lodash/clone';
-import { from } from 'rxjs';
+import { firstValueFrom, from } from 'rxjs';
 import { assert } from 'console';
 import { GramadoirUrl } from '../grammar.service'
 import { DashboardComponent } from 'app/student-components/dashboard/dashboard.component';
-
-import * as Wink from 'wink-nlp';
-import * as Model from 'wink-eng-lite-web-model';
-
-const nlp = Wink.default(Model.default)
 
 
 const Tooltip = Quill.import('ui/tooltip');
@@ -152,10 +147,10 @@ export class QuillHighlightService {
     const currentGramadoirErrorTypes: object = {};
 
     // Sentence tokenization to make gramadoir requests for each sentence independently
-    const sentences = nlp.readDoc(text).sentences().out();
+    const sentences = await firstValueFrom(
+      this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: text})
+    );
     const sentencesWithOffsets = []
-
-    console.log('WINK', sentences);
 
     // We need to find the right offset for each sentence, because the gramadoir 'fromx' and 'tox' is relative to the sentence
     // The idea here is to iterate through the tokenized sentences and match them in the original text, to get their offsets
