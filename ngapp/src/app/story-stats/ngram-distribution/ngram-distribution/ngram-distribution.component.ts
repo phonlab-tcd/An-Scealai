@@ -10,7 +10,7 @@ const nlp = Wink.default(Model.default)
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
 
-const STOP_WORDS = ['.', ',', '?', '!'];
+const STOP_WORDS = ['.', ',', '?', '!', '-', ';', ' ', '\n', '\n\n'];
 
 type CountDict = {key: string; count: number};
 
@@ -49,7 +49,6 @@ export class NgramDistributionComponent implements OnInit {
       .reduce(sumCountDicts, {});
 
     const sortedNgramCounts = reverseSortObject(ngramCounts);
-    
     const X_DATA = sortedNgramCounts.map(entry => entry.key.replaceAll(',', ' '));
     const Y_DATA = sortedNgramCounts.map(entry => ngramCounts[entry.key]);
 
