@@ -7,6 +7,7 @@
         </button>
     </div>
     <div class="cards-container">
+        <!-- N-Gram Graph -->
         <mat-card class="stats-card">
             <ng-template #ngramTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
@@ -19,6 +20,7 @@
                 </mat-card-content>
             </ng-template>
         </mat-card>
+        <!-- Word Count Graph -->
         <mat-card class="stats-card" *ngIf="dataLoaded">
             <ng-template #wordCountTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
@@ -28,6 +30,18 @@
                 </mat-card-header>
                 <mat-card-content>
                     <app-word-counts [data]="stats"></app-word-counts>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+        <mat-card class="stats-card" *ngIf="dataLoaded">
+            <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>Grammar Errors</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-grammar-pie-chart [errorCounts]="grammarErrorCounts"></app-grammar-pie-chart>
                 </mat-card-content>
             </ng-template>
         </mat-card>

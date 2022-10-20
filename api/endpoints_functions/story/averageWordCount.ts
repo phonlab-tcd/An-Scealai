@@ -21,10 +21,6 @@ module.exports = async (req, res) => {
       const textTokens = nlp.readDoc(story.text).tokens()
           .out()
           .filter((token) => !STOP_WORDS.includes(token));
-
-      textTokens.forEach((token) => {
-        console.log(token);
-      });
       wordCounts.push(textTokens.length);
     });
 

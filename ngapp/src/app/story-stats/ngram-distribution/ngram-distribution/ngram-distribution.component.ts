@@ -7,7 +7,7 @@ import config from 'abairconfig';
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
 
-const STOP_WORDS = ['.', ',', '?', '!'];
+const STOP_WORDS = ['.', ',', '?', '!', '-', ';', ' ', '\n', '\n\n'];
 
 type CountDict = {key: string; count: number};
 
@@ -52,7 +52,6 @@ export class NgramDistributionComponent implements OnInit {
     const bongResponses = await Promise.all(bongRequests);
     const ngramCounts = bongResponses.reduce(sumCountDicts, {});
     const sortedNgramCounts = reverseSortObject(ngramCounts);
-    
     const X_DATA = sortedNgramCounts.map(entry => entry.key.replaceAll(',', ' '));
     const Y_DATA = sortedNgramCounts.map(entry => ngramCounts[entry.key]);
 
