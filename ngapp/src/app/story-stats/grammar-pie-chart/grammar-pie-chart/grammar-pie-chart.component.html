@@ -1,5 +1,7 @@
 <div class="chartContainer">
     <div class="legendContainer" *ngIf="legendItems.length > 0">
+      <div class="legend">Legend</div>
+      <hr/>
       <div *ngFor="let item of legendItems">
         <div class="legendPair" (click)="setDataVisibility(item.index)">
           <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
@@ -8,5 +10,7 @@
         </div>
       </div>
     </div>
-    <canvas id="grammar-pie-chart" width="400" height="200"></canvas>
+    <div class="pieContainer">
+      <canvas id="grammar-pie-chart" width="200" height="200"></canvas>
+    </div>
 </div>
