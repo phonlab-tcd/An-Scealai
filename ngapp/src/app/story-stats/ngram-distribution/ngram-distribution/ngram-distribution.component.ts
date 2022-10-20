@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Chart } from 'chart.js';
-
-import * as Wink from 'wink-nlp';
-import * as Model from 'wink-eng-lite-web-model';
-import * as NLPUtils from 'wink-nlp-utils';
-
-const nlp = Wink.default(Model.default)
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import config from 'abairconfig';
 
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
@@ -27,7 +24,9 @@ export class NgramDistributionComponent implements OnInit {
   selectedN: number = 1;
   ngramChart: Chart;
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   ngOnInit(): void {
     this.loadNgramChart();
@@ -37,17 +36,21 @@ export class NgramDistributionComponent implements OnInit {
     this.loadNgramChart();
   }
 
-  loadNgramChart() {
-    const allTextsAsTokens = this.texts.map(text =>
-      nlp.readDoc(text).tokens().out() // this converts text -> array of tokens
-        .filter(token => !STOP_WORDS.includes(token))
-        .map(token => token.toLowerCase())
+  async loadNgramChart() {
+    const tokenizationRequests = this.texts.map(text => 
+      firstValueFrom(this.http.post<string[]>(config.baseurl + 'nlp/tokenize', {text: text}))
+    );
+    const tokenResponses = await Promise.all(tokenizationRequests);
+    const textsAsTokens = tokenResponses.map(tokens => 
+      tokens.filter(token => !STOP_WORDS.includes(token)).map(token => token.toLowerCase())
     );
 
-    const ngramCounts = allTextsAsTokens
-      .map(tokens => NLPUtils.string.bong(tokens, this.selectedN)) // bong <-> bag of n-grams :^)
-      .reduce(sumCountDicts, {});
-
+    // bong <-> bag of n-grams
+    const bongRequests = textsAsTokens.map(tokens => 
+      firstValueFrom(this.http.post<any>(config.baseurl + 'nlp/bong', {array: tokens, n: this.selectedN}))
+    );
+    const bongResponses = await Promise.all(bongRequests);
+    const ngramCounts = bongResponses.reduce(sumCountDicts, {});
     const sortedNgramCounts = reverseSortObject(ngramCounts);
     const X_DATA = sortedNgramCounts.map(entry => entry.key.replaceAll(',', ' '));
     const Y_DATA = sortedNgramCounts.map(entry => ngramCounts[entry.key]);
