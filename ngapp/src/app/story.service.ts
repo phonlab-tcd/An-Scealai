@@ -144,8 +144,8 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'updateActiveRecording/' + storyId + '/', {activeRecording: recordingId});
   }
   
-  averageWordCount(studentId:string) : Observable<any> {
-    return this.http.get(this.baseUrl + "averageWordCount/" + studentId);
+  averageWordCount(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "averageWordCount/" + studentId, {startDate:startDate, endDate:endDate});
   }
   
   countGrammarErrors(studentId:string) : Observable<any> {

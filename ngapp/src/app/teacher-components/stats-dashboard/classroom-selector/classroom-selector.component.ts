@@ -40,8 +40,8 @@ export class ClassroomSelectorComponent implements OnInit {
   }
 
   closeDialog(classroom: Classroom | null) {
-    let startDate = (this.range.get("start").value) ? this.range.get("start").value : "empty";
-    let endDate = (this.range.get("end").value) ? this.range.get("end").value : "empty";
+    let startDate = (this.range.get("start").value) ? this.range.get("start").value : "";
+    let endDate = (this.range.get("end").value) ? this.range.get("end").value : "";
     
     this.dialogRef.close({classroom:classroom, startDate: startDate, endDate: endDate});
   }

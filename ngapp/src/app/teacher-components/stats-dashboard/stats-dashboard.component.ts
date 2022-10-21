@@ -36,7 +36,7 @@ export class StatsDashboardComponent implements OnInit {
   
   async ngOnInit() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
-    if(this.classrooms.length > 0) await this.loadDataForCharts(this.classrooms[0]);
+    if(this.classrooms.length > 0) await this.loadDataForCharts(this.classrooms[0], '', '');
   }
 
   dialogRef: MatDialogRef<unknown>;
@@ -59,12 +59,10 @@ export class StatsDashboardComponent implements OnInit {
     const classroom = classroomResponse.classroom;
     const startDate = classroomResponse.startDate;
     const endDate = classroomResponse.endDate;
-    console.log(startDate);
-    console.log(endDate);
-    if (classroom) await this.loadDataForCharts(classroom)
+    if (classroom) await this.loadDataForCharts(classroom, startDate, endDate);
   }
   
-  async loadDataForCharts(classroom) {
+  async loadDataForCharts(classroom, startDate, endDate) {
     this.classroomTitle = classroom.title;
     // get n-gram data
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
@@ -80,7 +78,7 @@ export class StatsDashboardComponent implements OnInit {
     ))).reduce(this.countDictSum, {});
     
     // get word count data
-    this.wordCountData = await this.getWordCounts(classroom);
+    this.wordCountData = await this.getWordCounts(classroom, startDate, endDate);
   }
 
   countDictSum(A, B) {
@@ -93,7 +91,7 @@ export class StatsDashboardComponent implements OnInit {
   /*
   * Get average word count and username for each student in classroom (over all stories)
   */
-  async getWordCounts(classroom) {
+  async getWordCounts(classroom, startDate, endDate) {
     let statsEntry = {
       studentNames: [],
       averageWordCounts: []
@@ -101,7 +99,7 @@ export class StatsDashboardComponent implements OnInit {
     
     await Promise.all(classroom.studentIds.map(async (id) => {
         statsEntry.studentNames.push((await firstValueFrom(this.userService.getUserById(id))).username);
-        statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(id))).avgWordCount);
+        statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount);
       }
     ));
     
