@@ -33,7 +33,7 @@ export class StatsDashboardComponent implements OnInit {
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
-
+  
   async ngOnInit() {
     this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
     if(this.classrooms.length > 0) await this.loadDataForCharts(this.classrooms[0]);
@@ -55,7 +55,12 @@ export class StatsDashboardComponent implements OnInit {
       ClassroomSelectorComponent,
       { width: '60%' }
     );
-    const classroom = await firstValueFrom(classroomDialogRef.afterClosed());
+    const classroomResponse = await firstValueFrom(classroomDialogRef.afterClosed());
+    const classroom = classroomResponse.classroom;
+    const startDate = classroomResponse.startDate;
+    const endDate = classroomResponse.endDate;
+    console.log(startDate);
+    console.log(endDate);
     if (classroom) await this.loadDataForCharts(classroom)
   }
   

@@ -48,13 +48,5 @@ export class GrammarPieChartComponent implements OnInit {
 
     this.legendItems = this.pieChart['legend']['legendItems'];
   }
-  
-  setDataVisibility(index) {
-    console.log(index);
-    if(this.pieChart.isDatasetVisible(index))
-      this.pieChart.setDatasetVisibility(index, false);
-    else 
-      this.pieChart.setDatasetVisibility(index, true);
-  }
 
 }
