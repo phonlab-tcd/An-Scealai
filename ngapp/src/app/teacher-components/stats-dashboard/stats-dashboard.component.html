@@ -1,6 +1,6 @@
 <div class="dashboard" *ngIf="!dialogRef">
     <div class="dashboard-header">
-        <h3 class="dashboard-title">Statistics Dashboard</h3>
+        <h3 class="dashboard-title">{{ts.l.statistics_dashboard}}</h3>
         <button mat-stroked-button (click)="openClassroomSelector()">
             {{classroomTitle}}
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -11,7 +11,7 @@
         <mat-card class="stats-card">
             <ng-template #ngramTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
-                    <mat-card-title>N-gram Distribution</mat-card-title>
+                    <mat-card-title>{{ts.l.ngram_distribution}}</mat-card-title>
                     <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(ngramTemplate)"></i>
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>
@@ -24,7 +24,7 @@
         <mat-card class="stats-card">
             <ng-template #wordCountTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
-                    <mat-card-title>Average Word Counts</mat-card-title>
+                    <mat-card-title>{{ts.l.average_word_counts}}</mat-card-title>
                     <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(wordCountTemplate)"></i>
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>
@@ -37,7 +37,7 @@
         <mat-card class="stats-card">
             <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
-                    <mat-card-title>Grammar Errors</mat-card-title>
+                    <mat-card-title>{{ts.l.grammar_errors}}</mat-card-title>
                     <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>

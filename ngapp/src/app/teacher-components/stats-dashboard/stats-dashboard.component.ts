@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
 import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
+import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
@@ -25,6 +26,7 @@ export class StatsDashboardComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private http: HttpClient,
+    private ts: TranslationService
   ) { }
 
   classrooms: Classroom[];

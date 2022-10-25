@@ -1,12 +1,12 @@
 <div class="header">
-    <div>Select a classroom</div>
+    <div>{{ts.l.select_a_classroom}}</div>
     <div>
         <i class="fa fa-times xbutton" (click)="closeDialog(null)"></i>
     </div>
 </div>
 
 <div class="checkBox"> 
-  <input type="checkbox" [(ngModel)]="showDatePicker" name="dateCheckBox"> Date Range
+  <input type="checkbox" [(ngModel)]="showDatePicker" name="dateCheckBox"> {{ts.l.date_range}}
 </div>
 
 <div class="contentsContainer" *ngIf="classrooms && classrooms.length > 0; else noClassrooms" >

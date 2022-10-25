@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
 import config from 'abairconfig';
 
@@ -14,6 +15,7 @@ export class GrammarPieChartComponent implements OnInit {
   legendItems: any[] = [];
 
   constructor(
+    private ts: TranslationService
   ) { }
 
   ngOnInit(): void {
