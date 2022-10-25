@@ -16,7 +16,7 @@
 
 .classHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -44,7 +44,7 @@
 
 .seenByStudent {
     font-size: 10pt;
-    color: #999999;
+    color: var(--scealai-light-gray);
     margin-left: 4px;
 }
 
@@ -70,7 +70,7 @@
 
 .addClassBtn:hover {
     cursor: pointer;
-    color: #70a87f;
+    color: var(--scealai-green);
     transition: color 0.5s;
 }
 
@@ -104,7 +104,7 @@
 
 .storyTextHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -132,7 +132,7 @@
 
 .feedbackHeaderTeacherStory {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     padding: 4px;
@@ -185,14 +185,14 @@
     padding: 8px;
     color: white;
     font-size: 14pt;
-    background-color: #534d3d;
+    background-color: var(--scealai-med-brown);
     border-radius: 5px;
     margin-top: 5px;
 }
 
 .classroomCard:hover {
-    color:#ff9100;
-    background-color: #3b372b;
+    color:var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
     cursor: pointer;
 }
@@ -202,7 +202,7 @@
     padding-left: 16px;
     padding-right: 16px;
     background-color: #d1d1d1;
-    color: #424242;
+    color: var(--scealai-dark-gray);
 }
 
 .keyNumStudents {
@@ -256,7 +256,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding-left: 10px;
     padding-right: 10px;
     background-color: #d1d1d1;
-    color: #707070;
+    color: var(--modal-hover);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -276,7 +276,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .greenLinkText {
     margin-top: 10px;
-    color: #70a87f;
+    color: var(--scealai-green);
     text-decoration: underline;
 }
 
@@ -289,17 +289,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
 .createBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .createBtnGreen:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .titleInput {
@@ -337,7 +337,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 8px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 5px;
     padding: 4px;
@@ -347,7 +347,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -358,7 +358,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .codeView {
     background-color: #d1d1d1;
-    border: 1px solid #999999;
+    border: 1px solid var(--scealai-light-gray);
     border-radius: 4px;
     padding: 4px;
     padding-left: 8px;
@@ -367,12 +367,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .deleteRedBtn {
-    background-color: #c40021;
+    background-color: var(--scealai-delete-red-3);
     color: white;
 }
 
 .deleteRedBtn:hover {
-    background-color: #8f0018;
+    background-color: var(--scealai-delete-red-3-hover);
 }
 
 .recordBtnContainer {
@@ -385,7 +385,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .recordingIcon {
     font-size: 14pt;
     margin-left: 10px;
-    color: #c40021;
+    color: var(--scealai-delete-red-3);
     animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
 
@@ -395,7 +395,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color:var(--orange-text);
     transition: color, 0.5s;
 }
 

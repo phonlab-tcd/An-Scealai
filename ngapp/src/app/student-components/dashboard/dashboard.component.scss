@@ -32,7 +32,7 @@ h1 {
 }
 
 .ql-editor {
-  background-color: #f7f2e7;
+  background-color: var(--scealai-cream-2);
   /* ~44px is the height of the toolbar */
   height: calc(var(--textfieldHeight));
   z-index: 1;
@@ -146,7 +146,7 @@ h1 {
 .storyTitle {
     display: flex;
     justify-content: space-between;
-    color: #261500;
+    color: var(--dark-text);
     font-size: 18pt;
     text-align: left;
     padding: 5px;
@@ -159,22 +159,22 @@ h1 {
 .myStoriesBtn {
   white-space: nowrap;
   border-style: none;
-  color: #261500;
-  /*color: #b3a995;*/
+  color: var(--dark-text);
+  /*color: var(--scealai-light-brown);*/
   font-size: 11pt;
   padding: 5px;
 }
 
 .myStoriesBtn:hover {
-    color: #c15a2e; 
-    /*color: #261500;*/
+    color: var(--scealai-orange); 
+    /*color: var(--dark-text);*/
     text-decoration: none;
     cursor: pointer; 
 }
 
 .saveIcon {
   white-space: nowrap;
-  color: #261500;
+  color: var(--dark-text);
   border-style: none;
   font-size: 11pt;
   padding: 5px;
@@ -213,8 +213,8 @@ h1 {
     /* height: var(--textfieldHeight); */
     resize: none;
     z-index: 1;
-    color: #261500;
-    background: #f7f2e7;
+    color: var(--dark-text);
+    background: var(--scealai-cream-2);
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 10px;
@@ -231,7 +231,7 @@ quill-editor {
 }
 
 .text-input-highlight-container .text-highlight-element  {
-  background: #f7f2e7;
+  background: var(--scealai-cream-2);
 }
 
 .bg-blue {
@@ -316,7 +316,7 @@ quill-editor {
 }
 
 .savedBtn {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
 }
 
 .footerBtnContainer {
@@ -350,7 +350,7 @@ quill-editor {
 }
 
 .optionsBtn {
-  background-color: #e5bd3b;
+  background-color: var(--scealai-yellow);
   border-style: none;
   color: #464444;
   margin: 0px;
@@ -383,7 +383,7 @@ quill-editor {
 }
 
 .optionsBtnClicked {
-  background-color: #ad8f2b;
+  background-color: var(--scealai-yellow-hover);
   color: white;
 }
 
@@ -413,7 +413,7 @@ quill-editor {
 	width: 0;
 	height: 0;
 	border: 10px solid transparent;
-	border-bottom-color: #f1e9d8;
+	border-bottom-color: var(--scealai-cream);
 	border-top: 0;
 	margin-left: -10px;
     margin-top: -10px;
@@ -425,7 +425,7 @@ quill-editor {
 
 .notificationBtn {
     margin-left: 5px;
-    background-color: #bd2323;
+    background-color: var(--notification-button);
     color: white;
     font-size: 8pt;
     border-radius: 50%;
@@ -450,8 +450,8 @@ quill-editor {
 
 .grammarMessageContainer {
     height: var(--grammarMessageHeight);
-    border: 1px solid #999999;
-    background: #f7f2e7;
+    border: 1px solid var(--scealai-light-gray);
+    background: var(--scealai-cream-2);
     text-align: left;
     padding: 4px;
     padding-left: 8px;
@@ -459,7 +459,7 @@ quill-editor {
 }
 
 .grammarToolbar {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     display: flex;
     padding-left: 20px;
@@ -473,7 +473,7 @@ quill-editor {
   flex-wrap: wrap;
   justify-content: space-around;
   text-align: left;
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   display: flex;
   color: white;
 }
@@ -500,7 +500,7 @@ quill-editor {
 }
 
 .default-tag {
-    background-color: #bd2323;
+    background-color: var(--notification-button);
 }
 
 .tagHover {
@@ -521,14 +521,14 @@ quill-editor {
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-    color: #437250;
+    color: var(--scealai-med-green);
 }
 
 .textContainer {
     height: var(--textfieldHeight);
-    color: #261500;
-    background-color: #f7f2e7;
-    border: 1px solid #999999;
+    color: var(--dark-text);
+    background-color: var(--scealai-cream-2);
+    border: 1px solid var(--scealai-light-gray);
     text-align: left;
     padding-left: 8px;
     padding-right: 8px;
@@ -537,11 +537,11 @@ quill-editor {
 }
 
 .savedIcon {
-    color: #b3a995;
+    color: var(--scealai-light-brown);
 }
 
 .unsavedIcon {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 5px;
@@ -550,7 +550,7 @@ quill-editor {
 }
 
 .unsavedIcon:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     cursor: pointer;
     transition: 0.5s;
 }
@@ -606,7 +606,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -635,8 +635,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   height: 280px;
   resize: none;
   z-index: 1;
-  color: #261500;
-  background: #f7f2e7;
+  color: var(--dark-text);
+  background: var(--scealai-cream-2);
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 4px;
@@ -655,7 +655,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding-left: 20px;
     padding-right: 20px;
     height: 30px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     display: flex;
     align-items: center;
@@ -663,7 +663,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .dictionaryHeader {
     padding: 5px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     display: flex;
     align-items: column;
@@ -672,13 +672,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .dictionarySubHeader {
     padding: 5px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     display: flex;
 }
 
 .dictionaryName {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   font-size: 12px;
   color: white;
   padding-right: 5px;
@@ -686,13 +686,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .dictionaryName:hover {
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     text-decoration: none;
     cursor: pointer;
 }
 
 .dictionaryInput {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   color: white;
   display: flex;
   align-items: center;
@@ -703,7 +703,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 
 .searchDictionaryBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     border-style: none;
     color: white;
     font-size: 12pt;
@@ -712,7 +712,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .searchDictionaryBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
     color: white;
 }
 

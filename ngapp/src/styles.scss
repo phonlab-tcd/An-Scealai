@@ -1,6 +1,38 @@
 @import './app/gramadoir-tags.scss';
 @import './quill.fonts.scss';
 
+:root {
+  --scealai-green: #70a87f;
+  --scealai-med-green: #437250;
+  --scealai-dark-green: #304e38;
+  --scealai-light-green: #91ffa5;
+  --scealai-yellow: #e5bd3b;
+  --scealai-yellow-hover: #ad8f2b;
+  --scealai-orange: #c15a2e;
+  --scealai-cream: #f1e9d8;
+  --scealai-cream-2: #f7f2e7;
+  --scealai-light-gray: #999999;
+  --scealai-dark-gray: #424242;
+  --scealai-light-brown: #b3a995;
+  --scealai-med-brown: #534d3d;
+  --scealai-med-brown-hover: #3b372b;
+  --scealai-light-blue: #0088ff6b;
+  --scealai-light-blue-hover: #0088ff36;
+  --scealai-med-blue: #8fcaff;
+  --scealai-gray: #d1d1d1;
+  --orange-text: #ff9100;
+  --dark-text: #261500;
+  --form-background: #e6e8ed;
+  --modal-hover: #707070;
+  --delete-red: #dd000e;
+  --delete-red-hover: #b7000a;
+  --delete-red-2: #d6123c;
+  --delete-red-2-hover: #9b0d2b;
+  --notification-button: #bd2323;
+  --scealai-delete-red-3: #c40021;
+  --scealai-delete-red-3-hover: #8f0018;
+}
+
 html,body.rootBody {
   height: 100%;
 }
@@ -61,7 +93,7 @@ body.rootBody {
 }
 
 .btn:hover {
-  background-color: #ad8f2b;
+  background-color: var(--scealai-yellow-hover);
   color: white;
 }
 

@@ -39,7 +39,7 @@
 }
 
 .option:hover {
-    color: #70a87f;
+    color: var(--scealai-green);
     text-decoration: none;
     cursor: pointer;
 }
@@ -55,7 +55,7 @@
 }
 
 .submitButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding: 5px;
     padding-left: 10px;
@@ -66,7 +66,7 @@
 
 .submitButton:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .displayData {

@@ -17,7 +17,7 @@
 
 .classHeader {
   width: 100%;
-  background-color: #304e38;
+  background-color: var(--scealai-dark-green);
   border-radius: 5px 5px 0px 0px;
   color: white;
   display: flex;
@@ -38,7 +38,7 @@
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color: var(--orange-text);
     transition: color, 0.5s;
 }
 
@@ -52,7 +52,7 @@
     margin-top: 4vh;
     width: 100%;
     height: 65vh;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -70,7 +70,7 @@
     align-items: center;
     justify-content: center;
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .mainEventBody {
-    border-top: 1px solid #d1d1d1;
+    border-top: 1px solid var(--scealai-gray);
 }
 
 .eventCard {
@@ -110,7 +110,7 @@
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 8px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     padding: 4px;
     padding-left: 8px;
@@ -119,7 +119,7 @@
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -165,7 +165,7 @@
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -179,17 +179,17 @@
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
 .createBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .createBtnGreen:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .hidden {
@@ -261,7 +261,7 @@
   
   .classHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -272,7 +272,7 @@
   .headerIconBtn {
       font-size: 10pt;
       margin-left: 4px;
-      background-color: #70a87f;
+      background-color: var(--scealai-green);
       border-radius: 5px;
       padding-left: 4px;
       padding-right: 4px;

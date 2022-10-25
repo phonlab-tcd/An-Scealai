@@ -23,14 +23,14 @@
     justify-content: center;
     color: white;
     font-size: 16pt;
-    background-color: #534d3d;
+    background-color: var(--scealai-med-brown);
     margin: 5px;
     border-radius: 5px;
 }
 
 .btnContainer:hover {
-    color:#ff9100;
-    background-color: #3b372b;
+    color: var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
     cursor: pointer;
 }

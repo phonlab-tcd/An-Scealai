@@ -39,7 +39,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -52,7 +52,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
@@ -85,7 +85,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .teacherCodeButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding: 5px;
     padding-left: 10px;
@@ -96,7 +96,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .teacherCodeButton:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .teacherCodeTitle {
@@ -115,7 +115,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding-left: 5px;
     font-size: 12pt;
     resize: none;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px 5px 5px 5px;
     white-space: nowrap;
@@ -128,7 +128,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .copyIcon {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     width: 30px;
     height: 30px;
@@ -139,7 +139,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .copyIcon:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .buttonContainer {
@@ -147,13 +147,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .deleteAccountButton {
-  background-color: #d6123c;
+  background-color: var(--delete-red-2);
   font-size: 12pt;
   border-radius: 10px 10px 10px 10px;
 }
 
 .deleteAccountButton:hover {
-    background-color: #9b0d2b;
+    background-color: var(--delete-red-2-hover);
     transition: 0.5s;
 }
 
@@ -164,7 +164,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     align-items: center;
     justify-content: center;
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
 }
 
@@ -182,7 +182,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 4vh;
     width: 100%;
     height: 45vh;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -243,7 +243,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .copiedText {
     margin-left: 10px;
-    color: #70a87f;
+    color: var(--scealai-green);
 }
 
 .storyLink {
@@ -256,7 +256,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .whiteBtn:hover {
     color:white;
-    background-color: #3b372b;
+    background-color: var(--scealai-med-brown-hover);
     cursor: pointer;
 }
 
@@ -267,7 +267,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   }
 
   .mainEventBody {
-      border-top: 1px solid #d1d1d1;
+      border-top: 1px solid var(--scealai-gray);
   }
 
   .storyLinkIcon {

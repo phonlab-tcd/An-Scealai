@@ -217,7 +217,7 @@ export class ViewRecordingComponent implements OnInit {
     let duration = span.getAttribute("data-dur");
     this.a.currentTime = time;
     this.a.play();
-    span.style.background = "#0088ff6b";
+    span.style.background = "var(--scealai-light-blue)";
     let t = setTimeout(() => {
       this.a.pause();
       span.classList.remove("staticHighlight");

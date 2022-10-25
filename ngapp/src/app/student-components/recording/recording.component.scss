@@ -1,5 +1,4 @@
 $corner-button-width: 10rem;
-$scealai-orange: #c15a2e;
 
 .bookContainerSynth {
     width: 70%;
@@ -72,7 +71,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -86,7 +85,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .bookTitle {
   overflow: auto;
-  color: #261500; 
+  color: var(--dark-text); 
   margin-left: 2em;
   margin-right: 2em;
   display: inline-block;
@@ -94,7 +93,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .bookTitleHistory {
-    color: #261500; 
+    color: var(--dark-text); 
     padding-right: 37%;
     padding-top: 3px;
     display: inline-block;
@@ -102,7 +101,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordingStoryHeader {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 4px 4px 0px 0px;
     width: 90%;
@@ -113,14 +112,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   white-space: nowrap;
   display: inline;
   border-style: none;
-  color: #261500;
+  color: var(--dark-text);
   width: $corner-button-width;
   font-size: 12pt;
   padding-top: 10px;
 }
 
 .myStoriesBtn:hover {
-    color: $scealai-orange;
+    color: var(--scealai-orange);
     cursor: pointer;
     transition: color 0.5s;
 }
@@ -136,8 +135,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     width: 90%;
     margin-left: 5%;
     height: 290px;
-    color: #261500;
-    background-color: #f7f2e7;
+    color: var(--dark-text);
+    background-color: var(--scealai-cream-2);
     border: 1px solid #261500a2;
     text-align: left;
     padding-left: 8px;
@@ -151,8 +150,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     width: 90%;
     margin-left: 5%;
     height: 360px;
-    color: #261500;
-    background-color: #f7f2e7;
+    color: var(--dark-text);
+    background-color: var(--scealai-cream-2);
     border: 1px solid #261500a2;
     text-align: left;
     padding-left: 8px;
@@ -167,7 +166,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .recordingSaveIcon {
   width: $corner-button-width;
-  color: #261500;
+  color: var(--dark-text);
   border-style: none;
   font-size: 11pt;
   padding-top: 15px;
@@ -175,7 +174,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .recordingSavedIcon {
   white-space: nowrap;
-  color: #b3a995;
+  color: var(--scealai-light-brown);
 }
 
 .optionsPopupRec {
@@ -205,14 +204,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 0;
   height: 0;
   border: 10px solid transparent;
-  border-bottom-color: #f1e9d8;
+  border-bottom-color: var(--scealai-cream);
   border-top: 0;
   margin-left: -10px;
   margin-top: -10px;
 }
 
 .recordingUnsavedIcon {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     padding-left: 6px;
     padding-right: 6px;
     border-radius: 5px;
@@ -221,7 +220,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordingUnsavedIcon:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     cursor: pointer;
     transition: 0.5s;
 }
@@ -231,7 +230,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .playAudioBtn {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 4px;
     border: none;
@@ -243,7 +242,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .playAudioBtn:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     transition: 0.5s;
 }
 
@@ -252,7 +251,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
-    color: #437250;
+    color: var(--scealai-med-green);
 }
 
 .footer {
@@ -277,7 +276,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .changeSplitBtn {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   border-radius: 4px;
   margin-right: 5px;
   font-size: 10pt;
@@ -285,7 +284,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .changeSplitBtn:hover {
-  background-color: #437250;
+  background-color: var(--scealai-med-green);
 }
 
 .sentenceContainer {
@@ -293,11 +292,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .selectedBtn {
-  background-color: #437250;
+  background-color: var(--scealai-med-green);
 }
 
 .historyToolbar {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     display: flex;
     width: 90%;
@@ -322,13 +321,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .dividerLine {
-  border-top: 1px solid #707070;
+  border-top: 1px solid var(--modal-hover);
   width: 100%;
 }
 
 .recognisedSpeechContainer {
   height:40px;
-  color: #70a87f;
+  color: var(--scealai-green);
   font-style: italic;
 }
 
@@ -342,8 +341,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   margin-left: 20px;
   animation: dotFlashing 1s infinite linear alternate;
   animation-delay: .5s;
@@ -361,8 +360,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 0s;
 }
@@ -372,15 +371,15 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 1s;
 }
 
 @keyframes dotFlashing {
   0% {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
   }
   50%,
   100% {
@@ -393,7 +392,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordingBtn {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   color: white;
   border-radius: 4px;
   border: none;
@@ -405,7 +404,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordingBtn:hover {
-  background-color: #437250;
+  background-color: var(--scealai-med-green);
   transition: 0.5s;
 }
 
@@ -565,7 +564,7 @@ Some pseudo-classes used to highlight text
   content: '';
   height: 22px;
   width: 0%;
-  background: #0088ff6b;
+  background: var(--scealai-light-blue);
   position: absolute;
   transition: var(--trans);
 }
@@ -580,11 +579,11 @@ Some pseudo-classes used to highlight text
 }
 
 .paragraphContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }
 
 .sentenceContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }

@@ -44,7 +44,7 @@
 
 .classHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     display: inline-flex;
     color: white;
@@ -59,7 +59,7 @@
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color: var(--orange-text);
     transition: color, 0.5s;
 }
 
@@ -71,7 +71,7 @@
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 8px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     padding: 4px;
     padding-left: 8px;
@@ -80,7 +80,7 @@
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -90,7 +90,7 @@
 }
 
 .newMessageContainer {
-  background-color: #d1d1d1;
+  background-color: var(--scealai-gray);
   display: inline-flex;
   margin-top: 10px;
   margin-left: 10px;
@@ -218,7 +218,7 @@ label {
 
 .clickedresultCard {
     color:white;
-    background-color: #3b372b;
+    background-color: var(--scealai-med-brown-hover);
 }
 
 .messageEntries {
@@ -322,13 +322,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .recordingIcon {
     font-size: 14pt;
     margin-left: 10px;
-    color: #c40021;
+    color: var(--scealai-delete-red-3);
     animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
 
 .greenLinkText {
     margin-top: 10px;
-    color: #70a87f;
+    color: var(--scealai-green);
     text-decoration: underline;
 }
 
@@ -341,13 +341,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
 .deleteBtn {
   font-size: 12pt;
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   border-radius: 5px;
   padding: 4px;
   padding-right: 8px;
@@ -364,17 +364,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .deleteBtn:hover {
   cursor: pointer;
-  color: #91ffa5;
+  color: var(--scealai-light-green);
   -webkit-transition: 0.5s; /* Safari */
   transition: 0.5s;
 }
 
 .deleteModeBtn {
-    background-color: #dd000e;
+    background-color: var(--delete-red);
 }
 
 .deleteModeBtn:hover {
-    background-color: #b7000a;
+    background-color: var(--delete-red-hover);
 }
 
 .optionsPopupBtn {

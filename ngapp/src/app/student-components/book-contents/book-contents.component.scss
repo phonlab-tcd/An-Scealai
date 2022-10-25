@@ -31,7 +31,7 @@
 }
 */
 .bookContentsTitle {
-    color: #261500;
+    color: var(--dark-text);
     padding-left: 5%;
     padding-right: 5%;
     display: inline-block;
@@ -80,7 +80,7 @@
 }
 
 .contentsLink {
-    color: #261500;
+    color: var(--dark-text);
     text-align: left;
     width: 50%;
     text-decoration: none;
@@ -92,7 +92,7 @@
 }
 
 .contentsDate {
-    color:#261500;
+    color: var(--dark-text);
 }
 
 .contentSection {
@@ -103,14 +103,14 @@
 
 .contentsDateTitle {
     font-size: 14pt;
-    color: #c15a2e;
+    color: var(--scealai-orange);
 }
 
 .contentsLinkTitle {
     float: left;
     margin-left: 1%;
     font-size: 14pt;
-    color: #c15a2e;
+    color: var(--scealai-orange);
 }
 
 .contentsBtnsContainer {
@@ -120,7 +120,7 @@
 }
 
 .newStoryBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     border-style: none;
     color: white;
     font-size: 12pt;
@@ -129,12 +129,12 @@
 }
 
 .newStoryBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
     color: white;
 }
 
 .messagesBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     border-style: none;
     color: white;
     font-size: 12pt;
@@ -143,13 +143,13 @@
 }
 
 .messagesBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
     color: white;
 }
 
 .notificationBtn {
     margin-left: 5px;
-    background-color: #bd2323;
+    background-color: var(--notification-button);
     color: white;
     font-size: 8pt;
     border-radius: 50%;
@@ -165,7 +165,7 @@
 
 .optionsBtn {
     font-size: 14pt;
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     border-style: none;
     color: white;
     font-size: 12pt;
@@ -175,7 +175,7 @@
 }
 
 .optionsBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
     color: white;
 }
 
@@ -208,14 +208,14 @@ border-radius: 5px 5px 5px 5px;
 	width: 0;
 	height: 0;
 	border: 10px solid transparent;
-	border-bottom-color: #f1e9d8;
+	border-bottom-color: var(--scealai-cream);
 	border-top: 0;
 	margin-left: -10px;
     margin-top: -10px;
 }
 
 .deleteBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     border-style: none;
     color: white;
     margin: 0px;
@@ -230,15 +230,15 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .deleteBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
 }
 
 .deleteModeBtn {
-    background-color: #dd000e;
+    background-color: var(--delete-red);
 }
 
 .deleteModeBtn:hover {
-    background-color: #b7000a;
+    background-color: var(--delete-red-hover);
 }
 
 
@@ -292,7 +292,7 @@ border-radius: 5px 5px 5px 5px;
     }
 
     .deleteBtn {
-        background-color: #e5bd3b;
+        background-color: var(--scealai-yellow);
         border-style: none;
         color: white;
         margin: 0px;
@@ -307,15 +307,15 @@ border-radius: 5px 5px 5px 5px;
     }
     
     .deleteBtn:hover {
-        background-color: #ad8f2b;
+        background-color: var(--scealai-yellow-hover);
     }
     
     .deleteModeBtn {
-        background-color: #dd000e;
+        background-color: var(--delete-red);
     }
     
     .deleteModeBtn:hover {
-        background-color: #b7000a;
+        background-color: var(--delete-red-hover);
     }
     
     

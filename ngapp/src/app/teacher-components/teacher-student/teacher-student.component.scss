@@ -16,7 +16,7 @@
 
 .classHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -42,7 +42,7 @@
 
 .addClassBtn:hover {
     cursor: pointer;
-    color: #70a87f;
+    color: var(--scealai-green);
     transition: color 0.5s;
 }
 
@@ -63,14 +63,14 @@
     padding: 8px;
     color: white;
     font-size: 14pt;
-    background-color: #534d3d;
+    background-color: var(--scealai-med-brown);
     border-radius: 5px;
     margin-top: 5px;
 }
 
 .classroomCard:hover {
-    color:#ff9100;
-    background-color: #3b372b;
+    color: var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
     cursor: pointer;
 }
@@ -90,17 +90,17 @@
     justify-content: space-between;
     padding-left: 16px;
     padding-right: 16px;
-    background-color: #d1d1d1;
-    color: #424242;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
 }
 
 .createBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .createBtnGreen:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .titleInput {
@@ -138,7 +138,7 @@
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 8px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     padding: 4px;
     padding-left: 8px;
@@ -147,7 +147,7 @@
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -157,8 +157,8 @@
 }
 
 .codeView {
-    background-color: #d1d1d1;
-    border: 1px solid #999999;
+    background-color: var(--scealai-gray);
+    border: 1px solid var(--scealai-light-gray);
     border-radius: 4px;
     padding: 4px;
     padding-left: 8px;
@@ -167,12 +167,12 @@
 }
 
 .deleteRedBtn {
-    background-color: #c40021;
+    background-color: var(--scealai-delete-red-3);
     color: white;
 }
 
 .deleteRedBtn:hover {
-    background-color: #8f0018;
+    background-color: var(--scealai-delete-red-3-hover);
 }
 
 .arrow {
@@ -185,6 +185,6 @@
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color: var(--scealai-gray);
     transition: color, 0.5s;
 }

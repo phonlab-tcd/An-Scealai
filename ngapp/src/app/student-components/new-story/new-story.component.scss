@@ -15,7 +15,7 @@
 }
 
 .bookTitle {
-    color: #261500;
+    color: var(--dark-text);
     width: 80%;
     padding-left: 5%;
     padding-right: 25%;
@@ -57,7 +57,7 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .formLabel {
-    color: #261500;
+    color: var(--dark-text);
     float: left;
 }
 
@@ -73,13 +73,13 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 .backBtn {
     display: inline-block;
     border-style: none;
-    color: #261500;
+    color: var(--dark-text);
     font-size: 12pt;
     width: 20%;
 }
 
 .backBtn:hover {
-    color: #c15a2e;
+    color: var(--scealai-orange);
     text-decoration: none;
 }
 

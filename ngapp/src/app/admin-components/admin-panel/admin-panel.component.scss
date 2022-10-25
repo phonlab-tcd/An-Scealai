@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
 }
 
@@ -27,7 +27,7 @@
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color: var(--orange-text);
     transition: color, 0.5s;
 }
 

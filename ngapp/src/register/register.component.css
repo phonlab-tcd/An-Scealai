@@ -1,9 +1,9 @@
 .loginBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
 }
 
 .loginBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
 }
 
 .inputField {
@@ -16,8 +16,8 @@
     display: inline-block;
     padding-top: 15px;
     padding-bottom: 25px;
-    color: #261500;
-    background-color: #e6e8ed;
+    color: var(--dark-text);
+    background-color: var(--form-background);
     border-radius: 0px 0px 10px 10px;
 }
 
@@ -30,7 +30,7 @@
 .registerContainer {
     width: 400px;
     display: inline-block;
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
     color: white;
     border-radius: 10px;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
@@ -57,7 +57,7 @@
 }
 
 .languageButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding-left: 6px;
     padding-right: 6px;
@@ -67,11 +67,11 @@
 
 .languageButton:hover { 
     cursor: pointer;
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
 }
 
 .languageButtonSelected {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
 }
 
 .termsOfUseContainer {
@@ -82,7 +82,7 @@
 .termsOfUseButton {
     width: 80%;
     margin-left: 10%;
-    color: #437250;
+    color: var(--scealai-med-green);
 }
 
 .termsOfUseButton:hover {

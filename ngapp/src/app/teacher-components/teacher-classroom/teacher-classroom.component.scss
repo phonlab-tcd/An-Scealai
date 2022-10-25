@@ -16,7 +16,7 @@
 
 .classHeader {
     width: 100%;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -31,7 +31,7 @@
 
 .addClassBtn:hover {
     cursor: pointer;
-    color: #70a87f;
+    color: var(--scealai-green);
     transition: color 0.5s;
 }
 
@@ -52,14 +52,14 @@
     padding: 8px;
     color: white;
     font-size: 14pt;
-    background-color: #534d3d;
+    background-color: var(--scealai-med-brown);
     border-radius: 5px;
     margin-top: 5px;
 }
 
 .classroomCard:hover {
-    color:#ff9100;
-    background-color: #3b372b;
+    color:var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
     cursor: pointer;
 }
@@ -68,8 +68,8 @@
     display: flex;
     padding-left: 16px;
     padding-right: 16px;
-    background-color: #d1d1d1;
-    color: #424242;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
 }
 
 .keyNumStudents {
@@ -110,7 +110,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -126,22 +126,22 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
 .createBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .createBtnGreen:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .notificationBtn {
     margin-left: 5px;
-    background-color: #bd2323;
+    background-color: var(--notification-button);
     color: white;
     font-size: 8pt;
     border-radius: 50%;
@@ -191,7 +191,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 8px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     padding: 4px;
     padding-left: 8px;
@@ -200,7 +200,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -210,8 +210,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .codeView {
-    background-color: #d1d1d1;
-    border: 1px solid #999999;
+    background-color: var(--scealai-gray);
+    border: 1px solid var(--scealai-light-gray);
     border-radius: 4px;
     padding: 4px;
     padding-left: 8px;
@@ -220,12 +220,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .deleteRedBtn {
-    background-color: #c40021;
+    background-color: var(--scealai-delete-red-3);
     color: white;
 }
 
 .deleteRedBtn:hover {
-    background-color: #8f0018;
+    background-color: var(--scealai-delete-red-3-hover);
 }
 
 .arrow {
@@ -238,7 +238,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .backArrow:hover {
     cursor: pointer;
-    color:#ff9100;
+    color: var(--orange-text);
     transition: color, 0.5s;
 }
 

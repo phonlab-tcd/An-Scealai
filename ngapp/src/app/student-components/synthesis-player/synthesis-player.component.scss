@@ -23,7 +23,7 @@
 }
 
 .synth .reload:hover {
-  background-color: #8fcaff;
+  background-color: var(--scealai-med-blue);
   color: black;
   font-weight: bold;
 }
@@ -35,7 +35,7 @@
 }
 
 .synth .fast-synth:hover {
-  background-color: #8fcaff;
+  background-color: var(--scealai-med-blue);
   color: black;
   border-radius: 2px;
   font-weight: bold;

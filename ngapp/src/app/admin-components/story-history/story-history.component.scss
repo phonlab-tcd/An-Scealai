@@ -1,6 +1,6 @@
 .header {
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     width: 60%;
     margin-left: 20%;
     border-radius: 5px 5px 0px 0px;
@@ -14,24 +14,24 @@
     float: right;
     margin-right: 8px;
     margin-top: 5px;
-    color: #304e38;
+    color: var(--scealai-dark-green);
     opacity: 0.3;
 }
 
 .highlightIcon:hover {
-    color: #70a87f;
+    color: var(--scealai-green);
     opacity: 1;
     transition: 0.5s;
     cursor: pointer;
 }
 
 .iconHighlighted {
-    color: #70a87f;
+    color: var(--scealai-green);
     opacity: 1;
 }
 
 .iconHighlighted:hover {
-    color: #304e38;
+    color: var(--scealai-dark-green);
     transition: 1s;
 }
 
@@ -61,7 +61,7 @@
 
 .eventType {
     width: 50%;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 0px 10px 10px 0px
 }

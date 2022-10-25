@@ -27,14 +27,14 @@
 }
 
 .bookTitle {
-    color: #261500; 
+    color: var(--dark-text); 
     padding-right: 5%;
     display: inline-block;
     font-size: 18pt;
 }
 
 .storyHeader {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 4px 4px 0px 0px;
     width: 90%;
@@ -44,7 +44,7 @@
 .myStoriesBtn {
     display: inline;
     border-style: none;
-    color: #261500;
+    color: var(--dark-text);
     width: 100px;
     font-size: 12pt;
     padding-top: 10px;
@@ -52,7 +52,7 @@
 }
 
 .myStoriesBtn:hover {
-    color: #c15a2e;
+    color: var(--scealai-orange);
     cursor: pointer;
     transition: color 0.5s;
 }
@@ -60,7 +60,7 @@
 .chatbotBtn {
     display: inline;
     float: right;
-    color: #261500;
+    color: var(--dark-text);
     border-style: none;
     font-size: 12pt;
     padding-top: 10px;
@@ -68,7 +68,7 @@
 }
 
 .chatbotBtn:hover {
-    color: #c15a2e;
+    color: var(--scealai-orange);
 }
 
 .bookHeader {
@@ -80,9 +80,9 @@
     width: 90%;
     margin-left: 5%;
     height: 290px;
-    color: #261500;
-    background-color: #f7f2e7;
-    border: 1px solid #261500a2;
+    color: var(--dark-text);
+    background-color: var(--scealai-cream-2);
+    border: 1px solid var(--dark-text)a2;
     text-align: left;
     padding-left: 8px;
     padding-right: 8px;
@@ -95,7 +95,7 @@
 }
 
 .playAudioBtn {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 4px;
     border: none;
@@ -107,7 +107,7 @@
 }
 
 .playAudioBtn:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     transition: 0.5s;
 }
 
@@ -116,7 +116,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
-    color: #437250;
+    color: var(--scealai-med-green);
 }
 
 .footer {
@@ -140,14 +140,14 @@
 }
 
 .changeSplitBtn {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   border-radius: 4px;
   margin-right: 5px;
   color: white;
 }
 
 .changeSplitBtn:hover {
-  background-color: #437250;
+  background-color: var(--scealai-med-green);
 }
 
 .sentenceContainer {
@@ -155,7 +155,7 @@
 }
 
 .selectedBtn {
-  background-color: #437250;
+  background-color: var(--scealai-med-green);
 }
 
 @media only screen and (max-width: 350px) {
@@ -296,7 +296,7 @@ Some pseudo-classes used to highlight text
     content: '';
     height: 22px;
     width: 0%;
-    background: #0088ff6b;
+    background: var(--scealai-light-blue);
     position: absolute;
     transition: var(--trans);
 }
@@ -311,11 +311,11 @@ Some pseudo-classes used to highlight text
 }
 
 .paragraphContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }
 
 .sentenceContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }

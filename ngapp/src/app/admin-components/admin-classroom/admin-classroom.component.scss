@@ -1,7 +1,7 @@
 .classContainer {
     width: 90%;
     margin-left: 5%;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border-radius: 5px;
     margin-top: 20px;
     height: 65vh;
@@ -9,7 +9,7 @@
 
 .classHeader {
     width: 100%;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
@@ -35,14 +35,14 @@
     padding: 8px;
     color: white;
     font-size: 12pt;
-    background-color: #534d3d;
+    background-color: var(--scealai-med-brown);
     border-radius: 5px;
     margin-top: 5px;
 }
 
 .classroomCard:hover {
-    color:#ff9100;
-    background-color: #3b372b;
+    color: var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
     cursor: pointer;
 }

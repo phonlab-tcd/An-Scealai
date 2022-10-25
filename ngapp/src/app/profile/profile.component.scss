@@ -16,7 +16,7 @@
     display: flex;
     justify-content: center;
     padding: 15px;
-    color: #261500;
+    color: var(--dark-text);
     background-color: white;
     border-radius: 0px 0px 10px 10px;
 }
@@ -66,7 +66,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -80,7 +80,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
@@ -106,18 +106,18 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 .createBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .createBtnGreen:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .profileContainer {
     width: 500px;
     display: inline-block;
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     color: white;
     border-radius: 10px;
 
@@ -129,7 +129,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .headerIconBtn {
     font-size: 12pt;
     margin-left: 25px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     padding: 4px;
     padding-left: 8px;
@@ -139,7 +139,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .headerIconBtn:hover {
     cursor: pointer;
-    color: #91ffa5;
+    color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
 }
@@ -163,14 +163,14 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .logoutBtn {
     font-size: 12pt;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 10px 10px 10px 10px;
     padding: 5px;
     z-index: 1;
 }
 
 .logoutBtn:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
 }
 
 .form-group {
@@ -201,7 +201,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .leaveClassroomButton {
-    background-color: #d6123c;
+    background-color: var(--delete-red-2);
     border-radius: 5px;
     padding: 2px;
     padding-left: 5px;
@@ -212,12 +212,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .leaveClassroomButton:hover {
-    background-color: #9b0d2b;
+    background-color: var(--delete-red-2-hover);
     transition: 0.5s;
 }
 
 .deleteAccountButton {
-  background-color: #d6123c;
+  background-color: var(--delete-red-2);
   margin-bottom: 10px;
   font-size: 9px;
   border-radius: 10px 10px 10px 10px;
@@ -225,13 +225,13 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .deleteAccountButton:hover {
-    background-color: #9b0d2b;
+    background-color: var(--delete-red-2-hover);
     transition: 0.5s;
 }
 
 
 .passwordButton {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   color: white;
   margin-bottom: 10px;
   font-size: 9px;
@@ -241,7 +241,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .passwordButton:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     transition: 0.5s;
 }
 
@@ -250,12 +250,12 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .notFoundText {
-    color: #d6123c;
+    color: var(--delete-red-2);
 }
 
 .greenLink {
     text-decoration: underline;
-    color: #70a87f;
+    color: var(--scealai-green);
     font-size: 12pt;
 }
 
@@ -275,7 +275,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .languageButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding-left: 6px;
     padding-right: 6px;
@@ -285,11 +285,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .languageButton:hover { 
     cursor: pointer;
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
 }
 
 .languageButtonSelected {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
 }
 
 .accountButtonContainer {

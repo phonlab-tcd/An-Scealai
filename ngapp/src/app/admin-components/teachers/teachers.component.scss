@@ -12,7 +12,7 @@
 }
 
 .teacherCodeButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding: 5px;
     padding-left: 10px;
@@ -23,7 +23,7 @@
 
 .teacherCodeButton:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .teacherCodeTitle {
@@ -48,7 +48,7 @@
 }
 
 .copyIcon {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     width: 30px;
     height: 30px;
@@ -59,7 +59,7 @@
 
 .copyIcon:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .teacherAccountsHeader {
@@ -69,7 +69,7 @@
     align-items: center;
     justify-content: center;
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .deleteBtn {
-    color: #304e38;
+    color: var(--scealai-dark-green);
     font-size: 12pt;
     padding: 5px;
     float: right;
@@ -152,17 +152,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 
 .deleteRedBtn {
-    background-color: #c40021;
+    background-color: var(--scealai-delete-red-3);
     color: white;
 }
 
 .deleteRedBtn:hover {
-    background-color: #8f0018;
+    background-color: var(--scealai-delete-red-3-hover);
 }
 
 .hidden {
@@ -189,11 +189,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .copiedText {
     margin-left: 10px;
-    color: #70a87f;
+    color: var(--scealai-green);
 }
 
 .whiteBtn:hover {
     color:white;
-    background-color: #3b372b;
+    background-color: var(--scealai-med-brown-hover);
     cursor: pointer;
   }

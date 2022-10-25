@@ -44,8 +44,8 @@
     display: inline-block;
     padding-top: 15px;
     padding-bottom: 25px;
-    color: #261500;
-    background-color: #e6e8ed;
+    color: var(--dark-text);
+    background-color: var(--form-background);
     border-radius: 0px 0px 10px 10px;
 }
 
@@ -105,7 +105,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #d1d1d1;
+    background-color: var(--scealai-gray);
     border: none;
     border-radius: 5px;
     margin: 5px;
@@ -119,7 +119,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .modalBtn:hover {
-    background-color: #707070;
+    background-color: var(--modal-hover);
     color: white;
 }
 

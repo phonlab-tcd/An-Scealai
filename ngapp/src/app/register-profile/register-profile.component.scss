@@ -1,11 +1,11 @@
 .loginBtn {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     border-radius: 5px;
     margin-bottom: -14px;
 }
 
 .loginBtn:hover {
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
 .inputField {
@@ -23,8 +23,8 @@
     display: inline-block;
     padding-top: 15px;
     padding-bottom: 25px;
-    color: #261500;
-    background-color: #d1d1d1;
+    color: var(--dark-text);
+    background-color: var(--scealai-gray);
     border-radius: 0px 0px 10px 10px;
 }
 
@@ -37,7 +37,7 @@
 .registerContainer {
     width: 500px;
     display: inline-block;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     color: white;
     border-radius: 10px;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
@@ -68,7 +68,7 @@
 }
 
 .form-group-set {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     width: 95%;
     margin-left: 2.5%;
     border-radius: 5px 5px 5px 5px;

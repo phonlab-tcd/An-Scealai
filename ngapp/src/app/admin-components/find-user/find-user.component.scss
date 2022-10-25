@@ -12,7 +12,7 @@
 }
 
 .searchHeader {
-    background: #304e38;
+    background: var(--scealai-dark-green);
     border-radius: 4px 4px 0px 0px;
     font-size: 14pt;
     color: white;
@@ -48,7 +48,7 @@
 
 .resultCard:hover {
     color:white;
-    background-color: #3b372b;
+    background-color: var(--scealai-med-brown-hover);
     cursor: pointer;
 }
 
