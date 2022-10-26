@@ -96,8 +96,9 @@ export class DashboardComponent implements OnInit {
         await this.quillHighlightService
           .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
           .then((errTypes: object) => {
-            console.dir(errTypes);
+            this.grammar.countNewErrors(this.previousTextToCheck, textToCheck);
             this.currentGrammarErrorTypes = errTypes;
+            this.previousTextToCheck = textToCheck;
           });
       } catch (updateGrammarErrorsError) {
         if ( !this.quillHighlightService.showingTags) {
@@ -144,6 +145,7 @@ export class DashboardComponent implements OnInit {
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
   stories: Story[];
+  previousTextToCheck: string;
   saveStoryDebounceId = 0;
   id: string;
   storyFound: boolean;
@@ -313,6 +315,7 @@ export class DashboardComponent implements OnInit {
         for (const story of this.stories) {
           if (story._id === this.id) {
             this.story = story;
+            this.previousTextToCheck = story.text;
             this.textUpdated.next();
             this.getWordCount(this.story.text);
             if (this.story.htmlText == null) {
@@ -446,8 +449,6 @@ export class DashboardComponent implements OnInit {
       await saveStoryPromise;
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
-        console.count('STORY SAVED');
-        console.log(debounceId);
       } else if (debounceId === 'modal') {
         this.storySaved = true;
       }

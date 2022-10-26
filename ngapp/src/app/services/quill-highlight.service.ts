@@ -175,7 +175,6 @@ export class QuillHighlightService {
       next: async promise => {
         errorTagsArray.push(promise);
         const errorTags = (await promise)[0];
-        console.log(errorTags);
   
         this.currentGramadoirHighlightTags = this.currentGramadoirHighlightTags.concat(errorTags);
 
@@ -194,9 +193,9 @@ export class QuillHighlightService {
             .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
             .map(([errors, sentence]) => ({errors, sentence})),
         };
-        this.http.post<any>(config.baseurl + 'gramadoir/insert/' ,body,{headers}).subscribe();
-    }
-  });
+        this.http.post<any>(config.baseurl + 'gramadoir/insert/', body, {headers}).subscribe();
+      }
+    });
     
     this.currentGenetiveHighlightTags = await this.grammar
       .genitiveDirectObservable(text)

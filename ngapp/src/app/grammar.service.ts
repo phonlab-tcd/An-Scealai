@@ -4,10 +4,12 @@ import {
 import {
   HttpClient,
 } from '@angular/common/http';
-import { Observable, from} from 'rxjs';
+import { Observable, from, firstValueFrom} from 'rxjs';
 import { StoryService } from './story.service';
 import { TranslationService } from 'app/translation.service';
 import { EngagementService } from 'app/engagement.service';
+import * as Diff from 'diff';
+import config from 'abairconfig';
 
 export type DisagreeingVowelIndices = {
   broadFirst: boolean;
@@ -368,12 +370,12 @@ export class GrammarService {
     input: string,
     language: 'en' | 'ga',
     url: GramadoirUrl
-  ): Observable<any> {
+  ): Observable<GramadoirTag[]> {
     const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
     if (encodedRequest in this.gramadoirCache) {
       return this.gramadoirCache[encodedRequest];
     }
-    return this.http.post(
+    return this.http.post<GramadoirTag[]>(
         url,
         encodedRequest,
         {
@@ -388,6 +390,45 @@ export class GrammarService {
     const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
     // Wrap errors in an extra array so that the observable returns an single array of errors rather than treating them as a stream
     this.gramadoirCache[encodedRequest] = from([errors]); 
+  }
+
+  getErrorsFromCache(input: string, language: 'en' | 'ga') {
+    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
+    return firstValueFrom(this.gramadoirCache[encodedRequest]);
+  }
+
+  async countNewErrors(prevText: string, currentText: string) {
+    const prevSentences = await firstValueFrom(
+      this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: prevText})
+    );
+    const currentSentences = await firstValueFrom(
+      this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: currentText})
+    );
+
+    const prevErrorPromises = prevSentences.filter(s => s).map(
+      s => firstValueFrom(this.gramadoirObservable(s, "en", "https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl"))
+    );
+    const prevErrors = (await Promise.all(prevErrorPromises)).flat();
+    const prevErrorMap = prevErrors.map(error => JSON.stringify([error.errortext, this.string2GramadoirRuleId(error.ruleId)]));
+
+    const currentErrorPromises = currentSentences.map(
+      s => firstValueFrom(this.gramadoirObservable(s, "en", "https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl"))
+    );
+    const currentErrors = (await Promise.all(currentErrorPromises)).flat();
+    const currentErrorMap = currentErrors.map(error => JSON.stringify([error.errortext, this.string2GramadoirRuleId(error.ruleId)]));
+
+    // Multiset subtraction: currentErrorMap - prevError map
+    // This should give us the errors that are new in currentErrorMap
+    const toCount = currentErrorMap
+      .filter(entry => {
+        if (prevErrorMap.includes(entry)) {
+          prevErrorMap[prevErrorMap.indexOf(entry)] = null;
+          return false;
+        }
+        return true;
+      })
+      .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
+    console.log('toCount', toCount);
   }
 
   genitiveDirectObservable(input: string): Observable<any> {
