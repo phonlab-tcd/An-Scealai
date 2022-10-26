@@ -392,11 +392,6 @@ export class GrammarService {
     this.gramadoirCache[encodedRequest] = from([errors]); 
   }
 
-  getErrorsFromCache(input: string, language: 'en' | 'ga') {
-    const encodedRequest = this.gramadoirXWwwFormUrlencodedRequestData(input, language);
-    return firstValueFrom(this.gramadoirCache[encodedRequest]);
-  }
-
   async countNewErrors(prevText: string, currentText: string) {
     const prevSentences = await firstValueFrom(
       this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: prevText})
