@@ -1,13 +1,13 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
 .synth {
   display: grid;
   margin: 20px;
   padding: 20px;
   border-radius: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .synth .reload {

@@ -1,37 +1,12 @@
-.loginBtn {
-    background-color: #876daa;
-}
-
-.loginBtn:hover {
-    background-color: #685383;
-}
-
-.inputField {
-    margin-left: 5%;
-    min-width: 0;
-}
-
-.formBody {
+.profileContainer {
     width: 500px;
-    display: flex;
-    justify-content: center;
-    padding: 15px;
-    color: var(--dark-text);
-    background-color: white;
-    border-radius: 0px 0px 10px 10px;
-}
-
-.formContainer {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
+    display: inline-block;
+    background-color: var(--scealai-med-green);
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
 }
 
 .modalContainer {
@@ -58,8 +33,22 @@
     flex-direction: column;
     align-items: center;
     -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalText {
+    font-size: 12pt;
+    white-space: normal;
+    color: black;
+}
+
+.usernameErrorText {
+    font-size: 12pt;
+    color: red;
+    margin-top: 4px;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .modalBtn {
@@ -73,38 +62,11 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 15px;
 }
 
-.modalText {
-    font-size: 12pt;
-    white-space: normal;
-    color: black;
-}
-
 .modalBtn:hover {
     background-color: var(--modal-hover);
     color: white;
 }
 
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
 .createBtnGreen {
     background-color: var(--scealai-green);
     color: white;
@@ -114,16 +76,36 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     background-color: var(--scealai-dark-green);
 }
 
-.profileContainer {
-    width: 500px;
-    display: inline-block;
-    background-color: var(--scealai-med-green);
-    color: white;
-    border-radius: 10px;
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
 
-    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+.formBody {
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    color: var(--dark-text);
+    background-color: white;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.formContainer {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.formLabel {
+    white-space: nowrap;
+}
+
+.userInfo {
+    padding-left: 5%;
+    white-space: nowrap;
 }
 
 .headerIconBtn {
@@ -142,35 +124,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     color: var(--scealai-light-green);
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
-}
-
-.usernameErrorText {
-    font-size: 12pt;
-    color: red;
-    margin-top: 4px;
-    width: 80%;
-    margin-left: 10%;
-}
-
-.formLabel {
-    white-space: nowrap;
-}
-
-.userInfo {
-    padding-left: 5%;
-    white-space: nowrap;
-}
-
-.logoutBtn {
-    font-size: 12pt;
-    background-color: var(--scealai-green);
-    border-radius: 10px 10px 10px 10px;
-    padding: 5px;
-    z-index: 1;
-}
-
-.logoutBtn:hover {
-    background-color: var(--scealai-med-green);
 }
 
 .form-group {
@@ -196,8 +149,9 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     align-items: center;
 }
 
-.classroomMessage {
-    margin: 10px;
+.inputField {
+    margin-left: 5%;
+    min-width: 0;
 }
 
 .leaveClassroomButton {
@@ -216,37 +170,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     transition: 0.5s;
 }
 
-.deleteAccountButton {
-  background-color: var(--delete-red-2);
-  margin-bottom: 10px;
-  font-size: 9px;
-  border-radius: 10px 10px 10px 10px;
-  padding: 5px;
-}
-
-.deleteAccountButton:hover {
-    background-color: var(--delete-red-2-hover);
-    transition: 0.5s;
-}
-
-
-.passwordButton {
-  background-color: var(--scealai-green);
-  color: white;
-  margin-bottom: 10px;
-  font-size: 9px;
-  border-radius: 10px 10px 10px 10px;
-  padding: 5px;
-  margin-left: 10px;
-}
-
-.passwordButton:hover {
-    background-color: var(--scealai-med-green);
-    transition: 0.5s;
-}
-
-.centerForm {
-    justify-content: center;
+.classroomMessage {
+    margin: 10px;
 }
 
 .notFoundText {
@@ -261,12 +186,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .greenLink:hover {
     cursor: pointer;
-}
-
-.btnContainer {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 15px;
 }
 
 .languageButtonContainer {
@@ -295,6 +214,74 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 .accountButtonContainer {
   display: flex;
   margin-left: 20%;
+}
+
+.deleteAccountButton {
+  background-color: var(--delete-red-2);
+  margin-bottom: 10px;
+  font-size: 9px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 5px;
+}
+
+.deleteAccountButton:hover {
+    background-color: var(--delete-red-2-hover);
+    transition: 0.5s;
+}
+
+.passwordButton {
+  background-color: var(--scealai-green);
+  color: white;
+  margin-bottom: 10px;
+  font-size: 9px;
+  border-radius: 10px 10px 10px 10px;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.passwordButton:hover {
+    background-color: var(--scealai-med-green);
+    transition: 0.5s;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 15px;
+}
+
+.logoutBtn {
+    font-size: 12pt;
+    background-color: var(--scealai-green);
+    border-radius: 10px 10px 10px 10px;
+    padding: 5px;
+    z-index: 1;
+}
+
+.logoutBtn:hover {
+    background-color: var(--scealai-med-green);
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
 @media only screen and (max-width: 700px) {

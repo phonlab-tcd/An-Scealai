@@ -1,5 +1,53 @@
+.landingTextContainer {
+    margin-top: -5vh;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .landingImg {
     width: 42%;
+}
+
+.landingText {
+    margin-bottom: -2px;
+    font-family: "Optima";
+    color: var(--dark-text);
+}
+
+.quoteAuthorText {
+    position: absolute;
+    right: 20%;
+    z-index: -5;
+}
+
+.landingBtnsContainer {
+    margin-top: 20px;
+}
+
+.teacherRegisterBtn {
+    font-size: 14pt;
+    margin: 10px;
+    background-color: var(--scealai-yellow);
+    color: white;
+}
+
+.teacherRegisterBtn:hover {
+    background-color: var(--scealai-yellow-hover);
+    color: white;
+}
+
+.studentRegisterBtn {
+    font-size: 14pt;
+    background-color: var(--scealai-orange);
+}
+
+.studentRegisterBtn:hover {
+    background-color: #843c1d;
+    color: white;
+}
+
+.loginTextContainer {
+    margin-top: 2vh;
 }
 
 .bottomLeftImg {
@@ -20,6 +68,11 @@
     z-index: -2;
 }
 
+.catContainer {
+    width: 100%;
+    text-align: center;
+}
+
 .catJumpingImg {
     width: 180px;
     height: auto;
@@ -34,63 +87,6 @@
     display: none;
     z-index: -1;
 }
-
-.catContainer {
-    width: 100%;
-    text-align: center;
-}
-
-.landingTextContainer {
-    margin-top: -5vh;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.landingText {
-    margin-bottom: -2px;
-    font-family: "Optima";
-    color: var(--dark-text);
-}
-
-.landingBtnsContainer {
-    margin-top: 20px;
-}
-
-.teacherRegisterBtn {
-    font-size: 14pt;
-}
-
-.studentRegisterBtn {
-    font-size: 14pt;
-    background-color: var(--scealai-orange);
-}
-
-.studentRegisterBtn:hover {
-    background-color: #843c1d;
-    color: white;
-}
-
-.teacherRegisterBtn {
-    margin: 10px;
-    background-color: var(--scealai-yellow);
-    color: white;
-}
-
-.teacherRegisterBtn:hover {
-    background-color: var(--scealai-yellow-hover);
-    color: white;
-}
-
-.loginTextContainer {
-    margin-top: 2vh;
-}
-
-.quoteAuthorText {
-    position: absolute;
-    right: 20%;
-    z-index: -5;
-}
-
 
 .footer {
     position: absolute;

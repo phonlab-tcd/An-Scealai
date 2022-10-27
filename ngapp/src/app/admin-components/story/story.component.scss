@@ -4,45 +4,6 @@
     padding-right: 5%;
 }
 
-.feedbackBtnContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.feedbackFooter {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    border-top: 1px solid var(--scealai-gray);
-    border-radius: 5px;
-    margin-top: auto;
-}
-
-.seenByStudent {
-    font-size: 10pt;
-    color: var(--scealai-light-gray);
-    margin-left: 4px;
-}
-
-.sendFeedbackBtn {
-    margin-left: auto;
-}
-
-.feedbackTextarea {
-    border: none;
-    width: 100%;
-    height: 75px;
-    resize: none;
-}
-
-.audioPlayer {
-    width: 450px;
-    height: 32px;
-    margin-top: 7px;
-}
-
 .classBody {
     display: flex;
     padding: 5px;
@@ -59,60 +20,6 @@
     height: 68vh;
     width: 50%;
     border-radius: 5px;
-}
-
-.storyInfoContainer { 
-    display: flex;
-    flex-direction: column;
-    background-color: var(--scealai-gray);
-    margin-top: 2vh;
-    margin-left: 1%;
-    height: 68vh;
-    width: 48%;
-    border-radius: 5px;
-}
-
-.storyTextHeader {
-    width: 100%;
-    background-color: var(--scealai-dark-green);
-    border-radius: 5px 5px 0px 0px;
-    color: white;
-    display: flex;
-    padding: 4px;
-    padding-left: 8px;
-    font-size: 12pt;
-    justify-content: center;
-}
-
-.feedbackContainer {
-    width: 100%;
-    background-color: white;
-    margin-top: 2vh;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    height: 28vh;
-}
-
-.feedbackBody {
-    padding: 4px;
-    text-align: left;
-    overflow: auto;
-}
-
-.feedbackHeader {
-    width: 100%;
-    background-color: var(--scealai-dark-green);
-    border-radius: 5px 5px 0px 0px;
-    color: white;
-    padding: 4px;
-}
-
-.storyInfoBody {
-    display: flex;
-    flex-direction: column;
-    padding-left: 8px;
-    padding-right: 8px;
 }
 
 .storyText {
@@ -140,6 +47,45 @@
     transition: 0.5s;
 }
 
+.storyInfoContainer { 
+    display: flex;
+    flex-direction: column;
+    background-color: var(--scealai-gray);
+    margin-top: 2vh;
+    margin-left: 1%;
+    height: 68vh;
+    width: 48%;
+    border-radius: 5px;
+}
+
+.storyTextHeader {
+    width: 100%;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    display: flex;
+    padding: 4px;
+    padding-left: 8px;
+    font-size: 12pt;
+    justify-content: center;
+}
+
+.storyInfoBody {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.userInfo {
+    float: right;
+    display: flex;
+    align-items: center;
+    padding-top: 8px;
+    width: 100%;
+    white-space: nowrap;
+}
+
 .userInfoTextarea {
     height: 30px;
     width: 100%;
@@ -153,39 +99,61 @@
     white-space: nowrap;
 }
 
-.userInfo {
-    float: right;
+.feedbackContainer {
+    width: 100%;
+    background-color: white;
+    margin-top: 2vh;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 28vh;
+}
+
+.feedbackHeader {
+    width: 100%;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    padding: 4px;
+}
+
+.feedbackBody {
+    padding: 4px;
+    text-align: left;
+    overflow: auto;
+}
+
+.feedbackTextarea {
+    border: none;
+    width: 100%;
+    height: 75px;
+    resize: none;
+}
+
+.feedbackFooter {
+    width: 100%;
     display: flex;
     align-items: center;
-    padding-top: 8px;
-    width: 100%;
-    white-space: nowrap;
+    padding: 4px;
+    border-top: 1px solid var(--scealai-gray);
+    border-radius: 5px;
+    margin-top: auto;
 }
 
-.hidden {
-    visibility: hidden;
-    opacity: 0;
+.seenByStudent {
+    font-size: 10pt;
+    color: var(--scealai-light-gray);
+    margin-left: 4px;
 }
 
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
+.feedbackBtnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-
-@keyframes blinker {  
-  from { opacity: 1; }
-  to { opacity: 0; }
+.audioPlayer {
+    width: 450px;
+    height: 32px;
+    margin-top: 7px;
 }

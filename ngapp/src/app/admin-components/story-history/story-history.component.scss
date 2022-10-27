@@ -10,6 +10,44 @@
 
 }
 
+.storyContainer {
+    width: 60%;
+    margin-left: 20%;
+    background-color: #d1d1d1;
+    border-radius: 0px 0px 5px 5px;
+    height: 63vh;
+    padding: 8px;
+    padding-bottom: 0px;
+    overflow: auto;
+}
+
+.entry {
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #777777;
+    border-radius: 5px;
+}
+
+.eventEntry {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.eventDate {
+    width: 50%;
+    background-color: white;
+    border-radius: 10px 0px 0px 10px
+}
+
+.eventType {
+    width: 50%;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 0px 10px 10px 0px
+}
+
 .highlightIcon {
     float: right;
     margin-right: 8px;
@@ -35,50 +73,12 @@
     transition: 1s;
 }
 
-.storyContainer {
-    width: 60%;
-    margin-left: 20%;
-    background-color: #d1d1d1;
-    border-radius: 0px 0px 5px 5px;
-    height: 63vh;
-    padding: 8px;
-    padding-bottom: 0px;
-    overflow: auto;
-}
-
-.eventEntry {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.eventDate {
-    width: 50%;
-    background-color: white;
-    border-radius: 10px 0px 0px 10px
-}
-
-.eventType {
-    width: 50%;
-    background-color: var(--scealai-green);
-    color: white;
-    border-radius: 0px 10px 10px 0px
-}
-
 .textEntry {
     width: 100%;
     text-align: left;
     padding: 4px;
     border-radius: 5px;
     background-color: white;
-}
-
-.entry {
-    margin-bottom: 8px;
-    padding: 8px;
-    background-color: #777777;
-    border-radius: 5px;
 }
 
 :host ::ng-deep .highlightedGreen {

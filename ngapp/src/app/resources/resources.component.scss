@@ -17,10 +17,6 @@
     margin-bottom: 10px;
 }
 
-.author {
-    font-style: normal;
-}
-
 .content {
     text-align: left;
 }
@@ -38,16 +34,6 @@
     padding-top: 30px;
 }
 
-.storyBlock {
-  padding-left: 20px;
-  padding-bottom: 20px;
-}
-
-.story {
-  padding-bottom: 20px;
-  padding-left: 30px;
-}
-
 .storyImg {
   width: 300px;
   height: 200px;
@@ -60,14 +46,22 @@
   padding-top: 70px;
 }
 
+.panelFlex {
+  display:flex;
+  flex-direction: column;
+}
+
 .panelDescriptionNoPhoto {
   font-size : 15pt;
   font-weight: bold;
 }
 
-.panelFlex {
+.moreResources {
+  place-content: space-between;
+}
+
+.dialectContainer {
   display:flex;
-  flex-direction: column;
 }
 
 .viewStory {
@@ -93,14 +87,6 @@
   font-size: 16pt;
   padding-top:40px;
   text-align: center;
-}
-
-.moreResources {
-  place-content: space-between;
-}
-
-.dialectContainer {
-  display:flex;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -141,7 +127,6 @@
   background-color: #3e8e41;
 }
 
-
 .footer {
     display: flex;
     flex-direction: column;
@@ -154,10 +139,6 @@
 .footerLogos {
     display: flex;
     flex-wrap: wrap;
-}
-
-.logoImg {
-    height: 40px;
 }
 
 .copyright {
@@ -174,6 +155,9 @@
   padding-bottom:5px;
 }
 
+.logoImg {
+    height: 40px;
+}
 
 @media only screen and (max-width: 700px) {
     .container {

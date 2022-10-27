@@ -4,6 +4,66 @@
     padding-right: 5%;
 }
 
+.modalContainer {
+    position: absolute;
+    z-index: 5;
+    width: 90%;
+    height: 80vh;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    margin-top: 10vh;
+    width: 40%;
+    margin-left: 30%;
+    padding: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalText {
+    font-size: 14pt;
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
+}
+
+.modalBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--scealai-gray);
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+}
+
+
+.createBtnGreen {
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.createBtnGreen:hover {
+    background-color: var(--scealai-dark-green);
+}
+
+.modalBtn:hover {
+    background-color: var(--modal-hover);
+    color: white;
+}
+
 .classContainer {
     width: 100%;
     background-color: white;
@@ -36,6 +96,18 @@
     transition: color 0.5s;
 }
 
+.classroomKey {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
+}
+
+.keyNumStudents {
+    margin-left: auto;
+}
+
 .classBody {
     display: flex;
     flex-direction: column;
@@ -65,80 +137,9 @@
     cursor: pointer;
 }
 
-.classroomKey {
-    display: flex;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: var(--scealai-gray);
-    color: var(--scealai-dark-gray);
-}
-
-.keyNumStudents {
-    margin-left: auto;
-}
-
 .numStudents {
     margin-left: auto;
     margin-right: 45px;
-}
-
-.modalContainer {
-    position: absolute;
-    z-index: 5;
-    width: 90%;
-    height: 80vh;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.modalContent {
-    margin-top: 10vh;
-    width: 40%;
-    margin-left: 30%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalText {
-    font-size: 14pt;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
-}
-
-.titleInput {
-    margin-top: 10px;
-    padding-left: 4px;
 }
 
 .hidden {

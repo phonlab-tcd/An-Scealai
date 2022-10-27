@@ -78,9 +78,8 @@
         <!-- join classroom option STUDENT -->
         <div class="form-group-vertical" *ngIf="!classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="form-group-section">
-            <div class="formLabel classroomCodeLabel">{{ts.l.classroom_code}} :</div>
-            <input type="text" class="form-control inputField"
-            placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
+            <div class="formLabel">{{ts.l.classroom_code}} :</div>
+            <input type="text" class="form-control inputField" placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
           </div>
           <div class="classroomMessages">
             <div *ngIf="classroomCodeOutput" class="notFoundText classroomMessage">{{classroomCodeOutput}}</div>

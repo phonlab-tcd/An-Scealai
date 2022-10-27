@@ -41,6 +41,16 @@
     margin: 10px;
 }
 
+.sponsorCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+}
+
 .cardLeft {
     width: 60%;
     margin-right: 5%;
@@ -52,16 +62,6 @@
 
 .logoCardImg {
     width: 100%;
-}
-
-.sponsorCard {
-    display: flex;
-    flex-direction: column;
-}
-
-.cardBody {
-    display: flex;
-    align-items: center;
 }
 
 .testimonialFooter {

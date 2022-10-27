@@ -26,7 +26,7 @@
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousLogs">
       <div *ngFor="let log of previousLogs" class="logContainer">
-        <div class="submitButton logButton" (click)="setDataToDisplay(log.statsData)"> {{log.date | date : 'd/M/yy, h:mm a'}} </div>
+        <div class="submitButton" (click)="setDataToDisplay(log.statsData)"> {{log.date | date : 'd/M/yy, h:mm a'}} </div>
       </div>
     </div>
     <br>

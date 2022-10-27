@@ -1,42 +1,18 @@
-.loginBtn {
+.registerContainer {
+    width: 400px;
+    display: inline-block;
     background-color: #cc670a;
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
-.loginBtn:hover {
-    background-color: #af5503;
-}
-
-.inputField {
-    width: 80%;
-    margin-left: 10%;
-}
-
-.forgotPassword {
-  float: left;
-  padding-left: 12%;
-  font-size: 12px;
-  color: #0000EE;
-}
-
-.forgotPassword:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.closeForgotPasswordBtn {
-  float: riht;
-}
-.closeForgotPasswordBtn:hover {
-  cursor: pointer;
-  color: black;
-}
-
-.usernameErrorText {
-    font-size: 12pt;
-    color: red;
-    margin-top: 4px;
-    width: 80%;
-    margin-left: 10%;
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
 }
 
 .formContainer {
@@ -47,30 +23,6 @@
     color: var(--dark-text);
     background-color: var(--form-background);
     border-radius: 0px 0px 10px 10px;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
-}
-
-.registerContainer {
-    width: 400px;
-    display: inline-block;
-    background-color: #cc670a;
-    color: white;
-    border-radius: 10px;
-
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.formLabel {
-    text-align: left;
-    margin-left: 10%;
-    margin-right: 10%;
 }
 
 .modalContainer {
@@ -97,8 +49,22 @@ box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     flex-direction: column;
     align-items: center;
     -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalText {
+    font-size: 12pt;
+    white-space: normal;
+    color: black;
+}
+
+.usernameErrorText {
+    font-size: 12pt;
+    color: red;
+    margin-top: 4px;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .modalBtn {
@@ -112,15 +78,49 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 15px;
 }
 
-.modalText {
-    font-size: 12pt;
-    white-space: normal;
-    color: black;
-}
-
 .modalBtn:hover {
     background-color: var(--modal-hover);
     color: white;
+}
+
+.formLabel {
+    text-align: left;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.inputField {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.forgotPassword {
+  float: left;
+  padding-left: 12%;
+  font-size: 12px;
+  color: #0000EE;
+}
+
+.forgotPassword:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.loginBtn {
+    background-color: #cc670a;
+}
+
+.loginBtn:hover {
+    background-color: #af5503;
+}
+
+
+.closeForgotPasswordBtn {
+  float: riht;
+}
+.closeForgotPasswordBtn:hover {
+  cursor: pointer;
+  color: black;
 }
 
 .hidden {

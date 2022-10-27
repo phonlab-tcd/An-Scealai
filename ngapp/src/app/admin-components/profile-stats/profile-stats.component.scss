@@ -1,20 +1,7 @@
-.content {
-    width: 100%;
-    padding: 3vh;
-    display: flex;
-    justify-content: space-around;
-}
-
-.container {
-  width: 900px;
-  background-color: white;
-  border-radius: 4px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+.header {
+  font-size: 16pt;
+  font-weight: bold;
+  padding-top: 10px;
 }
 
 .dataOptions {
@@ -35,20 +22,29 @@
     cursor: pointer;
 }
 
-.profileNumber {
-  text-align: left;
-  padding-left: 20px;
+.content {
+    width: 100%;
+    padding: 3vh;
+    display: flex;
+    justify-content: space-around;
 }
 
-.header {
-  font-size: 16pt;
-  font-weight: bold;
-  padding-top: 10px;
+.container {
+  width: 900px;
+  background-color: white;
+  border-radius: 4px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .datePicker {
   padding-top: 10px;
 }
+
 
 .submitButton {
     background-color: var(--scealai-green);
@@ -69,14 +65,32 @@
   padding: 10px;
 }
 
-.displayData {
-  padding: 20px;
+.loaderContainer {
+    position: absolute;
+    width: 90%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profileNumber {
+  text-align: left;
+  padding-left: 20px;
 }
 
 .profileHeader {
   text-align: center;
   font-weight: bold;
   font-size: 14pt;
+}
+
+.displayData {
+  padding: 20px;
+}
+
+mat-panel-description.panelDescription {
+  flex-grow: 0;
 }
 
 .sideBySide {
@@ -98,15 +112,3 @@
   padding-left: 40%;
 }
 
-mat-panel-description.panelDescription {
-  flex-grow: 0;
-}
-
-.loaderContainer {
-    position: absolute;
-    width: 90%;
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}

@@ -1,23 +1,3 @@
-.bookContainerSynth {
-    width: 70%;
-    height: 400px;
-    margin-left: 15%;
-    z-index: 10;
-    border-radius: 5px;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.page {
-    padding-top: 20px;
-}
-
 .bookImg {
     z-index: -10;
     width: 90%;
@@ -26,19 +6,29 @@
     right: 5%;
 }
 
-.bookTitle {
-    color: var(--dark-text); 
-    padding-right: 5%;
-    display: inline-block;
-    font-size: 18pt;
+.page {
+    padding-top: 20px;
 }
 
-.storyHeader {
-    background-color: var(--scealai-green);
-    color: white;
-    border-radius: 4px 4px 0px 0px;
-    width: 90%;
-    margin-left: 5%;
+.bookContainerSynth {
+    width: 70%;
+    height: 400px;
+    margin-left: 15%;
+    z-index: 10;
+    border-radius: 5px;
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.bookHeader {
+    display: flex;
+    justify-content: space-between;
 }
 
 .myStoriesBtn {
@@ -57,23 +47,16 @@
     transition: color 0.5s;
 }
 
-.chatbotBtn {
-    display: inline;
-    float: right;
-    color: var(--dark-text);
-    border-style: none;
-    font-size: 12pt;
-    padding-top: 10px;
-    padding-right: 5%;
+.storyContainer {
+    margin-top: 10px;
 }
 
-.chatbotBtn:hover {
-    color: var(--scealai-orange);
-}
-
-.bookHeader {
-    display: flex;
-    justify-content: space-between;
+.storyHeader {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px 4px 0px 0px;
+    width: 90%;
+    margin-left: 5%;
 }
 
 .textContainerSynth {
@@ -90,8 +73,12 @@
     overflow: auto;
 }
 
-.storyContainer {
-    margin-top: 10px;
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    color: var(--scealai-med-green);
 }
 
 .playAudioBtn {
@@ -111,25 +98,10 @@
     transition: 0.5s;
 }
 
-.loaderContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    color: var(--scealai-med-green);
-}
-
 .footer {
   margin-left: 5%;
   width: 90%;
   display: flex;
-}
-
-.footerText {
-  display: flex;
-  align-items: center;
-  font-size: 12pt;
-  margin-right: 5px;
 }
 
 .btnContainer {
@@ -137,6 +109,13 @@
   display: flex;
   align-items: center;
   padding: 5px;
+}
+
+.footerText {
+  display: flex;
+  align-items: center;
+  font-size: 12pt;
+  margin-right: 5px;
 }
 
 .changeSplitBtn {
@@ -148,10 +127,6 @@
 
 .changeSplitBtn:hover {
   background-color: var(--scealai-med-green);
-}
-
-.sentenceContainer {
-  margin-bottom: 10px;
 }
 
 .selectedBtn {
@@ -311,11 +286,6 @@ Some pseudo-classes used to highlight text
 }
 
 .paragraphContainer ::ng-deep .wordBtn:hover {
-  background: var(--scealai-light-blue-hover);
-  cursor: pointer;
-}
-
-.sentenceContainer ::ng-deep .wordBtn:hover {
   background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }

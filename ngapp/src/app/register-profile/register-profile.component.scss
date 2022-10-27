@@ -1,39 +1,3 @@
-.loginBtn {
-    background-color: var(--scealai-green);
-    border-radius: 5px;
-    margin-bottom: -14px;
-}
-
-.loginBtn:hover {
-    background-color: var(--scealai-dark-green);
-}
-
-.inputField {
-    width: 60%;
-    margin-left: 20%;
-}
-
-.inputFieldYears {
-    width: 15%;
-    margin-left: 40%;
-}
-
-.formContainer {
-    width: 500px;
-    display: inline-block;
-    padding-top: 15px;
-    padding-bottom: 25px;
-    color: var(--dark-text);
-    background-color: var(--scealai-gray);
-    border-radius: 0px 0px 10px 10px;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
-}
-
 .registerContainer {
     width: 500px;
     display: inline-block;
@@ -46,25 +10,20 @@
     margin-bottom: 80px;
 }
 
-.formLabel {
-    text-align: left;
-    margin-left: 20%;
-    width: 60%;
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
 }
 
-.errorMessage {
-    margin-left: 10%;
-    width: 80%;
-}
-
-.selectOptions {
-   margin-left: 20%;
-   width: 60%;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
+.formContainer {
+    width: 500px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    color: var(--dark-text);
+    background-color: var(--scealai-gray);
+    border-radius: 0px 0px 10px 10px;
 }
 
 .form-group-set {
@@ -72,6 +31,15 @@
     width: 95%;
     margin-left: 2.5%;
     border-radius: 5px 5px 5px 5px;
+}
+
+.group-set-body-instructions {
+    background-color: white;
+    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 12pt;
 }
 
 .group-set-header {
@@ -86,13 +54,30 @@
     margin-bottom: 10px;
 }
 
-.group-set-body-instructions {
-    background-color: white;
-    width: 100%;
-    border-radius: 5px 5px 5px 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 12pt;
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputField {
+    width: 60%;
+    margin-left: 20%;
+}
+
+.inputFieldYears {
+    width: 15%;
+    margin-left: 40%;
+}
+
+.formLabel {
+    text-align: left;
+    margin-left: 20%;
+    width: 60%;
+}
+
+.selectOptions {
+   margin-left: 20%;
+   width: 60%;
 }
 
 .checkbox-group {
@@ -101,6 +86,16 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.loginBtn {
+    background-color: var(--scealai-green);
+    border-radius: 5px;
+    margin-bottom: -14px;
+}
+
+.loginBtn:hover {
+    background-color: var(--scealai-dark-green);
 }
 
 .ng-valid[required], .ng-valid.required {

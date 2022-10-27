@@ -33,27 +33,14 @@
   text-align: center;
 }
 
-.dialectTitle {
-    font-size: 15pt;
-    font-weight: bold;
-    padding-bottom: 10px;
-    padding-top: 30px;
-}
-
-.storyBlock {
-  padding-left: 20px;
-  padding-bottom: 20px;
-}
-
-.story {
-  padding-bottom: 20px;
-  padding-left: 30px;
-}
-
 .neasaImg {
   width: 200px;
   height: 220px;
   padding: 5px;
+}
+
+.developerCard {
+  display: flex;
 }
 
 .maddieImg {
@@ -81,25 +68,4 @@
   width: 500px;
   height: 350px;
   padding: 5px;
-}
-
-.developerCard {
-  display: flex;
-}
-
-.panelDescription {
-  font-size : 12pt;
-  font-weight: bold;
-}
-
-.viewStoryBtn {
-    padding: 7px;
-    background-color: var(--scealai-green);
-    color: white;
-    border-radius: 4px;
-    text-decoration:none
-}
-
-.viewStoryBtn:hover {
-    cursor: pointer;
 }

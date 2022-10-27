@@ -1,14 +1,3 @@
-.adminTitle {
-    font-size: 20pt;
-    height: 6vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: var(--scealai-dark-green);
-    border-radius: 5px 5px 0px 0px;
-}
-
 .content {
     width: 90%;
     margin-left: 5%;
@@ -20,17 +9,16 @@
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
-.backArrow {
-    margin-right: 8px;
-    float: left;
+.adminTitle {
+    font-size: 20pt;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
 }
-
-.backArrow:hover {
-    cursor: pointer;
-    color: var(--orange-text);
-    transition: color, 0.5s;
-}
-
 
 @media (max-width:550px) {
     .content {

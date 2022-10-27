@@ -31,8 +31,13 @@
     flex-direction: column;
     align-items: center;
     -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalText {
+    font-size: 12pt;
+    white-space: normal;
 }
 
 .modalBtn {
@@ -46,36 +51,9 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     margin-top: 15px;
 }
 
-.modalText {
-    font-size: 12pt;
-    white-space: normal;
-}
-
 .modalBtn:hover {
     background-color: var(--modal-hover);
     color: white;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
 .generateCodeTitle {
@@ -84,29 +62,16 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     justify-content: center;
 }
 
-.teacherCodeButton {
-    background-color: var(--scealai-green);
-    color: white;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-left: 10px;
-    border-radius: 5px;
-}
-
-.teacherCodeButton:hover {
-    cursor: pointer;
-    background-color: var(--scealai-dark-green);
-}
-
-.teacherCodeTitle {
-    padding: 5px;
-}
-
 .userInfoDisplay {
     width:30%;
     margin-left: 30%;
     margin-top: 2vh;
+}
+
+.userInfo {
+    float: right;
+    display: flex;
+    align-items: center;
 }
 
 .userInfoTextarea {
@@ -119,27 +84,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     border: none;
     border-radius: 5px 5px 5px 5px;
     white-space: nowrap;
-}
-
-.userInfo {
-    float: right;
-    display: flex;
-    align-items: center;
-}
-
-.copyIcon {
-    background-color: var(--scealai-green);
-    color: white;
-    width: 30px;
-    height: 30px;
-    padding: 4px;
-    font-size: 16pt;
-    border-radius: 0px 5px 5px 0px;
-}
-
-.copyIcon:hover {
-    cursor: pointer;
-    background-color: var(--scealai-dark-green);
 }
 
 .buttonContainer {
@@ -157,19 +101,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     transition: 0.5s;
 }
 
-.teacherAccountsHeader {
-    font-size: 14pt;
-    height: 5vh;
+.contentBody {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: var(--scealai-dark-green);
-    border-radius: 5px 5px 0px 0px;
-}
-
-.eventContainerHeader {
-    justify-content: space-between;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .teacherAccountsContainer {
@@ -184,6 +119,17 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     height: 45vh;
     background-color: var(--scealai-gray);
     border-radius: 5px 5px 5px 5px;
+}
+
+.teacherAccountsHeader {
+    font-size: 14pt;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
 }
 
 .teacherAccountsBody {
@@ -202,6 +148,44 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     display: flex;
 }
 
+.whiteBtn:hover {
+    color:white;
+    background-color: var(--scealai-med-brown-hover);
+    cursor: pointer;
+}
+
+.studentCount {
+    margin-left: auto;
+}
+
+.eventContainerHeader {
+    justify-content: space-between;
+}
+
+.maximiseIconContainer {
+    margin-right: 8px;
+}
+
+.dateTextContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #777777;
+    margin-bottom: 10px;
+}
+
+.dateText {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+.dateLine {
+  height: 1px;
+  background-color: #777777;
+  width: 50%;
+}
+
 .eventContainer {
     flex-direction: column;
 }
@@ -210,14 +194,34 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     display: flex;
 }
 
+.eventTime {
+    margin-left: auto;
+}
+
 .eventBody {
     display: flex;
     flex-direction: column;
 }
 
-.studentCount {
-    margin-left: auto;
+.mainEventBody {
+    border-top: 1px solid var(--scealai-gray);
 }
+
+.storyLink {
+    color: black;
+    color: inherit;
+}
+
+.storyLink:hover {
+    text-decoration: none;
+    color: #53ff81;
+    text-decoration: underline;
+}
+
+.storyLinkIcon {
+    margin-left: 5px;
+}
+
 
 .hidden {
     visibility: hidden;
@@ -239,73 +243,4 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     visibility: visible;
     opacity: 1;
     transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.copiedText {
-    margin-left: 10px;
-    color: var(--scealai-green);
-}
-
-.storyLink {
-    color: black;
-}
-
-.storyLink:hover {
-    text-decoration: none;
-}
-
-.whiteBtn:hover {
-    color:white;
-    background-color: var(--scealai-med-brown-hover);
-    cursor: pointer;
-}
-
-  .contentBody {
-      display: flex;
-      width: 100%;
-      justify-content: space-evenly;
-  }
-
-  .mainEventBody {
-      border-top: 1px solid var(--scealai-gray);
-  }
-
-  .storyLinkIcon {
-      margin-left: 5px;
-  }
-
-  .storyLink {
-      color: inherit;
-  }
-
-  .storyLink:hover {
-    color: #53ff81;
-    text-decoration: underline;
-  }
-
-  .dateTextContainer {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      color: #777777;
-      margin-bottom: 10px;
-  }
-
-  .dateLine {
-    height: 1px;
-    background-color: #777777;
-    width: 50%;
-  }
-
-  .dateText {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.eventTime {
-    margin-left: auto;
-}
-
-.maximiseIconContainer {
-    margin-right: 8px;
 }

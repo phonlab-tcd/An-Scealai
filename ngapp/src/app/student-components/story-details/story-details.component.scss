@@ -1,15 +1,46 @@
-.bookContentsContainer {
-    width: 80%;
-    margin-left: 10%;
-    z-index: 10;
-}
-
 .bookImg {
     z-index: -10;
     width: 90%;
     height: 500px;
     position: fixed;
     right: 5%;
+}
+
+.bookContentsContainer {
+    width: 80%;
+    margin-left: 10%;
+    z-index: 10;
+}
+
+.contentsContainer {
+    padding-left: 3%;
+    padding-right: 3%;
+    height: 390px;
+    width: 80%;
+    margin-left: 10%;
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
+}
+
+.topHeader {
+    width: 100%;
+}
+
+.myStoriesBtn {
+    margin-top: 10px;
+    float: left;
+}
+
+.myStoriesBtn:hover {
+    color: var(--scealai-orange);
+    cursor: pointer;
 }
 
 .bookTitle {
@@ -20,23 +51,6 @@
     font-size: 18pt;
     padding-top: 10px;
     width: 100%;
-}
-
-.contentsContainer {
-    padding-left: 3%;
-    padding-right: 3%;
-    height: 390px;
-    width: 80%;
-    margin-left: 10%;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
 }
 
 .contentBody {
@@ -64,21 +78,6 @@ border-radius: 5px 5px 5px 5px;
 }
 
 .selectOptions {
-    width: 100%;
-}
-
-.myStoriesBtn {
-    margin-top: 10px;
-    float: left;
-}
-
-.myStoriesBtn:hover {
-    color: var(--scealai-orange);
-    cursor: pointer;
-}
-
-
-.topHeader {
     width: 100%;
 }
 

@@ -4,6 +4,88 @@
     padding-right: 5%;
 }
 
+.modalContainer {
+    position: absolute;
+    z-index: 5;
+    width: 90%;
+    height: 80vh;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    margin-top: 20vh;
+    width: 50%;
+    margin-left: 25%;
+    padding: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
+}
+
+.modalText {
+  font-size: 14pt;
+}
+
+.modalBtn {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: var(--scealai-gray);
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+  margin-top: 15px;
+}
+
+.modalBtn:hover {
+    background-color: var(--modal-hover);
+    color: white;
+}
+
+.codeView {
+    background-color: var(--scealai-gray);
+    border: 1px solid var(--scealai-light-gray);
+    border-radius: 4px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 16px;
+}
+
+.createBtnGreen {
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.createBtnGreen:hover {
+    background-color: var(--scealai-dark-green);
+}
+
+.deleteModalText {
+    font-size: 12pt;
+}
+
+.deleteRedBtn {
+    background-color: var(--scealai-delete-red-3);
+    color: white;
+}
+
+.deleteRedBtn:hover {
+    background-color: var(--scealai-delete-red-3-hover);
+}
+
 .classContainer {
     width: 100%;
     background-color: white;
@@ -25,14 +107,65 @@
     font-size: 16pt;
 }
 
-.addClassBtn {
-    margin-left: auto;
+.backArrow {
+    margin-right: 8px;
 }
 
-.addClassBtn:hover {
+.backArrow:hover {
+  cursor: pointer;
+  color: var(--orange-text);
+  transition: color, 0.5s;
+}
+
+.headerIconContainer {
+    margin-left: auto;
+    display: flex;
+    overflow-x: auto;
+}
+
+.headerIconBtn {
+    font-size: 12pt;
+    margin-left: 8px;
+    background-color: var(--scealai-green);
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.headerIconBtn:hover {
     cursor: pointer;
-    color: var(--scealai-green);
-    transition: color 0.5s;
+    color: var(--scealai-light-green);
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+}
+
+.headerIcon {
+    margin-left: 5px;
+}
+
+.notificationBtn {
+    margin-left: 5px;
+    background-color: var(--notification-button);
+    color: white;
+    font-size: 8pt;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+}
+
+.classroomKey {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
 }
 
 .classBody {
@@ -64,192 +197,7 @@
     cursor: pointer;
 }
 
-.classroomKey {
-    display: flex;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: var(--scealai-gray);
-    color: var(--scealai-dark-gray);
-}
-
-.keyNumStudents {
-    margin-left: auto;
-}
-
-.numStudents {
-    margin-left: auto;
-    margin-right: 45px;
-}
-
-.modalContainer {
-    position: absolute;
-    z-index: 5;
-    width: 90%;
-    height: 80vh;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.modalContent {
-    margin-top: 20vh;
-    width: 50%;
-    margin-left: 25%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalText {
-    font-size: 14pt;
-}
-
-.deleteModalText {
-    font-size: 12pt;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
-}
-
-.notificationBtn {
-    margin-left: 5px;
-    background-color: var(--notification-button);
-    color: white;
-    font-size: 8pt;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-  -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-  box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-  }
-
-.titleInput {
-    margin-top: 10px;
-    padding-left: 4px;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.headerIconContainer {
-    margin-left: auto;
-    display: flex;
-    overflow-x: auto;
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 8px;
-    background-color: var(--scealai-green);
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-light-green);
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.headerIcon {
-    margin-left: 5px;
-}
-
-.codeView {
-    background-color: var(--scealai-gray);
-    border: 1px solid var(--scealai-light-gray);
-    border-radius: 4px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-top: 16px;
-}
-
-.deleteRedBtn {
-    background-color: var(--scealai-delete-red-3);
-    color: white;
-}
-
-.deleteRedBtn:hover {
-    background-color: var(--scealai-delete-red-3-hover);
-}
-
-.arrow {
-    margin-left: auto;
-}
-
-.backArrow {
-    margin-right: 8px;
-}
-
-.backArrow:hover {
-    cursor: pointer;
-    color: var(--orange-text);
-    transition: color, 0.5s;
-}
-
 @media (max-width:550px) {
-
-    .modalContent {
-        margin-top: 10vh;
-        width: 90%;
-        margin-left: 5%;
-    }
-
     .classHeader {
         font-size: 10pt;
     }

@@ -24,26 +24,40 @@
     padding-left: 16px;
     font-size: 16pt;
 }
-.filter {
-  display: flex;
-  justify-content: space-between;
-  width: 100px;
+
+.backArrow {
+    margin-right: 8px;
 }
 
+.backArrow:hover {
+    cursor: pointer;
+    color: var(--scealai-gray);
+    transition: color, 0.5s;
+}
 
 .storyAuthor {
   width: 300px;
   text-align: left;
 }
 
-.addClassBtn {
-    margin-left: auto;
+.filter {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
 }
 
-.addClassBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-green);
-    transition: color 0.5s;
+.classroomKey {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
+}
+
+.title {
+  width: 370px;
+  text-align: left;
 }
 
 .classBody {
@@ -80,111 +94,6 @@
   text-align: left;
 }
 
-.title {
-  width: 370px;
-  text-align: left;
-}
-
-.classroomKey {
-    display: flex;
-    justify-content: space-between;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: var(--scealai-gray);
-    color: var(--scealai-dark-gray);
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
-}
-
-.titleInput {
-    margin-top: 10px;
-    padding-left: 4px;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.headerIconContainer {
-    margin-left: auto;
-    display: flex;
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 8px;
-    background-color: var(--scealai-green);
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-light-green);
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.headerIcon {
-    margin-left: 5px;
-}
-
-.codeView {
-    background-color: var(--scealai-gray);
-    border: 1px solid var(--scealai-light-gray);
-    border-radius: 4px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-top: 16px;
-}
-
-.deleteRedBtn {
-    background-color: var(--scealai-delete-red-3);
-    color: white;
-}
-
-.deleteRedBtn:hover {
-    background-color: var(--scealai-delete-red-3-hover);
-}
-
 .arrow {
     margin-left: auto;
-}
-
-.backArrow {
-    margin-right: 8px;
-}
-
-.backArrow:hover {
-    cursor: pointer;
-    color: var(--scealai-gray);
-    transition: color, 0.5s;
 }
