@@ -25,3 +25,5 @@ api/globalConfig.json
 /login
 
 /.neimhin
+
+/shell/*.log
