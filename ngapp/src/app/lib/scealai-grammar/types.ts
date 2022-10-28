@@ -1,5 +1,5 @@
 export type GrammarChecker = {
-  check: async (input: string) => ErrorTags[];
+  check: (input: string) => Promise<ErrorTags[]>;
   name: string;
 };
 
