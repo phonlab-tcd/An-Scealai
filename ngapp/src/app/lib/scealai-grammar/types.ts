@@ -1,5 +1,5 @@
 export type GrammarChecker = {
-  check: (input: string) => Promise<ErrorTags[]>;
+  check: (input: string) => Promise<ErrorTag[]>;
   name: string;
 };
 
@@ -19,6 +19,6 @@ type ErrorType = keyof typeof errors;
 const errors = {
                 "URU": {color:, messageEng:, messageGA:},
                 "SEIMHIU": {color:, messageEng:, messageGA:},
-                "CEOL": {color:, messageEng:, messageGA:},
+                "LEATHAN-CAOL": {color:, messageEng:, messageGA:}
               } as const;
                 
