@@ -13,7 +13,7 @@ export type GramadoirTag = {
   tox: number;
   ruleId: string;
   msg: string;
-  contex: string;
+  context: string;
   contextoffset: string;
   errortext: string;
   errorlength: string;
@@ -28,19 +28,18 @@ async function check(input):Promise<ErrorTag[]>{
     const errorsEN = await callAnGramadoir(input, 'en');
     const errorsGA = await callAnGramadoir(input, 'ga');
     
-    console.log("ERRORS: ", errors);
     let errorTags:ErrorTag[] = [];
     
-    for (const i = 0; i < errorsEn.length; i++) {
+    for (let i = 0; i < errorsEN.length; i++) {
       let tag:ErrorTag = {
-        errorText: errorsEn[i].errorText,
+        errorText: errorsEN[i].errortext,
         messageGA: errorsGA[i].msg,
         messageEN: errorsEN[i].msg,
-        context: errorsEn[i].context,
+        context: errorsEN[i].context,
         type: 'URU',
         color: "color",
-        fromX: errorsEn[i].fromx,
-        toX: errorsEn[i].tox,
+        fromX: errorsEN[i].fromx,
+        toX: errorsEN[i].tox,
       }
       
       errorTags.push(tag);
