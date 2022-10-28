@@ -11,8 +11,11 @@
         <div *ngIf="hasText">
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
+            <!--Voice Synthesis-->
             <div class="playback">
-                <app-synth-item *ngFor="let si of synthItems; let i = index" class="synth" [synthItem]=si [i]=i></app-synth-item>
+                <div class="synth-item" *ngFor="let si of synthItems; let i = index">
+                    <app-synth-item class="synth" [synthItem]=si [i]=i></app-synth-item>
+                </div>
                 <!-- Select dialect -->
                 <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
             </div>
