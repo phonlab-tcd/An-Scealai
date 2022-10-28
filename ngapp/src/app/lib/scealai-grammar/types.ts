@@ -1,5 +1,5 @@
 export type GrammarChecker = {
-  check: (input: string) => ErrorTags[];
+  check: async (input: string) => ErrorTags[];
   name: string;
 };
 
