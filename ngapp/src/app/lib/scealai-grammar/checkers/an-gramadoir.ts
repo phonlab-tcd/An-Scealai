@@ -25,21 +25,22 @@ const gramadoirUrl: GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1
 
 async function check(input):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
-    const errors = await callAnGramadoir(input, 'en');
+    const errorsEN = await callAnGramadoir(input, 'en');
+    const errorsGA = await callAnGramadoir(input, 'ga');
+    
     console.log("ERRORS: ", errors);
     let errorTags:ErrorTag[] = [];
     
-    for (const error of errors) {
-    
+    for (const i = 0; i < errorsEn.length; i++) {
       let tag:ErrorTag = {
-        errorText: error.errorText,
-        messageGA: "string",
-        messageEN: "str",
-        context: input,
+        errorText: errorsEn[i].errorText,
+        messageGA: errorsGA[i].msg,
+        messageEN: errorsEN[i].msg,
+        context: errorsEn[i].context,
         type: 'URU',
         color: "color",
-        fromX: error.fromx,
-        toX: error.tox,
+        fromX: errorsEn[i].fromx,
+        toX: errorsEn[i].tox,
       }
       
       errorTags.push(tag);
