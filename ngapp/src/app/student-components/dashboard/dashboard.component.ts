@@ -33,6 +33,9 @@ import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 
+import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
+import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
+
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
@@ -297,7 +300,11 @@ export class DashboardComponent implements OnInit {
   // set the stories array of all the student's stories
   // set the stories array of all the student's stories w
   // and the current story being edited given its id from url
-  ngOnInit() {
+  async ngOnInit() {
+    const grammarEngine = new GrammarEngine([leathanCaolChecker], this.http);
+    const errorTags = await grammarEngine.check('Hello world. Here are some sentences.');
+    console.log('ERROR TAGS :)', errorTags);
+
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
