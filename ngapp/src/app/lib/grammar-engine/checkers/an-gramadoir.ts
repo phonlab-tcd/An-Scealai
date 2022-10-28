@@ -45,10 +45,12 @@ async function check(input: string):Promise<ErrorTag[]>{
       }  
     }
 
-  // get simple rule name from an gramadoir's ruleId response attribute
-  let cleanedErrorName = await gramadoirId2string(errorsEN[i].ruleId);
-
-    const errorTags = errorsEN.map((errorEN, i) => {
+    // map gramadoir responses to generic ErrorTag values
+    const errorTags: ErrorTag[] = errorsEN.map((errorEN, i) => {
+      // get simple rule name from an gramadoir's ruleId response attribute
+      console.log(errorEN.ruleId);
+      let cleanedErrorName = gramadoirId2string(errorEN.ruleId);
+      
       return {
         errorText: errorEN.errortext,
         messageGA: errorsGA[i].msg,
@@ -101,9 +103,9 @@ function gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 
 /**
 * Shorten An Gramadoir ruleId to simple name: ex. Lingua::GA::Gramadoir/MOLADH => MOLADH
 * @param str - An Gramadoir ruleId
-* @returns - Promise of simplified string
+* @returns - simplified string
 */
-async function gramadoirId2string(str: string): Promise<string> {
+function gramadoirId2string(str: string): string {
   if (!str) { return ''; }
   const subString = str.replace(/[A-Za-z:]+\//, '');
   if (!subString) { return ''; }
