@@ -30,11 +30,7 @@ async function check(input): Promise<ErrorTag[]>{
         errorText: input,
         messageGA: "string",
         messageEN: "str",
-<<<<<<< HEAD:ngapp/src/app/lib/grammar-engine/checkers/leathan-caol-checker.ts
-        context: input,   // for analysis
-=======
         context: input,
->>>>>>> 1ece3da1b118ba1cd003d45d5dc4b3f09973ee3b:ngapp/src/app/lib/scealai-grammar/checkers/leathan-caol-checker.ts
         type: 'LEATHAN-CAOL',
         color: "color",
         fromX: error.first,
