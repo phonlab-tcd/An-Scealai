@@ -22,5 +22,6 @@ const errors = {
                 "URU": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
                 "SEIMHIU": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
                 "LEATHAN-CAOL": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
+                "GENITIVE": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
               } as const;
                 
