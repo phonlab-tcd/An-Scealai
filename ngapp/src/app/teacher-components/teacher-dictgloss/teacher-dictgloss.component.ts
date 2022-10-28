@@ -52,29 +52,41 @@ export class TeacherDictglossComponent implements OnInit {
   }
 
   sendDictgloss(){
-    let passage = this.newStoryForm.get('passage').value;
+    let formFilled = this.newStoryForm.controls['passage'].value !== '';
 
-    console.log(passage);
-    console.log(this.sendTo);
+    console.log(this.sendTo.length, formFilled);
+    
+    if(this.sendTo.length > 0 && formFilled){
+      this.noStudents = false;
+      let passage = this.newStoryForm.get('passage').value;
 
-    let message: Message = {
-      _id: "", //Check these
-      id: "",
-      subject: "New Dictogloss",
-      date: new Date,
-      senderId: this.auth.getUserDetails()._id, //Teacher ID
-      senderUsername: this.auth.getUserDetails().username, //Teacher Username
-      recipientId: "",
-      text: passage,
-      seenByRecipient: false,
-      audioId: "",
-    }
+      console.log(passage);
+      console.log(this.sendTo);
 
-    for(let student of this.sendTo){
-      message.recipientId = student;
-      this.messageService.saveMessage(message);
+      let message: Message = {
+        _id: "", //Check these
+        id: "",
+        subject: "New Dictogloss",
+        date: new Date,
+        senderId: this.auth.getUserDetails()._id, //Teacher ID
+        senderUsername: this.auth.getUserDetails().username, //Teacher Username
+        recipientId: "",
+        text: passage,
+        seenByRecipient: false,
+        audioId: "",
+      }
+
+      for(let student of this.sendTo){
+        message.recipientId = student;
+        this.messageService.saveMessage(message);
+      }
+      this.goToDashboard();
+    } else if (this.sendTo.length === 0){
+      this.noStudents = true;
     }
   }
+
+  noStudents: boolean = false;
 
   selectAllStudents(){
     this.allSelected = this.allSelected? false:true;
@@ -92,6 +104,7 @@ export class TeacherDictglossComponent implements OnInit {
 
   sendList(id: string){
     if(!this.sendTo.includes(id)){
+      this.noStudents = false;
       this.sendTo.push(id);
     } else {
       this.sendTo.splice(this.sendTo.indexOf(id), 1);

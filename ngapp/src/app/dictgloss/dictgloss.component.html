@@ -12,39 +12,30 @@
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
             <div class="playback">
-                <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+                <app-synth-item *ngFor="let si of synthItems; let i = index" class="synth" [synthItem]=si [i]=i></app-synth-item>
                 <!-- Select dialect -->
-                <form [formGroup]="synthForm">
-                    <div class="formGroup">
-                        <p class="formLabel">{{ts.l.dialect}}</p>
-                        <select formControlName="dialect" class="dialectSelect">
-                            <option value="connemara">{{ts.l.connacht}}</option>
-                            <option value="donegal">{{ts.l.ulster}}</option>
-                            <option value="kerry">{{ts.l.munster}}</option>
-                        </select>
-                    </div>
-                </form>
+                <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
             </div>
             <hr>
-            <div class="buttons-and-templates">
+            <div class="buttons-and-templates"> 
                 <div *ngFor="let i of wordsPunc; let index = index">
                     <div *ngIf="isNotPunctuated(i); else punctuated;">
-                        <button 
-                        class="button-unguessed"
-                        *ngIf="shownWords[index] !== wordsPunc[index] && !(this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1));" 
-                        (click)="firstChar(index); generalCheck();">
-                            <h5>{{shownWords[index]}}</h5>
-                        </button>
-                        <button 
-                        class="button-pressed"
-                        *ngIf="shownWords[index] !== wordsPunc[index] && this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1);">
-                            <h5>{{shownWords[index]}}</h5>
-                        </button>
-                        <button 
-                        class="button-guessed"
-                        *ngIf="shownWords[index] === wordsPunc[index];">
-                            <h5>{{shownWords[index]}}</h5>
-                        </button>
+                        <span class="unguessed-class" *ngIf="shownWords[index] !== wordsPunc[index] && !(this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1));">
+                            <span class="hint">{{ts.l.dictgloss_hint}}</span>
+                            <button class="button-unguessed" (click)="firstChar(index); generalCheck();">
+                                <h5 class="button-text">{{shownWords[index]}}</h5>
+                            </button>
+                        </span>
+                        <span *ngIf="shownWords[index] !== wordsPunc[index] && this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1);">
+                            <button class="button-pressed">
+                                <h5 class="button-text">{{shownWords[index]}}</h5>
+                            </button>
+                        </span>
+                        <span *ngIf="shownWords[index] === wordsPunc[index];">
+                            <button class="button-guessed">
+                                <h5 class="button-text">{{shownWords[index]}}</h5>
+                            </button>
+                        </span>
                     </div>
                     <ng-template #punctuated><b><h5 style="margin: 2px;">{{i}}</h5></b></ng-template>
                 </div>

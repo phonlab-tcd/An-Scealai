@@ -13,9 +13,12 @@
 }
 
 .playback {
-    display: inline-block;
-    margin: 10px 10px 0 0;
-    padding: 5px 10px
+    display: block;
+    //margin: 8px;
+}
+
+.synth {
+    //margin: 2px;
 }
 
 .infoBoxButton {
@@ -78,6 +81,32 @@
     border-style: solid;
     border-color: rgba($color: #8f0000, $alpha: 1.0);
     background-color: rgba($color: rgba(255, 131, 131, 0.459), $alpha: 1.0);
+}
+
+.button-text {
+    margin: 0px;
+}
+
+.unguessed-class {
+    display: grid;
+    justify-content: center;
+    position: relative;
+}
+
+.unguessed-class .hint {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    top: -35px;
+  }
+
+.unguessed-class:hover .hint{
+    visibility: visible;
 }
 
 .victory-button {

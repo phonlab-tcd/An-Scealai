@@ -2240,4 +2240,10 @@ export default {
   teacher_deselected: {
     ga: 'Díroghnaigh go léir',
     en: 'Deselect All' },
+  teacher_error_dictgloss: {
+    ga: 'Roghnaigh dalta amháin ar a laghad',
+    en: 'Choose at least 1 student' },
+  dictgloss_hint: {
+    ga: 'Cliceáil le haghaidh leid',
+    en: 'Click for a hint' }
 }

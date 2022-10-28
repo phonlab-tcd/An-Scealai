@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { SynthItem } from 'app/synth-item';
 import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
@@ -11,6 +11,9 @@ import { UserService } from 'app/user.service';
 import { ClassroomService } from 'app/classroom.service';
 import { Classroom } from 'app/classroom';
 import { MessageService } from 'app/message.service';
+import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { TextProcessingService } from 'app/services/text-processing.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-dictgloss',
@@ -22,6 +25,8 @@ export class DictglossComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
+    private textProcessor: TextProcessingService,
     private messageService: MessageService,
     private classroomService: ClassroomService,
     private userService: UserService,
@@ -43,8 +48,8 @@ export class DictglossComponent implements OnInit {
     }
   } 
 
+  synthesisPlayer: SynthesisPlayerComponent;
   generatedFromMessages: boolean;
-
   isTeacher: boolean;
   teacherName: string;
   teacherId: string;
@@ -73,6 +78,30 @@ export class DictglossComponent implements OnInit {
       });
       this.isStudent = true;
     }
+    this.refresh();
+  }
+
+  @Input() text: string;
+  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+
+  selected: Voice;
+  refresh(voice: Voice = undefined) {
+    if(voice) this.selected = voice;
+    this.synthItems.map(s=>{
+      s.audioUrl = undefined;
+      s.dispose();
+    })
+    this.synthItems = [] //Does this mess stuff up?
+    this.collateSynths(this.sentences);
+    // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
+    if(this.texts === "") return;
+    // setTimeout(()=>{
+    //   this.synthItems =
+    //     this.textProcessor
+    //         .sentences(this.texts)
+    //     .map(l=>this.getSynthItem(l));
+    //   this.cdref.detectChanges();
+    // },50);
   }
 
   init() {
@@ -169,6 +198,7 @@ export class DictglossComponent implements OnInit {
     this.wrongWords = [];
     this.wordsPunc = [];
     this.wordsPuncLower = [];
+    this.synthItems = [];
     this.synthText = '';
     this.wrong_words_div = "";
     this.rightCount = 0;
@@ -222,7 +252,7 @@ export class DictglossComponent implements OnInit {
       this.synthText += this.words[i] + " ";
     }
 
-    console.log('This is the synth input', this.synthText);
+    console.log('This is the synth input', this.sentences);
     if(this.hasText){
       //this.dictglossSynthRefresh();
       this.collateSynths(this.sentences);
@@ -252,6 +282,7 @@ export class DictglossComponent implements OnInit {
     this.allGuessed = false;
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
+    selector.value = "";
 
     let isValid = false;
     for(let i = 0; i < this.texts.length; i++){
@@ -274,7 +305,6 @@ export class DictglossComponent implements OnInit {
 
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);
-    selector.value = "";
   }
 
   dictglossFromMessages(text: string) {
@@ -306,26 +336,14 @@ export class DictglossComponent implements OnInit {
     this.displayText(this.texts);
   }
   
-  selected: Voice = voices[0];
   synthItems: SynthItem[] = [];
   collateSynths(sentences: string[]){
-    // if(this.synthItems.length === 0){
-      for(let i = 0; i < sentences.length; i++){
-        this.synthItems.push(this.getSynthItem(sentences[i]));
-        console.log(this.synthItems[i]);
-      }
-      console.log(this.synthItems);
-      
-    // }
+    for(let i = 0; i < sentences.length; i++){
+      this.synthItems.push(this.getSynthItem(sentences[i]));
+      console.log(this.synthItems[i]);
+    }
+    console.log(this.synthItems);
   }
-
-  // refresh(voice: Voice = undefined) {
-  //   if(voice) this.selected = voice;
-  //   this.synthItems.map(s => {
-  //     s.audioUrl = undefined;
-  //     s.dispose();
-  //   })
-  // }
 
   getSynthItem(line: string) {
     return new SynthItem(line,this.selected,this.synth);

@@ -22,10 +22,13 @@
     </form>
     <div style="margin-top: 8px;">
         <button class="backButton" (click)="goToDashboard()">{{ts.l.teacher_go_to_dashboard}}</button>
-        <button class="backButton" (click)="sendDictgloss(); goToDashboard();">{{ts.l.teacher_send_dictgloss}}</button>
+        <button class="backButton" (click)="sendDictgloss()">{{ts.l.teacher_send_dictgloss}}</button>
     </div>
     <div class="select">
         <button class="selectButton" *ngIf="!allSelected; else deselected;" (click)="selectAllStudents();">{{ts.l.teacher_selected}}</button>
+        <div class="validationAlert" *ngIf="!(sendTo.length > 0) && noStudents">
+            *{{ts.l.teacher_error_dictgloss}}
+        </div>
         <ng-template #deselected>
             <button class="selectButton"(click)="selectAllStudents();">{{ts.l.teacher_deselected}}</button>
         </ng-template>
