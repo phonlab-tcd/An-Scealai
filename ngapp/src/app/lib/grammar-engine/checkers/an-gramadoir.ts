@@ -19,14 +19,24 @@ export type GramadoirTag = {
   errorlength: string;
 };
 
-export type GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl' | 'https://cadhan.com/api/gramadoir/1.0';
-
-const gramadoirUrl: GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
-
 async function check(input):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
-    const errorsEN = await callAnGramadoir(input, 'en');
-    const errorsGA = await callAnGramadoir(input, 'ga');
+    
+    let errorsEN = [];
+    let errorsGA = [];
+    
+    try {
+      errorsEN = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
+      errorsGA = await callAnGramadoir(input, 'ga', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
+    }
+    catch(_) {
+      try {
+        errorsEN = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
+        errorsGA = await callAnGramadoir(input, 'ga', 'https://cadhan.com/api/gramadoir/1.0');
+      } catch(_) {
+        reject();
+      }  
+    }
     
     let errorTags:ErrorTag[] = [];
     
@@ -49,9 +59,9 @@ async function check(input):Promise<ErrorTag[]>{
   });
 }
 
-async function callAnGramadoir(input: string, language: 'en' | 'ga'): Promise<GramadoirTag[]> {
+async function callAnGramadoir(input: string, language: 'en' | 'ga', url): Promise<GramadoirTag[]> {
 
-  const res = await fetch(gramadoirUrl, {
+  const res = await fetch(url, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded',
        },
