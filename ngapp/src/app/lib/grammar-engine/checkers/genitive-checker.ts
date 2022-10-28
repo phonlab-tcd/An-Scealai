@@ -13,13 +13,15 @@ async function check(input):Promise<ErrorTag[]>{
     const errors = await callGenitiveChecker(input);
     let errorTags:ErrorTag[] = [];
     
+
+    console.log('GEN ERS', errors);
+
     for (const error of errors) {
-    
       let tag:ErrorTag = {
-        errorText: input,
+        errorText: error.errortext,
         messageGA: "string",
         messageEN: "str",
-        context: input,
+        context: error.context,
         type: 'GENITIVE',
         color: "color",
         fromX: 0,
@@ -43,8 +45,7 @@ async function callGenitiveChecker(input: string): Promise<any> {
        });
 
     if (res.ok) {
-      console.log(res.json());
-      return res.json();
+      return await res.json();
     }
   
     throw new Error(res.statusText);
