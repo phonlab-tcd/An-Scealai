@@ -23,16 +23,31 @@ export class GrammarEngine {
             this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
         );
 
-        const allErrorTags = await Promise.all(this.grammarCheckers.map(async checker => 
-            await Promise.all(sentences.map(async s => {
+        const sentencesWithOffsets = []
+
+        let i = 0
+        for (const s of sentences) {
+            const sIndex = input.slice(i).indexOf(s);
+            const offset = i + sIndex;
+            sentencesWithOffsets.push([offset, s]); 
+            i = offset + s.length;
+        }
+
+        const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker => 
+            await Promise.all(sentencesWithOffsets.map(async ([offset, s]) => {
                 if (s in this.cacheMap.get(checker.name)) {
                     return this.cacheMap.get(checker.name)[s];
                 }
                 const errorTags = await checker.check(s);
                 this.cacheMap.get(checker.name)[s] = errorTags;
-                return errorTags;
+                const offsetErrorTags = errorTags.map(tag => {
+                    tag.fromX += offset;
+                    tag.toX += offset;
+                    return tag;
+                })
+                return offsetErrorTags;
             }))
-        ));
+        ))).flat();
 
         return allErrorTags;
     }

@@ -303,7 +303,7 @@ export class DashboardComponent implements OnInit {
   // and the current story being edited given its id from url
   async ngOnInit() {
     const grammarEngine = new GrammarEngine([leathanCaolChecker, anGramadoir], this.http);
-    const errorTags = await grammarEngine.check('Hello world. Here are some sentences.');
+    const errorTags = await grammarEngine.check('Hello world.     Here are some sentences.');
     console.log('ERROR TAGS :)', errorTags);
 
     this.storySaved = true;

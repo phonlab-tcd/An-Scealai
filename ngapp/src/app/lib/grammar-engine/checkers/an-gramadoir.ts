@@ -32,17 +32,10 @@ async function check(input):Promise<ErrorTag[]>{
     
     for (let i = 0; i < errorsEN.length; i++) {
       let tag:ErrorTag = {
-<<<<<<< HEAD
-        errorText: error.errortext,
-        messageGA: "string",
-        messageEN: "str",
-        context: input,
-=======
         errorText: errorsEN[i].errortext,
         messageGA: errorsGA[i].msg,
         messageEN: errorsEN[i].msg,
         context: errorsEN[i].context,
->>>>>>> b139042f599adffc7f177decf65e4dcc51b788af
         type: 'URU',
         color: "color",
         fromX: errorsEN[i].fromx,
@@ -67,11 +60,8 @@ async function callAnGramadoir(input: string, language: 'en' | 'ga'): Promise<Gr
      });
 
   if (res.ok) {
-    console.log(res.json());
-    return res.json();
+    return await res.json();
   }
-  
-  console.log("ERROR");
 
   throw new Error(res.statusText);
     
