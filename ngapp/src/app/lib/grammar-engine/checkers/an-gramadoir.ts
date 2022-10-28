@@ -32,7 +32,7 @@ async function check(input):Promise<ErrorTag[]>{
     for (const error of errors) {
     
       let tag:ErrorTag = {
-        errorText: error.errorText,
+        errorText: error.errortext,
         messageGA: "string",
         messageEN: "str",
         context: input,

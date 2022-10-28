@@ -35,6 +35,7 @@ import   config                     from 'abairconfig';
 
 import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
 import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
+import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -301,7 +302,7 @@ export class DashboardComponent implements OnInit {
   // set the stories array of all the student's stories w
   // and the current story being edited given its id from url
   async ngOnInit() {
-    const grammarEngine = new GrammarEngine([leathanCaolChecker], this.http);
+    const grammarEngine = new GrammarEngine([leathanCaolChecker, anGramadoir], this.http);
     const errorTags = await grammarEngine.check('Hello world. Here are some sentences.');
     console.log('ERROR TAGS :)', errorTags);
 
