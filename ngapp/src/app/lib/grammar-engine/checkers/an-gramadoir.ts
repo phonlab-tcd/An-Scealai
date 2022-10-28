@@ -48,7 +48,6 @@ async function check(input: string):Promise<ErrorTag[]>{
     // map gramadoir responses to generic ErrorTag values
     const errorTags: ErrorTag[] = errorsEN.map((errorEN, i) => {
       // get simple rule name from an gramadoir's ruleId response attribute
-      console.log(errorEN.ruleId);
       let cleanedErrorName = gramadoirId2string(errorEN.ruleId);
       
       return {
