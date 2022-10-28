@@ -36,7 +36,7 @@ async function check(input: string):Promise<ErrorTag[]>{
       errorsEN = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
       errorsGA = await callAnGramadoir(input, 'ga', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
     }
-    catch(_) {
+    catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
         errorsEN = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
         errorsGA = await callAnGramadoir(input, 'ga', 'https://cadhan.com/api/gramadoir/1.0');
@@ -44,27 +44,24 @@ async function check(input: string):Promise<ErrorTag[]>{
         reject();
       }  
     }
-    
-    let errorTags:ErrorTag[] = [];
 
-    // map both English and Irish An Gramadoir values to generic ErrorTag values
-    for (let i = 0; i < errorsEN.length; i++) {
-      // get simple rule name from an gramadoir's ruleId response attribute
-      let cleanedErrorName = await gramadoirId2string(errorsEN[i].ruleId);
-      
-      let tag:ErrorTag = {
-        errorText: errorsEN[i].errortext,
+  // get simple rule name from an gramadoir's ruleId response attribute
+  let cleanedErrorName = await gramadoirId2string(errorsEN[i].ruleId);
+
+    const errorTags = errorsEN.map((errorEN, i) => {
+      return {
+        errorText: errorEN.errortext,
         messageGA: errorsGA[i].msg,
-        messageEN: errorsEN[i].msg,
-        context: errorsEN[i].context,
+        messageEN: errorEN.msg,
+        context: errorEN.context,
         nameEN: ERROR_INFO[cleanedErrorName].nameEN,
         nameGA: ERROR_INFO[cleanedErrorName].nameGA,
         color: ERROR_INFO[cleanedErrorName].color,
-        fromX: errorsEN[i].fromx,
-        toX: errorsEN[i].tox,
-      }
-      errorTags.push(tag);
-    }
+        fromX: errorEN.fromx,
+        toX: errorEN.tox,
+      } as ErrorTag;
+    });
+
     resolve(errorTags);
   });
 }
