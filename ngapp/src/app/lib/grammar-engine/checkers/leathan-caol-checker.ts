@@ -1,55 +1,60 @@
-import { GrammarChecker} from '../types';
-import { ErrorTag} from '../types';
+import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
 
+// initialise the grammar checker
 export const leathanCaolChecker: GrammarChecker = {
   name: "LEATHAN_CAOL",
   check: check
 }; 
 
+// indices of vowels that break the rule
 type DisagreeingVowelIndices = {
   broadFirst: boolean;
   first: number;
   second: number;
 };
 
-const broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
-const slender = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
-const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
-const ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
+const BROAD = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
+const SLENDER = ['e', 'i', 'é', 'í', 'E', 'I', 'É', 'Í'];
+const CONSONANTS = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z', 'B', 'C', 'D', 'F', 'G', 'H', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z'];
+const IGNORE = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
-
-async function check(input): Promise<ErrorTag[]>{
+/**
+* Check input text according to broad/slender rule
+* @param input - sentence from story text
+* @returns - Promise of an array of ErrorTags
+*/
+async function check(input: string): Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>((resolve, reject) => {
     const errors = getDisagreeingVowelIndices(input);
-    console.log("ERRORS: ", errors);
     let errorTags:ErrorTag[] = [];
     
+    // map index objects to generic ErrorTag values
     for (const error of errors) {
-    
       let tag:ErrorTag = {
         errorText: input,
-        messageGA: "string",
-        messageEN: "str",
+        messageGA: ERROR_INFO['LEATHAN-CAOL'].messageGA,
+        messageEN: ERROR_INFO['LEATHAN-CAOL'].messageEN,
         context: input,
-        type: 'LEATHAN-CAOL',
-        color: "color",
+        nameEN: ERROR_INFO['LEATHAN-CAOL'].nameEN,
+        nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
+        color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
         toX: error.second,
       }
-      
       errorTags.push(tag);
     }
-
     resolve(errorTags);
   });
 }
 
-
-// Takes in a story text and returns an
-// array of vowel tags showing slender/broad
-// errors around consonants of words in the text
+/**
+* Takes in a story sentence and returns 
+* an array of vowel tags showing slender/broad
+* errors around consonants of words in the text
+* @param text - sentence from story text
+* @returns - Array of objects specifying indices of vowel disagreement
+*/
 function getDisagreeingVowelIndices(text: string): DisagreeingVowelIndices[] {
-  // Calculate which words need to be skipped, given the 'ignore' array.
   const skipIndices = getSkipIndices(text);
   const tags: DisagreeingVowelIndices[] = [];
   // Algorithm to find vowels in the same word on either side of one or more
@@ -77,15 +82,16 @@ function getDisagreeingVowelIndices(text: string): DisagreeingVowelIndices[] {
   return tags;
 }
 
-
-
-// Input : text from a story written by a user
-// Output : an array 'skipIndices' that contains at a given index i the amount
-//          of characters to be skipped in order to get past a word
-//          in the 'ignore' array, from where it starts in the input string.
+/**
+* Calculate which words (irregulars) need to be skipped, given the 'ignore' array.
+* @param text - sentence from story text
+* @returns - Array 'skipIndices' that contains at a given index i the amount
+*                   of characters to be skipped in order to get past a word
+*                   in the 'ignore' array, from where it starts in the input string.
+*/
 function getSkipIndices(text: string): number[] {
   let skipIndices: number[] = [];
-  for (let word of ignore) {
+  for (let word of IGNORE) {
     let lowerCaseText = text.toLowerCase();
     let indices = getAllIndexes(lowerCaseText, word);
     for (let index of indices) {
@@ -95,6 +101,12 @@ function getSkipIndices(text: string): number[] {
   return skipIndices;
 }
 
+/**
+* Get all indices 
+* @param text - sentence from story text (in lowercase)
+* @param val - word from the ignore list
+* @returns - Array of indices
+*/
 function getAllIndexes(arr: string, val: string | RegExp) : number[] {
   var indexes = [];
 
@@ -109,37 +121,35 @@ function getAllIndexes(arr: string, val: string | RegExp) : number[] {
     regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
     match = regex.exec(arr);
   }
-  
   return indexes;
 }
 
-// given a string, return the string after
-// changing the content a specified index
+// given a string, return the string after changing the content a specified index
 function replaceAt(str, index, replacement) : string {
   return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
 }
 
 // given a character, returns whether or not it is a vowel
 function isVowel(char) : boolean {
-  return broad.includes(char) || slender.includes(char);
+  return BROAD.includes(char) || SLENDER.includes(char);
 }
 
 // given a character, returns whether or not it is broad
 function isLeathan(char) : boolean {
-  return broad.includes(char);
+  return BROAD.includes(char);
 }
 
 // given a character, returns whether or not it is slender
 function isCaol(char) : boolean {
-  return slender.includes(char);
+  return SLENDER.includes(char);
 }
 
 // given a character, returns whether or not it is a consonant
 function isConsonant(char) : boolean {
-  return consonants.includes(char);
+  return CONSONANTS.includes(char);
 }
 
 // given two vowels, returns whether they are both broad or both slender 
 function vowelsAgree(v1, v2) : boolean {
-  return (broad.includes(v1) && broad.includes(v2)) || (slender.includes(v1) && slender.includes(v2));
+  return (BROAD.includes(v1) && BROAD.includes(v2)) || (SLENDER.includes(v1) && SLENDER.includes(v2));
 }
