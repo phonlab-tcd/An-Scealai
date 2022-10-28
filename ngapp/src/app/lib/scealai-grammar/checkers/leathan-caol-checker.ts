@@ -30,8 +30,8 @@ async function check(input):Promise<ErrorTag[]>{
         errorText: input,
         messageGA: "string",
         messageEN: "str",
-        context: input,   // for analysis
-        type: 'LEATHAN-CAEOL',
+        context: input,
+        type: 'LEATHAN-CAOL',
         color: "color",
         fromX: error.first,
         toX: error.second,
