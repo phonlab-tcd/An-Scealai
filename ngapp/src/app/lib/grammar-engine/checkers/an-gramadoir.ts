@@ -13,7 +13,7 @@ export type GramadoirTag = {
   tox: number;
   ruleId: string;
   msg: string;
-  contex: string;
+  context: string;
   contextoffset: string;
   errortext: string;
   errorlength: string;
@@ -25,21 +25,28 @@ const gramadoirUrl: GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1
 
 async function check(input):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
-    const errors = await callAnGramadoir(input, 'en');
-    console.log("ERRORS: ", errors);
+    const errorsEN = await callAnGramadoir(input, 'en');
+    const errorsGA = await callAnGramadoir(input, 'ga');
+    
     let errorTags:ErrorTag[] = [];
     
-    for (const error of errors) {
-    
+    for (let i = 0; i < errorsEN.length; i++) {
       let tag:ErrorTag = {
+<<<<<<< HEAD
         errorText: error.errortext,
         messageGA: "string",
         messageEN: "str",
         context: input,
+=======
+        errorText: errorsEN[i].errortext,
+        messageGA: errorsGA[i].msg,
+        messageEN: errorsEN[i].msg,
+        context: errorsEN[i].context,
+>>>>>>> b139042f599adffc7f177decf65e4dcc51b788af
         type: 'URU',
         color: "color",
-        fromX: error.fromx,
-        toX: error.tox,
+        fromX: errorsEN[i].fromx,
+        toX: errorsEN[i].tox,
       }
       
       errorTags.push(tag);
