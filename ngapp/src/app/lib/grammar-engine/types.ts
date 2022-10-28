@@ -3,7 +3,7 @@ export type GrammarChecker = {
   name: string;
 };
 
-export type GrammarCache = {[input: string]: Promise<ErrorTag[]>}
+export type GrammarCache = {[input: string]: ErrorTag[]}
 
 export type ErrorTag = {
   errorText: string;  // for counting
@@ -21,6 +21,6 @@ type ErrorType = keyof typeof errors;
 const errors = {
                 "URU": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
                 "SEIMHIU": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
-                "CEOL": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
+                "LEATHAN-CAOL": {color: 'X', messageEN: 'Y', messageGA: 'Z'},
               } as const;
                 

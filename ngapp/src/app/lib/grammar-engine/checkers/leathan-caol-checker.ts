@@ -2,7 +2,7 @@ import { GrammarChecker} from '../types';
 import { ErrorTag} from '../types';
 
 export const leathanCaolChecker: GrammarChecker = {
-  name: "Leathan/Caeol",
+  name: "LEATHAN_CAOL",
   check: check
 }; 
 
@@ -18,7 +18,7 @@ const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'l', 'm', 'n', 'p', 'r', 's', 
 const ignore = ['aniar', 'aníos', 'aréir', 'arís', 'aríst', 'anseo', 'ansin', 'ansiúd', 'cén', 'den', 'faoina', 'ina', 'inar', 'insa', 'lena', 'lenar'];
 
 
-async function check(input):Promise<ErrorTag[]>{
+async function check(input): Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>((resolve, reject) => {
     const errors = getDisagreeingVowelIndices(input);
     console.log("ERRORS: ", errors);
@@ -31,7 +31,7 @@ async function check(input):Promise<ErrorTag[]>{
         messageGA: "string",
         messageEN: "str",
         context: input,   // for analysis
-        type: 'LEATHAN-CAEOL',
+        type: 'LEATHAN-CAOL',
         color: "color",
         fromX: error.first,
         toX: error.second,
@@ -103,7 +103,7 @@ function getAllIndexes(arr: string, val: string | RegExp) : number[] {
 
   while (match) {
     regex = new RegExp(val);
-    let interiorMatch = regex.exec(match[0])
+    let interiorMatch = regex.exec(match[0]);
     indexes.push(match.index + interiorMatch.index);
     arr = replaceAt(arr, match.index, '#'.repeat(5));
     regex = new RegExp("[\\s.!?\\-]" + val + "[\\s.!?\\-]", "g");
