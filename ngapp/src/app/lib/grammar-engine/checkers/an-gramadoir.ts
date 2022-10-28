@@ -29,7 +29,7 @@ async function check(input):Promise<ErrorTag[]>{
       errorsEN = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
       errorsGA = await callAnGramadoir(input, 'ga', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
     }
-    catch(_) {
+    catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
         errorsEN = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
         errorsGA = await callAnGramadoir(input, 'ga', 'https://cadhan.com/api/gramadoir/1.0');
@@ -37,23 +37,19 @@ async function check(input):Promise<ErrorTag[]>{
         reject();
       }  
     }
-    
-    let errorTags:ErrorTag[] = [];
-    
-    for (let i = 0; i < errorsEN.length; i++) {
-      let tag:ErrorTag = {
-        errorText: errorsEN[i].errortext,
+
+    const errorTags = errorsEN.map((errorEN, i) => {
+      return {
+        errorText: errorEN.errortext,
         messageGA: errorsGA[i].msg,
-        messageEN: errorsEN[i].msg,
-        context: errorsEN[i].context,
+        messageEN: errorEN.msg,
+        context: errorEN.context,
         type: 'URU',
         color: "color",
-        fromX: errorsEN[i].fromx,
-        toX: errorsEN[i].tox,
-      }
-      
-      errorTags.push(tag);
-    }
+        fromX: errorEN.fromx,
+        toX: errorEN.tox,
+      } as ErrorTag;
+    });
 
     resolve(errorTags);
   });
@@ -76,7 +72,6 @@ async function callAnGramadoir(input: string, language: 'en' | 'ga', url): Promi
   throw new Error(res.statusText);
     
 }
-
 
 function gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 'ga') {
   return `teacs=${encodeURIComponent(input)}&teanga=${language}`;

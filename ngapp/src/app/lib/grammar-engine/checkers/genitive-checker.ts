@@ -11,25 +11,18 @@ const genitiveUrl = 'https://phoneticsrv3.lcs.tcd.ie/gramsrv/api/grammar'
 async function check(input):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
     const errors = await callGenitiveChecker(input);
-    let errorTags:ErrorTag[] = [];
-    
-
-    console.log('GEN ERS', errors);
-
-    for (const error of errors) {
-      let tag:ErrorTag = {
-        errorText: error.errortext,
-        messageGA: "string",
-        messageEN: "str",
-        context: error.context,
+    const errorTags: ErrorTag[] = errors.map(error => {
+      return {
+        errorText: input.slice(error.fromx, error.tox),
+        messageGA: "GA_msg",
+        messageEN: "EN_msg",
+        context: input,
         type: 'GENITIVE',
         color: "color",
         fromX: 0,
         toX: 1,
       }
-      
-      errorTags.push(tag);
-    }
+    });
 
     resolve(errorTags);
   });
