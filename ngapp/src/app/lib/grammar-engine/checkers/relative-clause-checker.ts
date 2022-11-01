@@ -60,5 +60,5 @@ async function callRelativeClauseChecker(input: string): Promise<any> {
 * @returns - encoded string
 */
 function relativeXWwwFormUrlencodedRequestData(input: string) {
-  return `text=${encodeURIComponent(input)}&check=relative`;
+  return `text=${encodeURIComponent(input)}&check=relclause`;
 }
