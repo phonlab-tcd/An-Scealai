@@ -298,6 +298,8 @@ export class DashboardComponent implements OnInit {
   // set the stories array of all the student's stories w
   // and the current story being edited given its id from url
   ngOnInit() {
+
+
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
