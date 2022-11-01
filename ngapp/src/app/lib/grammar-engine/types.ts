@@ -201,6 +201,13 @@ export const ERROR_INFO = {
                   color: 'X', 
                   messageEN: '', 
                   messageGA: ''
+                },
+                "RELATIVE-CLAUSE": {
+                  nameEN: '',
+                  nameGA: '',
+                  color: 'X', 
+                  messageEN: '', 
+                  messageGA: ''
                 }
               } as const;
                 
