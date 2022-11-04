@@ -74,7 +74,6 @@
     "@types/lodash": "^4.14.172",
     "@types/node": "^12.11.1",
     "@types/uuid": "^3.4.4",
-    "codelyzer": "^0.0.28",
     "cypress": "^9.6.1",
     "jasmine-core": "~4.1.1",
     "jasmine-spec-reporter": "~5.0.0",
