@@ -303,18 +303,7 @@ export class DashboardComponent implements OnInit {
   // set the stories array of all the student's stories
   // set the stories array of all the student's stories w
   // and the current story being edited given its id from url
-<<<<<<< HEAD
-  async ngOnInit() {
-    // const grammarEngine = new GrammarEngine([leathanCaolChecker, anGramadoir, genitiveChecker, relativeClauseChecker], this.http);
-    // const errorTags = await grammarEngine.check('an bord ar atá an forc.');
-    // //const errorTags = await grammarEngine.check('Mála an fear');
-    // 
-    // console.log('ERROR TAGS :)', errorTags);
-=======
   ngOnInit() {
-
->>>>>>> 873373a77a11d8b1bd29865f7b9d31849aec28d5
-
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
