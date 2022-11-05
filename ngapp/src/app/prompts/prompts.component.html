@@ -55,11 +55,19 @@
       <!--Chosen Words & Audio Playback-->
       <div *ngIf="wordBank.length > 0" class="container">
         <div *ngIf="!bankHighlightsLoading" class="word-bank">
-          <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
-          <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
+          <!--Synth-->
+          <div class="playback">
+            <div class="synth-item">
+              <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+            </div>
+            <!-- Select dialect -->
+            <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+          </div>
+        <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+        <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
         </div>
         <div *ngIf="bankHighlightsLoading" class="word-bank">
-          <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item><b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+          <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
           <div>{{createWordBankString(wordBank)}}</div>
         </div>
       </div>

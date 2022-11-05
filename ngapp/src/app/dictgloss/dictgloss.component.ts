@@ -86,7 +86,7 @@ export class DictglossComponent implements OnInit {
   selected: Voice;
   refresh(voice: Voice = undefined) {
     if(voice) this.selected = voice;
-    this.synthItems.map(s=>{
+    this.synthItems.forEach(s=>{
       s.audioUrl = undefined;
       s.dispose();
     })
@@ -243,7 +243,6 @@ export class DictglossComponent implements OnInit {
     }
 
     if(this.hasText){
-      //this.dictglossSynthRefresh();
       this.collateSynths(this.sentences);
     }
     
@@ -332,14 +331,6 @@ export class DictglossComponent implements OnInit {
 
   getSynthItem(line: string) {
     return new SynthItem(line,this.selected,this.synth);
-  }
-
-  dictglossSynthRefresh() {
-    if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
-    //this.synthItem.voice = this.synth.api2_voice_from_dialect('connemara');
-    //this.synthItem = new SynthItem(this.synthText, this.voices[1], this.synth);
-    this.synthItem.text = "Play Text";  //Makes the text in the synth item not visible
-    console.log("REQUEST URL:",this.synthItem.requestUrl);
   }
 
   isNotPunctuated(i: string) {

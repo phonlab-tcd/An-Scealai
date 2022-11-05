@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewEncapsulation, } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
 import { GrammarService } from 'app/grammar.service';
 import { TranslationService } from '../translation.service';
 import { StoryService } from '../story.service'
 import { AuthenticationService } from 'app/authentication.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { SynthesisService } from 'app/services/synthesis.service';
+import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
+import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
 
 @Component({
   selector: 'app-prompts',
@@ -495,6 +496,29 @@ export class PromptsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("pos-prompt-init");
+    this.refresh();
+  }
+
+  @Input() text: string;
+  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+
+  selected: Voice;
+  refresh(voice: Voice = undefined) {
+    if(voice) this.selected = voice;
+    this.synthItem.audioUrl = undefined;
+    this.synthItem.dispose();
+    this.makeSynth();
+    // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
+    if(this.arrayString === "") return;
+  }
+
+  makeSynth(){
+    this.synthItem = this.getSynthItem(this.arrayString);
+    this.synthItem.text = "Play Prompt";
+  }
+
+  getSynthItem(line: string) {
+    return new SynthItem(line,this.selected,this.synth);
   }
 
   posSynthRefresh() {
@@ -583,6 +607,7 @@ export class PromptsComponent implements OnInit {
       arrayString = arrayString.charAt(0).toUpperCase() + arrayString.slice(1);
       this.arrayString = arrayString;
     }
+    this.makeSynth();
     return arrayString;
   }
 
