@@ -162,8 +162,11 @@ export class DictglossComponent implements OnInit {
   totalTime: number = 0;
   interval: any;
   startTimer(){
+    var start = Date.now();
     this.interval = setInterval(() => {
-      this.totalTime++;
+      var change;
+      change = Date.now() - start;
+      this.totalTime = Math.floor(change / 1000)
     },1000)
   }
 
@@ -173,11 +176,12 @@ export class DictglossComponent implements OnInit {
 
   resetTimer(){
     this.totalTime = 0;
+    clearInterval(this.interval);
   }
 
   displayTime(totalTime: number): string{
     let time: string;
-    time = Math.floor(totalTime / 60).toString() + " minutes " + (totalTime % 60).toString() + " seconds";
+    time = Math.floor(totalTime / 60).toString() + " minutes " + Math.floor(totalTime % 60).toString() + " seconds";
     return time;
   }
 
