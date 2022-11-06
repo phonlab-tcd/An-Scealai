@@ -210,8 +210,7 @@ export class MessagesComponent implements OnInit {
     this.messageService.getMessagesForLoggedInUser().subscribe( (res: Message[]) =>{
       this.receivedMessages = [];
       if(this.isTeacher) {
-        let messages = res;
-        for(let m of messages) {
+        for(let m of res) {
           for(let s of this.classroom.studentIds) {
             if(s === m.senderId) {
               this.receivedMessages.push(m);

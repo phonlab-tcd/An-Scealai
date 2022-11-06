@@ -12,13 +12,15 @@ let Message = new Schema({
         type: Date
     },
     senderId: {
-        type: String
+        type: String,
+        index: true,
     },
     senderUsername: {
       type: String
     },
     recipientId: {
-        type: String
+        type: String,
+        index: true,
     },
     text: {
         type: String

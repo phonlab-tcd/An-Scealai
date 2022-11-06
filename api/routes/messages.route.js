@@ -23,15 +23,15 @@ messageRoutes.route('/create').post(function (req, res) {
     });
 });
 
-// Get messages 
+// Get messages
 messageRoutes.route('/viewMessges/:id').get(function(req, res) {
-    Message.find({recipientId:req.params.id}, (err, message) => {
-        if(err) {
-            res.status(400).json({"message" : err.message});
-        } else {
-            res.json(message);
-        }
-    });
+  Message.find({recipientId: req.params.id}, (err, message) => {
+    if (err) {
+      res.status(400).json({'message': err.message});
+    } else {
+      res.json(message);
+    }
+  });
 });
 
 // Get message by id
