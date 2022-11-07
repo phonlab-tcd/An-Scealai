@@ -301,8 +301,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
-
     this.storySaved = true;
     // Get the stories from the storyService and run
     // the following function once that data has been retrieved
