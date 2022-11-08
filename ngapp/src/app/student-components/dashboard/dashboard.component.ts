@@ -7,7 +7,7 @@ import { Router                   } from '@angular/router';
 import { SafeUrl                  } from '@angular/platform-browser';
 import { DomSanitizer             } from '@angular/platform-browser';
 import { HttpClient               } from '@angular/common/http';
-import { firstValueFrom, Subject                  } from 'rxjs';
+import { Subject                  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import { HighlightTag             } from 'angular-text-input-highlight';
 import   Quill                      from 'quill';
@@ -32,12 +32,6 @@ import { SynthesisPlayerComponent } from 'app/student-components/synthesis-playe
 import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
-
-import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
-import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
-import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
-import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
-import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
 
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
@@ -74,7 +68,7 @@ type QuillHighlightTag = {
   encapsulation: ViewEncapsulation.None
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
   constructor(
     private http: HttpClient,
     protected sanitizer: DomSanitizer,
@@ -90,7 +84,6 @@ export class DashboardComponent implements OnInit {
     public classroomService: ClassroomService,
     public quillHighlightService: QuillHighlightService,
   ) {
-
     this.textUpdated.pipe(
       distinctUntilChanged(),
     ).subscribe(async () => {
@@ -98,15 +91,28 @@ export class DashboardComponent implements OnInit {
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+      this.grammarLoading = true;
       try {
         await this.quillHighlightService
-          .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
+          .updateGrammarErrors(this.quillEditor, textToCheck, this.story._id)
           .then((errTypes: object) => {
             console.dir(errTypes);
             this.currentGrammarErrorTypes = errTypes;
+            Object.keys(errTypes).forEach((k) => {
+              this.grammarTagFilter[k] !== undefined ?
+              this.grammarTagFilter[k] = this.grammarTagFilter[k] :
+              this.grammarTagFilter[k] = true;
+            });
+            this.quillHighlightService
+                .filterGramadoirTags(this.grammarTagFilter);
+            this.grammarTagsHidden ?
+            this.quillHighlightService
+                .clearAllGramadoirTags(this.quillEditor) :
+            this.quillHighlightService
+                .applyGramadoirTagFormatting(this.quillEditor);
           });
       } catch (updateGrammarErrorsError) {
-        if ( !this.quillHighlightService.showingTags) {
+        if ( !this.grammarTagsHidden) {
           window.alert(
             'There was an error while trying to fetch grammar ' +
             'suggestions from the Gramadóir server:\n' +
@@ -114,6 +120,9 @@ export class DashboardComponent implements OnInit {
             'See the browser console for more information');
         }
         console.dir(updateGrammarErrorsError);
+      }
+      if (grammarCheckerTime === this.mostRecentGramadoirRequestTime) {
+        this.grammarLoading = false;
       }
     });
   }
@@ -160,6 +169,7 @@ export class DashboardComponent implements OnInit {
   filteredTags: Map<string, HighlightTag[]> = new Map();
   checkBox: Map<string, boolean> = new Map();
   mostRecentGramadoirRequestTime = null;
+  grammarLoading = true;
   grammarSelected = true;
   grammarTagsHidden = true;
   grammarSettingsHidden = false;
@@ -172,10 +182,6 @@ export class DashboardComponent implements OnInit {
   teacherSelectedErrors: string[] = [];
   classroomId: string;
   selectTeanglann = true;
-  defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
-    `data:text/html;charset=utf-8,` +
-    this.ts.l.search_for_words_in_dictionary
-  );
 
   downloadStoryFormat = '.pdf';
 
@@ -194,9 +200,6 @@ export class DashboardComponent implements OnInit {
   htmlDataIsReady = false;
   quillEditor: Quill;
   private textUpdated= new Subject<void | string>();
-  
-  // DICTIONARY LOOKUPS
-  wordLookedUp:string = '';
 
   dialects = [
     {
@@ -254,7 +257,7 @@ export class DashboardComponent implements OnInit {
         .filterGramadoirTags(this.grammarTagFilter);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (this.quillHighlightService.showingTags) {
+    if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -265,7 +268,7 @@ export class DashboardComponent implements OnInit {
     console.log(this.quillHighlightService.showLeathanCaol, event);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.quillHighlightService.showingTags) {
+    if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -275,7 +278,7 @@ export class DashboardComponent implements OnInit {
     this.quillHighlightService.showGenitive = event;
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.quillHighlightService.showingTags) {
+    if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
@@ -294,12 +297,15 @@ export class DashboardComponent implements OnInit {
         .filterGramadoirTags(this.grammarTagFilter);
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
-    if (!this.quillHighlightService.showingTags) {
+    if (!this.grammarTagsHidden) {
       this.quillHighlightService
           .applyGramadoirTagFormatting(this.quillEditor);
     }
   }
 
+  // set the stories array of all the student's stories
+  // set the stories array of all the student's stories w
+  // and the current story being edited given its id from url
   ngOnInit() {
     this.storySaved = true;
     // Get the stories from the storyService and run
@@ -349,7 +355,7 @@ export class DashboardComponent implements OnInit {
             }
           });
   }
-  
+
   // return the student's set of
   // stories using the story service
   getStories(): Promise<any> {
@@ -391,24 +397,24 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleGrammarButton() {
-    const key: MessageKey = this.quillHighlightService.showingTags ?
-    'hide_grammar_suggestions' :
-      'show_grammar_suggestions';
+    const key: MessageKey = this.grammarTagsHidden ?
+      'show_grammar_suggestions' :
+      'hide_grammar_suggestions' ;
     return this.ts.message(key);
   }
 
   toggleGrammarTags() {
-    this.quillHighlightService.showingTags ? this.hideGrammarTags() : this.showGrammarTags();
+    this.grammarTagsHidden ? this.showGrammarTags() : this.hideGrammarTags();
   }
 
   hideGrammarTags() {
-    this.quillHighlightService.showingTags = false;
+    this.grammarTagsHidden = true;
     this.quillHighlightService
         .clearAllGramadoirTags(this.quillEditor);
   }
 
   showGrammarTags(){
-    this.quillHighlightService.showingTags = true;
+    this.grammarTagsHidden = false;
     this.quillHighlightService
         .applyGramadoirTagFormatting(this.quillEditor);
   }
@@ -498,42 +504,12 @@ export class DashboardComponent implements OnInit {
       this.saveStory(myId, finishedWritingTime);
     }
   }
-  
-  async lookupWord() {
-    if(this.wordLookedUp) {
-      const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
-      const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
-      const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
-      
-      // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
-      const exampleLinks = teanglannDoc.querySelectorAll('.ex > .head > a');
-      exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
-      `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
 
-      const moreExamplesLink = teanglannDoc.querySelector('.moar');
-      moreExamplesLink?.remove(); // this requires teanglann javascript to work, so can just remove.
-      
-      const resultsContainer = teanglannDoc.querySelector('.listings') as HTMLDivElement;
-      resultsContainer.style.cssText += 'margin-right: 0px; padding: 10px;';
-
-      const frameObj = document.getElementById('dictiframe') as HTMLIFrameElement;
-      frameObj.src = 
-        "data:text/html;charset=utf-8," +
-        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/template.css">` +
-        `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
-        resultsContainer.outerHTML;
-
-      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
+  showDictionary() {
+    if (!!this.dictionaryVisible === false) {
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY']);
     }
-    else {
-      alert(this.ts.l.enter_a_word_to_lookup);
-    }
-  }
-  
-  clearDictInput() {
-    if(this.wordLookedUp) {
-      this.wordLookedUp = "";
-    }
+    this.dictionaryVisible = !this.dictionaryVisible;
   }
 
   // Get audio feedback with function call

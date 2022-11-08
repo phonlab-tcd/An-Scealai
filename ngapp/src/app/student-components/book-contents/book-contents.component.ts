@@ -33,7 +33,6 @@ export class BookContentsComponent implements OnInit {
   isFromAmerica: boolean = false;
   isEnrolled: boolean = false;
   searchText: string = '';
-  storiesLoaded: boolean = false;
 
   constructor(
     private storyService: StoryService,
@@ -62,8 +61,7 @@ export class BookContentsComponent implements OnInit {
       .subscribe(
         (data) => {
           this.stories = data.map(storyData => new Story().fromJSON(storyData));
-          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
-          this.storiesLoaded = true;
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
         },
         window.alert
       );

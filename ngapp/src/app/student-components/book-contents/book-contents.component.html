@@ -16,14 +16,9 @@
         </div>
       </div>
     </div>
-
+    <!-- create new story message if no stories -->
     <div class="contentsLinkContainer">
-      <div> {{ts.l.loading}} </div>
-      <div *ngIf="!storiesLoaded" class="newStoryMessage">
-        <grid-spinner></grid-spinner>
-      </div>
-          <!-- create new story message if no stories -->
-      <div *ngIf="stories.length === 0 && storiesLoaded" class="newStoryMessage">
+      <div *ngIf="stories.length === 0" class="newStoryMessage">
         {{ts.l.click_new_story}}
       </div>
         <!-- List each story -->

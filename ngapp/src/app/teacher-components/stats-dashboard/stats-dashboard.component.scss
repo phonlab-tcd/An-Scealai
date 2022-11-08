@@ -1,25 +1,9 @@
-.dashboard {
+.content {
     display: flex;
-    flex-direction: column;
     width: 90%;
     background: white;
-    border: 1px solid grey;
     border-radius: 5px;
     margin-left: 5%;
-    padding: 20px;
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-}
-
-.cards-container {
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
     padding: 20px;
 }
 
@@ -28,19 +12,12 @@
     justify-content: space-between;
 }
 
-i:hover {
+.stats-card:hover {
     cursor: pointer;
-    font-size: larger;
-    margin-top: -1px;
-    margin-right: -1px;
 }
 
-mat-card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid grey;
-}
-
-mat-card-content {
-    flex-grow: 1;
+.stats-card-fullscreen {
+    width: 90%;
+    z-index: 10;
+    left: 5%;
 }

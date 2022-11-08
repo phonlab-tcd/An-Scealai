@@ -6,13 +6,11 @@ const VoiceRecording = new Schema({
   storyData: Object,
   paragraphAudioIds: [String],
   paragraphIndices: [Number],
-  paragraphTranscriptions: [String],
   sentenceAudioIds: [String],
   sentenceIndices: [Number],
-  sentenceTranscriptions: [String],
-  archived: Boolean,
+  archived: Boolean
 }, {
-  collection: 'recordings',
+    collection: 'recordings'
 });
 
 module.exports = mongoose.model('VoiceRecording', VoiceRecording);

@@ -29,7 +29,6 @@ const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
-const nlpRoute = require('./routes/nlp.route');
 
 const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw');
@@ -95,11 +94,10 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
-app.use('/nlp', nlpRoute);
 
 app.use('/proxy',async (req,res,next)=>{
   function allowUrl(url) {
-    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie/;
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise/;
     return !! allowedUrls.exec(url);
   }
   if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');

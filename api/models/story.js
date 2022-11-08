@@ -5,7 +5,6 @@ let Story = new Schema(
   {
     owner: {
         type: mongoose.Types.ObjectId,
-        index: true,
         // required: true, // TODO, make required
         // ref: 'User', // TODO, validate relation to users collection
     },

@@ -32,7 +32,6 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
         const event = new Event();
         event.type = req.body.event.type;
         event.storyData = req.body.event.storyData; // may be null
-        event.dictionaryLookup = req.body.event.dictionaryLookup; // may be null
         event.userId = user._id;
         event.date = new Date();
         event.save().then(() => {

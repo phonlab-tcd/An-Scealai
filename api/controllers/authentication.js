@@ -124,40 +124,34 @@ module.exports.resetPassword = async (req, res) => {
       Kindly,\n\
       \n\
       The An Scéalaí team`,
-  };
-
+  }
+  
   try {
-    // make email GDPR compliant
-    let hiddenEmail = user.email;
-    for (let i = 0; i < hiddenEmail.indexOf('@') -3; i++) {
-      hiddenEmail = hiddenEmail.replace(hiddenEmail.charAt(i), '*');
-    }
-
     const sendEmailRes = await mail.sendEmail(mailObj);
     if (!sendEmailRes) {
       return res.status(500).json({
-        messageKeys: [`There seems to have been error while trying to send 
-          an email to ${hiddenEmail}`],
+        messageKeys: [`There seems to have been error while trying to send an email to ${user.email}`],
       });
     }
 
     if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
       return res.status(500).json({
-        messageKeys: [`Failed to send verification email 
-          to ${sendEmailRes.rejected}.`],
+        messageKeys: [`Failed to send verification email to ${sendEmailRes.rejected}.`],
       });
     }
 
     return res.status(200).json({
       messageKeys: [`email_sent`],
-      sentTo: hiddenEmail,
+      sentTo: user.email,
     });
   } catch (err) {
     return res.status(500).json({
-      messageKeys: [err.message],
+      messageKeys: [err.message]
     });
+
   }
-};
+
+}
 
 
 async function sendVerificationEmail(username, password, email, baseurl, language) {

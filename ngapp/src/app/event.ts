@@ -13,7 +13,6 @@ export class Event extends Serializable {
     storyData: object;
     date: Date;
     statsData: Object;
-    dictionaryLookup: string;
 }
 
 export class MouseOverGrammarSuggestionEvent extends Event {

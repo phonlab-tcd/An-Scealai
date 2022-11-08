@@ -20,12 +20,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
-import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
-import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -143,7 +139,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
     ConfirmDialogComponent,
-    ClassroomSelectorComponent,
   ],
   imports: [
     RegisterModule,
@@ -163,7 +158,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
     MatNativeDateModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule,
     MatDialogModule,
     NgbModule,
     NgbDropdownModule,
@@ -179,9 +173,7 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
         ]
       }],
     }),
-    NgramDistributionModule,
-    WordCountsModule,
-    GrammarPieChartModule
+    NgramDistributionModule
   ],
   providers: [
     StoryService,
@@ -190,7 +182,6 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
     MatNativeDateModule,
     {provide : LocationStrategy , useClass: HashLocationStrategy },
     {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide : MatDialogRef, useValue: {}},
   ],
   bootstrap: [
     AppComponent,

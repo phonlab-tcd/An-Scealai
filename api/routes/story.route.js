@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const querystring = require('querystring');
 const request = require('request');
 const makeEndpoints = require('../utils/makeEndpoints');
-const {parse} = require('node-html-parser');
+const { parse } = require('node-html-parser');
 const path = require('path');
 const fs = require('fs'); // file system
 const pandoc = require('node-pandoc-promise');
@@ -17,23 +17,17 @@ const Story = require('../models/story');
 let storyRoutes;
 // Immediately Invoked Function Expression.
 // Scopes the imported functions to just this function
-(() => {
+(() => {  
   // ENDPOINT HANDLERS
   // GET
   const withId =
     require('../endpoints_functions/story/withId');
   // const myStudentsStory =
   //   require('../endpoints_functions/story/myStudentsStory');
-  const ownerId =
-    require('../endpoints_functions/story/ownerId');
   const author =
     require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
-  const averageWordCount =
-    require('../endpoints_functions/story/averageWordCount');
-  const countGrammarErrors =
-    require('../endpoints_functions/story/countGrammarErrors');
 
   // POST
   const create =
@@ -47,11 +41,8 @@ let storyRoutes;
     get: {
       '/withId/:id': withId,
       // '/myStudentsStory/:id': myStudentsStory,
-      '/owner/:id': ownerId,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
-      '/averageWordCount/:studentId': averageWordCount,
-      '/countGrammarErrors/:id': countGrammarErrors,
     },
     post: {
       '/create': create,
@@ -62,8 +53,8 @@ let storyRoutes;
 })();
 
 // Get stories by a given author after a certain date from DB
-storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function (req, res) {
-  Story.find({"owner": req.params.owner, date: {$gte: req.params.date}}, function (err, stories) {
+storyRoutes.route('/getStoriesForClassroom/:author/:date').get(function (req, res) {
+  Story.find({"author": req.params.author, date: {$gte: req.params.date}}, function (err, stories) {
     if(err) {
       console.log(err);
       res.json(err)

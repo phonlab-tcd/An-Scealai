@@ -30,7 +30,7 @@ export class RecordingService {
     return this.http.post(this.baseUrl + "updateTracks/" + recordingId + "/", trackData);
   }
 
-  saveAudio(storyId:string, audioBlob: Blob, index: string) : Observable<any> {
+  saveAudio(storyId, audioBlob: Blob, index: string) : Observable<any> {
     const formData = new FormData();
     formData.append('audio', audioBlob);
     return this.http.post(this.baseUrl + "saveAudio/" + storyId + "/" + index + "/" + uuid().toString(), formData);

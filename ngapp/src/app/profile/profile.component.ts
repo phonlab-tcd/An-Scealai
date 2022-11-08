@@ -8,6 +8,7 @@ import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
 import { NotificationService } from '../notification-service.service';
 import { StatsService } from '../stats.service';
+import { StudentStats } from '../studentStats';
 import { StoryService } from '../story.service';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
@@ -77,6 +78,10 @@ export class ProfileComponent implements OnInit {
       if (res.status === 200) {
         this.classroom = this.foundClassroom;
         this.foundClassroom = null;
+        this.statObj.studentId = this.auth.getUserDetails()._id;
+        this.statObj.studentUsername = this.auth.getUserDetails().username;
+        this.statObj.classroomId = this.classroom._id;
+        this.statsService.addNewStatEntry(this.statObj).subscribe();
       }
     });
   }
@@ -172,8 +177,22 @@ export class ProfileComponent implements OnInit {
       this.updatedUsername = "";
       return
     }
-
-    await this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise()
+    
+    if(this.auth.getUserDetails().role === "STUDENT") {
+      await this.storyService.updateAuthor(this.auth.getUserDetails().username, this.updatedUsername).toPromise();
+      const stats = await this.statsService.getStatsForStudent(this.auth.getUserDetails()._id).toPromise()
+        .catch(err => {
+          console.error(
+            `${this.auth.getUserDetails().username} \
+              doesn't have any associated studentStats!`, err);
+        });
+      if (stats) {
+        await this.statsService.updateStudentUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+      }
+    }
+    
+    await this.messageService.updateSenderUsername(this.auth.getUserDetails()._id, this.updatedUsername).toPromise();
+    await this.userService.updateUsername(this.updatedUsername).toPromise()
     this.auth.logout();
   }
 
