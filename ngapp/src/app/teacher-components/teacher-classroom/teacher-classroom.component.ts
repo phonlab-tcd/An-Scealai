@@ -83,7 +83,7 @@ export class TeacherClassroomComponent implements OnInit {
         this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         this.studentIds.push(res._id);
         if(this.classroom.date) {
-          this.storyService.getStoriesForClassroom(res.username, this.classroom.date).subscribe( (stories) => {
+          this.storyService.getStoriesForClassroom(res._id, this.classroom.date).subscribe( (stories) => {
             let count = Object.keys(stories).length;
             this.numOfStories.set(res.username, count);
           });

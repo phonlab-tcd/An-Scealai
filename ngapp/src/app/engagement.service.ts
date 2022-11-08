@@ -28,11 +28,11 @@ export class EngagementService {
     this.http.post(this.baseUrl + 'addEvent/playSynthesis', info).subscribe();
   };
 
-  addEventForLoggedInUser(type: EventType, story?: object){
-    this.addEventObservable(type, story).subscribe();
+  addEventForLoggedInUser(type: EventType, storyData?: object, dictionaryLookup?: string){
+    this.addEventObservable(type, storyData, dictionaryLookup).subscribe();
   }
 
-  addEventObservable(type: EventType, storyData: object): Observable<any> {
+  addEventObservable(type: EventType, storyData: object, dictionaryLookup: string): Observable<any> {
     if (! this.auth.isLoggedIn()) {
       throw new Error('Cannot add event if user is not logged in');
     }
@@ -40,6 +40,7 @@ export class EngagementService {
     const event: Event = new Event();
     event.type = type;
     if (storyData) { event.storyData = storyData; }
+    if (dictionaryLookup) { event.dictionaryLookup = dictionaryLookup; }
     event.userId = this.auth.getUserDetails()._id;
 
     return this.http
