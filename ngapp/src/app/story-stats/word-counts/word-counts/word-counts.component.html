@@ -1,0 +1,9 @@
+<div class="container">
+  <ngb-carousel #carousel interval=0 wrap=true>
+    <ng-template ngbSlide *ngFor="let chart of data">
+      <div>
+          <canvas id="{{chart.chartId}}" ></canvas>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>

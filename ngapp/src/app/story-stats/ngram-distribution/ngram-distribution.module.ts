@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 import { NgramDistributionComponent } from './ngram-distribution/ngram-distribution.component';
 
 
@@ -9,6 +12,9 @@ import { NgramDistributionComponent } from './ngram-distribution/ngram-distribut
   ],
   imports: [
     CommonModule,
+    MatInputModule,
+    MatSelectModule,
+    FormsModule,
   ],
   exports: [
     NgramDistributionComponent
