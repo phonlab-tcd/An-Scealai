@@ -1,0 +1,15 @@
+{
+  "name": "load-test",
+  "version": "1.0.0",
+  "description": "Load test An Scéalaí backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.1.3",
+    "dotenv": "^16.0.3"
+  }
+}
