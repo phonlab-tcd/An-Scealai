@@ -60,7 +60,7 @@ function updateStoryOfUser(story,user) {
 
 (async()=>{
 	const users = await Promise.all(
-		Array(1).fill(undefined).map(async (x,n)=>{
+		Array(50).fill(undefined).map(async (x,n)=>{
 			const r = await loginAs(n)
 			const user = JSON.parse(atob(r.data.token.split('.')[1]));
 			return {
@@ -72,11 +72,10 @@ function updateStoryOfUser(story,user) {
 	users.forEach(u=>{
 		getStoriesOf(u).then(
 			stories=>{
-				console.log(stories);
 				stories.data.forEach(s=>{
 					updateStoryOfUser(s,u).then(
-						()=>console.log("success"),
-						()=>console.log("fail"),
+						()=>{},
+						console.log,
 					);
 				});
 			},
