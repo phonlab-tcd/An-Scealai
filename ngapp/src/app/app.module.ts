@@ -86,7 +86,6 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
-import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard/classroom-selector/classroom-selector.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 
@@ -143,7 +142,6 @@ import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.compon
     SynthItemComponent,
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
-    ConfirmDialogComponent,
     ClassroomSelectorComponent,
     BasicDialogComponent,
   ],

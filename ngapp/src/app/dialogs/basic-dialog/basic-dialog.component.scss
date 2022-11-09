@@ -1,11 +1,11 @@
+.dialogContainer {
+  padding:10px;
+}
+
 .header{
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.centerDialog {
-  text-align: center;
 }
 
 .modalBtn {
@@ -62,4 +62,5 @@
 .titleInput {
     margin-top: 10px;
     padding-left: 4px;
+    width: 80%;
 }

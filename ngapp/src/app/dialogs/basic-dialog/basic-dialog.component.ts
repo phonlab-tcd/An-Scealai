@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../authentication.service';
 export interface DialogData {
   title: string;
   message: string;
+  data: any;
   type: string;
   confirmText: string;
   cancelText: string;

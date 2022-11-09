@@ -14,7 +14,8 @@ import { Event } from '../../event';
 import { TranslationService } from '../../translation.service';
 import { RecordingService } from '../../recording.service';
 import config from 'abairconfig';
-import { DialogService } from '../../services/dialog.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-user',
@@ -36,7 +37,7 @@ export class UserComponent implements OnInit {
               private profileService: ProfileService,
               private userService: UserService,
               private recordingService: RecordingService,
-              private dialogService: DialogService) { }
+              private dialog: MatDialog) { }
 
   user: any;
   stories: Story[];
@@ -46,6 +47,7 @@ export class UserComponent implements OnInit {
   allEvents: Event[] = [];
   maximised : boolean = false;
   baseUrl: string = config.baseurl;
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     this.getUserId().then(params => {
@@ -214,18 +216,23 @@ export class UserComponent implements OnInit {
   }
   
   openDeleteDialog() {
-    this.dialogService.openDialog({
-      type: 'simpleConfirm',
-      title: this.ts.l.are_you_sure,
-      message: this.ts.l.this_includes_story_data,
-      confirmText: this.ts.l.yes,
-      cancelText: this.ts.l.no
-    }).subscribe((res) => {
-      console.log(res);
-      if(res) {
-        //this.deleteAccount();
-        alert('delete account')
-      }
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.are_you_sure,
+        message: this.ts.l.this_includes_story_data,
+        type: 'simpleConfirm',
+        confirmText: this.ts.l.yes,
+        cancelText: this.ts.l.no
+      },
+      width: '50%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          //this.deleteAccount();
+          alert('delete account')
+        }
     });
   }
 }

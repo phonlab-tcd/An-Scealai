@@ -9,7 +9,8 @@ import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
-import { DialogService } from '../../services/dialog.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -26,7 +27,7 @@ export class TeacherClassroomComponent implements OnInit {
               private messageService: MessageService,
               private storyService : StoryService,
               private statsService : StatsService,
-              private dialogService: DialogService) { }
+              private dialog: MatDialog) { }
   
   classroom : Classroom;
   students : User[] = [];
@@ -36,6 +37,7 @@ export class TeacherClassroomComponent implements OnInit {
   unreadMessages: number = 0;
   messagesForNotifications: Message[] = [];
   numOfStories: Map<string, number> = new Map();
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     this.getClassroom();
@@ -135,39 +137,61 @@ export class TeacherClassroomComponent implements OnInit {
     this.router.navigateByUrl('/teacher/teacher-stats/' + this.classroom._id);
   }
   
-  openCodeDialog() {
-    this.dialogService.openDialog({
-      type: 'shareCode',
-      title: this.ts.l.classroom_code,
-      data: this.classroom.code,
-      confirmText: this.ts.l.done,
-    }, "10%").subscribe(() => {});
+  openCodeDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.classroom_code,
+        type: 'classCode',
+        data: this.classroom.code,
+        confirmText: this.ts.l.done,
+      },
+      width: '15%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          console.log(res);
+        }
+    });
   }
   
-  openUpdateClassroomDialog() {
-    this.dialogService.openDialog({
-      type: 'updateText',
-      title: this.ts.l.edit_classroom_title,
-      cancelText: this.ts.l.cancel,
-      confirmText: this.ts.l.save,
-    }, "30%").subscribe((res) => {
-      if(res) {
-        this.newTitle = res;
-        this.editTitle();
-      }
+  openUpdateClassroomDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.edit_classroom_title,
+        type: 'updateText',
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.newTitle = res;
+          this.editTitle();
+        }
     });
   }
   
   openDeleteClassroomDialog() {
-    this.dialogService.openDialog({
-      type: 'simpleConfirm',
-      title: this.ts.l.sure_you_want_to_delete_code,
-      cancelText: this.ts.l.cancel,
-      confirmText: this.ts.l.delete,
-    }, "30%").subscribe((res) => {
-      if(res) {
-        this.deleteClassroom();
-      }
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.sure_you_want_to_delete_code,
+        type: 'simpleConfirm',
+        confirmText: this.ts.l.delete,
+        cancelText: this.ts.l.cancel
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.deleteClassroom();
+        }
     });
   }
   

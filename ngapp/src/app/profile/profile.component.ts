@@ -15,7 +15,6 @@ import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
 import { RecordingService } from '../recording.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
@@ -213,8 +212,10 @@ export class ProfileComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         this.errorMessage = "";
-        this.updatedUsername = res[0];
-        this.updateUsername();
+        if(res) {
+          this.updatedUsername = res[0];
+          this.updateUsername();
+        }
     });
   }
   
