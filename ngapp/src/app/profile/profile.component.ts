@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { ClassroomService } from '../classroom.service';
 import { FormControl } from '@angular/forms';
@@ -14,7 +14,9 @@ import { ProfileService } from '../profile.service';
 import { MessageService } from '../message.service';
 import { UserService } from '../user.service';
 import { RecordingService } from '../recording.service';
-import { DialogService } from '../services/dialog.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
+import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -27,11 +29,11 @@ export class ProfileComponent implements OnInit {
   codeInput : FormControl;
   foundClassroom: Classroom;
   classroom: Classroom;
-  statObj: StudentStats = new StudentStats();
   updatedUsername: string;
   errorMessage = '';
   newPassword: string;
   newPasswordConfirm: string;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService,
@@ -44,7 +46,7 @@ export class ProfileComponent implements OnInit {
               public userService: UserService,
               public statsService: StatsService,
               public recordingService: RecordingService,
-              public dialogService: DialogService) { }
+              private dialog: MatDialog,) { }
 
   ngOnInit() {
     this.codeInput = new FormControl();
@@ -196,49 +198,66 @@ export class ProfileComponent implements OnInit {
     }
   }
   
-  openDeleteDialog() {
-    this.dialogService.openDialog({
-      type: 'simpleConfirm',
-      title: this.ts.l.are_you_sure,
-      message: this.auth.getUserDetails().role === 'STUDENT' ? this.ts.l.this_includes_story_data : this.ts.l.this_includes_personal_data,
-      confirmText: this.ts.l.yes,
-      cancelText: this.ts.l.no
-    }).subscribe((res) => {
-      console.log(res);
-      if(res) {
-        this.deleteAccount();
-      }
+  openUpdateUsernameDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.change_username,
+        message: this.ts.l.you_will_have_to_login,
+        type: 'updatUsername',
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        this.errorMessage = "";
+        this.updatedUsername = res[0];
+        this.updateUsername();
     });
   }
   
-  openUpdateUsernameDialog() {
-    this.dialogService.openDialog({
-      type: 'updateUsername',
-      title: this.ts.l.change_username,
-      message: this.ts.l.you_will_have_to_login,
-      confirmText: this.ts.l.save,
-      cancelText: this.ts.l.cancel
-    }).subscribe((res) => {
-      this.errorMessage = "";
-      this.updatedUsername = res;
-      this.updateUsername();
+  openDeleteDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.are_you_sure,
+        message: this.auth.getUserDetails().role === 'STUDENT' ? this.ts.l.this_includes_story_data : this.ts.l.this_includes_personal_data,
+        type: '',
+        confirmText: this.ts.l.yes,
+        cancelText: this.ts.l.no
+      },
+      width: '50%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.deleteAccount();
+        }
     });
   }
   
   openUpdatePasswordDialog() {
-    this.dialogService.openDialog({
-      type: 'updatePassword',
-      title: this.ts.l.change_password,
-      message: this.ts.l.you_will_have_to_login_password,
-      confirmText: this.ts.l.save,
-      cancelText: this.ts.l.cancel
-    }).subscribe((res) => {
-      this.errorMessage = "";
-      if(res) {
-        this.newPassword = res[0];
-        this.newPasswordConfirm = res[1];
-        this.updatePassword();
-      }
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.change_password,
+        message: this.ts.l.you_will_have_to_login_password,
+        type: 'updatePassword',
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        this.errorMessage = "";
+        if(res) {
+          this.newPassword = res[0];
+          this.newPasswordConfirm = res[1];
+          this.updatePassword();
+        }
     });
   }
 }

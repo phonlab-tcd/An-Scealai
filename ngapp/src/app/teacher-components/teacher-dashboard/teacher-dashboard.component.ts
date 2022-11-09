@@ -6,7 +6,8 @@ import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { NotificationService } from '../../notification-service.service';
-import { DialogService } from '../../services/dialog.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -20,11 +21,12 @@ export class TeacherDashboardComponent implements OnInit {
               private router: Router,
               public ts : TranslationService,
               public ns: NotificationService,
-              public dialogService: DialogService) { }
+              private dialog: MatDialog,) { }
               
   
   classrooms : Observable<Classroom[]>;
   newClassroom : Classroom = new Classroom();
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     this.classrooms = this.getClassrooms();
@@ -79,16 +81,22 @@ export class TeacherDashboardComponent implements OnInit {
   openCreateClassroomDialog() {
     this.newClassroom.title = null;
     if(this.newClassroom) {
-      this.dialogService.openDialog({
-        type: 'updateText',
-        title: this.ts.l.add_new_classroom,
-        confirmText: this.ts.l.create,
-        cancelText: this.ts.l.cancel
-      }).subscribe((res) => {
-        if(res) {
-          this.newClassroom.title = res;
-          this.createNewClassroom();
-        }
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.add_new_classroom,
+          type: 'updateText',
+          confirmText: this.ts.l.create,
+          cancelText: this.ts.l.cancel
+        },
+        width: '50%',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if(res) {
+            this.newClassroom.title = res[0];
+            this.createNewClassroom();
+          }
       });
     }
   }
