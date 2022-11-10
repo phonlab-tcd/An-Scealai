@@ -14,50 +14,50 @@ const RED = 'rgba(255, 114, 111, 1)';
 
 export class WordCountsComponent implements OnInit {
   
-  @Input() data:any;
-  charts:any[] = [];
+  @Input() wordCountData:{studentNames, averageWordCounts};
+  wordCountChart: Chart;
 
   constructor() { }
 
-  async ngOnInit() {
-    console.log(this.data);
-    this.makeCharts();
+  ngOnInit() {
+    this.loadWordChart();
   }
   
-  private makeCharts() {
-    // wait for HTML to render before adding charts (need dynamically created ids)
-    setTimeout(() => {
-      for (let entry of this.data) {
-        let canvasElem = document.getElementById(entry.chartId) as HTMLCanvasElement;
-        let ctx = canvasElem.getContext('2d');
-        let myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: entry.studentNames,
-                datasets: [{
-                    label: 'Average Word Counts For ' + entry.classroomTitle,
-                    data: entry.averageWordCounts,
-                    backgroundColor: entry.averageWordCounts.map(_ => LIGHT_RED),
-                    borderColor: entry.averageWordCounts.map(_ => RED),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-              scales: {
-                yAxes: [{
-                    display: true,
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 40
-                    }
-                }]
-              },
-              responsive: true
-            }
-        });
-      }
-    }, 1)
+  ngOnChanges(_) {
+    this.loadWordChart();
+  }
+  
+  private loadWordChart() {    
+    if (this.wordCountChart) { this.wordCountChart.destroy(); }
+    
+    let canvasElem = document.getElementById('word-count-chart') as HTMLCanvasElement;
+    let ctx = canvasElem.getContext('2d');
+    this.wordCountChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: this.wordCountData.studentNames,
+            datasets: [{
+                label: 'Average Word Count',
+                data: this.wordCountData.averageWordCounts,
+                backgroundColor: this.wordCountData.averageWordCounts.map(_ => LIGHT_RED),
+                borderColor: this.wordCountData.averageWordCounts.map(_ => RED),
+                borderWidth: 1
+            }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+                display: true,
+                stacked: true,
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 40
+                }
+            }]
+          },
+          responsive: true
+        }
+    });
   }
   
 }

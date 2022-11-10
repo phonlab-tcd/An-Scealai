@@ -1,6 +1,7 @@
 .classroom-card-container {
     display: flex;
     flex-direction: column;
+    align-self: stretch;
 }
 
 .classroom-card {
@@ -23,4 +24,28 @@
 
 .xbutton:hover {
     cursor: pointer;
+}
+
+.noClassrooms {
+  text-align: center;
+  font-weight: bold;
+}
+
+.checkBox {
+  font-weight: bold;
+  font-size: 12px;
+  padding: 10px;
+}
+
+.contentsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.datePicker {
+  padding-top: 10px;
+  padding-bottom: 5px;
+  align-self: center;
 }

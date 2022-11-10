@@ -30,8 +30,6 @@ let storyRoutes;
     require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
-  const averageWordCount =
-    require('../endpoints_functions/story/averageWordCount');
   const countGrammarErrors =
     require('../endpoints_functions/story/countGrammarErrors');
 
@@ -42,6 +40,10 @@ let storyRoutes;
     require('../endpoints_functions/story/viewFeedback');
   const updateStoryAndCheckGrammar =
     require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+  const averageWordCount =
+    require('../endpoints_functions/story/averageWordCount');
+  const getStoriesByDate =
+    require('../endpoints_functions/story/getStoriesByDate');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -50,13 +52,14 @@ let storyRoutes;
       '/owner/:id': ownerId,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
-      '/averageWordCount/:studentId': averageWordCount,
       '/countGrammarErrors/:id': countGrammarErrors,
     },
     post: {
       '/create': create,
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+      '/averageWordCount/:studentId': averageWordCount,
+      '/getStoriesByDate/:studentId': getStoriesByDate,
     },
   });
 })();
