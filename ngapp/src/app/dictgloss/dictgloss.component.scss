@@ -12,6 +12,21 @@
     animation-name: fadeIn;
 }
 
+.fadeOutContainer{
+    max-width: 600px; 
+    height: 280px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    animation-duration: 1s;
+    animation-name: fadeOut;
+}
+
 .playback {
     display: block;
     margin: 8px;
@@ -126,6 +141,18 @@
     to {
         opacity: 100%;
         transform: translateY(0px) scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 100%;
+        transform: translateY(0px) scale(1);
+    }
+
+    to {
+        opacity: 0%;
+        transform: translateY(100px) scale(0.9);
     }
 }
 

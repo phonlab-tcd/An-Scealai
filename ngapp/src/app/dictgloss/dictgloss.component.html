@@ -3,8 +3,11 @@
     <div class="container">
         <div id="selectorDiv" style="display:block">
             <h3>Dictogloss</h3>
-            <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true;">{{ts.l.dictgloss_usage}}?</p>
-            <input id="textSelector">
+            <h5>{{ts.l.dictgloss_char_limit}}</h5>
+            <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true; setClass();">{{ts.l.dictgloss_usage}}?</p>
+            <div style="display: flex; justify-content: center;">
+                <textarea style="max-width: 300px;" class="form-control" id="textSelector" rows="3" maxlength="2000"></textarea>
+            </div>
             <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
         </div>
         <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
@@ -66,12 +69,17 @@
             </ng-template>
         </div>
     </div>
-    <div *ngIf="showInfo" style="max-width: 600px; height: 280px;" class="container">
-        <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
-        <h5>{{ts.l.dictgloss_1}}&ensp;</h5>
-        <h5>{{ts.l.dictgloss_2}}&ensp;</h5>
-        <h5>{{ts.l.dictgloss_3}}&ensp;</h5>
-        <h5>{{ts.l.dictgloss_tip}}&ensp;</h5>
-        <div class="infoBoxButton" (click)="showInfo = false;">❌</div>
+    <div
+    style="display: flex;
+    align-items: center;
+    justify-content: center;">
+        <div id="infoBox" *ngIf="showInfo" style="max-width: 600px; height: 280px;" class="container">
+            <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
+            <h5>{{ts.l.dictgloss_1}}&ensp;</h5>
+            <h5>{{ts.l.dictgloss_2}}&ensp;</h5>
+            <h5>{{ts.l.dictgloss_3}}&ensp;</h5>
+            <h5>{{ts.l.dictgloss_tip}}&ensp;</h5>
+            <div id="infoButtonClose" class="infoBoxButton" (click)="fadeOutAnimation();">❌</div>
+        </div>
     </div>
 </div>

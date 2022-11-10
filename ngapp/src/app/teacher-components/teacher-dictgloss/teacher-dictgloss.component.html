@@ -1,14 +1,20 @@
 <div class="container">
     <h1>{{ts.l.teacher_send_dictgloss}}</h1>
     <p>{{ts.l.teacher_send_dictgloss_info}}</p>
+    <h5>{{ts.l.dictgloss_char_limit}}</h5>
     <form [formGroup]="newStoryForm">
         <div class="formGroup" novalidate>
-            <input
-            data-cy=passage
-            type="text"
-            class="passageInput"
-            formControlName="passage"
-            maxLength="35"/>
+            <div style="display: flex; justify-content: center;">
+                <textarea 
+                style="max-width: 300px;" 
+                class="form-control" 
+                id="textSelector" 
+                data-cy=passage
+                formControlName="passage"
+                rows="3"
+                maxlength="2000">
+                </textarea>
+            </div>
             <!-- check for invalid passage -->
             <div 
                 *ngIf="newStoryForm.controls['passage'].invalid && 

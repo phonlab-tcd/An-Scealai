@@ -129,12 +129,23 @@ export class DictglossComponent implements OnInit {
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
   showInfo: boolean = false;
 
+  fadeOutAnimation(){
+    document.getElementById("infoButtonClose").hidden = true;
+    document.getElementById("infoBox").className = "fadeOutContainer";
+    setTimeout(() => {this.showInfo = false;}, 1000)
+  }
+
+  setClass(){
+    document.getElementById("infoBox").className = "container"
+    document.getElementById("infoButtonClose").hidden = false;
+  }
+
   sendDictglossReport(){
     if(this.isStudent){
       let message: Message = {
         _id: "", //Check these
         id: "",
-        subject: "Student Finished Dictogloss!",
+        subject: "\"" + this.auth.getUserDetails().username + "\" Finished Dictogloss!",
         date: new Date,
         senderId: "",
         senderUsername: "", //Teacher Username

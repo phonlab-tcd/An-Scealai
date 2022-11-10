@@ -2193,8 +2193,8 @@ export default {
     ga: '*Iontráil Scéal Anseo',
     en: '*Enter Story Here' },
   dictgloss_enter_story: {
-    ga: /*'Cuir isteach scéal'*/ '✔️', 
-    en: /*'Enter story'*/ '✔️' },
+    ga: 'Cuir isteach scéal', 
+    en: 'Enter story' },
   dictgloss_guess: {
     ga: /*'Cuir isteach focal'*/ '❓',
     en: /*'Enter word'*/ '❓' },
@@ -2245,5 +2245,8 @@ export default {
     en: 'Choose at least 1 student' },
   dictgloss_hint: {
     ga: 'Cliceáil le haghaidh leid',
-    en: 'Click for a hint' }
+    en: 'Click for a hint' },
+  dictgloss_char_limit: {
+    ga: 'Teorainn Carachtair 2000',
+    en: '2000 Character Limit' },
 }
