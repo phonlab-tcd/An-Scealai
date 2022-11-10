@@ -166,7 +166,7 @@ const routes: Routes = [
         component: TeacherStatsComponent,
       },
       {
-        path: 'stats-dashboard',
+        path: 'stats-dashboard/:id',
         component: StatsDashboardComponent,
       }
     ]

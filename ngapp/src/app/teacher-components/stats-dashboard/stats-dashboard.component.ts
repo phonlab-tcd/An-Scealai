@@ -11,6 +11,7 @@ import { Classroom } from 'app/classroom'
 import { Story } from 'app/story';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -26,10 +27,10 @@ export class StatsDashboardComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private ts: TranslationService
+    private ts: TranslationService,
+    private route:ActivatedRoute
   ) { }
 
-  classrooms: Classroom[];
   classroomStories: Story[];
   classroomTitle = 'Select a classroom'; // By default we'll display this
   textsToAnalyse: string[] = [];
@@ -37,8 +38,9 @@ export class StatsDashboardComponent implements OnInit {
   wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
   
   async ngOnInit() {
-    this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
-    if(this.classrooms.length > 0) await this.loadDataForCharts(this.classrooms[0], '', '');
+    // initialise stats with classroom id from route param
+    let classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+    if(classroom) await this.loadDataForCharts(classroom, '', ''); 
   }
 
   dialogRef: MatDialogRef<unknown>;
