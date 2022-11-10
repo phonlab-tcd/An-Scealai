@@ -42,6 +42,8 @@ let storyRoutes;
     require('../endpoints_functions/story/updateStoryAndCheckGrammar');
   const averageWordCount =
     require('../endpoints_functions/story/averageWordCount');
+  const getStoriesByDate =
+    require('../endpoints_functions/story/getStoriesByDate');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -57,6 +59,7 @@ let storyRoutes;
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
       '/averageWordCount/:studentId': averageWordCount,
+      '/getStoriesByDate/:studentId': getStoriesByDate,
     },
   });
 })();

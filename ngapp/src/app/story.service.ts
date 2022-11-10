@@ -64,6 +64,10 @@ export class StoryService {
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
   }
+  
+  getStoriesByDate(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "getStoriesByDate/" + studentId, {startDate:startDate, endDate:endDate});
+  }
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();

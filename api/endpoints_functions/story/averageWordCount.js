@@ -7,7 +7,7 @@ const nlp = winkNLP( model );
 const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
 
 /**
- * Add two numbers.
+ * Get average wordcount of stories given a student ID
  * @param {Object} req The student's id number
  * @param {Object} res The object to store the response
  * @return {Object} Student's average word count
