@@ -152,5 +152,9 @@ export class BookContentsComponent implements OnInit {
   goToMessages() {
     this.router.navigateByUrl('/messages/' + this.userId);
   }
+  
+  goToStats() {
+    this.router.navigateByUrl('/student-stats');
+  }
 
 }

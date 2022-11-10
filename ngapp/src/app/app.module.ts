@@ -88,6 +88,7 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard/classroom-selector/classroom-selector.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
+import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -144,6 +145,7 @@ import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.compon
     StatsDashboardComponent,
     ClassroomSelectorComponent,
     BasicDialogComponent,
+    StudentStatsDashboardComponent,
   ],
   imports: [
     RegisterModule,

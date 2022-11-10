@@ -46,6 +46,7 @@ import { TeacherStudentComponent } from './teacher-components/teacher-student/te
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
+import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -83,6 +84,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'student-stats', component: StudentStatsDashboardComponent, canActivate: [AuthGuardService]},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
