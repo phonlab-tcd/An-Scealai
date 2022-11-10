@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
         res.set('content-type', 'audio/mp3');
         res.set('accept-ranges', 'bytes');
         // get collection name for audio files
-        const bucket = new mongodb.GridFSBucket(db, {
+        const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
           bucketName: 'audioFeedback',
         });
         // create a new stream of file data using the bucket name

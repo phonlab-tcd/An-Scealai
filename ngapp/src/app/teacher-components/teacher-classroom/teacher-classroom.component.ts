@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
-import { HttpClient } from '@angular/common/http';
 import { Classroom } from '../../classroom';
-import { Observable } from 'rxjs';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
@@ -11,6 +9,8 @@ import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -20,27 +20,24 @@ import { StatsService } from '../../stats.service';
 export class TeacherClassroomComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private http: HttpClient,
               private classroomService: ClassroomService,
               private router: Router,
               private userService: UserService,
               public ts : TranslationService,
               private messageService: MessageService,
               private storyService : StoryService,
-              private statsService : StatsService) { }
+              private statsService : StatsService,
+              private dialog: MatDialog) { }
   
   classroom : Classroom;
-  modalClass : string = "hidden";
-  shareModalClass : string = "hidden";
-  deleteModalClass : string = "hidden";
   students : User[] = [];
   studentIds: String[] = [];
-  errorText : string;
   registrationError : boolean = false;
   newTitle: string;
   unreadMessages: number = 0;
   messagesForNotifications: Message[] = [];
   numOfStories: Map<string, number> = new Map();
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     this.getClassroom();
@@ -107,11 +104,10 @@ export class TeacherClassroomComponent implements OnInit {
 * Edit the title of the classroom with classroom service 
 */
   editTitle() {
-    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe((res) => {
+    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe(() => {
       this.getClassroom();
-      this.hideModal();
     }, (err) => {
-      this.showError(err);
+      alert(err);
     });
   }
 
@@ -140,39 +136,63 @@ export class TeacherClassroomComponent implements OnInit {
   goToStats() {
     this.router.navigateByUrl('/teacher/stats-dashboard/' + this.classroom._id);
   }
-
-/*
-* Set modal to visible
-*/
-  showModal() {
-    this.newTitle = this.classroom.title;
-    this.modalClass = "visibleFade";
+  
+  openCodeDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.classroom_code,
+        type: 'classCode',
+        data: this.classroom.code,
+        confirmText: this.ts.l.done,
+      },
+      width: '15%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          console.log(res);
+        }
+    });
   }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
+  
+  openUpdateClassroomDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.edit_classroom_title,
+        type: 'updateText',
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.newTitle = res;
+          this.editTitle();
+        }
+    });
   }
-
-  showShareModal() {
-    this.shareModalClass = "visibleFade";
+  
+  openDeleteClassroomDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.sure_you_want_to_delete_code,
+        type: 'simpleConfirm',
+        confirmText: this.ts.l.delete,
+        cancelText: this.ts.l.cancel
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.deleteClassroom();
+        }
+    });
   }
-
-  hideShareModal() {
-    this.shareModalClass = "hiddenFade";
-  }
-
-  showDeleteModal() {
-    this.deleteModalClass = "visibleFade";
-  }
-
-  hideDeleteModal() {
-    this.deleteModalClass = "hiddenFade";
-  }
-
-  showError(err) {
-    this.errorText = err.message;
-    this.registrationError = true;
-  }
-
   
 }
