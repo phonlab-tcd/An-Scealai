@@ -24,30 +24,35 @@ module.exports = async (req, res, next) => {
     );
     await uniqueStoryErrors.save();
   }
-  for (const {errors, sentence} of sentences) {
-    await UniqueStoryErrors.updateOne(
-      // QUERY: find all uniqueStoryErrors documents without 'sentence'
-      {
-        $and: [
-          {"storyId": storyId},
-          {
-            "sentenceErrors": {
-              $not: { $elemMatch: { sentence: sentence } }
+  
+  if (sentences.length > 0) {
+    for (const {errors, sentence} of sentences) {
+      await UniqueStoryErrors.updateOne(
+        // QUERY: find all uniqueStoryErrors documents without 'sentence'
+        {
+          $and: [
+            {"storyId": storyId},
+            {
+              "sentenceErrors": {
+                $not: { $elemMatch: { sentence: sentence } }
+              }
+            }
+          ]
+        },
+        // UPDATE
+        {
+          $push: {
+            sentenceErrors: {
+              sentence: sentence,
+              grammarErrors: errors
             }
           }
-        ]
-      },
-      // UPDATE
-      {
-        $push: {
-          sentenceErrors: {
-            sentence: sentence,
-            grammarErrors: errors
-          }
         }
-      }
-    )
+      )
+    }
   }
+  
+
 
   res.json();
 }

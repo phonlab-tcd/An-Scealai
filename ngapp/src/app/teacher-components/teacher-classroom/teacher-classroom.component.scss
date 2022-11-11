@@ -4,88 +4,6 @@
     padding-right: 5%;
 }
 
-.modalContainer {
-    position: absolute;
-    z-index: 5;
-    width: 90%;
-    height: 80vh;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.modalContent {
-    margin-top: 20vh;
-    width: 50%;
-    margin-left: 25%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.titleInput {
-    margin-top: 10px;
-    padding-left: 4px;
-}
-
-.modalText {
-  font-size: 14pt;
-}
-
-.modalBtn {
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: var(--scealai-gray);
-  border: none;
-  border-radius: 5px;
-  margin: 5px;
-  margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
-}
-
-.codeView {
-    background-color: var(--scealai-gray);
-    border: 1px solid var(--scealai-light-gray);
-    border-radius: 4px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-top: 16px;
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
-}
-
-.deleteModalText {
-    font-size: 12pt;
-}
-
-.deleteRedBtn {
-    background-color: var(--scealai-delete-red-3);
-    color: white;
-}
-
-.deleteRedBtn:hover {
-    background-color: var(--scealai-delete-red-3-hover);
-}
-
 .classContainer {
     width: 100%;
     background-color: white;
@@ -189,6 +107,7 @@
     border-radius: 5px;
     margin-top: 5px;
 }
+
 
 .classroomCard:hover {
     color:var(--orange-text);

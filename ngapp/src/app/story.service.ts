@@ -64,6 +64,10 @@ export class StoryService {
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
   }
+  
+  getStoriesByDate(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "getStoriesByDate/" + studentId, {startDate:startDate, endDate:endDate});
+  }
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
     const userDetails = this.auth.getUserDetails();
@@ -144,8 +148,8 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'updateActiveRecording/' + storyId + '/', {activeRecording: recordingId});
   }
   
-  averageWordCount(studentId:string) : Observable<any> {
-    return this.http.get(this.baseUrl + "averageWordCount/" + studentId);
+  averageWordCount(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "averageWordCount/" + studentId, {startDate:startDate, endDate:endDate});
   }
   
   countGrammarErrors(studentId:string) : Observable<any> {

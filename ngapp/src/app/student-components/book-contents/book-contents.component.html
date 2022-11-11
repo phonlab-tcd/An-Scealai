@@ -16,9 +16,14 @@
         </div>
       </div>
     </div>
-    <!-- create new story message if no stories -->
+
     <div class="contentsLinkContainer">
-      <div *ngIf="stories.length === 0" class="newStoryMessage">
+      <div> {{ts.l.loading}} </div>
+      <div *ngIf="!storiesLoaded" class="newStoryMessage">
+        <grid-spinner></grid-spinner>
+      </div>
+          <!-- create new story message if no stories -->
+      <div *ngIf="stories.length === 0 && storiesLoaded" class="newStoryMessage">
         {{ts.l.click_new_story}}
       </div>
         <!-- List each story -->
@@ -44,7 +49,7 @@
       </div>
     </div>     
 
-    <!-- delte and new story buttons -->
+    <!-- delte story button -->
     <div class="contentsBtnsContainer">
       <button
           class="btn deleteBtn"
@@ -52,6 +57,7 @@
           (click)="toggleDeleteMode()">
         <img src="assets/img/trash.ico" class="trashImg">
       </button>
+      <!-- messages button -->
       <button
           *ngIf="isEnrolled"
           class="btn messagesBtn"
@@ -61,6 +67,14 @@
           {{unreadMessages}}
         </span>
       </button>
+      <!-- stats button -->
+      <button
+          *ngIf="isEnrolled && stories.length > 0"
+          class="btn messagesBtn"
+          (click)="goToStats()">
+        {{ts.l.stats}}
+      </button>
+      <!-- new story button -->
       <button
           data-cy=create-story
           class="btn newStoryBtn" routerLink="/new-story">{{ts.l.new_story}}

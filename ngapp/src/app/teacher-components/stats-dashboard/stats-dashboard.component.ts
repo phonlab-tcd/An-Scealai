@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
 import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
+import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
@@ -10,6 +11,7 @@ import { Classroom } from 'app/classroom'
 import { Story } from 'app/story';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -25,21 +27,20 @@ export class StatsDashboardComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private http: HttpClient,
+    private ts: TranslationService,
+    private route:ActivatedRoute
   ) { }
 
-  classrooms: Classroom[];
   classroomStories: Story[];
   classroomTitle = 'Select a classroom'; // By default we'll display this
-  stats: any[] = [];
-  dataLoaded: boolean = false;
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
-
+  wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
+  
   async ngOnInit() {
-    this.classrooms = await firstValueFrom(this.classroomService.getClassroomsForTeacher(this.auth.getUserDetails()._id));
-    await this.getWordCounts();
-        
-    this.dataLoaded = true;
+    // initialise stats with classroom id from route param
+    let classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+    if(classroom) await this.loadDataForCharts(classroom, '', ''); 
   }
 
   dialogRef: MatDialogRef<unknown>;
@@ -58,18 +59,30 @@ export class StatsDashboardComponent implements OnInit {
       ClassroomSelectorComponent,
       { width: '60%' }
     );
-    const classroom = await firstValueFrom(classroomDialogRef.afterClosed());
+    const classroomResponse = await firstValueFrom(classroomDialogRef.afterClosed());
+    const classroom = classroomResponse.classroom;
+    const startDate = classroomResponse.startDate;
+    const endDate = classroomResponse.endDate;
+    if (classroom) await this.loadDataForCharts(classroom, startDate, endDate);
+  }
+  
+  async loadDataForCharts(classroom, startDate, endDate) {
     this.classroomTitle = classroom.title;
+    // get n-gram data
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
-      await firstValueFrom(this.storyService.getStoriesByOwner(id)) // Note: Most stories do not yet have the owner property
+      await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate)) // Note: Most stories do not yet have the owner property
     ))).flat();
     this.textsToAnalyse = this.classroomStories.map(story => story.text);
 
+    // get grammar eror data
     this.grammarErrorCounts = (await Promise.all(this.classroomStories.map(async story =>
       await firstValueFrom(
         this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
       )
     ))).reduce(this.countDictSum, {});
+    
+    // get word count data
+    this.wordCountData = await this.getWordCounts(classroom, startDate, endDate);
   }
 
   countDictSum(A, B) {
@@ -80,39 +93,27 @@ export class StatsDashboardComponent implements OnInit {
   }
   
   /*
-  * For each classroom of logged-in teacher, get average word count for each student (over all stories)
+  * Get average word count and username for each student in classroom (over all stories)
   */
-  private async getWordCounts() {
+  async getWordCounts(classroom, startDate, endDate) {
+    let statsEntry = {
+      studentNames: [],
+      averageWordCounts: []
+    };
     
-    for (let entry in this.classrooms) {
-      // only consider classrooms that have at least one student
-      if (this.classrooms[entry].studentIds.length > 0) {
-        // stats object created for each classroom
-        let statsEntry = {
-          classroomTitle: this.classrooms[entry].title,
-          studentNames: [],
-          averageWordCounts: [],
-          chartId: "chartId_" + entry
-        }
-        
-        // get student usernames and word count averages
-        for (let key in this.classrooms[entry].studentIds) {
-          const userId = this.classrooms[entry].studentIds[key];
-          const usernameResponse = await firstValueFrom(this.userService.getUserById(userId));
-          statsEntry.studentNames.push(usernameResponse.username);
-
-          const wordCountResponse = await firstValueFrom(this.storyService.averageWordCount(userId));
-          statsEntry.averageWordCounts.push(wordCountResponse.avgWordCount);
-        } 
-          this.stats.push(statsEntry);
+    await Promise.all(classroom.studentIds.map(async (id) => {
+        statsEntry.studentNames.push((await firstValueFrom(this.userService.getUserById(id))).username);
+        statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount);
       }
-    }
+    ));
+    
+    return statsEntry;
   }
   
   /*
   * Get grammar error counts for a given student ID
   */
-  private async countGrammarErrorsStudent(id:string) {
+  async countGrammarErrorsStudent(id:string) {
     // for now just get stats for the first student in the first classroom
     this.grammarErrorCounts = await firstValueFrom(this.storyService.countGrammarErrors(id));
   }

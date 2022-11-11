@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
 import config from 'abairconfig';
 
@@ -11,15 +12,17 @@ export class GrammarPieChartComponent implements OnInit {
   
   @Input() errorCounts: {[type: string]: number} = {};
   pieChart: Chart;
+  legendItems: any[] = [];
 
   constructor(
+    private ts: TranslationService
   ) { }
 
   ngOnInit(): void {
-    this.loadPieChart();
+    //this.loadPieChart();
   }
 
-  ngOnChanges(_) {
+  ngOnChanges(changes: any) {
     this.loadPieChart();
   }
   
@@ -38,7 +41,14 @@ export class GrammarPieChartComponent implements OnInit {
                 backgroundColor: Object.keys(this.errorCounts).map(_ => `#${((Math.random() * 0xffffff) << 0).toString(16)}`),
             }]
         },
+        options: {
+            legend: {
+              display: false,
+            }
+        },
     });
+
+    this.legendItems = this.pieChart['legend']['legendItems'];
   }
 
 }
