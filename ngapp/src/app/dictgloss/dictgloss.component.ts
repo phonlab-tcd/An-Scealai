@@ -36,9 +36,13 @@ export class DictglossComponent implements OnInit {
     try {
       this.texts = this.router.getCurrentNavigation().extras.state.text; //Doesn't work with full stops.
       console.log("Generated from message.")
+      this.playWithTimer = true;
+      this.gameInProgress = true;
       this.generatedFromMessages = true;
     } catch {
       console.log("Not generated from message.")
+      this.playWithTimer = false;
+      this.gameInProgress = false;
       this.generatedFromMessages = false;
     }
   } 
@@ -48,13 +52,14 @@ export class DictglossComponent implements OnInit {
   isTeacher: boolean;
   teacherName: string;
   teacherId: string;
+  playWithTimer = false;
 
   isStudent: boolean;
   studentId: string;
   classroom: any;
   ngOnInit(): void {
     const userDetails = this.auth.getUserDetails();
-    
+
     // Return if user not logged in to avoid calling null.role (which results in error)
     if (!userDetails) return;
 
@@ -75,9 +80,19 @@ export class DictglossComponent implements OnInit {
     }
     this.refresh();
 
-    if(this.texts !== ""){
+    if(this.texts !== "" && this.generatedFromMessages == true){
       this.dictglossFromMessages(this.texts);
     }
+  }
+
+  toggleTimer(){
+    if(this.playWithTimer === false){
+      this.playWithTimer = true;
+    } else {
+      this.playWithTimer = false
+    }
+    console.log(this.playWithTimer);
+    
   }
 
   @Input() text: string;
@@ -151,7 +166,7 @@ export class DictglossComponent implements OnInit {
         senderUsername: "", //Teacher Username
         recipientId: "", //Teacher Id
         text: 
-        "The final time was: \t" + this.displayTime(this.totalTime) + "\n" + 
+        "The final time was: \t" + this.displayTime(this.totalTime) + "\n" + //Timer always must be on for a teacher-sent dictogloss.
         "Correct guesses:\t\t" + this.rightCount + "\n" +
         "Incorrect guesses:\t" + this.wrongCount,
         seenByRecipient: false,
@@ -173,19 +188,22 @@ export class DictglossComponent implements OnInit {
   totalTime: number = 0;
   interval: any;
   startTimer(){
+    if(this.playWithTimer === false){ return; }
     var start = Date.now();
     this.interval = setInterval(() => {
       var change;
       change = Date.now() - start;
       this.totalTime = Math.floor(change / 1000)
-    },1000)
+    },1000);
   }
 
   pauseTimer(){
+    if(this.playWithTimer === false){ return; }
     clearInterval(this.interval);
   }
 
   resetTimer(){
+    if(this.playWithTimer === false){ return; }
     this.totalTime = 0;
     clearInterval(this.interval);
   }
@@ -280,6 +298,7 @@ export class DictglossComponent implements OnInit {
   errorText: boolean;
   dictglossLoad() {
     this.generatedFromMessages = false;
+    this.gameInProgress = true;
     console.log("Not generated from message.")
     this.resetTimer();
     this.startTimer();
@@ -306,9 +325,11 @@ export class DictglossComponent implements OnInit {
     this.displayText(this.texts);
   }
 
+  gameInProgress: boolean = false;
   dictglossFromMessages(text: string) {
     this.resetTimer();
     this.startTimer();
+    //this.gameInProgress = true;
     this.allGuessed = false;
     this.texts = text;
 
@@ -327,10 +348,7 @@ export class DictglossComponent implements OnInit {
       this.hasText = false;
       this.errorText = true;
     }
-
-    console.log(this.texts.length, this.hasText);
     
-
     console.log('The input text is:', this.texts);
     this.displayText(this.texts);
   }
@@ -427,6 +445,7 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.pauseTimer();
       this.allGuessed = true;
+      this.gameInProgress = false;
       if(this.generatedFromMessages){ this.sendDictglossReport(); }
       this.generatedFromMessages = false;
     }
@@ -444,6 +463,7 @@ export class DictglossComponent implements OnInit {
     if(this.guessCheck){
       this.pauseTimer();
       this.allGuessed = true;
+      this.gameInProgress = false;
       if(this.generatedFromMessages){ this.sendDictglossReport(); }
       this.generatedFromMessages = false;
     }

@@ -2249,4 +2249,10 @@ export default {
   dictgloss_char_limit: {
     ga: 'Teorainn Carachtair 2000',
     en: '2000 Character Limit' },
+  dictgloss_timer_off: {
+    ga: '🕒❌',
+    en: '🕒❌' },
+  dictgloss_timer_on: {
+    ga: '🕒✔️',
+    en: '🕒✔️' },
 }

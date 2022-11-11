@@ -3,12 +3,20 @@
     <div class="container">
         <div id="selectorDiv" style="display:block">
             <h3>Dictogloss</h3>
-            <h5>{{ts.l.dictgloss_char_limit}}</h5>
+            <p>{{ts.l.dictgloss_char_limit}}</p>
             <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true; setClass();">{{ts.l.dictgloss_usage}}?</p>
             <div style="display: flex; justify-content: center;">
                 <textarea style="max-width: 300px;" class="form-control" id="textSelector" rows="3" maxlength="2000"></textarea>
             </div>
             <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
+            <button 
+            *ngIf="playWithTimer === false && gameInProgress == false" 
+            style="margin:4px; border-radius: 4px; background-color: rgba(255, 60, 60, 0.76);" 
+            (click)="toggleTimer();">{{ts.l.dictgloss_timer_off}}</button>
+            <button 
+            *ngIf="playWithTimer === true && gameInProgress == false" 
+            style="margin:4px; border-radius: 4px; background-color: rgba(125, 255, 125, 0.76);" 
+            (click)="toggleTimer();">{{ts.l.dictgloss_timer_on}}</button>
         </div>
         <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
         <div *ngIf="hasText">
@@ -48,7 +56,7 @@
             </div>
             <hr>
             <div *ngIf="!allGuessed; else correct;">
-                <div><b>{{displayTime(totalTime)}}</b></div>
+                <div *ngIf="playWithTimer === true"><b>{{displayTime(totalTime)}}</b></div>
                 <input id="guesses_input">
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
                 <div>
@@ -63,7 +71,7 @@
             </div>
             <ng-template  #correct>
                 <i><h2 class="victory">{{ts.l.dictgloss_victory}}</h2></i>
-                <b><h2>{{ts.l.dictgloss_final_time}}{{displayTime(totalTime)}}</h2></b>
+                <b *ngIf="playWithTimer === true"><h2>{{ts.l.dictgloss_final_time}}{{displayTime(totalTime)}}</h2></b>
                 <button class="victory-button" (click)="hasText = false;">{{ts.l.dictgloss_new}}</button>
                 <button class="victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictgloss_return}}</button>
             </ng-template>

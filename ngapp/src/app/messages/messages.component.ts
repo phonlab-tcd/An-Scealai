@@ -296,44 +296,41 @@ export class MessagesComponent implements OnInit {
   * Update nav bar notifications at the top of the screen
   */
   showMessageBody(message: Message) {
-    if(message.subject !== "New Dictogloss"){
-      if(message) {
-        let id = "message-" + message.id;
-        let messageElement = document.getElementById(id);
-        
-        if(this.lastClicked != '') {
-          let previousMessage = document.getElementById(this.lastClicked);
-          previousMessage.classList.remove("clickedresultCard");
-        }
-        this.lastClicked = id;
-        messageElement.classList.add("clickedresultCard");
-        
-        this.messageContent = message.text;
-        
-        if(!message.seenByRecipient) {
-          this.numberOfUnread--;
-          if(this.isTeacher) {
-            this.notificationService.removeTeacherMessage(message.senderId);
-          }
-          if(this.isStudent) {
-            this.notificationService.removeMessage(message);
-          }
-          this.messageService.markAsOpened(message._id).subscribe(() => {
-            message.seenByRecipient = true;
-          });
-        }
-        
-        if(message.audioId) {
-          this.getMessageAudio(message._id);
-          this.showAudio = true;
-        }
-        else {
-          this.showAudio = false;
-        }
+    if(message) {
+      let id = "message-" + message.id;
+      let messageElement = document.getElementById(id);
+      
+      if(this.lastClicked != '') {
+        let previousMessage = document.getElementById(this.lastClicked);
+        previousMessage.classList.remove("clickedresultCard");
       }
-    } else {
-      this.sendToDictgloss(message.text);
+      this.lastClicked = id;
+      messageElement.classList.add("clickedresultCard");
+      
+      this.messageContent = message.text;
+      
+      if(!message.seenByRecipient) {
+        this.numberOfUnread--;
+        if(this.isTeacher) {
+          this.notificationService.removeTeacherMessage(message.senderId);
+        }
+        if(this.isStudent) {
+          this.notificationService.removeMessage(message);
+        }
+        this.messageService.markAsOpened(message._id).subscribe(() => {
+          message.seenByRecipient = true;
+        });
+      }
+      
+      if(message.audioId) {
+        this.getMessageAudio(message._id);
+        this.showAudio = true;
+      }
+      else {
+        this.showAudio = false;
+      }
     }
+    if(message.subject === "New Dictogloss"){ this.sendToDictgloss(message.text); }
   }
 
   sendToDictgloss(passage: string){
