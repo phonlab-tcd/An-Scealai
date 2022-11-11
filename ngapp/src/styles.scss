@@ -237,6 +237,28 @@ body.rootBody {
     color: black;
 }
 
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
 button:focus, input:focus, audio:focus{
   outline: 0;
 }
@@ -244,6 +266,14 @@ button:focus, input:focus, audio:focus{
 .errorMessage {
   color: red;
   margin-top: 10px;
+}
+
+.usernameErrorText {
+    font-size: 12pt;
+    color: red;
+    margin-top: 4px;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .userInfoTextarea {

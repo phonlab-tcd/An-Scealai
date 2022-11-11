@@ -17,14 +17,6 @@
     padding: 60px;
 }
 
-.usernameErrorText {
-    font-size: 12pt;
-    color: red;
-    margin-top: 4px;
-    width: 80%;
-    margin-left: 10%;
-}
-
 .formLabel {
     text-align: left;
     margin-left: 10%;
@@ -63,28 +55,6 @@
 .closeForgotPasswordBtn:hover {
   cursor: pointer;
   color: black;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
 @media only screen and (max-width: 700px) {
