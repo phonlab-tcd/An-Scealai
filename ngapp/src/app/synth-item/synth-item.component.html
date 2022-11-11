@@ -17,7 +17,7 @@
       <span *ngIf="synthItem.audioUrl; else loading" style="display: flex;">
         <div style="width: 1rem; height: 1rem;"></div>
         <span>&ensp;{{synthItem.text}}</span>
-        <audio  #audioElement>
+        <audio id="synthAudio" #audioElement>
           <source src="{{synthItem.audioUrl}}">
         </audio>
       </span>

@@ -53,6 +53,7 @@ export class DictglossComponent implements OnInit {
   teacherName: string;
   teacherId: string;
   playWithTimer = false;
+  playbackSpeed:number = 1; //Shoud range from 0.5x to 2x speed incrementing in 0.5.
 
   isStudent: boolean;
   studentId: string;
@@ -91,8 +92,15 @@ export class DictglossComponent implements OnInit {
     } else {
       this.playWithTimer = false
     }
-    console.log(this.playWithTimer);
-    
+  }
+
+  changeSpeed(increment: number){
+    if(increment > 0 && this.playbackSpeed < 2){
+      this.playbackSpeed += 0.5;
+    }
+    if(increment < 0 && this.playbackSpeed > 0.5){
+      this.playbackSpeed -= 0.5;
+    }
   }
 
   @Input() text: string;
@@ -105,7 +113,7 @@ export class DictglossComponent implements OnInit {
       s.audioUrl = undefined;
       s.dispose();
     })
-    this.synthItems = [] //Does this mess stuff up?
+    this.synthItems = []
     this.collateSynths(this.sentences);
     // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
     if(this.texts === "") return;
@@ -140,14 +148,14 @@ export class DictglossComponent implements OnInit {
   hasIncorrect: boolean = false;
   synthText: string;
   guess: string;
-  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ]+/;
-  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ]+)/g;
+  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
+  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
   showInfo: boolean = false;
 
   fadeOutAnimation(){
     document.getElementById("infoButtonClose").hidden = true;
     document.getElementById("infoBox").className = "fadeOutContainer";
-    setTimeout(() => {this.showInfo = false;}, 1000)
+    setTimeout(() => {this.showInfo = false;}, 1000)//Avoids premature animation ending.
   }
 
   setClass(){
@@ -359,7 +367,6 @@ export class DictglossComponent implements OnInit {
       this.synthItems.push(this.getSynthItem(sentences[i]));
       this.synthItems[i].text = "Sentence " + (i + 1);
     }
-    console.log(this.synthItems);
   }
 
   getSynthItem(line: string) {

@@ -19,6 +19,7 @@ export class SynthItemComponent {
   @Input() storyId: string;
   @Input('i') i: number = 0;
   @ViewChild('audioElement') audioElement: ElementRef<HTMLAudioElement>;
+  @Input('playbackSpeed') speed: number;
 
   constructor(
     private synth: SynthesisService,
@@ -27,10 +28,16 @@ export class SynthItemComponent {
   ) {}
 
   play() {
+    this.setPlaybackSpeed()
     if(this.audioElement.nativeElement) {
       this.audioElement.nativeElement.play()
     }
     this.engagement.playSynthesis(this.synthItem, this.storyId);
+  }
+
+  setPlaybackSpeed(){
+    const audio = document.getElementById('synthAudio') as HTMLAudioElement;
+    audio.playbackRate = this.speed;
   }
 
   public refresh() {
