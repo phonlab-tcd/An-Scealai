@@ -33,35 +33,6 @@
   text-align: left;
 }
 
-.classBody {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-    padding-top: 0px;
-    overflow: auto;
-    height: 67.5vh;
-}
-
-.classroomCard {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    color: white;
-    font-size: 14pt;
-    background-color: var(--scealai-med-brown);
-    border-radius: 5px;
-    margin-top: 5px;
-}
-
-.classroomCard:hover {
-    color: var(--orange-text);
-    background-color: var(--scealai-med-brown-hover);
-    transition: color, background-color, 0.5s;
-    cursor: pointer;
-}
-
 .storyTitle {
   width: 400px;
   text-align: left;
