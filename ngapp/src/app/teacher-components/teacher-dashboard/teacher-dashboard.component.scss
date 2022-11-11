@@ -29,26 +29,10 @@
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 14pt;
-}
-
 .titleInput {
     margin-top: 10px;
     padding-left: 4px;
 }
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
 
 .createBtnGreen {
     background-color: var(--scealai-green);
@@ -57,11 +41,6 @@
 
 .createBtnGreen:hover {
     background-color: var(--scealai-dark-green);
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
 }
 
 .classHeader {

@@ -53,34 +53,12 @@
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 12pt;
-    white-space: normal;
-    color: black;
-}
-
 .usernameErrorText {
     font-size: 12pt;
     color: red;
     margin-top: 4px;
     width: 80%;
     margin-left: 10%;
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
 }
 
 .formLabel {

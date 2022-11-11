@@ -203,11 +203,6 @@
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 14pt;
-    margin-bottom: 10px;
-}
-
 .recordBtnContainer {
     margin-top: 10px;
     display: flex;
@@ -230,11 +225,6 @@
 
 .greenLinkText:hover {
     cursor: pointer;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
 }
 
 .messageContents {

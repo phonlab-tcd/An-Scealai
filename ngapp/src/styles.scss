@@ -89,6 +89,11 @@ body.rootBody {
     padding-right: 5%;
 }
 
+.contentBody {
+    display: flex;
+    width: 100%;
+}
+
 .headerTitle {
     font-size: 14pt;
     font-weight: bold;
@@ -194,6 +199,22 @@ body.rootBody {
     background-color: var(--scealai-delete-red-3-hover);
 }
 
+.modalBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+}
+
+.modalText {
+    font-size: 14pt;
+    white-space: normal;
+    color: black;
+}
+
 button:focus, input:focus, audio:focus{
   outline: 0;
 }
@@ -213,6 +234,12 @@ button:focus, input:focus, audio:focus{
     border: none;
     border-radius: 5px;
     white-space: nowrap;
+}
+
+.footer {
+  margin-left: 5%;
+  width: 90%;
+  display: flex;
 }
 
 

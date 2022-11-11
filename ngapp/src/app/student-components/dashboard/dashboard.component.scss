@@ -39,26 +39,6 @@
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 14pt;
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background: #474747;
-    color: white;
-}
-
 .bookHeader {
   display: flex;
   flex-direction: column;

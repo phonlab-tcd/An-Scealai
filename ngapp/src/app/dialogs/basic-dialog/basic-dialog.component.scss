@@ -2,44 +2,24 @@
   padding:10px;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    color: white;
-}
-
 .confirmBtnGreen {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
 }
 
 .confirmBtnGreen:hover {
-    background-color: #304e38;
-}
-
-.modalText {
-    font-size: 12pt;
-    white-space: normal;
-    color: black;
+    background-color: var(--scealai-dark-green);
 }
 
 .codeView {
-    background-color: #d1d1d1;
-    border: 1px solid #999999;
+    background-color: var(--scealai-gray);
+    border: 1px solid var(--scealai-light-gray);
     border-radius: 4px;
     padding: 4px;
     padding-left: 8px;

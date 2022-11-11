@@ -45,22 +45,6 @@ $corner-button-width: 10rem;
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 14pt;
-    white-space: normal;
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
 .recordingBookHeader {
   padding-left: 5%;
   padding-right: 5%;
@@ -233,12 +217,6 @@ $corner-button-width: 10rem;
 
 .trashBtn:hover {
   background-color: rgb(119, 5, 5);
-}
-
-.footer {
-  margin-left: 5%;
-  width: 90%;
-  display: flex;
 }
 
 .footerText {

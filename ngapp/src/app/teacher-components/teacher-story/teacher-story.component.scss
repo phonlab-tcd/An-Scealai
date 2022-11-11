@@ -27,7 +27,6 @@
 }
 
 .modalText {
-    font-size: 14pt;
     margin-bottom: 10px;
 }
 
@@ -76,27 +75,6 @@
 .audioPlayer {
     height: 32px;
     margin-top: 7px;
-}
-
-.modalBtnContainer {
-    display: flex;
-    flex-direction: row;
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
 }
 
 .createBtnGreen {

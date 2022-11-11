@@ -67,28 +67,6 @@
     box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalText {
-    font-size: 14pt;
-    padding: 2px;
-    font-weight: bold;
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: var(--scealai-gray);
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background-color: var(--modal-hover);
-    color: white;
-}
-
 .createBtnGreen {
     background-color: var(--scealai-green);
     color: white;
@@ -110,8 +88,6 @@
 }
 
 .contentBody {
-    display: flex;
-    width: 100%;
     justify-content: space-evenly;
 }
 
@@ -221,9 +197,7 @@
   }
   
   .contentBody {
-      display: flex;
       flex-direction: column;
-      width: 100%;
       align-items: center;
   }
   
@@ -253,9 +227,7 @@
 
 @media only screen and (max-width: 1000px) and (max-height: 750px) {
   .contentBody {
-      display: flex;
       flex-direction: column;
-      width: 100%;
       align-items: center;
   }
   .classContainer {
@@ -275,9 +247,7 @@
 
 @media only screen and (max-width: 1400px) and (max-height: 900px) {
   .contentBody {
-      display: flex;
       flex-direction: column;
-      width: 100%;
       align-items: center;
   }
   .classContainer {
