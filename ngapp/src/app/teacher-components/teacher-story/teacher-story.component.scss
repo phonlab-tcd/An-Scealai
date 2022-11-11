@@ -23,53 +23,9 @@
     align-items: center;
 }
 
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 8px;
-    background-color: var(--scealai-green);
-    color: white;
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-light-green);
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.recordingIcon {
-    font-size: 14pt;
-    margin-left: 10px;
-    color: var(--scealai-delete-red-3);
-    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
-}
-
-.greenLinkText {
-    margin-top: 10px;
-    color: var(--scealai-green);
-    text-decoration: underline;
-}
-
-.greenLinkText:hover {
-    cursor: pointer;
-}
-
 .audioPlayer {
     height: 32px;
     margin-top: 7px;
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
 }
 
 .inactiveBtn {
@@ -87,16 +43,6 @@
 
 .classContainer {
     height: 500px;
-}
-
-.backArrow {
-    margin-right: 8px;
-}
-
-.backArrow:hover {
-    cursor: pointer;
-    color: var(--orange-text);
-    transition: color, 0.5s;
 }
 
 .storyClassBody {

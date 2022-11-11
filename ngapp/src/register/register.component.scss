@@ -33,24 +33,6 @@
     margin-left: 10%;
 }
 
-.languageButton {
-    background-color: var(--scealai-green);
-    color: white;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 4px;
-    margin: 4px;
-}
-
-.languageButton:hover { 
-    cursor: pointer;
-    background-color: var(--scealai-med-green);
-}
-
-.languageButtonSelected {
-    background-color: var(--scealai-med-green);
-}
-
 .termsOfUseContainer {
     font-size: 10pt;
     width: 100%;

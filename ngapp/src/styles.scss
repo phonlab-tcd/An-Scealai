@@ -185,10 +185,10 @@ body.rootBody {
   z-index: 20;
 }
 
-.btn:hover {
-  background-color: var(--scealai-yellow-hover);
-  color: white;
-}
+// .btn:hover {
+//   background-color: var(--scealai-yellow-hover);
+//   color: white;
+// }
 
 .deleteRedBtn {
     background-color: var(--scealai-delete-red-3);
@@ -197,6 +197,47 @@ body.rootBody {
 
 .deleteRedBtn:hover {
     background-color: var(--scealai-delete-red-3-hover);
+}
+
+.createBtnGreen {
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.createBtnGreen:hover {
+    background-color: var(--scealai-dark-green);
+}
+
+.greenBtn {
+  font-size: 12pt;
+  background-color: var(--scealai-green);
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.greenBtn:hover {
+  cursor: pointer;
+  color: var(--scealai-light-green);
+  -webkit-transition: 0.5s; /* Safari */
+}
+
+
+.languageButton {
+    background-color: var(--scealai-green);
+    color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.languageButton:hover { 
+    cursor: pointer;
+    background-color: var(--scealai-med-green);
+}
+
+.languageButtonSelected {
+    background-color: var(--scealai-med-green);
 }
 
 .modalContainer {
@@ -259,8 +300,46 @@ body.rootBody {
     transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
+.headerIconContainer {
+    margin-left: auto;
+    display: flex;
+    overflow-x: auto;
+}
+
+.headerIconBtn {
+    font-size: 12pt;
+    margin-left: 8px;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.headerIconBtn:hover {
+    cursor: pointer;
+    color: var(--scealai-light-green);
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+}
+
+.headerIcon {
+    margin-left: 5px;
+}
+
 button:focus, input:focus, audio:focus{
   outline: 0;
+}
+
+.backArrow {
+    margin-right: 8px;
+}
+
+.backArrow:hover {
+    cursor: pointer;
+    color: var(--orange-text);
+    transition: color, 0.5s;
 }
 
 .errorMessage {
@@ -318,6 +397,72 @@ button:focus, input:focus, audio:focus{
   margin-left: 5%;
   width: 90%;
   display: flex;
+}
+
+.logoContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.sponsorCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+}
+
+.cardLeft {
+    width: 60%;
+    margin-right: 5%;
+}
+
+.cardRight {
+    width: 35%;
+}
+
+.logoCardImg {
+    width: 100%;
+}
+
+.logoImg {
+    height: 80px;
+    margin: 10px;
+}
+
+.textBlock {
+    padding: 20px;
+}
+
+.smallTextBlock {
+    padding: 10px;
+}
+
+.testimonialFooter {
+    width: 100%;
+    text-align: right;
+}
+
+.greenLinkText {
+    margin-top: 10px;
+    color: var(--scealai-green);
+    text-decoration: underline;
+}
+
+.greenLinkText:hover {
+    cursor: pointer;
+}
+
+.recordingIcon {
+    font-size: 14pt;
+    margin-left: 10px;
+    color: var(--scealai-delete-red-3);
+    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
 
 

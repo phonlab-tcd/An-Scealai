@@ -6,8 +6,8 @@
     <div class="classHeader">
       <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> {{ts.l.messages}} ({{totalNumberOfMessages}})
       <div class="headerIconContainer">
-        <div *ngIf="!createNewMessage" class="btn deleteBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
-        <button *ngIf="!createNewMessage" class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
+        <div *ngIf="!createNewMessage" class="btn greenBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
+        <button *ngIf="!createNewMessage" class="btn greenBtn" [class.deleteRedBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
         <div *ngIf="!createNewMessage" class="headerIconBtn" (click)="createNewMessage = true; audioSource = null; chunks = [];"> {{ts.l.new_message}} <i class="fas fa-plus"></i></div>
       </div>
     </div>

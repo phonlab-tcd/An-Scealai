@@ -9,52 +9,8 @@
     box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
 }
 
-.createBtnGreen {
-    background-color: #70a87f;
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: #304e38;
-}
-
-.profileContainer {
-    width: 500px;
-    display: inline-block;
-    background-color: #437250;
-    color: white;
-    border-radius: 10px;
-
-    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-}
-
 .headerIconBtn {
-    font-size: 12pt;
     margin-left: 25px;
-    background-color: #70a87f;
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    color: white;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: #91ffa5;
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.createBtnGreen {
-    background-color: var(--scealai-green);
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: var(--scealai-dark-green);
 }
 
 .formBody {
@@ -81,24 +37,6 @@
 .userInfo {
     padding-left: 5%;
     white-space: nowrap;
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 25px;
-    background-color: var(--scealai-green);
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    color: white;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-light-green);
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
 }
 
 .form-group {
@@ -168,24 +106,6 @@
     margin-left: 4px;
 }
 
-.languageButton {
-    background-color: var(--scealai-green);
-    color: white;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 4px;
-    margin: 4px;
-}
-
-.languageButton:hover { 
-    cursor: pointer;
-    background-color: var(--scealai-med-green);
-}
-
-.languageButtonSelected {
-    background-color: var(--scealai-med-green);
-}
-
 .accountButtonContainer {
   display: flex;
   margin-left: 20%;
@@ -235,28 +155,6 @@
 
 .logoutBtn:hover {
     background-color: var(--scealai-med-green);
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
 @media only screen and (max-width: 700px) {
