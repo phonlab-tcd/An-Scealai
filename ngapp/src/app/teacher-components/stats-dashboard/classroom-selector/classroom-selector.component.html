@@ -5,11 +5,6 @@
     </div>
 </div>
 
-<div class="classroom-card-container">
-    <div *ngFor="let classroom of classrooms" class="classroom-card" (click)="closeDialog(classroom)">
-        <div>{{classroom.title}}</div>
-    </div>
-
 <div class="checkBox"> 
   <input type="checkbox" [(ngModel)]="showDatePicker" name="dateCheckBox"> {{ts.l.date_range}}
 </div>
