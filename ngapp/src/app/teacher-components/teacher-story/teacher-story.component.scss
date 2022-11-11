@@ -203,16 +203,7 @@
 }
 
 .userInfoTextarea {
-    height: 30px;
     width: 100%;
-    margin-left: 10px;
-    padding-left: 5px;
-    font-size: 12pt;
-    resize: none;
-    background-color: white;
-    border: none;
-    border-radius: 5px;
-    white-space: nowrap;
 }
 
 .feedbackContainer {
@@ -293,15 +284,6 @@
     visibility: visible;
     opacity: 1;
     transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.deleteRedBtn {
-    background-color: var(--scealai-delete-red-3);
-    color: white;
-}
-
-.deleteRedBtn:hover {
-    background-color: var(--scealai-delete-red-3-hover);
 }
 
 @keyframes blinker {  

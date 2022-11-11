@@ -185,6 +185,15 @@ body.rootBody {
   color: white;
 }
 
+.deleteRedBtn {
+    background-color: var(--scealai-delete-red-3);
+    color: white;
+}
+
+.deleteRedBtn:hover {
+    background-color: var(--scealai-delete-red-3-hover);
+}
+
 button:focus, input:focus, audio:focus{
   outline: 0;
 }
@@ -192,6 +201,18 @@ button:focus, input:focus, audio:focus{
 .errorMessage {
   color: red;
   margin-top: 10px;
+}
+
+.userInfoTextarea {
+    height: 30px;
+    margin-left: 10px;
+    padding-left: 5px;
+    font-size: 12pt;
+    resize: none;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    white-space: nowrap;
 }
 
 

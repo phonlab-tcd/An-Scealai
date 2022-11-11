@@ -1,10 +1,3 @@
-<div class="{{modalClass}} modalContainer">
-  <div class="modalContent">
-    <div class="modalText">{{ts.l.sure_you_want_to_delete_code}}</div>
-    <button class="modalBtn deleteRedBtn" (click)="deleteTeacherCode()">{{ts.l.delete}}</button><button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
-  </div>
-</div>
-
 <div class="adminContent">
   <div class="generateCodeTitle"><div class="teacherCodeTitle">{{ts.l.teacher_account_code}}</div><div class="teacherCodeButton" (click)="generateCode()">{{ts.l.generate}}</div></div>
   <div class="teacherCodeDisplay">
@@ -20,7 +13,7 @@
       <div class="teacherAccountsBody">
         <div class="activeTeacherCodeContainer" *ngFor="let code of activeTeacherCodes">
           {{code.code}} 
-          <i class="fa fa-times deleteBtn" aria-hidden="true" (click)="showModal(code.code)"></i>
+          <i class="fa fa-times deleteBtn" aria-hidden="true" (click)="openDeleteCodeDialog(code.code)"></i>
         </div>
       </div>
     </div>
