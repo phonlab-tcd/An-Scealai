@@ -15,7 +15,7 @@
   padding: 5px;
 }
 
-.btnContainer {
+.adminBtnContainer {
     width: 150px;
     height: 80px;
     display: flex;
@@ -28,7 +28,7 @@
     border-radius: 5px;
 }
 
-.btnContainer:hover {
+.adminBtnContainer:hover {
     color: var(--orange-text);
     background-color: var(--scealai-med-brown-hover);
     transition: color, background-color, 0.5s;
@@ -43,7 +43,7 @@
         padding-right: 5%;
     }
 
-    .btnContainer {
+    .adminBtnContainer {
         width: 90%;
         height: 80px;
         padding: 10px;

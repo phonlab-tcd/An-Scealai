@@ -21,10 +21,7 @@
     cursor: pointer;
 }
 
-.content {
-    width: 100%;
-    padding: 3vh;
-    display: flex;
+.adminContent {
     justify-content: space-around;
 }
 
@@ -45,15 +42,6 @@
 .submitButton:hover {
     cursor: pointer;
     background-color: var(--scealai-dark-green);
-}
-
-.loaderContainer {
-    position: absolute;
-    width: 90%;
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .card {
