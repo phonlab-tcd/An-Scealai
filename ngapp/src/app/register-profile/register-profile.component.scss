@@ -1,29 +1,11 @@
 .registerContainer {
     width: 500px;
-    display: inline-block;
     background-color: var(--scealai-dark-green);
-    color: white;
-    border-radius: 10px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    margin-bottom: 80px;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
 }
 
 .formContainer {
     width: 500px;
-    display: inline-block;
-    padding-top: 15px;
-    padding-bottom: 25px;
-    color: var(--dark-text);
     background-color: var(--scealai-gray);
-    border-radius: 0px 0px 10px 10px;
 }
 
 .form-group-set {

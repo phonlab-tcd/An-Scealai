@@ -178,13 +178,8 @@
 }
 
 .modalContainer {
-    position: absolute;
-    z-index: 5;
     width: 87.2%;
     height: 72%;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -192,15 +187,6 @@
 
 .modalContent {
     width: 400px;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .recordBtnContainer {

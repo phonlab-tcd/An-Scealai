@@ -42,14 +42,9 @@
 }
 
 .modalContainer {
-    position: absolute;
-    z-index: 5;
     width: 90%;
     height: 75vh;
     overflow-y: scroll;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
 }
 
 .modalContent {
@@ -57,14 +52,6 @@
     margin-bottom: 5vh;
     width: 60%;
     margin-left: 20%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 .createBtnGreen {

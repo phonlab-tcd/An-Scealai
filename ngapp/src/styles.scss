@@ -199,6 +199,28 @@ body.rootBody {
     background-color: var(--scealai-delete-red-3-hover);
 }
 
+.modalContainer {
+    position: absolute;
+    z-index: 5;
+    width: 90%;
+    height: 500px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    padding: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
 .modalBtn {
     padding: 5px;
     padding-left: 10px;
@@ -234,6 +256,32 @@ button:focus, input:focus, audio:focus{
     border: none;
     border-radius: 5px;
     white-space: nowrap;
+}
+
+.registerContainer {
+    width: 400px;
+    display: inline-block;
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
+
+.formContainer {
+    width: 400px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    color: var(--dark-text);
+    background-color: var(--form-background);
+    border-radius: 0px 0px 10px 10px;
 }
 
 .footer {
