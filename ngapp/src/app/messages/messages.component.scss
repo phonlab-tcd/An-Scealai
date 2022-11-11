@@ -5,25 +5,11 @@
 }
 
 .classContainer {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
     padding-bottom: 70px;
-    height: 80vh;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
 }
 
 .classHeader {
-    width: 100%;
-    background-color: var(--scealai-dark-green);
-    border-radius: 5px 5px 0px 0px;
     display: inline-flex;
-    color: white;
-    padding: 8px;
-    padding-left: 16px;
-    font-size: 16pt;
 }
 
 .backArrow {

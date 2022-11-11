@@ -37,6 +37,105 @@ html,body.rootBody {
   height: 100%;
 }
 
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html {
+  overflow-y: hidden;
+}
+
+body.rootBody {
+   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+   font-family: "Open Sans";
+   overflow-y: scroll;
+}
+
+///////////////////////////////////////////////////////////// REUSABLE ELEMENTS
+.container {
+    width: 900px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.aboutContent {
+    text-align: left;
+}
+
+.contentContainer {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.headerTitle {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.classContainer {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    height: 80vh;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.classHeader {
+    width: 100%;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    display: flex;
+    padding: 8px;
+    padding-left: 16px;
+    font-size: 16pt;
+}
+
+.btn {
+  color: white;
+  font-size: 14pt;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 30px;
+  background-color: var(--scealai-yellow);
+  z-index: 20;
+}
+
+.btn:hover {
+  background-color: var(--scealai-yellow-hover);
+  color: white;
+}
+
+button:focus, input:focus, audio:focus{
+  outline: 0;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+
+////////////////////////////////////////////////////////////////// QUILL STYLES
 .ql-container {
   margin: auto;
 }
@@ -65,47 +164,7 @@ html,body.rootBody {
   }
 }
 
-html {
-  overflow-y: hidden;
-}
-body.rootBody {
-  overflow-y: scroll;
-}
-
-body.rootBody {
-   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
- -webkit-background-size: cover;
-    -moz-background-size: cover;
-      -o-background-size: cover;
-         background-size: cover;
- font-family: "Open Sans";
-}
-
-.btn {
-  color: white;
-  font-size: 14pt;
-  padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 30px;
-  background-color: var(--scealai-yellow);
-  z-index: 20;
-}
-
-.btn:hover {
-  background-color: var(--scealai-yellow-hover);
-  color: white;
-}
-
-.errorMessage {
-  color: red;
-  margin-top: 10px;
-}
-
-button:focus, input:focus, audio:focus{
-  outline: 0;
-}
-
+/////////////////////////////////////////////////////////////////////// Chatbot
 .add-personal-topics{
   position: relative;
   border-radius: 5px;
@@ -126,18 +185,6 @@ button:focus, input:focus, audio:focus{
   font-style: italic;
 }
 
-#go-to-taidhgin{
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  background-color:lightsalmon;
-}
-
-#go-to-taidhgin:hover{
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-}
-
-/* Chatbot Styles */
 /* Dialogue and Photos */
 .bot-message-photo, .user-message-photo{
   position:relative;
@@ -473,6 +520,3 @@ button:focus, input:focus, audio:focus{
     margin-left: 10%;
   }
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

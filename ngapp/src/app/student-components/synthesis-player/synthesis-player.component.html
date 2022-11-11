@@ -7,7 +7,7 @@
     <p>({{ts.l['dnn_synthesiser'] ? ts.l['dnn_synthesiser'] : 'dnn_synthesiser' }})</p>
 
   </div>
-  <div class=header>
+  <div class=synthHeader>
     <div class=reload (click)=refresh()>&#8635;</div>
     <synth-voice-select (selectVoice)=refresh($event)></synth-voice-select>
     <div class=fast-synth (click)=goToFastSynthesiser()>

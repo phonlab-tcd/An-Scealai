@@ -255,6 +255,17 @@ button:hover{
     padding: 5px;
 }
 
+#go-to-taidhgin{
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  background-color:lightsalmon;
+}
+
+#go-to-taidhgin:hover{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
 @media only screen and (min-width: 700px) and (max-width: 1000px){
     #container, #submit-container{
         width: 80%;
