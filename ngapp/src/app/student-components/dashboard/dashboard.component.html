@@ -72,6 +72,13 @@
         {{ts.l.edit_title_or_dialect}}
         <i class="fas fa-pencil-alt optionsBtnIcon"></i>
       </div>
+      
+      <!-- SPEECH TO TEXT-->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; speakStory()">
+        {{ts.l.dictation}}
+         <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span> <!-- Google icon, index.html-->
+         <button *ngIf="isRecording" class="notRecordingBtn blink"><i class="fas fa-stop-circle"></i></button>
+      </div>
 
       <!-- DOWNLOAD -->
       <div 

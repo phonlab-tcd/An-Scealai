@@ -172,6 +172,34 @@ h1 {
     cursor: pointer; 
 }
 
+.notRecordingBtn {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.blink {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  0% {
+    background-color:red;
+  }
+  50% {
+    background-color:rgb(119, 0, 0);
+  }
+  100% {
+    background-color:red;
+  }
+}
+
 .saveIcon {
   white-space: nowrap;
   color: #261500;
