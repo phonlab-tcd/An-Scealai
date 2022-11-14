@@ -1,9 +1,5 @@
 $corner-button-width: 10rem;
 
-.page {
-    padding-top: 20px;
-}
-
 .bookContainerSynth {
     width: 70%;
     margin-left: 15%;
@@ -375,11 +371,6 @@ $corner-button-width: 10rem;
 }
 
 @media only screen and (max-width: 700px) { 
-  .bookContentsContainer {
-      width: 100%;
-      padding-top: 10px;
-      z-index: 10;
-  }
   .bookContainerSynth {
      width: 90%;
      margin-left: 5%;

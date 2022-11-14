@@ -55,6 +55,24 @@ body.rootBody {
 }
 
 ///////////////////////////////////////////////////////////// REUSABLE ELEMENTS
+.bookImg {
+  z-index: -10;
+  width: 90%;
+  height: 500px;
+  position: fixed;
+  right: 5%;
+}
+
+.bookContentsContainer {
+    width: 80%;
+    margin-left: 10%;
+    z-index: 10;
+}
+
+.page {
+    padding-top: 20px;
+}
+
 .container {
     width: 900px;
     background-color: white;
@@ -174,6 +192,58 @@ body.rootBody {
   padding: 5px;
 }
 
+.contentsTitleContainer {
+    width: 100%;
+    padding: 5px;
+    display:flex;
+    justify-content: space-between;
+}
+
+.contentsDateTitle {
+    font-size: 14pt;
+    color: var(--scealai-orange);
+}
+
+.contentsLinkTitle {
+    float: left;
+    margin-left: 1%;
+    font-size: 14pt;
+    color: var(--scealai-orange);
+}
+
+.contentSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deleteCheckbox {
+    float:left;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.notificationBtn {
+    margin-left: 5px;
+    background-color: var(--notification-button);
+    color: white;
+    font-size: 8pt;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+}
+
+.notificationBtn:hover {
+  cursor: pointer;
+  background-color: #d82727;
+}
+
 .btn {
   color: white;
   font-size: 14pt;
@@ -219,6 +289,7 @@ body.rootBody {
   cursor: pointer;
   color: var(--scealai-light-green);
   -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
 }
 
 

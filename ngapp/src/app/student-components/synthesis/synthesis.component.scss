@@ -1,15 +1,3 @@
-.bookImg {
-    z-index: -10;
-    width: 90%;
-    height: 500px;
-    position: fixed;
-    right: 5%;
-}
-
-.page {
-    padding-top: 20px;
-}
-
 .bookContainerSynth {
     width: 70%;
     height: 400px;
@@ -133,11 +121,6 @@
 @media only screen and (max-width: 700px) { 
   .bookImg {
       display: none;
-  }
-  .bookContentsContainer {
-      width: 100%;
-      padding-top: 10px;
-      z-index: 10;
   }
   .bookContainerSynth {
      width: 90%;

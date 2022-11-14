@@ -5,19 +5,7 @@
 }
 
 .notificationBtn {
-    margin-left: 5px;
-    background-color: var(--notification-button);
-    color: white;
-    font-size: 8pt;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-    -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-    box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
 }
 
 .classroomKey {

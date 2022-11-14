@@ -23,25 +23,6 @@
     font-size: 18pt;
 }
 
-.contentsTitleContainer {
-    width: 100%;
-    padding: 5px;
-    display:flex;
-    justify-content: space-between;
-}
-
-.contentsLinkTitle {
-    float: left;
-    margin-left: 1%;
-    font-size: 14pt;
-    color: var(--scealai-orange);
-}
-
-.contentsDateTitle {
-    font-size: 14pt;
-    color: var(--scealai-orange);
-}
-
 .contentsLinkContainer {
   height: 260px;
   overflow: auto;
@@ -51,18 +32,6 @@
   -moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
   box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.5);
   border-radius: 5px 5px 5px 5px;
-}
-
-.contentSection {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.deleteCheckbox {
-    float:left;
-    margin-right: 5px;
-    margin-top: 5px;
 }
 
 .contentsLink {
@@ -131,22 +100,6 @@
     color: white;
 }
 
-.notificationBtn {
-    margin-left: 5px;
-    background-color: var(--notification-button);
-    color: white;
-    font-size: 8pt;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-    -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-    box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
-}
-
 .newStoryBtn {
     background-color: var(--scealai-yellow);
     border-style: none;
@@ -162,15 +115,6 @@
 }
 
 @media only screen and (max-width: 700px) { 
-    .bookImg {
-        display: none;
-    }
-    .bookContentsContainer {
-        width: 95%;
-        padding-top: 10px;
-        margin-left: 2.5%;
-        z-index: 10;
-    }
     .contentsContainer {
        width: 90%;
        margin-left: 5%;
@@ -236,21 +180,6 @@
 }
 
 @media only screen and (min-width: 700px) {
-    .bookImg {
-        z-index: -10;
-        width: 630px;
-        left: 50%;
-        margin-left: -315px;
-    }
-
-    .bookContentsContainer {
-        width: 560px;
-        position: fixed;
-        left: 50%;
-        margin-left: -280px;
-        padding-top: 40px;
-    }
-
     .optionsPopup {
         margin-left: 55px;
     }
@@ -258,23 +187,6 @@
 }
 
 @media only screen and (min-width: 1400px) and (min-height: 800px) {
-    .bookImg {
-        z-index: -10;
-        width: 630px;
-        left: 50%;
-        margin-left: -315px;
-        margin-top: 100px;
-    }
-
-    .bookContentsContainer {
-        width: 560px;
-        position: fixed;
-        left: 50%;
-        margin-left: -280px;
-        padding-top: 40px;
-        margin-top: 100px;
-    }
-
     .optionsPopup {
         margin-left: 55px;
     }
