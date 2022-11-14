@@ -54,7 +54,7 @@ body.rootBody {
    overflow-y: scroll;
 }
 
-///////////////////////////////////////////////////////////// REUSABLE ELEMENTS
+//////////////////////////////////////////////////////////////////////////////// CONTAINERS / HEADERS
 .bookImg {
   z-index: -10;
   width: 90%;
@@ -91,8 +91,10 @@ body.rootBody {
     margin-bottom: 10px;
 }
 
-.aboutContent {
-    text-align: left;
+.contentContainer {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 .adminContent {
@@ -101,10 +103,8 @@ body.rootBody {
   display: flex;
 }
 
-.contentContainer {
-    display: flex;
-    padding-left: 5%;
-    padding-right: 5%;
+.aboutContent {
+    text-align: left;
 }
 
 .contentBody {
@@ -148,6 +148,66 @@ body.rootBody {
     height: 67.5vh;
 }
 
+//////////////////////////////////////////////////////////////////////////////// RECORDINGS / SYNTHESIS
+
+.bookContainerSynth {
+  width: 70%;
+  margin-left: 15%;
+  z-index: 10;
+  border-radius: 5px;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.recordingStoryContainer {
+  margin-top: 10px;
+}
+
+.recordingStoryHeader {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px 4px 0px 0px;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.textContainerSynth {
+  width: 90%;
+  margin-left: 5%;
+  height: 290px;
+  color: var(--dark-text);
+  background-color: var(--scealai-cream-2);
+  border: 1px solid var(--dark-text)a2;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  overflow: auto;
+}
+
+.dividerLine {
+  border-top: 1px solid var(--modal-hover);
+  width: 100%;
+}
+
+.changeSplitBtn {
+  background-color: var(--scealai-green);
+  border-radius: 4px;
+  margin-right: 5px;
+  color: white;
+}
+
+.changeSplitBtn:hover {
+  background-color: var(--scealai-med-green);
+}
+
+//////////////////////////////////////////////////////////////////////////////// TEACHER STYLES
 .classroomCard {
     width: 100%;
     display: flex;
@@ -168,6 +228,16 @@ body.rootBody {
     cursor: pointer;
 }
 
+.classroomKey {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
+}
+
+//////////////////////////////////////////////////////////////////////////////// ADMIN / STUDENT STYLES
+
 .adminLoaderContainer {
     position: absolute;
     width: 90%;
@@ -183,13 +253,6 @@ body.rootBody {
     align-items: center;
     margin-top: 50px;
     color: var(--scealai-med-green);
-}
-
-.btnContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 5px;
 }
 
 .contentsTitleContainer {
@@ -215,6 +278,15 @@ body.rootBody {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+//////////////////////////////////////////////////////////////////////////////// BUTTONS
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px;
 }
 
 .deleteCheckbox {
@@ -292,7 +364,6 @@ body.rootBody {
   transition: 0.5s;
 }
 
-
 .languageButton {
     background-color: var(--scealai-green);
     color: white;
@@ -310,6 +381,18 @@ body.rootBody {
 .languageButtonSelected {
     background-color: var(--scealai-med-green);
 }
+
+.backArrow {
+    margin-right: 8px;
+}
+
+.backArrow:hover {
+    cursor: pointer;
+    color: var(--orange-text);
+    transition: color, 0.5s;
+}
+
+//////////////////////////////////////////////////////////////////////////////// MODALS
 
 .modalContainer {
     position: absolute;
@@ -371,47 +454,7 @@ body.rootBody {
     transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
-.headerIconContainer {
-    margin-left: auto;
-    display: flex;
-    overflow-x: auto;
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 8px;
-    background-color: var(--scealai-green);
-    color: white;
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: var(--scealai-light-green);
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.headerIcon {
-    margin-left: 5px;
-}
-
-button:focus, input:focus, audio:focus{
-  outline: 0;
-}
-
-.backArrow {
-    margin-right: 8px;
-}
-
-.backArrow:hover {
-    cursor: pointer;
-    color: var(--orange-text);
-    transition: color, 0.5s;
-}
+//////////////////////////////////////////////////////////////////////////////// PROFILE / REGISTRATION
 
 .errorMessage {
   color: red;
@@ -462,6 +505,40 @@ button:focus, input:focus, audio:focus{
     color: var(--dark-text);
     background-color: var(--form-background);
     border-radius: 0px 0px 10px 10px;
+}
+
+//////////////////////////////////////////////////////////////////////////////// ICONS / LOGOS
+
+.headerIconContainer {
+    margin-left: auto;
+    display: flex;
+    overflow-x: auto;
+}
+
+.headerIconBtn {
+    font-size: 12pt;
+    margin-left: 8px;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.headerIconBtn:hover {
+    cursor: pointer;
+    color: var(--scealai-light-green);
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+}
+
+.headerIcon {
+    margin-left: 5px;
+}
+
+button:focus, input:focus, audio:focus{
+  outline: 0;
 }
 
 .footer {
@@ -536,8 +613,7 @@ button:focus, input:focus, audio:focus{
     animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
 
-
-////////////////////////////////////////////////////////////////// QUILL STYLES
+//////////////////////////////////////////////////////////////////////////////// QUILL STYLES
 .ql-container {
   margin: auto;
 }
@@ -566,7 +642,7 @@ button:focus, input:focus, audio:focus{
   }
 }
 
-/////////////////////////////////////////////////////////////////////// Chatbot
+//////////////////////////////////////////////////////////////////////////////// Chatbot
 .add-personal-topics{
   position: relative;
   border-radius: 5px;

@@ -98,28 +98,6 @@
   height:40vh; width:40vw
 }
 
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
 .hide {
   display: none;
 }

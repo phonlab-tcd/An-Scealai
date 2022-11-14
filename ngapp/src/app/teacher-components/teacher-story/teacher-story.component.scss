@@ -174,28 +174,6 @@
     justify-content: center;
 }
 
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
 @keyframes blinker {  
   from { opacity: 1; }
   to { opacity: 0; }

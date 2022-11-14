@@ -34,14 +34,6 @@
     transition: color 0.5s;
 }
 
-.classroomKey {
-    display: flex;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: var(--scealai-gray);
-    color: var(--scealai-dark-gray);
-}
-
 .keyNumStudents {
     margin-left: auto;
 }
@@ -49,28 +41,6 @@
 .numStudents {
     margin-left: auto;
     margin-right: 45px;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
 }
 
 @media (max-width:550px) {
