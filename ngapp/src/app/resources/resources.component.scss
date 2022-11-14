@@ -1,33 +1,8 @@
 .container {
-    width: 900px;
-    background-color: white;
-    border-radius: 4px;
-    padding-top: 20px;
     padding-bottom: 20px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.header {
-    width: 100%;
-    font-size: 20pt;
-    height: 50px;
-    margin-bottom: 10px;
-}
-
-.author {
-    font-style: normal;
-}
-
-.content {
-    text-align: left;
 }
 
 .headerTitle {
-    font-size: 14pt;
-    font-weight: bold;
     text-align: center;
 }
 
@@ -36,16 +11,6 @@
     font-weight: bold;
     padding-bottom: 10px;
     padding-top: 30px;
-}
-
-.storyBlock {
-  padding-left: 20px;
-  padding-bottom: 20px;
-}
-
-.story {
-  padding-bottom: 20px;
-  padding-left: 30px;
 }
 
 .storyImg {
@@ -60,14 +25,22 @@
   padding-top: 70px;
 }
 
+.panelFlex {
+  display:flex;
+  flex-direction: column;
+}
+
 .panelDescriptionNoPhoto {
   font-size : 15pt;
   font-weight: bold;
 }
 
-.panelFlex {
+.moreResources {
+  place-content: space-between;
+}
+
+.dialectContainer {
   display:flex;
-  flex-direction: column;
 }
 
 .viewStory {
@@ -76,7 +49,7 @@
 
 .viewStoryBtn {
     padding: 7px;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 4px;
     text-decoration:none;
@@ -93,14 +66,6 @@
   font-size: 16pt;
   padding-top:40px;
   text-align: center;
-}
-
-.moreResources {
-  place-content: space-between;
-}
-
-.dialectContainer {
-  display:flex;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -141,8 +106,7 @@
   background-color: #3e8e41;
 }
 
-
-.footer {
+.footerLARA {
     display: flex;
     flex-direction: column;
     bottom: 0;
@@ -154,10 +118,6 @@
 .footerLogos {
     display: flex;
     flex-wrap: wrap;
-}
-
-.logoImg {
-    height: 40px;
 }
 
 .copyright {
@@ -174,6 +134,9 @@
   padding-bottom:5px;
 }
 
+.logoImg {
+    height: 40px;
+}
 
 @media only screen and (max-width: 700px) {
     .container {

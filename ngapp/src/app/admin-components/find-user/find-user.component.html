@@ -1,11 +1,11 @@
-<div class='container'>
+<div class='adminContainer'>
   <div class='searchContainer'>
     <div class='searchHeader'>
       {{ts.l.all_users}} ({{userCount}})
     </div>
 
     <!-- Loading panel -->
-    <div *ngIf="!dataLoaded" class="loaderContainer">
+    <div *ngIf="!dataLoaded" class="adminLoaderContainer">
       <b>{{ts.l.compiling_data}}</b>
       <grid-spinner></grid-spinner>
     </div>

@@ -6,13 +6,12 @@
     <div class="classHeader">
       <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div> {{ts.l.messages}} ({{totalNumberOfMessages}})
       <div class="headerIconContainer">
-        <div *ngIf="!createNewMessage" class="btn deleteBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
-        <button *ngIf="!createNewMessage" class="btn deleteBtn" [class.deleteModeBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
+        <div *ngIf="!createNewMessage" class="btn greenBtn"><i class="fa fa-redo-alt refreshNotifications" (click)="resetMessages()"></i></div>
+        <button *ngIf="!createNewMessage" class="btn greenBtn" [class.deleteRedBtn]="deleteMode" (click)="toggleDeleteMode()"><i class="fas fa-trash-alt headerIcon"></i></button>
         <div *ngIf="!createNewMessage" class="headerIconBtn" (click)="createNewMessage = true; audioSource = null; chunks = [];"> {{ts.l.new_message}} <i class="fas fa-plus"></i></div>
       </div>
     </div>
      
-
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
       <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
@@ -22,7 +21,7 @@
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
               <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle' style='font-size:10px;color:#70a87f;padding-right:5px'></i></div>
-              <div class="sender"> {{message.senderUsername}} </div>
+              <div> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>
             <div *ngIf="!isFromAmerica" class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
@@ -35,7 +34,7 @@
       <div class="messageReadContents">
         <div class="readMessageBody" [innerHtml]="messageContent"></div>
         <div *ngIf="showAudio">
-          <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+          <audio [src]="audioSource" id="audio" controls #audioTag></audio>
         </div>
       </div>
     </div>
@@ -55,12 +54,12 @@
                </div>
                <!-- Listen back to message -->
                <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
-               <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+               <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag></audio>
                <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
                <!-- Cancel or send audio -->
-               <div class="modalBtnContainer">
+               <div>
                    <button type="button" class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button>
-                   <button type="button" class="modalBtn createBtnGreen" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> {{ts.l.add_to_message}} </button>
+                   <button type="button" class="modalBtn" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> {{ts.l.add_to_message}} </button>
                </div>
            </div>
          </div>
@@ -70,7 +69,7 @@
           <!-- recipient field -->
           <div class="sendTo">
             <label> {{ts.l.send_to}} </label>
-            <select *ngIf="isTeacher" name="recipient" class="selectOptions" [(ngModel)]="message.recipientId" required>
+            <select *ngIf="isTeacher" name="recipient" [(ngModel)]="message.recipientId" required>
               <option [ngValue]="classroom._id"> {{ts.l.all_class_members}} </option>
               <option *ngFor="let student of students" [ngValue]="student._id"> {{student.username}} </option>
             </select>
@@ -97,7 +96,7 @@
             <!-- audio message player -->
             <div class="audioReplay">
               <div *ngIf="audioSource">
-                <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
+                <audio [src]="audioSource" id="audio" controls #audioTag></audio>
               </div>
               <div>
                   <button type="button" (click)="showModal()" class="headerIconBtn">{{ts.l.audio_message}}</button>

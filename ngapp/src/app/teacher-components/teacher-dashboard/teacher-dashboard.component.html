@@ -7,13 +7,13 @@
     </div>
     <!-- title and number of students headers -->
     <div class="classroomKey">
-      <div class="keyTitle">{{ts.l.title}}</div>
+      <div>{{ts.l.title}}</div>
       <div class="keyNumStudents">{{ts.l.no_students}}</div>
     </div>
     <!-- display list of classrooms-->
     <div class="classBody">
       <div class="classroomCard" *ngFor="let classroom of classrooms | async" (click)="goToClassroom(classroom._id)">
-        <div class="classroomTitle">{{classroom.title}}</div>
+        <div>{{classroom.title}}</div>
         <div class="numStudents">{{getNumberOfStudents(classroom)}}</div>
       </div>
     </div>

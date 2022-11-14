@@ -1,10 +1,10 @@
-<div class="header"> {{ts.l.scealai_feature_statistics}} </div>
+<div class="headerTitle"> {{ts.l.scealai_feature_statistics}} </div>
 <!-- Toggle between date picker and feature logs -->
 <div class="dataOptions">
   <div class="option" (click)="selectDateRange = true"> {{ts.l.date_range}}</div> |
   <div class="option" (click)="selectDateRange = false"> {{ts.l.previous_data}} </div>
 </div>
-<div class="content">
+<div class="adminContent">
   <!-- Date picker -->
   <div class="datePicker" *ngIf="selectDateRange">
     <mat-form-field appearance="fill">
@@ -35,7 +35,7 @@
 </div>
 
 <!-- Loading panel -->
-<div *ngIf="!dataLoaded" class="loaderContainer">
+<div *ngIf="!dataLoaded" class="adminLoaderContainer">
   <b>{{ts.l.compiling_data}}</b>
   <grid-spinner></grid-spinner>
 </div>
