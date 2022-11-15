@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
               public userService: UserService,
               public statsService: StatsService,
               public recordingService: RecordingService,
-              private dialog: MatDialog,) { }
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     this.codeInput = new FormControl();

@@ -1,16 +1,6 @@
 <!-- Select the synthesis option for a story -->
 <div class="page">
   <div class="bookContainerSynth">
-    <!--popup for update story option -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent">
-          <div class="modalText">{{ts.l.save_changes_made_to_this_recording}}</div>
-          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-          <div>
-              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn" (click)="saveModal()">{{ts.l.save}}</button>
-          </div>
-      </div>
-    </div>
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
         <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
