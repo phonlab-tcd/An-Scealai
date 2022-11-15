@@ -67,10 +67,6 @@ export class RecordingDialogComponent{
     }
     else if (this.data.type == "messageAudio") {
       this.dialogRef.close(this.audioSource);
-      // this.errorText = this.recordingService.saveAudioMessage(this.data.id);
-      // if(!this.errorText) {
-      //   this.dialogRef.close(true);
-      // }
     }
     else {
       this.dialogRef.close(false);

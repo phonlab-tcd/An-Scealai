@@ -124,25 +124,6 @@
   border-radius: 10px;
 }
 
-.modalContainer {
-    width: 87.2%;
-    height: 72%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modalContent {
-    width: 400px;
-}
-
-.recordBtnContainer {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
 .messageContents {
   background-color: white;
   display: inline-flex;
@@ -234,13 +215,6 @@ label {
 }
 
 @media (max-width:320px) {
-
-    .modalContent {
-        margin-top: 10vh;
-        width: 90%;
-        margin-left: 5%;
-    }
-
     .classHeader {
         font-size: 10pt;
     }
@@ -314,13 +288,6 @@ label {
 }
 
 @media (max-width:360px) {
-
-    .modalContent {
-        margin-top: 10vh;
-        width: 90%;
-        margin-left: 5%;
-    }
-
     .classHeader {
         font-size: 10pt;
     }
@@ -394,13 +361,6 @@ label {
 }
 
 @media (max-width:400px) {
-
-    .modalContent {
-        margin-top: 10vh;
-        width: 90%;
-        margin-left: 5%;
-    }
-
     .classHeader {
         font-size: 10pt;
     }

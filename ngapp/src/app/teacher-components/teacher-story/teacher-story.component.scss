@@ -136,26 +136,9 @@
     justify-content: center;
 }
 
-@keyframes blinker {  
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@-webkit-keyframes blinker {  
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-
 @media (min-width: 1000px) {
 
     .classContainer {
-        width: 900px;
-        position: absolute;
-        left: 50%;
-        margin-left: -450px;
-    }
-
-    .modalContainer {
         width: 900px;
         position: absolute;
         left: 50%;
