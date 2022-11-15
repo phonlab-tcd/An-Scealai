@@ -7,6 +7,7 @@ import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
+import { RecordingService } from '../../services/recording.service';
 import config from 'abairconfig';
 
 declare var MediaRecorder : any;
@@ -26,7 +27,8 @@ export class TeacherStoryComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private profileService: ProfileService,
-    private auth: AuthenticationService) { }
+    private auth: AuthenticationService,
+    private recordingService: RecordingService) { }
 
   modalClass : string = "hidden";
 
@@ -37,17 +39,13 @@ export class TeacherStoryComponent implements OnInit {
   authorPossessive : string;
   feedbackSent : boolean = false;
   newRecording : boolean = false;
-  showListenBack : boolean = false;
-  canSendAudio : boolean = false;
+  isRecording: boolean = false;
+  showAudio: boolean = false;
   userId: string;
   isFromAmerica: boolean = false;
 
   errorText : string;
   registrationError : boolean;
-
-  recorder;
-  stream;
-  chunks;
 
   baseUrl: string = config.baseurl;
 
@@ -125,78 +123,39 @@ export class TeacherStoryComponent implements OnInit {
       this.feedbackSent = true;
     });
   }
-
-/*
-* Create media object and record audio
-*/
-  recordAudio() {
-    let media = {
-      tag: 'audio',
-      type: 'audio/mp3',
-      ext: '.mp3',
-      gUM: {audio: true}
+  
+  /*
+  * Start and stop recording
+  */
+  record() {
+    if(this.isRecording) {
+      this.newRecording = this.recordingService.stopRecording();
     }
-    navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-      this.stream = _stream;
-      this.recorder = new MediaRecorder(this.stream);
-      this.startRecording();
-      this.recorder.ondataavailable = e => {
-        this.chunks.push(e.data);
-        if(this.recorder.state == 'inactive') {
-
-        };
-      };
-    }).catch();
+    else {
+      this.showAudio = false;
+      this.newRecording = false;
+      this.recordingService.recordAudio();
+    }
+    this.isRecording = !this.isRecording;
   }
 
-/*
-* Call the recording audio function
-*/
-  prepRecording() {
-    this.recordAudio();
-  }
-
-/*
-* Set parameters for recording audio and start the process
-*/
-  startRecording() {
-    this.recording = true;
-    this.newRecording = false;
-    this.showListenBack = false;
-    this.chunks = [];
-    this.recorder.start();
-  }
-
-/*
-* Reset parameters for recording audio and stop the process 
-*/
-  stopRecording() {
-    this.recorder.stop();
-    this.recording = false;
-    this.showListenBack = true;
-    this.canSendAudio = true;
-    this.stream.getTracks().forEach(track => track.stop());
-  }
 
 /*
 * Playback the recorded audio
 */
-  playbackAudio() {
-    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-    this.newRecording = true;
+  getAudio() {
+    this.showAudio = true;
+    this.audioSource = this.recordingService.playbackAudio();
   }
 
 /*
 * Add the audio fedback to the database 
 */
   saveAudio() {
-    let blob = new Blob(this.chunks, {type: 'audio/mp3'});
-    this.storyService.addFeedbackAudio(this.story._id, blob).subscribe((res) => {
+    this.errorText = this.recordingService.saveAudio(this.story._id);
+    if(!this.errorText) {
       this.hideModal();
-    }, (err) => {
-      this.errorText = err.message;
-      this.registrationError = true;
-    });
+    }
   }
 
 /*
@@ -218,14 +177,8 @@ export class TeacherStoryComponent implements OnInit {
 
   hideModal() {
     this.modalClass = "hiddenFade";
-    if(this.recorder.state != 'inactive') {
-      this.recorder.stop();
-      this.stream.getTracks().forEach(track => track.stop());
-    }
-    this.chunks = [];
-    this.recording = false;
     this.newRecording = false;
-    this.showListenBack = false;
+    this.showAudio = false;
   }
 
   goBack() {
