@@ -136,6 +136,16 @@
     justify-content: center;
 }
 
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@-webkit-keyframes blinker {  
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
 @media (min-width: 1000px) {
 
     .classContainer {
