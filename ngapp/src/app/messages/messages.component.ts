@@ -14,6 +14,7 @@ import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
 import { NotificationService } from '../notification-service.service';
+import { RecordingService } from '../services/recording.service';
 
 declare var MediaRecorder : any;
 
@@ -68,21 +69,13 @@ export class MessagesComponent implements OnInit {
   
   //audio file variables
   modalClass : string = "hidden";
-  recording: boolean = false;
   audioSource : SafeUrl;
   feedbackText: string;
   feedbackSent : boolean = false;
   newRecording : boolean = false;
-  showListenBack : boolean = false;
-  canSendAudio : boolean = false;
   showAudio: boolean = false;
-  blob: any;
+  isRecording: boolean = false;
   errorText : string;
-  registrationError : boolean;
-  recorder;
-  stream;
-  chunks;
-
 
   constructor(private classroomService: ClassroomService,
               private userService: UserService, 
@@ -93,7 +86,8 @@ export class MessagesComponent implements OnInit {
               private messageService: MessageService,
               protected sanitizer: DomSanitizer,
               protected profileService: ProfileService,
-              protected notificationService: NotificationService) { }
+              protected notificationService: NotificationService,
+              private recordingService: RecordingService) { }
 
   /*
   * Get classroom and student information for TEACHER, get teacher information for STUDENT 
@@ -103,8 +97,6 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
     this.deleteMode = false;
     this.toBeDeleted = [];
-    this.chunks = [];
-    this.canSendAudio = false;
     
     const userDetails = this.auth.getUserDetails();
     
@@ -149,6 +141,7 @@ export class MessagesComponent implements OnInit {
   * Add audio file to DB if audio taken
   */
   sendMessage() {
+    alert('send message');
     //Add new message to DB
     if(this.message.text) {
       this.message.id = uuid();
@@ -180,27 +173,22 @@ export class MessagesComponent implements OnInit {
         ids.push(this.message.id);
       }
       //Add audio to DB if taken
-      if(this.canSendAudio) {
+      alert('new recording: ' + this.newRecording);
+      if(this.newRecording) {
         for(let id of ids) {
           this.messageService.getMessageById(id).subscribe((res) => {
-            this.messageService.addMessageAudio(res._id, this.blob).subscribe((res) => {
+            this.errorText = this.recordingService.saveAudioMessage(res._id);
+            if(!this.errorText) {
               this.hideModal();
-            }, (err) => {
-              this.errorText = err.message;
-              this.registrationError = true;
-            });
-          })
+            }
+          });
         }
       }
       this.createNewMessage = false;
-      this.chunks = [];
-      this.audioSource = null;
-      this.canSendAudio = false;
     }
     else {
       alert("Message empty")
     }
-
   }
   
   /*
@@ -276,9 +264,8 @@ export class MessagesComponent implements OnInit {
   goBack() {
     if(this.createNewMessage) {
       this.createNewMessage = false;
-      this.chunks = [];
       this.audioSource = null;
-      this.canSendAudio = false;
+      this.newRecording = false;
     }
     else {
       if(this.isTeacher) {
@@ -344,72 +331,26 @@ export class MessagesComponent implements OnInit {
   }
 
   /*
-  * Create media object and record audio
+  * Start and stop recording
   */
-    recordAudio() {
-      let media = {
-        tag: 'audio',
-        type: 'audio/mp3',
-        ext: '.mp3',
-        gUM: {audio: true}
-      }
-      navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-        this.stream = _stream;
-        this.recorder = new MediaRecorder(this.stream);
-        this.startRecording();
-        this.recorder.ondataavailable = e => {
-          this.chunks.push(e.data);
-          if(this.recorder.state == 'inactive') {
-
-          };
-        };
-      }).catch();
-      
+  record() {
+    if(this.isRecording) {
+      this.newRecording = this.recordingService.stopRecording();
     }
-
-  /*
-  * Call the recording audio function
-  */
-    prepRecording() {
-      this.recordAudio();
-    }
-
-  /*
-  * Set parameters for recording audio and start the process
-  */
-    startRecording() {
-      this.recording = true;
+    else {
+      this.showAudio = false;
       this.newRecording = false;
-      this.showListenBack = false;
-      this.chunks = [];
-      this.recorder.start();
+      this.recordingService.recordAudio();
     }
-
-  /*
-  * Reset parameters for recording audio and stop the process 
-  */
-    stopRecording() {
-      this.recorder.stop();
-      this.recording = false;
-      this.showListenBack = true;
-      this.canSendAudio = true;
-      this.stream.getTracks().forEach(track => track.stop());
-    }
+    this.isRecording = !this.isRecording;
+  }
 
   /*
   * Playback the recorded audio
   */
-    playbackAudio() {
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
-      this.newRecording = true;
-    }
-
-  /*
-  * Save audio data into a blob (function called in sendMessage)
-  */
-    saveAudio() {
-      this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
-      this.modalClass = "hiddenFade";
+    getAudio() {
+      this.showAudio = true;
+      this.audioSource = this.recordingService.playbackAudio();
     }
     
   // change css class to show recording container
@@ -421,21 +362,21 @@ export class MessagesComponent implements OnInit {
     resetForm() {
       if(this.audioSource) {
         this.audioSource = null;
-        this.chunks = [];
       }
       this.createNewMessage = false;
+    }
+    
+    deleteRecording() {
+      if(this.audioSource) {
+        this.audioSource = null;
+        this.newRecording = false;
+      }
     }
 
   // change the css class to hide the recording container 
     hideModal() {
       this.modalClass = "hiddenFade";
-      if(this.recorder.state != 'inactive') {
-        this.recorder.stop();
-        this.stream.getTracks().forEach(track => track.stop());
-      }
-      this.recording = false;
-      this.newRecording = false;
-      this.showListenBack = false;
+      this.showAudio = false;
     }
     
   /* delete messages added to the to be deleted array

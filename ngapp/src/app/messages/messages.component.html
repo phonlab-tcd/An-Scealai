@@ -48,18 +48,18 @@
                <div class="modalText">{{ts.l.record_audio_message}}</div>
                <!-- Start/stop recording audio or go back -->
                <div class="recordBtnContainer">
-                 <button *ngIf="!recording" type="button" (click)="prepRecording()" class="headerIconBtn">{{ts.l.record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
-                 <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
+                 <button *ngIf="!isRecording" type="button" (click)="record()" class="headerIconBtn">{{ts.l.record_audio}}</button>
+                 <button *ngIf="isRecording" (click)="record()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
+                 <div *ngIf="isRecording" class="recordingIcon"><i class="fa fa-circle"></i></div>
                </div>
                <!-- Listen back to message -->
-               <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
-               <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag></audio>
-               <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
+               <div *ngIf="newRecording" class="greenLinkText" (click)="getAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
+               <audio *ngIf="showAudio" [src]="audioSource" id="audio" controls #audioTag></audio>
+               <div *ngIf="errorText" class="errorMessage">{{errorText}}</div>
                <!-- Cancel or send audio -->
                <div>
-                   <button type="button" class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button>
-                   <button type="button" class="modalBtn" (click)="playbackAudio(); saveAudio(); hideModal();" *ngIf="canSendAudio"> {{ts.l.add_to_message}} </button>
+                   <button type="button" class="modalBtn" (click)="deleteRecording(); hideModal()">{{ts.l.cancel}}</button>
+                   <button type="button" class="modalBtn" (click)="hideModal();" *ngIf="newRecording"> {{ts.l.add_to_message}} </button>
                </div>
            </div>
          </div>

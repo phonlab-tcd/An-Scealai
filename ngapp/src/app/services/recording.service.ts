@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { StoryService } from '../story.service';
+import { MessageService } from '../message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { StoryService } from '../story.service';
 export class RecordingService {
 
   constructor(protected sanitizer: DomSanitizer,
-              private storyService: StoryService) { }
+              private storyService: StoryService,
+              private messageService: MessageService) { }
 
   audioSource : SafeUrl;
   recorder;
@@ -62,7 +64,7 @@ export class RecordingService {
   }
   
   /* Add the audio story fedback to the database */
-  saveAudio(storyId):string {
+  saveAudio(storyId: string):string {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     let errorText = "";
     
@@ -77,4 +79,25 @@ export class RecordingService {
     });
     return errorText;
   }
+  
+  saveAudioMessage(id: string):string {
+    let blob = new Blob(this.chunks, {type: 'audio/mp3'});
+    let errorText = "";
+    
+    alert('saving audio for ' + id);
+    
+    this.messageService.addMessageAudio(id, blob).subscribe((res) => {
+      if(this.recorder.state != 'inactive') {
+        this.recorder.stop();
+        this.stream.getTracks().forEach(track => track.stop());
+      }
+      this.chunks = [];
+    }, (err) => {
+      errorText = err.message;
+    });
+    
+    return errorText;
+    
+  }
+  
 }
