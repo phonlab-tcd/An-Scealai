@@ -2014,5 +2014,8 @@ export default {
     en: 'Select a classroom' },
   date_range: {
     ga: 'Raon na nDátaí',
-    en: 'Date Range' } 
+    en: 'Date Range' },
+  dictation: {
+    ga: 'Deachtú',
+    en: 'Dictation' } 
 }
