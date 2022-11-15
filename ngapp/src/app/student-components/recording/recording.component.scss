@@ -1,128 +1,19 @@
 $corner-button-width: 10rem;
-$scealai-orange: #c15a2e;
-
-.bookContainerSynth {
-    width: 70%;
-    margin-left: 15%;
-    z-index: 10;
-    border-radius: 5px;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.page {
-    padding-top: 20px;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
 
 .modalContainer {
-    position: absolute;
     margin-top: 0px;
-    z-index: 100;
     height: 400px;
     width: 100%;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
 }
 
 .modalContent {
     margin-top: 80px;
     width: 80%;
     margin-left: 10%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: #d1d1d1;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalText {
-    font-size: 14pt;
-    white-space: normal;
-}
-
-.bookTitle {
-  overflow: auto;
-  color: #261500; 
-  margin-left: 2em;
-  margin-right: 2em;
-  display: inline-block;
-  font-size: 16pt;
-}
-
-.bookTitleHistory {
-    color: #261500; 
-    padding-right: 37%;
-    padding-top: 3px;
-    display: inline-block;
-    font-size: 16pt;
-}
-
-.recordingStoryHeader {
-    background-color: #70a87f;
-    color: white;
-    border-radius: 4px 4px 0px 0px;
-    width: 90%;
-    margin-left: 5%;
-}
-
-.myStoriesBtn {
-  white-space: nowrap;
-  display: inline;
-  border-style: none;
-  color: #261500;
-  width: $corner-button-width;
-  font-size: 12pt;
-  padding-top: 10px;
-}
-
-.myStoriesBtn:hover {
-    color: $scealai-orange;
-    cursor: pointer;
-    transition: color 0.5s;
+.textContainerSynth {
+  border: 1px solid #261500a2;
 }
 
 .recordingBookHeader {
@@ -132,42 +23,34 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   justify-content: space-between;
 }
 
-.textContainerSynth {
-    width: 90%;
-    margin-left: 5%;
-    height: 290px;
-    color: #261500;
-    background-color: #f7f2e7;
-    border: 1px solid #261500a2;
-    text-align: left;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 4px;
-    overflow: auto;
+.myStoriesBtn {
+  white-space: nowrap;
+  display: inline;
+  border-style: none;
+  color: var(--dark-text);
+  width: $corner-button-width;
+  font-size: 12pt;
+  padding-top: 10px;
 }
 
-
-.historyTextContainerSynth {
-    width: 90%;
-    margin-left: 5%;
-    height: 360px;
-    color: #261500;
-    background-color: #f7f2e7;
-    border: 1px solid #261500a2;
-    text-align: left;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 4px;
-    overflow: auto;
+.myStoriesBtn:hover {
+    color: var(--scealai-orange);
+    cursor: pointer;
+    transition: color 0.5s;
 }
 
-.recordingStoryContainer {
-    margin-top: 10px;
+.bookTitle {
+  overflow: auto;
+  color: var(--dark-text); 
+  margin-left: 2em;
+  margin-right: 2em;
+  display: inline-block;
+  font-size: 16pt;
 }
 
 .recordingSaveIcon {
   width: $corner-button-width;
-  color: #261500;
+  color: var(--dark-text);
   border-style: none;
   font-size: 11pt;
   padding-top: 15px;
@@ -175,7 +58,120 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
 .recordingSavedIcon {
   white-space: nowrap;
-  color: #b3a995;
+  color: var(--scealai-light-brown);
+}
+
+.recordingUnsavedIcon {
+    background-color: var(--scealai-green);
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 5px;
+    margin-top: -5px;
+    color: white;
+}
+
+.recordingUnsavedIcon:hover {
+    background-color: var(--scealai-med-green);
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.textCard {
+  background-color: white;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+  box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+}
+
+.playAudioBtn {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    border: none;
+    margin-left: 4px;
+    font-size: 10pt;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.playAudioBtn:hover {
+    background-color: var(--scealai-med-green);
+    transition: 0.5s;
+}
+
+.recordingBtn {
+  background-color: var(--scealai-green);
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.recordingBtn:hover {
+  background-color: var(--scealai-med-green);
+  transition: 0.5s;
+}
+
+.notRecordingBtn {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.recognisedSpeechContainer {
+  height:40px;
+  color: var(--scealai-green);
+  font-style: italic;
+}
+
+.cardFooter {
+  display: flex;
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 35px;
+}
+
+.trashBtn {
+  background-color: rgb(190, 10, 10);
+  font-size: 12pt;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.trashBtn:hover {
+  background-color: rgb(119, 5, 5);
+}
+
+.footerText {
+  display: flex;
+  align-items: center;
+  font-size: 12pt;
+  margin-right: 5px;
+}
+
+.changeSplitBtn {
+  font-size: 10pt;
+}
+
+.selectedBtn {
+  background-color: var(--scealai-med-green);
 }
 
 .optionsPopupRec {
@@ -205,131 +201,10 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 0;
   height: 0;
   border: 10px solid transparent;
-  border-bottom-color: #f1e9d8;
+  border-bottom-color: var(--scealai-cream);
   border-top: 0;
   margin-left: -10px;
   margin-top: -10px;
-}
-
-.recordingUnsavedIcon {
-    background-color: #70a87f;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 5px;
-    margin-top: -5px;
-    color: white;
-}
-
-.recordingUnsavedIcon:hover {
-    background-color: #437250;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
-.audioPlayer {
-  height: 15px;
-}
-
-.playAudioBtn {
-    background-color: #70a87f;
-    color: white;
-    border-radius: 4px;
-    border: none;
-    margin-left: 4px;
-    font-size: 10pt;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.playAudioBtn:hover {
-    background-color: #437250;
-    transition: 0.5s;
-}
-
-.loaderContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    color: #437250;
-}
-
-.footer {
-  margin-left: 5%;
-  width: 90%;
-  display: flex;
-}
-
-.footerText {
-  display: flex;
-  align-items: center;
-  font-size: 12pt;
-  margin-right: 5px;
-}
-
-.btnContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.changeSplitBtn {
-  background-color: #70a87f;
-  border-radius: 4px;
-  margin-right: 5px;
-  font-size: 10pt;
-  color: white;
-}
-
-.changeSplitBtn:hover {
-  background-color: #437250;
-}
-
-.sentenceContainer {
-  margin-bottom: 10px;
-}
-
-.selectedBtn {
-  background-color: #437250;
-}
-
-.historyToolbar {
-    background-color: #70a87f;
-    color: white;
-    display: flex;
-    width: 90%;
-    margin-left: 5%;
-    padding: 5px;
-}
-
-.selectStoryFilter {
-    font-size: 10pt;
-    margin-left: 5px;
-}
-
-.textCard {
-  background-color: white;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
-  -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
-  box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
-}
-
-.dividerLine {
-  border-top: 1px solid #707070;
-  width: 100%;
-}
-
-.recognisedSpeechContainer {
-  height:40px;
-  color: #70a87f;
-  font-style: italic;
 }
 
 /**
@@ -342,8 +217,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   margin-left: 20px;
   animation: dotFlashing 1s infinite linear alternate;
   animation-delay: .5s;
@@ -361,8 +236,8 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 0s;
 }
@@ -372,64 +247,20 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #70a87f;
-  color: #70a87f;
+  background-color: var(--scealai-green);
+  color: var(--scealai-green);
   animation: dotFlashing 1s infinite alternate;
   animation-delay: 1s;
 }
 
 @keyframes dotFlashing {
   0% {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
   }
   50%,
   100% {
     background-color: #d1e6d6;
   }
-}
-
-.cardFooter {
-  display: flex;
-}
-
-.recordingBtn {
-  background-color: #70a87f;
-  color: white;
-  border-radius: 4px;
-  border: none;
-  margin-left: 4px;
-  font-size: 10pt;
-  padding: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.recordingBtn:hover {
-  background-color: #437250;
-  transition: 0.5s;
-}
-
-.notRecordingBtn {
-  background-color: red;
-  color: white;
-  border-radius: 4px;
-  border: none;
-  margin-left: 4px;
-  font-size: 10pt;
-  padding: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
-.trashBtn {
-  background-color: rgb(190, 10, 10);
-  font-size: 12pt;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-.trashBtn:hover {
-  background-color: rgb(119, 5, 5);
 }
 
 .blink {
@@ -448,10 +279,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
   }
 }
 
-.audioPlayer {
-  width: 100%;
-  height: 35px;
-}
 
 @media only screen and (max-width: 350px) {
   .footerText {
@@ -472,11 +299,6 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 }
 
 @media only screen and (max-width: 700px) { 
-  .bookContentsContainer {
-      width: 100%;
-      padding-top: 10px;
-      z-index: 10;
-  }
   .bookContainerSynth {
      width: 90%;
      margin-left: 5%;
@@ -543,7 +365,7 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
 
   .modalContainer {
     width: 980px;
-      height: 730px;
+    height: 730px;
   }
 
   .textContainerSynth {
@@ -565,7 +387,7 @@ Some pseudo-classes used to highlight text
   content: '';
   height: 22px;
   width: 0%;
-  background: #0088ff6b;
+  background: var(--scealai-light-blue);
   position: absolute;
   transition: var(--trans);
 }
@@ -580,11 +402,11 @@ Some pseudo-classes used to highlight text
 }
 
 .paragraphContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }
 
 .sentenceContainer ::ng-deep .wordBtn:hover {
-  background: #0088ff36;
+  background: var(--scealai-light-blue-hover);
   cursor: pointer;
 }

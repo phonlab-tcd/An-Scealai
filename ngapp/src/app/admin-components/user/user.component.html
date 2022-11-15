@@ -58,7 +58,7 @@
             <div class="dateTextContainer"><div class="dateLine"></div><div class="dateText">{{getFormattedDateOfInitialElementFor(eventArray)}}</div><div class="dateLine"></div></div>
             <div class="activeTeacherCodeContainer eventContainer whiteBtn" *ngFor="let event of eventArray" (click)="eventSelected[event._id]=!eventSelected[event._id]">
                 <div class="eventHeader">
-                    <div class="eventType">{{event.type}}</div>
+                    <div>{{event.type}}</div>
                     <div class="eventTime">{{getTimeFromDate(event.date)}}</div>
                 </div>
                 <div class="eventBody mainEventBody" *ngIf="eventSelected[event._id]">

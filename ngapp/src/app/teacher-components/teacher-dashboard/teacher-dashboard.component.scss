@@ -4,26 +4,24 @@
     padding-right: 5%;
 }
 
-.classContainer {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
+.modalContainer {
+    width: 90%;
     height: 80vh;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.modalContent {
+    margin-top: 10vh;
+    width: 40%;
+    margin-left: 30%;
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
 }
 
 .classHeader {
-    width: 100%;
-    background-color: #304e38;
-    border-radius: 5px 5px 0px 0px;
-    color: white;
-    display: flex;
-    padding: 8px;
-    padding-left: 16px;
     padding-right: 16px;
-    font-size: 16pt;
 }
 
 .addClassBtn {
@@ -32,45 +30,8 @@
 
 .addClassBtn:hover {
     cursor: pointer;
-    color: #70a87f;
+    color: var(--scealai-green);
     transition: color 0.5s;
-}
-
-.classBody {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-    padding-top: 0px;
-    overflow: auto;
-    height: 67.5vh;
-}
-
-.classroomCard {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    color: white;
-    font-size: 14pt;
-    background-color: #534d3d;
-    border-radius: 5px;
-    margin-top: 5px;
-}
-
-.classroomCard:hover {
-    color:#ff9100;
-    background-color: #3b372b;
-    transition: color, background-color, 0.5s;
-    cursor: pointer;
-}
-
-.classroomKey {
-    display: flex;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: #d1d1d1;
-    color: #424242;
 }
 
 .keyNumStudents {
@@ -80,4 +41,14 @@
 .numStudents {
     margin-left: auto;
     margin-right: 45px;
+}
+
+@media (max-width:550px) {
+
+    .modalContent {
+        margin-top: 10vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
 }

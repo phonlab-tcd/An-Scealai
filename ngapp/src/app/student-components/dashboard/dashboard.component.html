@@ -1,5 +1,5 @@
 <!-- Display the written story along with edit options -->
-<div class="page bookContainer">
+<div class="bookContainer">
 
     <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
@@ -16,7 +16,7 @@
           <button class="modalBtn" (click)="hideModal();">
             {{ts.l.cancel}}
           </button>
-          <button class="modalBtn createBtnGreen" (click)="saveModal()">
+          <button class="modalBtn" (click)="saveModal()">
             {{ts.l.save}}
           </button>
         </div>
@@ -62,7 +62,7 @@
 
     <div class="optionsBtnContainer" (click)="toggleOptions();">
 
-      <div class="toggleShowOptions optionsBtn">
+      <div class="optionsBtn">
         <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
         <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
       </div>
@@ -176,8 +176,7 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div 
-        class="textFieldContainer">
+      <div>
           <div 
             *ngIf="feedbackVisible"
             class="feedbackHeader">

@@ -4,8 +4,25 @@
     padding-right: 5%;
 }
 
+.classContainer {
+    padding-bottom: 70px;
+}
+
+.classHeader {
+    display: inline-flex;
+}
+
+.greenBtn {
+  padding-right: 8px;
+  margin-left: 8px;
+}
+
+.refreshNotifications:hover {
+    cursor: pointer;    
+}
+
 .messagesContainer {
-  background-color: #d1d1d1;
+  background-color: var(--scealai-gray);
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -30,89 +47,50 @@
   justify-content: space-between;
 }
 
-
-.classContainer {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
-    padding-bottom: 70px;
-    height: 80vh;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.classHeader {
-    width: 100%;
-    background-color: #304e38;
-    border-radius: 5px 5px 0px 0px;
-    display: inline-flex;
-    color: white;
-    padding: 8px;
-    padding-left: 16px;
-    font-size: 16pt;
-}
-
-.backArrow {
-    margin-right: 8px;
-}
-
-.backArrow:hover {
-    cursor: pointer;
-    color:#ff9100;
-    transition: color, 0.5s;
-}
-
-.headerIconContainer {
-    margin-left: auto;
-    display: flex;
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 8px;
-    background-color: #70a87f;
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: #91ffa5;
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.headerIcon {
-    margin-left: 5px;
-}
-
-.newMessageContainer {
-  background-color: #d1d1d1;
-  display: inline-flex;
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  height: 100%;
-  width: 97%;
-  border-radius: 10px;
-}
-
-.messageContents {
-  background-color: white;
+.messageList {
   display: inline-flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  padding-left: 20px;
-  padding-top: 20px;
-  width: 100%
+  overflow-y: scroll;
+  height: 40%;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.resultCard {
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 12pt;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    text-align: left;
+    padding: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+    padding-right: 20%;
+}
+
+.resultCard:hover {
+    cursor: pointer;
+}
+
+.dotNewMessage {
+  display: flex;
+  padding-right: 20px;
+  width: 30%;
+  flex-grow: 1;
+}
+
+.subject {
+  width: 42%;
+  text-align: left;
+}
+
+.date {
+  text-align: left;
 }
 
 .messageReadContents {
@@ -132,7 +110,51 @@
   padding-top: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
+}
 
+.newMessageContainer {
+  background-color: var(--scealai-gray);
+  display: inline-flex;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  height: 100%;
+  width: 97%;
+  border-radius: 10px;
+}
+
+.modalContainer {
+    width: 87.2%;
+    height: 72%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    width: 400px;
+}
+
+.recordBtnContainer {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.messageContents {
+  background-color: white;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  width: 100%
 }
 
 .sendTo {
@@ -152,13 +174,20 @@ label {
   padding-right: 10px;
 }
 
-.subject {
-  width: 42%;
-  text-align: left;
+.subjectNewMessage {
+  display: flex;
+  width: 80%;
+  margin-bottom: 10px;
 }
 
-.date {
-  text-align: left;
+/* get rid of red boarder for Firefox */
+.subjectNewMessage:-moz-placeholder {
+    box-shadow:none !important;
+}
+
+.subjectNewMessage:invalid {
+    box-shadow:none;
+    border-style: solid;
 }
 
 .newMessageBody {
@@ -195,201 +224,13 @@ label {
   padding-right: 40px;
 }
 
-.resultCard {
-    background-color: #ffffff;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 12pt;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    text-align: left;
-    padding: 10px;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-top: 2px;
-    margin-bottom: 5px;
-    padding-right: 20%;
-}
-
-.resultCard:hover {
-    cursor: pointer;
-}
-
-.clickedresultCard {
-    color:white;
-    background-color: #3b372b;
-}
-
-.messageEntries {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.subjectNewMessage {
-  display: flex;
-  width: 80%;
-  margin-bottom: 10px;
-}
-
-/* get rid of red boarder for Firefox */
-.subjectNewMessage:-moz-placeholder {
-    box-shadow:none !important;
-}
-
-
-.subjectNewMessage:invalid {
-    box-shadow:none;
-    border-style: solid;
-}
-
-.messageList {
-  display: inline-flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  height: 40%;
-  border: 1px solid black;
-  border-radius: 5px;
-  
-}
-
-.modalContainer {
-    position: absolute;
-    z-index: 5;
-    width: 87.2%;
-    height: 72%;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modalContent {
-    width: 400px;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
 .audioReplay {
   display: inline-flex;
 }
 
-.modalText {
-    font-size: 14pt;
-    margin-bottom: 10px;
-}
-
-.hidden {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.hiddenFade {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s ease-in;
-}
-
-.visible {
-    visibility: visible;
-    opacity: 1;
-}
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-
-.recordBtnContainer {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.recordingIcon {
-    font-size: 14pt;
-    margin-left: 10px;
-    color: #c40021;
-    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
-}
-
-.greenLinkText {
-    margin-top: 10px;
-    color: #70a87f;
-    text-decoration: underline;
-}
-
-.greenLinkText:hover {
-    cursor: pointer;
-}
-
-.deleteModalText {
-    font-size: 12pt;
-}
-
-.modalBtn:hover {
-    background-color: #707070;
-    color: white;
-}
-
-.deleteBtn {
-  font-size: 12pt;
-  background-color: #70a87f;
-  border-radius: 5px;
-  padding: 4px;
-  padding-right: 8px;
-  margin-left: 8px;
-}
-
-.dotNewMessage {
-  display: flex;
-  padding-right: 20px;
-  width: 30%;
-  flex-grow: 1;
-}
-
-
-.deleteBtn:hover {
-  cursor: pointer;
-  color: #91ffa5;
-  -webkit-transition: 0.5s; /* Safari */
-  transition: 0.5s;
-}
-
-.deleteModeBtn {
-    background-color: #dd000e;
-}
-
-.deleteModeBtn:hover {
-    background-color: #b7000a;
-}
-
-.optionsPopupBtn {
-    height: 38px;
-    margin-right: 4px;
-}
-
-.deleteCheckbox {
-    float:left;
-    margin-right: 5px;
-    margin-top: 5px;
-}
-
-.refreshNotifications:hover {
-    cursor: pointer;    
+.clickedresultCard {
+    color:white;
+    background-color: var(--scealai-med-brown-hover);
 }
 
 @media (max-width:320px) {

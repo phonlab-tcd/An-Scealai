@@ -1,5 +1,5 @@
 <!--Display the stories of a particular student in a class -->
-<div class="content">
+<div class="contentContainer">
     <div class="classContainer">
         <div class="classHeader">
           <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
@@ -12,7 +12,7 @@
           </span>
           <!-- filter by checkbox -->
           <div class="filter"> {{ts.l.filter_by}}: </div>
-          <div class="checkbox"> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> {{ts.l.no_feedback_given}} ({{storiesWithoutFeedback.length}})</div>
+          <div> <input type="checkbox"[(ngModel)]="viewNoFeedback"/> {{ts.l.no_feedback_given}} ({{storiesWithoutFeedback.length}})</div>
         </div>
         <div class="classroomKey">
           <div class="title">{{ts.l.title}}</div>

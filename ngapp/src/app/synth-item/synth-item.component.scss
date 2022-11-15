@@ -1,17 +1,17 @@
-.center {
-  vertical-align: middle;
-  text-align: center;
-  align: center;
+.flex {
+  display: flex;
+  align-items: center;
+  vertical-align: center;
 }
 
 .height {
   height: 3rem;
 }
 
-.flex {
-  display: flex;
-  align-items: center;
-  vertical-align: center;
+.center {
+  vertical-align: middle;
+  text-align: center;
+  align: center;
 }
 
 .clickable:hover {
@@ -30,6 +30,11 @@
   text-align: center;
 }
 
+.reload:hover {
+  color: black;
+  font-weight: bold;
+}
+
 .left {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -40,11 +45,6 @@
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   padding-right: 1rem;
-}
-
-.reload:hover {
-  color: black;
-  font-weight: bold;
 }
 
 .b0 {

@@ -230,8 +230,7 @@ export class UserComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if(res) {
-          //this.deleteAccount();
-          alert('delete account')
+          this.deleteAccount();
         }
     });
   }

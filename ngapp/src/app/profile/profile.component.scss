@@ -1,14 +1,16 @@
-.loginBtn {
-    background-color: #876daa;
+.profileContainer {
+    width: 500px;
+    display: inline-block;
+    background-color: var(--scealai-med-green);
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
+    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
 }
 
-.loginBtn:hover {
-    background-color: #685383;
-}
-
-.inputField {
-    margin-left: 5%;
-    min-width: 0;
+.headerIconBtn {
+    margin-left: 25px;
 }
 
 .formBody {
@@ -16,70 +18,16 @@
     display: flex;
     justify-content: center;
     padding: 15px;
-    color: #261500;
+    color: var(--dark-text);
     background-color: white;
     border-radius: 0px 0px 10px 10px;
 }
 
-.formContainer {
+.profileFormContainer {
     width: 60%;
     display: flex;
     flex-direction: column;
     align-items: left;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
-}
-
-.createBtnGreen {
-    background-color: #70a87f;
-    color: white;
-}
-
-.createBtnGreen:hover {
-    background-color: #304e38;
-}
-
-.profileContainer {
-    width: 500px;
-    display: inline-block;
-    background-color: #437250;
-    color: white;
-    border-radius: 10px;
-
-    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-}
-
-.headerIconBtn {
-    font-size: 12pt;
-    margin-left: 25px;
-    background-color: #70a87f;
-    border-radius: 5px;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    color: white;
-}
-
-.headerIconBtn:hover {
-    cursor: pointer;
-    color: #91ffa5;
-    -webkit-transition: 0.5s; /* Safari */
-    transition: 0.5s;
-}
-
-.usernameErrorText {
-    font-size: 12pt;
-    color: red;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    width: 80%;
-    margin-left: 10%;
 }
 
 .formLabel {
@@ -89,18 +37,6 @@
 .userInfo {
     padding-left: 5%;
     white-space: nowrap;
-}
-
-.logoutBtn {
-    font-size: 12pt;
-    background-color: #70a87f;
-    border-radius: 10px 10px 10px 10px;
-    padding: 5px;
-    z-index: 1;
-}
-
-.logoutBtn:hover {
-    background-color: #437250;
 }
 
 .form-group {
@@ -126,12 +62,13 @@
     align-items: center;
 }
 
-.classroomMessage {
-    margin: 10px;
+.inputField {
+    margin-left: 5%;
+    min-width: 0;
 }
 
 .leaveClassroomButton {
-    background-color: #d6123c;
+    background-color: var(--delete-red-2);
     border-radius: 5px;
     padding: 2px;
     padding-left: 5px;
@@ -142,12 +79,40 @@
 }
 
 .leaveClassroomButton:hover {
-    background-color: #9b0d2b;
+    background-color: var(--delete-red-2-hover);
     transition: 0.5s;
 }
 
+.classroomMessage {
+    margin: 10px;
+}
+
+.notFoundText {
+    color: var(--delete-red-2);
+}
+
+.greenLink {
+    text-decoration: underline;
+    color: var(--scealai-green);
+    font-size: 12pt;
+}
+
+.greenLink:hover {
+    cursor: pointer;
+}
+
+.languageButtonContainer {
+    display: flex;
+    margin-left: 4px;
+}
+
+.accountButtonContainer {
+  display: flex;
+  margin-left: 20%;
+}
+
 .deleteAccountButton {
-  background-color: #d6123c;
+  background-color: var(--delete-red-2);
   margin-bottom: 10px;
   font-size: 9px;
   border-radius: 10px 10px 10px 10px;
@@ -155,13 +120,12 @@
 }
 
 .deleteAccountButton:hover {
-    background-color: #9b0d2b;
+    background-color: var(--delete-red-2-hover);
     transition: 0.5s;
 }
 
-
 .passwordButton {
-  background-color: #70a87f;
+  background-color: var(--scealai-green);
   color: white;
   margin-bottom: 10px;
   font-size: 9px;
@@ -171,60 +135,26 @@
 }
 
 .passwordButton:hover {
-    background-color: #437250;
+    background-color: var(--scealai-med-green);
     transition: 0.5s;
 }
 
-.centerForm {
-    justify-content: center;
-}
-
-.notFoundText {
-    color: #d6123c;
-}
-
-.greenLink {
-    text-decoration: underline;
-    color: #70a87f;
-    font-size: 12pt;
-}
-
-.greenLink:hover {
-    cursor: pointer;
-}
-
-.btnContainer {
+.profileBtnContainer {
     display: flex;
     justify-content: space-around;
     padding-top: 15px;
 }
 
-.languageButtonContainer {
-    display: flex;
-    margin-left: 4px;
+.logoutBtn {
+    font-size: 12pt;
+    background-color: var(--scealai-green);
+    border-radius: 10px 10px 10px 10px;
+    padding: 5px;
+    z-index: 1;
 }
 
-.languageButton {
-    background-color: #70a87f;
-    color: white;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 4px;
-    margin: 4px;
-}
-
-.languageButton:hover { 
-    cursor: pointer;
-    background-color: #437250;
-}
-
-.languageButtonSelected {
-    background-color: #437250;
-}
-
-.accountButtonContainer {
-  display: flex;
-  margin-left: 20%;
+.logoutBtn:hover {
+    background-color: var(--scealai-med-green);
 }
 
 @media only screen and (max-width: 700px) {
@@ -246,7 +176,7 @@
     .formBody {
         width: 100%;
     }
-    .formContainer {
+    .profileFormContainer {
         width: 95%;
     }
     .logoutBtn {

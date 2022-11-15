@@ -20,8 +20,7 @@
         <div class="recordingStoryHeader">
           {{ts.l.listen_and_compare}}
         </div>
-        <div class="textFieldContainer">
-
+        <div>
             <!--Main container for story -->
             <div class="textContainerSynth">
 
@@ -39,14 +38,14 @@
                     <span *ngIf="sectionSplit==='paragraph'">
                       <!-- play / pause synthesiser -->
                       <div class="textCard">
-                        <div class="cardBody">
+                        <div>
                           <span [innerHTML]="p.responseHtml" [attr.id]="'paragraph-' + p.index"></span>
                           <button *ngIf="p.audioPlaying" (click)="stopAudio(p)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
                           <button *ngIf="!p.audioPlaying" (click)="playAudio(p)" class="playAudioBtn"><i class="fa fa-play"></i></button>
                         </div>
                         <hr class="dividerLine" *ngIf="paragraphToAudioSource[p.index]">
                         <!-- Audio player -->
-                        <div class="cardFooter" *ngIf="paragraphToAudioSource[p.index]">
+                        <div *ngIf="paragraphToAudioSource[p.index]">
                           <!-- play / pause student recorded audio -->
                           <audio *ngIf="paragraphToAudioSource[p.index]" [src]="paragraphToAudioSource[p.index]" controls #audioTag class="audioPlayer"></audio>
                           <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div> 
@@ -59,7 +58,7 @@
                       <div *ngFor="let s of p.sentences" class="sentenceContainer">
                         <!-- play / pause synthesiser -->
                         <div class="textCard">
-                          <div class="cardBody">
+                          <div>
                             <span [innerHTML]="s.responseHtml" [attr.id]="'sentence-' + s.index"></span>
                             <button *ngIf="s.audioPlaying" (click)="stopAudio(s)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
                             <button *ngIf="!s.audioPlaying" (click)="playAudio(s)" class="playAudioBtn"><i class="fa fa-play"></i></button>
