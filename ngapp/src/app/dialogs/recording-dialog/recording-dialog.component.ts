@@ -60,7 +60,7 @@ export class RecordingDialogComponent{
     this.getAudio();
     
     if (this.data.type == "feedbackAudio") {
-      this.errorText = this.recordAudioService.saveAudio(this.data.id);
+      this.errorText = this.recordAudioService.saveAudioFeedback(this.data.id);
       if(!this.errorText) {
         this.dialogRef.close(true);
       }

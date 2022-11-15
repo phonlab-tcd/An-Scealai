@@ -64,7 +64,7 @@ export class RecordAudioService {
   }
   
   /* Add the audio story fedback to the database */
-  saveAudio(storyId: string):string {
+  saveAudioFeedback(storyId: string):string {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     let errorText = "";
     
