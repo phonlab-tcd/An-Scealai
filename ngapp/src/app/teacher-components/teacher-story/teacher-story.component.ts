@@ -7,7 +7,6 @@ import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
-import { RecordingService } from '../../services/recording.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RecordingDialogComponent } from '../../dialogs/recording-dialog/recording-dialog.component';
 import config from 'abairconfig';
@@ -28,7 +27,6 @@ export class TeacherStoryComponent implements OnInit {
     private userService: UserService,
     private profileService: ProfileService,
     private auth: AuthenticationService,
-    private recordingService: RecordingService,
     private dialog: MatDialog,) { }
 
   story : any;
@@ -36,16 +34,9 @@ export class TeacherStoryComponent implements OnInit {
   feedbackText: string;
   authorPossessive : string;
   feedbackSent : boolean = false;
-  newRecording : boolean = false;
-  isRecording: boolean = false;
-  showAudio: boolean = false;
   userId: string;
   isFromAmerica: boolean = false;
   dialogRef: MatDialogRef<unknown>;
-
-  errorText : string;
-  registrationError : boolean;
-
   baseUrl: string = config.baseurl;
 
   ngOnInit() {
@@ -122,19 +113,21 @@ export class TeacherStoryComponent implements OnInit {
     });
   }
   
-  /* Open Recording Dialog Box */
+  /* 
+  * Open Recording Dialog Box 
+  */
   openRecordingDialog() {
     this.dialogRef = this.dialog.open(RecordingDialogComponent, {
       data: {
         type: 'feedbackAudio',
-        id: this.story._id
+        id: this.story._id,
+        confirmButton: this.ts.l.save
       },
       width: '30%',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
-        this.errorText = "";
         if(res) {
           this.getFeedbackAudio();
         }

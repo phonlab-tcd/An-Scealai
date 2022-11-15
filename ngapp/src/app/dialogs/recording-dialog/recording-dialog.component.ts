@@ -7,6 +7,7 @@ import { SafeUrl } from '@angular/platform-browser';
 export interface DialogData {
   type: string;
   id: string;
+  confirmButton: string;
 }
 
 @Component({
@@ -53,14 +54,26 @@ export class RecordingDialogComponent{
   }
 
 /*
-* Add the audio fedback to the database 
+* Add the audio fedback to the database
 */
   saveAudio() {
+    this.getAudio();
+    
     if (this.data.type == "feedbackAudio") {
       this.errorText = this.recordingService.saveAudio(this.data.id);
       if(!this.errorText) {
         this.dialogRef.close(true);
       }
+    }
+    else if (this.data.type == "messageAudio") {
+      this.dialogRef.close(this.audioSource);
+      // this.errorText = this.recordingService.saveAudioMessage(this.data.id);
+      // if(!this.errorText) {
+      //   this.dialogRef.close(true);
+      // }
+    }
+    else {
+      this.dialogRef.close(false);
     }
   }
 

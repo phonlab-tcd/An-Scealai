@@ -15,6 +15,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
 import { NotificationService } from '../notification-service.service';
 import { RecordingService } from '../services/recording.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { RecordingDialogComponent } from '../dialogs/recording-dialog/recording-dialog.component';
 
 declare var MediaRecorder : any;
 
@@ -68,14 +70,11 @@ export class MessagesComponent implements OnInit {
   };
   
   //audio file variables
-  modalClass : string = "hidden";
   audioSource : SafeUrl;
   feedbackText: string;
   feedbackSent : boolean = false;
-  newRecording : boolean = false;
   showAudio: boolean = false;
-  isRecording: boolean = false;
-  errorText : string;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(private classroomService: ClassroomService,
               private userService: UserService, 
@@ -87,7 +86,8 @@ export class MessagesComponent implements OnInit {
               protected sanitizer: DomSanitizer,
               protected profileService: ProfileService,
               protected notificationService: NotificationService,
-              private recordingService: RecordingService) { }
+              private recordingService: RecordingService,
+              private dialog: MatDialog,) { }
 
   /*
   * Get classroom and student information for TEACHER, get teacher information for STUDENT 
@@ -141,7 +141,6 @@ export class MessagesComponent implements OnInit {
   * Add audio file to DB if audio taken
   */
   sendMessage() {
-    alert('send message');
     //Add new message to DB
     if(this.message.text) {
       this.message.id = uuid();
@@ -173,21 +172,17 @@ export class MessagesComponent implements OnInit {
         ids.push(this.message.id);
       }
       //Add audio to DB if taken
-      alert('new recording: ' + this.newRecording);
-      if(this.newRecording) {
+      if(this.audioSource) {
         for(let id of ids) {
           this.messageService.getMessageById(id).subscribe((res) => {
-            this.errorText = this.recordingService.saveAudioMessage(res._id);
-            if(!this.errorText) {
-              this.hideModal();
-            }
+            this.recordingService.saveAudioMessage(res._id);
           });
         }
       }
       this.createNewMessage = false;
     }
     else {
-      alert("Message empty")
+      alert("Message empty");
     }
   }
   
@@ -265,7 +260,6 @@ export class MessagesComponent implements OnInit {
     if(this.createNewMessage) {
       this.createNewMessage = false;
       this.audioSource = null;
-      this.newRecording = false;
     }
     else {
       if(this.isTeacher) {
@@ -329,35 +323,28 @@ export class MessagesComponent implements OnInit {
       }
     });
   }
-
-  /*
-  * Start and stop recording
+  
+  /* 
+  * Open Recording Dialog Box 
   */
-  record() {
-    if(this.isRecording) {
-      this.newRecording = this.recordingService.stopRecording();
-    }
-    else {
-      this.showAudio = false;
-      this.newRecording = false;
-      this.recordingService.recordAudio();
-    }
-    this.isRecording = !this.isRecording;
+  openRecordingDialog() {
+    this.dialogRef = this.dialog.open(RecordingDialogComponent, {
+      data: {
+        type: 'messageAudio',
+        id: "test",
+        confirmButton: this.ts.l.add_to_message
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.audioSource = res;
+        }
+    });
   }
 
-  /*
-  * Playback the recorded audio
-  */
-    getAudio() {
-      this.showAudio = true;
-      this.audioSource = this.recordingService.playbackAudio();
-    }
-    
-  // change css class to show recording container
-    showModal() {
-      this.modalClass = "visibleFade";
-    }
-    
   // clear out audio source if it exists and close new messsage
     resetForm() {
       if(this.audioSource) {
@@ -365,20 +352,7 @@ export class MessagesComponent implements OnInit {
       }
       this.createNewMessage = false;
     }
-    
-    deleteRecording() {
-      if(this.audioSource) {
-        this.audioSource = null;
-        this.newRecording = false;
-      }
-    }
 
-  // change the css class to hide the recording container 
-    hideModal() {
-      this.modalClass = "hiddenFade";
-      this.showAudio = false;
-    }
-    
   /* delete messages added to the to be deleted array
   * deletes message using the message service 
   * deletes associated audio files if there are any

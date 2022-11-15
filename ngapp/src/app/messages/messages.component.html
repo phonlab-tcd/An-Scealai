@@ -42,28 +42,6 @@
     <!-- Write new message container -->
     <form #messageForm="ngForm" (ngSubmit)="sendMessage(); messageForm.reset();" class="newMessageContainer" *ngIf="createNewMessage" ngNativeValidate>
       
-      <!-- Record audio message container (fades in/out depending on class) -->
-         <div class="{{modalClass}} modalContainer">
-           <div class="modalContent">
-               <div class="modalText">{{ts.l.record_audio_message}}</div>
-               <!-- Start/stop recording audio or go back -->
-               <div class="recordBtnContainer">
-                 <button *ngIf="!isRecording" type="button" (click)="record()" class="headerIconBtn">{{ts.l.record_audio}}</button>
-                 <button *ngIf="isRecording" (click)="record()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
-                 <div *ngIf="isRecording" class="recordingIcon"><i class="fa fa-circle"></i></div>
-               </div>
-               <!-- Listen back to message -->
-               <div *ngIf="newRecording" class="greenLinkText" (click)="getAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
-               <audio *ngIf="showAudio" [src]="audioSource" id="audio" controls #audioTag></audio>
-               <div *ngIf="errorText" class="errorMessage">{{errorText}}</div>
-               <!-- Cancel or send audio -->
-               <div>
-                   <button type="button" class="modalBtn" (click)="deleteRecording(); hideModal()">{{ts.l.cancel}}</button>
-                   <button type="button" class="modalBtn" (click)="hideModal();" *ngIf="newRecording"> {{ts.l.add_to_message}} </button>
-               </div>
-           </div>
-         </div>
-      
     <!-- new message -->
       <div class="messageContents">
           <!-- recipient field -->
@@ -99,7 +77,7 @@
                 <audio [src]="audioSource" id="audio" controls #audioTag></audio>
               </div>
               <div>
-                  <button type="button" (click)="showModal()" class="headerIconBtn">{{ts.l.audio_message}}</button>
+                  <button type="button" (click)="openRecordingDialog()" class="headerIconBtn">{{ts.l.audio_message}}</button>
               </div>
             </div>
             <!-- send button -->

@@ -80,11 +80,9 @@ export class RecordingService {
     return errorText;
   }
   
-  saveAudioMessage(id: string):string {
+  saveAudioMessage(id: string) {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     let errorText = "";
-    
-    alert('saving audio for ' + id);
     
     this.messageService.addMessageAudio(id, blob).subscribe((res) => {
       if(this.recorder.state != 'inactive') {
@@ -92,12 +90,7 @@ export class RecordingService {
         this.stream.getTracks().forEach(track => track.stop());
       }
       this.chunks = [];
-    }, (err) => {
-      errorText = err.message;
     });
-    
-    return errorText;
-    
   }
   
 }
