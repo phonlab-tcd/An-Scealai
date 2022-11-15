@@ -4,17 +4,6 @@
     padding-right: 5%;
 }
 
-.modalContainer {
-    width: 90%;
-    height: 80vh;
-}
-
-.modalContent {
-    margin-top: 10vh;
-    width: 40%;
-    margin-left: 30%;
-}
-
 .titleInput {
     margin-top: 10px;
     padding-left: 4px;
@@ -41,14 +30,4 @@
 .numStudents {
     margin-left: auto;
     margin-right: 45px;
-}
-
-@media (max-width:550px) {
-
-    .modalContent {
-        margin-top: 10vh;
-        width: 90%;
-        margin-left: 5%;
-    }
-
 }
