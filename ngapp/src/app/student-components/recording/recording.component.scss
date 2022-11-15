@@ -1,17 +1,5 @@
 $corner-button-width: 10rem;
 
-.modalContainer {
-    margin-top: 0px;
-    height: 400px;
-    width: 100%;
-}
-
-.modalContent {
-    margin-top: 80px;
-    width: 80%;
-    margin-left: 10%;
-}
-
 .textContainerSynth {
   border: 1px solid #261500a2;
 }
@@ -324,12 +312,7 @@ $corner-button-width: 10rem;
       margin-left: -310px;
       margin-top: 20px;
   }
-
-  .modalContainer {
-    width: 620px;
-    height: 510px;
-  }
-
+  
   .textContainerSynth {
       height: 390px;
   }
@@ -343,12 +326,7 @@ $corner-button-width: 10rem;
       margin-left: -400px;
       margin-top: 30px;
   }
-
-  .modalContainer {
-    width: 800px;
-    height: 600px;
-  }
-
+  
   .textContainerSynth {
       height: 480px;
   }
@@ -361,11 +339,6 @@ $corner-button-width: 10rem;
       left: 50%;
       margin-left: -490px;
       margin-top: 30px;
-  }
-
-  .modalContainer {
-    width: 980px;
-    height: 730px;
   }
 
   .textContainerSynth {

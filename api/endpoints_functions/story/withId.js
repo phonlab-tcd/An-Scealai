@@ -1,7 +1,6 @@
 const Story = require('../../models/story');
 
 module.exports = async (req, res, next) => {
-  console.log('withId');
   function yes() { res.json(story)}
   function no(status=404, msg='not found') {res.status(status).json(msg)}
   if(!req.user)     return no(400,'need to know user');

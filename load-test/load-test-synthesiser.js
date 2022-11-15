@@ -3,9 +3,14 @@ const axios = require("axios");
 n = parseInt(process.env.NUM_REQUESTS) || 20;
 const abairUrl = "https://www.abair.ie/anscealaibackend/proxy";
 
+const voices = [
+	"ga_UL_anb_nnmnkwii",
+	"ga_UL_anb_nemo"
+]
+
 const fromObject = {
 	input: "dia dhuit a cara",
-	voice: "ga_UL_anb_nnmnkwii",
+	voice: voices[1],
 	audioEncoding: "MP3",
 	outputType: 'JSON',
 };

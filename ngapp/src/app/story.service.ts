@@ -7,7 +7,6 @@ import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
-import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
@@ -26,7 +25,6 @@ export class StoryService {
     private auth: AuthenticationService,
     private engagement: EngagementService,
     private ts: TranslationService,
-    private recordingService: RecordingService
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
@@ -47,7 +45,6 @@ export class StoryService {
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        // this.recordingService.addRecordingForLoggedInUser(storyObj);
 
         this.router.navigateByUrl('/dashboard/' + res.id);
       });
