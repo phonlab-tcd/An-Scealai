@@ -591,7 +591,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
   downloadStoryUrl() {
     return config.baseurl +
       'story/downloadStory/' +
@@ -747,7 +746,6 @@ export class DashboardComponent implements OnInit {
       recogniseBlob: audioData,
       developer: true,
     };
-
     fetch(this.url_ASR_API, {
       method: "POST",
       headers: {
