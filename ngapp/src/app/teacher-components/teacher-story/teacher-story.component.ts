@@ -8,9 +8,9 @@ import { UserService } from '../../user.service';
 import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
 import { RecordingService } from '../../services/recording.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { RecordingDialogComponent } from '../../dialogs/recording-dialog/recording-dialog.component';
 import config from 'abairconfig';
-
-declare var MediaRecorder : any;
 
 @Component({
   selector: 'app-teacher-story',
@@ -28,11 +28,9 @@ export class TeacherStoryComponent implements OnInit {
     private userService: UserService,
     private profileService: ProfileService,
     private auth: AuthenticationService,
-    private recordingService: RecordingService) { }
+    private recordingService: RecordingService,
+    private dialog: MatDialog,) { }
 
-  modalClass : string = "hidden";
-
-  recording: boolean = false;
   story : any;
   audioSource : SafeUrl;
   feedbackText: string;
@@ -43,6 +41,7 @@ export class TeacherStoryComponent implements OnInit {
   showAudio: boolean = false;
   userId: string;
   isFromAmerica: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   errorText : string;
   registrationError : boolean;
@@ -108,10 +107,9 @@ export class TeacherStoryComponent implements OnInit {
 */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
-      if(res) {
+      if(res.type == "audio/mp3") {
         this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
       }
-      
     });
   }
 
@@ -124,40 +122,25 @@ export class TeacherStoryComponent implements OnInit {
     });
   }
   
-  /*
-  * Start and stop recording
-  */
-  record() {
-    if(this.isRecording) {
-      this.newRecording = this.recordingService.stopRecording();
-    }
-    else {
-      this.showAudio = false;
-      this.newRecording = false;
-      this.recordingService.recordAudio();
-    }
-    this.isRecording = !this.isRecording;
+  /* Open Recording Dialog Box */
+  openRecordingDialog() {
+    this.dialogRef = this.dialog.open(RecordingDialogComponent, {
+      data: {
+        type: 'feedbackAudio',
+        id: this.story._id
+      },
+      width: '30%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        this.errorText = "";
+        if(res) {
+          this.getFeedbackAudio();
+        }
+    });
   }
-
-
-/*
-* Playback the recorded audio
-*/
-  getAudio() {
-    this.showAudio = true;
-    this.audioSource = this.recordingService.playbackAudio();
-  }
-
-/*
-* Add the audio fedback to the database 
-*/
-  saveAudio() {
-    this.errorText = this.recordingService.saveAudio(this.story._id);
-    if(!this.errorText) {
-      this.hideModal();
-    }
-  }
-
+  
 /*
 * Return the url parameters as a promise
 */
@@ -168,17 +151,6 @@ export class TeacherStoryComponent implements OnInit {
           resolve(params);
       });
     });
-  }
-  
-// fix the css class for recording audio
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
-    this.newRecording = false;
-    this.showAudio = false;
   }
 
   goBack() {

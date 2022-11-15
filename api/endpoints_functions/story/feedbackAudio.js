@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
       res.status(404).json(err);
     } else if (story) {
       if (story.feedback.audioId) {
+        console.log("story has an audio id");
         let audioId;
         // get the audio id from the audio id set to the story
         try {
