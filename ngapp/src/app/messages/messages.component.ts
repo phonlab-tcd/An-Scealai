@@ -14,7 +14,7 @@ import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProfileService } from '../profile.service';
 import { NotificationService } from '../notification-service.service';
-import { RecordingService } from '../services/recording.service';
+import { RecordAudioService } from '../services/record-audio.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RecordingDialogComponent } from '../dialogs/recording-dialog/recording-dialog.component';
 
@@ -86,7 +86,7 @@ export class MessagesComponent implements OnInit {
               protected sanitizer: DomSanitizer,
               protected profileService: ProfileService,
               protected notificationService: NotificationService,
-              private recordingService: RecordingService,
+              private recordAudioService: RecordAudioService,
               private dialog: MatDialog,) { }
 
   /*
@@ -175,7 +175,7 @@ export class MessagesComponent implements OnInit {
       if(this.audioSource) {
         for(let id of ids) {
           this.messageService.getMessageById(id).subscribe((res) => {
-            this.recordingService.saveAudioMessage(res._id);
+            this.recordAudioService.saveAudioMessage(res._id);
           });
         }
       }

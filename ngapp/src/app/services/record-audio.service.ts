@@ -6,7 +6,7 @@ import { MessageService } from '../message.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RecordingService {
+export class RecordAudioService {
 
   constructor(protected sanitizer: DomSanitizer,
               private storyService: StoryService,

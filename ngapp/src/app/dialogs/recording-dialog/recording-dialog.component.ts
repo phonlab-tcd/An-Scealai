@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslationService } from '../../translation.service';
-import { RecordingService } from '../../services/recording.service';
+import { RecordAudioService } from '../../services/record-audio.service';
 import { SafeUrl } from '@angular/platform-browser';
 
 export interface DialogData {
@@ -21,7 +21,7 @@ export class RecordingDialogComponent{
               public data: DialogData,
               private dialogRef: MatDialogRef<RecordingDialogComponent>,
               public ts: TranslationService,
-              private recordingService: RecordingService) { }
+              private recordAudioService: RecordAudioService) { }
   
   newRecording : boolean = false;
   isRecording: boolean = false;
@@ -34,12 +34,12 @@ export class RecordingDialogComponent{
   */
   record() {
     if(this.isRecording) {
-      this.newRecording = this.recordingService.stopRecording();
+      this.newRecording = this.recordAudioService.stopRecording();
     }
     else {
       this.showAudio = false;
       this.newRecording = false;
-      this.recordingService.recordAudio();
+      this.recordAudioService.recordAudio();
     }
     this.isRecording = !this.isRecording;
   }
@@ -50,7 +50,7 @@ export class RecordingDialogComponent{
 */
   getAudio() {
     this.showAudio = true;
-    this.audioSource = this.recordingService.playbackAudio();
+    this.audioSource = this.recordAudioService.playbackAudio();
   }
 
 /*
@@ -60,7 +60,7 @@ export class RecordingDialogComponent{
     this.getAudio();
     
     if (this.data.type == "feedbackAudio") {
-      this.errorText = this.recordingService.saveAudio(this.data.id);
+      this.errorText = this.recordAudioService.saveAudio(this.data.id);
       if(!this.errorText) {
         this.dialogRef.close(true);
       }
