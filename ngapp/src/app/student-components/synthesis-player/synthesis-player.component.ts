@@ -7,6 +7,7 @@ import { TranslationService } from 'app/translation.service';
 import { voices as synthVoices, pseudonym } from 'app/services/synthesis.service';
 import { MatSelect } from '@angular/material/select';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -19,10 +20,14 @@ import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-se
 export class SynthesisPlayerComponent implements OnInit {
   hideEntireSynthesisPlayer = true;
   synthItems: SynthItem[] = [];
+  allAudioSources: any = [];
   pseudonym = pseudonym;
+  audio;
+  fileUrl;
 
   @Input() storyId: string;
   @Input() text: string;
+  @Input() storyTitle: string;
   @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
 
   selected: Voice;
@@ -37,10 +42,13 @@ export class SynthesisPlayerComponent implements OnInit {
     private textProcessor: TextProcessingService,
     private cdref: ChangeDetectorRef,
     private synth: SynthesisService,
-    public ts: TranslationService
+    public ts: TranslationService,
+    private sanitizer: DomSanitizer
     ) { }
 
-  ngOnInit() { this.refresh() }
+  ngOnInit() { 
+    this.refresh();
+  }
 
   getSynthItem(line: string) {
     return new SynthItem(line,this.selected,this.synth);
@@ -55,12 +63,55 @@ export class SynthesisPlayerComponent implements OnInit {
     // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
     if(!this.text) return;
     setTimeout(()=>{
-      this.synthItems =
-        this.textProcessor
-            .sentences(this.text)
-        .map(l=>this.getSynthItem(l));
+      this.synthItems = this.textProcessor.sentences(this.text).map(l=>this.getSynthItem(l));
       this.cdref.detectChanges();
+      this.audio = null;
     },50);
+  }
+  
+  /* check if all synthItems have an audio url */
+  audioLoaded():boolean {
+    return this.synthItems.every(element => element.audioUrl != undefined);
+  }
+  
+  /* If audio exists, play it; otherwise create it by combining audio urls */
+  async combineAndPlayAudio() {
+    if(!this.audio) {
+      await this.combineAudioSources();
+    }
+    this.playAllAudio();
+  }
+  
+  /* Combine the audio URLs of all synth items so the story can be played in one go */
+  async combineAudioSources() {
+    this.allAudioSources = this.synthItems.map(item => item.audioUrl);
+    let proms = this.allAudioSources.map(uri => fetch(uri).then(r => r.blob()));
+    await Promise.all(proms)
+    .then(blobs => {
+        let blob = new Blob(blobs);
+        let blobUrl = URL.createObjectURL(blob);
+        this.audio = new Audio(blobUrl);
+    })
+  }
+  
+  /* Play all audio or stop and reset if already playing */
+  playAllAudio() {
+    if(this.audio.paused) {
+      this.audio.play();
+    }
+    else {
+      this.audio.pause();
+      this.audio.currentTime = 0;
+    }
+  }
+  
+  /* Download synthesised story as mp3 */
+  async downloadAudio() {
+    if(!this.audio) {
+      await this.combineAudioSources();
+    }
+    const blob = new Blob(this.audio.src, { type: 'audio/mp3' });
+    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
   }
 
   goToFastSynthesiser() {
