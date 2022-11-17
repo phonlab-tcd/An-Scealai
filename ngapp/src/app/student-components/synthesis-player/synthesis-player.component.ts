@@ -7,7 +7,6 @@ import { TranslationService } from 'app/translation.service';
 import { voices as synthVoices, pseudonym } from 'app/services/synthesis.service';
 import { MatSelect } from '@angular/material/select';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-synthesis-player',
@@ -42,8 +41,7 @@ export class SynthesisPlayerComponent implements OnInit {
     private textProcessor: TextProcessingService,
     private cdref: ChangeDetectorRef,
     private synth: SynthesisService,
-    public ts: TranslationService,
-    private sanitizer: DomSanitizer
+    public ts: TranslationService
     ) { }
 
   ngOnInit() { 
