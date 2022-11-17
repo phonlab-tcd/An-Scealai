@@ -72,7 +72,11 @@ export class StatsDashboardComponent implements OnInit {
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
       await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate)) // Note: Most stories do not yet have the owner property
     ))).flat();
-    this.textsToAnalyse = this.classroomStories.map(story => story.text);
+    
+    this.textsToAnalyse = this.classroomStories.reduce(function(result, story) {
+      if (story.text) result.push(story.text);
+      return result;
+    }, []);
 
     // get grammar eror data
     this.grammarErrorCounts = (await Promise.all(this.classroomStories.map(async story =>

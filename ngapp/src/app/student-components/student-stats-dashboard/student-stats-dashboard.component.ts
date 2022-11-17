@@ -43,7 +43,10 @@ export class StudentStatsDashboardComponent implements OnInit {
   
   async loadDataForCharts() {
     // get n-gram data
-    this.textsToAnalyse = this.stories.map(story => story.text);
+    this.textsToAnalyse = this.stories.reduce(function(result, story) {
+      if (story.text) result.push(story.text);
+      return result;
+    }, []);
 
     // get grammar eror data
     this.grammarErrorCounts = (await Promise.all(this.stories.map(async story =>
