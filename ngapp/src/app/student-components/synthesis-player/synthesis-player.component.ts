@@ -23,7 +23,7 @@ export class SynthesisPlayerComponent implements OnInit {
   allAudioSources: any = [];
   pseudonym = pseudonym;
   audio;
-  fileUrl;
+  blobUrl
 
   @Input() storyId: string;
   @Input() text: string;
@@ -89,8 +89,8 @@ export class SynthesisPlayerComponent implements OnInit {
     await Promise.all(proms)
     .then(blobs => {
         let blob = new Blob(blobs);
-        let blobUrl = URL.createObjectURL(blob);
-        this.audio = new Audio(blobUrl);
+        this.blobUrl = URL.createObjectURL(blob);
+        this.audio = new Audio(this.blobUrl);
     })
   }
   
@@ -110,8 +110,14 @@ export class SynthesisPlayerComponent implements OnInit {
     if(!this.audio) {
       await this.combineAudioSources();
     }
-    const blob = new Blob(this.audio.src, { type: 'audio/mp3' });
-    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = this.blobUrl;
+    a.download = this.storyTitle + '.mp3';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(this.blobUrl);
   }
 
   goToFastSynthesiser() {
