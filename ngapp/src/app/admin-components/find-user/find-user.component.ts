@@ -68,7 +68,7 @@ export class FindUserComponent implements OnInit {
     if (!this.validSearchText()) return;
     this.dataLoaded = false;
     this.userResults = [];
-    const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0])
+    const roles = Object.entries(this.roleFilter).filter(pair => pair[1]).map(pair => pair[0]);
     this.userService.searchUser(this.searchText, this.currentPage, this.LIMIT, roles).subscribe((res: any) => {
       this.userResults = res.users.map(userData => new User().fromJSON(userData));
       this.resultCount = res.count;
