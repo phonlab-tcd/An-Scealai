@@ -18,8 +18,6 @@ async function searchUser(req, res) {
       'ADMIN',
     ],
   };
-  
-  console.log(reqBody);
 
   // '+' operator casts to Number
   const limit = +reqBody.limit;
