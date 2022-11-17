@@ -18,10 +18,12 @@ async function searchUser(req, res) {
       'ADMIN',
     ],
   };
+  
+  console.log(reqBody);
 
   // '+' operator casts to Number
-  limit = +reqBody.limit;
-  page = +reqBody.currentPage;
+  const limit = +reqBody.limit;
+  const page = +reqBody.currentPage;
 
   // Some parameter validation
   if (limit < 0 || page < 0) {
