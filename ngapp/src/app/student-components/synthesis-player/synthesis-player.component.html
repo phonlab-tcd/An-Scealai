@@ -14,11 +14,11 @@
   <div class="btnContainer" style="justify-content: space-between;">
     <button [disabled]="!audioLoaded()" class="playAllButton" (click)="combineAndPlayAudio()" style="text-align:center; width: 100px"> 
       <div *ngIf="!audioLoaded()" class="spinner-grow" style="width: 1rem; height: 1rem;"></div> 
-      Play all 
+      {{ts.l.play_all}}
     </button>
     <button [disabled]="!audioLoaded()" class="playAllButton" (click)="downloadAudio()" style="text-align:center; width: 150px"> 
       <div *ngIf="!audioLoaded()" class="spinner-grow" style="width: 1rem; height: 1rem;"></div> 
-      Download
+      {{ts.l.download}}
     </button>
   </div>
   <hr>
