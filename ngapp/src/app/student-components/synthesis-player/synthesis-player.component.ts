@@ -71,7 +71,7 @@ export class SynthesisPlayerComponent implements OnInit {
   
   /* check if all synthItems have an audio url */
   audioLoaded():boolean {
-    return this.synthItems.every(element => element.audioUrl != undefined);
+    return this.synthItems.every(element => element.audioUrl != undefined || element.exceptions.length > 0);
   }
   
   /* If audio exists, play it; otherwise create it by combining audio urls */
