@@ -1,4 +1,5 @@
 <mat-form-field appearance="fill">
+  <!-- [style]="'background-color:' + color(selected.gender)" -->
   <mat-label>{{ts.message('voice')}}</mat-label>
   <mat-select [(value)]=selected (selectionChange)=selectVoice.emit($event.value)>
       <mat-option
