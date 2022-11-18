@@ -31,6 +31,9 @@ export class TextProcessingService {
 
   extraShortening(lines: string[]): string[] {
     return lines.flatMap(s=>{
+      if(s == ' ') {
+        return [];
+      }
       if(s.charAt(100)){
         return this.splitWithReplacement(s,',');
       }

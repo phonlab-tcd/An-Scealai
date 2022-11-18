@@ -2017,5 +2017,11 @@ export default {
     en: 'Date Range' },
   dictation: {
     ga: 'Deachtú',
-    en: 'Dictation' } 
+    en: 'Dictation' },
+  download: {
+    ga: 'Íoslódáil',
+    en: 'Download' },
+  play: {
+    ga: 'Éist',
+    en: 'Play' } 
 }

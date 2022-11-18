@@ -91,7 +91,7 @@
           class="optionsBtn optionsPopupBtn"
           target="_blank"
           href="{{downloadStoryUrl()}}">
-          Download
+          {{ts.l.download}}
           <i class="fas fa-download optionsBtnIcon"></i>
         </button>
         <select 
@@ -322,5 +322,6 @@
 <app-synthesis-player
     #mySynthesisPlayer
     [text]=story.text
-    [storyId]=story._id>
+    [storyId]=story._id
+    [storyTitle]=story.title>
 </app-synthesis-player>
