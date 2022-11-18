@@ -89,7 +89,7 @@ export class TeacherDashboardComponent implements OnInit {
           confirmText: this.ts.l.create,
           cancelText: this.ts.l.cancel
         },
-        width: '30%',
+        width: '50vh',
       });
       
       this.dialogRef.afterClosed().subscribe( (res) => {

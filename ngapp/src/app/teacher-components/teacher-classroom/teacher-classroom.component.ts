@@ -118,7 +118,7 @@ export class TeacherClassroomComponent implements OnInit {
         data: this.classroom.code,
         confirmText: this.ts.l.done,
       },
-      width: '15%',
+      width: '15vh',
     });
     
     this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
@@ -132,7 +132,7 @@ export class TeacherClassroomComponent implements OnInit {
         confirmText: this.ts.l.save,
         cancelText: this.ts.l.cancel
       },
-      width: '30%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
@@ -152,7 +152,7 @@ export class TeacherClassroomComponent implements OnInit {
         confirmText: this.ts.l.delete,
         cancelText: this.ts.l.cancel
       },
-      width: '30%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {

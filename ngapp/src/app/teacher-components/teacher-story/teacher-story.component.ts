@@ -121,7 +121,7 @@ export class TeacherStoryComponent implements OnInit {
         id: this.story._id,
         confirmButton: this.ts.l.save
       },
-      width: '30%',
+      width: '30vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {

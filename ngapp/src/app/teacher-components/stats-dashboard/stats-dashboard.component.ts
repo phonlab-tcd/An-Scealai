@@ -47,7 +47,7 @@ export class StatsDashboardComponent implements OnInit {
 
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
-         width: '60%',
+         width: '60vh',
     });
     this.dialogRef.afterClosed().subscribe(_ => {
         this.dialogRef = undefined;

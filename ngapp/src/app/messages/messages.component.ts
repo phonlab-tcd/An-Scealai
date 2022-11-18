@@ -334,7 +334,7 @@ export class MessagesComponent implements OnInit {
         id: "test",
         confirmButton: this.ts.l.add_to_message
       },
-      width: '30%',
+      width: '30vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {

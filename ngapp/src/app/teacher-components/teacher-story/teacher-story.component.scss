@@ -11,6 +11,7 @@
     display: flex;
     padding: 5px;
     padding-top: 0px;
+    flex-wrap: wrap;
 }
 
 .storyTextContainer { 
@@ -22,6 +23,7 @@
     height: 430px;
     width: 50%;
     border-radius: 5px;
+    flex-grow: 1;
 }
 
 .storyTextHeader {
@@ -63,6 +65,7 @@
     height: 430px;
     width: 48%;
     border-radius: 5px;
+    flex-grow: 1;
 }
 
 .userInfo {
@@ -147,7 +150,6 @@
   }
 
 @media (min-width: 1000px) {
-
     .classContainer {
         width: 900px;
         position: absolute;

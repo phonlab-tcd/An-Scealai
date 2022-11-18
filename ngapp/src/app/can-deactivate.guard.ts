@@ -44,7 +44,7 @@ class CanDeactivateRecordingGuard implements CanDeactivate<RecordingComponent> {
         confirmText: this.ts.l.save,
         cancelText: this.ts.l.cancel
       },
-      width: '30%',
+      width: '30vh',
     });
     
     dialogRef.afterClosed().subscribe( (res) => {

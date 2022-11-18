@@ -206,7 +206,7 @@ export class ProfileComponent implements OnInit {
         confirmText: this.ts.l.save,
         cancelText: this.ts.l.cancel
       },
-      width: '50%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
@@ -228,7 +228,7 @@ export class ProfileComponent implements OnInit {
         confirmText: this.ts.l.yes,
         cancelText: this.ts.l.no
       },
-      width: '50%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
@@ -248,7 +248,7 @@ export class ProfileComponent implements OnInit {
         confirmText: this.ts.l.save,
         cancelText: this.ts.l.cancel
       },
-      width: '50%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
