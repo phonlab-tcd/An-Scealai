@@ -62,17 +62,15 @@ export class TeacherStoryComponent implements OnInit {
 * with possessive ending, and the user's id 
 */
   getStoryData() {
-    this.getParams().then(params => {
-      this.http.get(this.baseUrl + 'story/viewStory/' + params['id'].toString()).subscribe((res) => {
-        this.story = res[0];
-        if(this.story.htmlText == null) {
-          this.story.htmlText = this.story.text;
-        }
-        this.getFeedbackAudio();
-        this.getAuthorPossessive();
-        this.getUserId();
-      });
-    })
+    this.http.get(this.baseUrl + 'story/viewStory/' + this.route.snapshot.params['id']).subscribe((res) => {
+      this.story = res[0];
+      if(this.story.htmlText == null) {
+        this.story.htmlText = this.story.text;
+      }
+      this.getFeedbackAudio();
+      this.getAuthorPossessive();
+      this.getUserId();
+    });
   }
 
 /*
@@ -131,18 +129,6 @@ export class TeacherStoryComponent implements OnInit {
         if(res) {
           this.getFeedbackAudio();
         }
-    });
-  }
-  
-/*
-* Return the url parameters as a promise
-*/
-  getParams(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.route.params.subscribe(
-        params => {
-          resolve(params);
-      });
     });
   }
 

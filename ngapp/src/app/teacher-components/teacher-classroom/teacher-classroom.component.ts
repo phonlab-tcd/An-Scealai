@@ -11,6 +11,7 @@ import { Message } from '../../message';
 import { StatsService } from '../../stats.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-classroom',
@@ -39,43 +40,17 @@ export class TeacherClassroomComponent implements OnInit {
   numOfStories: Map<string, number> = new Map();
   dialogRef: MatDialogRef<unknown>;
 
-  ngOnInit() {
-    this.getClassroom();
-  }
-
-/*
-* Get classroom id from route parameters
-*/
-  getClassroomId(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.route.params.subscribe(
-        params => {
-          resolve(params);
-      });
-    });
-  }
-
-/*
-* Get classroom id with function and call getClassroom with classroom service
-* call function to get list of students
-*/
-  getClassroom() {
-    this.getClassroomId().then((params) => {
-      let id: string = params.id.toString();
-      this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
-        this.classroom = res;
-        this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
-          this.messagesForNotifications = res;
-          this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);
-        });
-        this.getStudents();
-      });
+  async ngOnInit() {
+    this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+    this.getStudents();
+    this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
+      this.messagesForNotifications = res;
+      this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);
     });
   }
 
 /*
 * Loop through student ids in classroom object to get student objects
-* Use the message service to get number of unread messages for the classroom
 */
   getStudents() {
     for(let id of this.classroom.studentIds) {
@@ -86,14 +61,12 @@ export class TeacherClassroomComponent implements OnInit {
         this.studentIds.push(res._id);
         if(this.classroom.date) {
           this.storyService.getStoriesForClassroom(res._id, this.classroom.date).subscribe( (stories) => {
-            let count = Object.keys(stories).length;
-            this.numOfStories.set(res.username, count);
+            this.numOfStories.set(res.username, Object.keys(stories).length);
           });
         }
         else {
           this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
-            let count = Object.keys(stories).length;
-            this.numOfStories.set(res.username, count);
+            this.numOfStories.set(res.username, Object.keys(stories).length);
           });
         }
       });
@@ -105,7 +78,7 @@ export class TeacherClassroomComponent implements OnInit {
 */
   editTitle() {
     this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe(() => {
-      this.getClassroom();
+      this.ngOnInit();
     }, (err) => {
       alert(err);
     });
@@ -148,12 +121,7 @@ export class TeacherClassroomComponent implements OnInit {
       width: '15%',
     });
     
-    this.dialogRef.afterClosed().subscribe( (res) => {
-        this.dialogRef = undefined;
-        if(res) {
-          console.log(res);
-        }
-    });
+    this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
   }
   
   openUpdateClassroomDialog() {    
@@ -170,7 +138,7 @@ export class TeacherClassroomComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if(res) {
-          this.newTitle = res;
+          this.newTitle = res[0];
           this.editTitle();
         }
     });

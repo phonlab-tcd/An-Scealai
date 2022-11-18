@@ -32,23 +32,15 @@ export class TeacherStudentComponent implements OnInit {
     baseUrl: string = config.baseurl;
   
     ngOnInit() {
-      this.getUserId().then(params => {
-        this.http.get(
-          this.baseUrl + 'user/viewUser',
-          { 
-            headers: 
-              {
-              _id : params['id'].toString()
-              }
+      this.http.get(this.baseUrl + 'user/viewUser',
+          { headers: 
+              {_id : this.route.snapshot.params['id'] }
           }
-        ).subscribe(
-        (res: User) => {
-          this.userId = params['id'].toString();
+        ).subscribe((res: User) => {
+          this.userId = this.route.snapshot.params['id'];
           this.student = res;
           this.setClassroomId();
-          
         });
-      });
     }
     
     filterFeedback(data: Story[]) {
@@ -74,16 +66,7 @@ export class TeacherStudentComponent implements OnInit {
         }
       });
     }
-  
-    getUserId(): Promise<any> {
-      return new Promise((resolve, reject) => {
-        this.route.params.subscribe(
-          params => {
-            resolve(params);
-        });
-      });
-    }
-  
+
     goToStory(storyId) {
       this.router.navigateByUrl('teacher/story/' + storyId.toString());
     }
