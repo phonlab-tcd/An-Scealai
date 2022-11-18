@@ -20,7 +20,6 @@ import { EngagementService        } from 'app/engagement.service';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
 import { GramadoirRuleId          } from 'app/grammar.service';
-import { GrammarService           } from 'app/grammar.service';
 import { ReadableGramadoirRuleIds } from 'app/grammar.service';
 
 
@@ -30,6 +29,7 @@ import { StatsService             } from 'app/stats.service';
 import { ClassroomService         } from 'app/classroom.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
 import { QuillHighlightService    } from 'app/services/quill-highlight.service';
+import { RecordAudioService       } from 'app/services/record-audio.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 
@@ -84,11 +84,11 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
-    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
     public classroomService: ClassroomService,
     public quillHighlightService: QuillHighlightService,
+    public recordAudioService: RecordAudioService
   ) {
 
     this.textUpdated.pipe(
@@ -98,26 +98,28 @@ export class DashboardComponent implements OnInit {
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
-      try {
-        await this.quillHighlightService
-          .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
-          .then((errTypes: object) => {
-            console.dir(errTypes);
-            this.currentGrammarErrorTypes = errTypes;
-          });
-      } catch (updateGrammarErrorsError) {
-        if ( !this.quillHighlightService.showingTags) {
-          window.alert(
-            'There was an error while trying to fetch grammar ' +
-            'suggestions from the Gramadóir server:\n' +
-            updateGrammarErrorsError.message + '\n' +
-            'See the browser console for more information');
+      if(this.quillEditor) {
+        try {
+          await this.quillHighlightService
+            .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
+            .then((errTypes: object) => {
+              console.dir(errTypes);
+              this.currentGrammarErrorTypes = errTypes;
+            });
+        } catch (updateGrammarErrorsError) {
+          if ( !this.quillHighlightService.showingTags) {
+            window.alert(
+              'There was an error while trying to fetch grammar ' +
+              'suggestions from the Gramadóir server:\n' +
+              updateGrammarErrorsError.message + '\n' +
+              'See the browser console for more information');
+          }
+          console.dir(updateGrammarErrorsError);
         }
-        console.dir(updateGrammarErrorsError);
       }
+
     });
   }
-
 
   downloadMimeType() {
     return 'application/' + this.downloadStoryFormat.split('.')[1];
@@ -149,9 +151,7 @@ export class DashboardComponent implements OnInit {
 
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
-  stories: Story[];
   saveStoryDebounceId = 0;
-  id: string;
   storyFound: boolean;
   storySaved = true;
   feedbackVisible: boolean;
@@ -170,7 +170,6 @@ export class DashboardComponent implements OnInit {
   modalClass = 'hidden';
   modalChoice: Subject<boolean> = new Subject<boolean>();
   teacherSelectedErrors: string[] = [];
-  classroomId: string;
   selectTeanglann = true;
   defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
     `data:text/html;charset=utf-8,` +
@@ -241,20 +240,20 @@ export class DashboardComponent implements OnInit {
   chunks: any[] = [];
   isRecording: boolean = false;
 
-  stringifySynth(i: number) {
-    if (this.audioSources[i]) {
-      return JSON.stringify(this.audioSources[i]);
-    }
-    return 'not defined';
-  }
+  // stringifySynth(i: number) {
+  //   if (this.audioSources[i]) {
+  //     return JSON.stringify(this.audioSources[i]);
+  //   }
+  //   return 'not defined';
+  // }
 
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
   }
 
-  getSelectedMessage() {
-    return this.quillHighlightService.getMostRecentMessage();
-  }
+  // getSelectedMessage() {
+  //   return this.quillHighlightService.getMostRecentMessage();
+  // }
 
   grammarCheckBoxEvent(key: string, event: boolean) {
     this.grammarTagFilter[key] = event;
@@ -308,84 +307,24 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.storySaved = true;
-    // Get the stories from the storyService and run
-    // the following function once that data has been retrieved
-    this.getStories().then(stories => {
-      this.stories = stories;
-      // Get the story id from the URL in the same way
-      this.getStoryId().then(params => {
-        this.id = params.id;
-        // loop through the array of stories and check
-        // if the id in the url matches one of them
-        // if no html version exists yet, create one from the plain text
-        // TODO Woah that's gotta be slow (Neimhin 15 July 2021)
-        for (const story of this.stories) {
-          if (story._id === this.id) {
-            this.story = story;
-            this.textUpdated.next();
-            this.getWordCount(this.story.text);
-            if (this.story.htmlText == null) {
-              this.story.htmlText = this.story.text;
-            }
-            this.htmlDataIsReady = true;
-            break;
-          }
-        }
-        }).catch(error => {
-          this.story.text = JSON.stringify(error);
-          throw error;
-      }).catch(error => {
-        this.story.text = JSON.stringify(error);
-      });
-    });
-
-
-    // GET CLASSROOM ID
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
       return;
     }
-    this.classroomService
-        .getClassroomOfStudent(
-          userDetails._id)
-        .subscribe(
-          (res) => {
-            if (res) {
-              this.classroomId = res._id;
-            }
-          });
-  }
-  
-  // return the student's set of
-  // stories using the story service
-  getStories(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storyService
-          .getStoriesForLoggedInUser()
-          .subscribe({
-            next: (stories: Story[]) => {
-              resolve(stories);
-            },
-            error: (error: Error) => {
-              reject(error);
-            },
-          });
-    });
-  }
+    
+    // get story from param id
+    this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
 
-  // return the url params (which contains the id,
-  // presuming dashboard component is only
-  // used on a url with a story id) using
-  // the routing parameters
-  getStoryId(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.route.params.subscribe(
-        params => resolve(params),
-        error => reject(error)
-      );
-    });
+    this.textUpdated.next();
+    this.getWordCount(this.story.text);
+    
+    // create html text property for older stories if they don't have it
+    if (this.story.htmlText == null) {
+      this.story.htmlText = this.story.text;
+    }
+    this.htmlDataIsReady = true;
   }
 
   instructionMessage() {
@@ -756,13 +695,13 @@ export class DashboardComponent implements OnInit {
     })
       .then((response) => response.json())
       .then((data) => {
-      let transcription = data["transcriptions"][0]["utterance"];
-      this.story.text = this.story.text + "\n" + transcription;
-      this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
-      this.getWordCount(transcription);
-      this.storySaved = false; 
-      this.textUpdated.next(transcription);
-      this.debounceSaveStory();
+        let transcription = data["transcriptions"][0]["utterance"];
+        this.story.text = this.story.text + "\n" + transcription;
+        this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
+        this.getWordCount(transcription);
+        this.storySaved = false; 
+        this.textUpdated.next(transcription);
+        this.debounceSaveStory();
     });
   }
   
