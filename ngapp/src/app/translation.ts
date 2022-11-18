@@ -2021,7 +2021,7 @@ export default {
   download: {
     ga: 'Íoslódáil',
     en: 'Download' },
-  play_all: {
+  play: {
     ga: 'Éist',
-    en: 'Play All' } 
+    en: 'Play' } 
 }
