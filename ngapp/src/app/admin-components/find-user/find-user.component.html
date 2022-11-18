@@ -41,13 +41,13 @@
       
       <div>
         <button (click)="goPrevPage()">&lt;</button>
-        Page {{currentPage+1}} / {{getPageCount()+1}}
+        Page {{currentPage + 1}} / {{totalPages + 1}}
         <button (click)="goNextPage()">&gt;</button>
       </div>
 
       <!-- List of users -->
       <div style="margin: 5px;">{{ts.l.results}} ({{resultCount}})</div>
-      <div class='resultContainer' *ngIf="resultCount > 0 && searchText">
+      <div class='resultContainer' *ngIf="resultCount > 0">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults" >
           <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
           {{user.username}}</div>
