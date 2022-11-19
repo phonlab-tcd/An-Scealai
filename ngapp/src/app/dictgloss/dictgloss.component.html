@@ -63,6 +63,11 @@
                 <div *ngIf="playWithTimer === true"><b>{{displayTime(totalTime)}}</b></div>
                 <input id="guesses_input">
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
+                <div class="recordBtnContainer">
+                 <button *ngIf="!recording" type="button" (click)="prepRecording()" class="headerIconBtn">{{ts.l.dictgloss_record_audio}}</button>
+                 <button *ngIf="recording" (click)="stopRecording(); saveAudio();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
+                 <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
+               </div>
                 <div>
                     <b style="color:green; padding-right: 1em;">{{ts.l.dictgloss_correct}}: {{rightCount}}</b>
                     <b style="color:red;padding-left: 1em;">{{ts.l.dictgloss_incorrect}}: {{wrongCount}}</b>

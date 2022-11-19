@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { SynthItem } from 'app/synth-item';
 import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
 import { TranslationService } from 'app/translation.service';
@@ -12,6 +13,8 @@ import { ClassroomService } from 'app/classroom.service';
 import { Classroom } from 'app/classroom';
 import { MessageService } from 'app/message.service';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dictgloss',
@@ -29,8 +32,10 @@ export class DictglossComponent implements OnInit {
     private auth: AuthenticationService,
     private synth: SynthesisService,
     private router: Router,
+    private http: HttpClient,
     public activatedRoute: ActivatedRoute,
     public ts: TranslationService,
+    protected sanitizer: DomSanitizer,
   ) { 
     this.dictglossCreateForm(); 
     try {
@@ -60,7 +65,8 @@ export class DictglossComponent implements OnInit {
   classroom: any;
   ngOnInit(): void {
     const userDetails = this.auth.getUserDetails();
-
+    this.chunks = [];
+    this.canSendAudio = false;
     // Return if user not logged in to avoid calling null.role (which results in error)
     if (!userDetails) return;
 
@@ -84,6 +90,118 @@ export class DictglossComponent implements OnInit {
     if(this.texts !== "" && this.generatedFromMessages == true){
       this.dictglossFromMessages(this.texts);
     }
+  }
+
+  //Next 7 functions copied from messages.component.ts
+  audioSource : SafeUrl;
+  chunks;
+  recording: boolean = false;
+  showListenBack : boolean = false;
+  newRecording : boolean = false;
+  canSendAudio : boolean = false;
+  blob: any;
+  modalClass : string = "hidden";
+  recorder;
+  stream;
+  recordAudio() {
+    let media = {
+      tag: 'audio',
+      type: 'audio/mp3',
+      ext: '.mp3',
+      gUM: {audio: true}
+    }
+    navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
+      this.stream = _stream;
+      this.recorder = new MediaRecorder(this.stream);
+      this.startRecording();
+      this.recorder.ondataavailable = e => {
+        this.chunks.push(e.data);
+        if(this.recorder.state == 'inactive') {
+
+        };
+      };
+    }).catch();
+    
+  }
+
+/*
+* Call the recording audio function
+*/
+  prepRecording() {
+    this.recordAudio();
+  }
+
+/*
+* Set parameters for recording audio and start the process
+*/
+  startRecording() {
+    this.recording = true;
+    this.newRecording = false;
+    this.showListenBack = false;
+    this.chunks = [];
+    this.recorder.start();
+  }
+
+/*
+* Reset parameters for recording audio and stop the process 
+*/
+  stopRecording() {
+    this.recorder.stop();
+    this.recording = false;
+    this.showListenBack = true;
+    this.canSendAudio = true;
+    this.stream.getTracks().forEach(track => track.stop());
+  }
+
+/*
+* Playback the recorded audio
+*/
+  playbackAudio() {
+    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
+    this.newRecording = true;
+  }
+
+/*
+* Save audio data into a blob (function called in sendMessage)
+*/
+  saveAudio() {
+    this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
+    this.modalClass = "hiddenFade";
+  }
+  
+// change css class to show recording container
+  showModal() {
+    this.modalClass = "visibleFade";
+  }
+  
+// clear out audio source if it exists and close new messsage
+  resetForm() {
+    if(this.audioSource) {
+      this.audioSource = null;
+      this.chunks = [];
+    }
+  }
+
+// change the css class to hide the recording container 
+  hideModal() {
+    this.modalClass = "hiddenFade";
+    if(this.recorder.state != 'inactive') {
+      this.recorder.stop();
+      this.stream.getTracks().forEach(track => track.stop());
+    }
+    this.recording = false;
+    this.newRecording = false;
+    this.showListenBack = false;
+  }
+
+  baseUrl: string = 'https://phoneticsrv3.lcs.tcd.ie/asr_api/';
+  hitVoiceRecognition(){
+    const url = 'placeholder';
+    this.http.get(this.baseUrl + `recognise_audio?path${this.getAudioPath()}`);
+  }
+
+  getAudioPath(): String {
+    return 'XD';
   }
 
   toggleTimer(){

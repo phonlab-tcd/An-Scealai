@@ -2251,11 +2251,17 @@ export default {
     en: '2000 Character Limit' },
   dictgloss_timer_off: {
     ga: '🕒❌',
-    en: '🕒❌' },
+    en: '🕒' },
   dictgloss_timer_on: {
     ga: '🕒✔️',
     en: '🕒✔️' },
   dictgloss_playback_speed: {
     ga: 'Luas Athsheinm',
     en: 'Playback Speed' },
+  dictgloss_record_audio:{
+    ga: '🎤Taifeadadh ar❌',
+    en: '🎤Recording off❌' },
+  dictgloss_not_record_audio: {
+    ga: '🎤Taifeadadh as✔️',
+    en: '🎤Recording on✔️' },
 }
