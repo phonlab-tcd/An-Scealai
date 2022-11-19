@@ -132,6 +132,11 @@
     border-style: solid;
 }
 
+.speed-button {
+    border-radius: 16px;
+    background-color: rgba(92, 230, 131, 0.637);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0%;

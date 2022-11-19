@@ -36,8 +36,7 @@ export class SynthItemComponent {
   }
 
   setPlaybackSpeed(){
-    const audio = document.getElementById('synthAudio') as HTMLAudioElement;
-    audio.playbackRate = this.speed;
+    this.audioElement.nativeElement.playbackRate = this.speed;
   }
 
   public refresh() {

@@ -22,7 +22,10 @@
         <div *ngIf="hasText">
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
-            <button style="border-radius: 10px;" (click)="changeSpeed(-1);">〈</button><span>{{playbackSpeed}}</span><button style="border-radius: 10px;" (click)="changeSpeed(1);">〉</button>
+            <p style="margin: 2px;">{{ts.l.dictgloss_playback_speed}}</p>
+            <button class="speed-button" (click)="changeSpeed(-1);">〈</button>
+                <span style="margin: 0px 4px 0px 4px">{{playbackSpeed}}x</span>
+            <button class="speed-button" (click)="changeSpeed(1);">〉</button>
             <!--Voice Synthesis-->
             <div class="playback">
                 <div class="synth-item" *ngFor="let si of synthItems; let i = index">
