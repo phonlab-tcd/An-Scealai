@@ -2255,6 +2255,9 @@ export default {
   dictgloss_timer_on: {
     ga: '🕒✔️',
     en: '🕒✔️' },
+  dictgloss_timer_disabled: {
+    ga: '🕒✖️',
+    en: '🕒✖️' },
   dictgloss_playback_speed: {
     ga: 'Luas Athsheinm',
     en: 'Playback Speed' },

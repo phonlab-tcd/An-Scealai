@@ -92,6 +92,13 @@ export class DictglossComponent implements OnInit {
     }
   }
 
+  showSpan(){
+    const butn = document.getElementById('game-in-progress');
+    if(butn.style.visibility = 'hidden'){ butn.style.visibility = 'visible'; }
+    else {butn.style.visibility = 'hidden'}
+    console.log(butn.style.visibility);
+  }
+
   //Next 7 functions copied from messages.component.ts
   audioSource : SafeUrl;
   chunks;
@@ -121,7 +128,6 @@ export class DictglossComponent implements OnInit {
         };
       };
     }).catch();
-    
   }
 
 /*
@@ -157,7 +163,8 @@ export class DictglossComponent implements OnInit {
 * Playback the recorded audio
 */
   playbackAudio() {
-    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, {type: 'audio/mp3'})));
+    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(new Blob(this.chunks, 
+      {type: 'audio/mp3'})));
     this.newRecording = true;
   }
 
@@ -196,13 +203,20 @@ export class DictglossComponent implements OnInit {
 
   baseUrl: string = 'https://phoneticsrv3.lcs.tcd.ie/asr_api/';
   hitVoiceRecognition(){
-    const url = 'placeholder';
-    this.http.get(this.baseUrl + `recognise_audio?path${this.getAudioPath()}`);
+    this.http.post(this.baseUrl + `recognise`, 
+      { 
+        "recogniseBlob": this.blob.text().toString(),
+        "userID": "string",
+        "sessionID": "string",
+        "developer": false,
+        "method": "gstreamer"
+      }
+    ).subscribe(observer => {
+      console.log(observer);
+      
+    });
   }
 
-  getAudioPath(): String {
-    return 'XD';
-  }
 
   toggleTimer(){
     if(this.playWithTimer === false){

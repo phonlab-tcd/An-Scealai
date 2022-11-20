@@ -17,6 +17,11 @@
             *ngIf="playWithTimer === true && gameInProgress == false" 
             style="margin:4px; border-radius: 4px; background-color: rgba(125, 255, 125, 0.76);" 
             (click)="toggleTimer();">{{ts.l.dictgloss_timer_on}}</button>
+            <button 
+            *ngIf="gameInProgress == true" 
+            class="disabledButton"
+            style="margin:4px; border-radius: 4px; background-color: rgba(110, 110, 110, 0.76);" 
+            >{{ts.l.dictgloss_timer_disabled}}</button>
         </div>
         <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
         <div *ngIf="hasText">
@@ -65,7 +70,7 @@
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
                 <div class="recordBtnContainer">
                  <button *ngIf="!recording" type="button" (click)="prepRecording()" class="headerIconBtn">{{ts.l.dictgloss_record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording(); saveAudio();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
+                 <button *ngIf="recording" (click)="stopRecording(); saveAudio(); hitVoiceRecognition();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
                  <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
                </div>
                 <div>
