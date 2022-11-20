@@ -6,7 +6,7 @@
             <p>{{ts.l.dictgloss_char_limit}}</p>
             <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true; setClass();">{{ts.l.dictgloss_usage}}?</p>
             <div style="display: flex; justify-content: center;">
-                <textarea style="max-width: 300px;" class="form-control" id="textSelector" rows="3" maxlength="2000"></textarea>
+                <textarea spellcheck=false style="max-width: 300px;" class="form-control" id="textSelector" rows="3" maxlength="2000"></textarea>
             </div>
             <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
             <button 
@@ -66,11 +66,11 @@
             <hr>
             <div *ngIf="!allGuessed; else correct;">
                 <div *ngIf="playWithTimer === true"><b>{{displayTime(totalTime)}}</b></div>
-                <input id="guesses_input">
+                <input id="guesses_input" spellcheck=false>
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
                 <div class="recordBtnContainer">
-                 <button *ngIf="!recording" type="button" (click)="prepRecording()" class="headerIconBtn">{{ts.l.dictgloss_record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording(); saveAudio(); hitVoiceRecognition();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
+                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="headerIconBtn">{{ts.l.dictgloss_record_audio}}</button>
+                 <button *ngIf="recording" (click)="stopRecording();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
                  <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
                </div>
                 <div>

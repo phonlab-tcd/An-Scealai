@@ -66,7 +66,6 @@ export class DictglossComponent implements OnInit {
   ngOnInit(): void {
     const userDetails = this.auth.getUserDetails();
     this.chunks = [];
-    this.canSendAudio = false;
     // Return if user not logged in to avoid calling null.role (which results in error)
     if (!userDetails) return;
 
@@ -103,9 +102,7 @@ export class DictglossComponent implements OnInit {
   audioSource : SafeUrl;
   chunks;
   recording: boolean = false;
-  showListenBack : boolean = false;
   newRecording : boolean = false;
-  canSendAudio : boolean = false;
   blob: any;
   modalClass : string = "hidden";
   recorder;
@@ -143,20 +140,8 @@ export class DictglossComponent implements OnInit {
   startRecording() {
     this.recording = true;
     this.newRecording = false;
-    this.showListenBack = false;
     this.chunks = [];
     this.recorder.start();
-  }
-
-/*
-* Reset parameters for recording audio and stop the process 
-*/
-  stopRecording() {
-    this.recorder.stop();
-    this.recording = false;
-    this.showListenBack = true;
-    this.canSendAudio = true;
-    this.stream.getTracks().forEach(track => track.stop());
   }
 
 /*
@@ -169,11 +154,46 @@ export class DictglossComponent implements OnInit {
   }
 
 /*
-* Save audio data into a blob (function called in sendMessage)
+* Save audio data into a blob and get transcription
 */
-  saveAudio() {
-    this.blob = new Blob(this.chunks, {type: 'audio/mp3'});
-    this.modalClass = "hiddenFade";
+  url_ASR_API: string = 'https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise';
+  /* stop recording stream and convert audio to base64 to send to ASR */
+  stopRecording() {
+    this.recorder.stop();
+    this.recording = false;
+    this.stream.getTracks().forEach(track => track.stop());
+    setTimeout(() => {
+      const blob = new Blob(this.chunks, {type: 'audio/mp3'});
+      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        let encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
+        this.getTranscription(encodedAudio);
+      }.bind(this);
+    }, 500);
+  }
+  
+  /* send audio to the ASR system and get transcription */
+  getTranscription(audioData:string) {
+    const rec_req = {
+      recogniseBlob: audioData,
+      developer: true,
+    };
+    fetch(this.url_ASR_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rec_req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      let transcription = data["transcriptions"][0]["utterance"];
+      let input = document.getElementById('guesses_input') as HTMLInputElement;
+      input.value = transcription;
+    });
   }
   
 // change css class to show recording container
@@ -198,25 +218,7 @@ export class DictglossComponent implements OnInit {
     }
     this.recording = false;
     this.newRecording = false;
-    this.showListenBack = false;
   }
-
-  baseUrl: string = 'https://phoneticsrv3.lcs.tcd.ie/asr_api/';
-  hitVoiceRecognition(){
-    this.http.post(this.baseUrl + `recognise`, 
-      { 
-        "recogniseBlob": this.blob.text().toString(),
-        "userID": "string",
-        "sessionID": "string",
-        "developer": false,
-        "method": "gstreamer"
-      }
-    ).subscribe(observer => {
-      console.log(observer);
-      
-    });
-  }
-
 
   toggleTimer(){
     if(this.playWithTimer === false){
