@@ -32,6 +32,7 @@ export class FeatureStatsComponent implements OnInit {
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("FEATURE-STATS").subscribe( (res) => {
       this.previousFeatures = res.sort((a, b) => b.date - a.date);
+      console.log(this.previousFeatures);
       //this.previousFeatures = this.previousFeatures.sort((a, b) => b.date - a.date);
     });
   }
@@ -48,7 +49,9 @@ export class FeatureStatsComponent implements OnInit {
     return new Promise<void>( (resolve, reject) => {
       this.statsService.getFeatureDataByDate(startDate, endDate).subscribe( async (res) => {
         this.features = res;
+        console.log("FEATURES: ", this.features);
         await this.calculateStats();
+        console.log("Calculating done")
         this.dataLoaded = true;
         resolve();
       });
@@ -60,6 +63,7 @@ export class FeatureStatsComponent implements OnInit {
   * Count the number of times each unique type shows up in the array
   */
   async calculateStats() {
+    console.log("Calculating stats")
     let types = [];
     this.features.forEach(feature => {
       if(feature.type){
