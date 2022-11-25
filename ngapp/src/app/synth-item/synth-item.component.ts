@@ -19,7 +19,7 @@ export class SynthItemComponent {
   @Input() storyId: string;
   @Input('i') i: number = 0;
   @ViewChild('audioElement') audioElement: ElementRef<HTMLAudioElement>;
-  @Input('playbackSpeed') speed: number;
+  @Input('playbackSpeed') speed?: number;
 
   constructor(
     private synth: SynthesisService,
@@ -36,7 +36,11 @@ export class SynthItemComponent {
   }
 
   setPlaybackSpeed(){
+    if(this.speed != undefined){
     this.audioElement.nativeElement.playbackRate = this.speed;
+    } else {
+      this.audioElement.nativeElement.playbackRate = 1;
+    }
   }
 
   public refresh() {
