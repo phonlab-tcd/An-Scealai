@@ -32,6 +32,7 @@ export class FeatureStatsComponent implements OnInit {
     });
   }
   
+  /* Sort feature counts in descending order */
   valueOrder = (a: KeyValue<number,number>, b: KeyValue<number,number>): number => {
     return a.value > b.value ? -1 : (b.value > a.value ? 1 : 0);
   }
@@ -47,9 +48,7 @@ export class FeatureStatsComponent implements OnInit {
 
     return new Promise<void>( (resolve, reject) => {
       this.statsService.getFeatureDataByDate(startDate, endDate).subscribe( async (res:Object) => {
-        this.featureCounts = Object.fromEntries(
-            Object.entries(res).sort(([,a],[,b]) => a-b)
-        );
+        this.featureCounts = res;
         this.dataLoaded = true;
         resolve();
       });
@@ -81,7 +80,6 @@ export class FeatureStatsComponent implements OnInit {
             });
             this.engagement.addAnalysisEvent(EventType["FEATURE-STATS"], newCounts);
           }
-          
           resolve();
         });
       }); 

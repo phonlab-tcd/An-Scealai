@@ -64,7 +64,6 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
     } else {
       const types = events.map((entry) => entry.type);
       const typesCount = countTypes(types);
-      console.log(typesCount);
       res.status(200).json(typesCount);
     }
   });
