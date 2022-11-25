@@ -499,6 +499,21 @@ export class PromptsComponent implements OnInit {
     this.refresh();
   }
 
+  init() {
+    //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
+    //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
+    if (location.search !== "") {
+      console.log("Loading text from location.search: " + location.search);
+
+      var sp = new URLSearchParams(location.search)
+      var text = JSON.parse(sp.get("text"))
+      console.log(text);
+      console.log("text.name: " + text.name);
+    } else {
+      console.log("Loading texts from " + this.arrayString);
+    }
+  }
+
   @Input() text: string;
   @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
 
@@ -507,6 +522,7 @@ export class PromptsComponent implements OnInit {
     if(voice) this.selected = voice;
     this.synthItem.audioUrl = undefined;
     this.synthItem.dispose();
+    this.synthItem = null;
     this.makeSynth();
     // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
     if(this.arrayString === "") return;
@@ -518,7 +534,7 @@ export class PromptsComponent implements OnInit {
   }
 
   getSynthItem(line: string) {
-    return new SynthItem(line,this.selected,this.synth);
+    return new SynthItem(line, this.selected, this.synth);
   }
 
   posSynthRefresh() {

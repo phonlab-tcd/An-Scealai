@@ -14,7 +14,6 @@ import { Classroom } from 'app/classroom';
 import { MessageService } from 'app/message.service';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dictgloss',
@@ -504,7 +503,7 @@ export class DictglossComponent implements OnInit {
   }
 
   getSynthItem(line: string) {
-    return new SynthItem(line,this.selected,this.synth);
+    return new SynthItem(line, this.selected, this.synth);
   }
 
   isNotPunctuated(i: string) {

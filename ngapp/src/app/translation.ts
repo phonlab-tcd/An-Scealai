@@ -2251,7 +2251,7 @@ export default {
     en: '2000 Character Limit' },
   dictgloss_timer_off: {
     ga: '🕒❌',
-    en: '🕒' },
+    en: '🕒❌' },
   dictgloss_timer_on: {
     ga: '🕒✔️',
     en: '🕒✔️' },
@@ -2267,4 +2267,10 @@ export default {
   dictgloss_not_record_audio: {
     ga: '🎤Taifeadadh as✔️',
     en: '🎤Recording on✔️' },
+  dictgloss_type_story: {
+    ga: 'Write story here...',
+    en: 'Type story here...' },
+  dictgloss_usage_close: {
+    ga: 'Folaigh eolas',
+    en: 'Hide info' },
 }

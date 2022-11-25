@@ -3,38 +3,49 @@
     <div class="container">
         <div id="selectorDiv" style="display:block">
             <h3>Dictogloss</h3>
-            <p>{{ts.l.dictgloss_char_limit}}</p>
             <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true; setClass();">{{ts.l.dictgloss_usage}}?</p>
+            <p *ngIf="showInfo" id="infoButtonClose" class="infoBoxButton" (click)="fadeOutAnimation();">{{ts.l.dictgloss_usage_close}}</p>
             <div style="display: flex; justify-content: center;">
-                <textarea spellcheck=false style="max-width: 300px;" class="form-control" id="textSelector" rows="3" maxlength="2000"></textarea>
+                <textarea 
+                spellcheck=false 
+                class="textarea" 
+                id="textSelector" 
+                rows="4" 
+                maxlength="2000"
+                placeholder="{{ts.l.dictgloss_type_story}}"></textarea>
             </div>
-            <button style="margin:4px; border-radius: 4px;" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
+            <button class="generic-button" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
+            <!--Timer settings-->
             <button 
             *ngIf="playWithTimer === false && gameInProgress == false" 
-            style="margin:4px; border-radius: 4px; background-color: rgba(255, 60, 60, 0.76);" 
+            class="timer-button off" 
             (click)="toggleTimer();">{{ts.l.dictgloss_timer_off}}</button>
             <button 
             *ngIf="playWithTimer === true && gameInProgress == false" 
-            style="margin:4px; border-radius: 4px; background-color: rgba(125, 255, 125, 0.76);" 
+            class="timer-button on" 
             (click)="toggleTimer();">{{ts.l.dictgloss_timer_on}}</button>
             <button 
             *ngIf="gameInProgress == true" 
             class="disabledButton"
-            style="margin:4px; border-radius: 4px; background-color: rgba(110, 110, 110, 0.76);" 
+            class="timer-button unavailable" 
             >{{ts.l.dictgloss_timer_disabled}}</button>
         </div>
         <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
         <div *ngIf="hasText">
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
-            <p style="margin: 2px;">{{ts.l.dictgloss_playback_speed}}</p>
-            <button class="speed-button" (click)="changeSpeed(-1);">〈</button>
-                <span style="margin: 0px 4px 0px 4px">{{playbackSpeed}}x</span>
-            <button class="speed-button" (click)="changeSpeed(1);">〉</button>
-            <!--Voice Synthesis-->
-            <div class="playback">
-                <div class="synth-item" *ngFor="let si of synthItems; let i = index">
-                    <app-synth-item class="synth" [playbackSpeed]=playbackSpeed [synthItem]=si [i]=i></app-synth-item>
+            <div class="synth-container">
+                <p class="playback-header">{{ts.l.dictgloss_playback_speed}}</p>
+                <div class="speed-container">
+                    <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
+                        <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
+                    <span class="speed-button" (click)="changeSpeed(1);">〉</span>
+                </div>
+                <!--Voice Synthesis-->
+                <div class="playback">
+                    <div class="synth-item" *ngFor="let si of synthItems; let i = index">
+                        <app-synth-item class="synth" [playbackSpeed]=playbackSpeed [synthItem]=si [i]=i></app-synth-item>
+                    </div>
                 </div>
                 <!-- Select dialect -->
                 <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
@@ -69,8 +80,8 @@
                 <input id="guesses_input" spellcheck=false>
                 <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
                 <div class="recordBtnContainer">
-                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="headerIconBtn">{{ts.l.dictgloss_record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording();" class="headerIconBtn">{{ts.l.dictgloss_not_record_audio}}</button>          
+                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="generic-button">{{ts.l.dictgloss_record_audio}}</button>
+                 <button *ngIf="recording" (click)="stopRecording();" class="generic-button">{{ts.l.dictgloss_not_record_audio}}</button>          
                  <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
                </div>
                 <div>
@@ -95,13 +106,13 @@
     style="display: flex;
     align-items: center;
     justify-content: center;">
-        <div id="infoBox" *ngIf="showInfo" style="max-width: 600px; height: 280px;" class="container">
+        <div id="infoBox" *ngIf="showInfo" style="max-width: 600px; height: 320px;" class="container">
             <h3>{{ts.l.dictgloss_usage}}&ensp;</h3>
+            <p>{{ts.l.dictgloss_char_limit}}</p>
             <h5>{{ts.l.dictgloss_1}}&ensp;</h5>
             <h5>{{ts.l.dictgloss_2}}&ensp;</h5>
             <h5>{{ts.l.dictgloss_3}}&ensp;</h5>
             <h5>{{ts.l.dictgloss_tip}}&ensp;</h5>
-            <div id="infoButtonClose" class="infoBoxButton" (click)="fadeOutAnimation();">❌</div>
         </div>
     </div>
 </div>
