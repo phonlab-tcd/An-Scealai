@@ -46,18 +46,14 @@ statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get(async (req, r
     if (!events) {
       res.status(404).send({'message': 'No feature stats in this date range were not found'});
     } else {
-      //console.log(events);
       const types = events.map((entry) => entry.type);
-      console.log(types);
-      const test = countTypes(types);
-      console.log(test);
-      res.status(200).json(events);
+      const typesCount = countTypes(types);
+      res.status(200).json(typesCount);
     }
   });
 });
 
 statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
-  console.log('Function reached');
   Event.find({'date': {'$gt': req.params.date}}, (err, events) => {
     if (err) {
       console.log(err);
@@ -66,8 +62,10 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
     if (!events) {
       res.status(404).send({'message': 'No previous feature stats were found'});
     } else {
-      console.log(events);
-      res.status(200).json(events);
+      const types = events.map((entry) => entry.type);
+      const typesCount = countTypes(types);
+      console.log(typesCount);
+      res.status(200).json(typesCount);
     }
   });
 });
