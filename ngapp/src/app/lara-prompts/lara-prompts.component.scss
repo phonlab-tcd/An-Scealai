@@ -39,10 +39,6 @@
     margin-bottom: 8px;
 }
 
-.confirmation-button {
-    margin-top: 16px;
-}
-
 .content {
     text-align: left;
 }
@@ -57,16 +53,26 @@
     height: 24px;
 }
 
-.prompt-button {
-    border-width: 2px;
-    font-size: 24px;
-    background-color: rgba(112, 168, 127, 0.1);
-    border-color: rgb(112, 168, 127);
-    border-style: solid;
+.dialectSelect {
+    margin: 4px;
 }
 
-.prompt-button:hover {
-    box-shadow: 0 0 8px rgba(33, 33, 33, 0.2);
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 0px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-4px);
 }
 
 .prompt {

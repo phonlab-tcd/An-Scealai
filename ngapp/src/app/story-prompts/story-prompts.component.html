@@ -17,7 +17,7 @@
                     </select>
                 </div>
             </form>
-            <button class="prompt-button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
+            <button class="button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.sep_get_prompt}}</button>
         </div>
         <!--Prompt(-->
         <div *ngIf="promptExists; else noPrompt">
@@ -26,17 +26,17 @@
                     <!--Calling methods so it updates on form selection change(prob a bit of redundant code)-->
                     <div class="story-prompt-box">
                         <p>{{ts.l.sp_character}}</p>
-                        <button (click)="change('character')">{{ts.l.sp_change}}</button>
+                        <button class="button" (click)="change('character')">{{ts.l.sp_change}}</button>
                     </div>
                     <i class="character">{{this.chosenCharacter}}</i>
                     <div class="story-prompt-box">
                         <p>{{ts.l.sp_setting}}</p>
-                        <button (click)="change('setting')">{{ts.l.sp_change}}</button>
+                        <button class="button" (click)="change('setting')">{{ts.l.sp_change}}</button>
                     </div>
                     <i class="setting">{{this.chosenSetting}}</i>
                     <div class="story-prompt-box">
                         <p>{{ts.l.sp_theme}}</p>
-                        <button (click)="change('theme')">{{ts.l.sp_change}}</button>
+                        <button class="button" (click)="change('theme')">{{ts.l.sp_change}}</button>
                     </div>
                     <i class="theme">{{this.chosenTheme}}</i>
                 </div>
@@ -68,7 +68,7 @@
                             (click)="spAddNewStory(newStoryForm.controls['title'].value, 
                             newStoryForm.controls['dialect'].value, this.prompt)" 
                             [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
-                            class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
+                            class="button">{{ts.l.pos_save_to_stories}}</button>
                         </div>
                 </div>
                 <!-- check for invalid title -->

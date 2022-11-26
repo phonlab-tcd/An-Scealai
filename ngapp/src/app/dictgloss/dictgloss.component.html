@@ -1,6 +1,6 @@
 <!--Irish Language support probably wrong(I used google translate)-->
 <div class="container-fluid">
-    <div class="container">
+    <div class="container input">
         <div id="selectorDiv" style="display:block">
             <h3>Dictogloss</h3>
             <p *ngIf="!showInfo" class="infoButtonText" (click)="showInfo = true; setClass();">{{ts.l.dictgloss_usage}}?</p>
@@ -14,20 +14,19 @@
                 maxlength="2000"
                 placeholder="{{ts.l.dictgloss_type_story}}"></textarea>
             </div>
-            <button class="generic-button" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
+            <button class="button" (click)="dictglossLoad();">{{ts.l.dictgloss_enter_story}}</button>
             <!--Timer settings-->
             <button 
             *ngIf="playWithTimer === false && gameInProgress == false" 
-            class="timer-button off" 
+            class="button timer-button off" 
             (click)="toggleTimer();">{{ts.l.dictgloss_timer_off}}</button>
             <button 
             *ngIf="playWithTimer === true && gameInProgress == false" 
-            class="timer-button on" 
+            class="button timer-button on" 
             (click)="toggleTimer();">{{ts.l.dictgloss_timer_on}}</button>
             <button 
             *ngIf="gameInProgress == true" 
-            class="disabledButton"
-            class="timer-button unavailable" 
+            class="button timer-button unavailable" 
             >{{ts.l.dictgloss_timer_disabled}}</button>
         </div>
         <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
@@ -35,20 +34,22 @@
             <hr>
             <h3>{{ts.l.dictgloss_audio}}</h3>
             <div class="synth-container">
-                <p class="playback-header">{{ts.l.dictgloss_playback_speed}}</p>
-                <div class="speed-container">
-                    <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
-                        <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
-                    <span class="speed-button" (click)="changeSpeed(1);">〉</span>
-                </div>
                 <!--Voice Synthesis-->
                 <div class="playback">
                     <div class="synth-item" *ngFor="let si of synthItems; let i = index">
                         <app-synth-item class="synth" [playbackSpeed]=playbackSpeed [synthItem]=si [i]=i></app-synth-item>
                     </div>
                 </div>
-                <!-- Select dialect -->
-                <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+                <div class="speed-voice-selection">
+                    <!-- Select dialect -->
+                    <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+                    <div class="speed-container">
+                        <p class="playback-header">{{ts.l.dictgloss_playback_speed}}</p>
+                        <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
+                            <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
+                        <span class="speed-button" (click)="changeSpeed(1);">〉</span>
+                    </div>
+                </div>
             </div>
             <hr>
             <div class="buttons-and-templates"> 
@@ -78,10 +79,10 @@
             <div *ngIf="!allGuessed; else correct;">
                 <div *ngIf="playWithTimer === true"><b>{{displayTime(totalTime)}}</b></div>
                 <input id="guesses_input" spellcheck=false>
-                <button style="margin:4px; border-radius: 4px;" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
+                <button class="button" (click)="delimitPotentialWords();">{{ts.l.dictgloss_guess}}</button>
                 <div class="recordBtnContainer">
-                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="generic-button">{{ts.l.dictgloss_record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording();" class="generic-button">{{ts.l.dictgloss_not_record_audio}}</button>          
+                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="button">{{ts.l.dictgloss_record_audio}}</button>
+                 <button *ngIf="recording" (click)="stopRecording();" class="button">{{ts.l.dictgloss_not_record_audio}}</button>          
                  <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
                </div>
                 <div>
@@ -97,8 +98,8 @@
             <ng-template  #correct>
                 <i><h2 class="victory">{{ts.l.dictgloss_victory}}</h2></i>
                 <b *ngIf="playWithTimer === true"><h2>{{ts.l.dictgloss_final_time}}{{displayTime(totalTime)}}</h2></b>
-                <button class="victory-button" (click)="hasText = false;">{{ts.l.dictgloss_new}}</button>
-                <button class="victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictgloss_return}}</button>
+                <button class="button victory-button" (click)="hasText = false;">{{ts.l.dictgloss_new}}</button>
+                <button class="button victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.dictgloss_return}}</button>
             </ng-template>
         </div>
     </div>

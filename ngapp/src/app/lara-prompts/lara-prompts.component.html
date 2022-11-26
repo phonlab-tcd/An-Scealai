@@ -9,7 +9,7 @@
         </div>
         <!--Choose Dialect-->
         <div class="button-div">
-            <button class="prompt-button" (click)="randomPrompt(data);">{{ts.l.lp_get_prompt}}</button>
+            <button class="button" (click)="randomPrompt(data);">{{ts.l.lp_get_prompt}}</button>
         </div>
         <!--Prompt-->
         <div *ngIf="promptExists; else noPrompt">
@@ -35,14 +35,12 @@
                             </select>
                         </div>
                         <!--Save story button-->
-                        <div class="confirmation-button">
-                            <button data-cy=create-story
-                            type="submit" 
-                            (click)="ppAddNewStory(newStoryForm.controls['title'].value, 
-                            newStoryForm.controls['dialect'].value, this.prompt)" 
-                            [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
-                            class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
-                        </div>
+                        <button data-cy=create-story
+                        type="submit" 
+                        (click)="ppAddNewStory(newStoryForm.controls['title'].value, 
+                        newStoryForm.controls['dialect'].value, this.prompt)" 
+                        [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
+                        class="button">{{ts.l.pos_save_to_stories}}</button>
                 </div>
                 <!-- check for invalid title -->
                 <div *ngIf="newStoryForm.controls['title'].invalid && 

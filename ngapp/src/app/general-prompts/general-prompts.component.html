@@ -9,7 +9,7 @@
         </div>
         <!--Choose Level-->
         <div class="button-div">
-            <button class="prompt-button" (click)="randomPrompt(data)">{{ts.l.sep_get_prompt}}</button>
+            <button class="button" (click)="randomPrompt(data)">{{ts.l.sep_get_prompt}}</button>
         </div>
         <!--Prompt-->
         <div class="prompt-box" *ngIf="promptExists; else noPrompt">
@@ -41,7 +41,7 @@
                         (click)="gpAddNewStory(newStoryForm.controls['title'].value, 
                         newStoryForm.controls['dialect'].value, this.prompt)" 
                         [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
-                        class="btn btn-success">{{ts.l.pos_save_to_stories}}</button>
+                        class="button">{{ts.l.pos_save_to_stories}}</button>
                     </div>
                 </div>
                 <!-- check for invalid title -->

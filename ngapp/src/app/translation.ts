@@ -2273,4 +2273,7 @@ export default {
   dictgloss_usage_close: {
     ga: 'Folaigh eolas',
     en: 'Hide info' },
+  pos_synth: {
+    ga: 'Athsheinm Sintéise',
+    en: 'Synthesis Playback' },
 }

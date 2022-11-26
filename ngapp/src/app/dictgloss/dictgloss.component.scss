@@ -12,6 +12,10 @@
     animation-name: fadeIn;
 }
 
+.container.input {
+    max-width: 600px;
+}
+
 .fadeOutContainer{
     max-width: 600px; 
     height: 280px;
@@ -75,20 +79,34 @@
     background-color: rgba(125, 255, 125, 0.5);
 }
 
-.timer-button {
+.button.timer-button {
     margin:4px; border-radius: 4px; border-width: 1px;
 }
 
 .timer-button.on {
-    background-color: rgba(125, 255, 125, 0.76);
+    background-color: #6eff81;
+}
+
+.timer-button.on:hover {
+    background-color: #6eff81;
 }
 
 .timer-button.off {
     background-color: rgba(255, 60, 60, 0.76);
 }
 
-.timer-button.unavailable {
+.timer-button.off:hover {
+    background-color: rgba(255, 60, 60, 0.76);
+    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+}
+
+.button.timer-button.unavailable {
     background-color: rgba(110, 110, 110, 0.76);
+}
+
+.timer-button.unavailable:hover {
+    background-color: rgba(110, 110, 110, 0.76);
+    box-shadow: 0px 15px 20px rgba(71, 71, 71, 0.2);
 }
 
 .victory {
@@ -178,10 +196,22 @@
     border-width: 1px;
 }
 
-.generic-button { 
-    margin:4px; 
-    border-radius: 4px; 
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 4px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-2px);
 }
 
 .playback-header {
@@ -196,11 +226,17 @@
 }
 
 .synth-container {
+    display: flex;
+    justify-content: space-evenly;
     border-style: solid;
     border-width: 1px;
     border-radius: 6px;
     padding: 6px;
     background-color: rgba(128, 128, 128, 0.7);
+}
+
+.speed-voice-selection {
+    display: table-column;
 }
 
 @keyframes fadeIn {

@@ -13,8 +13,36 @@
 }
 
 .playback {
-    display: block;
-    margin: 8px;
+    display: flex;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    padding: 6px;
+    justify-content: space-between;
+    background-color: rgba(128, 128, 128, 0.7);
+}
+
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 4px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+.button.no:hover {
+    background-color: #ff6a6a;
+    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
 }
 
 .synth-item {

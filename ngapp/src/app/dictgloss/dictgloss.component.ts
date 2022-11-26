@@ -439,7 +439,6 @@ export class DictglossComponent implements OnInit {
   errorText: boolean;
   dictglossLoad() {
     this.generatedFromMessages = false;
-    this.gameInProgress = true;
     console.log("Not generated from message.")
     this.resetTimer();
     this.startTimer();
@@ -447,6 +446,9 @@ export class DictglossComponent implements OnInit {
     var selector = document.getElementById("textSelector") as HTMLInputElement;
     this.texts = selector.value;
     selector.value = "";
+    if(this.texts != ""){
+    this.gameInProgress = true;
+    }
 
     let isValid = false;
     for(let i = 0; i < this.texts.length; i++){
