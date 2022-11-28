@@ -8,9 +8,9 @@ export const anGramadoir: GrammarChecker = {
 
 // An Gramadoir response type
 export type GramadoirTag = {
-  fromy: string;
+  fromy: number;
   fromx: number;
-  toy: string;
+  toy: number;
   tox: number;
   ruleId: string;
   msg: string;
@@ -58,11 +58,11 @@ async function check(input: string):Promise<ErrorTag[]>{
         nameEN: ERROR_INFO[cleanedErrorName].nameEN,
         nameGA: ERROR_INFO[cleanedErrorName].nameGA,
         color: ERROR_INFO[cleanedErrorName].color,
-        fromX: errorEN.fromx,
-        toX: errorEN.tox,
+        fromX: +errorEN.fromx,
+        toX: +errorEN.tox,
+        type: cleanedErrorName
       } as ErrorTag;
     });
-
     resolve(errorTags);
   });
 }

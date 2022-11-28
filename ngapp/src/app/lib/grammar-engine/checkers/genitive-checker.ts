@@ -27,6 +27,7 @@ async function check(input: string):Promise<ErrorTag[]>{
         color: ERROR_INFO['GENITIVE'].color,
         fromX: error.fromx,
         toX: error.tox,
+        type: 'GENITIVE'
       }
     });
 

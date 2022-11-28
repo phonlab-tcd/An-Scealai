@@ -27,6 +27,7 @@ async function check(input: string):Promise<ErrorTag[]>{
         color: ERROR_INFO['RELATIVE-CLAUSE'].color,
         fromX: error.fromx,
         toX: error.tox,
+        type: 'RELATIVE-CLAUSE'
       }
     });
 

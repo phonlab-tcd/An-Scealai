@@ -26,11 +26,11 @@ export class GrammarEngine {
         const sentencesWithOffsets = []
 
         let i = 0
-        for (const s of sentences) {
-            const sIndex = input.slice(i).indexOf(s);
+        for (let s = 0; s < sentences.length -1; s++) {
+            const sIndex = input.slice(i).indexOf(sentences[s]);
             const offset = i + sIndex;
-            sentencesWithOffsets.push([offset, s]); 
-            i = offset + s.length;
+            sentencesWithOffsets.push([offset, sentences[s]]); 
+            i = offset + sentences[s].length;
         }
 
         const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker => 
@@ -39,6 +39,8 @@ export class GrammarEngine {
                     return this.cacheMap.get(checker.name)[s];
                 }
                 const errorTags = await checker.check(s);
+                console.log(checker.name);
+                console.log(errorTags);
                 this.cacheMap.get(checker.name)[s] = errorTags;
                 const offsetErrorTags = errorTags.map(tag => {
                     tag.fromX += offset;
@@ -47,7 +49,7 @@ export class GrammarEngine {
                 })
                 return offsetErrorTags;
             }))
-        ))).flat();
+        ))).flat().filter(err => err.length);
 
         return allErrorTags;
     }

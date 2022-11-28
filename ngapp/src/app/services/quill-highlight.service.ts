@@ -130,8 +130,6 @@ export class QuillHighlightService {
   }
 
   async updateGrammarErrors(quillEditor: Quill, text: string, grammarTagFilter, storyId:string): Promise<object> {
-    // my tslint server keeps
-    // asking me to brace these guys
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
 
     this.clearAllGramadoirTags(quillEditor);
@@ -208,6 +206,7 @@ export class QuillHighlightService {
         ga: 'Úsáid an tuiseal ginideach.'
       }
     }
+    console.log(currentGramadoirErrorTypes)
 
     return currentGramadoirErrorTypes;
   }
@@ -409,7 +408,7 @@ export class QuillHighlightService {
         const t3 = tagElement.getAttribute('data-vowel-agreement-tag');
         if(t3) {
           const parsed = JSON.parse(t3);
-          console.log(parsed);
+          //console.log(parsed);
           messages.en += '<hr>' + (this.ts.getLanguageFromCode('en')as any).vowels_should_agree;
           messages.ga += '<hr>' + (this.ts.getLanguageFromCode('ga') as any).vowels_should_agree;
           start = parsed.first;

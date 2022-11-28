@@ -40,6 +40,7 @@ async function check(input: string): Promise<ErrorTag[]>{
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
         toX: error.second,
+        type: 'LEATHAN-CAOL'
       }
       errorTags.push(tag);
     }
