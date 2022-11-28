@@ -1,19 +1,36 @@
-.bookContentsContainer {
+.contentsContainer {
+    padding-left: 3%;
+    padding-right: 3%;
+    height: 390px;
     width: 80%;
     margin-left: 10%;
-    z-index: 10;
+    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    border-radius: 5px 5px 5px 5px;
 }
 
-.bookImg {
-    z-index: -10;
-    width: 90%;
-    height: 500px;
-    position: fixed;
-    right: 5%;
+.topHeader {
+    width: 100%;
+}
+
+.myStoriesBtn {
+    margin-top: 10px;
+    float: left;
+}
+
+.myStoriesBtn:hover {
+    color: var(--scealai-orange);
+    cursor: pointer;
 }
 
 .bookTitle {
-    color: #261500;
+    color: var(--dark-text);
     padding-left: 5%;
     padding-right: 5%;
     display: inline-block;
@@ -22,26 +39,7 @@
     width: 100%;
 }
 
-.contentsContainer {
-    padding-left: 3%;
-    padding-right: 3%;
-    height: 390px;
-    width: 80%;
-    margin-left: 10%;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
--moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-border-radius: 5px 5px 5px 5px;
-}
-
 .contentBody {
-    width: 100%;
-    display: flex;
     flex-direction: column;
     padding-top: 20px;
 }
@@ -67,29 +65,14 @@ border-radius: 5px 5px 5px 5px;
     width: 100%;
 }
 
-.myStoriesBtn {
-    margin-top: 10px;
-    float: left;
-}
-
-.myStoriesBtn:hover {
-    color: #c15a2e;
-    cursor: pointer;
-}
-
-
-.topHeader {
-    width: 100%;
-}
-
-.loginBtn {
-    background-color: #70a87f;
+.saveBtn {
+    background-color: var(--scealai-green);
     border-radius: 5px;
     margin-bottom: -14px;
 }
 
-.loginBtn:hover {
-    background-color: #304e38;
+.saveBtn:hover {
+    background-color: var(--scealai-dark-green);
 }
 
 @media only screen and (max-width: 700px) { 

@@ -1,16 +1,6 @@
 <!-- Select the synthesis option for a story -->
 <div class="page">
   <div class="bookContainerSynth">
-    <!--popup for update story option -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent">
-          <div class="modalText">{{ts.l.save_changes_made_to_this_recording}}</div>
-          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-          <div>
-              <button class="modalBtn" (click)="hideModal();">{{ts.l.cancel}}</button><button class="modalBtn createBtnGreen" (click)="saveModal()">{{ts.l.save}}</button>
-          </div>
-      </div>
-    </div>
     <!-- back button to return to story and save button to send recordings to db-->
       <div class="recordingBookHeader" *ngIf="story">
         <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
@@ -29,7 +19,7 @@
         <div class="recordingStoryHeader">
           {{ts.l.listen_record_compare}}
         </div>
-        <div class="textFieldContainer">
+        <div>
           <!--Main container for story -->
             <div class="textContainerSynth">
               <!-- Display synthesising (loading) -->
@@ -43,7 +33,7 @@
                   <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer">
                       <!-- play / pause synthesiser -->
                       <div class="textCard">
-                        <div class="cardBody">
+                        <div>
                           <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml"></span>
                           <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
                           <button *ngIf="section.audio.paused" (click)="playSection(section)" class="playAudioBtn"><i class="fa fa-play"></i></button>

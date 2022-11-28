@@ -33,6 +33,12 @@ import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 
+import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
+import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
+import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
+import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
+import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
+
 const Parchment = Quill.import('parchment');
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
@@ -228,6 +234,14 @@ export class DashboardComponent implements OnInit {
     ],
     // scrollingContainer: false,
   };
+  
+  // SPEECH TO TEXT
+  url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
+  recorder;
+  stream;
+  audioSourceASR : SafeUrl;
+  chunks: any[] = [];
+  isRecording: boolean = false;
 
   stringifySynth(i: number) {
     if (this.audioSources[i]) {
@@ -296,9 +310,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // set the stories array of all the student's stories
-  // set the stories array of all the student's stories w
-  // and the current story being edited given its id from url
   ngOnInit() {
     this.storySaved = true;
     // Get the stories from the storyService and run
@@ -581,7 +592,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
   downloadStoryUrl() {
     return config.baseurl +
       'story/downloadStory/' +
@@ -685,4 +695,76 @@ export class DashboardComponent implements OnInit {
       this.storySaved = true;
     }
   }
+  
+  /* Stop recording if already recording, otherwise start recording */
+  speakStory() {
+    this.isRecording ? this.stopRecording() : this.recordAudio();
+  }
+  
+  /* Record audio */
+  recordAudio() {
+    console.log('Record audio:');
+    let media = {
+      tag: 'audio',
+      type: 'audio/mp3',
+      ext: '.mp3',
+      gUM: {audio: true}
+    }
+    this.isRecording = true;
+    navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
+      this.stream = _stream;
+      this.recorder = new MediaRecorder(this.stream);
+      this.chunks = [];
+      this.recorder.start();
+      this.recorder.ondataavailable = e => {
+        this.chunks.push(e.data);
+        if(this.recorder.state == 'inactive') {
+        };
+      };
+    }).catch();
+  }
+  
+  /* stop recording stream and convert audio to base64 to send to ASR */
+  stopRecording() {
+    this.recorder.stop();
+    this.isRecording = false;
+    this.stream.getTracks().forEach(track => track.stop());
+    setTimeout(() => {
+      const blob = new Blob(this.chunks, {type: 'audio/mp3'});
+      this.audioSourceASR = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        let encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
+        this.getTranscription(encodedAudio);
+      }.bind(this);
+    }, 500);
+  }
+  
+  /* send audio to the ASR system and get transcription */
+  getTranscription(audioData:string) {
+    const rec_req = {
+      recogniseBlob: audioData,
+      developer: true,
+    };
+    fetch(this.url_ASR_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rec_req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      let transcription = data["transcriptions"][0]["utterance"];
+      this.story.text = this.story.text + "\n" + transcription;
+      this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
+      this.getWordCount(transcription);
+      this.storySaved = false; 
+      this.textUpdated.next(transcription);
+      this.debounceSaveStory();
+    });
+  }
+  
 }

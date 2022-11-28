@@ -1,7 +1,4 @@
-.content {
-    width: 100%;
-    padding: 3vh;
-    display: flex;
+.adminContent {
     flex-direction: column;
 }
 
@@ -11,8 +8,12 @@
     justify-content: center;
 }
 
+.teacherCodeTitle {
+    padding: 5px;
+}
+
 .teacherCodeButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding: 5px;
     padding-left: 10px;
@@ -23,11 +24,7 @@
 
 .teacherCodeButton:hover {
     cursor: pointer;
-    background-color: #304e38;
-}
-
-.teacherCodeTitle {
-    padding: 5px;
+    background-color: var(--scealai-dark-green);
 }
 
 .teacherCodeDisplay {
@@ -48,7 +45,7 @@
 }
 
 .copyIcon {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     width: 30px;
     height: 30px;
@@ -59,18 +56,12 @@
 
 .copyIcon:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
-.teacherAccountsHeader {
-    font-size: 14pt;
-    height: 4vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    background-color: #304e38;
-    border-radius: 5px 5px 0px 0px;
+.copiedText {
+    margin-left: 10px;
+    color: var(--scealai-green);
 }
 
 .teacherAccountsContainer {
@@ -86,6 +77,17 @@
     height: 45vh;
     background-color: #d1d1d1;
     border-radius: 0px 0px 5px 5px;
+}
+
+.teacherAccountsHeader {
+    font-size: 14pt;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
 }
 
 .teacherAccountsBody {
@@ -104,65 +106,24 @@
     font-size: 11pt;
 }
 
-.deleteBtn {
-    color: #304e38;
+.greenBtn {
+    color: var(--scealai-dark-green);
     font-size: 12pt;
     padding: 5px;
     float: right;
     margin-top: -2px;
 }
 
-.deleteBtn:hover {
+.greenBtn:hover {
     cursor: pointer;
     font-size: 14pt;
     padding: 4px;
 }
 
-.modalContainer {
-    position: absolute;
-    z-index: 5;
-    width: 90%;
-    height: 74vh;
-    border-radius: 0px 0px 4px 4px;
-    background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.modalContent {
-    margin-top: 22vh;
-    width: 30%;
-    margin-left: 35%;
-    padding: 25px;
-    background-color: white;
-    border-radius: 5px;
-    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
--moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
-}
-
-.modalBtn {
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background-color: #d1d1d1;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    margin-top: 15px;
-}
-
-.modalBtn:hover {
-    background-color: #707070;
-    color: white;
-}
-
-.deleteRedBtn {
-    background-color: #c40021;
-    color: white;
-}
-
-.deleteRedBtn:hover {
-    background-color: #8f0018;
+.whiteBtn:hover {
+    color:white;
+    background-color: var(--scealai-med-brown-hover);
+    cursor: pointer;
 }
 
 .hidden {
@@ -180,20 +141,3 @@ box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
     visibility: visible;
     opacity: 1;
 }
-
-.visibleFade {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0.3s, opacity 0.3s ease-out;
-}
-
-.copiedText {
-    margin-left: 10px;
-    color: #70a87f;
-}
-
-.whiteBtn:hover {
-    color:white;
-    background-color: #3b372b;
-    cursor: pointer;
-  }

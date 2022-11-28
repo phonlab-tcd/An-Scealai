@@ -1,27 +1,5 @@
 <!-- Displays the student's story for the teacher -->
-<div class="content">
-  <!-- Record audio message container -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent">
-          <div class="modalText">{{ts.l.record_audio_message}}</div>
-          <!-- Start/stop recording audio or go back -->
-          <div class="recordBtnContainer">
-            <button *ngIf="!recording" (click)="prepRecording()" class="headerIconBtn">{{ts.l.record_audio}}</button>
-            <button *ngIf="recording" (click)="stopRecording()" class="headerIconBtn">{{ts.l.stop_recording}}</button>          
-            <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
-          </div>
-          <!-- Listen back to message -->
-          <div *ngIf="showListenBack" class="greenLinkText" (click)="playbackAudio()">{{ts.l.would_you_like_to_listen_back}}</div>
-          <audio *ngIf="newRecording" [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
-          <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-          <!-- Cancel or send audio -->
-          <div class="modalBtnContainer">
-              <button class="modalBtn" (click)="hideModal()">{{ts.l.cancel}}</button>
-              <button class="modalBtn createBtnGreen" (click)="saveAudio()" *ngIf="canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
-              <div class="inactiveBtn" *ngIf="!canSendAudio">{{ts.l.send}} <i class="fas fa-paper-plane"></i></div>
-          </div>
-      </div>
-    </div>
+<div class="contentContainer">
     <!-- View story and add feedback container -->
     <div class="classContainer">
       <!-- header story title and back arrow -->
@@ -30,7 +8,7 @@
           {{story?.title}}
         </div>
         <!-- story body and feedback details -->
-        <div class="classBody">
+        <div class="storyClassBody">
           <!-- story text -->
             <div class="storyTextContainer">
               <div class="storyTextHeader">{{ts.l.text}}</div>
@@ -71,7 +49,7 @@
                         <audio [src]="audioSource" id="audio" controls #audioTag class="audioPlayer"></audio>
                       </div>
                       <div>
-                          <button (click)="showModal()" class="headerIconBtn">{{ts.l.audio_message}}</button>
+                          <button (click)="openRecordingDialog()" class="headerIconBtn">{{ts.l.audio_message}}</button>
                       </div>
                     </div>
                   </div>
@@ -79,3 +57,4 @@
         </div>
       </div>
 </div>
+

@@ -1,10 +1,10 @@
-<div class="header"> {{ts.l.scealai_feature_statistics}} </div>
+<div class="headerTitle"> {{ts.l.scealai_feature_statistics}} </div>
 <!-- Toggle between date picker and feature logs -->
 <div class="dataOptions">
   <div class="option" (click)="selectDateRange = true"> {{ts.l.date_range}}</div> |
   <div class="option" (click)="selectDateRange = false"> {{ts.l.previous_data}} </div>
 </div>
-<div class="content">
+<div class="adminContent">
   <!-- Date picker -->
   <div class="datePicker" *ngIf="selectDateRange">
     <mat-form-field appearance="fill">
@@ -25,7 +25,7 @@
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousFeatures">
       <div *ngFor="let feature of previousFeatures" style="padding:10px">
-        <div class="submitButton" (click)="sortData(feature.statsData);"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
+        <div class="submitButton" (click)="displayLog(feature.statsData);"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
       </div>
     </div>
     <br>
@@ -35,20 +35,20 @@
 </div>
 
 <!-- Loading panel -->
-<div *ngIf="!dataLoaded" class="loaderContainer">
+<div *ngIf="!dataLoaded" class="adminLoaderContainer">
   <b>{{ts.l.compiling_data}}</b>
   <grid-spinner></grid-spinner>
 </div>
 
 <!-- Display feature data -->
 <div *ngIf="dataLoaded">
-  <mat-card *ngFor="let stat of sortedFeatureCounts">
+  <mat-card *ngFor="let stat of featureCounts | keyvalue: valueOrder">
     <div class="card">
     <mat-card-content>
-      <div class="featureName"><b>{{stat[0]}} : </b></div>
+      <div class="featureName"><b>{{stat.key}} : </b></div>
     </mat-card-content>
     <mat-card-content>
-      <div class="featureValue">{{stat[1]}}</div>
+      <div class="featureValue">{{stat.value}}</div>
     </mat-card-content>
     </div>
   </mat-card>

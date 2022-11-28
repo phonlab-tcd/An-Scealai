@@ -7,7 +7,6 @@ import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
-import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
@@ -26,7 +25,6 @@ export class StoryService {
     private auth: AuthenticationService,
     private engagement: EngagementService,
     private ts: TranslationService,
-    private recordingService: RecordingService
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
@@ -47,7 +45,6 @@ export class StoryService {
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        // this.recordingService.addRecordingForLoggedInUser(storyObj);
 
         this.router.navigateByUrl('/dashboard/' + res.id);
       });
@@ -63,6 +60,10 @@ export class StoryService {
 
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
+  }
+  
+  getStoriesByDate(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "getStoriesByDate/" + studentId, {startDate:startDate, endDate:endDate});
   }
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
@@ -144,8 +145,8 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'updateActiveRecording/' + storyId + '/', {activeRecording: recordingId});
   }
   
-  averageWordCount(studentId:string) : Observable<any> {
-    return this.http.get(this.baseUrl + "averageWordCount/" + studentId);
+  averageWordCount(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "averageWordCount/" + studentId, {startDate:startDate, endDate:endDate});
   }
   
   countGrammarErrors(studentId:string) : Observable<any> {

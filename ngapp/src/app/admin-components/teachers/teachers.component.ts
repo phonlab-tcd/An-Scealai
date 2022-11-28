@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 // import identifierModuleUrl from '@angular/compiler';
 import { TranslationService } from '../../translation.service';
 import config from 'abairconfig';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-teachers',
@@ -17,15 +19,12 @@ export class TeachersComponent implements OnInit {
   teacherCode : String;
   activeTeacherCodes : TeacherCodeDetails[];
   codeToDelete : String;
-
   teachers : Object[];
-
   copiedTextClass : String = "hidden";
-  modalClass : String = "hidden";
-
   baseUrl: string = config.baseurl;
+  dialogRef: MatDialogRef<unknown>;
 
-  constructor(private http: HttpClient, private router: Router, public ts: TranslationService) { }
+  constructor(private http: HttpClient, private router: Router, public ts: TranslationService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.getActiveTeacherCodes();
@@ -59,7 +58,6 @@ export class TeachersComponent implements OnInit {
     if(this.codeToDelete != null) {
       this.http.get(this.baseUrl + 'teacherCode/delete/' + this.codeToDelete).subscribe((res) => {
         this.getActiveTeacherCodes();
-        this.hideModal();
       });
     } else {
     }
@@ -76,14 +74,24 @@ export class TeachersComponent implements OnInit {
     this.copiedTextClass = "visible";
     setTimeout(() => this.copiedTextClass = "hiddenFade", 1000);
   }
-
-  showModal(code : String) {
-    this.modalClass = "visibleFade";
+  
+  openDeleteCodeDialog(code: String) {
     this.codeToDelete = code;
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.sure_you_want_to_delete_code,
+        confirmText: this.ts.l.delete,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50%',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.deleteTeacherCode()
+        }
+    });
   }
 
   goToUser(userId) {

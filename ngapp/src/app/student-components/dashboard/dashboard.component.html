@@ -1,5 +1,5 @@
 <!-- Display the written story along with edit options -->
-<div class="page bookContainer">
+<div class="bookContainer">
 
     <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
@@ -16,7 +16,7 @@
           <button class="modalBtn" (click)="hideModal();">
             {{ts.l.cancel}}
           </button>
-          <button class="modalBtn createBtnGreen" (click)="saveModal()">
+          <button class="modalBtn" (click)="saveModal()">
             {{ts.l.save}}
           </button>
         </div>
@@ -62,7 +62,7 @@
 
     <div class="optionsBtnContainer" (click)="toggleOptions();">
 
-      <div class="toggleShowOptions optionsBtn">
+      <div class="optionsBtn">
         <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
         <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
       </div>
@@ -71,6 +71,13 @@
       <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
         {{ts.l.edit_title_or_dialect}}
         <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+      </div>
+      
+      <!-- SPEECH TO TEXT-->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; speakStory()">
+        {{ts.l.dictation}}
+         <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span> <!-- Google icon, index.html-->
+         <button *ngIf="isRecording" class="notRecordingBtn blink"><i class="fas fa-stop-circle"></i></button>
       </div>
 
       <!-- DOWNLOAD -->
@@ -84,7 +91,7 @@
           class="optionsBtn optionsPopupBtn"
           target="_blank"
           href="{{downloadStoryUrl()}}">
-          Download
+          {{ts.l.download}}
           <i class="fas fa-download optionsBtnIcon"></i>
         </button>
         <select 
@@ -169,8 +176,7 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div 
-        class="textFieldContainer">
+      <div>
           <div 
             *ngIf="feedbackVisible"
             class="feedbackHeader">
@@ -316,5 +322,6 @@
 <app-synthesis-player
     #mySynthesisPlayer
     [text]=story.text
-    [storyId]=story._id>
+    [storyId]=story._id
+    [storyTitle]=story.title>
 </app-synthesis-player>

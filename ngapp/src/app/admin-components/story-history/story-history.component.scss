@@ -1,38 +1,12 @@
-.header {
+.storyHistoryHeader {
     color: white;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
     width: 60%;
     margin-left: 20%;
     border-radius: 5px 5px 0px 0px;
     font-size: 12pt;
     padding: 4px;
     margin-top: 2vh;
-
-}
-
-.highlightIcon {
-    float: right;
-    margin-right: 8px;
-    margin-top: 5px;
-    color: #304e38;
-    opacity: 0.3;
-}
-
-.highlightIcon:hover {
-    color: #70a87f;
-    opacity: 1;
-    transition: 0.5s;
-    cursor: pointer;
-}
-
-.iconHighlighted {
-    color: #70a87f;
-    opacity: 1;
-}
-
-.iconHighlighted:hover {
-    color: #304e38;
-    transition: 1s;
 }
 
 .storyContainer {
@@ -44,6 +18,13 @@
     padding: 8px;
     padding-bottom: 0px;
     overflow: auto;
+}
+
+.entry {
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #777777;
+    border-radius: 5px;
 }
 
 .eventEntry {
@@ -61,9 +42,34 @@
 
 .eventType {
     width: 50%;
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     border-radius: 0px 10px 10px 0px
+}
+
+.highlightIcon {
+    float: right;
+    margin-right: 8px;
+    margin-top: 5px;
+    color: var(--scealai-dark-green);
+    opacity: 0.3;
+}
+
+.highlightIcon:hover {
+    color: var(--scealai-green);
+    opacity: 1;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.iconHighlighted {
+    color: var(--scealai-green);
+    opacity: 1;
+}
+
+.iconHighlighted:hover {
+    color: var(--scealai-dark-green);
+    transition: 1s;
 }
 
 .textEntry {
@@ -72,13 +78,6 @@
     padding: 4px;
     border-radius: 5px;
     background-color: white;
-}
-
-.entry {
-    margin-bottom: 8px;
-    padding: 8px;
-    background-color: #777777;
-    border-radius: 5px;
 }
 
 :host ::ng-deep .highlightedGreen {
