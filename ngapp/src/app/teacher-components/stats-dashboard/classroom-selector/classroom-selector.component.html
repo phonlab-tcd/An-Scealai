@@ -1,11 +1,37 @@
-<div class="header">
-    <div>Select a classroom</div>
+<div class="selectorHeader">
+    <div>{{ts.l.select_a_classroom}}</div>
     <div>
         <i class="fa fa-times xbutton" (click)="closeDialog(null)"></i>
     </div>
 </div>
-<div class="classroom-card-container">
-    <div *ngFor="let classroom of classrooms" class="classroom-card" (click)="closeDialog(classroom)">
-        <div class="class-title">{{classroom.title}}</div>
-    </div>
+
+<div class="checkBox"> 
+  <input type="checkbox" [(ngModel)]="showDatePicker" name="dateCheckBox"> {{ts.l.date_range}}
 </div>
+
+<div class="contentsContainer" *ngIf="classrooms && classrooms.length > 0; else noClassrooms" >
+  <!-- Date picker -->
+  <div class="datePicker" *ngIf="showDatePicker">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ts.l.enter_date_range}}</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">{{ts.l.invalid_start_date}}</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{ts.l.invalid_end_date}}</mat-error>
+    </mat-form-field>
+  </div>
+  <!-- Classroom list -->
+  <div class="classroom-card-container">
+      <div *ngFor="let classroom of classrooms" class="classroom-card" (click)="closeDialog(classroom)">
+          <div class="class-title">{{classroom.title}}</div>
+      </div>
+  </div>
+</div>
+<!-- Display if no classrooms -->
+<ng-template #noClassrooms>
+    <div class="noClassrooms"> {{ts.l.add_students_for_statistics}}</div>
+</ng-template>

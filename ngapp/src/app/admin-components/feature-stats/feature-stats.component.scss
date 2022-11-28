@@ -1,29 +1,6 @@
-.content {
-    width: 100%;
-    padding: 3vh;
-    display: flex;
-    justify-content: space-around;
-}
-
-.container {
-  width: 900px;
-  background-color: white;
-  border-radius: 4px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.loaderContainer {
-    position: absolute;
-    width: 90%;
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.headerTitle {
+  font-size: 16pt;
+  padding-top: 10px;
 }
 
 .dataOptions {
@@ -39,15 +16,13 @@
 }
 
 .option:hover {
-    color: #70a87f;
+    color: var(--scealai-green);
     text-decoration: none;
     cursor: pointer;
 }
 
-.header {
-  font-size: 16pt;
-  font-weight: bold;
-  padding-top: 10px;
+.adminContent {
+    justify-content: space-around;
 }
 
 .datePicker {
@@ -55,7 +30,7 @@
 }
 
 .submitButton {
-    background-color: #70a87f;
+    background-color: var(--scealai-green);
     color: white;
     padding: 5px;
     padding-left: 10px;
@@ -66,17 +41,14 @@
 
 .submitButton:hover {
     cursor: pointer;
-    background-color: #304e38;
+    background-color: var(--scealai-dark-green);
 }
 
-.displayData {
-  padding: 20px;
-}
-
-.profileHeader {
+.card {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
   text-align: center;
-  font-weight: bold;
-  font-size: 14pt;
 }
 
 .featureName {
@@ -88,12 +60,5 @@
 .featureValue {
   font-size: 14pt;
   padding-left: 20px;
-  text-align: center;
-}
-
-.card {
-  display: flex;
-  flex-direction: row;
-  padding: 10px;
   text-align: center;
 }

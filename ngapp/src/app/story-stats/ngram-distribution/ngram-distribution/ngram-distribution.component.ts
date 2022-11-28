@@ -7,7 +7,7 @@ import config from 'abairconfig';
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
 
-const STOP_WORDS = ['.', ',', '?', '!', '-', ';', ' ', '\n', '\n\n'];
+const STOP_WORDS = ['.', ',', '?', '!', '-', ';', ' ', '\n', '\n\n', ':'];
 
 type CountDict = {key: string; count: number};
 

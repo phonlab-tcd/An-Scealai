@@ -1,10 +1,629 @@
 @import './app/gramadoir-tags.scss';
 @import './quill.fonts.scss';
 
+:root {
+  --scealai-green: #70a87f;
+  --scealai-med-green: #437250;
+  --scealai-dark-green: #304e38;
+  --scealai-light-green: #91ffa5;
+  --scealai-yellow: #e5bd3b;
+  --scealai-yellow-hover: #ad8f2b;
+  --scealai-orange: #c15a2e;
+  --scealai-cream: #f1e9d8;
+  --scealai-cream-2: #f7f2e7;
+  --scealai-light-gray: #999999;
+  --scealai-dark-gray: #424242;
+  --scealai-light-brown: #b3a995;
+  --scealai-med-brown: #534d3d;
+  --scealai-med-brown-hover: #3b372b;
+  --scealai-light-blue: #0088ff6b;
+  --scealai-light-blue-hover: #0088ff36;
+  --scealai-med-blue: #8fcaff;
+  --scealai-gray: #d1d1d1;
+  --orange-text: #ff9100;
+  --dark-text: #261500;
+  --form-background: #e6e8ed;
+  --modal-hover: #707070;
+  --delete-red: #dd000e;
+  --delete-red-hover: #b7000a;
+  --delete-red-2: #d6123c;
+  --delete-red-2-hover: #9b0d2b;
+  --notification-button: #bd2323;
+  --scealai-delete-red-3: #c40021;
+  --scealai-delete-red-3-hover: #8f0018;
+}
+
 html,body.rootBody {
   height: 100%;
 }
 
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html {
+  overflow-y: hidden;
+}
+
+body.rootBody {
+   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+   font-family: "Open Sans";
+   overflow-y: scroll;
+}
+
+//////////////////////////////////////////////////////////////////////////////// CONTAINERS / HEADERS
+.bookImg {
+  z-index: -10;
+  width: 90%;
+  height: 500px;
+  position: fixed;
+  right: 5%;
+}
+
+.bookContentsContainer {
+    width: 80%;
+    margin-left: 10%;
+    z-index: 10;
+}
+
+.page {
+    padding-top: 20px;
+}
+
+.container {
+    width: 900px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.contentContainer {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.adminContent {
+  width: 100%;
+  padding: 3vh;
+  display: flex;
+}
+
+.aboutContent {
+    text-align: left;
+}
+
+.contentBody {
+    display: flex;
+    width: 100%;
+}
+
+.headerTitle {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.classContainer {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    height: 80vh;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.classHeader {
+    width: 100%;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+    display: flex;
+    padding: 8px;
+    padding-left: 16px;
+    font-size: 16pt;
+}
+
+.classBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    padding-top: 0px;
+    overflow: auto;
+    height: 67.5vh;
+}
+
+//////////////////////////////////////////////////////////////////////////////// RECORDINGS / SYNTHESIS
+
+.bookContainerSynth {
+  width: 70%;
+  margin-left: 15%;
+  z-index: 10;
+  border-radius: 5px;
+  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.recordingStoryContainer {
+  margin-top: 10px;
+}
+
+.recordingStoryHeader {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px 4px 0px 0px;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.textContainerSynth {
+  width: 90%;
+  margin-left: 5%;
+  height: 290px;
+  color: var(--dark-text);
+  background-color: var(--scealai-cream-2);
+  border: 1px solid var(--dark-text)a2;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  overflow: auto;
+}
+
+.dividerLine {
+  border-top: 1px solid var(--modal-hover);
+  width: 100%;
+}
+
+.changeSplitBtn {
+  background-color: var(--scealai-green);
+  border-radius: 4px;
+  margin-right: 5px;
+  color: white;
+}
+
+.changeSplitBtn:hover {
+  background-color: var(--scealai-med-green);
+}
+
+//////////////////////////////////////////////////////////////////////////////// TEACHER STYLES
+.classroomCard {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    color: white;
+    font-size: 14pt;
+    background-color: var(--scealai-med-brown);
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.classroomCard:hover {
+    color: var(--orange-text);
+    background-color: var(--scealai-med-brown-hover);
+    transition: color, background-color, 0.5s;
+    cursor: pointer;
+}
+
+.classroomKey {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--scealai-gray);
+    color: var(--scealai-dark-gray);
+}
+
+//////////////////////////////////////////////////////////////////////////////// ADMIN / STUDENT STYLES
+
+.adminLoaderContainer {
+    position: absolute;
+    width: 90%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    color: var(--scealai-med-green);
+}
+
+.contentsTitleContainer {
+    width: 100%;
+    padding: 5px;
+    display:flex;
+    justify-content: space-between;
+}
+
+.contentsDateTitle {
+    font-size: 14pt;
+    color: var(--scealai-orange);
+}
+
+.contentsLinkTitle {
+    float: left;
+    margin-left: 1%;
+    font-size: 14pt;
+    color: var(--scealai-orange);
+}
+
+.contentSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+//////////////////////////////////////////////////////////////////////////////// BUTTONS
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.deleteCheckbox {
+    float:left;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.notificationBtn {
+    margin-left: 5px;
+    background-color: var(--notification-button);
+    color: white;
+    font-size: 8pt;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+    box-shadow: inset 0px -9px 9px -14px rgba(0,0,0,0.75);
+}
+
+.notificationBtn:hover {
+  cursor: pointer;
+  background-color: #d82727;
+}
+
+.btn {
+  color: white;
+  font-size: 14pt;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 30px;
+  background-color: var(--scealai-yellow);
+  z-index: 20;
+}
+
+// .btn:hover {
+//   background-color: var(--scealai-yellow-hover);
+//   color: white;
+// }
+
+.deleteRedBtn {
+    background-color: var(--scealai-delete-red-3);
+    color: white;
+}
+
+.deleteRedBtn:hover {
+    background-color: var(--scealai-delete-red-3-hover);
+}
+
+.createBtnGreen {
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.createBtnGreen:hover {
+    background-color: var(--scealai-dark-green);
+}
+
+.greenBtn {
+  font-size: 12pt;
+  background-color: var(--scealai-green);
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.greenBtn:hover {
+  cursor: pointer;
+  color: var(--scealai-light-green);
+  -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
+}
+
+.languageButton {
+    background-color: var(--scealai-green);
+    color: white;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.languageButton:hover { 
+    cursor: pointer;
+    background-color: var(--scealai-med-green);
+}
+
+.languageButtonSelected {
+    background-color: var(--scealai-med-green);
+}
+
+.backArrow {
+    margin-right: 8px;
+}
+
+.backArrow:hover {
+    cursor: pointer;
+    color: var(--orange-text);
+    transition: color, 0.5s;
+}
+
+//////////////////////////////////////////////////////////////////////////////// MODALS
+
+.modalContainer {
+    position: absolute;
+    z-index: 5;
+    width: 90%;
+    height: 500px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modalContent {
+    padding: 25px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+    box-shadow: -1px 10px 17px 0px rgba(0,0,0,0.5);
+}
+
+.modalBtn {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    margin-top: 15px;
+}
+
+.modalText {
+    font-size: 14pt;
+    white-space: normal;
+    color: black;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hiddenFade {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s ease-in;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.visibleFade {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.3s, opacity 0.3s ease-out;
+}
+
+//////////////////////////////////////////////////////////////////////////////// PROFILE / REGISTRATION
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+.usernameErrorText {
+    font-size: 12pt;
+    color: red;
+    margin-top: 4px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.userInfoTextarea {
+    height: 30px;
+    margin-left: 10px;
+    padding-left: 5px;
+    font-size: 12pt;
+    resize: none;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.registerContainer {
+    width: 400px;
+    display: inline-block;
+    color: white;
+    border-radius: 10px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.formTitle {
+    margin-bottom: -20px;
+    margin-top: 5px;
+    font-size: 18pt;
+}
+
+.formContainer {
+    width: 400px;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    color: var(--dark-text);
+    background-color: var(--form-background);
+    border-radius: 0px 0px 10px 10px;
+}
+
+//////////////////////////////////////////////////////////////////////////////// ICONS / LOGOS
+
+.headerIconContainer {
+    margin-left: auto;
+    display: flex;
+    overflow-x: auto;
+}
+
+.headerIconBtn {
+    font-size: 12pt;
+    margin-left: 8px;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 5px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.headerIconBtn:hover {
+    cursor: pointer;
+    color: var(--scealai-light-green);
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+}
+
+.headerIcon {
+    margin-left: 5px;
+}
+
+button:focus, input:focus, audio:focus{
+  outline: 0;
+}
+
+.footer {
+  margin-left: 5%;
+  width: 90%;
+  display: flex;
+}
+
+.logoContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.sponsorCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+}
+
+.cardLeft {
+    width: 60%;
+    margin-right: 5%;
+}
+
+.cardRight {
+    width: 35%;
+}
+
+.logoCardImg {
+    width: 100%;
+}
+
+.logoImg {
+    height: 80px;
+    margin: 10px;
+}
+
+.textBlock {
+    padding: 20px;
+}
+
+.smallTextBlock {
+    padding: 10px;
+}
+
+.testimonialFooter {
+    width: 100%;
+    text-align: right;
+}
+
+.greenLinkText {
+    margin-top: 10px;
+    color: var(--scealai-green);
+    text-decoration: underline;
+}
+
+.greenLinkText:hover {
+    cursor: pointer;
+}
+
+.recordingIcon {
+    font-size: 14pt;
+    margin-left: 10px;
+    color: var(--scealai-delete-red-3);
+    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@-webkit-keyframes blinker {  
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+//////////////////////////////////////////////////////////////////////////////// QUILL STYLES
 .ql-container {
   margin: auto;
 }
@@ -33,47 +652,7 @@ html,body.rootBody {
   }
 }
 
-html {
-  overflow-y: hidden;
-}
-body.rootBody {
-  overflow-y: scroll;
-}
-
-body.rootBody {
-   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
- -webkit-background-size: cover;
-    -moz-background-size: cover;
-      -o-background-size: cover;
-         background-size: cover;
- font-family: "Open Sans";
-}
-
-.btn {
-  color: white;
-  font-size: 14pt;
-  padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 30px;
-  background-color: #e5bd3b;
-  z-index: 20;
-}
-
-.btn:hover {
-  background-color: #ad8f2b;
-  color: white;
-}
-
-.errorMessage {
-  color: red;
-  margin-top: 10px;
-}
-
-button:focus, input:focus, audio:focus{
-  outline: 0;
-}
-
+//////////////////////////////////////////////////////////////////////////////// Chatbot
 .add-personal-topics{
   position: relative;
   border-radius: 5px;
@@ -94,18 +673,6 @@ button:focus, input:focus, audio:focus{
   font-style: italic;
 }
 
-#go-to-taidhgin{
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  background-color:lightsalmon;
-}
-
-#go-to-taidhgin:hover{
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-}
-
-/* Chatbot Styles */
 /* Dialogue and Photos */
 .bot-message-photo, .user-message-photo{
   position:relative;
@@ -441,6 +1008,3 @@ button:focus, input:focus, audio:focus{
     margin-left: 10%;
   }
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

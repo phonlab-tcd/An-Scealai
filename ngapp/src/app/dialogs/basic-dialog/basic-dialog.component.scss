@@ -1,0 +1,34 @@
+.dialogContainer {
+  padding:10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirmBtnGreen {
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.confirmBtnGreen:hover {
+    background-color: var(--scealai-dark-green);
+}
+
+.codeView {
+    background-color: var(--scealai-gray);
+    border: 1px solid var(--scealai-light-gray);
+    border-radius: 4px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 16px;
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
+    width: 80%;
+}

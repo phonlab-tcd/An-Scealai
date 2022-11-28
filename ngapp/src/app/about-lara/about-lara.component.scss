@@ -1,22 +1,10 @@
 .container {
-    width: 900px;
-    background-color: white;
-    border-radius: 4px;
-    padding-top: 20px;
     padding-bottom: 20px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-}
-
-.content {
-    text-align: left;
+    width: 95%;
 }
 
 .headerTitle {
     font-size: 15pt;
-    font-weight: bold;
     text-align: center;
     padding-bottom: 15px;
 }

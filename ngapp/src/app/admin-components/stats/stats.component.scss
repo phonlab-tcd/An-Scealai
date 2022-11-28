@@ -12,21 +12,14 @@
   margin-top: 20px;
 }
 
+.chart-container {
+  width: 600px;
+  height: 600px;
+}
+
 #canvas {
   width: 600px;
   height: 300px;
 }
 
-.loaderContainer {
-  position: absolute;
-  width: 90%;
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.chart-container {
-  width: 600px;
-  height: 600px;
-}

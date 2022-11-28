@@ -6,6 +6,8 @@ import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { NotificationService } from '../../notification-service.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -18,14 +20,13 @@ export class TeacherDashboardComponent implements OnInit {
               private auth: AuthenticationService,
               private router: Router,
               public ts : TranslationService,
-              public ns: NotificationService) { }
+              public ns: NotificationService,
+              private dialog: MatDialog,) { }
               
   
   classrooms : Observable<Classroom[]>;
-  modalClass : string = "hidden";
   newClassroom : Classroom = new Classroom();
-  errorText : string;
-  registrationError : boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     this.classrooms = this.getClassrooms();
@@ -45,11 +46,6 @@ export class TeacherDashboardComponent implements OnInit {
     this.router.navigateByUrl('teacher/classroom/' + id);
   }
 
-  addNewClassroom() {
-    this.newClassroom.title = null;
-    this.showModal();
-  }
-
   createNewClassroom() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
@@ -61,19 +57,13 @@ export class TeacherDashboardComponent implements OnInit {
       this.newClassroom.code = newCode;
       this.classroom.createClassroom(this.newClassroom).subscribe((res) => {
         this.classrooms = this.getClassrooms();
-        this.hideModal();
       }, (err) => {
-        this.showError(err);
+        alert(err.message);
       });
     }, (err) => {
-      this.showError(err);
+      alert(err.message);
     });
     
-  }
-
-  showError(err) {
-    this.errorText = err.message;
-    this.registrationError = true;
   }
 
   getUniqueCode(codes: string[]) : string {
@@ -87,13 +77,29 @@ export class TeacherDashboardComponent implements OnInit {
   getNumberOfStudents(classroom : Classroom) : number{
     return classroom.studentIds.length;
   }
-
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
+  
+  openCreateClassroomDialog() {
+    this.newClassroom.title = null;
+    if(this.newClassroom) {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.add_new_classroom,
+          message: this.ts.l.enter_title,
+          type: 'updateText',
+          confirmText: this.ts.l.create,
+          cancelText: this.ts.l.cancel
+        },
+        width: '50vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if(res) {
+            this.newClassroom.title = res[0];
+            this.createNewClassroom();
+          }
+      });
+    }
   }
 
 }

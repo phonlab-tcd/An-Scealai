@@ -27,3 +27,5 @@ api/globalConfig.json
 /.neimhin
 
 /shell/*.log
+
+load-test/.env

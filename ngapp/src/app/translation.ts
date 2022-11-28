@@ -1077,10 +1077,7 @@ export default {
     en: 'Story History' },
   scealai_feature_statistics: {
     ga: 'Staitisticí Feidhmiúla an Scéalaí',
-    en: 'SScéalaí Features Statistics' },
-  date_range: {
-    ga: 'Raon Sonraíochta',
-    en: 'Date Range' },
+    en: 'Scéalaí Features Statistics' },
   previous_data: {
     ga: 'Sonraí roimhe seo',
     en: 'Previous Data' },
@@ -1996,5 +1993,35 @@ export default {
     en: 'Search for words in Irish or English from Foclóir Gaeilge-Béarla Ó Dónaill using the search bar above' },
   enter_a_word_to_lookup: {
     ga: 'Líon isteach focal le cuardach',
-    en: 'Please enter a word to lookup' },    
+    en: 'Please enter a word to lookup' }, 
+  add_students_for_statistics: {
+    ga: 'Cur mic léinn i rang chun a gcuid staitisticí a scrúdú',
+    en: 'Add students to a classroom to view their statistics' },
+  legend: {
+    ga: 'Eochair eolais',
+    en: 'Legend' },
+  average_word_counts: {
+    ga: 'Líon na bhfocal ar an meán',
+    en: 'Average Word Counts' },
+  ngram_distribution: {
+    ga: 'Dáileadh na N-gram',
+    en: 'N-gram distribution' },
+  statistics_dashboard: {
+    ga: 'Deais Staitisticí',
+    en: 'Statistics Dashboard' },
+  select_a_classroom: {
+    ga: 'Roghnaigh rang',
+    en: 'Select a classroom' },
+  date_range: {
+    ga: 'Raon na nDátaí',
+    en: 'Date Range' },
+  dictation: {
+    ga: 'Deachtú',
+    en: 'Dictation' },
+  download: {
+    ga: 'Íoslódáil',
+    en: 'Download' },
+  play: {
+    ga: 'Éist',
+    en: 'Play' } 
 }

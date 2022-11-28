@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
@@ -86,6 +87,9 @@ import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard/classroom-selector/classroom-selector.component';
+import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
+import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
+import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +145,9 @@ import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard
     SynthVoiceSelectComponent,
     StatsDashboardComponent,
     ClassroomSelectorComponent,
+    BasicDialogComponent,
+    StudentStatsDashboardComponent,
+    RecordingDialogComponent,
   ],
   imports: [
     RegisterModule,

@@ -30,8 +30,6 @@ let storyRoutes;
     require('../endpoints_functions/story/author');
   const feedbackAudio =
     require('../endpoints_functions/story/feedbackAudio');
-  const averageWordCount =
-    require('../endpoints_functions/story/averageWordCount');
   const countGrammarErrors =
     require('../endpoints_functions/story/countGrammarErrors');
 
@@ -42,6 +40,10 @@ let storyRoutes;
     require('../endpoints_functions/story/viewFeedback');
   const updateStoryAndCheckGrammar =
     require('../endpoints_functions/story/updateStoryAndCheckGrammar');
+  const averageWordCount =
+    require('../endpoints_functions/story/averageWordCount');
+  const getStoriesByDate =
+    require('../endpoints_functions/story/getStoriesByDate');
 
   storyRoutes = makeEndpoints({
     get: {
@@ -50,13 +52,14 @@ let storyRoutes;
       '/owner/:id': ownerId,
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
-      '/averageWordCount/:studentId': averageWordCount,
       '/countGrammarErrors/:id': countGrammarErrors,
     },
     post: {
       '/create': create,
       '/viewFeedback/:id': viewFeedback,
       '/updateStoryAndCheckGrammar': updateStoryAndCheckGrammar,
+      '/averageWordCount/:studentId': averageWordCount,
+      '/getStoriesByDate/:studentId': getStoriesByDate,
     },
   });
 })();
@@ -212,6 +215,7 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
         // get audio file from collection and save id to story audio id
         let uploadStream = bucket.openUploadStream("audio-feedback-for-story-" + story._id.toString());
         story.feedback.audioId = uploadStream.id;
+        story.feedback.seenByStudent = false;
         story.save();
         // pipe data in stream to the audio file entry in the db 
         readableTrackStream.pipe(uploadStream);

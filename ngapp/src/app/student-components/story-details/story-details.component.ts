@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
 import { TranslationService } from '../../translation.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-story-details',
@@ -18,15 +19,8 @@ export class StoryDetailsComponent implements OnInit {
 
   story : Story = new Story();
 
-//get current story using id from route
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.storyService.getStory(params['id']).subscribe(
-        story => {
-          this.story = story;
-        }
-      );
-    })
+  async ngOnInit() {
+    this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
   }
 
   dialects = [

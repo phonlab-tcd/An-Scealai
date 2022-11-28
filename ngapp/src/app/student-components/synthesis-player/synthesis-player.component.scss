@@ -1,13 +1,16 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
 .synth {
   display: grid;
   margin: 20px;
   padding: 20px;
   border-radius: 15px;
+  margin: 30px; 
+  background-color: rgba(white, 0.5);
+  border: 2px;
+}
+
+.synthHeader {
+  display: flex;
+  justify-content: space-between;
 }
 
 .synth .reload {
@@ -23,7 +26,7 @@
 }
 
 .synth .reload:hover {
-  background-color: #8fcaff;
+  // background-color: var(--scealai-med-blue);
   color: black;
   font-weight: bold;
 }
@@ -35,7 +38,7 @@
 }
 
 .synth .fast-synth:hover {
-  background-color: #8fcaff;
+  // background-color: var(--scealai-med-blue);
   color: black;
   border-radius: 2px;
   font-weight: bold;
@@ -51,4 +54,17 @@
   text-align: left;
   flex-wrap: wrap;
   justify-content: left;
+}
+
+.playAllButton {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  width: 100px;
+  text-align: center;
+  background-color: #95CDCD;
+}
+
+.playAllButton:hover:enabled{
+  color: white;
 }

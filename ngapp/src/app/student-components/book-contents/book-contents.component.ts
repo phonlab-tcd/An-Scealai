@@ -33,6 +33,7 @@ export class BookContentsComponent implements OnInit {
   isFromAmerica: boolean = false;
   isEnrolled: boolean = false;
   searchText: string = '';
+  storiesLoaded: boolean = false;
 
   constructor(
     private storyService: StoryService,
@@ -61,7 +62,8 @@ export class BookContentsComponent implements OnInit {
       .subscribe(
         (data) => {
           this.stories = data.map(storyData => new Story().fromJSON(storyData));
-          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
+          this.storiesLoaded = true;
         },
         window.alert
       );
@@ -149,6 +151,10 @@ export class BookContentsComponent implements OnInit {
   
   goToMessages() {
     this.router.navigateByUrl('/messages/' + this.userId);
+  }
+  
+  goToStats() {
+    this.router.navigateByUrl('/student-stats');
   }
 
 }

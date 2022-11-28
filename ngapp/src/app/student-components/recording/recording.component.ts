@@ -10,6 +10,8 @@ import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 declare var MediaRecorder : any;
 
@@ -23,7 +25,8 @@ export class RecordingComponent implements OnInit {
   constructor(private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService, private engagement: EngagementService) { }
+              private synthesis: SynthesisService, private engagement: EngagementService,
+              private dialog: MatDialog) { }
   
   // Synthesis variables
   story: Story = new Story();
@@ -31,7 +34,7 @@ export class RecordingComponent implements OnInit {
   sentences: Sentence[] = [];
   chosenSections: Section[];
 
-  // Audio variables
+  dialogRef: MatDialogRef<unknown>;
   
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
@@ -56,8 +59,6 @@ export class RecordingComponent implements OnInit {
   sectionChunks: {[key:number]:any[]}  = [];
 
   // UI variables
-  modalClass : string = "hidden";
-  modalChoice: Subject<boolean> = new Subject<boolean>();
   recordingSaved: boolean = true;
   popupVisible = false;
   errorText : string;
@@ -76,7 +77,6 @@ export class RecordingComponent implements OnInit {
   * Reset variables when recording text updated (function called in updateStory())
   */
   ngOnInit() {
-    this.modalClass = "hidden";
     this.chunks = [];
     this.sectionAudioSources = this.paragraphAudioSources;
     this.sectionBlobs = this.paragraphBlobs;
@@ -363,24 +363,6 @@ export class RecordingComponent implements OnInit {
   stopSection(section) {
     section.stop();
     section.removeHighlight();
-  }
-
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
-    this.modalChoice.next(false);
-  }
-
-  setModalChoice() {
-    this.modalChoice.next(true);
-  }
-
-  saveModal() {
-    this.saveRecordings();
-    this.modalChoice.next(true);
   }
   
   goToDashboard() {
