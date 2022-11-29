@@ -3,12 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import Quill from 'quill';
 import { map, retry } from 'rxjs/operators';
 import { TranslationService } from 'app/translation.service';
-import {
-  GramadoirRuleId,
-  GrammarService,
-  GramadoirTag,
-  DisagreeingVowelIndices,
-} from 'app/grammar.service';
+import { GramadoirRuleId, GrammarService, GramadoirTag, DisagreeingVowelIndices} from 'app/grammar.service';
 import {EngagementService} from "../engagement.service";
 import { reject, takeRight } from 'lodash';
 import {AuthenticationService} from "../authentication.service";
@@ -51,15 +46,15 @@ const Parchment = Quill.import('parchment');
 
 const gramadoirTag =
   new Parchment.Attributor.Attribute(
-    'gramadoir-tag',
-    'data-gramadoir-tag',
+    'gramadoir-tag', // not in css file
+    'data-gramadoir-tag',// not in css file
     {scope: Parchment.Scope.INLINE});
 
 Quill.register(gramadoirTag);
 
 const gramadoirTagStyleType =
   new Parchment.Attributor.Attribute(
-    'gramadoir-tag-style-type',
+    'gramadoir-tag-style-type',// not in css file
     'data-gramadoir-tag-style-type',
     {scope: Parchment.Scope.INLINE});
 
@@ -67,7 +62,7 @@ Quill.register(gramadoirTagStyleType);
 
 const vowelAgreementAttributor =
   new Parchment.Attributor.Attribute(
-    'vowel-agreement-tag',
+    'vowel-agreement-tag', // not in css file
     'data-vowel-agreement-tag',
     {scope: Parchment.Scope.INLINE});
 
@@ -75,7 +70,7 @@ Quill.register(vowelAgreementAttributor);
 
 const genitiveAttributor =
   new Parchment.Attributor.Attribute(
-    'genitive-tag',
+    'genitive-tag', // not in css file
     'data-genitive-tag',
     {scope: Parchment.Scope.INLINE});
 
@@ -109,12 +104,18 @@ export class QuillHighlightService {
     private auth: AuthenticationService,
   ) { }
 
+  /* Get most recent message from mouse over */
   getMostRecentMessage() {
     if (!this.outMessages) { return ''; }
     if (!this.outMessages[this.ts.l.iso_code]) { return ''; }
     return this.outMessages[this.ts.l.iso_code];
   }
 
+  /* 
+   * Get gramadoir errors in En and Ga
+   * Store sentences and associated grammar tags to cache for both lang
+   * Get error tags formatted from gramadoir response
+  */
   makeGramadoirRequest(url: GramadoirUrl, sentencesWithOffsets, currentErrorTypes) {
     return from(sentencesWithOffsets.map(async ([offset, sentence],idx) => {
         const get = (lang)=> this.grammar.gramadoirObservable(sentence, lang, this.grammar.gramadoirUrl).pipe(retry(2)).toPromise();
@@ -123,12 +124,24 @@ export class QuillHighlightService {
         this.grammar.addToGramadoirCache(sentence, 'ga', errorsGa);
         const errorTags = this.gramadoir2QuillTags(errorsEn, currentErrorTypes, offset);
         errorTags.forEach((e, i) => {
-            e.messages.ga = errorsGa[i].msg;
+            e.messages.ga = errorsGa[i].msg; // tag created from english response, set irish message manually
         });
         return [errorTags,sentence,idx];
     }));
   }
 
+  /*
+   * Clear all error tags and get story text from quill
+   * Get grammar error promise from an gramadoir in Ga
+   * Tokenize story text into sentences 
+   * Get offsets of each sentence within story text context
+   * Call An Gramadoir with offset sentences (gets tags in both lang)
+   * Concatenate tags to tag array, apply formatting for an gramadoir tags
+   * Add error/sentence pairs to the DB
+   * Call Genitive checker, format tags using same function as for an gramadoir
+   * Set genitive error tag messages
+   * Return a dictionary with the counts of error types (gets calculated in the tag formatting function)
+  */
   async updateGrammarErrors(quillEditor: Quill, text: string, grammarTagFilter, storyId:string): Promise<object> {
     if (!quillEditor) { return Promise.reject('quillEditor was falsey'); }
 
@@ -211,37 +224,6 @@ export class QuillHighlightService {
     return currentGramadoirErrorTypes;
   }
 
-  private applyVowelAgreementFormatting(
-    quillEditor: Quill,
-    v: DisagreeingVowelIndices) {
-
-    (v as VowelAgreementIndex).isFirst = true;
-
-    const firstVowelAttributeValue: string =
-      JSON.stringify(v);
-
-    quillEditor.formatText(
-      v.first,
-      1,
-      {
-        'vowel-agreement-tag': firstVowelAttributeValue,
-      },
-      'api');
-
-    (v as VowelAgreementIndex).isFirst = false;
-
-    const secondVowelAttributeValue: string =
-      JSON.stringify(v);
-
-    quillEditor.formatText(
-       v.second,
-       1,
-       {
-         'vowel-agreement-tag': secondVowelAttributeValue,
-       },
-       'api');
-  }
-
   /**
    * Maps an array of gramadoir tags to quill tags
    * @param tagData - raw gramadoir tags
@@ -267,6 +249,7 @@ export class QuillHighlightService {
     )
   }
 
+  /* Create an array of error tags the user wants to display based on its type */
   filterGramadoirTags(filter: object) {
     this.currentFilteredHighlightTags = [];
     this.currentGramadoirHighlightTags
@@ -278,15 +261,46 @@ export class QuillHighlightService {
 
   }
 
-  applyManyVowelAgreementFormatting(
-    quillEditor: Quill,
-    vs: DisagreeingVowelIndices[]) {
+  /* Apply css formatting for an array of broad/slender error objects */
+  applyManyVowelAgreementFormatting(quillEditor: Quill, vs: DisagreeingVowelIndices[]) {
     if (!vs) { return; }
     for (const v of vs) {
       this.applyVowelAgreementFormatting(quillEditor, v);
     }
   }
+  
+  /* Apply vowel aggreement css to a broad/slender error object */
+  private applyVowelAgreementFormatting(quillEditor: Quill, v: DisagreeingVowelIndices) {
 
+    (v as VowelAgreementIndex).isFirst = true;
+
+    const firstVowelAttributeValue: string = JSON.stringify(v);
+
+    quillEditor.formatText(
+      v.first,
+      1,
+      {
+        'vowel-agreement-tag': firstVowelAttributeValue,
+      },
+      'api');
+
+    (v as VowelAgreementIndex).isFirst = false;
+
+    const secondVowelAttributeValue: string = JSON.stringify(v);
+
+    quillEditor.formatText(
+       v.second,
+       1,
+       {
+         'vowel-agreement-tag': secondVowelAttributeValue,
+       },
+       'api');
+  }
+
+  /* Add error highlighting to gramadoir and 
+  * genitive tags if there is an array of filtered tags 
+  * Call function to generate tooltip
+  */
   applyGramadoirTagFormatting(quillEditor: Quill) {
     if (!this.currentFilteredHighlightTags) { return; }
     this.currentFilteredHighlightTags
@@ -320,14 +334,15 @@ export class QuillHighlightService {
     this.generateGramadoirTagTooltips(quillEditor);
   }
 
+  /* 
+   * Get broad/slender error object from grammar service and apply css
+   * Create grammar popup for gramadoir, genitive, and vowel tags
+  */
   generateGramadoirTagTooltips(quillEditor: Quill) {
-
     if (this.showLeathanCaol) {
       const disagreeingVowelIndices =
         this.grammar.getDisagreeingVowelIndices(quillEditor.getText());
-      this.applyManyVowelAgreementFormatting(
-        quillEditor,
-        disagreeingVowelIndices);
+      this.applyManyVowelAgreementFormatting(quillEditor, disagreeingVowelIndices);
     }
 
     const t1 = 'data-gramadoir-tag';
@@ -337,15 +352,17 @@ export class QuillHighlightService {
     tagElements.forEach(t=>this.createGrammarPopup(quillEditor, t));
   }
 
+  /* Remove any remaining custom-tooltips from the DOM.
+   * Without doing this, a tooltip can live on past its
+   * corresponding highlight tag if the user stays hovering
+   * on the highlight tag while the grammar error is fixed. 
+  */
   clearAllGramadoirTags(quillEditor: Quill) {
     this.clearGramadoirTagFormatting(quillEditor);
-    // remove any remaining custom-tooltips from the DOM.
-    //  -> without doing this, a tooltip can live on past its
-    //     corresponding highlight tag if the user stays hovering
-    //     on the highlight tag while the grammar error is fixed.
     document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
   }
 
+  /* Clear all grammar tags for an gramadoir, genitive, and broad/slender errors */
   private clearGramadoirTagFormatting(quillEditor: Quill) {
     quillEditor.formatText(
         0, // from the very beginning of the text
@@ -369,10 +386,14 @@ export class QuillHighlightService {
     );
   }
 
-    private createGrammarPopup(
-    quillEditor: Quill,
-    tagElement: Element,
-    ) {
+  /*
+   * For a grammar tag, create a tooltip popup
+   * Function 1: set tooltip attributes for an gramadoir
+   * Function 2: set tooltip attributes for genitive tags 
+   * Function 3: set tooltip attributes for vowel tags
+   * Add css classes for tooltip mouse over
+  */
+    private createGrammarPopup(quillEditor: Quill, tagElement: Element,) {
       const messages = {en: '',ga: ''};
       let errorType: string;
       let start = 0;
@@ -409,7 +430,7 @@ export class QuillHighlightService {
         if(t3) {
           const parsed = JSON.parse(t3);
           //console.log(parsed);
-          messages.en += '<hr>' + (this.ts.getLanguageFromCode('en')as any).vowels_should_agree;
+          messages.en += '<hr>' + (this.ts.getLanguageFromCode('en') as any).vowels_should_agree;
           messages.ga += '<hr>' + (this.ts.getLanguageFromCode('ga') as any).vowels_should_agree;
           start = parsed.first;
           length = parsed.second - parsed.first;
@@ -436,11 +457,14 @@ export class QuillHighlightService {
     });
   }
 
-  private mouseOverTagElem(
-    quillEditor: Quill,
-    error: QuillHighlightTag,
-    tagElement: Element,
-  )
+  /* 
+   * Set data selected css attribute and out message
+   * Set quill scroll settings
+   * Show and position tooltip
+   * Set overflow parameters so the tooltip fits on the screen
+   * Send engagement event to the DB
+   */
+  private mouseOverTagElem(quillEditor: Quill, error: QuillHighlightTag, tagElement: Element)
   {
     tagElement.setAttribute('data-selected','');
     this.outMessages = error.messages;

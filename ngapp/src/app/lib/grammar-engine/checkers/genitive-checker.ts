@@ -19,15 +19,15 @@ async function check(input: string):Promise<ErrorTag[]>{
     const errorTags: ErrorTag[] = errors.map(error => {
       return {
         errorText: input.slice(error.fromx, error.tox),
-        messageGA: ERROR_INFO['GENITIVE'].messageEN,
-        messageEN: ERROR_INFO['GENITIVE'].messageGA,
+        messageGA: ERROR_INFO['GENITIVE-HOME'].messageEN,
+        messageEN: ERROR_INFO['GENITIVE-HOME'].messageGA,
         context: error.context,
-        nameEN: ERROR_INFO['GENITIVE'].nameEN,
-        nameGA: ERROR_INFO['GENITIVE'].nameGA,
-        color: ERROR_INFO['GENITIVE'].color,
+        nameEN: ERROR_INFO['GENITIVE-HOME'].nameEN,
+        nameGA: ERROR_INFO['GENITIVE-HOME'].nameGA,
+        color: ERROR_INFO['GENITIVE-HOME'].color,
         fromX: error.fromx,
         toX: error.tox,
-        type: 'GENITIVE'
+        type: 'GENITIVE-HOME'
       }
     });
 

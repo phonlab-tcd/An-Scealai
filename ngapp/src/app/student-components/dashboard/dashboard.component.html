@@ -147,7 +147,7 @@
             <i class="fas fa-spell-check optionsBtnIcon"></i>
         </span>
         <span
-          [hidden]="!quillHighlightService.showingTags"
+          [hidden]="!showErrorTags"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
           class="settingsIcon">
             ⚙
@@ -222,11 +222,11 @@
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
         style="background-color: #8FCAFF"
-        [hidden]="!quillHighlightService.showingTags || grammarLoading"
+        [hidden]="!showErrorTags || grammarLoading"
         [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>

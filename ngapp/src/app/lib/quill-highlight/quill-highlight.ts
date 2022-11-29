@@ -1,20 +1,21 @@
 import Quill from 'quill';
+import { TranslationService } from 'app/translation.service';
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
 
 Quill.register(
     new Parchment.Attributor.Attribute(
-        'highlight-tag-type',
-        'highlight-tag-type',
+        'highlight-tag',
+        'highlight-tag',
         {scope: Parchment.Scope.INLINE}
     )
 );
 
 Quill.register(
     new Parchment.Attributor.Attribute(
-        'highlight-tag-data',
-        'highlight-tag-data',
+        'highlight-tag-type',
+        'highlight-tag-type',
         {scope: Parchment.Scope.INLINE}
     )
 );
@@ -37,20 +38,25 @@ type TooltippedHighlightTag = {
 
 export class QuillHighlighter {
     quillEditor: Quill;
+    private ts: TranslationService;
 
-    constructor(quillEditor: Quill) {
+    constructor(quillEditor: Quill, ts: TranslationService) {
         this.quillEditor = quillEditor;
+        this.ts = ts;
     }
 
     public show(tags: HighlightTag[]): void {
+        if(!tags) return;
+      
         tags.forEach((tag) => {
-            // Add highlighting to error text
+            // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
             this.quillEditor.formatText(
                 tag.fromX,
-                tag.toX,
+                (tag.toX - tag.fromX),
                 {
+                    'highlight-tag': JSON.stringify(tag),
                     'highlight-tag-type': tag.type,
-                    'highlight-tag-data': JSON.stringify(tag)
+                    'background-color': tag.color
                 },
                 'api'
             );
@@ -59,7 +65,7 @@ export class QuillHighlighter {
         // Create message popups with tooltips
         const tagElements = document.querySelectorAll('[highlight-tag]');
         tagElements.forEach(tagElement => {
-            const tagData = tagElement.getAttribute('data-gramadoir-tag');
+            const tagData = tagElement.getAttribute('highlight-tag');
             if (!tagData) return;
             const highlightTag = JSON.parse(tagData) as HighlightTag;
             const tooltip = new Tooltip(this.quillEditor);
@@ -68,6 +74,11 @@ export class QuillHighlighter {
             tagElement.addEventListener('mouseover', () => {
                 this.mouseOverTagElem(highlightTag, tagElement, tooltip);
             });
+            
+            tagElement.addEventListener('mouseout', () => {
+              tagElement.removeAttribute('data-selected');
+              tooltip.hide();
+            });
         });
     }
 
@@ -75,16 +86,14 @@ export class QuillHighlighter {
         this.quillEditor.formatText(
             0, // from the very beginning of the text
             this.quillEditor.getLength(), // to the very end of the text
-            {'highlight-tag': null} // delete all highlight-tag's on the parchment
+            {'highlight-tag': null,
+            'highlight-tag-type': null,
+            'background-color': ''} // delete all highlight-tag's on the parchment
         );
         document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
-    private mouseOverTagElem(
-        tag: HighlightTag,
-        tagElement: Element,
-        tooltip
-    ) {
+    private mouseOverTagElem(tag: HighlightTag, tagElement: Element, tooltip) {
         tagElement.setAttribute('data-selected', '');
     
         // for some reason bounds aren't calculated correctly until someone scrolls
@@ -92,7 +101,8 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        tooltip.root.innerHTML = tag.messageEN; // TODO: make this language responsive
+        const message = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
+        tooltip.root.innerHTML = message; // TODO: make this language responsive
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));

@@ -39,8 +39,6 @@ export class GrammarEngine {
                     return this.cacheMap.get(checker.name)[s];
                 }
                 const errorTags = await checker.check(s);
-                console.log(checker.name);
-                console.log(errorTags);
                 this.cacheMap.get(checker.name)[s] = errorTags;
                 const offsetErrorTags = errorTags.map(tag => {
                     tag.fromX += offset;
