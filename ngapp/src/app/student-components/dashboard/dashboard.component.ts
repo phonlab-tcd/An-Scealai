@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit {
   downloadStoryFormat = '.pdf';
   currentGrammarErrors: any = [];
   showErrorTags: boolean = false;
+  grammarEngine: GrammarEngine;
   
   // OPTIONS (to show or not to show)
   showOptions = true;
@@ -143,7 +144,7 @@ export class DashboardComponent implements OnInit {
     public quillHighlightService: QuillHighlightService,
   ) {
     //this.quillHighlighter = new QuillHighlighter(this.quillEditor, ts);
-    const grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker], this.http);
+    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker], this.http);
     // subscribe to any changes made to the story text
     this.textUpdated.pipe(
       distinctUntilChanged(),
@@ -155,7 +156,7 @@ export class DashboardComponent implements OnInit {
       try {
         console.log("check grammar: ")
         // check text for grammar errors and updating highlighting
-        this.currentGrammarErrors = (await grammarEngine.check(this.story.text)).flat();
+        this.currentGrammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
         console.log(this.currentGrammarErrors)
         if(this.showErrorTags) {
           this.quillHighlighter.show(this.currentGrammarErrors);
@@ -198,6 +199,8 @@ export class DashboardComponent implements OnInit {
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
     }
+    
+    this.currentGrammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
   }
   
   /* 
@@ -404,17 +407,22 @@ export class DashboardComponent implements OnInit {
   // }
 
   /* get rid of gramadoir markup from html text */
+  // stripGramadoirAttributesFromHtml(text: string){
+  //   return text
+  //       .replace(
+  //           /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,
+  //           '')
+  //       .replace(
+  //           /\s*data-vowel-agreement-tag="([^"])+"/g,
+  //           '')
+  //       .replace(
+  //         /\s*data-genitive-tag="([^"])+"/g,
+  //         '');
+  // }
+  
+  /* get rid of gramadoir markup from html text */
   stripGramadoirAttributesFromHtml(text: string){
-    return text
-        .replace(
-            /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,
-            '')
-        .replace(
-            /\s*data-vowel-agreement-tag="([^"])+"/g,
-            '')
-        .replace(
-          /\s*data-genitive-tag="([^"])+"/g,
-          '');
+    return text.replace(/\s*style?="([^"])+"/g,'')
   }
 
   /* Set html for dictionary iframe and log looked-up word to DB */

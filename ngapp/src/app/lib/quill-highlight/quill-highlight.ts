@@ -44,7 +44,6 @@ export class QuillHighlighter {
     constructor(quillEditor: Quill, ts: TranslationService) {
         this.quillEditor = quillEditor;
         this.ts = ts;
-        console.log(this.ts);
         this.mostRecentHoveredMessage = this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
     }
 

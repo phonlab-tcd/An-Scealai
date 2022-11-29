@@ -51,8 +51,8 @@ async function check(input: string): Promise<ErrorTag[]>{
         nameEN: ERROR_INFO['LEATHAN-CAOL'].nameEN,
         nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
         color: ERROR_INFO['LEATHAN-CAOL'].color,
-        fromX: error.second - 1,
-        toX: error.second,
+        fromX: error.second,
+        toX: error.second + 1,
         type: 'LEATHAN-CAOL'
       }
       errorTags.push(tag2);

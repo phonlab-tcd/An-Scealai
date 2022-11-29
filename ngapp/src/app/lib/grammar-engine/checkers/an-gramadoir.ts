@@ -59,7 +59,7 @@ async function check(input: string):Promise<ErrorTag[]>{
         nameGA: ERROR_INFO[cleanedErrorName].nameGA,
         color: ERROR_INFO[cleanedErrorName].color,
         fromX: +errorEN.fromx,
-        toX: +errorEN.tox,
+        toX: +errorEN.tox + 1,
         type: cleanedErrorName
       } as ErrorTag;
     });
