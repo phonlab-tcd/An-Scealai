@@ -24,7 +24,7 @@ export const ERROR_INFO = {
     "LEATHAN-CAOL": {
       nameEN: '',
       nameGA: '',
-      color: 'orange', 
+      color: '#FFFF64', 
       messageEN: 'These vowels should be in agreement according to the Leathan/Caol rule.', 
       messageGA: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan/Caol.'
     },

@@ -132,7 +132,7 @@ export class QuillHighlightService {
 
   /*
    * Clear all error tags and get story text from quill
-   * Get grammar error promise from an gramadoir in Ga
+   * Get grammar error promise from an gramadoir in Ga (why?)
    * Tokenize story text into sentences 
    * Get offsets of each sentence within story text context
    * Call An Gramadoir with offset sentences (gets tags in both lang)

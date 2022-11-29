@@ -157,7 +157,9 @@ export class DashboardComponent implements OnInit {
         // check text for grammar errors and updating highlighting
         this.currentGrammarErrors = (await grammarEngine.check(this.story.text)).flat();
         console.log(this.currentGrammarErrors)
-        //this.quillHighlighter.show(this.currentGrammarErrors);
+        if(this.showErrorTags) {
+          this.quillHighlighter.show(this.currentGrammarErrors);
+        }
         
         
         // await this.quillHighlightService
@@ -356,8 +358,10 @@ export class DashboardComponent implements OnInit {
 
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
-    return this.quillHighlightService.mostRecentHoveredMessage() ??
-            this.instructionMessage();
+    if (this.quillHighlighter)
+      return this.quillHighlighter.getMostRecentMessage()
+    else
+      return this.instructionMessage();
   }
   
   /* get en or ga message for grammar instructions */
@@ -377,15 +381,10 @@ export class DashboardComponent implements OnInit {
   /* show or hide grammar tags */
   async toggleGrammarTags() {
     console.log(this.currentGrammarErrors)
-    if (this.currentGrammarErrors.length > 0) {
       this.showErrorTags ? 
         this.quillHighlighter.hide():
         this.quillHighlighter.show(this.currentGrammarErrors);
       this.showErrorTags = !this.showErrorTags;
-    }
-    else {
-      console.log('no errors');
-    }
   }
   
   // toggleGrammarTags() {

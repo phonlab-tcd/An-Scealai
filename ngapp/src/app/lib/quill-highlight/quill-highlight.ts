@@ -31,18 +31,21 @@ export type HighlightTag = {
     toX: number;
 }
 
-type TooltippedHighlightTag = {
-    tag: HighlightTag;
-    tooltip: any;
-}
+// type TooltippedHighlightTag = {
+//     tag: HighlightTag;
+//     tooltip: any;
+// }
 
 export class QuillHighlighter {
     quillEditor: Quill;
+    mostRecentHoveredMessage: String = '';
     private ts: TranslationService;
 
     constructor(quillEditor: Quill, ts: TranslationService) {
         this.quillEditor = quillEditor;
         this.ts = ts;
+        console.log(this.ts);
+        this.mostRecentHoveredMessage = this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
     }
 
     public show(tags: HighlightTag[]): void {
@@ -50,6 +53,7 @@ export class QuillHighlighter {
       
         tags.forEach((tag) => {
             // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
+            
             this.quillEditor.formatText(
                 tag.fromX,
                 (tag.toX - tag.fromX),
@@ -101,8 +105,8 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        const message = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
-        tooltip.root.innerHTML = message; // TODO: make this language responsive
+        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
+        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
@@ -127,5 +131,9 @@ export class QuillHighlighter {
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
       }
+      
+    public getMostRecentMessage() {
+      return this.mostRecentHoveredMessage;
+    }
 }
 

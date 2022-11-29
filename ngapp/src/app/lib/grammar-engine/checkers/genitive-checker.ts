@@ -19,8 +19,8 @@ async function check(input: string):Promise<ErrorTag[]>{
     const errorTags: ErrorTag[] = errors.map(error => {
       return {
         errorText: input.slice(error.fromx, error.tox),
-        messageGA: ERROR_INFO['GENITIVE-HOME'].messageEN,
-        messageEN: ERROR_INFO['GENITIVE-HOME'].messageGA,
+        messageGA: ERROR_INFO['GENITIVE-HOME'].messageGA,
+        messageEN: ERROR_INFO['GENITIVE-HOME'].messageEN,
         context: error.context,
         nameEN: ERROR_INFO['GENITIVE-HOME'].nameEN,
         nameGA: ERROR_INFO['GENITIVE-HOME'].nameGA,

@@ -30,7 +30,7 @@ async function check(input: string): Promise<ErrorTag[]>{
     
     // map index objects to generic ErrorTag values
     for (const error of errors) {
-      let tag:ErrorTag = {
+      let tag1:ErrorTag = {
         errorText: input,
         messageGA: ERROR_INFO['LEATHAN-CAOL'].messageGA,
         messageEN: ERROR_INFO['LEATHAN-CAOL'].messageEN,
@@ -39,10 +39,23 @@ async function check(input: string): Promise<ErrorTag[]>{
         nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
+        toX: error.first + 1,
+        type: 'LEATHAN-CAOL'
+      }
+      errorTags.push(tag1);
+      let tag2:ErrorTag = {
+        errorText: input,
+        messageGA: ERROR_INFO['LEATHAN-CAOL'].messageGA,
+        messageEN: ERROR_INFO['LEATHAN-CAOL'].messageEN,
+        context: input,
+        nameEN: ERROR_INFO['LEATHAN-CAOL'].nameEN,
+        nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
+        color: ERROR_INFO['LEATHAN-CAOL'].color,
+        fromX: error.second - 1,
         toX: error.second,
         type: 'LEATHAN-CAOL'
       }
-      errorTags.push(tag);
+      errorTags.push(tag2);
     }
     resolve(errorTags);
   });
