@@ -6,12 +6,14 @@
         <div class="formGroup" novalidate>
             <div style="display: flex; justify-content: center;">
                 <textarea 
+                spellcheck=false 
                 style="max-width: 300px;" 
                 class="form-control" 
                 id="textSelector" 
                 data-cy=passage
                 formControlName="passage"
-                rows="3"
+                rows="4"
+                placeholder="{{ts.l.dictgloss_type_story}}"
                 maxlength="2000">
                 </textarea>
             </div>
@@ -27,22 +29,22 @@
         </div>
     </form>
     <div style="margin-top: 8px;">
-        <button class="backButton" (click)="goToDashboard()">{{ts.l.teacher_go_to_dashboard}}</button>
-        <button class="backButton" (click)="sendDictgloss()">{{ts.l.teacher_send_dictgloss}}</button>
+        <button class="button" (click)="goToDashboard()">{{ts.l.teacher_go_to_dashboard}}</button>
+        <button class="button" (click)="sendDictgloss()">{{ts.l.teacher_send_dictgloss}}</button>
     </div>
     <div class="select">
-        <button class="selectButton" *ngIf="!allSelected; else deselected;" (click)="selectAllStudents();">{{ts.l.teacher_selected}}</button>
+        <button class="button selectAll" *ngIf="!allSelected; else deselected;" (click)="selectAllStudents();">{{ts.l.teacher_selected}}</button>
         <div class="validationAlert" *ngIf="!(sendTo.length > 0) && noStudents">
             *{{ts.l.teacher_error_dictgloss}}
         </div>
         <ng-template #deselected>
-            <button class="selectButton"(click)="selectAllStudents();">{{ts.l.teacher_deselected}}</button>
+            <button class="button selectAll"(click)="selectAllStudents();">{{ts.l.teacher_deselected}}</button>
         </ng-template>
     </div>
     <div class="classroomCluster">
         <div class="classroomCard" *ngFor="let student of students">
-            <button *ngIf="sendTo.indexOf(student._id) == -1;" class="headerIconBtnNotSelected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
-            <button *ngIf="sendTo.indexOf(student._id) != -1;" class="headerIconBtnSelected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
+            <button *ngIf="sendTo.indexOf(student._id) == -1;" class="button deselected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
+            <button *ngIf="sendTo.indexOf(student._id) != -1;" class="button selected" (click)="sendList(student._id);"><b>{{student.username}}</b></button>
         </div>
     </div>
 </div>
