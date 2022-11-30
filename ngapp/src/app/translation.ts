@@ -1806,8 +1806,8 @@ export default {
     ga: '<a href="https://cgd.ie/">Coláiste Ghaoth Dobhair</a>, do na múinteoirí agus do na mic léinn uile, as a bheith páirteach i staidéar píolótach ar scála mór i rith na bliana 2021. Tá an t-aiseolas atá faighte ag cur go mór leis an gcéad leagan eile de An Scéalaí.',
     en: '<a href="https://cgd.ie/">Coláiste Ghaoth Dobhair</a>, its teachers and students, who took part in a large-scale pilot study during 2021. This study provided invaluable feedback which crucially informs the next stage of development.' },
   interested_teachers: {
-    ga: '*Ba mhaith linn teagmháil a dhéanamh le múinteoirí dara leibhéal a mbeadh suim acu An Scéalaí á úsáid le grúpaí sa Scoilbhliain 2021/22. Gach eolas ó Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie.',
-    en: '*We are interested in forming focus groups among second level teachers who would like to use An Scéalaí with their classes during the 2021/22 school year. Please contact Neasa Ní Chiaráin – neasa.nichiarain@tcd.ie if you would like to participate.' },
+    ga: '*Ba mhaith linn teagmháil a dhéanamh le múinteoirí dara leibhéal a mbeadh suim acu An Scéalaí á úsáid le grúpaí sa Scoilbhliain 2022/23. Gach eolas ó Neasa Ní Chiaráin - neasa.nichiarain@tcd.ie.',
+    en: '*We are interested in forming focus groups among second level teachers who would like to use An Scéalaí with their classes during the 2022/23 school year. Please contact Neasa Ní Chiaráin – neasa.nichiarain@tcd.ie if you would like to participate.' },
   testimonials: {
     ga: 'Teistiméireachtaí',
     en: 'Testimonials' },
@@ -2023,5 +2023,21 @@ export default {
     en: 'Download' },
   play: {
     ga: 'Éist',
-    en: 'Play' } 
+    en: 'Play' },
+  download_user_guide: {
+    ga: 'Íoslódáil an Treoir d\'Úsáideoirí',
+    en: 'Download the User Guide' },
+  download_user_guide_by_clicking_link: {
+    ga: 'Is féidir leagan PDF den Treoir d\'Úsáideoirí a íoslódáil ón nasc thíos.',
+    en: 'You can download a PDF version of our User Guide by clicking on the link below.' },
+  video_tutorial: {
+    ga: 'Físeán Teagaisc',
+    en: 'Video Tutorial' },
+  watch_following_instructional_video: {
+    ga: 'Tugann an físeán seo léargas ar phríomhghnéithe An Scéalaí.',
+    en: 'You can watch the following instructional video on how to use An Scéalaí.' },
+  user_guides: {
+    ga: 'Treoracha d\'Úsáideoirí',
+    en: 'User Guides' },
+    
 }
