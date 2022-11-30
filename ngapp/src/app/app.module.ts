@@ -90,6 +90,7 @@ import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
+import { UserGuidesComponent } from './user-guides/user-guides.component';
 
 @NgModule({
   declarations: [
@@ -148,6 +149,7 @@ import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-d
     BasicDialogComponent,
     StudentStatsDashboardComponent,
     RecordingDialogComponent,
+    UserGuidesComponent,
   ],
   imports: [
     RegisterModule,
