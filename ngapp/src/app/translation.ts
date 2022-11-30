@@ -2039,5 +2039,14 @@ export default {
   user_guides: {
     ga: 'Treoracha d\'Úsáideoirí',
     en: 'User Guides' },
+  academic_papers: {
+    ga: 'Foilseacháin Acadúla',
+    en: 'Academic Papers' },
+  ell_description: {
+    ga: 'Is duais é seo a bhronntar ar na tionscadail fhoghlama teanga is nuálaí. Tá an Séala seo comhordnaithe ag an gCoimisiún Eorpach agus á riaradh ag Léargas in Éirinn ó 1999.',
+    en: 'The ELL is a cross-sectoral Award that recognises the most innovative language learning projects. The is an Award coordinated by the European Commission and it has been managed by Léargas in Ireland since 1999.' },
+  ell_award: {
+    ga: 'An Séala Eorpach Teanga 2022',
+    en: 'European Language Label Award 2022' },
     
 }

@@ -37,8 +37,16 @@
 }
 
 .paperHeader {
-  font-weight: bold;
   padding-bottom: 10px;
+  font-size: 20px;
+  color: #000000DE;
+  font-family: Roboto, "Helvetica Neue";
+  margin: 15px;
+  font-weight: 500;
+}
+
+.paperDescription {
+  padding-top: 20px;
   font-size: 12pt;
 }
 
