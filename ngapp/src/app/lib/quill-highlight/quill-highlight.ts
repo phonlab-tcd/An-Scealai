@@ -59,7 +59,8 @@ export class QuillHighlighter {
                 {
                     'highlight-tag': JSON.stringify(tag),
                     'highlight-tag-type': tag.type,
-                    'background-color': tag.color
+                    'background-color': tag.color,
+                    // '.custom-tooltip': ''
                 },
                 'api'
             );
@@ -85,15 +86,17 @@ export class QuillHighlighter {
         });
     }
 
-    public hide() {
+    public hide(tags: HighlightTag[]) {
+      tags.forEach((tag) => {
         this.quillEditor.formatText(
-            0, // from the very beginning of the text
-            this.quillEditor.getLength(), // to the very end of the text
+          tag.fromX,
+          (tag.toX - tag.fromX),
             {'highlight-tag': null,
             'highlight-tag-type': null,
-            'background-color': ''} // delete all highlight-tag's on the parchment
+            'background-color': ''}
         );
-        document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+      });
+        //document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
     private mouseOverTagElem(tag: HighlightTag, tagElement: Element, tooltip) {

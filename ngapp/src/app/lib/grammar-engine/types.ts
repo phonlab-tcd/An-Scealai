@@ -22,22 +22,22 @@ type ErrorType = keyof typeof ERROR_INFO;
 
 export const ERROR_INFO = {
     "LEATHAN-CAOL": {
-      nameEN: '',
-      nameGA: '',
+      nameEN: 'Broad/Slender',
+      nameGA: 'Leathan/Caol',
       color: '#FFFF64', 
       messageEN: 'These vowels should be in agreement according to the Leathan/Caol rule.', 
       messageGA: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan/Caol.'
     },
     "RELATIVE-CLAUSE": {
-      nameEN: '',
-      nameGA: '',
+      nameEN: 'Relative Clause',
+      nameGA: 'Relative Clause Error',
       color: '#ADD8E6', 
-      messageEN: '', 
-      messageGA: ''
+      messageEN: 'Relative Clause Error', 
+      messageGA: 'Relative Clause Error'
     },
     "GENITIVE-HOME": {
-      nameEN: '',
-      nameGA: '',
+      nameEN: 'Genitive',
+      nameGA: 'Genitive',
       color: '#00FA9A', 
       messageEN: 'Consider using the genitive', 
       messageGA: 'Úsáid an tuiseal ginideach'

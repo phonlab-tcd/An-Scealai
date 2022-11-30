@@ -90,6 +90,8 @@ export class DashboardComponent implements OnInit {
   currentGrammarErrors: any = [];
   showErrorTags: boolean = false;
   grammarEngine: GrammarEngine;
+  filteredErrors: Object = {};
+  checkBoxes: Object = {'showAll': true};
   
   // OPTIONS (to show or not to show)
   showOptions = true;
@@ -143,34 +145,33 @@ export class DashboardComponent implements OnInit {
     public statsService: StatsService,
     public quillHighlightService: QuillHighlightService,
   ) {
-    //this.quillHighlighter = new QuillHighlighter(this.quillEditor, ts);
     this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker], this.http);
     // subscribe to any changes made to the story text
-    this.textUpdated.pipe(
-      distinctUntilChanged(),
-    ).subscribe(async () => {
+    this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
       try {
-        console.log("check grammar: ")
         // check text for grammar errors and updating highlighting
+        console.log("checking grammar");
         this.currentGrammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
-        console.log(this.currentGrammarErrors)
+        // create a dictionary of error type and tags for checkbox filtering
+        this.filteredErrors = this.currentGrammarErrors.reduce(function(map, tag) {
+            if(!map[tag.type]) {
+              map[tag.type] = [];
+            }
+            map[tag.type].push(tag);
+            return map;
+        }, {});
+        // initialise all error checkboxes to true
+        for (const key of Object.keys(this.filteredErrors)) {
+          this.checkBoxes[key] = true;
+        }
+        // show error highlighting if button on
         if(this.showErrorTags) {
           this.quillHighlighter.show(this.currentGrammarErrors);
         }
-        
-        
-        // await this.quillHighlightService
-        //   .updateGrammarErrors(this.quillEditor, textToCheck, this.grammarTagFilter, this.story._id)
-        //   .then((errTypes: object) => {
-        //     console.log(errTypes)
-        //     this.grammar.countNewErrors(this.previousTextToCheck, textToCheck);
-        //     this.currentGrammarErrorTypes = errTypes; // name and number of error for checkboxes
-        //     this.previousTextToCheck = textToCheck;
-        //   });
       } catch (updateGrammarErrorsError) {
         if ( !this.currentGrammarErrors) {
           window.alert(
@@ -199,8 +200,6 @@ export class DashboardComponent implements OnInit {
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
     }
-    
-    this.currentGrammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
   }
   
   /* 
@@ -226,7 +225,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   
-  /* call the saveStory function after increasing a debounce id counter */
+  /* Call the saveStory function after increasing a debounce id counter */
   debounceSaveStory() {
     this.saveStoryDebounceId++;
     const myId = this.saveStoryDebounceId;
@@ -268,7 +267,7 @@ export class DashboardComponent implements OnInit {
 
     const saveStoryPromise = this.storyService.updateStory(updateData, this.story._id).toPromise();
 
-    // try to save story to the DB
+    // Save story to the DB
     try {
       await saveStoryPromise;
       if (debounceId === this.saveStoryDebounceId) {
@@ -281,7 +280,7 @@ export class DashboardComponent implements OnInit {
       window.alert('Error while trying to save story: ' + error.message);
       throw error;
     }
-    // set story to saved if dates match 
+    // Set story status to saved if dates match 
     try {
       if (saveAttempt === this.mostRecentAttemptToSaveStory) {
         this.storySaved = true;
@@ -293,7 +292,7 @@ export class DashboardComponent implements OnInit {
     return;
   }
   
-  /* Initialise quill editor */
+  /* Initialise quill editor and highlighter */
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
     this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts);
@@ -301,63 +300,31 @@ export class DashboardComponent implements OnInit {
   
   /* If story not saved, make title italic */
   titleStyle() {
-    return {
-      'font-style': this.storySaved ? 'normal' : 'italic'
-    };
+    return {'font-style': this.storySaved ? 'normal' : 'italic'};
   }
-  // 
-  // /* apply an gramadoir error highlighting depending on which errors checked to display */
-  // grammarCheckBoxEvent(key: string, event: boolean) {
-  //   this.grammarTagFilter[key] = event;
-  //   this.quillHighlightService
-  //       .filterGramadoirTags(this.grammarTagFilter);
-  //   this.quillHighlightService
-  //       .clearAllGramadoirTags(this.quillEditor);
-  //   if (this.quillHighlightService.showingTags) {
-  //     this.quillHighlightService
-  //         .applyGramadoirTagFormatting(this.quillEditor);
-  //   }
-  // }
-  // 
-  // /* apply broad/slender error highlighting depending on which errors checked to display */
-  // leathanCaolCheckBox(event: boolean) {
-  //   this.quillHighlightService.showLeathanCaol = event;
-  //   this.quillHighlightService
-  //       .clearAllGramadoirTags(this.quillEditor);
-  //   if (!this.quillHighlightService.showingTags) {
-  //     this.quillHighlightService
-  //         .applyGramadoirTagFormatting(this.quillEditor);
-  //   }
-  // }
-  // 
-  // /* apply genitive error highlighting depending on which errors checked to display */
-  // genitiveCheckBox(event: boolean) {
-  //   this.quillHighlightService.showGenitive = event;
-  //   this.quillHighlightService
-  //       .clearAllGramadoirTags(this.quillEditor);
-  //   if (!this.quillHighlightService.showingTags) {
-  //     this.quillHighlightService
-  //         .applyGramadoirTagFormatting(this.quillEditor);
-  //   }
-  // }
-  // 
-  // /* display all error tags from all checkers */
-  // setAllCheckBoxes(value: boolean) {
-  //   this.quillHighlightService.showLeathanCaol = value;
-  //   this.quillHighlightService.showGenitive = value;
-  //   Object.keys(this.grammarTagFilter)
-  //       .forEach((k) => {
-  //         this.grammarTagFilter[k] = value;
-  //       });
-  //   this.quillHighlightService
-  //       .filterGramadoirTags(this.grammarTagFilter);
-  //   this.quillHighlightService
-  //       .clearAllGramadoirTags(this.quillEditor);
-  //   if (!this.quillHighlightService.showingTags) {
-  //     this.quillHighlightService
-  //         .applyGramadoirTagFormatting(this.quillEditor);
-  //   }
-  // }
+  
+  /* apply error highlighting depending on which errors are checked to display */
+  setCheckBox(tags, boxChecked: boolean) {
+    if(boxChecked) {
+      this.quillHighlighter.show(tags);
+    }
+    else {
+      this.quillHighlighter.hide(tags);
+    }
+  }
+  
+  /* apply error highlighting to all or none of the errors */
+  setAllCheckBoxes() {
+    if(this.checkBoxes['showAll']) {
+      this.quillHighlighter.show(this.currentGrammarErrors);
+    }
+    else {
+      this.quillHighlighter.hide(this.currentGrammarErrors);
+    }
+    Object.keys(this.checkBoxes).forEach(key => {
+      this.checkBoxes[key] = this.checkBoxes['showAll']; // re-set all error checkboxes
+    });
+  }
 
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
@@ -367,13 +334,13 @@ export class DashboardComponent implements OnInit {
       return this.instructionMessage();
   }
   
-  /* get en or ga message for grammar instructions */
+  /* Get EN or GA message for grammar instructions */
   instructionMessage() {
     const key: MessageKey = 'hover_over_a_highlighted_word_for_a_grammar_suggestion';
     return this.ts.message(key);
   }
 
-  /* show/hide grammar checker button text on dashboard */
+  /* Show/hide grammar checker button text on dashboard */
   toggleGrammarButton() {
     const key: MessageKey = this.showErrorTags ?
       'hide_grammar_suggestions': 
@@ -381,48 +348,19 @@ export class DashboardComponent implements OnInit {
     return this.ts.message(key);
   }
 
-  /* show or hide grammar tags */
+  /* Show or hide error tags */
   async toggleGrammarTags() {
-    console.log(this.currentGrammarErrors)
       this.showErrorTags ? 
-        this.quillHighlighter.hide():
+        this.quillHighlighter.hide(this.currentGrammarErrors):
         this.quillHighlighter.show(this.currentGrammarErrors);
       this.showErrorTags = !this.showErrorTags;
   }
   
-  // toggleGrammarTags() {
-  //   this.quillHighlightService.showingTags ? this.hideGrammarTags() : this.showGrammarTags();
-  // }
-  // 
-  // hideGrammarTags() {
-  //   this.quillHighlightService.showingTags = false;
-  //   this.quillHighlightService
-  //       .clearAllGramadoirTags(this.quillEditor);
-  // }
-  // 
-  // showGrammarTags(){
-  //   this.quillHighlightService.showingTags = true;
-  //   this.quillHighlightService
-  //       .applyGramadoirTagFormatting(this.quillEditor);
-  // }
-
-  /* get rid of gramadoir markup from html text */
-  // stripGramadoirAttributesFromHtml(text: string){
-  //   return text
-  //       .replace(
-  //           /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,
-  //           '')
-  //       .replace(
-  //           /\s*data-vowel-agreement-tag="([^"])+"/g,
-  //           '')
-  //       .replace(
-  //         /\s*data-genitive-tag="([^"])+"/g,
-  //         '');
-  // }
-  
-  /* get rid of gramadoir markup from html text */
+  /* get rid of highlighting markup from html text */
   stripGramadoirAttributesFromHtml(text: string){
-    return text.replace(/\s*style?="([^"])+"/g,'')
+    return text.replace(/\s*style="([^"])+"/g,'')
+                .replace(/\s*highlight-tag-type="([^"])+"/g,'')
+                .replace(/\s*highlight-tag="([^"])+"/g,'')
   }
 
   /* Set html for dictionary iframe and log looked-up word to DB */
@@ -592,14 +530,6 @@ export class DashboardComponent implements OnInit {
     }
     this.dontToggle = false;
   }
-
-  // handleGrammarCheckerOptionClick() {
-  //   this.dontToggle = true;
-  //   this.defaultMode();
-  //   this.grammarChecker.hideEntireGrammarChecker =
-  //     !this.grammarChecker.hideEntireGrammarChecker;
-  // }
-
 
   /* Stop recording if already recording, otherwise start recording */
   speakStory() {
