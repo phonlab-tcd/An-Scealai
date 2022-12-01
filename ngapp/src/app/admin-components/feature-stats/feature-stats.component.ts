@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StatsService } from '../../stats.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { TranslationService } from '../../translation.service';
 import { EngagementService } from '../../engagement.service';
 import { EventType } from '../../event';
@@ -13,9 +13,9 @@ import { KeyValue } from '@angular/common';
 })
 export class FeatureStatsComponent implements OnInit {
   
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl()
+  range = new UntypedFormGroup({
+    start: new UntypedFormControl(),
+    end: new UntypedFormControl()
   });
   
   previousFeatures: any[] = [];
