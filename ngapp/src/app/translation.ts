@@ -881,8 +881,8 @@ export default {
     ga: 'Laurie Anderson',
     en: 'Laurie Anderson' },
   about_content_text_academic: {
-    ga: '    Tionscadal nua is ea An Scéalaí atá á fhorbairt faoi láthair. Ardán Foghlaim Ríomhchuidithe Teanga-cliste atá ann a tharraingíonn na forbairtí is déanaí i dteicneolaíocht na hurlabhra agus na teanga don Ghaeilge le chéile ar mhaithe le teagasc/foghlaim na Gaeilge. Is cur chuige iomlánaíoch atá i gceist, a dhíríonn ar an scríobh, éisteacht, léamh agus caint ag an am céanna, le béim ar leith ar na nascanna idir an focal scíofa agus an fuaimniú. Tá sé mar aidhm againn ardán a chruthú d’fhoghlaimeoirí atá idirghníomhach agus pearsantaithe chun sealbhú an dara teanga a chothú. Is féidir le daoine An Scéalaí a úsáid iad féin agus leas a bhaint as an aiseolas a ghineann an córas go huathoibríoch agus/nó is féidir an t-ardán a úsáid mar acmhainn bhreise le cur leis an méid atá ar siúl sa seomra ranga, agus aiseolas an mhúinteora a fháil chomh maith. Seo a leanas foilseachán a thugann an cúlra, na haidhmeanna agus an fhorbairt atá déanta go dtí seo.',
-    en: 'An Scéalaí is currently under development. It is an intelligent Computer-Assisted Language Learning (iCALL) platform for Irish which exploits the latest developments in Irish speech and language technology as its key feature. It promotes a holistic approach to language learning, simultaneously training the four skills of writing, listening, reading and speaking, focusing particularly on reinforcing the linkages between the spoken and written word. The goal is to offer the learner an interactive, personalised experience to foster their second language learning. It can be used as a standalone platform, incorporating automatic feedback and/or as a complement to classroom learning, incorporating teacher feedback. The following paper summarises the approach, rationale and development to date.' },
+    ga: 'Tionscadal nua is ea An Scéalaí atá á fhorbairt faoi láthair. Ardán Foghlaim Ríomhchuidithe Teanga-cliste atá ann a tharraingíonn na forbairtí is déanaí i dteicneolaíocht na hurlabhra agus na teanga don Ghaeilge le chéile ar mhaithe le teagasc/foghlaim na Gaeilge. Is cur chuige iomlánaíoch atá i gceist, a dhíríonn ar an scríobh, éisteacht, léamh agus caint ag an am céanna, le béim ar leith ar na nascanna idir an focal scíofa agus an fuaimniú. Tá sé mar aidhm againn ardán a chruthú d’fhoghlaimeoirí atá idirghníomhach agus pearsantaithe chun sealbhú an dara teanga a chothú. Is féidir le daoine An Scéalaí a úsáid iad féin agus leas a bhaint as an aiseolas a ghineann an córas go huathoibríoch agus/nó is féidir an t-ardán a úsáid mar acmhainn bhreise le cur leis an méid atá ar siúl sa seomra ranga, agus aiseolas an mhúinteora a fháil chomh maith. Seo a leanas foilseachán a thugann an cúlra, na haidhmeanna agus an fhorbairt atá déanta go dtí seo.',
+    en: 'An Scéalaí is currently under development. It is an intelligent Computer-Assisted Language Learning (iCALL) platform for Irish which exploits the latest developments in Irish speech and language technology as its key feature. It promotes a holistic approach to language learning, simultaneously training the four skills of writing, listening, reading and speaking, focusing particularly on reinforcing the linkages between the spoken and written word. The goal is to offer the learner an interactive, personalised experience to foster their second language learning. It can be used as a standalone platform, incorporating automatic feedback and/or as a complement to classroom learning, incorporating teacher feedback. The following papers summarise the approach, rationale and development to date.' },
   technology_in_an_scealai: {
     ga: 'Teicneolaíocht in úsáid in <i>An Scéalaí</i>',
     en: 'Technology in <i>An Scéalaí</i>' },
@@ -1410,7 +1410,7 @@ export default {
     en: 'What is An Scéalaí?' },
   about_content_text: {
     ga: 'Áis nua ríomhbhunaithe d’fhoghlaimeoirí na Gaeilge is ea ‘An Scéalaí’. Tugann sé ardán dóibh chun téacsanna nó scéalta a scríobh agus a cheartú. Ceann de na gnéithe nua a bhaineann leis ná go léann sé a scéal féin ar ais don fhoghlaimeoir. Anuas air seo aimsíonn sé botúin ghramadaí agus botúin litrithe a d’fhéadfadh a bheith sa téacs. Is féidir tuilleadh eolais a fháil faoin dtáb ‘teicneolaíocht’ ar ár suíomh gréasáin (www.abair.tcd.ie/scealai). Is cuid dár dtionscadal taighde anseo i Scoil na nEolaíochtaí Teangeolaíochta, Urlabhra agus Cumarsáide, Coláiste na Tríonóide, é An Scéalaí, áit a bhfuilimid ag fiosrú na héifeachta a bhaineann le modhanna éagsúla foghlama teangacha. Ba mhaith linn go mbainfeadh sibh triail as profáil ó chluas chomh maith leis an seiceálaí gramadaí chun botúin a aimsiú is a cheartú sna scéalta. Beidh sé seo ina chabhair dúinne anseo i gColáiste na Tríonóide freisin agus sinn ag cur lenár n- áiseanna foghlama, ach thar aon ní eile ba mhaith linn go mbainfeadh na foghlaimeoirí taitneamh agus tairbhe as.',
-    en: 'An Scéalaí is an online learning platform for students of the Irish language. It provides an environment in which users can write and correct Irish texts, or stories. One of An Scéalaí ’s unique features is the ability to listen back to a computer-generated voice reading your story as Gaeilge. As well as this, users can run their story through a grammar-checker that highlights any spelling mistakes or other grammatical errors found in the text. More detail on these technologies can be found at the Technology tab on our website.\n' +
+    en: 'An Scéalaí is an online learning platform for students of the Irish language. It provides an environment in which users can write and correct Irish texts, or stories. One of An Scéalaí’s unique features is the ability to listen back to a computer-generated voice reading your story as Gaeilge. As well as this, users can run their story through a grammar-checker that highlights any spelling mistakes or other grammatical errors found in the text. More detail on these technologies can be found at the Technology tab on our website.\n' +
       '\n' +
       'An Scéalaí also serves as a research project by Trinity College Dublin, investigating the effectiveness of different language-learning methods. We invite you to try using audio check as well as grammar check to correct spelling and grammar mistakes in your stories. This will provide us with useful data to help design language-learning resources in the future!\n' +
       '\n' +
@@ -2039,5 +2039,17 @@ export default {
   user_guides: {
     ga: 'Treoracha d\'Úsáideoirí',
     en: 'User Guides' },
+  academic_papers: {
+    ga: 'Foilseacháin Acadúla',
+    en: 'Academic Papers' },
+  ell_description: {
+    ga: 'Is duais é seo a bhronntar ar na tionscadail fhoghlama teanga is nuálaí. Tá an Séala seo comhordnaithe ag an gCoimisiún Eorpach agus á riaradh ag Léargas in Éirinn ó 1999.',
+    en: 'The ELL is a cross-sectoral Award that recognises the most innovative language learning projects. The is an Award coordinated by the European Commission and it has been managed by Léargas in Ireland since 1999.' },
+  ell_award: {
+    ga: 'An Séala Eorpach Teanga 2022',
+    en: 'European Language Label Award 2022' },
+  scealai_wins_ell_award: {
+    ga: 'Bronnfar An Séala Eorpach Teanga ar thionscadal ABAIR- An Scéalaí ag ócáid i bPáirc an Chrócaigh, 10 Samhain',
+    en: 'An Scéalaí has won a European Language Label Award 2022!' },
     
 }
