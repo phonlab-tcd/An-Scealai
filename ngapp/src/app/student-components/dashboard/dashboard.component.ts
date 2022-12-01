@@ -480,6 +480,7 @@ export class DashboardComponent implements OnInit {
   }
 
   stripGramadoirAttributesFromHtml(text: string){
+    if (!text || !text.replace) { return ''; }
     return text
         .replace(
             /\s*data-gramadoir-tag(-style-type)?="([^"])+"/g,

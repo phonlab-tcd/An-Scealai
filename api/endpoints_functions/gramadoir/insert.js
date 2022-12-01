@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     await uniqueStoryErrors.save();
   }
   
-  if (sentences.length > 0) {
+  if (sentences && sentences.length > 0) {
     for (const {errors, sentence} of sentences) {
       await UniqueStoryErrors.updateOne(
         // QUERY: find all uniqueStoryErrors documents without 'sentence'
