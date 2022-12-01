@@ -358,6 +358,7 @@ export class DashboardComponent implements OnInit {
   
   /* get rid of highlighting markup from html text */
   stripGramadoirAttributesFromHtml(text: string){
+    if (!text || !text.replace) {return '';}
     return text.replace(/\s*style="([^"])+"/g,'')
                 .replace(/\s*highlight-tag-type="([^"])+"/g,'')
                 .replace(/\s*highlight-tag="([^"])+"/g,'')
