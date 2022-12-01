@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { ClassroomService } from '../classroom.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Classroom } from '../classroom';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
@@ -25,7 +25,7 @@ import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.compo
 export class ProfileComponent implements OnInit {
 
   classroomCodeOutput: string;
-  codeInput : FormControl;
+  codeInput : UntypedFormControl;
   foundClassroom: Classroom;
   classroom: Classroom;
   updatedUsername: string;
@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
               private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.codeInput = new FormControl();
+    this.codeInput = new UntypedFormControl();
     this.getClassroom();
     this.codeInput.valueChanges.subscribe(
       (code) => {
