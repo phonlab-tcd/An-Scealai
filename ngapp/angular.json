@@ -21,6 +21,7 @@
           "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "rebaseRootRelativeCssUrls": true,
             "aot": true,
             "outputPath": "unpublished_dist",
             "index": "src/index.html",
