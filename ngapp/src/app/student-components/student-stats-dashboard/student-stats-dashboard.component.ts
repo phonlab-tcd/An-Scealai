@@ -68,7 +68,6 @@ export class StudentStatsDashboardComponent implements OnInit {
     
     // get dictionary lookups 
     this.dictionaryWords = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id));
-    console.log(this.dictionaryWords);
   }
 
   countDictSum(A, B) {

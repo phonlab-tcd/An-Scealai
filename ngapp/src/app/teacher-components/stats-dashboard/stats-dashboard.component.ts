@@ -1,17 +1,16 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
-import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
-import { Classroom } from 'app/classroom'
 import { Story } from 'app/story';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';
+import { EngagementService } from '../../engagement.service';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -22,13 +21,13 @@ export class StatsDashboardComponent implements OnInit {
 
   constructor(
     private storyService: StoryService,
-    private auth: AuthenticationService,
     private classroomService: ClassroomService,
     private userService: UserService,
     private dialog: MatDialog,
     private http: HttpClient,
     private ts: TranslationService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private engagement:EngagementService
   ) { }
 
   classroomStories: Story[];
@@ -36,6 +35,7 @@ export class StatsDashboardComponent implements OnInit {
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
+  dictionaryLookups: Object = {};
   
   async ngOnInit() {
     // initialise stats with classroom id from route param
@@ -87,6 +87,14 @@ export class StatsDashboardComponent implements OnInit {
     
     // get word count data
     this.wordCountData = await this.getWordCounts(classroom, startDate, endDate);
+    
+    // get dictionary lookups 
+    this.dictionaryLookups = {};
+    await Promise.all(classroom.studentIds.map(async (id) =>
+      this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
+      await firstValueFrom(this.engagement.getDictionaryLookups(id))
+    ));
+    console.log(this.dictionaryLookups);
   }
 
   countDictSum(A, B) {
