@@ -94,7 +94,6 @@ export class StatsDashboardComponent implements OnInit {
       this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
       await firstValueFrom(this.engagement.getDictionaryLookups(id))
     ));
-    console.log(this.dictionaryLookups);
   }
 
   countDictSum(A, B) {
