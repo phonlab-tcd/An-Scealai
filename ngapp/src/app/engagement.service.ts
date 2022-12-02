@@ -93,4 +93,8 @@ export class EngagementService {
   getEventsForStory(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'eventsForStory/' + id);
   }
+  
+  getDictionaryLookups(id: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'dictionaryLookups/' + id)
+  }
 }

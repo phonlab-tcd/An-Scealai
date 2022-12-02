@@ -1,0 +1,11 @@
+<div *ngIf="dictionaryWords.length > 0" class="dictionaryWordContainer">
+  <div *ngFor="let entry of dictionaryWords" style="padding-top: 5px;">
+    <mat-card>
+      <mat-card-content class="cardContent">
+        <div> <b>{{entry.dictionaryLookup}}</b> </div>
+        <div> {{entry.date | date : 'd/M/yy'}} </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

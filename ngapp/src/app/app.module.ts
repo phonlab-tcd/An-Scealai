@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 //import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
-import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
@@ -25,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
 import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
+import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -187,7 +187,8 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         }),
         NgramDistributionModule,
         WordCountsModule,
-        GrammarPieChartModule
+        GrammarPieChartModule,
+        DictionaryLookupsModule
     ],
     providers: [
         StoryService,

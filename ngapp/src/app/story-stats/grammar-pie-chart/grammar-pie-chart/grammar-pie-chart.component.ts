@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
-import config from 'abairconfig';
 
 @Component({
   selector: 'app-grammar-pie-chart',

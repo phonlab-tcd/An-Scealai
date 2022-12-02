@@ -2006,6 +2006,9 @@ export default {
   ngram_distribution: {
     ga: 'Dáileadh na N-gram',
     en: 'N-gram distribution' },
+  dictionary_lookups: {
+    ga: 'Dictionary Lookups',
+    en: 'Dictionary Lookups' },
   statistics_dashboard: {
     ga: 'Deais Staitisticí',
     en: 'Statistics Dashboard' },

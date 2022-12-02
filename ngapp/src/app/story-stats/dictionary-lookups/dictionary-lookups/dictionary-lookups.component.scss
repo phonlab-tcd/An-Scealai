@@ -1,0 +1,12 @@
+.dictionaryWordContainer {
+  max-height: 200px;
+  min-width: 400px;
+  overflow-y: auto;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}

@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslationService } from '../../translation.service';
 import { AuthenticationService } from '../../authentication.service';
+import { EngagementService } from '../../engagement.service';
 import { StoryService } from '../../story.service';
 import { Story } from 'app/story';
 import { firstValueFrom } from 'rxjs';
@@ -19,13 +20,15 @@ export class StudentStatsDashboardComponent implements OnInit {
               private auth: AuthenticationService,
               private storyService: StoryService,
               private http: HttpClient,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private engagement: EngagementService) { }
   
   dialogRef: MatDialogRef<unknown>;
   stories: Story[] = [];
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
+  dictionaryWords: string[] = [];
 
   async ngOnInit() {
     this.stories = await firstValueFrom(this.storyService.getStoriesByOwner(this.auth.getUserDetails()._id));
@@ -34,7 +37,7 @@ export class StudentStatsDashboardComponent implements OnInit {
   
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
-         width: '60vh',
+         width: '90vh',
     });
     this.dialogRef.afterClosed().subscribe(_ => {
         this.dialogRef = undefined;
@@ -62,6 +65,10 @@ export class StudentStatsDashboardComponent implements OnInit {
     };
     statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(this.auth.getUserDetails()._id, '', ''))).avgWordCount);
     this.wordCountData = statsEntry;
+    
+    // get dictionary lookups 
+    this.dictionaryWords = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id));
+    console.log(this.dictionaryWords);
   }
 
   countDictSum(A, B) {
