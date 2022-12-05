@@ -10,12 +10,14 @@ import { AuthenticationService } from '../../../authentication.service';
 })
 export class DictionaryLookupsComponent implements OnInit {
   
-  @Input() dictionaryWords: any[] = [];
-  @Input() dictionaryLookups;
+  @Input() dictionaryLookups:Object;
 
   constructor(private ts: TranslationService, public auth: AuthenticationService) { }
 
   ngOnInit(): void {
+  }
+  
+  ngOnChanges(changes: any) {
   }
   
 }

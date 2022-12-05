@@ -27,8 +27,8 @@ export class StudentStatsDashboardComponent implements OnInit {
   stories: Story[] = [];
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
-  wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
-  dictionaryWords: string[] = [];
+  wordCountData: Object = {};
+  dictionaryWords: Object = {};
 
   async ngOnInit() {
     this.stories = await firstValueFrom(this.storyService.getStoriesByOwner(this.auth.getUserDetails()._id));
@@ -59,15 +59,14 @@ export class StudentStatsDashboardComponent implements OnInit {
     ))).reduce(this.countDictSum, {});
     
     // get word count data
-    let statsEntry = {
-      studentNames: [this.auth.getUserDetails().username],
-      averageWordCounts: []
-    };
-    statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(this.auth.getUserDetails()._id, '', ''))).avgWordCount);
-    this.wordCountData = statsEntry;
+    let data = {};
+    data[this.auth.getUserDetails().username] = (await firstValueFrom(this.storyService.averageWordCount(this.auth.getUserDetails()._id, '', ''))).avgWordCount;
+    this.wordCountData = data;
     
     // get dictionary lookups 
-    this.dictionaryWords = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
+    data = {};
+    data[this.auth.getUserDetails()._id] = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
+    this.dictionaryWords = data;
   }
 
   countDictSum(A, B) {

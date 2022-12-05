@@ -1,8 +1,8 @@
+<!-- Teacher Graph -->
 <div *ngIf="auth.getUserDetails().role == 'TEACHER'; else studentGraph"  class="chartContainer">
   <ngb-carousel #carousel interval=0 wrap=true>
     <ng-template ngbSlide *ngFor="let student of dictionaryLookups | keyvalue">
       <p class="studentName">{{student.key}}</p>
-      
       <div *ngIf="student.value.length > 0; else noWords" class="dictionaryWordContainer">
         <div *ngFor="let entry of student.value" style="padding-top: 5px;">
           <mat-card>
@@ -15,23 +15,32 @@
       </div>
       <ng-template #noWords>
         <div style="height:200px; text-align:center; padding-top:25%">
-          No looked-up words <br>
+          {{ts.l.no_words_lookedup}} <br>
         </div>
       </ng-template>
-      
     </ng-template>
   </ngb-carousel>
 </div>
 
+<!-- Student Graph -- no carousel -->
 <ng-template #studentGraph>
-  <div *ngIf="dictionaryWords.length > 0" class="dictionaryWordContainer" style="min-width:400px;">
-    <div *ngFor="let entry of dictionaryWords" style="padding-top: 5px;">
-      <mat-card>
-        <mat-card-content class="cardContent">
-          <div> <b>{{entry.dictionaryLookup}}</b> </div>
-          <div> {{entry.date | date : 'd/M/yy'}} </div>
-        </mat-card-content>
-      </mat-card>
+  <div *ngIf="dictionaryLookups" class="dictionaryWordContainer" style="min-width:400px;">
+    <div *ngFor="let student of dictionaryLookups | keyvalue ">
+      <div *ngIf="student.value.length > 0; else noWordsStudent">
+        <div *ngFor="let entry of student.value" style="padding-top: 5px;">
+          <mat-card>
+            <mat-card-content class="cardContent">
+              <div> <b>{{entry.dictionaryLookup}}</b> </div>
+              <div> {{entry.date | date : 'd/M/yy'}} </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+      <ng-template #noWordsStudent>
+        <div style="height:200px; text-align:center; padding-top:25%">
+          {{ts.l.no_words_lookedup}} <br>
+        </div>
+      </ng-template>
     </div>
   </div>
 </ng-template>

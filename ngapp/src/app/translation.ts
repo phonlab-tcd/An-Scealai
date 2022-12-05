@@ -2007,8 +2007,11 @@ export default {
     ga: 'Dáileadh na N-gram',
     en: 'N-gram distribution' },
   dictionary_lookups: {
-    ga: 'Dictionary Lookups',
+    ga: 'Focail a cuardaíoch',
     en: 'Dictionary Lookups' },
+  no_words_lookedup: {
+    ga: 'Níor aimsíodh aon chuardach',
+    en: 'No words looked up' },
   statistics_dashboard: {
     ga: 'Deais Staitisticí',
     en: 'Statistics Dashboard' },

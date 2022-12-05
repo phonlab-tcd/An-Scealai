@@ -7,6 +7,7 @@ import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Story } from 'app/story';
+import { Classroom } from 'app/classroom';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';
@@ -34,7 +35,7 @@ export class StatsDashboardComponent implements OnInit {
   classroomTitle = 'Select a classroom'; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
-  wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
+  wordCountData: Object = {};
   dictionaryLookups: Object = {};
   
   async ngOnInit() {
@@ -66,7 +67,7 @@ export class StatsDashboardComponent implements OnInit {
     if (classroom) await this.loadDataForCharts(classroom, startDate, endDate);
   }
   
-  async loadDataForCharts(classroom, startDate, endDate) {
+  async loadDataForCharts(classroom:Classroom, startDate:string, endDate:string) {
     this.classroomTitle = classroom.title;
     // get n-gram data
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
@@ -85,7 +86,7 @@ export class StatsDashboardComponent implements OnInit {
       )
     ))).reduce(this.countDictSum, {});
     
-    // get word count data
+    // // get word count data
     this.wordCountData = await this.getWordCounts(classroom, startDate, endDate);
     
     // get dictionary lookups 
@@ -96,7 +97,7 @@ export class StatsDashboardComponent implements OnInit {
     ));
   }
 
-  countDictSum(A, B) {
+  countDictSum(A:any, B:any) {
     for (const key of Object.keys(B)) {
       A[key] = A[key] ? A[key] + B[key] : B[key] 
     }
@@ -106,19 +107,14 @@ export class StatsDashboardComponent implements OnInit {
   /*
   * Get average word count and username for each student in classroom (over all stories)
   */
-  async getWordCounts(classroom, startDate, endDate) {
-    let statsEntry = {
-      studentNames: [],
-      averageWordCounts: []
-    };
-    
-    await Promise.all(classroom.studentIds.map(async (id) => {
-        statsEntry.studentNames.push((await firstValueFrom(this.userService.getUserById(id))).username);
-        statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount);
-      }
+  async getWordCounts(classroom:Classroom, startDate:string, endDate:string) {
+    const data = {};
+    await Promise.all(classroom.studentIds.map(async (id) =>
+      data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
+      ((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount)
     ));
     
-    return statsEntry;
+    return data;
   }
   
   /*
