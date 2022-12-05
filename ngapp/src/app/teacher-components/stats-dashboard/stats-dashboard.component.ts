@@ -1,17 +1,17 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
-import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
-import { Classroom } from 'app/classroom'
 import { Story } from 'app/story';
+import { Classroom } from 'app/classroom';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';
+import { EngagementService } from '../../engagement.service';
 
 @Component({
   selector: 'app-stats-dashboard',
@@ -22,20 +22,21 @@ export class StatsDashboardComponent implements OnInit {
 
   constructor(
     private storyService: StoryService,
-    private auth: AuthenticationService,
     private classroomService: ClassroomService,
     private userService: UserService,
     private dialog: MatDialog,
     private http: HttpClient,
     private ts: TranslationService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private engagement:EngagementService
   ) { }
 
   classroomStories: Story[];
   classroomTitle = 'Select a classroom'; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
-  wordCountData: {studentNames, averageWordCounts} = {studentNames:[], averageWordCounts:[]};
+  wordCountData: Object = {};
+  dictionaryLookups: Object = {};
   
   async ngOnInit() {
     // initialise stats with classroom id from route param
@@ -66,7 +67,7 @@ export class StatsDashboardComponent implements OnInit {
     if (classroom) await this.loadDataForCharts(classroom, startDate, endDate);
   }
   
-  async loadDataForCharts(classroom, startDate, endDate) {
+  async loadDataForCharts(classroom:Classroom, startDate:string, endDate:string) {
     this.classroomTitle = classroom.title;
     // get n-gram data
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
@@ -85,11 +86,18 @@ export class StatsDashboardComponent implements OnInit {
       )
     ))).reduce(this.countDictSum, {});
     
-    // get word count data
+    // // get word count data
     this.wordCountData = await this.getWordCounts(classroom, startDate, endDate);
+    
+    // get dictionary lookups 
+    this.dictionaryLookups = {};
+    await Promise.all(classroom.studentIds.map(async (id) =>
+      this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
+      await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
+    ));
   }
 
-  countDictSum(A, B) {
+  countDictSum(A:any, B:any) {
     for (const key of Object.keys(B)) {
       A[key] = A[key] ? A[key] + B[key] : B[key] 
     }
@@ -99,19 +107,14 @@ export class StatsDashboardComponent implements OnInit {
   /*
   * Get average word count and username for each student in classroom (over all stories)
   */
-  async getWordCounts(classroom, startDate, endDate) {
-    let statsEntry = {
-      studentNames: [],
-      averageWordCounts: []
-    };
-    
-    await Promise.all(classroom.studentIds.map(async (id) => {
-        statsEntry.studentNames.push((await firstValueFrom(this.userService.getUserById(id))).username);
-        statsEntry.averageWordCounts.push((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount);
-      }
+  async getWordCounts(classroom:Classroom, startDate:string, endDate:string) {
+    const data = {};
+    await Promise.all(classroom.studentIds.map(async (id) =>
+      data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
+      ((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount)
     ));
     
-    return statsEntry;
+    return data;
   }
   
   /*
