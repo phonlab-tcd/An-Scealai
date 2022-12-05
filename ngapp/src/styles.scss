@@ -31,7 +31,9 @@
   --notification-button: #bd2323;
   --scealai-delete-red-3: #c40021;
   --scealai-delete-red-3-hover: #8f0018;
+  --paper-img: url(https://www.abair.ie/scealai/assets/img/paperBg.jpg);
 }
+
 
 html,body.rootBody {
   height: 100%;
@@ -45,7 +47,7 @@ html {
 }
 
 body.rootBody {
-   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
+   background: url("https://www.abair.ie/scealai/assets/img/paperBg.jpg") no-repeat center fixed;
    -webkit-background-size: cover;
    -moz-background-size: cover;
    -o-background-size: cover;
@@ -155,7 +157,7 @@ body.rootBody {
   margin-left: 15%;
   z-index: 10;
   border-radius: 5px;
-  background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+  background: url("https://www.abair.ie/scealai/assets/img/paperBg.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

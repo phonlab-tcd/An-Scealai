@@ -1,5 +1,5 @@
 .container {
-    width: 600px;
+    width: 95%;
 }
 
 .header {
@@ -15,25 +15,39 @@
     font-style: normal;
 }
 
-.buttonContainer {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    gap: 1rem;
-}
-
 .fileDownloadBtn {
     padding: 5px;
     background-color: var(--scealai-green);
     color: white;
     border-radius: 4px;
     margin-bottom: 10px;
+    text-decoration: none;
+    text-align: center;
 }
 
 .fileDownloadBtn:hover {
-    cursor: pointer;
+  color: var(--scealai-light-green);
+  cursor: pointer;
+  -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
+}
+
+.textContent {
+  font-size: 12pt;
+}
+
+.paperHeader {
+  padding-bottom: 10px;
+  font-size: 20px;
+  color: #000000DE;
+  font-family: Roboto, "Helvetica Neue";
+  margin: 15px;
+  font-weight: 500;
+}
+
+.paperDescription {
+  padding-top: 20px;
+  font-size: 12pt;
 }
 
 @media only screen and (max-width: 700px) {

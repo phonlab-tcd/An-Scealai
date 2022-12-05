@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 //import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
-import { createCustomElement } from '@angular/elements';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion'
@@ -25,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
 import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
+import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -90,116 +90,118 @@ import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
+import { UserGuidesComponent } from './user-guides/user-guides.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LandingComponent,
-    AboutComponent,
-    TechnologyComponent,
-    LanguageComponent,
-    LoginComponent,
-//     RegisterComponent,
-//     RegisterFormComponent,
-//     WaitingForEmailVerificationComponent,
-    DashboardComponent,
-    BookContentsComponent,
-    ChatbotComponent,
-    NewStoryComponent,
-    ProfileComponent,
-    AdminPanelComponent,
-    TeachersComponent,
-    AdminDashboardComponent,
-    UserComponent,
-    StoryComponent,
-    TeacherDashboardComponent,
-    TeacherStudentComponent,
-    TeacherClassroomComponent,
-    TeacherStoryComponent,
-    TeacherPanelComponent,
-    AdminClassroomComponent,
-    SynthesisComponent,
-    StoryHistoryComponent,
-    RecordingComponent,
-    RegisterProfileComponent,
-    StoryDetailsComponent,
-    StatsComponent,
-    FindUserComponent,
-    HighlightDirective,
-    FilterPipe,
-    MessagesComponent,
-    TeacherStatsComponent,
-    ResourcesComponent,
-    TeamComponent,
-    AboutLaraComponent,
-    RecordingHistoryComponent,
-    ViewRecordingComponent,
-    SafeHtmlPipe,
-    SponsorsComponent,
-    SynthesisPlayerComponent,
-    ProfileStatsComponent,
-    FeatureStatsComponent,
-    CreateQuizComponent,
-    AboutTaidhginComponent,
-    SynthItemComponent,
-    SynthVoiceSelectComponent,
-    StatsDashboardComponent,
-    ClassroomSelectorComponent,
-    BasicDialogComponent,
-    StudentStatsDashboardComponent,
-    RecordingDialogComponent,
-  ],
-  imports: [
-    RegisterModule,
-    ReportAnIssueModule,
-    SpinnerModule,
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    // SlimLoadingBarModule,
-    FormsModule,
-    TextInputHighlightModule,
-    BrowserAnimationsModule,
-    MatExpansionModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatDialogModule,
-    NgbModule,
-    NgbDropdownModule,
-    QuillModule.forRoot({
-      customOptions: [{
-        import: 'formats/font',
-        whitelist: [
-          'sans-serif',         // @quill-font
-          'serif',              // @quill-font
-          'monospace',          // @quill-font
-          'arial',              // @quill-font
-          'times-new-roman',    // @quill-font
-        ]
-      }],
-    }),
-    NgramDistributionModule,
-    WordCountsModule,
-    GrammarPieChartModule
-  ],
-  providers: [
-    StoryService,
-    UserService,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    {provide : LocationStrategy , useClass: HashLocationStrategy },
-    {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide : MatDialogRef, useValue: {}},
-  ],
-  bootstrap: [
-    AppComponent,
-  ],
-  entryComponents: [ChatbotComponent],
+    declarations: [
+        AppComponent,
+        LandingComponent,
+        AboutComponent,
+        TechnologyComponent,
+        LanguageComponent,
+        LoginComponent,
+        //     RegisterComponent,
+        //     RegisterFormComponent,
+        //     WaitingForEmailVerificationComponent,
+        DashboardComponent,
+        BookContentsComponent,
+        ChatbotComponent,
+        NewStoryComponent,
+        ProfileComponent,
+        AdminPanelComponent,
+        TeachersComponent,
+        AdminDashboardComponent,
+        UserComponent,
+        StoryComponent,
+        TeacherDashboardComponent,
+        TeacherStudentComponent,
+        TeacherClassroomComponent,
+        TeacherStoryComponent,
+        TeacherPanelComponent,
+        AdminClassroomComponent,
+        SynthesisComponent,
+        StoryHistoryComponent,
+        RecordingComponent,
+        RegisterProfileComponent,
+        StoryDetailsComponent,
+        StatsComponent,
+        FindUserComponent,
+        HighlightDirective,
+        FilterPipe,
+        MessagesComponent,
+        TeacherStatsComponent,
+        ResourcesComponent,
+        TeamComponent,
+        AboutLaraComponent,
+        RecordingHistoryComponent,
+        ViewRecordingComponent,
+        SafeHtmlPipe,
+        SponsorsComponent,
+        SynthesisPlayerComponent,
+        ProfileStatsComponent,
+        FeatureStatsComponent,
+        CreateQuizComponent,
+        AboutTaidhginComponent,
+        SynthItemComponent,
+        SynthVoiceSelectComponent,
+        StatsDashboardComponent,
+        ClassroomSelectorComponent,
+        BasicDialogComponent,
+        StudentStatsDashboardComponent,
+        RecordingDialogComponent,
+        UserGuidesComponent,
+    ],
+    imports: [
+        RegisterModule,
+        ReportAnIssueModule,
+        SpinnerModule,
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        // SlimLoadingBarModule,
+        FormsModule,
+        TextInputHighlightModule,
+        BrowserAnimationsModule,
+        MatExpansionModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatDialogModule,
+        NgbModule,
+        NgbDropdownModule,
+        QuillModule.forRoot({
+            customOptions: [{
+                    import: 'formats/font',
+                    whitelist: [
+                        'sans-serif',
+                        'serif',
+                        'monospace',
+                        'arial',
+                        'times-new-roman', // @quill-font
+                    ]
+                }],
+        }),
+        NgramDistributionModule,
+        WordCountsModule,
+        GrammarPieChartModule,
+        DictionaryLookupsModule
+    ],
+    providers: [
+        StoryService,
+        UserService,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: MatDialogRef, useValue: {} },
+    ],
+    bootstrap: [
+        AppComponent,
+    ]
 })
 export class AppModule {
   constructor(private injector: Injector) {

@@ -14,7 +14,7 @@
     width: 80%;
     margin-left: 10%;
     border-radius: 5px;
-    background: url("/assets/img/paperBg.jpg") no-repeat center center fixed; 
+    background: var(--paper-img) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

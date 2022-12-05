@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
 
 const LIGHT_RED = 'rgba(255, 204, 203, 1)';
@@ -13,11 +14,11 @@ const RED = 'rgba(255, 114, 111, 1)';
 })
 
 export class WordCountsComponent implements OnInit {
-  
-  @Input() wordCountData:{studentNames, averageWordCounts};
+
+  @Input() wordCountData: Object;
   wordCountChart: Chart;
 
-  constructor() { }
+  constructor(private ts: TranslationService) { }
 
   ngOnInit() {
     this.loadWordChart();
@@ -35,12 +36,12 @@ export class WordCountsComponent implements OnInit {
     this.wordCountChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: this.wordCountData.studentNames,
+            labels: Object.keys(this.wordCountData),
             datasets: [{
-                label: 'Average Word Count',
-                data: this.wordCountData.averageWordCounts,
-                backgroundColor: this.wordCountData.averageWordCounts.map(_ => LIGHT_RED),
-                borderColor: this.wordCountData.averageWordCounts.map(_ => RED),
+                label: this.ts.l.average_word_counts,
+                data: Object.values(this.wordCountData),
+                backgroundColor: Object.values(this.wordCountData).map(_ => LIGHT_RED),
+                borderColor: Object.values(this.wordCountData).map(_ => RED),
                 borderWidth: 1
             }]
         },

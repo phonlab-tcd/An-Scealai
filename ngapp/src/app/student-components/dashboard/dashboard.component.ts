@@ -297,6 +297,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
     if (this.quillHighlighter)
@@ -304,6 +305,7 @@ export class DashboardComponent implements OnInit {
     else
       return '';
   }
+
 
   /* Show/hide grammar checker button text on dashboard */
   toggleGrammarButton() {

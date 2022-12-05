@@ -5,7 +5,7 @@ import { TranslationService } from '../../../translation.service';
 import { AuthenticationService } from 'app/authentication.service';
 import { Classroom } from 'app/classroom';
 import { firstValueFrom } from 'rxjs';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-classroom-selector',
@@ -24,9 +24,9 @@ export class ClassroomSelectorComponent implements OnInit {
   classrooms: Classroom[];
   
   // for selecting a date range
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl()
+  range = new UntypedFormGroup({
+    start: new UntypedFormControl(),
+    end: new UntypedFormControl()
   });
   
   showDatePicker: boolean = false;

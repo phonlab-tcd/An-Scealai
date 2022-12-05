@@ -6,14 +6,77 @@
     </div>
   </div>
   <div class="aboutContent">
-    <div class="headerTitle">{{ts.l.what_is_an_scealai}}</div>
-    {{ts.l.about_content_text}}
-    <br/>
-    <br/>
-    {{ts.l.about_content_text_academic}}
-  </div>
-  <div class="buttonContainer">
-    <a href="assets/pdf/paper1.pdf" class="fileDownloadBtn" download>{{ts.l.academic_paper}} <i class="fas fa-download"></i></a>
-    <a href="assets/pdf/User_guide.pdf" class="fileDownloadBtn" download>{{ts.l.user_guide}} <i class="fas fa-download"></i></a>
+    <mat-card style="text-align:left;">
+      <mat-card-header>
+        <mat-card-title> {{ts.l.what_is_an_scealai}} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="textContent">
+        {{ts.l.about_content_text}}
+        <br><br>
+        {{ts.l.about_content_text_academic}}
+      </mat-card-content>
+    </mat-card>
+    <br><br>
+    
+    <div class="paperHeader"> {{ts.l.academic_papers}} </div>
+    <mat-accordion multi>
+      <mat-expansion-panel >
+        <mat-expansion-panel-header [collapsedHeight]="'100px'">
+          <mat-panel-title>
+              <div><b> Using Speech and NLP Resources to build an iCALL platform for a 
+                minority language, the story of An Scéalaí, the Irish experience to date </b></div>
+          </mat-panel-title>
+          <mat-panel-description>
+            2022 - Neasa Ní Chiaráin, Oisín Nolan, Madeleine Comtois, Neimhin Robinson Gunning, Harald Berthelsen, Ailbhe Ní Chasaide
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div class="paperDescription">This paper describes how emerging linguistic resources and technologies can be used to build a language learning platform for Irish, an endangered language. This platform, An Scéalaí, harvests learner corpora-a vital resource both to study the stages of learners’ language acquisition and to guide future platform development. A technical description of the platform is provided, including details of how different speech technologies and linguistic resources are fused to provide a holistic learner experience. The active continuous participation of the community, and platform evaluations by learners and teachers, are discussed.</div>
+          <br>
+          <a href="assets/pdf/CelticCALL.pdf" class="fileDownloadBtn" download>{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'100px'">
+          <mat-panel-title>
+              <div><b> Celtic CALL: strengthening the vital role of education for language transmission </b></div>
+          </mat-panel-title>
+          <mat-panel-description>
+            2022 - Neasa Ní Chiaráin, Madeleine Comtois, Oisín Nolan, Neimhin Robinson Gunning, John Sloan, Harald Berthelsen, Ailbhe Ní Chasaide
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div class="paperDescription"> In this paper, we present the Irish language learning platform, An Scéalaí, an intelligent Computer-Assisted Language Learning (iCALL) system which incorporates speech and language technologies in ways that promote the holistic development of the language skills-writing, listening, reading, and speaking. The technologies offer the advantage of extensive feedback in spoken and written form, enabling learners to improve their production. The system works equally as a classroom-based tool and as a standalone platform for the autonomous learner. Given the key role of education for the transmission of all the Celtic languages, it is vital that digital technologies be harnessed to maximise the effectiveness of language teaching/learning. An Scéalaí has been used by large numbers of learners and teachers and has received very positive feedback. It is built as a modular system which allows existing and newly emerging technologies to be readily integrated, even if those technologies are still in development phase. The architecture is largely language-independent, and as an open-source system, it is hoped that it can be usefully deployed in other Celtic languages.</div>
+          <br><br>
+          <a href="assets/pdf/ComputEL.pdf" class="fileDownloadBtn" download>{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'100px'">
+          <mat-panel-title>
+              <div><b> An Scéalaí: autonomous learners harnessing speech and language technologies </b></div>
+          </mat-panel-title>
+          <mat-panel-description>
+            2019 - Neasa Ni Chiarain, Ailbhe Ni Chasaide
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div class="paperDescription"> This paper presents an autonomous language learning platform which has speech and language technology at its core. An Scealaí ('the Storyteller') is a web-based interactive iCALL system that allows learners to compose their own text and correct it by listening to the text spoken with synthetic voices (aural proofing) and by responding to NLP prompts that detect errors. All learner interactions are logged and monitored, allowing researchers to observe the learning processes. A pilot study by 14 learners of Irish in the US was conducted to explore the efficacy of the corrective mechanisms currently implemented in the platform. The results of the pilot study indicate that both mechanisms currently on offer were effective in the development of writing skills but work in rather different ways. Aural proofing appears to generate an immediate corrective response which indicates that it is serving both to develop awareness of specific phonological contrasts as well as basic phonic rules of the language. In the case of the NLP prompts, corrections were also made, although the data suggest that this is a slower process and that learners may, at least initially, merely be satisfying the system's prompts rather than discovering the grammatical basis of the correction. The pilot has been useful in pointing towards future directions for platform development that can take the needs of this type of adult autonomous learner into account.</div>
+          <br><br>
+          <a href="assets/pdf/paper1.pdf" class="fileDownloadBtn" download>{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br><br>
+    
+    <mat-card style="text-align:left;">
+      <mat-card-header>
+        <mat-card-title> {{ts.l.ell_award}} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="textContent">
+        <div style="display:flex;">
+          <img src="assets/img/ELL_Logo.jpg" alt="ELL Logo" style="padding-right:15%">
+          <div>
+            <div> {{ts.l.scealai_wins_ell_award}}</div><br>
+            <div> {{ts.l.ell_description}}</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <br><br>
   </div>
 </div>
