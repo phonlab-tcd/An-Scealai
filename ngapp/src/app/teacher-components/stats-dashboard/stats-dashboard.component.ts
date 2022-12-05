@@ -92,7 +92,7 @@ export class StatsDashboardComponent implements OnInit {
     this.dictionaryLookups = {};
     await Promise.all(classroom.studentIds.map(async (id) =>
       this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
-      await firstValueFrom(this.engagement.getDictionaryLookups(id))
+      await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
     ));
   }
 

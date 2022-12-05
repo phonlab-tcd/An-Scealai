@@ -67,7 +67,7 @@ export class StudentStatsDashboardComponent implements OnInit {
     this.wordCountData = statsEntry;
     
     // get dictionary lookups 
-    this.dictionaryWords = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id));
+    this.dictionaryWords = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
   }
 
   countDictSum(A, B) {

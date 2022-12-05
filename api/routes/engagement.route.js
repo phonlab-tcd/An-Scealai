@@ -104,8 +104,15 @@ engagementRoutes.route('/eventsForStory/:id').get((req, res) => {
   });
 });
 
-engagementRoutes.route('/dictionaryLookups/:id').get((req, res) => {
-    Event.find({'userId' : req.params.id, 'type': 'USE-DICTIONARY'}, (err, events) => {
+engagementRoutes.route('/dictionaryLookups/:id').post((req, res) => {
+  const conditions = {'userId': req.params.id, 'type': 'USE-DICTIONARY'};
+  if (req.body.startDate !== '' && req.body.endDate !== '') {
+    conditions['date'] = {
+      '$gte': req.body.startDate,
+      '$lte': req.body.endDate,
+    };
+  };
+  Event.find(conditions, (err, events) => {
     if (err) {
       res.json(err);
     }
