@@ -19,8 +19,8 @@ async function check(input: string):Promise<ErrorTag[]>{
     const errorTags: ErrorTag[] = errors.map(error => {
       return {
         errorText: input.slice(error.fromx, error.tox),
-        messageGA: ERROR_INFO['RELATIVE-CLAUSE'].messageEN,
-        messageEN: ERROR_INFO['RELATIVE-CLAUSE'].messageGA,
+        messageGA: error.msg,
+        messageEN: error.msg,
         context: error.context,
         nameEN: ERROR_INFO['RELATIVE-CLAUSE'].nameEN,
         nameGA: ERROR_INFO['RELATIVE-CLAUSE'].nameGA,
@@ -52,7 +52,8 @@ async function callRelativeClauseChecker(input: string): Promise<any> {
     if (res.ok) {
       return await res.json();
     }
-    throw new Error(res.statusText);
+    // throw new Error(res.statusText);
+    return [];
 }
 
 /**

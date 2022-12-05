@@ -44,7 +44,6 @@ export class QuillHighlighter {
     constructor(quillEditor: Quill, ts: TranslationService) {
         this.quillEditor = quillEditor;
         this.ts = ts;
-        this.mostRecentHoveredMessage = this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
     }
 
     public show(tags: HighlightTag[]): void {
@@ -52,7 +51,6 @@ export class QuillHighlighter {
       
         tags.forEach((tag) => {
             // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
-            
             this.quillEditor.formatText(
                 tag.fromX,
                 (tag.toX - tag.fromX),
@@ -99,6 +97,7 @@ export class QuillHighlighter {
         //document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
+    /* Set styling for tooltip */
     private mouseOverTagElem(tag: HighlightTag, tagElement: Element, tooltip) {
         tagElement.setAttribute('data-selected', '');
     
@@ -134,8 +133,16 @@ export class QuillHighlighter {
           tooltip.root.style.left;
       }
       
-    public getMostRecentMessage() {
-      return this.mostRecentHoveredMessage;
+    /* Return either last tag hovered, checking grammar, or instructions message */
+    public getGrammarMessage(grammarLoaded: boolean) {
+      if(grammarLoaded) {
+        if (!this.mostRecentHoveredMessage)
+          return this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
+        else 
+          return this.mostRecentHoveredMessage;
+      }
+      else 
+        return this.ts.message('checking_grammar');
     }
 }
 

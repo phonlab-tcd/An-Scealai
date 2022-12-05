@@ -210,11 +210,7 @@
       </div>
 
       <!-- SELECTED GRAMMAR SUGGESTION -->
-      <div
-        style="background-color: #8FCAFF"
-        [hidden]="!showErrorTags || grammarLoading"
-        [innerHTML]=selectedGrammarSuggestion()>
-      </div>
+      <div style="background-color: #8FCAFF" [hidden]="!showErrorTags" [innerHTML]=selectedGrammarSuggestion()></div>
       <!-- GRAMMAR CHECKER SETTINGS -->
       <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags">
         <span class="dictionaryContainer">
@@ -239,7 +235,7 @@
         <!-- GRAMMAR ERROR CHECKBOXES -->
 
         
-        <div *ngFor="let tag of (filteredErrors | keyvalue)" style="margin:2px;">
+        <div *ngFor="let tag of (grammarErrorsTypeDict | keyvalue)" style="margin:2px;">
           <input
               [(ngModel)]="checkBoxes[tag.key]"
               (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"

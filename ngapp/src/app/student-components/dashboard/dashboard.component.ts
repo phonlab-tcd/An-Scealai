@@ -9,8 +9,8 @@ import { DomSanitizer             } from '@angular/platform-browser';
 import { HttpClient               } from '@angular/common/http';
 import { firstValueFrom, Subject  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
-import { HighlightTag             } from 'angular-text-input-highlight';
 import   Quill                      from 'quill';
+import { MessageKey               } from 'app/translation.service';
 
 import { EventType                } from 'app/event';
 import { Story                    } from 'app/story';
@@ -19,48 +19,20 @@ import { StoryService             } from 'app/story.service';
 import { EngagementService        } from 'app/engagement.service';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
-import { GramadoirRuleId          } from 'app/grammar.service';
-import { GrammarService           } from 'app/grammar.service';
-import { ReadableGramadoirRuleIds } from 'app/grammar.service';
 
 import { TranslationService       } from 'app/translation.service';
-import { MessageKey               } from 'app/translation.service';
 import { StatsService             } from 'app/stats.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
-import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 
 import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
+import { QuillHighlighter } from '../../lib/quill-highlight/quill-highlight';
 import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
 import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
-import { QuillHighlighter } from '../../lib/quill-highlight/quill-highlight';
 
-// QUILL VARIABLES
-const Parchment = Quill.import('parchment');
-const gramadoirTag = new Parchment.Attributor.Attribute(
-  'gramadoir-tag',
-  'data-gramadoir-tag', {
-    scope: Parchment.Scope.INLINE
-  });
-
-Quill.register(gramadoirTag);
-
-const Tooltip = Quill.import('ui/tooltip');
-
-type QuillHighlightTag = {
-  start: number;
-  length: number;
-  type: GramadoirRuleId;
-  tooltip: typeof Tooltip;
-  color: string;
-  messages: {
-    en: string;
-    ga: string;
-  };
-};
 
 @Component({
   selector: 'app-dashboard',
@@ -75,28 +47,28 @@ type QuillHighlightTag = {
 
 export class DashboardComponent implements OnInit {
   
-  // STORY AND GRAMMAR VARIABLES
+  // STORY VARIABLES
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
   previousTextToCheck: string;
   saveStoryDebounceId = 0;
   storySaved = true;
   audioSource: SafeUrl;
+  downloadStoryFormat = '.pdf';
+  
+  // GRAMMAR VARIABLES
+  grammarEngine: GrammarEngine;
   mostRecentGramadoirRequestTime = null;
   mostRecentGramadoirInput: string = null;
-  grammarTagFilter: object = {};
-  currentGrammarErrorTypes = {};
-  downloadStoryFormat = '.pdf';
-  currentGrammarErrors: any = [];
+  grammarLoaded: boolean = false;
+  grammarErrors: any = [];
+  grammarErrorsTypeDict: Object = {};
   showErrorTags: boolean = false;
-  grammarEngine: GrammarEngine;
-  filteredErrors: Object = {};
   checkBoxes: Object = {'showAll': true};
   
-  // OPTIONS (to show or not to show)
+  // OPTIONS (to show or not to show dash menu bar)
   showOptions = true;
   dontToggle = false;
-  
   selectTeanglann = true;
   feedbackVisible: boolean;
   dictionaryVisible: boolean;
@@ -120,8 +92,6 @@ export class DashboardComponent implements OnInit {
   
   @ViewChild('mySynthesisPlayer')
   synthesisPlayer: SynthesisPlayerComponent;
-
-  ReadableGramadoirRuleIds = ReadableGramadoirRuleIds;
   
   // SPEECH TO TEXT
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
@@ -140,24 +110,23 @@ export class DashboardComponent implements OnInit {
     private notifications: NotificationService,
     private router: Router,
     private engagement: EngagementService,
-    private grammar: GrammarService,
     public ts: TranslationService,
     public statsService: StatsService,
-    public quillHighlightService: QuillHighlightService,
   ) {
-    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker], this.http);
+    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http);
     // subscribe to any changes made to the story text
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
+      this.grammarLoaded = false;
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
       this.mostRecentGramadoirRequestTime = grammarCheckerTime;
+      
       try {
-        // check text for grammar errors and updating highlighting
-        console.log("checking grammar");
-        this.currentGrammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
+        // check text for grammar errors
+        this.grammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
         // create a dictionary of error type and tags for checkbox filtering
-        this.filteredErrors = this.currentGrammarErrors.reduce(function(map, tag) {
+        this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
             if(!map[tag.type]) {
               map[tag.type] = [];
             }
@@ -165,15 +134,17 @@ export class DashboardComponent implements OnInit {
             return map;
         }, {});
         // initialise all error checkboxes to true
-        for (const key of Object.keys(this.filteredErrors)) {
+        for (const key of Object.keys(this.grammarErrorsTypeDict)) {
           this.checkBoxes[key] = true;
         }
+
         // show error highlighting if button on
         if(this.showErrorTags) {
-          this.quillHighlighter.show(this.currentGrammarErrors);
+          this.quillHighlighter.show(this.grammarErrors);
         }
+        this.grammarLoaded = true;
       } catch (updateGrammarErrorsError) {
-        if ( !this.currentGrammarErrors) {
+        if ( !this.grammarErrors) {
           window.alert(
             'There was an error while trying to fetch grammar ' +
             'suggestions from the Gramadóir server:\n' +
@@ -316,28 +287,22 @@ export class DashboardComponent implements OnInit {
   /* apply error highlighting to all or none of the errors */
   setAllCheckBoxes() {
     if(this.checkBoxes['showAll']) {
-      this.quillHighlighter.show(this.currentGrammarErrors);
+      this.quillHighlighter.show(this.grammarErrors);
     }
     else {
-      this.quillHighlighter.hide(this.currentGrammarErrors);
+      this.quillHighlighter.hide(this.grammarErrors);
     }
     Object.keys(this.checkBoxes).forEach(key => {
-      this.checkBoxes[key] = this.checkBoxes['showAll']; // re-set all error checkboxes
+      this.checkBoxes[key] = this.checkBoxes['showAll']; // reset all error checkboxes
     });
   }
 
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
     if (this.quillHighlighter)
-      return this.quillHighlighter.getMostRecentMessage()
+      return this.quillHighlighter.getGrammarMessage(this.grammarLoaded)
     else
-      return this.instructionMessage();
-  }
-  
-  /* Get EN or GA message for grammar instructions */
-  instructionMessage() {
-    const key: MessageKey = 'hover_over_a_highlighted_word_for_a_grammar_suggestion';
-    return this.ts.message(key);
+      return '';
   }
 
   /* Show/hide grammar checker button text on dashboard */
@@ -351,8 +316,8 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error tags */
   async toggleGrammarTags() {
       this.showErrorTags ? 
-        this.quillHighlighter.hide(this.currentGrammarErrors):
-        this.quillHighlighter.show(this.currentGrammarErrors);
+        this.quillHighlighter.hide(this.grammarErrors):
+        this.quillHighlighter.show(this.grammarErrors);
       this.showErrorTags = !this.showErrorTags;
   }
   
@@ -476,7 +441,7 @@ export class DashboardComponent implements OnInit {
     this.dictionaryVisible = false;
   }
 
-// return whether or not the student has viewed the feedback
+  // return whether or not the student has viewed the feedback
   hasNewFeedback(): boolean {
     if (
       this.story &&
