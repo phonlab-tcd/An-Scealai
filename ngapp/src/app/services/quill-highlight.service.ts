@@ -178,7 +178,7 @@ export class QuillHighlightService {
 
     // First try making the request with the ABAIR hosted gramadoir, then if that fails try the Cadhan hosted gramadoir
     const errorTagsArray = [];
-    await this.makeGramadoirRequest(
+    this.makeGramadoirRequest(
         this.grammar.gramadoirUrl,
         sentencesWithOffsets,
         currentGramadoirErrorTypes

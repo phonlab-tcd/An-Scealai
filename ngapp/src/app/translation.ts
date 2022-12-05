@@ -248,8 +248,8 @@ export default {
     ga: 'Cuir tic i ngach bosca',
     en: 'Check all' },
   checking_grammar: {
-    ga: 'Checké grammaré',
-    en: 'Checking Grammar' },
+    ga: '...an ghramadach á seiceáil',
+    en: '...Checking Grammar' },
   gramadoir: {
     ga: 'An Gramadóir',
     en: 'An Gramadóir' },

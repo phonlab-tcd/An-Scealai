@@ -2,14 +2,18 @@ import { GrammarChecker, ErrorTag, GrammarCache } from './types';
 import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { AuthenticationService } from 'app/authentication.service';
 
 export class GrammarEngine {
     private cacheMap: Map<string, GrammarCache>;
     private grammarCheckers: GrammarChecker[];
     private http: HttpClient;
+    private auth: AuthenticationService;
+    private previousErrorTags: Object[] = [];
     
-    constructor(grammarCheckers: GrammarChecker[], http: HttpClient) {
+    constructor(grammarCheckers: GrammarChecker[], http: HttpClient, auth: AuthenticationService) {
         this.http = http;
+        this.auth = auth;
         this.grammarCheckers = grammarCheckers;
         // make empty caches for each checker
         this.cacheMap = new Map<string, GrammarCache>();
@@ -48,7 +52,35 @@ export class GrammarEngine {
                 return offsetErrorTags;
             }))
         ))).flat().filter(err => err.length);
+        
+        // log error counts to the DB
+        this.countNewErrors(allErrorTags.flat());
 
         return allErrorTags;
+    }
+    
+    // Count new grammar errors and save to DB
+    async countNewErrors(newTags:any[]) {      
+      const prevErrorMap = this.previousErrorTags.map(error => JSON.stringify([error['errorText'], error['type']]));
+      const newErrorMap = newTags.map(error => JSON.stringify([error.errorText, error.type]));
+      
+      // Multiset subtraction: currentErrorMap - prevError map
+      // This should give us the errors that are new in currentErrorMap
+      const toCount = newErrorMap
+        .filter(entry => {
+          if (prevErrorMap.includes(entry)) {
+            prevErrorMap[prevErrorMap.indexOf(entry)] = null;
+            return false;
+          }
+          return true;
+        })
+        .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
+      console.log('toCount', toCount);
+      
+      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
+      const body = {errors: toCount,};
+      this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body, {headers}).subscribe();
+      
+      this.previousErrorTags = newTags;
     }
 }

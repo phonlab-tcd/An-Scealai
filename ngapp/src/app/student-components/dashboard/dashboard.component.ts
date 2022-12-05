@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
     public ts: TranslationService,
     public statsService: StatsService,
   ) {
-    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http);
+    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
     // subscribe to any changes made to the story text
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
       this.grammarLoaded = false;
