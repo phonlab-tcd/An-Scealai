@@ -117,7 +117,7 @@ function getSkipIndices(text: string): number[] {
 
 /**
 * Get all indices 
-* @param text - sentence from story text (in lowercase)
+* @param arr - sentence from story text (in lowercase)
 * @param val - word from the ignore list
 * @returns - Array of indices
 */
@@ -139,8 +139,8 @@ function getAllIndexes(arr: string, val: string | RegExp) : number[] {
 }
 
 // given a string, return the string after changing the content a specified index
-function replaceAt(str, index, replacement) : string {
-  return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
+function replaceAt(str:string, index:number, replacement:string) : string {
+  return str.substr(0, index) + replacement + str.substr(index + replacement.length);
 }
 
 // given a character, returns whether or not it is a vowel

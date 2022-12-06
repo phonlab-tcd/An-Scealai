@@ -74,7 +74,7 @@ async function check(input: string):Promise<ErrorTag[]>{
 * @param url - url specifying which instance of an gramadoir to call
 * @returns - Promise of returned GramadoirTags
 */
-async function callAnGramadoir(input: string, language: 'en' | 'ga', url): Promise<GramadoirTag[]> {
+async function callAnGramadoir(input: string, language: 'en' | 'ga', url:string): Promise<GramadoirTag[]> {
   const res = await fetch(url, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded',
@@ -100,7 +100,7 @@ function gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 
 }
 
 /**
-* Shorten An Gramadoir ruleId to simple name: ex. Lingua::GA::Gramadoir/MOLADH => MOLADH
+* Shorten An Gramadoir response ruleId to simple name: ex. Lingua::GA::Gramadoir/MOLADH => MOLADH
 * @param str - An Gramadoir ruleId
 * @returns - simplified string
 */

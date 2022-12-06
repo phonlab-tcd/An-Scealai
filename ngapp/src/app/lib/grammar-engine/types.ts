@@ -35,7 +35,7 @@ export const ERROR_INFO = {
       messageEN: 'Relative Clause Error', 
       messageGA: 'Relative Clause Error'
     },
-    "GENITIVE-HOME": {
+    "GEN-TONIC": {
       nameEN: 'Genitive',
       nameGA: 'Genitive',
       color: '#00FA9A', 
