@@ -290,7 +290,7 @@ export class DashboardComponent implements OnInit {
       this.quillHighlighter.show(this.grammarErrors);
     }
     else {
-      this.quillHighlighter.hide(this.grammarErrors);
+      this.quillHighlighter.hide();
     }
     Object.keys(this.checkBoxes).forEach(key => {
       this.checkBoxes[key] = this.checkBoxes['showAll']; // reset all error checkboxes

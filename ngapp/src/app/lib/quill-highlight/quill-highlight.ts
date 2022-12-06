@@ -84,16 +84,28 @@ export class QuillHighlighter {
         });
     }
 
-    public hide(tags: HighlightTag[]) {
-      tags.forEach((tag) => {
+    public hide(tags?: HighlightTag[]) {
+      if (typeof tags !== "undefined") { // hide tags from params
+        tags.forEach((tag) => {
+          this.quillEditor.formatText(
+            tag.fromX,
+            (tag.toX - tag.fromX),
+              {'highlight-tag': null,
+              'highlight-tag-type': null,
+              'background-color': ''}
+          );
+        });
+      }
+      else {                             // hide all tags
         this.quillEditor.formatText(
-          tag.fromX,
-          (tag.toX - tag.fromX),
+          0,
+          this.quillEditor.getLength(),
             {'highlight-tag': null,
             'highlight-tag-type': null,
             'background-color': ''}
         );
-      });
+      }
+
         //document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
