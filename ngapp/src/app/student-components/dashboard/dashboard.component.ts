@@ -266,6 +266,7 @@ export class DashboardComponent implements OnInit {
   /* Initialise quill editor and highlighter */
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
+    this.quillEditor.root.setAttribute("spellcheck", "false");
     this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts);
   }
   
