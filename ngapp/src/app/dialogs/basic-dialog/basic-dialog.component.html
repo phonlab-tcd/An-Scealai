@@ -23,7 +23,24 @@
     <pre *ngIf="data?.type == 'classCode'" class="codeView">{{data?.data}}</pre>
     <!-- single text input -->
     <input *ngIf="data?.type == 'updateText'" type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]">
-
+    <!-- select -->
+    <div *ngIf="data?.type == 'select'" >
+      Save as: <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]"><br><br>
+      Format:
+      <select  #downloadFormatOption style="border-end-end-radius: 0; background: rgba(0,0,0,0);" [(ngModel)]="textInputs[1]">
+        <option>.pdf</option>
+        <option>.docx</option>
+        <option>.txt</option>
+        <option>.odt</option>
+        <option>.pptx</option>
+        <option>.html</option>
+        <option>.md</option>
+        <option>.latex</option>
+        <option>.json</option>
+      </select>
+      <br><br>
+     </div>
+    
     <div mat-dialog-actions [align]="'center'">
       <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.type != 'classCode'"> {{data?.cancelText}} </button>
       <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInputs"> {{data?.confirmText}} </button>

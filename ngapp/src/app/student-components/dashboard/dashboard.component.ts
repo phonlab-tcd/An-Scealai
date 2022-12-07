@@ -32,6 +32,8 @@ import { SynthesisPlayerComponent } from 'app/student-components/synthesis-playe
 import { QuillHighlightService    } from 'app/services/quill-highlight.service';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
 import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
@@ -89,6 +91,7 @@ export class DashboardComponent implements OnInit {
     public statsService: StatsService,
     public classroomService: ClassroomService,
     public quillHighlightService: QuillHighlightService,
+    private dialog: MatDialog
   ) {
 
     this.textUpdated.pipe(
@@ -122,18 +125,38 @@ export class DashboardComponent implements OnInit {
   downloadMimeType() {
     return 'application/' + this.downloadStoryFormat.split('.')[1];
   }
-
+  
+  dialogRef: MatDialogRef<unknown>;
+  
   downloadStory() {
-    this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
-      .subscribe(data=>{
-        console.log(data);
-        const elem = window.document.createElement('a');
-        elem.href = window.URL.createObjectURL(data);
-        elem.download = this.story.title;
-        document.body.appendChild(elem);
-        elem.click();
-        document.body.removeChild(elem);
-      });
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.download,
+        type: 'select',
+        confirmText: this.ts.l.download,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          console.log(res[0])
+          res[1] ? this.downloadStoryFormat = res[1] : this.downloadStoryFormat = '.pdf'
+          this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
+              .subscribe(data=>{
+                console.log(data);
+                const elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(data);
+                res[0] ? elem.download = res[0] : elem.download = this.story.title;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+              });
+          console.log(res);
+        }
+    });
   }
 
   @ViewChild('mySynthesisPlayer')
