@@ -26,11 +26,7 @@
   --modal-hover: #707070;
   --delete-red: #dd000e;
   --delete-red-hover: #b7000a;
-  --delete-red-2: #d6123c;
-  --delete-red-2-hover: #9b0d2b;
   --notification-button: #bd2323;
-  --scealai-delete-red-3: #c40021;
-  --scealai-delete-red-3-hover: #8f0018;
   --paper-img: url(https://www.abair.ie/scealai/assets/img/paperBg.jpg) no-repeat center fixed;
 }
 
@@ -148,6 +144,12 @@ body.rootBody {
     padding-top: 0px;
     overflow: auto;
     height: 67.5vh;
+}
+
+.panelContent {
+  padding-top: 20px; 
+  font-size: 13pt; 
+  font-family: 'Serif';
 }
 
 //////////////////////////////////////////////////////////////////////////////// RECORDINGS / SYNTHESIS
@@ -299,7 +301,7 @@ body.rootBody {
 
 .notificationBtn {
     margin-left: 5px;
-    background-color: var(--notification-button);
+    background-color: #bd2323;
     color: white;
     font-size: 8pt;
     border-radius: 50%;
@@ -335,12 +337,12 @@ body.rootBody {
 // }
 
 .deleteRedBtn {
-    background-color: var(--scealai-delete-red-3);
+    background-color: var(--delete-red);
     color: white;
 }
 
 .deleteRedBtn:hover {
-    background-color: var(--scealai-delete-red-3-hover);
+    background-color: var(--delete-red-hover);
 }
 
 .createBtnGreen {
@@ -611,7 +613,7 @@ button:focus, input:focus, audio:focus{
 .recordingIcon {
     font-size: 14pt;
     margin-left: 10px;
-    color: var(--scealai-delete-red-3);
+    color: var(--delete-red);
     animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
 

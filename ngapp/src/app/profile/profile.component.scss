@@ -68,7 +68,7 @@
 }
 
 .leaveClassroomButton {
-    background-color: var(--delete-red-2);
+    background-color: var(--delete-red);
     border-radius: 5px;
     padding: 2px;
     padding-left: 5px;
@@ -79,7 +79,7 @@
 }
 
 .leaveClassroomButton:hover {
-    background-color: var(--delete-red-2-hover);
+    background-color: var(--delete-red-hover);
     transition: 0.5s;
 }
 
@@ -88,7 +88,7 @@
 }
 
 .notFoundText {
-    color: var(--delete-red-2);
+    color: var(--delete-red);
 }
 
 .greenLink {
@@ -112,7 +112,7 @@
 }
 
 .deleteAccountButton {
-  background-color: var(--delete-red-2);
+  background-color: var(--delete-red);
   margin-bottom: 10px;
   font-size: 9px;
   border-radius: 10px 10px 10px 10px;
@@ -120,7 +120,7 @@
 }
 
 .deleteAccountButton:hover {
-    background-color: var(--delete-red-2-hover);
+    background-color: var(--delete-red-hover);
     transition: 0.5s;
 }
 
