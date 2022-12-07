@@ -7,4 +7,9 @@
   text-decoration: none;
   color: white;
   margin-left: 10px;
+  padding:10px;
+}
+
+.greenBtn:hover {
+  color: var(--scealai-light-green);
 }
