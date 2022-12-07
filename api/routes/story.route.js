@@ -65,11 +65,11 @@ let storyRoutes;
 })();
 
 // Get stories by a given author after a certain date from DB
-storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function (req, res) {
-  Story.find({"owner": req.params.owner, date: {$gte: req.params.date}}, function (err, stories) {
-    if(err) {
+storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res) {
+  Story.find({'owner': req.params.owner, 'date': {$gte: req.params.date}}, function(err, stories) {
+    if (err) {
       console.log(err);
-      res.json(err)
+      res.json(err);
     } else {
       res.json(stories);
     }
@@ -78,10 +78,10 @@ storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function (req, res
 
 // Get story with a given ID from DB
 storyRoutes.route('/viewStory/:id').get(function(req, res) {
-  Story.find({_id:req.params.id}, (err, story) => {
-    if(err) {
+  Story.find({_id: req.params.id}, (err, story) => {
+    if (err) {
       console.log(err);
-      res.status(400).json({"message" : err.message});
+      res.status(400).json({'message': err.message});
     } else {
       res.json(story);
     }
@@ -117,119 +117,116 @@ storyRoutes
         if (req.body.title) {
           story.title = req.body.title;
         }
-        if( story.studentId) story.owner = story.studentId;
+        if ( story.studentId) story.owner = story.studentId;
         story.save().then(
-          (ok) => res.json('Update complete'),
-          (err)=> res.status(400).json(err));
+            (ok) => res.json('Update complete'),
+            (err)=> res.status(400).json(err));
       });
-});
+    });
 
 // Update story author
-storyRoutes.route('/updateAuthor/:oldAuthor').post(function (req, res) {
-  Story.updateMany({"author": req.params.oldAuthor}, { $set: { "author": req.body.newAuthor } }, function(err, stories) {
-    if(err) res.json(err);
+storyRoutes.route('/updateAuthor/:oldAuthor').post(function(req, res) {
+  Story.updateMany({'author': req.params.oldAuthor}, {$set: {'author': req.body.newAuthor}}, function(err, stories) {
+    if (err) res.json(err);
 
-    if(stories === null) {
-      console.log("story is null!");
-    }
-    else {
+    if (stories === null) {
+      console.log('story is null!');
+    } else {
       res.json(stories);
     }
   });
-})
+});
 
 // Delete story by ID
 storyRoutes.route('/delete/:id').get(function(req, res) {
   Story.findOneAndRemove({_id: req.params.id}, function(err, story) {
-    if(err) {
+    if (err) {
       console.log(err);
       res.json(err);
-    }
-    else res.json("Successfully removed story");
+    } else res.json('Successfully removed story');
   });
 });
 
 // Delete story by student username
 storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
-  Story.deleteMany({"author": req.params.author}, function(err, story) {
-    if(err) {
+  Story.deleteMany({'author': req.params.author}, function(err, story) {
+    if (err) {
       console.log(err);
       res.json(err);
-    }
-    else res.json("Successfully removed all stories for user");
+    } else res.json('Successfully removed all stories for user');
   });
 });
 
 storyRoutes.route('/feedback/:id').get(function(req, res) {
   Story.findById(req.params.id, (err, story) => {
-    if(err) {
+    if (err) {
       console.log(err);
       res.json(err);
     }
-    if(story) {
+    if (story) {
       res.json(story.feedback);
     } else {
-      res.status(404).json({"message" : "Story does not exist"});
+      res.status(404).json({'message': 'Story does not exist'});
     }
   });
 });
 
 storyRoutes.route('/addFeedback/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    if(err) {
+    if (err) {
       console.log(err);
       res.json(err);
     }
-    if(story) {
+    if (story) {
       story.feedback.text = req.body.feedback;
       story.feedback.seenByStudent = false;
       story.save();
-      res.status(200).json({"message" : "Feedback added successfully"});
+      res.status(200).json({'message': 'Feedback added successfully'});
     } else {
-      res.status(404).json({"message" : "Story does not exist"});
+      res.status(404).json({'message': 'Story does not exist'});
     }
   });
 });
 
 storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    if(err) {
+    if (err) {
       console.log(err);
       res.json(err);
     }
-    if(story) {
+    if (story) {
       const storage = multer.memoryStorage();
-      const upload = multer({ storage: storage, limits: { fields: 1, fileSize: 6000000, files: 1, parts: 2 }});
+      const upload = multer({storage: storage, limits: {fields: 1, fileSize: 6000000, files: 1, parts: 2}});
       upload.single('audio')(req, res, (err) => {
         if (err) {
-          return res.status(400).json({ message: "Upload Request Validation Failed" });
+          return res.status(400).json({message: 'Upload Request Validation Failed'});
         }
         // create new stream and push audio data
         const readableTrackStream = new Readable();
         readableTrackStream.push(req.file.buffer);
         readableTrackStream.push(null);
         // get bucket (collection) for storing audio file
-        let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
-          bucketName: 'audioFeedback'
+        const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
+          bucketName: 'audioFeedback',
         });
         // get audio file from collection and save id to story audio id
-        let uploadStream = bucket.openUploadStream("audio-feedback-for-story-" + story._id.toString());
+        const uploadStream = bucket.openUploadStream('audio-feedback-for-story-' + story._id.toString());
         story.feedback.audioId = uploadStream.id;
         story.feedback.seenByStudent = false;
         story.save();
-        // pipe data in stream to the audio file entry in the db 
+        // pipe data in stream to the audio file entry in the db
         readableTrackStream.pipe(uploadStream);
 
         uploadStream.on('error', () => {
-          return res.status(500).json({ message: "Error uploading file" });
+          return res.status(500).json({message: 'Error uploading file'});
         });
 
         uploadStream.on('finish', () => {
-          return res.status(201).json({ message: "File uploaded successfully, stored under Mongo"});
+          return res.status(201).json({message: 'File uploaded successfully, stored under Mongo'});
         });
       });
     } else {
-      res.status(404).json({"message" : "Story does not exist"});
+      res.status(404).json({'message': 'Story does not exist'});
     }
   });
 });
@@ -240,14 +237,14 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
       console.log(err);
       res.json(err);
     }
-    if(story) {
+    if (story) {
       if (req.body.activeRecording) {
         story.activeRecording = req.body.activeRecording;
       }
-      story.save().then(_ => {
+      story.save().then((_) => {
         res.json('Update complete');
-      }).catch(_ => {
-        res.status(400).send("Unable to update");
+      }).catch((_) => {
+        res.status(400).send('Unable to update');
       });
     } else {
       res.status(404).json({message: 'Story not found'});
@@ -255,87 +252,84 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   });
 });
 
-storyRoutes
-    .route('/downloadStory/:id/:format')
-    .get(async (req, res) => {
-      try {
-        logger.info({
-          endpoint: '/story/downloadStory',
-          params: req.params,
-        });
-
-        const story =
-          await Story.findById(req.params.id);
-
-        if (!story) {
-          return res.status(404)
-              .json({
-                message: 'Story does not exist',
-              });
-        }
-
-	console.dir(story);
-
-        // GENERATE A FILENAME <story._id>.<format>
-        const filename =
-          path.join(
-              __dirname,
-              `storiesForDownload/${story._id}.${req.params.format}`);
-	
-	console.log(filename);
-
-        logger.info({
-          msg: 'CREATING ' + req.params.format,
-          filename: filename,
-          story: story,
-        });
-
-        // Pandoc example
-        const pandocErr =
-          await pandoc(
-              story.htmlText || story.text, // src
-              ['--from', 'html', '-o', filename]); // args
-
-        if (pandocErr) {
-          return res.json({
-            pandocError: pandocErr,
-          });
-        }
-
-        // SEND THE FILE CREATED WITH PANDOC
-        res.sendFile(filename, (sendFileErr) => {
-          if (sendFileErr) {
-            logger.error({
-              endpoint: '/story/downloadStory',
-              while: 'sending the file:' + filename,
-              error: sendFileErr,
-            });
-	    return res.send(sendFileErr);
-          }
-          // DELETE THE FILE AFTER IT HAS BEEN SENT
-          fs.unlink(filename, (err) => {
-            if (err) {
-              logger.error({
-                endpoint: '/story/downloadStory',
-                while: 'trying to delete file:' + filename,
-                error: err,
-              });
-            }
-          });
-        });
-      } catch (error) {
-        console.dir(error);
-        logger.error(error);
-        return res.json(error);
-      }
+storyRoutes.route('/downloadStory/:id/:format').get(async (req, res) => {
+  try {
+    logger.info({
+      endpoint: '/story/downloadStory',
+      params: req.params,
     });
+
+    const story = await Story.findById(req.params.id);
+
+    if (!story) {
+      return res.status(404)
+          .json({
+            message: 'Story does not exist',
+          });
+    }
+
+    console.dir(story);
+
+    // GENERATE A FILENAME <story._id>.<format>
+    const filename =
+      path.join(
+          __dirname,
+          `storiesForDownload/${story._id}${req.params.format}`);
+
+    console.log(filename);
+
+    logger.info({
+      msg: 'CREATING ' + req.params.format,
+      filename: filename,
+      story: story,
+    });
+
+    // Pandoc example
+    const pandocErr =
+      await pandoc(
+          story.htmlText || story.text, // src
+          ['--from', 'html', '-o', filename]); // args
+
+    if (pandocErr) {
+      return res.json({
+        pandocError: pandocErr,
+      });
+    }
+
+    // SEND THE FILE CREATED WITH PANDOC
+    res.sendFile(filename, (sendFileErr) => {
+      if (sendFileErr) {
+        logger.error({
+          endpoint: '/story/downloadStory',
+          while: 'sending the file:' + filename,
+          error: sendFileErr,
+        });
+        return res.send(sendFileErr);
+      }
+      // DELETE THE FILE AFTER IT HAS BEEN SENT
+      fs.unlink(filename, (err) => {
+        if (err) {
+          logger.error({
+            endpoint: '/story/downloadStory',
+            while: 'trying to delete file:' + filename,
+            error: err,
+          });
+        }
+      });
+    });
+  } catch (error) {
+    console.dir(error);
+    logger.error(error);
+    return res.json(error);
+  }
+});
 /*
- * Synthesise a story given the story id 
+ * Synthesise a story given the story id
  */
 storyRoutes.route('/synthesise/:id').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    if(story) {
-      synthesiseStory(story).then(synthesis => {
+    if (story) {
+      synthesiseStory(story).then((synthesis) => {
         if (synthesis) {
           res.json(synthesis);
         } else {
@@ -354,7 +348,7 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
  */
 storyRoutes.route('/synthesiseObject/').post((req, res) => {
   if (req.body.story) {
-    synthesiseStory(req.body.story).then(synthesis => {
+    synthesiseStory(req.body.story).then((synthesis) => {
       if (synthesis) {
         res.json(synthesis);
       } else {
@@ -368,9 +362,9 @@ storyRoutes.route('/synthesiseObject/').post((req, res) => {
 
 function synthesiseStory(story) {
   let dialectCode;
-  if(story.dialect === 'connemara') dialectCode = 'ga_CM';
-  if(story.dialect === 'donegal') dialectCode = 'ga_GD';
-  if(story.dialect === 'kerry') dialectCode = 'ga_MU';
+  if (story.dialect === 'connemara') dialectCode = 'ga_CM';
+  if (story.dialect === 'donegal') dialectCode = 'ga_GD';
+  if (story.dialect === 'kerry') dialectCode = 'ga_MU';
 
   // create a form with the story text, dialect choice, html, and speed
   /*
@@ -381,8 +375,8 @@ function synthesiseStory(story) {
   console.log("\nnew format: ", test9);
   */
 
-  let form = {
-    //Input: test9,
+  const form = {
+    // Input: test9,
     Input: story.text,
     Locale: dialectCode,
     Format: 'html',
@@ -390,46 +384,46 @@ function synthesiseStory(story) {
   };
 
   // turn form into a url query string
-  let formData = querystring.stringify(form);
-  let contentLength = formData.length;
+  const formData = querystring.stringify(form);
+  const contentLength = formData.length;
 
   return new Promise((resolve, reject) => {
     // make a request to abair passing in the form data
     request({
       headers: {
-        'Host' : 'www.abair.ie',
+        'Host': 'www.abair.ie',
         'Content-Length': contentLength,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       // uri: 'https://www.abair.tcd.ie/webreader/synthesis',
       uri: abairBaseUrl + '/webreader/synthesis',
       body: formData,
-      method: 'POST'
-    }, function (err, resp, body) {
-      if(err) resp.send(err);
-      if(body) {
+      method: 'POST',
+    }, function(err, resp, body) {
+      if (err) resp.send(err);
+      if (body) {
         // audioContainer is chunk of text made up of paragraphs
-        let audioContainer = parse(body).querySelectorAll('.audio_paragraph');
-        let paragraphs = [];
-        let urls = [];
+        const audioContainer = parse(body).querySelectorAll('.audio_paragraph');
+        const paragraphs = [];
+        const urls = [];
         // loop through every paragraph and fill array of sentences
-        for(let p of audioContainer) {
-          let sentences = [];
-          for(let s of p.childNodes) {
+        for (const p of audioContainer) {
+          const sentences = [];
+          for (const s of p.childNodes) {
             // push the sentences
             // s.rawTagName <--> s.tagName if synthesis text not appearing
-            if(s.rawTagName === 'span') {
+            if (s.rawTagName === 'span') {
               sentences.push(s.toString());
-            } 
+            }
             // push the audio ids for the sentences
             // s.rawTagName <--> s.tagName if synthesis text not appearing
-            else if(s.rawTagName === 'audio') {
+            else if (s.rawTagName === 'audio') {
               urls.push(s.id);
             }
           }
           paragraphs.push(sentences);
         }
-        resolve({html : paragraphs, audio : urls });
+        resolve({html: paragraphs, audio: urls });
       } else {
         reject();
       }
