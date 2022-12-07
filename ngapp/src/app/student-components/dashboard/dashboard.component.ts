@@ -125,6 +125,11 @@ export class DashboardComponent implements OnInit {
       try {
         // check text for grammar errors
         this.grammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
+        
+        // save any grammar errors with associated sentences to DB
+        if(this.grammarErrors) {
+          await this.grammarEngine.saveErrorsWithSentences(this.story._id);
+        }
         // create a dictionary of error type and tags for checkbox filtering
         this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
             if(!map[tag.type]) {
@@ -133,6 +138,7 @@ export class DashboardComponent implements OnInit {
             map[tag.type].push(tag);
             return map;
         }, {});
+        
         // initialise all error checkboxes to true
         for (const key of Object.keys(this.grammarErrorsTypeDict)) {
           this.checkBoxes[key] = true;
