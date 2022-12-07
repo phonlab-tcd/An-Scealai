@@ -250,6 +250,7 @@ export class DashboardComponent implements OnInit {
 
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
+    this.quillEditor.root.setAttribute("spellcheck", "false");
   }
 
   getSelectedMessage() {

@@ -6,7 +6,7 @@
     width: var(--bookContainerWidth);
     margin-left: 2.5%;
     margin-bottom: 2.5%;
-    background: var(--paper-img) no-repeat center center fixed; 
+    // background: var(--paper-img); 
     -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
     box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
@@ -100,12 +100,13 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  --options-btn-background-color: rgba(223, 217, 200, 0);
-  --options-btn-background-color-hover : #aeffc486;
+  // --options-btn-background-color: rgba(223, 217, 200, 0);
+  // --options-btn-background-color-hover : #aeffc486;
+  --options-btn-background-color-hover : lightgray
 }
 
 .optionsBtnContainer:hover {
-  background-color: #ffd07587;
+  // background-color: #ffd07587;
 }
 
 .optionsBtn {
@@ -124,6 +125,7 @@
   background-color: var(--options-btn-background-color-hover);
   color: #35322f;
   cursor: pointer;
+  border-radius: 2;
 }
 
 .optionsPopupBtn {
@@ -308,10 +310,12 @@
 
 .ql-container {
   height: auto;
+  background-color: #F8F9FA;
 }
 
 .ql-editor {
-  background-color: var(--scealai-cream-2);
+  // background-color: var(--scealai-cream-2);
+  background-color: white;
   /* ~44px is the height of the toolbar */
   height: calc(var(--textfieldHeight));
   z-index: 1;
