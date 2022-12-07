@@ -45,7 +45,6 @@ import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
@@ -105,7 +104,6 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         DashboardComponent,
         BookContentsComponent,
         ChatbotComponent,
-        NewStoryComponent,
         ProfileComponent,
         AdminPanelComponent,
         TeachersComponent,
