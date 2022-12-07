@@ -68,10 +68,11 @@
       </div>
 
       <!-- EDIT STORY DETAILS -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; editStoryTitle()">
         {{ts.l.edit_title_or_dialect}}
         <i class="fas fa-pencil-alt optionsBtnIcon"></i>
       </div>
+      
       
       <!-- SPEECH TO TEXT-->
       <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; speakStory()">
@@ -109,7 +110,7 @@
       <div
         *ngIf="showOptions"
         class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
+        (click)="this.dontToggle=true; this.dictionaryVisible = !this.dictionaryVisible;">
           {{ts.l.dictionary}}
         <i class="fas fa-book optionsBtnIcon"></i>
       </div>

@@ -63,7 +63,6 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { MessagesComponent } from './messages/messages.component';
@@ -123,7 +122,6 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         StoryHistoryComponent,
         RecordingComponent,
         RegisterProfileComponent,
-        StoryDetailsComponent,
         StatsComponent,
         FindUserComponent,
         HighlightDirective,
