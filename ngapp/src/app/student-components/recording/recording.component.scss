@@ -95,6 +95,7 @@ $corner-button-width: 10rem;
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
+    float:right;
 }
 
 .playAudioBtn:hover {
@@ -112,6 +113,7 @@ $corner-button-width: 10rem;
   padding: 4px;
   padding-left: 10px;
   padding-right: 10px;
+  float: right;
 }
 
 .recordingBtn:hover {
@@ -129,6 +131,7 @@ $corner-button-width: 10rem;
   padding: 4px;
   padding-left: 8px;
   padding-right: 8px;
+  float: right;
 }
 
 .recognisedSpeechContainer {

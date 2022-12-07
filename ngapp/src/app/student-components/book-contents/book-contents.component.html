@@ -28,18 +28,19 @@
         <!-- List each story -->
       <div *ngFor="let story of stories | appFilter: searchText">
         <div class="contentSection">
-          <!-- delete check box if deleteMode -->
-          <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
-          <!-- link the story to its dashboard -->
-          <div
-            appHighlight
-            [searchedWord]="searchText"
-            [content]="story.title"
-            [classToApply]="'font-weight-bold'"
-            [setTitle]="'true'" 
-            [routerLink]="['/dashboard', story._id]"
-            class="contentsLink"> 
-              {{story.title}}
+          <div class="contentsLink">
+            <!-- delete check box if deleteMode -->
+            <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
+            <!-- link the story to its dashboard -->
+            <div 
+              appHighlight
+              [searchedWord]="searchText"
+              [content]="story.title"
+              [classToApply]="'font-weight-bold'"
+              [setTitle]="'true'" 
+              [routerLink]="['/dashboard', story._id]"> 
+                {{story.title}}
+            </div>
           </div>
           <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm a' }}</div>
           <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm a' }}</div>

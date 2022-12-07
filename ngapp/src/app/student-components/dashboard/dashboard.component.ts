@@ -167,7 +167,8 @@ export class DashboardComponent implements OnInit {
 
   titleStyle() {
     return {
-      'font-style': this.storySaved ? 'normal' : 'italic'
+      'font-style': this.storySaved ? 'normal' : 'italic',
+      'font-size': '15pt'
     };
   }
 
