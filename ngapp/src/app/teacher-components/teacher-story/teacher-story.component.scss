@@ -2,48 +2,27 @@
     display: flex;
     padding-left: 5%;
     padding-right: 5%;
-    // padding-bottom: 20px;
 }
 
 .classContainer {
-  // height:auto;
-  // height: 80vh;
-  // 
-  // display:inline-flex; 
-  // flex-direction: column;
-  background-color: blue;
-  // padding-bottom: 70px;
-  display:inline-flex;
-  flex-direction: column;
-}
-
-.classHeader {
     display: inline-flex;
-}
-
-.audioPlayer {
-    height: 32px;
-    margin-top: 7px;
+    flex-direction: column;
 }
 
 .storyClassBody {
-    // display: flex;
     display: inline-flex;
     flex-direction: row;
     padding: 5px;
-    // padding-top: 0px;
-    // flex-wrap: wrap;
     gap: 1rem;
     flex-grow: 1;
     overflow-y: scroll;
 }
 
 .storyClassBody > * {
-  flex: 1; // makes the columns equally spaced
+    flex: 1; // makes the columns equally spaced
 }
 
 .storyTextContainer { 
-    // display: flex;
     display: inline-flex;
     flex-direction: column;
     background-color: var(--scealai-gray);
@@ -51,13 +30,11 @@
 }
 
 .storyTextHeader {
-    // width: 100%;
     background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
     padding: 4px;
-    // padding-left: 8px;
     font-size: 12pt;
     justify-content: center;
 }
@@ -74,12 +51,10 @@
 }
 
 .storyInfoContainer { 
-    // display: flex;
     display: inline-flex;
     flex-direction: column;
     background-color: var(--scealai-gray);
     border-radius: 5px;
-    // flex:1;
 }
 
 .storyInfoBody {
@@ -91,7 +66,7 @@
 }
 
 .userInfoContainer {
-  flex: 1;
+  flex: 0.75;
 }
 
 .userInfo {
@@ -133,7 +108,6 @@
     border: none;
     width: 100%;
     resize: none;
-    // min-height: 300px;
 }
 
 .feedbackFooter {
@@ -161,6 +135,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 5px;
+}
+
+.audioPlayer {
+    height: 32px;
+    margin-top: 7px;
 }
 
 @keyframes blinker {  
@@ -174,13 +154,6 @@
   }
 
 @media (min-width: 1000px) {
-    // .classContainer {
-    //     width: 900px;
-    //     position: absolute;
-    //     left: 50%;
-    //     margin-left: -450px;
-    // }
-
 
 }
 
