@@ -1,9 +1,6 @@
 .bookContainer {
-    --bookContainerHeight: 80vh;
-    --bookContainerWidth: 80%;
-    // height: calc(var(--bookContainerHeight/2));
-    height: var(--bookContainerHeight);
-    width: var(--bookContainerWidth);
+    height: auto;
+    width: 80%;
     background: var(--paper-img);
     margin-left: 10%;
     -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
@@ -27,7 +24,7 @@
 
 .contentsLinkContainer {
   // height: 260px;
-  height: 500px;;
+  height: 500px;
   overflow: auto;
   padding: 10px;
   background-color: #f7f2e7; 
