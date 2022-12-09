@@ -39,12 +39,14 @@
 }
 
 .messagesContainerHeader {
-  padding-left: 10px;
   padding-bottom: 2px;
-  padding-right: 25%;
-  font-size: 12px;
+  font-size: 14px;
   display: flex;
-  justify-content: space-between;
+}
+
+.messagesContainerHeader > * {
+  flex:1;
+  text-align: left;
 }
 
 .messageList {
@@ -62,16 +64,16 @@
     margin-bottom: 10px;
     font-size: 12pt;
     display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    text-align: left;
     padding: 10px;
     margin-left: 2px;
     margin-right: 2px;
     margin-top: 2px;
     margin-bottom: 5px;
-    padding-right: 20%;
 }
+
+.resultCard > * {
+  flex: 1;
+} 
 
 .resultCard:hover {
     cursor: pointer;

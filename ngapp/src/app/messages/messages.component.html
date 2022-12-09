@@ -14,7 +14,7 @@
      
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
-      <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
+      <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div style="padding-left:25px;"> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
       <div *ngIf="receivedMessages.length > 0" class="messageList">
         <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message.id"> 
         <!--  <div class="messageEntries"> -->
