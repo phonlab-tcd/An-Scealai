@@ -20,7 +20,7 @@
         <!--  <div class="messageEntries"> -->
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
-              <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle' style='font-size:10px;color:#70a87f;padding-right:5px'></i></div>
+              <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle dot'></i></div>
               <div> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>
