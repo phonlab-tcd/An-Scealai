@@ -32,7 +32,7 @@ export class StatsDashboardComponent implements OnInit {
   ) { }
 
   classroomStories: Story[];
-  classroomTitle = 'Select a classroom'; // By default we'll display this
+  classroomTitle = this.ts.l.select_a_classroom; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: Object = {};
