@@ -55,7 +55,7 @@ export class TeacherDashboardComponent implements OnInit {
     this.classroom.getAllCodes().subscribe((res: string[]) => {
       let newCode: string = this.getUniqueCode(res);
       this.newClassroom.code = newCode;
-      this.classroom.createClassroom(this.newClassroom).subscribe((res) => {
+      this.classroom.createClassroom(this.newClassroom).subscribe((_) => {
         this.classrooms = this.getClassrooms();
       }, (err) => {
         alert(err.message);
