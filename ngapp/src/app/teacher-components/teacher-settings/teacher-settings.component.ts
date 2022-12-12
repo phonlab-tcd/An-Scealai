@@ -72,7 +72,7 @@ export class TeacherSettingsComponent implements OnInit {
   removeStudent(studentId:string) {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
-        title: 'Are you sure you want to remove this student from this class',
+        title: 'Are you sure you want to remove this student from the class?',
         confirmText: this.ts.l.delete,
         cancelText: this.ts.l.cancel
       },
@@ -82,7 +82,6 @@ export class TeacherSettingsComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if(res) {
-          console.log('delete from classroom');
           this.classroomService.removeStudentFromClassroom(this.classroom._id, studentId).subscribe(() => {
               this.ngOnInit();
           });

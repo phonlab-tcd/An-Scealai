@@ -5,7 +5,7 @@
       <!-- Nav bar -->
       <div class="classHeader">
         <div class="backArrow" routerLink="/teacher/dashboard"><i class="fas fa-arrow-left"></i></div>
-        Classrooms
+        {{ts.l.classrooms}}
       </div>
       
       <!--Classroom title -->
@@ -15,7 +15,7 @@
         </div>
         
         <!-- List of students -->
-        <h5 class="studentsHeader"> Students enrolled </h5>
+        <h5 class="studentsHeader"> Students Enrolled </h5>
         <mat-card class="studentsList">
           <div class="classBody">
             <div class="classCard" *ngFor="let student of students">
@@ -27,7 +27,7 @@
         
         <!-- Grammar Options -->
         <h5 class="studentsHeader"> Grammar Checker Options </h5>
-        <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> Select which grammar checkers you would like your students to have access to. </h6>
+        <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> Select which grammar checkers you would like your students to use. </h6>
         <div class="checkBoxes">
           <span><input [(ngModel)]="checkerSelection.anGramadoir" (ngModelChange)="changesSaved = false;" type="checkbox"> An Gramadoir</span>
           <span><input [(ngModel)]="checkerSelection.relativeClause" (ngModelChange)="changesSaved = false;" type="checkbox"> Relative Clause</span>
