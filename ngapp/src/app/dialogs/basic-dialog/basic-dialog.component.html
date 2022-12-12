@@ -25,9 +25,8 @@
     <input *ngIf="data?.type == 'updateText'" type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]">
     <!-- select -->
     <div *ngIf="data?.type == 'select'" >
-      Save as: <input type="text" class="titleInput" placeholder="{{data.data[0]}}" name="title" [(ngModel)]="textInputs[0]"><br><br>
-      Format:
-      {{data.data.test}}
+      {{data.data[2] ? data.data[2][0] : 'Save as'}}: <input type="text" class="titleInput" placeholder="{{data.data[0]}}" name="title" [(ngModel)]="textInputs[0]"><br><br>
+      {{data.data[2] ? data.data[2][1] : 'Format'}}:
       <select  #downloadFormatOption style="border-end-end-radius: 0; background: rgba(0,0,0,0);" [(ngModel)]="textInputs[1]">
         <option *ngFor="let opt of data.data[1]">{{opt}}</option>
       </select>
