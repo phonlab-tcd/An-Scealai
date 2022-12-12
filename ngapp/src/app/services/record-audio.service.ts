@@ -68,7 +68,7 @@ export class RecordAudioService {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
     let errorText = "";
     
-    this.storyService.addFeedbackAudio(storyId, blob).subscribe((res) => {
+    this.storyService.addFeedbackAudio(storyId, blob).subscribe(() => {
       if(this.recorder.state != 'inactive') {
         this.recorder.stop();
         this.stream.getTracks().forEach(track => track.stop());
@@ -82,9 +82,8 @@ export class RecordAudioService {
   
   saveAudioMessage(id: string) {
     let blob = new Blob(this.chunks, {type: 'audio/mp3'});
-    let errorText = "";
     
-    this.messageService.addMessageAudio(id, blob).subscribe((res) => {
+    this.messageService.addMessageAudio(id, blob).subscribe(() => {
       if(this.recorder.state != 'inactive') {
         this.recorder.stop();
         this.stream.getTracks().forEach(track => track.stop());
@@ -125,6 +124,5 @@ export class RecordAudioService {
       
     });
     return transcription;
-  } 
-  
+  }
 }
