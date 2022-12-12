@@ -34,6 +34,7 @@ import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-ca
 import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
+import { gaelSpell } from '../../lib/grammar-engine/checkers/gaelspell-checker';
 
 
 @Component({

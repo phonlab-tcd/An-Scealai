@@ -42,6 +42,13 @@ export const ERROR_INFO = {
       messageEN: 'Consider using the genitive', 
       messageGA: 'Úsáid an tuiseal ginideach'
     },
+    "GaelSpell": {
+      nameEN: 'Spelling',
+      nameGA: 'Spelling',
+      color: 'orange', 
+      messageEN: 'Spelling Error', 
+      messageGA: 'Spelling Error.'
+    },
     "MICHEART": {
       nameEN: 'MINOR ERROR',
       nameGA: 'BOTÚN BEAG',

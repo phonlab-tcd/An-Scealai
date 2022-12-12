@@ -2,7 +2,7 @@ import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
 
 // initialise checker
 export const relativeClauseChecker: GrammarChecker = {
-  name: "RelativeClauseChecker",
+  name: "RelativeClause",
   check: check
 }; 
 

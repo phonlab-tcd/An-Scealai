@@ -2,7 +2,7 @@ import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
 
 // initialise the grammar checker
 export const leathanCaolChecker: GrammarChecker = {
-  name: "LEATHAN_CAOL",
+  name: "Leathan_Caol",
   check: check
 }; 
 
