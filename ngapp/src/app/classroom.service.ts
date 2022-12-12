@@ -82,5 +82,9 @@ export class ClassroomService {
  getGrammarRules(classroomId): Observable<any> {
    return this.http.get(this.baseUrl + 'getGrammarRules/' + classroomId);
  }
+ 
+ updateClassroomCheckers(classroomId: string, checkers: string[]):Observable<any> {
+   return this.http.post(this.baseUrl + 'updateClassroomCheckers/' + classroomId, {"checkers":checkers});
+ }
 
 }

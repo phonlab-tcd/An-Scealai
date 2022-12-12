@@ -110,6 +110,10 @@ export class TeacherClassroomComponent implements OnInit {
     this.router.navigateByUrl('/teacher/stats-dashboard/' + this.classroom._id);
   }
   
+  goToSettings() {
+    this.router.navigateByUrl('/teacher/teacher-settings/' + this.classroom._id);
+  }
+  
   openCodeDialog() {    
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -122,26 +126,6 @@ export class TeacherClassroomComponent implements OnInit {
     });
     
     this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
-  }
-  
-  openUpdateClassroomDialog() {    
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.edit_classroom_title,
-        type: 'updateText',
-        confirmText: this.ts.l.save,
-        cancelText: this.ts.l.cancel
-      },
-      width: '50vh',
-    });
-    
-    this.dialogRef.afterClosed().subscribe( (res) => {
-        this.dialogRef = undefined;
-        if(res) {
-          this.newTitle = res[0];
-          this.editTitle();
-        }
-    });
   }
   
   openDeleteClassroomDialog() {

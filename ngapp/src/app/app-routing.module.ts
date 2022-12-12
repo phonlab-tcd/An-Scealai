@@ -46,6 +46,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
+import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
 import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 
@@ -172,6 +173,10 @@ const routes: Routes = [
       {
         path: 'stats-dashboard/:id',
         component: StatsDashboardComponent,
+      },
+      {
+        path: 'teacher-settings/:id',
+        component: TeacherSettingsComponent,
       }
     ]
   },
