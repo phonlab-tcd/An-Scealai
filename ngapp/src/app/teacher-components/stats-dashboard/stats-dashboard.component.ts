@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { StoryService } from '../../story.service';
+import { AuthenticationService } from '../../authentication.service';
 import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
@@ -28,20 +29,33 @@ export class StatsDashboardComponent implements OnInit {
     private http: HttpClient,
     private ts: TranslationService,
     private route:ActivatedRoute,
-    private engagement:EngagementService
+    private engagement:EngagementService,
+    private auth: AuthenticationService
   ) { }
 
-  classroomStories: Story[];
+  classroomStories: Story[] = [];
+  studentStories: Story[]= [];
   classroomTitle = this.ts.l.select_a_classroom; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
+  userRole: string = '';
   
   async ngOnInit() {
-    // initialise stats with classroom id from route param
-    let classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
-    if(classroom) await this.loadDataForCharts(classroom, '', ''); 
+    // determine if user is a teacher or student
+    this.userRole = this.auth.getUserDetails().role;
+
+    if (this.userRole == 'TEACHER') {
+      // initialise stats with classroom id from route param
+      let classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+      if(classroom) await this.loadDataForChartsTeacher(classroom, '', ''); 
+    }
+    else {
+      this.studentStories = await firstValueFrom(this.storyService.getStoriesByOwner(this.auth.getUserDetails()._id));
+      await this.loadDataForChartsStudent(); 
+    }
+    
   }
 
   dialogRef: MatDialogRef<unknown>;
@@ -64,10 +78,10 @@ export class StatsDashboardComponent implements OnInit {
     const classroom = classroomResponse.classroom;
     const startDate = classroomResponse.startDate;
     const endDate = classroomResponse.endDate;
-    if (classroom) await this.loadDataForCharts(classroom, startDate, endDate);
+    if (classroom) await this.loadDataForChartsTeacher(classroom, startDate, endDate);
   }
   
-  async loadDataForCharts(classroom:Classroom, startDate:string, endDate:string) {
+  async loadDataForChartsTeacher(classroom:Classroom, startDate:string, endDate:string) {
     this.classroomTitle = classroom.title;
     // get n-gram data
     this.classroomStories = (await Promise.all(classroom.studentIds.map(async (id) =>
@@ -95,6 +109,31 @@ export class StatsDashboardComponent implements OnInit {
       this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
       await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
     ));
+  }
+  
+  async loadDataForChartsStudent() {
+    // get n-gram data
+    this.textsToAnalyse = this.studentStories.reduce(function(result, story) {
+      if (story.text) result.push(story.text);
+      return result;
+    }, []);
+
+    // get grammar eror data
+    this.grammarErrorCounts = (await Promise.all(this.studentStories.map(async story =>
+      await firstValueFrom(
+        this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
+      )
+    ))).reduce(this.countDictSum, {});
+    
+    // get word count data
+    let data = {};
+    data[this.auth.getUserDetails().username] = (await firstValueFrom(this.storyService.averageWordCount(this.auth.getUserDetails()._id, '', ''))).avgWordCount;
+    this.wordCountData = data;
+    
+    // get dictionary lookups 
+    data = {};
+    data[this.auth.getUserDetails()._id] = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
+    this.dictionaryLookups = data;
   }
 
   countDictSum(A:any, B:any) {
