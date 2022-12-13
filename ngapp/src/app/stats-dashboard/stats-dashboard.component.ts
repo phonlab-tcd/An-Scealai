@@ -1,10 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { StoryService } from '../../story.service';
-import { AuthenticationService } from '../../authentication.service';
-import { ClassroomService } from '../../classroom.service';
-import { TranslationService } from '../../translation.service';
-import { UserService } from '../../user.service';
+import { StoryService } from '../story.service';
+import { AuthenticationService } from '../authentication.service';
+import { ClassroomService } from '../classroom.service';
+import { TranslationService } from '../translation.service';
+import { UserService } from '../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Story } from 'app/story';
@@ -12,7 +12,7 @@ import { Classroom } from 'app/classroom';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from '../engagement.service';
 
 @Component({
   selector: 'app-stats-dashboard',
