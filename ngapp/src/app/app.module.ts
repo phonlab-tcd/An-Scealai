@@ -88,7 +88,6 @@ import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-sele
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
-import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { UserGuidesComponent } from './user-guides/user-guides.component';
 
@@ -147,7 +146,6 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         StatsDashboardComponent,
         ClassroomSelectorComponent,
         BasicDialogComponent,
-        StudentStatsDashboardComponent,
         RecordingDialogComponent,
         UserGuidesComponent,
     ],

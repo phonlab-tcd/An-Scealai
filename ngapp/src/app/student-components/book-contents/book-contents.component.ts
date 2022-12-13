@@ -151,7 +151,7 @@ export class BookContentsComponent implements OnInit {
   }
   
   goToStats() {
-    this.router.navigateByUrl('teacher/stats-dashboard/' + this.userId);
+    this.router.navigateByUrl('/stats-dashboard/' + this.userId);
   }
 
 }
