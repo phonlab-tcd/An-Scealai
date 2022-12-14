@@ -107,7 +107,7 @@ export class TeacherClassroomComponent implements OnInit {
   }
   
   goToStats() {
-    this.router.navigateByUrl('/teacher/stats-dashboard/' + this.classroom._id);
+    this.router.navigateByUrl('/stats-dashboard/' + this.classroom._id);
   }
   
   openCodeDialog() {    
