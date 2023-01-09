@@ -74,7 +74,7 @@ export class ConsentService {
         this.linguisticsResearchEnabled$
 	    .next(privacyPreferences["Linguistics Research"]?.option === "accept");
 
-        Array.from(this.consentTypes).forEach(([t,o])=>{
+        this.consentTypesArray.forEach(([t,o])=>{
           const pp = privacyPreferences[t];
           const enabled = pp.option === "accept";
           if(enabled)  o.enable();
@@ -84,9 +84,10 @@ export class ConsentService {
 
     this.age.subscribe(a => {
       if (a !== "under16") return;
-      Object.entries(this.consentTypes).forEach(([t,o]) => {
+      this.consentTypesArray.forEach(([t,o]) => {
         if (!o.allowUnder16) {
-          this.http.post(config.baseurl + 'privacy-preferences', { forGroup: t, option: "reject", prose: JSON.stringify(o.prose) }).subscribe();
+          this.realHttp.post(config.baseurl + 'privacy-preferences', { forGroup: t, option: "reject" }).subscribe();
+					o.disable()
         }
       })
     });
@@ -135,4 +136,5 @@ export class ConsentService {
       isEnabled:  () =>   this.linguisticsResearchEnabled$.value,
     }],
   ] as const);
+	consentTypesArray = Array.from(this.consentTypes);
 }
