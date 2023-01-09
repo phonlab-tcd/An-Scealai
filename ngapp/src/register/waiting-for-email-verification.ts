@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
   selector: 'waiting-for-email-verification',
   templateUrl: './waiting-for-email-verification.html',
   styleUrls: [
-    './register.component.css'
+    './register.component.scss'
   ],
   host: {
     class: 'registerContainer',

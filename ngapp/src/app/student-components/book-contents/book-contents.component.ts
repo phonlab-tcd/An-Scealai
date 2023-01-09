@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { AuthenticationService, TokenPayload, UserDetails } from '../../authentication.service';
+import { AuthenticationService } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
@@ -33,6 +33,7 @@ export class BookContentsComponent implements OnInit {
   isFromAmerica: boolean = false;
   isEnrolled: boolean = false;
   searchText: string = '';
+  storiesLoaded: boolean = false;
 
   constructor(
     private storyService: StoryService,
@@ -61,7 +62,8 @@ export class BookContentsComponent implements OnInit {
       .subscribe(
         (data) => {
           this.stories = data.map(storyData => new Story().fromJSON(storyData));
-          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1)
+          this.stories.sort((a, b) => (a.date > b.date) ? -1 : 1);
+          this.storiesLoaded = true;
         },
         window.alert
       );
@@ -115,12 +117,9 @@ export class BookContentsComponent implements OnInit {
       for(let id of this.toBeDeleted) {
         this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], {_id: id});
         
-        this.recordingService.deleteStoryRecordingAudio(id).subscribe((res) => {
-        });
-        this.recordingService.deleteStoryRecording(id).subscribe( (res) => {
-        })
-        this.storyService.deleteStory(id).subscribe(
-          res => {
+        this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
+        this.recordingService.deleteStoryRecording(id).subscribe( (_) => {})
+        this.storyService.deleteStory(id).subscribe(_ => {
             this.ngOnInit();
           }
         );
@@ -149,6 +148,10 @@ export class BookContentsComponent implements OnInit {
   
   goToMessages() {
     this.router.navigateByUrl('/messages/' + this.userId);
+  }
+  
+  goToStats() {
+    this.router.navigateByUrl('/stats-dashboard/' + this.userId);
   }
 
 }

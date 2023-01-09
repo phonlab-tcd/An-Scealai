@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 
+import { PrivacyPreferencesComponent } from './privacy-preferences/privacy-preferences.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -11,6 +12,7 @@ import { TechnologyComponent } from './technology/technology.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
+import { UserGuidesComponent } from './user-guides/user-guides.component';
 import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from 'register/register.component';
@@ -45,6 +47,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
+import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
 import { RoleGuardService } from './role-guard.service';
@@ -65,6 +68,7 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent},
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
+  { path: 'user-guides', component: UserGuidesComponent},
   { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
@@ -82,6 +86,7 @@ const routes: Routes = [
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
   { path: 'admin',
     component: AdminPanelComponent,
     canActivate: [RoleGuardService],
@@ -171,7 +176,7 @@ const routes: Routes = [
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
   },
-  { path: 'privacy-preferences', loadChildren: () => import('./privacy-preferences/privacy-preferences.module').then(m => m.PrivacyPreferencesModule) },
+  { path: 'privacy-preferences', component: PrivacyPreferencesComponent },
 ];
 
 @NgModule({

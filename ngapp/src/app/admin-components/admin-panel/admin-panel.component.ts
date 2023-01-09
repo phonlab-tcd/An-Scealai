@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 
 @Component({
@@ -8,17 +7,10 @@ import { TranslationService } from '../../translation.service';
   styleUrls: ['./admin-panel.component.scss']
 })
 export class AdminPanelComponent implements OnInit {
-  
-  //onDashboard: Boolean = true;
 
-  constructor(private router: Router, public ts : TranslationService) { }
+  constructor(public ts : TranslationService) { }
 
   ngOnInit() {
   }
   
-  /*
-  goBack() {
-    this.router.navigateByUrl('admin/dashboard/');
-  }
-  */
 }

@@ -14,10 +14,11 @@ export class StopSoundGuard implements CanDeactivate<SynthesisComponent> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | boolean {
-    for (const section of synthesis.chosenSections) {
-      section.stop();
+    if(synthesis.chosenSections){
+      for (const section of synthesis.chosenSections) {
+        section.stop();
+      }
     }
     return true;
   }
-
 }

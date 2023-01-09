@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-// import nlp from 'wink-nlp-utils';
 
 // This ought to be a stateless service.
 // The service offers functions but should not
@@ -32,6 +31,9 @@ export class TextProcessingService {
 
   extraShortening(lines: string[]): string[] {
     return lines.flatMap(s=>{
+      if(s == ' ') {
+        return [];
+      }
       if(s.charAt(100)){
         return this.splitWithReplacement(s,',');
       }

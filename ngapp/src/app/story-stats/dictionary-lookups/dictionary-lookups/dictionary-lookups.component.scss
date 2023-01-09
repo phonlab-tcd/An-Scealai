@@ -1,0 +1,66 @@
+.dictionaryWordContainer {
+  max-height: 200px;
+  min-width: 95%;
+  overflow-y: auto;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 400px;
+}
+
+.studentName {
+  text-align:center;
+  font-weight: bold;
+  font-size: 12pt;
+}
+
+ngb-carousel {
+  max-width: 400px;
+}
+
+ngb-carousel:focus {
+  outline: none;
+}
+
+.carousel-indicators {
+  margin-bottom: -20px;
+}
+
+.carousel-inner {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: black;
+}
+
+.carousel-control-next-icon {
+  /*background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')*/
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNNSAzbDMuMDU3LTMgMTEuOTQzIDEyLTExLjk0MyAxMi0zLjA1Ny0zIDktOXoiLz48L3N2Zz4=');
+  width: 20px;
+}
+
+.carousel-control-next {
+  margin-right: -25px;
+}
+
+.carousel-control-prev-icon {
+  /*background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')*/
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTYuNjcgMGwyLjgzIDIuODI5LTkuMzM5IDkuMTc1IDkuMzM5IDkuMTY3LTIuODMgMi44MjktMTIuMTctMTEuOTk2eiIvPjwvc3ZnPg==');
+  width: 20px;
+}
+
+.carousel-control-prev {
+  margin-left: -25px;
+}

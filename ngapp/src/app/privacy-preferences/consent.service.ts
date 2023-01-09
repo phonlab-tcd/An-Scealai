@@ -20,6 +20,8 @@ export interface ConsentData {
 export const consentKey = ["Google Analytics", "Engagement", "Cloud Storage", "Linguistics Research"] as const;
 export type ConsentGroup = typeof consentKey[number];
 
+type Age = "under16"|"over16";
+
 @Injectable({
   providedIn: 'root',
 })
@@ -44,10 +46,10 @@ export class ConsentService {
   })();
 
 
-  age = (()=>{
-    const subject = new BehaviorSubject<"under16"|"over16">(undefined);
+  age: BehaviorSubject<Age> = (()=>{
+    const subject = new BehaviorSubject<Age>(undefined);
     this.auth.loggedInAs$subscribe(()=>{
-      this.realHttp.get<"under16"|"over16">(config.baseurl + 'privacy-preferences/age')
+      this.realHttp.get<Age>(config.baseurl + 'privacy-preferences/age')
       .subscribe((body)=>subject.next(body));
     });
     return subject;
@@ -67,11 +69,14 @@ export class ConsentService {
     this.auth.loggedInAs$subscribe( async () => {
       this.realHttp.get(config.baseurl + 'privacy-preferences').subscribe(pp=>this.privacyPreferences$.next(pp));
         const privacyPreferences = await this.http.get(config.baseurl + 'privacy-preferences').toPromise();
-        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true}); // disableClose so that only way to close is to click 'ok' and go to pp page
-        this.linguisticsResearchEnabled$.next(privacyPreferences["Linguistics Research"]?.option === "accept");
-        Object.entries(this.consentTypes).forEach(([t,o])=>{
+
+        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true}); // disableClose so that only way to close is to click 'ok' and go to privacy preferences page
+        this.linguisticsResearchEnabled$
+	    .next(privacyPreferences["Linguistics Research"]?.option === "accept");
+
+        Array.from(this.consentTypes).forEach(([t,o])=>{
           const pp = privacyPreferences[t];
-          const enabled = pp.option === "accept" && pp.prose === JSON.stringify(o.prose);
+          const enabled = pp.option === "accept";
           if(enabled)  o.enable();
           else o.disable();
         });
@@ -126,7 +131,7 @@ export class ConsentService {
     ['Linguistics Research', {
       allowUnder16: false,
       enable:     () => { this.syncEnable("Linguistics Research");  this.linguisticsResearchEnabled$.next(true);   },
-      disable:    () => { this.syncDisable('Linguistics Research'); this.linguisticsResearchEnabled$.next(false); },
+      disable:    () => { this.syncDisable("Linguistics Research"); this.linguisticsResearchEnabled$.next(false); },
       isEnabled:  () =>   this.linguisticsResearchEnabled$.value,
     }],
   ] as const);

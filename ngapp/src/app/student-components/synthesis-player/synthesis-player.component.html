@@ -1,18 +1,25 @@
-<div
-    style="width: 100% - 40px; margin: 10px; background-color: #14ff004a; border: 2px;"
-    [hidden]="hideEntireSynthesisPlayer"
-    class=synth>
+<div class=synth [hidden]="hideEntireSynthesisPlayer">
   <div>
     <h1>{{ts.l['listen_back_to_your_story'] ? ts.l['listen_back_to_your_story'] : 'listen_back_to_your_story'}}</h1>
     <p>({{ts.l['dnn_synthesiser'] ? ts.l['dnn_synthesiser'] : 'dnn_synthesiser' }})</p>
 
   </div>
-  <div class=header>
+  <div class=synthHeader>
     <div class=reload (click)=refresh()>&#8635;</div>
     <synth-voice-select (selectVoice)=refresh($event)></synth-voice-select>
     <div class=fast-synth (click)=goToFastSynthesiser()>
       {{ts.l['go_to_fast_synthesiser'] ? ts.l['go_to_fast_synthesiser'] : 'go_to_fast_synthesiser'}}
     </div>
+  </div>
+  <div class="btnContainer" style="justify-content: space-between;">
+    <button [disabled]="!audioLoaded()" class="playAllButton" (click)="combineAndPlayAudio()" style="text-align:center; width: 100px"> 
+      <div *ngIf="!audioLoaded()" class="spinner-grow" style="width: 1rem; height: 1rem;"></div> 
+      {{ts.l.play}}
+    </button>
+    <button [disabled]="!audioLoaded()" class="playAllButton" (click)="downloadAudio()" style="text-align:center; width: 150px"> 
+      <div *ngIf="!audioLoaded()" class="spinner-grow" style="width: 1rem; height: 1rem;"></div> 
+      {{ts.l.download}}
+    </button>
   </div>
   <hr>
   <div class="items">

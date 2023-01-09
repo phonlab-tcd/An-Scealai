@@ -7,7 +7,6 @@ import { AuthenticationService } from './authentication.service';
 import { Observable } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
-import { RecordingService } from './recording.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
@@ -28,7 +27,6 @@ export class StoryService {
     private auth: AuthenticationService,
     private engagement: EngagementService,
     private ts: TranslationService,
-    private recordingService: RecordingService
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
@@ -59,8 +57,16 @@ export class StoryService {
     return this.http.get(this.baseUrl + author);
   }
 
+  getStoriesByOwner(owner: string) : Observable<Story[]>  {
+    return this.http.get<Story[]>(this.baseUrl + 'owner/' + owner);
+  }
+
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
+  }
+  
+  getStoriesByDate(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "getStoriesByDate/" + studentId, {startDate:startDate, endDate:endDate});
   }
 
   getStoriesForLoggedInUser(): Observable<Story[]> {
@@ -71,16 +77,15 @@ export class StoryService {
         subscriber.complete();
       });
     }
-    const author = userDetails.username;
-    return this.http.get<Story[]>(this.baseUrl + author);
+    return this.getStoriesByOwner(userDetails._id);
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {
     return this.consent.http.post(this.baseUrl + 'update/' + story._id, story);
   }
   
-  getStoriesForClassroom(author: string, date): Observable<any> {
-    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + author + "/" + date);
+  getStoriesForClassroom(owner: string, date): Observable<any> {
+    return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
   updateStory(updateData: any, id: string): Observable<any> {
@@ -135,5 +140,13 @@ export class StoryService {
 
   updateActiveRecording(storyId: string, recordingId: string): Observable<any> {
     return this.http.post(this.baseUrl + 'updateActiveRecording/' + storyId + '/', {activeRecording: recordingId});
+  }
+  
+  averageWordCount(studentId:string, startDate:string, endDate:string) : Observable<any> {
+    return this.http.post(this.baseUrl + "averageWordCount/" + studentId, {startDate:startDate, endDate:endDate});
+  }
+  
+  countGrammarErrors(studentId:string) : Observable<any> {
+    return this.http.get(this.baseUrl + "countGrammarErrors/" + studentId);
   }
 }

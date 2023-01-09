@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { StoryService } from '../../story.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService, TokenPayload } from '../../authentication.service';
 import { TranslationService } from '../../translation.service';
 
@@ -12,8 +12,8 @@ import { TranslationService } from '../../translation.service';
 })
 export class NewStoryComponent implements OnInit {
 
-  newStoryForm: FormGroup;
-  constructor(private fb: FormBuilder,  private storyService: StoryService,
+  newStoryForm: UntypedFormGroup;
+  constructor(private fb: UntypedFormBuilder,  private storyService: StoryService,
     private auth: AuthenticationService, public ts : TranslationService) {
     this.createForm();
   }

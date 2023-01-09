@@ -1,5 +1,5 @@
 <!-- Display the written story along with edit options -->
-<div class="page bookContainer">
+<div class="bookContainer">
 
     <!-- MODAL -->
     <div class="{{modalClass}} modalContainer">
@@ -16,7 +16,7 @@
           <button class="modalBtn" (click)="hideModal();">
             {{ts.l.cancel}}
           </button>
-          <button class="modalBtn createBtnGreen" (click)="saveModal()">
+          <button class="modalBtn" (click)="saveModal()">
             {{ts.l.save}}
           </button>
         </div>
@@ -62,7 +62,7 @@
 
     <div class="optionsBtnContainer" (click)="toggleOptions();">
 
-      <div class="toggleShowOptions optionsBtn">
+      <div class="optionsBtn">
         <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
         <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
       </div>
@@ -71,6 +71,13 @@
       <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
         {{ts.l.edit_title_or_dialect}}
         <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+      </div>
+      
+      <!-- SPEECH TO TEXT-->
+      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; speakStory()">
+        {{ts.l.dictation}}
+         <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span> <!-- Google icon, index.html-->
+         <button *ngIf="isRecording" class="notRecordingBtn blink"><i class="fas fa-stop-circle"></i></button>
       </div>
 
       <!-- DOWNLOAD -->
@@ -84,23 +91,9 @@
           class="optionsBtn optionsPopupBtn"
           target="_blank"
           href="{{downloadStoryUrl()}}">
-          Download
+          {{ts.l.download}}
           <i class="fas fa-download optionsBtnIcon"></i>
         </button>
-        <select 
-             #downloadFormatOption
-             style="border-end-end-radius: 0; background: rgba(0,0,0,0);"
-             [(ngModel)]="downloadStoryFormat">
-          <option>.pdf</option>
-          <option>.docx</option>
-          <option>.odt</option>
-          <option>.pptx</option>
-          <option>.md</option>
-          <option>.txt</option>
-          <option>.html</option>
-          <option>.json</option>
-          <option>.latex</option>
-        </select>
       </div>
       <!-- FEEDBACK -->
       <div
@@ -116,7 +109,7 @@
       <div
         *ngIf="showOptions"
         class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; showDictionary();">
+        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
           {{ts.l.dictionary}}
         <i class="fas fa-book optionsBtnIcon"></i>
       </div>
@@ -138,13 +131,9 @@
           (click)="toggleGrammarTags();">
             {{ toggleGrammarButton() }}
             <i class="fas fa-spell-check optionsBtnIcon"></i>
-            <div
-              class="loader"
-              *ngIf="!grammarTagsHidden && grammarLoading">
-            </div>
         </span>
         <span
-          [hidden]="grammarTagsHidden"
+          [hidden]="!quillHighlightService.showingTags"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
           class="settingsIcon">
             ⚙
@@ -162,7 +151,7 @@
       -->
 
       <!-- RECORDINGS -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
+      <div *ngIf="showOptions" [hidden]="story.text && story.text.length === 0" class="optionsBtn optionsPopupBtn"
         (click)="this.dontToggle=true; goToRecording()">
         {{ts.l.recordings}}
         <i class="fas fa-microphone optionsBtnIcon"></i>
@@ -173,8 +162,7 @@
     <!-- story contents -->
     <div class="storyContainer" *ngIf="story">
       <!-- display story before grammar checked (i.e. writing mode)-->
-      <div 
-        class="textFieldContainer">
+      <div>
           <div 
             *ngIf="feedbackVisible"
             class="feedbackHeader">
@@ -220,11 +208,11 @@
       <!-- SELECTED GRAMMAR SUGGESTION -->
       <div
         style="background-color: #8FCAFF"
-        [hidden]="grammarTagsHidden || grammarLoading"
+        [hidden]="!quillHighlightService.showingTags || grammarLoading"
         [innerHTML]=selectedGrammarSuggestion()>
       </div>
       <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || grammarTagsHidden">
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
@@ -294,9 +282,19 @@
           {{ts.l.external_links}}
         </div>
       </div>
+      <div *ngIf="selectTeanglann" class="dictionaryInput">
+        <label for="dictlookup">{{ts.l.search}}:</label>
+        <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
+        <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+      </div>
 
       <!-- TEANGLANN -->
-      <iframe *ngIf="selectTeanglann" class="dictionaryIframe" src="https://www.teanglann.ie/en"></iframe>
+      <iframe
+        *ngIf="selectTeanglann" 
+        class="dictionaryIframe" 
+        id="dictiframe"
+        [src]="defaultDictIframeText"
+      ></iframe>
 
       <!-- EXTERNAL LINKS -->
       <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
@@ -310,5 +308,6 @@
 <app-synthesis-player
     #mySynthesisPlayer
     [text]=story.text
-    [storyId]=story._id>
+    [storyId]=story._id
+    [storyTitle]=story.title>
 </app-synthesis-player>

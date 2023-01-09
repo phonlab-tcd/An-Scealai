@@ -9,9 +9,7 @@
 <div class="landingBtnsContainer" *ngIf="!auth.isLoggedIn()">
   <button type="button" class="btn teacherRegisterBtn" routerLink="/register/TEACHER">{{ts.l.i_am_a_teacher}}</button><br>
   <button type="button" class="btn studentRegisterBtn" routerLink="/register/STUDENT">{{ts.l.i_am_a_student}}</button>
-  <div
-    class="loginTextContainer"
-    >
+  <div class="loginTextContainer">
       {{ts.l.already_have_account}}
       <a
         routerLink="/login"
@@ -31,7 +29,7 @@
 </div>
 
 <!-- Footer containing logos -->
-<div class="footer">
+<div class="footerLanding">
   <div class="copyright">{{ts.l.copyright}}</div>
   <div class="footerLogos">
     <img class="logoImg" src="assets/img/logo_abair.png">

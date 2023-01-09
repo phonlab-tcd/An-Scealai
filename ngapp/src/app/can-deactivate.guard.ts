@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { AppComponent } from './app.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +27,34 @@ class CanDeactivateDashboardGuard implements CanDeactivate<DashboardComponent> {
   providedIn: 'root'
 })
 class CanDeactivateRecordingGuard implements CanDeactivate<RecordingComponent> {
+  
+  constructor(private dialog: MatDialog, private ts: TranslationService) { }
+              
   canDeactivate(
     recording: RecordingComponent
   ): Observable<boolean> | boolean {
     if(recording.recordingSaved) { return true };
-    recording.showModal();
-    return recording.modalChoice;
+    
+    let dialogRef: MatDialogRef<unknown>;
+    
+    dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.save_changes_made_to_this_recording,
+        type: '',
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '30vh',
+    });
+    
+    dialogRef.afterClosed().subscribe( (res) => {
+        dialogRef = undefined;
+        if(res) {
+          recording.saveRecordings();
+          return true;
+        }
+    });
+    return false;
   }
 }
 

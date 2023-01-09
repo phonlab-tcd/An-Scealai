@@ -1,9 +1,9 @@
 .loginBtn {
-    background-color: #e5bd3b;
+    background-color: var(--scealai-yellow);
 }
 
 .loginBtn:hover {
-    background-color: #ad8f2b;
+    background-color: var(--scealai-yellow-hover);
 }
 
 .inputField {
@@ -11,31 +11,8 @@
     margin-left: 10%;
 }
 
-.formContainer {
-    width: 400px;
-    display: inline-block;
-    padding-top: 15px;
-    padding-bottom: 25px;
-    color: #261500;
-    background-color: #e6e8ed;
-    border-radius: 0px 0px 10px 10px;
-}
-
-.formTitle {
-    margin-bottom: -20px;
-    margin-top: 5px;
-    font-size: 18pt;
-}
-
 .registerContainer {
-    width: 400px;
-    display: inline-block;
-    background-color: #e5bd3b;
-    color: white;
-    border-radius: 10px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    background-color: var(--scealai-yellow);
 }
 
 .formLabel {
@@ -56,24 +33,6 @@
     margin-left: 10%;
 }
 
-.languageButton {
-    background-color: #70a87f;
-    color: white;
-    padding-left: 6px;
-    padding-right: 6px;
-    border-radius: 4px;
-    margin: 4px;
-}
-
-.languageButton:hover { 
-    cursor: pointer;
-    background-color: #437250;
-}
-
-.languageButtonSelected {
-    background-color: #437250;
-}
-
 .termsOfUseContainer {
     font-size: 10pt;
     width: 100%;
@@ -82,7 +41,7 @@
 .termsOfUseButton {
     width: 80%;
     margin-left: 10%;
-    color: #437250;
+    color: var(--scealai-med-green);
 }
 
 .termsOfUseButton:hover {
@@ -103,14 +62,6 @@
 .usernameInputRed {
     border: 1px solid red;
     background: rgba(255, 0, 0, 0.123);
-}
-
-.usernameErrorText {
-    font-size: 10pt;
-    color: red;
-    margin-top: 4px;
-    width: 80%;
-    margin-left: 10%;
 }
 
 @media only screen and (max-width: 700px) {

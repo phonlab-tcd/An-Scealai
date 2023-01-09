@@ -1,0 +1,63 @@
+<div class="dashboard" *ngIf="!dialogRef">
+    <div class="dashboard-header">
+        <h3 class="dashboard-title">{{ts.l.statistics_dashboard}}</h3>
+        <button *ngIf="userRole == 'TEACHER'" mat-stroked-button (click)="openClassroomSelector()">
+            {{classroomTitle}}
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="cards-container">
+        <!-- N-Gram Graph -->
+        <mat-card>
+            <ng-template #ngramTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.ngram_distribution}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(ngramTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-ngram-distribution [texts]="textsToAnalyse"></app-ngram-distribution>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+        <!-- Word Count Graph -->
+        <mat-card class="stats-card">
+            <ng-template #wordCountTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.average_word_counts}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(wordCountTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-word-counts [wordCountData]="wordCountData"></app-word-counts>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+        <!-- Grammar Pie Chart -->
+        <mat-card class="stats-card">
+            <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.grammar_errors}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-grammar-pie-chart [errorCounts]="grammarErrorCounts"></app-grammar-pie-chart>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+        <!-- Dictionary Lookups -->
+        <mat-card class="stats-card">
+            <ng-template #dictionaryLookupsTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.dictionary_lookups}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(dictionaryLookupsTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-dictionary-lookups [dictionaryLookups]="dictionaryLookups"></app-dictionary-lookups>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+    </div>
+</div>

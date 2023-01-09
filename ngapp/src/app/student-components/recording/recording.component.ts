@@ -6,10 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
-import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 declare var MediaRecorder : any;
 
@@ -23,7 +23,7 @@ export class RecordingComponent implements OnInit {
   constructor(private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService, private engagement: EngagementService) { }
+              private synthesis: SynthesisService, private engagement: EngagementService,) { }
   
   // Synthesis variables
   story: Story = new Story();
@@ -31,7 +31,7 @@ export class RecordingComponent implements OnInit {
   sentences: Sentence[] = [];
   chosenSections: Section[];
 
-  // Audio variables
+  dialogRef: MatDialogRef<unknown>;
   
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
@@ -56,24 +56,29 @@ export class RecordingComponent implements OnInit {
   sectionChunks: {[key:number]:any[]}  = [];
 
   // UI variables
-  modalClass : string = "hidden";
-  modalChoice: Subject<boolean> = new Subject<boolean>();
   recordingSaved: boolean = true;
   popupVisible = false;
   errorText : string;
   registrationError : boolean;
   audioFinishedLoading: boolean = false;
+  
+  // ASR variables
+  url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
+  sentenceTranscriptions: string[] = [];
+  paragraphTranscriptions: string[] = []
+  sectionTranscriptions: string[] = [];
+  isTranscribing: boolean[] = [false];
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
   * Reset variables when recording text updated (function called in updateStory())
   */
   ngOnInit() {
-    this.modalClass = "hidden";
     this.chunks = [];
     this.sectionAudioSources = this.paragraphAudioSources;
     this.sectionBlobs = this.paragraphBlobs;
     this.sectionChunks = this.paragraphChunks;
+    this.sectionTranscriptions = this.paragraphTranscriptions;
     this.isRecordingSection = this.isRecordingParagraph;
     const storyId = this.route.snapshot.paramMap.get('id');
     this.storyService.getStory(storyId).subscribe(story => {
@@ -120,14 +125,17 @@ export class RecordingComponent implements OnInit {
           this.paragraphs = [];
           this.paragraphAudioSources = [];
           this.paragraphChunks = [];
+          this.paragraphTranscriptions = [];
 
           this.sentences = [];
           this.sentenceAudioSources = [];
           this.sentenceChunks = [];
+          this.sentenceTranscriptions = [];
 
           this.chosenSections = [];
           this.sectionAudioSources = [];
           this.sectionChunks = [];
+          this.sectionTranscriptions = [];
 
           this.popupVisible = false;
           this.loadSynthesis(story);
@@ -151,12 +159,15 @@ export class RecordingComponent implements OnInit {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
         this.paragraphBlobs[i] = res;
         this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        this.paragraphTranscriptions[recording.paragraphIndices[i]] = recording.paragraphTranscriptions[recording.paragraphIndices[i]];
       });
     }
+    console.log(recording.sentenceIndices);
     for (let i=0; i<recording.sentenceIndices.length; ++i) {
       this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
         this.sentenceBlobs[i] = res;
         this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+        this.sentenceTranscriptions[recording.sentenceIndices[i]] = recording.sentenceTranscriptions[recording.sentenceIndices[i]];
       });
     }
   }
@@ -166,7 +177,6 @@ export class RecordingComponent implements OnInit {
    * sentence / paragraph index, populate that chunks array with audio data
    * recorded through microphone.
    * @param index - index for the paragraph / sentence being recorded
-   * @param chunksArray - array of any[], should be either paragraphChunks
    * or sentenceChunks
    */
   recordAudio(index:number) {
@@ -193,6 +203,7 @@ export class RecordingComponent implements OnInit {
     }).catch();
   }
 
+  /* stop recording stream and convert audio to base64 to send to ASR */
   stopRecording(index: number) {
     this.recorder.stop();
     this.isRecordingSection[index] = false;
@@ -202,7 +213,48 @@ export class RecordingComponent implements OnInit {
       this.sectionBlobs[index] = blob;
       this.sectionAudioSources[index] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
       this.recordingSaved = false;
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        let encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
+        this.getTranscription(encodedAudio, index);
+      }.bind(this);
     }, 500);
+  }
+  
+  /* send audio to the ASR system and get transcription */
+  getTranscription(audioData:string, index:number) {
+    this.isTranscribing[index] = true;
+    if(this.isParagraphMode()) {this.paragraphTranscriptions[index] = null}
+    if(this.isSentenceMode()) {this.sentenceTranscriptions[index] = null}
+    const rec_req = {
+      recogniseBlob: audioData,
+      developer: true,
+    };
+
+    fetch(this.url_ASR_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rec_req),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      let transcription = data["transcriptions"][0]["utterance"];
+      
+      if(this.isParagraphMode()) {
+        this.paragraphTranscriptions[index] = transcription;
+        this.sectionTranscriptions[index] = this.paragraphTranscriptions[index];
+      }
+      else if (this.isSentenceMode()) {
+        this.sentenceTranscriptions[index] = transcription;
+        this.sectionTranscriptions[index] = this.sentenceTranscriptions[index];
+      }
+      
+      this.isTranscribing[index] = false;
+    });
   }
 
   deleteRecording(index: number) {
@@ -210,6 +262,7 @@ export class RecordingComponent implements OnInit {
     delete this.sectionAudioSources[index];
     delete this.sectionChunks[index];
     delete this.sectionBlobs[index];
+    delete this.sectionTranscriptions[index];
   }
   
   /**
@@ -249,11 +302,13 @@ export class RecordingComponent implements OnInit {
     const trackData = {
       paragraphAudioIds: paragraphAudioIds,
       paragraphIndices: paragraphIndices,
+      paragraphTranscriptions: this.paragraphTranscriptions,
       sentenceIndices: sentenceIndices,
-      sentenceAudioIds: sentenceAudioIds
+      sentenceAudioIds: sentenceAudioIds,
+      sentenceTranscriptions: this.sentenceTranscriptions
     }
 
-    this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
+    this.recordingService.update(this.story.activeRecording, trackData).subscribe(_ => {
       this.recordingSaved = true;
     });
   }
@@ -285,11 +340,13 @@ export class RecordingComponent implements OnInit {
       this.sectionAudioSources = this.sentenceAudioSources;
       this.sectionBlobs = this.sentenceBlobs;
       this.sectionChunks = this.sentenceChunks;
+      this.sectionTranscriptions = this.sentenceTranscriptions;
       this.isRecordingSection = this.isRecordingSentence;
     } else if (this.isParagraphMode()) {
       this.sectionAudioSources = this.paragraphAudioSources;
       this.sectionBlobs = this.paragraphBlobs;
       this.sectionChunks = this.paragraphChunks;
+      this.sectionTranscriptions = this.paragraphTranscriptions;
       this.isRecordingSection = this.isRecordingParagraph;
     }
   }
@@ -302,24 +359,6 @@ export class RecordingComponent implements OnInit {
   stopSection(section) {
     section.stop();
     section.removeHighlight();
-  }
-
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  hideModal() {
-    this.modalClass = "hiddenFade";
-    this.modalChoice.next(false);
-  }
-
-  setModalChoice() {
-    this.modalChoice.next(true);
-  }
-
-  saveModal() {
-    this.saveRecordings();
-    this.modalChoice.next(true);
   }
   
   goToDashboard() {

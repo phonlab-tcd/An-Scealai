@@ -30,6 +30,7 @@ let Event = new Schema({
   storyData: Object,
   userId: String,
   statsData: Object,
+  dictionaryLookup: String,
 }, {
   collection: 'engagement',
 });

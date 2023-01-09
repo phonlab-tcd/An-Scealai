@@ -1,7 +1,7 @@
 import { OnInit, Component, Output, EventEmitter } from '@angular/core';
 import { TranslationService } from 'app/translation.service';
 import { AuthenticationService, RegistrationTokenPayload } from 'app/authentication.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import config from 'abairconfig';
 import {ActivatedRoute} from "@angular/router";
 
@@ -10,7 +10,7 @@ type UsernameMessageKey = 'username_no_spaces' | 'username_no_special_chars';
 @Component({
   selector: 'register-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./register.component.css'],
+  styleUrls: ['./register.component.scss'],
   host: {
     class: 'registerContainer',
   },
@@ -22,7 +22,7 @@ export class RegisterFormComponent implements OnInit {
   errorTextKeys: string[];
   passwordConfirm: string;
 
-  usernameInput: FormControl;
+  usernameInput: UntypedFormControl;
   usernameClass: string;
   usernameErrorTextKeys: UsernameMessageKey[];
 
@@ -56,7 +56,7 @@ export class RegisterFormComponent implements OnInit {
 
     this.usernameClass = '';
     this.usernameErrorTextKeys = [];
-    this.usernameInput = new FormControl();
+    this.usernameInput = new UntypedFormControl();
     this.usernameInput.valueChanges.subscribe((text) => {
       this.credentials.username = text;
       this.usernameErrorTextKeys = [];

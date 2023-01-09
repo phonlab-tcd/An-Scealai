@@ -10,6 +10,11 @@ import { TranslationService } from 'app/translation.service';
     <div mat-dialog-close routerLink="/privacy-preferences">
       <transl [key]="'go_to_privacy_preferences_page'"></transl>
     </div>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close routerLink="/privacy-preferences">
+        <transl key=ok></transl>
+      </button>
+    </div>
   `
 })
 export class TryingToUseFeaturesThatRequireConsentComponent {

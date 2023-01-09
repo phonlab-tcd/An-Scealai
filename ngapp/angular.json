@@ -1,6 +1,5 @@
 {
-  "defaultProject": "an-scealai",
-	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
 	"cli": {
 		"analytics": "28879dc6-bc91-478d-8f49-0d9a32a36fba"
 	},
@@ -22,6 +21,7 @@
           "defaultConfiguration": "production",
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+
             "aot": true,
             "outputPath": "unpublished_dist",
             "index": "src/index.html",
@@ -58,7 +58,7 @@
                 }
               },
               "budgets": [
-                { "type": "initial",            "maximumWarning": "2mb",  "maximumError": "2.55mb" },
+                { "type": "initial",            "maximumWarning": "3mb",  "maximumError": "3.55mb" },
                 { "type": "anyComponentStyle",  "maximumWarning": "5kb",    "maximumError": "9kb" }
               ],
               "fileReplacements": [

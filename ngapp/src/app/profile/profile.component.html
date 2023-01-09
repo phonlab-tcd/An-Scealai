@@ -1,75 +1,18 @@
 <div class="profileContainer" *ngIf="auth.getUserDetails()">
-
-  <!-- Popups -->
-    <div class="{{modalClass}} modalContainer">
-      <!-- Popup for deleting account -->
-        <div *ngIf="deleteAccountMode" class="modalContent">
-            <pre class="modalText">{{ts.l.are_you_sure}}</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="deleteAccount(); update">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); deleteAccountMode=false;">{{ts.l.no}}</button>
-            </div>
-        </div>
-        <!-- Popup for changing username -->
-        <div *ngIf="updateUsernameMode" class="modalContent">
-            <div class="modalText"> {{ts.l.change_username}} </div>
-            <div class="modalText"> ({{ts.l.you_will_have_to_login}}) </div><br>
-            <div class="modalText"> {{ts.l.current_username}}: <i>{{auth.getUserDetails().username}}</i></div><br>
-            <div class="modalText"> {{ts.l.new_username}}: <input type="text" placeholder={{ts.l.enter_username}} name="username" [(ngModel)]="updatedUsername"></div>
-            <div class="usernameErrorText"> {{errorMessage}} </div>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="updateUsername()">{{ts.l.save}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateUsernameMode=false;">{{ts.l.cancel}}</button>
-            </div>
-        </div>
-        
-        <!-- Popup for changing email -->
-        <div *ngIf="updateEmailMode" class="modalContent">
-            <pre class="modalText">Update email</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'STUDENT'" class="modalText">({{ts.l.this_includes_story_data}})</pre>
-            <pre *ngIf="auth.getUserDetails().role === 'TEACHER'" class="modalText">({{ts.l.this_includes_personal_data}})</pre>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.yes}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updateEmailMode=false;">{{ts.l.no}}</button>
-            </div>
-        </div>
-        <!-- Popup for changing password -->
-        <div *ngIf="updatePasswordMode" class="modalContent">
-            <div class="modalText"> {{ts.l.change_password}} </div>
-            <div class="modalText"> ({{ts.l.you_will_have_to_login_password}}) </div><br>
-            <div class="modalText"> {{ts.l.new_password}}: <input type="password" name="password" [(ngModel)]="newPassword"></div><br>
-            <div class="modalText"> {{ts.l.confirm_password}}: <input type="password" name="passwordConfirm" [(ngModel)]="newPasswordConfirm"></div>
-            <div class="usernameErrorText"> {{errorMessage}} </div>
-            <div>
-                <button class="modalBtn createBtnGreen" (click)="updatePassword()">{{ts.l.save}}</button>
-                <button class="modalBtn createBtnGreen" (click)="hideModal(); updatepasswordMode=false;">{{ts.l.cancel}}</button>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Profile options -->
     <div class="formTitle">{{ts.l.profile}}</div><br>
-    <div *ngIf="!editMode" class="formBody">  
-      <div class="formContainer">
+    <div class="formBody">  
+      <div class="profileFormContainer">
+        <!-- error message container -->
+        <div class="usernameErrorText"> {{errorMessage}} </div>
         <!-- username details -->
         <div class="form-group">
           <div class="formLabel">{{ts.l.username}} :</div>
           <div class="userInfo">
             <i>{{auth.getUserDetails().username}}</i>
-            <i class="fas fa-edit headerIconBtn" (click)="updateUsernameMode=true; errorMessage=''; showModal()"></i>
+            <i class="fas fa-edit headerIconBtn" (click)="openUpdateUsernameDialog()"></i>
           </div>
         </div>
-        <!-- update email
-        <div class="form-group">
-          <div class="formLabel">{{ts.l.email}} :</div>
-          <div class="userInfo">
-            <i>{{auth.getUserDetails().email}}</i>
-            <i class="fas fa-edit headerIconBtn" (click)="updateEmailMode=true; errorMessage=''; showModal()"></i>
-          </div>
-        </div>-->
         <!-- classroom details if STUDENT -->
         <div class="form-group" *ngIf="classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="formLabel">{{ts.l.classroom}} :</div>
@@ -79,9 +22,8 @@
         <!-- join classroom option STUDENT -->
         <div class="form-group-vertical" *ngIf="!classroom && auth.getUserDetails().role === 'STUDENT'">
           <div class="form-group-section">
-            <div class="formLabel classroomCodeLabel">{{ts.l.classroom_code}} :</div>
-            <input type="text" class="form-control inputField"
-            placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
+            <div class="formLabel">{{ts.l.classroom_code}} :</div>
+            <input type="text" class="form-control inputField" placeholder="{{ts.l.enter_code}}" name="classroomcode" [formControl]="codeInput">
           </div>
           <div class="classroomMessages">
             <div *ngIf="classroomCodeOutput" class="notFoundText classroomMessage">{{classroomCodeOutput}}</div>
@@ -100,11 +42,24 @@
             <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
           </div>
         </div>
-        <button mat-button color="delete" (click)="deleteAccountMode=true; showModal()"> {{ts.l.delete_my_account}} </button>
-        <button mat-button color="secondary" (click)="updatePasswordMode=true; errorMessage='';showModal()" > {{ts.l.change_password}} </button>
-        <button routerLink="/privacy-preferences" color="primary" mat-button>{{ts.message('privacy_preferences')}}</button>
+        <div class="accountButtonContainer">
+          <!-- delete account -->
+          <div>
+            <button class="btn deleteAccountButton" (click)="openDeleteDialog()"> {{ts.l.delete_my_account}} </button>
+          </div>
+          <!-- Change password -->
+          <div>
+            <button class="btn passwordButton" (click)="openUpdatePasswordDialog()"> {{ts.l.change_password}} </button>
+          </div>
+					<br>
+        </div>
+        <div>
+					<button routerLink="/privacy-preferences" color="primary" mat-button>
+						<transl key='privacy_preferences'></transl>
+					</button>
+        </div>
         <!-- sign out and profile information -->
-        <div class="btnContainer">
+        <div class="profileBtnContainer">
           <button routerLink="/register-profile" class="btn logoutBtn">{{ts.l.my_info}}</button>
           <button routerLink="/landing" class="btn logoutBtn" (click)="logout()">{{ts.l.sign_out}} <i class="fas fa-sign-out-alt"></i></button>
         </div>

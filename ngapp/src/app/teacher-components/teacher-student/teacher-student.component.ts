@@ -6,6 +6,7 @@ import { StoryService } from '../../story.service';
 import { TranslationService } from '../../translation.service';
 import { ClassroomService } from '../../classroom.service';
 import config from 'abairconfig';
+import { User } from 'app/user';
 
 @Component({
   selector: 'app-teacher-student',
@@ -21,7 +22,7 @@ export class TeacherStudentComponent implements OnInit {
     public ts : TranslationService,
     private classroomService: ClassroomService) { }
 
-    student: any;
+    student: User;
     stories: Story[];
     storiesWithoutFeedback: Story[] = [];
     userId: string;
@@ -31,23 +32,15 @@ export class TeacherStudentComponent implements OnInit {
     baseUrl: string = config.baseurl;
   
     ngOnInit() {
-      this.getUserId().then(params => {
-        this.http.get(
-          this.baseUrl + 'user/viewUser',
-          { 
-            headers: 
-              {
-              _id : params['id'].toString()
-              }
+      this.http.get(this.baseUrl + 'user/viewUser',
+          { headers: 
+              {_id : this.route.snapshot.params['id'] }
           }
-        ).subscribe(
-        (res) => {
-          this.userId = params['id'].toString();
+        ).subscribe((res: User) => {
+          this.userId = this.route.snapshot.params['id'];
           this.student = res;
           this.setClassroomId();
-          
         });
-      });
     }
     
     filterFeedback(data: Story[]) {
@@ -62,7 +55,7 @@ export class TeacherStudentComponent implements OnInit {
       this.classroomService.getClassroomOfStudent(this.userId).subscribe((res) => {
         this.classroomId = res._id;
         if(res.date) {
-          this.storyService.getStoriesForClassroom(this.student.username, res.date).subscribe((data: Story[]) => {
+          this.storyService.getStoriesForClassroom(this.student._id, res.date).subscribe((data: Story[]) => {
             this.stories = data, this.filterFeedback(data);
           });
         }
@@ -73,16 +66,7 @@ export class TeacherStudentComponent implements OnInit {
         }
       });
     }
-  
-    getUserId(): Promise<any> {
-      return new Promise((resolve, reject) => {
-        this.route.params.subscribe(
-          params => {
-            resolve(params);
-        });
-      });
-    }
-  
+
     goToStory(storyId) {
       this.router.navigateByUrl('teacher/story/' + storyId.toString());
     }
