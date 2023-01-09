@@ -1,5 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication.service';
 import type { Observable } from 'rxjs';
 import { of, BehaviorSubject, Subject } from 'rxjs';
@@ -60,6 +61,7 @@ export class ConsentService {
     private auth: AuthenticationService,
     public realHttp: HttpClient,
     private dialog: MatDialog,
+		private router: Router,
   ) {
     this.http = this.realHttp;
 
@@ -70,7 +72,14 @@ export class ConsentService {
       this.realHttp.get(config.baseurl + 'privacy-preferences').subscribe(pp=>this.privacyPreferences$.next(pp));
         const privacyPreferences = await this.http.get(config.baseurl + 'privacy-preferences').toPromise();
 
-        if(!privacyPreferences) return this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true}); // disableClose so that only way to close is to click 'ok' and go to privacy preferences page
+        if(!privacyPreferences) {
+					// disableClose so that only way to close is to click 'ok' and go to privacy preferences page
+					const dialogRef = this.dialog.open(PleaseSpecifyPrivacyPreferences, {disableClose: true}); 
+					dialogRef.afterClosed().subscribe(()=>{
+						this.router.navigateByUrl("/privacy-preferences");
+					});
+					return;
+				}
         this.linguisticsResearchEnabled$
 	    .next(privacyPreferences["Linguistics Research"]?.option === "accept");
 
