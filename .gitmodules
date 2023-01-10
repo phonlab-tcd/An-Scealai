@@ -1,0 +1,3 @@
+[submodule "collect-gramadoir-messages-by-type"]
+	path = collect-gramadoir-messages-by-type
+	url = ./collect-gramadoir-messages-by-type/
