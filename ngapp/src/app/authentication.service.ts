@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable ,  /* throwError,*/ Subject } from 'rxjs';
+import { Observable , BehaviorSubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import config from 'abairconfig';
@@ -49,48 +49,63 @@ export interface RegistrationTokenPayload {
   language: 'en' | 'ga'; // english | gaeilge
 }
 
+function jwtPayload(jwt) {
+  try {
+    return JSON.parse(window.atob(jwt.split('.')[1]));
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+const jwtTokenName = Object.freeze('scealai-token' as const);
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  public jwtTokenName = jwtTokenName;
 
   baseUrl: string = config.baseurl + 'user/';
   private token: string;
-  public getLoggedInName: any = new Subject();
+  public getLoggedInName = new Subject();
+
+  public loggedInAs$subscribe(observer) {
+    return this.loggedInAs$.subscribe(observer);
+  }
+  private loggedInAs$ = new BehaviorSubject(jwtPayload(this.getToken()));
 
   public pendingUserPayload: LoginTokenPayload = null;
-  public jwtTokenName = 'scealai-token' as const;
 
   constructor(
     private http: HttpClient,
-    private router: Router, ) { }
+    private router: Router, ) {
+    const token = this.getToken();
+    if(token) this.loggedInAs$.next(jwtPayload(token));
+  }
 
   private saveToken(token: string): void {
-    localStorage.setItem(this.jwtTokenName, token);
+    localStorage.setItem(jwtTokenName, token);
     this.token = token;
   }
 
   public getToken(): string {
-    this.token = localStorage.getItem(this.jwtTokenName);
+    this.token = localStorage.getItem(jwtTokenName);
     return this.token;
+  }
+
+  private deleteToken() {
+    this.token = null;
+    localStorage.removeItem(jwtTokenName);
   }
 
   public getUserDetails(): UserDetails {
     const token = this.getToken();
-    let payload: any;
-    if (token) {
-
-      payload = token.split('.')[1];
-      if(!payload) return null;
-      payload = window.atob(payload);
-
-      this.getLoggedInName.next(JSON.parse(payload).username);
-
-      return JSON.parse(payload);
-
-    } else {
-      return null;
-    }
+    if(!token) return null;
+    const user = jwtPayload(token);
+    this.getLoggedInName.next(user.username);
+    return user;
   }
 
   public isLoggedIn(): boolean {
@@ -150,7 +165,10 @@ export class AuthenticationService {
       user)
       .pipe(
         map((data: TokenResponse) => {
-          if (data.token) this.saveToken(data.token);
+          if (data.token) {
+            this.saveToken(data.token);
+            this.loggedInAs$.next(jwtPayload(data.token));
+          }
           return data;
         })
       );
@@ -161,9 +179,8 @@ export class AuthenticationService {
   }
 
   public logout(): void {
-    this.token = '';
-    window.localStorage.removeItem('scealai-token');
+    this.deleteToken();
+    this.loggedInAs$.next(null);
     this.router.navigateByUrl('/landing');
-    // location.reload();
   }
 }

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
 
+import { PrivacyPreferencesComponent } from './privacy-preferences/privacy-preferences.component';
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -175,6 +176,7 @@ const routes: Routes = [
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
   },
+  { path: 'privacy-preferences', component: PrivacyPreferencesComponent },
 ];
 
 @NgModule({

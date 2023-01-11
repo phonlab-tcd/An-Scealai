@@ -1,18 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SynthItem } from './synth-item';
 import { AuthenticationService } from './authentication.service';
 import { QuillHighlightTag } from './services/quill-highlight.service';
 import config from 'abairconfig';
 
+const empty = ()=>of(undefined);
+
 @Injectable({
   providedIn: 'root'
 })
 export class EngagementService {
+  private fakeHttp = {
+    post: empty,
+    get: empty,
+    patch: empty,
+  };
 
-  constructor(private http: HttpClient, private auth: AuthenticationService) { }
+  http: HttpClient | typeof this.fakeHttp;
+
+  disable() { console.count('DISABLE ENGAGEMENT'); this.http = this.fakeHttp; }
+  enable()  { console.count('ENABLE ENGAGEMENT');  this.http = this.realHttp; }
+
+  constructor(
+    public realHttp: HttpClient,
+    private auth: AuthenticationService,
+    ) { 
+    this.http = this.fakeHttp;
+  }
 
   baseUrl: string = config.baseurl + 'engagement/';
 

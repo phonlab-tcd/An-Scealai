@@ -95,6 +95,7 @@ app.use('/messages', messageRoute);
 app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
+app.use('/privacy-preferences', require('./routes/privacy-preferences.route'));
 app.use('/nlp', nlpRoute);
 
 app.use('/proxy',async (req,res,next)=>{

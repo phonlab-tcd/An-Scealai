@@ -3,7 +3,7 @@ import translation from './translation';
 import { AuthenticationService } from './authentication.service';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import trans_pre from './translation';
 
 export type MessageKey = keyof typeof trans_pre;
@@ -30,8 +30,12 @@ export enum LANGUAGE {
 export class TranslationService {
 
   currentLanguage: LANGUAGE;
+  languageCode$ = new BehaviorSubject<"ga"|"en">("ga");
 
-  constructor(private auth : AuthenticationService, private http : HttpClient) { }
+
+  constructor(private auth : AuthenticationService, private http : HttpClient) { 
+
+  }
 
   l: any = '';
   baseUrl: string = config.baseurl;
@@ -40,10 +44,12 @@ export class TranslationService {
     return this.l[key] ?? key;
   }
 
+
   initLanguage() {
     if (this.auth.isLoggedIn()) {
       this.getUserLanguageCode().subscribe((res) => {
         this.l = this.getLanguageFromCode(res.language);
+        this.languageCode$.next(res.language);
       });
     } else {
       this.l = this.getLanguageFromCode('ga');
@@ -52,6 +58,7 @@ export class TranslationService {
 
   setLanguage(code: 'ga'|'en') {
     this.l = this.getLanguageFromCode(code);
+    this.languageCode$.next(code);
 
     this.currentLanguage = (this.l.iso_code === 'en' ? LANGUAGE.ENGLISH : LANGUAGE.IRISH);
 

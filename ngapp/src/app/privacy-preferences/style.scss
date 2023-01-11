@@ -1,0 +1,22 @@
+.mat-button-toggle-checked {
+    background-color: rgb(255,255,255,0.5);
+    font-weight: bold;
+}
+.mat-card,.mat-expansion-panel,.mat-button-toggle {
+    background-color: rgba(255,255,255,0.1);
+}
+.mat-card,.mat-expansion-panel, .mat-button-toggle-group {
+    margin: auto;
+    margin-bottom: 2em;
+}
+
+.exception {
+    background-color: rgba(255, 166, 0, 0.37);
+    padding: 2mm;
+    border-radius: 2mm;
+}
+
+h1,h3,p,.mat-expansion-panel-header-title {
+    margin-right: 1rem;
+    margin-left: 1rem;
+}

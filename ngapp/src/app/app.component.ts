@@ -1,16 +1,10 @@
 import { Component              } from '@angular/core';
-import { OnInit                 } from '@angular/core';
 import { HostListener           } from '@angular/core';
-import { NavigationCancel       } from '@angular/router';
 import { Event                  } from '@angular/router';
 import { NavigationEnd          } from '@angular/router';
-import { NavigationError        } from '@angular/router';
-import { NavigationStart        } from '@angular/router';
 import { Router                 } from '@angular/router';
 
 import { filter                 } from 'rxjs/operators';
-import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
-// import { SlimLoadingBarService  } from 'ng2-slim-loading-bar';
 
 import { Story                  } from 'app/story';
 import { Message                } from 'app/message';
@@ -18,7 +12,6 @@ import { Classroom              } from 'app/classroom';
 import { NotificationService    } from 'app/notification-service.service';
 import { EngagementService      } from 'app/engagement.service';
 import { TranslationService     } from 'app/translation.service';
-import { MessageService         } from 'app/message.service';
 import { AuthenticationService  } from 'app/authentication.service';
 import { StoryService           } from 'app/story.service';
 
@@ -41,15 +34,17 @@ export class AppComponent {
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
 
+  window = window;
+
   constructor(
     //private _loadingBar: SlimLoadingBarService, 
     private _router: Router,
     public auth: AuthenticationService,
-    private storyService: StoryService,
     private notificationSerivce : NotificationService,
-    private engagement: EngagementService,
+    public engagement: EngagementService,
     public ts: TranslationService,
   ) {
+    console.log('app component',this.engagement);
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((event: Event) => {
       this.navigationInterceptor(event);
@@ -59,6 +54,7 @@ export class AppComponent {
       filter(event => event instanceof NavigationEnd)
     );
     navEndEvents.subscribe((event: NavigationEnd) => {
+      console.log(event);
       gtag('config', 'UA-178889778-1', {
         'page_path' : event.urlAfterRedirects
       });

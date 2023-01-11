@@ -1,0 +1,23 @@
+<mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h5><transl [key]="forGroup"></transl></h5>
+        </mat-panel-title>
+        <mat-slide-toggle disabled="1" [checked]="data.isEnabled()"></mat-slide-toggle>
+    </mat-expansion-panel-header>
+    <p align="justify" matExpansionPanelContent>
+      <transl [key]="forGroup+'.prose'"></transl>
+    </p>
+    <div style="height: 5em">
+        <p align="justify" class="exception" *ngIf=disabled>
+            {{ ts.message('only_for_users_over_16')}}
+
+        </p>
+        <mat-button-toggle-group
+        [disabled]=disabled
+        (change)="choose($event)">
+            <mat-button-toggle value="reject"> {{ ts.message('reject') }} </mat-button-toggle>
+            <mat-button-toggle value="accept"> {{ ts.message('accept') }} </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</mat-expansion-panel>

@@ -13,7 +13,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
@@ -85,11 +84,15 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
+import { ConsentService } from './privacy-preferences/consent.service';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { UserGuidesComponent } from './user-guides/user-guides.component';
+
+import { TranslationModule } from './translation/module';
+import { PrivacyPreferencesModule } from './privacy-preferences/module';
 
 @NgModule({
     declarations: [
@@ -150,6 +153,8 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         UserGuidesComponent,
     ],
     imports: [
+        TranslationModule,
+	PrivacyPreferencesModule,
         RegisterModule,
         ReportAnIssueModule,
         SpinnerModule,
@@ -189,6 +194,7 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         DictionaryLookupsModule
     ],
     providers: [
+    	ConsentService,
         StoryService,
         UserService,
         MatDatepickerModule,
@@ -201,6 +207,8 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         AppComponent,
     ]
 })
+
+
 export class AppModule {
   constructor(private injector: Injector) {
     //const chatbotElement = createCustomElement(ChatbotComponent, {injector});

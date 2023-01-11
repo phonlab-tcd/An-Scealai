@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Story } from './story';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from './authentication.service';
-import { Observable, throwError } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
+import { Observable } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
 import { EventType } from './event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
+import { ConsentService } from './privacy-preferences/consent.service';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class StoryService {
 
   constructor(
     private http: HttpClient,
+    private consent: ConsentService,
     private router: Router,
     private auth: AuthenticationService,
     private engagement: EngagementService,
@@ -41,12 +43,13 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
-      .subscribe(res => {
+    this.consent.http.post(this.baseUrl + 'create', storyObj)
+      .subscribe((res: {id: string}) => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-
-        this.router.navigateByUrl('/dashboard/' + res.id);
+        // this.recordingService.addRecordingForLoggedInUser(storyObj);
+        if("id" in res)
+          this.router.navigateByUrl('/dashboard/' + res.id);
       });
   }
 
@@ -78,7 +81,7 @@ export class StoryService {
   }
 
   updateStoryTitleAndDialect(story: Story): Observable<any> {
-    return this.http.post(this.baseUrl + 'update/' + story._id, story);
+    return this.consent.http.post(this.baseUrl + 'update/' + story._id, story);
   }
   
   getStoriesForClassroom(owner: string, date): Observable<any> {
@@ -86,13 +89,11 @@ export class StoryService {
   }
 
   updateStory(updateData: any, id: string): Observable<any> {
-    return this.http.post(
-      this.baseUrl + 'update/' + id,
-      updateData);
+    return this.consent.http.post(this.baseUrl + 'update/' + id, updateData);
   }
   
   updateAuthor(oldAuthor, newAuthor): Observable<any> {
-    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
+    return this.consent.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
   }
 
   deleteStory(id) {
@@ -104,7 +105,7 @@ export class StoryService {
   }
 
   addFeedback(id, feedbackText: string) : Observable<any> {
-    return this.http.post(this.baseUrl + "addFeedback/" + id, {feedback : feedbackText});
+    return this.consent.http.post(this.baseUrl + "addFeedback/" + id, {feedback : feedbackText});
   }
 
   getFeedback(id) : Observable<any> {
@@ -122,7 +123,7 @@ export class StoryService {
   addFeedbackAudio(id, audioBlob: Blob) : Observable<any>{
     let formData = new FormData();
     formData.append('audio', audioBlob);
-    return this.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);
+    return this.consent.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);
   }
 
   synthesise(id: string): Observable<any> {
@@ -130,15 +131,11 @@ export class StoryService {
   }
 
   gramadoirViaBackend(id: string): Observable<any> {
-    return this
-      .http
-      .get(
-        // URL
-        this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
+    return this.http.get(this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
   }
 
   synthesiseObject(storyObject: Story): Observable<any> {
-    return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
+    return this.consent.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
   }
 
   updateActiveRecording(storyId: string, recordingId: string): Observable<any> {

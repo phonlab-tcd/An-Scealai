@@ -654,7 +654,56 @@ button:focus, input:focus, audio:focus{
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////// Chatbot
+html {
+  overflow-y: hidden;
+}
+body.rootBody {
+  overflow-y: scroll;
+}
+
+body.rootBody {
+   background: url("assets/img/paperBg.jpg") no-repeat center fixed;
+ -webkit-background-size: cover;
+    -moz-background-size: cover;
+      -o-background-size: cover;
+         background-size: cover;
+ font-family: "Open Sans";
+}
+
+.btn {
+  color: white;
+  font-size: 14pt;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 30px;
+  background-color: #e5bd3b;
+  z-index: 20;
+}
+
+.btn:hover {
+  background-color: #ad8f2b;
+  color: white;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+button:focus, input:focus, audio:focus{
+  outline: 0;
+}
+
+.mat-delete {
+  background-color: red;
+  color: white;
+}
+
+.mat-secondary {
+  background-color: #fdd798;
+}
+
 .add-personal-topics{
   position: relative;
   border-radius: 5px;
