@@ -225,25 +225,25 @@ export const ERROR_INFO = {
       messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
     },
     "INPHRASE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'SET PHRASE IN DATABASE NOT MATCHED',
+      nameGA: 'MÍ-MHEAITSEÁIL LE NATH CAINTE SA CHÓRAS',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'This looks like it should form part of a set phrase  - did you mean # ?', 
+      messageGA: 'An cuid de nath cainte é seo? An é # a bhí i gceist?'
     },
     "BREISCHEIM": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'COMPARATIVE ADJECTIVE',
+      nameGA: 'BREISCHÉIM',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Comparative adjective detected: check the adjective form after \'níos / ní ba\'', 
+      messageGA: 'Breischéim? Seiceáil an aidiacht tar éis \'níos / ní ba\''
     },
     "NIAITCH": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'PREFIX \'H\'',
+      nameGA: 'Prefix \/d\'\/ missing',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Does the prefix \/h\/ follow in this context?', 
+      messageGA: 'An bhfuil an comhthéacs ceart ann don réamhlitir \/h\/ anseo?'
     },
     "NEEDART": {
       nameEN: 'WORD NOT IN DATABASE',
@@ -253,109 +253,109 @@ export const ERROR_INFO = {
       messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
     },
     "CAIGHMOIRF": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'SPELLING OR NON-STANDARD FORM',
+      nameGA: 'LITRIÚ NÓ FOIRM NEAMHCHAIGHDEÁNACH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Spelling error? or derived from a non-standard form of \/\1\/ ?', 
+      messageGA: 'Earráid sa litriú? nó bunaithe ar leagan neamhchaighdeánach de  \/\1\/ ?'
     },
     "NITEE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'PREFIX \'T\'',
+      nameGA: 'RÉAMHLITIR \'T\'',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Unnecessary prefix \/t\/ ?', 
+      messageGA: 'Réamhlitir \/t\/ gan ghá?'
     },
     "NICLAOCHLU": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'UNNECESSARY INITIAL MUTATION',
+      nameGA: 'URÚ/SÉIMHIÚ GAN GHÁ',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Unnecessary initial mutation?', 
+      messageGA: 'Urú nó séimhiú gan ghá?'
     },
     "DUBAILTE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'DUPLICATION',
+      nameGA: 'DÚBLÁIL',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Repeated word', 
+      messageGA: 'An focal céanna faoi dhó'
     },
     "NOSUBJ": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'RESEMBLES SUBJUNCTIVE',
+      nameGA: 'COSÚIL LEIS AN MODH FOSHUITEACH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Looks like a subjunctive. Did you mean this?', 
+      messageGA: 'É seo cosúil leis an modh foshuiteach, ach an é sin atá ar intinn agat?'
     },
     "ABSOLUTE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'DEPENDENT FORM',
+      nameGA: 'FOIRM SPLEÁCH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the dependent form of the verb correct here? (or is previous word misspelled?)', 
+      messageGA: 'An bhfuil gá leis an bhfoirm spleách anseo? (nó an bhfuil an focal roimhe litrithe mícheart?)'
     },
-    "PREFIX": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+    "PREFIXD": {
+      nameEN: 'PREFIX \'D\' MISSING',
+      nameGA: 'GÁ LE RÉAMHMHÍR \'D\'',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the prefix \/d\'\/ missing here? (see past tense/conditional verbs beginning with a vowel/\'f\')', 
+      messageGA: 'An bhfuil gá leis an réamhlitir \/d\'\/ anseo? (féach aimsir chaite / modh coinníollach le focail a thosaíonn le guta/\'f\')'
     },
     "ONEART": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'TWO DEFINITE ARTICLES',
+      nameGA: 'DHÁ HALT LE HAIS A CHÉILE',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'No need for two definite articles', 
+      messageGA: 'Ní gá dhá alt a bheith le hais a chéile (má tá an litriú ceart)'
     },
     "SYNTHETIC": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'COMBINED FORM',
+      nameGA: 'AN FHOIRM THÁITE',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'The synthetic (combined) form, ending in \/\1\/, is often used here', 
+      messageGA: 'Is é an fhoirm tháite, leis an iarmhír \/\1\/, a úsáidtear anseo go minic'
     },
     "NODATIVE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'DATIVE',
+      nameGA: 'TUISEAL TABHARTHACH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Did you mean to use the dative form here?', 
+      messageGA: 'Arbh é an tuiseal tabharthach a bhí ar intinn agat?'
     },
     "RELATIVE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'INDEPENDENT FORM',
+      nameGA: 'FOIRM NEAMHSPLEÁCH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the independent form of the verb correct here?', 
+      messageGA: 'An bhfuil an fhoirm neamhspleách ceart anseo?'
     },
     "NIDEE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'UNNECESSARY PREFIX \'D\'',
+      nameGA: 'RÉAMHMHÍR \'D\' GAN GHÁ',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Unnecessary prefix \/d\'\/ ?', 
+      messageGA: 'Réamhmhír  \/d\'\/ gan ghá?'
     },
     "BADART": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'UNNECESSARY DEFINITE ARTICLE',
+      nameGA: 'AN T-ALT GAN GHÁ',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Unnecessary use of the definite article? (double check spelling of noun)', 
+      messageGA: 'An bhfuil gá leis an alt anseo?  (féach siar ar litriú an ainmfhocail)'
     },
     "NIGA": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'UNNECESSARY WORD',
+      nameGA: 'FOCAL GAN GHÁ',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the word \/\1\/ needed?', 
+      messageGA: 'An bhfuil gá leis ab bhfocal \/\1\/?'
     },
     "PRESENT": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'MÁ AND THE PRESENT TENSE',
+      nameGA: 'MÁ AGUS AN AIMSIR LÁITHREACH',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Consider using the present tense after \'má\' here', 
+      messageGA: 'Úsáid an aimsir láithreach sa chás seo tar éis \'má\''
     },
     "NIDARASEIMHIU": {
       nameEN: 'WORD NOT IN DATABASE',
@@ -365,32 +365,32 @@ export const ERROR_INFO = {
       messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
     },
     "NIBEE": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'A SECOND LENITION',
+      nameGA: 'AN DARA SÉIMHIÚ',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the second lenition necessary?', 
+      messageGA: 'An bhfuil gá leis an dara séimhiú?'
     },
     "GENDER": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'GENDER DISAGREEMENT',
+      nameGA: 'INSCNE MHÍCHEART',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Gender disagreement?', 
+      messageGA: 'Inscne mhícheart? '
     },
     "IOLRA": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'PLURAL FORM REQUIRED',
+      nameGA: 'GÁ LE HUIMHIR IOLRA',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Is the plural form required here?', 
+      messageGA: 'Uimhir iolra ag teastáil anseo?'
     },
     "NUMBER": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
+      nameEN: 'NUMBER DISAGREEMENT',
+      nameGA: 'UIMHIR MHÍCHEART',
       color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
+      messageEN: 'Number disagreement?', 
+      messageGA: 'Uimhir agsu ainmfhocal ag teacht le chéile?'
     }
   } as const;
                 
