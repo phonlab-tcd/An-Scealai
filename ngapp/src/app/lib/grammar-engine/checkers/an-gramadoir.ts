@@ -28,38 +28,35 @@ export type GramadoirTag = {
 async function check(input: string):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
     
-    let errorsEN = [];
-    let errorsGA = [];
+    let errors = [];
     
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
     try {
-      errorsEN = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
-      errorsGA = await callAnGramadoir(input, 'ga', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
+      errors = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
     }
     catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
-        errorsEN = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
-        errorsGA = await callAnGramadoir(input, 'ga', 'https://cadhan.com/api/gramadoir/1.0');
+        errors = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
       } catch(_) {
         reject();
       }  
     }
 
     // map gramadoir responses to generic ErrorTag values
-    const errorTags: ErrorTag[] = errorsEN.map((errorEN, i) => {
+    const errorTags: ErrorTag[] = errors.map((error) => {
       // get simple rule name from an gramadoir's ruleId response attribute
-      let cleanedErrorName = gramadoirId2string(errorEN.ruleId);
+      let cleanedErrorName = gramadoirId2string(error.ruleId);
       
       return {
-        errorText: errorEN.errortext,
-        messageGA: errorsGA[i].msg,
-        messageEN: errorEN.msg,
-        context: errorEN.context,
+        errorText: error.errortext,
+        messageGA: (ERROR_INFO[cleanedErrorName].messageGA).replace('#', error.errortext),
+        messageEN: (ERROR_INFO[cleanedErrorName].messageEN).replace('#', error.errortext),
+        context: error.context,
         nameEN: ERROR_INFO[cleanedErrorName].nameEN,
         nameGA: ERROR_INFO[cleanedErrorName].nameGA,
         color: ERROR_INFO[cleanedErrorName].color,
-        fromX: +errorEN.fromx,
-        toX: +errorEN.tox + 1,
+        fromX: +error.fromx,
+        toX: +error.tox + 1,
         type: cleanedErrorName
       } as ErrorTag;
     });

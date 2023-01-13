@@ -31,7 +31,7 @@ export const ERROR_INFO = {
     "RELATIVE-CLAUSE": {
       nameEN: 'Relative Clause',
       nameGA: 'Relative Clause Error',
-      color: '#ADD8E6', 
+      color: '#CBC3E3', 
       messageEN: 'Relative Clause Error', 
       messageGA: 'Relative Clause Error'
     },
@@ -60,8 +60,8 @@ export const ERROR_INFO = {
       nameEN: 'ERROR',
       nameGA: 'BOTÚN',
       color: '#FFA3A3', 
-      messageEN: 'Y', 
-      messageGA: 'Z'
+      messageEN: 'Word not recognised: #?', 
+      messageGA: 'Níl an fhoirm seo den fhocal sa bhfoclóir: #?'
     },
     "CAIGHDEAN": {
       nameEN: 'NON-STANDARD FORM',
@@ -73,7 +73,7 @@ export const ERROR_INFO = {
     "SEIMHIU": {
       nameEN: 'SÉIMHIÚ/LENITION NEEDED',
       nameGA: 'SÉIMHIÚ AG TEASTÁIL',
-      color: 'lightblue', 
+      color: '#ADD8E6', 
       messageEN: 'Is seimhiú / lenition missing?', 
       messageGA: 'An bhfuil séimhiú ar lár?'
     },
@@ -358,18 +358,18 @@ export const ERROR_INFO = {
       messageGA: 'Úsáid an aimsir láithreach sa chás seo tar éis \'má\''
     },
     "NIDARASEIMHIU": {
-      nameEN: 'WORD NOT IN DATABASE',
-      nameGA: 'NÍL AN FOCAL SA CHÓRAS',
-      color: '#FFA3A3', 
-      messageEN: 'Not in database - is this formed from the root # ?', 
-      messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
-    },
-    "NIBEE": {
       nameEN: 'A SECOND LENITION',
       nameGA: 'AN DARA SÉIMHIÚ',
       color: '#FFA3A3', 
       messageEN: 'Is the second lenition necessary?', 
       messageGA: 'An bhfuil gá leis an dara séimhiú?'
+    },
+    "NIBEE": {
+      nameEN: 'PREFIX \'B\'',
+      nameGA: 'RÉAMHLITIR \'B\'',
+      color: '#FFA3A3', 
+      messageEN: 'Is prefix \/b\'\/ required here?', 
+      messageGA: 'An bhfuil gá leis an réamhlitir \/b\'\/ ?'
     },
     "GENDER": {
       nameEN: 'GENDER DISAGREEMENT',
