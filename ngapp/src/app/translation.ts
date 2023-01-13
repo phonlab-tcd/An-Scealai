@@ -2081,6 +2081,11 @@ export default {
   broad_slender_checker: {
     ga: 'Seiceálaí don Chomhfhreagras Caol/Leathan',
     en: 'Broad/Slender Checker' },
-  
+  save_as: {
+    ga: 'Sábháil mar',
+    en: 'Save as' },
+  format: {
+    ga: 'Formáid',
+    en: 'Format' },
     
 }

@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { EventType } from '../event';
 import { EngagementService } from '../engagement.service';
 import { TranslationService } from '../translation.service';
-// import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-// import { StoryService } from '../story.service';
-import { UserService } from '../user.service';
 import config from 'abairconfig';
 
 @Component({
@@ -58,10 +55,7 @@ export class LoginComponent implements OnInit {
     private auth: AuthenticationService,
     private router: Router,
     private engagement: EngagementService,
-    public ts: TranslationService,
-    // public _loadingBar: SlimLoadingBarService,
-    // private storyService: StoryService,
-    private userService: UserService) {}
+    public ts: TranslationService) {}
 
   ngOnInit() {
     this.loginError = false;

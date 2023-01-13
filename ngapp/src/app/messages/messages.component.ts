@@ -1,7 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { Classroom } from '../classroom';
-import { Observable } from 'rxjs';
 import { User } from '../user';
 import { Message } from '../message';
 import { UserService } from '../user.service';
@@ -17,8 +15,6 @@ import { NotificationService } from '../notification-service.service';
 import { RecordAudioService } from '../services/record-audio.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RecordingDialogComponent } from '../dialogs/recording-dialog/recording-dialog.component';
-
-declare var MediaRecorder : any;
 
 @Component({
   selector: 'app-messages',

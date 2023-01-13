@@ -25,8 +25,8 @@
     <input *ngIf="data?.type == 'updateText'" type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]">
     <!-- select -->
     <div *ngIf="data?.type == 'select'" >
-      Save as: <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]"><br><br>
-      Format:
+      {{ts.l.save_as}}: <input type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]"><br><br>
+      {{ts.l.format}}:
       <select  #downloadFormatOption style="border-end-end-radius: 0; background: rgba(0,0,0,0);" [(ngModel)]="textInputs[1]">
         <option>.pdf</option>
         <option>.docx</option>
