@@ -256,8 +256,8 @@ export const ERROR_INFO = {
       nameEN: 'SPELLING OR NON-STANDARD FORM',
       nameGA: 'LITRIÚ NÓ FOIRM NEAMHCHAIGHDEÁNACH',
       color: '#FFA3A3', 
-      messageEN: 'Spelling error? or derived from a non-standard form of \/\1\/ ?', 
-      messageGA: 'Earráid sa litriú? nó bunaithe ar leagan neamhchaighdeánach de  \/\1\/ ?'
+      messageEN: 'Spelling error? or derived from a non-standard form of # ?', 
+      messageGA: 'Earráid sa litriú? nó bunaithe ar leagan neamhchaighdeánach de # ?'
     },
     "NITEE": {
       nameEN: 'PREFIX \'T\'',
@@ -312,8 +312,8 @@ export const ERROR_INFO = {
       nameEN: 'COMBINED FORM',
       nameGA: 'AN FHOIRM THÁITE',
       color: '#FFA3A3', 
-      messageEN: 'The synthetic (combined) form, ending in \/\1\/, is often used here', 
-      messageGA: 'Is é an fhoirm tháite, leis an iarmhír \/\1\/, a úsáidtear anseo go minic'
+      messageEN: 'The synthetic (combined) form, ending in #, is often used here', 
+      messageGA: 'Is é an fhoirm tháite, leis an iarmhír #, a úsáidtear anseo go minic'
     },
     "NODATIVE": {
       nameEN: 'DATIVE',
@@ -347,8 +347,8 @@ export const ERROR_INFO = {
       nameEN: 'UNNECESSARY WORD',
       nameGA: 'FOCAL GAN GHÁ',
       color: '#FFA3A3', 
-      messageEN: 'Is the word \/\1\/ needed?', 
-      messageGA: 'An bhfuil gá leis ab bhfocal \/\1\/?'
+      messageEN: 'Is the word # needed?', 
+      messageGA: 'An bhfuil gá leis ab bhfocal #?'
     },
     "PRESENT": {
       nameEN: 'MÁ AND THE PRESENT TENSE',
