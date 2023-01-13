@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+
+import pandas as pd
+import json
+
+df = pd.read_csv('simple.csv')
+
+
+dic = {}
+for index,row in df.iterrows():
+    dic[row['key']] = {"ga":"","en":""}
+
+for index,row in df.iterrows():
+    dic[row['key']]["ga"] +=  row["ga"]
+    dic[row['key']]["en"] +=  row["en"]
+
+
+print(json.dumps(dic, indent=4, ensure_ascii=False))
