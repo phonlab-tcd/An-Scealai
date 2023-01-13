@@ -72,7 +72,7 @@ export class TeacherSettingsComponent implements OnInit {
   removeStudent(studentId:string) {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
-        title: 'Are you sure you want to remove this student from the class?',
+        title: this.ts.l.want_to_remove_student_from_class,
         confirmText: this.ts.l.delete,
         cancelText: this.ts.l.cancel
       },
