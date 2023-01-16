@@ -45,16 +45,17 @@ async function check(input: string):Promise<ErrorTag[]>{
     // map gramadoir responses to generic ErrorTag values
     const errorTags: ErrorTag[] = errors.map((error) => {
       // get simple rule name from an gramadoir's ruleId response attribute
-      let cleanedErrorName = gramadoirId2string(error.ruleId);
+      const cleanedErrorName = gramadoirId2string(error.ruleId);
+      const e_info = ERROR_INFO[cleanedErrorName];
       
       return {
         errorText: error.errortext,
-        messageGA: (ERROR_INFO[cleanedErrorName].messageGA).replace('#', error.errortext),
-        messageEN: (ERROR_INFO[cleanedErrorName].messageEN).replace('#', error.errortext),
+        messageGA: (e_info.messageGA).replace('#', error.errortext),
+        messageEN: (e_info.messageEN).replace('#', error.errortext),
         context: error.context,
-        nameEN: ERROR_INFO[cleanedErrorName].nameEN,
-        nameGA: ERROR_INFO[cleanedErrorName].nameGA,
-        color: ERROR_INFO[cleanedErrorName].color,
+        nameEN: e_info.nameEN,
+        nameGA: e_info.nameGA,
+        color: e_info.color,
         fromX: +error.fromx,
         toX: +error.tox + 1,
         type: cleanedErrorName

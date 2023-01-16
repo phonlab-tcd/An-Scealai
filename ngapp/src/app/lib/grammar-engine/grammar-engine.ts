@@ -4,6 +4,45 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AuthenticationService } from 'app/authentication.service';
 
+function diffNewErrors(prev: any[], curr: any[]) {
+    const prevErrsJson = asJson(prev);
+    const currErrsJson = asJson(curr);
+
+    const newErrors = extractNew(prevErrsJson, currErrsJson);
+
+    return newErrors;
+
+    function asJson(tags) {
+	    return tags.map(error => JSON.stringify([error.errorText, error.type]));
+
+    }
+
+    function extractNew(prevJson, currJson) {
+	return currJson 
+	  .filter(entry => {
+	    if (prevJson.includes(entry)) {
+	      prevJson[prevJson.indexOf(entry)] = null;
+	      return false;
+	    }
+	    return true;
+	  })
+	  .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
+    }
+}
+
+function countErrorTypes(errors) {
+  const errorDict = errors.reduce(reducer, {});
+
+  console.log(errorDict);
+  return errorDict;
+
+  function reducer(dict, cur) {
+    if(!dict[cur]) dict[cur] = 0;
+    dict[cur] += 1;
+    return dict;
+  }
+}
+
 export class GrammarEngine {
     private cacheMap: Map<string, GrammarCache>;
     private grammarCheckers: GrammarChecker[];
@@ -83,28 +122,15 @@ export class GrammarEngine {
 
         return allErrorTags;
     }
+
     
     /**
     * Check number of new errors and save to DB
     * @param newTags - array of grammar tags since most recent grammar check
     */
     async countNewErrors(newTags:any[]) {      
-      const prevErrorMap = this.previousErrorTags.map(error => JSON.stringify([error['errorText'], error['type']]));
-      const newErrorMap = newTags.map(error => JSON.stringify([error.errorText, error.type]));
-      
-      // Multiset subtraction: currentErrorMap - prevError map
-      // This should give us the errors that are new in currentErrorMap
-      const toCount = newErrorMap
-        .filter(entry => {
-          if (prevErrorMap.includes(entry)) {
-            prevErrorMap[prevErrorMap.indexOf(entry)] = null;
-            return false;
-          }
-          return true;
-        })
-        .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
-      console.log('toCount', toCount);
-      
+      const toCount = diffNewErrors(this.previousErrorTags, newTags);
+      const counts = countErrorTypes(toCount);
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
       const body = {errors: toCount,};
       this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body, {headers}).subscribe();
