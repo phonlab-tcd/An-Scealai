@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const UserGrammarCounts = require('../../models/userGrammarCounts');
 const {API500Error} = require('../../utils/APIError');
 
+
+// Get set of new errors from frontend client (frontend has to determine which errors are new and which are old).
+// Create a new document with the counts of these errors by type (e.g. GENITIVE, BACHOIR, NISEIMHIU, etc.).
+// To get the total counts of errors for a user, would have to scan the collection by the owner and collate documents,
+// which is delegated to another part of the code base for simplicity/efficiency.
 module.exports = async (req, res, next) => {
   const userId = new mongoose.mongo.ObjectId(req.user._id);
 
