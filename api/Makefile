@@ -1,7 +1,7 @@
 network:
 	docker network create -d bridge scealai-api-network
 
-container: Dockerfile
+image: Dockerfile
 	docker build -t scealai-api .
 
 install: package.json package-lock.json

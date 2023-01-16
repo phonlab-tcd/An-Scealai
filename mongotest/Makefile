@@ -1,4 +1,4 @@
-container: Dockerfile
+image: Dockerfile
 	docker build -t scealai-mongo .
 
 run-dev:

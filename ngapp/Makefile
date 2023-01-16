@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-container: Dockerfile package.json package-lock.json
+image: Dockerfile package.json package-lock.json
 	docker build -t scealai-frontend .
 
 install:
