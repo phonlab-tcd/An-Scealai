@@ -48,7 +48,7 @@ export class GrammarEngine {
     private grammarCheckers: GrammarChecker[];
     private http: HttpClient;
     private auth: AuthenticationService;
-    private previousErrorTags: Object[] = [];
+    private previousErrorTags: Object[];
     private errorsWithSentences = [];
     
     constructor(grammarCheckers: GrammarChecker[], http: HttpClient, auth: AuthenticationService) {
@@ -129,6 +129,11 @@ export class GrammarEngine {
     * @param newTags - array of grammar tags since most recent grammar check
     */
     async countNewErrors(newTags:any[]) {      
+      this.previousErrorTags = newTags;
+      this.countNewErrors = this._countNewErrorsAfterFirstTime;
+    }
+
+    private async _countNewErrorsAfterFirstTime(newTags: any[]) {
       const toCount = diffNewErrors(this.previousErrorTags, newTags);
       const counts = countErrorTypes(toCount);
       const body = {countsByType: counts};
@@ -136,6 +141,7 @@ export class GrammarEngine {
       
       this.previousErrorTags = newTags;
     }
+
     
     /**
     * Save an array containing sentences, associated errors, and indexes to the DB
