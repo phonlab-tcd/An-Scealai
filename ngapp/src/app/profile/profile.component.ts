@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { ClassroomService } from '../classroom.service';
 import { UntypedFormControl } from '@angular/forms';
@@ -93,12 +93,10 @@ export class ProfileComponent implements OnInit {
   }
 
   leaveClassroom() {
-    this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
+    this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((_) => {
       this.classroom = null;
     });
-    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe(
-      (res) => {
-      });
+    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe((_) => {});
   }
 
   logout() {
@@ -122,32 +120,32 @@ export class ProfileComponent implements OnInit {
 
       this.storyService.getStoriesFor(userDetails.username).subscribe( (res: Story[]) => {
         for(let story of res) {
-          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((res) => {});
-          this.recordingService.deleteStoryRecording(story._id).subscribe( (res) => {
+          this.recordingService.deleteStoryRecordingAudio(story._id).subscribe((_) => {});
+          this.recordingService.deleteStoryRecording(story._id).subscribe( (_) => {
           })
         }
       });
       
-      this.storyService.deleteAllStories(userDetails.username).subscribe( (res) => {
+      this.storyService.deleteAllStories(userDetails.username).subscribe( (_) => {
       });
       
-      this.statsService.deleteStats(userDetails._id).subscribe( (res) => {
+      this.statsService.deleteStats(userDetails._id).subscribe( (_) => {
       });
     }
     
     if(userDetails.role === "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
         for(let classroom of res) {
-          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (res) => {});
+          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (_) => {});
         }
       });
       
-      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (res) => {});
+      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (_) => {});
     }
     
-    this.messageService.deleteAllMessages(userDetails._id).subscribe( (res) => {});  
-    this.profileService.deleteProfile(userDetails._id).subscribe( (res) => {});
-    this.userService.deleteUser(userDetails.username).subscribe( (res) => {});
+    this.messageService.deleteAllMessages(userDetails._id).subscribe( (_) => {});  
+    this.profileService.deleteProfile(userDetails._id).subscribe( (_) => {});
+    this.userService.deleteUser(userDetails.username).subscribe( (_) => {});
     this.auth.logout();
   }
   
@@ -185,7 +183,7 @@ export class ProfileComponent implements OnInit {
           this.errorMessage = this.ts.l.passwords_5_char_long;
         } else {
           this.errorMessage = '';
-          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((res) => {
+          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((_) => {
           });
           this.auth.logout();
         }

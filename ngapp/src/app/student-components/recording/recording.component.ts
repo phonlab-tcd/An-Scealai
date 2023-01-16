@@ -6,12 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Story } from '../../story';
 import { Recording } from '../../recording';
-import { Subject } from 'rxjs';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 declare var MediaRecorder : any;
 
@@ -25,8 +23,7 @@ export class RecordingComponent implements OnInit {
   constructor(private storyService: StoryService, public ts: TranslationService,
               private sanitizer: DomSanitizer, private route: ActivatedRoute,
               private router: Router, private recordingService: RecordingService,
-              private synthesis: SynthesisService, private engagement: EngagementService,
-              private dialog: MatDialog) { }
+              private synthesis: SynthesisService, private engagement: EngagementService,) { }
   
   // Synthesis variables
   story: Story = new Story();
@@ -180,7 +177,6 @@ export class RecordingComponent implements OnInit {
    * sentence / paragraph index, populate that chunks array with audio data
    * recorded through microphone.
    * @param index - index for the paragraph / sentence being recorded
-   * @param chunksArray - array of any[], should be either paragraphChunks
    * or sentenceChunks
    */
   recordAudio(index:number) {
@@ -312,7 +308,7 @@ export class RecordingComponent implements OnInit {
       sentenceTranscriptions: this.sentenceTranscriptions
     }
 
-    this.recordingService.update(this.story.activeRecording, trackData).subscribe(res => {
+    this.recordingService.update(this.story.activeRecording, trackData).subscribe(_ => {
       this.recordingSaved = true;
     });
   }

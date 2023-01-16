@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { AuthenticationService, TokenPayload } from '../../authentication.service';
-import { EventType } from '../../event';
+import { AuthenticationService } from '../../authentication.service';
 import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
 import { ProfileService } from '../../profile.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from '../../message.service';
-import { Message } from '../../message';
 import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { Recording } from '../../recording';
@@ -27,10 +24,9 @@ export class RecordingHistoryComponent implements OnInit {
   userId: string = '';
   isFromAmerica: boolean = false;
 
-  constructor(private storyService: StoryService, private auth: AuthenticationService,
-    private engagement: EngagementService, public ts : TranslationService, private router: Router,
-    private messageService: MessageService, private profileService: ProfileService, private classroomService: ClassroomService,
-    private ns: NotificationService, private route: ActivatedRoute, private recordingService: RecordingService) { }
+  constructor(public ts : TranslationService, private router: Router,
+    private profileService: ProfileService,
+    private route: ActivatedRoute, private recordingService: RecordingService) { }
 
 /*
 * Set story array of stories for logged in user
