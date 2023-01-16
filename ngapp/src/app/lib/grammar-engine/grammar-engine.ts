@@ -5,29 +5,29 @@ import { firstValueFrom } from 'rxjs';
 import { AuthenticationService } from 'app/authentication.service';
 
 function diffNewErrors(prev: any[], curr: any[]) {
-    const prevErrsJson = asJson(prev);
-    const currErrsJson = asJson(curr);
+  const prevErrsJson = asJson(prev);
+  const currErrsJson = asJson(curr);
 
-    const newErrors = extractNew(prevErrsJson, currErrsJson);
+  const newErrors = extractNew(prevErrsJson, currErrsJson);
 
-    return newErrors;
+  return newErrors;
 
-    function asJson(tags) {
-	    return tags.map(error => JSON.stringify([error.errorText, error.type]));
+  function asJson(tags) {
+	return tags.map(error => JSON.stringify([error.errorText, error.type]));
 
-    }
+  }
 
-    function extractNew(prevJson, currJson) {
-	return currJson 
-	  .filter(entry => {
-	    if (prevJson.includes(entry)) {
-	      prevJson[prevJson.indexOf(entry)] = null;
-	      return false;
-	    }
-	    return true;
-	  })
-	  .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
-    }
+  function extractNew(prevJson, currJson) {
+      return currJson 
+        .filter(entry => {
+          if (prevJson.includes(entry)) {
+            prevJson[prevJson.indexOf(entry)] = null;
+            return false;
+          }
+          return true;
+        })
+        .map(entry => JSON.parse(entry)[1]); // Get error type from string encoding of [errortext, errortype]
+  }
 }
 
 function countErrorTypes(errors) {
@@ -131,9 +131,8 @@ export class GrammarEngine {
     async countNewErrors(newTags:any[]) {      
       const toCount = diffNewErrors(this.previousErrorTags, newTags);
       const counts = countErrorTypes(toCount);
-      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
-      const body = {errors: toCount,};
-      this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body, {headers}).subscribe();
+      const body = {countsByType: counts};
+      this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
       
       this.previousErrorTags = newTags;
     }
