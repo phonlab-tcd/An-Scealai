@@ -42,7 +42,7 @@ import { gaelSpell } from '../../lib/grammar-engine/checkers/gaelspell-checker';
   templateUrl: './dashboard.component.html',
   styleUrls: [
     './dashboard.component.scss',
-    './../../gramadoir-tags.scss',
+    './../../lib/quill-highlight/gramadoir-tags.scss',
     './../../../quill.fonts.scss',
   ],
   encapsulation: ViewEncapsulation.None
@@ -279,7 +279,7 @@ export class DashboardComponent implements OnInit {
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
-    this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts);
+    this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts, this.engagement);
   }
   
   /* If story not saved, make title italic */

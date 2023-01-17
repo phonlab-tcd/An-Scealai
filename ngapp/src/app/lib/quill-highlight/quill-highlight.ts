@@ -1,5 +1,6 @@
 import Quill from 'quill';
 import { TranslationService } from 'app/translation.service';
+import { EngagementService } from '../../engagement.service'
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
@@ -31,19 +32,16 @@ export type HighlightTag = {
     toX: number;
 }
 
-// type TooltippedHighlightTag = {
-//     tag: HighlightTag;
-//     tooltip: any;
-// }
-
 export class QuillHighlighter {
     quillEditor: Quill;
     mostRecentHoveredMessage: String = '';
     private ts: TranslationService;
+    private engagement: EngagementService;
 
-    constructor(quillEditor: Quill, ts: TranslationService) {
+    constructor(quillEditor: Quill, ts: TranslationService, engagement: EngagementService) {
         this.quillEditor = quillEditor;
         this.ts = ts;
+        this.engagement = engagement;
     }
 
     public show(tags: HighlightTag[]): void {
@@ -143,6 +141,8 @@ export class QuillHighlighter {
           (tooltip.root.offsetLeft < 0) ?
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
+          
+          this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
       
     /* Return either last tag hovered, checking grammar, or instructions message */
