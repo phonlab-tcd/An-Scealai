@@ -102,10 +102,10 @@ userRoutes.route('/deleteUser/:username').get(function(req, res) {
 
 // Update password by id 
 userRoutes.route('/updatePassword/:id').post((req, res) => {
-    User.findById(req.params.id, (err, user) => {
+    User.findById(req.params.id, async function(err, user) {
         if(user) {
             user.salt = crypto.randomBytes(16).toString('hex');
-            user.hash = crypto.pbkdf2Sync(req.body.password, user.salt, 1000, 64, 'sha512').toString('hex');
+            user.hash = (await crypto.pbkdf2(req.body.password, user.salt, 1000, 64, 'sha512')).toString('hex');
             user.save().then(() => {
                 res.status(200).json("Password updated successfully");
              }).catch(err => {
@@ -120,7 +120,7 @@ userRoutes.route('/updatePassword/:id').post((req, res) => {
 
 // Update account with random password, send user an email
 userRoutes.route('/sendNewPassword/').post((req, res) => {
-    User.findOne({"username": req.body.username}, (err, user) => {
+    User.findOne({"username": req.body.username}, async function (err, user) {
         if(err){
           return res.status(500).json(err);
         }
@@ -130,7 +130,7 @@ userRoutes.route('/sendNewPassword/').post((req, res) => {
               numbers: true
             });
             user.salt = crypto.randomBytes(16).toString('hex');
-            user.hash = crypto.pbkdf2Sync(randomPassword, user.salt, 1000, 64, 'sha512').toString('hex');
+            user.hash = (await crypto.pbkdf2(randomPassword, user.salt, 1000, 64, 'sha512')).toString('hex');
             console.log("change password to: ", randomPassword);
             user.save().then(() => {
 
