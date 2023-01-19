@@ -25,6 +25,7 @@ import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngra
 import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
 import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
 import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
+import { GrammarErrorTimeModule } from 'app/story-stats/grammar-error-time/grammar-error-time.module';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -186,7 +187,8 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         NgramDistributionModule,
         WordCountsModule,
         GrammarPieChartModule,
-        DictionaryLookupsModule
+        DictionaryLookupsModule,
+        GrammarErrorTimeModule
     ],
     providers: [
         StoryService,

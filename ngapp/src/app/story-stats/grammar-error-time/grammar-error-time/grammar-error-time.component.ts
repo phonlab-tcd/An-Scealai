@@ -10,8 +10,8 @@ export class GrammarErrorTimeComponent implements OnInit {
 
   constructor() { }
   
-  @Input() data:any;
-  chart: any;
+  @Input() grammarErrorTimeCounts: Object[];
+  chart: Chart;
 
   async ngOnInit() {
     await this.makeCharts();
@@ -21,9 +21,11 @@ export class GrammarErrorTimeComponent implements OnInit {
   private async makeCharts() {
     let labels = new Set<string>();
     let datasets = [];
+    
+    console.log(this.grammarErrorTimeCounts)
 
     // loop through each error and create data structures for chart
-    for (let [key, value] of Object.entries(this.data)) {
+    for (let [key, value] of Object.entries(this.grammarErrorTimeCounts)) {
       Object.keys(value).forEach((item) => labels.add(item));
       let dict = {
         label: key,

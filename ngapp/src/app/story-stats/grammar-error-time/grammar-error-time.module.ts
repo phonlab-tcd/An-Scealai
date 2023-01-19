@@ -10,6 +10,9 @@ import { GrammarErrorTimeComponent } from './grammar-error-time/grammar-error-ti
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    GrammarErrorTimeComponent
   ]
 })
 export class GrammarErrorTimeModule { }

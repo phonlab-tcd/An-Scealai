@@ -68,7 +68,7 @@
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>
                 <mat-card-content>
-                    <app-grammar-error-time [grammarErrorsTime]=""></app-grammar-error-time>
+                    <app-grammar-error-time [grammarErrorTimeCounts]="grammarErrorTimeCounts"></app-grammar-error-time>
                 </mat-card-content>
             </ng-template>
         </mat-card>
