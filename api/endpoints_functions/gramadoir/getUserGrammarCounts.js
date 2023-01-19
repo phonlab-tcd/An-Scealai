@@ -21,7 +21,25 @@ async function getUserGrammarCounts(req, res) {
     return el.errorCounts != null;
   });
 
-  return res.json(filteredData);
+
+  const errorCountsDict = {};
+
+  for (const entry of filteredData) {
+    entry = entry.toJSON();
+
+    for (const [key, val] of Object.entries(entry.errorCounts)) {
+      const date = new Date(+entry.timestamp).toISOString().slice(0, 10);
+      if (! (key in errorCountsDict)) {
+        errorCountsDict[key] = {};
+      }
+      errorCountsDict[key][date] = val;
+    }
+  }
+
+  console.log(errorCountsDict);
+
+
+  return res.json(errorCountsDict);
 }
 
 module.exports = {getUserGrammarCounts};
