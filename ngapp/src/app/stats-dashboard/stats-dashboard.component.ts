@@ -30,7 +30,7 @@ export class StatsDashboardComponent implements OnInit {
     private ts: TranslationService,
     private route:ActivatedRoute,
     private engagement:EngagementService,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
   ) { }
 
   classroomStories: Story[] = [];
@@ -38,9 +38,11 @@ export class StatsDashboardComponent implements OnInit {
   classroomTitle = this.ts.l.select_a_classroom; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
+  grammarErrorTimeCounts;
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
   userRole: string = '';
+  dialogRef: MatDialogRef<unknown>;
   
   async ngOnInit() {
     // determine if user is a teacher or student
@@ -58,8 +60,7 @@ export class StatsDashboardComponent implements OnInit {
     
   }
 
-  dialogRef: MatDialogRef<unknown>;
-
+  /* Open and close the dialog to make graphs full screen */
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
          width: '60vh',
@@ -69,6 +70,7 @@ export class StatsDashboardComponent implements OnInit {
     });
   }
 
+  /* Open dialog to select which classroom teacher wants for stats */
   async openClassroomSelector() {
     const classroomDialogRef = this.dialog.open(
       ClassroomSelectorComponent,
@@ -81,6 +83,7 @@ export class StatsDashboardComponent implements OnInit {
     if (classroom) await this.loadDataForChartsTeacher(classroom, startDate, endDate);
   }
   
+  /* Make calls to the backend to get stats data for teachers */
   async loadDataForChartsTeacher(classroom:Classroom, startDate:string, endDate:string) {
     this.classroomTitle = classroom.title;
     // get n-gram data
@@ -111,6 +114,7 @@ export class StatsDashboardComponent implements OnInit {
     ));
   }
   
+  /* Make calls to the backend to get stats data for students */
   async loadDataForChartsStudent() {
     // get n-gram data
     this.textsToAnalyse = this.studentStories.reduce(function(result, story) {
@@ -134,6 +138,11 @@ export class StatsDashboardComponent implements OnInit {
     data = {};
     data[this.auth.getUserDetails()._id] = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
     this.dictionaryLookups = data;
+    
+    // get grammar error time data
+    this.grammarErrorTimeCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${this.auth.getUserDetails()._id}`));
+    console.log(this.grammarErrorTimeCounts)
+    
   }
 
   countDictSum(A:any, B:any) {
