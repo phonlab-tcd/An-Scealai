@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from "chart.js";
+import { TranslationService } from '../../../translation.service';
 
 @Component({
   selector: 'app-grammar-error-time',
@@ -8,10 +9,11 @@ import { Chart } from "chart.js";
 })
 export class GrammarErrorTimeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ts: TranslationService) { }
   
   @Input() grammarErrorTimeCounts: Object[];
   chart: Chart;
+  legendItems: any[] = [];
 
   async ngOnInit() {
     // await this.makeCharts();
@@ -50,6 +52,9 @@ export class GrammarErrorTimeComponent implements OnInit {
         datasets: datasets,
       },
       options: {
+        legend: {
+          display: false,
+        },
         scales: {
           yAxes: [{
             ticks: {
@@ -59,6 +64,8 @@ export class GrammarErrorTimeComponent implements OnInit {
         }
       }
     });
+    
+    this.legendItems = this.chart['legend']['legendItems'];
   }
 
 }

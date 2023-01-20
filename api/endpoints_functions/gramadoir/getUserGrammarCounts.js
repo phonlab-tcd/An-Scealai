@@ -4,7 +4,7 @@ const UserGrammarCounts = require('../../models/userGrammarCounts');
 /**
  * Returns a dictionary of errors and dates for a given student
  *
- * @param {Object} req
+ * @param {Object} req ownerID
  * @param {Object} res
  * @return {Object} error dictionary
  */
@@ -13,20 +13,21 @@ async function getUserGrammarCounts(req, res) {
   const userGrammarCounts = await UserGrammarCounts.find({'owner': ownerId});
 
   if (!userGrammarCounts) {
-    console.log('No DB entries');
     return res.json({});
   }
 
+  // filter out entries that don't have error counts
   const filteredData = userGrammarCounts.filter(function(el) {
     return el.errorCounts != null;
   });
 
-
   const errorCountsDict = {};
 
+  // manipulate the data into an object that can be used for graphing:
+  // keys: error names (uru, seimhu, etc.)
+  // values: {{timestamp: errorCount}, {timestamp2: errorCount2}, etc.}
   for (const entry of filteredData) {
     entry = entry.toJSON();
-
     for (const [key, val] of Object.entries(entry.errorCounts)) {
       const date = new Date(+entry.timestamp).toISOString().slice(0, 10);
       if (! (key in errorCountsDict)) {
@@ -35,10 +36,6 @@ async function getUserGrammarCounts(req, res) {
       errorCountsDict[key][date] = val;
     }
   }
-
-  console.log(errorCountsDict);
-
-
   return res.json(errorCountsDict);
 }
 
