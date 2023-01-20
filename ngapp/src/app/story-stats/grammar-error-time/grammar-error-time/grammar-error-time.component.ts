@@ -33,17 +33,22 @@ export class GrammarErrorTimeComponent implements OnInit {
     let datasets = [];
 
     // loop through each error and create data structures for chart
-    for (let [key, value] of Object.entries(this.grammarErrorTimeCounts)) {
-      Object.keys(value).forEach((item) => labels.add(item)); // loop through each timestamp
-      let dict = {
-        label: key, // Error name
-        data: Object.values(value),  // {timestamp: count}
-        borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
-        // borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
-        fill: false,
-      };
-      datasets.push(dict);
+    for(let entry of this.grammarErrorTimeCounts) {
+      console.log(entry)
+      for (let [key, value] of Object.entries(entry)) {
+        Object.keys(value).forEach((item) => labels.add(item)); // loop through each timestamp
+        let dict = {
+          label: key, // Error name
+          data: Object.values(value),  // {timestamp: count}
+          borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
+          // borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
+          fill: false,
+        };
+        datasets.push(dict);
+      }
+      
     }
+
 
     let canvasElem = document.getElementById("grammar-errors-time-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext("2d");

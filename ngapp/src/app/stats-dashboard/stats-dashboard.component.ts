@@ -38,9 +38,9 @@ export class StatsDashboardComponent implements OnInit {
   classroomTitle = this.ts.l.select_a_classroom; // By default we'll display this
   textsToAnalyse: string[] = [];
   grammarErrorCounts: {[type: string]: number} = {};
-  grammarErrorTimeCounts;
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
+  grammarErrorTimeCounts: Object[] = [];
   userRole: string = '';
   dialogRef: MatDialogRef<unknown>;
   
@@ -112,10 +112,22 @@ export class StatsDashboardComponent implements OnInit {
       this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
       await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
     ));
+    
+    // get grammar error time data
+    let totalGrammarCounts = [];
+    await Promise.all(classroom.studentIds.map(async (id) => {
+      let studentGrammarCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${id}`))
+      console.log(studentGrammarCounts);
+      totalGrammarCounts.push(studentGrammarCounts);
+     }
+    ));
+    this.grammarErrorTimeCounts = totalGrammarCounts;
+    
   }
   
   /* Make calls to the backend to get stats data for students */
   async loadDataForChartsStudent() {
+    let studentId = this.auth.getUserDetails()._id;
     // get n-gram data
     this.textsToAnalyse = this.studentStories.reduce(function(result, story) {
       if (story.text) result.push(story.text);
@@ -131,16 +143,18 @@ export class StatsDashboardComponent implements OnInit {
     
     // get word count data
     let data = {};
-    data[this.auth.getUserDetails().username] = (await firstValueFrom(this.storyService.averageWordCount(this.auth.getUserDetails()._id, '', ''))).avgWordCount;
+    data[this.auth.getUserDetails().username] = (await firstValueFrom(this.storyService.averageWordCount(studentId, '', ''))).avgWordCount;
     this.wordCountData = data;
     
     // get dictionary lookups 
     data = {};
-    data[this.auth.getUserDetails()._id] = await firstValueFrom(this.engagement.getDictionaryLookups(this.auth.getUserDetails()._id, '', ''));
+    data[this.auth.getUserDetails()._id] = await firstValueFrom(this.engagement.getDictionaryLookups(studentId, '', ''));
     this.dictionaryLookups = data;
     
     // get grammar error time data
-    this.grammarErrorTimeCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${this.auth.getUserDetails()._id}`));
+    let grammarErrors = [];
+    grammarErrors[0] = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${studentId}`));
+    this.grammarErrorTimeCounts = grammarErrors;
     
   }
 
