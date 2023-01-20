@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
+import { ERROR_INFO} from '../../../lib/grammar-engine/types';
 
 @Component({
   selector: 'app-grammar-pie-chart',
@@ -29,6 +30,7 @@ export class GrammarPieChartComponent implements OnInit {
     let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
     if (this.pieChart) { this.pieChart.destroy(); } 
+    console.log(this.errorCounts)
     this.pieChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -36,8 +38,7 @@ export class GrammarPieChartComponent implements OnInit {
             datasets: [{
                 label: 'Grammar Error Counts ',
                 data: Object.values(this.errorCounts),
-                // TODO: replace these colours with correct gramadoir error colour-coding
-                backgroundColor: Object.keys(this.errorCounts).map(_ => `#${((Math.random() * 0xffffff) << 0).toString(16)}`),
+                backgroundColor: Object.keys(this.errorCounts).map( err => ERROR_INFO[err].color),
             }]
         },
         options: {

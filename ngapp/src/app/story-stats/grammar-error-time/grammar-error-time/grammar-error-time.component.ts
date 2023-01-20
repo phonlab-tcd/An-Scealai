@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from "chart.js";
 import { TranslationService } from '../../../translation.service';
+import { ERROR_INFO} from '../../../lib/grammar-engine/types';
 
 @Component({
   selector: 'app-grammar-error-time',
@@ -38,6 +39,7 @@ export class GrammarErrorTimeComponent implements OnInit {
         label: key, // Error name
         data: Object.values(value),  // {timestamp: count}
         borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
+        // borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
         fill: false,
       };
       datasets.push(dict);
