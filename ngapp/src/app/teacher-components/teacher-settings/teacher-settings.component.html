@@ -33,6 +33,7 @@
           <span><input [(ngModel)]="checkerSelection.relativeClause" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.relative_clause_checker}}</span>
           <span><input [(ngModel)]="checkerSelection.genitive" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.genitive_checker}}</span>
           <span><input [(ngModel)]="checkerSelection.broadSlender" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.broad_slender_checker}}</span>
+          <span><input [(ngModel)]="checkerSelection.gaelSpell" (ngModelChange)="changesSaved = false;" type="checkbox"> GaelSpell </span>
         </div>
         <div class="saveBtn"> <button class="greenBtn" (click)="updateCheckers()"> {{changesSaved? ts.l.saved : ts.l.save}} </button> </div>
     </div>

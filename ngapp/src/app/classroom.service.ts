@@ -86,5 +86,9 @@ export class ClassroomService {
  updateClassroomCheckers(classroomId: string, checkers: string[]):Observable<any> {
    return this.http.post(this.baseUrl + 'updateClassroomCheckers/' + classroomId, {"checkers":checkers});
  }
+ 
+ getClassroomCheckers(classroomId: string):Observable<any> {
+   return this.http.get(this.baseUrl + 'getClassroomCheckers/' + classroomId);
+ }
 
 }

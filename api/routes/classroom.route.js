@@ -194,4 +194,11 @@ classroomRoutes.route('/updateClassroomCheckers/:id').post((req, res) => {
   });
 });
 
+classroomRoutes.route('/getClassroomCheckers/:id').get( (req, res) => {
+  Classroom.findById(req.params.id, (err, classroom) => {
+    if (err) res.json(err);
+    if (classroom) res.json(classroom.grammarCheckers);
+  });
+});
+
 module.exports = classroomRoutes;

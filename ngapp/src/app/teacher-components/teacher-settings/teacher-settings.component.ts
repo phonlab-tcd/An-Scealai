@@ -26,14 +26,15 @@ export class TeacherSettingsComponent implements OnInit {
   students: User[] = [];
   dialogRef: MatDialogRef<unknown>;
   checkerSelection = {
-    anGramadoir : true,
-    relativeClause : true,
-    genitive : true,
-    broadSlender : true
+    anGramadoir : false,
+    relativeClause : false,
+    genitive : false,
+    broadSlender : false,
+    gaelSpell: false
   }
   changesSaved: boolean = true;
 
-
+  /* Get classroom, list of students, and previous checker settings */
   async ngOnInit() {
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
     this.students = [];
@@ -43,8 +44,14 @@ export class TeacherSettingsComponent implements OnInit {
         this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
       });
     }
+    
+    let savedCheckers = await firstValueFrom(this.classroomService.getClassroomCheckers(this.classroom._id));
+    savedCheckers.forEach(item => {
+      this.checkerSelection[item] = true;
+    })
   }
   
+  /* Open dialog for updating classroom title */
   openUpdateClassroomDialog() {    
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -69,6 +76,7 @@ export class TeacherSettingsComponent implements OnInit {
     });
   }
   
+  /* Remove student from classroom given student id */
   removeStudent(studentId:string) {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -76,7 +84,7 @@ export class TeacherSettingsComponent implements OnInit {
         confirmText: this.ts.l.delete,
         cancelText: this.ts.l.cancel
       },
-      width: '50%',
+      width: '50vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (res) => {
@@ -85,11 +93,11 @@ export class TeacherSettingsComponent implements OnInit {
           this.classroomService.removeStudentFromClassroom(this.classroom._id, studentId).subscribe(() => {
               this.ngOnInit();
           });
-
         }
     });
   }
   
+  /* Save grammar checker settings to the DB */
   async updateCheckers() {
     let checkers = [];
     for (const key in this.checkerSelection) {
