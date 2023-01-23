@@ -94,10 +94,8 @@ export class TeacherSettingsComponent implements OnInit {
       width: '80vh',
     });
     
-    this.dialogRef.afterClosed().subscribe( (res) => {
+    this.dialogRef.afterClosed().subscribe( (_) => {
         this.dialogRef = undefined;
-        if(res) {
-        }
     });
   }
   
