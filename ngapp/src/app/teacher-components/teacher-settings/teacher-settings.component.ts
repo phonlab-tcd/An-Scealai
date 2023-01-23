@@ -76,6 +76,31 @@ export class TeacherSettingsComponent implements OnInit {
     });
   }
   
+  /* Open dialog for grammar checker information */
+  openInformationDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: 'Grammar Checkers',
+        type: 'simpleMessage',
+        message: `
+        <p><h5> An Gramadoir:</h5> ${this.ts.l.an_gramadoir_description}</p><br>
+        <p><h5>${this.ts.l.relative_clause_checker}:</h5> ${this.ts.l.relative_clause_checker_description} </p><br>
+        <p><h5>${this.ts.l.genitive_checker}:</h5> ${this.ts.l.genitive_checker_description} </p><br>
+        <p><h5>${this.ts.l.broad_slender_checker}:</h5> ${this.ts.l.broad_slender_checker_description} </p><br>
+        <p><h5> GaelSpell:</h5> ${this.ts.l.gael_spell_description} </p>
+        `,
+        confirmText: this.ts.l.done,
+      },
+      width: '80vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+        }
+    });
+  }
+  
   /* Remove student from classroom given student id */
   removeStudent(studentId:string) {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {

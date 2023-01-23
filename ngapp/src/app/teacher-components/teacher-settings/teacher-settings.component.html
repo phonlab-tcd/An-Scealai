@@ -27,7 +27,9 @@
         
         <!-- Grammar Options -->
         <h5 class="studentsHeader"> {{ts.l.grammar_checker_options}} </h5>
-        <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> {{ts.l.select_which_grammar_checker_for_students_to_use}}. </h6>
+        <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> {{ts.l.select_which_grammar_checker_for_students_to_use}}. 
+          <i class="fa fa-info-circle" style="cursor:pointer" (click)="openInformationDialog()"></i>
+        </h6>
         <div class="checkBoxes">
           <span><input [(ngModel)]="checkerSelection.anGramadoir" (ngModelChange)="changesSaved = false;" type="checkbox"> An Gramadoir</span>
           <span><input [(ngModel)]="checkerSelection.relativeClause" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.relative_clause_checker}}</span>

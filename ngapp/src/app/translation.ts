@@ -2087,5 +2087,20 @@ export default {
   format: {
     ga: 'Formáid',
     en: 'Format' },
+  an_gramadoir_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  relative_clause_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  genitive_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  broad_slender_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  gael_spell_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
     
 }
