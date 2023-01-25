@@ -32,8 +32,6 @@ function diffNewErrors(prev: any[], curr: any[]) {
 
 function countErrorTypes(errors) {
   const errorDict = errors.reduce(reducer, {});
-
-  console.log(errorDict);
   return errorDict;
 
   function reducer(dict, cur) {
@@ -42,6 +40,44 @@ function countErrorTypes(errors) {
     return dict;
   }
 }
+
+interface SentenceWithOffset {
+  sentence: string;
+  offset: number;
+}
+
+
+/**
+* We need to find the right offset for each sentence, because the gramadoir 'fromx' and 'tox' is relative to the sentence
+* The idea here is to iterate through the tokenized sentences and match them in the original text, to get their offsets
+* Once we have an offset for each sentence, we can apply the 'fromx' 'tox' relative to that.
+* @param sentences - tokenised sentences from story text
+* @param input - story text
+* @return array of objects containing the sentence and associated offset
+*/
+function getOffsets(sentences:string[], input: string): SentenceWithOffset[] {
+  const sentencesWithOffsets:SentenceWithOffset[] = [];
+  let i = 0
+  for (let sentence of sentences) {
+    if (sentence) {
+      const sIndex = input.slice(i).indexOf(sentence);
+      const offset = i + sIndex;
+      sentencesWithOffsets.push({sentence, offset}); 
+      i = offset + sentence.length;
+    }
+  }
+  return sentencesWithOffsets;
+}
+
+
+/**
+* Clones error objects from sentences in cache
+* @param object - error objects
+*/
+function clone(object) {
+  return Object.assign({}, object);
+}
+
 
 export class GrammarEngine {
     private cacheMap: Map<string, GrammarCache>;
@@ -68,31 +104,30 @@ export class GrammarEngine {
     */
     public async check(input: string) {
         // Sentence tokenization to make gramadoir requests for each sentence independently
-        const sentences = await firstValueFrom(
-            this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
-        );
-
-        const sentencesWithOffsets = []
-
-        // We need to find the right offset for each sentence, because the gramadoir 'fromx' and 'tox' is relative to the sentence
-        // The idea here is to iterate through the tokenized sentences and match them in the original text, to get their offsets
-        // Once we have an offset for each sentence, we can apply the 'fromx' 'tox' relative to that.
-        let i = 0
-        for (let s = 0; s < sentences.length -1; s++) {
-            const sIndex = input.slice(i).indexOf(sentences[s]);
-            const offset = i + sIndex;
-            sentencesWithOffsets.push([offset, sentences[s]]); 
-            i = offset + sentences[s].length;
-        }
+        const sentences = await firstValueFrom(this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input}));
+        
+        // calculate offset indices for each sentence in relation to entire text
+        const sentencesWithOffsets = getOffsets(sentences, input);
 
         // keep an array of errors associated with particular sentences
         this.errorsWithSentences = [];
-        // check grammar on text using the initialised grammar checkers 
+        // check grammar on offset text using the initialised grammar checkers 
         const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker =>
-            await Promise.all(sentencesWithOffsets.map(async ([offset, s], i) => {
+            await Promise.all(sentencesWithOffsets.map(async (o, i) => {
+                const s = o.sentence;
+                const offset = o.offset;
+                
+                // function to set error tag indices based on associated offset
+                function mapOffset(errorTag) {
+                    errorTag.fromX += offset;
+                    errorTag.toX += offset;
+                    return errorTag;
+                }
+                
                 // get errors from cache map if already stored and return
                 if (s in this.cacheMap.get(checker.name)) {
-                  let errorTags = this.cacheMap.get(checker.name)[s];
+                  let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
+                  
                   this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
                           [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                           this.errorsWithSentences[i] = [errorTags, s, i];
@@ -102,11 +137,8 @@ export class GrammarEngine {
                 const errorTags = await checker.check(s);
                 this.cacheMap.get(checker.name)[s] = errorTags;
                 // calculate error offset based on sentence indices
-                const offsetErrorTags = errorTags.map(tag => {
-                    tag.fromX += offset;
-                    tag.toX += offset;
-                    return tag;
-                })
+                const offsetErrorTags = errorTags.map(clone).map(mapOffset)
+                console.log(offsetErrorTags)
                 
                 // add the error tags and sentence pair to array
                 this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 

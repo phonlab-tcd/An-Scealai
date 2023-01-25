@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
         
         // save any grammar errors with associated sentences to DB
         if(this.grammarErrors) {
-          await this.grammarEngine.saveErrorsWithSentences(this.story._id);
+          this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
         }
         // create a dictionary of error type and tags for checkbox filtering
         this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
@@ -303,7 +303,7 @@ export class DashboardComponent implements OnInit {
       this.quillHighlighter.show(this.grammarErrors);
     }
     else {
-      this.quillHighlighter.hide();
+      this.quillHighlighter.hideAll();
     }
     Object.keys(this.checkBoxes).forEach(key => {
       this.checkBoxes[key] = this.checkBoxes['showAll']; // reset all error checkboxes
