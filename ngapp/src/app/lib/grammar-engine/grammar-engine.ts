@@ -3,6 +3,7 @@ import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AuthenticationService } from 'app/authentication.service';
+import { Observable, Subject } from 'rxjs';
 
 function diffNewErrors(prev: any[], curr: any[]) {
   const prevErrsJson = asJson(prev);
@@ -102,57 +103,72 @@ export class GrammarEngine {
     * Check grammar on given input story text
     * @param input - story text
     */
-    public async check(input: string) {
-        // Sentence tokenization to make gramadoir requests for each sentence independently
-        const sentences = await firstValueFrom(this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input}));
-        
-        // calculate offset indices for each sentence in relation to entire text
-        const sentencesWithOffsets = getOffsets(sentences, input);
+    public check$(input: string) {
+      const subject = new Subject();
+      this.check(input, subject);
+      return subject;
+    }
+    
+    /**
+    * Check grammar on given input story text
+    * @param input - story text
+    * @param obs - Subject to handle the errors as they come in
+    */
+    public async check(input: string, obs: Subject<any>) {
+      // Sentence tokenization to make gramadoir requests for each sentence independently
+      const sentences = await firstValueFrom(
+          this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
+      );
+      
+      // calculate offset indices for each sentence in relation to entire text
+      const sentencesWithOffsets = getOffsets(sentences, input);
 
-        // keep an array of errors associated with particular sentences
-        this.errorsWithSentences = [];
-        // check grammar on offset text using the initialised grammar checkers 
-        const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker =>
-            await Promise.all(sentencesWithOffsets.map(async (o, i) => {
-                const s = o.sentence;
-                const offset = o.offset;
+      // keep an array of errors associated with particular sentences
+      this.errorsWithSentences = [];
+      // check grammar on text using the initialised grammar checkers 
+      const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker =>
+          await Promise.all(sentencesWithOffsets.map(async (o, i) => {
+              // get errors from cache map if already stored and return
+              const s = o.sentence;
+              const offset = o.offset;
+              
+              // function to set error tag indices based on associated offset
+              function mapOffset(errorTag) {
+                  errorTag.fromX += offset;
+                  errorTag.toX += offset;
+                  obs.next(errorTag);
+                  return errorTag;
+              }
+              
+              // get errors from cache map if already stored and return
+              if (s in this.cacheMap.get(checker.name)) {
+                let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
                 
-                // function to set error tag indices based on associated offset
-                function mapOffset(errorTag) {
-                    errorTag.fromX += offset;
-                    errorTag.toX += offset;
-                    return errorTag;
-                }
-                
-                // get errors from cache map if already stored and return
-                if (s in this.cacheMap.get(checker.name)) {
-                  let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
-                  
-                  this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
-                          [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
-                          this.errorsWithSentences[i] = [errorTags, s, i];
-                  return errorTags;
-                }
-                // get errors from grammar checker if not in cache map
-                const errorTags = await checker.check(s);
-                this.cacheMap.get(checker.name)[s] = errorTags;
-                // calculate error offset based on sentence indices
-                const offsetErrorTags = errorTags.map(clone).map(mapOffset)
-                console.log(offsetErrorTags)
-                
-                // add the error tags and sentence pair to array
                 this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
                         [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                         this.errorsWithSentences[i] = [errorTags, s, i];
-                
-                return offsetErrorTags;
-            }))
-        ))).flat().filter(err => err.length);
-        
-        // log error counts to the DB
-        this.countNewErrors(allErrorTags.flat());
+                return errorTags;
+              }
+              // get errors from grammar checker if not in cache map
+              const errorTags = await checker.check(s);
+              this.cacheMap.get(checker.name)[s] = errorTags;
+              // calculate error offset based on sentence indices
+              const offsetErrorTags = errorTags.map(clone).map(mapOffset)
+              
+              // add the error tags and sentence pair to array
+              this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
+                      [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
+                      this.errorsWithSentences[i] = [errorTags, s, i];
+              
+              return offsetErrorTags;
+          }))
+      ))).flat().filter(err => err.length);
+      obs.complete();
+      
+      // log error counts to the DB
+      this.countNewErrors(allErrorTags.flat());
 
-        return allErrorTags;
+      return allErrorTags;
     }
 
     

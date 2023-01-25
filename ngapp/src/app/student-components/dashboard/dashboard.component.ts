@@ -123,6 +123,7 @@ export class DashboardComponent implements OnInit {
     // subscribe to any changes made to the story text
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
       this.grammarLoaded = false;
+      this.grammarErrors = [];
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
       const grammarCheckerTime = new Date();
@@ -130,31 +131,47 @@ export class DashboardComponent implements OnInit {
       
       try {
         // check text for grammar errors
-        this.grammarErrors = (await this.grammarEngine.check(this.story.text)).flat();
-        
-        // save any grammar errors with associated sentences to DB
-        if(this.grammarErrors) {
-          this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
-        }
-        // create a dictionary of error type and tags for checkbox filtering
-        this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
-            if(!map[tag.type]) {
-              map[tag.type] = [];
+        this.grammarEngine.check$(this.story.text).subscribe({
+          next: function (tag) {
+            console.log("In the next");
+            console.log(tag);
+            this.grammarErrors.push(tag);
+            // show error highlighting if button on =========> put this here now?
+            if(this.showErrorTags) {
+              this.quillHighlighter.show([tag]);
             }
-            map[tag.type].push(tag);
-            return map;
-        }, {});
-        
-        // initialise all error checkboxes to true
-        for (const key of Object.keys(this.grammarErrorsTypeDict)) {
-          this.checkBoxes[key] = true;
-        }
+          },
+          error: function () {},
+          complete: function () {
+            console.log("In the complete");
+            // save any grammar errors with associated sentences to DB
+            if(this.grammarErrors) {
+              this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
+            }
+          
+            // create a dictionary of error type and tags for checkbox filtering
+            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
+                if(!map[tag.type]) {
+                  map[tag.type] = [];
+                }
+                map[tag.type].push(tag);
+                return map;
+            }, {});
+            
+            // initialise all error checkboxes to true
+            for (const key of Object.keys(this.grammarErrorsTypeDict)) {
+              this.checkBoxes[key] = true;
+            }
 
-        // show error highlighting if button on
-        if(this.showErrorTags) {
-          this.quillHighlighter.show(this.grammarErrors);
-        }
-        this.grammarLoaded = true;
+            // show error highlighting if button on =====> original way of applying highlighting 
+            if(this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors);
+            }
+            this.grammarLoaded = true;
+          },
+        });
+        
+
       } catch (updateGrammarErrorsError) {
         if ( !this.grammarErrors) {
           window.alert(
