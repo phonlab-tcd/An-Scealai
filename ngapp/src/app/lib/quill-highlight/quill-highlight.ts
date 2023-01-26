@@ -50,10 +50,9 @@ export class QuillHighlighter {
     */
     public show(tags: HighlightTag[]): void {
         if(!tags) return;
-        this.hideAll();  // remove any previous highlighting 
+        //this.hide(tags);  // remove any previous highlighting 
       
         tags.forEach((tag) => {
-          console.log(tag);
             // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
             this.quillEditor.formatText(
                 tag.fromX,
@@ -72,7 +71,6 @@ export class QuillHighlighter {
         tagElements.forEach(tagElement => {
             const tagData = tagElement.getAttribute('highlight-tag');
             if (!tagData) {
-              console.log("NO TAG DATA: ", tagElement);
               return;
             } 
             const highlightTag = JSON.parse(tagData) as HighlightTag;
