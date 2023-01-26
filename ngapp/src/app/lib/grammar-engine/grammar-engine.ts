@@ -3,7 +3,7 @@ import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AuthenticationService } from 'app/authentication.service';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 function diffNewErrors(prev: any[], curr: any[]) {
   const prevErrsJson = asJson(prev);
@@ -112,9 +112,9 @@ export class GrammarEngine {
     /**
     * Check grammar on given input story text
     * @param input - story text
-    * @param obs - Subject to handle the errors as they come in
+    * @param subj - Subject to handle the errors as they come in
     */
-    public async check(input: string, obs: Subject<any>) {
+    public async check(input: string, subj: Subject<any>) {
       // Sentence tokenization to make gramadoir requests for each sentence independently
       const sentences = await firstValueFrom(
           this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
@@ -128,7 +128,6 @@ export class GrammarEngine {
       // check grammar on text using the initialised grammar checkers 
       const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker =>
           await Promise.all(sentencesWithOffsets.map(async (o, i) => {
-              // get errors from cache map if already stored and return
               const s = o.sentence;
               const offset = o.offset;
               
@@ -136,7 +135,7 @@ export class GrammarEngine {
               function mapOffset(errorTag) {
                   errorTag.fromX += offset;
                   errorTag.toX += offset;
-                  obs.next(errorTag);
+                  subj.next(errorTag);
                   return errorTag;
               }
               
@@ -163,7 +162,7 @@ export class GrammarEngine {
               return offsetErrorTags;
           }))
       ))).flat().filter(err => err.length);
-      obs.complete();
+      subj.complete();
       
       // log error counts to the DB
       this.countNewErrors(allErrorTags.flat());

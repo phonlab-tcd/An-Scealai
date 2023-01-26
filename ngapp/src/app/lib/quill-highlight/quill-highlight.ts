@@ -165,7 +165,7 @@ export class QuillHighlighter {
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
           
-          this.engagement.mouseOverGrammarSuggestionEvent(tag);
+        this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
       
     /**

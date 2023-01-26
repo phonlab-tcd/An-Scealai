@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
     public statsService: StatsService,
     private dialog: MatDialog
   ) {
-    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
+    this.grammarEngine = new GrammarEngine([ leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
     
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
