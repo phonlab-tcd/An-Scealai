@@ -40,8 +40,8 @@ export class GrammarErrorTimeComponent implements OnInit {
         let dict = {
           label: key, // Error name
           data: Object.values(value),  // {timestamp: count}
-          borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
-          // borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
+          //borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
+          borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
           fill: false,
         };
         datasets.push(dict);
