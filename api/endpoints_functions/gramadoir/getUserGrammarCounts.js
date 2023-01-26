@@ -29,7 +29,7 @@ async function getUserGrammarCounts(req, res) {
   for (const entry of filteredData) {
     entry = entry.toJSON();
     for (const [key, val] of Object.entries(entry.errorCounts)) {
-      const date = new Date(+entry.timestamp).toISOString().slice(0, 10);
+      const date = new Date(+entry.updatedAt).toISOString().slice(0, 10);
       if (! (key in errorCountsDict)) {
         errorCountsDict[key] = {};
       }
