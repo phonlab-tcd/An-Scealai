@@ -63,7 +63,7 @@ export class StatsDashboardComponent implements OnInit {
   /* Open and close the dialog to make graphs full screen */
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
-         width: '60vh',
+         width: '100vw',
     });
     this.dialogRef.afterClosed().subscribe(_ => {
         this.dialogRef = undefined;

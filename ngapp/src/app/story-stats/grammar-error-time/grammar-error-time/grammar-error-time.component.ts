@@ -38,10 +38,9 @@ export class GrammarErrorTimeComponent implements OnInit {
       for (let [key, value] of Object.entries(entry)) {
         Object.keys(value).forEach((item) => labels.add(item)); // loop through each timestamp
         let dict = {
-          label: key, // Error name
+          label: this.ts.currentLanguage? ERROR_INFO[key].nameGA : ERROR_INFO[key].nameEN , // Error name
           data: Object.values(value),  // {timestamp: count}
-          //borderColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
-          borderColor: ERROR_INFO[key].color,       // TODO: This should work once merged to main
+          borderColor: ERROR_INFO[key].color,
           fill: false,
         };
         datasets.push(dict);
