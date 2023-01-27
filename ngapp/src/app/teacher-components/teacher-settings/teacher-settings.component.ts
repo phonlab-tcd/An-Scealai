@@ -26,11 +26,11 @@ export class TeacherSettingsComponent implements OnInit {
   students: User[] = [];
   dialogRef: MatDialogRef<unknown>;
   checkerSelection = {
-    anGramadoir : false,
-    relativeClause : false,
-    genitive : false,
-    broadSlender : false,
-    gaelSpell: false
+    anGramadoir : true,
+    relativeClause : true,
+    genitive : true,
+    broadSlender : true,
+    gaelSpell: true
   }
   changesSaved: boolean = true;
 
@@ -46,9 +46,14 @@ export class TeacherSettingsComponent implements OnInit {
     }
     
     let savedCheckers = await firstValueFrom(this.classroomService.getClassroomCheckers(this.classroom._id));
-    savedCheckers.forEach(item => {
-      this.checkerSelection[item] = true;
-    })
+    
+    // set checkboxes of checkers if teacher has previously selected certain ones
+    if (savedCheckers.length > 0) {
+      for (const key in this.checkerSelection) {
+        savedCheckers.includes(key) ? this.checkerSelection[key] = true : this.checkerSelection[key] = false;
+      }
+    }
+
   }
   
   /* Open dialog for updating classroom title */
