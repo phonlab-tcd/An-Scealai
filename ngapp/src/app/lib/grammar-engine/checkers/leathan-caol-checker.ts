@@ -2,7 +2,7 @@ import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
 
 // initialise the grammar checker
 export const leathanCaolChecker: GrammarChecker = {
-  name: "LEATHAN_CAOL",
+  name: "Leathan_Caol",
   check: check
 }; 
 
@@ -30,7 +30,7 @@ async function check(input: string): Promise<ErrorTag[]>{
     
     // map index objects to generic ErrorTag values
     for (const error of errors) {
-      let tag:ErrorTag = {
+      let tag1:ErrorTag = {
         errorText: input,
         messageGA: ERROR_INFO['LEATHAN-CAOL'].messageGA,
         messageEN: ERROR_INFO['LEATHAN-CAOL'].messageEN,
@@ -39,9 +39,23 @@ async function check(input: string): Promise<ErrorTag[]>{
         nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
-        toX: error.second,
+        toX: error.first + 1,
+        type: 'LEATHAN-CAOL'
       }
-      errorTags.push(tag);
+      errorTags.push(tag1);
+      let tag2:ErrorTag = {
+        errorText: input,
+        messageGA: ERROR_INFO['LEATHAN-CAOL'].messageGA,
+        messageEN: ERROR_INFO['LEATHAN-CAOL'].messageEN,
+        context: input,
+        nameEN: ERROR_INFO['LEATHAN-CAOL'].nameEN,
+        nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
+        color: ERROR_INFO['LEATHAN-CAOL'].color,
+        fromX: error.second,
+        toX: error.second + 1,
+        type: 'LEATHAN-CAOL'
+      }
+      errorTags.push(tag2);
     }
     resolve(errorTags);
   });
@@ -103,7 +117,7 @@ function getSkipIndices(text: string): number[] {
 
 /**
 * Get all indices 
-* @param text - sentence from story text (in lowercase)
+* @param arr - sentence from story text (in lowercase)
 * @param val - word from the ignore list
 * @returns - Array of indices
 */
@@ -125,8 +139,8 @@ function getAllIndexes(arr: string, val: string | RegExp) : number[] {
 }
 
 // given a string, return the string after changing the content a specified index
-function replaceAt(str, index, replacement) : string {
-  return str.substr(0, index) + replacement+ str.substr(index + replacement.length);
+function replaceAt(str:string, index:number, replacement:string) : string {
+  return str.substr(0, index) + replacement + str.substr(index + replacement.length);
 }
 
 // given a character, returns whether or not it is a vowel

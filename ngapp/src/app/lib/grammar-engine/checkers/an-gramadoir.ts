@@ -8,9 +8,9 @@ export const anGramadoir: GrammarChecker = {
 
 // An Gramadoir response type
 export type GramadoirTag = {
-  fromy: string;
+  fromy: number;
   fromx: number;
-  toy: string;
+  toy: number;
   tox: number;
   ruleId: string;
   msg: string;
@@ -28,41 +28,39 @@ export type GramadoirTag = {
 async function check(input: string):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
     
-    let errorsEN = [];
-    let errorsGA = [];
+    let errors = [];
     
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
     try {
-      errorsEN = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
-      errorsGA = await callAnGramadoir(input, 'ga', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
+      errors = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
     }
     catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
-        errorsEN = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
-        errorsGA = await callAnGramadoir(input, 'ga', 'https://cadhan.com/api/gramadoir/1.0');
+        errors = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
       } catch(_) {
         reject();
       }  
     }
 
     // map gramadoir responses to generic ErrorTag values
-    const errorTags: ErrorTag[] = errorsEN.map((errorEN, i) => {
+    const errorTags: ErrorTag[] = errors.map((error) => {
       // get simple rule name from an gramadoir's ruleId response attribute
-      let cleanedErrorName = gramadoirId2string(errorEN.ruleId);
+      const cleanedErrorName = gramadoirId2string(error.ruleId);
+      const e_info = ERROR_INFO[cleanedErrorName];
       
       return {
-        errorText: errorEN.errortext,
-        messageGA: errorsGA[i].msg,
-        messageEN: errorEN.msg,
-        context: errorEN.context,
-        nameEN: ERROR_INFO[cleanedErrorName].nameEN,
-        nameGA: ERROR_INFO[cleanedErrorName].nameGA,
-        color: ERROR_INFO[cleanedErrorName].color,
-        fromX: errorEN.fromx,
-        toX: errorEN.tox,
+        errorText: error.errortext,
+        messageGA: (e_info.messageGA).replace('#', error.errortext),
+        messageEN: (e_info.messageEN).replace('#', error.errortext),
+        context: error.context,
+        nameEN: e_info.nameEN,
+        nameGA: e_info.nameGA,
+        color: e_info.color,
+        fromX: +error.fromx,
+        toX: +error.tox + 1,
+        type: cleanedErrorName
       } as ErrorTag;
     });
-
     resolve(errorTags);
   });
 }
@@ -74,7 +72,7 @@ async function check(input: string):Promise<ErrorTag[]>{
 * @param url - url specifying which instance of an gramadoir to call
 * @returns - Promise of returned GramadoirTags
 */
-async function callAnGramadoir(input: string, language: 'en' | 'ga', url): Promise<GramadoirTag[]> {
+async function callAnGramadoir(input: string, language: 'en' | 'ga', url:string): Promise<GramadoirTag[]> {
   const res = await fetch(url, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded',
@@ -100,7 +98,7 @@ function gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 
 }
 
 /**
-* Shorten An Gramadoir ruleId to simple name: ex. Lingua::GA::Gramadoir/MOLADH => MOLADH
+* Shorten An Gramadoir response ruleId to simple name: ex. Lingua::GA::Gramadoir/MOLADH => MOLADH
 * @param str - An Gramadoir ruleId
 * @returns - simplified string
 */

@@ -134,22 +134,12 @@
             <i class="fas fa-spell-check optionsBtnIcon"></i>
         </span>
         <span
-          [hidden]="!quillHighlightService.showingTags"
+          [hidden]="!showErrorTags"
           (click)="grammarSettingsHidden = !grammarSettingsHidden"
           class="settingsIcon">
             ⚙
         </span>
       </div>
-
-      <!-- POPOUT GRAMMAR CHECK -->
-      <!--
-      <div *ngIf="showOptions"
-           class="optionsBtn optionsPopupBtn"
-           (click)="handleGrammarCheckerOptionClick();">
-        {{ts.l.grammar_check}}
-        <i class="fas fa-spell-check optionsBtnIcon"></i>
-      </div>
-      -->
 
       <!-- RECORDINGS -->
       <div *ngIf="showOptions" [hidden]="story.text && story.text.length === 0" class="optionsBtn optionsPopupBtn"
@@ -207,13 +197,9 @@
       </div>
 
       <!-- SELECTED GRAMMAR SUGGESTION -->
-      <div
-        style="background-color: #8FCAFF"
-        [hidden]="!quillHighlightService.showingTags || grammarLoading"
-        [innerHTML]=selectedGrammarSuggestion()>
-      </div>
+      <div style="background-color: #8FCAFF" [hidden]="!showErrorTags" [innerHTML]=selectedGrammarSuggestion()></div>
       <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
+      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags">
         <span class="dictionaryContainer">
           <div class="dictionaryHeader">
               <h5>
@@ -224,38 +210,27 @@
                   <i class="fa fa-times"></i>
               </div>
           </div>
+          <div class="checkAllBox">
+            <input
+                [(ngModel)]="checkBoxes['showAll']"
+                (ngModelChange)="setAllCheckBoxes()"
+                type="checkbox">
+                {{ ts.message('check_all') }}
+          </div>
         </span>
-        <div *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)" style="margin:2px;">
+
+        <!-- GRAMMAR ERROR CHECKBOXES -->
+
+        
+        <div *ngFor="let tag of (grammarErrorsTypeDict | keyvalue)" style="margin:2px;">
           <input
-              [(ngModel)]="grammarTagFilter[recipient.key]"
-              (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
+              [(ngModel)]="checkBoxes[tag.key]"
+              (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
               type="checkbox">
-            {{ ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] ?
-               ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] :
-               recipient.key | lowercase}} ({{recipient.value}})
+               {{ ts.l.iso_code == 'en' ? (tag.value[0].nameEN | titlecase) : (tag.value[0].nameGA) | titlecase }} <!-- Error name -->  
+               ({{ tag.value[0].nameEN == 'Broad/Slender' ?  (tag.value.length / 2) : (tag.value.length)}})        <!-- Error count --> 
         </div> 
-        <div style="margin: 2px;">
-          <input 
-            [(ngModel)]="quillHighlightService.showLeathanCaol"
-            (ngModelChange)="leathanCaolCheckBox($event)"
-            type="checkbox">
-          {{ ts.message('broad_slender_agreement') }}
-        </div>
-        <div style="margin: 2px;">
-          <input 
-            [(ngModel)]="quillHighlightService.showGenitive"
-            (ngModelChange)="genitiveCheckBox($event)"
-            type="checkbox">
-          {{ ts.message('genitive') }}
-        </div>
-        <button
-          (click)="setAllCheckBoxes(false)">
-          {{ ts.message('uncheck_all') }}
-        </button>
-        <button
-          (click)="setAllCheckBoxes(true)">
-          {{ ts.message('check_all') }}
-        </button>
+
       </div>
     </div>
 
