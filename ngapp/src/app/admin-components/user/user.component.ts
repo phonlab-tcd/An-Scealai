@@ -191,7 +191,7 @@ export class UserComponent implements OnInit {
         }
       });
     
-      this.storyService.deleteAllStories(this.user.username).subscribe( () => {});
+      this.storyService.deleteAllStories(this.user._id).subscribe( () => {});
     }
     if(this.user.role === "TEACHER") {
       this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( () => {});  
@@ -199,7 +199,7 @@ export class UserComponent implements OnInit {
     
     this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});  
     this.profileService.deleteProfile(this.user._id).subscribe( () => {});
-    this.userService.deleteUser(this.user.username).subscribe( () => {});
+    this.userService.deleteUser(this.user._id).subscribe( () => {});
     
     this.router.navigateByUrl('admin/find-user');
     

@@ -95,8 +95,8 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
   
-  deleteAllStories(author) {
-    return this.http.get(this.baseUrl + 'deleteAllStories/' + author);
+  deleteAllStories(id) {
+    return this.http.get(this.baseUrl + 'deleteAllStories/' + id);
   }
 
   addFeedback(id, feedbackText: string) : Observable<any> {

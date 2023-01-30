@@ -122,7 +122,7 @@ export class ProfileComponent implements OnInit {
         }
       });
       
-      this.storyService.deleteAllStories(userDetails.username).subscribe( (_) => {});
+      this.storyService.deleteAllStories(userDetails._id).subscribe( (_) => {});
 
     }
     
@@ -132,7 +132,7 @@ export class ProfileComponent implements OnInit {
     
     this.messageService.deleteAllMessages(userDetails._id).subscribe( (_) => {});  
     this.profileService.deleteProfile(userDetails._id).subscribe( (_) => {});
-    this.userService.deleteUser(userDetails.username).subscribe( (_) => {});
+    this.userService.deleteUser(userDetails._id).subscribe( (_) => {});
     this.auth.logout();
   }
   

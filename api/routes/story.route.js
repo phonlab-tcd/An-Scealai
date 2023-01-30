@@ -135,8 +135,8 @@ storyRoutes.route('/delete/:id').get(function(req, res) {
 });
 
 // Delete story by student username
-storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
-  Story.deleteMany({'author': req.params.author}, function(err, story) {
+storyRoutes.route('/deleteAllStories/:id').get(function(req, res) {
+  Story.deleteMany({'owner': req.params.id}, function(err, story) {
     if (err) {
       console.log(err);
       res.json(err);
