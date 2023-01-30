@@ -7,7 +7,6 @@ const Classroom = new Schema({
   date: Date,
   studentIds: [String],
   code: String,
-  grammarRules: [String],
   grammarCheckers: [String],
 }, {
   collection: 'classroom',

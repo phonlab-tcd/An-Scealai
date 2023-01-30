@@ -155,7 +155,7 @@ classroomRoutes.route('/').get((req, res) => {
   });
 });
 
-classroomRoutes.route('/updateClassroomCheckers/:id').post((req, res) => {
+classroomRoutes.route('/setClassroomCheckers/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
       res.status(400).json(err);

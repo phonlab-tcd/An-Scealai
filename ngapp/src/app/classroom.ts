@@ -5,6 +5,5 @@ export class Classroom {
     date: Date;
     title: string;
     code: string;
-    grammarRules: string[];
     grammarCheckers: string[];
 }

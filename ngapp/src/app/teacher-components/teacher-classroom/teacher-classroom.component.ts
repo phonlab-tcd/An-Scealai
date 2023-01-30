@@ -86,7 +86,7 @@ export class TeacherClassroomComponent implements OnInit {
 * Delete classroom with classroom service, redirect to landing
 */
   deleteClassroom() {
-    this.classroomService.delete(this.classroom._id).subscribe((_) => {
+    this.classroomService.deleteClassroom(this.classroom._id).subscribe((_) => {
       this.router.navigateByUrl('/landing');
     });
   }

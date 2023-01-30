@@ -15,19 +15,14 @@ export class StatsService {
   
 // *********************** Admin stats ************************************  
   getProfileDataByDate(startDate: string, endDate: string): Observable<any> {
-    console.log("start date: ", startDate);
-    console.log("end date: ", endDate);
     return this.http.get(this.baseUrl + 'getProfileDataByDate/' + startDate + "/" + endDate);
   }
   
   getFeatureDataByDate(startDate: string, endDate: string): Observable<any> {
-    console.log("start date: ", startDate);
-    console.log("end date: ", endDate);
     return this.http.get(this.baseUrl + 'getFeatureDataByDate/' + startDate + "/" + endDate);
   }
   
   getFeatureDataSinceLog(date): Observable<any> {
-    console.log("Date: ", date);
     return this.http.get(this.baseUrl + 'getFeatureDataSinceLog/' + date.toString());
   }
 
