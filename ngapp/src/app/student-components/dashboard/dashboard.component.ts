@@ -620,7 +620,7 @@ export class DashboardComponent implements OnInit {
       data: {
         title: this.ts.l.story_details,
         type: 'select',
-        data: [this.story.title, [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]],
+        data: [this.story.title, [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster], [this.ts.l.title, this.ts.l.dialect]],
         confirmText: this.ts.l.save_details,
         cancelText: this.ts.l.cancel
       },
