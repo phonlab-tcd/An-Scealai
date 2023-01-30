@@ -35,7 +35,6 @@ import { UserComponent } from './admin-components/user/user.component';
 import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
 import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
-import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
@@ -121,10 +120,6 @@ const routes: Routes = [
       {
         path: 'story-history/:id',
         component: StoryHistoryComponent,
-      },
-      {
-        path: 'stats',
-        component: StatsComponent,
       },
       {
         path: 'find-user',

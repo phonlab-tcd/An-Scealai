@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-//import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
@@ -64,7 +63,6 @@ import { StoryHistoryComponent } from './admin-components/story-history/story-hi
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
-import { StatsComponent } from './admin-components/stats/stats.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { MessagesComponent } from './messages/messages.component';
 import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
@@ -124,7 +122,6 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         RecordingComponent,
         RegisterProfileComponent,
         StoryDetailsComponent,
-        StatsComponent,
         FindUserComponent,
         HighlightDirective,
         FilterPipe,

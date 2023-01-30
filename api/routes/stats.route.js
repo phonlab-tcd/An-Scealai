@@ -69,29 +69,6 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
   });
 });
 
-
-statsRoutes.route('/synthesisFixes').get((req, res) => {
-  getTexts().then((data) => {
-    if (data) {
-      const errorDifferences = new Map();
-      countErrors(data, 'BEFORE').then((beforeErrors) => {
-        console.log('BEFORE ERRORS', beforeErrors);
-        countErrors(data, 'AFTER').then((afterErrors) => {
-          console.log('AFTER ERRORS', afterErrors);
-          beforeErrors.forEach((val, key) => {
-            if (afterErrors.has(key)) {
-              errorDifferences.set(key, (val-afterErrors.get(key)));
-            } else {
-              errorDifferences.set(key, val);
-            }
-          });
-          res.json(mapToObj(errorDifferences));
-        });
-      });
-    }
-  });
-});
-
 function countTypes(array) {
   const count = {};
   array.forEach((val) => count[val] = (count[val] || 0) + 1);

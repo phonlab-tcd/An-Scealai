@@ -15,11 +15,7 @@ export class StatsService {
 
   constructor(private http: HttpClient, private auth: AuthenticationService) { }
   
-// *********************** Admin stats ************************************
-  getSynthesisData() : Observable<any> {
-    return this.http.get(this.baseUrl + 'synthesisFixes');
-  }
-  
+// *********************** Admin stats ************************************  
   getProfileDataByDate(startDate: string, endDate: string): Observable<any> {
     console.log("start date: ", startDate);
     console.log("end date: ", endDate);
