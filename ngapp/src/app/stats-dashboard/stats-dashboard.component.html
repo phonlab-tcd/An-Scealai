@@ -1,7 +1,7 @@
 <mat-card class="dashboard" *ngIf="!dialogRef">
     <div class="dashboard-header">
         <h3 class="dashboard-title">{{ts.l.statistics_dashboard}}</h3>
-        <button mat-stroked-button (click)="openClassroomSelector()">
+        <button *ngIf="userRole == 'TEACHER'" mat-stroked-button (click)="openClassroomSelector()">
             {{classroomTitle}}
             <i class="fa fa-search" aria-hidden="true"></i>
         </button>

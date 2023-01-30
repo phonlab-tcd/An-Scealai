@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { AuthenticationService, TokenPayload, UserDetails } from '../../authentication.service';
+import { AuthenticationService } from '../../authentication.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
 import { TranslationService } from '../../translation.service';
@@ -121,12 +121,9 @@ export class BookContentsComponent implements OnInit {
       for(let id of this.toBeDeleted) {
         this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], {_id: id});
         
-        this.recordingService.deleteStoryRecordingAudio(id).subscribe((res) => {
-        });
-        this.recordingService.deleteStoryRecording(id).subscribe( (res) => {
-        })
-        this.storyService.deleteStory(id).subscribe(
-          res => {
+        this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
+        this.recordingService.deleteStoryRecording(id).subscribe( (_) => {})
+        this.storyService.deleteStory(id).subscribe(_ => {
             this.ngOnInit();
           }
         );
@@ -158,7 +155,7 @@ export class BookContentsComponent implements OnInit {
   }
   
   goToStats() {
-    this.router.navigateByUrl('/student-stats');
+    this.router.navigateByUrl('/stats-dashboard/' + this.userId);
   }
   
   createNewStory() {

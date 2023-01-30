@@ -88,8 +88,8 @@ export class TeacherClassroomComponent implements OnInit {
 * Delete classroom with classroom service, redirect to landing
 */
   deleteClassroom() {
-    this.classroomService.delete(this.classroom._id).subscribe((res) => {
-      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((res) => {
+    this.classroomService.delete(this.classroom._id).subscribe((_) => {
+      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((_) => {
         this.router.navigateByUrl('/landing');
       })  
     });
@@ -107,7 +107,11 @@ export class TeacherClassroomComponent implements OnInit {
   }
   
   goToStats() {
-    this.router.navigateByUrl('/teacher/stats-dashboard/' + this.classroom._id);
+    this.router.navigateByUrl('/stats-dashboard/' + this.classroom._id);
+  }
+  
+  goToSettings() {
+    this.router.navigateByUrl('/teacher/teacher-settings/' + this.classroom._id);
   }
   
   openCodeDialog() {    
@@ -122,26 +126,6 @@ export class TeacherClassroomComponent implements OnInit {
     });
     
     this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
-  }
-  
-  openUpdateClassroomDialog() {    
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.edit_classroom_title,
-        type: 'updateText',
-        confirmText: this.ts.l.save,
-        cancelText: this.ts.l.cancel
-      },
-      width: '50vh',
-    });
-    
-    this.dialogRef.afterClosed().subscribe( (res) => {
-        this.dialogRef = undefined;
-        if(res) {
-          this.newTitle = res[0];
-          this.editTitle();
-        }
-    });
   }
   
   openDeleteClassroomDialog() {

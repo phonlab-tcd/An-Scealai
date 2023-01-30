@@ -83,12 +83,12 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
-import { StatsDashboardComponent } from './teacher-components/stats-dashboard/stats-dashboard.component';
-import { ClassroomSelectorComponent } from './teacher-components/stats-dashboard/classroom-selector/classroom-selector.component';
+import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
+import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
-import { StudentStatsDashboardComponent } from './student-components/student-stats-dashboard/student-stats-dashboard.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { UserGuidesComponent } from './user-guides/user-guides.component';
+import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 
 @NgModule({
     declarations: [
@@ -143,9 +143,9 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
         StatsDashboardComponent,
         ClassroomSelectorComponent,
         BasicDialogComponent,
-        StudentStatsDashboardComponent,
         RecordingDialogComponent,
         UserGuidesComponent,
+        TeacherSettingsComponent,
     ],
     imports: [
         RegisterModule,

@@ -3,8 +3,8 @@
     <h2 mat-dialog-title>{{data?.title}} </h2>
   </div>
 
-  <div *ngIf="data?.message" mat-dialog-content>
-    {{data?.message}}
+  <div *ngIf="data?.message" mat-dialog-content [innerHTML]=data.message>
+    
   </div>
 
   <div>
@@ -34,8 +34,8 @@
      </div>
     
     <div mat-dialog-actions [align]="'center'">
-      <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.type != 'classCode'"> {{data?.cancelText}} </button>
-      <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInputs"> {{data?.confirmText}} </button>
+      <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.cancelText"> {{data?.cancelText}} </button>
+      <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInputs" *ngIf="data.confirmText"> {{data?.confirmText}} </button>
     </div>
   </div>
 </div>

@@ -2057,5 +2057,50 @@ export default {
   scealai_wins_ell_award: {
     ga: 'Bronnfar An Séala Eorpach Teanga ar thionscadal ABAIR- An Scéalaí ag ócáid i bPáirc an Chrócaigh, 10 Samhain',
     en: 'An Scéalaí has won a European Language Label Award 2022!' },
+  settings: {
+    ga: 'Socruithe',
+    en: 'Settings' },
+  want_to_remove_student_from_class: {
+    ga: 'An bhfuil tú cinnte go bhfuil tú ag iarraidh an scoláire a bhaint den rang?',
+    en: 'Are you sure you want to remove this student from the class?' },
+  students_enrolled: {
+    ga: 'Scoláirí Cláraithe',
+    en: 'Students Enrolled' },
+  grammar_checker_options: {
+    ga: 'Roghanna sa Seiceálaí Gramadaí',
+    en: 'Grammar Checker Options' },
+  select_which_grammar_checker_for_students_to_use: {
+    ga: 'Roghnaigh an seiceálaí gramadaí atá le húsáid ag do scoláirí',
+    en: 'Select which grammar checkers you would like your students to use' },
+  relative_clause_checker: {
+    ga: 'Seiceálaí don Chlásal Coibhneasta',
+    en: 'Relative Clause Checker' },
+  genitive_checker: {
+    ga: 'Seiceálaí don Ghinideach',
+    en: 'Genitive Checker' },
+  broad_slender_checker: {
+    ga: 'Seiceálaí don Chomhfhreagras Caol/Leathan',
+    en: 'Broad/Slender Checker' },
+  save_as: {
+    ga: 'Sábháil mar',
+    en: 'Save as' },
+  format: {
+    ga: 'Formáid',
+    en: 'Format' },
+  an_gramadoir_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  relative_clause_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  genitive_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  broad_slender_checker_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
+  gael_spell_description: {
+    ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
+    en: 'An Gramadoir is blah blah blah <a> link </a>' },
     
 }
