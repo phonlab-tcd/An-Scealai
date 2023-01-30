@@ -7,7 +7,6 @@ import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
 import { NotificationService } from '../notification-service.service';
-import { StatsService } from '../stats.service';
 import { StoryService } from '../story.service';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
@@ -43,7 +42,6 @@ export class ProfileComponent implements OnInit {
               public profileService: ProfileService,
               public messageService: MessageService,
               public userService: UserService,
-              public statsService: StatsService,
               public recordingService: RecordingService,
               private dialog: MatDialog) { }
 
@@ -71,7 +69,6 @@ export class ProfileComponent implements OnInit {
 
 /*
 * Join a classroom with a given classroom code
-* Create a new stats object in the database
 */
   joinClassroom() {
     this.classroomService.addStudentToClassroom(this.foundClassroom._id, this.auth.getUserDetails()._id).subscribe((res) => {
@@ -96,7 +93,6 @@ export class ProfileComponent implements OnInit {
     this.classroomService.removeStudentFromClassroom(this.classroom._id, this.auth.getUserDetails()._id).subscribe((_) => {
       this.classroom = null;
     });
-    this.statsService.deleteStats(this.auth.getUserDetails()._id).subscribe((_) => {});
   }
 
   logout() {
@@ -126,20 +122,11 @@ export class ProfileComponent implements OnInit {
         }
       });
       
-      this.storyService.deleteAllStories(userDetails.username).subscribe( (_) => {
-      });
-      
-      this.statsService.deleteStats(userDetails._id).subscribe( (_) => {
-      });
+      this.storyService.deleteAllStories(userDetails.username).subscribe( (_) => {});
+
     }
     
     if(userDetails.role === "TEACHER") {
-      this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
-        for(let classroom of res) {
-          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( (_) => {});
-        }
-      });
-      
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe( (_) => {});
     }
     

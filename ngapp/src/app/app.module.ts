@@ -64,7 +64,6 @@ import { RegisterProfileComponent } from './register-profile/register-profile.co
 import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
 import { MessagesComponent } from './messages/messages.component';
-import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
@@ -124,7 +123,6 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         HighlightDirective,
         FilterPipe,
         MessagesComponent,
-        TeacherStatsComponent,
         ResourcesComponent,
         TeamComponent,
         AboutLaraComponent,

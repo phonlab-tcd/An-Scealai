@@ -155,29 +155,6 @@ classroomRoutes.route('/').get((req, res) => {
   });
 });
 
-classroomRoutes.route('/setGrammarRules/:id').post((req, res) => {
-  Classroom.findById(req.params.id, (err, classroom) => {
-    if (err) {
-      res.status(400).json(err);
-    }
-    if (classroom) {
-      classroom.grammarRules = req.body.grammarRules;
-      classroom.save().then((classroom) => {
-        res.status(200).json('Updated grammar rules successfully');
-      }).catch((err) => {
-        res.status(404).send(err);
-      });
-    }
-  });
-});
-
-classroomRoutes.route('/getGrammarRules/:id').get( (req, res) => {
-  Classroom.findById(req.params.id, (err, classroom) => {
-    if (err) res.json(err);
-    if (classroom) res.json(classroom.grammarRules);
-  });
-});
-
 classroomRoutes.route('/updateClassroomCheckers/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {

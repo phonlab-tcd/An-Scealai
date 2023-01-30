@@ -43,7 +43,6 @@ import { TeacherDashboardComponent } from './teacher-components/teacher-dashboar
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
-import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
 
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
@@ -158,10 +157,6 @@ const routes: Routes = [
       {
         path: 'story/:id',
         component: TeacherStoryComponent,
-      },
-      {
-        path: 'teacher-stats/:id',
-        component: TeacherStatsComponent,
       },
       {
         path: 'stats-dashboard/:id',

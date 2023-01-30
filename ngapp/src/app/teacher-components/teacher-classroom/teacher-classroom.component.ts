@@ -8,7 +8,6 @@ import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
-import { StatsService } from '../../stats.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { firstValueFrom } from 'rxjs';
@@ -27,7 +26,6 @@ export class TeacherClassroomComponent implements OnInit {
               public ts : TranslationService,
               private messageService: MessageService,
               private storyService : StoryService,
-              private statsService : StatsService,
               private dialog: MatDialog) { }
   
   classroom : Classroom;
@@ -89,9 +87,7 @@ export class TeacherClassroomComponent implements OnInit {
 */
   deleteClassroom() {
     this.classroomService.delete(this.classroom._id).subscribe((_) => {
-      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((_) => {
-        this.router.navigateByUrl('/landing');
-      })  
+      this.router.navigateByUrl('/landing');
     });
   }
 

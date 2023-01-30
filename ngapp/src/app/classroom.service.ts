@@ -75,14 +75,6 @@ export class ClassroomService {
     return result;
  }
  
- setGrammarRules(classroomId: string, rules: string[]): Observable<any> {
-   return this.http.post(this.baseUrl + 'setGrammarRules/' + classroomId, {"grammarRules":rules});
- }
- 
- getGrammarRules(classroomId): Observable<any> {
-   return this.http.get(this.baseUrl + 'getGrammarRules/' + classroomId);
- }
- 
  updateClassroomCheckers(classroomId: string, checkers: string[]):Observable<any> {
    return this.http.post(this.baseUrl + 'updateClassroomCheckers/' + classroomId, {"checkers":checkers});
  }
