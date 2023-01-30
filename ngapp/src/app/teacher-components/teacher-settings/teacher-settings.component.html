@@ -1,0 +1,44 @@
+<!-- Displays selected classroom details -->
+<div class="contents">
+    <!-- Nav bar and students container-->
+    <div class="classContainer">
+      <!-- Nav bar -->
+      <div class="classHeader">
+        <div class="backArrow" routerLink="/teacher/dashboard"><i class="fas fa-arrow-left"></i></div>
+        {{ts.l.classrooms}}
+      </div>
+      
+      <!--Classroom title -->
+        <div class="classTitle">
+          <h2>  {{classroom?.title}} </h2>
+          <i class="fas fa-edit headerIconBtn" (click)="openUpdateClassroomDialog()"></i>
+        </div>
+        
+        <!-- List of students -->
+        <h5 class="sectionTitle"> {{ts.l.students_enrolled}} </h5>
+        <mat-card>
+          <div class="classBody">
+            <div class="classCard" *ngFor="let student of students">
+              <div>{{student.username}}</div>
+              <i class="fa fa-times deleteX" aria-hidden="true" (click)="removeStudent(student._id)"></i>
+            </div>
+          </div>
+        </mat-card>
+        
+        <!--Grammar Options -->
+        <!-- <h5 class="sectionTitle"> {{ts.l.grammar_checker_options}} </h5>
+        <mat-card>
+          <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> {{ts.l.select_which_grammar_checker_for_students_to_use}}. 
+            <i class="fa fa-info-circle" style="cursor:pointer" (click)="openInformationDialog()"></i>
+          </h6>
+          <div class="checkBoxes">
+            <span><input [(ngModel)]="checkerSelection.anGramadoir" (ngModelChange)="changesSaved = false;" type="checkbox"> An Gramadoir</span>
+            <span><input [(ngModel)]="checkerSelection.relativeClause" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.relative_clause_checker}}</span>
+            <span><input [(ngModel)]="checkerSelection.genitive" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.genitive_checker}}</span>
+            <span><input [(ngModel)]="checkerSelection.broadSlender" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.broad_slender_checker}}</span>
+            <span><input [(ngModel)]="checkerSelection.gaelSpell" (ngModelChange)="changesSaved = false;" type="checkbox"> GaelSpell </span>
+          </div>
+          <div class="saveBtn"> <button class="greenBtn" (click)="updateCheckers()"> {{changesSaved? ts.l.saved : ts.l.save}} </button> </div>
+        </mat-card> -->
+    </div>
+  </div>
