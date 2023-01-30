@@ -12,7 +12,6 @@ import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
 import { UserGuidesComponent } from './user-guides/user-guides.component';
-import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from 'register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
@@ -69,7 +68,6 @@ const routes: Routes = [
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
   { path: 'user-guides', component: UserGuidesComponent},
-  { path: 'language', component: LanguageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},

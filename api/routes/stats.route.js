@@ -1,11 +1,7 @@
 const express = require('express');
-const app = express();
 const statsRoutes = express.Router();
-const querystring = require('querystring');
-const request = require('request');
 
 const Event = require('../models/event');
-const Story = require('../models/story');
 const Profile = require('../models/profile');
 const User = require('../models/user');
 
@@ -73,116 +69,6 @@ function countTypes(array) {
   const count = {};
   array.forEach((val) => count[val] = (count[val] || 0) + 1);
   return count;
-}
-
-function countErrors(data, dataSet) {
-  return new Promise((resolve, reject) => {
-    let counter = 0;
-    const errorsMap = new Map();
-    data.forEach((d, index, array ) => {
-      getGramadoirErrorsForText((dataSet === 'BEFORE') ? d.before : d.after).then((body) => {
-        errors = JSON.parse(body);
-        errors.forEach((error) => {
-          const ruleStr = error.ruleId.toString();
-          const ruleLabel = ruleStr.match('(?<=\/)(.*?)(?=\{|$)')[0];
-          if (errorsMap.has(ruleLabel)) {
-            errorsMap.set(ruleLabel, errorsMap.get(ruleLabel)+1);
-          } else {
-            errorsMap.set(ruleLabel, 1);
-          }
-        });
-        counter++;
-        if (counter === array.length) {
-          resolve(errorsMap);
-        }
-      });
-    });
-  });
-}
-
-function getTexts() {
-  return new Promise((resolve, reject) => {
-    const data = [];
-    Story.find({}, (err, stories) => {
-      if (stories) {
-        let counter = 0;
-
-        stories.forEach((story, index, array) => {
-          getEvents(story).then((eventData) => {
-            // data.push(eventData); // This pushes data per story (as opposed to all together)
-            eventData.forEach((datum) => {
-              data.push(datum);
-            });
-            counter++;
-            console.log(counter, array.length);
-            if (counter === array.length) {
-              resolve(data);
-            }
-          });
-        });
-      }
-    });
-  });
-}
-
-function getEvents(story) {
-  console.log('getEvents()');
-  return new Promise((resolve, reject) => {
-    const data = [];
-    Event.find({'storyData._id': story._id.toString()}, (err, events) => {
-      if (events) {
-        if (events.length > 0) {
-          let previousEvent = events[0];
-          events.forEach((event, index, array) => {
-            if (previousEvent.type === 'SYNTHESISE-STORY' &&
-                        event.type === 'SAVE-STORY') {
-              data.push({'before': previousEvent.storyData.text,
-                'after': event.storyData.text});
-            }
-            if (index === array.length-1) {
-              resolve(data);
-            }
-            previousEvent = event;
-          });
-        } else {
-          resolve([]);
-        }
-      }
-    });
-  });
-}
-
-function getGramadoirErrorsForText(text) {
-  const form = {
-    teacs: text.replace(/\n/g, ' '),
-    teanga: 'en',
-  };
-
-  const formData = querystring.stringify(form);
-
-  return new Promise(function(resolve, reject) {
-    request({headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    uri: 'https://cadhan.com/api/gramadoir/1.0',
-    body: formData,
-    method: 'POST',
-    }, (err, resp, body) => {
-      if (body) {
-        resolve(body);
-      }
-    });
-  });
-}
-
-function mapToObj(inputMap) {
-  const obj = {};
-
-  inputMap.forEach(function(value, key) {
-    obj[key] = value;
-  });
-
-  return obj;
 }
 
 module.exports = statsRoutes;

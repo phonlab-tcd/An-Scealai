@@ -36,7 +36,6 @@ import { LandingComponent } from './landing/landing.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
-import { LanguageComponent } from './language/language.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
@@ -96,7 +95,6 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         LandingComponent,
         AboutComponent,
         TechnologyComponent,
-        LanguageComponent,
         LoginComponent,
         //     RegisterComponent,
         //     RegisterFormComponent,
