@@ -1,4 +1,3 @@
-// user.route.js 
 // endpoint prefix = '/user'
 const logger = require('../logger');
 const generator = require('generate-password');
@@ -44,6 +43,11 @@ userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.get('/viewUser', checkJwt, ctrlProfile.viewUser);
 userRoutes.get('/teachers', checkJwt, ctrlProfile.getTeachers);
 
+/**
+ * Set user language preference
+ * @param {Object} req params: User ID
+ * @return {Object} Success or error message
+ */
 userRoutes.route('/setLanguage/:id').post(checkJwt, (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (user) {
@@ -58,6 +62,11 @@ userRoutes.route('/setLanguage/:id').post(checkJwt, (req, res) => {
   });
 });
 
+/**
+ * Get user language preference
+ * @param {Object} req params: User ID
+ * @return {Object} language code
+ */
 userRoutes.route('/getLanguage/:id').get(checkJwt, (req, res) => {
   User.findById(req.user._id)
       .then(
@@ -68,6 +77,11 @@ userRoutes.route('/getLanguage/:id').get(checkJwt, (req, res) => {
       );
 });
 
+/**
+ * Get user by username
+ * @param {Object} req params: User's username
+ * @return {Object} User
+ */
 userRoutes.route('/getUserByUsername/:username').get(checkJwt, (req, res) => {
   User.find({'username': req.params.username}, (err, user) => {
     if (err) {
@@ -82,7 +96,11 @@ userRoutes.route('/getUserByUsername/:username').get(checkJwt, (req, res) => {
   });
 });
 
-// Delete user by username
+/**
+ * Delete user by ID
+ * @param {Object} req params: User ID
+ * @return {Object} Success or error message
+ */
 userRoutes.route('/deleteUser/:id').get(function(req, res) {
   User.findOneAndRemove({_id: req.params.id}, function(err, user) {
     if (err) {
@@ -92,7 +110,12 @@ userRoutes.route('/deleteUser/:id').get(function(req, res) {
   });
 });
 
-// Update password by id
+
+/**
+ * Update user password -- DEPRICATED?
+ * @param {Object} req params: Student ID
+ * @return {Object} Success or error message
+ */
 userRoutes.route('/updatePassword/:id').post((req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (user) {
@@ -109,8 +132,11 @@ userRoutes.route('/updatePassword/:id').post((req, res) => {
   });
 });
 
-
-// Update account with random password, send user an email
+/**
+ * Send user an email with randomly generated password and update user object
+ * @param {Object} req body: Classroom object
+ * @return {Object} Success or error message
+ */
 userRoutes.route('/sendNewPassword/').post((req, res) => {
   User.findOne({'username': req.body.username}, (err, user) => {
     if (err) {
@@ -125,7 +151,6 @@ userRoutes.route('/sendNewPassword/').post((req, res) => {
       user.hash = crypto.pbkdf2Sync(randomPassword, user.salt, 1000, 64, 'sha512').toString('hex');
       console.log('change password to: ', randomPassword);
       user.save().then(() => {
-        // console.log("Constructing the mailObj");
         const mailObj = {
           from: 'scealai.info@gmail.com',
           recipients: [req.body.email],

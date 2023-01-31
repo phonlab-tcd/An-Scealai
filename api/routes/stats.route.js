@@ -5,6 +5,12 @@ const Event = require('../models/event');
 const Profile = require('../models/profile');
 const User = require('../models/user');
 
+/**
+ * Get profile data of active users within optional date range
+ * @param {Object} req params: start date for date range
+ * @param {Object} req params: end date for date range
+ * @return {Object} List of profiles
+ */
 statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get(async (req, res, next) => {
   try {
     const conditions = {status: 'Active'};
@@ -28,6 +34,12 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get(async (req, r
   }
 });
 
+/**
+ * Get website feature use data within optional date range
+ * @param {Object} req params: start date for date range
+ * @param {Object} req params: end date for date range
+ * @return {Object} Dictionary of feature type and number of counts
+ */
 statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get(async (req, res) => {
   let conditions = {};
   if (req.params.startDate !== 'empty' && req.params.endDate !== 'empty') {
@@ -49,6 +61,11 @@ statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get(async (req, r
   });
 });
 
+/**
+ * Get website feature use data starting from the date of the last saved log
+ * @param {Object} req params: start date for events
+ * @return {Object} Dictionary of feature type and number of counts
+ */
 statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
   Event.find({'date': {'$gt': req.params.date}}, (err, events) => {
     if (err) {
@@ -65,6 +82,11 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
   });
 });
 
+/**
+ * Create a dictionary of event feature names and associated counts
+ * @param {Array} array List of strings for event types
+ * @return {Object} Dictionary of feature type and number of counts
+ */
 function countTypes(array) {
   const count = {};
   array.forEach((val) => count[val] = (count[val] || 0) + 1);
