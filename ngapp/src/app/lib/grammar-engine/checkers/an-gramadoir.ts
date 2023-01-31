@@ -32,7 +32,7 @@ async function check(input: string):Promise<ErrorTag[]>{
     
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
     try {
-      errors = await callAnGramadoir(input, 'en', 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl');
+      errors = await callAnGramadoir(input, 'en', 'https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl');
     }
     catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
