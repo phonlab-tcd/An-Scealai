@@ -9,6 +9,7 @@ import { By } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
 import { TranslationService } from '../../translation.service';
 import { Story } from 'app/story';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -25,7 +26,7 @@ describe('DashboardComponent', () => {
         FormsModule,
       ],
       declarations: [ DashboardComponent, SynthesisPlayerComponent ],
-      providers: [ TranslationService, ...qm.providers]
+      providers: [ TranslationService, ...qm.providers, { provide: MatDialog, useValue: {} }]
     })
     .compileComponents()
   );
