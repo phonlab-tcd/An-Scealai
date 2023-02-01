@@ -2,6 +2,12 @@ const Story = require('../../models/story');
 const {API404Error} = require('../../utils/APIError');
 const mongoose = require('mongoose');
 
+/**
+ * Set feedback status of story to 'viewed'
+ * @param {Object} req params: Story ID
+ * @param {Object} res
+ * @return {Object} Success or Error Message
+ */
 module.exports = async (req, res) => {
   if (! mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({

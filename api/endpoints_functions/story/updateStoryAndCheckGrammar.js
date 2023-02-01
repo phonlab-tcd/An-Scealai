@@ -2,6 +2,12 @@ const Story = require('../../models/story');
 const {requestGrammarTags} = require('../../utils/grammar');
 const logger = require('../../logger');
 
+/**
+ * Grammar check a story and update its status
+ * @param {Object} req body: Story object
+ * @param {Object} res
+ * @return {Object} Success or Error Message
+ */
 module.exports = async (req, res) => {
   const storyUpdate = new Story(req.body);
 
