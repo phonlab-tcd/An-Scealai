@@ -279,14 +279,15 @@ export enum LANGUAGE {
   IRISH = 1,
 }
 
-export type GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl' | 'https://cadhan.com/api/gramadoir/1.0';
+const gramadoirUrls = ['https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl','https://cadhan.com/api/gramadoir/1.0'] as const;
+export type GramadoirUrl = typeof gramadoirUrls[number];
 
 @Injectable({
   providedIn: 'root'
 })
 export class GrammarService {
-  gramadoirUrl: GramadoirUrl = 'https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl';
-  gramadoirCadhanUrl: GramadoirUrl = 'https://cadhan.com/api/gramadoir/1.0';
+  gramadoirUrl: GramadoirUrl = gramadoirUrls[0];
+  gramadoirCadhanUrl: GramadoirUrl = gramadoirUrls[1];
   genitiveUrl = 'https://phoneticsrv3.lcs.tcd.ie/gramsrv/api/grammar'
 
   broad = ['a', 'o', 'u', 'á', 'ó', 'ú', 'A', 'O', 'U', 'Á', 'Ó', 'Ú'];
