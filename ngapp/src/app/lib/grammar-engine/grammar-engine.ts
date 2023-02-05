@@ -1,4 +1,4 @@
-import { GrammarChecker, GrammarCache } from './types';
+import { GrammarChecker, GrammarCache, ErrorTag} from './types';
 import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -104,7 +104,7 @@ export class GrammarEngine {
     * @param input - story text
     */
     public check$(input: string) {
-      const subject = new Subject();
+      const subject = new Subject<ErrorTag>();
       this.check(input, subject);
       return subject;
     }
@@ -114,7 +114,7 @@ export class GrammarEngine {
     * @param input - story text
     * @param subj - Subject to handle the errors as they come in
     */
-    public async check(input: string, subj: Subject<any>) {
+    public async check(input: string, subj: Subject<ErrorTag>) {
       // Sentence tokenization to make gramadoir requests for each sentence independently
       const sentences = await firstValueFrom(
           this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
@@ -132,7 +132,7 @@ export class GrammarEngine {
               const offset = o.offset;
               
               // function to set error tag indices based on associated offset
-              function mapOffset(errorTag) {
+              function mapOffset(errorTag: ErrorTag): ErrorTag {
                   errorTag.fromX += offset;
                   errorTag.toX += offset;
                   subj.next(errorTag);

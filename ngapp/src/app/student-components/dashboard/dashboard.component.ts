@@ -36,6 +36,7 @@ import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
 import { gaelSpell } from '../../lib/grammar-engine/checkers/gaelspell-checker';
+import { ErrorTag } from '../../lib/grammar-engine/types';
 
 
 @Component({
@@ -67,7 +68,8 @@ export class DashboardComponent implements OnInit {
   mostRecentGramadoirRequestTime = null;
   mostRecentGramadoirInput: string = null;
   grammarLoaded: boolean = false;
-  grammarErrors: any = [];
+  grammarErrors: ErrorTag[] = [];
+  prevGrammarErrors: ErrorTag[] = [];
   grammarErrorsTypeDict: Object = {};
   showErrorTags: boolean = false;
   checkBoxes: Object = {'showAll': true};
@@ -136,7 +138,7 @@ export class DashboardComponent implements OnInit {
         // check text for grammar errors
         this.grammarErrors = [];
         this.grammarEngine.check$(this.story.text).subscribe({
-          next: (tag) => {
+          next: (tag: ErrorTag) => {
             this.grammarErrors.push(tag);
             
             // show error highlighting if button on
@@ -146,6 +148,11 @@ export class DashboardComponent implements OnInit {
           },
           error: function () {},
           complete: () => {
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+            // and then re-show all the latest error tags
+            this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+            
             //save any grammar errors with associated sentences to DB
             if(this.grammarErrors) {
               this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
@@ -344,8 +351,8 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error tags */
   async toggleGrammarTags() {
       this.showErrorTags ? 
-        this.quillHighlighter.hide(this.grammarErrors):
-        this.quillHighlighter.show(this.grammarErrors);
+        this.quillHighlighter.hideAll() :
+        this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
       this.showErrorTags = !this.showErrorTags;
   }
   
@@ -613,5 +620,4 @@ export class DashboardComponent implements OnInit {
       this.debounceSaveStory();
     });
   }
-  
 }
