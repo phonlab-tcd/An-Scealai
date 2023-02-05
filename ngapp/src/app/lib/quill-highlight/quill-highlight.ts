@@ -1,20 +1,22 @@
 import Quill from 'quill';
+import { TranslationService } from 'app/translation.service';
+import { EngagementService } from '../../engagement.service'
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
 
 Quill.register(
     new Parchment.Attributor.Attribute(
-        'highlight-tag-type',
-        'highlight-tag-type',
+        'highlight-tag',
+        'highlight-tag',
         {scope: Parchment.Scope.INLINE}
     )
 );
 
 Quill.register(
     new Parchment.Attributor.Attribute(
-        'highlight-tag-data',
-        'highlight-tag-data',
+        'highlight-tag-type',
+        'highlight-tag-type',
         {scope: Parchment.Scope.INLINE}
     )
 );
@@ -30,27 +32,35 @@ export type HighlightTag = {
     toX: number;
 }
 
-type TooltippedHighlightTag = {
-    tag: HighlightTag;
-    tooltip: any;
-}
-
 export class QuillHighlighter {
     quillEditor: Quill;
+    mostRecentHoveredMessage: String = '';
+    private ts: TranslationService;
+    private engagement: EngagementService;
 
-    constructor(quillEditor: Quill) {
+    constructor(quillEditor: Quill, ts: TranslationService, engagement: EngagementService) {
         this.quillEditor = quillEditor;
+        this.ts = ts;
+        this.engagement = engagement;
     }
-
+    
+    /**
+    * Apply css highlighting to given error tags
+    * @param tags - array of tags to highlight
+    */
     public show(tags: HighlightTag[]): void {
+        if(!tags) return;
+        //this.hide(tags);  // remove any previous highlighting 
+      
         tags.forEach((tag) => {
-            // Add highlighting to error text
+            // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
             this.quillEditor.formatText(
                 tag.fromX,
-                tag.toX,
+                (tag.toX - tag.fromX),
                 {
+                    'highlight-tag': JSON.stringify(tag),
                     'highlight-tag-type': tag.type,
-                    'highlight-tag-data': JSON.stringify(tag)
+                    'background-color': tag.color,
                 },
                 'api'
             );
@@ -59,8 +69,10 @@ export class QuillHighlighter {
         // Create message popups with tooltips
         const tagElements = document.querySelectorAll('[highlight-tag]');
         tagElements.forEach(tagElement => {
-            const tagData = tagElement.getAttribute('data-gramadoir-tag');
-            if (!tagData) return;
+            const tagData = tagElement.getAttribute('highlight-tag');
+            if (!tagData) {
+              return;
+            } 
             const highlightTag = JSON.parse(tagData) as HighlightTag;
             const tooltip = new Tooltip(this.quillEditor);
             tooltip.root.classList.add('custom-tooltip');
@@ -68,23 +80,58 @@ export class QuillHighlighter {
             tagElement.addEventListener('mouseover', () => {
                 this.mouseOverTagElem(highlightTag, tagElement, tooltip);
             });
+            
+            tagElement.addEventListener('mouseout', () => {
+              tagElement.removeAttribute('data-selected');
+              tooltip.hide();
+            });
         });
     }
 
-    public hide() {
-        this.quillEditor.formatText(
-            0, // from the very beginning of the text
-            this.quillEditor.getLength(), // to the very end of the text
-            {'highlight-tag': null} // delete all highlight-tag's on the parchment
-        );
+    /**
+    * Remove css highlighting to input array of error tags
+    * @param tags - array of tags to remove highlighting
+    */
+    public hide(tags: HighlightTag[]) {
+        tags.forEach((tag) => {
+          this.quillEditor.formatText(
+            tag.fromX,
+            (tag.toX - tag.fromX),
+              {'highlight-tag': null,
+              'highlight-tag-type': null,
+              'background-color': '',
+              'data-selected': null}
+          );
+        });
+    
+        document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+    }
+    
+    /**
+    * Remove css highlighting from all error tags
+    */
+    public hideAll() {
+      const tagElements = document.querySelectorAll('[data-selected]');
+      tagElements.forEach(tag => tag.removeAttribute('data-selected'))
+      this.quillEditor.formatText(
+        0,
+        this.quillEditor.getLength(),
+          {'highlight-tag': null,
+          'highlight-tag-type': null,
+          'background-color': '',
+          'data-selected': null}
+      );
+      
         document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
-    private mouseOverTagElem(
-        tag: HighlightTag,
-        tagElement: Element,
-        tooltip
-    ) {
+    /**
+    * Set styling for tooltip
+    * @param tag - error tag for applying tooltip
+    * @param tagElement - html element associated with tag
+    * @param tooltip - tooltip to be applied to tag
+    */
+    private mouseOverTagElem(tag: HighlightTag, tagElement: Element, tooltip) {
         tagElement.setAttribute('data-selected', '');
     
         // for some reason bounds aren't calculated correctly until someone scrolls
@@ -92,7 +139,8 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        tooltip.root.innerHTML = tag.messageEN; // TODO: make this language responsive
+        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
+        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
@@ -116,6 +164,23 @@ export class QuillHighlighter {
           (tooltip.root.offsetLeft < 0) ?
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
+          
+        this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
+      
+    /**
+    * Return either last tag hovered, checking grammar, or instructions message
+    * @param grammarLoaded - boolean to determine if grammar is finished loading
+    */
+    public getGrammarMessage(grammarLoaded: boolean) {
+      if(grammarLoaded) {
+        if (!this.mostRecentHoveredMessage)
+          return this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
+        else 
+          return this.mostRecentHoveredMessage;
+      }
+      else 
+        return this.ts.message('checking_grammar');
+    }
 }
 

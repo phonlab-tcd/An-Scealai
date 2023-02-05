@@ -1,15 +1,18 @@
 const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 
-const { getUniqueErrorTypeCounts } = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts')
+const {getUniqueErrorTypeCounts} = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts');
 
-////////////////////////////////////////////// POST
+// //////////////////////////////////////////// POST
 gramadoirRoutes
-  .route('/insert')
-  .post(auth, require('../endpoints_functions/gramadoir/insert'));
-////////////////////////////////////////////// GET
+    .route('/insert')
+    .post(auth, require('../endpoints_functions/gramadoir/insert'));
 gramadoirRoutes
-  .route('/getUniqueErrorTypeCounts/:storyId')
-  .get(auth, getUniqueErrorTypeCounts);
+    .route('/userGrammarCounts')
+    .post(auth, require('../endpoints_functions/gramadoir/userGrammarCounts'));
+// //////////////////////////////////////////// GET
+gramadoirRoutes
+    .route('/getUniqueErrorTypeCounts/:storyId')
+    .get(auth, getUniqueErrorTypeCounts);
 
 module.exports = gramadoirRoutes;
