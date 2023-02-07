@@ -19,12 +19,15 @@ let userRoutes;
     require('../endpoints_functions/user/searchUser');
   const getUserCount =
     require('../endpoints_functions/user/getUserCount');
+  const getUserCountAndStatus =
+    require('../endpoints_functions/user/getUserCountAndStatus');
   const updateUsername =
     require('../endpoints_functions/user/updateUsername');
 
   userRoutes = makeEndpoints({
     get: {
       '/count': getUserCount,
+      '/countAndStatus': getUserCountAndStatus,
     },
     post: {
       '/searchUser': searchUser,

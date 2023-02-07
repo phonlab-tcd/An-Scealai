@@ -37,6 +37,7 @@ import { AdminDashboardComponent } from './admin-components/admin-dashboard/admi
 import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
+import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
@@ -127,6 +128,10 @@ const routes: Routes = [
       {
         path: 'feature-stats',
         component: FeatureStatsComponent,
+      },
+      {
+        path: 'database-stats',
+        component: DatabaseStatsComponent,
       }
     ]
   },

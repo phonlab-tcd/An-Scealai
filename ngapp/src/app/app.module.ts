@@ -88,6 +88,7 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
+import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 
 @NgModule({
     declarations: [
@@ -144,6 +145,7 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         RecordingDialogComponent,
         UserGuidesComponent,
         TeacherSettingsComponent,
+        DatabaseStatsComponent,
     ],
     imports: [
         RegisterModule,
