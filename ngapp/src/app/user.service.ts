@@ -38,8 +38,9 @@ export class UserService {
     return this.http.get(this.baseUrl + 'count/');
   }
 
-  deleteUser(username: string): Observable<any> {
-    return this.http.delete(this.baseUrl + username);
+  deleteUser(id: string): Observable<any> {
+    console.log("delete acount for ", id)
+    return this.http.get(this.baseUrl + 'deleteUser/' + id);
   }
 
   updateUsername(id: string, newUsername: string): Observable<any> {

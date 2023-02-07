@@ -1,19 +1,13 @@
-const express = require("express");
-const app = express();
+const express = require('express');
 const recordingRoutes = express.Router();
-const MongoClient = require("mongodb").MongoClient;
-const multer = require("multer");
-const { Readable } = require("stream");
-const mongodb = require("mongodb");
-const mongoose = require("mongoose");
-const ObjectID = require("mongodb").ObjectID;
-const querystring = require("querystring");
-const request = require("request");
-const { parse, stringify } = require("node-html-parser");
-const logger = require("../logger.js");
-
-let VoiceRecording = require("../models/recording");
-let User = require("../models/user");
+const MongoClient = require('mongodb').MongoClient;
+const multer = require('multer');
+const {Readable} = require('stream');
+const mongodb = require('mongodb');
+const mongoose = require('mongoose');
+const ObjectID = require('mongodb').ObjectID;
+const logger = require('../logger.js');
+const VoiceRecording = require('../models/recording');
 
 // let db;
 // MongoClient.connect('mongodb://localhost:27017/',
@@ -28,6 +22,12 @@ let User = require("../models/user");
 //   db = client.db('an-scealai');
 // });
 
+/**
+ * Create a new voice recording
+ * @param {Object} req body: Voice Recording object
+ * @param {Object} req user: User object
+ * @return {Object} Success or error message
+ */
 recordingRoutes.route('/create').post((req, res) => {
   const recording = new VoiceRecording(req.body);
   recording
@@ -46,6 +46,11 @@ recordingRoutes.route('/create').post((req, res) => {
       });
 });
 
+/**
+ * Get a voice recording object
+ * @param {Object} req params: Voice recording ID
+ * @return {Object} Voice recording object
+ */
 recordingRoutes.route('/:id').get(function(req, res) {
   VoiceRecording.findById(req.params.id, (err, recording) => {
     if (err) {
@@ -57,7 +62,12 @@ recordingRoutes.route('/:id').get(function(req, res) {
   });
 });
 
-// Update the audio ids and indices for a given recording
+/**
+ * Update the audio IDs and paragraph/sentence IDs for a given recording
+ * @param {Object} req params: Voice Recording ID
+ * @param {Object} body paragraph and sentence ID, audio, and transcription data
+ * @return {Object} Success or error message
+ */
 recordingRoutes.route('/updateTracks/:id').post(function(req, res) {
   VoiceRecording.findById(req.params.id, function(err, recording) {
     if (err) {
@@ -120,6 +130,14 @@ recordingRoutes.route('/updateTracks/:id').post(function(req, res) {
   });
 });
 
+/**
+ * Save audio for a voice recording object
+ * @param {Object} req params: Story ID
+ * @param {Object} req params: uuid: Generated random ID
+ * @param {Object} req params: index: Index of paragraph/sentence for audio
+ * @param {Object} req file: Audio buffer
+ * @return {Object} Success or error message, file Id and audio index
+ */
 recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
   const storage = multer.memoryStorage();
   const upload = multer({
@@ -168,6 +186,11 @@ recordingRoutes.route('/saveAudio/:storyId/:index/:uuid').post((req, res) => {
   });
 });
 
+/**
+ * Get audio for a voice recording object
+ * @param {Object} req params: Voice Recording ID
+ * @return {Object} Audio stream
+ */
 recordingRoutes.route('/audio/:id').get((req, res) => {
   let audioId;
   // get the audio id from the audio id set to the story
@@ -205,20 +228,30 @@ recordingRoutes.route('/audio/:id').get((req, res) => {
   });
 });
 
-recordingRoutes.route("/getHistory/:storyId").get((req, res) => {
+/**
+ * Get all archived recordings for a particular story
+ * @param {Object} req params: Story ID
+ * @return {Object} List of voice recordings
+ */
+recordingRoutes.route('/getHistory/:storyId').get((req, res) => {
   VoiceRecording.find(
-    { "storyData._id": req.params.storyId, archived: true },
-    (err, recordings) => {
-      if (err) {
-        console.log(err);
-        res.status(400).json({ message: err.message });
-      } else {
-        res.json(recordings);
-      }
-    }
+      {'storyData._id': req.params.storyId, 'archived': true},
+      (err, recordings) => {
+        if (err) {
+          console.log(err);
+          res.status(400).json({message: err.message});
+        } else {
+          res.json(recordings);
+        }
+      },
   );
 });
 
+/**
+ * Set a voice recording status to 'archived'
+ * @param {Object} req params: Voice Recording ID
+ * @return {Object} Success or error message
+ */
 recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
   VoiceRecording.findById(req.params.recordingId, (err, recording) => {
     if (err) {
@@ -231,7 +264,12 @@ recordingRoutes.route('/updateArchiveStatus/:recordingId').get((req, res) => {
   });
 });
 
-// Delete audio recordings for story
+/**
+ * Delete audio recordings for all paragraphs/sentences of a given story
+ * @param {Object} req params: Story ID
+ * @param {Object} body paragraph and sentence ID, audio, and transcription data
+ * @return {Object} Success or error message
+ */
 recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
   VoiceRecording.find({'storyData._id': req.params.id}, (err, recordings) => {
     if (err) res.status(400).json(err);
@@ -240,7 +278,7 @@ recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
     }
 
     let bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
-      bucketName: "voiceRecording",
+      bucketName: 'voiceRecording',
     });
 
     recordings.forEach((recording) => {
@@ -248,7 +286,7 @@ recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
         bucket.delete(new ObjectID(paragraphAudioId), (err) => {
           if (err) {
             // console.log("File does not exist");
-            res.status(404).json("Paragraph audio file does not exist");
+            res.status(404).json('Paragraph audio file does not exist');
           }
         });
       });
@@ -256,27 +294,31 @@ recordingRoutes.route('/deleteStoryRecordingAudio/:id').get((req, res) => {
       recording.sentenceAudioIds.forEach((sentenceAudioId) => {
         bucket.delete(new ObjectID(sentenceAudioId), (err) => {
           if (err) {
-            //console.log("File does not exist");
-            res.status(404).json("Sentence audio file does not exist");
+            // console.log("File does not exist");
+            res.status(404).json('Sentence audio file does not exist');
           }
         });
       });
     });
 
     res
-      .status(200)
-      .json("Successfully deleted all audio recordiings for story");
+        .status(200)
+        .json('Successfully deleted all audio recordiings for story');
   });
 });
 
-// Delete all messages with recipient id
-recordingRoutes.route("/deleteStoryRecording/:id").get(function (req, res) {
-  VoiceRecording.deleteMany({ "storyData._id": req.params.id }, function (
-    err,
-    recordings
+/**
+ * Delete all voice recording objects for a given story
+ * @param {Object} req params: Story ID
+ * @return {Object} Success or error message
+ */
+recordingRoutes.route('/deleteStoryRecording/:id').get(function(req, res) {
+  VoiceRecording.deleteMany({'storyData._id': req.params.id}, function(
+      err,
+      recordings,
   ) {
     if (err) res.json(err);
-    else res.json("Successfully removed all voice recording objects for story");
+    else res.json('Successfully removed all voice recording objects for story');
   });
 });
 

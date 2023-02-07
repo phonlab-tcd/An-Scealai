@@ -7,7 +7,7 @@ const {API500Error} = require('../../utils/APIError');
 // Create a new document with the counts of these errors by type (e.g. GENITIVE, BACHOIR, NISEIMHIU, etc.).
 // To get the total counts of errors for a user, would have to scan the collection by the owner and collate documents,
 // which is delegated to another part of the code base for simplicity/efficiency. (neimhin Mon 16 Jan 2023 17:59:40 GMT)
-module.exports = async function (req, res, next) {
+module.exports = async function(req, res, next) {
   const userId = new mongoose.mongo.ObjectId(req.user._id);
 
   const {ok, err} = await createDoc(userId, req.body.countsByType);

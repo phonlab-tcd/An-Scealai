@@ -8,7 +8,6 @@ import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { Message } from '../../message';
-import { StatsService } from '../../stats.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { firstValueFrom } from 'rxjs';
@@ -27,7 +26,6 @@ export class TeacherClassroomComponent implements OnInit {
               public ts : TranslationService,
               private messageService: MessageService,
               private storyService : StoryService,
-              private statsService : StatsService,
               private dialog: MatDialog) { }
   
   classroom : Classroom;
@@ -88,10 +86,8 @@ export class TeacherClassroomComponent implements OnInit {
 * Delete classroom with classroom service, redirect to landing
 */
   deleteClassroom() {
-    this.classroomService.delete(this.classroom._id).subscribe((_) => {
-      this.statsService.deleteStatsForClassroom(this.classroom._id).subscribe((_) => {
-        this.router.navigateByUrl('/landing');
-      })  
+    this.classroomService.deleteClassroom(this.classroom._id).subscribe((_) => {
+      this.router.navigateByUrl('/landing');
     });
   }
 
@@ -110,6 +106,10 @@ export class TeacherClassroomComponent implements OnInit {
     this.router.navigateByUrl('/stats-dashboard/' + this.classroom._id);
   }
   
+  goToSettings() {
+    this.router.navigateByUrl('/teacher/teacher-settings/' + this.classroom._id);
+  }
+  
   openCodeDialog() {    
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -122,26 +122,6 @@ export class TeacherClassroomComponent implements OnInit {
     });
     
     this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
-  }
-  
-  openUpdateClassroomDialog() {    
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.edit_classroom_title,
-        type: 'updateText',
-        confirmText: this.ts.l.save,
-        cancelText: this.ts.l.cancel
-      },
-      width: '50vh',
-    });
-    
-    this.dialogRef.afterClosed().subscribe( (res) => {
-        this.dialogRef = undefined;
-        if(res) {
-          this.newTitle = res[0];
-          this.editTitle();
-        }
-    });
   }
   
   openDeleteClassroomDialog() {

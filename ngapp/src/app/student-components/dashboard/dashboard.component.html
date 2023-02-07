@@ -226,8 +226,8 @@
               [(ngModel)]="checkBoxes[tag.key]"
               (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
               type="checkbox">
-              {{ ts.l.iso_code == 'en' ? (tag.value[0].nameEN | titlecase) : (tag.value[0].nameGA) | titlecase }}
-              ({{tag.value.length}})
+               {{ ts.l.iso_code == 'en' ? (tag.value[0].nameEN | titlecase) : (tag.value[0].nameGA) | titlecase }} <!-- Error name -->  
+               ({{ tag.value[0].nameEN == 'Broad/Slender' ?  (tag.value.length / 2) : (tag.value.length)}})        <!-- Error count --> 
         </div> 
 
       </div>

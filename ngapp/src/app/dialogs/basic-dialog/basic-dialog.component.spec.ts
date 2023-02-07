@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BasicDialogComponent } from './basic-dialog.component';
+import { MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('BasicDialogComponent', () => {
   let component: BasicDialogComponent;
@@ -8,7 +9,12 @@ describe('BasicDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BasicDialogComponent ]
+      declarations: [ BasicDialogComponent ],
+      imports: [HttpClientTestingModule], 
+      providers: [
+          { provide: MatDialog, useValue: {} },
+          { provide: MAT_DIALOG_DATA, useValue: {} }
+      ]
     })
     .compileComponents();
   });

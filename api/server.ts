@@ -22,10 +22,8 @@ const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
 const engagementRoute = require('./routes/engagement.route');
 const statsRoute = require('./routes/stats.route');
-const albumRoute = require('./routes/album.route');
 const profileRoute = require('./routes/profile.route');
 const messageRoute = require('./routes/messages.route');
-const studentStatsRoute = require('./routes/studentStats.route');
 const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
@@ -89,17 +87,15 @@ app.use('/classroom', classroomRoute);
 app.use('/Chatbot', chatbotRoute);
 app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
-app.use('/album', albumRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
-app.use('/studentStats', studentStatsRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
 app.use('/proxy',async (req,res,next)=>{
   function allowUrl(url) {
-    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie/;
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie|https:\/\/cadhan.com\/api\/gaelspell\/1.0/;
     return !! allowedUrls.exec(url);
   }
   if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');

@@ -1,26 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StatsDashboardComponent } from './stats-dashboard.component';
+import { TeacherSettingsComponent } from './teacher-settings.component';
+import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { RouterTestingModule } from "@angular/router/testing";
 
-describe('StatsDashboardComponent', () => {
-  let component: StatsDashboardComponent;
-  let fixture: ComponentFixture<StatsDashboardComponent>;
+describe('TeacherSettingsComponent', () => {
+  let component: TeacherSettingsComponent;
+  let fixture: ComponentFixture<TeacherSettingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StatsDashboardComponent ],
-      imports: [HttpClientTestingModule, RouterTestingModule], 
+      declarations: [ TeacherSettingsComponent ],
+      imports: [RouterTestingModule, HttpClientTestingModule], 
       providers: [
           { provide: MatDialog, useValue: {} }
       ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StatsDashboardComponent);
+    fixture = TestBed.createComponent(TeacherSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

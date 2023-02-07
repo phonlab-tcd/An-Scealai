@@ -64,7 +64,13 @@ let storyRoutes;
   });
 })();
 
-// Get stories by a given author after a certain date from DB
+
+/**
+ * Get stories for a given user (owner) after a certain date
+ * @param {Object} req params: User ID
+ * @param {Object} req params: Date
+ * @return {Object} List of stories
+ */
 storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res) {
   Story.find({'owner': req.params.owner, 'date': {$gte: req.params.date}}, function(err, stories) {
     if (err) {
@@ -76,7 +82,11 @@ storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res)
   });
 });
 
-// Get story with a given ID from DB
+/**
+ * Get a story by ID
+ * @param {Object} req params: Story ID
+ * @return {Object} Story object
+ */
 storyRoutes.route('/viewStory/:id').get(function(req, res) {
   Story.find({_id: req.params.id}, (err, story) => {
     if (err) {
@@ -88,8 +98,12 @@ storyRoutes.route('/viewStory/:id').get(function(req, res) {
   });
 });
 
-
-// Update story by ID
+/**
+ * Update story information
+ * @param {Object} req params: Story ID
+ * @param {Object} req body: new story data
+ * @return {Object} Success or error message
+ */
 storyRoutes
     .route('/update/:id')
     .post((req, res) => {
@@ -124,20 +138,11 @@ storyRoutes
       });
     });
 
-// Update story author
-storyRoutes.route('/updateAuthor/:oldAuthor').post(function(req, res) {
-  Story.updateMany({'author': req.params.oldAuthor}, {$set: {'author': req.body.newAuthor}}, function(err, stories) {
-    if (err) res.json(err);
-
-    if (stories === null) {
-      console.log('story is null!');
-    } else {
-      res.json(stories);
-    }
-  });
-});
-
-// Delete story by ID
+/**
+ * Delete a story by ID
+ * @param {Object} req params: Story ID
+ * @return {Object} Success or error message
+ */
 storyRoutes.route('/delete/:id').get(function(req, res) {
   Story.findOneAndRemove({_id: req.params.id}, function(err, story) {
     if (err) {
@@ -147,9 +152,13 @@ storyRoutes.route('/delete/:id').get(function(req, res) {
   });
 });
 
-// Delete story by student username
-storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
-  Story.deleteMany({'author': req.params.author}, function(err, story) {
+/**
+ * Delete a story by owner ID
+ * @param {Object} req params: User (owner) ID
+ * @return {Object} Success or error message
+ */
+storyRoutes.route('/deleteAllStories/:id').get(function(req, res) {
+  Story.deleteMany({'owner': req.params.id}, function(err, story) {
     if (err) {
       console.log(err);
       res.json(err);
@@ -157,6 +166,11 @@ storyRoutes.route('/deleteAllStories/:author').get(function(req, res) {
   });
 });
 
+/**
+ * Get feedback information for a particular story
+ * @param {Object} req params: Story ID
+ * @return {Object} Story feedback
+ */
 storyRoutes.route('/feedback/:id').get(function(req, res) {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
@@ -171,6 +185,12 @@ storyRoutes.route('/feedback/:id').get(function(req, res) {
   });
 });
 
+/**
+ * Update feedback information for a particular story
+ * @param {Object} req params: Story ID
+ * @param {Object} req body: Feedback data
+ * @return {Object} Success or error message
+ */
 storyRoutes.route('/addFeedback/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
@@ -188,6 +208,12 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
   });
 });
 
+/**
+ * Save feedback audio to the DB for a given story
+ * @param {Object} req params: Story ID
+ * @param {Object} req file: Audio file
+ * @return {Object} Success or error message
+ */
 storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
@@ -231,6 +257,12 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
   });
 });
 
+/**
+ * Update story audio recording ID
+ * @param {Object} req params: Story ID
+ * @param {Object} req body: active recording ID
+ * @return {Object} Success or error message
+ */
 storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
@@ -252,6 +284,12 @@ storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
   });
 });
 
+/**
+ * Download story in given format
+ * @param {Object} req params: Story ID
+ * @param {Object} req params: Download format
+ * @return {Object} Downloaded story file
+ */
 storyRoutes.route('/downloadStory/:id/:format').get(async (req, res) => {
   try {
     logger.info({
@@ -323,9 +361,12 @@ storyRoutes.route('/downloadStory/:id/:format').get(async (req, res) => {
     return res.json(error);
   }
 });
-/*
- * Synthesise a story given the story id
- */
+
+/**
+* Synthesise a given story by ID
+* @param {Object} req params: Story ID
+* @return {Object} Synthesis data
+*/
 storyRoutes.route('/synthesise/:id').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (story) {
@@ -342,10 +383,11 @@ storyRoutes.route('/synthesise/:id').get((req, res) => {
   });
 });
 
-
-/*
- * Synthesise a story object given in req.body
- */
+/**
+* Synthesise a story object
+* @param {Object} req body: Story data
+* @return {Object} Synthesis data
+*/
 storyRoutes.route('/synthesiseObject/').post((req, res) => {
   if (req.body.story) {
     synthesiseStory(req.body.story).then((synthesis) => {
@@ -360,20 +402,16 @@ storyRoutes.route('/synthesiseObject/').post((req, res) => {
   }
 });
 
+/**
+ * Get the synthesis using story data
+ * @param {Object} story
+ * @return {Object} HTML and audio data
+ */
 function synthesiseStory(story) {
   let dialectCode;
   if (story.dialect === 'connemara') dialectCode = 'ga_CM';
   if (story.dialect === 'donegal') dialectCode = 'ga_GD';
   if (story.dialect === 'kerry') dialectCode = 'ga_MU';
-
-  // create a form with the story text, dialect choice, html, and speed
-  /*
-  console.log(story.text);
-  let test8 = story.text.replace(/<br>/g, "\n");
-  let test9 = test8.replace(/(<([^>]+)>)/gm,'');
-  console.log("\nnew format: ", test8);
-  console.log("\nnew format: ", test9);
-  */
 
   const form = {
     // Input: test9,
@@ -423,7 +461,7 @@ function synthesiseStory(story) {
           }
           paragraphs.push(sentences);
         }
-        resolve({html: paragraphs, audio: urls });
+        resolve({html: paragraphs, audio: urls});
       } else {
         reject();
       }
@@ -431,9 +469,13 @@ function synthesiseStory(story) {
   });
 }
 
+/**
+ * Get An Gramadoir data for a given story  -- DEPRICATED ?
+ * @param {Object} req params: Story ID
+ * @return {Object} Grammar error tags
+ */
 storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
   Story.findById(req.params.id, (err, story) => {
-    console.log('story: ', story);
     if (err) {
       console.log(err);
       return res.send(err);

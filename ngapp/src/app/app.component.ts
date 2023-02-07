@@ -7,11 +7,8 @@ import { NavigationEnd          } from '@angular/router';
 import { NavigationError        } from '@angular/router';
 import { NavigationStart        } from '@angular/router';
 import { Router                 } from '@angular/router';
-
 import { filter                 } from 'rxjs/operators';
 import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
-// import { SlimLoadingBarService  } from 'ng2-slim-loading-bar';
-
 import { Story                  } from 'app/story';
 import { Message                } from 'app/message';
 import { Classroom              } from 'app/classroom';
@@ -42,7 +39,6 @@ export class AppComponent {
   currentLanguage: string = '';
 
   constructor(
-    //private _loadingBar: SlimLoadingBarService, 
     private _router: Router,
     public auth: AuthenticationService,
     private storyService: StoryService,
@@ -51,9 +47,7 @@ export class AppComponent {
     public ts: TranslationService,
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this._router.events.subscribe((event: Event) => {
-      this.navigationInterceptor(event);
-    });
+    this._router.events.subscribe((event: Event) => {});
 
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -131,24 +125,6 @@ export class AppComponent {
   changeToIrish() {
     this.ts.setLanguage("ga");
     this.currentLanguage = "Gaeilge";
-  }
-
-  // Change loading bar status based on current event
-  private navigationInterceptor(event: Event): void {
-    /*
-    if (event instanceof NavigationStart) {
-      this._loadingBar.start();
-    }
-    if (event instanceof NavigationEnd) {
-      this._loadingBar.complete();
-    }
-    if (event instanceof NavigationCancel) {
-      this._loadingBar.stop();
-    }
-    if (event instanceof NavigationError) {
-      this._loadingBar.stop();
-    }
-   */
   }
 
   // Keep track of where the user clicks
