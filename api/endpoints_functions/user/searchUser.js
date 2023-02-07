@@ -7,7 +7,7 @@ const {API404Error, API400Error} = require('../../utils/APIError');
 * See: https://stackoverflow.com/a/61354694
 * @param {Object} req body: search string to find user, display limit, and current page
 * @param {Object} res
-* @return {Object} Object of found users and its count
+* @return {Promise} Object of found users and its count
 */
 async function searchUser(req, res) {
   // default values for req body

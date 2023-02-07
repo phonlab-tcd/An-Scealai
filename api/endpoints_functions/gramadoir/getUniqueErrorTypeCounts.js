@@ -33,7 +33,7 @@ const UniqueStoryErrors = mongoose.model(
  * @param {Object} req params: Story ID
  * @param {Object} res object to return response
  * @param {Object} next
- * @return {Object} Dictionary of error counts and sentences
+ * @return {Promise} Dictionary of error counts and sentences
  */
 async function getUniqueErrorTypeCounts(req, res, next) {
   const storyId = new mongoose.mongo.ObjectId(req.params.storyId);

@@ -5,7 +5,7 @@ const User = require('../../models/user');
 * counts of each user role
 * @param {Object} req
 * @param {Object} res
-* @return {Object} Dictionary of role types and total counts
+* @return {Promise} Dictionary of role types and total counts
 */
 async function getUserCount(req, res) {
   const total = await User.where({}).countDocuments();

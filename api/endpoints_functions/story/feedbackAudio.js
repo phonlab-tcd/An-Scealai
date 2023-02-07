@@ -6,7 +6,7 @@ const Story = require('../../models/story');
  * Get feedback audio from a given story
  * @param {Object} req params: Story ID
  * @param {Object} res
- * @return {Object} Audio stream
+ * @return {Promise} Audio stream
  */
 module.exports = async (req, res) => {
   if (! mongoose.Types.ObjectId.isValid(req.params.id)) {

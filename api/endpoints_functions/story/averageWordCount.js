@@ -10,7 +10,7 @@ const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
  * Get average wordcount of stories given a student ID
  * @param {Object} req The student's id number
  * @param {Object} res The object to store the response
- * @return {Object} Student's average word count
+ * @return {Promise} Student's average word count
  */
 module.exports = async (req, res) => {
   const conditions = {'owner': req.params.studentId};

@@ -9,7 +9,7 @@ const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: O
  * @param {Object} req body: Unique story errors object; user: User information
  * @param {Object} res object to return response
  * @param {Object} next
- * @return {Object} Success or error Message
+ * @return {Promise} Success or error Message
  */
 module.exports = async (req, res, next) => {
   const sentences = req.body.sentences;

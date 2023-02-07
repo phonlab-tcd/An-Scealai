@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
  * Set feedback status of story to 'viewed'
  * @param {Object} req params: Story ID
  * @param {Object} res
- * @return {Object} Success or Error Message
+ * @return {Promise} Success or Error Message
  */
 module.exports = async (req, res) => {
   if (! mongoose.Types.ObjectId.isValid(req.params.id)) {

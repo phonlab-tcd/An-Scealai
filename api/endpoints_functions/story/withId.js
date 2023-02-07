@@ -5,7 +5,7 @@ const Story = require('../../models/story');
  * @param {Object} req user: User information; params: story ID
  * @param {Object} res
  * @param {Object} next
- * @return {Object} Story object
+ * @return {Promise} Story object
  */
 module.exports = async (req, res, next) => {
   function yes() {
