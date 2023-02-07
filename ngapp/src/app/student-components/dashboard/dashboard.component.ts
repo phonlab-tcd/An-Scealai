@@ -151,7 +151,9 @@ export class DashboardComponent implements OnInit {
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
             this.quillHighlighter.hideAll();
             // and then re-show all the latest error tags
-            this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+            if(this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+            }
             
             //save any grammar errors with associated sentences to DB
             if(this.grammarErrors) {
