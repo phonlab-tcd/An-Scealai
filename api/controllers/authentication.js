@@ -1,21 +1,21 @@
 const logger = require('../logger.js');
 
 const mail = require('../mail');
-if(mail.couldNotCreate){
+if (mail.couldNotCreate) {
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
 }
 
 // Used to generate confirmation code to confirm email address
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 
-var passport = require('passport');
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+const passport = require('passport');
+let mongoose = require('mongoose');
+const User = mongoose.model('User');
 
-var sendJSONresponse = function(res, status, content) {
-    res.status(status);
-    res.json(content);
+const sendJSONresponse = function(res, status, content) {
+  res.status(status);
+  res.json(content);
 };
 
 const pendingRegEx = /^Pending$/;
@@ -23,22 +23,27 @@ const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
 const validUsernameRegEx = /^[a-z0-9]+$/i;
 
+/**
+ * Generate a new password for a given user
+ * @param {Object} req query: Username, email, and reset password code
+ * @param {Object} res object to return response
+ * @return {Object} HTML for password reset message
+ */
 module.exports.generateNewPassword = async (req, res) => {
 
-  if( !req.query.username || !req.query.email || !req.query.code ){
-    return res.status(400).json("Please provide username, email and code in url params!");
+  if ( !req.query.username || !req.query.email || !req.query.code ) {
+    return res.status(400).json('Please provide username, email and code in url params!');
   }
 
+  // Get user from DB
+  const user = await User.findOne({username: req.query.username, email: req.query.email})
+      .catch(
+          (err) => {
+            logger.error(err);
+          });
 
-  // Authenticate User
-  const user = await User.findOne({ username: req.query.username, email: req.query.email })
-    .catch(
-      err => {
-        logger.error(err);
-      });
-
-  if( !user ){
-    return res.status(400).json("Username and email not found.");
+  if ( !user ) {
+    return res.status(400).json('Username and email not found.');
   }
 
   if ( !user.status || user.status !== 'Active' ) {
@@ -46,44 +51,55 @@ module.exports.generateNewPassword = async (req, res) => {
   }
 
   if ( !user.resetPassword || !user.resetPassword.code || req.query.code !== user.resetPassword.code) {
-    return res.status(400).json("Codes do not match. Refusing to change password.");
+    return res.status(400).json('Codes do not match. Refusing to change password.');
   }
 
-  const new_password = user.generateNewPassword();
-  user.setPassword(new_password);
+  // generate new random password and save to user
+  const newPassword = user.generateNewPassword();
+  user.setPassword(newPassword);
 
-  user.save().catch(err => { logger.error(err); });
+  user.save().catch((err) => {
+    logger.error(err);
+  });
 
   const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: req.query.email,
     subject: 'New Password -- An Scéalaí',
-    body: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${new_password}`
-  }
+    body: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${newPassword}`,
+  };
 
+  // send email with new random password
   const mailRes = mail.sendEmail(mailObj);
 
-  res.status(200).send(`<h1>Password reset successfully</h1><ul><li>username:${req.query.username}</li><li>password:${new_password}</li></ul>`);
+  res.status(200).send(`<h1>Password reset successfully</h1><ul><li>username:${req.query.username}</li><li>password:${newPassword}</li></ul>`);
+};
 
-}
 
+/**
+ * Reset the password for a given user
+ * @param {Object} req body: Username, baseUrl
+ * @param {Object} res object to return response
+ * @return {Object} Success or error message
+ */
 module.exports.resetPassword = async (req, res) => {
   if ( !req.body.username ) {
     return res.status(400).json({
-      messageKeys: ["Please provide a username in the query parameters."],
+      messageKeys: ['Please provide a username in the query parameters.'],
     });
   }
 
   if ( !req.body.baseurl ) {
-    logger.warning("baseurl not provided. defaulting to dev server: http://localhost:4000/");
+    logger.warning('baseurl not provided. defaulting to dev server: http://localhost:4000/');
     req.body.baseurl = 'http://localhost:4000/';
   }
-  
+
+  // get user from DB by username
   try {
     var user = await User.findOne({username: req.body.username});
   } catch (err) {
     return res.status(400).json({
-      messageKeys: ["Could not find user with username: " + req.body.username],
+      messageKeys: ['Could not find user with username: ' + req.body.username],
     });
   }
 
@@ -93,30 +109,30 @@ module.exports.resetPassword = async (req, res) => {
     });
   }
 
-  if ( 
-    !user.status 
-    || user.status.match(pendingRegEx)
-    || !user.status.match(activeRegEx)
-    || !user.email ) {
+  // check user has certain properties set: an email, active or pending status
+  if (
+    !user.status ||
+    user.status.match(pendingRegEx) ||
+    !user.status.match(activeRegEx) ||
+    !user.email ) {
     return res.status(400).json({
-      messageKeys: ["user_not_verified_cannot_reset_password"],
+      messageKeys: ['user_not_verified_cannot_reset_password'],
     });
   }
-  
-  const resetPasswordLink = 
-    user.generateResetPasswordLink(req.body.baseurl);
 
-  // Update user's email and verification code on the db
+  // Generate a reset password link for the user
+  const resetPasswordLink = user.generateResetPasswordLink(req.body.baseurl);
+
   await user.save()
-    .catch(err => {
-      logger.error(err);
-    });
+      .catch((err) => {
+        logger.error(err);
+      });
 
   const mailObj = {
     from: 'scealai.info@gmail.com',
     recipients: [user.email],
     subject: 'An Scéalaí account verification',
-    message: 
+    message:
     `Dear ${user.username},\n\
       Please use this link to generate a new password for your account:\n\n\
       ${resetPasswordLink}\n\n\
@@ -127,12 +143,13 @@ module.exports.resetPassword = async (req, res) => {
   };
 
   try {
-    // make email GDPR compliant
+    // make email private for display by replacing characters with ***
     let hiddenEmail = user.email;
     for (let i = 0; i < hiddenEmail.indexOf('@') -3; i++) {
       hiddenEmail = hiddenEmail.replace(hiddenEmail.charAt(i), '*');
     }
 
+    // send the email
     const sendEmailRes = await mail.sendEmail(mailObj);
     if (!sendEmailRes) {
       return res.status(500).json({
@@ -159,41 +176,47 @@ module.exports.resetPassword = async (req, res) => {
   }
 };
 
-
+/**
+ * Send verification email for new user to set up their account
+ * @param {Object} username
+ * @param {Object} password
+ * @param {Object} email
+ * @param {Object} baseurl
+ * @param {Object} language
+ * @return {Promise} Success or error message after sending email
+ */
 async function sendVerificationEmail(username, password, email, baseurl, language) {
   return new Promise(async (resolve, reject) => {
-
     logger.info(`beginning sendVerificationEmail(${username}, password, ${email}, ${baseurl})`);
 
-    // Authenticate User
-    const user = await User.findOne({ username: username })
-      .catch(
-        err => {
-          logger.error(err);
-          reject(err);
-        });
+    // Get User from DB by username
+    const user = await User.findOne({username: username})
+        .catch(
+            (err) => {
+              logger.error(err);
+              reject(err);
+            });
 
-    // Require valid password
-    if( !user.validPassword(password) ) {
+    // Check if user has a valid password
+    if ( !user.validPassword(password) ) {
       logger.error('Invalid password');
       reject({
-        messageToUser: 'INVALID PASSWORD'
+        messageToUser: 'INVALID PASSWORD',
       });
     }
 
     user.email = email;
 
-    const activationLink = user
-      .generateActivationLink(baseurl, language);
-
     // Update user's email and verification code on the db
-    await user.save()
-      .catch(err => {
-        reject(err);
-      });
+    const activationLink = user.generateActivationLink(baseurl, language);
 
-    const emailMessage = (language === 'ga') ? 
-      // as gaeilge 
+    await user.save()
+        .catch((err) => {
+          reject(err);
+        });
+
+    const emailMessage = (language === 'ga') ?
+      // as gaeilge
       `A ${user.username}, a chara,\n\
       Úsáid an nasc seo a leanas chun do sheoladh rphoist a dheimhniú, le do thoil:\n\n\
       ${activationLink}\n\n\
@@ -201,8 +224,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
       \n\
       Le gach dea-ghuí,\n\
       \n\
-      Foireann An Scéalaí`
-      :
+      Foireann An Scéalaí` :
       // in english
       `Dear ${user.username},\n\
       Please use this link to verify your email address for An Scéalaí:\n\n\
@@ -221,6 +243,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
     };
 
     try {
+      // send verification email
       const sendEmailRes = await mail.sendEmail(mailObj);
       if (!sendEmailRes) {
         return reject({
@@ -231,7 +254,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
 
       if (sendEmailRes &&
           sendEmailRes.rejected &&
-          sendEmailRes.rejected.length && 
+          sendEmailRes.rejected.length &&
           sendEmailRes.rejected.length !== 0) {
         return reject({
           messageToUser: `Failed to send verification email to ${sendEmailRes.rejected}.`,
@@ -257,27 +280,33 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
   }); // end Promise constructor
 } // end sendVerificationEmail
 
-// Set a user's status to Active when they click on the activation link
+
+/**
+ * Set a user's status to Active when they click on the activation link
+ * @param {Object} req query: username, email, verification code
+ * @param {Object} res
+ * @return {Object} Success or error message
+ */
 module.exports.verify = async (req, res) => {
-  if (!req.query.username){
-    return res.status(400).json("username required to verify account email address");
+  if (!req.query.username) {
+    return res.status(400).json('username required to verify account email address');
   }
-  if (!req.query.email){
-    return res.status(400).json("email required to verify account email address");
+  if (!req.query.email) {
+    return res.status(400).json('email required to verify account email address');
   }
-  if (!req.query.verificationCode){
-    return res.status(400).json("verificationCode required to verify account email address");
+  if (!req.query.verificationCode) {
+    return res.status(400).json('verificationCode required to verify account email address');
   }
 
   const user = await User.findOne({username: req.query.username, email: req.query.email})
-    .catch(err => {
-      logger.error({
-        error: err,
-        endpoint: '/user/verify'
+      .catch((err) => {
+        logger.error({
+          error: err,
+          endpoint: '/user/verify',
+        });
       });
-    });
-  
-  if(!user){
+
+  if (!user) {
     return res.status(404).json(`User with username: ${req.query.username} and email: ${req.query.email} does not exist.`);
   }
 
@@ -291,10 +320,15 @@ module.exports.verify = async (req, res) => {
         .sendFile(path.join(__dirname, '../views/account_verification.html'));
   }
 
-
   res.status(200).send('<h1>Sorry</h1><p>That didn\'t work.</p>');
 };
 
+/**
+ * Verify older accounts in the DB that did not have email verification upon sign up
+ * @param {Object} req query: username, email, password
+ * @param {Object} res
+ * @return {Object} Success or error message
+ */
 module.exports.verifyOldAccount = async (req, res) => {
   try {
     const resObj = {
@@ -315,6 +349,7 @@ module.exports.verifyOldAccount = async (req, res) => {
 
     logger.info('Beginning verification of ' + req.body.username);
 
+    // get user from DB by username
     const user = await User.findOne({username: req.body.username})
         .catch((error) => {
           return res.status(404).json({
@@ -330,6 +365,7 @@ module.exports.verifyOldAccount = async (req, res) => {
     }
 
     if (user.status === 'Active') {
+      // if user has already been verified
       if (user.email) {
         return res
             .status(400)
@@ -345,6 +381,7 @@ module.exports.verifyOldAccount = async (req, res) => {
           had no assoctiated email address. \
           Resetting to Pending`);
       try {
+        // set user status to Pending and send error message
         user.status = 'Pending';
         await user.save();
         return res
@@ -368,13 +405,14 @@ module.exports.verifyOldAccount = async (req, res) => {
     console.log('verifyOldAccount language', req.body.language);
 
     try {
+      // send the verification email if no errors above have been sent
       const mailRes =
         await sendVerificationEmail(
-          req.body.username,
-          req.body.password,
-          req.body.email,
-          req.body.baseurl,
-          req.body.language,
+            req.body.username,
+            req.body.password,
+            req.body.email,
+            req.body.baseurl,
+            req.body.language,
         );
 
       console.log('mailRes:', mailRes);
@@ -411,6 +449,13 @@ module.exports.verifyOldAccount = async (req, res) => {
   }
 };
 
+
+/**
+ * Register new users
+ * @param {Object} req body: username, email, password
+ * @param {Object} res
+ * @return {Object} Success or error message
+ */
 module.exports.register = async (req, res) => {
   logger.info(`Attempting to register ${req.body.username}`);
   const resObj = {
@@ -435,14 +480,11 @@ module.exports.register = async (req, res) => {
     return res.status(400).json(resObj);
   }
 
+  // set new user properties and save user to the DB
   const user = new User();
-
   user.username = req.body.username;
-
   user.email = req.body.email;
-
   user.setPassword(req.body.password);
-
   user.role = req.body.role;
 
   try {
@@ -461,6 +503,7 @@ module.exports.register = async (req, res) => {
     }
   }
 
+  // send verification email so new users can verify their accounts
   try {
     await sendVerificationEmail(
         user.username,
@@ -481,7 +524,12 @@ module.exports.register = async (req, res) => {
   return res.status(200).json(resObj);
 };
 
-
+/**
+ * Login users
+ * @param {Object} req user: user data
+ * @param {Object} res
+ * @return {Object} Success or error message
+ */
 module.exports.login = function(req, res) {
   // assume passport.authenticate('local') has succeeded
   const user = req.user;
@@ -489,34 +537,36 @@ module.exports.login = function(req, res) {
     userStatus: null,
     messageKeys: [],
     errors: [],
-  }
+  };
 
-  if(!user){
+  if (!user) {
     resObj.messageKeys.push(info.message);
     return res.status(400).json(resObj);
   }
 
-  if(!user.validStatus()){
+  // send error if user has not been validated
+  if (!user.validStatus()) {
     logger.error('User,' + user.username + 'has an invalid no status property');
     resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
     user.status = 'Pending';
-    user.save().catch(err => { 
+    user.save().catch((err) => {
       logger.error(JSON.parse(JSON.stringify(err)));
-      resObj.errors.push(JSON.stringify(err));});
+      resObj.errors.push(JSON.stringify(err));
+    });
   }
 
-  if(user.status.match(pendingRegEx)){
-    resObj.messageKeys.push('email_not_verified')
+  // send error if user has pending status and is not yet valid, otherwise login active user
+  if (user.status.match(pendingRegEx)) {
+    resObj.messageKeys.push('email_not_verified');
     resObj.userStatus = user.status;
     return res.status(400).json(resObj);
-  }
-  else if (user.status.match(activeRegEx)) {
+  } else if (user.status.match(activeRegEx)) {
     logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
     resObj.token = user.generateJwt();
     return res
-      .status(200)
-      .json(resObj);
-  } 
+        .status(200)
+        .json(resObj);
+  }
 
   // ELSE
   // TODO throw new Error()

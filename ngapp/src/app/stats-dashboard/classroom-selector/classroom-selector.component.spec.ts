@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ClassroomSelectorComponent } from './classroom-selector.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ClassroomSelectorComponent', () => {
   let component: ClassroomSelectorComponent;
@@ -8,7 +9,11 @@ describe('ClassroomSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClassroomSelectorComponent ]
+      declarations: [ ClassroomSelectorComponent ],
+      imports: [HttpClientTestingModule], 
+      providers: [
+          { provide: MatDialogRef, useValue: {} }
+      ]
     })
     .compileComponents();
   });

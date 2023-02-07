@@ -4,6 +4,13 @@ import { UniqueStoryErrors, SentenceError } from './getUniqueErrorTypeCounts';
 
 const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: ObjectId, storyId: ObjectId, sentences: Array, timestamp:Date}))
 
+/**
+ * Add unique story error counts and associated sentences to the DB
+ * @param {Object} req body: Unique story errors object; user: User information
+ * @param {Object} res object to return response
+ * @param {Object} next
+ * @return {Promise} Success or error Message
+ */
 module.exports = async (req, res, next) => {
   const sentences = req.body.sentences;
   
@@ -51,6 +58,5 @@ module.exports = async (req, res, next) => {
       )
     }
   }
-
   res.json();
 }

@@ -2,10 +2,13 @@ const User = require('../../models/user');
 const {API404Error, API400Error} = require('../../utils/APIError');
 
 /**
- * Search for users in the DB whose usernames match a search string.
- * Uses pagination to prevent too many DB operations at once.
- * See: https://stackoverflow.com/a/61354694
- */
+* Search for users in the DB whose usernames match a search string.
+* Uses pagination to prevent too many DB operations at once.
+* See: https://stackoverflow.com/a/61354694
+* @param {Object} req body: search string to find user, display limit, and current page
+* @param {Object} res
+* @return {Promise} Object of found users and its count
+*/
 async function searchUser(req, res) {
   // default values for req body
   const reqBody = {

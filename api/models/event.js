@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-let Event = new mongoose.Schema({
+const Event = new mongoose.Schema({
   date: Date,
   type: {
     type: String,

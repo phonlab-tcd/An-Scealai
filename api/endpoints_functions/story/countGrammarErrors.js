@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
  *
  * @param {Object} req story id
  * @param {Object} res
- * @return {Object} error dictionary
+ * @return {Promise} error dictionary
  */
 async function getGrammarErrors(req, res) {
   if (! mongoose.Types.ObjectId.isValid(req.params.id)) {

@@ -1,8 +1,12 @@
 const express = require('express');
 const classroomRoutes = express.Router();
-
 const Classroom = require('../models/classroom');
 
+/**
+ * Create a new classroom
+ * @param {Object} req body: Classroom object
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/create').post((req, res) => {
   const classroom = new Classroom(req.body);
   classroom.save().then((classroom) => {
@@ -12,6 +16,24 @@ classroomRoutes.route('/create').post((req, res) => {
   });
 });
 
+/**
+ * Get all classrooms
+ * @return {Array} List of all classrooms
+ */
+classroomRoutes.route('/').get((req, res) => {
+  Classroom.find({}, (err, classrooms) => {
+    if (classrooms) {
+      res.json(classrooms);
+    } else {
+      req.json({message: 'No classrooms were found', status: 404});
+    }
+  });
+});
+
+/**
+ * Get all the codes for all the classrooms
+ * @return {Array} A list of all the codes
+ */
 classroomRoutes.route('/getAllCodes').get((req, res) => {
   Classroom.find({}, (err, classrooms) => {
     if (err) {
@@ -28,6 +50,11 @@ classroomRoutes.route('/getAllCodes').get((req, res) => {
   });
 });
 
+/**
+ * Get a classroom by its ID
+ * @param {Object} req params: id
+ * @return {Object} Classroom object with corresponding ID
+ */
 classroomRoutes.route('/:id').get((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
@@ -38,6 +65,11 @@ classroomRoutes.route('/:id').get((req, res) => {
   });
 });
 
+/**
+ * Get all classrooms for a given teacher
+ * @param {Object} req params: teacher ID
+ * @return {Array} List of all the teacher's classrooms
+ */
 classroomRoutes.route('/forTeacher/:id').get((req, res) => {
   Classroom.find({'teacherId': req.params.id}, (err, classrooms) => {
     if (err) {
@@ -48,6 +80,11 @@ classroomRoutes.route('/forTeacher/:id').get((req, res) => {
   });
 });
 
+/**
+ * Update a classroom title
+ * @param {Object} req params: Classroom ID
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/updateTitle/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
@@ -64,6 +101,11 @@ classroomRoutes.route('/updateTitle/:id').post((req, res) => {
   });
 });
 
+/**
+ * Delete a classroom
+ * @param {Object} req params: Classroom ID
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/delete/:id').get((req, res) => {
   Classroom.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
@@ -74,6 +116,11 @@ classroomRoutes.route('/delete/:id').get((req, res) => {
   });
 });
 
+/**
+ * Delete all the classrooms for a given teacher
+ * @param {Object} req params: Teacher ID
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/deleteAllClassrooms/:teacherId').get((req, res) => {
   Classroom.deleteMany({'teacherId': req.params.teacherId}, (err) => {
     if (err) {
@@ -84,6 +131,11 @@ classroomRoutes.route('/deleteAllClassrooms/:teacherId').get((req, res) => {
   });
 });
 
+/**
+ * Find a classroom corresponding to a paritcular code
+ * @param {Object} req params: The classroom code
+ * @return {Object} Classroom object
+ */
 classroomRoutes.route('/getClassroomForCode/:code').get((req, res) => {
   Classroom.findOne({'code': req.params.code}, (err, classroom) => {
     if (err) {
@@ -97,6 +149,11 @@ classroomRoutes.route('/getClassroomForCode/:code').get((req, res) => {
   });
 });
 
+/**
+ * Add a student to a classroom
+ * @param {Object} req params: The student's id number
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/addStudent/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
@@ -114,6 +171,11 @@ classroomRoutes.route('/addStudent/:id').post((req, res) => {
   });
 });
 
+/**
+ * Remove a student from a classroom
+ * @param {Object} req params: The student's id number
+ * @return {Object} Success or error message
+ */
 classroomRoutes.route('/removeStudent/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
@@ -134,6 +196,11 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
   });
 });
 
+/**
+ * Get the classroom for the given student
+ * @param {Object} req params: The student's id number
+ * @return {Object} Classroom object
+ */
 classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
   Classroom.findOne({studentIds: {$all: [req.params.studentId]}}, (err, classroom) => {
     if (classroom) {
@@ -145,40 +212,12 @@ classroomRoutes.route('/getClassroomForStudent/:studentId').get((req, res) => {
   });
 });
 
-classroomRoutes.route('/').get((req, res) => {
-  Classroom.find({}, (err, classrooms) => {
-    if (classrooms) {
-      res.json(classrooms);
-    } else {
-      req.json({message: 'No classrooms were found', status: 404});
-    }
-  });
-});
-
-classroomRoutes.route('/setGrammarRules/:id').post((req, res) => {
-  Classroom.findById(req.params.id, (err, classroom) => {
-    if (err) {
-      res.status(400).json(err);
-    }
-    if (classroom) {
-      classroom.grammarRules = req.body.grammarRules;
-      classroom.save().then((classroom) => {
-        res.status(200).json('Updated grammar rules successfully');
-      }).catch((err) => {
-        res.status(404).send(err);
-      });
-    }
-  });
-});
-
-classroomRoutes.route('/getGrammarRules/:id').get( (req, res) => {
-  Classroom.findById(req.params.id, (err, classroom) => {
-    if (err) res.json(err);
-    if (classroom) res.json(classroom.grammarRules);
-  });
-});
-
-classroomRoutes.route('/updateClassroomCheckers/:id').post((req, res) => {
+/**
+ * Set the list of grammar checkers for a given classroom
+ * @param {Object} req params: Classroom ID
+ * @return {Object} Success or error message
+ */
+classroomRoutes.route('/setClassroomCheckers/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
       res.status(400).json(err);
@@ -194,6 +233,11 @@ classroomRoutes.route('/updateClassroomCheckers/:id').post((req, res) => {
   });
 });
 
+/**
+ * Get the list of grammar checkers for a given classroom
+ * @param {Object} req params: Classroom ID
+ * @return {Array} List of grammar checkers
+ */
 classroomRoutes.route('/getClassroomCheckers/:id').get( (req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) res.json(err);
