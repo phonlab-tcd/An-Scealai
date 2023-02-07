@@ -95,7 +95,7 @@ app.use('/nlp', nlpRoute);
 
 app.use('/proxy',async (req,res,next)=>{
   function allowUrl(url) {
-    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie/;
+    const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie|https:\/\/cadhan.com\/api\/gaelspell\/1.0/;
     return !! allowedUrls.exec(url);
   }
   if(!allowUrl(req.body.url)) return res.status(400).json('illegal url');
