@@ -19,34 +19,58 @@
             </mat-card-header>
             <mat-card-content>
                 <mat-card>
-                    <mat-card-content>
-                        <b>Total stories</b>: {{storyStats.totalStories}}
+                    <mat-card-content class="cardText">
+                        <b>Total words:</b> {{storyStats.totalWords}}
                     </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-content>
-                        <b>Total words</b>: {{storyStats.totalWords}}
+                    <mat-card-content class="cardText">
+                        <b>Total stories:</b> {{storyStats.totalStories}}
                     </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-content>
-                        <b>Average words per story</b>: {{storyStats.avgWordCount}}
+                    <mat-card-content class="cardText">
+                        <b>Avg words per story:</b> {{storyStats.avgWordCount}}
                     </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-content>
-                        <b>Total recordings</b>: {{storyStats.totalRecordings}}
+                    <mat-card-content class="cardText">
+                        <b>Total recordings:</b> {{storyStats.totalRecordings}}
                     </mat-card-content>
                 </mat-card>
             </mat-card-content>
         </mat-card>
-        <!-- Grammar Pie Chart -->
-        <mat-card>
+        <!-- Teacher Stats -->
+        <mat-card *ngIf="dataLoaded">
             <mat-card-header class="stats-card-header">
-                <mat-card-title>Title</mat-card-title>
+                <mat-card-title>Teacher Stats</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                Content
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total classrooms:</b> {{storyStats.totalWords}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total feedback given:</b> {{storyStats.totalStories}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Textual feedback:</b> {{storyStats.avgWordCount}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Audio feedback:</b> {{storyStats.totalRecordings}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Avg feedback word count:</b> {{storyStats.totalRecordings}}
+                    </mat-card-content>
+                </mat-card>
             </mat-card-content>
         </mat-card>
         <!-- Dictionary Lookups -->
