@@ -12,13 +12,32 @@
                 <canvas id="user-counts"> </canvas>
             </mat-card-content>
         </mat-card>
-        <!-- Word Count Graph -->
-        <mat-card>
+        <!-- Story Stats -->
+        <mat-card *ngIf="dataLoaded">
             <mat-card-header class="stats-card-header">
-                <mat-card-title>Title</mat-card-title>
+                <mat-card-title>Story Stats</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                Content
+                <mat-card>
+                    <mat-card-content>
+                        <b>Total stories</b>: {{storyStats.totalStories}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content>
+                        <b>Total words</b>: {{storyStats.totalWords}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content>
+                        <b>Average words per story</b>: {{storyStats.avgWordCount}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content>
+                        <b>Total recordings</b>: {{storyStats.totalRecordings}}
+                    </mat-card-content>
+                </mat-card>
             </mat-card-content>
         </mat-card>
         <!-- Grammar Pie Chart -->

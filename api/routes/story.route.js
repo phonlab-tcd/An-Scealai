@@ -32,6 +32,8 @@ let storyRoutes;
     require('../endpoints_functions/story/feedbackAudio');
   const countGrammarErrors =
     require('../endpoints_functions/story/countGrammarErrors');
+  const getStoryStats =
+    require('../endpoints_functions/story/getStoryStats');
 
   // POST
   const create =
@@ -53,6 +55,7 @@ let storyRoutes;
       '/:author': author,
       '/feedbackAudio/:id': feedbackAudio,
       '/countGrammarErrors/:id': countGrammarErrors,
+      '/getStoryStats/allDB': getStoryStats,
     },
     post: {
       '/create': create,

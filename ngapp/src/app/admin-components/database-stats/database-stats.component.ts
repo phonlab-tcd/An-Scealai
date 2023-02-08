@@ -1,7 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { firstValueFrom, Subject, Subscription } from "rxjs";
 import { UserService } from "../../user.service";
+import { StoryService } from "../../story.service";
 import { Chart } from 'chart.js';
+import { Story } from "app/story";
+
+export interface StoryStats {
+  totalStories: number,
+  totalWords: number,
+  avgWordCount: number,
+  totalRecordings: number,
+}
 
 @Component({
   selector: "app-database-stats",
@@ -9,13 +18,17 @@ import { Chart } from 'chart.js';
   styleUrls: ["./database-stats.component.scss"],
 })
 export class DatabaseStatsComponent implements OnInit {
-  userCount: number = 0;
-  userChart;
+  userChart:any;
+  storyStats: StoryStats
+  dataLoaded: boolean = false;
 
-  constructor(private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.getUserCount();
+  constructor(private userService: UserService, private storyService: StoryService) {}
+
+  async ngOnInit() {
+    await this.getUserCount();
+    await this.getStoryStats();
+    this.dataLoaded = true;
   }
 
   async getUserCount() {
@@ -63,5 +76,10 @@ export class DatabaseStatsComponent implements OnInit {
         responsive: true,
       },
     });
+  }
+
+  async getStoryStats() {
+    this.storyStats = await firstValueFrom<StoryStats>(this.storyService.getStoryStats());
+    console.log(this.storyStats);
   }
 }

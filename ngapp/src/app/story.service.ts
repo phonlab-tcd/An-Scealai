@@ -140,4 +140,8 @@ export class StoryService {
   countGrammarErrors(studentId:string) : Observable<any> {
     return this.http.get(this.baseUrl + "countGrammarErrors/" + studentId);
   }
+
+  getStoryStats() : Observable<any> {
+    return this.http.get(this.baseUrl + "getStoryStats/allDB");
+  }
 }
