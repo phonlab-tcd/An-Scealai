@@ -6,7 +6,7 @@
         <!-- User numbers -->
         <mat-card>
             <mat-card-header class="stats-card-header">
-                <mat-card-title>Number of Users ({{userCounts.total}})</mat-card-title>
+                <mat-card-title *ngIf="dataLoaded">Number of Users ({{userCounts.total}})</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <canvas id="user-counts"> </canvas>

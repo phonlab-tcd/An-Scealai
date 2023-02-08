@@ -5,6 +5,8 @@ import { StoryService } from "../../story.service";
 import { ClassroomService } from "../../classroom.service";
 import { ProfileService } from "../../profile.service";
 import { Chart } from 'chart.js';
+import config from 'abairconfig';
+import { HttpClient } from '@angular/common/http';
 
 export interface StoryStats {
   totalStories: number,
@@ -37,11 +39,14 @@ export class DatabaseStatsComponent implements OnInit {
   dataLoaded: boolean = false;
 
   constructor(private userService: UserService, private storyService: StoryService,
-              private classroomService: ClassroomService, private profileService: ProfileService) {}
+              private classroomService: ClassroomService, private profileService: ProfileService,
+              private http: HttpClient) {}
 
   async ngOnInit() {
     await this.getUserCount();
     await this.getStoryStats();
+    await this.getGrammarStats();
+
     this.totalClassrooms = await firstValueFrom(this.classroomService.getTotalClassrooms());
     let numProfiles = await firstValueFrom(this.profileService.getNumOfProfiles());
     this.profileFilledPercentage = numProfiles / this.userCounts.total;
@@ -50,7 +55,6 @@ export class DatabaseStatsComponent implements OnInit {
     let teachersWithClassrooms = await firstValueFrom(this.userService.countTeachersWithClassrooms());
     this.teachersWithClassroomsPercentage = teachersWithClassrooms / this.userCounts.totalTeachers;
     let languageCounts = await firstValueFrom(this.userService.getLanguageCount());
-    console.log(languageCounts);
     this.englishPercentage = languageCounts.englishCount / this.userCounts.total;
     this.irishPercentage = languageCounts.irishCount / this.userCounts.total;
     this.dataLoaded = true;
@@ -107,5 +111,10 @@ export class DatabaseStatsComponent implements OnInit {
   async getStoryStats() {
     this.storyStats = await firstValueFrom<StoryStats>(this.storyService.getStoryStats());
     console.log(this.storyStats);
+  }
+
+  async getGrammarStats() {
+    let test = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts`));
+    console.log(test);
   }
 }
