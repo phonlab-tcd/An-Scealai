@@ -3,6 +3,7 @@ import { firstValueFrom, Subject, Subscription } from "rxjs";
 import { UserService } from "../../user.service";
 import { StoryService } from "../../story.service";
 import { ClassroomService } from "../../classroom.service";
+import { ProfileService } from "../../profile.service";
 import { Chart } from 'chart.js';
 
 export interface StoryStats {
@@ -25,25 +26,39 @@ export interface StoryStats {
 })
 export class DatabaseStatsComponent implements OnInit {
   userChart:any;
+  userCounts:any;
   storyStats: StoryStats
   totalClassrooms: number = 0;
+  profileFilledPercentage: number = 0;
+  studentsWithStoriesPercentage: number = 0;
+  teachersWithClassroomsPercentage: number = 0;
+  englishPercentage: number = 0;
+  irishPercentage: number = 0;
   dataLoaded: boolean = false;
 
-
   constructor(private userService: UserService, private storyService: StoryService,
-              private classroomService: ClassroomService) {}
+              private classroomService: ClassroomService, private profileService: ProfileService) {}
 
   async ngOnInit() {
     await this.getUserCount();
     await this.getStoryStats();
     this.totalClassrooms = await firstValueFrom(this.classroomService.getTotalClassrooms());
-    console.log(this.totalClassrooms)
+    let numProfiles = await firstValueFrom(this.profileService.getNumOfProfiles());
+    this.profileFilledPercentage = numProfiles / this.userCounts.total;
+    let studentsWithStories = await firstValueFrom(this.userService.countUsersWithStories());
+    this.studentsWithStoriesPercentage = studentsWithStories / this.userCounts.totalStudents;
+    let teachersWithClassrooms = await firstValueFrom(this.userService.countTeachersWithClassrooms());
+    this.teachersWithClassroomsPercentage = teachersWithClassrooms / this.userCounts.totalTeachers;
+    let languageCounts = await firstValueFrom(this.userService.getLanguageCount());
+    console.log(languageCounts);
+    this.englishPercentage = languageCounts.englishCount / this.userCounts.total;
+    this.irishPercentage = languageCounts.irishCount / this.userCounts.total;
     this.dataLoaded = true;
   }
 
   async getUserCount() {
-    let userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
-    console.log(userCounts)
+    this.userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
+    console.log(this.userCounts)
 
     let canvasElem = document.getElementById(
       "user-counts"
@@ -56,18 +71,18 @@ export class DatabaseStatsComponent implements OnInit {
       datasets: [          // one dataset for each user status: Active, Pending, Other
         {
           label: "Active",
-          data: [userCounts.activeStudents, userCounts.activeTeachers],
+          data: [this.userCounts.activeStudents, this.userCounts.activeTeachers],
           backgroundColor: "green",
         },
         {
           label: "Pending",
-          data: [userCounts.pendingStudents, userCounts.pendingTeachers],
+          data: [this.userCounts.pendingStudents, this.userCounts.pendingTeachers],
           backgroundColor: "yellow",
         },
         {
-          label: "Other",
-          data: [userCounts.totalStudents - (userCounts.activeStudents + userCounts.pendingStudents),
-                 userCounts.totalTeachers - (userCounts.activeTeachers + userCounts.pendingTeachers)],
+          label: "Not specified",
+          data: [this.userCounts.totalStudents - (this.userCounts.activeStudents + this.userCounts.pendingStudents),
+                 this.userCounts.totalTeachers - (this.userCounts.activeTeachers + this.userCounts.pendingTeachers)],
           backgroundColor: "red",
         },
       ],

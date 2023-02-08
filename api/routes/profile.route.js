@@ -18,6 +18,16 @@ profileRoutes.route('/create').post((req, res) => {
 });
 
 /**
+ * Get total number of profiles
+ * @param {Object} req
+ * @return {Object} Total number of profiles
+ */
+profileRoutes.route('/getCount').get(async (req, res) => {
+  const profileCount = await Profile.find().countDocuments();
+  res.status(200).json(profileCount);
+});
+
+/**
  * Get a profile by ID
  * @param {Object} req params: Profile ID
  * @return {Object} Profile object

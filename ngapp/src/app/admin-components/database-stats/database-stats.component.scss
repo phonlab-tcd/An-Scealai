@@ -31,10 +31,11 @@ mat-card {
   display: flex;
   flex-direction: column;
   border: 1px solid grey;
-  min-width: 300px;
+  min-width: 500px;
 }
 
 .cardText {
   display:flex;
   justify-content: space-between;
+  gap: 1rem;
 }
