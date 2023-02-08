@@ -245,4 +245,14 @@ classroomRoutes.route('/getClassroomCheckers/:id').get( (req, res) => {
   });
 });
 
+/**
+ * Get total number of classrooms
+ * @param {Object} req
+ * @return {Number} Number of total classrooms
+ */
+classroomRoutes.route('/getTotalClassrooms/allDB').get( async (req, res) => {
+  const totalClassrooms = await Classroom.find().countDocuments();
+  return res.status(200).json(totalClassrooms);
+});
+
 module.exports = classroomRoutes;

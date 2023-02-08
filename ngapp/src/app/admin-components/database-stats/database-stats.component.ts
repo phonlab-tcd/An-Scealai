@@ -2,14 +2,20 @@ import { Component, OnInit } from "@angular/core";
 import { firstValueFrom, Subject, Subscription } from "rxjs";
 import { UserService } from "../../user.service";
 import { StoryService } from "../../story.service";
+import { ClassroomService } from "../../classroom.service";
 import { Chart } from 'chart.js';
-import { Story } from "app/story";
 
 export interface StoryStats {
   totalStories: number,
   totalWords: number,
   avgWordCount: number,
   totalRecordings: number,
+  totalFeedback: number,
+  onlyTextFeedback: number,
+  onlyAudioFeedback: number,
+  bothAudioAndText: number,
+  totalFeedbackWords: number,
+  avgFeedbackWordCount: number,
 }
 
 @Component({
@@ -20,14 +26,18 @@ export interface StoryStats {
 export class DatabaseStatsComponent implements OnInit {
   userChart:any;
   storyStats: StoryStats
+  totalClassrooms: number = 0;
   dataLoaded: boolean = false;
 
 
-  constructor(private userService: UserService, private storyService: StoryService) {}
+  constructor(private userService: UserService, private storyService: StoryService,
+              private classroomService: ClassroomService) {}
 
   async ngOnInit() {
     await this.getUserCount();
     await this.getStoryStats();
+    this.totalClassrooms = await firstValueFrom(this.classroomService.getTotalClassrooms());
+    console.log(this.totalClassrooms)
     this.dataLoaded = true;
   }
 
@@ -74,6 +84,7 @@ export class DatabaseStatsComponent implements OnInit {
           },
         },
         responsive: true,
+        // maintainAspectRatio: false
       },
     });
   }
