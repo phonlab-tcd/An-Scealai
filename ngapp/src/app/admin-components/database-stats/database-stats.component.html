@@ -1,0 +1,146 @@
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h3 class="dashboard-title">Database Stats</h3>
+    </div>
+    <div class="cards-container">
+        <!-- User numbers -->
+        <mat-card>
+            <mat-card-header class="stats-card-header">
+                <mat-card-title *ngIf="dataLoaded">Number of Users ({{userCounts.total}})</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <canvas id="user-counts"> </canvas>
+            </mat-card-content>
+        </mat-card>
+        <!-- Story Stats -->
+        <mat-card *ngIf="dataLoaded">
+            <mat-card-header class="stats-card-header">
+                <mat-card-title>Story Stats</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total words:</b> {{storyStats.totalWords}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total stories:</b> {{storyStats.totalStories}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Avg words per story:</b> {{storyStats.avgWordCount}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total recordings:</b> {{storyStats.totalRecordings}}
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+        <!-- User Stats -->
+        <mat-card *ngIf="dataLoaded">
+            <mat-card-header class="stats-card-header">
+                <mat-card-title>User Stats</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Profiles filled out:</b> {{profileFilledPercentage | percent:'2.2'}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Students with at least 1 story:</b> {{ studentsWithStoriesPercentage | percent:'2.2' }}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Teaechers with at least 1 classroom:</b> {{ teachersWithClassroomsPercentage | percent:'2.2' }}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Language Settings:</b> <div><b>GA:</b> {{irishPercentage | percent:'2.2'}}</div> <div><b>EN:</b> {{englishPercentage | percent:'2.2'}}</div>
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+        <!-- Teacher Stats -->
+        <mat-card *ngIf="dataLoaded">
+            <mat-card-header class="stats-card-header">
+                <mat-card-title>Teacher Stats</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total classrooms:</b> {{totalClassrooms}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total stories with feedback:</b> {{storyStats.totalFeedback}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Stories with only textual feedback:</b> {{storyStats.onlyTextFeedback}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Stories with only audio feedback:</b> {{storyStats.onlyAudioFeedback}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Stories with both text/audio feedback:</b> {{storyStats.bothAudioAndText}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Total words textual feedback:</b> {{storyStats.totalFeedbackWords}}
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-content class="cardText">
+                        <b>Avg words textual feedback:</b> {{storyStats.avgFeedbackWordCount}}
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+        <!-- Grammar Pie Chart-->
+        <mat-card>
+            <mat-card-header class="stats-card-header">
+                <mat-card-title *ngIf="dataLoaded"> Grammar Errors </mat-card-title>
+            </mat-card-header>
+            <mat-card-content style="display:flex">
+                <div class="legendContainer" *ngIf="legendItems.length > 0">
+                    <div class="legend">Legend</div>
+                    <hr/>
+                    <div *ngFor="let item of legendItems">
+                      <div class="legendPair">
+                        <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
+                                                  [style.borderColor]="item.strokeStyle"></div> 
+                        <div>{{item.text}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pieContainer">
+                    <canvas id="grammar-pie-chart" width="200" height="200"></canvas>
+                  </div>
+            </mat-card-content>
+        </mat-card>
+        <!-- County Chart-->
+        <mat-card>
+            <mat-card-header class="stats-card-header">
+                <mat-card-title *ngIf="dataLoaded"> Grammar Errors </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <canvas id="county-chart"></canvas>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

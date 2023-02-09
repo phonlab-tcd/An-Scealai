@@ -72,14 +72,15 @@ export class NgramDistributionComponent implements OnInit {
         },
         options: {
           scales: {
-            yAxes: [{
+            y: {
+                beginAtZero: true,
                 display: true,
                 stacked: true,
                 ticks: {
-                    beginAtZero: true,
+                    // beginAtZero: true,
                     stepSize: 1
                 }
-            }]
+            }
           },
           responsive: true
         }
