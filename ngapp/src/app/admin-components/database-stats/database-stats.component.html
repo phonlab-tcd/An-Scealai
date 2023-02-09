@@ -63,7 +63,7 @@
                 </mat-card>
                 <mat-card>
                     <mat-card-content class="cardText">
-                        <b>Language Settings:</b> <b>GA:</b>{{irishPercentage | percent:'2.2'}} <b>EN:</b>{{englishPercentage | percent:'2.2'}}
+                        <b>Language Settings:</b> <div><b>GA:</b> {{irishPercentage | percent:'2.2'}}</div> <div><b>EN:</b> {{englishPercentage | percent:'2.2'}}</div>
                     </mat-card-content>
                 </mat-card>
             </mat-card-content>
@@ -109,6 +109,28 @@
                         <b>Avg words textual feedback:</b> {{storyStats.avgFeedbackWordCount}}
                     </mat-card-content>
                 </mat-card>
+            </mat-card-content>
+        </mat-card>
+        <!-- Grammar Pie Chart-->
+        <mat-card>
+            <mat-card-header class="stats-card-header">
+                <mat-card-title *ngIf="dataLoaded"> Grammar Errors </mat-card-title>
+            </mat-card-header>
+            <mat-card-content style="display:flex">
+                <div class="legendContainer" *ngIf="legendItems.length > 0">
+                    <div class="legend">Legend</div>
+                    <hr/>
+                    <div *ngFor="let item of legendItems">
+                      <div class="legendPair">
+                        <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
+                                                  [style.borderColor]="item.strokeStyle"></div> 
+                        <div>{{item.text}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pieContainer">
+                    <canvas id="grammar-pie-chart" width="200" height="200"></canvas>
+                  </div>
             </mat-card-content>
         </mat-card>
     </div>
