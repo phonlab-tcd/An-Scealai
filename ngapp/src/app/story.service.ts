@@ -90,17 +90,13 @@ export class StoryService {
       this.baseUrl + 'update/' + id,
       updateData);
   }
-  
-  updateAuthor(oldAuthor, newAuthor): Observable<any> {
-    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
-  }
 
   deleteStory(id) {
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
   
-  deleteAllStories(author) {
-    return this.http.get(this.baseUrl + 'deleteAllStories/' + author);
+  deleteAllStories(id) {
+    return this.http.get(this.baseUrl + 'deleteAllStories/' + id);
   }
 
   addFeedback(id, feedbackText: string) : Observable<any> {
@@ -129,14 +125,6 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'synthesise/' + id);
   }
 
-  gramadoirViaBackend(id: string): Observable<any> {
-    return this
-      .http
-      .get(
-        // URL
-        this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
-  }
-
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
   }
@@ -151,5 +139,9 @@ export class StoryService {
   
   countGrammarErrors(studentId:string) : Observable<any> {
     return this.http.get(this.baseUrl + "countGrammarErrors/" + studentId);
+  }
+
+  getStoryStats() : Observable<any> {
+    return this.http.get(this.baseUrl + "getStoryStats/allDB");
   }
 }

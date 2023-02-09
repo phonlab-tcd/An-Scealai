@@ -133,7 +133,7 @@ export class TeacherSettingsComponent implements OnInit {
         checkers.push(key);
       }
     }
-    await firstValueFrom(this.classroomService.updateClassroomCheckers(this.classroom._id, checkers));
+    await firstValueFrom(this.classroomService.setClassroomCheckers(this.classroom._id, checkers));
     this.changesSaved = true;
   }
 

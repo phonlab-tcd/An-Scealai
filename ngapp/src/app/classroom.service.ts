@@ -44,7 +44,7 @@ export class ClassroomService {
     return this.http.post(this.baseUrl + "updateTitle/" + classroomId, {"title":newTitle});
   }
 
-  delete(classroomId: string) : Observable<any> {
+  deleteClassroom(classroomId: string) : Observable<any> {
     return this.http.get(this.baseUrl + "delete/" + classroomId);
   }
 
@@ -75,20 +75,16 @@ export class ClassroomService {
     return result;
  }
  
- setGrammarRules(classroomId: string, rules: string[]): Observable<any> {
-   return this.http.post(this.baseUrl + 'setGrammarRules/' + classroomId, {"grammarRules":rules});
- }
- 
- getGrammarRules(classroomId): Observable<any> {
-   return this.http.get(this.baseUrl + 'getGrammarRules/' + classroomId);
- }
- 
- updateClassroomCheckers(classroomId: string, checkers: string[]):Observable<any> {
-   return this.http.post(this.baseUrl + 'updateClassroomCheckers/' + classroomId, {"checkers":checkers});
+ setClassroomCheckers(classroomId: string, checkers: string[]):Observable<any> {
+   return this.http.post(this.baseUrl + 'setClassroomCheckers/' + classroomId, {"checkers":checkers});
  }
  
  getClassroomCheckers(classroomId: string):Observable<any> {
    return this.http.get(this.baseUrl + 'getClassroomCheckers/' + classroomId);
  }
+
+ getTotalClassrooms() : Observable<any> {
+  return this.http.get(this.baseUrl + "getTotalClassrooms/allDB");
+}
 
 }

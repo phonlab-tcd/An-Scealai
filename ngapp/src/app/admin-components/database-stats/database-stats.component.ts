@@ -68,6 +68,7 @@ export class DatabaseStatsComponent implements OnInit {
 
   async getUserCount() {
     this.userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
+    console.log(this.userCounts)
 
     let canvasElem = document.getElementById(
       "user-counts"
@@ -141,7 +142,6 @@ export class DatabaseStatsComponent implements OnInit {
             }
 
           }
-
         },
     });
 
