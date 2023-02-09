@@ -7,6 +7,8 @@ import { ProfileService } from "../../profile.service";
 import { Chart } from 'chart.js/auto';
 import { ChoroplethChart } from 'chartjs-chart-geo';
 import * as ChartGeo from 'chartjs-chart-geo'
+import { COUNTY_NAMES } from './countyNames'
+
 import config from 'abairconfig';
 import { HttpClient } from '@angular/common/http';
 
@@ -68,7 +70,6 @@ export class DatabaseStatsComponent implements OnInit {
 
   async getUserCount() {
     this.userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
-    console.log(this.userCounts)
 
     let canvasElem = document.getElementById(
       "user-counts"
@@ -149,47 +150,39 @@ export class DatabaseStatsComponent implements OnInit {
   }
 
   async getCountyMap() {
-    const us = await fetch(' https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json').then((r) => r.json());
-    const irl = await fetch('https://raw.githubusercontent.com/markmarkoh/datamaps/master/src/js/data/irl.topo.json').then((r) => r.json());
-    console.log(us);
-    console.log(irl);
+    // get topo json data of Irish counties
+    const irl = await fetch('https://raw.githubusercontent.com/gist/carsonfarmer/9791524/raw/b27ca0d78d46a84664fe7ef709eed4f7621f7a25/irish-counties.topojson').then((r) => r.json());
+    const counties = ChartGeo.topojson.feature(irl, irl.objects.counties)['features'];
+    const mapLabels = counties.map((d) => d.id);
 
-    const nation = ChartGeo.topojson.feature(us, us.objects.nation)['features'][0];
-    const states = ChartGeo.topojson.feature(us, us.objects.states)['features'];
-    const alaska = states.find((d) => d.properties.name === 'Alaska');
-    const california = states.find((d) => d.properties.name === 'California');
+    // get counts of users from each county according to their profiles
+    let profileCountyData = await firstValueFrom(this.profileService.getCountyCounts());
+
     let canvasElem = document.getElementById("county-chart") as HTMLCanvasElement;
-
-    this.countyChart = new Chart(canvasElem.getContext("2d"), {
-      type: 'choropleth',
+    this.countyChart = new ChoroplethChart(canvasElem.getContext("2d"), {
       data: {
-        labels: ['Alaska', 'California'],
+        labels: mapLabels,
         datasets: [{
-          label: 'States',
-          outline: nation, // ... outline to compute bounds
+          label: 'Counties',
+          outline: counties,
           showOutline: true,
-          data: [
-            {
-              value: 0.4,
-              feature: alaska // ... the feature to render
-            },
-            {
-              value: 0.3,
-              feature: california
-            }
-          ]
+          data: counties.map((d) => ({ feature: d, value: profileCountyData[COUNTY_NAMES[d.id]] })),
         }]
       },
       options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
         scales: {
           projection: {
-            projection: 'albersUsa' // ... projection method
+            axis: 'x',
+            projection: 'equalEarth'
           }
         }
       }
     });
-
-    
 
   }
 }

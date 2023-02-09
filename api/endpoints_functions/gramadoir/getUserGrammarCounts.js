@@ -15,7 +15,6 @@ async function getUserGrammarCounts(req, res, next) {
   // create a dictionary of error name and total counts
   for (const entry of errorCounts) {
     for (const [key, value] of Object.entries(entry.errorCounts)) {
-      console.log(`${key}: ${value}`);
       if (!totalErrorCounts[key]) totalErrorCounts[key] = 0;
       totalErrorCounts[key] += value;
     }
