@@ -117,10 +117,10 @@
                 <mat-card-title *ngIf="dataLoaded"> Grammar Errors </mat-card-title>
             </mat-card-header>
             <mat-card-content style="display:flex">
-                <div class="legendContainer" *ngIf="legendItems.length > 0">
+                <div class="legendContainer" *ngIf="pieChartLegendItems.length > 0">
                     <div class="legend">Legend</div>
                     <hr/>
-                    <div *ngFor="let item of legendItems">
+                    <div *ngFor="let item of pieChartLegendItems">
                       <div class="legendPair">
                         <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
                                                   [style.borderColor]="item.strokeStyle"></div> 
@@ -131,6 +131,15 @@
                   <div class="pieContainer">
                     <canvas id="grammar-pie-chart" width="200" height="200"></canvas>
                   </div>
+            </mat-card-content>
+        </mat-card>
+        <!-- County Chart-->
+        <mat-card>
+            <mat-card-header class="stats-card-header">
+                <mat-card-title> Map of Users </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <canvas id="county-chart"></canvas>
             </mat-card-content>
         </mat-card>
     </div>

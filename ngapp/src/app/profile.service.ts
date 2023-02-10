@@ -27,12 +27,20 @@ export class ProfileService {
     return this.http.get(this.baseUrl + 'getForUser/' + userId);
   }
 
-  /*
-  * Get number of filled profiles
-  */
+/*
+* Get number of filled profiles
+*/
   getNumOfProfiles() : Observable<any> {
     return this.http.get(this.baseUrl + 'getCount');
   }
+
+/*
+* Get number of users per county
+*/
+  getCountyCounts() : Observable<any> {
+    return this.http.get(this.baseUrl + 'getCountyCounts');
+  }
+
 
 /*
 * Delete a profile from the DB for a given user id
