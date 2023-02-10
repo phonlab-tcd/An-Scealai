@@ -64,7 +64,6 @@ import { DashboardComponent } from './student-components/dashboard/dashboard.com
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
@@ -86,33 +85,6 @@ import { TeacherPanelComponent } from './teacher-components/teacher-panel/teache
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
-import { RegisterProfileComponent } from './register-profile/register-profile.component';
-import { StatsComponent } from './admin-components/stats/stats.component';
-import { FindUserComponent } from './admin-components/find-user/find-user.component';
-import { MessagesComponent } from './messages/messages.component';
-import { TeacherStatsComponent } from './teacher-components/teacher-stats/teacher-stats.component';
-import { ResourcesComponent } from './resources/resources.component';
-import { TeamComponent } from './team/team.component';
-import { AboutLaraComponent } from './about-lara/about-lara.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
-import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { SponsorsComponent } from './sponsors/sponsors.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { QuillModule } from 'ngx-quill';
-import { SpinnerModule } from 'spinner/spinner.module';
-import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
-import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
-import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
-import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
-import { SynthItemComponent } from './synth-item/synth-item.component';
-import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
-import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
-import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
-import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
-import { UserGuidesComponent } from './user-guides/user-guides.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 
@@ -145,8 +117,6 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
         StoryHistoryComponent,
         RecordingComponent,
         RegisterProfileComponent,
-        StatsComponent,
-        StoryDetailsComponent,
         FindUserComponent,
         HighlightDirective,
         FilterPipe,

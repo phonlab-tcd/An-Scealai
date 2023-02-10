@@ -23,7 +23,6 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
