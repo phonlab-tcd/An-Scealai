@@ -103,6 +103,8 @@ export class BookContentsComponent implements OnInit {
         this.isFromAmerica = false;
       }
     
+    }, err => {
+      this.router.navigateByUrl('/register-profile');
     });
   
   }

@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const QuillHighlightTag = new Schema({
-  start: { type: Number, required: true }, 
-  length: { type: Number, required: true },
-  type: { type: String, required: true},
-  messages: { 
+  start: {type: Number, required: true},
+  length: {type: Number, required: true},
+  type: {type: String, required: true},
+  messages: {
     type: {
-      en: { type: String, required: true },
-      ga: { type: String, required: true }
-    }
+      en: {type: String, required: true},
+      ga: {type: String, required: true},
+    },
   },
 });
 
@@ -23,7 +23,7 @@ const GramadoirCache = new Schema({
     of: QuillHighlightTag,
   },
 }, {
-  collection: 'gramadoir.cache'
+  collection: 'gramadoir.cache',
 });
 
 const GramadoirCacheLink = new Schema({
@@ -32,26 +32,26 @@ const GramadoirCacheLink = new Schema({
   },
   timestamp: {
     type: Date,
-  }
+  },
 });
 
 
 const GramadoirStoryHistory = new Schema({
-    userId: {
-      type: mongoose.ObjectId,
-    },
-    storyId: {
-      type: mongoose.ObjectId,
-    },
-    versions: {
-      type: [GramadoirCacheLink],
-      default: [],
-    },
+  userId: {
+    type: mongoose.ObjectId,
+  },
+  storyId: {
+    type: mongoose.ObjectId,
+  },
+  versions: {
+    type: [GramadoirCacheLink],
+    default: [],
+  },
 }, {
-    collection: 'gramadoir.story.history'
+  collection: 'gramadoir.story.history',
 });
 
 module.exports = {
   GramadoirCache: mongoose.model('GramadoirCache', GramadoirCache),
   GramadoirStoryHistory: mongoose.model('GramadoirInputText', GramadoirStoryHistory),
-}
+};

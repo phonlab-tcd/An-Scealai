@@ -1,5 +1,5 @@
 <!-- Teacher Graph -->
-<div *ngIf="auth.getUserDetails().role == 'TEACHER'; else studentGraph"  class="chartContainer">
+<div *ngIf="auth.getUserDetails() && auth.getUserDetails().role == 'TEACHER'; else studentGraph"  class="chartContainer">
   <ngb-carousel #carousel interval=0 wrap=true>
     <ng-template ngbSlide *ngFor="let student of dictionaryLookups | keyvalue">
       <p class="studentName">{{student.key}}</p>

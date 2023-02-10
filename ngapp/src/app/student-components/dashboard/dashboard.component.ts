@@ -27,6 +27,7 @@ import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { RecordAudioService     } from 'app/services/record-audio.service'
 
 import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
 import { QuillHighlighter } from '../../lib/quill-highlight/quill-highlight';
@@ -36,6 +37,7 @@ import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
 import { gaelSpell } from '../../lib/grammar-engine/checkers/gaelspell-checker';
+import { ErrorTag } from '../../lib/grammar-engine/types';
 
 
 @Component({
@@ -67,7 +69,8 @@ export class DashboardComponent implements OnInit {
   mostRecentGramadoirRequestTime = null;
   mostRecentGramadoirInput: string = null;
   grammarLoaded: boolean = false;
-  grammarErrors: any = [];
+  grammarErrors: ErrorTag[] = [];
+  prevGrammarErrors: ErrorTag[] = [];
   grammarErrorsTypeDict: Object = {};
   showErrorTags: boolean = false;
   checkBoxes: Object = {'showAll': true};
@@ -101,8 +104,6 @@ export class DashboardComponent implements OnInit {
   
   // SPEECH TO TEXT
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
-  recorder;
-  stream;
   audioSourceASR : SafeUrl;
   chunks: any[] = [];
   isRecording: boolean = false;
@@ -118,9 +119,10 @@ export class DashboardComponent implements OnInit {
     private engagement: EngagementService,
     public ts: TranslationService,
     public statsService: StatsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private recordAudioService: RecordAudioService
   ) {
-    this.grammarEngine = new GrammarEngine([ leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
+    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
     
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
@@ -136,7 +138,7 @@ export class DashboardComponent implements OnInit {
         // check text for grammar errors
         this.grammarErrors = [];
         this.grammarEngine.check$(this.story.text).subscribe({
-          next: (tag) => {
+          next: (tag: ErrorTag) => {
             this.grammarErrors.push(tag);
             
             // show error highlighting if button on
@@ -146,6 +148,13 @@ export class DashboardComponent implements OnInit {
           },
           error: function () {},
           complete: () => {
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+            // and then re-show all the latest error tags
+            if(this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+            }
+            
             //save any grammar errors with associated sentences to DB
             if(this.grammarErrors) {
               this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
@@ -344,8 +353,8 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error tags */
   async toggleGrammarTags() {
       this.showErrorTags ? 
-        this.quillHighlighter.hide(this.grammarErrors):
-        this.quillHighlighter.show(this.grammarErrors);
+        this.quillHighlighter.hideAll() :
+        this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
       this.showErrorTags = !this.showErrorTags;
   }
   
@@ -544,99 +553,25 @@ export class DashboardComponent implements OnInit {
     this.dontToggle = false;
   }
 
+
   /* Stop recording if already recording, otherwise start recording */
-  speakStory() {
-    this.isRecording ? this.stopRecording() : this.recordAudio();
-  }
-  
-  /* Record audio */
-  recordAudio() {
-    console.log('Record audio:');
-    let media = {
-      tag: 'audio',
-      type: 'audio/mp3',
-      ext: '.mp3',
-      gUM: {audio: true}
+  async speakStory() {
+    if (this.isRecording) {
+      this.recordAudioService.stopRecording();
+      let transcription = await this.recordAudioService.getAudioTranscription();
+      console.log(transcription)
+      if(transcription) {
+        this.story.text = this.story.text + "\n" + transcription;
+        this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
+        this.getWordCount(transcription);
+        this.storySaved = false; 
+        this.textUpdated.next(transcription);
+        this.debounceSaveStory();
+      }
     }
-    this.isRecording = true;
-    navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-      this.stream = _stream;
-      this.recorder = new MediaRecorder(this.stream);
-      this.chunks = [];
-      this.recorder.start();
-      this.recorder.ondataavailable = e => {
-        this.chunks.push(e.data);
-        if(this.recorder.state == 'inactive') {
-        };
-      };
-    }).catch();
+    else {
+      this.recordAudioService.recordAudio();
+    }
+    this.isRecording = !this.isRecording;
   }
-  
-  /* stop recording stream and convert audio to base64 to send to ASR */
-  stopRecording() {
-    this.recorder.stop();
-    this.isRecording = false;
-    this.stream.getTracks().forEach(track => track.stop());
-    setTimeout(() => {
-      const blob = new Blob(this.chunks, {type: 'audio/mp3'});
-      this.audioSourceASR = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function () {
-        let encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
-        this.getTranscription(encodedAudio);
-      }.bind(this);
-    }, 500);
-  }
-  
-  /* send audio to the ASR system and get transcription */
-  getTranscription(audioData:string) {
-    const rec_req = {
-      recogniseBlob: audioData,
-      developer: true,
-    };
-    fetch(this.url_ASR_API, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rec_req),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-      let transcription = data["transcriptions"][0]["utterance"];
-      this.story.text = this.story.text + "\n" + transcription;
-      this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
-      this.getWordCount(transcription);
-      this.storySaved = false; 
-      this.textUpdated.next(transcription);
-      this.debounceSaveStory();
-    });
-  }
-  
-  editStoryTitle() {
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.story_details,
-        type: 'select',
-        data: [this.story.title, [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster], [this.ts.l.title, this.ts.l.dialect]],
-        confirmText: this.ts.l.save_details,
-        cancelText: this.ts.l.cancel
-      },
-      width: '50vh',
-    });
-    
-    this.dialogRef.afterClosed().subscribe( async (res) => {
-        this.dialogRef = undefined;
-        if(res) {
-          this.storyService.updateStoryTitleAndDialect(this.story, res[0], res[1]).subscribe({
-                complete: () => {
-                  this.ngOnInit();
-                },
-              });
-        }
-    });
-  }
-  
 }

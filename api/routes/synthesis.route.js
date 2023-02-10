@@ -7,45 +7,55 @@ const request = require('request');
 
 const abairAPIv2SynthUrl = 'https://www.abair.tcd.ie/api2/synthesise';
 const abairAPIv2Voices = [
-'ga_UL_anb_nnmnkwii', 
-'ga_UL', 
-'ga_UL_anb_exthts', 
-'ga_CO', 
-'ga_CO_hts', 
-'ga_CO_pmg_nnmnkwii', 
-'ga_MU_nnc_exthts', 
-'ga_MU_nnc_nnmnkwii', 
-'ga_MU_cmg_nnmnkwii'
+  'ga_UL_anb_nnmnkwii',
+  'ga_UL',
+  'ga_UL_anb_exthts',
+  'ga_CO',
+  'ga_CO_hts',
+  'ga_CO_pmg_nnmnkwii',
+  'ga_MU_nnc_exthts',
+  'ga_MU_nnc_nnmnkwii',
+  'ga_MU_cmg_nnmnkwii',
 ];
 
 /*
-  'ga_UL_anb_nnmnkwii', 
-  'ga_UL', 
-  'ga_UL_anb_exthts', 
-  'ga_CO', 
-  'ga_CO_hts', 
-  'ga_CO_pmg_nnmnkwii', 
-  'ga_MU_nnc_exthts', 
-  'ga_MU_nnc_nnmnkwii', 
+  'ga_UL_anb_nnmnkwii',
+  'ga_UL',
+  'ga_UL_anb_exthts',
+  'ga_CO',
+  'ga_CO_hts',
+  'ga_CO_pmg_nnmnkwii',
+  'ga_MU_nnc_exthts',
+  'ga_MU_nnc_nnmnkwii',
   'ga_MU_cmg_nnmnkwii'
 ];
 */
 
+/**
+ * Check if valid dialect code
+ * @param {any} code Dialect code
+ * @return {boolean} return if valid dialect code
+ */
 function isValidAbairAPIv2DialectCode(code) {
-  if(! (typeof code === 'string' )){
+  if (! (typeof code === 'string' )) {
     return false;
   }
-  for(let c in abairAPIv2Voices){
-    if ( c === code ){
+  for (const c in abairAPIv2Voices) {
+    if ( c === code ) {
       return true;
     }
   }
 }
 
-async function abairAPIv2Synthesise(text, dialect){
-
-  if(! isValidAbairAPIv2DialectCode(dialect) ) {
-    logger.warning("Invalid dialect code given to abairAPIv2Synthesise:", dialect, ". Defaulting to: ", abairAPIv2Voices[0]);
+/**
+ * Call Abair synthesis on story text
+ * @param {string} text Story text
+ * @param {string} dialect dialect choice
+ * @return {Object} Synthesis response
+ */
+async function abairAPIv2Synthesise(text, dialect) {
+  if (! isValidAbairAPIv2DialectCode(dialect) ) {
+    logger.warning('Invalid dialect code given to abairAPIv2Synthesise:', dialect, '. Defaulting to: ', abairAPIv2Voices[0]);
     dialect = abairAPIv2Voices[0];
   }
 
@@ -53,15 +63,14 @@ async function abairAPIv2Synthesise(text, dialect){
     request({
       method: 'GET',
       headers: {
-        'Host': 'www.abair.tcd.ie'
+        'Host': 'www.abair.tcd.ie',
       },
       uri: `${abairAPIv2SynthUrl}?input=${text}&voice=${dialect}`,
     }, (err, response, body) => {
-      if(err){
+      if (err) {
         logger.error(err);
         reject(err);
-      }
-      else {
+      } else {
         logger.info(body);
         resolve(JSON.parse(body));
       }

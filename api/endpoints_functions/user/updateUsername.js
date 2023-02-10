@@ -3,8 +3,8 @@ const {API404Error} = require('../../utils/APIError');
 
 /**
  * Update username
- * @param req Includes user id and new username
- * @param res Returns response success code
+ * @param {Object} req Includes user id and new username
+ * @param {Object} res Returns response success code
  */
 async function updateUsername(req, res) {
   const user = await User.findById(req.params.id);

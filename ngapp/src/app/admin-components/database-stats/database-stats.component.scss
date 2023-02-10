@@ -1,0 +1,77 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  background: white;
+  margin-left: 5%;
+  padding: 20px;
+  margin-bottom: 2%;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cards-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.stats-card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid grey;
+  min-width: 400px;
+  padding: 10px;
+}
+
+.cardText {
+  display:flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pieContainer {
+  flex: 1;
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.legendContainer {
+  overflow-y: scroll;
+  width: 40%;
+  max-height: 200px;
+  max-width: 200px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.legendPair {
+  display: flex;
+  flex-direction: row;
+  gap:0.5rem;
+}
+
+.legendMarker {
+  width: 30px;
+  height: 10px;
+}
+
+.legend {
+  padding-top: 5px;
+  text-align: center;
+  font-weight: bold;
+}

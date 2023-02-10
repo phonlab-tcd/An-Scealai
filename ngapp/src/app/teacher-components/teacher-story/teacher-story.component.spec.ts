@@ -3,6 +3,7 @@ import { TeacherStoryComponent } from './teacher-story.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('TeacherStoryComponent', () => {
   let component: TeacherStoryComponent;
@@ -12,7 +13,10 @@ describe('TeacherStoryComponent', () => {
     TestBed.configureTestingModule({
       schemas: [ NO_ERRORS_SCHEMA ],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [ TeacherStoryComponent ]
+      declarations: [ TeacherStoryComponent ],
+      providers: [
+          { provide: MatDialog, useValue: {} }
+      ]
     })
     .compileComponents();
   }));
