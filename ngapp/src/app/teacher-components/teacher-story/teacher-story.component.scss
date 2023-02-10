@@ -1,39 +1,40 @@
-.audioPlayer {
-    height: 32px;
-    margin-top: 7px;
+.contents {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
 .classContainer {
-    height: 500px;
+    display: inline-flex;
+    flex-direction: column;
 }
 
 .storyClassBody {
-    display: flex;
+    display: inline-flex;
+    flex-direction: row;
     padding: 5px;
-    padding-top: 0px;
-    flex-wrap: wrap;
+    gap: 1rem;
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.storyClassBody > * {
+    flex: 1; // makes the columns equally spaced
 }
 
 .storyTextContainer { 
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     background-color: var(--scealai-gray);
-    margin-top: 10px;
-    margin-left: 5px;
-    height: 430px;
-    width: 50%;
     border-radius: 5px;
-    flex-grow: 1;
 }
 
 .storyTextHeader {
-    width: 100%;
     background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
     display: flex;
     padding: 4px;
-    padding-left: 8px;
     font-size: 12pt;
     justify-content: center;
 }
@@ -46,26 +47,26 @@
     background-color: white;
     border-radius: 5px;
     margin: 8px;
-    height: 380px;
-}
-
-.storyInfoBody {
-    display: flex;
-    flex-direction: column;
-    padding-left: 8px;
-    padding-right: 8px;
+    height: 100%;
 }
 
 .storyInfoContainer { 
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     background-color: var(--scealai-gray);
-    margin-top: 10px;
-    margin-left: 1%;
-    height: 430px;
-    width: 48%;
     border-radius: 5px;
-    flex-grow: 1;
+}
+
+.storyInfoBody {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 8px;
+    overflow: auto;
+    height: 100%;
+}
+
+.userInfoContainer {
+  flex: 0.75;
 }
 
 .userInfo {
@@ -82,13 +83,11 @@
 }
 
 .feedbackContainer {
-    width: 100%;
     background-color: white;
-    margin-top: 10px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    height: 180px;
+    flex: 2;
 }
 
 .feedbackHeaderTeacherStory {
@@ -102,13 +101,12 @@
 .feedbackBody {
     padding: 4px;
     text-align: left;
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 .feedbackTextarea {
     border: none;
     width: 100%;
-    height: 75px;
     resize: none;
 }
 
@@ -137,6 +135,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 5px;
+}
+
+.audioPlayer {
+    height: 32px;
+    margin-top: 7px;
 }
 
 @keyframes blinker {  
@@ -150,12 +154,6 @@
   }
 
 @media (min-width: 1000px) {
-    .classContainer {
-        width: 900px;
-        position: absolute;
-        left: 50%;
-        margin-left: -450px;
-    }
 
 }
 

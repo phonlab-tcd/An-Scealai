@@ -21,9 +21,11 @@
           </ul>
         </mat-panel-description>
       </mat-expansion-panel-header>
-        <div> {{ts.l.what_is_LARA_body1}} </div> <br>
-        <div> {{ts.l.what_is_LARA_body2}} </div> <br>
-        <div> {{ts.l.what_is_LARA_body3}} </div>
+        <div class="panelContent">
+          <div> {{ts.l.what_is_LARA_body1}} </div> <br>
+          <div> {{ts.l.what_is_LARA_body2}} </div> <br>
+          <div> {{ts.l.what_is_LARA_body3}} </div>
+        </div>
     </mat-expansion-panel>
     <!-- For Whom? -->
     <mat-expansion-panel>
@@ -32,6 +34,7 @@
           <b>{{ts.l.for_whom}}</b>
         </mat-panel-title>
       </mat-expansion-panel-header>
+      <div class="panelContent">
         <div innerHTML={{ts.l.for_learners}}> </div> <br>
         <div innerHTML={{ts.l.for_teachers}}> </div>
         <ul>
@@ -43,6 +46,7 @@
           <li> {{ts.l.for_teachers_point6}} </li>
         </ul>
         <div innerHTML={{ts.l.for_whom_body}}></div>
+      </div>
     </mat-expansion-panel>
     <!-- List of Stories available to date -->
     <mat-expansion-panel>
@@ -51,25 +55,27 @@
           <b>{{ts.l.list_of_stories}}</b>
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <ul>
-          <li> Balor </li>
-          <li> Beatha na Féinne </li>
-          <li> Colorado </li>
-          <li> Druma Mór </li>
-          <li> Mar a Baisteadh Fionn </li>
-          <li> Fairceallach Fhinn Mhic Cumhaill </li>
-          <li> Pósadh ar an mBlascaod Mór </li>
-          <li> Oisín i dTír na nÓg </li>
-          <li> An Seilide agus An Míol Mór </li>
-          <li> (sliocht as) An Prionsa Beag </li>
-          <li> Cinnín Óir agus na Trí Bhéar </li>
-          <li> Na Trí Mhuicín </li>
-          <li> Cochaillín Dearg </li>
-          <li> An Píobaire Breac </li>
-          <li> An Lacha Bheag Ghránna </li>
-          <li> Na Trí Ghabhar Chliste </li>
-          <li> An Tornapa Mór Millteach </li>
-        </ul>
+        <div class="panelContent">
+          <ul>
+            <li> Balor </li>
+            <li> Beatha na Féinne </li>
+            <li> Colorado </li>
+            <li> Druma Mór </li>
+            <li> Mar a Baisteadh Fionn </li>
+            <li> Fairceallach Fhinn Mhic Cumhaill </li>
+            <li> Pósadh ar an mBlascaod Mór </li>
+            <li> Oisín i dTír na nÓg </li>
+            <li> An Seilide agus An Míol Mór </li>
+            <li> (sliocht as) An Prionsa Beag </li>
+            <li> Cinnín Óir agus na Trí Bhéar </li>
+            <li> Na Trí Mhuicín </li>
+            <li> Cochaillín Dearg </li>
+            <li> An Píobaire Breac </li>
+            <li> An Lacha Bheag Ghránna </li>
+            <li> Na Trí Ghabhar Chliste </li>
+            <li> An Tornapa Mór Millteach </li>
+          </ul>
+        </div>
     </mat-expansion-panel>
     <!-- LARA features and functionality -->
     <mat-expansion-panel>
@@ -78,22 +84,24 @@
           <b>{{ts.l.LARA_features_and_functionality}}</b>
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <ul>
-          <li> {{ts.l.LARA_texts_include}} </li>
+        <div class="panelContent">
           <ul>
-            <li innerHTML={{ts.l.LARA_features1_point1}}></li>
-            <li> {{ts.l.LARA_features1_point2}} </li>
-            <li> {{ts.l.LARA_features1_point3}} </li>
-            <li> {{ts.l.LARA_features1_point4}} </li>
-            <li> {{ts.l.LARA_features1_point5}} </li>
-            <ul innerHTML={{ts.l.LARA_features1_point5_points}}>
+            <li> {{ts.l.LARA_texts_include}} </li>
+            <ul>
+              <li innerHTML={{ts.l.LARA_features1_point1}}></li>
+              <li> {{ts.l.LARA_features1_point2}} </li>
+              <li> {{ts.l.LARA_features1_point3}} </li>
+              <li> {{ts.l.LARA_features1_point4}} </li>
+              <li> {{ts.l.LARA_features1_point5}} </li>
+              <ul innerHTML={{ts.l.LARA_features1_point5_points}}>
+              </ul>
+            </ul>
+            <li> {{ts.l.LARA_links_the_word}} </li>
+            <ul>
+              <li> {{ts.l.LARA_links_the_word_point1}} </li>
             </ul>
           </ul>
-          <li> {{ts.l.LARA_links_the_word}} </li>
-          <ul>
-            <li> {{ts.l.LARA_links_the_word_point1}} </li>
-          </ul>
-        </ul>
+        </div>
     </mat-expansion-panel>
     <!-- More information -->
     <mat-expansion-panel>
@@ -102,43 +110,44 @@
           <b>{{ts.l.more_information}}</b>
         </mat-panel-title>
       </mat-expansion-panel-header>
-        <b>{{ts.l.on_the_background_of_LARA}}</b>
-        <ul>
-          <li innerHTML={{ts.l.background_point1}}></li>
-          <li innerHTML={{ts.l.background_point2}}></li>
-        </ul>
-        <div class="logos">
-          <img src="assets/img/callector_project.png" class="logoImg" style="padding-right: 10px" alt="Callector Project Logo">
-          <img src="assets/img/enet_collect.png" class="logoImg" style="padding-left: 10px" alt="enet Collect Logo">
-        </div>
-        <b> {{ts.l.on_the_research_background}}</b>
-        <ul>
-          <li innerHTML={{ts.l.on_the_research_background_point1}}></li>
-          <li innerHTML={{ts.l.on_the_research_background_point2}}></li>
-          <li>{{ts.l.on_the_research_background_point3}}</li>
-        </ul>
-        <b> {{ts.l.on_the_speech_and_technology}}</b>
-        <ul>
-          <li>{{ts.l.on_the_speech_and_technology_point1}}</li>
-          <li innerHTML={{ts.l.on_the_speech_and_technology_point2}}></li>
-          <li innerHTML={{ts.l.on_the_speech_and_technology_point3}}></li>
-        </ul>
-        <b> {{ts.l.sample_research_papers}}</b><br>
-        <br><b> LARA: </b>
-        <ul>
-          <li> {{ts.l.lara_paper1}}</li>
-          <li innerHTML={{ts.l.lara_paper2}}></li>
-        </ul> 
-        <b> {{ts.l.the_abair_initiative}}</b>
-        <ul>
-          <li> {{ts.l.abair_paper1}}</li>
-          <li> {{ts.l.abair_paper2}}</li>
-        </ul>
-        <b> {{ts.l.other_relavent_research}}</b>
-        <ul>
-          <li> {{ts.l.other_relavent_research1}}</li>
-        </ul>
-            
+        <div class="panelContent">
+          <b>{{ts.l.on_the_background_of_LARA}}</b>
+          <ul>
+            <li innerHTML={{ts.l.background_point1}}></li>
+            <li innerHTML={{ts.l.background_point2}}></li>
+          </ul>
+          <div class="logos">
+            <img src="assets/img/callector_project.png" class="logoImg" style="padding-right: 10px" alt="Callector Project Logo">
+            <img src="assets/img/enet_collect.png" class="logoImg" style="padding-left: 10px" alt="enet Collect Logo">
+          </div>
+          <b> {{ts.l.on_the_research_background}}</b>
+          <ul>
+            <li innerHTML={{ts.l.on_the_research_background_point1}}></li>
+            <li innerHTML={{ts.l.on_the_research_background_point2}}></li>
+            <li>{{ts.l.on_the_research_background_point3}}</li>
+          </ul>
+          <b> {{ts.l.on_the_speech_and_technology}}</b>
+          <ul>
+            <li>{{ts.l.on_the_speech_and_technology_point1}}</li>
+            <li innerHTML={{ts.l.on_the_speech_and_technology_point2}}></li>
+            <li innerHTML={{ts.l.on_the_speech_and_technology_point3}}></li>
+          </ul>
+          <b> {{ts.l.sample_research_papers}}</b><br>
+          <br><b> LARA: </b>
+          <ul>
+            <li> {{ts.l.lara_paper1}}</li>
+            <li innerHTML={{ts.l.lara_paper2}}></li>
+          </ul> 
+          <b> {{ts.l.the_abair_initiative}}</b>
+          <ul>
+            <li> {{ts.l.abair_paper1}}</li>
+            <li> {{ts.l.abair_paper2}}</li>
+          </ul>
+          <b> {{ts.l.other_relavent_research}}</b>
+          <ul>
+            <li> {{ts.l.other_relavent_research1}}</li>
+          </ul>
+      </div>
     </mat-expansion-panel>
     
   </mat-accordion>

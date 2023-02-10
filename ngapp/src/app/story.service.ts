@@ -77,8 +77,17 @@ export class StoryService {
     return this.getStoriesByOwner(userDetails._id);
   }
 
-  updateStoryTitleAndDialect(story: Story): Observable<any> {
-    return this.http.post(this.baseUrl + 'update/' + story._id, story);
+  updateStoryTitleAndDialect(story: Story, title:string, dialect:any): Observable<any> {
+    let updatedStory = story;
+    if (title) updatedStory.title = title;
+    
+    if (dialect == this.ts.l.connacht) updatedStory.dialect = 'connemara';
+    if (dialect == this.ts.l.munster) updatedStory.dialect = 'kerry';
+    if (dialect == this.ts.l.ulster) updatedStory.dialect = 'donegal';
+    
+    console.log(updatedStory);
+
+    return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
   }
   
   getStoriesForClassroom(owner: string, date): Observable<any> {

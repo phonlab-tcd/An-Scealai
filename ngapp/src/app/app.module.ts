@@ -63,9 +63,7 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
@@ -103,7 +101,6 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
         DashboardComponent,
         BookContentsComponent,
         ChatbotComponent,
-        NewStoryComponent,
         ProfileComponent,
         AdminPanelComponent,
         TeachersComponent,
@@ -120,7 +117,6 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
         StoryHistoryComponent,
         RecordingComponent,
         RegisterProfileComponent,
-        StoryDetailsComponent,
         FindUserComponent,
         HighlightDirective,
         FilterPipe,

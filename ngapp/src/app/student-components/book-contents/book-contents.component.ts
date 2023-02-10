@@ -13,6 +13,8 @@ import { ClassroomService } from '../../classroom.service';
 import { NotificationService } from '../../notification-service.service';
 import { RecordingService } from '../../recording.service';
 import { FilterPipe } from 'app/pipes/filter.pipe'; // used in html template
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-book-contents',
@@ -34,6 +36,7 @@ export class BookContentsComponent implements OnInit {
   isEnrolled: boolean = false;
   searchText: string = '';
   storiesLoaded: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(
     private storyService: StoryService,
@@ -45,7 +48,8 @@ export class BookContentsComponent implements OnInit {
     private profileService: ProfileService,
     private classroomService: ClassroomService,
     private ns: NotificationService,
-    private recordingService: RecordingService) { }
+    private recordingService: RecordingService,
+    private dialog: MatDialog) { }
 
 
   // Set story array of stories for logged in user
@@ -154,6 +158,34 @@ export class BookContentsComponent implements OnInit {
   
   goToStats() {
     this.router.navigateByUrl('/stats-dashboard/' + this.userId);
+  }
+  
+  createNewStory() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.story_details,
+        type: 'select',
+        data: [this.ts.l.enter_title, [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster], [this.ts.l.title, this.ts.l.dialect]],
+        confirmText: this.ts.l.save_details,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          if (res[0]) {
+            let dialect = 'connemara';
+            if (res[1] == this.ts.l.munster) dialect = 'kerry';
+            if (res[1] == this.ts.l.ulster) dialect = 'donegal';
+            this.storyService.saveStory(this.auth.getUserDetails()._id, res[0], new Date(), dialect, "", this.auth.getUserDetails().username);
+          }
+          else {
+            alert(this.ts.l.title_required);
+          }
+        }
+    });
   }
 
 }

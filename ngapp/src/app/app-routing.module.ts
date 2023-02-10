@@ -22,9 +22,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
@@ -75,8 +73,6 @@ const routes: Routes = [
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
-  { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
-  { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
