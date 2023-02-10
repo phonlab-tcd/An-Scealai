@@ -35,7 +35,7 @@ export class ProfileService {
   }
 
 /*
-* Get number of filled profiles
+* Get number of users per county
 */
   getCountyCounts() : Observable<any> {
     return this.http.get(this.baseUrl + 'getCountyCounts');
