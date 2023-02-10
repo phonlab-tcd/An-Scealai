@@ -1,17 +1,19 @@
-.bookContainer {
-    --bookContainerHeight: 40vh;
-    --bookContainerWidth: 95%;
-    --textfieldHeight: calc(var(--bookContainerHeight));
-    --dictionaryHeight: 80vh;
+.dashboardContainer {
+    // --bookContainerHeight: 40vh;
+    --bookContainerHeight: 95vh;
+    --bookContainerWidth: 100%;
+    --textfieldHeight: calc(var(--bookContainerHeight) / 3);
+    --dictionaryHeight: 60vh;
     width: var(--bookContainerWidth);
-    margin-left: 2.5%;
-    margin-bottom: 2.5%;
-    background: var(--paper-img) no-repeat center center fixed; 
-    -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
-    -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
-    box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
-    border-radius: 5px 5px 5px 5px;
-    border: solid 2px #827662b8;
+    height: 95vh;
+    // margin-left: 1%;
+    // margin-bottom: 2.5%;
+    margin-top: -55px;
+    // -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+    // -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
+    // box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+    // border-radius: 5px 5px 5px 5px;
+    // border: solid 2px #827662b8;
 }
 
 .modalContainer {
@@ -26,15 +28,17 @@
 
 .bookHeader {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between; // in headerUpper originally, div just under .bookHeader
   padding: 15px;
   padding-bottom: 5px;
 }
 
-.headerUpper {
-    display: flex;
-    justify-content: space-between;
-}
+// .headerUpper {
+//     display: flex;
+//     justify-content: space-between;
+//     background-color: red;
+// }
 
 .myStoriesBtn {
   white-space: nowrap;
@@ -100,12 +104,15 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  --options-btn-background-color: rgba(223, 217, 200, 0);
-  --options-btn-background-color-hover : #aeffc486;
+  // --options-btn-background-color: rgba(223, 217, 200, 0);
+  // --options-btn-background-color-hover : #aeffc486;
+  --options-btn-background-color-hover : lightgray;
+  margin-left: 2%;
+  margin-right: 2%;
 }
 
 .optionsBtnContainer:hover {
-  background-color: #ffd07587;
+  // background-color: #ffd07587;
 }
 
 .optionsBtn {
@@ -124,6 +131,7 @@
   background-color: var(--options-btn-background-color-hover);
   color: #35322f;
   cursor: pointer;
+  border-radius: 2;
 }
 
 .optionsPopupBtn {
@@ -177,19 +185,20 @@
 .textField {
     width: 100%;
     min-height: var(--textfieldHeight);
-    height: auto;
+    // height: auto;
     /* height: var(--textfieldHeight); */
     resize: none;
     z-index: 1;
     color: var(--dark-text);
-    background: var(--scealai-cream-2);
+    // background: var(--scealai-cream-2);
+    background: white;
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 10px;
 }
 
 .feedbackTextareaAudio {
-    height: 100px;
+    // height: 100px;
 }
 
 .audioPlayer {
@@ -295,38 +304,30 @@
   background: white;
 }
 
-// 
-// .synthesisLoading {
-//   align: center;
-//   border-right: 2px solid orange;
-//   border-left: 2px solid red;
-//   border-top: 2px solid green;
-//   border-bottom: 2px solid blue;
-//   border-radius: 50%;
-//   width: 20px;
-//   height: 20px;
-//   animation: spin 5s linear infinite;
-// }
-// 
-// @keyframes spin {
-//   0% { transform: rotate(0deg); }
-//   100% { transform: rotate(360deg); }
-// }
+.writingContainer {
+  // height: 70vh;
+  // background-color: red;
+}
 
 .ql-container {
   height: auto;
+  background-color: #F8F9FA;
 }
 
-.ql-editor {
-  background-color: var(--scealai-cream-2);
+.ql-editor { // the 'page' where the writing happens
+  // background-color: var(--scealai-cream-2);
+  background-color: white;
   /* ~44px is the height of the toolbar */
-  height: calc(var(--textfieldHeight));
+  // height: calc(var(--textfieldHeight));
   z-index: 1;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
+  padding-bottom: 10px;
   font-size: 14pt;
   font-family: "Times New Roman", Times, serif;
+  min-height: 60vh !important;
+  max-height: 60vh !important;
 }
 
 .⚙ {
@@ -341,75 +342,19 @@
   background-color: #aeffc486;
 }
 
-// .loader {
-//   font-size: 2px;
-//   text-indent: -9999em;
-//   width: 11em;
-//   height: 11em;
-//   border-radius: 50%;
-//   --backgroundColor: lightblue;
-//   background: var(--backgroundColor);
-//   background: -moz-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
-//   background: -webkit-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
-//   background: -o-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
-//   background: -ms-linear-gradient(left, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
-//   background: linear-gradient(to right, var(--backgroundColor) 10%, rgba(255, 255, 255, 0) 42%);
-//   position: relative;
-//   -webkit-animation: load3 1.4s infinite linear;
-//   animation: load3 1.4s infinite linear;
-//   -webkit-transform: translateZ(0);
-//   -ms-transform: translateZ(0);
-//   transform: translateZ(0);
-// }
-// .loader::before {
-//   width: 50%;
-//   height: 50%;
-//   background: cyan;
-//   border-radius: 100% 0 0 0;
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   content: '';
-// }
-// .loader::after {
-//   background: transparent;
-//   width: 75%;
-//   height: 75%;
-//   border-radius: 50%;
-//   content: '';
-//   margin: auto;
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   right: 0;
-// }
-// 
-// @-webkit-keyframes load3 {
-//   0% {
-//     -webkit-transform: rotate(0deg);
-//     transform: rotate(0deg);
-//   }
-//   100% {
-//     -webkit-transform: rotate(360deg);
-//     transform: rotate(360deg);
-//   }
-// }
-// @keyframes load3 {
-//   0% {
-//     -webkit-transform: rotate(0deg);
-//     transform: rotate(0deg);
-//   }
-//   100% {
-//     -webkit-transform: rotate(360deg);
-//     transform: rotate(360deg);
-//   }
-// }
-
+.wordCountContainer {
+  display: flex;
+  align-items: center;
+  // padding-bottom: 6px;
+  padding-left: 8px;
+  padding-top: 0;
+  // margin-top: 0;
+  border-bottom: 1px solid #ccc;
+}
 
 quill-editor {
-  width: 100%;
-  height: 10vh;
+  // width: 100%;
+  // height: 10vh;
 }
 
 .quill-editor-dict {
@@ -427,66 +372,6 @@ quill-editor {
 
 .tickIcon {
     margin-left: 5px;
-}
-
-// .textFieldGrammarCheck {
-//     color: black;
-//     height: 40vh;
-// }
-// 
-// .grammarMessageContainer {
-//     height: var(--grammarMessageHeight);
-//     border: 1px solid var(--scealai-light-gray);
-//     background: var(--scealai-cream-2);
-//     text-align: left;
-//     padding: 4px;
-//     padding-left: 8px;
-//     font-size: 10pt;
-// }
-// 
-// .grammarToolbar {
-//     background-color: var(--scealai-green);
-//     color: white;
-//     display: flex;
-//     padding-left: 20px;
-//     height: 30px;
-//     display: flex;
-//     align-items: center;
-// }
-// 
-// 
-// 
-// .selectGrammarFilter {
-//     font-size: 10pt;
-//     margin-left: 5px;
-// }
-
-.seimhiu-color {
-    background-color: #00c732;
-}
-
-.uru-color {
-    background-color: #4c00ff;
-}
-
-.vowel-caol-agreement-tag {
-    background-color: #0077c7;
-}
-
-.vowel-leathan-agreement-tag {
-    background-color: #da4c0a;
-}
-
-.default-tag {
-    background-color: var(--notification-button);
-}
-
-.tagHover {
-    opacity: 0.8;
-}
-
-.tagNotHover {
-    opacity: 0.4;
 }
 
 .refreshGrammar:hover {

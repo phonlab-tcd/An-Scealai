@@ -36,7 +36,6 @@ import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-ca
 import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
-import { gaelSpell } from '../../lib/grammar-engine/checkers/gaelspell-checker';
 import { ErrorTag } from '../../lib/grammar-engine/types';
 
 
@@ -437,6 +436,7 @@ export class DashboardComponent implements OnInit {
       data: {
         title: this.ts.l.download,
         type: 'select',
+        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt', '.pptx', '.html', '.md', '.latex', '.json']],
         confirmText: this.ts.l.download,
         cancelText: this.ts.l.cancel
       },
@@ -550,6 +550,30 @@ export class DashboardComponent implements OnInit {
       this.showOptions = !this.showOptions;
     }
     this.dontToggle = false;
+  }
+  
+  editStoryTitle() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.story_details,
+        type: 'select',
+        data: [this.story.title, [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]],
+        confirmText: this.ts.l.save_details,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          this.storyService.updateStoryTitleAndDialect(this.story, res[0], res[1]).subscribe({
+                complete: () => {
+                  this.ngOnInit();
+                },
+              });
+        }
+    });
   }
 
 
