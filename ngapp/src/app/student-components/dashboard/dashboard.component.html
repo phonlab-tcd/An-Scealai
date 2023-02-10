@@ -1,6 +1,5 @@
-<!-- Display the written story along with edit options -->
-<div class="bookContainer">
-  <!-- MODAL -->
+<div class="dashboardContainer">
+  <!-- MODAL POPUP IF STORY NOT SAVED -->
   <div class="{{ modalClass }} modalContainer">
     <div class="modalContent" *ngIf="story">
       <div class="modalText">
@@ -23,9 +22,9 @@
     </div>
   </div>
 
+                                                                                            <!-- CONTAINER HEADER -->
   <div class="bookHeader">
-    <div class="headerUpper">
-      <!-- BACK BUTTON TO LIST OF STUDENT'S STORIES -->
+      <!-- BACK BUTTON -->
       <div routerLink="/contents" class="myStoriesBtn">
         <i class="fa fa-chevron-left backArrow"></i>
         {{ ts.l.contents }}
@@ -33,7 +32,7 @@
 
       <!-- STORY TITLE -->
       <p
-        style="margin-right: 3em; margin-left: 3em; overflow: auto"
+        style="margin-right: 3em; margin-left: 3em; overflow: auto; font-size: 20px;"
         [ngStyle]="titleStyle()"
         data-cy="title"
       >
@@ -51,9 +50,10 @@
           <i class="fas fa-save"> </i>
         </div>
       </div>
-    </div>
+ 
   </div>
 
+                                                                                            <!-- STORY OPTIONS TOOLBAR-->
   <div class="optionsBtnContainer" (click)="toggleOptions()">
     <div class="optionsBtn">
       <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
@@ -71,18 +71,10 @@
     </div>
 
     <!-- SPEECH TO TEXT-->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; speakStory()"
-    >
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()">
       {{ ts.l.dictation }}
-      <span
-        *ngIf="!isRecording"
-        class="material-symbols-outlined optionsBtnIcon"
-        >speech_to_text</span
-      >
       <!-- Google icon, index.html-->
+      <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span>
       <button *ngIf="isRecording" class="notRecordingBtn blink">
         <i class="fas fa-stop-circle"></i>
       </button>
@@ -101,6 +93,7 @@
         <i class="fas fa-download optionsBtnIcon"></i>
       </button>
     </div>
+
     <!-- FEEDBACK -->
     <div
       *ngIf="showOptions"
@@ -116,9 +109,7 @@
     <div
       *ngIf="showOptions"
       class="optionsBtn optionsPopupBtn"
-      (click)="
-        this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible
-      "
+      (click)="this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible"
     >
       {{ ts.l.dictionary }}
       <i class="fas fa-book optionsBtnIcon"></i>
@@ -165,10 +156,10 @@
     </div>
   </div>
 
-  <!-- story contents -->
+                                                                                           <!-- STORY CONTENTS -->
   <div class="storyContainer" *ngIf="story">
     <!-- display story before grammar checked (i.e. writing mode)-->
-    <div>
+    <div class="writingContainer">
       <div *ngIf="feedbackVisible" class="feedbackHeader">
         <div>
           {{ ts.l.feedback }}
@@ -194,8 +185,8 @@
         class="audioPlayer"
       ></audio>
 
-      <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-      <span #quillHeightSpan [ngStyle]="quillEditorStyle">
+      <!-- <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" /> -->
+      <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle">
         <quill-editor
           [modules]="quillToolbar"
           placeholder=""
@@ -206,81 +197,52 @@
           (onEditorCreated)="onEditorCreated($event)"
         >
         </quill-editor>
-      </span>
+      </div>
     </div>
 
     <!-- Word Count -->
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        padding-bottom: 6px;
-        padding-left: 8px;
-        padding-top: 0;
-        margin-top: 0;
-      "
-    >
+    <div class="wordCountContainer">
       <span> {{ ts.l.word_count }}: {{ wordCount }} </span>
     </div>
 
     <!-- SELECTED GRAMMAR SUGGESTION -->
-    <div
-      style="background-color: #8fcaff"
-      [hidden]="!showErrorTags"
-      [innerHTML]="selectedGrammarSuggestion()"
-    ></div>
+    <div style="background-color: #8fcaff" [hidden]="!showErrorTags" [innerHTML]="selectedGrammarSuggestion()"></div>
     <!-- GRAMMAR CHECKER SETTINGS -->
-    <div
-      class="selectErrorCheckbox"
-      [hidden]="grammarSettingsHidden || !showErrorTags"
-    >
+    <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags" >
       <span class="dictionaryContainer">
         <div class="dictionaryHeader">
           <h5>
             {{ ts.message("grammar_checker_settings") }}
           </h5>
-          <div
-            class="closeDictionaryBtn"
-            (click)="grammarSettingsHidden = true"
-          >
+          <div class="closeDictionaryBtn" (click)="grammarSettingsHidden = true">
             <i class="fa fa-times"></i>
           </div>
         </div>
         <div class="checkAllBox">
-          <input
-            [(ngModel)]="checkBoxes['showAll']"
-            (ngModelChange)="setAllCheckBoxes()"
-            type="checkbox"
-          />
+          <input [(ngModel)]="checkBoxes['showAll']" (ngModelChange)="setAllCheckBoxes()" type="checkbox" />
           {{ ts.message("check_all") }}
         </div>
       </span>
 
       <!-- GRAMMAR ERROR CHECKBOXES -->
-
-      <div
-        *ngFor="let tag of grammarErrorsTypeDict | keyvalue"
-        style="margin: 2px"
-      >
+      <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" style="margin: 2px">
         <input
           [(ngModel)]="checkBoxes[tag.key]"
-          (ngModelChange)="
-            setCheckBox(tag.value, $event); checkBoxes['showAll'] = false
-          "
+          (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
           type="checkbox"
         />
+          <!-- Error name -->
         {{
           ts.l.iso_code == "en"
             ? (tag.value[0].nameEN | titlecase)
             : (tag.value[0].nameGA | titlecase)
         }}
-        <!-- Error name -->
+        <!-- Error count -->
         ({{
           tag.value[0].nameEN == "Broad/Slender"
             ? tag.value.length / 2
             : tag.value.length
         }})
-        <!-- Error count -->
       </div>
     </div>
   </div>
@@ -354,11 +316,14 @@
       </ul>
     </div>
   </div>
-</div>
-<app-synthesis-player
+
+  <app-synthesis-player
   #mySynthesisPlayer
   [text]="story.text"
   [storyId]="story._id"
   [storyTitle]="story.title"
 >
 </app-synthesis-player>
+
+</div>
+
