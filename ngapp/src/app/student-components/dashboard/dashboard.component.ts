@@ -52,7 +52,6 @@ import { ErrorTag } from '../../lib/grammar-engine/types';
 
 export class DashboardComponent implements OnInit {
 
-  
   // STORY VARIABLES
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
@@ -102,9 +101,7 @@ export class DashboardComponent implements OnInit {
   synthesisPlayer: SynthesisPlayerComponent;
   
   // SPEECH TO TEXT
-  url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
   audioSourceASR : SafeUrl;
-  chunks: any[] = [];
   isRecording: boolean = false;
   
   constructor(
@@ -575,7 +572,6 @@ export class DashboardComponent implements OnInit {
         }
     });
   }
-
 
   /* Stop recording if already recording, otherwise start recording */
   async speakStory() {
