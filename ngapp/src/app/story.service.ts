@@ -90,7 +90,8 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
   }
   
-  getStoriesForClassroom(owner: string, date): Observable<any> {
+  getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {
+    console.log(date);
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
