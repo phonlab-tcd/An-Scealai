@@ -168,14 +168,23 @@
           <i class="fa fa-times"></i>
         </div>
       </div>
-      <textarea
-        *ngIf="feedbackVisible"
-        class="textField feedbackTextareaAudio"
+      <!-- Display feedback text and markup-->
+      <div *ngIf="feedbackVisible" class="textFieldContainer">
+        <!-- feedback text comment -->
+        <textarea
+        class="textField"
         placeholder="{{ ts.l.no_feedback_provided }}"
         readonly
-        value="{{ story?.feedback.text }}"
-      >
-      </textarea>
+        value="{{ story?.feedback.text }}">
+        <!-- feedback story markup -->
+        </textarea>
+        <hr>
+        <div class="textField" style="text-align: left; padding-left:25%; padding-right:25%;"
+          *ngIf="story.feedback.feedbackMarkup" 
+          [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.feedback.feedbackMarkup)" >
+        </div>
+      </div>
+       <!-- Display feedback audio-->
       <audio
         *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
         [src]="audioSource"

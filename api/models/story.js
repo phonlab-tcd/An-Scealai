@@ -1,59 +1,63 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let Story = new Schema(
-  {
-    owner: {
+const Story = new Schema(
+    {
+      owner: {
         type: mongoose.Types.ObjectId,
         index: true,
         // required: true, // TODO, make required
         // ref: 'User', // TODO, validate relation to users collection
-    },
-    title: {
-      type: String,
-    },
-    date: {
-      type: Date,
-    },
-    lastUpdated: {
-      type: Date,
-    },
-    dialect: {
-      type: String,
-    },
-    text: {
-      type: String,
-    },
-    htmlText: {
-      type: String,
-    },
-    author: { // DEPRECATED
-        type: String
-    },
-    studentId: { // DEPRECATED
-        type: String
-    },
-    feedback: {
+      },
+      title: {
+        type: String,
+      },
+      date: {
+        type: Date,
+      },
+      lastUpdated: {
+        type: Date,
+      },
+      dialect: {
+        type: String,
+      },
       text: {
         type: String,
-        default: null,
       },
-      seenByStudent: {
-        type: Boolean,
-        default: null,
-      },
-      audioId: {
+      htmlText: {
         type: String,
-        default: null,
+      },
+      author: { // DEPRECATED
+        type: String,
+      },
+      studentId: { // DEPRECATED
+        type: String,
+      },
+      feedback: {
+        text: {
+          type: String,
+          default: null,
+        },
+        feedbackMarkup: {
+          type: String,
+          default: null,
+        },
+        seenByStudent: {
+          type: Boolean,
+          default: null,
+        },
+        audioId: {
+          type: String,
+          default: null,
+        },
+      },
+      activeRecording: {
+        type: String,
       },
     },
-    activeRecording: {
-      type: String,
+    {
+      collection: 'story',
     },
-  },
-  {
-    collection: "story",
-  }
 );
 
-module.exports = mongoose.model("Story", Story);
+module.exports = mongoose.model('Story', Story);

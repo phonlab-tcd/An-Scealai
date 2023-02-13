@@ -203,6 +203,30 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
     if (story) {
       story.feedback.text = req.body.feedback;
       story.feedback.seenByStudent = false;
+      story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.save();
+      res.status(200).json({'message': 'Feedback added successfully'});
+    } else {
+      res.status(404).json({'message': 'Story does not exist'});
+    }
+  });
+});
+
+
+/**
+ * Update feedback makrup text for a particular story
+ * @param {Object} req params: Story ID
+ * @param {Object} req body: Feedback markup data
+ * @return {Object} Success or error message
+ */
+storyRoutes.route('/updateFeedbackMarkup/:id').post((req, res) => {
+  Story.findById(req.params.id, (err, story) => {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    }
+    if (story) {
+      story.feedback.feedbackMarkup = req.body.feedbackMarkup;
       story.save();
       res.status(200).json({'message': 'Feedback added successfully'});
     } else {

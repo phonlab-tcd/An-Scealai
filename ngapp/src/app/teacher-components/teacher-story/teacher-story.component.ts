@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StoryService } from '../../story.service';
@@ -9,12 +9,16 @@ import { ProfileService } from '../../profile.service';
 import { AuthenticationService } from '../../authentication.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RecordingDialogComponent } from '../../dialogs/recording-dialog/recording-dialog.component';
+import { BasicDialogComponent } from 'app/dialogs/basic-dialog/basic-dialog.component';
+import  Quill  from 'quill';
 import config from 'abairconfig';
+
 
 @Component({
   selector: 'app-teacher-story',
   templateUrl: './teacher-story.component.html',
-  styleUrls: ['./teacher-story.component.scss']
+  styleUrls: ['./teacher-story.component.scss', './../../../quill.fonts.scss',],
+  encapsulation: ViewEncapsulation.None
 })
 export class TeacherStoryComponent implements OnInit {
 
@@ -38,6 +42,15 @@ export class TeacherStoryComponent implements OnInit {
   isFromAmerica: boolean = false;
   dialogRef: MatDialogRef<unknown>;
   baseUrl: string = config.baseurl;
+  quillEditor: Quill;
+  storyUpdated: boolean = false;
+  config = {
+    toolbar :  [
+      [{ 'color': [] }, { 'background': [] }],
+      [ 'bold', 'italic', 'underline', 'strike' ],
+     
+    ]
+  }
 
   ngOnInit() {
     this.getStoryData();
@@ -55,6 +68,7 @@ export class TeacherStoryComponent implements OnInit {
         this.isFromAmerica = false;
       }
     });
+
   }
 
 /*
@@ -64,13 +78,26 @@ export class TeacherStoryComponent implements OnInit {
   getStoryData() {
     this.http.get(this.baseUrl + 'story/viewStory/' + this.route.snapshot.params['id']).subscribe((res) => {
       this.story = res[0];
-      if(this.story.htmlText == null) {
-        this.story.htmlText = this.story.text;
+      // get story text from previous markup if it exists, otherwise just get story html
+      if(this.story.feedback.feedbackMarkup == null) {
+        this.story.feedback.feedbackMarkup = this.story.htmlText || this.story.text;
+      }
+      // check if student has updated story since last teacher edits made, if so refresh button is displayed
+      else {
+        this.storyUpdated = this.checkTextDifference(this.story.feedback.feedbackMarkup, this.story.text);
       }
       this.getFeedbackAudio();
       this.getAuthorPossessive();
       this.getUserId();
     });
+  }
+
+  
+  /* return true if the texts are different, otherwise return false */
+  checkTextDifference(text1: string, text2: string) {
+    let stripped1 = text1.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, '');
+    let stripped2 = text2.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, '');
+    return stripped1 !== stripped2;
   }
 
 /*
@@ -106,7 +133,12 @@ export class TeacherStoryComponent implements OnInit {
 * Add feedback text to the story using the story service 
 */
   sendFeedback() {
-    this.storyService.addFeedback(this.story._id, this.story.feedback.text).subscribe((res) => {
+    let markupText = null;
+    // check if the teacher added any markup to the story text, if so save to DB
+    if (this.story.htmlText !== this.story.feedback.feedbackMarkup) {
+      markupText = this.story.feedback.feedbackMarkup;
+    }
+    this.storyService.addFeedback(this.story._id, this.story.feedback.text, markupText).subscribe((res) => {
       this.feedbackSent = true;
     });
   }
@@ -131,6 +163,47 @@ export class TeacherStoryComponent implements OnInit {
         }
     });
   }
+
+  /* 
+  * Open update story markup dialog box
+  */
+    openUpdateStoryTextDialog() {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: 'Update Story',
+          message: `${this.story.author} has made changes since you last viewed the story. Do you want to refresh the text? Any previous highlighting/editing to the story text will be overriden`,
+          confirmText: this.ts.l.yes,
+          cancelText: this.ts.l.no
+        },
+        width: '60vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if(res) {
+            this.storyService.updateFeedbackMarkup(this.story._id, null).subscribe();
+            this.story.feedback.feedbackMarkup = this.story.htmlText;
+          }
+      });
+    }
+
+    /* Initialise quill editor and highlighter */
+    onEditorCreated(q: Quill) {
+      this.quillEditor = q;
+      this.quillEditor.root.setAttribute("spellcheck", "false");
+    }
+
+    /* 
+   * Update story text with what the student has written with quill
+   * Call functions to save story to DB
+  */
+    onContentChanged(q: {editor: Quill; html: string; text: string; content: any; delta: any; oldDelta: any; source: 'user'|'api'|'silent'|undefined}) {
+      this.story.text = q.text;
+      switch(q.source) {
+        case 'user':
+          // save changes to DB
+      }
+    }
 
   goBack() {
     this.router.navigateByUrl('teacher/student/' + this.userId);
