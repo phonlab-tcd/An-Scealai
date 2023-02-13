@@ -35,6 +35,8 @@ export class TeacherStudentComponent implements OnInit {
       this.classroom = await firstValueFrom(this.classroomService.getClassroomOfStudent(this.student._id));
       // only get stories written after classroom creation date (or get all if no date)
       this.stories = await firstValueFrom(this.storyService.getStoriesForClassroom(this.student._id, this.classroom.date?.toString()));
+      this.stories.sort((a,b) => (a.lastUpdated > b.lastUpdated) ? -1 : ((b.lastUpdated > a.lastUpdated) ? 1 : 0))
+
 
       // filter stories for those that have no feedback
       this.storiesWithoutFeedback = this.stories.filter( (story) => {
