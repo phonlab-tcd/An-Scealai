@@ -91,7 +91,6 @@ export class StoryService {
   }
   
   getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {
-    console.log(date);
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
