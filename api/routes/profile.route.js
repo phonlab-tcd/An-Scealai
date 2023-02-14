@@ -18,6 +18,16 @@ profileRoutes.route('/create').post((req, res) => {
 });
 
 /**
+ * Get total number of profiles
+ * @param {Object} req
+ * @return {Object} Total number of profiles
+ */
+profileRoutes.route('/getCount').get(async (req, res) => {
+  const profileCount = await Profile.find().countDocuments();
+  res.status(200).json(profileCount);
+});
+
+/**
  * Get a profile by ID
  * @param {Object} req params: Profile ID
  * @return {Object} Profile object
@@ -62,5 +72,28 @@ profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
     } else res.json('Successfully removed profile');
   });
 });
+
+/**
+ * Get counts of counties for all users
+ * @param {Object} req
+ * @return {Object} Total number of counties
+ */
+profileRoutes.route('/getCountyCounts').get(async (req, res) => {
+  const profiles = await Profile.find();
+  const countyTotals = {};
+
+  // create a dictionary of county name and total counts
+  for (const entry of profiles) {
+    if (entry.county) {
+      let county = entry.county;
+      if (entry.county == 'Baile Átha Cliath') county = 'Contae Átha Cliath'; // can only use one 'Dublin' for map on admin dashboard
+      if (!countyTotals[county]) countyTotals[county] = 0;
+      countyTotals[county] += 1;
+    }
+  }
+
+  res.status(200).json(countyTotals);
+});
+
 
 module.exports = profileRoutes;

@@ -38,6 +38,22 @@ export class UserService {
     return this.http.get(this.baseUrl + 'count/');
   }
 
+  getUserCountAndStatus(): Observable<any> {
+    return this.http.get(this.baseUrl + 'countAndStatus/');
+  }
+
+  countUsersWithStories(): Observable<any> {
+    return this.http.get(this.baseUrl + 'countUsersWithStories/');
+  }
+
+  countTeachersWithClassrooms(): Observable<any> {
+    return this.http.get(this.baseUrl + 'countTeachersWithClassrooms/');
+  }
+
+  getLanguageCount(): Observable<any> {
+    return this.http.get(this.baseUrl + 'getLanguageCount/');
+  }
+
   deleteUser(id: string): Observable<any> {
     console.log("delete acount for ", id)
     return this.http.get(this.baseUrl + 'deleteUser/' + id);

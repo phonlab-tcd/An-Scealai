@@ -19,12 +19,24 @@ let userRoutes;
     require('../endpoints_functions/user/searchUser');
   const getUserCount =
     require('../endpoints_functions/user/getUserCount');
+  const getUserCountAndStatus =
+    require('../endpoints_functions/user/getUserCountAndStatus');
   const updateUsername =
     require('../endpoints_functions/user/updateUsername');
+  const countUsersWithStories =
+    require('../endpoints_functions/user/countUsersWithStories');
+  const countTeachersWithClassrooms =
+    require('../endpoints_functions/user/countTeachersWithClassrooms');
+  const getLanguageCount =
+    require('../endpoints_functions/user/getLanguageCount');
 
   userRoutes = makeEndpoints({
     get: {
       '/count': getUserCount,
+      '/countAndStatus': getUserCountAndStatus,
+      '/countUsersWithStories': countUsersWithStories,
+      '/countTeachersWithClassrooms': countTeachersWithClassrooms,
+      '/getLanguageCount': getLanguageCount,
     },
     post: {
       '/searchUser': searchUser,

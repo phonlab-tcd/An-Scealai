@@ -64,9 +64,7 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
@@ -89,6 +87,7 @@ import { AdminClassroomComponent } from './admin-components/admin-classroom/admi
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
+import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 
 @NgModule({
     declarations: [
@@ -103,7 +102,6 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         DashboardComponent,
         BookContentsComponent,
         ChatbotComponent,
-        NewStoryComponent,
         ProfileComponent,
         AdminPanelComponent,
         TeachersComponent,
@@ -120,7 +118,6 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         StoryHistoryComponent,
         RecordingComponent,
         RegisterProfileComponent,
-        StoryDetailsComponent,
         FindUserComponent,
         HighlightDirective,
         FilterPipe,
@@ -145,6 +142,7 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
         RecordingDialogComponent,
         UserGuidesComponent,
         TeacherSettingsComponent,
+        DatabaseStatsComponent,
     ],
     imports: [
         RegisterModule,

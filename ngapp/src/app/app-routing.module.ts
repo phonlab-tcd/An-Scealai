@@ -22,9 +22,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { NewStoryComponent } from './student-components/new-story/new-story.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { StoryDetailsComponent } from './student-components/story-details/story-details.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
 import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
@@ -37,6 +35,7 @@ import { AdminDashboardComponent } from './admin-components/admin-dashboard/admi
 import { StoryComponent } from './admin-components/story/story.component';
 import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
 import { FindUserComponent } from './admin-components/find-user/find-user.component';
+import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
@@ -74,8 +73,6 @@ const routes: Routes = [
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
-  { path: 'new-story', component: NewStoryComponent, canActivate: [AuthGuardService] },
-  { path: 'story-details/:id', component: StoryDetailsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
   { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
@@ -127,6 +124,10 @@ const routes: Routes = [
       {
         path: 'feature-stats',
         component: FeatureStatsComponent,
+      },
+      {
+        path: 'database-stats',
+        component: DatabaseStatsComponent,
       }
     ]
   },

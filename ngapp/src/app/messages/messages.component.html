@@ -14,13 +14,13 @@
      
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
-      <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
+      <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div style="padding-left:25px;"> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
       <div *ngIf="receivedMessages.length > 0" class="messageList">
         <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message.id"> 
         <!--  <div class="messageEntries"> -->
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
-              <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle' style='font-size:10px;color:#70a87f;padding-right:5px'></i></div>
+              <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle dot'></i></div>
               <div> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>

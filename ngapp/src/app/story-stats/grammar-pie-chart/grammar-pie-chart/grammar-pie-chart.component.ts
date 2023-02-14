@@ -42,9 +42,12 @@ export class GrammarPieChartComponent implements OnInit {
             }]
         },
         options: {
+          plugins: {
             legend: {
               display: false,
             }
+          }
+
         },
     });
 

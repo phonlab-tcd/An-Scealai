@@ -91,7 +91,7 @@ export class RecordAudioService {
       this.chunks = [];
     });
   }
-
+  
   async getAudioTranscription() {
     await new Promise(resolve => setTimeout(resolve,500));   // chunks needs some time to fully load?
     const blob = new Blob(this.chunks, {type: 'audio/mp3'});
@@ -124,5 +124,5 @@ export class RecordAudioService {
       
     });
     return transcription;
-  }  
+  }
 }
