@@ -17,8 +17,6 @@ import config from 'abairconfig';
 })
 export class StoryService {
 
-  chosenStory: Story;
-
   constructor(
     private http: HttpClient,
     private router: Router,
