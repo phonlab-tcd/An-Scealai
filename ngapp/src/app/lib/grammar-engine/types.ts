@@ -30,14 +30,14 @@ export const ERROR_INFO = {
     },
     "RELATIVE-CLAUSE": {
       nameEN: 'Relative Clause',
-      nameGA: 'Relative Clause Error',
+      nameGA: 'Clásáil Coibhneasta',
       color: '#CBC3E3', 
       messageEN: 'Relative Clause Error', 
-      messageGA: 'Relative Clause Error'
+      messageGA: 'Botún leis an gClásál Coibhneasta'
     },
     "GEN-TONIC": {
       nameEN: 'Genitive',
-      nameGA: 'Genitive',
+      nameGA: 'Tuiseal Ginideach',
       color: '#00FA9A', 
       messageEN: 'Consider using the genitive', 
       messageGA: 'Úsáid an tuiseal ginideach'
