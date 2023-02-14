@@ -34,9 +34,9 @@ export class GrammarErrorTimeComponent implements OnInit {
 
     // loop through each error and create data structures for chart
     for(let entry of this.grammarErrorTimeCounts) {
-      console.log(entry)
       for (let [key, value] of Object.entries(entry)) {
         Object.keys(value).forEach((item) => labels.add(item)); // loop through each timestamp
+        console.log(labels)
         let dict = {
           label: this.ts.currentLanguage? ERROR_INFO[key].nameGA : ERROR_INFO[key].nameEN , // Error name
           data: Object.values(value),  // {timestamp: count}
@@ -45,12 +45,11 @@ export class GrammarErrorTimeComponent implements OnInit {
         };
         datasets.push(dict);
       }
-      
     }
-
 
     let canvasElem = document.getElementById("grammar-errors-time-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext("2d");
+    console.log(datasets)
     this.chart = new Chart(ctx, {
       type: "line",
       data: {
@@ -58,16 +57,18 @@ export class GrammarErrorTimeComponent implements OnInit {
         datasets: datasets,
       },
       options: {
-        legend: {
-          display: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
         },
         scales: {
-          yAxes: [{
-            ticks: {
-              stepSize: 1
-            }
-          }]
-        }
+          y: {
+              ticks: {
+                  stepSize: 1
+              }
+          }
+        },
       }
     });
     

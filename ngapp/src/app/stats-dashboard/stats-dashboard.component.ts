@@ -153,7 +153,7 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     let grammarErrors = [];
-    grammarErrors[0] = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${studentId}`));
+    grammarErrors[0] = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getTimeGrammarCounts/${studentId}`));
     this.grammarErrorTimeCounts = grammarErrors;
     
   }

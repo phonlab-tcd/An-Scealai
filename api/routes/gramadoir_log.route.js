@@ -16,7 +16,10 @@ gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
     .get(auth, getUniqueErrorTypeCounts);
 gramadoirRoutes
-    .route('/getUserGrammarCounts/:ownerId')
+    .route('/getUserGrammarCounts')
+    .get(auth, getUserGrammarCounts);
+gramadoirRoutes
+    .route('/getTimeGrammarCounts/:ownerId')
     .get(auth, getUserGrammarCounts);
 
 module.exports = gramadoirRoutes;
