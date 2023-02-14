@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   // add the 'owner' property to any stories that don't have it
   if (oldStories) {
     for (const story of oldStories) {
-      story.owner = mongoose.Types.ObjectId(req.params.id);;
+      story.owner = mongoose.Types.ObjectId(req.params.id);
       try {
         await story.save();
       }
