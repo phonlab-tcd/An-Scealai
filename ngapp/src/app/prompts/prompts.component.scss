@@ -1,0 +1,152 @@
+.container {
+    width: 600px;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    animation-duration: 1s;
+    animation-name: fadeIn;
+}
+
+.playback {
+    display: flex;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    padding: 6px;
+    justify-content: space-between;
+    background-color: rgba(128, 128, 128, 0.7);
+}
+
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 4px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+.button.no:hover {
+    background-color: #ff6a6a;
+    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+}
+
+.synth-item {
+    margin-bottom: 4px;
+}
+
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 20px;
+    margin-bottom: 60px;
+}
+
+.content {
+    text-align: left;
+}
+
+.formGroup {
+    display: flex;
+    margin: auto;
+    padding: 8px;
+}
+
+.highlight {
+    background-color: lightcoral;
+    border-radius: 4px;
+    margin: 0px;
+    padding: 2px;
+}
+
+
+.dialectSelect {
+    font-size: 16px;
+    height: 24px;
+}
+
+.formLabel {
+    padding-right: 8px;
+}
+
+.titleInput {
+    padding: 8px;
+    height: 24px;
+} 
+
+.word-bank {
+    padding: 16px;
+    display: flex;
+}
+
+.your-word-bank {
+    padding-left: 8px;
+}
+
+.word-types {
+    padding: 8px;
+}
+
+.given-word {
+    padding: 16px;
+}
+
+.pos-confirmation-buttons {
+    padding: 8px;
+}
+
+.prompt-input {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.validationAlert {
+    padding-left: 8px;
+    color: red;
+    font-size: 12pt;
+}
+
+.synth {
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .container {
+        width: 95%;
+    }
+    .content {
+        font-size: 10pt;
+    }
+    .header {
+        font-size: 15pt;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0%;
+        transform: translateY(100px) scale(0.9);
+    }
+
+    to {
+        opacity: 100%;
+        transform: translateY(0px) scale(1);
+    }
+}
