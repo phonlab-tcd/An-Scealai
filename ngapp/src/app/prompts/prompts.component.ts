@@ -484,6 +484,11 @@ export class PromptsComponent implements OnInit {
   buttonsLoading: boolean = false;
   errorButtons: string[];
 
+  @Input() text: string;
+  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+
+  selected: Voice;
+  
   constructor(
     private storyService: StoryService,
     private auth: AuthenticationService,
@@ -493,40 +498,40 @@ export class PromptsComponent implements OnInit {
   ) { this.posCreateForm(); }
 
   ngOnInit(): void {
-    console.log(this.wordTypes);
     this.refresh();
   }
 
-  // init() {
-  //   //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
-  //   //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
-  //   if (location.search !== "") {
-  //     console.log("Loading text from location.search: " + location.search);
+  init() {
+    //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
+    //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
+    if (location.search !== "") {
+      console.log("Loading text from location.search: " + location.search);
 
-  //     var sp = new URLSearchParams(location.search)
-  //     var text = JSON.parse(sp.get("text"))
-  //     console.log(text);
-  //     console.log("text.name: " + text.name);
-  //   } else {
-  //     console.log("Loading texts from " + this.arrayString);
-  //   }
-  // }
+      var sp = new URLSearchParams(location.search)
+      var text = JSON.parse(sp.get("text"))
+      console.log(text);
+      console.log("text.name: " + text.name);
+    } else {
+      console.log("Loading texts from " + this.arrayString);
+    }
+  }
 
-  @Input() text: string;
-  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
 
-  selected: Voice;
   refresh(voice: Voice = undefined) {
     if(voice) this.selected = voice;
-    this.synthItem.audioUrl = undefined;
-    this.synthItem.dispose();
-    this.synthItem = null;
+    if (this.synthItem) {
+      this.synthItem.audioUrl = undefined;
+      this.synthItem.dispose();
+      this.synthItem = null;
+    }
+
     this.makeSynth();
     // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
     if(this.arrayString === "") return;
   }
 
   makeSynth(){
+    if (!this.arrayString) {return;}
     this.synthItem = this.getSynthItem(this.arrayString);
     this.synthItem.text = "Play Prompt";
   }
@@ -575,39 +580,39 @@ export class PromptsComponent implements OnInit {
   async getBankHighlights() {
     this.bankHighlightsLoading = true;
     //this.bankHighlights = this.gs.gramadoirDirectObservable(this.arrayString, 'ga');
-    this.bankHighlights.subscribe(res => {
-      console.log(res, '<SUBSCRIBE STRING>');
-      this.indiceValues = res.map(element =>
-        new Object(
-          {
-            fromx: Number(element.fromx),
-            tox: Number(element.tox)
-          }
-        )
-      )
-      console.log(this.indiceValues, 'INDICEVALS');
-      if (this.indiceValues.length !== 0) {
-        let newStart: number = 0;
-        let lastBitToAdd: number = 0;
-        this.innerHTMLWordBank = '';
-        for (var i = 0; i < this.indiceValues.length; i++) {
-          let nonHighlightStart: number = newStart;
-          let highlightStart: number = this.indiceValues[i].fromx;
-          let highlightEnd: number = this.indiceValues[i].tox + 1;
-          lastBitToAdd = highlightEnd;
+    // this.bankHighlights.subscribe(res => {
+    //   console.log(res, '<SUBSCRIBE STRING>');
+    //   this.indiceValues = res.map(element =>
+    //     new Object(
+    //       {
+    //         fromx: Number(element.fromx),
+    //         tox: Number(element.tox)
+    //       }
+    //     )
+    //   )
+    //   console.log(this.indiceValues, 'INDICEVALS');
+    //   if (this.indiceValues.length !== 0) {
+    //     let newStart: number = 0;
+    //     let lastBitToAdd: number = 0;
+    //     this.innerHTMLWordBank = '';
+    //     for (var i = 0; i < this.indiceValues.length; i++) {
+    //       let nonHighlightStart: number = newStart;
+    //       let highlightStart: number = this.indiceValues[i].fromx;
+    //       let highlightEnd: number = this.indiceValues[i].tox + 1;
+    //       lastBitToAdd = highlightEnd;
 
-          this.innerHTMLWordBank +=
-            this.arrayString.slice(nonHighlightStart, highlightStart)
-            + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
+    //       this.innerHTMLWordBank +=
+    //         this.arrayString.slice(nonHighlightStart, highlightStart)
+    //         + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
 
-          newStart = this.indiceValues[i].tox + 1;
-        }
-        this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
-      } else {
-        this.innerHTMLWordBank = this.arrayString;
-      }
-      this.bankHighlightsLoading = false;
-    });
+    //       newStart = this.indiceValues[i].tox + 1;
+    //     }
+    //     this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
+    //   } else {
+    //     this.innerHTMLWordBank = this.arrayString;
+    //   }
+    //   this.bankHighlightsLoading = false;
+    // });
   }
 
   createWordBankString(array: Array<string>) {
