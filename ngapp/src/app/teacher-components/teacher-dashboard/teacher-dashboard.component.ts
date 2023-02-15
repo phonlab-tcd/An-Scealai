@@ -6,6 +6,7 @@ import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { NotificationService } from '../../notification-service.service';
+import { ProfileService } from '../../profile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
@@ -21,7 +22,8 @@ export class TeacherDashboardComponent implements OnInit {
               private router: Router,
               public ts : TranslationService,
               public ns: NotificationService,
-              private dialog: MatDialog,) { }
+              private dialog: MatDialog,
+              private profileService: ProfileService) { }
               
   
   classrooms : Observable<Classroom[]>;
@@ -29,6 +31,11 @@ export class TeacherDashboardComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
+    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    }, err => {
+      this.router.navigateByUrl('/register-profile');
+    });
+
     this.classrooms = this.getClassrooms();
     // TODO: Fix bug
     // this.classrooms.sort((a, b) => (a.title < b.title) ? -1 : 1);
