@@ -2024,9 +2024,9 @@ export default {
   date_range: {
     ga: 'Raon na nDátaí',
     en: 'Date Range' },
-  dictation: {
-    ga: 'Deachtú',
-    en: 'Dictation' },
+  speak: {
+    ga: 'Abair scéal',
+    en: 'Speak' },
   download: {
     ga: 'Íoslódáil',
     en: 'Download' },

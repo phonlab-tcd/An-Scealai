@@ -72,7 +72,7 @@
 
     <!-- SPEECH TO TEXT-->
     <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()">
-      {{ ts.l.dictation }}
+      {{ ts.l.speak }}
       <!-- Google icon, index.html-->
       <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span>
       <button *ngIf="isRecording" class="notRecordingBtn blink">
