@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild} from "@angular/core";
-import { TranslationService } from "../translation.service";
-import { StoryService } from "../story.service";
-import { AuthenticationService } from "app/authentication.service";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
-import { SynthesisService, Voice, voices, } from "app/services/synthesis.service";
-import { SynthItem } from "app/synth-item";
-import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
+import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
+import { TranslationService } from '../translation.service';
+import { StoryService } from '../story.service'
+import { AuthenticationService } from 'app/authentication.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
+import { SynthItem } from 'app/synth-item';
+import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
 
 @Component({
-  selector: "app-prompts",
-  templateUrl: "./prompts.component.html",
-  styleUrls: ["./prompts.component.scss"],
+  selector: 'app-prompts',
+  templateUrl: './prompts.component.html',
+  styleUrls: ['./prompts.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
+
 export class PromptsComponent implements OnInit {
   tempWordDatabase = {
     noun: [
@@ -468,14 +469,14 @@ export class PromptsComponent implements OnInit {
     ]
   }
 
-  WORD_PROMPT = "Please choose a word type";
-  givenWord = "Please choose a word type";
+  WORD_PROMPT = 'Please choose a word type';
+  givenWord = 'Please choose a word type';
   wordBank = [];
-  arrayString = "";
+  arrayString = '';
   newStoryForm: FormGroup;
   bankHighlights: Observable<any>;
   indiceValues: { fromx: number; tox: number }[] = [];
-  innerHTMLWordBank: string = "";
+  innerHTMLWordBank: string = '';
   bankHighlightsLoading: boolean = true;
   synthItem: SynthItem;
   wordTypes = Object.keys(this.tempWordDatabase);
@@ -488,46 +489,44 @@ export class PromptsComponent implements OnInit {
     private auth: AuthenticationService,
     private fb: FormBuilder,
     public ts: TranslationService,
-    private synth: SynthesisService
-  ) {
-    this.posCreateForm();
-  }
+    private synth: SynthesisService,
+  ) { this.posCreateForm(); }
 
   ngOnInit(): void {
-    console.log("pos-prompt-init");
+    console.log(this.wordTypes);
     this.refresh();
   }
 
-  init() {
-    //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
-    //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
-    if (location.search !== "") {
-      console.log("Loading text from location.search: " + location.search);
+  // init() {
+  //   //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
+  //   //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
+  //   if (location.search !== "") {
+  //     console.log("Loading text from location.search: " + location.search);
 
-      var sp = new URLSearchParams(location.search);
-      var text = JSON.parse(sp.get("text"));
-      console.log(text);
-      console.log("text.name: " + text.name);
-    } else {
-      console.log("Loading texts from " + this.arrayString);
-    }
-  }
+  //     var sp = new URLSearchParams(location.search)
+  //     var text = JSON.parse(sp.get("text"))
+  //     console.log(text);
+  //     console.log("text.name: " + text.name);
+  //   } else {
+  //     console.log("Loading texts from " + this.arrayString);
+  //   }
+  // }
 
   @Input() text: string;
-  @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+  @ViewChild('voiceSelect') voiceSelect: ElementRef<SynthVoiceSelectComponent>;
 
   selected: Voice;
   refresh(voice: Voice = undefined) {
-    if (voice) this.selected = voice;
+    if(voice) this.selected = voice;
     this.synthItem.audioUrl = undefined;
     this.synthItem.dispose();
     this.synthItem = null;
     this.makeSynth();
-    // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
-    if (this.arrayString === "") return;
+    // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
+    if(this.arrayString === "") return;
   }
 
-  makeSynth() {
+  makeSynth(){
     this.synthItem = this.getSynthItem(this.arrayString);
     this.synthItem.text = "Play Prompt";
   }
@@ -538,18 +537,14 @@ export class PromptsComponent implements OnInit {
 
   posSynthRefresh() {
     if (this.synthItem?.dispose instanceof Function) this.synthItem.dispose();
-    this.synthItem = new SynthItem(
-      this.arrayString,
-      this.newStoryForm.get("dialect").value,
-      this.synth
-    );
+    this.synthItem = new SynthItem(this.arrayString, this.newStoryForm.get('dialect').value, this.synth);
   }
 
   //Could perhaps use createForm() from the dashboard component instead
   posCreateForm() {
     this.newStoryForm = this.fb.group({
-      title: ["", Validators.required],
-      dialect: ["connemara"],
+      title: ['', Validators.required],
+      dialect: ['connemara']
     });
   }
 
@@ -558,15 +553,7 @@ export class PromptsComponent implements OnInit {
     let username = this.auth.getUserDetails().username;
     let studentId = this.auth.getUserDetails()._id;
     let createdWithPrompts = true;
-    // this.storyService.saveStoryPrompt(
-    //   studentId,
-    //   title,
-    //   date,
-    //   dialect,
-    //   text,
-    //   username,
-    //   createdWithPrompts
-    // );
+    //this.storyService.saveStoryPrompt(studentId, title, date, dialect, text, username, createdWithPrompts);
   }
 
   async selectWord(type: keyof typeof this.tempWordDatabase) {
@@ -587,24 +574,22 @@ export class PromptsComponent implements OnInit {
   //While this is loading the text should be shown unhighlighted.
   async getBankHighlights() {
     this.bankHighlightsLoading = true;
-    // this.bankHighlights = this.gs.gramadoirDirectObservable(
-    //   this.arrayString,
-    //   "ga"
-    // );
-    this.bankHighlights.subscribe((res) => {
-      console.log(res, "<SUBSCRIBE STRING>");
-      this.indiceValues = res.map(
-        (element) =>
-          new Object({
+    //this.bankHighlights = this.gs.gramadoirDirectObservable(this.arrayString, 'ga');
+    this.bankHighlights.subscribe(res => {
+      console.log(res, '<SUBSCRIBE STRING>');
+      this.indiceValues = res.map(element =>
+        new Object(
+          {
             fromx: Number(element.fromx),
-            tox: Number(element.tox),
-          })
-      );
-      console.log(this.indiceValues, "INDICEVALS");
+            tox: Number(element.tox)
+          }
+        )
+      )
+      console.log(this.indiceValues, 'INDICEVALS');
       if (this.indiceValues.length !== 0) {
         let newStart: number = 0;
         let lastBitToAdd: number = 0;
-        this.innerHTMLWordBank = "";
+        this.innerHTMLWordBank = '';
         for (var i = 0; i < this.indiceValues.length; i++) {
           let nonHighlightStart: number = newStart;
           let highlightStart: number = this.indiceValues[i].fromx;
@@ -612,17 +597,12 @@ export class PromptsComponent implements OnInit {
           lastBitToAdd = highlightEnd;
 
           this.innerHTMLWordBank +=
-            this.arrayString.slice(nonHighlightStart, highlightStart) +
-            '<b class="highlight">' +
-            this.arrayString.slice(highlightStart, highlightEnd) +
-            "</b>";
+            this.arrayString.slice(nonHighlightStart, highlightStart)
+            + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
 
           newStart = this.indiceValues[i].tox + 1;
         }
-        this.innerHTMLWordBank += this.arrayString.slice(
-          lastBitToAdd,
-          this.arrayString.length
-        );
+        this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
       } else {
         this.innerHTMLWordBank = this.arrayString;
       }
@@ -631,13 +611,13 @@ export class PromptsComponent implements OnInit {
   }
 
   createWordBankString(array: Array<string>) {
-    let arrayString = "";
+    let arrayString = '';
     if (array.length > 0) {
       for (var i = 0; i < array.length; i++) {
         arrayString += array[i];
-        arrayString += " ";
+        arrayString += ' ';
       }
-      arrayString = arrayString.slice(0, -1) + ".";
+      arrayString = arrayString.slice(0, -1) + '.';
       arrayString = arrayString.charAt(0).toUpperCase() + arrayString.slice(1);
       this.arrayString = arrayString;
     }
@@ -655,4 +635,5 @@ export class PromptsComponent implements OnInit {
   randomWord(wordList: Array<string>) {
     return wordList[Math.floor(Math.random() * wordList.length)];
   }
+
 }

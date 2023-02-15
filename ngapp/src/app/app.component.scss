@@ -90,6 +90,13 @@
   right: 20px;
 }
 
+// TODO: Does this actually affect the style?
+.mat-badge-content {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
 .profileBtnContainer {
   display: flex;
   align-items: center;

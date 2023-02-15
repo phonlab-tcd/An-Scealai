@@ -2009,11 +2009,86 @@ export default {
   gp_dropdown: {
     ga: 'Leideanna Cineálach',
     en: 'General Prompts' },
-
-
-
-
-
+  pos_prompts: {
+    ga: 'Cén Scéal!',
+    en: 'What a Story!' },
+  pos_description: {
+    ga: 'Déan scéal trí fhocail randamacha a roghnú.',
+    en: 'Make a story by choosing random words.' },
+  pos_demand: {
+    ga: 'Tabhair dom a: ',
+    en: 'Give me a: ' },
+  pos_choose_word_type: {
+    ga: 'Roghnaigh cineál focal',
+    en: 'Please choose a word type' },
+  pos_add_to_word_bank: {
+    ga: 'Ar mhaith leat an focal seo a chur le do bhanc focal?',
+    en: 'Would you like to add this word to your word bank?' },
+  pos_instructions: {
+    ga: 'Conas "Cén Scéal!" a úsáid',
+    en: 'How to use "What a Story!"' },
+  pos_instructions_description_1: {
+    ga: 'Ar dtús, roghnaigh ceann amháin de na cineálacha focal a thugtar. ' +
+    'Beidh focal randamach den chineál sin focal le feiceáil. ' +
+    'Más maith leat an focal cliceáil "Sea", agus mura bhfuil cliceáil "ní hea". Déan é seo arís go dtí go mbeidh an scéal inmhianaithe tosaithe agat.',
+    en: 'Firstly, select one of the given word types. '+
+    'A random word of that word type will appear. '+
+    'If you like the word click "yes", and if not click "no". Repeat this until you have the desired story started.' },
+  pos_instructions_description_2: {
+    ga: 'Ar an dara dul síos, cinntigh nach bhfuil gramadach mícheart ar bith ag do scéal (mar atá léirithe ag an aibhsiú dearg os cionn téacs mícheart). ' +
+    'Mura bhfuil tú sásta leis an scéal tosaithe is féidir leat "Athshocraigh Banc" a roghnú chun an banc focal a athshocrú. ' +
+    'Is féidir leat do scéal a shábháil ansin trí theideal, canúint bhailí a thabhairt dó agus “Sábháil go Scéalta” a bhrú.',
+    en: 'Secondly, make sure your story has no incorrect grammar(as indicated by the red highlighting over incorrect text). ' +
+    'If you\'re unhappy with the story starter you can select "Reset Bank" to reset the word bank. ' +
+    'You can then save your story by giving it a valid title, dialect and pressing "Save to Stories".' },
+  pos_your_word_bank: {
+    ga: 'Do Bhanc Focal: ',
+    en: 'Your Word Bank: ' },
+  pos_synth: {
+    ga: 'Athsheinm Sintéise',
+    en: 'Synthesis Playback' },
+  pos_reset_bank: {
+    ga: 'Banc Athshocraigh',
+    en: 'Reset Bank' },
+  pos_save_to_stories: {
+    ga: 'Shábháil ar Scéalta',
+    en: 'Save to Stories'},
+  pos_save_name: {
+    ga: 'Ainmnigh Do Scéal',
+    en: 'Name Your Story' },
+  pos_no_words: {
+    ga: 'Focail Roghnaithe Le feiceáil Anseo',
+    en: 'Chosen Words Appear Here' },
+  verb: {
+    ga: 'Briathar', 
+    en: 'Verb' }, 
+  noun: {
+    ga: 'Ainmfhocal', 
+    en: 'Noun' }, 
+  adjective: {
+    ga: 'Aidiacht', 
+    en: 'Adjective' }, 
+  adverb: {
+    ga: 'Dobhriathar', 
+    en: 'Adverb' }, 
+  pronoun: {
+    ga: 'Forainm', 
+    en: 'Pronoun' }, 
+  determiner: {
+    ga: 'Chinntitheoir', 
+    en: 'Determiner' },
+  article: {
+    ga: 'Airteagal', 
+    en: 'Article' }, 
+  adposition: {
+    ga: 'Adposition', 
+    en: 'Adposition' }, 
+  conjunction: {
+    ga: 'Comhcheangail', 
+    en: 'Conjunction' }, 
+  numeral: {
+    ga: 'Uimhreacha', 
+    en: 'Numeral' },
 
 
 
