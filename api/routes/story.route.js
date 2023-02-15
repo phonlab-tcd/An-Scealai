@@ -204,6 +204,7 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
       story.feedback.text = req.body.feedback;
       story.feedback.seenByStudent = false;
       story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.feedback.lastUpdated = new Date();
       story.save();
       res.status(200).json({'message': 'Feedback added successfully'});
     } else {
