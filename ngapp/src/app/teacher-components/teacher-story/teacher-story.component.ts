@@ -44,6 +44,7 @@ export class TeacherStoryComponent implements OnInit {
   baseUrl: string = config.baseurl;
   quillEditor: Quill;
   storyUpdated: boolean = false;
+  initialMarkupText: string;
   config = {
     toolbar :  [
       [{ 'color': [] }, { 'background': [] }],
@@ -86,6 +87,8 @@ export class TeacherStoryComponent implements OnInit {
       else {
         this.storyUpdated = this.checkTextDifference(this.story.feedback.feedbackMarkup, this.story.text);
       }
+      // set variable to initial markup text to check for saving changes before leaving page
+      this.initialMarkupText = this.story.feedback.feedbackMarkup;
       this.getFeedbackAudio();
       this.getAuthorPossessive();
       this.getUserId();
@@ -141,6 +144,7 @@ export class TeacherStoryComponent implements OnInit {
     this.storyService.addFeedback(this.story._id, this.story.feedback.text, markupText).subscribe((res) => {
       this.feedbackSent = true;
     });
+    this.initialMarkupText = markupText;
   }
   
   /* 
@@ -199,13 +203,32 @@ export class TeacherStoryComponent implements OnInit {
   */
     onContentChanged(q: {editor: Quill; html: string; text: string; content: any; delta: any; oldDelta: any; source: 'user'|'api'|'silent'|undefined}) {
       this.story.text = q.text;
-      switch(q.source) {
-        case 'user':
-          // save changes to DB
-      }
     }
 
+  /* check if any changes need to be saved and prompt, otherwise go back */
   goBack() {
-    this.router.navigateByUrl('teacher/student/' + this.userId);
+    if (this.initialMarkupText !== this.story.feedback.feedbackMarkup) {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: 'save changes',
+          message:  'save changes',
+          confirmText: this.ts.l.yes,
+          cancelText: this.ts.l.no
+        },
+        width: '60vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if(res) {
+            this.sendFeedback();
+          }
+          this.router.navigateByUrl('teacher/student/' + this.userId);
+      });
+    }
+    else {
+      this.router.navigateByUrl('teacher/student/' + this.userId);
+    }
+    
   }
 }

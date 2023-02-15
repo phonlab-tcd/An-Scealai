@@ -267,6 +267,7 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
         const uploadStream = bucket.openUploadStream('audio-feedback-for-story-' + story._id.toString());
         story.feedback.audioId = uploadStream.id;
         story.feedback.seenByStudent = false;
+        story.feedback.lastUpdated = new Date();
         story.save();
         // pipe data in stream to the audio file entry in the db
         readableTrackStream.pipe(uploadStream);
