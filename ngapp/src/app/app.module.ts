@@ -87,6 +87,7 @@ import { StoryHistoryComponent } from './admin-components/story-history/story-hi
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
+import { PromptsComponent } from './prompts/prompts.component';
 
 @NgModule({
     declarations: [
@@ -142,6 +143,7 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
         UserGuidesComponent,
         TeacherSettingsComponent,
         DatabaseStatsComponent,
+        PromptsComponent,
     ],
     imports: [
         RegisterModule,

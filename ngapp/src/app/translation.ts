@@ -1988,6 +1988,49 @@ export default {
   shuffle_questions: {
     ga: 'shuffle questions',
     en: 'shuffle questions' },
+  prompts: {
+    ga: 'Leideanna',
+    en: 'Prompts' },
+  pos_dropdown: {
+    ga: 'POS Leideanna',
+    en: 'POS Prompts'},
+  sep_dropdown: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Exam Prompts' },
+  pp_dropdown: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  lp_dropdown: {
+    ga: 'Leideanna LARA',
+    en: 'LARA Prompts' },
+  sp_dropdown: {
+    ga: 'Leideanna Scealaí',
+    en: 'Story Prompts' },
+  gp_dropdown: {
+    ga: 'Leideanna Cineálach',
+    en: 'General Prompts' },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   search: {
     ga: 'Cuardaigh',
     en: 'Search' },
