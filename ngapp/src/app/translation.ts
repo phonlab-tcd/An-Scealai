@@ -2089,7 +2089,67 @@ export default {
   numeral: {
     ga: 'Uimhreacha', 
     en: 'Numeral' },
-
+  sep_header: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Examination Prompts' },
+  sep_explanation: {
+    ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
+    en: 'Press the button to recieve a topic or story starter to write about' },
+  get_prompt: {
+    ga: 'Faigh Leid',
+    en: 'Get Prompt' },
+  please_choose_prompt: {
+    ga: 'Roghnaigh leid le do thoil',
+    en: 'Please choose a prompt' },
+  choose_level: {
+    ga: 'Roghnaigh Leibhéal Gaeilge',
+    en: 'Choose a Level of Irish' },
+  level_preferences: {
+    ga: ['Teastas Sóisearach', 'Ardteistiméireacht(GL)', 'Ardteistiméireacht(AL)'],
+    en: ['Junior Certificate', 'Leaving Certificate(OL)', 'LeavingCertificate(HL)'],
+  },
+  pp_header: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  pp_explanation: {
+    ga: 'Brúigh an cnaipe chun seanfhocal a fháil le scríobh faoi/úsáid',
+    en: 'Press the button to recieve a proverb to write about/use' },
+  pp_no_prompt: {
+    ga: 'Roghnaigh seanfhocal le do thoil',
+    en: 'Please choose a proverb' },
+  pp_get_prompt: {
+    ga: 'Faigh Seanfhocal',
+    en: 'Get Proverb' },
+  lp_header: {
+    ga: 'Leideanna LARA',
+    en: 'LARA Prompts' },
+  lp_explanation: {
+    ga: 'Brúigh an cnaipe chun tús a chur le scéal, agus críochnaigh tú féin é!',
+    en: 'Press the button to get the start of a story, and finish it yourself!' },
+  lp_get_prompt: {
+    ga: 'Faigh Scéal',
+    en: 'Get Story' },
+  sp_explanation: {
+    ga: 'Cliceáil an cnaipe chun roinnt topaicí a fháil do do scéal!',
+    en: 'Click the button to get some topics for your story!' },
+  sp_character: {
+    ga: 'Carachtar',
+    en: 'Character' },
+  sp_setting: {
+    ga: 'Suíomhanna',
+    en: 'Setting' },
+  sp_theme: {
+    ga: 'Téama',
+    en: 'Theme' },
+  sp_change: {
+    ga: 'Athrú',
+    en: 'Change' },
+  gp_explanation: {
+    ga: 'Brúigh an cnaipe chun tús scéil cineálach a fháil, agus críochnaigh tú féin é!',
+    en: 'Press the button to get a generic story starter, and finish it yourself!' },
+  gp_get_prompt: {
+    ga: 'Faigh Scéal',
+    en: 'Get Starter' },
 
 
 

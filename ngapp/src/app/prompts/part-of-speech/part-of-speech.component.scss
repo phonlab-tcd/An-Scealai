@@ -12,49 +12,6 @@
     animation-name: fadeIn;
 }
 
-.story-prompt-box {
-    display: flex;
-    max-height: fit-content;
-    justify-content: center;
-}
-
-.story-prompt-box > p {
-    margin: 4px;
-}
-
-.story-prompt {
-    display: flex;
-    flex-direction: column;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-top: 24px;
-}
-
-.story-prompt > p {
-    margin: 8px 4px 4px 0px;
-}
-
-.character {
-    font-size: 24px;
-    margin: 0px 8px 8px 0px;
-    animation-name: slots;
-    animation-duration: 3s;
-}
-
-.setting {
-    font-size: 24px;
-    margin: 0px 8px 8px 0px;
-    animation-name: slots;
-    animation-duration: 4s;
-}
-
-.theme {
-    font-size: 24px;
-    margin: 0px 8px 8px 0px;
-    animation-name: slots;
-    animation-duration: 5s;
-}
-
 .playback {
     display: flex;
     padding: 6px;
@@ -188,44 +145,4 @@
         opacity: 100%;
         transform: translateY(0px) scale(1);
     }
-}
-
-.header {
-    margin-bottom: 16px;
-}
-
-.button-div {
-    max-height: 48px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
-
-.button {
-    margin: 0px;
-}
-
-.formLabel {
-    margin: 2px;
-    padding: 2px;
-}
-
-.dialectSelect {
-    margin: 4px;
-}
-
-.level-select {
-    font-size: 16px;
-    height: 24px;
-}
-
-.prompt-button:hover {
-    box-shadow: 0 0 8px rgba(33, 33, 33, 0.2);
-}
-
-.prompt {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-top: 24px;
-    font-size: 24px;
 }

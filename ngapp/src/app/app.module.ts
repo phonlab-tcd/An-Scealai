@@ -88,6 +88,7 @@ import { RecordingComponent } from './student-components/recording/recording.com
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 import { PromptsComponent } from './prompts/prompts.component';
+import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 
 @NgModule({
     declarations: [
@@ -144,6 +145,7 @@ import { PromptsComponent } from './prompts/prompts.component';
         TeacherSettingsComponent,
         DatabaseStatsComponent,
         PromptsComponent,
+        PartOfSpeechComponent,
     ],
     imports: [
         RegisterModule,

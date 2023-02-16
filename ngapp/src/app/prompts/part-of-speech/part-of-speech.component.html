@@ -1,0 +1,121 @@
+<!--Irish Language support probably wrong(I used google translate)-->
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="container">
+          <div class="header">
+            {{ts.l.pos_prompts}}
+            <h6>{{ts.l.pos_description}} </h6>
+          </div>
+          <div class="content">
+            {{ts.l.pos_demand}}
+            <!--Word Type Button Group-->
+            <div class="word-types">
+              <div class="btn-group-sm" role="group">
+                  <button *ngFor="let type of wordTypes" type=button (click)=selectWord(type) class="button">{{ts.l[type]}}</button>
+              </div>
+            </div>
+          </div>
+          <!--Word Card-->
+          <div *ngIf="givenWord !== WORD_PROMPT" class="given-word">
+            <div class="card">
+              <h3 class="card-header">{{givenWord}}</h3>
+            </div>
+          </div>
+          <!--Ask for word-->
+          <div *ngIf="givenWord === WORD_PROMPT" class="given-word">
+            <i>{{ts.l.pos_choose_word_type}}</i>
+          </div>
+          <!--Confirm word choice-->
+          <div *ngIf="givenWord !== WORD_PROMPT" class="content"> 
+            {{ts.l.pos_add_to_word_bank}}
+            <div class="pos-confirmation-buttons">
+              <button type="button" (click)="posConfirmation(true)" class="button">{{ts.l.yes}}</button>
+              <button type="button" (click)="posConfirmation(false)" class="button no">{{ts.l.no}}</button>
+            </div>     
+          </div>
+        </div>
+        <!--Instructions-->
+        <div class="container">
+          <div class="header">
+            {{ts.l.pos_instructions}}
+          </div>
+          <h6 align="justify">
+              <p>{{ts.l.pos_instructions_description_1}}</p>
+              <p>{{ts.l.pos_instructions_description_2}}</p>
+          </h6>
+        </div>
+      </div>
+      <!--Word Bank-->
+      <div class="col-lg-6">
+        <!--Chosen Words & Audio Playback-->
+        <div *ngIf="wordBank.length > 0" class="container">
+          <div *ngIf="!bankHighlightsLoading" class="word-bank">
+            <div class="your-word-bank">{{ts.l.pos_your_word_bank}}</div>
+            <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
+          </div>
+          <div *ngIf="bankHighlightsLoading" class="word-bank">
+            <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+            <div>{{createWordBankString(wordBank)}}</div>
+          </div>
+        </div>
+        <div *ngIf="(!bankHighlightsLoading || bankHighlightsLoading) && wordBank.length > 0" class="container">
+          <h2>{{ts.l.pos_synth}}</h2>
+          <!--Synth-->
+          <div class="playback">
+            <div class="synth-item">
+              <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+            </div>
+            <!-- Select Synth dialect -->
+            <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+          </div>
+        </div>
+        <div *ngIf="wordBank.length > 0" class="container">
+          <form [formGroup]="newStoryForm">
+            <!--Reset or save story buttons-->
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" (click)="resetWordBank()" class="button no">{{ts.l.pos_reset_bank}}</button>
+              <button data-cy=create-story
+                    type="submit" 
+                    (click)="posAddNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value, this.arrayString)" 
+                    [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
+                    class="button">
+                    {{ts.l.pos_save_to_stories}}
+                </button>
+            </div>
+            <!--Form input-->
+            <div class="formGroup" novalidate>
+              <p class="formLabel">{{ts.l.pos_save_name}}</p>
+              <input
+                data-cy=title
+                type="text"
+                class="titleInput"
+                formControlName="title"
+                maxLength="35"/>
+              <!-- check for invalid title -->
+              <div *ngIf="newStoryForm.controls['title'].invalid && 
+              (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" 
+              class="validationAlert">
+                <div *ngIf="newStoryForm.controls['title'].errors.required">
+                  *{{ts.l.title_required}}.
+                </div>
+              </div>
+            </div>
+            <!-- Select dialect -->
+            <div class="formGroup">
+              <p class="formLabel">{{ts.l.dialect}}</p>
+              <select formControlName="dialect" class="dialectSelect">
+                <option value="connemara">{{ts.l.connacht}}</option>
+                <option value="donegal">{{ts.l.ulster}}</option>
+                <option value="kerry">{{ts.l.munster}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <!--Empty Word Bank-->
+        <div *ngIf="wordBank.length === 0" class="container">
+          {{ts.l.pos_no_words}}
+        </div>
+      </div>
+    </div>
+  </div>

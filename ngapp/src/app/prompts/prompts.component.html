@@ -1,121 +1,143 @@
-<!--Irish Language support probably wrong(I used google translate)-->
-<div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="container">
-          <div class="header">
-            {{ts.l.pos_prompts}}
-            <h6>{{ts.l.pos_description}} </h6>
-          </div>
-          <div class="content">
-            {{ts.l.pos_demand}}
-            <!--Word Type Button Group-->
-            <div class="word-types">
-              <div class="btn-group-sm" role="group">
-                  <button *ngFor="let type of wordTypes" type=button (click)=selectWord(type) class="button">{{ts.l[type]}}</button>
-              </div>
-            </div>
-          </div>
-          <!--Word Card-->
-          <div *ngIf="givenWord !== WORD_PROMPT" class="given-word">
-            <div class="card">
-              <h3 class="card-header">{{givenWord}}</h3>
-            </div>
-          </div>
-          <!--Ask for word-->
-          <div *ngIf="givenWord === WORD_PROMPT" class="given-word">
-            <i>{{ts.l.pos_choose_word_type}}</i>
-          </div>
-          <!--Confirm word choice-->
-          <div *ngIf="givenWord !== WORD_PROMPT" class="content"> 
-            {{ts.l.pos_add_to_word_bank}}
-            <div class="pos-confirmation-buttons">
-              <button type="button" (click)="posConfirmation(true)" class="button">{{ts.l.yes}}</button>
-              <button type="button" (click)="posConfirmation(false)" class="button no">{{ts.l.no}}</button>
-            </div>     
-          </div>
-        </div>
-        <!--Instructions-->
-        <div class="container">
-          <div class="header">
-            {{ts.l.pos_instructions}}
-          </div>
-          <h6 align="justify">
-              <p>{{ts.l.pos_instructions_description_1}}</p>
-              <p>{{ts.l.pos_instructions_description_2}}</p>
-          </h6>
-        </div>
+<div *ngIf="type=='pos'">
+  <app-part-of-speech></app-part-of-speech>
+</div>
+<div *ngIf="type!=='pos'">
+  <!--Irish Language support probably wrong(I used google translate)-->
+<div>
+  <div class="container">
+      <div *ngIf="type=='state-exam'" class="header"> {{ts.l.sep_header}} </div>
+      <div *ngIf="type=='proverb'" class="header"> {{ts.l.pp_header}} </div>
+      <div *ngIf="type=='lara'" class="header"> {{ts.l.lp_header}} </div>
+      <div *ngIf="type=='story'" class="header"> {{ts.l.sp_dropdown}} </div>
+      <div *ngIf="type=='general'" class="header"> {{ts.l.gp_dropdown}} </div>
+      <div>
+          <p *ngIf="type=='state-exam'"> {{ts.l.sep_explanation}}</p>
+          <p *ngIf="type=='proverb'"> {{ts.l.pp_explanation}}</p>
+          <p *ngIf="type=='lara'"> {{ts.l.lp_explanation}}</p>
+          <p *ngIf="type=='story'"> {{ts.l.sp_explanation}}</p>
+          <p *ngIf="type=='general'"> {{ts.l.gp_explanation}}</p>
       </div>
-      <!--Word Bank-->
-      <div class="col-lg-6">
-        <!--Chosen Words & Audio Playback-->
-        <div *ngIf="wordBank.length > 0" class="container">
-          <div *ngIf="!bankHighlightsLoading" class="word-bank">
-            <div class="your-word-bank">{{ts.l.pos_your_word_bank}}</div>
-            <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
-          </div>
-          <div *ngIf="bankHighlightsLoading" class="word-bank">
-            <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
-            <div>{{createWordBankString(wordBank)}}</div>
-          </div>
-        </div>
-        <div *ngIf="(!bankHighlightsLoading || bankHighlightsLoading) && wordBank.length > 0" class="container">
-          <h2>{{ts.l.pos_synth}}</h2>
-          <!--Synth-->
-          <div class="playback">
-            <div class="synth-item">
-              <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
+      <!--State Exam Choose Level-->
+      <div *ngIf="type=='state-exam' || type=='story'" class="button-div">
+          <form [formGroup]="levelForm">
+              <div class="formGroup">
+                  <label class="formLabel">{{ts.l.choose_level}}</label>
+                  <select formControlName="level" class="level-select">
+                  <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp" >{{ts.l.level_preferences[i]}}</option>
+                  </select>
+              </div>
+          </form>
+          <button class="button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.get_prompt}}</button>
+      </div>
+      <!--Proverb Choose Dialect-->
+      <div *ngIf="type=='proverb'" class="button-div">
+        <form [formGroup]="dialectForm">
+            <div class="formGroup">
+                <label class="formLabel">{{ts.l.choose_level}}</label>
+                <select formControlName="dialect" class="level-select">
+                <option *ngFor="let dp of proverbDialectPreferences; let i = index" [ngValue]="dp" >{{proverbDialectPreferences[i]}}</option>
+                </select>
             </div>
-            <!-- Select Synth dialect -->
-            <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+        </form>
+        <button class="button" (click)="pp_currentPrompt(); randomPrompt(currentPromptBank);">{{ts.l.pp_get_prompt}}</button>
+    </div>
+    <!-- LARA Choose Dialect-->
+    <div *ngIf="type=='lara'" class="button-div">
+        <button class="button" (click)="currentPromptLARA(); randomPrompt(lara_data);">{{ts.l.lp_get_prompt}}</button>
+    </div>
+    <!-- GENERAL Choose Dialect-->
+    <div *ngIf="type=='general'" class="button-div">
+        <button class="button" (click)="randomPrompt(g_data);">{{ts.l.get_prompt}}</button>
+    </div>
+      <!--Prompt-->
+      <div *ngIf="promptExists; else noPrompt">
+            <!-- Proverb-->
+            <div *ngIf="type=='proverb' || type=='state-exam'">
+                <div *ngFor="let lp of levelPreferences;">
+                    <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
+                        <i>"{{returnLevel(lp)[currentPromptIndex]}}"</i>
+                    </div>
+                </div>
+            </div>
+
+          <!-- LARA -->
+          <div *ngIf="type=='lara'">
+            <i>"{{lara_data[currentPromptIndex]}}"</i>
           </div>
-        </div>
-        <div *ngIf="wordBank.length > 0" class="container">
+          <!-- STORY -->
+          <div *ngIf="type=='story'">
+            <div *ngFor="let lp of levelPreferences;">
+                <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
+                    <!--Calling methods so it updates on form selection change(prob a bit of redundant code)-->
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_character}}</p>
+                        <button class="button" (click)="change('character')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="character">{{chosenCharacter}}</i>
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_setting}}</p>
+                        <button class="button" (click)="change('setting')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="setting">{{chosenSetting}}</i>
+                    <div class="story-prompt-box">
+                        <p>{{ts.l.sp_theme}}</p>
+                        <button class="button" (click)="change('theme')">{{ts.l.sp_change}}</button>
+                    </div>
+                    <i class="theme">{{chosenTheme}}</i>
+                    </div>
+                </div>
+          </div>
+          <!-- GENERAL -->
+          <i *ngIf="type=='general'" class="prompt">{{prompt}}</i>
+
           <form [formGroup]="newStoryForm">
-            <!--Reset or save story buttons-->
-            <div class="btn-group btn-group-sm" role="group">
-              <button type="button" (click)="resetWordBank()" class="button no">{{ts.l.pos_reset_bank}}</button>
-              <button data-cy=create-story
-                    type="submit" 
-                    (click)="posAddNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value, this.arrayString)" 
-                    [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
-                    class="button">
-                    {{ts.l.pos_save_to_stories}}
-                </button>
-            </div>
-            <!--Form input-->
-            <div class="formGroup" novalidate>
-              <p class="formLabel">{{ts.l.pos_save_name}}</p>
-              <input
-                data-cy=title
-                type="text"
-                class="titleInput"
-                formControlName="title"
-                maxLength="35"/>
+              <!--Form input-->
+              <div>
+                  <div class="formGroup" novalidate>
+                  <p class="formLabel">{{ts.l.pos_save_name}}</p>
+                  <input
+                      data-cy=title
+                      type="text"
+                      class="titleInput"
+                      formControlName="title"
+                      maxLength="35"/>
+                  <!-- Select dialect -->
+                  <div class="formGroup">
+                      <p class="formLabel">{{ts.l.dialect}}</p>
+                          <select formControlName="dialect" class="dialectSelect">
+                              <option value="connemara">{{ts.l.connacht}}</option>
+                              <option value="donegal">{{ts.l.ulster}}</option>
+                              <option value="kerry">{{ts.l.munster}}</option>                  
+                          </select>
+                  </div>
+                  <!--Save story button-->
+                  <button data-cy=create-story
+                  type="submit" 
+                  (click)="addNewStory(
+                            newStoryForm.controls['title'].value, 
+                            newStoryForm.controls['dialect'].value, 
+                            prompt)" 
+                  [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
+                  class="button">{{ts.l.pos_save_to_stories}}</button>
+              </div>
               <!-- check for invalid title -->
               <div *ngIf="newStoryForm.controls['title'].invalid && 
               (newStoryForm.controls['title'].dirty || newStoryForm.controls['title'].touched)" 
               class="validationAlert">
-                <div *ngIf="newStoryForm.controls['title'].errors.required">
-                  *{{ts.l.title_required}}.
-                </div>
+                  <div *ngIf="newStoryForm.controls['title'].errors.required">
+                      *{{ts.l.title_required}}.
+                  </div>
               </div>
-            </div>
-            <!-- Select dialect -->
-            <div class="formGroup">
-              <p class="formLabel">{{ts.l.dialect}}</p>
-              <select formControlName="dialect" class="dialectSelect">
-                <option value="connemara">{{ts.l.connacht}}</option>
-                <option value="donegal">{{ts.l.ulster}}</option>
-                <option value="kerry">{{ts.l.munster}}</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <!--Empty Word Bank-->
-        <div *ngIf="wordBank.length === 0" class="container">
-          {{ts.l.pos_no_words}}
-        </div>
+              </div>
+            </form>
       </div>
-    </div>
+      <!--No Prompt-->
+      <ng-template #noPrompt>
+          <div *ngIf="promptExists === false" class="prompt">
+              {{ts.l.please_choose_prompt}}
+          </div>
+      </ng-template>
   </div>
+</div>
+
+</div>

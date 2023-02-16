@@ -116,12 +116,12 @@
       <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
       <button matBadge="Beta" matBadgeSize="small" matBadgePosition="before" matBadgeColor="accent" class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">{{ts.l.prompts}}</button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <button routerLink="/prompts/type" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>
-        <button routerLink="/prompts/exam-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.sep_dropdown}}</button>
-        <button routerLink="/prompts/proverb-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.pp_dropdown}}</button>
-        <button routerLink="/prompts/lara-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.lp_dropdown}}</button>
-        <button routerLink="/prompts/story-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.sp_dropdown}}</button>
-        <button routerLink="/prompts/general-prompts" ngbDropdownItem (click)="changeCheck()">{{ts.l.gp_dropdown}}</button>
+        <button routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>
+        <button routerLink="/prompts/state-exam" ngbDropdownItem (click)="changeCheck()">{{ts.l.sep_dropdown}}</button>
+        <button routerLink="/prompts/proverb" ngbDropdownItem (click)="changeCheck()">{{ts.l.pp_dropdown}}</button>
+        <button routerLink="/prompts/lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.lp_dropdown}}</button>
+        <button routerLink="/prompts/story" ngbDropdownItem (click)="changeCheck()">{{ts.l.sp_dropdown}}</button>
+        <button routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()">{{ts.l.gp_dropdown}}</button>
       </div>
     </div>
 
