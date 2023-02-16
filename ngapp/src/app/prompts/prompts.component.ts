@@ -7,6 +7,15 @@ import { Observable } from 'rxjs';
 import { SynthesisService, Voice, voices } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { HttpClient } from '@angular/common/http';
+import { GrammarEngine } from '../lib/grammar-engine/grammar-engine';
+import { anGramadoir } from '../lib/grammar-engine/checkers/an-gramadoir';
+import { ErrorTag } from '../lib/grammar-engine/types';
+
+type TagForHighlight = {
+  fromx: number;
+  tox: number;
+};
 
 @Component({
   selector: 'app-prompts',
@@ -474,8 +483,9 @@ export class PromptsComponent implements OnInit {
   wordBank = [];
   arrayString = '';
   newStoryForm: FormGroup;
+  grammarEngine: GrammarEngine;
   bankHighlights: Observable<any>;
-  indiceValues: { fromx: number; tox: number }[] = [];
+  indiceValues: TagForHighlight[] = [];
   innerHTMLWordBank: string = '';
   bankHighlightsLoading: boolean = true;
   synthItem: SynthItem;
@@ -495,9 +505,11 @@ export class PromptsComponent implements OnInit {
     private fb: FormBuilder,
     public ts: TranslationService,
     private synth: SynthesisService,
+    private http: HttpClient,
   ) { this.posCreateForm(); }
 
   ngOnInit(): void {
+    this.grammarEngine = new GrammarEngine([anGramadoir], this.http, this.auth);
     this.refresh();
   }
 
@@ -554,11 +566,7 @@ export class PromptsComponent implements OnInit {
   }
 
   posAddNewStory(title, dialect, text) {
-    let date = new Date();
-    let username = this.auth.getUserDetails().username;
-    let studentId = this.auth.getUserDetails()._id;
-    let createdWithPrompts = true;
-    //this.storyService.saveStoryPrompt(studentId, title, date, dialect, text, username, createdWithPrompts);
+    this.storyService.saveStory(this.auth.getUserDetails()._id, title, new Date(), dialect, text, this.auth.getUserDetails().username, true);
   }
 
   async selectWord(type: keyof typeof this.tempWordDatabase) {
@@ -579,40 +587,40 @@ export class PromptsComponent implements OnInit {
   //While this is loading the text should be shown unhighlighted.
   async getBankHighlights() {
     this.bankHighlightsLoading = true;
-    //this.bankHighlights = this.gs.gramadoirDirectObservable(this.arrayString, 'ga');
-    // this.bankHighlights.subscribe(res => {
-    //   console.log(res, '<SUBSCRIBE STRING>');
-    //   this.indiceValues = res.map(element =>
-    //     new Object(
-    //       {
-    //         fromx: Number(element.fromx),
-    //         tox: Number(element.tox)
-    //       }
-    //     )
-    //   )
-    //   console.log(this.indiceValues, 'INDICEVALS');
-    //   if (this.indiceValues.length !== 0) {
-    //     let newStart: number = 0;
-    //     let lastBitToAdd: number = 0;
-    //     this.innerHTMLWordBank = '';
-    //     for (var i = 0; i < this.indiceValues.length; i++) {
-    //       let nonHighlightStart: number = newStart;
-    //       let highlightStart: number = this.indiceValues[i].fromx;
-    //       let highlightEnd: number = this.indiceValues[i].tox + 1;
-    //       lastBitToAdd = highlightEnd;
-
-    //       this.innerHTMLWordBank +=
-    //         this.arrayString.slice(nonHighlightStart, highlightStart)
-    //         + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
-
-    //       newStart = this.indiceValues[i].tox + 1;
-    //     }
-    //     this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
-    //   } else {
-    //     this.innerHTMLWordBank = this.arrayString;
-    //   }
-    //   this.bankHighlightsLoading = false;
-    // });
+    this.grammarEngine.check$(this.arrayString).subscribe({
+      next: (tag: ErrorTag) => {
+        let entry:TagForHighlight =
+          {
+            fromx: Number(tag.fromX),
+            tox: Number(tag.toX)
+          }
+        this.indiceValues.push(entry);
+      },
+      error: function () {},
+      complete: () => {
+        if (this.indiceValues.length !== 0) {
+          let newStart: number = 0;
+          let lastBitToAdd: number = 0;
+          this.innerHTMLWordBank = '';
+          for (var i = 0; i < this.indiceValues.length; i++) {
+            let nonHighlightStart: number = newStart;
+            let highlightStart: number = this.indiceValues[i].fromx;
+            let highlightEnd: number = this.indiceValues[i].tox + 1;
+            lastBitToAdd = highlightEnd;
+  
+            this.innerHTMLWordBank +=
+              this.arrayString.slice(nonHighlightStart, highlightStart)
+              + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
+  
+            newStart = this.indiceValues[i].tox + 1;
+          }
+          this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
+        } else {
+          this.innerHTMLWordBank = this.arrayString;
+        }
+        this.bankHighlightsLoading = false;
+      },
+    });
   }
 
   createWordBankString(array: Array<string>) {

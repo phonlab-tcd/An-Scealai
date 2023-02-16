@@ -179,7 +179,7 @@ export class BookContentsComponent implements OnInit {
             let dialect = 'connemara';
             if (res[1] == this.ts.l.munster) dialect = 'kerry';
             if (res[1] == this.ts.l.ulster) dialect = 'donegal';
-            this.storyService.saveStory(this.auth.getUserDetails()._id, res[0], new Date(), dialect, "", this.auth.getUserDetails().username);
+            this.storyService.saveStory(this.auth.getUserDetails()._id, res[0], new Date(), dialect, "", this.auth.getUserDetails().username, false);
           }
           else {
             alert(this.ts.l.title_required);

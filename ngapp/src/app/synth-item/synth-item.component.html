@@ -1,5 +1,5 @@
 <span class="flex height center">
-    <span (click)="refresh();" class="flex clickable height reload left {{alternateColors(i)}}">
+    <span (click)="refresh();" class="flex clickable height reload left">
       <span>
         &#8635;
       </span>
@@ -12,7 +12,7 @@
       clickable
       height
       right
-      {{alternateColors(i)}}"
+      "
     style="display: flex;">
       <span *ngIf="synthItem.audioUrl; else loading" style="display: flex;">
         <div style="width: 1rem; height: 1rem;"></div>

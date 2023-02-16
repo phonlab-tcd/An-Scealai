@@ -29,7 +29,7 @@ export class StoryService {
 
   baseUrl: string = config.baseurl + 'story/';
 
-  saveStory(studentId, title, date, dialect, text, author) {
+  saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {
       title: title,
       date: date,
@@ -37,10 +37,12 @@ export class StoryService {
       text: text,
       htmlText: text,
       author: author,
+      createdWithPrompts: createdWithPrompts,
       studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
     };
+    console.log(storyObj);
     this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);

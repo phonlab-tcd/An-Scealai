@@ -1,5 +1,5 @@
 .container {
-    width: 600px;
+    width: 90%;
     background-color: white;
     border-radius: 4px;
     padding-top: 20px;
@@ -14,12 +14,8 @@
 
 .playback {
     display: flex;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 6px;
     padding: 6px;
     justify-content: space-between;
-    background-color: rgba(128, 128, 128, 0.7);
 }
 
 .button {
@@ -33,16 +29,14 @@
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.button:hover {
-    background-color: #2EE59D;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+.button:hover:not([disabled]) {
+    background-color: var(--scealai-green);
     color: #fff;
     transform: translateY(-4px);
 }
 
 .button.no:hover {
-    background-color: #ff6a6a;
-    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+    background-color: var(--notification-button);
 }
 
 .synth-item {
@@ -91,10 +85,12 @@
 .word-bank {
     padding: 16px;
     display: flex;
+    gap: 1rem;
 }
 
 .your-word-bank {
     padding-left: 8px;
+    font-weight: 900;
 }
 
 .word-types {

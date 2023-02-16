@@ -51,7 +51,7 @@
         <!--Chosen Words & Audio Playback-->
         <div *ngIf="wordBank.length > 0" class="container">
           <div *ngIf="!bankHighlightsLoading" class="word-bank">
-            <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
+            <div class="your-word-bank">{{ts.l.pos_your_word_bank}}</div>
             <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
           </div>
           <div *ngIf="bankHighlightsLoading" class="word-bank">
