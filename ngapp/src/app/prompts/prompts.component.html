@@ -17,7 +17,7 @@
           <p *ngIf="type=='story'"> {{ts.l.sp_explanation}}</p>
           <p *ngIf="type=='general'"> {{ts.l.gp_explanation}}</p>
       </div>
-      <!--State Exam Choose Level-->
+      <!--State Exam / STORY Choose Level-->
       <div *ngIf="type=='state-exam' || type=='story'" class="button-div">
           <form [formGroup]="levelForm">
               <div class="formGroup">
@@ -27,7 +27,6 @@
                   </select>
               </div>
           </form>
-          <button class="button" (click)="currentPrompt(); randomPrompt(currentPromptBank)">{{ts.l.get_prompt}}</button>
       </div>
       <!--Proverb Choose Dialect-->
       <div *ngIf="type=='proverb'" class="button-div">
@@ -35,36 +34,18 @@
             <div class="formGroup">
                 <label class="formLabel">{{ts.l.choose_level}}</label>
                 <select formControlName="dialect" class="level-select">
-                <option *ngFor="let dp of proverbDialectPreferences; let i = index" [ngValue]="dp" >{{proverbDialectPreferences[i]}}</option>
+                <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp" >{{proverbDialectPreferences[i]}}</option>
                 </select>
             </div>
         </form>
-        <button class="button" (click)="pp_currentPrompt(); randomPrompt(currentPromptBank);">{{ts.l.pp_get_prompt}}</button>
     </div>
-    <!-- LARA Choose Dialect-->
-    <div *ngIf="type=='lara'" class="button-div">
-        <button class="button" (click)="currentPromptLARA(); randomPrompt(lara_data);">{{ts.l.lp_get_prompt}}</button>
-    </div>
-    <!-- GENERAL Choose Dialect-->
-    <div *ngIf="type=='general'" class="button-div">
-        <button class="button" (click)="randomPrompt(g_data);">{{ts.l.get_prompt}}</button>
+    <!-- Get prompt button -->
+    <div class="button-div">
+        <button class="button" (click)="currentPrompt(); randomPrompt(data);">{{ts.l.get_prompt}}</button>
     </div>
       <!--Prompt-->
       <div *ngIf="promptExists; else noPrompt">
-            <!-- Proverb-->
-            <div *ngIf="type=='proverb' || type=='state-exam'">
-                <div *ngFor="let lp of levelPreferences;">
-                    <div *ngIf="levelForm.controls['level'].value === lp" class="prompt">
-                        <i>"{{returnLevel(lp)[currentPromptIndex]}}"</i>
-                    </div>
-                </div>
-            </div>
-
-          <!-- LARA -->
-          <div *ngIf="type=='lara'">
-            <i>"{{lara_data[currentPromptIndex]}}"</i>
-          </div>
-          <!-- STORY -->
+          <!-- STORY Prompt Text -->
           <div *ngIf="type=='story'">
             <div *ngFor="let lp of levelPreferences;">
                 <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
@@ -87,9 +68,9 @@
                     </div>
                 </div>
           </div>
-          <!-- GENERAL -->
-          <i *ngIf="type=='general'" class="prompt">{{prompt}}</i>
-
+          <!-- Prompt text -->
+          <i class="prompt">{{prompt}}</i>
+          <!-- Create new story -->
           <form [formGroup]="newStoryForm">
               <!--Form input-->
               <div>

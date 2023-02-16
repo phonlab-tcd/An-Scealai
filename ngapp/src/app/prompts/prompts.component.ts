@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PromptsComponent implements OnInit {
 
   // {string (level), string[]}
-  data = {
+  state_data = {
     sep_jc_choices: [
       "Nuair a chuala mo thuismitheoirí an scéal bhí siad ar buile liom… (2019)",
       "Eachtra ghreannmhar a tharla le linn turas scoile. (2019)",
@@ -46,7 +46,7 @@ export class PromptsComponent implements OnInit {
 
   // {string (dialect), string[]}
   pp_data = {
-    pp_munster: [
+    munster: [
       "Is minic a bhíonn ciúin ciontach",
       "Tosnú maith leath na hoibre",
       "Níor tógadh an Róimh in aon ló",
@@ -92,12 +92,12 @@ export class PromptsComponent implements OnInit {
       "Taithí a dhéanann an mháistreacht",
       "Tús maith leath na hoibre",
     ],     
-    pp_connacht: [
+    connacht: [
       "Is fada an bóthar nach bhfuil casadh ann",
       "Namhaid an cheird gan í a fhoghlaim",
       "Ní bhíonn in aon rud ach seal"
     ],
-    pp_ulster: [
+    ulster: [
       "Bíonn blas ar an bheagán",
       "Cha raibh séasúr fliuch gann riamh",
       "An rud a scríobhas an púca, léann sé féin é"
@@ -124,26 +124,46 @@ export class PromptsComponent implements OnInit {
     "An Tornapa Mór Millteach: ‘Ó, céard seo?’ arsa an feirmeoir…"
   ]
 
-  // {string (character), string[]}
-  dataHl = {
-    character: ['Síobhaire', 'Tuismitheoir buartha', 'Cúléisteoir', 'Piocaire Póca'],
-    setting: ['Reilig', 'Seanfhoirgnemah', 'Ardaitheoir Sáinnithe', 'Seomra Ranga'],
-    theme: ['Madra ar Iarraidh', 'Botún ar léarscáil', 'Scéál grinn... a théann ró-fhada', 'Geallúint nár comhlíonadh'],
+  // { string, Object {string, string[]}}
+  story_data = {
+    sep_jc_choices: {
+      character: ['Síobhaire', 'Tuismitheoir buartha', 'Cúléisteoir', 'Piocaire Póca'],
+      setting: ['Reilig', 'Seanfhoirgnemah', 'Ardaitheoir Sáinnithe', 'Seomra Ranga'],
+      theme: ['Madra ar Iarraidh', 'Botún ar léarscáil', 'Scéál grinn... a théann ró-fhada', 'Geallúint nár comhlíonadh'],  
+    },
+    sep_lcol_choices: {
+      character: ['Comharsa chantalach', 'Feighlí leanaí', 'Tiománaí leoraí'],
+      setting: ['Forhalla óstáin', 'Taobh an chnoic', 'An mórbhealach'],
+      theme: ['Tine sa chistin', 'Fón goidte', 'Gearán a éiríonn an-dáiríre'],
+    },
+    sep_lchl_choices: {
+      character: ['Duine Cáiliúil', 'Fear Crosta', 'Aintín atá as a Meabhair'],
+      setting: ['An Gairdín Cúl', 'Lár na Cathrach', 'Cúl an bhus'],
+      theme: ['Pléisiúr Dé', 'Nathair Nimhe ag Imeacht Thart sa Cheantar', 'Iarnóin deas Suimhneach'],
+    }
+
   }
 
-  // {string (character), string[]}
-  dataOl = {
-    character: ['Comharsa chantalach', 'Feighlí leanaí', 'Tiománaí leoraí'],
-    setting: ['Forhalla óstáin', 'Taobh an chnoic', 'An mórbhealach'],
-    theme: ['Tine sa chistin', 'Fón goidte', 'Gearán a éiríonn an-dáiríre'],
-  }
+  // // {string (character), string[]}
+  // dataHl = {
+  //   character: ['Síobhaire', 'Tuismitheoir buartha', 'Cúléisteoir', 'Piocaire Póca'],
+  //   setting: ['Reilig', 'Seanfhoirgnemah', 'Ardaitheoir Sáinnithe', 'Seomra Ranga'],
+  //   theme: ['Madra ar Iarraidh', 'Botún ar léarscáil', 'Scéál grinn... a théann ró-fhada', 'Geallúint nár comhlíonadh'],
+  // }
 
-  // {string (character, string[])}
-  dataJc = {
-    character: ['Duine Cáiliúil', 'Fear Crosta', 'Aintín atá as a Meabhair'],
-    setting: ['An Gairdín Cúl', 'Lár na Cathrach', 'Cúl an bhus'],
-    theme: ['Pléisiúr Dé', 'Nathair Nimhe ag Imeacht Thart sa Cheantar', 'Iarnóin deas Suimhneach'],
-  }
+  // // {string (character), string[]}
+  // dataOl = {
+  //   character: ['Comharsa chantalach', 'Feighlí leanaí', 'Tiománaí leoraí'],
+  //   setting: ['Forhalla óstáin', 'Taobh an chnoic', 'An mórbhealach'],
+  //   theme: ['Tine sa chistin', 'Fón goidte', 'Gearán a éiríonn an-dáiríre'],
+  // }
+
+  // // {string (character, string[])}
+  // dataJc = {
+  //   character: ['Duine Cáiliúil', 'Fear Crosta', 'Aintín atá as a Meabhair'],
+  //   setting: ['An Gairdín Cúl', 'Lár na Cathrach', 'Cúl an bhus'],
+  //   theme: ['Pléisiúr Dé', 'Nathair Nimhe ag Imeacht Thart sa Cheantar', 'Iarnóin deas Suimhneach'],
+  // }
 
   // string[]
   g_data = [
@@ -199,9 +219,11 @@ export class PromptsComponent implements OnInit {
   currentPromptBank: string[];
   newStoryForm: FormGroup;
   prompt: string;
-  levelPreferences: string[] = ['jc', 'lcol', 'lchl'];
+  levelPreferences: string[] = ['sep_jc_choices', 'sep_lcol_choices', 'sep_lchl_choices'];
 
   proverbDialectPreferences: string[] = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh"];
+
+  dialectPreferences: string[] = ["munster", 'connaught', 'ulster'];
 
   promptOptions: string[] = [];
 
@@ -212,7 +234,7 @@ export class PromptsComponent implements OnInit {
   chosenTheme: string;
   currentPromptBankStory: { character: string[]; setting: string[]; theme: string[]; };
 
-
+  data: any;
   type:string;
   
   constructor(
@@ -230,21 +252,20 @@ export class PromptsComponent implements OnInit {
 
     switch(this.type) {
       case 'state-exam':
-        this.promptOptions = ['jc', 'lcol', 'lchl'];
+        this.data = this.state_data;
         break;
       case 'proverb':
-        this.promptOptions = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh"];
-        // code block
+        this.data = this.pp_data;
         break;
       case 'lara':
+        this.data = this.lara_data;
         // code block
         break;
       case 'story':
-        this.promptOptions = ['jc', 'lcol', 'lchl'];
-        // code block
+        this.data = this.story_data;
         break;
       case 'general':
-        // code block
+        this.data = this.g_data;
         break;
       default:
         console.log('not a valid option')
@@ -260,10 +281,10 @@ export class PromptsComponent implements OnInit {
  */
   createForms() {
     this.levelForm = this.fb.group({
-      level: ['jc']
+      level: ['sep_jc_choices']
     });
     this.dialectForm = this.fb.group({
-      dialect: ["Gaeilge Mumha"]
+      dialect: ['munster']
     });
     this.newStoryForm = this.fb.group({
       title: ['', Validators.required],
@@ -281,88 +302,41 @@ export class PromptsComponent implements OnInit {
     this.storyService.saveStory(this.auth.getUserDetails()._id, title, new Date(), dialect, text, this.auth.getUserDetails().username, true);
   }
 
-  /**
-   * Get data from specified level form
-   * @param level 
-   * @returns array of data strings
-   */
-  returnLevel(level: string) {
-    console.log("in function")
-    if(level === 'jc'){
-      return this.data.sep_jc_choices;
-    } else if (level === 'lcol'){
-      return this.data.sep_lcol_choices;
-    } else {
-      return this.data.sep_lchl_choices;
-    }
-  }
-
-  returnLevelStory(level: string) {
-    if(level === 'jc'){
-      return this.dataJc;
-    } else if (level === 'lcol'){
-      return this.dataOl;
-    } else {
-      return this.dataHl;
-    }
-  }
-
-  //selectedDialect don't work
-  returnDialect(dialect: string) {
-    if(dialect === "Gaeilge Mumha"){
-      return this.pp_data.pp_munster;
-    } else if (dialect === "Gaeilge Chonnact"){
-      return this.pp_data.pp_connacht;
-    } else {
-      return this.pp_data.pp_ulster;
-    }
-  }
-
   currentPrompt() {
-    let bank = this.levelForm.controls['level'].value;
-    if(bank === 'jc'){
-      this.currentPromptBank = this.data.sep_jc_choices;
-    } else if(bank === 'lcol') {
-      this.currentPromptBank = this.data.sep_lcol_choices;
-    } else {
-      this.currentPromptBank = this.data.sep_lchl_choices;
+    console.log(this.type);
+    console.log(this.data);
+    if (this.type == 'state-exam') {
+      let bankChoice = this.levelForm.controls['level'].value;
+      console.log(bankChoice);
+      this.currentPromptBank = this.data[bankChoice];
+      console.log(this.currentPromptBank);
     }
-    console.log(this.currentPromptBank);
-  }
-
-  currentPromptStory() {
-    let bank = this.levelForm.controls['level'].value;
-    if(bank === 'jc'){
-      this.currentPromptBankStory = this.dataJc;
-    } else if(bank === 'lcol') {
-      this.currentPromptBankStory = this.dataOl;
-    } else {
-      this.currentPromptBankStory = this.dataHl;
+    else if (this.type == 'story') {
+      let bankChoice = this.levelForm.controls['level'].value;
+      console.log(bankChoice);
+      this.currentPromptBank = this.story_data[bankChoice];
+      console.log(this.currentPromptBank);
     }
-  }
-
-  currentPromptLARA() {
-    this.currentPromptBank = this.lara_data;
-  }
-
-  //For randomPrompt()
-  pp_currentPrompt() {
-    let bank = this.dialectForm.controls['dialect'].value;
-    if(bank === "Gaeilge Uladh"){
-      this.currentPromptBank = this.pp_data.pp_munster;
-    } else if(bank === "Gaeilge Chonnact") {
-      this.currentPromptBank = this.pp_data.pp_connacht;
-    } else {
-      this.currentPromptBank = this.pp_data.pp_ulster;
+    else if (this.type == 'proverb') {
+      let bankChoice = this.dialectForm.controls['dialect'].value;
+      console.log(bankChoice);
+      this.currentPromptBank = this.pp_data[bankChoice];
+      console.log(this.currentPromptBank);
+    }
+    else {
+      this.currentPromptBank = this.data;
     }
   }
 
   //Try find a way to not have the arrays in ts service
-  randomPrompt(promptArray: string[]) {
-    console.log(this.currentPromptBank);
+  randomPrompt() {
     this.promptExists = true;
-    this.currentPromptIndex = Math.floor(Math.random() * promptArray.length);
+    this.currentPromptIndex = Math.floor(Math.random() * this.currentPromptBank.length);
+    console.log(this.data);
+    console.log(this.currentPromptBank);
+    console.log(this.currentPromptIndex);
     this.prompt = this.currentPromptBank[this.currentPromptIndex];
+    console.log(this.prompt);
     return this.currentPromptIndex;
   }
 
