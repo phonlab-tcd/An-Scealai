@@ -12,6 +12,53 @@
     animation-name: fadeIn;
 }
 
+.header {
+    width: 100%;
+    font-size: 20pt;
+    height: 20px;
+    margin-bottom: 60px;
+}
+
+.button-div {
+    max-height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.formGroup {
+    display: flex;
+    margin: auto;
+    padding: 8px;
+}
+
+.formLabel {
+    margin: 2px;
+    padding: 2px;
+}
+
+.level-select {
+    font-size: 16px;
+    height: 24px;
+}
+
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 4px;
+    transition: all 0.3s ease 0s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover:not([disabled]) {
+    background-color: var(--scealai-green);
+    color: #fff;
+    transform: translateY(-4px);
+}
+
 .story-prompt-box {
     display: flex;
     max-height: fit-content;
@@ -55,114 +102,16 @@
     animation-duration: 5s;
 }
 
-.playback {
-    display: flex;
-    padding: 6px;
-    justify-content: space-between;
-}
-
-.button {
-    border-color: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    border-width: 1px;
-    letter-spacing: 1px;
-    background-color: rgba(126, 118, 118, 0.1);
-    margin: 4px;
-    transition: all 0.3s ease 0s;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-}
-
-.button:hover:not([disabled]) {
-    background-color: var(--scealai-green);
-    color: #fff;
-    transform: translateY(-4px);
-}
-
-.button.no:hover {
-    background-color: var(--notification-button);
-}
-
-.synth-item {
-    margin-bottom: 4px;
-}
-
-.header {
-    width: 100%;
-    font-size: 20pt;
-    height: 20px;
-    margin-bottom: 60px;
-}
-
-.content {
-    text-align: left;
-}
-
-.formGroup {
-    display: flex;
-    margin: auto;
-    padding: 8px;
-}
-
-.highlight {
-    background-color: lightcoral;
-    border-radius: 4px;
-    margin: 0px;
-    padding: 2px;
+.prompt {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 24px;
+    font-size: 24px;
 }
 
 
-.dialectSelect {
-    font-size: 16px;
-    height: 24px;
-}
-
-.formLabel {
-    padding-right: 8px;
-}
-
-.titleInput {
-    padding: 8px;
-    height: 24px;
-} 
-
-.word-bank {
-    padding: 16px;
-    display: flex;
-    gap: 1rem;
-}
-
-.your-word-bank {
-    padding-left: 8px;
-    font-weight: 900;
-}
-
-.word-types {
-    padding: 8px;
-}
-
-.given-word {
-    padding: 16px;
-}
-
-.pos-confirmation-buttons {
-    padding: 8px;
-}
-
-.prompt-input {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
-}
-
-.validationAlert {
-    padding-left: 8px;
-    color: red;
-    font-size: 12pt;
-}
-
-.synth {
-    padding-top: 0px;
-    margin-top: 0px;
+.prompt-button:hover {
+    box-shadow: 0 0 8px rgba(33, 33, 33, 0.2);
 }
 
 
@@ -190,42 +139,11 @@
     }
 }
 
-.header {
-    margin-bottom: 16px;
-}
-
-.button-div {
-    max-height: 48px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-}
-
-.button {
-    margin: 0px;
-}
-
-.formLabel {
-    margin: 2px;
-    padding: 2px;
-}
-
-.dialectSelect {
-    margin: 4px;
-}
-
-.level-select {
-    font-size: 16px;
-    height: 24px;
-}
-
-.prompt-button:hover {
-    box-shadow: 0 0 8px rgba(33, 33, 33, 0.2);
-}
-
-.prompt {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-top: 24px;
-    font-size: 24px;
+@keyframes slots {
+    from {
+        transform: rotateY(7200deg);
+    }
+    to {
+        transform: rotateY(0deg);
+    }
 }

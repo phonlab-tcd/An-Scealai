@@ -1,32 +1,7 @@
-.container {
-    width: 90%;
-    background-color: white;
-    border-radius: 4px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    animation-duration: 1s;
-    animation-name: fadeIn;
-}
-
 .playback {
     display: flex;
     padding: 6px;
     justify-content: space-between;
-}
-
-.button {
-    border-color: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    border-width: 1px;
-    letter-spacing: 1px;
-    background-color: rgba(126, 118, 118, 0.1);
-    margin: 4px;
-    transition: all 0.3s ease 0s;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover:not([disabled]) {
@@ -39,25 +14,17 @@
     background-color: var(--notification-button);
 }
 
+.synth {
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
 .synth-item {
     margin-bottom: 4px;
 }
 
-.header {
-    width: 100%;
-    font-size: 20pt;
-    height: 20px;
-    margin-bottom: 60px;
-}
-
 .content {
     text-align: left;
-}
-
-.formGroup {
-    display: flex;
-    margin: auto;
-    padding: 8px;
 }
 
 .highlight {
@@ -66,7 +33,6 @@
     margin: 0px;
     padding: 2px;
 }
-
 
 .dialectSelect {
     font-size: 16px;
@@ -115,34 +81,4 @@
     padding-left: 8px;
     color: red;
     font-size: 12pt;
-}
-
-.synth {
-    padding-top: 0px;
-    margin-top: 0px;
-}
-
-
-@media only screen and (max-width: 700px) {
-    .container {
-        width: 95%;
-    }
-    .content {
-        font-size: 10pt;
-    }
-    .header {
-        font-size: 15pt;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0%;
-        transform: translateY(100px) scale(0.9);
-    }
-
-    to {
-        opacity: 100%;
-        transform: translateY(0px) scale(1);
-    }
 }
