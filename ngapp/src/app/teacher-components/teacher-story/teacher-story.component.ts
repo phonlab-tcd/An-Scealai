@@ -188,8 +188,8 @@ export class TeacherStoryComponent implements OnInit {
   openUpdateStoryTextDialog() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
-        title: "Update Story",
-        message: `${this.story.author} has made changes since you last viewed the story. Do you want to refresh the text? Any previous highlighting/editing to the story text will be overriden`,
+        title: this.ts.l.story_updated,
+        message: (this.ts.l.student_has_made_changes_since_feedback).replace('#', this.story.author),
         confirmText: this.ts.l.yes,
         cancelText: this.ts.l.no,
       },
@@ -222,8 +222,8 @@ export class TeacherStoryComponent implements OnInit {
     if (this.initialMarkupText !== this.story.feedback.feedbackMarkup) {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
-          title: "save changes",
-          message: "save changes",
+          title: this.ts.l.save_changes,
+          message: this.ts.l.would_you_like_save_feedback_changes,
           confirmText: this.ts.l.yes,
           cancelText: this.ts.l.no,
         },

@@ -979,6 +979,22 @@ export default {
   leave_feedback_for: {
     ga: 'Fág aiseolas do',
     en: 'Leave some feedback for' },
+  save_changes: {
+    ga: 'Sabháil na hathruithe',
+    en: 'Save changes'
+  },
+  would_you_like_save_feedback_changes: {
+    ga: 'Ar mhaith na hathruithe ón aiseolas a shabháil?',
+    en: 'Would you like to save your feedback changes?'
+  },
+  student_has_made_changes_since_feedback: {
+    ga: 'Tá athruithe déanta ag # ó chonaic tú an scéal go deireanach. Ar mhaith leat an téacs a athnuachan? Déanfar forscríobh ar aon eagarthóireacht/aibsiú a rinneadh roimhe seo.',
+    en: '# has made changes since you last viewed the story.  Do you want to refresh the text? Any previous highlighting/editing to the story text will be overwritten.'
+  },
+  story_updated: {
+    ga: 'Rinneadh uasdátú ar an scéal',
+    en: 'Story updated'
+  },
   type_of_school_teacher: {
     ga: 'Saghas scoile?',
     en: 'At what type of school do you teach?' },
