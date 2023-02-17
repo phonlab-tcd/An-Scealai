@@ -22,7 +22,6 @@ export class PromptsComponent implements OnInit {
   
   // options for prompt generation
   levelPreferences: string[] = ['sep_jc_choices', 'sep_lcol_choices', 'sep_lchl_choices'];
-  proverbDialectPreferences: string[] = ["Gaeilge Mumha", "Gaeilge Chonnact", "Gaeilge Uladh"];
   dialectPreferences: string[] = ['munster', 'connacht', 'ulster'];
 
   // forms to store prompt preferences
