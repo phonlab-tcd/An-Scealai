@@ -36,7 +36,7 @@
                 <div class="feedbackContainer">
                   <div class="feedbackHeaderTeacherStory">{{ts.l.feedback}}</div>
                   <div class="feedbackBody" *ngIf="story">
-                      <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
+                      <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false" spellcheck="false"></textarea>
                   </div>
                   <!-- seen by student section -->
                   <div class="feedbackFooter">
