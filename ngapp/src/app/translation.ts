@@ -2150,7 +2150,90 @@ export default {
   gp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Starter' },
-
+  dictogloss_usage: {
+    ga: 'Conas Dictogloss a úsáid',
+    en: 'How to use Dictogloss' },
+  dictogloss_usage_close: {
+    ga: 'Folaigh eolas',
+    en: 'Hide info' },
+  dictogloss_enter_story: {
+    ga: 'Cuir isteach scéal', 
+    en: 'Enter story' },
+  dictogloss_timer_off: {
+    ga: '🕒❌',
+    en: '🕒❌' },
+  dictogloss_timer_on: {
+    ga: '🕒✔️',
+    en: '🕒✔️' },
+  dictogloss_timer_disabled: {
+    ga: '🕒✖️',
+    en: '🕒✖️' },
+  dictogloss_error: {
+    ga: '*Iontráil Scéal Anseo',
+    en: '*Enter Story Here' },
+  dictogloss_audio: {
+    ga: 'Athsheinm Fuaime',
+    en: 'Audio Playback' },
+  dictogloss_playback_speed: {
+    ga: 'Luas Athsheinm',
+    en: 'Playback Speed' },
+  dictogloss_hint: {
+    ga: 'Cliceáil le haghaidh leid',
+    en: 'Click for a hint' },
+  dictogloss_guess: {
+    ga: /*'Cuir isteach focal'*/ '❓',
+    en: /*'Enter word'*/ '❓' },
+  dictogloss_record_audio:{
+    ga: '🎤Taifeadadh ar❌',
+    en: '🎤Recording off❌' },
+  dictogloss_not_record_audio: {
+    ga: '🎤Taifeadadh as✔️',
+    en: '🎤Recording on✔️' },
+  correct: {
+    ga: 'Ceart',
+    en: 'Correct' },
+  incorrect: {
+    ga: 'Mícheart',
+    en: 'Incorrect' },
+  dictogloss_guessed1: {
+    ga: 'Tá ',
+    en: 'You\'ve guessed ' },
+  dictogloss_guessed2: {
+    ga: ' as ',
+    en: ' out of ' },
+  dictogloss_guessed3: {
+    ga: ' buille faoi thuairim agat.',
+    en: '.' },
+  you_filled_in_all_blanks: {
+    ga: 'Líon tú na bearnaí go léir!',
+    en: 'You filled in all the blanks!' },
+  you_finished_in: {
+    ga: 'Chríochnaigh tú i ',
+    en: 'You finished in ' },
+  new_dictogloss: {
+    ga: 'Dictogloss nua',
+    en: 'New Dictogloss' },
+  go_to_my_stories: {
+    ga: 'Téigh go dtí mo scéalta',
+    en: 'Go to my stories' },
+  how_to_use_dictogloss: {
+    ga: 'Conas Dictogloss a úsáid',
+    en: 'How to use Dictogloss' },
+  dictogloss_char_limit: {
+    ga: 'Teorainn Carachtair 2000',
+    en: '2000 Character Limit' },
+  dictogloss_instructions_1: {
+    ga: '1. Cuir sliocht Gaeilge isteach sa chéad ionchur téacs.',
+    en: '1. Enter an Irish passage into the first text input.' },
+  dictogloss_instructions_2: {
+    ga: '2. Éist leis an tsintéis gutha a thugtar ón sliocht.',
+    en: '2. Listen to the voice synthesis that is given from the passage.' },
+  dictogloss_instructions_3: {
+    ga: '3. Déan iarracht é a athscríobh de chluas (is féidir leat an chéad litir de gach focal a fheiceáil trí chliceáil ar a spás).',
+    en: '3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).' },
+  dictogloss_tip: {
+    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
+    en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it.' },
 
 
 

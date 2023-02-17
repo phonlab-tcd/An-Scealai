@@ -20,6 +20,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { PromptsComponent } from './prompts/prompts.component';
+import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -73,6 +74,7 @@ const routes: Routes = [
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'prompts/:type', component: PromptsComponent},
+  { path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },

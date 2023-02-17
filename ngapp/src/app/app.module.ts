@@ -89,6 +89,7 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
 import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
+import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
 @NgModule({
     declarations: [
@@ -146,6 +147,7 @@ import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.c
         DatabaseStatsComponent,
         PromptsComponent,
         PartOfSpeechComponent,
+        DictoglossComponent,
     ],
     imports: [
         RegisterModule,
