@@ -17,7 +17,7 @@
         <p *ngIf="promptType == 'proverb'">{{ ts.l.pp_explanation }}</p>
         <p *ngIf="promptType == 'lara'">{{ ts.l.lp_explanation }}</p>
         <p *ngIf="promptType == 'story'">{{ ts.l.sp_explanation }}</p>
-        <p *ngIf="typpromptTypee == 'general'">{{ ts.l.gp_explanation }}</p>
+        <p *ngIf="promptType == 'general'">{{ ts.l.gp_explanation }}</p>
       </div>
       <!-- Choose Level Dropdown -->
       <div *ngIf="promptType == 'state-exam' || promptType == 'story'" class="button-div">
@@ -85,18 +85,18 @@
           </div>
         </div>
         <!-- Generated Prompt -->
-        <i class="prompt">{{ prompt }}</i>
+        <div class="prompt"><i>{{ prompt }}</i></div>
         <!-- Create New Story Button-->
         <button class="button" (click)="createNewStory()">
-            {{ ts.l.pos_save_to_stories }}
+            {{ ts.l.new_story }}
         </button>
       </div>
       <!--No Prompt-->
-      <ng-template #noPrompt>
+      <!-- <ng-template #noPrompt>
         <div *ngIf="promptExists === false" class="prompt">
           {{ ts.l.please_choose_prompt }}
         </div>
-      </ng-template>
+      </ng-template> -->
     </div>
   </div>
 </div>

@@ -4,7 +4,6 @@
     border-radius: 4px;
     padding-top: 20px;
     padding-bottom: 20px;
-    margin-bottom: 20px;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
@@ -16,7 +15,7 @@
     width: 100%;
     font-size: 20pt;
     height: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
 }
 
 .button-div {
@@ -48,9 +47,9 @@
     border-width: 1px;
     letter-spacing: 1px;
     background-color: rgba(126, 118, 118, 0.1);
-    margin: 4px;
     transition: all 0.3s ease 0s;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    padding: 10px;
 }
 
 .button:hover:not([disabled]) {
@@ -102,16 +101,14 @@
     animation-duration: 5s;
 }
 
-.prompt {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin-top: 24px;
-    font-size: 24px;
+.promptContainer {
 }
 
-
-.prompt-button:hover {
-    box-shadow: 0 0 8px rgba(33, 33, 33, 0.2);
+.prompt {
+    padding-top: 2px;
+    padding-bottom: 20px;
+    margin-top: 24px;
+    font-size: 24px;
 }
 
 

@@ -4,6 +4,10 @@
     justify-content: space-between;
 }
 
+.button {
+    margin: 4px;
+}
+
 .button:hover:not([disabled]) {
     background-color: var(--scealai-green);
     color: #fff;
