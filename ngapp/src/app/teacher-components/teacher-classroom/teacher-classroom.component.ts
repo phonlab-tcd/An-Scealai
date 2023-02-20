@@ -109,6 +109,10 @@ export class TeacherClassroomComponent implements OnInit {
   goToSettings() {
     this.router.navigateByUrl('/teacher/teacher-settings/' + this.classroom._id);
   }
+
+  goToDictgloss() {
+    this.router.navigateByUrl('/teacher/teacher-dictogloss/' + this.classroom._id);
+  }
   
   openCodeDialog() {    
     this.dialogRef = this.dialog.open(BasicDialogComponent, {

@@ -90,6 +90,7 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
+import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
 
 @NgModule({
     declarations: [
@@ -148,6 +149,7 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         PromptsComponent,
         PartOfSpeechComponent,
         DictoglossComponent,
+        TeacherDictoglossComponent,
     ],
     imports: [
         RegisterModule,

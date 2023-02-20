@@ -306,7 +306,16 @@ export class MessagesComponent implements OnInit {
       else {
         this.showAudio = false;
       }
+
+      if(message.subject === "New Dictogloss") {
+        this.sendToDictogloss(message.text);
+      }
+      
     }
+  }
+
+  sendToDictogloss(passage: string){
+    this.router.navigateByUrl('/dictgloss', {state: {text: passage} });
   }
   
   /*

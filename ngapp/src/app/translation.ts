@@ -2150,6 +2150,9 @@ export default {
   gp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Starter' },
+  dashboard_prompts: {
+    ga: '(Déanta le leideanna)',
+    en: '(Made using prompts)' },
   dictogloss_usage: {
     ga: 'Conas Dictogloss a úsáid',
     en: 'How to use Dictogloss' },
@@ -2237,6 +2240,24 @@ export default {
   dictogloss_type_story: {
     ga: 'Write story here...',
     en: 'Type story here...' },
+  teacher_send_dictogloss: {
+    ga: 'Seol Dictogloss',
+    en: 'Send Dictogloss' },
+  teacher_send_dictogloss_info: {
+    ga: 'Scríobh sliocht sa bhosca téacs ar mhaith leat go ndéanfadh an mac léinn seo éisteacht Dictogloss air.',
+    en: 'Write a passage in the text box that you would like this student to do a Dictogloss listening on.' },
+  dictogloss_required: {
+    ga: 'Dictogloss ag teastáil',
+    en: 'Dictogloss required' },
+  go_to_dashboard: {
+    ga: 'Téigh go dtí an Deais',
+    en: 'Go to Dashboard' },
+  choose_at_least_one_student: {
+    ga: 'Roghnaigh dalta amháin ar a laghad',
+    en: 'Choose at least 1 student' },
+  deselect_all: {
+    ga: 'Díroghnaigh go léir',
+    en: 'Deselect All' },
 
 
 
