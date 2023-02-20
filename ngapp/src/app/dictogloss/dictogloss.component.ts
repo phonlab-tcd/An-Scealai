@@ -9,7 +9,6 @@ import { AuthenticationService } from "app/authentication.service";
 import { Message } from "app/message";
 import { UserService } from "app/user.service";
 import { ClassroomService } from "app/classroom.service";
-import { Classroom } from "app/classroom";
 import { MessageService } from "app/message.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
@@ -23,7 +22,6 @@ import { firstValueFrom } from "rxjs";
 export class DictoglossComponent implements OnInit {
   // dictogloss variables
   generatedFromMessages: boolean;
-  @Input() text: string;
   texts: string;
   wrong_words_div: string = "";
   words: string[] = [];
@@ -65,7 +63,6 @@ export class DictoglossComponent implements OnInit {
   studentId: string;
   teacherId: string;
   teacherName: string;
-  classroom: any;
 
   // record audio variables
   audioSource: SafeUrl;
@@ -105,24 +102,8 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  init() {
-    //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
-    //Example: dictgloss.html?text={"name":"urltest","txt":"test/story.txt","wavs":["test/audio/wav/paragraph_1.wav","test/audio/wav/paragraph_2.wav"]}
-    if (location.search !== "") {
-      console.log("Loading text from location.search: " + location.search);
-
-      var sp = new URLSearchParams(location.search);
-      var text = JSON.parse(sp.get("text"));
-      console.log(text);
-      console.log("text.name: " + text.name);
-    } else {
-      console.log("Loading texts from " + this.texts);
-    }
-  }
-
-
   /**
-   * Get user details -> id, role, classroom
+   * Get user details -> id, role
    * Refresh synthesis voice settings
    * Check if dictogloss is sent from messages
    */
@@ -135,10 +116,9 @@ export class DictoglossComponent implements OnInit {
     }
     if (userDetails.role === "STUDENT") {
       this.studentId = userDetails._id;
-      this.classroom = await firstValueFrom(
+      this.teacherId = (await firstValueFrom(
         this.classroomService.getClassroomOfStudent(this.studentId)
-      );
-      this.teacherId = this.classroom.teacherId;
+      )).teacherId;
       this.teacherName = (
         await firstValueFrom(this.userService.getUserById(this.teacherId))
       ).username;
@@ -146,7 +126,7 @@ export class DictoglossComponent implements OnInit {
     this.refreshVoice();
 
     // create a dictogloss from the text sent by teacher
-    if (this.texts !== "" && this.generatedFromMessages == true) {
+    if (this.texts && this.generatedFromMessages == true) {
       this.loadDictoglossFromMessages();
     }
   }

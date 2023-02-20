@@ -315,7 +315,7 @@ export class MessagesComponent implements OnInit {
   }
 
   sendToDictogloss(passage: string){
-    this.router.navigateByUrl('/dictgloss', {state: {text: passage} });
+    this.router.navigateByUrl('/dictogloss', {state: {text: passage} });
   }
   
   /*
