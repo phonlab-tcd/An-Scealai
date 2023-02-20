@@ -2234,6 +2234,9 @@ export default {
   dictogloss_tip: {
     ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
     en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it.' },
+  dictogloss_type_story: {
+    ga: 'Write story here...',
+    en: 'Type story here...' },
 
 
 

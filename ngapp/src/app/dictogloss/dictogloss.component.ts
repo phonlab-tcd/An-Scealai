@@ -14,7 +14,7 @@ import { Classroom } from "app/classroom";
 import { MessageService } from "app/message.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: "app-dictogloss",
@@ -22,24 +22,62 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ["./dictogloss.component.scss"],
 })
 export class DictoglossComponent implements OnInit {
-
   // dictogloss variables
   generatedFromMessages: boolean;
-
-  // game variables
+  @Input() text: string;
+  texts: string;
+  wrong_words_div: string = "";
+  words: string[] = [];
+  shownWords: string[] = [];
+  wrongWords: string[] = [];
+  wordsPunc: string[] = [];
+  wordsPuncLower: string[] = [];
+  sentences: string[] = [];
+  hasText: boolean = false;
+  hasIncorrect: boolean = false;
+  synthText: string;
+  guess: string;
+  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
+  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
+  showInfo: boolean = false;
+  totalTime: number = 0;
+  interval: any;
   playWithTimer = false;
+  gameInProgress: boolean = false;
+  allGuessed: boolean = false;
+  guessCheck: boolean = false;
+  wrongCount: number = 0;
+  rightCount: number = 0;
 
   // synthesis variables
   synthesisPlayer: SynthesisPlayerComponent;
   playbackSpeed: number = 1; //Shoud range from 0.5x to 2x speed incrementing in 0.5.
+  @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
+  selected: Voice;
+  audio_urls: any;
+  showReplay: boolean = false;
+  synthItem: SynthItem;
+  errorText: boolean;
+  synthItems: SynthItem[] = [];
 
   // user variables
-  isStudent: boolean;  
+  isStudent: boolean;
   isTeacher: boolean;
   studentId: string;
   teacherId: string;
   teacherName: string;
   classroom: any;
+
+  // record audio variables
+  audioSource: SafeUrl;
+  chunks;
+  recording: boolean = false;
+  newRecording: boolean = false;
+  blob: any;
+  modalClass: string = "hidden";
+  recorder;
+  stream;
+  url_ASR_API: string = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
 
   constructor(
     private fb: FormBuilder,
@@ -53,10 +91,10 @@ export class DictoglossComponent implements OnInit {
     public ts: TranslationService,
     protected sanitizer: DomSanitizer
   ) {
-    this.dictglossCreateForm();
     // see if dictogloss is generated from messages
     try {
       this.texts = this.router.getCurrentNavigation().extras.state.text; //Doesn't work with full stops.
+      console.log("TEXTS: ", this.texts);
       console.log("Generated from message.");
       this.playWithTimer = true;
       this.gameInProgress = true;
@@ -68,230 +106,6 @@ export class DictoglossComponent implements OnInit {
       this.generatedFromMessages = false;
     }
   }
-
-  /**
-   * Initialise form for synthesis dialect
-   */
-  dictglossCreateForm() {
-    this.synthForm = this.fb.group({
-      dialect: ["connemara"],
-    });
-  }
-
-/**
- * Get user details -> id, role, classroom
- * Refresh synthesis voice settings
- * Check if dictogloss is sent from messages
- */
-  async ngOnInit() {
-    const userDetails = this.auth.getUserDetails();
-    this.chunks = [];
-    if (!userDetails) return;
-
-    if (userDetails.role === "TEACHER") {
-      this.isTeacher = true;
-      this.teacherId = this.auth.getUserDetails()._id;
-    }
-    if (userDetails.role === "STUDENT") {
-      this.studentId = this.auth.getUserDetails()._id;
-      this.classroom = await firstValueFrom(this.classroomService.getClassroomOfStudent(this.studentId));
-      this.teacherId = this.classroom.teacherId;
-      this.teacherName = (await firstValueFrom(this.userService.getUserById(this.teacherId))).username;
-      this.isStudent = true;
-    }
-    this.refreshVoice();
-
-    if (this.texts !== "" && this.generatedFromMessages == true) {
-      this.dictglossFromMessages(this.texts);
-    }
-  }
-
-  /**
-   * Refresh the synthetic voice
-   * @param voice Synthesis voice option
-   * @returns 
-   */
-  refreshVoice(voice: Voice = undefined) {
-    if (voice) this.selected = voice;
-    this.synthItems.forEach((s) => {
-      s.audioUrl = undefined;
-      s.dispose();
-    });
-    this.synthItems = [];
-    this.collateSynths(this.sentences);
-    // // setTimeout is just for juice (Neimhin Fri 28 Jan 2022 23:19:46)
-    if (this.texts === "") return;
-  }
-
-  collateSynths(sentences: string[]) {
-    for (let i = 0; i < sentences.length; i++) {
-      this.synthItems.push(this.getSynthItem(sentences[i]));
-      this.synthItems[i].text = "Sentence " + (i + 1);
-    }
-  }
-
-
-  showSpan() {
-    const butn = document.getElementById("game-in-progress");
-    if ((butn.style.visibility = "hidden")) {
-      butn.style.visibility = "visible";
-    } else {
-      butn.style.visibility = "hidden";
-    }
-    console.log(butn.style.visibility);
-  }
-
-  //Next 7 functions copied from messages.component.ts
-  audioSource: SafeUrl;
-  chunks;
-  recording: boolean = false;
-  newRecording: boolean = false;
-  blob: any;
-  modalClass: string = "hidden";
-  recorder;
-  stream;
-  recordAudio() {
-    let media = {
-      tag: "audio",
-      type: "audio/mp3",
-      ext: ".mp3",
-      gUM: { audio: true },
-    };
-    navigator.mediaDevices
-      .getUserMedia(media.gUM)
-      .then((_stream) => {
-        this.stream = _stream;
-        this.recorder = new MediaRecorder(this.stream);
-        this.startRecording();
-        this.recorder.ondataavailable = (e) => {
-          this.chunks.push(e.data);
-          if (this.recorder.state == "inactive") {
-          }
-        };
-      })
-      .catch();
-  }
-
-  /*
-   * Call the recording audio function
-   */
-  prepRecording() {
-    this.recordAudio();
-  }
-
-  /*
-   * Set parameters for recording audio and start the process
-   */
-  startRecording() {
-    this.recording = true;
-    this.newRecording = false;
-    this.chunks = [];
-    this.recorder.start();
-  }
-
-  /*
-   * Playback the recorded audio
-   */
-  playbackAudio() {
-    this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
-      URL.createObjectURL(new Blob(this.chunks, { type: "audio/mp3" }))
-    );
-    this.newRecording = true;
-  }
-
-  /*
-   * Save audio data into a blob and get transcription
-   */
-  url_ASR_API: string = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
-  /* stop recording stream and convert audio to base64 to send to ASR */
-  stopRecording() {
-    this.recorder.stop();
-    this.recording = false;
-    this.stream.getTracks().forEach((track) => track.stop());
-    setTimeout(() => {
-      const blob = new Blob(this.chunks, { type: "audio/mp3" });
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
-        URL.createObjectURL(blob)
-      );
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function () {
-        let encodedAudio = (<string>reader.result).split(";base64,")[1]; // convert audio to base64
-        this.getTranscription(encodedAudio);
-      }.bind(this);
-    }, 500);
-  }
-
-  /* send audio to the ASR system and get transcription */
-  getTranscription(audioData: string) {
-    const rec_req = {
-      recogniseBlob: audioData,
-      developer: true,
-    };
-    fetch(this.url_ASR_API, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rec_req),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let transcription = data["transcriptions"][0]["utterance"];
-        let input = document.getElementById(
-          "guesses_input"
-        ) as HTMLInputElement;
-        input.value = transcription;
-      });
-  }
-
-  // change css class to show recording container
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  // clear out audio source if it exists and close new messsage
-  resetForm() {
-    if (this.audioSource) {
-      this.audioSource = null;
-      this.chunks = [];
-    }
-  }
-
-  // change the css class to hide the recording container
-  hideModal() {
-    this.modalClass = "hiddenFade";
-    if (this.recorder.state != "inactive") {
-      this.recorder.stop();
-      this.stream.getTracks().forEach((track) => track.stop());
-    }
-    this.recording = false;
-    this.newRecording = false;
-  }
-
-  toggleTimer() {
-    if (this.playWithTimer === false) {
-      this.playWithTimer = true;
-    } else {
-      this.playWithTimer = false;
-    }
-  }
-
-  changeSpeed(increment: number) {
-    if (increment > 0 && this.playbackSpeed < 2) {
-      this.playbackSpeed += 0.5;
-    }
-    if (increment < 0 && this.playbackSpeed > 0.5) {
-      this.playbackSpeed -= 0.5;
-    }
-  }
-
-  @Input() text: string;
-  @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
-
-  selected: Voice;
-
 
   init() {
     //If the page is loaded with a 'text' as url parameter, load that text instead of using the ones listed here
@@ -308,24 +122,129 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  //I recognise that using parallel arrays wasn't the most intuitive move - Fionn
-  texts: string;
-  synthForm: FormGroup;
-  wrong_words_div: string = "";
-  words: string[] = [];
-  shownWords: string[] = [];
-  wrongWords: string[] = [];
-  wordsPunc: string[] = [];
-  wordsPuncLower: string[] = [];
-  sentences: string[] = [];
-  hasText: boolean = false;
-  hasIncorrect: boolean = false;
-  synthText: string;
-  guess: string;
-  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
-  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
-  showInfo: boolean = false;
 
+  /**
+   * Get user details -> id, role, classroom
+   * Refresh synthesis voice settings
+   * Check if dictogloss is sent from messages
+   */
+  async ngOnInit() {
+    const userDetails = this.auth.getUserDetails();
+    this.chunks = [];
+    if (!userDetails) return;
+
+    if (userDetails.role === "TEACHER") {
+      this.isTeacher = true;
+      this.teacherId = userDetails._id;
+    }
+    if (userDetails.role === "STUDENT") {
+      this.studentId = userDetails._id;
+      this.classroom = await firstValueFrom(
+        this.classroomService.getClassroomOfStudent(this.studentId)
+      );
+      this.teacherId = this.classroom.teacherId;
+      this.teacherName = (
+        await firstValueFrom(this.userService.getUserById(this.teacherId))
+      ).username;
+      this.isStudent = true;
+    }
+    this.refreshVoice();
+
+    // create a dictogloss from the text sent by teacher
+    if (this.texts !== "" && this.generatedFromMessages == true) {
+      this.dictoglossFromMessages(this.texts);
+    }
+  }
+
+  /**
+   * Refresh the synthetic voice: deletes old audio urls and creates new array
+   * @param voice Synthesis voice option
+   * @returns
+   */
+  refreshVoice(voice: Voice = undefined) {
+    if (voice) this.selected = voice;
+    this.synthItems.forEach((s) => {
+      s.audioUrl = undefined;
+      s.dispose();
+    });
+    this.synthItems = [];
+    this.collateSynths(this.sentences);
+  }
+
+
+  /**
+   * Create an array of synth items, one synth item for each sentence to guess
+   * @param sentences Array of sentences to listen to
+   */
+  collateSynths(sentences: string[]) {
+    for (let i = 0; i < sentences.length; i++) {
+      this.synthItems.push(this.getSynthItem(sentences[i]));
+      this.synthItems[i].text = "Sentence " + (i + 1);
+    }
+  }
+
+  /**
+   * Create a new synth item from a given sentence
+   * @param line sentence to synthesise
+   * @returns SynthItem
+   */
+    getSynthItem(line: string) {
+      return new SynthItem(line, this.selected, this.synth);
+    }
+
+  /**
+   * Generate the dictogloss text from teacher message
+   * @param text string to guess
+   */
+  dictoglossFromMessages(text: string) {
+    this.resetTimer();
+    this.startTimer();
+    this.allGuessed = false;
+    this.texts = text;
+
+    let isValid = false;
+    for (let i = 0; i < this.texts.length; i++) {
+      if (this.texts[i] !== " ") {
+        isValid = true;
+        break;
+      }
+    }
+
+    if (this.texts.length > 0 && isValid) {
+      this.hasText = true;
+      this.errorText = false;
+    } else {
+      this.hasText = false;
+      this.errorText = true;
+    }
+
+    console.log("The input text is:", this.texts);
+    this.displayText(this.texts);
+  }
+
+  /**
+   * Display or hide the timer
+   */
+  toggleTimer() {
+    this.playWithTimer = !this.playWithTimer;
+  }
+
+  /**
+   * Increase or decrease synthesis speed
+   * @param increment selected voice speed level
+   */
+  changeSpeed(increment: number) {
+    if (increment > 0 && this.playbackSpeed < 2) {
+      this.playbackSpeed += 0.5;
+    }
+    if (increment < 0 && this.playbackSpeed > 0.5) {
+      this.playbackSpeed -= 0.5;
+    }
+  }
+
+  /**
+   * Fades in/out the instructions box (buggy)
+   */
   fadeOutAnimation() {
     document.getElementById("infoButtonClose").hidden = true;
     document.getElementById("infoBox").className = "fadeOutContainer";
@@ -334,12 +253,18 @@ export class DictoglossComponent implements OnInit {
     }, 1000); //Avoids premature animation ending.
   }
 
+  /**
+   * Set the css class of the instructions box when it is clicked on
+   */
   setClass() {
     document.getElementById("infoBox").className = "container";
     document.getElementById("infoButtonClose").hidden = false;
   }
 
-  sendDictglossReport() {
+  /**
+   * Send a message to the teacher with the student's stats
+   */
+  sendDictoglossReport() {
     if (this.isStudent) {
       let message: Message = {
         _id: "", //Check these
@@ -369,9 +294,9 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-
-  totalTime: number = 0;
-  interval: any;
+  /**
+   * Set timer interval starting using new date
+   */
   startTimer() {
     if (this.playWithTimer === false) {
       return;
@@ -384,6 +309,9 @@ export class DictoglossComponent implements OnInit {
     }, 1000);
   }
 
+  /**
+   * Clear timer interval if timer is running
+   */
   pauseTimer() {
     if (this.playWithTimer === false) {
       return;
@@ -391,6 +319,9 @@ export class DictoglossComponent implements OnInit {
     clearInterval(this.interval);
   }
 
+  /**
+   * Clear timer interval and reset total time
+   */
   resetTimer() {
     if (this.playWithTimer === false) {
       return;
@@ -399,6 +330,11 @@ export class DictoglossComponent implements OnInit {
     clearInterval(this.interval);
   }
 
+  /**
+   * Display total time as a string in minutes and seconds
+   * @param totalTime total time (in seconds)
+   * @returns String showing total time
+   */
   displayTime(totalTime: number): string {
     let time: string;
     time =
@@ -409,6 +345,44 @@ export class DictoglossComponent implements OnInit {
     return time;
   }
 
+  /**
+   * Initialise game variables and process any text if sent by teacher
+   */
+  dictoglossLoad() {
+    this.generatedFromMessages = false;
+    console.log("Not generated from message.");
+    this.resetTimer();
+    this.startTimer();
+    this.allGuessed = false;
+    var selector = document.getElementById("textSelector") as HTMLInputElement;
+    this.texts = selector.value;
+    selector.value = "";
+    if (this.texts != "") {
+      this.gameInProgress = true;
+    }
+
+    let isValid = false;
+    for (let i = 0; i < this.texts.length; i++) {
+      if (this.texts[i] !== " ") {
+        isValid = true;
+        break;
+      }
+    }
+
+    if (this.texts.length > 0 && isValid) {
+      this.hasText = true;
+      this.errorText = false;
+    } else {
+      this.hasText = false;
+      this.errorText = true;
+    }
+    this.displayText(this.texts);
+  }
+
+  /**
+   *
+   * @param text string of the text to guess
+   */
   displayText(text) {
     //global lists of words
     this.words = [];
@@ -422,6 +396,7 @@ export class DictoglossComponent implements OnInit {
     this.rightCount = 0;
     this.wrongCount = 0;
 
+    // pre-process the text and split into words
     this.words = text.split(this.regex);
     this.wordsPuncLower = text.toLowerCase().split(this.regexg);
     this.wordsPunc = text.split(this.regexg);
@@ -466,10 +441,12 @@ export class DictoglossComponent implements OnInit {
       this.wordsPunc.splice(0, 1);
     }
 
+    // create a string from the words to use for synthesis
     for (let i = 0; i < this.words.length; i++) {
       this.synthText += this.words[i] + " ";
     }
 
+    // create synthesis if text sent by teacher
     if (this.hasText) {
       this.collateSynths(this.sentences);
     }
@@ -479,6 +456,10 @@ export class DictoglossComponent implements OnInit {
     console.log("SHOWN WORDS: ", this.shownWords);
   }
 
+  /**
+   * Show the first character of a hidden word
+   * @param index index of word in the sentence
+   */
   firstChar(index: number) {
     if (this.shownWords[index] !== this.wordsPunc[index]) {
       this.shownWords[index] =
@@ -486,75 +467,33 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  audio_urls: any;
-  showReplay: boolean = false;
-  synthItem: SynthItem;
-  errorText: boolean;
-  dictglossLoad() {
-    this.generatedFromMessages = false;
-    console.log("Not generated from message.");
-    this.resetTimer();
-    this.startTimer();
-    this.allGuessed = false;
-    var selector = document.getElementById("textSelector") as HTMLInputElement;
-    this.texts = selector.value;
-    selector.value = "";
-    if (this.texts != "") {
-      this.gameInProgress = true;
-    }
-
-    let isValid = false;
-    for (let i = 0; i < this.texts.length; i++) {
-      if (this.texts[i] !== " ") {
-        isValid = true;
+  /**
+   * For if there is a single letter word that is pressed last.
+   */
+  generalCheck() {
+    this.guessCheck = true;
+    for (let i = 0; i < this.wordsPunc.length; i++) {
+      if (this.wordsPunc[i] !== this.shownWords[i]) {
+        this.guessCheck = false;
         break;
       }
     }
-
-    if (this.texts.length > 0 && isValid) {
-      this.hasText = true;
-      this.errorText = false;
-    } else {
-      this.hasText = false;
-      this.errorText = true;
-    }
-    this.displayText(this.texts);
-  }
-
-  gameInProgress: boolean = false;
-  dictglossFromMessages(text: string) {
-    this.resetTimer();
-    this.startTimer();
-    //this.gameInProgress = true;
-    this.allGuessed = false;
-    this.texts = text;
-
-    let isValid = false;
-    for (let i = 0; i < this.texts.length; i++) {
-      if (this.texts[i] !== " ") {
-        isValid = true;
-        break;
+    if (this.guessCheck) {
+      this.pauseTimer();
+      this.allGuessed = true;
+      this.gameInProgress = false;
+      if (this.generatedFromMessages) {
+        this.sendDictoglossReport();
       }
+      this.generatedFromMessages = false;
     }
-
-    if (this.texts.length > 0 && isValid) {
-      this.hasText = true;
-      this.errorText = false;
-    } else {
-      this.hasText = false;
-      this.errorText = true;
-    }
-
-    console.log("The input text is:", this.texts);
-    this.displayText(this.texts);
   }
 
-  synthItems: SynthItem[] = [];
-
-  getSynthItem(line: string) {
-    return new SynthItem(line, this.selected, this.synth);
-  }
-
+  /**
+   * Checks if a word contains any punctuation
+   * @param i word from sentences to guess
+   * @returns boolean if word contains punctuation
+   */
   isNotPunctuated(i: string) {
     if (this.regex.test(i)) {
       return false;
@@ -563,8 +502,9 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  allGuessed: boolean = false;
-  guessCheck: boolean = false;
+  /**
+   * Preprocess word to then check if correct guess 
+   */
   async delimitPotentialWords() {
     //Word input field
     var word_input = document.getElementById(
@@ -596,8 +536,10 @@ export class DictoglossComponent implements OnInit {
     word_input.value = "";
   }
 
-  wrongCount: number = 0;
-  rightCount: number = 0;
+  /**
+   * Check if word is valid guess?
+   * @param word word from wordlist
+   */
   checkWord(word: string) {
     let isIn = this.wordsPuncLower.indexOf(word.toLowerCase()) != -1;
     let index = this.wordsPuncLower.indexOf(word.toLowerCase());
@@ -643,29 +585,140 @@ export class DictoglossComponent implements OnInit {
       this.allGuessed = true;
       this.gameInProgress = false;
       if (this.generatedFromMessages) {
-        this.sendDictglossReport();
+        this.sendDictoglossReport();
       }
       this.generatedFromMessages = false;
     }
   }
 
-  //For if there is a single letter word that is pressed last.
-  generalCheck() {
-    this.guessCheck = true;
-    for (let i = 0; i < this.wordsPunc.length; i++) {
-      if (this.wordsPunc[i] !== this.shownWords[i]) {
-        this.guessCheck = false;
-        break;
-      }
-    }
-    if (this.guessCheck) {
-      this.pauseTimer();
-      this.allGuessed = true;
-      this.gameInProgress = false;
-      if (this.generatedFromMessages) {
-        this.sendDictglossReport();
-      }
-      this.generatedFromMessages = false;
-    }
-  }
+  // showSpan() {
+  //   const butn = document.getElementById("game-in-progress");
+  //   if ((butn.style.visibility = "hidden")) {
+  //     butn.style.visibility = "visible";
+  //   } else {
+  //     butn.style.visibility = "hidden";
+  //   }
+  //   console.log(butn.style.visibility);
+  // }
+
+  //Next 7 functions copied from messages.component.ts
+
+  // recordAudio() {
+  //   let media = {
+  //     tag: "audio",
+  //     type: "audio/mp3",
+  //     ext: ".mp3",
+  //     gUM: { audio: true },
+  //   };
+  //   navigator.mediaDevices
+  //     .getUserMedia(media.gUM)
+  //     .then((_stream) => {
+  //       this.stream = _stream;
+  //       this.recorder = new MediaRecorder(this.stream);
+  //       this.startRecording();
+  //       this.recorder.ondataavailable = (e) => {
+  //         this.chunks.push(e.data);
+  //         if (this.recorder.state == "inactive") {
+  //         }
+  //       };
+  //     })
+  //     .catch();
+  // }
+
+  /*
+   * Call the recording audio function
+   */
+  // prepRecording() {
+  //   this.recordAudio();
+  // }
+
+  /*
+   * Set parameters for recording audio and start the process
+   */
+  // startRecording() {
+  //   this.recording = true;
+  //   this.newRecording = false;
+  //   this.chunks = [];
+  //   this.recorder.start();
+  // }
+
+  /*
+   * Playback the recorded audio
+   */
+  // playbackAudio() {
+  //   this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
+  //     URL.createObjectURL(new Blob(this.chunks, { type: "audio/mp3" }))
+  //   );
+  //   this.newRecording = true;
+  // }
+
+  /*
+   * Save audio data into a blob and get transcription
+   */
+  /* stop recording stream and convert audio to base64 to send to ASR */
+  // stopRecording() {
+  //   this.recorder.stop();
+  //   this.recording = false;
+  //   this.stream.getTracks().forEach((track) => track.stop());
+  //   setTimeout(() => {
+  //     const blob = new Blob(this.chunks, { type: "audio/mp3" });
+  //     this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
+  //       URL.createObjectURL(blob)
+  //     );
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(blob);
+  //     reader.onloadend = function () {
+  //       let encodedAudio = (<string>reader.result).split(";base64,")[1]; // convert audio to base64
+  //       this.getTranscription(encodedAudio);
+  //     }.bind(this);
+  //   }, 500);
+  // }
+
+  /* send audio to the ASR system and get transcription */
+  // getTranscription(audioData: string) {
+  //   const rec_req = {
+  //     recogniseBlob: audioData,
+  //     developer: true,
+  //   };
+  //   fetch(this.url_ASR_API, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(rec_req),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       let transcription = data["transcriptions"][0]["utterance"];
+  //       let input = document.getElementById(
+  //         "guesses_input"
+  //       ) as HTMLInputElement;
+  //       input.value = transcription;
+  //     });
+  // }
+
+  // // change css class to show recording container
+  // showModal() {
+  //   this.modalClass = "visibleFade";
+  // }
+
+  // clear out audio source if it exists and close new messsage
+  // resetForm() {
+  //   if (this.audioSource) {
+  //     this.audioSource = null;
+  //     this.chunks = [];
+  //   }
+  // }
+
+  // change the css class to hide the recording container
+  // hideModal() {
+  //   this.modalClass = "hiddenFade";
+  //   if (this.recorder.state != "inactive") {
+  //     this.recorder.stop();
+  //     this.stream.getTracks().forEach((track) => track.stop());
+  //   }
+  //   this.recording = false;
+  //   this.newRecording = false;
+  // }
 }
