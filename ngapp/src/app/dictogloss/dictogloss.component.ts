@@ -3,7 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { SynthItem } from "app/synth-item";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
 import { TranslationService } from "app/translation.service";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { SynthesisPlayerComponent } from "app/student-components/synthesis-player/synthesis-player.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "app/authentication.service";
@@ -40,14 +39,16 @@ export class DictoglossComponent implements OnInit {
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
   showInfo: boolean = false;
-  totalTime: number = 0;
-  interval: any;
-  playWithTimer = false;
   gameInProgress: boolean = false;
   allGuessed: boolean = false;
   guessCheck: boolean = false;
   wrongCount: number = 0;
   rightCount: number = 0;
+
+  // timer variables
+  playWithTimer = false;
+  totalTime: number = 0;
+  interval: any;
 
   // synthesis variables
   synthesisPlayer: SynthesisPlayerComponent;
@@ -61,8 +62,6 @@ export class DictoglossComponent implements OnInit {
   synthItems: SynthItem[] = [];
 
   // user variables
-  isStudent: boolean;
-  isTeacher: boolean;
   studentId: string;
   teacherId: string;
   teacherName: string;
@@ -80,7 +79,6 @@ export class DictoglossComponent implements OnInit {
   url_ASR_API: string = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
 
   constructor(
-    private fb: FormBuilder,
     private messageService: MessageService,
     private classroomService: ClassroomService,
     private userService: UserService,
@@ -130,11 +128,9 @@ export class DictoglossComponent implements OnInit {
    */
   async ngOnInit() {
     const userDetails = this.auth.getUserDetails();
-    this.chunks = [];
     if (!userDetails) return;
 
     if (userDetails.role === "TEACHER") {
-      this.isTeacher = true;
       this.teacherId = userDetails._id;
     }
     if (userDetails.role === "STUDENT") {
@@ -146,13 +142,12 @@ export class DictoglossComponent implements OnInit {
       this.teacherName = (
         await firstValueFrom(this.userService.getUserById(this.teacherId))
       ).username;
-      this.isStudent = true;
     }
     this.refreshVoice();
 
     // create a dictogloss from the text sent by teacher
     if (this.texts !== "" && this.generatedFromMessages == true) {
-      this.dictoglossFromMessages(this.texts);
+      this.loadDictoglossFromMessages();
     }
   }
 
@@ -170,7 +165,6 @@ export class DictoglossComponent implements OnInit {
     this.synthItems = [];
     this.collateSynths(this.sentences);
   }
-
 
   /**
    * Create an array of synth items, one synth item for each sentence to guess
@@ -194,13 +188,11 @@ export class DictoglossComponent implements OnInit {
 
   /**
    * Generate the dictogloss text from teacher message
-   * @param text string to guess
    */
-  dictoglossFromMessages(text: string) {
+  loadDictoglossFromMessages() {
     this.resetTimer();
     this.startTimer();
     this.allGuessed = false;
-    this.texts = text;
 
     let isValid = false;
     for (let i = 0; i < this.texts.length; i++) {
@@ -219,11 +211,46 @@ export class DictoglossComponent implements OnInit {
     }
 
     console.log("The input text is:", this.texts);
-    this.displayText(this.texts);
+    this.displayText();
   }
 
   /**
-   * Display or hide the timer
+   * Generate the dictogloss text from student input
+   */
+    loadDictogloss() {
+      this.generatedFromMessages = false;
+      console.log("Not generated from message.");
+      this.resetTimer();
+      this.startTimer();
+      this.allGuessed = false;
+      let selector = document.getElementById("textSelector") as HTMLInputElement;
+      this.texts = selector.value;
+      selector.value = "";
+      if (this.texts != "") {
+        this.gameInProgress = true;
+      }
+  
+      // check to see if the word starts with any spaces
+      let isValid = false;
+      for (let i = 0; i < this.texts.length; i++) {
+        if (this.texts[i] !== " ") {
+          isValid = true;
+          break;
+        }
+      }
+  
+      if (this.texts.length > 0 && isValid) {
+        this.hasText = true;
+        this.errorText = false;
+      } else {
+        this.hasText = false;
+        this.errorText = true;
+      }
+      this.displayText();
+    }
+
+  /**
+   * Activate or deactivate timer
    */
   toggleTimer() {
     this.playWithTimer = !this.playWithTimer;
@@ -265,46 +292,42 @@ export class DictoglossComponent implements OnInit {
    * Send a message to the teacher with the student's stats
    */
   sendDictoglossReport() {
-    if (this.isStudent) {
-      let message: Message = {
-        _id: "", //Check these
-        id: "",
-        subject:
-          '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
-        date: new Date(),
-        senderId: "",
-        senderUsername: "", //Teacher Username
-        recipientId: "", //Teacher Id
-        text:
-          "The final time was: \t" +
-          this.displayTime(this.totalTime) +
-          "\n" + //Timer always must be on for a teacher-sent dictogloss.
-          "Correct guesses:\t\t" +
-          this.rightCount +
-          "\n" +
-          "Incorrect guesses:\t" +
-          this.wrongCount,
-        seenByRecipient: false,
-        audioId: "",
-      };
+    let message: Message = {
+      _id: "", //Check these
+      id: "",
+      subject:
+        '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
+      date: new Date(),
+      senderId: this.studentId,
+      senderUsername: "", //Teacher Username
+      recipientId: this.teacherId, //Teacher Id
+      text:
+        "The final time was: \t" +
+        this.displayTime(this.totalTime) +
+        "\n" + //Timer always must be on for a teacher-sent dictogloss.
+        "Correct guesses:\t\t" +
+        this.rightCount +
+        "\n" +
+        "Incorrect guesses:\t" +
+        this.wrongCount,
+      seenByRecipient: false,
+      audioId: "",
+    };
 
-      message.senderId = this.studentId;
-      message.recipientId = this.teacherId;
-      this.messageService.saveMessage(message);
-    }
+    this.messageService.saveMessage(message);
   }
 
   /**
-   * Set timer interval starting using new date
+   * Start timer interval using new date
    */
   startTimer() {
     if (this.playWithTimer === false) {
       return;
     }
-    var start = Date.now();
+    let start = Date.now();
     this.interval = setInterval(() => {
-      var change;
-      change = Date.now() - start;
+      //var change;
+      let change = Date.now() - start;
       this.totalTime = Math.floor(change / 1000);
     }, 1000);
   }
@@ -345,45 +368,11 @@ export class DictoglossComponent implements OnInit {
     return time;
   }
 
-  /**
-   * Initialise game variables and process any text if sent by teacher
-   */
-  dictoglossLoad() {
-    this.generatedFromMessages = false;
-    console.log("Not generated from message.");
-    this.resetTimer();
-    this.startTimer();
-    this.allGuessed = false;
-    var selector = document.getElementById("textSelector") as HTMLInputElement;
-    this.texts = selector.value;
-    selector.value = "";
-    if (this.texts != "") {
-      this.gameInProgress = true;
-    }
-
-    let isValid = false;
-    for (let i = 0; i < this.texts.length; i++) {
-      if (this.texts[i] !== " ") {
-        isValid = true;
-        break;
-      }
-    }
-
-    if (this.texts.length > 0 && isValid) {
-      this.hasText = true;
-      this.errorText = false;
-    } else {
-      this.hasText = false;
-      this.errorText = true;
-    }
-    this.displayText(this.texts);
-  }
 
   /**
    *
-   * @param text string of the text to guess
    */
-  displayText(text) {
+  displayText() {
     //global lists of words
     this.words = [];
     this.shownWords = [];
@@ -397,23 +386,28 @@ export class DictoglossComponent implements OnInit {
     this.wrongCount = 0;
 
     // pre-process the text and split into words
-    this.words = text.split(this.regex);
-    this.wordsPuncLower = text.toLowerCase().split(this.regexg);
-    this.wordsPunc = text.split(this.regexg);
-    this.sentences = text.split(".");
+    this.words = this.texts.split(this.regex);
+    this.wordsPuncLower = this.texts.toLowerCase().split(this.regexg);
+    this.wordsPunc = this.texts.split(this.regexg);
+    this.sentences = this.texts.split(".");
     this.texts = "";
 
-    //Gets rid of multiple spaces
+    // Adds spaces between words
     for (let i = 0; i < this.wordsPunc.length; i++) {
+      console.log(this.wordsPunc[i])
+      // if word is empty
       if (this.wordsPunc[i] === "") {
         this.wordsPunc.splice(i, 1);
         if (i > 0) {
           i--;
         }
       } else {
+        // if word is a punctuation mark
         if (this.regex.test(this.wordsPunc[i])) {
           this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
-        } else {
+        } 
+        // normal word
+        else {
           let dashes = "";
           for (let j = 0; j < this.wordsPunc[i].length; j++) {
             dashes += "-"; //For every character, adds a dash.
@@ -452,7 +446,9 @@ export class DictoglossComponent implements OnInit {
     }
 
     console.log("WORDS: ", this.words);
+    console.log("PUNCTUATED WORDS LOWER: ", this.wordsPuncLower);
     console.log("PUNCTUATED WORDS: ", this.wordsPunc);
+    console.log("SENTENCES: ", this.sentences);
     console.log("SHOWN WORDS: ", this.shownWords);
   }
 

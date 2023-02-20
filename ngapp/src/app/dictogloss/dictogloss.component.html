@@ -8,7 +8,7 @@
             <div style="display: flex; justify-content: center;">
                 <textarea spellcheck=false class="textarea" id="textSelector" rows="4" maxlength="2000" placeholder="{{ts.l.dictogloss_type_story}}"></textarea>
             </div>
-            <button class="button" (click)="dictoglossLoad();">{{ts.l.dictogloss_enter_story}}</button>
+            <button class="button" (click)="loadDictogloss();">{{ts.l.dictogloss_enter_story}}</button>
             <!--Timer settings-->
             <button *ngIf="playWithTimer === false && gameInProgress == false" class="button timer-button off" (click)="toggleTimer();">
                 {{ts.l.dictogloss_timer_off}}
@@ -16,7 +16,7 @@
             <button *ngIf="playWithTimer === true && gameInProgress == false" class="button timer-button on" (click)="toggleTimer();">
                 {{ts.l.dictogloss_timer_on}}
             </button>
-            <button *ngIf="gameInProgress == true" class="button timer-button unavailable" >
+            <button *ngIf="gameInProgress" class="button timer-button unavailable" >
                 {{ts.l.dictogloss_timer_disabled}}
             </button>
         </div>
@@ -114,9 +114,9 @@
         <div id="infoBox" *ngIf="showInfo" style="max-width: 600px; height: 320px;" class="container">
             <h3>{{ts.l.how_to_use_dictogloss}}&ensp;</h3>
             <p>{{ts.l.dictogloss_char_limit}}</p>
-            <h5>{{ts.l.dictogloss_1}}&ensp;</h5>
-            <h5>{{ts.l.dictogloss_2}}&ensp;</h5>
-            <h5>{{ts.l.dictogloss_3}}&ensp;</h5>
+            <h5>{{ts.l.dictogloss_instructions_1}}&ensp;</h5>
+            <h5>{{ts.l.dictogloss_instructions_2}}&ensp;</h5>
+            <h5>{{ts.l.dictogloss_instructions_3}}&ensp;</h5>
             <h5>{{ts.l.dictogloss_tip}}&ensp;</h5>
         </div>
     </div>
