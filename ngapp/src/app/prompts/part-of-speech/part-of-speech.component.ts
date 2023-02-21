@@ -11,6 +11,8 @@ import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
 import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { ErrorTag } from "../../lib/grammar-engine/types";
 import { PROMPT_DATA } from "../prompt-data";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 type TagForHighlight = {
   fromx: number;
@@ -35,10 +37,9 @@ export class PartOfSpeechComponent implements OnInit {
   synthItem: SynthItem;
   wordTypes: string[] = [];
   showSynthesis: boolean = false;
-
+  dialogRef: MatDialogRef<unknown>;
   buttonsLoading: boolean = false;
   errorButtons: string[];
-
   selectedVoice: Voice;
 
   constructor(
@@ -47,7 +48,8 @@ export class PartOfSpeechComponent implements OnInit {
     private fb: FormBuilder,
     public ts: TranslationService,
     private synth: SynthesisService,
-    private http: HttpClient
+    private http: HttpClient,
+    private dialog: MatDialog,
   ) {
     this.wordDatabase = PROMPT_DATA["part-of-speech"];
     this.wordTypes = Object.keys(this.wordDatabase);
@@ -141,6 +143,30 @@ export class PartOfSpeechComponent implements OnInit {
     this.refreshSynthesis();
     this.constructedPrompt = "";
     this.showSynthesis = false;
+  }
+
+  /**
+   * Open dialog for instructions
+   */
+  openInformationDialog() {    
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.pos_instructions,
+        type: 'simpleMessage',
+        message: `
+        <h6 align="justify">
+          <p>${this.ts.l.pos_instructions_description_1}</p>
+          <p>${this.ts.l.pos_instructions_description_2}</p>
+        </h6>
+        `,
+        confirmText: this.ts.l.done,
+      },
+      width: '80vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (_) => {
+        this.dialogRef = undefined;
+    });
   }
 
   /**
