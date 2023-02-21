@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "../translation.service";
 import { StoryService } from "../story.service";
 import { AuthenticationService } from "app/authentication.service";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { SynthesisService } from "app/services/synthesis.service";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
@@ -47,8 +47,6 @@ export class PromptsComponent implements OnInit {
     private auth: AuthenticationService,
     private fb: FormBuilder,
     public ts: TranslationService,
-    private synth: SynthesisService,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {

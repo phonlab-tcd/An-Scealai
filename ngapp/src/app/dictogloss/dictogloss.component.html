@@ -20,7 +20,6 @@
                 {{ts.l.dictogloss_timer_disabled}}
             </button>
         </div>
-
     </div>
     <!-- Error message -->
     <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
@@ -98,8 +97,6 @@
                 <b>{{ts.l.dictogloss_guessed1}}{{rightCount}}{{ts.l.dictogloss_guessed2}}{{words.length}}{{ts.l.dictogloss_guessed3}}</b>
             </div>
             <!-- list of wrong guessed words -->
-            <!-- <div *ngIf="wrongWords && wrongWords.length > 0" [innerHtml]="wrong_words_div">
-            </div> -->
             <div *ngIf="wrongWords && wrongWords.length > 0" class="wrongWordBank">
                 <div *ngFor="let word of wrongWords" >
                     <div class="wordBankItem">{{word}}</div>

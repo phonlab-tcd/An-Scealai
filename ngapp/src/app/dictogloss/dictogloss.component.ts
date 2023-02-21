@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { SynthItem } from "app/synth-item";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
 import { TranslationService } from "app/translation.service";
@@ -486,7 +486,10 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  /* Stop recording if already recording, otherwise start recording */
+  /**
+   * Stop recording if already recording, otherwise start recording
+   * Send speech to ASR, add transcription as guess input
+   */
   async speakAnswer() {
     if (this.isRecording) {
       this.recordAudioService.stopRecording();
@@ -503,6 +506,9 @@ export class DictoglossComponent implements OnInit {
     this.isRecording = !this.isRecording;
   }
 
+  /**
+   * Dialog box to display instructions
+   */
   openInformationDialog() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {

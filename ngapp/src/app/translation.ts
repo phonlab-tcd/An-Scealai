@@ -2258,21 +2258,6 @@ export default {
   deselect_all: {
     ga: 'Díroghnaigh go léir',
     en: 'Deselect All' },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   search: {
     ga: 'Cuardaigh',
     en: 'Search' },
