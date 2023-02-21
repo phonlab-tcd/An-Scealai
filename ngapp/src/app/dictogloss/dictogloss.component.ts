@@ -14,6 +14,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: "app-dictogloss",
@@ -213,12 +214,12 @@ export class DictoglossComponent implements OnInit {
   sendDictoglossReport() {
     let message: Message = {
       _id: "", //Check these
-      id: "",
+      id: uuid(), // Needs to be deprecated
       subject:
         '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
       date: new Date(),
       senderId: this.studentId,
-      senderUsername: "", //Teacher Username
+      senderUsername: this.auth.getUserDetails().username, //Student Username
       recipientId: this.teacherId, //Teacher Id
       text:
         "The final time was: \t" +
