@@ -85,9 +85,8 @@
                 <button class="button" (click)="delimitPotentialWords();">{{ts.l.dictogloss_guess}}</button>
                 <!-- recording button -->
                 <div class="recordBtnContainer">
-                 <button *ngIf="!recording" type="button" (click)="prepRecording();" class="button">{{ts.l.dictogloss_record_audio}}</button>
-                 <button *ngIf="recording" (click)="stopRecording();" class="button">{{ts.l.dictogloss_not_record_audio}}</button>          
-                 <div *ngIf="recording" class="recordingIcon"><i class="fa fa-circle"></i></div>
+                 <button *ngIf="!isRecording" type="button" (click)="speakAnswer();" class="button">{{ts.l.dictogloss_record_audio}}</button>
+                 <button *ngIf="isRecording" (click)="speakAnswer();" class="button">{{ts.l.dictogloss_not_record_audio}}<i class="recordingIcon fa fa-circle"></i></button>
                </div>
                <!-- correct/wrong guess counter -->
                 <div>
@@ -112,12 +111,12 @@
     </div>
     <div style="display: flex; align-items: center; justify-content: center;">
         <div id="infoBox" *ngIf="showInfo" style="max-width: 600px; height: 320px;" class="container">
-            <h3>{{ts.l.how_to_use_dictogloss}}&ensp;</h3>
+            <h3>{{ts.l.how_to_use_dictogloss}}</h3>
             <p>{{ts.l.dictogloss_char_limit}}</p>
-            <h5>{{ts.l.dictogloss_instructions_1}}&ensp;</h5>
-            <h5>{{ts.l.dictogloss_instructions_2}}&ensp;</h5>
-            <h5>{{ts.l.dictogloss_instructions_3}}&ensp;</h5>
-            <h5>{{ts.l.dictogloss_tip}}&ensp;</h5>
+            <h5>{{ts.l.dictogloss_instructions_1}}</h5>
+            <h5>{{ts.l.dictogloss_instructions_2}}</h5>
+            <h5>{{ts.l.dictogloss_instructions_3}}</h5>
+            <h5>{{ts.l.dictogloss_tip}}</h5>
         </div>
     </div>
 </div>

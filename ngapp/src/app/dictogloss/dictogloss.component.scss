@@ -97,7 +97,6 @@
 
 .timer-button.off:hover {
     background-color: rgba(255, 60, 60, 0.76);
-    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
 }
 
 .button.timer-button.unavailable {
@@ -208,8 +207,7 @@
 }
 
 .button:hover {
-    background-color: #2EE59D;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    background-color: var(--scealai-green);
     color: #fff;
     transform: translateY(-2px);
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { SynthItem } from "app/synth-item";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
 import { TranslationService } from "app/translation.service";
@@ -10,6 +9,7 @@ import { Message } from "app/message";
 import { UserService } from "app/user.service";
 import { ClassroomService } from "app/classroom.service";
 import { MessageService } from "app/message.service";
+import { RecordAudioService } from "app/services/record-audio.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
@@ -42,6 +42,7 @@ export class DictoglossComponent implements OnInit {
   guessCheck: boolean = false;
   wrongCount: number = 0;
   rightCount: number = 0;
+  isRecording: boolean = false;
 
   // timer variables
   playWithTimer = false;
@@ -62,18 +63,6 @@ export class DictoglossComponent implements OnInit {
   // user variables
   studentId: string;
   teacherId: string;
-  teacherName: string;
-
-  // record audio variables
-  audioSource: SafeUrl;
-  chunks;
-  recording: boolean = false;
-  newRecording: boolean = false;
-  blob: any;
-  modalClass: string = "hidden";
-  recorder;
-  stream;
-  url_ASR_API: string = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
 
   constructor(
     private messageService: MessageService,
@@ -84,7 +73,8 @@ export class DictoglossComponent implements OnInit {
     private router: Router,
     public activatedRoute: ActivatedRoute,
     public ts: TranslationService,
-    protected sanitizer: DomSanitizer
+    protected sanitizer: DomSanitizer,
+    private recordAudioService: RecordAudioService
   ) {
     // see if dictogloss is generated from messages
     try {
@@ -116,12 +106,11 @@ export class DictoglossComponent implements OnInit {
     }
     if (userDetails.role === "STUDENT") {
       this.studentId = userDetails._id;
-      this.teacherId = (await firstValueFrom(
-        this.classroomService.getClassroomOfStudent(this.studentId)
-      )).teacherId;
-      this.teacherName = (
-        await firstValueFrom(this.userService.getUserById(this.teacherId))
-      ).username;
+      this.teacherId = (
+        await firstValueFrom(
+          this.classroomService.getClassroomOfStudent(this.studentId)
+        )
+      ).teacherId;
     }
     this.refreshVoice();
 
@@ -162,9 +151,9 @@ export class DictoglossComponent implements OnInit {
    * @param line sentence to synthesise
    * @returns SynthItem
    */
-    getSynthItem(line: string) {
-      return new SynthItem(line, this.selected, this.synth);
-    }
+  getSynthItem(line: string) {
+    return new SynthItem(line, this.selected, this.synth);
+  }
 
   /**
    * Generate the dictogloss text from teacher message
@@ -197,37 +186,37 @@ export class DictoglossComponent implements OnInit {
   /**
    * Generate the dictogloss text from student input
    */
-    loadDictogloss() {
-      this.generatedFromMessages = false;
-      console.log("Not generated from message.");
-      this.resetTimer();
-      this.startTimer();
-      this.allGuessed = false;
-      let selector = document.getElementById("textSelector") as HTMLInputElement;
-      this.texts = selector.value;
-      selector.value = "";
-      if (this.texts != "") {
-        this.gameInProgress = true;
-      }
-  
-      // check to see if the word starts with any spaces
-      let isValid = false;
-      for (let i = 0; i < this.texts.length; i++) {
-        if (this.texts[i] !== " ") {
-          isValid = true;
-          break;
-        }
-      }
-  
-      if (this.texts.length > 0 && isValid) {
-        this.hasText = true;
-        this.errorText = false;
-      } else {
-        this.hasText = false;
-        this.errorText = true;
-      }
-      this.displayText();
+  loadDictogloss() {
+    this.generatedFromMessages = false;
+    console.log("Not generated from message.");
+    this.resetTimer();
+    this.startTimer();
+    this.allGuessed = false;
+    let selector = document.getElementById("textSelector") as HTMLInputElement;
+    this.texts = selector.value;
+    selector.value = "";
+    if (this.texts != "") {
+      this.gameInProgress = true;
     }
+
+    // check to see if the word starts with any spaces
+    let isValid = false;
+    for (let i = 0; i < this.texts.length; i++) {
+      if (this.texts[i] !== " ") {
+        isValid = true;
+        break;
+      }
+    }
+
+    if (this.texts.length > 0 && isValid) {
+      this.hasText = true;
+      this.errorText = false;
+    } else {
+      this.hasText = false;
+      this.errorText = true;
+    }
+    this.displayText();
+  }
 
   /**
    * Activate or deactivate timer
@@ -348,7 +337,6 @@ export class DictoglossComponent implements OnInit {
     return time;
   }
 
-
   /**
    *
    */
@@ -374,7 +362,7 @@ export class DictoglossComponent implements OnInit {
 
     // Adds spaces between words
     for (let i = 0; i < this.wordsPunc.length; i++) {
-      console.log(this.wordsPunc[i])
+      console.log(this.wordsPunc[i]);
       // if word is empty
       if (this.wordsPunc[i] === "") {
         this.wordsPunc.splice(i, 1);
@@ -385,7 +373,7 @@ export class DictoglossComponent implements OnInit {
         // if word is a punctuation mark
         if (this.regex.test(this.wordsPunc[i])) {
           this.shownWords.push(this.wordsPunc[i]); //For every punctuation mark, add it to the list of shown words(purely for comparing arrays)
-        } 
+        }
         // normal word
         else {
           let dashes = "";
@@ -479,7 +467,7 @@ export class DictoglossComponent implements OnInit {
   }
 
   /**
-   * Preprocess word to then check if correct guess 
+   * Preprocess word to then check if correct guess
    */
   async delimitPotentialWords() {
     //Word input field
@@ -567,134 +555,21 @@ export class DictoglossComponent implements OnInit {
     }
   }
 
-  // showSpan() {
-  //   const butn = document.getElementById("game-in-progress");
-  //   if ((butn.style.visibility = "hidden")) {
-  //     butn.style.visibility = "visible";
-  //   } else {
-  //     butn.style.visibility = "hidden";
-  //   }
-  //   console.log(butn.style.visibility);
-  // }
-
-  //Next 7 functions copied from messages.component.ts
-
-  // recordAudio() {
-  //   let media = {
-  //     tag: "audio",
-  //     type: "audio/mp3",
-  //     ext: ".mp3",
-  //     gUM: { audio: true },
-  //   };
-  //   navigator.mediaDevices
-  //     .getUserMedia(media.gUM)
-  //     .then((_stream) => {
-  //       this.stream = _stream;
-  //       this.recorder = new MediaRecorder(this.stream);
-  //       this.startRecording();
-  //       this.recorder.ondataavailable = (e) => {
-  //         this.chunks.push(e.data);
-  //         if (this.recorder.state == "inactive") {
-  //         }
-  //       };
-  //     })
-  //     .catch();
-  // }
-
-  /*
-   * Call the recording audio function
-   */
-  // prepRecording() {
-  //   this.recordAudio();
-  // }
-
-  /*
-   * Set parameters for recording audio and start the process
-   */
-  // startRecording() {
-  //   this.recording = true;
-  //   this.newRecording = false;
-  //   this.chunks = [];
-  //   this.recorder.start();
-  // }
-
-  /*
-   * Playback the recorded audio
-   */
-  // playbackAudio() {
-  //   this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
-  //     URL.createObjectURL(new Blob(this.chunks, { type: "audio/mp3" }))
-  //   );
-  //   this.newRecording = true;
-  // }
-
-  /*
-   * Save audio data into a blob and get transcription
-   */
-  /* stop recording stream and convert audio to base64 to send to ASR */
-  // stopRecording() {
-  //   this.recorder.stop();
-  //   this.recording = false;
-  //   this.stream.getTracks().forEach((track) => track.stop());
-  //   setTimeout(() => {
-  //     const blob = new Blob(this.chunks, { type: "audio/mp3" });
-  //     this.audioSource = this.sanitizer.bypassSecurityTrustUrl(
-  //       URL.createObjectURL(blob)
-  //     );
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(blob);
-  //     reader.onloadend = function () {
-  //       let encodedAudio = (<string>reader.result).split(";base64,")[1]; // convert audio to base64
-  //       this.getTranscription(encodedAudio);
-  //     }.bind(this);
-  //   }, 500);
-  // }
-
-  /* send audio to the ASR system and get transcription */
-  // getTranscription(audioData: string) {
-  //   const rec_req = {
-  //     recogniseBlob: audioData,
-  //     developer: true,
-  //   };
-  //   fetch(this.url_ASR_API, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(rec_req),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       let transcription = data["transcriptions"][0]["utterance"];
-  //       let input = document.getElementById(
-  //         "guesses_input"
-  //       ) as HTMLInputElement;
-  //       input.value = transcription;
-  //     });
-  // }
-
-  // // change css class to show recording container
-  // showModal() {
-  //   this.modalClass = "visibleFade";
-  // }
-
-  // clear out audio source if it exists and close new messsage
-  // resetForm() {
-  //   if (this.audioSource) {
-  //     this.audioSource = null;
-  //     this.chunks = [];
-  //   }
-  // }
-
-  // change the css class to hide the recording container
-  // hideModal() {
-  //   this.modalClass = "hiddenFade";
-  //   if (this.recorder.state != "inactive") {
-  //     this.recorder.stop();
-  //     this.stream.getTracks().forEach((track) => track.stop());
-  //   }
-  //   this.recording = false;
-  //   this.newRecording = false;
-  // }
+  /* Stop recording if already recording, otherwise start recording */
+  async speakAnswer() {
+    if (this.isRecording) {
+      this.recordAudioService.stopRecording();
+      let transcription = await this.recordAudioService.getAudioTranscription();
+      console.log(transcription);
+      if (transcription) {
+        let guess_input = document.getElementById(
+          "guesses_input"
+        ) as HTMLInputElement;
+        guess_input.value = transcription;
+      }
+    } else {
+      this.recordAudioService.recordAudio();
+    }
+    this.isRecording = !this.isRecording;
+  }
 }

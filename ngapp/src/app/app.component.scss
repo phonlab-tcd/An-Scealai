@@ -91,11 +91,11 @@
 }
 
 // TODO: Does this actually affect the style?
-.mat-badge-content {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-}
+// .mat-badge-content {
+//   width: 20px;
+//   height: 20px;
+//   line-height: 20px;
+// }
 
 .profileBtnContainer {
   display: flex;
@@ -111,11 +111,6 @@
 .navbarBtn:hover {
   cursor: pointer;
   color: var(--scealai-light-green);
-}
-
-.userGuide {
-  color: black;
-  text-decoration: none;
 }
 
 .notificationPopup {

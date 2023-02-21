@@ -2187,11 +2187,11 @@ export default {
     ga: /*'Cuir isteach focal'*/ '❓',
     en: /*'Enter word'*/ '❓' },
   dictogloss_record_audio:{
-    ga: '🎤Taifeadadh ar❌',
-    en: '🎤Recording off❌' },
+    ga: '🎤 Taifeadadh ar',
+    en: '🎤 Recording off' },
   dictogloss_not_record_audio: {
-    ga: '🎤Taifeadadh as✔️',
-    en: '🎤Recording on✔️' },
+    ga: '🎤 Taifeadadh as',
+    en: '🎤 Recording on' },
   correct: {
     ga: 'Ceart',
     en: 'Correct' },
@@ -2227,16 +2227,16 @@ export default {
     en: '2000 Character Limit' },
   dictogloss_instructions_1: {
     ga: '1. Cuir sliocht Gaeilge isteach sa chéad ionchur téacs.',
-    en: '1. Enter an Irish passage into the first text input.' },
+    en: '1. Enter an Irish passage into the text input box.' },
   dictogloss_instructions_2: {
     ga: '2. Éist leis an tsintéis gutha a thugtar ón sliocht.',
-    en: '2. Listen to the voice synthesis that is given from the passage.' },
+    en: '2. Listen to the voice synthesis that is generated from the passage.' },
   dictogloss_instructions_3: {
-    ga: '3. Déan iarracht é a athscríobh de chluas (is féidir leat an chéad litir de gach focal a fheiceáil trí chliceáil ar a spás).',
-    en: '3. Try to rewrite it by ear (you can see the first letter of each word by clicking its space).' },
+    ga: '3. Déan iarracht é a athscríobh de chluas.',
+    en: '3. Try to rewrite the text by ear.' },
   dictogloss_tip: {
     ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
-    en: 'Tip: If you\'re stuck, you can click on one of the spaces where the words go and get the first letter of it.' },
+    en: 'Tip: If you are stuck, click on a hidden word to reveal the first letter.' },
   dictogloss_type_story: {
     ga: 'Write story here...',
     en: 'Type story here...' },
