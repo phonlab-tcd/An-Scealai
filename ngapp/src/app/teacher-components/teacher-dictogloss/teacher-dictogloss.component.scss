@@ -1,10 +1,9 @@
 .container {
-    max-width: 900px;
+    width: 90%;
     background-color: white;
     border-radius: 4px;
     padding-top: 20px;
     padding-bottom: 20px;
-    margin-bottom: 20px;
     -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
@@ -12,18 +11,33 @@
     animation-name: fadeIn;
 }
 
-.classroomCard {
+.studentCard {
+    width: 100%;
     justify-content: center;
     display: inline-block;
+    background-color: white;
+    align-items: center;
+    padding: 8px;
+    font-size: 14pt;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.studentCard:hover {
+    cursor: pointer;
+}
+
+.textarea {
+    width: 90%;
+    resize: none;
+    border-radius: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 4px;
 }
 
 .classroomCluster {
-    background-color: rgba(0, 0, 0, 0.1);
     padding: 4px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    border-radius: 6px;
     justify-content: center;
     display: inline-block;
 }
@@ -35,8 +49,6 @@
     letter-spacing: 1px;
     background-color: rgba(126, 118, 118, 0.1);
     margin: 4px;
-    transition: all 0.3s ease 0s;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
@@ -57,16 +69,16 @@
 
 .button.deselected {
     background-color: #e52e2e;
-    box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
+    // box-shadow: 0px 15px 20px rgba(229, 46, 46, 0.4);
     color: #fff;
-    transform: translateY(-2px);
+    // transform: translateY(-2px);
 }
 
 .button.selected {
     background-color: #2EE59D;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    // box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
     color: #fff;
-    transform: translateY(-2px);
+    // transform: translateY(-2px);
 }
 
 .validationAlert {

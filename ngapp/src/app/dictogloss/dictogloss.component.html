@@ -98,7 +98,12 @@
                 <b>{{ts.l.dictogloss_guessed1}}{{rightCount}}{{ts.l.dictogloss_guessed2}}{{words.length}}{{ts.l.dictogloss_guessed3}}</b>
             </div>
             <!-- list of wrong guessed words -->
-            <div *ngIf="wrongWords && wrongWords.length > 0" [innerHtml]="wrong_words_div">
+            <!-- <div *ngIf="wrongWords && wrongWords.length > 0" [innerHtml]="wrong_words_div">
+            </div> -->
+            <div *ngIf="wrongWords && wrongWords.length > 0" class="wrongWordBank">
+                <div *ngFor="let word of wrongWords" >
+                    <div class="wordBankItem">{{word}}</div>
+                </div>
             </div>
         </div>
         <!-- if all words guessed correctly, show time and play again buttons-->

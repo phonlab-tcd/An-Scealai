@@ -12,25 +12,6 @@
     animation-name: fadeIn;
 }
 
-// .container.input {
-//     max-width: 600px;
-// }
-
-.fadeOutContainer{
-    max-width: 600px; 
-    height: 280px;
-    background-color: white;
-    border-radius: 4px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    animation-duration: 1s;
-    animation-name: fadeOut;
-}
-
 .playback {
     margin: 8px;
 }
@@ -205,6 +186,26 @@
 .recordingIcon {
     margin-left: 0px;
 }
+
+.wrongWordBank {
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.wordBankItem {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    padding: 10px;
+    font-weight: bold;
+}
+
 
 @keyframes fadeIn {
     from {
