@@ -35,9 +35,6 @@ export class TeacherDictoglossComponent implements OnInit {
   classroom: Classroom;
   allSelected: boolean = false;
 
-
-  
-
   ngOnInit(): void {
     this.getClassroom();
     console.log(this.students);

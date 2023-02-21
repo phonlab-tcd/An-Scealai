@@ -6,13 +6,14 @@ import { SynthesisPlayerComponent } from "app/student-components/synthesis-playe
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "app/authentication.service";
 import { Message } from "app/message";
-import { UserService } from "app/user.service";
 import { ClassroomService } from "app/classroom.service";
 import { MessageService } from "app/message.service";
 import { RecordAudioService } from "app/services/record-audio.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
-import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: "app-dictogloss",
@@ -31,31 +32,27 @@ export class DictoglossComponent implements OnInit {
   wordsPuncLower: string[] = [];
   sentences: string[] = [];
   hasText: boolean = false;
-  hasIncorrect: boolean = false;
-  synthText: string;
   guess: string;
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
-  showInfo: boolean = false;
   gameInProgress: boolean = false;
   allGuessed: boolean = false;
   guessCheck: boolean = false;
   wrongCount: number = 0;
   rightCount: number = 0;
-  isRecording: boolean = false;
 
-  // timer variables
+  // game options
   playWithTimer = false;
   totalTime: number = 0;
   interval: any;
+  isRecording: boolean = false;  
+  dialogRef: MatDialogRef<unknown>;
 
   // synthesis variables
   synthesisPlayer: SynthesisPlayerComponent;
   playbackSpeed: number = 1; //Shoud range from 0.5x to 2x speed incrementing in 0.5.
   @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
-  selected: Voice;
-  audio_urls: any;
-  showReplay: boolean = false;
+  selectedVoice: Voice;
   synthItem: SynthItem;
   errorText: boolean;
   synthItems: SynthItem[] = [];
@@ -67,19 +64,18 @@ export class DictoglossComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private classroomService: ClassroomService,
-    private userService: UserService,
     private auth: AuthenticationService,
     private synth: SynthesisService,
     private router: Router,
     public activatedRoute: ActivatedRoute,
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
-    private recordAudioService: RecordAudioService
+    private recordAudioService: RecordAudioService,
+    private dialog: MatDialog,
   ) {
     // see if dictogloss is generated from messages
     try {
       this.texts = this.router.getCurrentNavigation().extras.state.text; //Doesn't work with full stops.
-      console.log("TEXTS: ", this.texts);
       console.log("Generated from message.");
       this.playWithTimer = true;
       this.gameInProgress = true;
@@ -115,8 +111,8 @@ export class DictoglossComponent implements OnInit {
     this.refreshVoice();
 
     // create a dictogloss from the text sent by teacher
-    if (this.texts && this.generatedFromMessages == true) {
-      this.loadDictoglossFromMessages();
+    if (this.texts) {
+      this.loadDictogloss();
     }
   }
 
@@ -126,23 +122,27 @@ export class DictoglossComponent implements OnInit {
    * @returns
    */
   refreshVoice(voice: Voice = undefined) {
-    if (voice) this.selected = voice;
+    if (voice) this.selectedVoice = voice;
     this.synthItems.forEach((s) => {
       s.audioUrl = undefined;
       s.dispose();
     });
     this.synthItems = [];
-    this.collateSynths(this.sentences);
+    console.log('refresh synth')
+    this.collateSynths();
   }
 
   /**
    * Create an array of synth items, one synth item for each sentence to guess
    * @param sentences Array of sentences to listen to
    */
-  collateSynths(sentences: string[]) {
-    for (let i = 0; i < sentences.length; i++) {
-      this.synthItems.push(this.getSynthItem(sentences[i]));
-      this.synthItems[i].text = "Sentence " + (i + 1);
+  collateSynths() {
+    if (this.sentences) {
+      this.sentences = this.sentences.filter(el => el.length > 0)
+      for (let i = 0; i < this.sentences.length; i++) {
+        this.synthItems.push(this.getSynthItem(this.sentences[i]));
+        this.synthItems[i].text = "Sentence " + (i + 1);
+      }
     }
   }
 
@@ -152,63 +152,32 @@ export class DictoglossComponent implements OnInit {
    * @returns SynthItem
    */
   getSynthItem(line: string) {
-    return new SynthItem(line, this.selected, this.synth);
-  }
-
-  /**
-   * Generate the dictogloss text from teacher message
-   */
-  loadDictoglossFromMessages() {
-    this.resetTimer();
-    this.startTimer();
-    this.allGuessed = false;
-
-    let isValid = false;
-    for (let i = 0; i < this.texts.length; i++) {
-      if (this.texts[i] !== " ") {
-        isValid = true;
-        break;
-      }
-    }
-
-    if (this.texts.length > 0 && isValid) {
-      this.hasText = true;
-      this.errorText = false;
-    } else {
-      this.hasText = false;
-      this.errorText = true;
-    }
-
-    console.log("The input text is:", this.texts);
-    this.displayText();
+    return new SynthItem(line, this.selectedVoice, this.synth);
   }
 
   /**
    * Generate the dictogloss text from student input
    */
   loadDictogloss() {
-    this.generatedFromMessages = false;
-    console.log("Not generated from message.");
     this.resetTimer();
     this.startTimer();
     this.allGuessed = false;
-    let selector = document.getElementById("textSelector") as HTMLInputElement;
-    this.texts = selector.value;
-    selector.value = "";
+
+    // erase input box if student entered passage
+    if (!this.generatedFromMessages) {
+      let selector = document.getElementById("textSelector") as HTMLInputElement;
+      this.texts = selector.value;
+      selector.value = "";
+    }
+
     if (this.texts != "") {
       this.gameInProgress = true;
     }
 
-    // check to see if the word starts with any spaces
-    let isValid = false;
-    for (let i = 0; i < this.texts.length; i++) {
-      if (this.texts[i] !== " ") {
-        isValid = true;
-        break;
-      }
-    }
+    // trim any extra white spaces
+    this.texts = this.texts.trim();
 
-    if (this.texts.length > 0 && isValid) {
+    if (this.texts.length > 0) {
       this.hasText = true;
       this.errorText = false;
     } else {
@@ -236,25 +205,6 @@ export class DictoglossComponent implements OnInit {
     if (increment < 0 && this.playbackSpeed > 0.5) {
       this.playbackSpeed -= 0.5;
     }
-  }
-
-  /**
-   * Fades in/out the instructions box (buggy)
-   */
-  fadeOutAnimation() {
-    document.getElementById("infoButtonClose").hidden = true;
-    document.getElementById("infoBox").className = "fadeOutContainer";
-    setTimeout(() => {
-      this.showInfo = false;
-    }, 1000); //Avoids premature animation ending.
-  }
-
-  /**
-   * Set the css class of the instructions box when it is clicked on
-   */
-  setClass() {
-    document.getElementById("infoBox").className = "container";
-    document.getElementById("infoButtonClose").hidden = false;
   }
 
   /**
@@ -338,7 +288,7 @@ export class DictoglossComponent implements OnInit {
   }
 
   /**
-   *
+   * Update the text when the user guesses words
    */
   displayText() {
     //global lists of words
@@ -348,7 +298,6 @@ export class DictoglossComponent implements OnInit {
     this.wordsPunc = [];
     this.wordsPuncLower = [];
     this.synthItems = [];
-    this.synthText = "";
     this.wrong_words_div = "";
     this.rightCount = 0;
     this.wrongCount = 0;
@@ -362,7 +311,6 @@ export class DictoglossComponent implements OnInit {
 
     // Adds spaces between words
     for (let i = 0; i < this.wordsPunc.length; i++) {
-      console.log(this.wordsPunc[i]);
       // if word is empty
       if (this.wordsPunc[i] === "") {
         this.wordsPunc.splice(i, 1);
@@ -394,23 +342,9 @@ export class DictoglossComponent implements OnInit {
       }
     }
 
-    //Gets rid of first character space that breaks program
-    if (this.words[0] == " ") {
-      this.words.splice(0, 1);
-    }
-
-    if (this.wordsPunc[0] == " ") {
-      this.wordsPunc.splice(0, 1);
-    }
-
-    // create a string from the words to use for synthesis
-    for (let i = 0; i < this.words.length; i++) {
-      this.synthText += this.words[i] + " ";
-    }
-
-    // create synthesis if text sent by teacher
-    if (this.hasText) {
-      this.collateSynths(this.sentences);
+    // create synthesis from sentences
+    if (this.sentences.length > 0) {
+      this.collateSynths();
     }
 
     console.log("WORDS: ", this.words);
@@ -490,11 +424,8 @@ export class DictoglossComponent implements OnInit {
       wordList.splice(0, 1);
     }
 
-    console.log(wordList);
-
     //For multiple words entered at once
     for (let word = 0; word < wordList.length; word++) {
-      console.log(wordList[word]);
       this.checkWord(wordList[word]);
     }
     word_input.value = "";
@@ -515,7 +446,6 @@ export class DictoglossComponent implements OnInit {
     if (!isIn && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       //If wrong words list is empty, add word with no comma, else add it with comma in front of word
-      this.hasIncorrect = true;
       if (this.wrong_words_div.length !== 0) {
         this.wrong_words_div += ", " + word;
       } else {
@@ -560,7 +490,6 @@ export class DictoglossComponent implements OnInit {
     if (this.isRecording) {
       this.recordAudioService.stopRecording();
       let transcription = await this.recordAudioService.getAudioTranscription();
-      console.log(transcription);
       if (transcription) {
         let guess_input = document.getElementById(
           "guesses_input"
@@ -571,5 +500,27 @@ export class DictoglossComponent implements OnInit {
       this.recordAudioService.recordAudio();
     }
     this.isRecording = !this.isRecording;
+  }
+
+  openInformationDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.how_to_use_dictogloss,
+        type: 'simpleMessage',
+        message: `
+        <p>${this.ts.l.dictogloss_char_limit}</p>
+        <h5>${this.ts.l.dictogloss_instructions_1}</h5>
+        <h5>${this.ts.l.dictogloss_instructions_2}</h5>
+        <h5>${this.ts.l.dictogloss_instructions_3}</h5><br>
+        <h5>${this.ts.l.dictogloss_tip}</h5>
+        `,
+        confirmText: this.ts.l.done,
+      },
+      width: '80vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (_) => {
+        this.dialogRef = undefined;
+    });
   }
 }

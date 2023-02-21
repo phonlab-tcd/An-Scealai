@@ -1,5 +1,5 @@
 .container {
-    max-width: 900px;
+    max-width: 90%;
     background-color: white;
     border-radius: 4px;
     padding-top: 20px;
@@ -12,9 +12,9 @@
     animation-name: fadeIn;
 }
 
-.container.input {
-    max-width: 600px;
-}
+// .container.input {
+//     max-width: 600px;
+// }
 
 .fadeOutContainer{
     max-width: 600px; 
@@ -39,34 +39,6 @@
     margin-bottom: 4px;
 }
 
-.infoBoxButton {
-    background-color: lightblue;
-    border-width: 1px;
-    font-size: x-small;
-    margin: 4px auto 4px auto;
-    padding: 2px;
-    border-radius: 4px;
-    max-width: fit-content;
-    animation-duration: 1s;
-    animation-name: fadeInButton;
-}
-
-.infoButtonText {
-    border-width: 1px;
-    background-color: lightblue;
-    font-size: x-small;
-    margin: 4px auto 4px auto;
-    padding: 2px;
-    border-radius: 4px;
-    max-width: fit-content;
-    animation-duration: 1s;
-    animation-name: fadeInButton;
-}
-
-.infoBoxButton, .infoButtonText:hover {
-    cursor: pointer;
-}
-
 .speed-container {
     border-radius: 0px;
     border-width: 1px;
@@ -76,7 +48,6 @@
     font-weight: 500;
     display: inline;
     justify-content: center;
-    background-color: rgba(125, 255, 125, 0.5);
 }
 
 .button.timer-button {
@@ -173,8 +144,7 @@
 }
 
 .textarea {
-    max-width: 400px;
-    min-width: 400px;
+    width: 90%;
     resize: none;
     border-radius: 1px;
     border-style: solid;
@@ -219,7 +189,6 @@
 }
 
 .speed-button:hover {
-    background-color: rgba(125, 255, 125, 0.76);
     cursor: pointer;
 }
 
@@ -231,6 +200,10 @@
 
 .speed-voice-selection {
     display: table-column;
+}
+
+.recordingIcon {
+    margin-left: 0px;
 }
 
 @keyframes fadeIn {

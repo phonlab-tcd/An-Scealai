@@ -2184,8 +2184,8 @@ export default {
     ga: 'Cliceáil le haghaidh leid',
     en: 'Click for a hint' },
   dictogloss_guess: {
-    ga: /*'Cuir isteach focal'*/ '❓',
-    en: /*'Enter word'*/ '❓' },
+    ga: 'seiceáil',
+    en: 'check' },
   dictogloss_record_audio:{
     ga: '🎤 Taifeadadh ar',
     en: '🎤 Recording off' },
