@@ -1,4 +1,3 @@
-<!--Irish Language support probably wrong(I used google translate)-->
 <div class="container-fluid">
     <div class="row">
       <div class="col-lg-6">
@@ -12,26 +11,26 @@
             <!--Word Type Button Group-->
             <div class="word-types">
               <div class="btn-group-sm" role="group">
-                  <button *ngFor="let type of wordTypes" type=button (click)=selectWord(type) class="button">{{ts.l[type]}}</button>
+                  <button *ngFor="let type of wordTypes" type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
               </div>
             </div>
           </div>
           <!--Word Card-->
-          <div *ngIf="givenWord !== WORD_PROMPT" class="given-word">
+          <div *ngIf="givenWord" class="given-word">
             <div class="card">
               <h3 class="card-header">{{givenWord}}</h3>
             </div>
           </div>
           <!--Ask for word-->
-          <div *ngIf="givenWord === WORD_PROMPT" class="given-word">
+          <div *ngIf="!givenWord" class="given-word">
             <i>{{ts.l.pos_choose_word_type}}</i>
           </div>
           <!--Confirm word choice-->
-          <div *ngIf="givenWord !== WORD_PROMPT" class="content"> 
+          <div *ngIf="givenWord" class="content"> 
             {{ts.l.pos_add_to_word_bank}}
             <div class="pos-confirmation-buttons">
-              <button type="button" (click)="posConfirmation(true)" class="button">{{ts.l.yes}}</button>
-              <button type="button" (click)="posConfirmation(false)" class="button no">{{ts.l.no}}</button>
+              <button type="button" (click)="addToWordBank()" class="button">{{ts.l.yes}}</button>
+              <button type="button" (click)="givenWord=''" class="button no">{{ts.l.no}}</button>
             </div>     
           </div>
         </div>
@@ -50,34 +49,36 @@
       <div class="col-lg-6">
         <!--Chosen Words & Audio Playback-->
         <div *ngIf="wordBank.length > 0" class="container">
-          <div *ngIf="!bankHighlightsLoading" class="word-bank">
-            <div class="your-word-bank">{{ts.l.pos_your_word_bank}}</div>
-            <div [innerHTML]="innerHTMLWordBank" class="grammar-check-error"></div>
+          <h3>{{ts.l.pos_your_word_bank}}</h3>
+          <div class="word-bank">
+            <div *ngFor="let word of wordBank" class="wordBankItem">
+              {{word}}
+            </div>
           </div>
-          <div *ngIf="bankHighlightsLoading" class="word-bank">
-            <b class="your-word-bank">{{ts.l.pos_your_word_bank}}</b>
-            <div>{{createWordBankString(wordBank)}}</div>
+            <input type="text" style="width: 90%" [(ngModel)]="constructedPrompt"/>
+          <div class="wordBankButtons">
+            <button type="button" (click)="resetWordBank()" class="button no">{{ts.l.pos_reset_bank}}</button>
+            <button type="button" (click)="refreshSynthesis()" class="button" [disabled]="!constructedPrompt" >{{ts.l.pos_synth}}</button>
           </div>
         </div>
-        <div *ngIf="(!bankHighlightsLoading || bankHighlightsLoading) && wordBank.length > 0" class="container">
-          <h2>{{ts.l.pos_synth}}</h2>
+        <div *ngIf="showSynthesis" class="container">
+          <h3>{{ts.l.pos_synth}}</h3>
           <!--Synth-->
           <div class="playback">
             <div class="synth-item">
               <app-synth-item class="synth" [synthItem]=synthItem [i]=0></app-synth-item>
             </div>
             <!-- Select Synth dialect -->
-            <synth-voice-select style="margin: 4px" (selectVoice)="refresh($event)"></synth-voice-select>
+            <synth-voice-select style="margin: 4px" (selectVoice)="refreshSynthesis($event)"></synth-voice-select>
           </div>
         </div>
-        <div *ngIf="wordBank.length > 0" class="container">
+        <div *ngIf="constructedPrompt" class="container">
           <form [formGroup]="newStoryForm">
             <!--Reset or save story buttons-->
             <div class="btn-group btn-group-sm" role="group">
-              <button type="button" (click)="resetWordBank()" class="button no">{{ts.l.pos_reset_bank}}</button>
               <button data-cy=create-story
                     type="submit" 
-                    (click)="posAddNewStory(newStoryForm.controls['title'].value, newStoryForm.controls['dialect'].value, this.arrayString)" 
+                    (click)="createNewStory()" 
                     [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
                     class="button">
                     {{ts.l.pos_save_to_stories}}

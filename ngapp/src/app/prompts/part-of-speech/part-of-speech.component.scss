@@ -1,6 +1,8 @@
 .playback {
     display: flex;
     padding: 6px;
+    padding-left: 15%;
+    padding-right: 15%;
     justify-content: space-between;
 }
 
@@ -55,13 +57,27 @@
 .word-bank {
     padding: 16px;
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 1rem;
 }
 
-.your-word-bank {
-    padding-left: 8px;
-    font-weight: 900;
+.wordBankItem {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    padding: 10px;
+    font-weight: bold;
 }
+
+.wordBankButtons {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+}
+
 
 .word-types {
     padding: 8px;
@@ -73,12 +89,6 @@
 
 .pos-confirmation-buttons {
     padding: 8px;
-}
-
-.prompt-input {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
 }
 
 .validationAlert {
