@@ -155,6 +155,12 @@ export class GrammarEngine {
               const offsetErrorTags = errorTags.map(clone).map(mapOffset)
               
               // add the error tags and sentence pair to array
+              // TODO: initailly mapped this to {errors, sentence} (would need to fix insert.js)
+              /*
+              sentences: (await Promise.all(errorTagsArray))
+              .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
+              .map(([errors, sentence]) => ({errors, sentence})),
+              */
               this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
                       [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                       this.errorsWithSentences[i] = [errorTags, s, i];
