@@ -1,4 +1,5 @@
 const Story = require('../../models/story');
+const mongoose = require('mongoose');
 
 /**
  * Set feedback status of story to 'viewed'
@@ -16,8 +17,10 @@ module.exports = async (req, res, next) => {
   }
   if (!req.user) return no(400, 'need to know user');
   if (!req.user._id) return no(400, 'need to know user\'s id');
-  const story = await Story.findById(req.params.id);
+  const story = await Story.findById(new mongoose.mongo.ObjectId(req.params.id));
   if (!story) return no();
-  if (story.studentId === req.user._id || story.owner === req.user._id) return yes();
+  // owner is of type ObjectId, and req.user._id is of type string, so the second half
+  // of this statement was never read => added the toString()
+  if (story.studentId === req.user._id || story.owner.toString() === req.user._id) return yes();
   return no();
 };
