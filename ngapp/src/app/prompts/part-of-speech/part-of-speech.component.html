@@ -63,7 +63,7 @@
             <synth-voice-select style="margin: 4px" (selectVoice)="refreshSynthesis($event)"></synth-voice-select>
           </div>
         </div>
-        <div *ngIf="constructedPrompt" class="container">
+        <div *ngIf="constructedPrompt && auth.getUserDetails().role == 'STUDENT'" class="container">
           <form [formGroup]="newStoryForm">
             <!--Save story form input-->
             <div class="formGroup" novalidate>

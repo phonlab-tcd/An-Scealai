@@ -87,7 +87,7 @@
         <!-- Generated Prompt -->
         <div class="prompt"><i>{{ prompt }}</i></div>
         <!-- Create New Story Button-->
-        <button class="button" (click)="createNewStory()">
+        <button *ngIf="auth.getUserDetails().role == 'STUDENT'" class="button" (click)="createNewStory()">
             {{ ts.l.new_story }}
         </button>
       </div>

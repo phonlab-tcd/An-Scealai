@@ -3,8 +3,6 @@ import { TranslationService } from "../translation.service";
 import { StoryService } from "../story.service";
 import { AuthenticationService } from "app/authentication.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { SynthesisService } from "app/services/synthesis.service";
-import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 import { PROMPT_DATA } from "./prompt-data";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";

@@ -44,7 +44,7 @@ export class PartOfSpeechComponent implements OnInit {
 
   constructor(
     private storyService: StoryService,
-    private auth: AuthenticationService,
+    public auth: AuthenticationService,
     private fb: FormBuilder,
     public ts: TranslationService,
     private synth: SynthesisService,
