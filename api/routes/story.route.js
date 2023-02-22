@@ -81,7 +81,6 @@ storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res)
       $gte: req.params.date,
     };
   }
-  console.log(conditions);
   Story.find(conditions, function(err, stories) {
     if (err) {
       console.log(err);
