@@ -9,6 +9,7 @@ import { NotificationService } from '../../notification-service.service';
 import { ProfileService } from '../../profile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -18,7 +19,7 @@ import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.co
 export class TeacherDashboardComponent implements OnInit {
 
   constructor(private classroom: ClassroomService,
-              private auth: AuthenticationService,
+              public auth: AuthenticationService,
               private router: Router,
               public ts : TranslationService,
               public ns: NotificationService,
@@ -30,11 +31,15 @@ export class TeacherDashboardComponent implements OnInit {
   newClassroom : Classroom = new Classroom();
   dialogRef: MatDialogRef<unknown>;
 
-  ngOnInit() {
-    this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
-    }, err => {
+  async ngOnInit() {
+    let profile = await firstValueFrom(this.profileService.getForUser(this.auth.getUserDetails()._id));
+    if (!profile) {
       this.router.navigateByUrl('/register-profile');
-    });
+    }
+    // this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    // }, err => {
+    //   this.router.navigateByUrl('/register-profile');
+    // });
 
     this.classrooms = this.getClassrooms();
     // TODO: Fix bug
