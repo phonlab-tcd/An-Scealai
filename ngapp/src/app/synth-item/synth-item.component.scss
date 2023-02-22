@@ -14,8 +14,12 @@
   align: center;
 }
 
+.clickable {
+  background-color: #B3EDE9;
+}
+
 .clickable:hover {
-  background-color: white;
+  background-color: #A4DDDB;
   cursor: pointer;
 }
 

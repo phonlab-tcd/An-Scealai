@@ -19,6 +19,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { PromptsComponent } from './prompts/prompts.component';
+import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
@@ -46,6 +48,7 @@ import { TeacherClassroomComponent } from './teacher-components/teacher-classroo
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
+import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
 import { AuthGuardService } from './auth-guard.service';
@@ -71,6 +74,8 @@ const routes: Routes = [
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
+  { path: 'prompts/:type', component: PromptsComponent},
+  { path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
@@ -164,7 +169,11 @@ const routes: Routes = [
       {
         path: 'teacher-settings/:id',
         component: TeacherSettingsComponent,
-      }
+      },
+      {
+        path: 'teacher-dictogloss/:id', 
+        component: TeacherDictoglossComponent
+      },
     ]
   },
   {

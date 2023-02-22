@@ -103,7 +103,6 @@
           <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_LARA}}</button>
         </div>
       </div>
-      
       <!--Taidhgín-->
       <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
         <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">Taidhgín</button>
@@ -113,7 +112,23 @@
           <button routerLink="/about-taidhgin" ngbDropdownItem (click)="changeCheck()">{{ts.l.what_is_taidhgin_title}}</button>
         </div>
       </div>
-
+      <!--Prompts-->
+      <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
+      <button matBadge="Beta" matBadgeSize="small" matBadgePosition="before" matBadgeColor="accent" class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">{{ts.l.prompts}}</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()">{{ts.l.pos_dropdown}}</button>
+        <button routerLink="/prompts/state-exam" ngbDropdownItem (click)="changeCheck()">{{ts.l.sep_dropdown}}</button>
+        <button routerLink="/prompts/proverb" ngbDropdownItem (click)="changeCheck()">{{ts.l.pp_dropdown}}</button>
+        <button routerLink="/prompts/lara" ngbDropdownItem (click)="changeCheck()">{{ts.l.lp_dropdown}}</button>
+        <button routerLink="/prompts/story" ngbDropdownItem (click)="changeCheck()">{{ts.l.sp_dropdown}}</button>
+        <button routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()">{{ts.l.gp_dropdown}}</button>
+      </div>
+    </div>
+      <!--Dictgloss-->
+      <div class="d-inline-block">
+        <button class="btn navbarBtn" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()">Dictogloss</button>
+      </div>
+      <!--ABAIR-->
       <div class="d-inline-block">
         <a
           href="https://www.abair.tcd.ie/"
@@ -176,7 +191,6 @@
             </div>
         </div>
       </div>
-
     </div>
     <!-- notification container for STUDENTS if button clicked-->
     <div *ngIf="

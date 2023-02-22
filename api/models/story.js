@@ -28,10 +28,13 @@ let Story = new Schema(
       type: String,
     },
     author: { // DEPRECATED
-        type: String
+        type: String,
+    },
+    createdWithPrompts: {
+      type: Boolean,
     },
     studentId: { // DEPRECATED
-        type: String
+        type: String,
     },
     feedback: {
       text: {

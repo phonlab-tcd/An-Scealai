@@ -3,6 +3,7 @@ import { BookContentsComponent } from './book-contents.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FilterPipe } from '../../pipes/filter.pipe';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('BookContentsComponent', () => {
   let component: BookContentsComponent;
@@ -11,7 +12,10 @@ describe('BookContentsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ RouterTestingModule, HttpClientModule],
-      declarations: [ FilterPipe, BookContentsComponent ]
+      declarations: [ FilterPipe, BookContentsComponent ],
+      providers: [
+        { provide: MatDialog, useValue: {} }
+    ]
     })
     .compileComponents();
   }));
