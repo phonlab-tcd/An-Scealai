@@ -103,6 +103,7 @@ export class DashboardComponent implements OnInit {
   // SPEECH TO TEXT
   audioSourceASR : SafeUrl;
   isRecording: boolean = false;
+  isTranscribing: boolean = false;
   
   constructor(
     private http: HttpClient,
@@ -576,12 +577,13 @@ export class DashboardComponent implements OnInit {
   /* Stop recording if already recording, otherwise start recording */
   async speakStory() {
     if (this.isRecording) {
+      this.isTranscribing = true;
       this.recordAudioService.stopRecording();
       let transcription = await this.recordAudioService.getAudioTranscription();
-      console.log(transcription)
+      this.isTranscribing = false;
       if(transcription) {
-        this.story.text = this.story.text + "\n" + transcription;
-        this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
+        this.story.text = this.story.text + "\n" + transcription + ".";
+        this.story.htmlText = this.story.htmlText + "<p>" + transcription + ".</p>";
         this.getWordCount(transcription);
         this.storySaved = false; 
         this.textUpdated.next(transcription);

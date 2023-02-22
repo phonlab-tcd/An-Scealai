@@ -72,13 +72,14 @@
     </div>
 
     <!-- SPEECH TO TEXT-->
-    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()">
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()" [ngClass]="{disableDiv: isTranscribing}">
       {{ ts.l.speak }}
       <!-- Google icon, index.html-->
       <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span>
-      <button *ngIf="isRecording" class="notRecordingBtn blink">
+      <button *ngIf="isRecording && !isTranscribing" class="notRecordingBtn blink">
         <i class="fas fa-stop-circle"></i>
       </button>
+      <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
     </div>
 
     <!-- DOWNLOAD -->
