@@ -12,7 +12,7 @@
     </div>
     <!-- display list of classrooms-->
     <div class="classBody">
-      <div class="classroomCard" *ngFor="let classroom of classrooms | async" (click)="goToClassroom(classroom._id)">
+      <div class="classroomCard" *ngFor="let classroom of classrooms" (click)="goToClassroom(classroom._id)">
         <div>{{classroom.title}}</div>
         <div class="numStudents">{{getNumberOfStudents(classroom)}}</div>
       </div>
