@@ -125,7 +125,7 @@
       </div>
     </div>
       <!--Dictgloss-->
-      <div class="d-inline-block">
+      <div *ngIf="auth.isLoggedIn()" class="d-inline-block">
         <button class="btn navbarBtn" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()">Dictogloss</button>
       </div>
       <!--ABAIR-->
