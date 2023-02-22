@@ -1988,6 +1988,276 @@ export default {
   shuffle_questions: {
     ga: 'shuffle questions',
     en: 'shuffle questions' },
+  prompts: {
+    ga: 'Leideanna',
+    en: 'Prompts' },
+  pos_dropdown: {
+    ga: 'POS Leideanna',
+    en: 'POS Prompts'},
+  sep_dropdown: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Exam Prompts' },
+  pp_dropdown: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  lp_dropdown: {
+    ga: 'Leideanna LARA',
+    en: 'LARA Prompts' },
+  sp_dropdown: {
+    ga: 'Leideanna Scealaí',
+    en: 'Story Prompts' },
+  gp_dropdown: {
+    ga: 'Leideanna Cineálach',
+    en: 'General Prompts' },
+  pos_prompts: {
+    ga: 'Cén Scéal!',
+    en: 'What a Story!' },
+  pos_description: {
+    ga: 'Déan scéal trí fhocail randamacha a roghnú.',
+    en: 'Make a story by choosing random words.' },
+  pos_demand: {
+    ga: 'Tabhair dom a: ',
+    en: 'Give me a: ' },
+  pos_choose_word_type: {
+    ga: 'Roghnaigh cineál focal',
+    en: 'Please choose a word type' },
+  pos_add_to_word_bank: {
+    ga: 'Ar mhaith leat an focal seo a chur le do bhanc focal?',
+    en: 'Would you like to add this word to your word bank?' },
+  pos_instructions: {
+    ga: 'Conas "Cén Scéal!" a úsáid',
+    en: 'How to use "What a Story!"' },
+  pos_instructions_description_1: {
+    ga: 'Ar dtús, roghnaigh ceann amháin de na cineálacha focal a thugtar. ' +
+    'Beidh focal randamach den chineál sin focal le feiceáil. ' +
+    'Más maith leat an focal cliceáil "Sea", agus mura bhfuil cliceáil "ní hea". Déan é seo arís go dtí go mbeidh an scéal inmhianaithe tosaithe agat.',
+    en: 'Firstly, select one of the given word types. '+
+    'A random word of that word type will appear. '+
+    'If you like the word click "yes", and if not click "no". Repeat this until you have the desired story started.' },
+  pos_instructions_description_2: {
+    ga: 'Ar an dara dul síos, cinntigh nach bhfuil gramadach mícheart ar bith ag do scéal (mar atá léirithe ag an aibhsiú dearg os cionn téacs mícheart). ' +
+    'Mura bhfuil tú sásta leis an scéal tosaithe is féidir leat "Athshocraigh Banc" a roghnú chun an banc focal a athshocrú. ' +
+    'Is féidir leat do scéal a shábháil ansin trí theideal, canúint bhailí a thabhairt dó agus “Sábháil go Scéalta” a bhrú.',
+    en: 'Secondly, make sure your story has no incorrect grammar(as indicated by the red highlighting over incorrect text). ' +
+    'If you\'re unhappy with the story starter you can select "Reset Bank" to reset the word bank. ' +
+    'You can then save your story by giving it a valid title, dialect and pressing "Save to Stories".' },
+  pos_your_word_bank: {
+    ga: 'Do Bhanc Focal: ',
+    en: 'Your Word Bank: ' },
+  pos_synth: {
+    ga: 'Athsheinm Sintéise',
+    en: 'Synthesis Playback' },
+  pos_reset_bank: {
+    ga: 'Banc Athshocraigh',
+    en: 'Reset Bank' },
+  pos_save_to_stories: {
+    ga: 'Shábháil ar Scéalta',
+    en: 'Save to Stories'},
+  pos_save_name: {
+    ga: 'Ainmnigh Do Scéal',
+    en: 'Name Your Story' },
+  pos_no_words: {
+    ga: 'Focail Roghnaithe Le feiceáil Anseo',
+    en: 'Chosen Words Appear Here' },
+  verb: {
+    ga: 'Briathar', 
+    en: 'Verb' }, 
+  noun: {
+    ga: 'Ainmfhocal', 
+    en: 'Noun' }, 
+  adjective: {
+    ga: 'Aidiacht', 
+    en: 'Adjective' }, 
+  adverb: {
+    ga: 'Dobhriathar', 
+    en: 'Adverb' }, 
+  pronoun: {
+    ga: 'Forainm', 
+    en: 'Pronoun' }, 
+  determiner: {
+    ga: 'Chinntitheoir', 
+    en: 'Determiner' },
+  article: {
+    ga: 'Airteagal', 
+    en: 'Article' }, 
+  adposition: {
+    ga: 'Adposition', 
+    en: 'Adposition' }, 
+  conjunction: {
+    ga: 'Comhcheangail', 
+    en: 'Conjunction' }, 
+  numeral: {
+    ga: 'Uimhreacha', 
+    en: 'Numeral' },
+  sep_header: {
+    ga: 'Leideanna Scrúdaithe Stáit',
+    en: 'State Examination Prompts' },
+  sep_explanation: {
+    ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
+    en: 'Press the button to recieve a topic or story starter to write about' },
+  get_prompt: {
+    ga: 'Faigh Leid',
+    en: 'Get Prompt' },
+  please_choose_prompt: {
+    ga: 'Roghnaigh leid le do thoil',
+    en: 'Please choose a prompt' },
+  choose_level: {
+    ga: 'Roghnaigh Leibhéal Gaeilge',
+    en: 'Choose a Level of Irish' },
+  level_preferences: {
+    ga: ['Teastas Sóisearach', 'Ardteistiméireacht(GL)', 'Ardteistiméireacht(AL)'],
+    en: ['Junior Certificate', 'Leaving Certificate(OL)', 'LeavingCertificate(HL)'],
+  },
+  pp_header: {
+    ga: 'Leideanna Seanfhocal',
+    en: 'Proverb Prompts' },
+  pp_explanation: {
+    ga: 'Brúigh an cnaipe chun seanfhocal a fháil le scríobh faoi/úsáid',
+    en: 'Press the button to recieve a proverb to write about/use' },
+  pp_no_prompt: {
+    ga: 'Roghnaigh seanfhocal le do thoil',
+    en: 'Please choose a proverb' },
+  pp_get_prompt: {
+    ga: 'Faigh Seanfhocal',
+    en: 'Get Proverb' },
+  lp_header: {
+    ga: 'Leideanna LARA',
+    en: 'LARA Prompts' },
+  lp_explanation: {
+    ga: 'Brúigh an cnaipe chun tús a chur le scéal, agus críochnaigh tú féin é!',
+    en: 'Press the button to get the start of a story, and finish it yourself!' },
+  lp_get_prompt: {
+    ga: 'Faigh Scéal',
+    en: 'Get Story' },
+  sp_explanation: {
+    ga: 'Cliceáil an cnaipe chun roinnt topaicí a fháil do do scéal!',
+    en: 'Click the button to get some topics for your story!' },
+  sp_character: {
+    ga: 'Carachtar',
+    en: 'Character' },
+  sp_setting: {
+    ga: 'Suíomhanna',
+    en: 'Setting' },
+  sp_theme: {
+    ga: 'Téama',
+    en: 'Theme' },
+  sp_change: {
+    ga: 'Athrú',
+    en: 'Change' },
+  gp_explanation: {
+    ga: 'Brúigh an cnaipe chun tús scéil cineálach a fháil, agus críochnaigh tú féin é!',
+    en: 'Press the button to get a generic story starter, and finish it yourself!' },
+  gp_get_prompt: {
+    ga: 'Faigh Scéal',
+    en: 'Get Starter' },
+  dashboard_prompts: {
+    ga: '(Déanta le leideanna)',
+    en: '(Made using prompts)' },
+  dictogloss_usage: {
+    ga: 'Conas Dictogloss a úsáid',
+    en: 'How to use Dictogloss' },
+  dictogloss_usage_close: {
+    ga: 'Folaigh eolas',
+    en: 'Hide info' },
+  dictogloss_enter_story: {
+    ga: 'Cuir isteach scéal', 
+    en: 'Enter story' },
+  dictogloss_timer_off: {
+    ga: '🕒❌',
+    en: '🕒❌' },
+  dictogloss_timer_on: {
+    ga: '🕒✔️',
+    en: '🕒✔️' },
+  dictogloss_timer_disabled: {
+    ga: '🕒✖️',
+    en: '🕒✖️' },
+  dictogloss_error: {
+    ga: '*Iontráil Scéal Anseo',
+    en: '*Enter Story Here' },
+  dictogloss_audio: {
+    ga: 'Athsheinm Fuaime',
+    en: 'Audio Playback' },
+  dictogloss_playback_speed: {
+    ga: 'Luas Athsheinm',
+    en: 'Playback Speed' },
+  dictogloss_hint: {
+    ga: 'Cliceáil le haghaidh leid',
+    en: 'Click for a hint' },
+  dictogloss_guess: {
+    ga: 'seiceáil',
+    en: 'check' },
+  dictogloss_record_audio:{
+    ga: '🎤 Taifeadadh ar',
+    en: '🎤 Recording off' },
+  dictogloss_not_record_audio: {
+    ga: '🎤 Taifeadadh as',
+    en: '🎤 Recording on' },
+  correct: {
+    ga: 'Ceart',
+    en: 'Correct' },
+  incorrect: {
+    ga: 'Mícheart',
+    en: 'Incorrect' },
+  dictogloss_guessed1: {
+    ga: 'Tá ',
+    en: 'You\'ve guessed ' },
+  dictogloss_guessed2: {
+    ga: ' as ',
+    en: ' out of ' },
+  dictogloss_guessed3: {
+    ga: ' buille faoi thuairim agat.',
+    en: '.' },
+  you_filled_in_all_blanks: {
+    ga: 'Líon tú na bearnaí go léir!',
+    en: 'You filled in all the blanks!' },
+  you_finished_in: {
+    ga: 'Chríochnaigh tú i ',
+    en: 'You finished in ' },
+  new_dictogloss: {
+    ga: 'Dictogloss nua',
+    en: 'New Dictogloss' },
+  go_to_my_stories: {
+    ga: 'Téigh go dtí mo scéalta',
+    en: 'Go to my stories' },
+  how_to_use_dictogloss: {
+    ga: 'Conas Dictogloss a úsáid',
+    en: 'How to use Dictogloss' },
+  dictogloss_char_limit: {
+    ga: 'Teorainn Carachtair 2000',
+    en: '2000 Character Limit' },
+  dictogloss_instructions_1: {
+    ga: '1. Cuir sliocht Gaeilge isteach sa chéad ionchur téacs.',
+    en: '1. Enter an Irish passage into the text input box.' },
+  dictogloss_instructions_2: {
+    ga: '2. Éist leis an tsintéis gutha a thugtar ón sliocht.',
+    en: '2. Listen to the voice synthesis that is generated from the passage.' },
+  dictogloss_instructions_3: {
+    ga: '3. Déan iarracht é a athscríobh de chluas.',
+    en: '3. Try to rewrite the text by ear.' },
+  dictogloss_tip: {
+    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
+    en: 'Tip: If you are stuck, click on a hidden word to reveal the first letter.' },
+  dictogloss_type_story: {
+    ga: 'Write story here...',
+    en: 'Type story here...' },
+  teacher_send_dictogloss: {
+    ga: 'Seol Dictogloss',
+    en: 'Send Dictogloss' },
+  teacher_send_dictogloss_info: {
+    ga: 'Scríobh sliocht sa bhosca téacs ar mhaith leat go ndéanfadh an mac léinn seo éisteacht Dictogloss air.',
+    en: 'Write a passage in the text box that you would like this student to do a Dictogloss listening on.' },
+  dictogloss_required: {
+    ga: 'Dictogloss ag teastáil',
+    en: 'Dictogloss required' },
+  go_to_dashboard: {
+    ga: 'Téigh go dtí an Deais',
+    en: 'Go to Dashboard' },
+  choose_at_least_one_student: {
+    ga: 'Roghnaigh dalta amháin ar a laghad',
+    en: 'Choose at least 1 student' },
+  deselect_all: {
+    ga: 'Díroghnaigh go léir',
+    en: 'Deselect All' },
   search: {
     ga: 'Cuardaigh',
     en: 'Search' },
@@ -2024,9 +2294,9 @@ export default {
   date_range: {
     ga: 'Raon na nDátaí',
     en: 'Date Range' },
-  dictation: {
-    ga: 'Deachtú',
-    en: 'Dictation' },
+  speak: {
+    ga: 'Abair scéal',
+    en: 'Speak' },
   download: {
     ga: 'Íoslódáil',
     en: 'Download' },

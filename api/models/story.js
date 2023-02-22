@@ -6,8 +6,8 @@ const Story = new Schema(
       owner: {
         type: mongoose.Types.ObjectId,
         index: true,
-      // required: true, // TODO, make required
-      // ref: 'User', // TODO, validate relation to users collection
+        // required: true, // TODO, make required
+        // ref: 'User', // TODO, validate relation to users collection
       },
       title: {
         type: String,
@@ -52,10 +52,13 @@ const Story = new Schema(
       activeRecording: {
         type: String,
       },
+      createdWithPrompts: {
+        type: Boolean,
+      },
     },
     {
       collection: 'story',
-    }
+    },
 );
 
 module.exports = mongoose.model('Story', Story);

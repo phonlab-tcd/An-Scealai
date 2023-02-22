@@ -41,6 +41,7 @@ export class StatsDashboardComponent implements OnInit {
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
   userRole: string = '';
+  dialogRef: MatDialogRef<unknown>;
   
   async ngOnInit() {
     // determine if user is a teacher or student
@@ -57,8 +58,6 @@ export class StatsDashboardComponent implements OnInit {
     }
     
   }
-
-  dialogRef: MatDialogRef<unknown>;
 
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {

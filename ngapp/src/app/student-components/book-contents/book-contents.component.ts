@@ -175,26 +175,20 @@ export class BookContentsComponent implements OnInit {
       },
       width: "50vh",
     });
-
-    this.dialogRef.afterClosed().subscribe(async (res) => {
-      this.dialogRef = undefined;
-      if (res) {
-        if (res[0]) {
-          let dialect = "connemara";
-          if (res[1] == this.ts.l.munster) dialect = "kerry";
-          if (res[1] == this.ts.l.ulster) dialect = "donegal";
-          this.storyService.saveStory(
-            this.auth.getUserDetails()._id,
-            res[0],
-            new Date(),
-            dialect,
-            "",
-            this.auth.getUserDetails().username
-          );
-        } else {
-          alert(this.ts.l.title_required);
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          if (res[0]) {
+            let dialect = 'connemara';
+            if (res[1] == this.ts.l.munster) dialect = 'kerry';
+            if (res[1] == this.ts.l.ulster) dialect = 'donegal';
+            this.storyService.saveStory(this.auth.getUserDetails()._id, res[0], new Date(), dialect, "", this.auth.getUserDetails().username, false);
+          }
+          else {
+            alert(this.ts.l.title_required);
+          }
         }
-      }
-    });
+      });
   }
 }

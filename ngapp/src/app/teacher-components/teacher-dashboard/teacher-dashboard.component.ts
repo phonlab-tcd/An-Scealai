@@ -6,8 +6,10 @@ import { Classroom } from '../../classroom';
 import { Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { NotificationService } from '../../notification-service.service';
+import { ProfileService } from '../../profile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -17,18 +19,28 @@ import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.co
 export class TeacherDashboardComponent implements OnInit {
 
   constructor(private classroom: ClassroomService,
-              private auth: AuthenticationService,
+              public auth: AuthenticationService,
               private router: Router,
               public ts : TranslationService,
               public ns: NotificationService,
-              private dialog: MatDialog,) { }
+              private dialog: MatDialog,
+              private profileService: ProfileService) { }
               
   
   classrooms : Observable<Classroom[]>;
   newClassroom : Classroom = new Classroom();
   dialogRef: MatDialogRef<unknown>;
 
-  ngOnInit() {
+  async ngOnInit() {
+    let profile = await firstValueFrom(this.profileService.getForUser(this.auth.getUserDetails()._id));
+    if (!profile) {
+      this.router.navigateByUrl('/register-profile');
+    }
+    // this.profileService.getForUser(this.auth.getUserDetails()._id).subscribe((res) => {
+    // }, err => {
+    //   this.router.navigateByUrl('/register-profile');
+    // });
+
     this.classrooms = this.getClassrooms();
     // TODO: Fix bug
     // this.classrooms.sort((a, b) => (a.title < b.title) ? -1 : 1);
