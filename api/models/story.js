@@ -48,6 +48,14 @@ const Story = new Schema(
           type: String,
           default: null,
         },
+        feedbackMarkup: {
+          type: String,
+          default: null,
+        },
+        lastUpdated: {
+          type: Date,
+          default: null,
+        },
       },
       activeRecording: {
         type: String,

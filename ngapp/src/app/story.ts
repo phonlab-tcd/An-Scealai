@@ -13,6 +13,7 @@ export class Story extends Serializable {
     feedback: {
         seenByStudent: boolean;
         text: string;
+        feedbackMarkup: string;
         audioId: string;
     };
     activeRecording: string;

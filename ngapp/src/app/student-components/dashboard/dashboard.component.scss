@@ -1,19 +1,11 @@
 .dashboardContainer {
-    // --bookContainerHeight: 40vh;
     --bookContainerHeight: 95vh;
     --bookContainerWidth: 100%;
     --textfieldHeight: calc(var(--bookContainerHeight) / 3);
     --dictionaryHeight: 60vh;
     width: var(--bookContainerWidth);
     height: 95vh;
-    // margin-left: 1%;
-    // margin-bottom: 2.5%;
     margin-top: -55px;
-    // -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
-    // -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
-    // box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
-    // border-radius: 5px 5px 5px 5px;
-    // border: solid 2px #827662b8;
 }
 
 .modalContainer {
@@ -29,16 +21,10 @@
 .bookHeader {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; // in headerUpper originally, div just under .bookHeader
+  justify-content: space-between;
   padding: 15px;
   padding-bottom: 5px;
 }
-
-// .headerUpper {
-//     display: flex;
-//     justify-content: space-between;
-//     background-color: red;
-// }
 
 .myStoriesBtn {
   white-space: nowrap;
@@ -111,10 +97,6 @@
   margin-right: 2%;
 }
 
-.optionsBtnContainer:hover {
-  // background-color: #ffd07587;
-}
-
 .optionsBtn {
   background-color: var(--scealai-yellow);
   border-style: none;
@@ -182,23 +164,27 @@
   cursor: pointer;
 }
 
-.textField {
-    width: 100%;
-    min-height: var(--textfieldHeight);
-    // height: auto;
-    /* height: var(--textfieldHeight); */
-    resize: none;
-    z-index: 1;
-    color: var(--dark-text);
-    // background: var(--scealai-cream-2);
-    background: white;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
+.textFieldContainer {
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
 }
 
-.feedbackTextareaAudio {
-    // height: 100px;
+.textField {
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  border: none;
 }
 
 .audioPlayer {
@@ -233,11 +219,11 @@
 }
 
 .dictionaryHeader {
-    padding: 5px;
-    background-color: var(--scealai-green);
-    color: white;
-    display: flex;
-    align-items: column;
+  padding: 5px;
+  background-color: var(--scealai-green);
+  color: white;
+  display: flex;
+  align-items: column;
 }
 
 .closeDictionaryBtn {
@@ -268,9 +254,9 @@
 }
 
 .dictionaryName:hover {
-    color: var(--scealai-light-green);
-    text-decoration: none;
-    cursor: pointer;
+  color: var(--scealai-light-green);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .dictionaryInput {
@@ -284,17 +270,17 @@
 }
 
 .searchDictionaryBtn {
-    background-color: var(--scealai-yellow);
-    border-style: none;
-    color: white;
-    font-size: 12pt;
-    margin: 0px;
-    border-radius: 5px 5px 5px 5px;
+  background-color: var(--scealai-yellow);
+  border-style: none;
+  color: white;
+  font-size: 12pt;
+  margin: 0px;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .searchDictionaryBtn:hover {
-    background-color: var(--scealai-yellow-hover);
-    color: white;
+  background-color: var(--scealai-yellow-hover);
+  color: white;
 }
 
 .dictionaryIframe {
@@ -302,11 +288,6 @@
   width: 100%;
   border-radius: 0px 0px 5px 5px;
   background: white;
-}
-
-.writingContainer {
-  // height: 70vh;
-  // background-color: red;
 }
 
 .ql-container {

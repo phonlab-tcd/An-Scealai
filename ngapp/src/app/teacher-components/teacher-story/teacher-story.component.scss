@@ -38,10 +38,19 @@
     background-color: var(--scealai-dark-green);
     border-radius: 5px 5px 0px 0px;
     color: white;
-    display: flex;
     padding: 4px;
     font-size: 12pt;
-    justify-content: center;
+}
+
+.refresh {
+    float:right;
+    padding: 5px;
+    padding-right: 10px;
+}
+
+.refresh:hover {
+    color: var(--scealai-light-green);
+    cursor: pointer;
 }
 
 .storyText {
@@ -53,6 +62,20 @@
     border-radius: 5px;
     margin: 8px;
     height: 100%;
+}
+
+.ql-toolbar.ql-snow {
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
+    text-align: center;
+}
+  
+.ql-editor { // the 'page' where the writing happens
+    background-color: white;
+    z-index: 1;
+    font-size: 14pt;
+    font-family: "Times New Roman", Times, serif;
 }
 
 .storyInfoContainer { 
@@ -107,12 +130,14 @@
     padding: 4px;
     text-align: left;
     overflow-y: scroll;
+    height: 100%;
 }
 
 .feedbackTextarea {
     border: none;
     width: 100%;
     resize: none;
+    height: 100%;
 }
 
 .feedbackFooter {
