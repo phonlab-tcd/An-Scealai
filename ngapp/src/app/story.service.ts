@@ -17,8 +17,6 @@ import config from 'abairconfig';
 })
 export class StoryService {
 
-  chosenStory: Story;
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -29,7 +27,7 @@ export class StoryService {
 
   baseUrl: string = config.baseurl + 'story/';
 
-  saveStory(studentId, title, date, dialect, text, author) {
+  saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {
       title: title,
       date: date,
@@ -37,6 +35,7 @@ export class StoryService {
       text: text,
       htmlText: text,
       author: author,
+      createdWithPrompts: createdWithPrompts,
       studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
@@ -90,7 +89,7 @@ export class StoryService {
     return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
   }
   
-  getStoriesForClassroom(owner: string, date): Observable<any> {
+  getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 

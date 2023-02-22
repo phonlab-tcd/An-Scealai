@@ -1,0 +1,104 @@
+.container {
+    width: 90%;
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    animation-duration: 1s;
+    animation-name: fadeIn;
+}
+
+.studentCard {
+    width: 100%;
+    justify-content: center;
+    display: inline-block;
+    background-color: white;
+    align-items: center;
+    padding: 8px;
+    font-size: 14pt;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.studentCard:hover {
+    cursor: pointer;
+}
+
+.textarea {
+    width: 90%;
+    resize: none;
+    border-radius: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.classroomCluster {
+    padding: 4px;
+    justify-content: center;
+    display: inline-block;
+}
+
+.button {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-width: 1px;
+    letter-spacing: 1px;
+    background-color: rgba(126, 118, 118, 0.1);
+    margin: 4px;
+}
+
+.button:hover {
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.select {
+    margin-top: 16px;
+}
+
+.button.selectAll{
+    border-width: 2px;
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+.button.deselected {
+    background-color: #e52e2e;
+    color: #fff;
+}
+
+.button.selected {
+    background-color: #2EE59D;
+    color: #fff;
+}
+
+.validationAlert {
+    color: red;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0%;
+        transform: translateY(100px) scale(0.9);
+    }
+
+    to {
+        opacity: 100%;
+        transform: translateY(0px) scale(1);
+    }
+}
+
+@keyframes fadeInButton {
+    from {
+        opacity: 0%;
+    }
+
+    to {
+        opacity: 100%;
+    }
+}

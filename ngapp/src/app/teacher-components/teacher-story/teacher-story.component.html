@@ -5,7 +5,8 @@
       <!-- header story title and back arrow -->
       <div class="classHeader">
         <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
-        {{story?.title}}
+          {{story?.title}} 
+          <div *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.dashboard_prompts}}</div>
       </div>
       <!-- story body and feedback details -->
       <div class="storyClassBody">

@@ -17,4 +17,5 @@ export class Story extends Serializable {
         audioId: string;
     };
     activeRecording: string;
+    createdWithPrompts: boolean = false;
 }

@@ -1,0 +1,96 @@
+<!-- Part Of Speech Prompt Component-->
+<div *ngIf="promptType == 'pos'">
+  <app-part-of-speech></app-part-of-speech>
+</div>
+
+<!--All Other Prompts-->
+<div *ngIf="promptType !== 'pos'">
+  <div>
+    <div class="container">
+      <div *ngIf="promptType == 'state-exam'" class="header"> {{ ts.l.sep_header }} </div>
+      <div *ngIf="promptType == 'proverb'" class="header"> {{ ts.l.pp_header }} </div>
+      <div *ngIf="promptType == 'lara'" class="header"> {{ ts.l.lp_header }} </div>
+      <div *ngIf="promptType == 'story'" class="header"> {{ ts.l.sp_dropdown }} </div>
+      <div *ngIf="promptType == 'general'" class="header"> {{ ts.l.gp_dropdown }} </div>
+      <div>
+        <p *ngIf="promptType == 'state-exam'">{{ ts.l.sep_explanation }}</p>
+        <p *ngIf="promptType == 'proverb'">{{ ts.l.pp_explanation }}</p>
+        <p *ngIf="promptType == 'lara'">{{ ts.l.lp_explanation }}</p>
+        <p *ngIf="promptType == 'story'">{{ ts.l.sp_explanation }}</p>
+        <p *ngIf="promptType == 'general'">{{ ts.l.gp_explanation }}</p>
+      </div>
+      <!-- Choose Level Dropdown -->
+      <div *ngIf="promptType == 'state-exam' || promptType == 'story'" class="button-div">
+        <form [formGroup]="levelForm">
+          <div class="formGroup">
+            <label class="formLabel">{{ ts.l.choose_level }}</label>
+            <select formControlName="level" class="level-select">
+              <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp">
+                {{ ts.l.level_preferences[i] }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- Choose Dialect Dropdown -->
+      <div *ngIf="promptType == 'proverb'" class="button-div">
+        <form [formGroup]="dialectForm">
+          <div class="formGroup">
+            <label class="formLabel">{{ ts.l.choose_level }}</label>
+            <select formControlName="dialect" class="level-select">
+              <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">
+                {{ this.ts.l[dp] }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- Get Prompt Button -->
+      <div class="button-div">
+        <button class="button" (click)="currentPrompt()">
+          {{ ts.l.get_prompt }}
+        </button>
+      </div>
+      <!--Display Prompt-->
+      <div *ngIf="promptExists; else noPrompt">
+        <!-- Story Prompt Options -->
+        <div *ngIf="promptType == 'story'">
+          <div *ngFor="let lp of levelPreferences">
+            <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
+                <!-- character -->
+              <div class="story-prompt-box">
+                <p>{{ ts.l.sp_character }}</p>
+                <button class="button" (click)="changeStoryPrompt('character')">
+                  {{ ts.l.sp_change }}
+                </button>
+              </div>
+              <i class="character">{{ chosenCharacter }}</i>
+               <!-- setting -->
+              <div class="story-prompt-box">
+                <p>{{ ts.l.sp_setting }}</p>
+                <button class="button" (click)="changeStoryPrompt('setting')">
+                  {{ ts.l.sp_change }}
+                </button>
+              </div>
+              <i class="setting">{{ chosenSetting }}</i>
+               <!-- theme -->
+              <div class="story-prompt-box">
+                <p>{{ ts.l.sp_theme }}</p>
+                <button class="button" (click)="changeStoryPrompt('theme')">
+                  {{ ts.l.sp_change }}
+                </button>
+              </div>
+              <i class="theme">{{ chosenTheme }}</i>
+            </div>
+          </div>
+        </div>
+        <!-- Generated Prompt -->
+        <div class="prompt"><i>{{ prompt }}</i></div>
+        <!-- Create New Story Button-->
+        <button *ngIf="auth.getUserDetails().role == 'STUDENT'" class="button" (click)="createNewStory()">
+            {{ ts.l.new_story }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -27,18 +27,16 @@ const Story = new Schema(
       htmlText: {
         type: String,
       },
-      author: { // DEPRECATED
+      author: {
+      // DEPRECATED
         type: String,
       },
-      studentId: { // DEPRECATED
+      studentId: {
+      // DEPRECATED
         type: String,
       },
       feedback: {
         text: {
-          type: String,
-          default: null,
-        },
-        feedbackMarkup: {
           type: String,
           default: null,
         },
@@ -50,6 +48,10 @@ const Story = new Schema(
           type: String,
           default: null,
         },
+        feedbackMarkup: {
+          type: String,
+          default: null,
+        },
         lastUpdated: {
           type: Date,
           default: null,
@@ -57,6 +59,9 @@ const Story = new Schema(
       },
       activeRecording: {
         type: String,
+      },
+      createdWithPrompts: {
+        type: Boolean,
       },
     },
     {

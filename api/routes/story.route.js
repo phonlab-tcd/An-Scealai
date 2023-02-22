@@ -69,13 +69,19 @@ let storyRoutes;
 
 
 /**
- * Get stories for a given user (owner) after a certain date
+ * Get stories for a given user (owner) with optional classroom creation date filter
  * @param {Object} req params: User ID
- * @param {Object} req params: Date
+ * @param {Object} req params: Date classroom created
  * @return {Object} List of stories
  */
 storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res) {
-  Story.find({'owner': req.params.owner, 'date': {$gte: req.params.date}}, function(err, stories) {
+  const conditions = {'owner': req.params.owner};
+  if (req.params.date != 'empty') {
+    conditions['date'] = {
+      $gte: req.params.date,
+    };
+  }
+  Story.find(conditions, function(err, stories) {
     if (err) {
       console.log(err);
       res.json(err);
