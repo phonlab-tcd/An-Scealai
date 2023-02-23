@@ -26,19 +26,19 @@
         </mat-card>
         
         <!--Grammar Options -->
-        <!-- <h5 class="sectionTitle"> {{ts.l.grammar_checker_options}} </h5>
+        <h5 class="sectionTitle"> {{ts.l.grammar_checker_options}} </h5>
         <mat-card>
           <h6 style="text-align:left; margin-left:5%; padding-bottom:10px;"> {{ts.l.select_which_grammar_checker_for_students_to_use}}. 
-            <i class="fa fa-info-circle" style="cursor:pointer" (click)="openInformationDialog()"></i>
+            <!-- <i class="fa fa-info-circle" style="cursor:pointer" (click)="openInformationDialog()"></i> -->
           </h6>
           <div class="checkBoxes">
             <span><input [(ngModel)]="checkerSelection.anGramadoir" (ngModelChange)="changesSaved = false;" type="checkbox"> An Gramadoir</span>
             <span><input [(ngModel)]="checkerSelection.relativeClause" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.relative_clause_checker}}</span>
             <span><input [(ngModel)]="checkerSelection.genitive" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.genitive_checker}}</span>
             <span><input [(ngModel)]="checkerSelection.broadSlender" (ngModelChange)="changesSaved = false;" type="checkbox"> {{ts.l.broad_slender_checker}}</span>
-            <span><input [(ngModel)]="checkerSelection.gaelSpell" (ngModelChange)="changesSaved = false;" type="checkbox"> GaelSpell </span>
+            <!-- <span><input [(ngModel)]="checkerSelection.gaelSpell" (ngModelChange)="changesSaved = false;" type="checkbox"> GaelSpell </span> -->
           </div>
           <div class="saveBtn"> <button class="greenBtn" (click)="updateCheckers()"> {{changesSaved? ts.l.saved : ts.l.save}} </button> </div>
-        </mat-card> -->
+        </mat-card>
     </div>
   </div>
