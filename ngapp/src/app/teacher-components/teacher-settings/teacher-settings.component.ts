@@ -81,7 +81,7 @@ export class TeacherSettingsComponent implements OnInit {
     });
   }
   
-  /* Open dialog for grammar checker information */
+  /* Open dialog for grammar checker information (this content is not yet ready) */
   openInformationDialog() {    
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
