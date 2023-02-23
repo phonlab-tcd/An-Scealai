@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
@@ -11,7 +11,8 @@ import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 @Component({
   selector: 'app-classroom-selector',
   templateUrl: './classroom-selector.component.html',
-  styleUrls: ['./classroom-selector.component.scss']
+  styleUrls: ['./classroom-selector.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ClassroomSelectorComponent implements OnInit {
 

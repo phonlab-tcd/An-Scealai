@@ -27,9 +27,9 @@
   <!-- Classroom/Student list -->
   <div class="classroom-card-container">
       <mat-form-field appearance="fill" *ngFor="let classroom of classrooms" class="classroom-card">
-        <mat-label>{{classroom.title}}</mat-label>
+        <mat-label> <b>{{classroom.title}}</b></mat-label>
         <mat-select (selectionChange)="closeDialog(classroom, $event.value)">
-          <mat-option value="{{classroom.studentIds}}">All students</mat-option>
+          <mat-option value="{{classroom.studentIds}}">{{ts.l.all_class_members}}</mat-option>
           <mat-option *ngFor="let id of classroom.studentIds" value="{{[id]}}">{{studentUsernames[id]}}</mat-option>
         </mat-select>
       </mat-form-field>
