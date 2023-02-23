@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
+import { UserService } from '../../user.service';
 import { AuthenticationService } from 'app/authentication.service';
 import { Classroom } from 'app/classroom';
 import { firstValueFrom } from 'rxjs';
@@ -18,10 +19,13 @@ export class ClassroomSelectorComponent implements OnInit {
     public dialogRef: MatDialogRef<ClassroomSelectorComponent>,
     private classroomService: ClassroomService,
     private auth: AuthenticationService,
-    public ts: TranslationService
+    public ts: TranslationService,
+    public userService: UserService
   ) { }
 
-  classrooms: Classroom[];
+  classrooms: Classroom[] = [];
+  selectedStudents: string[] = [];
+  studentUsernames: Object = {};
   
   // for selecting a date range
   range = new UntypedFormGroup({
@@ -31,17 +35,29 @@ export class ClassroomSelectorComponent implements OnInit {
   
   showDatePicker: boolean = false;
 
-
   async ngOnInit() {
     const { _id } = this.auth.getUserDetails();
     this.classrooms = await firstValueFrom(
       this.classroomService.getClassroomsForTeacher(_id)
     );
+
+    // create dictionary for student ids -> usernames
+    this.classrooms.forEach( (classroom) => {
+      classroom.studentIds.forEach( async (id) => {
+        let username = (await firstValueFrom(this.userService.getUserById(id))).username;
+        this.studentUsernames[id] = username;
+      })
+    })
   }
 
-  closeDialog(classroom: Classroom | null) {
+  closeDialog(classroom: Classroom | null, studentIds) {
     let startDate = (this.range.get("start").value) ? this.range.get("start").value : "";
     let endDate = (this.range.get("end").value) ? this.range.get("end").value : "";
+
+    // filter student id array if selected student
+    if (studentIds) {
+      classroom.studentIds = studentIds.split(',');
+    }
     
     this.dialogRef.close({classroom:classroom, startDate: startDate, endDate: endDate});
   }

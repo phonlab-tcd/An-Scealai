@@ -1,7 +1,7 @@
 <div class="selectorHeader">
     <div>{{ts.l.select_a_classroom}}</div>
     <div>
-        <i class="fa fa-times xbutton" (click)="closeDialog(null)"></i>
+        <i class="fa fa-times xbutton" (click)="closeDialog(null, null)"></i>
     </div>
 </div>
 
@@ -24,11 +24,15 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{ts.l.invalid_end_date}}</mat-error>
     </mat-form-field>
   </div>
-  <!-- Classroom list -->
+  <!-- Classroom/Student list -->
   <div class="classroom-card-container">
-      <div *ngFor="let classroom of classrooms" class="classroom-card" (click)="closeDialog(classroom)">
-          <div class="class-title">{{classroom.title}}</div>
-      </div>
+      <mat-form-field appearance="fill" *ngFor="let classroom of classrooms" class="classroom-card">
+        <mat-label>{{classroom.title}}</mat-label>
+        <mat-select (selectionChange)="closeDialog(classroom, $event.value)">
+          <mat-option value="{{classroom.studentIds}}">All students</mat-option>
+          <mat-option *ngFor="let id of classroom.studentIds" value="{{[id]}}">{{studentUsernames[id]}}</mat-option>
+        </mat-select>
+      </mat-form-field>
   </div>
 </div>
 <!-- Display if no classrooms -->
