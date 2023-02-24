@@ -37,7 +37,6 @@ const jwtAuthMw = require('./utils/jwtAuthMw');
 // throw new Error('test error');
 
 mongoose.Promise = global.Promise;
-// mongoose.set('useFindAndModify', false);
 mongoose.set('strictQuery', false)
 
 async function prodConnection() {

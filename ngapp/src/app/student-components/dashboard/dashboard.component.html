@@ -25,7 +25,7 @@
                                                                                             <!-- CONTAINER HEADER -->
   <div class="bookHeader">
       <!-- BACK BUTTON -->
-      <div routerLink="/contents" class="myStoriesBtn">
+      <div routerLink="/contents" class="myStoriesBtn" (click)="synthesisPlayer.stopSynthesis()">
         <i class="fa fa-chevron-left backArrow"></i>
         {{ ts.l.contents }}
       </div>
