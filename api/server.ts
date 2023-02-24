@@ -5,6 +5,7 @@ else require('./keys/dev/load');
 const logger = require('./logger');
 
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -58,6 +59,7 @@ if(process.env.NODE_ENV !== 'test') {
 
 const app = express();
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+app.use(session({ secret: 'SECRET' }));
 app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
