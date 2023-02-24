@@ -37,7 +37,8 @@ const jwtAuthMw = require('./utils/jwtAuthMw');
 // throw new Error('test error');
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+// mongoose.set('useFindAndModify', false);
+mongoose.set('strictQuery', false)
 
 async function prodConnection() {
   const useNewUrlParser = true;
@@ -59,7 +60,11 @@ if(process.env.NODE_ENV !== 'test') {
 
 const app = express();
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
-app.use(session({ secret: 'SECRET' }));
+app.use(session({
+  secret: 'SECRET',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json());
