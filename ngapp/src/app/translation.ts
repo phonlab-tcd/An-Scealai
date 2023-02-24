@@ -2346,6 +2346,10 @@ export default {
   scealai_wins_ell_award: {
     ga: 'Bronnfar An Séala Eorpach Teanga ar thionscadal ABAIR- An Scéalaí ag ócáid i bPáirc an Chrócaigh, 10 Samhain',
     en: 'An Scéalaí has won a European Language Label Award 2022!' },
+  certificate: {
+    ga: 'Deimhniú',
+    en: 'Certificate'
+  },
   settings: {
     ga: 'Socruithe',
     en: 'Settings' },
