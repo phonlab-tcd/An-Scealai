@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "json-schema": "^0.4.0",
     "request": "^2.88.2"
   }
 }
