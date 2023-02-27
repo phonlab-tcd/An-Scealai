@@ -516,15 +516,6 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Closes feedback, grammar checker, and dictionary windows,
-   * setting text editor to 'default' mode.
-   */
-  defaultMode() {
-    this.feedbackVisible = false;
-    this.dictionaryVisible = false;
-  }
-
-  /**
    * Return whether or not the student has viewed the feedback
    * @returns true if student has viewed feedback
    */
@@ -557,11 +548,6 @@ export class DashboardComponent implements OnInit {
   hideModal() {
     this.modalClass = 'hiddenFade';
     this.modalChoice.next(false);
-  }
-
-  /* Set next modal choice to true */
-  setModalChoice() {
-    this.modalChoice.next(true);
   }
 
   /* Save story and set next modal choice to true */
