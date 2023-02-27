@@ -298,10 +298,7 @@
 }
 
 .ql-editor { // the 'page' where the writing happens
-  // background-color: var(--scealai-cream-2);
   background-color: white;
-  /* ~44px is the height of the toolbar */
-  // height: calc(var(--textfieldHeight));
   z-index: 1;
   padding-left: 20px;
   padding-right: 20px;
