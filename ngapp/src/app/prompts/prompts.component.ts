@@ -70,7 +70,7 @@ export class PromptsComponent implements OnInit {
   /**
    * Generate a word bank from the data based on type and preferences
    */
-  currentPrompt() {
+  generatePromptBank() {
     if (this.promptType == "story") {
       this.currentPromptBankStory = this.data[this.levelForm.controls["level"].value];
       this.randomPromptStory(this.currentPromptBankStory);

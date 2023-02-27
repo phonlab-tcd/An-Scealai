@@ -2121,8 +2121,8 @@ export default {
     ga: 'Roghnaigh Leibhéal Gaeilge',
     en: 'Choose a Level of Irish' },
   level_preferences: {
-    ga: ['Teastas Sóisearach', 'Ardteistiméireacht(GL)', 'Ardteistiméireacht(AL)'],
-    en: ['Junior Certificate', 'Leaving Certificate(OL)', 'LeavingCertificate(HL)'],
+    ga: ['Teastas Sóisearach', 'Ardteistiméireacht (GL)', 'Ardteistiméireacht (AL)'],
+    en: ['Junior Certificate', 'Leaving Certificate (OL)', 'Leaving Certificate (HL)'],
   },
   pp_header: {
     ga: 'Leideanna Seanfhocal',

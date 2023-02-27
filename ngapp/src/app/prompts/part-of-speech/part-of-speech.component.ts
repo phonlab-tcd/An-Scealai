@@ -57,7 +57,7 @@ export class PartOfSpeechComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.grammarEngine = new GrammarEngine([anGramadoir], this.http, this.auth);
+    //this.grammarEngine = new GrammarEngine([anGramadoir], this.http, this.auth);
     this.refreshSynthesis();
   }
 
@@ -76,7 +76,7 @@ export class PartOfSpeechComponent implements OnInit {
   }
 
   /**
-   * Synthesise the word bank
+   * Synthesise the constructed prompt
    */
   makeSynth() {
     if (!this.constructedPrompt) {
