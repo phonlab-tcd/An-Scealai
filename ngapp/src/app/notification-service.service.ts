@@ -49,7 +49,7 @@ export class NotificationService {
         let stories = res;
         for(let story of stories) {
           if(story &&
-             (story.feedback.text || story.feedback.audioId) &&
+             (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup) &&
              story.feedback.seenByStudent === false) {
             this.stories.push(story);
           }

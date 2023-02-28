@@ -9,6 +9,7 @@
         <div class="headerIconContainer">
           <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToMessages()"> {{ts.l.messages}} <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>
           <div *ngIf="studentIds.length > 0" class="headerIconBtn" (click)="goToStats()">{{ts.l.stats}} <i class='fas fa-calculator'></i></div>
+          <div class="headerIconBtn" (click)="goToDictgloss()"> Dictogloss <i class="fa fa-file-audio headerIcon" aria-hidden="true"></i></div>
           <div class="headerIconBtn" (click)="openCodeDialog()">{{ts.l.share_code}}<i class="fas fa-share-alt headerIcon"></i></div>
           <div class="headerIconBtn" (click)="goToSettings()"> {{ts.l.settings}} <i class="fa fa-cog headerIcon" aria-hidden="true"></i></div>
           <div class="headerIconBtn" (click)="openDeleteClassroomDialog()">{{ts.l.delete}} <i class="fas fa-trash-alt headerIcon"></i></div>

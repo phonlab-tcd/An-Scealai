@@ -5,14 +5,21 @@
       <!-- header story title and back arrow -->
       <div class="classHeader">
         <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
-        {{story?.title}}
+          {{story?.title}} 
+          <div *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.dashboard_prompts}}</div>
       </div>
       <!-- story body and feedback details -->
       <div class="storyClassBody">
         <!-- story text -->
           <div class="storyTextContainer">
-            <div class="storyTextHeader">{{ts.l.text}}</div>
-            <div class="storyText" [innerHTML]="story?.htmlText"></div>
+            <div class="storyTextHeader">{{ts.l.text}}<i *ngIf="storyUpdated" class="fa fa-redo-alt refresh" (click)="openUpdateStoryTextDialog()"></i></div>
+            <quill-editor class="storyText" *ngIf="story" 
+              placeholder="" name="text" 
+              [modules]="config" 
+              [(ngModel)]="story.feedback.feedbackMarkup" 
+              (onEditorCreated)="onEditorCreated($event)"> 
+            </quill-editor>
+
           </div>
           <!-- story information -->
           <div class="storyInfoContainer">
@@ -30,7 +37,7 @@
                 <div class="feedbackContainer">
                   <div class="feedbackHeaderTeacherStory">{{ts.l.feedback}}</div>
                   <div class="feedbackBody" *ngIf="story">
-                      <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false"></textarea>
+                      <textarea class="feedbackTextarea" placeholder="{{ts.l.leave_feedback_for}} {{story?.author}}" [(ngModel)]="story.feedback.text" (input)="feedbackSent = false" spellcheck="false"></textarea>
                   </div>
                   <!-- seen by student section -->
                   <div class="feedbackFooter">

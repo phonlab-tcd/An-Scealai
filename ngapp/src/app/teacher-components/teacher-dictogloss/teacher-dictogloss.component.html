@@ -1,0 +1,55 @@
+<div class="container">
+    <h1>{{ts.l.teacher_send_dictogloss}}</h1>
+    <p>{{ts.l.teacher_send_dictogloss_info}}</p>
+    <h5>{{ts.l.dictogloss_char_limit}}</h5>
+    <!-- Text input box -->
+    <form [formGroup]="newDictogloss">
+        <div class="formGroup" novalidate>
+            <div style="display: flex; justify-content: center;">
+                <textarea 
+                spellcheck=false 
+                class="textarea" 
+                id="textSelector" 
+                data-cy=passage
+                formControlName="passage"
+                rows="4"
+                placeholder="{{ts.l.dictogloss_type_story}}"
+                maxlength="2000">
+                </textarea>
+            </div>
+            <!-- check for invalid passage -->
+            <div 
+                *ngIf="newDictogloss.controls['passage'].invalid && 
+                (newDictogloss.controls['passage'].dirty || newDictogloss.controls['passage'].touched)" 
+                class="validationAlert">
+                <div *ngIf="newDictogloss.controls['passage'].errors.required">
+                    *{{ts.l.dictogloss_required}}.
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- Select all stuents -->
+    <div class="select">
+        <button class="button selectAll" *ngIf="!allStudentsSelected; else deselected;" (click)="selectAllStudents();">{{ts.l.select_all}}</button>
+        <div class="validationAlert" *ngIf="!(sendTo.length > 0)">
+            *{{ts.l.choose_at_least_one_student}}
+        </div>
+        <ng-template #deselected>
+            <button class="button selectAll"(click)="selectAllStudents();">{{ts.l.deselect_all}}</button>
+        </ng-template>
+    </div>
+    <!-- List of students -->
+    <div class="classroomCluster">
+        <div class="studentCard" *ngFor="let student of students">
+            <mat-card  *ngIf="sendTo.indexOf(student._id) == -1;" class="button deselected" (click)="updateSendList(student._id);"><b>{{student.username}}</b>
+            </mat-card>
+            <mat-card *ngIf="sendTo.indexOf(student._id) != -1;" class="button selected" (click)="updateSendList(student._id);"><b>{{student.username}}</b>
+            </mat-card>
+        </div>
+    </div>
+    <!-- Send button / go back to dashboard-->
+    <div style="margin-top: 8px;">
+        <button class="button" (click)="goToDashboard()">{{ts.l.go_to_dashboard}}</button>
+        <button class="button" (click)="sendDictogloss()">{{ts.l.teacher_send_dictogloss}}</button>
+    </div>
+</div>

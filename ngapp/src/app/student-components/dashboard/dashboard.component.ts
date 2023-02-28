@@ -16,6 +16,7 @@ import { EventType                } from 'app/event';
 import { Story                    } from 'app/story';
 
 import { StoryService             } from 'app/story.service';
+import { ClassroomService         } from 'app/classroom.service';
 import { EngagementService        } from 'app/engagement.service';
 import { AuthenticationService    } from 'app/authentication.service';
 import { NotificationService      } from 'app/notification-service.service';
@@ -55,7 +56,6 @@ export class DashboardComponent implements OnInit {
   // STORY VARIABLES
   story: Story = new Story();
   mostRecentAttemptToSaveStory = new Date();
-  previousTextToCheck: string;
   saveStoryDebounceId = 0;
   storySaved = true;
   audioSource: SafeUrl;
@@ -64,14 +64,17 @@ export class DashboardComponent implements OnInit {
   
   // GRAMMAR VARIABLES
   grammarEngine: GrammarEngine;
-  mostRecentGramadoirRequestTime = null;
-  mostRecentGramadoirInput: string = null;
   grammarLoaded: boolean = false;
   grammarErrors: ErrorTag[] = [];
-  prevGrammarErrors: ErrorTag[] = [];
   grammarErrorsTypeDict: Object = {};
   showErrorTags: boolean = false;
   checkBoxes: Object = {'showAll': true};
+  grammarCheckerOptions: Object = {
+    'anGramadoir': anGramadoir,
+    'relativeClause': relativeClauseChecker,
+    'genitive': genitiveChecker,
+    'broadSlender': leathanCaolChecker,
+  }
   
   // OPTIONS (to show or not to show dash menu bar)
   showOptions = true;
@@ -103,6 +106,7 @@ export class DashboardComponent implements OnInit {
   // SPEECH TO TEXT
   audioSourceASR : SafeUrl;
   isRecording: boolean = false;
+  isTranscribing: boolean = false;
   
   constructor(
     private http: HttpClient,
@@ -116,9 +120,52 @@ export class DashboardComponent implements OnInit {
     public ts: TranslationService,
     public statsService: StatsService,
     private dialog: MatDialog,
-    private recordAudioService: RecordAudioService
+    private recordAudioService: RecordAudioService,
+    private classroomService: ClassroomService,
   ) {
-    this.grammarEngine = new GrammarEngine([anGramadoir, leathanCaolChecker, genitiveChecker, relativeClauseChecker], this.http, this.auth);
+    this.setUpGrammarChecking();
+  }
+  
+  /* Get story from params id and initialise variables */
+  async ngOnInit() {
+    this.storySaved = true;
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+    
+    this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
+    if(!this.story) return;
+    
+    this.textUpdated.next();
+    this.getWordCount(this.story.text);
+    if (this.story.htmlText == null) {
+      this.story.htmlText = this.story.text;
+    }
+  }
+
+  /**
+   * Initialise the Grammar Engine and Highlighting services
+   * Update any error tags/highlighting when the user makes changes to their story
+   */
+  async setUpGrammarChecking() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    // get list of grammar checker selections from classroom settings
+    let classroomGrammarCheckers = (await firstValueFrom(this.classroomService.getClassroomOfStudent(userDetails._id))).grammarCheckers;
+
+    // populate an array of checkers from classroom settings to pass into the grammar engine
+    let checkers = [];
+    if (classroomGrammarCheckers.length > 0) {
+      classroomGrammarCheckers.forEach( checker => {
+        checkers.push(this.grammarCheckerOptions[checker]);
+      })
+    }
+    // pass all checkers to the grammar engine if no classroom specifications (or do we want to leave it empty?)
+    else {
+      checkers = Object.values(this.grammarCheckerOptions);
+    }
+  
+    this.grammarEngine = new GrammarEngine(checkers, this.http, this.auth);
     
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
@@ -126,9 +173,6 @@ export class DashboardComponent implements OnInit {
 
       const textToCheck = this.story.text.replace(/\n/g, ' ');
       if(!textToCheck) return;
-      
-      const grammarCheckerTime = new Date();
-      this.mostRecentGramadoirRequestTime = grammarCheckerTime;
       
       try {
         // check text for grammar errors
@@ -146,7 +190,7 @@ export class DashboardComponent implements OnInit {
           complete: () => {
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
             this.quillHighlighter.hideAll();
-            // and then re-show all the latest error tags
+            // and then re-show all the latest error tags if button on
             if(this.showErrorTags) {
               this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
             }
@@ -186,23 +230,6 @@ export class DashboardComponent implements OnInit {
     });
   }
   
-  /* Get story from params id and initialise variables */
-  async ngOnInit() {
-    this.storySaved = true;
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-    
-    this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
-    if(!this.story) return;
-    
-    this.previousTextToCheck = this.story.text;
-    this.textUpdated.next();
-    this.getWordCount(this.story.text);
-    if (this.story.htmlText == null) {
-      this.story.htmlText = this.story.text;
-    }
-  }
-  
   /* 
    * Update story text with what the student has written with quill
    * Call functions to save story to DB
@@ -232,14 +259,10 @@ export class DashboardComponent implements OnInit {
     const myId = this.saveStoryDebounceId;
     const finishedWritingTime = new Date();
     setTimeout(() => {
-      this.saveStoryDebounceCallback(myId, finishedWritingTime);
+      if (myId === this.saveStoryDebounceId) {
+        this.saveStory(myId, finishedWritingTime);
+      }
     }, 1000);
-  }
-
-  saveStoryDebounceCallback(myId: number, finishedWritingTime: Date) {
-    if (myId === this.saveStoryDebounceId) {
-      this.saveStory(myId, finishedWritingTime);
-    }
   }
 
   /* Update story data (text and date) using story service
@@ -293,7 +316,10 @@ export class DashboardComponent implements OnInit {
     return;
   }
   
-  /* Initialise quill editor and highlighter */
+  /**
+   * Initialise quill editor and highlighter
+   * @param q quill editor
+   */
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
@@ -305,7 +331,11 @@ export class DashboardComponent implements OnInit {
     return {'font-style': this.storySaved ? 'normal' : 'italic'};
   }
   
-  /* apply error highlighting depending on which errors are checked to display */
+  /**
+   * Apply error highlighting depending on which errors are checked to display
+   * @param tags grammar errors
+   * @param boxChecked true if box checked, false otherwise
+   */
   setCheckBox(tags, boxChecked: boolean) {
     if(boxChecked) {
       this.quillHighlighter.show(tags);
@@ -315,7 +345,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   
-  /* apply error highlighting to all or none of the errors */
+  /* Apply error highlighting to all or none of the errors */
   setAllCheckBoxes() {
     if(this.checkBoxes['showAll']) {
       this.quillHighlighter.show(this.grammarErrors);
@@ -328,7 +358,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
     if (this.quillHighlighter)
@@ -336,7 +365,6 @@ export class DashboardComponent implements OnInit {
     else
       return '';
   }
-
 
   /* Show/hide grammar checker button text on dashboard */
   toggleGrammarButton() {
@@ -354,7 +382,10 @@ export class DashboardComponent implements OnInit {
       this.showErrorTags = !this.showErrorTags;
   }
   
-  /* get rid of highlighting markup from html text */
+  /**
+   * Get rid of highlighting markup from html text
+   * @param text story html text
+   */
   stripGramadoirAttributesFromHtml(text: string){
     if (!text || !text.replace) {return '';}
     return text.replace(/\s*style="([^"])+"/g,'')
@@ -394,7 +425,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   
-  /* clear the dictionary input box */
+  /* Clear the dictionary input box */
   clearDictInput() {
     if(this.wordLookedUp) {
       this.wordLookedUp = "";
@@ -419,15 +450,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /* set the url for the audio source feedback */
+  /* Set the url for the audio source feedback */
   getFeedbackAudio() {
     this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
       this.audioSource = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
     });
   }
 
-
-  /* Download story */
+  /* Download story in selected format */
   downloadStory() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -442,12 +472,11 @@ export class DashboardComponent implements OnInit {
     
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
+        // res[0] is download title, res[1] is download format
         if(res) {
-          console.log(res[0])
           res[1] ? this.downloadStoryFormat = res[1] : this.downloadStoryFormat = '.pdf'
           this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
               .subscribe(data=>{
-                console.log(data);
                 const elem = window.document.createElement('a');
                 elem.href = window.URL.createObjectURL(data);
                 res[0] ? elem.download = res[0] : elem.download = this.story.title;
@@ -455,7 +484,6 @@ export class DashboardComponent implements OnInit {
                 elem.click();
                 document.body.removeChild(elem);
               });
-          console.log(res);
         }
     });
   }
@@ -465,7 +493,10 @@ export class DashboardComponent implements OnInit {
     return config.baseurl + 'story/downloadStory/' + this.story._id + '/' + this.downloadStoryFormat;
   }
 
-  /* Get word count of story text */
+  /**
+   * Get word count of story text
+   * @param text story text
+   */
   getWordCount(text: string) {
     if (!text) { return 0; }
     const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
@@ -485,15 +516,9 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Closes feedback, grammar checker, and dictionary windows,
-   * setting text editor to 'default' mode.
+   * Return whether or not the student has viewed the feedback
+   * @returns true if student has viewed feedback
    */
-  defaultMode() {
-    this.feedbackVisible = false;
-    this.dictionaryVisible = false;
-  }
-
-  // return whether or not the student has viewed the feedback
   hasNewFeedback(): boolean {
     if (
       this.story &&
@@ -504,34 +529,28 @@ export class DashboardComponent implements OnInit {
     return false;
   }
 
-  // route to synthesis
+  /* Toggle synthesis */
   goToSynthesis() {
     this.synthesisPlayer.toggleHidden();
-    // this.router.navigateByUrl('/synthesis/' + this.story._id);
   }
 
-  // route to synthesis
+  /* Route to record story component */
   goToRecording() {
     this.router.navigateByUrl('/record-story/' + this.story._id);
   }
 
-  // set modalClass to visible fade
+  /* Set modalClass to visible fade */
   showModal() {
     this.modalClass = 'visibleFade';
   }
 
-  // set modalClass to hidden fade and next choice to false
+  /* Set modalClass to hidden fade and next choice to false */
   hideModal() {
     this.modalClass = 'hiddenFade';
     this.modalChoice.next(false);
   }
 
-  // set next modal choice to true
-  setModalChoice() {
-    this.modalChoice.next(true);
-  }
-
-  // save story and set next modal choice to true
+  /* Save story and set next modal choice to true */
   async saveModal() {
     try {
       await this.saveStory('modal', new Date());
@@ -542,6 +561,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  /* Toggle upper menu buttons */
   toggleOptions() {
     if (!this.dontToggle){
       this.showOptions = !this.showOptions;
@@ -549,6 +569,7 @@ export class DashboardComponent implements OnInit {
     this.dontToggle = false;
   }
   
+  /* Open dialog for editing story title/dialect */
   editStoryTitle() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -576,12 +597,13 @@ export class DashboardComponent implements OnInit {
   /* Stop recording if already recording, otherwise start recording */
   async speakStory() {
     if (this.isRecording) {
+      this.isTranscribing = true;
       this.recordAudioService.stopRecording();
       let transcription = await this.recordAudioService.getAudioTranscription();
-      console.log(transcription)
+      this.isTranscribing = false;
       if(transcription) {
-        this.story.text = this.story.text + "\n" + transcription;
-        this.story.htmlText = this.story.htmlText + "<p>" + transcription + "</p>";
+        this.story.text = this.story.text + "\n" + transcription + ".";
+        this.story.htmlText = this.story.htmlText + "<p>" + transcription + ".</p>";
         this.getWordCount(transcription);
         this.storySaved = false; 
         this.textUpdated.next(transcription);

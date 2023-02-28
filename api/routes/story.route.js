@@ -69,13 +69,19 @@ let storyRoutes;
 
 
 /**
- * Get stories for a given user (owner) after a certain date
+ * Get stories for a given user (owner) with optional classroom creation date filter
  * @param {Object} req params: User ID
- * @param {Object} req params: Date
+ * @param {Object} req params: Date classroom created
  * @return {Object} List of stories
  */
 storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res) {
-  Story.find({'owner': req.params.owner, 'date': {$gte: req.params.date}}, function(err, stories) {
+  const conditions = {'owner': req.params.owner};
+  if (req.params.date != 'empty') {
+    conditions['date'] = {
+      $gte: req.params.date,
+    };
+  }
+  Story.find(conditions, function(err, stories) {
     if (err) {
       console.log(err);
       res.json(err);
@@ -203,6 +209,31 @@ storyRoutes.route('/addFeedback/:id').post((req, res) => {
     if (story) {
       story.feedback.text = req.body.feedback;
       story.feedback.seenByStudent = false;
+      story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.feedback.lastUpdated = new Date();
+      story.save();
+      res.status(200).json({'message': 'Feedback added successfully'});
+    } else {
+      res.status(404).json({'message': 'Story does not exist'});
+    }
+  });
+});
+
+
+/**
+ * Update feedback makrup text for a particular story
+ * @param {Object} req params: Story ID
+ * @param {Object} req body: Feedback markup data
+ * @return {Object} Success or error message
+ */
+storyRoutes.route('/updateFeedbackMarkup/:id').post((req, res) => {
+  Story.findById(req.params.id, (err, story) => {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    }
+    if (story) {
+      story.feedback.feedbackMarkup = req.body.feedbackMarkup;
       story.save();
       res.status(200).json({'message': 'Feedback added successfully'});
     } else {
@@ -242,6 +273,7 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
         const uploadStream = bucket.openUploadStream('audio-feedback-for-story-' + story._id.toString());
         story.feedback.audioId = uploadStream.id;
         story.feedback.seenByStudent = false;
+        story.feedback.lastUpdated = new Date();
         story.save();
         // pipe data in stream to the audio file entry in the db
         readableTrackStream.pipe(uploadStream);

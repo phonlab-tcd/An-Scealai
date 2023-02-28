@@ -25,7 +25,7 @@
                                                                                             <!-- CONTAINER HEADER -->
   <div class="bookHeader">
       <!-- BACK BUTTON -->
-      <div routerLink="/contents" class="myStoriesBtn">
+      <div routerLink="/contents" class="myStoriesBtn" (click)="synthesisPlayer.stopSynthesis()">
         <i class="fa fa-chevron-left backArrow"></i>
         {{ ts.l.contents }}
       </div>
@@ -38,6 +38,7 @@
       >
         {{ story?.title ?? "..." }}
         <span *ngIf="!storySaved">*</span>
+        <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">{{ts.l.dashboard_prompts}}</span>
       </p>
 
       <!-- SAVE ICON  -->
@@ -71,13 +72,14 @@
     </div>
 
     <!-- SPEECH TO TEXT-->
-    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()">
-      {{ ts.l.dictation }}
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()" [ngClass]="{disableDiv: isTranscribing}">
+      {{ ts.l.speak }}
       <!-- Google icon, index.html-->
       <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span>
-      <button *ngIf="isRecording" class="notRecordingBtn blink">
+      <button *ngIf="isRecording && !isTranscribing" class="notRecordingBtn blink">
         <i class="fas fa-stop-circle"></i>
       </button>
+      <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
     </div>
 
     <!-- DOWNLOAD -->
@@ -168,22 +170,33 @@
           <i class="fa fa-times"></i>
         </div>
       </div>
-      <textarea
-        *ngIf="feedbackVisible"
-        class="textField feedbackTextareaAudio"
-        placeholder="{{ ts.l.no_feedback_provided }}"
-        readonly
-        value="{{ story?.feedback.text }}"
-      >
-      </textarea>
-      <audio
-        *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
-        [src]="audioSource"
-        id="audio"
-        controls
-        #audioTag
-        class="audioPlayer"
-      ></audio>
+      <!-- Display feedback text and markup-->
+      <div *ngIf="feedbackVisible" class="textFieldContainer">
+        <!-- feedback text comment -->
+        <textarea
+          class="textField"
+          placeholder="{{ ts.l.no_feedback_provided }}"
+          readonly
+          value="{{ story?.feedback.text }}">
+        </textarea>
+        <!-- Display feedback audio-->
+        <audio
+          *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
+          [src]="audioSource"
+          id="audio"
+          controls
+          #audioTag
+          class="audioPlayer"
+        ></audio>
+        <hr>
+        <!-- feedback story markup -->
+        <div class="textField" style="text-align: left; padding-left:25%; padding-right:25%;"
+          *ngIf="story.feedback.feedbackMarkup" 
+          [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.feedback.feedbackMarkup)" >
+        </div>
+      </div>
+
+
 
       <!-- <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" /> -->
       <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle">
