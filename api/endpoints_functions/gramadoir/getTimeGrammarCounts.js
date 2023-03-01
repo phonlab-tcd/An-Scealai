@@ -10,7 +10,16 @@ const UserGrammarCounts = require('../../models/userGrammarCounts');
  */
 async function getTimeGrammarCounts(req, res) {
   const ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
-  const userGrammarCounts = await UserGrammarCounts.find({'owner': ownerId});
+
+  const conditions = {'owner': ownerId};
+  if (req.body.startDate !== '' && req.body.endDate !== '') {
+    conditions['updatedAt'] = {
+      '$gte': req.body.startDate,
+      '$lte': req.body.endDate,
+    };
+  };
+
+  const userGrammarCounts = await UserGrammarCounts.find(conditions);
 
   if (!userGrammarCounts) {
     return res.json({});

@@ -12,14 +12,12 @@ import "chartjs-adapter-date-fns";
 export class GrammarErrorTimeComponent implements OnInit {
   constructor(private ts: TranslationService) {}
 
-  @Input() grammarErrorTimeCounts: Object[];
+  @Input() grammarErrorTimeCounts: {startDate: Date, endDate: Date, data: Object[]};;
   timeSeriesChart: Chart;
   legendItems: any[] = [];
-  timeRange: string[] = [];
+  dateRange: string[] = [];
 
   async ngOnInit() {
-    this.createDateRange();
-    this.makeChart();
   }
 
   /**
@@ -27,7 +25,8 @@ export class GrammarErrorTimeComponent implements OnInit {
    */
   ngOnChanges(_) {
     if (this.grammarErrorTimeCounts) {
-      this.ngOnInit();
+      this.createDateRange();
+      this.makeChart();
     }
   }
 
@@ -35,11 +34,24 @@ export class GrammarErrorTimeComponent implements OnInit {
    * Create an array of dates from today - x days
    */
   createDateRange() {
-    const NUM_OF_DAYS = 30; // get last 30 dates.
-    for (let i = 0; i < NUM_OF_DAYS; i++) {
-      let date = new Date();
+    this.dateRange = [];
+    let numOfDays = 30; // default date range if no dates given
+    let endDate = new Date(); // initial date for calculating range, default today (calc begins with most recent date, i.e. end)
+    let totalDays = 0;
+
+    // get date range from given start and end date
+    if (this.grammarErrorTimeCounts.startDate && this.grammarErrorTimeCounts.endDate) {
+      let dateDifference = this.grammarErrorTimeCounts.endDate.getTime() - this.grammarErrorTimeCounts.startDate.getTime();
+      totalDays = Math.ceil(dateDifference / (1000 * 3600 * 24));
+      if (totalDays) {
+        numOfDays = totalDays;
+        endDate = this.grammarErrorTimeCounts.endDate;
+      }
+    }
+    for (let i = 0; i < numOfDays; i++) {
+      let date = new Date(endDate);
       date.setDate(date.getDate() - i);
-      this.timeRange.push(date.toISOString().split("T")[0]);
+      this.dateRange.push(date.toISOString().split("T")[0]);
     }
   }
 
@@ -94,8 +106,8 @@ export class GrammarErrorTimeComponent implements OnInit {
     let dataset: Object = {}; // one entry for each error name
 
     // loop through each error for each student in data and add error counts to a dataset
-    for (let studentEntry of this.grammarErrorTimeCounts) {                   // one entry for each student
-      for (let [errorName, timeData] of Object.entries(studentEntry)) {       // errorName is error name, timeData is object of timestamps and counts
+    for (let studentEntry of this.grammarErrorTimeCounts.data) {                // one entry for each student
+      for (let [errorName, timeData] of Object.entries(studentEntry)) {        // errorName is error name, timeData is object of timestamps and counts
          // if error already exists in the dataset, add counts to existing data object 
         if (errorName in dataset) {                                            
           Object.keys(dataset[errorName].data).forEach((date) => {
@@ -125,7 +137,7 @@ export class GrammarErrorTimeComponent implements OnInit {
    * Takes an error with a certain number of dates and counts and padds the object by
    * filling in the gaps where the object doesn't have a particular date
    * i.e. every error will have the same number of entries as the length of
-   * the timeRange array (one entry for each day), no matter the starting size
+   * the dateRange array (one entry for each day), no matter the starting size
    * e.x. data before: Seimhu: [{day9: count}, {day15: count}]
    * e.x. data after:  Seimhu: [{day1: count}, {day2: count}, {day3: count}, ...]
    * @param error object with dates and error counts
@@ -133,7 +145,7 @@ export class GrammarErrorTimeComponent implements OnInit {
    */
   createDateAndCountArray(error: Object) {
     let finalResult = {};
-    this.timeRange.reverse().forEach((date) => {
+    this.dateRange.reverse().forEach((date) => {
       // error does not have a count for this date
       if (!error.hasOwnProperty(date)) {
         finalResult[date] = null; // can either use null or 0, whichever looks cleaner on the chart

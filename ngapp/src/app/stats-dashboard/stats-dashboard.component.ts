@@ -40,7 +40,7 @@ export class StatsDashboardComponent implements OnInit {
   grammarErrorCounts: {[type: string]: number} = {};
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
-  grammarErrorTimeCounts: Object[] = [];
+  grammarErrorTimeCounts: {startDate: Date, endDate: Date, data: Object[]} = {startDate: null, endDate: null, data: []};
   userRole: string = '';
   dialogRef: MatDialogRef<unknown>;
   
@@ -115,14 +115,23 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     let totalGrammarCounts = [];
+    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
     await Promise.all(classroom.studentIds.map(async (id) => {
-      let studentGrammarCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`))
+      const body = {
+        startDate,
+        endDate,
+      };
+      let studentGrammarCounts = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`, body, {headers}))
       console.log(studentGrammarCounts);
       totalGrammarCounts.push(studentGrammarCounts);
      }
     ));
-    this.grammarErrorTimeCounts = totalGrammarCounts;
-    
+
+    this.grammarErrorTimeCounts = {
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      data: totalGrammarCounts
+    }
   }
   
   /* Make calls to the backend to get stats data for students */
@@ -153,8 +162,13 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     let grammarErrors = [];
-    grammarErrors[0] = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getTimeGrammarCounts/${studentId}`));
-    this.grammarErrorTimeCounts = grammarErrors;
+    grammarErrors[0] = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${studentId}`, {startDate:'', endDate:''}));
+
+    this.grammarErrorTimeCounts = {
+      startDate: null,
+      endDate: null,
+      data: grammarErrors
+    }
     
   }
 

@@ -12,6 +12,9 @@ gramadoirRoutes
 gramadoirRoutes
     .route('/userGrammarCounts')
     .post(auth, require('../endpoints_functions/gramadoir/userGrammarCounts'));
+gramadoirRoutes
+    .route('/getTimeGrammarCounts/:ownerId')
+    .post(auth, getTimeGrammarCounts);
 // //////////////////////////////////////////// GET
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
@@ -19,8 +22,5 @@ gramadoirRoutes
 gramadoirRoutes
     .route('/getUserGrammarCounts')
     .get(auth, getUserGrammarCounts);
-gramadoirRoutes
-    .route('/getTimeGrammarCounts/:ownerId')
-    .get(auth, getTimeGrammarCounts);
 
 module.exports = gramadoirRoutes;
