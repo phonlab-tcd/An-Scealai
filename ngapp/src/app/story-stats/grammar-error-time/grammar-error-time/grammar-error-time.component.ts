@@ -52,7 +52,7 @@ export class GrammarErrorTimeComponent implements OnInit {
 
     let canvasElem = document.getElementById("grammar-errors-time-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext("2d");
-    if (this.timeSeriesChart) { this.timeSeriesChart.destroy();}
+    if (this.timeSeriesChart) { this.timeSeriesChart.destroy(); }
 
     this.timeSeriesChart = new Chart(ctx, {
       type: "line",
@@ -90,29 +90,41 @@ export class GrammarErrorTimeComponent implements OnInit {
    * Processes the data to put it into a format usable by the chart
    * @returns array of data objects
    */
-    calculateDataForChart() {
-      let datasets = []; // one dataset for each error name
-  
-      // loop through each error and create data object for chart
-      for (let entry of this.grammarErrorTimeCounts) { // one entry for each student
-        for (let [key, value] of Object.entries(entry)) {  // key is error name, value is object of timestamps and counts
+  calculateDataForChart() {
+    let dataset: Object = {}; // one entry for each error name
+
+    // loop through each error for each student in data and add error counts to a dataset
+    for (let studentEntry of this.grammarErrorTimeCounts) {                   // one entry for each student
+      for (let [errorName, timeData] of Object.entries(studentEntry)) {       // errorName is error name, timeData is object of timestamps and counts
+         // if error already exists in the dataset, add counts to existing data object 
+        if (errorName in dataset) {                                            
+          Object.keys(dataset[errorName].data).forEach((date) => {
+            if (date in timeData) {
+              dataset[errorName].data[date] =
+                dataset[errorName].data[date] + timeData[date];    // add this student's counts to counts already in the dataset
+            }
+          });
+        } else {
+          // otherwise create new data object for that error
+          dataset[errorName] = {};
           let dict = {
-            label: this.ts.currentLanguage ? ERROR_INFO[key].nameGA : ERROR_INFO[key].nameEN, // Error name
-            data: this.createDateAndCountArray(value), // [{day1: count}, {day2: count}, ...] for each day in the date range
-            borderColor: ERROR_INFO[key].color,
-            backgroundColor: ERROR_INFO[key].color,
+            label: this.ts.currentLanguage ? ERROR_INFO[errorName].nameGA : ERROR_INFO[errorName].nameEN, // Error name
+            data: this.createDateAndCountArray(timeData), // [{day1: count}, {day2: count}, ...] for each day in the date range
+            borderColor: ERROR_INFO[errorName].color,
+            backgroundColor: ERROR_INFO[errorName].color,
             fill: false,
           };
-          datasets.push(dict);
+          dataset[errorName] = dict;
         }
       }
-      return datasets;
     }
+    return Object.values(dataset);
+  }
 
   /**
    * Takes an error with a certain number of dates and counts and padds the object by
    * filling in the gaps where the object doesn't have a particular date
-   * i.e. every error will have the same number of entries as the length of 
+   * i.e. every error will have the same number of entries as the length of
    * the timeRange array (one entry for each day), no matter the starting size
    * e.x. data before: Seimhu: [{day9: count}, {day15: count}]
    * e.x. data after:  Seimhu: [{day1: count}, {day2: count}, {day3: count}, ...]

@@ -116,7 +116,7 @@ export class StatsDashboardComponent implements OnInit {
     // get grammar error time data
     let totalGrammarCounts = [];
     await Promise.all(classroom.studentIds.map(async (id) => {
-      let studentGrammarCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts/${id}`))
+      let studentGrammarCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`))
       console.log(studentGrammarCounts);
       totalGrammarCounts.push(studentGrammarCounts);
      }
