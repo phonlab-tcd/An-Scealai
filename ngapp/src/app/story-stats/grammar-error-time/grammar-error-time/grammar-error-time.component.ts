@@ -136,7 +136,7 @@ export class GrammarErrorTimeComponent implements OnInit {
     this.timeRange.reverse().forEach((date) => {
       // error does not have a count for this date
       if (!error.hasOwnProperty(date)) {
-        finalResult[date] = 0; // can either use null or 0, whichever looks cleaner on the chart
+        finalResult[date] = null; // can either use null or 0, whichever looks cleaner on the chart
       }
       // error does have a count for this date
       else {
