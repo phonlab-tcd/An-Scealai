@@ -1,42 +1,26 @@
-const mongoose = require('mongoose');
 const UserGrammarCounts = require('../../models/userGrammarCounts');
 
 /**
- * Returns a dictionary of errors and dates for a given student
- *
- * @param {Object} req ownerID
- * @param {Object} res
- * @return {Object} error dictionary
+ * Get total error names and associated counts from the DB
+ * Currently used for pie chart on the admin pannel stats dashboard
+ * @param {Object} req params: Story ID
+ * @param {Object} res object to return response
+ * @param {Object} next
+ * @return {Promise} Dictionary of error counts and sentences
  */
-async function getUserGrammarCounts(req, res) {
-  const ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
-  const userGrammarCounts = await UserGrammarCounts.find({'owner': ownerId});
+async function getUserGrammarCounts(req, res, next) {
+  const errorCounts = await UserGrammarCounts.find({'errorCounts': {$ne: null}}, {'errorCounts': 1, '_id': 0});
 
-  if (!userGrammarCounts) {
-    return res.json({});
-  }
+  const totalErrorCounts = {};
 
-  // filter out entries that don't have error counts
-  const filteredData = userGrammarCounts.filter(function(el) {
-    return el.errorCounts != null;
-  });
-
-  const errorCountsDict = {};
-
-  // manipulate the data into an object that can be used for graphing:
-  // keys: error names (uru, seimhu, etc.)
-  // values: {{timestamp: errorCount}, {timestamp2: errorCount2}, etc.}
-  for (const entry of filteredData) {
-    entry = entry.toJSON();
-    for (const [key, val] of Object.entries(entry.errorCounts)) {
-      const date = new Date(+entry.updatedAt).toISOString().slice(0, 10);
-      if (! (key in errorCountsDict)) {
-        errorCountsDict[key] = {};
-      }
-      errorCountsDict[key][date] = val;
+  // create a dictionary of error name and total counts
+  for (const entry of errorCounts) {
+    for (const [key, value] of Object.entries(entry.errorCounts)) {
+      if (!totalErrorCounts[key]) totalErrorCounts[key] = 0;
+      totalErrorCounts[key] += value;
     }
   }
-  return res.json(errorCountsDict);
-}
 
+  res.json(totalErrorCounts);
+}
 module.exports = {getUserGrammarCounts};

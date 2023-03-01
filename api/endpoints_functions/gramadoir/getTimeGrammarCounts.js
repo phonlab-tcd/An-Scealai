@@ -3,12 +3,12 @@ const UserGrammarCounts = require('../../models/userGrammarCounts');
 
 /**
  * Returns a dictionary of errors and dates for a given student
- *
+ * Currently used for time series chart on the stats dashboard
  * @param {Object} req ownerID
  * @param {Object} res
  * @return {Promise} error dictionary
  */
-async function getUserGrammarCounts(req, res) {
+async function getTimeGrammarCounts(req, res) {
   const ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
   const userGrammarCounts = await UserGrammarCounts.find({'owner': ownerId});
 
@@ -39,4 +39,4 @@ async function getUserGrammarCounts(req, res) {
   return res.json(errorCountsDict);
 }
 
-module.exports = {getUserGrammarCounts};
+module.exports = {getTimeGrammarCounts};

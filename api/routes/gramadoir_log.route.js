@@ -3,6 +3,7 @@ const gramadoirRoutes = require('express').Router();
 
 const {getUniqueErrorTypeCounts} = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts');
 const {getUserGrammarCounts} = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
+const { getTimeGrammarCounts } = require('../endpoints_functions/gramadoir/getTimeGrammarCounts');
 
 // //////////////////////////////////////////// POST
 gramadoirRoutes
@@ -20,6 +21,6 @@ gramadoirRoutes
     .get(auth, getUserGrammarCounts);
 gramadoirRoutes
     .route('/getTimeGrammarCounts/:ownerId')
-    .get(auth, getUserGrammarCounts);
+    .get(auth, getTimeGrammarCounts);
 
 module.exports = gramadoirRoutes;
