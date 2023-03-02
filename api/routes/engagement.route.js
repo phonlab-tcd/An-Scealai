@@ -11,11 +11,16 @@ const PlaySynthesis = require('../models/engagement.playSynthesis');
  * @param {Object} req body: PlaySynthesis object (see models/engagement.playSynthesis)
  * @return {Object} Success or error message
  */
-engagementRoutes.route('/addEvent/playSynthesis').post(async (req, res, next)=>{
-  const itWas = await PlaySynthesis.create(req.body).then((ok)=>({ok}), (anError)=>({anError}));
-  if (itWas.anError) return next(itWas.anError);
-  return res.json(itWas.ok);
-});
+engagementRoutes
+    .route('/addEvent/playSynthesis')
+    .post(async (req, res, next) => {
+      const itWas = await PlaySynthesis.create(req.body).then(
+          (ok) => ({ok}),
+          (anError) => ({anError}),
+      );
+      if (itWas.anError) return next(itWas.anError);
+      return res.json(itWas.ok);
+    });
 
 /**
  * Add an event object to the DB for a given user
@@ -29,9 +34,9 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
       const stackTrace = {};
       Error.captureStackTrace(stackTrace);
       logger.error({
-        'endpoint': '/engagement/addEventForUser/:id',
+        endpoint: '/engagement/addEventForUser/:id',
         'error.message': err.message,
-        'stackTrace': stackTrace,
+        stackTrace: stackTrace,
       });
       return res.json(err);
     }
@@ -47,7 +52,8 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
           return res.status(200).json('Event added succesfully');
         });
       } else {
-        return res.status(400)
+        return res
+            .status(400)
             .json('Bad request, must include event object in request body');
       }
     } else {
@@ -62,7 +68,7 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route('/eventsForUser/:id').get((req, res) => {
-  Event.find({'userId': req.params.id}, (err, events) => {
+  Event.find({userId: req.params.id}, (err, events) => {
     if (err) {
       res.json(err);
     }
@@ -86,9 +92,13 @@ engagementRoutes.route('/addAnalysisEvent').post((req, res) => {
   event.userId = req.body.event.userId;
   event.date = new Date();
 
-  event.save().then((event) => {
-    res.status(200).json({'event': 'event added successfully', 'id': event._id});
-  })
+  event
+      .save()
+      .then((event) => {
+        res
+            .status(200)
+            .json({event: 'event added successfully', id: event._id});
+      })
       .catch((err) => {
         console.log(err);
         res.status(400).send('unable to save event to DB');
@@ -101,7 +111,7 @@ engagementRoutes.route('/addAnalysisEvent').post((req, res) => {
  * @return {Object} Success or error message
  */
 engagementRoutes.route('/getPreviousAnalysisData/:type').get((req, res) => {
-  Event.find({'type': req.params.type}, (err, events) => {
+  Event.find({type: req.params.type}, (err, events) => {
     if (err) {
       res.json(err);
     }
@@ -139,20 +149,28 @@ engagementRoutes.route('/eventsForStory/:id').get((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route('/dictionaryLookups/:id').post((req, res) => {
-  const conditions = {'userId': req.params.id, 'type': 'USE-DICTIONARY'};
+  const conditions = {userId: req.params.id, type: 'USE-DICTIONARY'};
   if (req.body.startDate !== '' && req.body.endDate !== '') {
     conditions['date'] = {
-      '$gte': req.body.startDate,
-      '$lte': req.body.endDate,
+      $gte: req.body.startDate,
+      $lte: req.body.endDate,
     };
-  };
+  }
   Event.find(conditions, (err, events) => {
     if (err) {
       res.json(err);
     }
     if (events) {
       const filtered = events.filter(function(el) {
-        return (el.dictionaryLookup && el.dictionaryLookup != null);
+        return el.dictionaryLookup && el.dictionaryLookup != null;
+      });
+      // sort descending chronologically
+      filtered.sort(function(a, b) {
+        const keyA = new Date(a.date);
+        const keyB = new Date(b.date);
+        if (keyA < keyB) return 1;
+        if (keyA > keyB) return -1;
+        return 0;
       });
       res.status(200).json(filtered);
     } else {

@@ -78,6 +78,10 @@ export class GrammarErrorTimeComponent implements OnInit {
         },
         scales: {
           y: {
+            title: {
+              display: true,
+              text: 'Num of errors'
+            },
             beginAtZero: true,
             ticks: {
               stepSize: 1,

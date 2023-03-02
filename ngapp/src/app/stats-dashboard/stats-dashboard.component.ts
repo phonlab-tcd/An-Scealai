@@ -114,6 +114,7 @@ export class StatsDashboardComponent implements OnInit {
       this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
       await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
     ));
+    console.log(this.dictionaryLookups);
     
     // get grammar error time data
     let totalGrammarCounts = [];
