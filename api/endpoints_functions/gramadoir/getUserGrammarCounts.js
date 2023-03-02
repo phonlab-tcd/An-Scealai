@@ -2,6 +2,7 @@ const UserGrammarCounts = require('../../models/userGrammarCounts');
 
 /**
  * Get total error names and associated counts from the DB
+ * Currently used for pie chart on the admin pannel stats dashboard
  * @param {Object} req params: Story ID
  * @param {Object} res object to return response
  * @param {Object} next

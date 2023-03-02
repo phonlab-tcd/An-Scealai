@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslationService } from '../../../translation.service';
 import { Chart } from 'chart.js';
+import { ERROR_INFO} from '../../../lib/grammar-engine/types';
 
 @Component({
   selector: 'app-grammar-pie-chart',
@@ -36,8 +37,7 @@ export class GrammarPieChartComponent implements OnInit {
             datasets: [{
                 label: 'Grammar Error Counts ',
                 data: Object.values(this.errorCounts),
-                // TODO: replace these colours with correct gramadoir error colour-coding
-                backgroundColor: Object.keys(this.errorCounts).map(_ => `#${((Math.random() * 0xffffff) << 0).toString(16)}`),
+                backgroundColor: Object.keys(this.errorCounts).map( err => ERROR_INFO[err].color),
             }]
         },
         options: {
@@ -52,5 +52,16 @@ export class GrammarPieChartComponent implements OnInit {
 
     this.legendItems = this.pieChart['legend']['legendItems'];
   }
+
+    /**
+   * Toggle legend item on/off on the legend and chart when clicked
+   * @param legendItem clicked legend item
+   * @param event clicked event
+   */
+    updateLegend(legendItem: any, event: any) {
+      this.pieChart.toggleDataVisibility(legendItem.index);
+      event.target.parentNode.classList.toggle('hideLegendItem');;
+      this.pieChart.update();
+    }
 
 }
