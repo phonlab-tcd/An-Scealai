@@ -42,17 +42,19 @@ export class GrammarErrorTimeComponent implements OnInit {
     // get date range from given start and end date
     if (this.grammarErrorTimeCounts.startDate && this.grammarErrorTimeCounts.endDate) {
       let dateDifference = this.grammarErrorTimeCounts.endDate.getTime() - this.grammarErrorTimeCounts.startDate.getTime();
-      totalDays = Math.ceil(dateDifference / (1000 * 3600 * 24));
+      totalDays = (Math.ceil(dateDifference / (1000 * 3600 * 24))) + 1;
       if (totalDays) {
         numOfDays = totalDays;
         endDate = this.grammarErrorTimeCounts.endDate;
       }
     }
+    console.log("END DATE: ", endDate)
     for (let i = 0; i < numOfDays; i++) {
       let date = new Date(endDate);
       date.setDate(date.getDate() - i);
       this.dateRange.push(date.toISOString().split("T")[0]);
     }
+    console.log(this.dateRange)
   }
 
   /**

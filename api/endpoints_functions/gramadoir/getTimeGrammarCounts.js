@@ -18,6 +18,7 @@ async function getTimeGrammarCounts(req, res) {
       '$lte': req.body.endDate,
     };
   };
+  console.log(conditions);
 
   const userGrammarCounts = await UserGrammarCounts.find(conditions);
 
