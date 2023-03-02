@@ -2304,6 +2304,10 @@ export default {
   statistics_dashboard: {
     ga: 'Deais Staitisticí',
     en: 'Statistics Dashboard' },
+  grammar_errors_over_time: {
+    ga: 'Líon na nEarráidí Gramadaithar am',
+    en: 'Grammar Errors Over Time'
+  },
   select_a_classroom: {
     ga: 'Roghnaigh rang',
     en: 'Select a classroom' },

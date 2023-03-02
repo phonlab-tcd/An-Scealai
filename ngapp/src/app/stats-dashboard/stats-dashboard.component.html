@@ -63,7 +63,7 @@
         <mat-card class="stats-card">
             <ng-template #grammarErrorTimeTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
-                    <mat-card-title>Grammar Errors Timeseries</mat-card-title>
+                    <mat-card-title>{{ts.l.grammar_errors_over_time}}</mat-card-title>
                     <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarErrorTimeTemplate)"></i>
                     <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
                 </mat-card-header>

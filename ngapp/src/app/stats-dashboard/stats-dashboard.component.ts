@@ -89,62 +89,61 @@ export class StatsDashboardComponent implements OnInit {
    */
   async loadDataForCharts(studentIds:string[] = [], startDate:string = '', endDate:string = '') {
     // get n-gram data
-    this.stories = (await Promise.all(studentIds.map(async (id) =>
-      await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate))
-    ))).flat();
-    
-    this.textsToAnalyse = this.stories.reduce(function(result, story) {
-      if (story.text) result.push(story.text);
-      return result;
-    }, []);
+    this.textsToAnalyse = await this.getNGramData(studentIds, startDate, endDate);
 
     // get grammar eror data for pie chart
-    this.grammarErrorCounts = (await Promise.all(this.stories.map(async story =>
-      await firstValueFrom(
-        this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
-      )
-    ))).reduce(this.countDictSum, {});
+    this.grammarErrorCounts = await this.getGrammarErrorsPieChart();
     
     // get word count data
     this.wordCountData = await this.getWordCounts(studentIds, startDate, endDate);
     
     // get dictionary lookups 
-    this.dictionaryLookups = {};
-    await Promise.all(studentIds.map(async (id) =>
-      this.dictionaryLookups[(await firstValueFrom(this.userService.getUserById(id))).username] =  
-      await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
-    ));
-    console.log(this.dictionaryLookups);
+    this.dictionaryLookups = await this.getDictionaryLookups(studentIds, startDate, endDate);
     
     // get grammar error time data
-    let totalGrammarCounts = [];
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
-    await Promise.all(studentIds.map(async (id) => {
-      let studentGrammarCounts = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`, {startDate, endDate}, {headers}))
-      console.log(studentGrammarCounts);
-      totalGrammarCounts.push(studentGrammarCounts);
-     }
-    ));
-
-    this.grammarErrorTimeCounts = {
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      data: totalGrammarCounts
-    }
+    this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate);
   }
-  
+
+  /**
+   * Get stories for students and calculate data for n-gram chart
+   */
+  async getNGramData(studentIds:string[], startDate:string, endDate:string) {
+    this.stories = (await Promise.all(studentIds.map(async (id) =>
+      await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate))
+    ))).flat();
+    
+    let textArray = this.stories.reduce(function(result, story) {
+      if (story.text) result.push(story.text);
+      return result;
+    }, []);
+    return textArray;
+  }
+
+  /**
+   * Get grammar error counts for all stories pie chart
+   */
+  async getGrammarErrorsPieChart() {
+    let data = {};
+    data = (await Promise.all(this.stories.map(async story =>
+      await firstValueFrom(
+        this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
+      )
+    ))).reduce(this.countDictSum, {});
+    return data;
+  }
+
   /**
    * Merge objets by key, if both objects have the same key then add values together
    * @param A object of grammar error names and counts
    * @param B object of grammar error names and counts
    * @returns merged object
    */
-  countDictSum(A:any, B:any) {
-    for (const key of Object.keys(B)) {
-      A[key] = A[key] ? A[key] + B[key] : B[key] 
+    countDictSum(A:any, B:any) {
+      for (const key of Object.keys(B)) {
+        A[key] = A[key] ? A[key] + B[key] : B[key] 
+      }
+      return A;
     }
-    return A;
-  }
   
   /*
   * Get average word count and username for each student in classroom (over all stories)
@@ -155,8 +154,39 @@ export class StatsDashboardComponent implements OnInit {
       data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
       ((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount)
     ));
-    
     return data;
+  }
+
+  /**
+   * Get list of dictionary lookups for each student in classroom
+   */
+  async getDictionaryLookups(studentIds:string[], startDate:string, endDate:string) {
+    const data = {};
+    await Promise.all(studentIds.map(async (id) =>
+      data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
+      await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
+    ));
+    return data;
+  }
+
+  /**
+   * Get grammar error time data for each student in classroom
+   */
+  async getGrammarErrorTimeSeries(studentIds:string[], startDate:string, endDate:string) {
+    let totalGrammarCounts = [];
+    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
+    await Promise.all(studentIds.map(async (id) => {
+      let studentGrammarCounts = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`, {startDate, endDate}, {headers}))
+      console.log(studentGrammarCounts);
+      totalGrammarCounts.push(studentGrammarCounts);
+     }
+    ));
+
+    return {
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      data: totalGrammarCounts
+    }
   }
   
 }
