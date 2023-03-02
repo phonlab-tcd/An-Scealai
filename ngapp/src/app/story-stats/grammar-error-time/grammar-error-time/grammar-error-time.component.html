@@ -1,15 +1,15 @@
 <div class="chartContainer">
-    <!-- <div class="legendContainer" *ngIf="legendItems.length > 0">
+    <div class="legendContainer" *ngIf="legendItems.length > 0">
       <div class="legend">{{ts.l.legend}}</div>
       <hr/>
       <div *ngFor="let item of legendItems">
-        <div class="legendPair">
+        <div class="legendPair" (click)="updateLegend(item, $event)">
           <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
                                     [style.borderColor]="item.strokeStyle"></div> 
           <div>{{item.text}}</div>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="graphContainer">
       <canvas id="grammar-errors-time-chart" width="200" height="200"></canvas>
     </div>

@@ -35,26 +35,23 @@ export class GrammarErrorTimeComponent implements OnInit {
    */
   createDateRange() {
     this.dateRange = [];
-    let numOfDays = 30; // default date range if no dates given
+    let numOfDays = 30; // default date range length if no dates given
     let endDate = new Date(); // initial date for calculating range, default today (calc begins with most recent date, i.e. end)
-    let totalDays = 0;
 
     // get date range from given start and end date
     if (this.grammarErrorTimeCounts.startDate && this.grammarErrorTimeCounts.endDate) {
       let dateDifference = this.grammarErrorTimeCounts.endDate.getTime() - this.grammarErrorTimeCounts.startDate.getTime();
-      totalDays = (Math.ceil(dateDifference / (1000 * 3600 * 24))) + 1;
+      let totalDays = (Math.ceil(dateDifference / (1000 * 3600 * 24))) + 1; // add 1 to get full last day
       if (totalDays) {
         numOfDays = totalDays;
         endDate = this.grammarErrorTimeCounts.endDate;
       }
     }
-    console.log("END DATE: ", endDate)
     for (let i = 0; i < numOfDays; i++) {
       let date = new Date(endDate);
       date.setDate(date.getDate() - i);
       this.dateRange.push(date.toISOString().split("T")[0]);
     }
-    console.log(this.dateRange)
   }
 
   /**
@@ -76,8 +73,7 @@ export class GrammarErrorTimeComponent implements OnInit {
       options: {
         plugins: {
           legend: {
-            display: true,
-            position: "left",
+            display: false,
           },
         },
         scales: {
@@ -107,7 +103,7 @@ export class GrammarErrorTimeComponent implements OnInit {
   calculateDataForChart() {
     let dataset: Object = {}; // one entry for each error name
 
-    // loop through each error for each student in data and add error counts to a dataset
+    // loop through each error for each student in data and add error counts to the dataset
     for (let studentEntry of this.grammarErrorTimeCounts.data) {                // one entry for each student
       for (let [errorName, timeData] of Object.entries(studentEntry)) {        // errorName is error name, timeData is object of timestamps and counts
          // if error already exists in the dataset, add counts to existing data object 
@@ -115,12 +111,11 @@ export class GrammarErrorTimeComponent implements OnInit {
           Object.keys(dataset[errorName].data).forEach((date) => {
             if (date in timeData) {
               dataset[errorName].data[date] =
-                dataset[errorName].data[date] + timeData[date];    // add this student's counts to counts already in the dataset
+                dataset[errorName].data[date] + timeData[date];    // add this student's counts to counts already in the dataset for that error
             }
           });
         } else {
           // otherwise create new data object for that error
-          dataset[errorName] = {};
           let dict = {
             label: this.ts.currentLanguage ? ERROR_INFO[errorName].nameGA : ERROR_INFO[errorName].nameEN, // Error name
             data: this.createDateAndCountArray(timeData), // [{day1: count}, {day2: count}, ...] for each day in the date range
@@ -137,7 +132,7 @@ export class GrammarErrorTimeComponent implements OnInit {
 
   /**
    * Takes an error with a certain number of dates and counts and padds the object by
-   * filling in the gaps where the object doesn't have a particular date
+   * filling in the gaps (with 0/null) where the object doesn't have a particular date
    * i.e. every error will have the same number of entries as the length of
    * the dateRange array (one entry for each day), no matter the starting size
    * e.x. data before: Seimhu: [{day9: count}, {day15: count}]
@@ -158,5 +153,18 @@ export class GrammarErrorTimeComponent implements OnInit {
       }
     });
     return finalResult;
+  }
+
+  /**
+   * Toggle legend item on/off on the legend and chart when clicked
+   * @param legendItem clicked legend item
+   * @param event clicked event
+   */
+  updateLegend(legendItem: any, event: any) {
+    const index = legendItem.datasetIndex;
+    const isHidden = !this.timeSeriesChart.isDatasetVisible(index);
+    this.timeSeriesChart.setDatasetVisibility(index, isHidden);
+    event.target.parentNode.classList.toggle('hideLegendItem');;
+    this.timeSeriesChart.update();
   }
 }

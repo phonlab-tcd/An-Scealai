@@ -88,8 +88,6 @@ export class StatsDashboardComponent implements OnInit {
    * @param endDate end date if teacher selects date range
    */
   async loadDataForCharts(studentIds:string[] = [], startDate:string = '', endDate:string = '') {
-    console.log(startDate);
-    console.log(endDate)
     // get n-gram data
     this.stories = (await Promise.all(studentIds.map(async (id) =>
       await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate))

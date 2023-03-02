@@ -53,4 +53,15 @@ export class GrammarPieChartComponent implements OnInit {
     this.legendItems = this.pieChart['legend']['legendItems'];
   }
 
+    /**
+   * Toggle legend item on/off on the legend and chart when clicked
+   * @param legendItem clicked legend item
+   * @param event clicked event
+   */
+    updateLegend(legendItem: any, event: any) {
+      this.pieChart.toggleDataVisibility(legendItem.index);
+      event.target.parentNode.classList.toggle('hideLegendItem');;
+      this.pieChart.update();
+    }
+
 }
