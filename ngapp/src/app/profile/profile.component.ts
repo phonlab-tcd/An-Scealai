@@ -6,7 +6,6 @@ import { Classroom } from '../classroom';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
 import { TranslationService } from '../translation.service';
-import { NotificationService } from '../notification-service.service';
 import { StoryService } from '../story.service';
 import { Story } from '../story';
 import { ProfileService } from '../profile.service';
@@ -37,7 +36,6 @@ export class ProfileComponent implements OnInit {
               private classroomService: ClassroomService,
               private engagement: EngagementService,
               public ts: TranslationService,
-              public ns: NotificationService,
               public storyService: StoryService,
               public profileService: ProfileService,
               public messageService: MessageService,

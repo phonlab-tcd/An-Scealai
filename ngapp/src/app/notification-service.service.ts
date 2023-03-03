@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { StoryService } from './story.service';
 import { MessageService } from './message.service';
 import { Story } from './story';
@@ -7,6 +6,7 @@ import { Classroom } from './classroom';
 import { AuthenticationService } from './authentication.service';
 import { Message } from './message';
 import { ClassroomService } from './classroom.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,6 @@ export class NotificationService {
   messageEmitter = new EventEmitter();
   teacherMessageEmitter = new EventEmitter();
   
-
   constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService,
               private classroomService: ClassroomService) {
   }
@@ -29,37 +28,32 @@ export class NotificationService {
   * who is logged in.  Update student feedback notificaitons if student.
   * Emit data structures to the app component for constent updating
   */
-  setNotifications() {
+  async setNotifications() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
+    this.stories = [];
+    this.messages = [];
+    this.teacherMessages.clear();
+
     if(userDetails.role == "STUDENT") {
-      this.messageService.getMessagesForLoggedInUser().subscribe((res : Message[]) => {
-        this.messages = [];
-        let messages = res;
-        for(let m of messages) {
-          if(m.seenByRecipient === false) {
-            this.messages.push(m);
-          }
-        }
-        this.messageEmitter.emit(this.messages);
-      });
-      this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
-        this.stories = [];
-        let stories = res;
-        for(let story of stories) {
-          if(story &&
-             (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup) &&
-             story.feedback.seenByStudent === false) {
-            this.stories.push(story);
-          }
-        }
-        this.storyEmitter.emit(this.stories);
-      });
+      
+      let messageRes = await firstValueFrom(this.messageService.getMessagesForLoggedInUser());
+      this.messages = messageRes.filter(message => message.seenByRecipient === false);
+      this.messageEmitter.emit(this.messages);
+
+      let storyRes = await firstValueFrom(this.storyService.getStoriesForLoggedInUser());
+      this.stories = storyRes.filter(story =>
+        story && 
+        story.feedback.seenByStudent === false &&
+        (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup)
+      );
+      this.storyEmitter.emit(this.stories);
+
     }
     if(userDetails.role == "TEACHER") {
       this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
-        this.teacherMessages.clear();
+        //this.teacherMessages.clear();
         let classrooms = res;
         this.messageService.getMessagesForLoggedInUser().subscribe( (messages: Message[]) => {
           for(let c of classrooms) {
@@ -73,7 +67,7 @@ export class NotificationService {
   }
 
   /*
-  * Remove a story from the feedback message array
+  * Remove a story from the feedback message array (Called from student dashboard component)
   */
   removeStory(story: Story) {
     for(let s of this.stories) {
@@ -86,7 +80,7 @@ export class NotificationService {
   }
   
   /*
-  * Remove a message notification from student message account
+  * Remove a message notification from student message account (Called from messages component)
   */
   removeMessage(message: Message) {
     for(let m of this.messages) {
@@ -98,7 +92,7 @@ export class NotificationService {
   
   /*
   * Decrease number of messages for a given classroom given the id of the 
-  * sender for the message
+  * sender for the message (Called from messages component)
   */
   removeTeacherMessage(id: string) {
     for (let entry of Array.from(this.teacherMessages.entries())) {

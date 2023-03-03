@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ClassroomService } from "../../classroom.service";
 import { AuthenticationService } from "../../authentication.service";
-import { Observable } from "rxjs";
 import { Classroom } from "../../classroom";
 import { Router } from "@angular/router";
 import { TranslationService } from "../../translation.service";

@@ -1,23 +1,14 @@
 import { Component              } from '@angular/core';
-import { OnInit                 } from '@angular/core';
 import { HostListener           } from '@angular/core';
-import { NavigationCancel       } from '@angular/router';
-import { Event                  } from '@angular/router';
 import { NavigationEnd          } from '@angular/router';
-import { NavigationError        } from '@angular/router';
-import { NavigationStart        } from '@angular/router';
 import { Router                 } from '@angular/router';
 import { filter                 } from 'rxjs/operators';
-import { NgbDropdown            } from '@ng-bootstrap/ng-bootstrap';
 import { Story                  } from 'app/story';
 import { Message                } from 'app/message';
 import { Classroom              } from 'app/classroom';
 import { NotificationService    } from 'app/notification-service.service';
-import { EngagementService      } from 'app/engagement.service';
 import { TranslationService     } from 'app/translation.service';
-import { MessageService         } from 'app/message.service';
 import { AuthenticationService  } from 'app/authentication.service';
-import { StoryService           } from 'app/story.service';
 
 declare var gtag;
 
@@ -41,13 +32,11 @@ export class AppComponent {
   constructor(
     private _router: Router,
     public auth: AuthenticationService,
-    private storyService: StoryService,
     private notificationSerivce : NotificationService,
-    private engagement: EngagementService,
     public ts: TranslationService,
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this._router.events.subscribe((event: Event) => {});
+    this._router.events.subscribe((_) => {});
 
     const navEndEvents = this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
