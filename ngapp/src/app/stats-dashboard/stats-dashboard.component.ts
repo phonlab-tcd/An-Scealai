@@ -102,6 +102,7 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate);
+    console.log(this.grammarErrorTimeCounts)
   }
 
   /**
@@ -133,7 +134,7 @@ export class StatsDashboardComponent implements OnInit {
   }
 
   /**
-   * Merge objets by key, if both objects have the same key then add values together
+   * Merge objects by key, if both objects have the same key then add values together
    * @param A object of grammar error names and counts
    * @param B object of grammar error names and counts
    * @returns merged object

@@ -139,8 +139,8 @@ export class GrammarErrorTimeComponent implements OnInit {
    * filling in the gaps (with 0/null) where the object doesn't have a particular date
    * i.e. every error will have the same number of entries as the length of
    * the dateRange array (one entry for each day), no matter the starting size
-   * e.x. data before: Seimhu: [{day9: count}, {day15: count}]
-   * e.x. data after:  Seimhu: [{day1: count}, {day2: count}, {day3: count}, ...]
+   * e.x. data before: Seimhu: {day9: count, day15: count}
+   * e.x. data after:  Seimhu: {day1: count, day2: count, day3: count, ... }
    * @param error object with dates and error counts
    * @returns an object with dates and error counts for the given time range
    */
