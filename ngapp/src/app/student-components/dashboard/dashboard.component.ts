@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit {
     private storyService: StoryService,
     private route: ActivatedRoute,
     private auth: AuthenticationService,
-    private notifications: NotificationService,
+    private notificationService: NotificationService,
     private router: Router,
     private engagement: EngagementService,
     public ts: TranslationService,
@@ -444,9 +444,10 @@ export class DashboardComponent implements OnInit {
     if (this.story.feedback.text !== '') {
       this.story.feedback.seenByStudent = true;
     }
-    this.notifications.removeStory(this.story);
+    // add event log to DB and update notifications
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
       this.engagement.addEventForLoggedInUser(EventType['VIEW-FEEDBACK'], this.story);
+      this.notificationService.getStudentNotifications();
     });
   }
 

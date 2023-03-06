@@ -1,114 +1,114 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { StoryService } from './story.service';
-import { MessageService } from './message.service';
-import { Story } from './story';
-import { Classroom } from './classroom';
-import { AuthenticationService } from './authentication.service';
-import { Message } from './message';
-import { ClassroomService } from './classroom.service';
+import { Injectable } from "@angular/core";
+import { StoryService } from "./story.service";
+import { MessageService } from "./message.service";
+import { Story } from "./story";
+import { Classroom } from "./classroom";
+import { AuthenticationService } from "./authentication.service";
+import { Message } from "./message";
+import { ClassroomService } from "./classroom.service";
+import { TranslationService } from "./translation.service";
+import { firstValueFrom, Subject } from "rxjs";
+
+export type TeacherMessage = {
+  classroom: Classroom;
+  numClassroomMessages: number;
+};
+
+export type Notification = {
+  header: string;
+  body: Story[] | Message[] | TeacherMessage[];
+};
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class NotificationService {
-  stories: Story[] = [];
-  messages: Message[] = [];
-  teacherMessages: Map<Classroom, number> = new Map();
-  storyEmitter = new EventEmitter();
-  messageEmitter = new EventEmitter();
-  teacherMessageEmitter = new EventEmitter();
-  
+  notifications: Notification[] = [];
+  notificationEmitter = new Subject<Notification[]>();
 
-  constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService,
-              private classroomService: ClassroomService) {
-  }
+  constructor(
+    private storyService: StoryService,
+    private auth: AuthenticationService,
+    private messageService: MessageService,
+    private classroomService: ClassroomService,
+    private ts: TranslationService
+  ) {}
 
-  /*
-  * Set the message data structure for either student or teacher depending on
-  * who is logged in.  Update student feedback notificaitons if student.
-  * Emit data structures to the app component for constent updating
-  */
-  setNotifications() {
+  /**
+   * Get stories and messages for student notifications
+   */
+  async getStudentNotifications() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    if(userDetails.role == "STUDENT") {
-      this.messageService.getMessagesForLoggedInUser().subscribe((res : Message[]) => {
-        this.messages = [];
-        let messages = res;
-        for(let m of messages) {
-          if(m.seenByRecipient === false) {
-            this.messages.push(m);
-          }
-        }
-        this.messageEmitter.emit(this.messages);
-      });
-      this.storyService.getStoriesForLoggedInUser().subscribe((res : Story[]) => {
-        this.stories = [];
-        let stories = res;
-        for(let story of stories) {
-          if(story &&
-             (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup) &&
-             story.feedback.seenByStudent === false) {
-            this.stories.push(story);
-          }
-        }
-        this.storyEmitter.emit(this.stories);
-      });
-    }
-    if(userDetails.role == "TEACHER") {
-      this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
-        this.teacherMessages.clear();
-        let classrooms = res;
-        this.messageService.getMessagesForLoggedInUser().subscribe( (messages: Message[]) => {
-          for(let c of classrooms) {
+    this.notifications = [];
+
+    // get stories and filter to ones that haven't viewed feedback
+    let storyRes: Story[] = await firstValueFrom(this.storyService.getStoriesForLoggedInUser());
+    let stories = storyRes.filter(
+      (story) =>
+        story &&
+        story.feedback.seenByStudent === false &&
+        (story.feedback.text ||
+          story.feedback.audioId ||
+          story.feedback.feedbackMarkup)
+    );
+    // create notification entry for stories
+    let storyNotifications: Notification = {
+      header: this.ts.l.new_feedback,
+      body: stories,
+    };
+    this.notifications.push(storyNotifications);
+
+    // get messages and filter to ones that have not been viewed
+    let messageRes: Message[] = await firstValueFrom(this.messageService.getMessagesForLoggedInUser());
+    let messages = messageRes.filter(
+      (message) => message.seenByRecipient === false
+    );
+
+    // create notification entry for messages
+    let messageNotifications: Notification = {
+      header: this.ts.l.new_messages,
+      body: messages,
+    };
+    this.notifications.push(messageNotifications);
+
+    // emit new (updated) messages to app component
+    this.notificationEmitter.next(this.notifications);
+  }
+
+  /**
+   * Get classroom messages for teacher notifications
+   */
+  async getTeacherNotifications() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    this.notifications = [];
+
+    this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe((res) => {
+      let classrooms = res;
+      this.messageService.getMessagesForLoggedInUser().subscribe((messages: Message[]) => {
+          let classMessages: TeacherMessage[] = [];
+          // get number of unread messages for each classroom, push classrom and count onto array
+          for (let c of classrooms) {
             let numberOfMessages = this.messageService.getNumberOfUnreadMessagesForClass(messages, c.studentIds);
-            this.teacherMessages.set(c, numberOfMessages);
+            if (numberOfMessages > 0) {
+              classMessages.push({
+                classroom: c,
+                numClassroomMessages: numberOfMessages,
+              });
+            }
           }
-          this.teacherMessageEmitter.emit(this.teacherMessages);
+          // create notification entry for teacher messages
+          let classNotification: Notification = {
+            header: this.ts.l.new_messages,
+            body: classMessages,
+          };
+          this.notifications.push(classNotification);
+          // emit new (updated) messages to app component
+          this.notificationEmitter.next(this.notifications);
         });
-      });
-    }
+    });
   }
-
-  /*
-  * Remove a story from the feedback message array
-  */
-  removeStory(story: Story) {
-    for(let s of this.stories) {
-      if(s._id === story._id) {
-        let i = this.stories.indexOf(s);
-        this.stories.splice(i, 1);
-        this.storyEmitter.emit(this.stories);
-      }
-    }
-  }
-  
-  /*
-  * Remove a message notification from student message account
-  */
-  removeMessage(message: Message) {
-    for(let m of this.messages) {
-      let i = this.messages.indexOf(m);
-      this.messages.splice(i, 1);
-      this.messageEmitter.emit(this.messages);
-    }  
-  }
-  
-  /*
-  * Decrease number of messages for a given classroom given the id of the 
-  * sender for the message
-  */
-  removeTeacherMessage(id: string) {
-    for (let entry of Array.from(this.teacherMessages.entries())) {
-      if(entry[0].studentIds.includes(id)) {
-        let amount = entry[1];
-        amount--;
-        this.teacherMessages.set(entry[0], amount);
-        this.teacherMessageEmitter.emit(this.teacherMessages);
-      }
-    }
-  }
-
 }

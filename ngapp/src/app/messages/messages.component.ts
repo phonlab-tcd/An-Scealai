@@ -288,14 +288,10 @@ export class MessagesComponent implements OnInit {
       
       if(!message.seenByRecipient) {
         this.numberOfUnread--;
-        if(this.isTeacher) {
-          this.notificationService.removeTeacherMessage(message.senderId);
-        }
-        if(this.isStudent) {
-          this.notificationService.removeMessage(message);
-        }
         this.messageService.markAsOpened(message._id).subscribe(() => {
           message.seenByRecipient = true;
+          // reset notifications in nav bar
+          this.resetMessages();
         });
       }
       
@@ -397,6 +393,6 @@ export class MessagesComponent implements OnInit {
     
   //reset the notifications at the nav bar on the top of the screen
     resetMessages() {
-      this.notificationService.setNotifications();
+      this.isStudent ? this.notificationService.getStudentNotifications() : this.notificationService.getTeacherNotifications();
     }
 }

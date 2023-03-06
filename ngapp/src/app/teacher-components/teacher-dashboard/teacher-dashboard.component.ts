@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ClassroomService } from "../../classroom.service";
 import { AuthenticationService } from "../../authentication.service";
-import { Observable } from "rxjs";
 import { Classroom } from "../../classroom";
 import { Router } from "@angular/router";
 import { TranslationService } from "../../translation.service";
@@ -22,7 +21,7 @@ export class TeacherDashboardComponent implements OnInit {
     public auth: AuthenticationService,
     private router: Router,
     public ts: TranslationService,
-    public ns: NotificationService,
+    public notificationService: NotificationService,
     private dialog: MatDialog,
     private profileService: ProfileService
   ) {}
@@ -47,7 +46,7 @@ export class TeacherDashboardComponent implements OnInit {
     }
 
     this.getClassrooms(userDetails._id);
-    this.ns.setNotifications();
+    this.notificationService.getTeacherNotifications();
   }
 
   /**
