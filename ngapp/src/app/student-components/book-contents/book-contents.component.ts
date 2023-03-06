@@ -46,7 +46,7 @@ export class BookContentsComponent implements OnInit {
     private messageService: MessageService,
     private profileService: ProfileService,
     private classroomService: ClassroomService,
-    private ns: NotificationService,
+    private notificationService: NotificationService,
     private recordingService: RecordingService,
     private dialog: MatDialog
   ) {}
@@ -70,8 +70,7 @@ export class BookContentsComponent implements OnInit {
     this.userId = userDetails._id;
     this.deleteMode = false;
     this.toBeDeleted = [];
-    this.ns.setNotifications();
-    this.ns.getStudentNotifications();
+    this.notificationService.getStudentNotifications();
 
     //see if student is enrolled in a class (if not the case, hide message feature in html)
     this.classroomService

@@ -21,7 +21,7 @@ export class TeacherDashboardComponent implements OnInit {
     public auth: AuthenticationService,
     private router: Router,
     public ts: TranslationService,
-    public ns: NotificationService,
+    public notificationService: NotificationService,
     private dialog: MatDialog,
     private profileService: ProfileService
   ) {}
@@ -46,8 +46,7 @@ export class TeacherDashboardComponent implements OnInit {
     }
 
     this.getClassrooms(userDetails._id);
-    this.ns.setNotifications();
-    this.ns.getTeacherNotifications();
+    this.notificationService.getTeacherNotifications();
   }
 
   /**

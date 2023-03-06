@@ -3,9 +3,6 @@ import { HostListener           } from '@angular/core';
 import { NavigationEnd          } from '@angular/router';
 import { Router                 } from '@angular/router';
 import { filter                 } from 'rxjs/operators';
-import { Story                  } from 'app/story';
-import { Message                } from 'app/message';
-import { Classroom              } from 'app/classroom';
 import { NotificationService, Notification    } from 'app/notification-service.service';
 import { TranslationService     } from 'app/translation.service';
 import { AuthenticationService  } from 'app/authentication.service';
@@ -21,12 +18,8 @@ export class AppComponent {
   title: string = 'An Scéalaí';
   checkVal: boolean = false;
   notificationsShown: boolean = false;
-  storiesForNotifications: Story[] = [];
-  messagesForNotifications: Message[] = [];  
-  teacherMessagesForNotifications: Map<Classroom, number> = new Map();
   wasInside: boolean = false;
   currentUser: string = '';
-  teacherMessagesSum: number = 0;
   currentLanguage: string = '';
   notifications: Notification[] = [];
   totalNumOfMessages: number = 0;
@@ -50,38 +43,28 @@ export class AppComponent {
     });
   }
 
-  // Set the page langauge
-  // Get list of stories that have notifications
+ 
+  /**
+   * Set the page language and get any notifications
+   */
   ngOnInit() {
     this.ts.initLanguage();
     this.currentLanguage = this.ts.getCurrentLanguage();
-    this.notificationSerivce.storyEmitter.subscribe( (res) => {
-      this.storiesForNotifications = res;
-    });
-
-    this.notificationSerivce.messageEmitter.subscribe( (res) => {
-      this.messagesForNotifications = res;
-    });
-
-    this.notificationSerivce.teacherMessageEmitter.subscribe( (res) => {
-      this.teacherMessagesForNotifications = res;
-      this.teacherMessagesSum = 0;
-      for (let entry of Array.from(this.teacherMessagesForNotifications.entries())) {
-        this.teacherMessagesSum += entry[1];
-      }
-    });
-
-    this.notificationSerivce.notificationEmitter.subscribe( (res) => {
+    // subscribe to message emitter
+    this.notificationSerivce.notificationEmitter.subscribe( (res: Notification[]) => {
       this.notifications = res;
+      // reset message counter to 0
       this.totalNumOfMessages = 0;
+      // calculate total number of notifictions
       this.notifications.forEach(entry => {
         entry.body.forEach(notification => {
-          notification.numOfMessages ? this.totalNumOfMessages += notification.numOfMessages : this.totalNumOfMessages++;
-        })
-      })
-    })
-  }
+          // for teachers, add number of messages per classroom, otherwise simply increase message counter
+          notification.numClassroomMessages ? this.totalNumOfMessages += notification.numClassroomMessages : this.totalNumOfMessages++;
+        });
+      });
+    });
 
+  }
 
   // Swap value of checkVal
   // if changed to false set notificationShown to false

@@ -32,14 +32,14 @@
         </div>
       </div>
 
-      <div
+      <!-- <div
         *ngIf="
           !checkVal &&
           storiesForNotifications &&
           storiesForNotifications.length > 0"
         class="notificationBtn menuNotificationBtn"
         (click)="changeCheck()">
-      </div>
+      </div> -->
     </div>
     <!-- links on the nav bar -->
     <div class="nav-links">
@@ -177,8 +177,8 @@
         <div *ngIf="notificationsShown && (notifications.length > 0)" class="optionsPopupOld notifcationPopup">
           <div *ngFor="let notificationEntry of notifications">
             <!-- notification type header -->
-            <div class="notificationsHeader">
-                {{notificationEntry.type}}
+            <div *ngIf="notificationEntry.body.length > 0" class="notificationsHeader">
+                {{notificationEntry.header}}
             </div>
             <!-- notification body -->
             <div class="notificationsBody">
@@ -193,7 +193,7 @@
                   </div>
                   <!-- teacher messages -->
                   <div *ngIf="notification.classroom" (click)="goToMessages(notification.classroom._id)">
-                    {{notification.classroom.title}} ({{notification.numOfMessages}})                 
+                    {{notification.classroom.title}} ({{notification.numClassroomMessages}})                 
                   </div>
               </div>
             </div>
