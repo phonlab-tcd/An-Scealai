@@ -6,7 +6,17 @@ import { Classroom } from './classroom';
 import { AuthenticationService } from './authentication.service';
 import { Message } from './message';
 import { ClassroomService } from './classroom.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
+
+export type TeacherMessage = {
+  classroom: Classroom;
+  numOfMessages: number;
+}
+
+export type Notification = {
+  type: string;
+  body: Story[] | Message[] | TeacherMessage[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +28,72 @@ export class NotificationService {
   storyEmitter = new EventEmitter();
   messageEmitter = new EventEmitter();
   teacherMessageEmitter = new EventEmitter();
+  notificationEmitter = new Subject<Notification[]>()
   
   constructor(private storyService : StoryService, private auth: AuthenticationService, private messageService: MessageService,
               private classroomService: ClassroomService) {
+  }
+
+  async getStudentNotifications() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    let notifications: Notification[] = [];
+
+    let storyRes = await firstValueFrom(this.storyService.getStoriesForLoggedInUser());
+    this.stories = storyRes.filter(story =>
+      story && 
+      story.feedback.seenByStudent === false &&
+      (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup)
+    );
+    let storyNotifications: Notification = {
+      type: 'feedback',
+      body: this.stories
+    }
+    notifications.push(storyNotifications);
+
+    let messageRes = await firstValueFrom(this.messageService.getMessagesForLoggedInUser());
+    this.messages = messageRes.filter(message => message.seenByRecipient === false);
+    let messageNotifications: Notification = {
+      type: 'message',
+      body: this.messages
+    }
+    notifications.push(messageNotifications);
+
+    this.notificationEmitter.next(notifications);
+  }
+
+  async getTeacherNotifications() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
+
+    let notifications: Notification[] = [];
+    
+    this.classroomService.getClassroomsForTeacher(userDetails._id).subscribe( (res) => {
+      //this.teacherMessages.clear();
+      let classrooms = res;
+      this.messageService.getMessagesForLoggedInUser().subscribe( (messages: Message[]) => {
+
+        let classNotifications: TeacherMessage[] = [];
+        for(let c of classrooms) {
+          let numberOfMessages = this.messageService.getNumberOfUnreadMessagesForClass(messages, c.studentIds);
+          if (numberOfMessages > 0) {
+            classNotifications.push({
+              classroom: c,
+              numOfMessages: numberOfMessages,
+            })
+          }
+        }
+        let classNotification: Notification = {
+          type: 'teacher message',
+          body: classNotifications
+        }
+        notifications.push(classNotification);
+        this.notificationEmitter.next(notifications);
+      });
+    });
+
+
   }
 
   /*

@@ -6,7 +6,7 @@ import { filter                 } from 'rxjs/operators';
 import { Story                  } from 'app/story';
 import { Message                } from 'app/message';
 import { Classroom              } from 'app/classroom';
-import { NotificationService    } from 'app/notification-service.service';
+import { NotificationService, Notification    } from 'app/notification-service.service';
 import { TranslationService     } from 'app/translation.service';
 import { AuthenticationService  } from 'app/authentication.service';
 
@@ -28,6 +28,8 @@ export class AppComponent {
   currentUser: string = '';
   teacherMessagesSum: number = 0;
   currentLanguage: string = '';
+  notifications: Notification[] = [];
+  totalNumOfMessages: number = 0;
 
   constructor(
     private _router: Router,
@@ -68,7 +70,18 @@ export class AppComponent {
         this.teacherMessagesSum += entry[1];
       }
     });
+
+    this.notificationSerivce.notificationEmitter.subscribe( (res) => {
+      this.notifications = res;
+      this.totalNumOfMessages = 0;
+      this.notifications.forEach(entry => {
+        entry.body.forEach(notification => {
+          notification.numOfMessages ? this.totalNumOfMessages += notification.numOfMessages : this.totalNumOfMessages++;
+        })
+      })
+    })
   }
+
 
   // Swap value of checkVal
   // if changed to false set notificationShown to false

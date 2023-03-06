@@ -47,6 +47,7 @@ export class TeacherDashboardComponent implements OnInit {
 
     this.getClassrooms(userDetails._id);
     this.ns.setNotifications();
+    this.ns.getTeacherNotifications();
   }
 
   /**

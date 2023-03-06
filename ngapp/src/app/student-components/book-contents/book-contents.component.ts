@@ -71,6 +71,7 @@ export class BookContentsComponent implements OnInit {
     this.deleteMode = false;
     this.toBeDeleted = [];
     this.ns.setNotifications();
+    this.ns.getStudentNotifications();
 
     //see if student is enrolled in a class (if not the case, hide message feature in html)
     this.classroomService

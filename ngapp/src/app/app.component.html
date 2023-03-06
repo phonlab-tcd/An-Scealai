@@ -165,81 +165,42 @@
             </button>
             <!-- notifications circle -->
             <div class="notificationBtn"
-              *ngIf="
-                auth.getUserDetails().role === 'STUDENT' &&
-                storiesForNotifications &&
-                storiesForNotifications.length > 0 &&
-                messagesForNotifications"
+              *ngIf="totalNumOfMessages > 0"
               (click)="showNotifications()">
-                {{storiesForNotifications.length + messagesForNotifications.length}}
-            </div>
-            <div class="notificationBtn"
-              *ngIf="
-                auth.getUserDetails().role === 'STUDENT' &&
-                storiesForNotifications.length == 0 &&
-                messagesForNotifications.length > 0"
-              (click)="showNotifications()">
-                {{messagesForNotifications.length}}
-            </div>
-            <div class="notificationBtn"
-              *ngIf="
-                auth.getUserDetails().role === 'TEACHER' &&
-                teacherMessagesForNotifications &&
-                teacherMessagesSum > 0"
-              (click)="showNotifications()">
-                {{teacherMessagesSum}}
+                {{totalNumOfMessages}}
             </div>
         </div>
       </div>
     </div>
-    <!-- notification container for STUDENTS if button clicked-->
-    <div *ngIf="
-      notificationsShown &&
-      (storiesForNotifications.length > 0 || messagesForNotifications.length > 0)"
-      class="optionsPopupOld notifcationPopup">
-        <div *ngIf="storiesForNotifications.length > 0"
-          class="notificationsHeader">
-            {{ts.l.new_feedback}}
-        </div>
-        <div class="notificationsBody">
-          <div *ngFor="let story of storiesForNotifications"
-            class="notificationCard"
-            (click)="goToStory(story._id)">
-              {{story.title}}
-          </div>
-        </div>
-        <div class="notificationsHeader"
-          *ngIf="
-            notificationsShown &&
-            messagesForNotifications.length > 0">
-              {{ts.l.new_messages}}
-        </div>
-        <div class="notificationsBody">
-          <div *ngFor="let message of messagesForNotifications"
-            class="notificationCard"
-            (click)="goToMessages(message.senderId)">
-              {{message.subject}}
-          </div>
-        </div>
-    </div>
-    <!-- notification container for TEACHER messages if button clicked -->
-    <div *ngIf="
-      notificationsShown &&
-      auth.isLoggedIn() &&
-      auth.getUserDetails().role === 'TEACHER'"
-      class="optionsPopupOld notificationPopup">
-        <div class="notificationsHeader">
-          {{ts.l.new_messages}}
-        </div>
-        <div class="notificationsBody"
-          *ngFor="let message of teacherMessagesForNotifications | keyvalue">
-            <div *ngIf="message.value > 0"
-              class="notificationCard"
-              (click)="goToMessages(message.key._id)">
-                {{message.key.title}} -- {{message.value}}
+
+        <!-- Notifications Dropdown -->
+        <div *ngIf="notificationsShown && (notifications.length > 0)" class="optionsPopupOld notifcationPopup">
+          <div *ngFor="let notificationEntry of notifications">
+            <!-- notification type header -->
+            <div class="notificationsHeader">
+                {{notificationEntry.type}}
             </div>
-        </div>
-    </div>
+            <!-- notification body -->
+            <div class="notificationsBody">
+              <div *ngFor="let notification of notificationEntry.body" class="notificationCard">
+                <!-- story feedback -->
+                  <div *ngIf="notification.title" (click)="goToStory(notification._id)">
+                    {{notification.title}}
+                  </div>
+                  <!-- student messages -->
+                  <div *ngIf="notification.subject" (click)="goToMessages(notification.senderId)">
+                    {{ notification.subject }}
+                  </div>
+                  <!-- teacher messages -->
+                  <div *ngIf="notification.classroom" (click)="goToMessages(notification.classroom._id)">
+                    {{notification.classroom.title}} ({{notification.numOfMessages}})                 
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
   </div>
   <!-- add component here given a specific route -->
   <div class="content">
