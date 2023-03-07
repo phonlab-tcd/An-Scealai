@@ -121,7 +121,7 @@ export class GrammarErrorTimeComponent implements OnInit {
         } else {
           // otherwise create new data object for that error
           let dict = {
-            label: this.ts.currentLanguage ? ERROR_INFO[errorName].nameGA : ERROR_INFO[errorName].nameEN, // Error name
+            label: this.ts.inIrish() ? ERROR_INFO[errorName].nameGA : ERROR_INFO[errorName].nameEN, // Error name
             data: this.createDateAndCountArray(timeData), // [{day1: count}, {day2: count}, ...] for each day in the date range
             borderColor: ERROR_INFO[errorName].color,
             backgroundColor: ERROR_INFO[errorName].color,
