@@ -1,76 +1,79 @@
 <!-- register with username and password -->
 <div class="formTitle">
-  {{ts.l.register}}
+  {{ ts.l.register }}
 </div>
-<br>
-<form (submit)="register()" class="formContainer" >
+<br />
+<form (submit)="register()" class="formContainer">
+  <!-- username input -->
   <div class="form-group">
-    <div class="formLabel"><label>{{ts.l.username}}</label></div>
-    <input
-        type="text"
-        class="form-control inputField {{usernameClass}}"
-        name="username"
-        [formControl]="usernameInput">
-    <div *ngFor="let usernameErrorTextKey of usernameErrorTextKeys" class="usernameErrorText">
-      {{ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}
+    <div class="formLabel">
+      <label>{{ ts.l.username }}</label>
+    </div>
+    <input type="text" class="form-control inputField {{ usernameClass }}" name="username" [formControl]="usernameInput" />
+    <div *ngFor="let usernameErrorTextKey of usernameErrorTextKeys" class="usernameErrorText" >
+      {{ ts.l[usernameErrorTextKey] ? ts.l[usernameErrorTextKey] : usernameErrorTextKey }}
     </div>
   </div>
+  <!-- email input -->
   <div class="form-group">
     <div class="formLabel">
       <label>
-        {{ts.l.email_address}}
+        {{ ts.l.email_address }}
       </label>
     </div>
-    <input 
-         type="text" 
-         class="form-control inputField"
-         name="email" 
-         placeholder="mise@gmail.com"
-         [(ngModel)]="credentials.email">
+    <input type="text" class="form-control inputField" name="email" placeholder="mise@gmail.com" [(ngModel)]="credentials.email" />
   </div>
+  <!-- password input -->
   <div class="form-group">
     <div class="formLabel">
       <label>
-        {{ts.l.create_password}}
+        {{ ts.l.create_password }}
       </label>
     </div>
-    <input
-        type="password"
-        class="form-control inputField" 
-        name="password"
-        [(ngModel)]="credentials.password">
+    <input type="password" class="form-control inputField" name="password" [(ngModel)]="credentials.password" />
   </div>
+  <!-- confiirm password input -->
   <div class="form-group">
     <div class="formLabel">
       <label>
-        {{ts.l.confirm_password}}
+        {{ ts.l.confirm_password }}
       </label>
     </div>
-    <input 
-         type="password" 
-         class="form-control inputField"
-         name="password" 
-         [(ngModel)]="passwordConfirm">
+    <input type="password" class="form-control inputField" name="password" [(ngModel)]="passwordConfirm" />
     <div *ngFor="let err of errorTextKeys" class="errorMessage">
       {{ ts.l[err] ? ts.l[err] : err }}
     </div>
   </div>
+  <!-- language selection -->
   <div class="form-group">
-    <div class="formLabel">{{ts.l.language}} :</div>
+    <div class="formLabel">{{ ts.l.language }} :</div>
     <div *ngIf="ts.inEnglish()" class="languageButtonContainer">
-      <div class="languageButton languageButtonSelected">{{ts.l.english}}</div>
-      <div class="languageButton" (click)="ts.setLanguage('ga')">{{ts.l.irish}}</div>
+      <div class="languageButton languageButtonSelected">
+        {{ ts.l.english }}
+      </div>
+      <div class="languageButton" (click)="ts.setLanguage('ga')">
+        {{ ts.l.irish }}
+      </div>
     </div>
     <div *ngIf="ts.inIrish()" class="languageButtonContainer">
-      <div class="languageButton" (click)="ts.setLanguage('en')">{{ts.l.english}}</div>
-      <div class="languageButton languageButtonSelected">{{ts.l.irish}}</div>
+      <div class="languageButton" (click)="ts.setLanguage('en')">
+        {{ ts.l.english }}
+      </div>
+      <div class="languageButton languageButtonSelected">
+        {{ ts.l.irish }}
+      </div>
     </div>
   </div>
+  <!-- terms and conditions -->
   <div class="form-group">
     <div class="termsOfUseContainer">
-      <div class="termsOfUseButton" (click)="toggleTerms()">*{{ts.l.agree_to_terms}}</div>
-      <div class="termsOfUseText" *ngIf="termsVisible">{{ts.l.terms_of_use}}</div>
+      <div class="termsOfUseButton" (click)="toggleTerms()">
+        *{{ ts.l.agree_to_terms }}
+      </div>
+      <div class="termsOfUseText" *ngIf="termsVisible">
+        {{ ts.l.terms_of_use }}
+      </div>
     </div>
   </div>
-  <button type="submit" class="btn loginBtn">{{ts.l.register}}</button>
+  <button type="submit" class="btn loginBtn">{{ ts.l.register }}</button>
 </form>
