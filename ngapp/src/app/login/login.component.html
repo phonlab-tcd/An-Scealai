@@ -2,27 +2,6 @@
   <div class="formTitle">{{ ts.l.sign_in }}</div>
   <br />
   <div class="formContainer">
-    <!-- FORGET PASSWORD POPUP -->
-    <div *ngIf="forgotPassword" class="{{ modalClass }} modalContainer">
-      <div class="modalContent">
-        <p class="modalText" style="justify-content: left" ;>
-          {{ ts.l.forgot_password_prose }}
-        </p>
-        <br />
-        <!-- RESET PASSWORD WITH PRE VERIFIED EMAIL ADDRESS -->
-        <div class="usernameErrorText">
-          {{ ts.l[errorMessageKey] ? ts.l[errrMessageKey] : errorMessageKey }}
-        </div>
-        <div>
-          <button class="modalBtn" (click)="sendNewPassword()">
-            {{ ts.l.send }}
-          </button>
-          <button class="modalBtn" (click)="hideModal()">
-            {{ ts.l.cancel }}
-          </button>
-        </div>
-      </div>
-    </div>
     <!-- LOGIN FORM -->
     <form (submit)="login()">
       <div class="form-group">
@@ -49,7 +28,7 @@
           name="password"
           [(ngModel)]="credentials.password"
         />
-        <div class="forgotPassword" (click)="forgotPassword = true; errorMessage = ''; showModal()" >
+        <div class="forgotPassword" (click)="forgotPassword = true; errorMessage = '';" >
           {{ ts.l.forgot_password }}
         </div>
         <br />

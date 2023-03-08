@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
 
   // variables for forgot password
   forgotPassword = false; // updated in HTML
-  modalClass: "hiddenFade" | "visibleFade";
   usernameForgotPassword: string;
   emailForgotPassword: string;
   errorMessageKey = "";
@@ -151,20 +150,6 @@ export class LoginComponent implements OnInit {
       },
       () => {}
     );
-  }
-
-  /**
-   * Show forgot password modal
-   */
-  showModal() {
-    this.modalClass = "visibleFade";
-  }
-
-  /**
-   * Hide forgot password modal
-   */
-  hideModal() {
-    this.modalClass = "hiddenFade";
   }
 
   /**

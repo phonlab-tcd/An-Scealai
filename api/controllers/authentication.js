@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const logger = require('../logger.js');
 
 const mail = require('../mail');
@@ -27,10 +28,9 @@ const validUsernameRegEx = /^[a-z0-9]+$/i;
  * Generate a new password for a given user
  * @param {Object} req query: Username, email, and reset password code
  * @param {Object} res object to return response
- * @return {Object} HTML for password reset message
+ * @return {Promise} HTML for password reset message
  */
 module.exports.generateNewPassword = async (req, res) => {
-
   if ( !req.query.username || !req.query.email || !req.query.code ) {
     return res.status(400).json('Please provide username, email and code in url params!');
   }
@@ -285,7 +285,7 @@ async function sendVerificationEmail(username, password, email, baseurl, languag
  * Set a user's status to Active when they click on the activation link
  * @param {Object} req query: username, email, verification code
  * @param {Object} res
- * @return {Object} Success or error message
+ * @return {Promise} Success or error message
  */
 module.exports.verify = async (req, res) => {
   if (!req.query.username) {
@@ -324,10 +324,10 @@ module.exports.verify = async (req, res) => {
 };
 
 /**
- * Verify older accounts in the DB that did not have email verification upon sign up
+ * Verify older accounts in the DB that did not have email verification upon registration
  * @param {Object} req query: username, email, password
  * @param {Object} res
- * @return {Object} Success or error message
+ * @return {Promise} Success or error message
  */
 module.exports.verifyOldAccount = async (req, res) => {
   try {
@@ -452,9 +452,9 @@ module.exports.verifyOldAccount = async (req, res) => {
 
 /**
  * Register new users
- * @param {Object} req body: username, email, password
+ * @param {Object} req body: username, email, password, baseurl
  * @param {Object} res
- * @return {Object} Success or error message
+ * @return {Promise} Success or error message
  */
 module.exports.register = async (req, res) => {
   logger.info(`Attempting to register ${req.body.username}`);
@@ -496,9 +496,7 @@ module.exports.register = async (req, res) => {
       logger.error('Mongo error. Error code: ' + err.code);
       if (err.code === 11000) {
         resObj.messageKeys.push('username_taken_msg');
-        return res
-            .status(400)
-            .json(resObj);
+        return res.status(400).json(resObj);
       }
     }
   }
@@ -526,12 +524,13 @@ module.exports.register = async (req, res) => {
 
 /**
  * Login users
- * @param {Object} req user: user data
+ * @param {Object} req user object
  * @param {Object} res
- * @return {Object} Success or error message
+ * @return {Object} generated JWT token or error messages
  */
 module.exports.login = function(req, res) {
-  // assume passport.authenticate('local') has succeeded
+  // assume passport.authenticate('local') has succeeded,
+  // which converts req.user to mongoose user object from front-end token
   const user = req.user;
   const resObj = {
     userStatus: null,
@@ -544,7 +543,7 @@ module.exports.login = function(req, res) {
     return res.status(400).json(resObj);
   }
 
-  // send error if user has not been validated
+  // send error if user has not been validated, set status to 'Pending'
   if (!user.validStatus()) {
     logger.error('User,' + user.username + 'has an invalid no status property');
     resObj.errors.push('Invalid status: ' + ( user.status ? user.status : undefined ));
@@ -563,9 +562,7 @@ module.exports.login = function(req, res) {
   } else if (user.status.match(activeRegEx)) {
     logger.info('User ' + user.username + ' authenticated and status is Active. Sending json web token.');
     resObj.token = user.generateJwt();
-    return res
-        .status(200)
-        .json(resObj);
+    return res.status(200).json(resObj);
   }
 
   // ELSE
