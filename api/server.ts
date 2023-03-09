@@ -1,9 +1,7 @@
 if(process.env.NODE_ENV==='prod') require('./keys/load');
 else require('./keys/dev/load');
 
-// Best to initialize the logger first
-const logger = require('./logger');
-
+const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -14,6 +12,8 @@ const passport = require('passport');
 const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
 const checkJwt = require('./utils/jwtAuthMw');
+const dbURL = require('./utils/dbUrl');
+const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 
 const storyRoute = require('./routes/story.route');
@@ -30,10 +30,7 @@ const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
 
-const dbURL = require('./utils/dbUrl');
-const jwtAuthMw = require('./utils/jwtAuthMw');
-
-// use this to test where uncaughtExceptions get logged
+/* use this to test where uncaughtExceptions get logged */
 // throw new Error('test error');
 
 mongoose.Promise = global.Promise;
@@ -99,7 +96,7 @@ app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
-app.use('/proxy',async (req,res,next)=>{
+app.use('/proxy', async (req,res,next)=>{
   function allowUrl(url) {
     const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie|https:\/\/cadhan.com\/api\/gaelspell\/1.0/;
     return !! allowedUrls.exec(url);
