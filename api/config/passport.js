@@ -6,13 +6,13 @@ const User = require('../models/user');
 mongoose.model('User');
 
 /**
- * Authenticate a user with their email and password
+ * Authenticate a user with their username and password
  * @param {string} username
  * @param {string} password
- * @param {string} cb
+ * @param {any} cb callback
  */
 function verify(username, password, cb) {
-  console.log(username);
+  console.log('Logging in: ' + username);
   User.findOne({username: username}, (err, user) => {
     if (err) {
       return cb(err);
@@ -36,11 +36,15 @@ function verify(username, password, cb) {
   });
 }
 
+// call the verify function to find user in the DB that matches the credentials
 passport.use(new LocalStrategy(verify));
 
+// save user id to session so it can be used in deseriaizeUser()
 passport.serializeUser((user, done)=>{
   done(null, user._id);
 });
+
+// get user object from the DB using the provided id
 passport.deserializeUser((id, done)=>{
   User.findById(id, (err, user)=>{
     done(err, user);

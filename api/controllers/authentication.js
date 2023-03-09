@@ -6,19 +6,9 @@ if (mail.couldNotCreate) {
   logger.error('Failed to create mail module in ./api/controllers/authentication.js');
 }
 
-// Used to generate confirmation code to confirm email address
-const jwt = require('jsonwebtoken');
 const path = require('path');
-
-const passport = require('passport');
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const User = mongoose.model('User');
-
-const sendJSONresponse = function(res, status, content) {
-  res.status(status);
-  res.json(content);
-};
-
 const pendingRegEx = /^Pending$/;
 const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
@@ -26,7 +16,7 @@ const validUsernameRegEx = /^[a-z0-9]+$/i;
 
 /**
  * Generate a new password for a given user
- * @param {Object} req query: Username, email, and reset password code
+ * @param {Object} req query: Username, email, and reset password code generated in user model
  * @param {Object} res object to return response
  * @return {Promise} HTML for password reset message
  */
@@ -80,7 +70,7 @@ module.exports.generateNewPassword = async (req, res) => {
  * Reset the password for a given user
  * @param {Object} req body: Username, baseUrl
  * @param {Object} res object to return response
- * @return {Object} Success or error message
+ * @return {Promise} Success or error message
  */
 module.exports.resetPassword = async (req, res) => {
   if ( !req.body.username ) {

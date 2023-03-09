@@ -145,7 +145,7 @@ userRoutes.route('/updatePassword/:id').post((req, res) => {
 });
 
 /**
- * Send user an email with randomly generated password and update user object
+ * Send user an email with randomly generated password and update user object => DEPRICATED?
  * @param {Object} req body: Classroom object
  * @return {Object} Success or error message
  */
