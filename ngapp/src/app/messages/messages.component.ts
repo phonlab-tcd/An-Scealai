@@ -26,14 +26,12 @@ export class MessagesComponent implements OnInit {
   //message variables
   createNewMessage: boolean = false;
   students : User[] = [];
-  receivedMessages: Message[] = [];
+  inboxMessages: Message[] = [];
   classroom : Classroom = new Classroom;
   messageSent: boolean = false;
-  studentId: string = '';
   teacherId: string = '';
   teacherName: string = '';
   isTeacher: Boolean = false;
-  isStudent: Boolean = false;
   name: string = '';
   showBody: boolean = false;
   messageContent: string = '';
@@ -41,25 +39,11 @@ export class MessagesComponent implements OnInit {
   totalNumberOfMessages: number = 0;
   deleteMode: Boolean = false;
   toBeDeleted: string[] = [];
-  isFromAmerica: boolean = false;
   lastClicked : string = '';
   newMessageText: string = '';
   newMessageSubject: string = '';
   newMessageRecipientId: string = '';
-  
-  //used for creating a new message
-  message: Message = {
-    _id: '',
-    subject: '',
-    date: new Date(),
-    senderId: '',
-    senderUsername: '',
-    recipientId: '',
-    text: '',
-    seenByRecipient: false,
-    audioId: ''
-  };
-  
+    
   //audio file variables
   audioSource : SafeUrl;
   feedbackText: string;
@@ -85,7 +69,7 @@ export class MessagesComponent implements OnInit {
   * Get message inbox
   * Set the date of the messages depending on the user's country
   */  
-  ngOnInit() {
+  async ngOnInit() {
     this.deleteMode = false;
     this.toBeDeleted = [];
     
@@ -96,35 +80,51 @@ export class MessagesComponent implements OnInit {
 
     if(userDetails.role === "TEACHER") {
       this.isTeacher = true;
-      this.getClassroom();
-      this.teacherId = this.auth.getUserDetails()._id;
+      this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+      this.getStudents();
     }
     if(userDetails.role === "STUDENT") {
-      this.studentId = this.auth.getUserDetails()._id;
-      this.classroomService.getClassroomOfStudent(this.studentId).subscribe((res: Classroom) => {
-        this.classroom = res;
-        this.teacherId = this.classroom.teacherId;
-        this.getMessages();
-        
-        this.userService.getUserById(this.teacherId).subscribe( (res) => {
-          this.teacherName = res.username;
-        });
+      this.isTeacher = false;
+      this.classroom = await firstValueFrom(this.classroomService.getClassroomOfStudent(userDetails._id));
+      this.userService.getUserById(this.classroom.teacherId).subscribe( (res) => {
+        this.teacherName = res.username;
       });
-      this.isStudent = true;
     }
-    
-    // get date format for user 
-    this.profileService.getForUser(userDetails._id).subscribe((res) => {
-      let p = res.profile;
-      let country = p.country;
-      if(country == "United States of America" || country == "America" || country == "USA" || country == "United States") {
-        this.isFromAmerica = true;
-      }
-      else {
-        this.isFromAmerica = false;
-      }
-    });
+
+    this.teacherId = this.classroom.teacherId;
+    this.getMessages();
   }
+
+    /*
+  * Loop through student ids in classroom object to get student objects
+  */
+    getStudents() {
+      this.students = [];
+      for(let id of this.classroom.studentIds) {
+        this.userService.getUserById(id).subscribe((res : User) => {
+          this.students.push(res);
+          this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+        });
+      }
+    }
+
+  /*
+  * Get messages form database for logged in user
+  */
+    getMessages() {  
+      this.messageService.getMessagesForLoggedInUser().subscribe( (res: Message[]) =>{
+        this.inboxMessages = [];
+        if(this.isTeacher) {
+          this.inboxMessages = res.filter(message => this.classroom.studentIds.includes(message.senderId))
+        }
+        else {
+          this.inboxMessages = res;
+        }
+        this.inboxMessages.sort((a, b) => (a.date > b.date) ? -1 : 1)
+        this.numberOfUnread = this.messageService.getNumberOfUnreadMessages(this.inboxMessages);
+        this.totalNumberOfMessages = this.inboxMessages.length; 
+      });
+    }
   
   /*
   * Set remaining message fields that were not filled with the form 
@@ -145,7 +145,7 @@ export class MessagesComponent implements OnInit {
       let recipients = [];
       let sentMessageIds = [];
       
-      if (this.isStudent) {
+      if (!this.isTeacher) {
         recipients = [this.classroom.teacherId]  // recipient is the teacher
       }
       else {
@@ -176,73 +176,7 @@ export class MessagesComponent implements OnInit {
     }
   }
   
-  /*
-  * Get messages form database for logged in user
-  */
-  getMessages() {  
-    this.messageService.getMessagesForLoggedInUser().subscribe( (res: Message[]) =>{
-      this.receivedMessages = [];
-      if(this.isTeacher) {
-        let messages = res;
-        for(let m of messages) {
-          for(let s of this.classroom.studentIds) {
-            if(s === m.senderId) {
-              this.receivedMessages.push(m);
-            }
-          }  
-        }
-      }
-      else {
-        this.receivedMessages = res;
-      }
-      this.receivedMessages.sort((a, b) => (a.date > b.date) ? -1 : 1)
-      this.numberOfUnread = this.messageService.getNumberOfUnreadMessages(this.receivedMessages);
-      this.totalNumberOfMessages = this.receivedMessages.length; 
-    });
-    
-  }
-  
-  /*
-  * Get classroom id from route parameters
-  */
-    getClassroomId(): Promise<any> {
-      return new Promise((resolve, reject) => {
-        this.route.params.subscribe(
-          params => {
-            resolve(params);
-        });
-      });
-    }
 
-  /*
-  * Get classroom id with function and call getClassroom with classroom service
-  * call function to get list of students
-  * Get the messages for the particular classroom by calling getMessages function
-  */
-    getClassroom() {
-      this.getClassroomId().then((params) => {
-        let id: string = params.id.toString();
-        this.classroomService.getClassroom(id).subscribe((res : Classroom) => {
-          this.classroom = res;
-          this.getMessages();
-          this.getStudents();
-        });
-      });
-    }
-
-  /*
-  * Loop through student ids in classroom object to get student objects
-  */
-    getStudents() {
-      this.students = [];
-      for(let id of this.classroom.studentIds) {
-        this.userService.getUserById(id).subscribe((res : User) => {
-          this.students.push(res);
-          this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
-        });
-      }
-    }
-    
   /*
   * Rerout the user to homepage depending on student/teacher
   */  
@@ -387,6 +321,6 @@ export class MessagesComponent implements OnInit {
     
   //reset the notifications at the nav bar on the top of the screen
     resetMessages() {
-      this.isStudent ? this.notificationService.getStudentNotifications() : this.notificationService.getTeacherNotifications();
+      this.isTeacher ? this.notificationService.getTeacherNotifications(): this.notificationService.getStudentNotifications(); 
     }
 }

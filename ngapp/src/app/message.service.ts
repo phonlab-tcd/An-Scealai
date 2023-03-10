@@ -73,13 +73,7 @@ export class MessageService {
   * Return the number of messages that have not yet been read
   */
   getNumberOfUnreadMessages(messages: Message[]): number {
-    let sum: number = 0;
-    for(let m of messages) {
-      if(!m.seenByRecipient) {
-        sum++;
-      }
-    }
-    return sum;
+    return messages.filter(message => !message.seenByRecipient).length
   }
   
   /*

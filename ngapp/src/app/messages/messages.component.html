@@ -15,8 +15,8 @@
     <!-- View messages -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
       <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div style="padding-left:25px;"> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
-      <div *ngIf="receivedMessages.length > 0" class="messageList">
-        <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message._id"> 
+      <div *ngIf="inboxMessages.length > 0" class="messageList">
+        <div class="resultCard" *ngFor="let message of inboxMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message._id"> 
         <!--  <div class="messageEntries"> -->
             <div class="dotNewMessage">
               <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message._id)">
@@ -24,12 +24,11 @@
               <div> {{message.senderUsername}} </div>
             </div>
             <div class="subject">{{message.subject}} </div>
-            <div *ngIf="!isFromAmerica" class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
-            <div *ngIf="isFromAmerica" class="date">{{message.date | date:'MM/dd/yyyy h:mm aa' }} </div> 
+            <div class="date">{{message.date | date:'dd/MM/yyyy h:mm aa' }} </div>
         <!--  </div> -->
         </div>
       </div>
-      <div *ngIf="receivedMessages.length == 0" class="messageList"> {{ts.l.no_messages}}
+      <div *ngIf="inboxMessages.length == 0" class="messageList"> {{ts.l.no_messages}}
       </div>
       <div class="messageReadContents">
         <div class="readMessageBody" [innerHtml]="messageContent"></div>
@@ -52,7 +51,7 @@
               <option *ngFor="let student of students" [ngValue]="student._id"> {{student.username}} </option>
             </select>
             
-            <div *ngIf="isStudent" class="studentSendTo">
+            <div *ngIf="!isTeacher" class="studentSendTo">
               <div> {{teacherName}} </div>
             </div>
           </div>
