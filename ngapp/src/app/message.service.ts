@@ -25,23 +25,21 @@ export class MessageService {
   /*
   * save a new message to the database
   */
-  saveMessage(message) {
+  saveMessage(message, recipientId): Observable<any> {
+    console.log(message);
     
     const messageObj = {
-      id: message.id,
       date: message.date,
       subject: message.subject,
       senderId: message.senderId,
       senderUsername: message.senderUsername,
-      recipientId: message.recipientId,
+      recipientId: recipientId,
       text: message.text,
       seenByRecipient: message.seenByRecipient,
     };
     
-    this.http.post(this.baseUrl + 'create', messageObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);
-      });
+    this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);
+    return this.http.post(this.baseUrl + "create", messageObj);
   }
   
   // Return messages from the database for the logged in user

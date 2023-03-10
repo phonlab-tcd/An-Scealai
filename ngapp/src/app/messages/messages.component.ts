@@ -6,7 +6,6 @@ import { UserService } from '../user.service';
 import { TranslationService } from '../translation.service';
 import { ClassroomService } from 'app/classroom.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { v4 as uuid } from 'uuid';
 import { AuthenticationService } from '../authentication.service';
 import { MessageService } from '../message.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -15,6 +14,7 @@ import { NotificationService } from '../notification-service.service';
 import { RecordAudioService } from '../services/record-audio.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RecordingDialogComponent } from '../dialogs/recording-dialog/recording-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -43,18 +43,13 @@ export class MessagesComponent implements OnInit {
   toBeDeleted: string[] = [];
   isFromAmerica: boolean = false;
   lastClicked : string = '';
-  config = {
-    toolbar :  [
-      [ 'bold', 'italic', 'underline', 'strike' ],
-      [{ 'list': 'ordered' }, { 'list': 'bullet'}],
-      ['link'],
-    ]
-  }
+  newMessageText: string = '';
+  newMessageSubject: string = '';
+  newMessageRecipientId: string = '';
   
   //used for creating a new message
   message: Message = {
     _id: '',
-    id: '',
     subject: '',
     date: new Date(),
     senderId: '',
@@ -136,43 +131,42 @@ export class MessagesComponent implements OnInit {
   * Use message service to send message to the DB
   * Add audio file to DB if audio taken
   */
-  sendMessage() {
-    //Add new message to DB
-    if(this.message.text) {
-      this.message.id = uuid();
-      this.message.date = new Date();
-      this.message.seenByRecipient = false;
-      this.message.senderUsername = this.auth.getUserDetails().username;
-      let ids: string[] = [];
+  async sendMessage() {
+    if(this.newMessageText && this.newMessageSubject) {
+      let newMessage = {
+        subject: this.newMessageSubject,
+        text: this.newMessageText,
+        date: new Date(),
+        seenByRecipient: false,
+        senderUsername: this.auth.getUserDetails().username,
+        senderId: this.auth.getUserDetails()._id,
+      }
+
+      let recipients = [];
+      let sentMessageIds = [];
       
-      if(this.isTeacher) {
-        this.message.senderId = this.teacherId;
-        if(this.message.recipientId === this.classroom._id) {
-          for(let id of this.classroom.studentIds) {
-            this.message.recipientId = id;
-            this.message.id = uuid();
-            ids.push(this.message.id);
-            this.messageService.saveMessage(this.message);
-          }
+      if (this.isStudent) {
+        recipients = [this.classroom.teacherId]  // recipient is the teacher
+      }
+      else {
+        if (this.newMessageRecipientId === this.classroom._id) {
+          recipients = this.classroom.studentIds;  // recipients are all students
         }
         else {
-          this.messageService.saveMessage(this.message);
-          ids.push(this.message.id);
+          recipients = [this.newMessageRecipientId]  // recipient is selected student
         }
       }
       
-      if(this.isStudent) {
-        this.message.senderId = this.studentId;
-        this.message.recipientId = this.teacherId;
-        this.messageService.saveMessage(this.message);
-        ids.push(this.message.id);
+      // for each recipient, save a message for them in the DB
+      for (const id of recipients) {
+        let sentMessage = await firstValueFrom(this.messageService.saveMessage(newMessage, id));
+        sentMessageIds.push(sentMessage._id);
       }
-      //Add audio to DB if taken
+
+      // Add audio to each sent message if recorded
       if(this.audioSource) {
-        for(let id of ids) {
-          this.messageService.getMessageById(id).subscribe((res) => {
-            this.recordAudioService.saveAudioMessage(res._id);
-          });
+        for(let id of sentMessageIds) {
+          this.recordAudioService.saveAudioMessage(id);
         }
       }
       this.createNewMessage = false;
@@ -274,7 +268,7 @@ export class MessagesComponent implements OnInit {
   */
   showMessageBody(message: Message) {
     if(message) {
-      let id = "message-" + message.id;
+      let id = "message-" + message._id;
       let messageElement = document.getElementById(id);
       
       if(this.lastClicked != '') {

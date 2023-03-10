@@ -20,7 +20,7 @@ const newBucket = ()=>new mongodb.GridFSBucket(db(), {bucketName: 'audioMessage'
 messageRoutes.route('/create').post(function(req, res) {
   const message = new Message(req.body);
   message.save().then((message) => {
-    res.json({message});
+    res.json(message);
   })
       .catch((err) => {
         res.status(400).send('unable to save to DB');

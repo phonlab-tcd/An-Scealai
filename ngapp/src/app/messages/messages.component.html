@@ -16,10 +16,10 @@
     <div class="messagesContainer" *ngIf="!createNewMessage">
       <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div style="padding-left:25px;"> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
       <div *ngIf="receivedMessages.length > 0" class="messageList">
-        <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message.id"> 
+        <div class="resultCard" *ngFor="let message of receivedMessages" (click)="showMessageBody(message);" [attr.id]="'message-' + message._id"> 
         <!--  <div class="messageEntries"> -->
             <div class="dotNewMessage">
-              <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message.id)">
+              <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(message._id)">
               <div *ngIf="!message.seenByRecipient"><i class='fas fa-circle dot'></i></div>
               <div> {{message.senderUsername}} </div>
             </div>
@@ -47,7 +47,7 @@
           <!-- recipient field -->
           <div class="sendTo">
             <label> {{ts.l.send_to}} </label>
-            <select *ngIf="isTeacher" name="recipient" [(ngModel)]="message.recipientId" required>
+            <select *ngIf="isTeacher" name="recipient" [(ngModel)]="newMessageRecipientId" required>
               <option [ngValue]="classroom._id"> {{ts.l.all_class_members}} </option>
               <option *ngFor="let student of students" [ngValue]="student._id"> {{student.username}} </option>
             </select>
@@ -59,12 +59,11 @@
           <!-- subject field -->
           <div class="subjectNewMessage">
             <label > {{ts.l.subject}} </label>
-            <input class="subjectNewMessage" type="text" name="subject" id="subject" [(ngModel)]="message.subject" required>
+            <input class="subjectNewMessage" type="text" name="subject" id="subject" [(ngModel)]="newMessageSubject" required>
           </div>
           <!-- message body -->
           <div class="newMessageBody">
-            <!--<quill-editor class="textFieldNewMessage" placeholder="" name="text" [modules]="config" [(ngModel)]="message.text" (input)="messageSent = false" required> </quill-editor> -->
-            <textarea class="textFieldNewMessage" name="text" value="{{messageText}}" [(ngModel)]="message.text" (input)="messageSent = false" required></textarea>
+            <textarea class="textFieldNewMessage" name="text" value="{{messageText}}" [(ngModel)]="newMessageText" (input)="messageSent = false" required></textarea>
           </div>
           <!-- buttons -->
           <div class="bottomButtons">

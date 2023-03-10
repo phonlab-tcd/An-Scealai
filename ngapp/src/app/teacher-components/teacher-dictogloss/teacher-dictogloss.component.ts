@@ -75,7 +75,7 @@ export class TeacherDictoglossComponent implements OnInit {
 
       let message: Message = {
         _id: "", //Check these
-        id: "",
+        // id: "",
         subject: "New Dictogloss",
         date: new Date(),
         senderId: this.auth.getUserDetails()._id, //Teacher ID
@@ -88,7 +88,7 @@ export class TeacherDictoglossComponent implements OnInit {
 
       for (let id of this.sendTo) {
         message.recipientId = id;
-        this.messageService.saveMessage(message);
+        this.messageService.saveMessage(message, id);
       }
       this.goToDashboard();
     }

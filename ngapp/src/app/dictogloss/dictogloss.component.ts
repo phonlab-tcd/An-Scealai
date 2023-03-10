@@ -214,7 +214,7 @@ export class DictoglossComponent implements OnInit {
   sendDictoglossReport() {
     let message: Message = {
       _id: "", //Check these
-      id: uuid(), // Needs to be deprecated
+      // id: uuid(), // Needs to be deprecated
       subject:
         '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
       date: new Date(),
@@ -234,7 +234,7 @@ export class DictoglossComponent implements OnInit {
       audioId: "",
     };
 
-    this.messageService.saveMessage(message);
+    this.messageService.saveMessage(message, this.teacherId);
   }
 
   /**
