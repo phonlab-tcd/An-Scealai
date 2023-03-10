@@ -26,8 +26,6 @@ export class MessageService {
   * save a new message to the database
   */
   saveMessage(message, recipientId): Observable<any> {
-    console.log(message);
-    
     const messageObj = {
       date: message.date,
       subject: message.subject,

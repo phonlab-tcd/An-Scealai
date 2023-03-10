@@ -100,7 +100,7 @@ messageRoutes.route('/updateSenderUsername/:id').post(function(req, res) {
  * @return {Object} Success or error message
  */
 messageRoutes.route('/delete/:id').get(function(req, res) {
-  Message.findOneAndRemove({'id': req.params.id}, function(err, message) {
+  Message.findOneAndRemove({'_id': req.params.id}, function(err, message) {
     if (err) res.json(err);
     else res.json('Successfully removed');
   });
@@ -216,7 +216,7 @@ messageRoutes.route('/messageAudio/:id').get((req, res) => {
  * @return {Object} Success or error message
  */
 messageRoutes.route('/deleteMessageAudio/:id').get((req, res) => {
-  Message.findOne({id: req.params.id}, (err, message) => {
+  Message.findById(req.params.id, (err, message) => {
     if (err) return res.json(err);
     if (message) {
       if (message.audioId) {
