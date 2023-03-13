@@ -211,16 +211,12 @@ export class DictoglossComponent implements OnInit {
   /**
    * Send a message to the teacher with the student's stats
    */
-  sendDictoglossReport() {
-    let message: Message = {
-      _id: "", //Check these
-      // id: uuid(), // Needs to be deprecated
-      subject:
-        '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
+  async sendDictoglossReport() {
+    let message = {
+      subject: '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
       date: new Date(),
       senderId: this.studentId,
-      senderUsername: this.auth.getUserDetails().username, //Student Username
-      recipientId: this.teacherId, //Teacher Id
+      senderUsername: this.auth.getUserDetails().username,
       text:
         "The final time was: \t" +
         this.displayTime(this.totalTime) +
@@ -231,10 +227,9 @@ export class DictoglossComponent implements OnInit {
         "Incorrect guesses:\t" +
         this.wrongCount,
       seenByRecipient: false,
-      audioId: "",
     };
 
-    this.messageService.saveMessage(message, this.teacherId);
+    await firstValueFrom( this.messageService.saveMessage(message, this.teacherId) );
   }
 
   /**

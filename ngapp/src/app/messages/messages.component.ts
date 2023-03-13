@@ -125,6 +125,7 @@ export class MessagesComponent implements OnInit {
       this.inboxMessages.sort((a, b) => (a.date > b.date ? -1 : 1));
       this.numberOfUnread = this.messageService.getNumberOfUnreadMessages( this.inboxMessages );
       this.totalNumberOfMessages = this.inboxMessages.length;
+      console.log(this.inboxMessages)
     });
   }
 
@@ -161,9 +162,7 @@ export class MessagesComponent implements OnInit {
 
       // for each recipient, save a message for them in the DB
       for (const id of recipients) {
-        let sentMessage = await firstValueFrom(
-          this.messageService.saveMessage(newMessage, id)
-        );
+        let sentMessage = await firstValueFrom( this.messageService.saveMessage(newMessage, id) );
         sentMessageIds.push(sentMessage._id);
       }
 
