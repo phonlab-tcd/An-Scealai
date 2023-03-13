@@ -37,7 +37,7 @@ export class MessagesComponent implements OnInit {
   deleteMode: Boolean = false;
   toBeDeleted: string[] = [];
   dictoglossMessage: string = "Go to dictogloss";
-  dictoglossText: string = "";
+  dictoglossContent: string = "";
 
   // create new message variables
   createNewMessage: boolean = false;
@@ -87,9 +87,9 @@ export class MessagesComponent implements OnInit {
     }
     if (userDetails.role === "STUDENT") {
       this.classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
-      // get teacher username to display for new message
+      // get teacher username to display as recipient for sending a new message
       this.userService.getUserById(this.classroom.teacherId).subscribe((res) => {
-        this.teacherName = res.username; 
+        this.teacherName = res.username;
       });
     }
 
@@ -125,8 +125,71 @@ export class MessagesComponent implements OnInit {
       this.inboxMessages.sort((a, b) => (a.date > b.date ? -1 : 1));
       this.numberOfUnread = this.messageService.getNumberOfUnreadMessages( this.inboxMessages );
       this.totalNumberOfMessages = this.inboxMessages.length;
-      console.log(this.inboxMessages)
     });
+  }
+
+  /*
+   * Set the parameters for showing the body of an inbox message
+   * Set the CSS class for a clicked message
+   * Update nav bar notifications at the top of the screen
+   */
+  showMessageBody(message: Message) {
+    if (message) {
+      let id = message._id;
+      let messageElement = document.getElementById(id);
+
+      // remove css highlighting for currently highlighted message
+      if (this.lastClickedMessageId) {
+        document.getElementById(this.lastClickedMessageId).classList.remove("clickedresultCard");
+      }
+      this.lastClickedMessageId = id;
+      // add css highlighting to the newly clicked message
+      messageElement.classList.add("clickedresultCard");
+
+      // if the message is for a Dictogloss, show pre-written content,
+      // otherwise display regular message body
+      if (message.subject === "Dictogloss") {
+        this.messageText = this.dictoglossMessage;
+        this.dictoglossContent = message.text;
+      } else {
+        this.messageText = message.text;
+      }
+
+      // reset unread message notifications
+      if (!message.seenByRecipient) {
+        this.numberOfUnread--;
+        this.messageService.markAsOpened(message._id).subscribe(() => {
+          message.seenByRecipient = true;
+          // reset notifications in nav bar
+          this.resetMessageNotifications();
+        });
+      }
+
+      // load audio message if it exists
+      if (message.audioId) {
+        this.getMessageAudio(message._id);
+        this.showAudio = true;
+      } else {
+        this.showAudio = false;
+      }
+    }
+  }
+
+  /*
+   * Get audio message from the database using the message service and message id
+   */
+  async getMessageAudio(id: string) {
+    let audioRes = await firstValueFrom( this.messageService.getMessageAudio(id) );
+    if (audioRes) {
+      this.audioSource = this.sanitizer.bypassSecurityTrustUrl( URL.createObjectURL(audioRes) );
+    }
+  }
+
+  //reset the notifications at the nav bar on the top of the screen
+  resetMessageNotifications() {
+    this.isTeacher
+      ? this.notificationService.getTeacherNotifications()
+      : this.notificationService.getStudentNotifications();
   }
 
   /*
@@ -160,10 +223,10 @@ export class MessagesComponent implements OnInit {
         }
       }
 
-      // for each recipient, save a message for them in the DB
+      // for each recipient, save a message for them in the DB (i.e. just one person or each student in a class)
       for (const id of recipients) {
         let sentMessage = await firstValueFrom( this.messageService.saveMessage(newMessage, id) );
-        sentMessageIds.push(sentMessage._id);
+        sentMessageIds.push(sentMessage._id); // these ids are used for saving any audio to the messages
       }
 
       // Add audio to each sent message if recorded
@@ -178,89 +241,22 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  /*
-   * If creating a new message, hide the view
-   * Otherwise re-route the user to homepage depending on role
+  /**
+   * Clear out audio source if it exists and close new messsage
    */
-  goBack() {
-    if (this.createNewMessage) {
-      this.createNewMessage = false;
+  resetForm() {
+    if (this.audioSource) {
       this.audioSource = null;
-    } else {
-      if (this.isTeacher) {
-        this.router.navigateByUrl(`teacher/classroom/${this.classroom._id}`);
-      } else {
-        this.router.navigateByUrl("contents");
-      }
     }
-  }
-
-  /*
-   * Set the parameters for showing the body of an inbox message
-   * Set the CSS class for a clicked message
-   * Update nav bar notifications at the top of the screen
-   */
-  showMessageBody(message: Message) {
-    if (message) {
-      let id = message._id;
-      let messageElement = document.getElementById(id);
-
-      // remove css highlighting for currently highlighted message
-      if (this.lastClickedMessageId) {
-        document .getElementById(this.lastClickedMessageId) .classList.remove("clickedresultCard");
-      }
-      this.lastClickedMessageId = id;
-      // add css highlighting to the newly clicked message
-      messageElement.classList.add("clickedresultCard");
-
-      // if the message is for a Dictogloss, show pre-written content,
-      // otherwise display regular message body
-      if (message.subject === "Dictogloss") {
-        this.messageText = this.dictoglossMessage;
-        this.dictoglossText = message.text;
-      } else {
-        this.messageText = message.text;
-      }
-
-      // reset unread message notifications
-      if (!message.seenByRecipient) {
-        this.numberOfUnread--;
-        this.messageService.markAsOpened(message._id).subscribe(() => {
-          message.seenByRecipient = true;
-          // reset notifications in nav bar
-          this.resetMessageNotifications();
-        });
-      }
-
-      // load audio message if exists
-      if (message.audioId) {
-        this.getMessageAudio(message._id);
-        this.showAudio = true;
-      } else {
-        this.showAudio = false;
-      }
-    }
+    this.createNewMessage = false;
   }
 
   /**
    * Re-route the user to the Dictogloss component
-   * @param passage dictogloss content
    */
   sendToDictogloss() {
-    if (this.dictoglossText) {
-      this.router.navigateByUrl("/dictogloss", { state: { text: this.dictoglossText }, });
-    }
-  }
-
-  /*
-   * get audio message from the database using the message service and message id
-   */
-  async getMessageAudio(id: string) {
-    let audioRes = await firstValueFrom(
-      this.messageService.getMessageAudio(id)
-    );
-    if (audioRes) {
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl( URL.createObjectURL(audioRes) );
+    if (this.dictoglossContent) {
+      this.router.navigateByUrl("/dictogloss", { state: { text: this.dictoglossContent }, });
     }
   }
 
@@ -283,16 +279,6 @@ export class MessagesComponent implements OnInit {
         this.audioSource = res;
       }
     });
-  }
-
-  /**
-   * clear out audio source if it exists and close new messsage
-   */
-  resetForm() {
-    if (this.audioSource) {
-      this.audioSource = null;
-    }
-    this.createNewMessage = false;
   }
 
   /* delete messages added to the to be deleted array
@@ -324,10 +310,20 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  //reset the notifications at the nav bar on the top of the screen
-  resetMessageNotifications() {
-    this.isTeacher
-      ? this.notificationService.getTeacherNotifications()
-      : this.notificationService.getStudentNotifications();
+  /*
+   * If creating a new message, hide the view
+   * Otherwise re-route the user to homepage depending on role
+   */
+  goBack() {
+    if (this.createNewMessage) {
+      this.createNewMessage = false;
+      this.audioSource = null;
+    } else {
+      if (this.isTeacher) {
+        this.router.navigateByUrl(`teacher/classroom/${this.classroom._id}`);
+      } else {
+        this.router.navigateByUrl("contents");
+      }
+    }
   }
 }
