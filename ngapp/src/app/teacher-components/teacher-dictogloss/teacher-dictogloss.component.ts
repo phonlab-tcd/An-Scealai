@@ -63,7 +63,7 @@ export class TeacherDictoglossComponent implements OnInit {
   /**
    * Send Dictogloss message to all students on the list
    */
-  sendDictogloss() {
+  async sendDictogloss() {
     if (
       this.sendTo.length > 0 &&
       this.newDictogloss.controls["passage"].value !== ""
@@ -73,22 +73,17 @@ export class TeacherDictoglossComponent implements OnInit {
       console.log(passage);
       console.log(this.sendTo);
 
-      let message: Message = {
-        _id: "", //Check these
-        id: "",
-        subject: "New Dictogloss",
+      let message = {
+        subject: "Dictogloss",
         date: new Date(),
         senderId: this.auth.getUserDetails()._id, //Teacher ID
         senderUsername: this.auth.getUserDetails().username, //Teacher Username
-        recipientId: "",
         text: passage,
         seenByRecipient: false,
-        audioId: "",
       };
 
       for (let id of this.sendTo) {
-        message.recipientId = id;
-        this.messageService.saveMessage(message);
+        await firstValueFrom(this.messageService.saveMessage(message, id));
       }
       this.goToDashboard();
     }

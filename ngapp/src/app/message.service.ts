@@ -25,23 +25,19 @@ export class MessageService {
   /*
   * save a new message to the database
   */
-  saveMessage(message) {
-    
+  saveMessage(message, recipientId): Observable<any> {
     const messageObj = {
-      id: message.id,
       date: message.date,
       subject: message.subject,
       senderId: message.senderId,
       senderUsername: message.senderUsername,
-      recipientId: message.recipientId,
+      recipientId: recipientId,
       text: message.text,
       seenByRecipient: message.seenByRecipient,
     };
     
-    this.http.post(this.baseUrl + 'create', messageObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);
-      });
+    this.engagement.addEventForLoggedInUser(EventType["CREATE-MESSAGE"], messageObj);
+    return this.http.post(this.baseUrl + "create", messageObj);
   }
   
   // Return messages from the database for the logged in user
@@ -75,13 +71,7 @@ export class MessageService {
   * Return the number of messages that have not yet been read
   */
   getNumberOfUnreadMessages(messages: Message[]): number {
-    let sum: number = 0;
-    for(let m of messages) {
-      if(!m.seenByRecipient) {
-        sum++;
-      }
-    }
-    return sum;
+    return messages.filter(message => !message.seenByRecipient).length
   }
   
   /*

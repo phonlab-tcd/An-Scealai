@@ -1,6 +1,5 @@
 export class Message {
     _id: string;
-    id: string;
     subject: string;
     date: Date;
     senderId: string;
