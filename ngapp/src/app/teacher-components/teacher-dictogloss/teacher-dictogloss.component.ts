@@ -74,7 +74,7 @@ export class TeacherDictoglossComponent implements OnInit {
       console.log(this.sendTo);
 
       let message = {
-        subject: "New Dictogloss",
+        subject: "Dictogloss",
         date: new Date(),
         senderId: this.auth.getUserDetails()._id, //Teacher ID
         senderUsername: this.auth.getUserDetails().username, //Teacher Username

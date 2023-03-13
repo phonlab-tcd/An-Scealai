@@ -12,7 +12,7 @@
       </div>
     </div>
      
-    <!-- View messages -->
+    <!-- Messages Inbox -->
     <div class="messagesContainer" *ngIf="!createNewMessage">
       <div class="messagesContainerHeader"> <div>{{ts.l.from}}</div> <div style="padding-left:25px;"> {{ts.l.subject}} </div> <div> {{ts.l.date}} </div> </div>
       <div *ngIf="inboxMessages.length > 0" class="messageList">
@@ -30,7 +30,14 @@
       </div>
       <div *ngIf="inboxMessages.length == 0" class="messageList"> {{ts.l.no_messages}}</div>
       <div class="messageReadContents">
-        <div class="readMessageBody" [innerHtml]="messageText"></div>
+        <!-- normal message body -->
+        <div *ngIf="messageText !== dictoglossMessage ; else dictoglossBody" class="readMessageBody" >{{messageText}}</div>
+        <!-- dictogloss message body -->
+        <ng-template #dictoglossBody>
+          <div class="readMessageBody">{{messageText}}:
+            <button class="headerIconBtn" (click)="sendToDictogloss()">here</button>
+          </div>
+        </ng-template>
         <div *ngIf="showAudio">
           <audio [src]="audioSource" id="audio" controls #audioTag></audio>
         </div>

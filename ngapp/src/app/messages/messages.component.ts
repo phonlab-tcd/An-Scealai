@@ -36,6 +36,8 @@ export class MessagesComponent implements OnInit {
   lastClickedMessageId: string = "";
   deleteMode: Boolean = false;
   toBeDeleted: string[] = [];
+  dictoglossMessage: string = "Go to dictogloss";
+  dictoglossText: string = "";
 
   // create new message variables
   createNewMessage: boolean = false;
@@ -87,7 +89,7 @@ export class MessagesComponent implements OnInit {
       this.classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
       // get teacher username to display for new message
       this.userService.getUserById(this.classroom.teacherId).subscribe((res) => {
-        this.teacherName = res.username;
+        this.teacherName = res.username; 
       });
     }
 
@@ -104,7 +106,8 @@ export class MessagesComponent implements OnInit {
     for (let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe((res: User) => {
         this.students.push(res);
-        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()) ); });
+        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()) );
+      });
     }
   }
 
@@ -211,7 +214,14 @@ export class MessagesComponent implements OnInit {
       // add css highlighting to the newly clicked message
       messageElement.classList.add("clickedresultCard");
 
-      this.messageText = message.text;
+      // if the message is for a Dictogloss, show pre-written content,
+      // otherwise display regular message body
+      if (message.subject === "Dictogloss") {
+        this.messageText = this.dictoglossMessage;
+        this.dictoglossText = message.text;
+      } else {
+        this.messageText = message.text;
+      }
 
       // reset unread message notifications
       if (!message.seenByRecipient) {
@@ -230,11 +240,6 @@ export class MessagesComponent implements OnInit {
       } else {
         this.showAudio = false;
       }
-
-      // if the message is for a Dictogloss, re-route the user
-      if (message.subject === "New Dictogloss") {
-        this.sendToDictogloss(message.text);
-      }
     }
   }
 
@@ -242,8 +247,10 @@ export class MessagesComponent implements OnInit {
    * Re-route the user to the Dictogloss component
    * @param passage dictogloss content
    */
-  sendToDictogloss(passage: string) {
-    this.router.navigateByUrl("/dictogloss", { state: { text: passage } });
+  sendToDictogloss() {
+    if (this.dictoglossText) {
+      this.router.navigateByUrl("/dictogloss", { state: { text: this.dictoglossText }, });
+    }
   }
 
   /*
@@ -300,7 +307,7 @@ export class MessagesComponent implements OnInit {
         this.messageService.deleteMessage(id).subscribe((_) => {});
       }
       this.lastClickedMessageId = "";
-      this.ngOnInit();
+      await this.ngOnInit();
     } else if (this.deleteMode && this.toBeDeleted.length === 0) {
       this.deleteMode = false;
     } else {
