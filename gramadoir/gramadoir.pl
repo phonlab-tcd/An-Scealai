@@ -1,8 +1,8 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -wT
 use strict;
 use warnings;
 use utf8;
-use CGI qw/:standard/;
+use CGI::Fast qw/:standard/;
 use DateTime;
 use JSON qw( to_json );
 use Encode qw( encode decode FB_CROAK LEAVE_SRC );
