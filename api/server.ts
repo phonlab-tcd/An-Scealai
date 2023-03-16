@@ -84,7 +84,7 @@ if(process.env.FUDGE) {
       );
   });
 }
-app.use('/gramadoir/:teanga',
+app.use('/gramadoir/:teanga/:teacs',
 				expressQueue({activeLimit: 5, queuedLimit: -1}),
 				async function(req,res,next) {
 					const url = 'https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl';
@@ -98,7 +98,7 @@ app.use('/gramadoir/:teanga',
 						method: "POST",
 						headers: {"content-type": "application/x-www-form-urlencoded" },
 						};
-					const got = await axios.post(url,request(req.query["teacs"]),options).then(ok=>({ok}),err=>({err}));
+					const got = await axios.post(url,request(req.params["teacs"]),options).then(ok=>({ok}),err=>({err}));
 					if("ok" in got) {
             return res.json(got.ok.data);
           }
@@ -106,6 +106,7 @@ app.use('/gramadoir/:teanga',
           return res.json(got.err.data);
           function request(text) {
             const teanga=req.params["teanga"] === "en" ? "en" : "ga";
+            console.log(text);
             return  `teacs=${encodeURIComponent(text)}&teanga=${teanga}`;
           }
 				});

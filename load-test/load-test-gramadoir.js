@@ -1,7 +1,7 @@
 const axios = require("axios");
 
-n = parseInt(process.env.NUM_REQUESTS) || 500;
-const abairUrl = "http://localhost:4000/gramadoir/en/dia%20duit%20a%20cara"; // currently served version
+n = parseInt(process.env.NUM_REQUESTS) || 50;
+const abairUrl = "http://localhost:4000/gramadoir/en/mo%20madra"; // currently served version
 //const abairUrl = "https://www.abair.ie/cgi-bin/api-gramadoir-1.0.pl";
 //const abairUrl = "https://maddiecomtois-psychic-system-4jg569xq4jqc974-80.preview.app.github.dev/cgi-bin/gramadoir.pl";
 
