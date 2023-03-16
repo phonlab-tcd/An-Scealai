@@ -29,6 +29,8 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
+const expressQueue = require('express-queue');
+const qs = require('qs');
 
 /* use this to test where uncaughtExceptions get logged */
 // throw new Error('test error');
@@ -95,6 +97,23 @@ app.use('/messages', messageRoute);
 app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
+
+app.use('/gramadoir/:text',
+				expressQueue({activeLimit: 2, queuedLimit: -1}),
+				async function(req,res,next) {
+					const url = 'https://www.phoneticsrv3.lcs.tcd.ie/cgi-bin/api-gramadoir-1.0.pl'
+					const params = {
+						teacs: req.query["text"]
+						teanga: "en"
+					};
+					const options = {
+						method: "POST",
+						headers: {"content-type": "application/x-www-form-urlencoded" },
+						data: qs.stringify(params),
+						url,
+						};
+					await axios.post()
+				});
 
 app.use('/proxy', async (req,res,next)=>{
   function allowUrl(url) {
