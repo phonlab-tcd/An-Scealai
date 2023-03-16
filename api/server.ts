@@ -84,6 +84,31 @@ if(process.env.FUDGE) {
       );
   });
 }
+app.use('/gramadoir/:teanga',
+				expressQueue({activeLimit: 5, queuedLimit: -1}),
+				async function(req,res,next) {
+					const url = 'https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl';
+          console.log(req.params);
+          console.log(req.query);
+					const params = {
+						teacs: req.query["teacs"],
+						teanga: req.params["teanga"] == "en" ? "en" : "ga",
+					};
+					const options = {
+						method: "POST",
+						headers: {"content-type": "application/x-www-form-urlencoded" },
+						};
+					const got = await axios.post(url,request(req.query["teacs"]),options).then(ok=>({ok}),err=>({err}));
+					if("ok" in got) {
+            return res.json(got.ok.data);
+          }
+          console.error(got.err.data);
+          return res.json(got.err.data);
+          function request(text) {
+            const teanga=req.params["teanga"] === "en" ? "en" : "ga";
+            return  `teacs=${encodeURIComponent(text)}&teanga=${teanga}`;
+          }
+				});
 
 app.use(checkJwt);
 app.use('/story', storyRoute);
@@ -98,22 +123,7 @@ app.use('/gramadoir', gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
-app.use('/gramadoir/:text',
-				expressQueue({activeLimit: 2, queuedLimit: -1}),
-				async function(req,res,next) {
-					const url = 'https://www.phoneticsrv3.lcs.tcd.ie/cgi-bin/api-gramadoir-1.0.pl'
-					const params = {
-						teacs: req.query["text"]
-						teanga: "en"
-					};
-					const options = {
-						method: "POST",
-						headers: {"content-type": "application/x-www-form-urlencoded" },
-						data: qs.stringify(params),
-						url,
-						};
-					await axios.post()
-				});
+
 
 app.use('/proxy', async (req,res,next)=>{
   function allowUrl(url) {
