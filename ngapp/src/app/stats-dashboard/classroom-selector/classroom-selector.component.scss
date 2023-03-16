@@ -6,12 +6,10 @@
 
 .classroom-card {
     padding: 15px;
-    border: 1px solid grey;
 }
 
 .classroom-card:hover {
     cursor: pointer;
-    background: rgb(236, 236, 236);
 }
 
 .selectorHeader {
@@ -48,4 +46,8 @@
   padding-top: 10px;
   padding-bottom: 5px;
   align-self: center;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #fff; 
 }

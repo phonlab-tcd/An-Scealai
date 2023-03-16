@@ -1,5 +1,15 @@
 $corner-button-width: 10rem;
 
+.content {
+  width: 90%;
+  margin-left: 5%;
+  -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+  -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
+  box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+  border-radius: 5px 5px 5px 5px;
+  border: solid 2px #827662b8;
+}
+
 .textContainerSynth {
   border: 1px solid #261500a2;
 }
@@ -85,6 +95,7 @@ $corner-button-width: 10rem;
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
+    float:right;
 }
 
 .playAudioBtn:hover {
@@ -102,6 +113,7 @@ $corner-button-width: 10rem;
   padding: 4px;
   padding-left: 10px;
   padding-right: 10px;
+  float: right;
 }
 
 .recordingBtn:hover {
@@ -119,6 +131,7 @@ $corner-button-width: 10rem;
   padding: 4px;
   padding-left: 8px;
   padding-right: 8px;
+  float: right;
 }
 
 .recognisedSpeechContainer {
@@ -132,7 +145,7 @@ $corner-button-width: 10rem;
 }
 
 .audioPlayer {
-  width: 100%;
+  width: 25%;
   height: 35px;
 }
 
@@ -193,62 +206,6 @@ $corner-button-width: 10rem;
   border-top: 0;
   margin-left: -10px;
   margin-top: -10px;
-}
-
-/**
- * =======================
- * ASR Loading Dot 
- * =======================
- */
-.dot-flashing {
-  position: relative;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: var(--scealai-green);
-  color: var(--scealai-green);
-  margin-left: 20px;
-  animation: dotFlashing 1s infinite linear alternate;
-  animation-delay: .5s;
-}
-
-.dot-flashing::before, .dot-flashing::after {
-  content: '';
-  display: inline-block;
-  position: absolute;
-  top: 0;
-}
-
-.dot-flashing::before {
-  left: -15px;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: var(--scealai-green);
-  color: var(--scealai-green);
-  animation: dotFlashing 1s infinite alternate;
-  animation-delay: 0s;
-}
-
-.dot-flashing::after {
-  left: 15px;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: var(--scealai-green);
-  color: var(--scealai-green);
-  animation: dotFlashing 1s infinite alternate;
-  animation-delay: 1s;
-}
-
-@keyframes dotFlashing {
-  0% {
-    background-color: var(--scealai-green);
-  }
-  50%,
-  100% {
-    background-color: #d1e6d6;
-  }
 }
 
 .blink {

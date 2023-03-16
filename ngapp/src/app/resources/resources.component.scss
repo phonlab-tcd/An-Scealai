@@ -1,5 +1,6 @@
 .container {
     padding-bottom: 20px;
+    width: 100%;
 }
 
 .headerTitle {
@@ -22,7 +23,7 @@
 .panelDescription {
   font-size : 15pt;
   font-weight: bold;
-  padding-top: 70px;
+  justify-content: center;
 }
 
 .panelFlex {

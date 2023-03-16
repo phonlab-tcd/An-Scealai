@@ -30,6 +30,7 @@ export class WordCountsComponent implements OnInit {
   
   private loadWordChart() {    
     if (this.wordCountChart) { this.wordCountChart.destroy(); }
+    if (!this.wordCountData) return;
     
     let canvasElem = document.getElementById('word-count-chart') as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
@@ -47,14 +48,15 @@ export class WordCountsComponent implements OnInit {
         },
         options: {
           scales: {
-            yAxes: [{
+            y: {
+                beginAtZero: true,
                 display: true,
                 stacked: true,
                 ticks: {
-                    beginAtZero: true,
+                    // beginAtZero: true,
                     stepSize: 40
                 }
-            }]
+            }
           },
           responsive: true
         }

@@ -1,0 +1,84 @@
+.contents {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.classTitle {
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; 
+}
+
+.sectionTitle {
+  text-align: left;
+  margin-left: 5%;
+  font-weight: bold;
+  padding-bottom: 10px;
+  padding-top: 20px;
+}
+
+mat-card {
+  width: 90%;
+  margin-left: 5%;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.classBody {
+  max-height: 25vh;
+}
+
+.classCard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  color: white;
+  font-size: 14pt;
+  background-color: var(--scealai-med-brown);
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.deleteX:hover {
+  color: var(--orange-text);
+  background-color: var(--scealai-med-brown-hover);
+  transition: color, background-color, 0.5s;
+  cursor: pointer;
+}
+
+.checkBoxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin-left: 5%;
+  margin-right: 5%;
+  gap: 1rem;
+}
+
+input:hover {
+  cursor: pointer;
+}
+
+.saveBtn {
+  text-align: right; 
+  margin-right: 5%;
+  padding-top: 20px;
+}
+
+
+@media (max-width:550px) {
+    .classHeader {
+        font-size: 10pt;
+    }
+
+    .headerIconBtn {
+        font-size: 10pt;
+    }
+}

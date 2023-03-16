@@ -1,4 +1,4 @@
-<div class="dashboard" *ngIf="!dialogRef">
+<mat-card class="dashboard" *ngIf="!dialogRef">
     <div class="dashboard-header">
         <h3 class="dashboard-title">{{ts.l.statistics_dashboard}}</h3>
         <button *ngIf="userRole == 'TEACHER'" mat-stroked-button (click)="openClassroomSelector()">
@@ -33,19 +33,6 @@
                 </mat-card-content>
             </ng-template>
         </mat-card>
-        <!-- Grammar Pie Chart -->
-        <mat-card class="stats-card">
-            <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
-                <mat-card-header class="stats-card-header">
-                    <mat-card-title>{{ts.l.grammar_errors}}</mat-card-title>
-                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
-                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
-                </mat-card-header>
-                <mat-card-content>
-                    <app-grammar-pie-chart [errorCounts]="grammarErrorCounts"></app-grammar-pie-chart>
-                </mat-card-content>
-            </ng-template>
-        </mat-card>
         <!-- Dictionary Lookups -->
         <mat-card class="stats-card">
             <ng-template #dictionaryLookupsTemplate [ngIf]="!dialogRef">
@@ -59,5 +46,31 @@
                 </mat-card-content>
             </ng-template>
         </mat-card>
+        <!-- Grammar Pie Chart -->
+        <mat-card class="stats-card">
+            <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.grammar_errors}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarPieChartTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-grammar-pie-chart [errorCounts]="grammarErrorCounts"></app-grammar-pie-chart>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
+        <!-- Grammar Error Time Series -->
+        <mat-card class="stats-card">
+            <ng-template #grammarErrorTimeTemplate [ngIf]="!dialogRef">
+                <mat-card-header class="stats-card-header">
+                    <mat-card-title>{{ts.l.grammar_errors_over_time}}</mat-card-title>
+                    <i *ngIf="!dialogRef" class="fa fa-expand" aria-hidden="true" (click)="openModal(grammarErrorTimeTemplate)"></i>
+                    <i *ngIf="dialogRef" class="fa fa-compress" aria-hidden="true" (click)="dialogRef.close()"></i>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-grammar-error-time [grammarErrorTimeCounts]="grammarErrorTimeCounts"></app-grammar-error-time>
+                </mat-card-content>
+            </ng-template>
+        </mat-card>
     </div>
-</div>
+</mat-card>

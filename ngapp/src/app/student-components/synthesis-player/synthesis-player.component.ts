@@ -121,4 +121,11 @@ export class SynthesisPlayerComponent implements OnInit {
   goToFastSynthesiser() {
     this.router.navigateByUrl('/synthesis/' + this.storyId);
   }
+
+  stopSynthesis() {
+    this.synthItems.map(s=>{
+      s.audioUrl = undefined;
+      s.dispose();
+    })
+  }
 }

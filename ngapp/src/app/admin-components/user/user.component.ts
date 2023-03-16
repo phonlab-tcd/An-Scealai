@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Story } from '../../story';
 import { StoryService } from '../../story.service';
-import { StatsService } from '../../stats.service';
 import { MessageService } from '../../message.service';
 import { ProfileService } from '../../profile.service';
 import { UserService } from '../../user.service';
@@ -32,7 +31,6 @@ export class UserComponent implements OnInit {
               private classroomService: ClassroomService,
               private engagement: EngagementService,
               private ts: TranslationService,
-              private statsService: StatsService,
               private messageService: MessageService,
               private profileService: ProfileService,
               private userService: UserService,
@@ -186,8 +184,6 @@ export class UserComponent implements OnInit {
         }
       });
       
-      this.statsService.deleteStats(this.user._id).subscribe( () => {});
-      
       this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
         for(let story of res) {
           this.recordingService.deleteStoryRecordingAudio(story._id).subscribe(() => {});
@@ -195,21 +191,15 @@ export class UserComponent implements OnInit {
         }
       });
     
-      this.storyService.deleteAllStories(this.user.username).subscribe( () => {});
+      this.storyService.deleteAllStories(this.user._id).subscribe( () => {});
     }
     if(this.user.role === "TEACHER") {
-      if(this.classrooms) {
-        for(let classroom of this.classrooms) {
-          this.statsService.deleteStatsForClassroom(classroom._id).subscribe( () => {});
-        }
-        
-      }
       this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( () => {});  
     }
     
     this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});  
     this.profileService.deleteProfile(this.user._id).subscribe( () => {});
-    this.userService.deleteUser(this.user.username).subscribe( () => {});
+    this.userService.deleteUser(this.user._id).subscribe( () => {});
     
     this.router.navigateByUrl('admin/find-user');
     

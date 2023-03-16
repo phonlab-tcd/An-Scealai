@@ -1,313 +1,342 @@
-<!-- Display the written story along with edit options -->
-<div class="bookContainer">
-
-    <!-- MODAL -->
-    <div class="{{modalClass}} modalContainer">
-      <div class="modalContent" *ngIf="story">
-        <div class="modalText">
-          {{ts.l.save_changes_made_to}} <b>{{story?.title}}</b>?
-        </div>
-
-        <div *ngIf="registrationError" class="errorMessage">
-          {{errorText}}
-        </div>
-
-        <div>
-          <button class="modalBtn" (click)="hideModal();">
-            {{ts.l.cancel}}
-          </button>
-          <button class="modalBtn" (click)="saveModal()">
-            {{ts.l.save}}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="bookHeader">
-      <div class="headerUpper">
-
-        <!-- BACK BUTTON TO LIST OF STUDENT'S STORIES -->
-        <div routerLink="/contents" class="myStoriesBtn">
-          <i class="fa fa-chevron-left backArrow"></i>
-          {{ts.l.contents}}
-        </div>
-
-        <!-- STORY TITLE -->
-        <p style="margin-right: 3em; margin-left: 3em; overflow: auto;"
-          [ngStyle]=titleStyle()
-          data-cy=title>
-          {{story?.title ?? '...'}}
-          <span *ngIf="!storySaved">*</span>
-        </p>
-
-        <!-- SAVE ICON  -->
-        <div class="saveIcon">
-          <div *ngIf="storySaved" class="savedIcon">
-            {{ts.l.saved}} <i class="fas fa-check"></i>
-          </div>
-          <div
-            *ngIf="!storySaved"
-            class="savedIcon"
-            >
-              {{ts.l.saving}}
-              <i
-                class="fas fa-save"
-                >
-              </i>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="optionsBtnContainer" (click)="toggleOptions();">
-
-      <div class="optionsBtn">
-        <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
-        <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+<div class="dashboardContainer">
+  <!-- MODAL POPUP IF STORY NOT SAVED -->
+  <div class="{{ modalClass }} modalContainer">
+    <div class="modalContent" *ngIf="story">
+      <div class="modalText">
+        {{ ts.l.save_changes_made_to }} <b>{{ story?.title }}</b
+        >?
       </div>
 
-      <!-- EDIT STORY DETAILS -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" [routerLink]="['/story-details', story._id]">
-        {{ts.l.edit_title_or_dialect}}
-        <i class="fas fa-pencil-alt optionsBtnIcon"></i>
-      </div>
-      
-      <!-- SPEECH TO TEXT-->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle=true; speakStory()">
-        {{ts.l.dictation}}
-         <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span> <!-- Google icon, index.html-->
-         <button *ngIf="isRecording" class="notRecordingBtn blink"><i class="fas fa-stop-circle"></i></button>
+      <div *ngIf="registrationError" class="errorMessage">
+        {{ errorText }}
       </div>
 
-      <!-- DOWNLOAD -->
-      <div 
-          *ngIf="showOptions"
-          style="display: flex;"
-          (click)="dontToggle=true">
-        <button 
-          (click)=downloadStory()
-          style="text-decoration: none;"
-          class="optionsBtn optionsPopupBtn"
-          target="_blank"
-          href="{{downloadStoryUrl()}}">
-          {{ts.l.download}}
-          <i class="fas fa-download optionsBtnIcon"></i>
-        </button>
-      </div>
-      <!-- FEEDBACK -->
-      <div
-        *ngIf="showOptions"
-        class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; getFeedback()">
-          {{ts.l.feedback}}
-        <i class="fas fa-comment-dots optionsBtnIcon"></i>
-        <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
-      </div>
-
-      <!-- DICTIONARY -->
-      <div
-        *ngIf="showOptions"
-        class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; this.dictionaryVisible = true;">
-          {{ts.l.dictionary}}
-        <i class="fas fa-book optionsBtnIcon"></i>
-      </div>
-
-      <!-- AUDIO CHECK -->
-      <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; goToSynthesis()">
-        {{ts.l.audio_check}}
-        <i class="fas fa-volume-up optionsBtnIcon"></i>
-      </div>
-
-      <!-- INLINE GRAMMAR CHECK -->
-      <div
-        style="display: flex;"
-        *ngIf="showOptions"
-        (click)="this.dontToggle=true;">
-        <span
-          class="optionsBtn optionsPopupBtn"
-          (click)="toggleGrammarTags();">
-            {{ toggleGrammarButton() }}
-            <i class="fas fa-spell-check optionsBtnIcon"></i>
-        </span>
-        <span
-          [hidden]="!quillHighlightService.showingTags"
-          (click)="grammarSettingsHidden = !grammarSettingsHidden"
-          class="settingsIcon">
-            ⚙
-        </span>
-      </div>
-
-      <!-- POPOUT GRAMMAR CHECK -->
-      <!--
-      <div *ngIf="showOptions"
-           class="optionsBtn optionsPopupBtn"
-           (click)="handleGrammarCheckerOptionClick();">
-        {{ts.l.grammar_check}}
-        <i class="fas fa-spell-check optionsBtnIcon"></i>
-      </div>
-      -->
-
-      <!-- RECORDINGS -->
-      <div *ngIf="showOptions" [hidden]="story.text && story.text.length === 0" class="optionsBtn optionsPopupBtn"
-        (click)="this.dontToggle=true; goToRecording()">
-        {{ts.l.recordings}}
-        <i class="fas fa-microphone optionsBtnIcon"></i>
-      </div>
-    </div>
-
-
-    <!-- story contents -->
-    <div class="storyContainer" *ngIf="story">
-      <!-- display story before grammar checked (i.e. writing mode)-->
       <div>
-          <div 
-            *ngIf="feedbackVisible"
-            class="feedbackHeader">
-            <div>
-                {{ts.l.feedback}}
-            </div>
-            <div class="closeFeedbackBtn" (click)="closeFeedback()">
-              <i class="fa fa-times"></i>
-            </div>
-          </div>
-          <textarea
-            *ngIf="feedbackVisible"
-            class="textField feedbackTextareaAudio"
-            placeholder="{{ts.l.no_feedback_provided}}"
-            readonly value="{{story?.feedback.text}}">
-          </textarea>
-          <audio
-            *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
-            [src]="audioSource"
-            id="audio" controls #audioTag class="audioPlayer">
-          </audio>
-
-          <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-          <span #quillHeightSpan [ngStyle]="quillEditorStyle">
-            <quill-editor
-              [modules]=quillToolbar
-              placeholder=""
-              [preserveWhitespace]=true
-              [debounceTime]=1500
-              [(ngModel)]=story.htmlText
-              (onContentChanged)=onContentChanged($event)
-              (onEditorCreated)=onEditorCreated($event)
-              >
-            </quill-editor>
-          </span>
-      </div>
-      
-      <!-- Word Count -->
-      <div style="display: flex; align-items: center; padding-bottom: 6px; padding-left: 8px; padding-top: 0; margin-top: 0;">
-        <span> {{ts.l.word_count}}: {{wordCount}} </span>
-      </div>
-
-      <!-- SELECTED GRAMMAR SUGGESTION -->
-      <div
-        style="background-color: #8FCAFF"
-        [hidden]="!quillHighlightService.showingTags || grammarLoading"
-        [innerHTML]=selectedGrammarSuggestion()>
-      </div>
-      <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !quillHighlightService.showingTags">
-        <span class="dictionaryContainer">
-          <div class="dictionaryHeader">
-              <h5>
-                {{  ts.message('grammar_checker_settings') }}
-              </h5>
-              <div class="closeDictionaryBtn"
-                (click)="grammarSettingsHidden = true;">
-                  <i class="fa fa-times"></i>
-              </div>
-          </div>
-        </span>
-        <div *ngFor="let recipient of (currentGrammarErrorTypes | keyvalue)" style="margin:2px;">
-          <input
-              [(ngModel)]="grammarTagFilter[recipient.key]"
-              (ngModelChange)="grammarCheckBoxEvent(recipient.key, $event)"
-              type="checkbox">
-            {{ ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] ?
-               ReadableGramadoirRuleIds[recipient.key][ts.l.iso_code] :
-               recipient.key | lowercase}} ({{recipient.value}})
-        </div> 
-        <div style="margin: 2px;">
-          <input 
-            [(ngModel)]="quillHighlightService.showLeathanCaol"
-            (ngModelChange)="leathanCaolCheckBox($event)"
-            type="checkbox">
-          {{ ts.message('broad_slender_agreement') }}
-        </div>
-        <div style="margin: 2px;">
-          <input 
-            [(ngModel)]="quillHighlightService.showGenitive"
-            (ngModelChange)="genitiveCheckBox($event)"
-            type="checkbox">
-          {{ ts.message('genitive') }}
-        </div>
-        <button
-          (click)="setAllCheckBoxes(false)">
-          {{ ts.message('uncheck_all') }}
+        <button class="modalBtn" (click)="hideModal()">
+          {{ ts.l.cancel }}
         </button>
-        <button
-          (click)="setAllCheckBoxes(true)">
-          {{ ts.message('check_all') }}
+        <button class="modalBtn" (click)="saveModal()">
+          {{ ts.l.save }}
         </button>
       </div>
+    </div>
+  </div>
+
+                                                                                            <!-- CONTAINER HEADER -->
+  <div class="bookHeader">
+      <!-- BACK BUTTON -->
+      <div routerLink="/contents" class="myStoriesBtn" (click)="synthesisPlayer.stopSynthesis()">
+        <i class="fa fa-chevron-left backArrow"></i>
+        {{ ts.l.contents }}
+      </div>
+
+      <!-- STORY TITLE -->
+      <p
+        style="margin-right: 3em; margin-left: 3em; overflow: auto; font-size: 20px;"
+        [ngStyle]="titleStyle()"
+        data-cy="title"
+      >
+        {{ story?.title ?? "..." }}
+        <span *ngIf="!storySaved">*</span>
+        <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">{{ts.l.dashboard_prompts}}</span>
+      </p>
+
+      <!-- SAVE ICON  -->
+      <div class="saveIcon">
+        <div *ngIf="storySaved" class="savedIcon">
+          {{ ts.l.saved }} <i class="fas fa-check"></i>
+        </div>
+        <div *ngIf="!storySaved" class="savedIcon">
+          {{ ts.l.saving }}
+          <i class="fas fa-save"> </i>
+        </div>
+      </div>
+ 
+  </div>
+
+                                                                                            <!-- STORY OPTIONS TOOLBAR-->
+  <div class="optionsBtnContainer" (click)="toggleOptions()">
+    <div class="optionsBtn">
+      <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+      <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+    </div>
+
+    <!-- EDIT STORY DETAILS -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="this.dontToggle = true; editStoryTitle()"
+    >
+      {{ ts.l.edit_title_or_dialect }}
+      <i class="fas fa-pencil-alt optionsBtnIcon"></i>
+    </div>
+
+    <!-- SPEECH TO TEXT-->
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; speakStory()" [ngClass]="{disableDiv: isTranscribing}">
+      {{ ts.l.speak }}
+      <!-- Google icon, index.html-->
+      <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon">speech_to_text</span>
+      <button *ngIf="isRecording && !isTranscribing" class="notRecordingBtn blink">
+        <i class="fas fa-stop-circle"></i>
+      </button>
+      <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div *ngIf="showOptions" style="display: flex" (click)="dontToggle = true">
+      <button
+        (click)="downloadStory()"
+        style="text-decoration: none"
+        class="optionsBtn optionsPopupBtn"
+        target="_blank"
+        href="{{ downloadStoryUrl() }}"
+      >
+        {{ ts.l.download }}
+        <i class="fas fa-download optionsBtnIcon"></i>
+      </button>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="this.dontToggle = true; getFeedback()"
+    >
+      {{ ts.l.feedback }}
+      <i class="fas fa-comment-dots optionsBtnIcon"></i>
+      <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
     </div>
 
     <!-- DICTIONARY -->
-    <div class="dictionaryContainer dictionaryHeight" *ngIf="dictionaryVisible">
-      <div class="dictionaryHeader">
-          <h5>
-            {{ts.l.dictionary}}
-          </h5>
-          <div class="closeDictionaryBtn"
-            (click)="dictionaryVisible = false;">
-              <i class="fa fa-times"></i>
-          </div>
-      </div>
-      <div class="dictionarySubHeader">
-        <div class="dictionaryName"
-             (click)="selectTeanglann = true;
-                      selectExternalLinks = false; 
-                      selectedDictionary = true;">
-          Teanglann
-        </div> |
-        <div class="dictionaryName"
-             (click)="selectExternalLinks = true; 
-                      selectTeanglann = false;">
-          {{ts.l.external_links}}
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible"
+    >
+      {{ ts.l.dictionary }}
+      <i class="fas fa-book optionsBtnIcon"></i>
+    </div>
+
+    <!-- AUDIO CHECK -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="this.dontToggle = true; goToSynthesis()"
+    >
+      {{ ts.l.audio_check }}
+      <i class="fas fa-volume-up optionsBtnIcon"></i>
+    </div>
+
+    <!-- INLINE GRAMMAR CHECK -->
+    <div
+      style="display: flex"
+      *ngIf="showOptions"
+      (click)="this.dontToggle = true"
+    >
+      <span class="optionsBtn optionsPopupBtn" (click)="toggleGrammarTags()">
+        {{ toggleGrammarButton() }}
+        <i class="fas fa-spell-check optionsBtnIcon"></i>
+      </span>
+      <span
+        [hidden]="!showErrorTags"
+        (click)="grammarSettingsHidden = !grammarSettingsHidden"
+        class="settingsIcon"
+      >
+        ⚙
+      </span>
+    </div>
+
+    <!-- RECORDINGS -->
+    <div
+      *ngIf="showOptions"
+      [hidden]="story.text && story.text.length === 0"
+      class="optionsBtn optionsPopupBtn"
+      (click)="this.dontToggle = true; goToRecording()"
+    >
+      {{ ts.l.recordings }}
+      <i class="fas fa-microphone optionsBtnIcon"></i>
+    </div>
+  </div>
+
+                                                                                           <!-- STORY CONTENTS -->
+  <div class="storyContainer" *ngIf="story">
+    <!-- display story before grammar checked (i.e. writing mode)-->
+    <div class="writingContainer">
+      <div *ngIf="feedbackVisible" class="feedbackHeader">
+        <div>
+          {{ ts.l.feedback }}
+        </div>
+        <div class="closeFeedbackBtn" (click)="closeFeedback()">
+          <i class="fa fa-times"></i>
         </div>
       </div>
-      <div *ngIf="selectTeanglann" class="dictionaryInput">
-        <label for="dictlookup">{{ts.l.search}}:</label>
-        <input type="text" id="dictlookup" name="dictlookup" [(ngModel)]="wordLookedUp" (keyup.enter)="lookupWord()" (click)="clearDictInput()" autofocus>
-        <button class="searchDictionaryBtn" (click)="lookupWord()"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+      <!-- Display feedback text and markup-->
+      <div *ngIf="feedbackVisible" class="textFieldContainer">
+        <!-- feedback text comment -->
+        <textarea
+          class="textField"
+          placeholder="{{ ts.l.no_feedback_provided }}"
+          readonly
+          value="{{ story?.feedback.text }}">
+        </textarea>
+        <!-- Display feedback audio-->
+        <audio
+          *ngIf="audioSource && feedbackVisible && story.feedback.audioId"
+          [src]="audioSource"
+          id="audio"
+          controls
+          #audioTag
+          class="audioPlayer"
+        ></audio>
+        <hr>
+        <!-- feedback story markup -->
+        <div class="textField" style="text-align: left; padding-left:25%; padding-right:25%;"
+          *ngIf="story.feedback.feedbackMarkup" 
+          [innerHTML]="sanitizer.bypassSecurityTrustHtml(story.feedback.feedbackMarkup)" >
+        </div>
       </div>
 
-      <!-- TEANGLANN -->
-      <iframe
-        *ngIf="selectTeanglann" 
-        class="dictionaryIframe" 
-        id="dictiframe"
-        [src]="defaultDictIframeText"
-      ></iframe>
 
-      <!-- EXTERNAL LINKS -->
-      <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left;">
-        <ul>
-          <li><a href="http://www.potafocal.com/beo/" target="_blank">potafocal.com</a></li>
-          <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
-        </ul>
+
+      <!-- <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" /> -->
+      <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle">
+        <quill-editor
+          [modules]="quillToolbar"
+          placeholder=""
+          [preserveWhitespace]="true"
+          [debounceTime]="1500"
+          [(ngModel)]="story.htmlText"
+          (onContentChanged)="onContentChanged($event)"
+          (onEditorCreated)="onEditorCreated($event)"
+        >
+        </quill-editor>
       </div>
     </div>
-</div>
-<app-synthesis-player
-    #mySynthesisPlayer
-    [text]=story.text
-    [storyId]=story._id
-    [storyTitle]=story.title>
+
+    <!-- Word Count -->
+    <div class="wordCountContainer">
+      <span> {{ ts.l.word_count }}: {{ wordCount }} </span>
+    </div>
+
+    <!-- SELECTED GRAMMAR SUGGESTION -->
+    <div style="background-color: #8fcaff" [hidden]="!showErrorTags" [innerHTML]="selectedGrammarSuggestion()"></div>
+    <!-- GRAMMAR CHECKER SETTINGS -->
+    <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags" >
+      <span class="dictionaryContainer">
+        <div class="dictionaryHeader">
+          <h5>
+            {{ ts.message("grammar_checker_settings") }}
+          </h5>
+          <div class="closeDictionaryBtn" (click)="grammarSettingsHidden = true">
+            <i class="fa fa-times"></i>
+          </div>
+        </div>
+        <div class="checkAllBox">
+          <input [(ngModel)]="checkBoxes['showAll']" (ngModelChange)="setAllCheckBoxes()" type="checkbox" />
+          {{ ts.message("check_all") }}
+        </div>
+      </span>
+
+      <!-- GRAMMAR ERROR CHECKBOXES -->
+      <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" style="margin: 2px">
+        <input
+          [(ngModel)]="checkBoxes[tag.key]"
+          (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
+          type="checkbox"
+        />
+          <!-- Error name -->
+        {{
+          ts.l.iso_code == "en"
+            ? (tag.value[0].nameEN | titlecase)
+            : (tag.value[0].nameGA | titlecase)
+        }}
+        <!-- Error count -->
+        ({{
+          tag.value[0].nameEN == "Broad/Slender"
+            ? tag.value.length / 2
+            : tag.value.length
+        }})
+      </div>
+    </div>
+  </div>
+
+  <!-- DICTIONARY -->
+  <div class="dictionaryContainer dictionaryHeight" *ngIf="dictionaryVisible">
+    <div class="dictionaryHeader">
+      <h5>
+        {{ ts.l.dictionary }}
+      </h5>
+      <div class="closeDictionaryBtn" (click)="dictionaryVisible = false">
+        <i class="fa fa-times"></i>
+      </div>
+    </div>
+    <div class="dictionarySubHeader">
+      <div
+        class="dictionaryName"
+        (click)="
+          selectTeanglann = true;
+          selectExternalLinks = false;
+          selectedDictionary = true
+        "
+      >
+        Teanglann
+      </div>
+      |
+      <div
+        class="dictionaryName"
+        (click)="selectExternalLinks = true; selectTeanglann = false"
+      >
+        {{ ts.l.external_links }}
+      </div>
+    </div>
+    <div *ngIf="selectTeanglann" class="dictionaryInput">
+      <label for="dictlookup">{{ ts.l.search }}:</label>
+      <input
+        type="text"
+        id="dictlookup"
+        name="dictlookup"
+        [(ngModel)]="wordLookedUp"
+        (keyup.enter)="lookupWord()"
+        (click)="clearDictInput()"
+        autofocus
+      />
+      <button class="searchDictionaryBtn" (click)="lookupWord()">
+        <i class="fa fa-search" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <!-- TEANGLANN -->
+    <iframe
+      *ngIf="selectTeanglann"
+      class="dictionaryIframe"
+      id="dictiframe"
+      [src]="defaultDictIframeText"
+    ></iframe>
+
+    <!-- EXTERNAL LINKS -->
+    <div
+      *ngIf="selectExternalLinks"
+      class="dictionaryIframe"
+      style="text-align: left"
+    >
+      <ul>
+        <li>
+          <a href="http://www.potafocal.com/beo/" target="_blank"
+            >potafocal.com</a
+          >
+        </li>
+        <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-synthesis-player
+  #mySynthesisPlayer
+  [text]="story.text"
+  [storyId]="story._id"
+  [storyTitle]="story.title"
+>
 </app-synthesis-player>
+
+</div>
+

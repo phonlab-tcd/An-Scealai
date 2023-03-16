@@ -3,6 +3,7 @@ import { ProfileComponent } from './profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialog} from '@angular/material/dialog';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -11,7 +12,10 @@ describe('ProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      declarations: [ ProfileComponent ]
+      declarations: [ ProfileComponent ],
+      providers: [
+          { provide: MatDialog, useValue: {} }
+      ]
     })
     .compileComponents();
   }));

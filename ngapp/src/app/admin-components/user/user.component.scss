@@ -34,13 +34,13 @@
 }
 
 .deleteAccountButton {
-  background-color: var(--delete-red-2);
+  background-color: var(--delete-red);
   font-size: 12pt;
   border-radius: 10px 10px 10px 10px;
 }
 
 .deleteAccountButton:hover {
-    background-color: var(--delete-red-2-hover);
+    background-color: var(--delete-red-hover);
     transition: 0.5s;
 }
 

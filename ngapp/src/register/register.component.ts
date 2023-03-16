@@ -15,6 +15,10 @@ export class RegisterComponent {
 
   successfulCredentials: RegistrationTokenPayload = null;
 
+  /**
+   * Get the registration credentials after successful registration
+   * @param creds registration credentials created in form.component
+   */
   registerSuccess(creds: RegistrationTokenPayload) {
     this.successfulCredentials = creds;
     this.cd.detectChanges();

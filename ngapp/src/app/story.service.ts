@@ -17,8 +17,6 @@ import config from 'abairconfig';
 })
 export class StoryService {
 
-  chosenStory: Story;
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -29,7 +27,7 @@ export class StoryService {
 
   baseUrl: string = config.baseurl + 'story/';
 
-  saveStory(studentId, title, date, dialect, text, author) {
+  saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {
       title: title,
       date: date,
@@ -37,6 +35,7 @@ export class StoryService {
       text: text,
       htmlText: text,
       author: author,
+      createdWithPrompts: createdWithPrompts,
       studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
@@ -77,11 +76,20 @@ export class StoryService {
     return this.getStoriesByOwner(userDetails._id);
   }
 
-  updateStoryTitleAndDialect(story: Story): Observable<any> {
-    return this.http.post(this.baseUrl + 'update/' + story._id, story);
+  updateStoryTitleAndDialect(story: Story, title:string, dialect:any): Observable<any> {
+    let updatedStory = story;
+    if (title) updatedStory.title = title;
+    
+    if (dialect == this.ts.l.connacht) updatedStory.dialect = 'connemara';
+    if (dialect == this.ts.l.munster) updatedStory.dialect = 'kerry';
+    if (dialect == this.ts.l.ulster) updatedStory.dialect = 'donegal';
+    
+    console.log(updatedStory);
+
+    return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
   }
   
-  getStoriesForClassroom(owner: string, date): Observable<any> {
+  getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
@@ -90,21 +98,21 @@ export class StoryService {
       this.baseUrl + 'update/' + id,
       updateData);
   }
-  
-  updateAuthor(oldAuthor, newAuthor): Observable<any> {
-    return this.http.post(this.baseUrl + 'updateAuthor/' + oldAuthor, {newAuthor: newAuthor});
-  }
 
   deleteStory(id) {
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
   
-  deleteAllStories(author) {
-    return this.http.get(this.baseUrl + 'deleteAllStories/' + author);
+  deleteAllStories(id) {
+    return this.http.get(this.baseUrl + 'deleteAllStories/' + id);
   }
 
-  addFeedback(id, feedbackText: string) : Observable<any> {
-    return this.http.post(this.baseUrl + "addFeedback/" + id, {feedback : feedbackText});
+  addFeedback(id, feedbackText: string, feedbackMarkup: string) : Observable<any> {
+    return this.http.post(this.baseUrl + "addFeedback/" + id, {feedback : feedbackText, feedbackMarkup: feedbackMarkup});
+  }
+
+  updateFeedbackMarkup(id, feedbackMarkup: string) : Observable<any> {
+    return this.http.post(this.baseUrl + "updateFeedbackMarkup/" + id, {feedbackMarkup: feedbackMarkup});
   }
 
   getFeedback(id) : Observable<any> {
@@ -129,14 +137,6 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'synthesise/' + id);
   }
 
-  gramadoirViaBackend(id: string): Observable<any> {
-    return this
-      .http
-      .get(
-        // URL
-        this.baseUrl + 'gramadoir/' + id + '/' + this.ts.l.iso_code);
-  }
-
   synthesiseObject(storyObject: Story): Observable<any> {
     return this.http.post(this.baseUrl + 'synthesiseObject/', {story: storyObject});
   }
@@ -151,5 +151,9 @@ export class StoryService {
   
   countGrammarErrors(studentId:string) : Observable<any> {
     return this.http.get(this.baseUrl + "countGrammarErrors/" + studentId);
+  }
+
+  getStoryStats() : Observable<any> {
+    return this.http.get(this.baseUrl + "getStoryStats/allDB");
   }
 }

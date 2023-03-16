@@ -9,9 +9,9 @@ describe('searchUser endpoint function', () => {
   it('should throw an API404Error if no users match search string', async () => {
     const mockReq = {
       params: {
-        searchString: 'test'
+        searchString: 'test',
       },
-      body: {}
+      body: {},
     };
     const mockRes = makeFakeRes();
 
@@ -23,7 +23,7 @@ describe('searchUser endpoint function', () => {
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
       params: {},
-      body: {}
+      body: {},
     };
     const mockRes = makeFakeRes();
 
@@ -38,7 +38,7 @@ describe('searchUser endpoint function', () => {
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
       params: {},
-      body: {currentPage: '-1'}
+      body: {currentPage: '-1'},
     };
     const mockRes = makeFakeRes();
 
@@ -50,7 +50,7 @@ describe('searchUser endpoint function', () => {
     mockingoose(User).toReturn(fakeUsers, 'find');
     const mockReq = {
       params: {},
-      body: {limit: '-1'}
+      body: {limit: '-1'},
     };
     const mockRes = makeFakeRes();
 
@@ -60,11 +60,11 @@ describe('searchUser endpoint function', () => {
 
 const makeFakeUsers = () => {
   return [
-      {
-        username: 'alice'
-      },
-      {
-        username: 'bob'
-      }
+    {
+      username: 'alice',
+    },
+    {
+      username: 'bob',
+    },
   ];
-}
+};

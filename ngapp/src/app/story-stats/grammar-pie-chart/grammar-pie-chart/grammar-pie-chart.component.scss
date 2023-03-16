@@ -18,17 +18,20 @@ canvas {
 .legendContainer {
   overflow-y: scroll;
   width: 40%;
-  max-height: 200px;
-  max-width: 200px;
+  max-height: 300px;
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
+  white-space: nowrap;
+  width: auto;
 }
 
 .legendPair {
   display: flex;
   flex-direction: row;
   gap:0.5rem;
+  cursor: pointer;
+  text-align: left;
 }
 
 .legendMarker {
@@ -40,4 +43,9 @@ canvas {
   padding-top: 5px;
   text-align: center;
   font-weight: bold;
+}
+
+.hideLegendItem {
+  text-decoration: line-through;
+  opacity: 0.5;
 }

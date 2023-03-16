@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { User } from '../user';
 import { Story } from '../story';
-import { userInfo } from 'os';
 
 /*
 * Pipe created to filter out usernames from the list of users in the find-user component

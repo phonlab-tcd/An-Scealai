@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let Classroom = new Schema({
-    teacherId: String,
-    title: String,
-    date: Date,
-    studentIds: [String],
-    code: String,
-    grammarRules: [String],
+const Classroom = new Schema({
+  teacherId: String,
+  title: String,
+  date: Date,
+  studentIds: [String],
+  code: String,
+  grammarCheckers: [String],
 }, {
-    collection: 'classroom'
+  collection: 'classroom',
 });
 
 module.exports = mongoose.model('Classroom', Classroom);

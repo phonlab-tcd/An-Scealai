@@ -1,0 +1,114 @@
+<div class="container">
+    <div id="selectorDiv" style="display:block">
+        <!-- Instructions popup -->
+        <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
+        <h3>Dictogloss</h3>
+        <div *ngIf="!generatedFromMessages">
+            <!-- text input -->
+            <div style="display: flex; justify-content: center;padding:10px">
+                <textarea spellcheck=false class="textarea" id="textSelector" rows="4" maxlength="2000" placeholder="{{ts.l.dictogloss_type_story}}" autofocus></textarea>
+            </div>
+            <button class="button" (click)="loadDictogloss();">{{ts.l.dictogloss_enter_story}}</button>
+            <!--Timer settings-->
+            <button *ngIf="playWithTimer === false && gameInProgress == false" class="button timer-button off" (click)="toggleTimer();">
+                {{ts.l.dictogloss_timer_off}}
+            </button>
+            <button *ngIf="playWithTimer === true && gameInProgress == false" class="button timer-button on" (click)="toggleTimer();">
+                {{ts.l.dictogloss_timer_on}}
+            </button>
+            <button *ngIf="gameInProgress" class="button timer-button unavailable" >
+                {{ts.l.dictogloss_timer_disabled}}
+            </button>
+        </div>
+    </div>
+    <!-- Error message -->
+    <span style="color: red;" *ngIf="errorText">{{ts.l.dictogloss_error}}</span>
+    <!-- Dictogloss body -->
+    <div *ngIf="hasText">
+        <hr>
+        <h3>{{ts.l.dictogloss_audio}}</h3>
+        <!--Voice Synthesis-->
+        <div class="synth-container">
+            <!-- List of synthesised sentences-->
+            <div class="playback">
+                <div class="synth-item" *ngFor="let si of synthItems; let i = index">
+                    <app-synth-item class="synth" [playbackSpeed]=playbackSpeed [synthItem]=si [i]=i></app-synth-item>
+                </div>
+            </div>
+            <div class="speed-voice-selection">
+                <!-- Select voice -->
+                <synth-voice-select style="margin: 4px" (selectVoice)="refreshVoice($event);"></synth-voice-select>
+                <!-- Select speed -->
+                <div class="speed-container">
+                    <p class="playback-header">{{ts.l.dictogloss_playback_speed}}</p>
+                    <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
+                        <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
+                    <span class="speed-button" (click)="changeSpeed(1);">〉</span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="buttons-and-templates"> 
+            <!-- Hidden words -->
+            <div *ngFor="let i of wordsPunc; let index = index">
+                <!-- word list if not punctuated -->
+                <div *ngIf="isNotPunctuated(i); else punctuated;">
+                    <!-- word with letters hidden -->
+                    <span class="unguessed-class" *ngIf="shownWords[index] !== wordsPunc[index] && !(this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1));">
+                        <span class="hint">{{ts.l.dictogloss_hint}}</span>
+                        <button class="button-unguessed" (click)="firstChar(index); generalCheck();">
+                            <h5 class="button-text">{{shownWords[index]}}</h5>
+                        </button>
+                    </span>
+                    <!-- word with first letter shown -->
+                    <span *ngIf="shownWords[index] !== wordsPunc[index] && this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1);">
+                        <button class="button-pressed">
+                            <h5 class="button-text">{{shownWords[index]}}</h5>
+                        </button>
+                    </span>
+                    <!-- full word shown when guessed -->
+                    <span *ngIf="shownWords[index] === wordsPunc[index];">
+                        <button class="button-guessed">
+                            <h5 class="button-text">{{shownWords[index]}}</h5>
+                        </button>
+                    </span>
+                </div>
+                    <!-- word list if punctuated-->
+                <ng-template #punctuated><b><h5 style="margin: 2px;">{{i}}</h5></b></ng-template>
+            </div>
+        </div>
+        <hr>
+        <!-- buttons and game options -->
+        <div *ngIf="!allGuessed; else correct;">
+            <!-- timer -->
+            <div *ngIf="playWithTimer === true"><b>{{displayTime(totalTime)}}</b></div>
+            <!-- recording button -->
+            <button *ngIf="!isRecording" type="button" (click)="speakAnswer();" class="button"><i class="fas fa-microphone"></i></button>
+            <button *ngIf="isRecording" (click)="speakAnswer();" class="button"><i class="recordingIcon fa fa-circle"></i></button>
+            <!-- guess input -->
+            <input id="guesses_input" style="width: 80%" spellcheck=false>
+            <button class="button" (click)="delimitPotentialWords();">{{ts.l.dictogloss_guess}}</button>
+            <!-- correct/wrong guess counter -->
+            <div>
+                <b style="color:green; padding-right: 1em;">{{ts.l.correct}}: {{rightCount}}</b>
+                <b style="color:red;padding-left: 1em;">{{ts.l.incorrect}}: {{wrongCount}}</b>
+            </div>
+            <div>
+                <b>{{ts.l.dictogloss_guessed1}}{{rightCount}}{{ts.l.dictogloss_guessed2}}{{words.length}}{{ts.l.dictogloss_guessed3}}</b>
+            </div>
+            <!-- list of wrong guessed words -->
+            <div *ngIf="wrongWords && wrongWords.length > 0" class="wrongWordBank">
+                <div *ngFor="let word of wrongWords" >
+                    <div class="wordBankItem">{{word}}</div>
+                </div>
+            </div>
+        </div>
+        <!-- if all words guessed correctly, show time and play again buttons-->
+        <ng-template  #correct>
+            <i><h2 class="victory">{{ts.l.you_filled_in_all_blanks}}</h2></i>
+            <b *ngIf="playWithTimer === true"><h2>{{ts.l.you_finished_in}}{{displayTime(totalTime)}}</h2></b>
+            <button class="button victory-button" (click)="hasText = false;">{{ts.l.new_dictogloss}}</button>
+            <button class="button victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.go_to_my_stories}}</button>
+        </ng-template>
+    </div>
+</div>

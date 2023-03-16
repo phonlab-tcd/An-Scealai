@@ -1,0 +1,51 @@
+.chartContainer {
+  display: flex;
+}
+
+.graphContainer {
+  flex: 1;
+  width: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  max-width: 60vh;
+  max-height: 60vh;
+}
+
+.legendContainer {
+  overflow-y: scroll;
+  width: 50%;
+  max-height: 300px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.legendPair {
+  display: flex;
+  flex-direction: row;
+  gap:0.5rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.legendMarker {
+  width: 30px;
+  height: 10px;
+}
+
+.legend {
+  padding-top: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.hideLegendItem {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
