@@ -1,9 +1,10 @@
 const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 
-const {getUniqueErrorTypeCounts} = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts');
-const {getUserGrammarCounts} = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
+const { getUniqueErrorTypeCounts } = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts');
+const { getUserGrammarCounts } = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
 const { getTimeGrammarCounts } = require('../endpoints_functions/gramadoir/getTimeGrammarCounts');
+const { callAnGramadoir } = require('../endpoints_functions/gramadoir/callAnGramadoir');
 
 // //////////////////////////////////////////// POST
 gramadoirRoutes
@@ -15,6 +16,9 @@ gramadoirRoutes
 gramadoirRoutes
     .route('/getTimeGrammarCounts/:ownerId')
     .post(auth, getTimeGrammarCounts);
+gramadoirRoutes
+    .route('/callAnGramadoir/:teacs')
+    .post(auth, callAnGramadoir);
 // //////////////////////////////////////////// GET
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')

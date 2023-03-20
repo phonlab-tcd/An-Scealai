@@ -15,6 +15,8 @@ const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
+const expressQueue = require('express-queue');
+const qs = require('qs');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -29,8 +31,6 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
-const expressQueue = require('express-queue');
-const qs = require('qs');
 
 /* use this to test where uncaughtExceptions get logged */
 // throw new Error('test error');
@@ -84,32 +84,6 @@ if(process.env.FUDGE) {
       );
   });
 }
-app.use('/gramadoir/:teanga/:teacs',
-				expressQueue({activeLimit: 5, queuedLimit: -1}),
-				async function(req,res,next) {
-					const url = 'https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl';
-          console.log(req.params);
-          console.log(req.query);
-					const params = {
-						teacs: req.query["teacs"],
-						teanga: req.params["teanga"] == "en" ? "en" : "ga",
-					};
-					const options = {
-						method: "POST",
-						headers: {"content-type": "application/x-www-form-urlencoded" },
-						};
-					const got = await axios.post(url,request(req.params["teacs"]),options).then(ok=>({ok}),err=>({err}));
-					if("ok" in got) {
-            return res.json(got.ok.data);
-          }
-          console.error(got.err.data);
-          return res.json(got.err.data);
-          function request(text) {
-            const teanga=req.params["teanga"] === "en" ? "en" : "ga";
-            console.log(text);
-            return  `teacs=${encodeURIComponent(text)}&teanga=${teanga}`;
-          }
-				});
 
 app.use(checkJwt);
 app.use('/story', storyRoute);
@@ -120,7 +94,7 @@ app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
-app.use('/gramadoir', gramadoirLogRoute);
+app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 

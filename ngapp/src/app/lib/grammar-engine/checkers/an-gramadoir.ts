@@ -1,4 +1,5 @@
 import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
+import config from 'abairconfig';
 
 // initialise the grammar checker
 export const anGramadoir: GrammarChecker = {
@@ -25,18 +26,18 @@ export type GramadoirTag = {
 * @param input - sentence from story text
 * @returns - Promise of an array of ErrorTags
 */
-async function check(input: string):Promise<ErrorTag[]>{
+async function check(input: string, authToken: string):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
     
     let errors = [];
-    
+
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
     try {
-      errors = await callAnGramadoir(input, 'en', 'https://phoneticsrv3.lcs.tcd.ie/gramadoir/api-gramadoir-1.0.pl');
+      errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoir/${input}`, authToken);
     }
     catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
-        errors = await callAnGramadoir(input, 'en', 'https://cadhan.com/api/gramadoir/1.0');
+        errors = await callAnGramadoir(`https://cadhan.com/api/gramadoir/1.0/en/${input}`);
       } catch(_) {
         reject();
       }  
@@ -72,29 +73,21 @@ async function check(input: string):Promise<ErrorTag[]>{
 * @param url - url specifying which instance of an gramadoir to call
 * @returns - Promise of returned GramadoirTags
 */
-async function callAnGramadoir(input: string, language: 'en' | 'ga', url:string): Promise<GramadoirTag[]> {
+async function callAnGramadoir(url: string, authToken?: string): Promise<GramadoirTag[]> {
+  let headers = {};
+  if (authToken) {
+    headers = {'Authorization': 'Bearer ' + authToken}
+  }
+
   const res = await fetch(url, {
-       headers: {
-         'Content-Type': 'application/x-www-form-urlencoded',
-       },
+       headers: headers,
        method: 'POST',
-       body: gramadoirXWwwFormUrlencodedRequestData(input.replace(/\n/g, ' '), language)
      });
 
   if (res.ok) {
     return await res.json();
   }
   throw new Error(res.statusText);
-}
-
-/**
-* Encode the story text so it can be sent to the gramadoir in x-www-form-urlencoded form
-* @param input - sentence from story text
-* @param language - get grammar errors in English or Gaeilge
-* @returns - encoded string
-*/
-function gramadoirXWwwFormUrlencodedRequestData(input: string, language: 'en' | 'ga') {
-  return `teacs=${encodeURIComponent(input)}&teanga=${language}`;
 }
 
 /**
