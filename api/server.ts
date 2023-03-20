@@ -16,7 +16,6 @@ const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 const expressQueue = require('express-queue');
-const qs = require('qs');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
