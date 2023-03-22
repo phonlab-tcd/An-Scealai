@@ -33,7 +33,7 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
 
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
     try {
-      errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoir/${input}`, authToken);
+      errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoirDocker/${input}`, authToken);
     }
     catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
       try {
