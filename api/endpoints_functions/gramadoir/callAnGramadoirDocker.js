@@ -20,6 +20,7 @@ async function callAnGramadoirDocker(req, res) {
     if (cachedErrors == null) {
       execShellCommand(`docker exec gramadoir gramadoir teanga=en teacs='${req.params["teacs"]}'`).then(
         (errorRes) => {
+          cache.set(req.params["teacs"], JSON.parse(errorRes), 300);
           return res.json(JSON.parse(errorRes));
         },
         (error) => {
