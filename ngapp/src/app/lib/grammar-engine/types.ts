@@ -1,5 +1,5 @@
 export type GrammarChecker = {
-  check: (input: string) => Promise<ErrorTag[]>;
+  check: (input: string, authToken?: string) => Promise<ErrorTag[]>;
   name: string;
 };
 

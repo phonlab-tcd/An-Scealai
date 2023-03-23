@@ -149,7 +149,7 @@ export class GrammarEngine {
                 return errorTags;
               }
               // get errors from grammar checker if not in cache map
-              const errorTags = await checker.check(s);
+              const errorTags = await checker.check(s, this.auth.getToken());
               this.cacheMap.get(checker.name)[s] = errorTags;
               // calculate error offset based on sentence indices
               const offsetErrorTags = errorTags.map(clone).map(mapOffset)

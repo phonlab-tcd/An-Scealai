@@ -15,6 +15,7 @@ const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
+const expressQueue = require('express-queue');
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -92,9 +93,11 @@ app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);
 app.use('/messages', messageRoute);
-app.use('/gramadoir', gramadoirLogRoute);
+app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
+
+
 
 app.use('/proxy', async (req,res,next)=>{
   function allowUrl(url) {
