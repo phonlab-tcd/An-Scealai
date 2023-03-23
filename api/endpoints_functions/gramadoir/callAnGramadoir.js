@@ -28,7 +28,7 @@ async function callAnGramadoir(req, res) {
     let cachedErrors = cache.get(req.params["teacs"]);
 
     // if errors do not exist in the cache, request them and then set the cache
-    if (true) {
+    if (cachedErrors == null) {
       // get errors from An Gramadoir
       const gramadoirRes = await axios.post(url, encodeParams(req.params["teacs"]), options).then(
         (ok) => ({ ok }),

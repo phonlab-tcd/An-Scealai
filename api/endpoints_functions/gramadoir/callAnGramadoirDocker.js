@@ -1,6 +1,7 @@
-const { exec } = require('child_process');
+const { exec } = require("child_process");
 const NodeCache = require("node-cache");
 
+// set the cache for storing grammar error responses
 const cache = new NodeCache({ stdTTL: 600 });
 
 /**
@@ -16,37 +17,37 @@ async function callAnGramadoirDocker(req, res) {
     let cachedErrors = cache.get(req.params["teacs"]);
 
     // if errors do not exist in the cache, request them and then set the cache
-    if (true) {
-      // get errors from An Gramadoir
-      //const gramadoirRes = exec(`docker exec gramadoir gramadoir teanga=en teacs='${req.params["teacs"]}'`).toString();
-      exec(`docker exec gramadoir gramadoir teanga=en teacs='${req.params["teacs"]}'`, (error, stdout, stderr) => {
-        if (error) {
-            return res.json(error);
+    if (cachedErrors == null) {
+      execShellCommand(`docker exec gramadoir gramadoir teanga=en teacs='${req.params["teacs"]}'`).then(
+        (errorRes) => {
+          return res.json(JSON.parse(errorRes));
+        },
+        (error) => {
+          return res.json(error);
         }
-        let test = stdout;
-        console.log(JSON.parse(test));
-        let test2 = JSON.parse(stdout);
-        console.log(test2)
-        return res.json()
- 
-
-       });
-      //console.log(gramadoirRes)
-      //const errors = JSON.parse(gramadoirRes);
-
-      // if errors are found, store them in cache and return
-    //   if (errors && errors.length > 0) {
-    //     cache.set(req.params["teacs"], errors, 300);
-    //     return res.json(errors);
-    //   }
-      return res.json([]);
+      );
     }
-    // return errors stored in cache
-    res.status(200).send(cachedErrors);
+    else {
+      // return errors stored in cache
+      res.status(200).send(cachedErrors);
+    }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
+}
+
+// Call the gramadoir file to get errors using command line
+function execShellCommand(cmd) {
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.warn(error);
+        return reject(error);
+      }
+      resolve(stdout ? stdout : stderr);
+    });
+  });
 }
 
 module.exports = { callAnGramadoirDocker };
