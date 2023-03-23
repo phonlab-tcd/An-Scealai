@@ -5,7 +5,7 @@
     <!-- Nav bar -->
     <div class="classHeader">
       <div class="backArrow" (click)="goBack()"> <i class="fas fa-arrow-left"></i> </div>
-      {{ ts.l.messages }} ({{ numberOfUnread }})
+      {{ ts.l.messages }} <span *ngIf="numberOfUnread > 0" style="padding-left:5px">({{ numberOfUnread }})</span>
       <div *ngIf="!createNewMessage" class="headerIconContainer">
         <div class="btn greenBtn"> <i class="fa fa-redo-alt refreshNotifications" (click)="resetMessageNotifications()" ></i> </div>
         <button class="btn greenBtn" [class.deleteRedBtn]="deleteMode" (click)="toggleDeleteMode()" > <i class="fas fa-trash-alt headerIcon"></i> </button>

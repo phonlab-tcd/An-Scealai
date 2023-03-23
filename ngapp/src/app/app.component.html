@@ -51,6 +51,9 @@
           <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">
             An Scéalaí
           </button>
+          <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()" >
+            {{ ts.l.technology }}
+          </button>
           <button routerLink="/user-guides" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.user_guide }}
           </button>
@@ -66,7 +69,7 @@
         </div>
       </div>
       <!-- technology menu -->
-      <div ngbDropdown class="d-inline-block" #myDrop2="ngbDropdown">
+      <!-- <div ngbDropdown class="d-inline-block" #myDrop2="ngbDropdown">
         <button class="btn navbarBtn" id="dropdownBasic1" ngbDropdownToggle onclick="this.blur();" >
           {{ ts.l.technology }}
         </button>
@@ -74,9 +77,9 @@
           <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.technology }}
           </button>
-          <!-- <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.other_CALL_projects}}</button> -->
+          <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">{{ts.l.other_CALL_projects}}</button>
         </div>
-      </div>
+      </div> -->
       <!-- LARA menu -->
       <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom" >
         <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">
@@ -109,7 +112,7 @@
         </div>
       </div>
       <!--Prompts-->
-      <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom" >
+      <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
         <button matBadge="Beta" matBadgeSize="small" matBadgePosition="before" matBadgeColor="accent" class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();" >
           {{ ts.l.prompts }}
         </button>
@@ -136,21 +139,19 @@
       </div>
       <!--Dictgloss-->
       <div *ngIf="auth.isLoggedIn()" class="d-inline-block">
-        <button class="btn navbarBtn" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()" >
+        <button class="btn navbarBtn" style="margin-bottom:3px" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()" >
           Dictogloss
         </button>
       </div>
       <!--ABAIR-->
       <div class="d-inline-block">
-        <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn" >ABAIR</a >
+        <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a >
       </div>
       <!-- Change language dropdown and login button-->
       <div class="navBtn rightNavBtn">
-        <div ngbDropdown class="d-inline-block" #myDrop4="ngbDropdown" placement="bottom" >
-          <button class="btn navbarBtn" id="dropdownBasic1" (click)="this.toggleLanguage()" >
-            {{ ts.l.other_language }}
-          </button>
-        </div>
+        <button class="btn navbarBtn" (click)="this.toggleLanguage()" >
+          {{ ts.l.other_language }}
+        </button>
         <!-- sign in button -->
         <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="changeCheck()" onclick="this.blur();" >
           {{ ts.l.sign_in }}
