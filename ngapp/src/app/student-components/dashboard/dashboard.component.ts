@@ -150,13 +150,13 @@ export class DashboardComponent implements OnInit {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    // get list of grammar checker selections from classroom settings
-    let classroomGrammarCheckers = (await firstValueFrom(this.classroomService.getClassroomOfStudent(userDetails._id))).grammarCheckers;
+    // get student classroom to see if any grammar checkers were specified in classroom settings
+    let classroom = (await firstValueFrom(this.classroomService.getClassroomOfStudent(userDetails._id)));
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers = [];
-    if (classroomGrammarCheckers.length > 0) {
-      classroomGrammarCheckers.forEach( checker => {
+    if (classroom && classroom.grammarCheckers && classroom.grammarCheckers.length > 0) {
+      classroom.grammarCheckers.forEach( checker => {
         checkers.push(this.grammarCheckerOptions[checker]);
       })
     }
