@@ -321,6 +321,7 @@ export class DashboardComponent implements OnInit {
    * @param q quill editor
    */
   onEditorCreated(q: Quill) {
+    q['history'].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
     this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts, this.engagement);
