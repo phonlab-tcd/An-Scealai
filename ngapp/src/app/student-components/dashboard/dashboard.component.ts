@@ -67,6 +67,7 @@ export class DashboardComponent implements OnInit {
   grammarLoaded: boolean = false;
   grammarErrors: ErrorTag[] = [];
   grammarErrorsTypeDict: Object = {};
+  grammarMessage: string = '';
   showErrorTags: boolean = false;
   checkBoxes: Object = {'showAll': true};
   grammarCheckerOptions: Object = {
@@ -361,10 +362,26 @@ export class DashboardComponent implements OnInit {
 
   /* Sets text for bottom blue bar of grammar checker */
   selectedGrammarSuggestion() {
-    if (this.quillHighlighter)
-      return this.quillHighlighter.getGrammarMessage(this.grammarLoaded)
+    if (this.quillHighlighter) {
+      this.grammarMessage = this.quillHighlighter.getGrammarMessage(this.grammarLoaded);
+      return this.grammarMessage;
+    }
     else
       return '';
+  }
+
+  openInformationDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: "More info",
+        confirmText: this.ts.l.done,
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+    });
   }
 
   /* Show/hide grammar checker button text on dashboard */

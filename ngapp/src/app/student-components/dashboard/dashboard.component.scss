@@ -322,6 +322,13 @@
   background-color: #aeffc486;
 }
 
+.grammarSuggestionBar {
+  background-color: #8fcaff;
+  display:flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
 .wordCountContainer {
   display: flex;
   align-items: center;

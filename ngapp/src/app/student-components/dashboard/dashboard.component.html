@@ -219,7 +219,12 @@
     </div>
 
     <!-- SELECTED GRAMMAR SUGGESTION -->
-    <div style="background-color: #8fcaff" [hidden]="!showErrorTags" [innerHTML]="selectedGrammarSuggestion()"></div>
+    <div class="grammarSuggestionBar" [hidden]="!showErrorTags">
+      <div [innerHTML]="selectedGrammarSuggestion()"></div>
+        <i class="fa fa-info-circle" style="cursor:pointer; padding-top:4px" (click)="openInformationDialog()"></i>
+      </div>
+
+    
     <!-- GRAMMAR CHECKER SETTINGS -->
     <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags" >
       <span class="dictionaryContainer">
