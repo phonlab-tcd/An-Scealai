@@ -24,7 +24,6 @@ export class EngagementService {
       user: this.auth.getUserDetails(),
       storyId: storyId,
     };
-    console.log(info);
     this.http.post(this.baseUrl + 'addEvent/playSynthesis', info).subscribe();
   };
 

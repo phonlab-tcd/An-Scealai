@@ -3,6 +3,9 @@ import { StoryService } from '../../story.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslationService } from '../../translation.service';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import { firstValueFrom } from 'rxjs';
+
+ //------------------------------ HTS Synthesis Component ----------------------------//
 
 @Component({
   selector: 'app-synthesis',
@@ -23,15 +26,15 @@ export class SynthesisComponent implements OnInit {
   chosenSections: Section[];
   audioFinishedLoading: boolean = false;
 
-  ngOnInit() {
+ async ngOnInit() {
     this.storyId = this.route.snapshot.paramMap.get('id');
-    this.storyService.getStory(this.storyId).subscribe((story) => {
-      this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
-        this.paragraphs = paragraphs;
-        this.sentences = sentences;
-        this.chosenSections = this.paragraphs;
-        this.audioFinishedLoading = true;
-      });
+    let story = await firstValueFrom(this.storyService.getStory(this.storyId));
+
+    this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
+      this.paragraphs = paragraphs;
+      this.sentences = sentences;
+      this.chosenSections = this.paragraphs;
+      this.audioFinishedLoading = true;
     });
   }
 

@@ -3,13 +3,8 @@ import { Story } from '../story';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EngagementService } from '../engagement.service';
 import { EventType } from '../event';
-import {
-  Observable,
-  of
-} from 'rxjs';
-import {
-  map,
-  tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import config from 'abairconfig';
 import {TextProcessingService} from './text-processing.service';
 import { SynthesisBankService } from 'app/services/synthesis-bank.service';

@@ -77,8 +77,10 @@ export class StatsDashboardComponent implements OnInit {
     const classroom = classroomResponse.classroom;
     const startDate = classroomResponse.startDate;
     const endDate = classroomResponse.endDate;
-    if (classroom) await this.loadDataForCharts(classroom.studentIds, startDate, endDate);
-    this.classroomTitle = classroom.title;
+    if (classroom) {
+      await this.loadDataForCharts(classroom.studentIds, startDate, endDate);
+      this.classroomTitle = classroom.title;
+    }
   }
   
   /**
@@ -177,7 +179,6 @@ export class StatsDashboardComponent implements OnInit {
     const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
     await Promise.all(studentIds.map(async (id) => {
       let studentGrammarCounts = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`, {startDate, endDate}, {headers}))
-      console.log(studentGrammarCounts);
       totalGrammarCounts.push(studentGrammarCounts);
      }
     ));

@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TextProcessingService } from 'app/services/text-processing.service';
-import { VoiceCode, ApiOptions as SynthApiOptions, SynthesisService, Dialect, voices, Voice } from 'app/services/synthesis.service';
+import { ApiOptions as SynthApiOptions, SynthesisService, Dialect, voices, Voice } from 'app/services/synthesis.service';
 import { SynthItem } from 'app/synth-item';
 import { TranslationService } from 'app/translation.service';
 import { voices as synthVoices, pseudonym } from 'app/services/synthesis.service';
-import { MatSelect } from '@angular/material/select';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+
+ //------------------------------ Audio Check Component On Dashboard ----------------------------//
 
 @Component({
   selector: 'app-synthesis-player',

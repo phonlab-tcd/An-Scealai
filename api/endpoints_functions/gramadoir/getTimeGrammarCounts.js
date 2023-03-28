@@ -13,9 +13,12 @@ async function getTimeGrammarCounts(req, res) {
 
   const conditions = {'owner': ownerId};
   if (req.body.startDate !== '' && req.body.endDate !== '') {
+    let endDate = new Date(req.body.endDate)
+    endDate.setDate(endDate.getDate() + 1);
+
     conditions['updatedAt'] = {
-      '$gte': req.body.startDate,
-      '$lte': req.body.endDate,
+      '$gte': new Date(req.body.startDate),
+      '$lte': endDate,
     };
   };
 

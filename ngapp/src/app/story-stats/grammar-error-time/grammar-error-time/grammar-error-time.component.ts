@@ -41,10 +41,12 @@ export class GrammarErrorTimeComponent implements OnInit {
     // get date range from given start and end date
     if (this.grammarErrorTimeCounts.startDate && this.grammarErrorTimeCounts.endDate) {
       let dateDifference = this.grammarErrorTimeCounts.endDate.getTime() - this.grammarErrorTimeCounts.startDate.getTime();
-      let totalDays = (Math.ceil(dateDifference / (1000 * 3600 * 24))) + 1; // add 1 to get full last day
+      let totalDays = (Math.ceil(dateDifference  / (1000 * 3600 * 24))) + 1; // add 1 to get full first day
+ 
       if (totalDays) {
         numOfDays = totalDays;
-        endDate = this.grammarErrorTimeCounts.endDate;
+        endDate = new Date(this.grammarErrorTimeCounts.endDate);
+        endDate.setDate(endDate.getDate() + 1); // add 1 to get full last day
       }
     }
     for (let i = 0; i < numOfDays; i++) {
@@ -126,6 +128,7 @@ export class GrammarErrorTimeComponent implements OnInit {
             borderColor: ERROR_INFO[errorName].color,
             backgroundColor: ERROR_INFO[errorName].color,
             fill: false,
+            pointRadius: 7,
           };
           dataset[errorName] = dict;
         }
