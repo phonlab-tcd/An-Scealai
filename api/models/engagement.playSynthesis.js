@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const props = {
-  user: String,
   date: Date,
   voice: Object,
   text: String,

@@ -18,9 +18,9 @@ export class EngagementService {
 
   playSynthesis(si: SynthItem, storyId: string) {
     const info = {
+      date: Date(),
       voice: si.voice,
       text: si.text,
-      time: Date(),
       user: this.auth.getUserDetails(),
       storyId: storyId,
     };
