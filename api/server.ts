@@ -48,6 +48,8 @@ async function prodConnection() {
     heartbeatFrequencyMS,
     serverSelectionTimeoutMS,
   };
+  let test = 'mongodb://mongo:27017/node-app';
+  console.log(dbURL);
   await mongoose.connect(dbURL, opts);
 }
 
