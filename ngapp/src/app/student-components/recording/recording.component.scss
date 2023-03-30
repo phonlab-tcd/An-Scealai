@@ -10,8 +10,44 @@ $corner-button-width: 10rem;
   border: solid 2px #827662b8;
 }
 
+.sidenav {
+  padding: 20px;
+  width: 20vw;
+}
+
+.menuButton {
+  display: flex;
+  margin-left: 10px;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.menuButton:hover {
+  cursor: pointer;
+}
+
+.contentsLink {
+  color: var(--dark-text);
+  text-align: left;
+  width: 50%;
+  text-decoration: none;
+}
+
+.contentsLink:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .textContainerSynth {
-  border: 1px solid #261500a2;
+  -webkit-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+  -moz-box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4); 
+  box-shadow: 0px 0px 11px 2px rgba(0,0,0,0.4);
+  margin-left: 5%;
+  width: 90%;
+  color: var(--dark-text);
+  background-color: #F8F9FA;
+  text-align: left;
+  overflow: auto;
 }
 
 .recordingBookHeader {
@@ -175,38 +211,6 @@ $corner-button-width: 10rem;
   background-color: var(--scealai-med-green);
 }
 
-.optionsPopupRec {
-  z-index: 10;
-  position: absolute;
-  right: 0;
-  margin-top: 25px;
-  display: flex;
-  padding: 5px;
-  padding-top: 10px;
-  background: var(--paper-img) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-  border-radius: 5px 5px 5px 5px;
-}
-
-.optionsPopupRec:after {
-  content: '';
-  position: absolute;
-  top: 0px;
-  right: 60px;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-bottom-color: var(--scealai-cream);
-  border-top: 0;
-  margin-left: -10px;
-  margin-top: -10px;
-}
 
 .blink {
   animation: blinker 2s linear infinite;

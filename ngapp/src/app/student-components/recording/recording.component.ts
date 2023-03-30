@@ -9,7 +9,8 @@ import { Recording } from '../../recording';
 import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
 import { EventType } from '../../event';
 import { EngagementService } from '../../engagement.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 
 declare var MediaRecorder : any;
 
@@ -69,11 +70,16 @@ export class RecordingComponent implements OnInit {
   sectionTranscriptions: string[] = [];
   isTranscribing: boolean[] = [false];
 
+  // Archived recordings variables
+  showingArchivedRecording: boolean = false;
+  archivedRecordings: Recording[] = [];
+  activeRecording: Recording = null;
+
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
   * Reset variables when recording text updated (function called in updateStory())
   */
-  ngOnInit() {
+  async ngOnInit() {
     this.chunks = [];
     this.sectionAudioSources = this.paragraphAudioSources;
     this.sectionBlobs = this.paragraphBlobs;
@@ -81,17 +87,37 @@ export class RecordingComponent implements OnInit {
     this.sectionTranscriptions = this.paragraphTranscriptions;
     this.isRecordingSection = this.isRecordingParagraph;
     const storyId = this.route.snapshot.paramMap.get('id');
-    this.storyService.getStory(storyId).subscribe(story => {
-        this.story = story;
-        if (this.story.activeRecording) {
-          this.recordingService.get(this.story.activeRecording).subscribe(recording => {
-            this.loadSynthesis(recording.storyData);
-            this.loadAudio(recording);
-          });
-        } else {
-          this.archive(this.story);
-        }
-      });
+    console.log(storyId);
+    this.story = await firstValueFrom (this.storyService.getStory(storyId));
+    if (this.story.activeRecording) {
+      this.activeRecording = await firstValueFrom(this.recordingService.get(this.story.activeRecording));
+      this.loadSynthesis(this.activeRecording.storyData);
+      this.loadAudio(this.activeRecording);
+      this.getArchivedRecordings();
+    }
+    else {
+      this.archive();
+    }
+  }
+
+  async getArchivedRecordings() {
+    console.log("active recording: ", this.activeRecording);
+    this.archivedRecordings = await firstValueFrom( this.recordingService.getHistory(this.story._id) );
+    if (this.archivedRecordings) {
+      this.archivedRecordings.push(this.activeRecording);
+      this.archivedRecordings.sort((a, b) => (a.date > b.date ? -1 : 1));
+    }
+    
+  }
+
+  loadArchivedRecording(recording) {
+    console.log("loading ", recording);
+
+    this.loadSynthesis(recording.storyData);
+    this.loadAudio(recording);
+
+    recording.archived ? this.showingArchivedRecording = true : this.showingArchivedRecording = false;
+
   }
 
   loadSynthesis(story: Story) {
@@ -109,18 +135,21 @@ export class RecordingComponent implements OnInit {
    * 
    * @param story - story whose activeRecording will be updated
    */
-  archive(story: Story) {
+  async archive() {
     
-    if(story.activeRecording) {
-      this.recordingService.updateArchiveStatus(story.activeRecording).subscribe();
+    if(this.story.activeRecording) {
+      this.recordingService.updateArchiveStatus(this.story.activeRecording).subscribe();
     }
     
-    const newActiveRecording = new Recording(story);
+    const newActiveRecording = new Recording(this.story);
+    
+
     this.recordingService.create(newActiveRecording).subscribe(res => {
       if (res.recording) {
         const newActiveRecordingId = res.recording._id;
-        this.storyService.updateActiveRecording(story._id, newActiveRecordingId).subscribe(_ => {
+        this.storyService.updateActiveRecording(this.story._id, newActiveRecordingId).subscribe(_ => {
           this.story.activeRecording = newActiveRecordingId;
+          this.activeRecording = res;
           // Reset all recording / audio data
           this.paragraphs = [];
           this.paragraphAudioSources = [];
@@ -138,7 +167,8 @@ export class RecordingComponent implements OnInit {
           this.sectionTranscriptions = [];
 
           this.popupVisible = false;
-          this.loadSynthesis(story);
+          this.loadSynthesis(this.story);
+          this.getArchivedRecordings();
         });
       }
     })
@@ -162,7 +192,6 @@ export class RecordingComponent implements OnInit {
         this.paragraphTranscriptions[recording.paragraphIndices[i]] = recording.paragraphTranscriptions[recording.paragraphIndices[i]];
       });
     }
-    console.log(recording.sentenceIndices);
     for (let i=0; i<recording.sentenceIndices.length; ++i) {
       this.recordingService.getAudio(recording.sentenceAudioIds[i]).subscribe((res) => {
         this.sentenceBlobs[i] = res;
