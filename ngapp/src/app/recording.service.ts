@@ -39,6 +39,10 @@ export class RecordingService {
   getAudio(audioId: string) : Observable<any> {
     return this.http.get(this.baseUrl + "audio/" + audioId, {responseType: "blob"});
   }
+
+  getRecordings(storyId: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "getRecordings/" + storyId);
+  }
   
   getHistory(storyId: string) : Observable<any> {
     return this.http.get(this.baseUrl + "getHistory/" + storyId);

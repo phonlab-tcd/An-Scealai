@@ -164,7 +164,7 @@ export class SynthesisService {
       const cachedDataUri = this.synthBank.getAudioUrlOfSentence(url);
       if (cachedDataUri) return of(cachedDataUri);
     }
-
+    console.log(url);
     // HIT THE API
     return this.http.post(this.baseUrl + 'proxy',{url}).pipe(
      map((data: {audioContent: string}) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding)),

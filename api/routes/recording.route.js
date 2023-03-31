@@ -22,10 +22,7 @@ recordingRoutes.route("/create").post((req, res) => {
   recording
     .save()
     .then((_) => {
-      res.status(200).json({
-        message: "Recording created successfully",
-        recording: recording,
-      });
+      res.status(200).json(recording);
     })
     .catch((err) => {
       console.log(err);
@@ -174,6 +171,24 @@ recordingRoutes.route("/audio/:id").get((req, res) => {
  * @param {Object} req params: Story ID
  * @return {Object} List of voice recordings
  */
+recordingRoutes.route("/getRecordings/:storyId").get((req, res) => {
+  VoiceRecording.find({ "storyData._id": req.params.storyId }, (err, recordings) => {
+      if (err) {
+        console.log(err);
+        logger.error(err);
+        return res.status(400).json({ message: err.message });
+      } else {
+        return res.json(recordings);
+      }
+    }
+  );
+});
+
+/**
+ * Get all archived recordings for a particular story
+ * @param {Object} req params: Story ID
+ * @return {Object} List of voice recordings
+ */
 recordingRoutes.route("/getHistory/:storyId").get((req, res) => {
   VoiceRecording.find({ "storyData._id": req.params.storyId, archived: true }, (err, recordings) => {
       if (err) {
@@ -193,14 +208,16 @@ recordingRoutes.route("/getHistory/:storyId").get((req, res) => {
  * @return {Object} Success or error message
  */
 recordingRoutes.route("/updateArchiveStatus/:recordingId").get((req, res) => {
-  VoiceRecording.findById(req.params.recordingId, (err, recording) => {
+  VoiceRecording.findById(req.params.recordingId, async (err, recording) => {
     if (err) {
       console.log(err);
       logger.error(err);
-      res.status(400).json({ message: err.message });
+      return res.status(400).json({ message: err.message });
     } else {
       recording.archived = true;
-      recording.save();
+      await recording.save();
+      console.log(recording);
+      return res.status(200).json("Successfully updated recording archive status");
     }
   });
 });

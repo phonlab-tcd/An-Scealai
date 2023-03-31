@@ -18,17 +18,17 @@
   </div>
 
   <!-- Open Archive button -->
-  <div *ngIf="archivedRecordings.length > 1" (click)="drawer.toggle()" class="menuButton" >
+  <div *ngIf="recordings.length > 0" (click)="drawer.toggle()" class="menuButton" >
     <mat-icon>menu</mat-icon> Archive
   </div>
 
   <!-- Archive menu -->
   <mat-drawer-container autosize>
     <mat-drawer #drawer class="sidenav" mode="side">
-      <div *ngFor="let recording of archivedRecordings">
+      <div *ngFor="let recording of recordings">
         <div class="contentSection">
           <div class="contentsLink">
-            <a (click)="loadArchivedRecording(recording)"> {{ recording?.storyData?.title }} </a>
+            <a (click)="setCurrentRecording(recording)"> {{ recording?.storyData?.title }} </a>
           </div>
           <div class="contentsDate">
             {{ recording.date | date : "d/M/yy, h:mm a" }}
@@ -43,7 +43,7 @@
       <div class="recordingStoryHeader">
         {{ ts.l.listen_record_compare }}
       </div>
-      <div>
+
         <!-- Story container -->
         <div class="textContainerSynth">
           <!-- Loading screen -->
@@ -117,12 +117,12 @@
                 {{ ts.l.sentence }}
               </button>
             </div>
-            <button class="changeSplitBtn" *ngIf="!showingArchivedRecording" style="margin-left: auto" (click)="archive()" >
+            <button class="changeSplitBtn" *ngIf="!showingArchivedRecording" style="margin-left: auto" (click)="archiveRecording()" >
               {{ ts.l.archive_recording }}
             </button>
           </div>
         </div>
-      </div>
+
     </div>
   </mat-drawer-container>
 </div>

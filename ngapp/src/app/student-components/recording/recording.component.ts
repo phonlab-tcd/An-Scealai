@@ -74,6 +74,8 @@ export class RecordingComponent implements OnInit {
   showingArchivedRecording: boolean = false;
   archivedRecordings: Recording[] = [];
   activeRecording: Recording = null;
+  recordings: Recording[] = [];
+  currentRecording: Recording = null;
 
   /*
   * Call getStory() to get current story recording, story data, synthesise, and recordings
@@ -88,25 +90,68 @@ export class RecordingComponent implements OnInit {
     this.sectionTranscriptions = this.paragraphTranscriptions;
     this.isRecordingSection = this.isRecordingParagraph;
     const storyId = this.route.snapshot.paramMap.get('id');
-
     this.story = await firstValueFrom (this.storyService.getStory(storyId));
-    console.log(this.story)
-
-    
+    console.log("Story's active recording: ", this.story.activeRecording);
 
     if (this.story.activeRecording) {
-      console.log("Active recording exists, loading it and any archived ones")
-      this.activeRecording = await firstValueFrom(this.recordingService.get(this.story.activeRecording));
-      console.log("Active recording: ", this.activeRecording)
-      this.loadSynthesis(this.activeRecording.storyData);
-      this.loadAudio(this.activeRecording);
-      this.getArchivedRecordings();
+      console.log("Active recording exists, loading it and any archived ones");
+      this.loadRecordings();
+      // this.activeRecording = await firstValueFrom(this.recordingService.get(this.story.activeRecording));
+      // console.log("Active recording: ", this.activeRecording)
+      // this.loadSynthesis(this.activeRecording.storyData);
+      // this.loadAudio(this.activeRecording);
+      // this.getArchivedRecordings();
     }
     else {
-      console.log("No active recording, creating a new new one...")
+      console.log("No active recording, creating a new new one...");
+      this.createNewRecording();
       //this.archive();
     }
   }
+
+  async loadRecordings() {
+    console.log("Loading recordings from the DB...")
+    this.recordings = await firstValueFrom(this.recordingService.getRecordings(this.story._id));
+    console.log("All recordings from DB: ", this.recordings);
+
+    let activeRecording = this.recordings.filter(recording => {
+      return recording.archived === false;
+    });
+    console.log("Active recordings: ", activeRecording)
+    this.setCurrentRecording(activeRecording[0])
+
+  }
+
+  setCurrentRecording(recording: Recording) {
+    this.currentRecording = recording;
+    console.log("Current active recording: ", this.currentRecording)
+    this.loadSynthesis(this.currentRecording.storyData);
+    this.loadAudio(this.currentRecording);
+  }
+
+  async createNewRecording() {
+    console.log("Creating new recording in DB...")
+    // create a new active recording with the story text
+    const newRecording = await firstValueFrom(this.recordingService.create(new Recording(this.story)));
+    console.log(newRecording);
+    console.log("Adding new recording as story's current active recording...")
+    // set this new recording to the story's current active recording
+    await firstValueFrom(this.storyService.updateActiveRecording(this.story._id, newRecording._id));
+
+    this.loadRecordings();
+
+  }
+
+  async archiveRecording() {
+    // set recording status to archived
+    console.log("Archiving... ", this.currentRecording);
+    let test = await firstValueFrom(this.recordingService.updateArchiveStatus(this.currentRecording._id));
+    console.log(test);
+    console.log("Archived")
+    // create a new active recording
+    this.createNewRecording();
+  }
+
 
   async getArchivedRecordings() {
     console.log("Getting archived recordings...")
