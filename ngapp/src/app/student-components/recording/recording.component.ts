@@ -80,6 +80,7 @@ export class RecordingComponent implements OnInit {
   * Reset variables when recording text updated (function called in updateStory())
   */
   async ngOnInit() {
+    console.log("Component is initialised")
     this.chunks = [];
     this.sectionAudioSources = this.paragraphAudioSources;
     this.sectionBlobs = this.paragraphBlobs;
@@ -87,28 +88,40 @@ export class RecordingComponent implements OnInit {
     this.sectionTranscriptions = this.paragraphTranscriptions;
     this.isRecordingSection = this.isRecordingParagraph;
     const storyId = this.route.snapshot.paramMap.get('id');
+
     this.story = await firstValueFrom (this.storyService.getStory(storyId));
+    console.log(this.story)
+
+    
+
     if (this.story.activeRecording) {
+      console.log("Active recording exists, loading it and any archived ones")
       this.activeRecording = await firstValueFrom(this.recordingService.get(this.story.activeRecording));
+      console.log("Active recording: ", this.activeRecording)
       this.loadSynthesis(this.activeRecording.storyData);
       this.loadAudio(this.activeRecording);
       this.getArchivedRecordings();
     }
     else {
-      this.archive();
+      console.log("No active recording, creating a new new one...")
+      //this.archive();
     }
   }
 
   async getArchivedRecordings() {
+    console.log("Getting archived recordings...")
     this.archivedRecordings = await firstValueFrom( this.recordingService.getHistory(this.story._id) );
     if (this.archivedRecordings) {
+      console.log("Adding active recording to archived list: ", this.activeRecording)
       this.archivedRecordings.push(this.activeRecording);
       this.archivedRecordings.sort((a, b) => (a.date > b.date ? -1 : 1));
+      console.log("Archived recordings: ", this.archivedRecordings);
     }
     
   }
 
   loadArchivedRecording(recording) {
+    console.log("Loading recording to screen...", recording);
     this.loadSynthesis(recording.storyData);
     this.loadAudio(recording);
 
@@ -116,11 +129,13 @@ export class RecordingComponent implements OnInit {
   }
 
   loadSynthesis(story: Story) {
+    console.log("Synthesising the recording...")
     this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
       this.paragraphs = paragraphs;
       this.sentences = sentences;
       this.chosenSections = this.paragraphs;
       this.audioFinishedLoading = true;
+      console.log("Done synthesising the recording")
     });
   }
 
@@ -131,19 +146,27 @@ export class RecordingComponent implements OnInit {
    * @param story - story whose activeRecording will be updated
    */
   async archive() {
+    console.log("Archiving active recording... ", this.story.activeRecording)
     
     if(this.story.activeRecording) {
+      console.log("Current active recording exists, changing its status to archived...")
       this.recordingService.updateArchiveStatus(this.story.activeRecording).subscribe();
+      console.log("Status changed to archived")
     }
-    
 
+    console.log("Creating new recording in DB...")
     const newRecording = await firstValueFrom(this.recordingService.create(new Recording(this.story)));
+    console.log("New recording created")
 
     if (newRecording.recording) {
       const newActiveRecordingId = newRecording.recording._id;
+      console.log("Updating active recording status for story...")
       await this.storyService.updateActiveRecording(this.story._id, newActiveRecordingId);
+      console.log("Status updated")
       this.story.activeRecording = newActiveRecordingId;
       this.activeRecording = newRecording.recording;
+      console.log("Active recording: ", this.activeRecording);
+      console.log("Now load the synthesis and any previously archived recordings...")
 
       // Reset all recording / audio data
       this.paragraphs = [];
@@ -162,7 +185,8 @@ export class RecordingComponent implements OnInit {
       this.sectionTranscriptions = [];
 
       this.popupVisible = false;
-      this.loadSynthesis(this.story);
+      this.loadSynthesis(this.activeRecording.storyData);
+      this.loadAudio(this.activeRecording)
       this.getArchivedRecordings();
     }
   }
@@ -177,6 +201,7 @@ export class RecordingComponent implements OnInit {
    * @param recording - recording whose audio clips should be loaded
    */
   loadAudio(recording: Recording) {
+    console.log("Loading audio...")
     this.audioFinishedLoading = false;
     for (let i=0; i<recording.paragraphIndices.length; ++i) {
       this.recordingService.getAudio(recording.paragraphAudioIds[i]).subscribe((res) => {
@@ -192,6 +217,7 @@ export class RecordingComponent implements OnInit {
         this.sentenceTranscriptions[recording.sentenceIndices[i]] = recording.sentenceTranscriptions[recording.sentenceIndices[i]];
       });
     }
+    console.log("Done loading audio")
   }
 
   /**
