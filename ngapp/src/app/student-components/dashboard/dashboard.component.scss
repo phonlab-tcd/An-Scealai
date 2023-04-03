@@ -236,6 +236,16 @@
   cursor: pointer;
 }
 
+.closeSynthesisBtn {
+  float: right;
+  padding-top: 10px;
+  padding-right: 30px;
+}
+
+.closeSynthesisBtn:hover {
+  cursor: pointer;
+}
+
 .dictionaryHeight {
   height: var(--dictionaryHeight);
 }

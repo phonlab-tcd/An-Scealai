@@ -330,6 +330,11 @@
     </div>
   </div>
 
+  <!-- close synthesis button -->
+  <div *ngIf="!synthesisPlayer?.hideEntireSynthesisPlayer" (click)="this.dontToggle = true; goToSynthesis()" class="closeSynthesisBtn">
+    <i class="fa fa-times"></i>
+  </div>
+
   <app-synthesis-player
   #mySynthesisPlayer
   [text]="story.text"
