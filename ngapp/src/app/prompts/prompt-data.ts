@@ -1,3 +1,8 @@
+
+
+//db.prompts.insert({"type":"stateExam", "level":"lcol", "prompt":"Tháinig an oíche mhór. Bhí an seó tallainne ag tosú agus bhí mé ag dul ar an stáitse… (2019)", "lastUpdated": new Date()})
+
+
 export const PROMPT_DATA = {
     'state-exam': {
         sep_jc_choices: [

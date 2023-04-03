@@ -7,6 +7,9 @@ import { ActivatedRoute } from "@angular/router";
 import { PROMPT_DATA } from "./prompt-data";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.component";
+import { firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import config from 'abairconfig';
 
 @Component({
   selector: "app-prompts",
@@ -20,7 +23,7 @@ export class PromptsComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
 
   // options and forms for prompt preferences
-  levelPreferences: string[] = ["sep_jc_choices", "sep_lcol_choices", "sep_lchl_choices"];
+  levelPreferences: string[] = ["jc", "lcol", "lchl"];
   dialectPreferences: string[] = ["munster", "connacht", "ulster"];
   levelForm: FormGroup;
   dialectForm: FormGroup;
@@ -28,7 +31,7 @@ export class PromptsComponent implements OnInit {
   // variables for generating prompt
   promptExists: boolean = false;
   prompt: string;
-  currentPromptBank: string[];
+  currentPromptBank: string[] = [];
 
   // variables for generating story prompts
   chosenCharacter: string;
@@ -46,31 +49,18 @@ export class PromptsComponent implements OnInit {
     private fb: FormBuilder,
     public ts: TranslationService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private http: HttpClient,
   ) {
     this.promptType = this.route.snapshot.params["type"];
-    this.data = PROMPT_DATA[this.promptType];
+    //this.data = PROMPT_DATA[this.promptType];
     this.createForms();
   }
 
-  ngOnInit(): void {}
+  async ngOnInit() {
 
-  /**
-   * Initialise forms for level selection and dialect selection
-   */
-  createForms() {
-    this.levelForm = this.fb.group({
-      level: ["sep_jc_choices"],
-    });
-    this.dialectForm = this.fb.group({
-      dialect: ["munster"],
-    });
-  }
+    console.log(this.promptType)
 
-  /**
-   * Generate a word bank from the data based on type and preferences
-   */
-  generatePromptBank() {
     if (this.promptType == "story") {
       this.currentPromptBankStory = this.data[this.levelForm.controls["level"].value];
       this.randomPromptStory(this.currentPromptBankStory);
@@ -78,20 +68,47 @@ export class PromptsComponent implements OnInit {
     }
 
     if (this.promptType == "state-exam") {
-      this.currentPromptBank = this.data[this.levelForm.controls["level"].value];
+      this.data = Object.values(await firstValueFrom(this.http.get(`${config.baseurl}prompt/getByType/stateExam`)));
     } else if (this.promptType == "proverb") {
-      this.currentPromptBank = this.data[this.dialectForm.controls["dialect"].value];
+      this.data = Object.values(await firstValueFrom(this.http.get(`${config.baseurl}prompt/getByType/proverb/`)));
+    } else {
+      this.data = Object.values(await firstValueFrom(this.http.get(`${config.baseurl}prompt/getByType/general`)));
+    }
+
+    console.log(this.data);
+
+  }
+
+  /**
+   * Initialise forms for level selection and dialect selection
+   */
+  createForms() {
+    this.levelForm = this.fb.group({
+      level: ["jc"],
+    });
+    this.dialectForm = this.fb.group({
+      dialect: ["munster"],
+    });
+  }
+
+  async generatePromptBank() {
+    if (this.promptType == "state-exam") {
+      this.currentPromptBank = this.data.filter(entry => entry.level == this.levelForm.controls["level"].value);
+    } else if (this.promptType == "proverb") {
+      this.currentPromptBank = this.data.filter(entry => entry.dialect == this.dialectForm.controls["dialect"].value);
     } else {
       this.currentPromptBank = this.data;
     }
-    this.randomPrompt();
+
+    this.getRandomPrompt();
+
   }
 
   /**
    * Generate a random prompt from the prompt bank
    */
-  randomPrompt() {
-    this.prompt = this.currentPromptBank[this.randomNumber(this.currentPromptBank.length)];
+  getRandomPrompt() {
+    this.prompt = this.currentPromptBank[this.randomNumber(this.currentPromptBank.length)]['prompt'];
     this.promptExists = true;
   }
 

@@ -104,6 +104,7 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate);
+    console.log(this.grammarErrorTimeCounts)
   }
 
   /**
