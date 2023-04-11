@@ -1356,7 +1356,7 @@ export default {
     ga: 'Foclóir',
     en: 'Dictionary' },
   recordings: {
-    ga: 'Taifeadadh',
+    ga: 'Fuaimniú',
     en: 'Recordings' },
   recording: {
     ga: 'Taifeadadh',
@@ -2323,23 +2323,34 @@ export default {
     ga: 'Eochair eolais',
     en: 'Legend' },
   average_word_counts: {
-    ga: 'Líon na bhfocal ar an meán',
+    ga: 'Meán-líon na bhfocal i do chuid scéalta',
     en: 'Average Word Counts' },
   ngram_distribution: {
-    ga: 'Dáileadh na N-gram',
-    en: 'N-gram distribution' },
+    ga: 'Dáileadh na bhfocal/na bhfrásaí’',
+    en: 'Word/phrases distribution' },
+  frequency: {
+    ga: 'Minicíocht',
+    en: 'Frequency' },
   dictionary_lookups: {
-    ga: 'Focail a cuardaíoch',
+    ga: 'Cuardaíodh',
     en: 'Dictionary Lookups' },
   no_words_lookedup: {
     ga: 'Níor aimsíodh aon chuardach',
     en: 'No words looked up' },
   statistics_dashboard: {
-    ga: 'Deais Staitisticí',
+    ga: 'Na Staitisticí',
     en: 'Statistics Dashboard' },
   grammar_errors_over_time: {
-    ga: 'Líon na nEarráidí Gramadaithar am',
+    ga: 'Earráidí thar Tréimhse',
     en: 'Grammar Errors Over Time'
+  },
+  num_of_errors: {
+    ga: 'Líon na nEarráidí',
+    en: 'No. of errors'
+  },
+  n_gram: {
+    ga: 'Roghnaigh líon na bhfocal’ ',
+    en: 'Choose no. of words'
   },
   select_a_classroom: {
     ga: 'Roghnaigh rang',
@@ -2348,7 +2359,7 @@ export default {
     ga: 'Raon na nDátaí',
     en: 'Date Range' },
   speak: {
-    ga: 'Abair scéal',
+    ga: 'Abair é',
     en: 'Speak' },
   download: {
     ga: 'Íoslódáil',
@@ -2412,10 +2423,10 @@ export default {
     ga: 'Seiceálaí don Chomhfhreagras Caol/Leathan',
     en: 'Broad/Slender Checker' },
   save_as: {
-    ga: 'Sábháil mar',
+    ga: 'Teideal',
     en: 'Save as' },
   format: {
-    ga: 'Formáid',
+    ga: 'Canúint',
     en: 'Format' },
   an_gramadoir_description: {
     ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',

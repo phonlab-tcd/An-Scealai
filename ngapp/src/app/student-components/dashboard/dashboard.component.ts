@@ -465,7 +465,7 @@ export class DashboardComponent implements OnInit {
       data: {
         title: this.ts.l.download,
         type: 'select',
-        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt', '.pptx', '.html', '.md', '.latex', '.json']],
+        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt']],
         confirmText: this.ts.l.download,
         cancelText: this.ts.l.cancel
       },
