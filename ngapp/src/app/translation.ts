@@ -6,7 +6,7 @@ export default {
     ga: 'Ba cheart go mbeadh na gutaí seo ar aon dul de réir riail Leathan/Caol.',
     en: 'These vowels should be in agreement according to the Leathan/Caol rule.' },
   voice: {
-    ga: 'Caint',
+    ga: 'Roghnaigh guth',
     en: 'Voice',
   },
   nemo_friendly_pmg_multidialect: {
@@ -920,7 +920,7 @@ export default {
     ga: 'Athraigh teideal/canúint',
     en: 'Edit title/dialect' },
   done: {
-    ga: 'Críochnaithe',
+    ga: 'Déanta',
     en: 'Done' },
   sure_you_want_to_delete_code: {
     ga: 'Cinnte go bhfuil tú ag iarraidh an cód seo a ghlanadh?',
@@ -2169,15 +2169,21 @@ export default {
   dashboard_prompts: {
     ga: '(Déanta le leideanna)',
     en: '(Made using prompts)' },
+  dictogloss: {
+    ga: 'Deachtú',
+    en: 'Dictogloss' },
+  dictogloss_title: {
+    ga: 'Meaisín Deachtúcháin',
+    en: 'Dictogloss' },
   dictogloss_usage: {
     ga: 'Conas Dictogloss a úsáid',
     en: 'How to use Dictogloss' },
   dictogloss_usage_close: {
     ga: 'Folaigh eolas',
     en: 'Hide info' },
-  dictogloss_enter_story: {
-    ga: 'Cuir isteach scéal', 
-    en: 'Enter story' },
+  submit: {
+    ga: 'Seol', 
+    en: 'Submit' },
   dictogloss_timer_off: {
     ga: '🕒❌',
     en: '🕒❌' },
@@ -2190,18 +2196,18 @@ export default {
   dictogloss_error: {
     ga: '*Iontráil Scéal Anseo',
     en: '*Enter Story Here' },
-  dictogloss_audio: {
-    ga: 'Athsheinm Fuaime',
+  audio_playback: {
+    ga: 'Cnaipe Seinnte',
     en: 'Audio Playback' },
-  dictogloss_playback_speed: {
-    ga: 'Luas Athsheinm',
+  playback_speed: {
+    ga: 'Luas na Cainte',
     en: 'Playback Speed' },
   dictogloss_hint: {
     ga: 'Cliceáil le haghaidh leid',
     en: 'Click for a hint' },
-  dictogloss_guess: {
-    ga: 'seiceáil',
-    en: 'check' },
+  check: {
+    ga: 'Seiceáil',
+    en: 'Check' },
   dictogloss_record_audio:{
     ga: '🎤 Taifeadadh ar',
     en: '🎤 Recording off' },
@@ -2221,8 +2227,11 @@ export default {
     ga: ' as ',
     en: ' out of ' },
   dictogloss_guessed3: {
-    ga: ' buille faoi thuairim agat.',
+    ga: ' agat.',
     en: '.' },
+  incorrect_guesses: {
+    ga: 'Leaganacha nach raibh sa téacs:',
+    en: 'Incorrect guesses:' },
   you_filled_in_all_blanks: {
     ga: 'Líon tú na bearnaí go léir!',
     en: 'You filled in all the blanks!' },
@@ -2236,25 +2245,49 @@ export default {
     ga: 'Téigh go dtí mo scéalta',
     en: 'Go to my stories' },
   how_to_use_dictogloss: {
-    ga: 'Conas Dictogloss a úsáid',
+    ga: 'Conas an Meaisín Deachtúcháin a úsáid',
     en: 'How to use Dictogloss' },
-  dictogloss_char_limit: {
-    ga: 'Teorainn Carachtair 2000',
-    en: '2000 Character Limit' },
+  can_you_reconstruct_text_just_heard: {
+    ga: 'An mbeidh tú in ann an téacs a athchruthú?',
+    en: 'Can you reconstruct the text you just heard?' },
+  following_are_the_steps: {
+    ga: 'Na céimeanna:',
+    en: 'The following are the steps:' },
+  // dictogloss_char_limit: {
+  //   ga: 'Teorainn Carachtair 2000',
+  //   en: '2000 Character Limit' },
   dictogloss_instructions_1: {
-    ga: '1. Cuir sliocht Gaeilge isteach sa chéad ionchur téacs.',
-    en: '1. Enter an Irish passage into the text input box.' },
+    ga: 'Cuir téacs Gaeilge isteach sa bhosca ionchuir (is féidir suas le 2000 carachtair a thógáil ó áit ar bith).',
+    en: 'Write some Irish text into the input box (this may be typed / taken from anywhere and have up to 2000 characters).' },
   dictogloss_instructions_2: {
-    ga: '2. Éist leis an tsintéis gutha a thugtar ón sliocht.',
-    en: '2. Listen to the voice synthesis that is generated from the passage.' },
+    ga: 'Imeoidh an téacs ón scáileáin agus léifear amach duit é (pé méid uair is mian leat).',
+    en: 'The text will disappear from the input box and then read out to you (this reading may be repeated a number of times).' },
   dictogloss_instructions_3: {
-    ga: '3. Déan iarracht é a athscríobh de chluas.',
-    en: '3. Try to rewrite the text by ear.' },
-  dictogloss_tip: {
-    ga: 'Leid: Má tá tú i bhfostú, is féidir leat cliceáil ar cheann de na spásanna ina dtéann na focail agus faigh an chéad litir uaidh.',
-    en: 'Tip: If you are stuck, click on a hidden word to reveal the first letter.' },
+    ga: 'Líon isteach aon fhocail a fhanann leat ón téacs. Is féidir an focal a scríobh isteach nó é a rá os ard.',
+    en: 'When you’ve finished listening, fill in any word or words that you can recall from the text. If correct, the words will appear in their appropriate positions in the text. Each guess may be either written or spoken.' },
+  dictogloss_instructions_4: {
+    ga: 'Bheadh sé an-deacair cuimhneamh ar an téacs ina iomlán… mar sin, tabhair buile faoi thuairim chun na focail eile a aimsiú – beidh do chuid eolais faoin ngramadach agus stór focal cabhrach duit anseo.',
+    en: 'It would be very difficult to recall the text in its entirety, so you must give it your best guess - your grammar knowledge and vocabulary will be a big help.' },
+  dictogloss_instructions_5: {
+    ga: 'Féach cén fhad a thógfaidh sé ort an t-alt a athchruthú ina iomlán.',
+    en: 'See how long it takes you to reconstruct the text in its entirety.' },
+  dictogloss_tip_1: {
+    ga: 'Mar phíosa spraoi is féidir an clog a úsáid mar choimeádóir ama – is féidir do fhad ama a thaifead agus a chur i gcomparáid le hiarrachtaí do chairde!',
+    en: 'You can time how long it takes you to complete the task (see timer on side of input box). You may create competition with your friends here in a game like atmosphere!' },
+  dictogloss_tip_2: {
+    ga: 'Leid ag teastáil? Is féidir cliceáil in aon bhosca ar leith agus tabharfaidh sé an chéad litir den fhocal duit mar nod.',
+    en: 'Need a Hint? By clicking on a particular box the first letter of the appropriate word appears as a hint.' },
+  sentence_number: {
+    ga: 'Abairt ',
+    en: 'Sentence ' },
+  minutes: {
+    ga: ' nóiméad ',
+    en: ' minutes ' },
+  seconds: {
+    ga: ' soicind ',
+    en: ' seconds ' },
   dictogloss_type_story: {
-    ga: 'Write story here...',
+    ga: 'Cuir téacs isteach anseo...',
     en: 'Type story here...' },
   teacher_send_dictogloss: {
     ga: 'Seol Dictogloss',

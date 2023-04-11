@@ -12,8 +12,10 @@
     animation-name: fadeIn;
 }
 
-.playback {
+.playback {   
     margin: 8px;
+    padding: 10px;
+    font-weight: bold;
 }
 
 .synth-item {
@@ -71,29 +73,24 @@
     flex-direction: row;
 }
 
-.button-guessed {
-    max-height: min-content;
+.hiddenWordButton {
     margin-top: 4px;
     border-radius: 4px;
     border-style: solid;
+    padding: 10px;
+}
+
+.hiddenWordButton.guessed {
     border-color: rgba($color: #008f13, $alpha: 1.0);
     background-color: rgba($color: rgba(131, 255, 131, 0.459), $alpha: 1.0);
 }
 
-.button-pressed {
-    max-height: min-content;
-    margin-top: 4px;
-    border-radius: 4px;
-    border-style: solid;
+.hiddenWordButton.pressed {
     border-color: rgba($color: #8f6200, $alpha: 1.0);
     background-color: rgba($color: rgba(255, 199, 46, 0.671), $alpha: 1.0);
 }
 
-.button-unguessed {
-    max-height: min-content;
-    margin-top: 4px;
-    border-radius: 4px;
-    border-style: solid;
+.hiddenWordButton.unguessed {
     border-color: rgba($color: #8f0000, $alpha: 1.0);
     background-color: rgba($color: rgba(255, 131, 131, 0.459), $alpha: 1.0);
 }
@@ -177,10 +174,6 @@
     display: flex;
     justify-content: space-evenly;
     padding: 6px;
-}
-
-.speed-voice-selection {
-    display: table-column;
 }
 
 .recordingIcon {

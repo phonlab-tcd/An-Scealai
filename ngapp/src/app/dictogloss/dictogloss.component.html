@@ -2,13 +2,13 @@
     <div id="selectorDiv" style="display:block">
         <!-- Instructions popup -->
         <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
-        <h3>Dictogloss</h3>
+        <h3>{{ts.l.dictogloss_title}}</h3>
         <div *ngIf="!generatedFromMessages">
             <!-- text input -->
             <div style="display: flex; justify-content: center;padding:10px">
                 <textarea spellcheck=false class="textarea" id="textSelector" rows="4" maxlength="2000" placeholder="{{ts.l.dictogloss_type_story}}" autofocus></textarea>
             </div>
-            <button class="button" (click)="loadDictogloss();">{{ts.l.dictogloss_enter_story}}</button>
+            <button class="button" (click)="loadDictogloss()">{{ts.l.submit}}</button>
             <!--Timer settings-->
             <button *ngIf="playWithTimer === false && gameInProgress == false" class="button timer-button off" (click)="toggleTimer();">
                 {{ts.l.dictogloss_timer_off}}
@@ -26,7 +26,7 @@
     <!-- Dictogloss body -->
     <div *ngIf="hasText">
         <hr>
-        <h3>{{ts.l.dictogloss_audio}}</h3>
+        <h3>{{ts.l.audio_playback}}</h3>
         <!--Voice Synthesis-->
         <div class="synth-container">
             <!-- List of synthesised sentences-->
@@ -35,16 +35,14 @@
                     <app-synth-item class="synth" [playbackSpeed]=playbackSpeed [synthItem]=si [i]=i></app-synth-item>
                 </div>
             </div>
-            <div class="speed-voice-selection">
-                <!-- Select voice -->
-                <synth-voice-select style="margin: 4px" (selectVoice)="refreshVoice($event);"></synth-voice-select>
-                <!-- Select speed -->
-                <div class="speed-container">
-                    <p class="playback-header">{{ts.l.dictogloss_playback_speed}}</p>
-                    <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
-                        <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
-                    <span class="speed-button" (click)="changeSpeed(1);">〉</span>
-                </div>
+            <!-- Select voice -->
+            <synth-voice-select style="margin: 4px" (selectVoice)="refreshVoice($event);"></synth-voice-select>
+            <!-- Select speed -->
+            <div class="speed-container">
+                <p class="playback-header">{{ts.l.playback_speed}}</p>
+                <span class="speed-button" (click)="changeSpeed(-1);">〈</span>
+                    <span style="margin: 0px 8px 0px 8px">{{playbackSpeed}}x</span>
+                <span class="speed-button" (click)="changeSpeed(1);">〉</span>
             </div>
         </div>
         <hr>
@@ -56,24 +54,24 @@
                     <!-- word with letters hidden -->
                     <span class="unguessed-class" *ngIf="shownWords[index] !== wordsPunc[index] && !(this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1));">
                         <span class="hint">{{ts.l.dictogloss_hint}}</span>
-                        <button class="button-unguessed" (click)="firstChar(index); generalCheck();">
+                        <button class="hiddenWordButton unguessed" (click)="firstChar(index); generalCheck();">
                             <h5 class="button-text">{{shownWords[index]}}</h5>
                         </button>
                     </span>
                     <!-- word with first letter shown -->
                     <span *ngIf="shownWords[index] !== wordsPunc[index] && this.shownWords[index].slice(0, 1) === this.wordsPunc[index].slice(0, 1);">
-                        <button class="button-pressed">
+                        <button class="hiddenWordButton pressed">
                             <h5 class="button-text">{{shownWords[index]}}</h5>
                         </button>
                     </span>
                     <!-- full word shown when guessed -->
                     <span *ngIf="shownWords[index] === wordsPunc[index];">
-                        <button class="button-guessed">
+                        <button class="hiddenWordButton guessed">
                             <h5 class="button-text">{{shownWords[index]}}</h5>
                         </button>
                     </span>
                 </div>
-                    <!-- word list if punctuated-->
+                    <!-- add padding if punctuation included-->
                 <ng-template #punctuated><b><h5 style="margin: 2px;">{{i}}</h5></b></ng-template>
             </div>
         </div>
@@ -86,8 +84,8 @@
             <button *ngIf="!isRecording" type="button" (click)="speakAnswer();" class="button"><i class="fas fa-microphone"></i></button>
             <button *ngIf="isRecording" (click)="speakAnswer();" class="button"><i class="recordingIcon fa fa-circle"></i></button>
             <!-- guess input -->
-            <input id="guesses_input" style="width: 80%" spellcheck=false>
-            <button class="button" (click)="delimitPotentialWords();">{{ts.l.dictogloss_guess}}</button>
+            <input id="guesses_input" style="width: 80%" spellcheck=false (keyup.enter)="delimitPotentialWords()">
+            <button class="button" (click)="delimitPotentialWords()">{{ts.l.check}}</button>
             <!-- correct/wrong guess counter -->
             <div>
                 <b style="color:green; padding-right: 1em;">{{ts.l.correct}}: {{rightCount}}</b>
@@ -97,9 +95,12 @@
                 <b>{{ts.l.dictogloss_guessed1}}{{rightCount}}{{ts.l.dictogloss_guessed2}}{{words.length}}{{ts.l.dictogloss_guessed3}}</b>
             </div>
             <!-- list of wrong guessed words -->
-            <div *ngIf="wrongWords && wrongWords.length > 0" class="wrongWordBank">
-                <div *ngFor="let word of wrongWords" >
-                    <div class="wordBankItem">{{word}}</div>
+            <div *ngIf="wrongWords && wrongWords.length > 0" >
+                <div style="float:left; padding:10 10">{{ts.l.incorrect_guesses}}</div><br>
+                <div class="wrongWordBank">
+                    <div *ngFor="let word of wrongWords" >
+                        <div class="wordBankItem">{{word}}</div>
+                    </div>
                 </div>
             </div>
         </div>
