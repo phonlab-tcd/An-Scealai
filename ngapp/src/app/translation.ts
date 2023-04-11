@@ -2385,18 +2385,20 @@ export default {
   academic_papers: {
     ga: 'Foilseacháin Acadúla',
     en: 'Academic Papers' },
-  ell_description: {
-    ga: 'Is duais é seo a bhronntar ar na tionscadail fhoghlama teanga is nuálaí. Tá an Séala seo comhordnaithe ag an gCoimisiún Eorpach agus á riaradh ag Léargas in Éirinn ó 1999.',
-    en: 'The ELL is a cross-sectoral Award that recognises the most innovative language learning projects. The is an Award coordinated by the European Commission and it has been managed by Léargas in Ireland since 1999.' },
-  ell_award: {
-    ga: 'An Séala Eorpach Teanga 2022',
-    en: 'European Language Label Award 2022' },
-  scealai_wins_ell_award: {
-    ga: 'Bronnfar An Séala Eorpach Teanga ar thionscadal ABAIR- An Scéalaí ag ócáid i bPáirc an Chrócaigh, 10 Samhain',
-    en: 'An Scéalaí has won a European Language Label Award 2022!' },
-  certificate: {
-    ga: 'Deimhniú',
-    en: 'Certificate'
+  awards: {
+    ga: 'Awards',
+    en: 'Awards' },
+  ell_description_1: {
+    ga: 'Tugadh aitheantas nach beag don tionscadal <i> An Scéalaí </i> nuair a bronnadh <b> An Séala Eorpach Teanga </b> air, ag ócáid a eagraíodh i bPáirc an Chrócaigh i mí na Samhna 2022. Bronntar é seo go bliantúil ar thionscnaimh a úsáideann modhanna nua-aimseartha chun teangacha a mhúineadh agus chun foghlaimeoirí a spreagadh chun teangacha a fhoghlaim agus chun tuiscint níos fearr a fháil ar chultúir éagsúla. Piocadh <i> An Scéalaí </i> go speisialta mar gheall ar an úsáid a baineadh as Teicneolaíocht an Eolais agus na meáin dhigiteacha.',
+    en: 'We were delighted to have been awarded <b> The European Language Label </b> for our <i> An Scéalaí </i> project. The prestigious award was presented in November 2022 at a ceremony at Croke Park. This annual award is presented in recognition of the development of innovative methods that proved to be effective in the promotion and diffusion of knowledge of the numerous idioms existing in the EU. Multilingualism is one of the cornerstones of the European Project and a powerful symbol of being united in diversity.'
+  },
+  ell_description_2: {
+    ga: 'Bronnann an Suathantas Teangacha Eorpach aitheantas ar thionscnaimh i dtíortha an Aontais Eorpaigh agus is é Léargas a eagraíonn é. Tá an t-ilteangachas ina bhunchloch ag an Aontas Eorpach agus féachtar air mar shiombal den aontacht is féidir a chruthú tríd an éagsúlacht.',
+    en: 'The <i> An Scéalaí </i> project received the award for its possibilities for  enhancing language learning through Information and Communication Technology (ICT) and digital media.'
+  },
+  ell_description_3: {
+    ga: 'Tá an-áthas orainn an t-aitheantas seo a bheith faighte againn don dul chun cinn atá déanta go dtí seo leis <i>An Scéalaí</i>.',
+    en: 'A massive congratulations to everyone involved in bringing this project to its current level of development.'
   },
   settings: {
     ga: 'Socruithe',
