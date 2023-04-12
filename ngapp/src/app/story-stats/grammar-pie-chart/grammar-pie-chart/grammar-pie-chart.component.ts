@@ -27,6 +27,7 @@ export class GrammarPieChartComponent implements OnInit {
   }
   
   private loadPieChart() {
+    
     let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
     if (this.pieChart) { this.pieChart.destroy(); } 

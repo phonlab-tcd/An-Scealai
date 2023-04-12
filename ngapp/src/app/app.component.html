@@ -86,16 +86,16 @@
           LARA
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()" >
-            {{ ts.l.irish_stories }}
-          </button>
           <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.what_is_LARA }}
+          </button>
+          <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()" >
+            {{ ts.l.irish_stories }}
           </button>
         </div>
       </div>
       <!--Taidhgín-->
-      <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom" >
+      <!-- <div ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom" >
         <button class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();">
           Taidhgín
         </button>
@@ -110,21 +110,21 @@
             {{ ts.l.what_is_taidhgin_title }}
           </button>
         </div>
-      </div>
+      </div> -->
       <!--Prompts-->
       <div *ngIf="auth.isLoggedIn()" ngbDropdown class="d-inline-block" #myDrop3="ngbDropdown" placement="bottom">
         <button matBadge="Beta" matBadgeSize="small" matBadgePosition="before" matBadgeColor="accent" class="btn navbarBtn" ngbDropdownToggle onclick="this.blur();" >
-          {{ ts.l.prompts }}
+          Cén Scéal?
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()" >
-            {{ ts.l.pos_dropdown }}
-          </button>
-          <button routerLink="/prompts/state-exam" ngbDropdownItem (click)="changeCheck()" >
-            {{ ts.l.sep_dropdown }}
+          <button routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()" >
+            {{ ts.l.gp_dropdown }}
           </button>
           <button routerLink="/prompts/proverb" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.pp_dropdown }}
+          </button>
+          <button routerLink="/prompts/state-exam" ngbDropdownItem (click)="changeCheck()" >
+            {{ ts.l.sep_dropdown }}
           </button>
           <button routerLink="/prompts/lara" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.lp_dropdown }}
@@ -132,8 +132,8 @@
           <button routerLink="/prompts/story" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.sp_dropdown }}
           </button>
-          <button routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()" >
-            {{ ts.l.gp_dropdown }}
+          <button routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()" >
+            {{ ts.l.pos_dropdown }}
           </button>
         </div>
       </div>
@@ -143,6 +143,12 @@
           {{ts.l.dictogloss}}
         </button>
       </div>
+
+      <!-- An Bat Mírialta -->
+      <div class="d-inline-block">
+        <a href="https://bat-mirialta.detail-design-develop.com/" target="_blank" rel="noopener noreferrer" class="navBtn">An Bat Mírialta</a >
+      </div>
+            
       <!--ABAIR-->
       <div class="d-inline-block">
         <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a >

@@ -7,14 +7,15 @@
 <div *ngIf="promptType !== 'pos'">
   <div>
     <div class="container">
-      <div *ngIf="promptType == 'state-exam'" class="header"> {{ ts.l.sep_header }} </div>
-      <div *ngIf="promptType == 'proverb'" class="header"> {{ ts.l.pp_header }} </div>
-      <div *ngIf="promptType == 'lara'" class="header"> {{ ts.l.lp_header }} </div>
+      <!-- Instructions popup -->
+      <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
+      <div *ngIf="promptType == 'state-exam'" class="header"> {{ ts.l.sep_dropdown }} </div>
+      <div *ngIf="promptType == 'proverb'" class="header"> {{ ts.l.pp_dropdown }} </div>
+      <div *ngIf="promptType == 'lara'" class="header"> {{ ts.l.lp_dropdown }} </div>
       <div *ngIf="promptType == 'story'" class="header"> {{ ts.l.sp_dropdown }} </div>
       <div *ngIf="promptType == 'general'" class="header"> {{ ts.l.gp_dropdown }} </div>
       <div>
-        <p *ngIf="promptType == 'state-exam'">{{ ts.l.sep_explanation }}</p>
-        <p *ngIf="promptType == 'proverb'">{{ ts.l.pp_explanation }}</p>
+        <p *ngIf="promptType == 'state-exam' || promptType == 'proverb'">{{ ts.l.pp_explanation }}</p>
         <p *ngIf="promptType == 'lara'">{{ ts.l.lp_explanation }}</p>
         <p *ngIf="promptType == 'story'">{{ ts.l.sp_explanation }}</p>
         <p *ngIf="promptType == 'general'">{{ ts.l.gp_explanation }}</p>
@@ -36,7 +37,7 @@
       <div *ngIf="promptType == 'proverb'" class="button-div">
         <form [formGroup]="dialectForm">
           <div class="formGroup">
-            <label class="formLabel">{{ ts.l.choose_level }}</label>
+            <label class="formLabel">{{ ts.l.choose_dialect }}</label>
             <select formControlName="dialect" class="level-select">
               <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">
                 {{ this.ts.l[dp] }}
@@ -85,10 +86,10 @@
           </div>
         </div>
         <!-- Generated Prompt -->
-        <div class="prompt"><i>{{ prompt }}</i></div>
+        <div class="prompt" *ngIf="promptType !== 'story'"><i>{{ prompt }}</i></div>
         <!-- Create New Story Button-->
         <button *ngIf="auth.getUserDetails().role == 'STUDENT'" class="button" (click)="createNewStory()">
-            {{ ts.l.new_story }}
+            {{ ts.l.start_my_story }}
         </button>
       </div>
     </div>

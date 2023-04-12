@@ -2,18 +2,26 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="container">
-          <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
-          <div class="header">
-            {{ts.l.pos_prompts}}
-            <h6>{{ts.l.pos_description}} </h6>
-          </div>
+          <div class="header"> {{ts.l.pos_dropdown}} </div>
+          <div style="padding-bottom:10px"> {{ts.l.pos_description}} </div>
           <div class="content">
             {{ts.l.pos_demand}}
             <!--Word Type Button Group-->
             <div class="word-types">
-              <div class="btn-group-sm" role="group">
-                  <button *ngFor="let type of wordTypes" type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
+              <div class="wordBankButtonsContainer">
+                <div *ngFor="let type of wordTypes">
+                  <button class="button" (click)=selectRandomWord(type)>{{ts.l[type]}}</button>
+                  <span><i class="fa fa-info-circle" style="cursor:pointer" (click)="openPartOfSpeechDescription(type)"></i></span>
+                </div>
+
               </div>
+              <!-- <div class="btn-group-sm" role="group">
+                <span *ngFor="let type of wordTypes">
+                  <button type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
+                  <i class="fa fa-info-circle" style="cursor:pointer;" (click)="openPartOfSpeechDescription(type)"></i>
+                </span>
+                  <button *ngFor="let type of wordTypes" type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
+              </div> -->
             </div>
           </div>
           <!--Word Card-->
@@ -22,16 +30,12 @@
               <h3 class="card-header">{{givenWord}}</h3>
             </div>
           </div>
-          <!--Ask for word-->
-          <div *ngIf="!givenWord" class="given-word">
-            <i>{{ts.l.pos_choose_word_type}}</i>
-          </div>
           <!--Confirm word choice-->
           <div *ngIf="givenWord" class="content"> 
             {{ts.l.pos_add_to_word_bank}}
             <div class="pos-confirmation-buttons">
-              <button type="button" (click)="addToWordBank()" class="button">{{ts.l.yes}}</button>
-              <button type="button" (click)="givenWord=''" class="button no">{{ts.l.no}}</button>
+              <button type="button" (click)="addToWordBank()" class="button">{{ts.l.pos_yes}}</button>
+              <button type="button" (click)="givenWord=''" class="button no">{{ts.l.pos_no}}</button>
             </div>     
           </div>
         </div>
@@ -99,7 +103,7 @@
                     (click)="createNewStory()" 
                     [disabled]="newStoryForm.pristine || newStoryForm.invalid" 
                     class="button">
-                    {{ts.l.pos_save_to_stories}}
+                    {{ts.l.start_my_story}}
                 </button>
             </div>
           </form>

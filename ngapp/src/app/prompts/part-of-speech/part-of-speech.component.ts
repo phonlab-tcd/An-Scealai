@@ -8,7 +8,6 @@ import { SynthesisService, Voice } from "app/services/synthesis.service";
 import { SynthItem } from "app/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
-import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { ErrorTag } from "../../lib/grammar-engine/types";
 import { PROMPT_DATA } from "../prompt-data";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -41,6 +40,16 @@ export class PartOfSpeechComponent implements OnInit {
   buttonsLoading: boolean = false;
   errorButtons: string[];
   selectedVoice: Voice;
+  posInformation: Object = {
+    "noun": "/assets/pdf/noun_information_ga.pdf",
+    "verb": "/assets/pdf/verb_information_ga.pdf",
+    "adjective": "/assets/pdf/adjective_information_ga.pdf",
+    "adverb": "/assets/pdf/adverb_information_ga.pdf",
+    "article": "/assets/pdf/article_information_ga.pdf",
+    "conjunction": "/assets/pdf/conjugation_information_ga.pdf",
+    "pronoun": "/assets/pdf/pronoun_information_ga.pdf",
+    "preposition": "/assets/pdf/preposition_information_ga.pdf",
+  }
 
   constructor(
     private storyService: StoryService,
@@ -146,30 +155,6 @@ export class PartOfSpeechComponent implements OnInit {
   }
 
   /**
-   * Open dialog for instructions
-   */
-  openInformationDialog() {    
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.pos_instructions,
-        type: 'simpleMessage',
-        message: `
-        <h6 align="justify">
-          <p>${this.ts.l.pos_instructions_description_1}</p>
-          <p>${this.ts.l.pos_instructions_description_2}</p>
-        </h6>
-        `,
-        confirmText: this.ts.l.done,
-      },
-      width: '80vh',
-    });
-    
-    this.dialogRef.afterClosed().subscribe( (_) => {
-        this.dialogRef = undefined;
-    });
-  }
-
-  /**
    * Add grammar highlighting to constructed prompt (Currently disabled)
    */
   async getBankHighlights() {
@@ -205,4 +190,25 @@ export class PartOfSpeechComponent implements OnInit {
       },
     });
   }
+
+  /**
+   * Open dialog for part of speech descriptions
+   */
+    openPartOfSpeechDescription(type:string) { 
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.pos_instructions[type],
+          type: 'PDF',
+          data: this.posInformation[type],
+          confirmText: this.ts.l.done,
+        },
+        width: '90vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (_) => {
+          this.dialogRef = undefined;
+      });
+    }
+
+
 }

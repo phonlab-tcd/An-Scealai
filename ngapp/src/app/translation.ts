@@ -2008,73 +2008,98 @@ export default {
     ga: 'Leideanna',
     en: 'Prompts' },
   pos_dropdown: {
-    ga: 'POS Leideanna',
-    en: 'POS Prompts'},
+    ga: 'Gineadóir ranna cainte',
+    en: 'Part-of-speech Generator'},
   sep_dropdown: {
-    ga: 'Leideanna Scrúdaithe Stáit',
-    en: 'State Exam Prompts' },
+    ga: 'Spreagthaí ó na scrúduithe',
+    en: 'Exam Prompts' },
   pp_dropdown: {
-    ga: 'Leideanna Seanfhocal',
+    ga: 'Seanfhocail mar spreagthaí',
     en: 'Proverb Prompts' },
   lp_dropdown: {
-    ga: 'Leideanna LARA',
+    ga: 'Spreagthaí ó LARA',
     en: 'LARA Prompts' },
   sp_dropdown: {
-    ga: 'Leideanna Scealaí',
-    en: 'Story Prompts' },
+    ga: 'Meascán Mearaí',
+    en: 'Combination Generator' },
   gp_dropdown: {
-    ga: 'Leideanna Cineálach',
+    ga: 'Spreagthaí Ginearálta',
     en: 'General Prompts' },
-  pos_prompts: {
-    ga: 'Cén Scéal!',
-    en: 'What a Story!' },
+  what_is_cen_sceal: {
+    ga: 'Cad é \'Cén Scéal?\'',
+    en: 'What is \'Cén Scéal?\'' },
+  cen_sceal_description_1: {
+    ga: 'Áis í seo a chun an scríbhneoireacht agus an scéalaíocht ó bhéal a spreagadh. An aidhm atá le \'Cén Scéal\' ná splanc a chur faoi do chuid samhlaíochta chun go rachfá i mbun pinn agus i mbun scéalaíochta.',
+    en: 'This innovative technology is designed to promote oral and written storytelling. The aim of \'Cén Scéal\' is to fire your imagination so that you may begin your journey towards becoming an Irish story creator.' },
+  how_does_it_work: {
+    ga: 'Cad a bheidh ann romhat?',
+    en: 'How does it work?' },
+  cen_sceal_description_2: {
+    ga: '<b>Gineadóir spreagthaí</b>: má tá tú ag iarraidh píosa a scríobh nó a ríomh ó bhéal, agus tú ag lorg smaointe le tosú, tabharfadh ‘Cén Scéal’ spreagadh nó nodanna duit. Spreagfaidh sé foghlaim fhéinriartha - ní gá duit a bheith ag brath ar éinne eile chun tús a chur le do shaothar.',
+    en: '<b> A prompt generator</b>: if you would like to create either an oral or written story, and would like some ideas to get you started, Cén Scéal will generate prompts for you. This will encourage self-directed learning because you will not be dependent on anyone else to help you begin.' },  
+  what_is_it_comprised_of: {
+    ga: 'Cad atá taobh thiar de seo?',
+    en: 'What is it comprised of?' },
+  cen_sceal_description_3: {
+    ga: 'Banc mór le taisce spreagthaí oiriúnacha, atá leagtha amach faoi théamaí ar leith.',
+    en: 'A large word bank of prompts, divided into six different themes' }, 
+  the_themes: {
+    ga: 'Na téamaí',
+    en: 'The Themes' },
+  general_prompts_description: {
+    ga: 'Spreagthaí Ginearálta: cum scéal ag tosú leis na nathanna a ghinfidh an ríomhaire duit.',
+    en: 'General Prompts: compose a story based on a sentence generated for you.' },
+  combination_generator_description: {
+    ga: 'Meascán mearaí: Cruthaigh scéal trí charactair, suíomhanna agus téamaí éagsúla a nascadh ar do bhealach féin.',
+    en: 'Combination generator: create a story by picking a unique combination from a list of characters, settings and themes.' },
+  proverb_prompts_description: {
+    ga: 'Seanfhocail mar spreagthaí: pioc seanfhocal le tús a chur le do scéal.',
+    en: 'Proverb prompts: select a proverb as a beginning to your story.' },
+  exam_prompts_description: {
+    ga: 'Spreagthaí ó na scrúduithe: cum do scéal féin bunaithe ar spreagthaí ó iarpháipéir scrúduithe.',
+    en: 'Previous Examination prompts: use previous exam paper prompts to compose your own story.' },
+  lara_prompts_description: {
+    ga: 'Spreagthaí ó LARA: tógadh na spreagthaí seo ón gcéad líne de na scéalta atá ar fáil ar LARA ar shuíomh An Scéalaí - cruthaigh leagan de do chuid féin den scéal.',
+    en: 'LARA Prompts: these prompts are the first lines of LARA stories available on the An Scéalaí webpage – use your imagination to come up with your own version of the story.' },
+  pos_generator_description: {
+    ga: 'Gineadóir Ranna Cainte: is féidir leat focail a roghnú ó ranna éagsúla cainte agus abairt a chumadh leis na focail sin. Is féidir an abairt sin a úsáid mar ionspioráid chun do scéal féin a thosú!',
+    en: 'Part-of-speech generator: choose words belonging to different parts-of-speech to compose your own sentence. Use this sentence as story starter inspiration!' },
+  cen_sceal: {
+    ga: 'Cén Scéal',
+    en: 'Cén Scéal' },
   pos_description: {
-    ga: 'Déan scéal trí fhocail randamacha a roghnú.',
-    en: 'Make a story by choosing random words.' },
+    ga: 'Cruthaigh abairt trí ranna cainte randamacha a shníomh le chéile. Úsáid an abairt seo chun tús a chur le do scéal féin. (Má tá dúshlán uait, roghnaigh réimse leathan ranna cainte!).',
+    en: 'Generate words from different part-of-speech categories and combine them to create a sentence. Use this sentence as your story starter. (Challenge yourself to select as many different parts-of-speech as possible for your sentence!).' },
   pos_demand: {
-    ga: 'Tabhair dom a: ',
-    en: 'Give me a: ' },
-  pos_choose_word_type: {
-    ga: 'Roghnaigh cineál focal',
-    en: 'Please choose a word type' },
+    ga: 'Roghnaigh: ',
+    en: 'Select a: ' },
   pos_add_to_word_bank: {
     ga: 'Ar mhaith leat an focal seo a chur le do bhanc focal?',
     en: 'Would you like to add this word to your word bank?' },
   pos_instructions: {
     ga: 'Conas "Cén Scéal!" a úsáid',
     en: 'How to use "What a Story!"' },
-  pos_instructions_description_1: {
-    ga: 'Ar dtús, roghnaigh ceann amháin de na cineálacha focal a thugtar. ' +
-    'Beidh focal randamach den chineál sin focal le feiceáil. ' +
-    'Más maith leat an focal cliceáil "Sea", agus mura bhfuil cliceáil "ní hea". Déan é seo arís go dtí go mbeidh an scéal inmhianaithe tosaithe agat.',
-    en: 'Firstly, select one of the given word types. '+
-    'A random word of that word type will appear. '+
-    'If you like the word click "yes", and if not click "no". Repeat this until you have the desired story started.' },
-  pos_instructions_description_2: {
-    ga: 'Ar an dara dul síos, cinntigh nach bhfuil gramadach mícheart ar bith ag do scéal (mar atá léirithe ag an aibhsiú dearg os cionn téacs mícheart). ' +
-    'Mura bhfuil tú sásta leis an scéal tosaithe is féidir leat "Athshocraigh Banc" a roghnú chun an banc focal a athshocrú. ' +
-    'Is féidir leat do scéal a shábháil ansin trí theideal, canúint bhailí a thabhairt dó agus “Sábháil go Scéalta” a bhrú.',
-    en: 'Secondly, make sure your story has no incorrect grammar(as indicated by the red highlighting over incorrect text). ' +
-    'If you\'re unhappy with the story starter you can select "Reset Bank" to reset the word bank. ' +
-    'You can then save your story by giving it a valid title, dialect and pressing "Save to Stories".' },
   pos_your_word_bank: {
     ga: 'Do Bhanc Focal: ',
     en: 'Your Word Bank: ' },
+  pos_yes: {
+    ga: 'Ba mhaith',
+    en: 'Yes' },
+  pos_no: {
+    ga: 'Níor mhaith',
+    en: 'No' },
   pos_synth: {
-    ga: 'Athsheinm Sintéise',
-    en: 'Synthesis Playback' },
+    ga: 'Éist le d\'abairt',
+    en: 'Listen to your sentence' },
   pos_reset_bank: {
-    ga: 'Banc Athshocraigh',
+    ga: 'Glan an Banc Focal',
     en: 'Reset Bank' },
-  pos_save_to_stories: {
-    ga: 'Shábháil ar Scéalta',
-    en: 'Save to Stories'},
   pos_save_name: {
-    ga: 'Ainmnigh Do Scéal',
+    ga: 'Ainmnigh do scéal',
     en: 'Name Your Story' },
   pos_no_words: {
-    ga: 'Focail Roghnaithe Le feiceáil Anseo',
-    en: 'Chosen Words Appear Here' },
+    ga: 'Taispeánfar na focail a roghnaigh tú anseo',
+    en: 'Chosen words appear here' },
   verb: {
     ga: 'Briathar', 
     en: 'Verb' }, 
@@ -2094,13 +2119,13 @@ export default {
     ga: 'Chinntitheoir', 
     en: 'Determiner' },
   article: {
-    ga: 'Airteagal', 
-    en: 'Article' }, 
-  adposition: {
-    ga: 'Adposition', 
-    en: 'Adposition' }, 
+    ga: 'An tAlt', 
+    en: 'The Article' }, 
+  preposition: {
+    ga: 'Réamhfhocal', 
+    en: 'Preposition' }, 
   conjunction: {
-    ga: 'Comhcheangail', 
+    ga: 'Cónasc', 
     en: 'Conjunction' }, 
   numeral: {
     ga: 'Uimhreacha', 
@@ -2112,24 +2137,30 @@ export default {
     ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
     en: 'Press the button to recieve a topic or story starter to write about' },
   get_prompt: {
-    ga: 'Faigh Leid',
+    ga: 'Gin spreagadh',
     en: 'Get Prompt' },
+  start_my_story: {
+    ga: 'Tosaigh anois',
+    en: 'Start my story' },
   please_choose_prompt: {
     ga: 'Roghnaigh leid le do thoil',
     en: 'Please choose a prompt' },
   choose_level: {
-    ga: 'Roghnaigh Leibhéal Gaeilge',
-    en: 'Choose a Level of Irish' },
+    ga: 'Roghnaigh leibhéal:',
+    en: 'Choose level:' },
+  choose_dialect: {
+    ga: 'Roghnaigh canúint:',
+    en: 'Choose dialect:' },
   level_preferences: {
-    ga: ['Teastas Sóisearach', 'Ardteistiméireacht (GL)', 'Ardteistiméireacht (AL)'],
+    ga: ['Teastas Sóisearach', 'Ardteist (GL)', 'Ardteist (AL)'],
     en: ['Junior Certificate', 'Leaving Certificate (OL)', 'Leaving Certificate (HL)'],
   },
   pp_header: {
     ga: 'Leideanna Seanfhocal',
     en: 'Proverb Prompts' },
   pp_explanation: {
-    ga: 'Brúigh an cnaipe chun seanfhocal a fháil le scríobh faoi/úsáid',
-    en: 'Press the button to recieve a proverb to write about/use' },
+    ga: 'Brúigh an cnaipe chun seanfhocal a fháil',
+    en: 'Click below to generate prompt' },
   pp_no_prompt: {
     ga: 'Roghnaigh seanfhocal le do thoil',
     en: 'Please choose a proverb' },
@@ -2140,14 +2171,14 @@ export default {
     ga: 'Leideanna LARA',
     en: 'LARA Prompts' },
   lp_explanation: {
-    ga: 'Brúigh an cnaipe chun tús a chur le scéal, agus críochnaigh tú féin é!',
-    en: 'Press the button to get the start of a story, and finish it yourself!' },
+    ga: 'Brúigh an cnaipe chun spreagadh a fháil. Tógadh na spreagthaí seo ón gcéad líne de na scéalta atá ar fáil ar LARA ar shuíomh An Scéalaí.',
+    en: 'Click below to generate prompt. These prompts are the first lines of LARA stories available on the An Scéalaí webpage.' },
   lp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Story' },
   sp_explanation: {
-    ga: 'Cliceáil an cnaipe chun roinnt topaicí a fháil do do scéal!',
-    en: 'Click the button to get some topics for your story!' },
+    ga: 'Brúigh anseo chun carachtar, suíomh agus téama a chruthú. Is féidir aon cheann acu a athrú thíos.',
+    en: 'Click here to generate a random character, setting and theme combination. You can change each individually should you please.' },
   sp_character: {
     ga: 'Carachtar',
     en: 'Character' },
@@ -2161,8 +2192,8 @@ export default {
     ga: 'Athrú',
     en: 'Change' },
   gp_explanation: {
-    ga: 'Brúigh an cnaipe chun tús scéil cineálach a fháil, agus críochnaigh tú féin é!',
-    en: 'Press the button to get a generic story starter, and finish it yourself!' },
+    ga: 'Brúigh an cnaipe chun spreagadh a fháil. (Lean ort á bhrú go dtí go bhfeice tú ceann a thaitníonn leat)',
+    en: 'Press the button to generate the start of a new story. (Repeat until you get a prompt that suits you)' },
   gp_get_prompt: {
     ga: 'Faigh Scéal',
     en: 'Get Starter' },
@@ -2239,7 +2270,7 @@ export default {
     ga: 'Chríochnaigh tú i ',
     en: 'You finished in ' },
   new_dictogloss: {
-    ga: 'Dictogloss nua',
+    ga: 'Deachtú nua',
     en: 'New Dictogloss' },
   go_to_my_stories: {
     ga: 'Téigh go dtí mo scéalta',
@@ -2253,9 +2284,6 @@ export default {
   following_are_the_steps: {
     ga: 'Na céimeanna:',
     en: 'The following are the steps:' },
-  // dictogloss_char_limit: {
-  //   ga: 'Teorainn Carachtair 2000',
-  //   en: '2000 Character Limit' },
   dictogloss_instructions_1: {
     ga: 'Cuir téacs Gaeilge isteach sa bhosca ionchuir (is féidir suas le 2000 carachtair a thógáil ó áit ar bith).',
     en: 'Write some Irish text into the input box (this may be typed / taken from anywhere and have up to 2000 characters).' },
@@ -2326,13 +2354,13 @@ export default {
     ga: 'Meán-líon na bhfocal i do chuid scéalta',
     en: 'Average Word Counts' },
   ngram_distribution: {
-    ga: 'Dáileadh na bhfocal/na bhfrásaí’',
+    ga: 'Dáileadh na bhfocal/na bhfrásaí',
     en: 'Word/phrases distribution' },
   frequency: {
     ga: 'Minicíocht',
     en: 'Frequency' },
   dictionary_lookups: {
-    ga: 'Cuardaíodh',
+    ga: 'Focail a cuardaíodh',
     en: 'Dictionary Lookups' },
   no_words_lookedup: {
     ga: 'Níor aimsíodh aon chuardach',
@@ -2386,7 +2414,7 @@ export default {
     ga: 'Foilseacháin Acadúla',
     en: 'Academic Papers' },
   awards: {
-    ga: 'Awards',
+    ga: 'Duaiseanna',
     en: 'Awards' },
   ell_description_1: {
     ga: 'Tugadh aitheantas nach beag don tionscadal <i> An Scéalaí </i> nuair a bronnadh <b> An Séala Eorpach Teanga </b> air, ag ócáid a eagraíodh i bPáirc an Chrócaigh i mí na Samhna 2022. Bronntar é seo go bliantúil ar thionscnaimh a úsáideann modhanna nua-aimseartha chun teangacha a mhúineadh agus chun foghlaimeoirí a spreagadh chun teangacha a fhoghlaim agus chun tuiscint níos fearr a fháil ar chultúir éagsúla. Piocadh <i> An Scéalaí </i> go speisialta mar gheall ar an úsáid a baineadh as Teicneolaíocht an Eolais agus na meáin dhigiteacha.',
