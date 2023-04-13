@@ -1,5 +1,5 @@
 <mat-form-field appearance="fill">
-  <mat-label>N-gram</mat-label>
+  <mat-label>{{ts.l.n_gram}}</mat-label>
   <mat-select [(ngModel)]="selectedN" name="n" (selectionChange)="loadNgramChart()">
     <mat-option *ngFor="let n of [1, 2, 3, 4, 5]" [value]="n">
       {{n}}

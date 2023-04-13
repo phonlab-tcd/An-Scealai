@@ -21,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
@@ -189,7 +190,8 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         WordCountsModule,
         GrammarPieChartModule,
         DictionaryLookupsModule,
-        GrammarErrorTimeModule
+        GrammarErrorTimeModule,
+        PdfViewerModule
     ],
     providers: [
         StoryService,

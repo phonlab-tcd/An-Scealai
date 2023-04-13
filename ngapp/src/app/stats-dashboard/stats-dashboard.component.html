@@ -21,7 +21,7 @@
             </ng-template>
         </mat-card>
         <!-- Word Count Graph -->
-        <mat-card class="stats-card">
+        <mat-card>
             <ng-template #wordCountTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>{{ts.l.average_word_counts}}</mat-card-title>
@@ -34,7 +34,7 @@
             </ng-template>
         </mat-card>
         <!-- Dictionary Lookups -->
-        <mat-card class="stats-card">
+        <mat-card>
             <ng-template #dictionaryLookupsTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>{{ts.l.dictionary_lookups}}</mat-card-title>
@@ -47,7 +47,7 @@
             </ng-template>
         </mat-card>
         <!-- Grammar Pie Chart -->
-        <mat-card class="stats-card">
+        <mat-card>
             <ng-template #grammarPieChartTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>{{ts.l.grammar_errors}}</mat-card-title>
@@ -60,7 +60,7 @@
             </ng-template>
         </mat-card>
         <!-- Grammar Error Time Series -->
-        <mat-card class="stats-card">
+        <mat-card>
             <ng-template #grammarErrorTimeTemplate [ngIf]="!dialogRef">
                 <mat-card-header class="stats-card-header">
                     <mat-card-title>{{ts.l.grammar_errors_over_time}}</mat-card-title>

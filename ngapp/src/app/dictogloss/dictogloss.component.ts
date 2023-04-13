@@ -5,7 +5,6 @@ import { TranslationService } from "app/translation.service";
 import { SynthesisPlayerComponent } from "app/student-components/synthesis-player/synthesis-player.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "app/authentication.service";
-import { Message } from "app/message";
 import { ClassroomService } from "app/classroom.service";
 import { MessageService } from "app/message.service";
 import { RecordAudioService } from "app/services/record-audio.service";
@@ -14,7 +13,6 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
-import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: "app-dictogloss",
@@ -25,7 +23,7 @@ export class DictoglossComponent implements OnInit {
   // dictogloss variables
   generatedFromMessages: boolean;
   texts: string;
-  wrong_words_div: string = "";
+  wrongWordsDiv: string = "";
   words: string[] = [];
   shownWords: string[] = [];
   wrongWords: string[] = [];
@@ -37,6 +35,7 @@ export class DictoglossComponent implements OnInit {
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
   gameInProgress: boolean = false;
+  showInputBox: boolean = true;
   allGuessed: boolean = false;
   guessCheck: boolean = false;
   wrongCount: number = 0;
@@ -142,7 +141,7 @@ export class DictoglossComponent implements OnInit {
       this.sentences = this.sentences.filter(el => el.length > 0)
       for (let i = 0; i < this.sentences.length; i++) {
         this.synthItems.push(this.getSynthItem(this.sentences[i]));
-        this.synthItems[i].text = "Sentence " + (i + 1);
+        this.synthItems[i].text = this.ts.message('sentence_number') +  (i + 1);
       }
     }
   }
@@ -173,6 +172,7 @@ export class DictoglossComponent implements OnInit {
 
     if (this.texts != "") {
       this.gameInProgress = true;
+      this.showInputBox = false;
     }
 
     // trim any extra white spaces
@@ -276,10 +276,8 @@ export class DictoglossComponent implements OnInit {
   displayTime(totalTime: number): string {
     let time: string;
     time =
-      Math.floor(totalTime / 60).toString() +
-      " minutes " +
-      Math.floor(totalTime % 60).toString() +
-      " seconds";
+      Math.floor(totalTime / 60).toString() + this.ts.l.minutes +
+      Math.floor(totalTime % 60).toString() + this.ts.l.seconds;
     return time;
   }
 
@@ -294,7 +292,7 @@ export class DictoglossComponent implements OnInit {
     this.wordsPunc = [];
     this.wordsPuncLower = [];
     this.synthItems = [];
-    this.wrong_words_div = "";
+    this.wrongWordsDiv = "";
     this.rightCount = 0;
     this.wrongCount = 0;
 
@@ -442,10 +440,10 @@ export class DictoglossComponent implements OnInit {
     if (!isIn && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       //If wrong words list is empty, add word with no comma, else add it with comma in front of word
-      if (this.wrong_words_div.length !== 0) {
-        this.wrong_words_div += ", " + word;
+      if (this.wrongWordsDiv.length !== 0) {
+        this.wrongWordsDiv += ", " + word;
       } else {
-        this.wrong_words_div += word;
+        this.wrongWordsDiv += word;
       }
       this.wrongWords.push(word);
     } else {
@@ -502,6 +500,37 @@ export class DictoglossComponent implements OnInit {
   }
 
   /**
+   * Dialog box to restart dictogloss
+   */
+    openRestartDictoglossDialog() {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: 'Close Dictogloss',
+          type: 'simpleMessage',
+          message: `
+            Are you sure you want to restart the Dictogloss?
+          `,
+          confirmText: this.ts.l.yes,
+          cancelText: this.ts.l.no,
+        },
+        width: '60vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if (res) {
+            this.resetDictogloss();
+          }
+      });
+    }
+
+    resetDictogloss() {
+      this.hasText = false
+      this.showInputBox = true;
+      this.gameInProgress = false;
+    }
+
+  /**
    * Dialog box to display instructions
    */
   openInformationDialog() {
@@ -510,15 +539,23 @@ export class DictoglossComponent implements OnInit {
         title: this.ts.l.how_to_use_dictogloss,
         type: 'simpleMessage',
         message: `
-        <p>${this.ts.l.dictogloss_char_limit}</p>
-        <h5>${this.ts.l.dictogloss_instructions_1}</h5>
-        <h5>${this.ts.l.dictogloss_instructions_2}</h5>
-        <h5>${this.ts.l.dictogloss_instructions_3}</h5><br>
-        <h5>${this.ts.l.dictogloss_tip}</h5>
+        <h6>${this.ts.l.can_you_reconstruct_text_just_heard}</h6><br>
+        <h6>${this.ts.l.following_are_the_steps}</h6><br>
+        <ol>
+          <li>${this.ts.l.dictogloss_instructions_1}</li>
+          <li>${this.ts.l.dictogloss_instructions_2}</li>
+          <li>${this.ts.l.dictogloss_instructions_3}</li>
+          <li>${this.ts.l.dictogloss_instructions_4}</li>
+          <li>${this.ts.l.dictogloss_instructions_5}</li>
+        </ol>
+        <ul>
+          <li>${this.ts.l.dictogloss_tip_1}</li>
+          <li>${this.ts.l.dictogloss_tip_2}</li>
+        </ul>
         `,
         confirmText: this.ts.l.done,
       },
-      width: '80vh',
+      width: '90vh',
     });
     
     this.dialogRef.afterClosed().subscribe( (_) => {

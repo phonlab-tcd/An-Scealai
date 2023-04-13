@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import config from 'abairconfig';
+import { TranslationService } from "../../../translation.service";
 
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
@@ -25,7 +26,8 @@ export class NgramDistributionComponent implements OnInit {
   ngramChart: Chart;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    public ts: TranslationService
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +65,7 @@ export class NgramDistributionComponent implements OnInit {
         data: {
             labels: X_DATA,
             datasets: [{
-                label: 'Frequency',
+                label: this.ts.l.frequency,
                 data: Y_DATA,
                 backgroundColor: Y_DATA.map(_ => LIGHT_BLUE),
                 borderColor: Y_DATA.map(_ => BLUE),

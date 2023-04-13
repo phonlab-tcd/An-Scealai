@@ -82,7 +82,7 @@ export class GrammarErrorTimeComponent implements OnInit {
           y: {
             title: {
               display: true,
-              text: 'Num of errors'
+              text: this.ts.l.num_of_errors
             },
             beginAtZero: true,
             ticks: {

@@ -38,7 +38,9 @@ import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
 import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
 import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
 import { ErrorTag } from '../../lib/grammar-engine/types';
+import ImageCompress from 'quill-image-compress';
 
+Quill.register('modules/imageCompress', ImageCompress);
 
 @Component({
   selector: 'app-dashboard',
@@ -92,6 +94,31 @@ export class DashboardComponent implements OnInit {
   quillEditor: Quill;
   quillHighlighter: QuillHighlighter;
   private textUpdated= new Subject<void | string>();
+  quillToolbar = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote'],
+      [{ 'header': 1 }, { 'header': 2 }],
+      [{ list: 'ordered'}, { list: 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      //[{ color: [] }, { background: [] }],
+      [{ align: [] }],
+      ['clean'],
+      ['image']
+    ],
+    imageCompress: { // used to compress any images added to the story
+      quality: 0.7,
+      maxWidth: 1000,
+      maxHeight: 1000,
+      imageType: ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+      debug: false, // console logs
+      suppressErrorLogging: false,
+      insertIntoEditor: undefined,
+    }
+  };
   
   // DICTIONARY LOOKUPS
   wordLookedUp:string = '';
@@ -188,6 +215,7 @@ export class DashboardComponent implements OnInit {
           },
           error: function () {},
           complete: () => {
+            if (!this.quillHighlighter) return;
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
             this.quillHighlighter.hideAll();
             // and then re-show all the latest error tags if button on
@@ -465,7 +493,7 @@ export class DashboardComponent implements OnInit {
       data: {
         title: this.ts.l.download,
         type: 'select',
-        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt', '.pptx', '.html', '.md', '.latex', '.json']],
+        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt']],
         confirmText: this.ts.l.download,
         cancelText: this.ts.l.cancel
       },

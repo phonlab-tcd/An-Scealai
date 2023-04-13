@@ -4,8 +4,7 @@
       <hr/>
       <div *ngFor="let item of legendItems">
         <div class="legendPair" (click)="updateLegend(item, $event)">
-          <div class="legendMarker" [style.backgroundColor]="item.fillStyle"
-                                    [style.borderColor]="item.strokeStyle"></div> 
+          <div class="legendMarker" [style.backgroundColor]="item.fillStyle" [style.borderColor]="item.strokeStyle"></div> 
           <div>{{item.text}}</div>
         </div>
       </div>

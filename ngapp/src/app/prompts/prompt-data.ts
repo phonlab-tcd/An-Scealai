@@ -534,9 +534,9 @@ export const PROMPT_DATA = {
             'tharaibh',
             'tharstu',
         ],
-        determiner: [
-            'seo', 'a', 'cé', 'an'
-        ],
+        // determiner: [
+        //     'seo', 'a', 'cé', 'an'
+        // ],
         article: [
             'an', 'na'
         ],
@@ -578,46 +578,49 @@ export const PROMPT_DATA = {
             'chomh maith',
             'ach oiread',
         ],
-        adposition: [
-            'le', 'sa'
+        // adposition: [
+        //     'le', 'sa'
+        // ],
+        preposition: [
+
         ],
         conjunction: [
             'agus',
             'go',
             'ach',
         ],
-        numeral: [
-            'a haon',
-            'an chéad',
-            'duine',
-            'a dó',
-            'an dara',
-            'beirt',
-            'a trí',
-            'an tríú',
-            'triúr',
-            'a ceathair',
-            'an ceathrú',
-            'ceathrar',
-            'a cúig',
-            'an cúigiú',
-            'cúigear',
-            'a sé',
-            'an séú',
-            'seisear',
-            'a seacht',
-            'an seachtú',
-            'seachtar',
-            'a hocht',
-            'an t-ochtú',
-            'ochtar',
-            'a naoi',
-            'an naoú',
-            'naonúr',
-            'a deich',
-            'an deichiú',
-            'deichniúr',
-        ]
+        // numeral: [
+        //     'a haon',
+        //     'an chéad',
+        //     'duine',
+        //     'a dó',
+        //     'an dara',
+        //     'beirt',
+        //     'a trí',
+        //     'an tríú',
+        //     'triúr',
+        //     'a ceathair',
+        //     'an ceathrú',
+        //     'ceathrar',
+        //     'a cúig',
+        //     'an cúigiú',
+        //     'cúigear',
+        //     'a sé',
+        //     'an séú',
+        //     'seisear',
+        //     'a seacht',
+        //     'an seachtú',
+        //     'seachtar',
+        //     'a hocht',
+        //     'an t-ochtú',
+        //     'ochtar',
+        //     'a naoi',
+        //     'an naoú',
+        //     'naonúr',
+        //     'a deich',
+        //     'an deichiú',
+        //     'deichniúr',
+        // ]
     },
       
 } as const;
