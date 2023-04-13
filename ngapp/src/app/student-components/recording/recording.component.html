@@ -19,7 +19,7 @@
 
   <!-- Open Archive button -->
   <div *ngIf="recordings.length > 0" (click)="drawer.toggle()" class="menuButton" >
-    <mat-icon>menu</mat-icon> Archive
+    <mat-icon>menu</mat-icon> {{ts.l.archive}}
   </div>
 
   <!-- Archive menu -->
@@ -28,7 +28,8 @@
       <div *ngFor="let recording of recordings">
         <div class="contentSection">
           <div class="contentsLink">
-            <a (click)="setCurrentRecording(recording)"> {{ recording?.storyData?.title }} </a>
+            <a (click)="setCurrentRecording(recording)" [ngStyle]="{'font-style': !recording.archived ? 'italic' : 'none' }"
+            > {{ recording?.storyData?.title }}</a>
           </div>
           <div class="contentsDate">
             {{ recording.date | date : "d/M/yy, h:mm a" }}
@@ -117,7 +118,7 @@
                 {{ ts.l.sentence }}
               </button>
             </div>
-            <button class="changeSplitBtn" *ngIf="!showingArchivedRecording" style="margin-left: auto" (click)="archiveRecording()" >
+            <button class="changeSplitBtn" *ngIf="!currentRecording.archived" style="margin-left: auto" (click)="archiveRecording()" >
               {{ ts.l.archive_recording }}
             </button>
           </div>
