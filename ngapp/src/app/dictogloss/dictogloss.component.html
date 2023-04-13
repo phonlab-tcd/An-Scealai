@@ -3,7 +3,7 @@
         <!-- Instructions popup -->
         <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
         <h3>{{ts.l.dictogloss_title}}</h3>
-        <div *ngIf="!generatedFromMessages">
+        <div *ngIf="!generatedFromMessages && showInputBox">
             <!-- text input -->
             <div style="display: flex; justify-content: center;padding:10px">
                 <textarea spellcheck=false class="textarea" id="textSelector" rows="4" maxlength="2000" placeholder="{{ts.l.type_story_here}}" autofocus></textarea>
@@ -26,6 +26,8 @@
     <!-- Dictogloss body -->
     <div *ngIf="hasText">
         <hr>
+        <!-- close dictogloss button -->
+        <i *ngIf="!generatedFromMessages" class="fa fa-times" style="float:right;cursor:pointer" (click)="openRestartDictoglossDialog()"></i>
         <h3>{{ts.l.audio_playback}}</h3>
         <!--Voice Synthesis-->
         <div class="synth-container">
@@ -108,8 +110,8 @@
         <ng-template  #correct>
             <i><h2 class="victory">{{ts.l.you_filled_in_all_blanks}}</h2></i>
             <b *ngIf="playWithTimer === true"><h2>{{ts.l.you_finished_in}}{{displayTime(totalTime)}}</h2></b>
-            <button class="button victory-button" (click)="hasText = false;">{{ts.l.new_dictogloss}}</button>
-            <button class="button victory-button" routerLink="/landing" (click)="hasText = false; changeCheck();">{{ts.l.go_to_my_stories}}</button>
+            <button class="button victory-button" (click)="hasText = false;showInputBox = true">{{ts.l.new_dictogloss}}</button>
+            <button class="button victory-button" routerLink="/landing" (click)="resetDictogloss()">{{ts.l.go_to_my_stories}}</button>
         </ng-template>
     </div>
 </div>

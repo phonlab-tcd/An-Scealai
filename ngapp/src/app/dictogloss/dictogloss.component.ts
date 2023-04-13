@@ -23,7 +23,7 @@ export class DictoglossComponent implements OnInit {
   // dictogloss variables
   generatedFromMessages: boolean;
   texts: string;
-  wrong_words_div: string = "";
+  wrongWordsDiv: string = "";
   words: string[] = [];
   shownWords: string[] = [];
   wrongWords: string[] = [];
@@ -35,6 +35,7 @@ export class DictoglossComponent implements OnInit {
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
   gameInProgress: boolean = false;
+  showInputBox: boolean = true;
   allGuessed: boolean = false;
   guessCheck: boolean = false;
   wrongCount: number = 0;
@@ -171,6 +172,7 @@ export class DictoglossComponent implements OnInit {
 
     if (this.texts != "") {
       this.gameInProgress = true;
+      this.showInputBox = false;
     }
 
     // trim any extra white spaces
@@ -290,7 +292,7 @@ export class DictoglossComponent implements OnInit {
     this.wordsPunc = [];
     this.wordsPuncLower = [];
     this.synthItems = [];
-    this.wrong_words_div = "";
+    this.wrongWordsDiv = "";
     this.rightCount = 0;
     this.wrongCount = 0;
 
@@ -438,10 +440,10 @@ export class DictoglossComponent implements OnInit {
     if (!isIn && !this.wrongWords.includes(word)) {
       //If the typed word is not in the words list
       //If wrong words list is empty, add word with no comma, else add it with comma in front of word
-      if (this.wrong_words_div.length !== 0) {
-        this.wrong_words_div += ", " + word;
+      if (this.wrongWordsDiv.length !== 0) {
+        this.wrongWordsDiv += ", " + word;
       } else {
-        this.wrong_words_div += word;
+        this.wrongWordsDiv += word;
       }
       this.wrongWords.push(word);
     } else {
@@ -496,6 +498,37 @@ export class DictoglossComponent implements OnInit {
     }
     this.isRecording = !this.isRecording;
   }
+
+  /**
+   * Dialog box to restart dictogloss
+   */
+    openRestartDictoglossDialog() {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: 'Close Dictogloss',
+          type: 'simpleMessage',
+          message: `
+            Are you sure you want to restart the Dictogloss?
+          `,
+          confirmText: this.ts.l.yes,
+          cancelText: this.ts.l.no,
+        },
+        width: '60vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (res) => {
+          this.dialogRef = undefined;
+          if (res) {
+            this.resetDictogloss();
+          }
+      });
+    }
+
+    resetDictogloss() {
+      this.hasText = false
+      this.showInputBox = true;
+      this.gameInProgress = false;
+    }
 
   /**
    * Dialog box to display instructions

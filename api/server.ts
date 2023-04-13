@@ -64,7 +64,7 @@ app.use(session({
 }));
 app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb', type: 'application/json'})); // default is 100kb
 app.use(cors());
 app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
