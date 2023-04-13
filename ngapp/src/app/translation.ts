@@ -2007,22 +2007,22 @@ export default {
   prompts: {
     ga: 'Leideanna',
     en: 'Prompts' },
-  pos_dropdown: {
+  part_of_speech_generator: {
     ga: 'Gineadóir ranna cainte',
     en: 'Part-of-speech Generator'},
-  sep_dropdown: {
+  exam_prompts: {
     ga: 'Spreagthaí ó na scrúduithe',
     en: 'Exam Prompts' },
-  pp_dropdown: {
+  proverb_prompts: {
     ga: 'Seanfhocail mar spreagthaí',
     en: 'Proverb Prompts' },
-  lp_dropdown: {
+  lara_prompts: {
     ga: 'Spreagthaí ó LARA',
     en: 'LARA Prompts' },
-  sp_dropdown: {
+  combination_generator: {
     ga: 'Meascán Mearaí',
     en: 'Combination Generator' },
-  gp_dropdown: {
+  general_prompts: {
     ga: 'Spreagthaí Ginearálta',
     en: 'General Prompts' },
   what_is_cen_sceal: {
@@ -2070,16 +2070,16 @@ export default {
   pos_description: {
     ga: 'Cruthaigh abairt trí ranna cainte randamacha a shníomh le chéile. Úsáid an abairt seo chun tús a chur le do scéal féin. (Má tá dúshlán uait, roghnaigh réimse leathan ranna cainte!).',
     en: 'Generate words from different part-of-speech categories and combine them to create a sentence. Use this sentence as your story starter. (Challenge yourself to select as many different parts-of-speech as possible for your sentence!).' },
-  pos_demand: {
+  select_a: {
     ga: 'Roghnaigh: ',
     en: 'Select a: ' },
-  pos_add_to_word_bank: {
+  would_you_like_add_word_to_wordbank: {
     ga: 'Ar mhaith leat an focal seo a chur le do bhanc focal?',
     en: 'Would you like to add this word to your word bank?' },
   pos_instructions: {
     ga: 'Conas "Cén Scéal!" a úsáid',
     en: 'How to use "What a Story!"' },
-  pos_your_word_bank: {
+  your_word_bank: {
     ga: 'Do Bhanc Focal: ',
     en: 'Your Word Bank: ' },
   pos_yes: {
@@ -2088,16 +2088,16 @@ export default {
   pos_no: {
     ga: 'Níor mhaith',
     en: 'No' },
-  pos_synth: {
+  listen_to_your_sentence: {
     ga: 'Éist le d\'abairt',
     en: 'Listen to your sentence' },
-  pos_reset_bank: {
+  reset_bank: {
     ga: 'Glan an Banc Focal',
     en: 'Reset Bank' },
-  pos_save_name: {
+  name_your_story: {
     ga: 'Ainmnigh do scéal',
     en: 'Name Your Story' },
-  pos_no_words: {
+  chosen_words_appear_here: {
     ga: 'Taispeánfar na focail a roghnaigh tú anseo',
     en: 'Chosen words appear here' },
   verb: {
@@ -2130,12 +2130,6 @@ export default {
   numeral: {
     ga: 'Uimhreacha', 
     en: 'Numeral' },
-  sep_header: {
-    ga: 'Leideanna Scrúdaithe Stáit',
-    en: 'State Examination Prompts' },
-  sep_explanation: {
-    ga: 'Brúigh an cnaipe chun ábhar nó tosaitheoir scéil a fháil le scríobh faoi',
-    en: 'Press the button to recieve a topic or story starter to write about' },
   get_prompt: {
     ga: 'Gin spreagadh',
     en: 'Get Prompt' },
@@ -2155,49 +2149,31 @@ export default {
     ga: ['Teastas Sóisearach', 'Ardteist (GL)', 'Ardteist (AL)'],
     en: ['Junior Certificate', 'Leaving Certificate (OL)', 'Leaving Certificate (HL)'],
   },
-  pp_header: {
-    ga: 'Leideanna Seanfhocal',
-    en: 'Proverb Prompts' },
-  pp_explanation: {
+  click_below_to_generate_prompt: {
     ga: 'Brúigh an cnaipe chun seanfhocal a fháil',
     en: 'Click below to generate prompt' },
-  pp_no_prompt: {
-    ga: 'Roghnaigh seanfhocal le do thoil',
-    en: 'Please choose a proverb' },
-  pp_get_prompt: {
-    ga: 'Faigh Seanfhocal',
-    en: 'Get Proverb' },
-  lp_header: {
-    ga: 'Leideanna LARA',
-    en: 'LARA Prompts' },
-  lp_explanation: {
+  click_below_to_generate_prompt_lara: {
     ga: 'Brúigh an cnaipe chun spreagadh a fháil. Tógadh na spreagthaí seo ón gcéad líne de na scéalta atá ar fáil ar LARA ar shuíomh An Scéalaí.',
     en: 'Click below to generate prompt. These prompts are the first lines of LARA stories available on the An Scéalaí webpage.' },
-  lp_get_prompt: {
-    ga: 'Faigh Scéal',
-    en: 'Get Story' },
-  sp_explanation: {
+  click_to_generate_random_character_setting_theme: {
     ga: 'Brúigh anseo chun carachtar, suíomh agus téama a chruthú. Is féidir aon cheann acu a athrú thíos.',
     en: 'Click here to generate a random character, setting and theme combination. You can change each individually should you please.' },
-  sp_character: {
+  character: {
     ga: 'Carachtar',
     en: 'Character' },
-  sp_setting: {
+  setting: {
     ga: 'Suíomhanna',
     en: 'Setting' },
-  sp_theme: {
+  theme: {
     ga: 'Téama',
     en: 'Theme' },
-  sp_change: {
+  change: {
     ga: 'Athrú',
     en: 'Change' },
-  gp_explanation: {
+  press_button_to_generate_start_of_new_story: {
     ga: 'Brúigh an cnaipe chun spreagadh a fháil. (Lean ort á bhrú go dtí go bhfeice tú ceann a thaitníonn leat)',
     en: 'Press the button to generate the start of a new story. (Repeat until you get a prompt that suits you)' },
-  gp_get_prompt: {
-    ga: 'Faigh Scéal',
-    en: 'Get Starter' },
-  dashboard_prompts: {
+  made_using_prompts: {
     ga: '(Déanta le leideanna)',
     en: '(Made using prompts)' },
   dictogloss: {
@@ -2206,12 +2182,6 @@ export default {
   dictogloss_title: {
     ga: 'Meaisín Deachtúcháin',
     en: 'Dictogloss' },
-  dictogloss_usage: {
-    ga: 'Conas Dictogloss a úsáid',
-    en: 'How to use Dictogloss' },
-  dictogloss_usage_close: {
-    ga: 'Folaigh eolas',
-    en: 'Hide info' },
   submit: {
     ga: 'Seol', 
     en: 'Submit' },
@@ -2224,7 +2194,7 @@ export default {
   dictogloss_timer_disabled: {
     ga: '🕒✖️',
     en: '🕒✖️' },
-  dictogloss_error: {
+  enter_story_here: {
     ga: '*Iontráil Scéal Anseo',
     en: '*Enter Story Here' },
   audio_playback: {
@@ -2233,18 +2203,12 @@ export default {
   playback_speed: {
     ga: 'Luas na Cainte',
     en: 'Playback Speed' },
-  dictogloss_hint: {
+  click_for_hint: {
     ga: 'Cliceáil le haghaidh leid',
     en: 'Click for a hint' },
   check: {
     ga: 'Seiceáil',
     en: 'Check' },
-  dictogloss_record_audio:{
-    ga: '🎤 Taifeadadh ar',
-    en: '🎤 Recording off' },
-  dictogloss_not_record_audio: {
-    ga: '🎤 Taifeadadh as',
-    en: '🎤 Recording on' },
   correct: {
     ga: 'Ceart',
     en: 'Correct' },
@@ -2314,7 +2278,7 @@ export default {
   seconds: {
     ga: ' soicind ',
     en: ' seconds ' },
-  dictogloss_type_story: {
+  type_story_here: {
     ga: 'Cuir téacs isteach anseo...',
     en: 'Type story here...' },
   teacher_send_dictogloss: {
@@ -2377,7 +2341,7 @@ export default {
     en: 'No. of errors'
   },
   n_gram: {
-    ga: 'Roghnaigh líon na bhfocal’ ',
+    ga: 'Roghnaigh líon na bhfocal',
     en: 'Choose no. of words'
   },
   select_a_classroom: {
