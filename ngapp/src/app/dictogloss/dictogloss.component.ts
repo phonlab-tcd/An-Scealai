@@ -505,11 +505,9 @@ export class DictoglossComponent implements OnInit {
     openRestartDictoglossDialog() {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
-          title: 'Close Dictogloss',
+          title: this.ts.l.restart_dictogloss,
           type: 'simpleMessage',
-          message: `
-            Are you sure you want to restart the Dictogloss?
-          `,
+          message: this.ts.l.are_you_sure_restart_dictogloss,
           confirmText: this.ts.l.yes,
           cancelText: this.ts.l.no,
         },

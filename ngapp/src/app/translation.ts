@@ -2158,6 +2158,12 @@ export default {
   dictogloss_title: {
     ga: 'Meaisín Deachtúcháin',
     en: 'Dictogloss' },
+  restart_dictogloss: {
+    ga: 'Tosaigh arís',
+    en: 'Restart Dictogloss' },
+  are_you_sure_restart_dictogloss: {
+    ga: 'An bhfuil tú cinnte go bhfuil tú ag iarraidh an Deachtú a thosú arís?',
+    en: 'Are you sure you want to restart the Dictogloss?' },
   submit: {
     ga: 'Seol', 
     en: 'Submit' },
