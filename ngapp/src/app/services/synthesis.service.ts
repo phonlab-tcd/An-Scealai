@@ -33,7 +33,7 @@ export const voices = asVoice([ // for extra type checking (typescript will chec
 //{api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???',                dialect: 'UL', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'ulster', algorithm: 'dnn'},
   // {api: 'api2', note: '', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'connaught', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'connacht', algorithm: 'dnn'},
   // {api: 'api2', note: '', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
   {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'munster', algorithm: 'dnn'},
 
@@ -61,7 +61,7 @@ type VoiceChecks = {
   readonly gender: 'male' | 'female';
   readonly shortCode: PseudonymKey;
   //readonly dialect: 'UL'|'CO'|'MU';
-  readonly dialect: 'ulster'|'connaught'|'munster';
+  readonly dialect: 'ulster'|'connacht'|'munster';
   readonly algorithm: string;
 };
 
@@ -168,7 +168,7 @@ export class SynthesisService {
       const cachedDataUri = this.synthBank.getAudioUrlOfSentence(url);
       if (cachedDataUri) return of(cachedDataUri);
     }
-
+    console.log(url);
     // HIT THE API
     return this.http.post(this.baseUrl + 'proxy',{url}).pipe(
      map((data: {audioContent: string}) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding)),

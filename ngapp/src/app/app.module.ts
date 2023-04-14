@@ -15,6 +15,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -66,8 +68,6 @@ import { DashboardComponent } from './student-components/dashboard/dashboard.com
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
-import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
@@ -130,8 +130,6 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         ResourcesComponent,
         TeamComponent,
         AboutLaraComponent,
-        RecordingHistoryComponent,
-        ViewRecordingComponent,
         SafeHtmlPipe,
         SponsorsComponent,
         SynthesisPlayerComponent,
@@ -172,6 +170,8 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         MatSelectModule,
         MatButtonModule,
         MatDialogModule,
+        MatSidenavModule,
+        MatIconModule,
         NgbModule,
         NgbDropdownModule,
         QuillModule.forRoot({

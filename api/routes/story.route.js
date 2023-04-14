@@ -259,6 +259,7 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
       const upload = multer({storage: storage, limits: {fields: 1, fileSize: 6000000, files: 1, parts: 2}});
       upload.single('audio')(req, res, (err) => {
         if (err) {
+          logger.error(err);
           return res.status(400).json({message: 'Upload Request Validation Failed'});
         }
         // create new stream and push audio data
@@ -298,25 +299,26 @@ storyRoutes.route('/addFeedbackAudio/:id').post((req, res) => {
  * @param {Object} req body: active recording ID
  * @return {Object} Success or error message
  */
-storyRoutes.route('/updateActiveRecording/:id').post((req, res) => {
-  Story.findById(req.params.id, (err, story) => {
-    if (err) {
-      console.log(err);
-      res.json(err);
+storyRoutes.route('/updateActiveRecording/:id').post(async (req, res) => {
+  if (!req.body.activeRecording)  return res.status(400).json('no activeRecording id');
+
+  const story = await Story.findById(req.params.id);
+
+  if (!story) {
+    return res.status(404).json('story not found');
+  }
+
+  if (req.body.activeRecording) {
+    story.activeRecording = req.body.activeRecording;
+    const [saveErr, updatedStory] = await story.save().then(r => [null, r], e => [e]);
+    if(saveErr) {
+      logger.error(saveErr);
+      return res.status(400).json(saveErr);
     }
-    if (story) {
-      if (req.body.activeRecording) {
-        story.activeRecording = req.body.activeRecording;
-      }
-      story.save().then((_) => {
-        res.json('Update complete');
-      }).catch((_) => {
-        res.status(400).send('Unable to update');
-      });
-    } else {
-      res.status(404).json({message: 'Story not found'});
-    }
-  });
+    
+    return res.json(updatedStory);
+  }
+
 });
 
 /**
