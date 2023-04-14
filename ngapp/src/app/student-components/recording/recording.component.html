@@ -18,18 +18,18 @@
   </div>
 
   <!-- Open Archive button -->
-  <div *ngIf="recordings.length > 0" (click)="drawer.toggle()" class="menuButton" >
+  <div *ngIf="recordings.length > 0" (click)="drawer.toggle()" class="archiveButton" >
     <mat-icon>menu</mat-icon> {{ts.l.archive}}
   </div>
 
   <!-- Archive menu -->
-  <mat-drawer-container autosize>
+  <mat-drawer-container autosize class="archiveNavContainer">
     <mat-drawer #drawer class="sidenav" mode="side">
       <div *ngFor="let recording of recordings">
-        <div class="contentSection">
+        <div class="contentSection" [attr.id]="recording._id" (click)="setCurrentRecording(recording)" >
           <div class="contentsLink">
-            <a (click)="setCurrentRecording(recording)" [ngStyle]="{'font-style': !recording.archived ? 'italic' : 'none' }"
-            > {{ recording?.storyData?.title }}</a>
+            <div [ngStyle]="{'font-style': !recording.archived ? 'italic' : 'none' }"
+            > {{ recording?.storyData?.title }}</div>
           </div>
           <div class="contentsDate">
             {{ recording.date | date : "d/M/yy, h:mm a" }}
@@ -67,10 +67,10 @@
                     <i class="fa fa-play"></i>
                   </button>
                   <!-- Recording button -->
-                  <button *ngIf=" !isRecording(section, index) && !showingArchivedRecording " class="recordingBtn" (click)="recordAudio(index)" >
+                  <button *ngIf=" !isRecording(section, index) && !currentRecording.archived" class="recordingBtn" (click)="recordAudio(index)" >
                     <i class="fas fa-microphone"></i>
                   </button>
-                  <button *ngIf=" isRecording(section, index) && !showingArchivedRecording " class="notRecordingBtn blink" (click)="stopRecording(index)" >
+                  <button *ngIf=" isRecording(section, index) && !currentRecording.archived" class="notRecordingBtn blink" (click)="stopRecording(index)" >
                     <i class="fas fa-stop-circle"></i>
                   </button>
                 </div>
@@ -79,18 +79,16 @@
                 <div *ngIf="isTranscribing[index]" class="recognisedSpeechContainer" >
                   <div class="dot-flashing"></div>
                 </div>
-                <div *ngIf="sectionTranscriptions[index]" class="recognisedSpeechContainer" >
-                  {{ sectionTranscriptions[index] }}
+                <div *ngIf="sectionTranscriptions[index]" style="height: 40px" >
+                  <span style="opacity:0.5">{{ts.l.speech_recognition_output}} </span><span class="recognisedSpeech">{{ sectionTranscriptions[index] }}</span>
                 </div>
                 <!-- Audio player -->
-                <div class="cardFooter" *ngIf="sectionAudioSources[index]">
+                <div class="audioContainer" *ngIf="sectionAudioSources[index]">
+                  <div style="opacity:0.5">{{ts.l.your_recording}}</div>
                   <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer" ></audio>
-                  <button *ngIf="sectionAudioSources[index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)" >
+                  <button *ngIf="sectionAudioSources[index] && !currentRecording.archived" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)" >
                     <i class="fas fa-trash-alt"></i>
                   </button>
-                  <div *ngIf="registrationError" class="errorMessage">
-                    {{ errorText }}
-                  </div>
                 </div>
               </div>
             </div>
@@ -118,7 +116,7 @@
                 {{ ts.l.sentence }}
               </button>
             </div>
-            <button class="changeSplitBtn" *ngIf="!currentRecording.archived" style="margin-left: auto" (click)="archiveRecording()" >
+            <button class="changeSplitBtn" *ngIf="!currentRecording.archived && currentRecording.storyData.text != story.text" style="margin-left: auto" (click)="archiveRecording()" >
               {{ ts.l.archive_recording }}
             </button>
           </div>

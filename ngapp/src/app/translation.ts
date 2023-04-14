@@ -1358,51 +1358,27 @@ export default {
   recordings: {
     ga: 'Fuaimniú',
     en: 'Recordings' },
-  recording: {
-    ga: 'Taifeadadh',
-    en: 'Recording' },
-  go_to_archive: {
-    ga: 'Téigh go Cartlann',
-    en: 'Go to Archive' },
   archive_recording: {
     ga: 'Cuir Taifead sa Chartlann',
     en: 'Archive Recording' },
   archive: {
     ga: 'Cartlann',
     en: 'Archive' },
+  speech_recognition_output: {
+    ga: 'Mar a chuala an ríomhaire tú:',
+    en: 'Speech recognition output:' },
+  your_recording: {
+    ga: 'Do ghlór féin:',
+    en: 'Your recording:' },
   save_changes_made_to_this_recording: {
     ga: 'Sábháil athruithe a rinneadh don taifeadadh seo?',
     en: 'Save changes made to this recording?' },
-  recordings_archive: {
-    ga: 'Taifid sa Chartlann',
-    en: 'Recordings Archive' },
   listen_record_compare: {
     ga: 'Éist, Déan taifead agus Déan comparáid',
     en: 'Listen, Record, and Compare' },
   listen_and_compare: {
     ga: 'Éist agus Déan Comparáid',
     en: 'Listen and Compare' },
-  general: {
-    ga: 'Ginearálta',
-    en: 'General' },
-  word_choice: {
-    ga: 'Rogha Focal',
-    en: 'Word Choice' },
-  Unrecognised_word: {
-    ga: 'Focal Anaithnid',
-    en: 'Unrecognised Word' },
-  prefix: {
-    ga: 'Réimir',
-    en: 'Prefix' },
-  lenition: {
-    ga: 'Séimhiú',
-    en: 'Lenition' },
-  eclipsis: {
-    ga: 'Urú',
-    en: 'Eclipsis' },
-  language_specific: {
-    ga: 'Sainiúil don Teanga',
-    en: 'Language Specific' },
   delete_my_account: {
     ga: 'Scrios mo chuntas',
     en: 'Delete my account' },

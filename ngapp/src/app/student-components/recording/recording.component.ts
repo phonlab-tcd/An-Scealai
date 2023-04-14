@@ -37,8 +37,6 @@ export class RecordingComponent implements OnInit {
   sentences: Sentence[] = [];
   chosenSections: Section[];
 
-  dialogRef: MatDialogRef<unknown>;
-
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
   recorder;
@@ -63,9 +61,8 @@ export class RecordingComponent implements OnInit {
 
   // UI variables
   recordingSaved: boolean = true;
-  errorText: string;
-  registrationError: boolean;
   audioFinishedLoading: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   // ASR variables
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
@@ -75,13 +72,13 @@ export class RecordingComponent implements OnInit {
   isTranscribing: boolean[] = [false];
 
   // Archived recordings variables
-  activeRecording: Recording = null;
   recordings: Recording[] = [];
   currentRecording: Recording = null;
+  lastClickedRecordingId: string = "";
 
   /*
-   * Call getStory() to get current story recording, story data, synthesise, and recordings
-   * Reset variables when recording text updated (function called in updateStory())
+   * Get story form url params
+   * If the story has any recordings, load them, otherwise create a new one
    */
   async ngOnInit() {
     this.chunks = [];
@@ -93,33 +90,25 @@ export class RecordingComponent implements OnInit {
 
     const storyId = this.route.snapshot.paramMap.get("id");
     this.story = await firstValueFrom(this.storyService.getStory(storyId));
-    console.log("Story's active recording: ", this.story.activeRecording);
 
     // load story recordings if they exist, otherwise create a new recording object
-    if (this.story.activeRecording) {
-      console.log("Active recording exists, loading it and any archived ones");
-      this.loadRecordings();
-    } else {
-      console.log("No active recording, creating a new new one...");
-      this.createNewRecording();
-    }
+    this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
   }
 
   /**
    * Get all recording objects for the given story
    */
   async loadRecordings() {
-    console.log("Loading recordings from the DB...");
     // get a list of all recordings for the story
-    this.recordings = await firstValueFrom( this.recordingService.getRecordings(this.story._id) );
+    this.recordings = await firstValueFrom(
+      this.recordingService.getRecordings(this.story._id)
+    );
     this.recordings.sort((a, b) => (a.date > b.date ? -1 : 1));
-    console.log("All recordings from DB: ", this.recordings);
 
-    // filter out the recording from the list that is currently active
+    // filter out the recording from the list that is currently active (i.e. not archived)
     let activeRecording = this.recordings.filter((recording) => {
       return recording.archived === false;
     });
-    console.log("Active recordings: ", activeRecording);
     // set this active recording as the current recording to view
     this.setCurrentRecording(activeRecording[0]);
   }
@@ -130,21 +119,35 @@ export class RecordingComponent implements OnInit {
    */
   setCurrentRecording(recording: Recording) {
     this.currentRecording = recording;
-    console.log("Current active recording: ", this.currentRecording);
     this.loadSynthesis(this.currentRecording.storyData);
     this.loadAudio(this.currentRecording);
+
+    // set css for selecting a recording in the archive nav
+    let id = this.currentRecording._id;
+    let recordingElement = document.getElementById(id);
+    if (recordingElement) {
+      // remove css highlighting for currently highlighted recording (from archive)
+      if (this.lastClickedRecordingId) {
+        document
+          .getElementById(this.lastClickedRecordingId)
+          .classList.remove("clickedresultCard");
+      }
+      this.lastClickedRecordingId = id;
+      // add css highlighting to the newly clicked recording
+      recordingElement.classList.add("clickedresultCard");
+    }
   }
 
   /**
    * Create a new recording object in the DB for the given story
    */
   async createNewRecording() {
-    console.log("Creating new recording in DB...");
     // create a new active recording with the story text
     const newRecording = await firstValueFrom( this.recordingService.create(new Recording(this.story)) );
-    console.log("Adding new recording as story's current active recording...");
-    // set this new recording to the story's current active recording
-    await firstValueFrom( this.storyService.updateActiveRecording(this.story._id, newRecording._id) );
+
+    // set this new recording as the story's current active recording
+    this.story = await firstValueFrom( this.storyService.updateActiveRecording(this.story._id, newRecording._id) );
+
     // load the story's recordings (now just an array containing this new recording object)
     this.loadRecordings();
   }
@@ -154,26 +157,20 @@ export class RecordingComponent implements OnInit {
    * Call a function to create a new recording object
    */
   async archiveRecording() {
-    // set recording status to archived
-    console.log("Archiving... ", this.currentRecording);
     await firstValueFrom( this.recordingService.updateArchiveStatus(this.currentRecording._id) );
-    console.log("Archived");
-    // create a new active recording
     this.createNewRecording();
   }
 
   /**
-   * Synthesie the story text from the given recording object
+   * Synthesie the story text of the given recording object
    * @param story story text to synthesise
    */
   loadSynthesis(story: Story) {
-    console.log("Synthesising the recording...");
     this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
       this.paragraphs = paragraphs;
       this.sentences = sentences;
       this.chosenSections = this.paragraphs;
       this.audioFinishedLoading = true;
-      console.log("Done synthesising the recording");
     });
   }
 
@@ -188,7 +185,6 @@ export class RecordingComponent implements OnInit {
    * @param recording - recording whose audio clips should be loaded
    */
   async loadAudio(recording: Recording) {
-    console.log("Loading audio and transcriptions...");
     this.audioFinishedLoading = false;
     this.paragraphAudioSources = [];
     this.paragraphTranscriptions = [];
@@ -197,6 +193,7 @@ export class RecordingComponent implements OnInit {
     this.sectionAudioSources = [];
     this.sectionTranscriptions = [];
 
+    // load in paragraph audio and transcriptions
     for (let i = 0; i < recording.paragraphIndices.length; ++i) {
       let res = await firstValueFrom( this.recordingService.getAudio(recording.paragraphAudioIds[i]) );
       this.paragraphBlobs[i] = res;
@@ -204,6 +201,7 @@ export class RecordingComponent implements OnInit {
       this.paragraphTranscriptions[recording.paragraphIndices[i]] = recording.paragraphTranscriptions[recording.paragraphIndices[i]];
     }
 
+    // load in sentence audio and transcriptions
     for (let i = 0; i < recording.sentenceIndices.length; ++i) {
       let res = await firstValueFrom( this.recordingService.getAudio(recording.sentenceAudioIds[i]) );
       this.sentenceBlobs[i] = res;
@@ -211,7 +209,7 @@ export class RecordingComponent implements OnInit {
       this.sentenceTranscriptions[recording.sentenceIndices[i]] = recording.sentenceTranscriptions[recording.sentenceIndices[i]];
     }
 
-    console.log("Done loading audio");
+    // set the default section to paragraph data
     this.sectionTranscriptions = this.paragraphTranscriptions;
     this.sectionAudioSources = this.paragraphAudioSources;
   }
@@ -301,10 +299,12 @@ export class RecordingComponent implements OnInit {
 
         if (this.isParagraphMode()) {
           this.paragraphTranscriptions[index] = transcription;
-          this.sectionTranscriptions[index] = this.paragraphTranscriptions[index];
+          this.sectionTranscriptions[index] =
+            this.paragraphTranscriptions[index];
         } else if (this.isSentenceMode()) {
           this.sentenceTranscriptions[index] = transcription;
-          this.sectionTranscriptions[index] = this.sentenceTranscriptions[index];
+          this.sectionTranscriptions[index] =
+            this.sentenceTranscriptions[index];
         }
         this.isTranscribing[index] = false;
       });
@@ -331,6 +331,7 @@ export class RecordingComponent implements OnInit {
    * which is also saved to DB.
    */
   async saveRecordings() {
+    // save paragraph audio
     const paragraph_promises = Object.entries(this.paragraphBlobs).map(
       async ([index, blob]) => {
         return this.recordingService
@@ -339,6 +340,7 @@ export class RecordingComponent implements OnInit {
       }
     );
 
+    // save sentence audio
     const sentence_promises = Object.entries(this.sentenceBlobs).map(
       async ([index, blob]) => {
         return this.recordingService
@@ -352,6 +354,7 @@ export class RecordingComponent implements OnInit {
 
     let paragraphIndices = [];
     let paragraphAudioIds = [];
+    // set the paragraph indices to indicate which paragraphs have audio/transcriptions
     for (const res of paragraphResponses) {
       paragraphIndices.push(res.index);
       paragraphAudioIds.push(res.fileId);
@@ -359,11 +362,13 @@ export class RecordingComponent implements OnInit {
 
     let sentenceIndices = [];
     let sentenceAudioIds = [];
+    // set the sentence indices to indicate which sentences have audio/transcriptions
     for (const res of sentenceResponses) {
       sentenceIndices.push(res.index);
       sentenceAudioIds.push(res.fileId);
     }
 
+    // object containing the data for the updated indices
     const trackData = {
       paragraphAudioIds: paragraphAudioIds,
       paragraphIndices: paragraphIndices,
@@ -373,11 +378,17 @@ export class RecordingComponent implements OnInit {
       sentenceTranscriptions: this.sentenceTranscriptions,
     };
 
-    this.recordingService
-      .update(this.story.activeRecording, trackData)
-      .subscribe((_) => {
-        this.recordingSaved = true;
-      });
+    // update the recording object with the indices/audio files for the new data
+    let updatedRecording = await firstValueFrom( this.recordingService.update(this.story.activeRecording, trackData) );
+
+    // reload the current recording to display the updated audio/transcriptions
+    if (updatedRecording) {
+      this.recordingSaved = true;
+      const currentRecordingIndex = this.recordings.indexOf(this.currentRecording);
+      this.recordings.splice(currentRecordingIndex, 1, updatedRecording);
+    } else {
+      alert("Error while saving audio");
+    }
   }
 
   //--- UI Manipulation ---//

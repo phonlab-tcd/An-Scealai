@@ -75,8 +75,10 @@ async function postUpdateTracks(req, res, next) {
 
   logger.info(`Request Paragraph audio ids: ${req.body.paragraphAudioIds}`);
   logger.info(`Request Paragraph indices:   ${req.body.paragraphIndices}`);
+  logger.info(`Request Paragraph transcriptions:   ${req.body.paragraphTranscriptions}`);
   logger.info(`Stored Paragraph audio ids:  ${recording.paragraphAudioIds}`);
   logger.info(`Stored Paragraph indices:    ${recording.paragraphIndices}`);
+  logger.info(`Stored Paragraph transcriptions:    ${recording.paragraphTranscriptions}`);
 
   // reset all values
   if (req.body.paragraphAudioIds)
@@ -92,8 +94,15 @@ async function postUpdateTracks(req, res, next) {
   if (req.body.sentenceTranscriptions)
     recording.sentenceTranscriptions = req.body.sentenceTranscriptions;
 
-  await recording.save();
-  return res.json("Update complete");
+  //await recording.save();
+  const [saveErr, updatedRecording] = await recording.save().then(r => [null, r], e => [e]);;
+
+  if(saveErr) {
+    logger.error(saveErr);
+    return res.status(400).json(saveErr);
+  }
+  return res.json(updatedRecording);
+  //return res.json("Update complete");
 }
 
 /**

@@ -310,12 +310,13 @@ storyRoutes.route('/updateActiveRecording/:id').post(async (req, res) => {
 
   if (req.body.activeRecording) {
     story.activeRecording = req.body.activeRecording;
-    const [saveErr] = await story.save().then(r => [null, r], e => [e]);
+    const [saveErr, updatedStory] = await story.save().then(r => [null, r], e => [e]);
     if(saveErr) {
       logger.error(saveErr);
       return res.status(400).json(saveErr);
     }
-    return res.json('Update complete');
+    
+    return res.json(updatedStory);
   }
 
 });
