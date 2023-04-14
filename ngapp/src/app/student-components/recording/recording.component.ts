@@ -9,7 +9,6 @@ import { Recording } from "../../recording";
 import { SynthesisService, Paragraph, Sentence, Section, } from "../../services/synthesis.service";
 import { EventType } from "../../event";
 import { EngagementService } from "../../engagement.service";
-import { MatDialogRef } from "@angular/material/dialog";
 import { firstValueFrom } from "rxjs";
 
 declare var MediaRecorder: any;
@@ -62,7 +61,6 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
-  dialogRef: MatDialogRef<unknown>;
 
   // ASR variables
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
