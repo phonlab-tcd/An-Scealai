@@ -54,28 +54,18 @@ export class TeacherClassroomComponent implements OnInit {
   async getStudents() {
     console.log("Getting students...");
     for(let id of this.classroom.studentIds) {
-      let student = await firstValueFrom(this.userService.getUserById(id));
-      console.log(student);
-      if(student) {
-        this.students.push(student);
-        console.log("Getting story count...");
-        let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
-        console.log(storyCount);
-        this.numOfStories.set(student.username, storyCount);
-      }
+      this.userService.getUserById(id).subscribe({
+        next: async student => {
+          console.log(student);
+          this.students.push(student);
+          console.log("Getting story count...");
+          let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
+          console.log(storyCount);
+          this.numOfStories.set(student.username, storyCount);
+        },
+        error: () => {console.log(id + " does not exist")}
+      })
     }
-    console.log("Done getting students");
-  }
-
-/*
-* Edit the title of the classroom with classroom service 
-*/
-  editTitle() {
-    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe(() => {
-      this.ngOnInit();
-    }, (err) => {
-      alert(err);
-    });
   }
 
 /*
