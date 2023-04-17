@@ -40,8 +40,10 @@ export class AdminClassroomComponent implements OnInit {
 
   private getStudents() {
     for(let id of this.classroom.studentIds) {
-      this.userService.getUserById(id)
-        .subscribe(student => this.students.push(student));
+      this.userService.getUserById(id).subscribe({
+        next: student => this.students.push(student), 
+        error: () => console.log(id + " does not exist")
+      });
     }
   }
 

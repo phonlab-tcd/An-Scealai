@@ -39,9 +39,12 @@ export class TeacherSettingsComponent implements OnInit {
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
     this.students = [];
     for(let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe((res : User) => {
-        this.students.push(res);
-        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+      this.userService.getUserById(id).subscribe({
+        next: student => {
+          this.students.push(student);
+          this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+        },
+        error: () => console.log(id + " does not exist")
       });
     }
     
