@@ -38,12 +38,10 @@ export class TeacherDashboardComponent implements OnInit {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    let profile = await firstValueFrom(
-      this.profileService.getForUser(this.auth.getUserDetails()._id)
-    );
-    if (!profile) {
-      this.router.navigateByUrl("/register-profile");
-    }
+    this.profileService.getForUser(this.auth.getUserDetails).subscribe({
+      next: () => {},
+      error: () => {console.log('no profile'); this.router.navigateByUrl("/register-profile");}
+   });
 
     this.getClassrooms(userDetails._id);
     this.notificationService.getTeacherNotifications();

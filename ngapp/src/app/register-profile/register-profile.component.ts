@@ -334,8 +334,8 @@ export class RegisterProfileComponent implements OnInit {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    this.profileService.getForUser(userDetails._id).subscribe((res) => {
-      if(res) {
+    this.profileService.getForUser(userDetails._id).subscribe({
+      next: (res) => {
         let p = res.profile;
         this.gender = p.gender;
         this.age = p.age;
@@ -378,9 +378,9 @@ export class RegisterProfileComponent implements OnInit {
         this.howOftenReading = p.howOftenReading;
         this.howOftenWriting = p.howOftenWriting;
         this.synthOpinion = p.synthOpinion;
-      }
-    }, (err) => {
-    });
+      },
+      error: () => {console.log('no profile')}
+   });
     
   }
 

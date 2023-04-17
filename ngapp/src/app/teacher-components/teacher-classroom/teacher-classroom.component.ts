@@ -60,7 +60,7 @@ export class TeacherClassroomComponent implements OnInit {
         this.students.push(res);
         //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
         console.log("Sorting student...");
-        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
+        //this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         this.studentIds.push(res._id);
         if(this.classroom.date) {
           console.log("Getting student stories (date exists)...");
