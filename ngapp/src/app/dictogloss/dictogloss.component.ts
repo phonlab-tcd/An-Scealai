@@ -102,11 +102,8 @@ export class DictoglossComponent implements OnInit {
     }
     if (userDetails.role === "STUDENT") {
       this.studentId = userDetails._id;
-      this.teacherId = (
-        await firstValueFrom(
-          this.classroomService.getClassroomOfStudent(this.studentId)
-        )
-      ).teacherId;
+      let studentClassroom = ( await firstValueFrom( this.classroomService.getClassroomOfStudent(this.studentId) ) )
+      if (studentClassroom) this.teacherId = studentClassroom.teacherId;
     }
     this.refreshVoice();
 
