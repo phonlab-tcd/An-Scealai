@@ -1,4 +1,3 @@
 export default {
-    // baseurl: "https://www.abair.ie/qa/anscealaibackend/"
-    baseurl: "https://www.abair.ie/qa/scealai/"
+    baseurl: "https://www.abair.ie/qa/anscealaibackend/"
 }
