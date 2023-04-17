@@ -30,7 +30,6 @@ export class TeacherClassroomComponent implements OnInit {
   
   classroom : Classroom;
   students : User[] = [];
-  studentIds: String[] = [];
   registrationError : boolean = false;
   newTitle: string;
   unreadMessages: number = 0;
@@ -53,28 +52,18 @@ export class TeacherClassroomComponent implements OnInit {
 /*
 * Loop through student ids in classroom object to get student objects
 */
-  getStudents() {
+  async getStudents() {
     console.log("Getting students...");
     for(let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe((res : User) => {
-        this.students.push(res);
-        //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
-        console.log("Sorting student...");
-        //this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
-        this.studentIds.push(res._id);
-        if(this.classroom.date) {
-          console.log("Getting student stories (date exists)...");
-          this.storyService.getStoriesForClassroom(res._id, this.classroom.date.toString()).subscribe( (stories) => {
-            this.numOfStories.set(res.username, Object.keys(stories).length);
-          });
-        }
-        else {
-          console.log("Getting student stories (date does not exist)...");
-          this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
-            this.numOfStories.set(res.username, Object.keys(stories).length);
-          });
-        }
-      });
+      let student = await firstValueFrom(this.userService.getUserById(id));
+      if(student) {
+        console.log("Got ", student.username);
+        this.students.push(student);
+        console.log("Getting story count...");
+        let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
+        console.log(storyCount);
+        this.numOfStories.set(student.username, storyCount);
+      }
     }
     console.log("Done getting students");
   }

@@ -92,6 +92,29 @@ storyRoutes.route('/getStoriesForClassroom/:owner/:date').get(function(req, res)
 });
 
 /**
+ * Get total number of stories for a given user (owner) with optional classroom creation date filter
+ * @param {Object} req params: User ID
+ * @param {Object} req params: Date classroom created
+ * @return {Object} List of stories
+ */
+storyRoutes.route('/getNumberOfStories/:owner/:date').get(function(req, res) {
+  const conditions = {'owner': req.params.owner};
+  if (req.params.date != 'empty') {
+    conditions['date'] = {
+      $gte: req.params.date,
+    };
+  }
+
+  Story.countDocuments(conditions, function (err, count) {
+      if (err){
+        res.json(err);
+      }else{
+        res.json(count);
+      }
+  });
+});
+
+/**
  * Get a story by ID
  * @param {Object} req params: Story ID
  * @return {Object} Story object
