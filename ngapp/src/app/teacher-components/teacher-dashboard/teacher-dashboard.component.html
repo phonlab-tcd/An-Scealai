@@ -14,7 +14,7 @@
     <div class="classBody">
       <div class="classroomCard" *ngFor="let classroom of classrooms" (click)="goToClassroom(classroom._id)">
         <div>{{classroom.title}}</div>
-        <div class="numStudents">{{getNumberOfStudents(classroom)}}</div>
+        <div class="numStudents">{{classroom.studentIds.length}}</div>
       </div>
     </div>
   </div>

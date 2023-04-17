@@ -41,11 +41,9 @@ export class TeacherClassroomComponent implements OnInit {
     console.log("Getting classroom...");
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
     this.getStudents();
-    console.log("Getting messages...")
     this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
       this.messagesForNotifications = res;
       this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);
-      console.log("Done getting messages");
     });
   }
 

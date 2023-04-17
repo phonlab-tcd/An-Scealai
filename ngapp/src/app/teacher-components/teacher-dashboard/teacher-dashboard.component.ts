@@ -52,9 +52,8 @@ export class TeacherDashboardComponent implements OnInit {
    * @param userDetails
    */
   async getClassrooms(teacherId) {
-    this.classrooms = await firstValueFrom(
-      this.classroom.getClassroomsForTeacher(teacherId)
-    );
+    this.classrooms = await firstValueFrom( this.classroom.getClassroomsForTeacher(teacherId) );
+    console.log(this.classrooms);
     this.classrooms.sort((a, b) => (a.title < b.title ? -1 : 1));
   }
 
@@ -101,15 +100,6 @@ export class TeacherDashboardComponent implements OnInit {
       potentialCode = this.classroom.generateCode();
     }
     return potentialCode;
-  }
-
-  /**
-   * Get number of students for given classroom
-   * @param classroom
-   * @returns length of student array in class
-   */
-  getNumberOfStudents(classroom: Classroom): number {
-    return classroom.studentIds.length;
   }
 
   /**
