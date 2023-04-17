@@ -39,11 +39,14 @@ export class TeacherClassroomComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
 
   async ngOnInit() {
+    console.log("Getting classroom...");
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
     this.getStudents();
+    console.log("Getting messages...")
     this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
       this.messagesForNotifications = res;
       this.unreadMessages = this.messageService.getNumberOfUnreadMessagesForClass(this.messagesForNotifications, this.classroom.studentIds);
+      console.log("Done getting messages");
     });
   }
 
@@ -51,24 +54,29 @@ export class TeacherClassroomComponent implements OnInit {
 * Loop through student ids in classroom object to get student objects
 */
   getStudents() {
+    console.log("Getting students...");
     for(let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe((res : User) => {
         this.students.push(res);
         //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
+        console.log("Sorting student...");
         this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         this.studentIds.push(res._id);
         if(this.classroom.date) {
+          console.log("Getting student stories (date exists)...");
           this.storyService.getStoriesForClassroom(res._id, this.classroom.date.toString()).subscribe( (stories) => {
             this.numOfStories.set(res.username, Object.keys(stories).length);
           });
         }
         else {
+          console.log("Getting student stories (date does not exist)...");
           this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
             this.numOfStories.set(res.username, Object.keys(stories).length);
           });
         }
       });
     }
+    console.log("Done getting students");
   }
 
 /*
