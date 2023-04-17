@@ -40,6 +40,7 @@ export class TeacherClassroomComponent implements OnInit {
   async ngOnInit() {
     console.log("Getting classroom...");
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
+    console.log(this.classroom);
     this.getStudents();
     this.messageService.getMessagesForLoggedInUser().subscribe((res: Message[]) => {
       this.messagesForNotifications = res;
@@ -54,8 +55,8 @@ export class TeacherClassroomComponent implements OnInit {
     console.log("Getting students...");
     for(let id of this.classroom.studentIds) {
       let student = await firstValueFrom(this.userService.getUserById(id));
+      console.log(student);
       if(student) {
-        console.log("Got ", student.username);
         this.students.push(student);
         console.log("Getting story count...");
         let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
