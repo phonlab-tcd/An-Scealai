@@ -1,13 +1,6 @@
 .container {
-    max-width: 90%;
-    background-color: white;
-    border-radius: 4px;
-    padding-top: 20px;
+    max-width: 70%;
     padding-bottom: 20px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
-    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
     animation-duration: 1s;
     animation-name: fadeIn;
 }
