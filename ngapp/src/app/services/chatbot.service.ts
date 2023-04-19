@@ -34,4 +34,14 @@ export class ChatbotService {
     return this.http.get<any>(config.baseurl + 'Chatbot/getTeacherScripts/' + classroom.teacherId + '/' + classroom.code)
   }
 
+  saveScript(result) {
+    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const body = {
+      result
+    };
+
+    return this.http.post<any>(config.baseurl + 'Chatbot/SaveScript', body, {headers});
+
+  }
+
 }
