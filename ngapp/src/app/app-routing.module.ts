@@ -24,7 +24,7 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 

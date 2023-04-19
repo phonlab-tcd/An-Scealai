@@ -66,7 +66,7 @@ import { UserGuidesComponent } from './user-guides/user-guides.component';
 
 import { DashboardComponent } from './student-components/dashboard/dashboard.component';
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 
