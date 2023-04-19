@@ -17,6 +17,7 @@ export class ChatbotComponent implements OnInit {
   audioCheckbox: HTMLInputElement;
   audioPlayer: HTMLAudioElement;
   videoPlayer: HTMLVideoElement;
+  currentDialectButton: HTMLButtonElement;
   bubbleId: number = 0;
   audio_reply: string = "";
   currentLanguage: string = '';
@@ -38,7 +39,10 @@ export class ChatbotComponent implements OnInit {
     this.audioCheckbox = document.querySelector(".audioCheckbox");
     this.audioPlayer = document.getElementById("botaudio") as HTMLAudioElement;
     this.videoPlayer = document.getElementById('chimp') as HTMLVideoElement;
+    this.currentDialectButton = document.getElementById('dialect-MU') as HTMLButtonElement;
     this.currentLanguage = this.ts.getCurrentLanguage();
+
+    console.log(this.currentLanguage);
 
     if(this.auth.isLoggedIn()){
       // @ts-ignore
@@ -61,7 +65,7 @@ export class ChatbotComponent implements OnInit {
         $('#personal-container').css('margin-top', '5%');
       }
 
-      this.chatSetup("start" + 'english', false, false)
+      this.chatSetup("start" + this.currentLanguage, false, false)
 
     }
     else{
@@ -72,7 +76,7 @@ export class ChatbotComponent implements OnInit {
       // @ts-ignore
       this.pandoraID = 'c08188e27e34571c';
 
-      this.chatSetup("start" + 'english', false, false)
+      this.chatSetup("start" + this.currentLanguage, false, false)
     }
 
     this.currentFile = 'start';
@@ -86,7 +90,7 @@ export class ChatbotComponent implements OnInit {
  * @returns 
  */
 async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
-  console.log("in chat setup")
+  console.log("Setting up chat with: ", text);
 
   //autoplay is on & bot is sending multiple consecutive bubbles
   if(holdMessages && this.audioCheckbox.checked == true){
@@ -110,6 +114,7 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
   else{
     // @ts-ignore
     let reply = await testBotReply(text);
+    console.log(reply)
     if(reply && reply != "" && !reply.includes('ERR')){
       console.log("Reply: " + reply);
       this.appendTypingIndicator(); // show bot typing
@@ -121,7 +126,6 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
       }, 2200);
     }
   }
-  return "";
 }
 
   /**
@@ -220,7 +224,6 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
   }
 
   chatAIML(){
-    console.log("LETS CHAT!")
     let output = '';
     var input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     $("form").on("submit", (event) => {
@@ -242,17 +245,16 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
 
         this.http.post<any>(config.baseurl + 'Chatbot/aiml-message/', body, {headers}).subscribe({
           next: (response) => {
-            if(response != ""){
-              // let xmlDoc = parser.parseFromString(JSON.parse(this.response).reply, 'text/xml');
-              // output = xmlDoc.getElementsByTagName('that')[0].childNodes[0].nodeValue;
-              // appendTypingIndicator();
-              // setTimeout(function(){
-              //   appendMessage(true, false, output);
-              //   $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-              //   this.audio(output, this.bubbleId, false);
-              //   //videoPlayer.pause();
-              // }, 2200);
-              // //callAudio(output, 'GD');
+            if(response.reply){
+              output = /<that>(.*?)<\/that>/g.exec(response.reply)[1]
+              this.appendTypingIndicator();
+              setTimeout(() => {
+                this.appendMessage(true, false, output);
+                $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+                this.audio(output, this.bubbleId, false);
+                //videoPlayer.pause();
+              }, 2200);
+              //callAudio(output, 'GD');
             } 
           }, 
           error: (error) => {console.log(error)}
@@ -613,32 +615,37 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * @param content_id 'c'
    */
  async load(fileId, start, content_id){
-  console.log("Loading quizz file")
-  console.log(this.currentFile)
     this.audioPlayer.pause();
     let send = document.getElementById('bot-message-button');
     send.onclick = () => {
+      console.log("Button clicked!!!!!")
       this.sendInput();
     }
   
+    // close popup window
     if(content_id) this.showContents(content_id, 'popup-background', false);
 
     // empty bot text from original greeting message
     if (this.currentFile == 'start') {
       $("#bot-messages").empty();
     }
-    else this.currentFile = fileId;
+    else {
+      this.currentFile = fileId;
+    }
+
     console.log(fileId);
   
     // @ts-ignore
     await testBotLoad(fileId, start);
 
     if(start == null) start = 'start';
-    this.chatSetup(start + this.currentLanguage.toLowerCase(), false, false);
+    this.chatSetup(start, false, false);
   }
 
+  /**
+   * Clear out the user input box
+   */
   sendInput(){
-    console.log("Sending chatobt input?")
     let input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     $("form").on("submit", (event) => {
       event.preventDefault();
@@ -654,6 +661,62 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
       $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
   
     }
+  }
+
+  selectEngine(engine){
+    $(engine).css('backgroundColor', '#F5B041');
+    if(engine == "#select-DNN"){
+      this.currentEngine = 'DNN';
+      $('#select-HTS').css('backgroundColor', '#FBFCFC');
+      $('#dialect-CM').css('display', 'none');
+      $('#dialect-GD').css('display', 'none');
+      $('#dialect-MU').css('display', 'none');
+  
+      $('#dialect-UL').css('display', 'block');
+      $('#dialect-CO').css('display', 'block');
+      $('#dialect-MU-DNN').css('display', 'block');
+    }
+    else{
+      this.currentEngine = 'HTS';
+      $('#select-DNN').css('backgroundColor', '#FBFCFC');
+      $('#dialect-CM').css('display', 'block');
+      $('#dialect-GD').css('display', 'block');
+      $('#dialect-MU').css('display', 'block');
+  
+      $('#dialect-UL').css('display', 'none');
+      $('#dialect-CO').css('display', 'none');
+      $('#dialect-MU-DNN').css('display', 'none');
+    }
+  }
+
+  dialectSelection(dialect){
+    $('.audioCheckbox').prop('checked', true);
+  
+    //set color
+    if(this.currentDialect != ''){
+      this.currentDialectButton.style.backgroundColor = '#1ABC9C';
+      this.currentDialectButton.style.fontWeight = '';
+    }
+    this.currentDialect = dialect.substr(8, dialect.length);
+    console.log(this.currentDialect);
+  
+    //set text
+    if(this.currentDialect == 'MU-DNN') this.currentDialect = 'MU';
+    
+    if(this.currentEngine == 'HTS'){
+      if(this.currentDialect == 'CM') $('#this-dialect').text("Dialect: Connemara - HTS");
+      else if(this.currentDialect == 'GD') $('#this-dialect').text("Dialect: Donegál - HTS");
+      else $('#this-dialect').text("Dialect: Kerry - HTS");
+    }
+    else{
+      if(this.currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
+      else if(this.currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
+      else $('#this-dialect').text("Dialect: Kerry - DNN");
+    }
+  
+    this.currentDialectButton = document.getElementById(dialect) as HTMLButtonElement;
+    this.currentDialectButton.style.backgroundColor = '#117A65';
+    this.currentDialectButton.style.fontWeight = 'bold';
   }
 
 }

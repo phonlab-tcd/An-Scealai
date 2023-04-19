@@ -64,41 +64,42 @@
                                                       <!-- Chatbot Container-->
 <div class="bot-bg-modal">
   <div id="bg-background"></div>
+                                                       <!-- Dialect Popup-->
   <div id="bot-audio">
     <div id="close-audio" (click)='showContents("bot-audio", "bg-background", false)' >
       Close
     </div>
     <div id="dialects">
-      <div id="select-HTS" onclick="selectEngine('#select-HTS')">
+      <div id="select-HTS" (click)="selectEngine('#select-HTS')">
         HTS
         <span class="tooltip-text">{{ ts.l.tt_hts }}</span>
       </div>
-      <div id="select-DNN" onclick="selectEngine('#select-DNN')">
+      <div id="select-DNN" (click)="selectEngine('#select-DNN')">
         DNN
         <span class="tooltip-text">{{ ts.l.tt_dnn }}</span>
       </div>
     </div>
-    <button id="dialect-CM" onclick="dialectSelection('dialect-CM')">
+    <button id="dialect-CM" (click)="dialectSelection('dialect-CM')">
       Connemara (male)
     </button>
-    <button id="dialect-GD" onclick="dialectSelection('dialect-GD')">
+    <button id="dialect-GD" (click)="dialectSelection('dialect-GD')">
       Gaoth Dobhair (female)
     </button>
-    <button id="dialect-MU" onclick="dialectSelection('dialect-MU')">
+    <button id="dialect-MU" (click)="dialectSelection('dialect-MU')">
       Corca Dhuibhne (female)
     </button>
-
-    <button id="dialect-CO" onclick="dialectSelection('dialect-CO')">
+    <button id="dialect-CO" (click)="dialectSelection('dialect-CO')">
       Connemara (male)
     </button>
-    <button id="dialect-UL" onclick="dialectSelection('dialect-UL')">
+    <button id="dialect-UL" (click)="dialectSelection('dialect-UL')">
       Gaoth Dobhair (female)
     </button>
-    <button id="dialect-MU-DNN" onclick="dialectSelection('dialect-MU-DNN')">
+    <button id="dialect-MU-DNN" (click)="dialectSelection('dialect-MU-DNN')">
       Corca Dhuibhne (male)
     </button>
   </div>
 
+                                                        <!-- Recording Container Popup-->
   <div id="recording-prompt">
     <p id="record-title">Record your Response</p>
     <p id="recording-message">
