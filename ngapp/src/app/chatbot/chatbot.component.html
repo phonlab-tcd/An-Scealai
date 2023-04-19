@@ -10,14 +10,16 @@
                                                       <!-- Quiz Selection Container-->
 <div id="new-contents">
   <div id="topics">{{ ts.l.taidhgin_choose_topic }}</div>
-  <!--<button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>-->
-  <button class="choose-personal" (click)="showContents('p', 'popup-background', true)" >
-    {{ ts.l.my_quiz_s }}
-  </button>
-  <button class="choose-community" (click)="showContents('c', 'popup-background', true)" >
-    {{ ts.l.t_community_quiz }}
-  </button>
-  <p id="login-rec">{{ ts.l.taidhgin_signup }}</p>
+  <div *ngIf="this.auth.isLoggedIn(); else notLoggedIn">
+    <!--<button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>-->
+    <button class="choose-personal" (click)="showContents('p', 'popup-background', true)" >
+      {{ ts.l.my_quiz_s }}
+    </button>
+    <button class="choose-community" (click)="showContents('c', 'popup-background', true)" >
+      {{ ts.l.t_community_quiz }}
+    </button>
+  </div>
+  <ng-template #notLoggedIn><p id="login-rec">{{ ts.l.taidhgin_signup }}</p></ng-template>
 </div>
 
 
@@ -32,13 +34,13 @@
                                                       <!-- My Quizzes Popup-->
 <div class="personal-topics" id="p">
   <div id="personal-topics-title"></div>
-  <div id="student" (click)="showPersonal('student')">
+  <div *ngIf="user?.role == 'STUDENT'" id="student" (click)="showPersonal('student')">
     <p>{{ ts.l.my_quiz_s }}</p>
   </div>
   <button id="to-create" routerLink="/create-quiz">
     <i class="fas fa-plus"></i>
   </button>
-  <div id="teacher" (click)="showPersonal('teacher')">
+  <div *ngIf="user?.role == 'STUDENT'" id="teacher" (click)="showPersonal('teacher')">
     <p>{{ ts.l.my_teachquiz }}</p>
   </div>
   <div id="personal-container"></div>
@@ -120,7 +122,7 @@
                                                       <!-- Chatbot Header (Audio/Dialect) -->
   <div style="display: flex; justify-content: space-between">
     <div class="audio-checkbox">
-      <input type="checkbox" name="audio" class="audioCheckbox" checked />
+      <input type="checkbox" name="audio" class="audioCheckbox" [(ngModel)]="autoPlayAudio" checked />
       {{ ts.l.taidhgin_audio_autoplay }}
     </div>
     <div class="bot-title">
@@ -144,11 +146,11 @@
       <i class="fas fa-arrow-circle-right arrow"></i>
     </button>
     <!-- Recording button -->
-    <button id="open-record" type="submit" (click)="showContents('recording-prompt', 'bg-background', true)" >
+    <button id="open-record" (click)="showContents('recording-prompt', 'bg-background', true)" >
       <i class="fas fa-microphone-alt"></i>
     </button>
     <!-- Choose dialect button-->
-    <button type="submit" id="choose-dialect" (click)="showContents('bot-audio', 'bg-background', true)" >
+    <button id="choose-dialect" (click)="showContents('bot-audio', 'bg-background', true)" >
       {{ ts.l.taidhgin_choose_dialect }}
     </button>
   </form>

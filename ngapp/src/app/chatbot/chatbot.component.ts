@@ -4,8 +4,8 @@ import config from 'abairconfig';
 import { TranslationService } from 'app/translation.service';
 import { ClassroomService } from 'app/classroom.service';
 import { HttpClient } from '@angular/common/http';
-
-const backendUrl = config.baseurl;
+import { ChatbotService } from 'app/services/chatbot.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-chatbot',
@@ -14,15 +14,15 @@ const backendUrl = config.baseurl;
 })
 export class ChatbotComponent implements OnInit {
 
-  audioCheckbox: HTMLInputElement;
+  autoPlayAudio: boolean = true;
   audioPlayer: HTMLAudioElement;
   videoPlayer: HTMLVideoElement;
-  currentDialectButton: HTMLButtonElement;
+  selectedDialect: HTMLButtonElement;
   bubbleId: number = 0;
   audio_reply: string = "";
   currentLanguage: string = '';
   bubbleObjArr: string[] = [];
-  currentEngine: string = 'HTS';
+  selectedSynthesisAlgo: string = 'HTS';
   currentDialect: string = 'MU';
   pandoraID: string = '';
   user: any;
@@ -32,53 +32,40 @@ export class ChatbotComponent implements OnInit {
   currentFile: string = '';
 
   constructor(public auth: AuthenticationService, public ts: TranslationService, private http: HttpClient,
-    private classroomService: ClassroomService) {
+    private classroomService: ClassroomService, private chatbotService: ChatbotService) {
    }
 
   async ngOnInit() {
-    this.audioCheckbox = document.querySelector(".audioCheckbox");
     this.audioPlayer = document.getElementById("botaudio") as HTMLAudioElement;
     this.videoPlayer = document.getElementById('chimp') as HTMLVideoElement;
-    this.currentDialectButton = document.getElementById('dialect-MU') as HTMLButtonElement;
+    this.selectedDialect = document.getElementById('dialect-MU') as HTMLButtonElement;
     this.currentLanguage = this.ts.getCurrentLanguage();
+    let setupFileName = '';
 
-    console.log(this.currentLanguage);
-
-    if(this.auth.isLoggedIn()){
-      // @ts-ignore
-      await setup('startLoggedIn', backendUrl, this.currentLanguage);
-
-      $('#login-rec').css('display', 'none');
-
+    if (this.auth.isLoggedIn()){
+      setupFileName = 'startLoggedIn';
       this.user = this.auth.getUserDetails();
-      // @ts-ignore
       this.pandoraID = 'da387bedce347878';
-      // @ts-ignore
-      this.getPersonalScripts();
-      if(this.auth.getUserDetails().role == 'STUDENT'){
-        // @ts-ignore
+  
+      // Get any user-made quizzes
+      let userQuizzes = await firstValueFrom(this.chatbotService.getPersonalScripts(this.user));
+      if(userQuizzes.status !== 404){
+        this.currentScripts = userQuizzes.userFiles;
+        if(this.currentScripts.length > 0) this.appendToPersonalTopics(this.currentScripts, this.user.role.toLowerCase());
+      }
+
+      if(this.user.role == 'STUDENT'){
         this.getTeacherScripts();
       }
-      else{
-        $('.personal-topics #student').css('display', 'none');
-        $('.personal-topics #teacher').css('display', 'none');
-        $('#personal-container').css('margin-top', '5%');
-      }
-
-      this.chatSetup("start" + this.currentLanguage, false, false)
-
     }
     else{
-      // @ts-ignore
-      await setup('startNotLoggedIn', backendUrl, this.currentLanguage);
-
-      this.hideTopics();
-      // @ts-ignore
+      setupFileName = 'startNotLoggedIn';
       this.pandoraID = 'c08188e27e34571c';
-
-      this.chatSetup("start" + this.currentLanguage, false, false)
     }
 
+    // @ts-ignore
+    await setup(setupFileName, config.baseurl, this.currentLanguage);
+    this.chatSetup("start" + this.currentLanguage, false, false)
     this.currentFile = 'start';
   }
 
@@ -93,7 +80,7 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
   console.log("Setting up chat with: ", text);
 
   //autoplay is on & bot is sending multiple consecutive bubbles
-  if(holdMessages && this.audioCheckbox.checked == true){
+  if(holdMessages && this.autoPlayAudio){
     this.audioPlayer.onended = async () => {
       if(text != ""){
         // @ts-ignore
@@ -127,20 +114,6 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
     }
   }
 }
-
-  /**
-   * Hide the Topics window
-   */
-  hideTopics(){
-    $('.choose-scealai').css('display', 'none');
-    $('.choose-personal').css('display', 'none');
-    $('.choose-community').css('display', 'none');
-    // const topics = Array.from( document.querySelectorAll('.choose-scealai, .choose-personal, .choose-community') as NodeListOf<HTMLElement>, );
-    // topics.forEach(topic => {
-    //   console.log(topic);
-    //   topic.style.display = 'none';
-    // });
-  }
 
   /**
    * Display the css for dots when the bot is typing
@@ -318,8 +291,8 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
       this.bubbleObjArr.push(newBubble);
       //console.log(newBubble);
       //makeMessageObj(isUser, bubbleText);
-      // if(this.currentEngine == 'DNN') testDNN(newBubble, thisId);        // TODO implement this function
-      // else if(this.currentEngine == 'HTS') callAudio(newBubble, thisId); // TODO implement this function
+      // if(this.selectedSynthesisAlgo == 'DNN') testDNN(newBubble, thisId);        // TODO implement this function
+      // else if(this.selectedSynthesisAlgo == 'HTS') callAudio(newBubble, thisId); // TODO implement this function
       this.callAudio(newBubble, thisId)
     }
   }
@@ -406,7 +379,7 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
         //assign audio url to message bubble
         let bubble = this.bubbleObjArr.find(obj => obj['id'] == id);
         if (bubble) bubble['url'] = bubbleUrl;
-        if(this.audioCheckbox.checked == true){
+        if(this.autoPlayAudio){
           this.playAudio(bubble);
         }
       }, 
@@ -425,30 +398,6 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
         });
       }
     }
-  }
-
-  /**
-   * Get any quizzes that the DB that the student made
-   */
-  getPersonalScripts(){
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
-    const body = {
-      name: this.user.username,
-      id: this.user._id
-    };
-
-    this.http.post<any>(config.baseurl + 'Chatbot/getScripts', body, {headers}).subscribe({
-      next: (response) => {
-        if(response.status !== 404){
-          this.currentScripts = response.userFiles;
-          if(this.currentScripts.length > 0) this.appendToPersonalTopics(this.currentScripts, this.user.role.toLowerCase());
-        }
-        else{
-         console.log(response);
-        }
-      }, 
-      error: (error) => {console.log(error)}
-    });
   }
 
   /**
@@ -666,7 +615,7 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
   selectEngine(engine){
     $(engine).css('backgroundColor', '#F5B041');
     if(engine == "#select-DNN"){
-      this.currentEngine = 'DNN';
+      this.selectedSynthesisAlgo = 'DNN';
       $('#select-HTS').css('backgroundColor', '#FBFCFC');
       $('#dialect-CM').css('display', 'none');
       $('#dialect-GD').css('display', 'none');
@@ -677,7 +626,7 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
       $('#dialect-MU-DNN').css('display', 'block');
     }
     else{
-      this.currentEngine = 'HTS';
+      this.selectedSynthesisAlgo = 'HTS';
       $('#select-DNN').css('backgroundColor', '#FBFCFC');
       $('#dialect-CM').css('display', 'block');
       $('#dialect-GD').css('display', 'block');
@@ -689,34 +638,40 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
     }
   }
 
-  dialectSelection(dialect){
-    $('.audioCheckbox').prop('checked', true);
+  /**
+   * Set the dialect preference and css styles of dialog popup modal
+   * @param dialect selected dialect
+   */
+  dialectSelection(dialect: string){
+    this.autoPlayAudio = true;
   
-    //set color
-    if(this.currentDialect != ''){
-      this.currentDialectButton.style.backgroundColor = '#1ABC9C';
-      this.currentDialectButton.style.fontWeight = '';
+    // reset colour of previously selected dialect button
+    if(this.currentDialect){
+      this.selectedDialect.style.backgroundColor = '#1ABC9C';
+      this.selectedDialect.style.fontWeight = '';
     }
-    this.currentDialect = dialect.substr(8, dialect.length);
-    console.log(this.currentDialect);
+    // set dialect preference
+    this.currentDialect = dialect.substring(8, dialect.length);
   
-    //set text
+    // set chatbot header text for selected dialect
+    let dialectElement = document.getElementById('this-dialect') as HTMLElement;
     if(this.currentDialect == 'MU-DNN') this.currentDialect = 'MU';
     
-    if(this.currentEngine == 'HTS'){
-      if(this.currentDialect == 'CM') $('#this-dialect').text("Dialect: Connemara - HTS");
-      else if(this.currentDialect == 'GD') $('#this-dialect').text("Dialect: Donegál - HTS");
-      else $('#this-dialect').text("Dialect: Kerry - HTS");
+    if(this.selectedSynthesisAlgo == 'HTS'){
+      if (this.currentDialect == 'CM') dialectElement.innerHTML = "Dialect: Connemara - HTS";
+      else if(this.currentDialect == 'GD') dialectElement.innerHTML = "Dialect: Donegál - HTS";
+      else dialectElement.innerHTML = "Dialect: Kerry - HTS";
     }
     else{
-      if(this.currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
-      else if(this.currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
-      else $('#this-dialect').text("Dialect: Kerry - DNN");
+      if (this.currentDialect == 'CO') dialectElement.innerHTML = "Dialect: Connemara - DNN";
+      else if(this.currentDialect == 'UL') dialectElement.innerHTML = "Dialect: Gaoth Dobhair - DNN";
+      else dialectElement.innerHTML = "Dialect: Kerry - DNN";
     }
   
-    this.currentDialectButton = document.getElementById(dialect) as HTMLButtonElement;
-    this.currentDialectButton.style.backgroundColor = '#117A65';
-    this.currentDialectButton.style.fontWeight = 'bold';
+    // set the colour of selected dialect button
+    this.selectedDialect = document.getElementById(dialect) as HTMLButtonElement;
+    this.selectedDialect.style.backgroundColor = '#117A65';
+    this.selectedDialect.style.fontWeight = 'bold';
   }
 
 }
