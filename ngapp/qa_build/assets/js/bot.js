@@ -22,19 +22,27 @@ var currentLanguage = 'Gaeilge';
 
 let currentDialectButton = null;
 
+async function testLoadQuiz(quizContent) {
+  console.log("loading quiz bot testLoadQuiz()");
+  bot = new RiveScript({utf8: true});    
+  await bot.stream(quizContent);
+  await bot.sortReplies();
+  console.log("done loading quiz bot");
+}
+
 async function testBotReply(text) {
-  console.log("getting bot reply testBotReply()")
+  console.log("getting bot reply testBotReply() with text: ", text);
   let reply = await bot.reply("local-user", text);
   return reply;
-  //await bot.reply("local-user", text);
 }
 
 async function testBotLoad(fileId, start) {
   console.log("test loading new bot testBotLoad()")
-  // sets thisVerb, use regex
+  // sets thisVerb if the quiz is not of type 'quiz' (i.e. community, eire)
   if(fileId.indexOf("quiz") == -1){
     var length = fileId.length - 2;
     thisVerb = fileId.substr(0, length);
+    console.log("this verb: ", thisVerb);
     if(thisVerb == "bi") thisVerb = "bí";
     else if(thisVerb == "teigh") thisVerb = "téigh";
     else if(thisVerb == "dean") thisVerb = "déan";
@@ -46,7 +54,6 @@ async function testBotLoad(fileId, start) {
   await bot.sortReplies();
   console.log(fileId + ' loaded');
   if(start == null) start = 'start';
-  console.log("done loading bot")
 }
 
 /**
@@ -80,6 +87,10 @@ async function setup(file, backendUrlFromAngularComponent, languageFromAngular){
 }
 
 // function load(fileId, start, content_id){
+//   console.log("FileId: ", fileId);
+//   console.log("Start: ", start);
+//   console.log("content_id: ", content_id);
+//   console.log("currentFile: ", currentFile)
 //   audioPlayer.pause();
 //   let send = document.getElementById('bot-message-button');
 //   send.onclick = function(){
@@ -188,6 +199,8 @@ function loadFromChat(fileId, start){ load(fileId, start); }
 //   // holdMessages => for autoplay audio
 //   // showButtons => for manual audio 
 
+//   console.log("Setting up chat with: ", text);
+
 //   if(holdMessages == "true" && audioCheckbox.checked == true){
 //     // autoplay is on & bot is sending multiple consecutive bubbles
 //     audioPlayer.onended = function(){
@@ -249,63 +262,63 @@ function loadFromChat(fileId, start){ load(fileId, start); }
 // }
 
 // Select Synthesis Engine
-function selectEngine(engine){
-  $(engine).css('backgroundColor', '#F5B041');
-  if(engine == "#select-DNN"){
-    currentEngine = 'DNN';
-    $('#select-HTS').css('backgroundColor', '#FBFCFC');
-    $('#dialect-CM').css('display', 'none');
-    $('#dialect-GD').css('display', 'none');
-    $('#dialect-MU').css('display', 'none');
+// function selectEngine(engine){
+//   $(engine).css('backgroundColor', '#F5B041');
+//   if(engine == "#select-DNN"){
+//     currentEngine = 'DNN';
+//     $('#select-HTS').css('backgroundColor', '#FBFCFC');
+//     $('#dialect-CM').css('display', 'none');
+//     $('#dialect-GD').css('display', 'none');
+//     $('#dialect-MU').css('display', 'none');
 
-    $('#dialect-UL').css('display', 'block');
-    $('#dialect-CO').css('display', 'block');
-    $('#dialect-MU-DNN').css('display', 'block');
-  }
-  else{
-    currentEngine = 'HTS';
-    $('#select-DNN').css('backgroundColor', '#FBFCFC');
-    $('#dialect-CM').css('display', 'block');
-    $('#dialect-GD').css('display', 'block');
-    $('#dialect-MU').css('display', 'block');
+//     $('#dialect-UL').css('display', 'block');
+//     $('#dialect-CO').css('display', 'block');
+//     $('#dialect-MU-DNN').css('display', 'block');
+//   }
+//   else{
+//     currentEngine = 'HTS';
+//     $('#select-DNN').css('backgroundColor', '#FBFCFC');
+//     $('#dialect-CM').css('display', 'block');
+//     $('#dialect-GD').css('display', 'block');
+//     $('#dialect-MU').css('display', 'block');
 
-    $('#dialect-UL').css('display', 'none');
-    $('#dialect-CO').css('display', 'none');
-    $('#dialect-MU-DNN').css('display', 'none');
-  }
-}
+//     $('#dialect-UL').css('display', 'none');
+//     $('#dialect-CO').css('display', 'none');
+//     $('#dialect-MU-DNN').css('display', 'none');
+//   }
+// }
 
 // Selecting Dialect
 let currentDialect = '';
-function dialectSelection(dialect){
-  $('.audioCheckbox').prop('checked', true);
+// function dialectSelection(dialect){
+//   $('.audioCheckbox').prop('checked', true);
 
-  //set color
-  if(currentDialect != ''){
-    currentDialectButton.style.backgroundColor = '#1ABC9C';
-    currentDialectButton.style.fontWeight = '';
-  }
-  currentDialect = dialect.substr(8, dialect.length);
-  console.log(currentDialect);
+//   //set color
+//   if(currentDialect != ''){
+//     currentDialectButton.style.backgroundColor = '#1ABC9C';
+//     currentDialectButton.style.fontWeight = '';
+//   }
+//   currentDialect = dialect.substr(8, dialect.length);
+//   console.log(currentDialect);
 
-  //set text
-  if(currentDialect == 'MU-DNN') currentDialect = 'MU';
+//   //set text
+//   if(currentDialect == 'MU-DNN') currentDialect = 'MU';
   
-  if(currentEngine == 'HTS'){
-    if(currentDialect == 'CM') $('#this-dialect').text("Dialect: Connemara - HTS");
-    else if(currentDialect == 'GD') $('#this-dialect').text("Dialect: Donegál - HTS");
-    else $('#this-dialect').text("Dialect: Kerry - HTS");
-  }
-  else{
-    if(currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
-    else if(currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
-    else $('#this-dialect').text("Dialect: Kerry - DNN");
-  }
+//   if(currentEngine == 'HTS'){
+//     if(currentDialect == 'CM') $('#this-dialect').text("Dialect: Connemara - HTS");
+//     else if(currentDialect == 'GD') $('#this-dialect').text("Dialect: Donegál - HTS");
+//     else $('#this-dialect').text("Dialect: Kerry - HTS");
+//   }
+//   else{
+//     if(currentDialect == 'CO') $('#this-dialect').text("Dialect: Connemara - DNN");
+//     else if(currentDialect == 'UL') $('#this-dialect').text("Dialect: Gaoth Dobhair - DNN");
+//     else $('#this-dialect').text("Dialect: Kerry - DNN");
+//   }
 
-  currentDialectButton = document.getElementById(dialect);
-  currentDialectButton.style.backgroundColor = '#117A65';
-  currentDialectButton.style.fontWeight = 'bold';
-}
+//   currentDialectButton = document.getElementById(dialect);
+//   currentDialectButton.style.backgroundColor = '#117A65';
+//   currentDialectButton.style.fontWeight = 'bold';
+// }
 
 
 //Bunscoil Spelling Test
