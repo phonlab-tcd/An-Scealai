@@ -45,10 +45,10 @@
   </div>
   <div id="personal-container"></div>
   <i class="fas fa-times close-topics" (click)="closePersonal()"></i>
-  <button id="delete-script" onclick="deleteScript()">
+  <button id="delete-script" (click)="deleteScript()">
     {{ ts.l.delete_quiz }}
   </button>
-  <button id="open-script" onclick="openScript()">{{ ts.l.open_quiz }}</button>
+  <button id="open-script" (click)="openScript()">{{ ts.l.open_quiz }}</button>
 </div>
 
                                                       <!-- Community Quizzes Popup-->

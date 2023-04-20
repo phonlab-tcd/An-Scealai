@@ -1860,9 +1860,6 @@ export default {
   how_to_tquiz_title: {
     ga: 'Treoracha ℹ️',
     en: 'How to Use! ℹ️' },
-  quiz_done: {
-    ga: 'Déanta',
-    en: 'Done' },
   quiz_add_q: {
     ga: 'Ceist eile',
     en: 'Add Question' },

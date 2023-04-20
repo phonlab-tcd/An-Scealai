@@ -1,125 +1,137 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'app/authentication.service';
-import config from 'abairconfig';
-import { TranslationService } from 'app/translation.service';
-import { ClassroomService } from 'app/classroom.service';
-import { HttpClient } from '@angular/common/http';
-import { ChatbotService } from 'app/services/chatbot.service';
-import { firstValueFrom } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { AuthenticationService } from "app/authentication.service";
+import config from "abairconfig";
+import { TranslationService } from "app/translation.service";
+import { ClassroomService } from "app/classroom.service";
+import { HttpClient } from "@angular/common/http";
+import { ChatbotService } from "app/services/chatbot.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
-  selector: 'app-chatbot',
-  templateUrl: './chatbot.component.html',
-  styleUrls: ['./chatbot.component.scss']
+  selector: "app-chatbot",
+  templateUrl: "./chatbot.component.html",
+  styleUrls: ["./chatbot.component.scss"],
 })
 export class ChatbotComponent implements OnInit {
-
   autoPlayAudio: boolean = true;
   audioPlayer: HTMLAudioElement;
   videoPlayer: HTMLVideoElement;
   selectedDialect: HTMLButtonElement;
   bubbleId: number = 0;
-  audio_reply: string = "";
-  currentLanguage: string = '';
-  bubbleObjArr: string[] = [];
-  selectedSynthesisAlgo: string = 'HTS';
-  currentDialect: string = 'MU';
-  pandoraID: string = '';
+  currentLanguage: string = "";
+  bubbleObjArr: Object[] = [];
+  selectedSynthesisAlgo: string = "HTS";
+  currentDialect: string = "MU";
+  pandoraID: string = "";
   user: any;
   currentScripts: any[] = [];
   personal_buttons: any[] = [];
-  selectedFile: string = '';
-  currentFile: string = '';
+  selectedFile: string = "";
+  currentFile: string = "";
+  quiz_score: number = 0;
+  currentNumberofQuestions: number = 0;
+  current_qandanswers: any;
 
-  constructor(public auth: AuthenticationService, public ts: TranslationService, private http: HttpClient,
-    private classroomService: ClassroomService, private chatbotService: ChatbotService) {
-   }
+  constructor(
+    public auth: AuthenticationService,
+    public ts: TranslationService,
+    private http: HttpClient,
+    private classroomService: ClassroomService,
+    private chatbotService: ChatbotService
+  ) {}
 
   async ngOnInit() {
     this.audioPlayer = document.getElementById("botaudio") as HTMLAudioElement;
-    this.videoPlayer = document.getElementById('chimp') as HTMLVideoElement;
-    this.selectedDialect = document.getElementById('dialect-MU') as HTMLButtonElement;
+    this.videoPlayer = document.getElementById("chimp") as HTMLVideoElement;
+    this.selectedDialect = document.getElementById( "dialect-MU" ) as HTMLButtonElement;
     this.currentLanguage = this.ts.getCurrentLanguage();
-    let setupFileName = '';
+    let setupFileName = "";
 
-    if (this.auth.isLoggedIn()){
-      setupFileName = 'startLoggedIn';
+    if (this.auth.isLoggedIn()) {
+      setupFileName = "startLoggedIn";
       this.user = this.auth.getUserDetails();
-      this.pandoraID = 'da387bedce347878';
-  
+      this.pandoraID = "da387bedce347878";
+
       // Get any user-made quizzes
-      let userQuizzes = await firstValueFrom(this.chatbotService.getPersonalScripts(this.user));
-      if(userQuizzes.status !== 404){
+      let userQuizzes = await firstValueFrom( this.chatbotService.getPersonalScripts(this.user) );
+      console.log(userQuizzes);
+      if (userQuizzes.status !== 404) {
         this.currentScripts = userQuizzes.userFiles;
-        if(this.currentScripts.length > 0) this.appendToPersonalTopics(this.currentScripts, this.user.role.toLowerCase());
+        if (this.currentScripts.length > 0)
+          this.appendToPersonalTopics( this.currentScripts, this.user.role.toLowerCase() );
       }
 
-      if(this.user.role == 'STUDENT'){
+      if (this.user.role == "STUDENT") {
         this.getTeacherScripts();
       }
-    }
-    else{
-      setupFileName = 'startNotLoggedIn';
-      this.pandoraID = 'c08188e27e34571c';
+    } else {
+      setupFileName = "startNotLoggedIn";
+      this.pandoraID = "c08188e27e34571c";
     }
 
     // @ts-ignore
     await setup(setupFileName, config.baseurl, this.currentLanguage);
-    this.chatSetup("start" + this.currentLanguage, false, false)
-    this.currentFile = 'start';
+    this.chatSetup("start" + this.currentLanguage, false, false);
+    this.currentFile = "start";
   }
 
   /**
- * 
- * @param {*} text e.x: 'start'
- * @param {*} holdMessages true | false => true for autoplay audio
- * @param {*} showButtons true | false => true for manual audio
- * @returns 
- */
-async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
-  console.log("Setting up chat with: ", text);
+   *
+   * @param {*} text e.x: 'start'
+   * @param {*} holdMessages true | false => true for autoplay audio
+   * @param {*} showButtons true | false => true for manual audio
+   * @returns
+   */
+  async chatSetup(text: string, holdMessages: boolean, showButtons: boolean) {
+    console.log("Setting up chat with: ", text);
 
-  //autoplay is on & bot is sending multiple consecutive bubbles
-  if(holdMessages && this.autoPlayAudio){
-    this.audioPlayer.onended = async () => {
-      if(text != ""){
-        // @ts-ignore
-        let reply = await testBotReply(text);
-        if(reply && reply != "" && !reply.includes('ERR')){
-          console.log("Reply: " + reply);
-          this.appendTypingIndicator();
-          setTimeout(function(){
-            this.appendMessage(true, false, reply);
-            this.audio(reply, this.bubbleId, false);
-            $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-          }, 2200);
+    //autoplay is on & bot is sending multiple consecutive bubbles
+    if (holdMessages && this.autoPlayAudio) {
+      this.audioPlayer.onended = async () => {
+        if (text != "") {
+          // @ts-ignore
+          let reply = await testBotReply(text);
+          if (reply && reply != "" && !reply.includes("ERR")) {
+            console.log("Reply: " + reply);
+            this.appendTypingIndicator();
+            setTimeout(function () {
+              this.appendMessage(true, false, reply);
+              this.audio(reply, this.bubbleId, false);
+              $(".chatlogs").animate(
+                { scrollTop: $(".chatlogs")[0].scrollHeight },
+                200
+              );
+            }, 2200);
+          }
         }
+      };
+    }
+    // autoplay is off => no need to wait for audio to play for consecutive bubbles
+    else {
+      // @ts-ignore
+      let reply = await testBotReply(text);
+      console.log(reply);
+      if (reply && reply != "" && !reply.includes("ERR")) {
+        console.log("Reply: " + reply);
+        this.appendTypingIndicator(); // show bot typing
+        // wait for the bot to 'finish typing'
+        setTimeout(() => {
+          this.appendMessage(true, false, reply);
+          this.audio(reply, this.bubbleId, false);
+          $(".chatlogs").animate(
+            { scrollTop: $(".chatlogs")[0].scrollHeight },
+            200
+          );
+        }, 2200);
       }
     }
   }
-  // autoplay is off => no need to wait for audio to play for consecutive bubbles
-  else{
-    // @ts-ignore
-    let reply = await testBotReply(text);
-    console.log(reply)
-    if(reply && reply != "" && !reply.includes('ERR')){
-      console.log("Reply: " + reply);
-      this.appendTypingIndicator(); // show bot typing
-      // wait for the bot to 'finish typing'
-      setTimeout(() => {
-        this.appendMessage(true, false, reply);
-        this.audio(reply, this.bubbleId, false);
-        $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-      }, 2200);
-    }
-  }
-}
 
   /**
    * Display the css for dots when the bot is typing
    */
-  appendTypingIndicator(){
-    $("#bot-messages").append($("<div class=\"typing-indicator\"><div class=\"bot-message-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"bot-message-ind\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
+  appendTypingIndicator() {
+    $("#bot-messages").append( $( '<div class="typing-indicator"><div class="bot-message-photo"><img src="assets/img/logo-S.png" id="bot-img"></div><div class="dots"><p class="bot-message-ind"><span id="typ1"></span><span id="typ2"></span><span id="typ3"></span></p></div></div></div>' ) );
     $(".typing-indicator").delay(2000).fadeOut("fast"); // make the typing dots dissapear
     $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
   }
@@ -130,42 +142,43 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * @param isUser true if message is from human
    * @param text message text
    */
-  appendMessage(isBot, isUser, text){
-    console.log("appending message")
+  appendMessage(isBot, isUser, text) {
+    console.log("appending message");
     this.bubbleId++;
     var newMessage = document.createElement("div");
     newMessage.setAttribute("class", "message_parent");
     newMessage.setAttribute("id", this.bubbleId.toString());
+
     var newP = document.createElement("p");
     var newSpan = document.createElement("span");
     var photoDiv = document.createElement("div");
     var photo = document.createElement("img");
-    if(isBot){
+
+    if (isBot) {
       newP.setAttribute("class", "bot-message");
       photoDiv.setAttribute("class", "bot-message-photo");
       photo.src = "assets/img/logo-S.png";
       photo.setAttribute("id", "bot-img");
-    }
-    else{
+    } else {
       newP.setAttribute("class", "user-message");
       photoDiv.setAttribute("class", "user-message-photo");
       photo.src = "assets/img/apple-user.svg";
       photo.setAttribute("id", "user-img");
     }
-    
+
     photoDiv.appendChild(photo);
     newMessage.appendChild(photoDiv);
     newSpan.setAttribute("class", "this-message");
     newSpan.innerHTML = text;
     newP.appendChild(newSpan);
-  
-    newMessage.ondblclick = function(){
+
+    newMessage.ondblclick = function () {
       // manualPlay(newMessage.id);  TODO
-    }
-  
+    };
+
     let isAQuestion = false; // WHAT IS THIS
-    let dictOn = false;  // WHAT IS THIS
-    if(isAQuestion){
+    let dictOn = false; // WHAT IS THIS
+    if (isAQuestion) {
       var dictPopup;
       var dictTri;
       var dictText;
@@ -174,182 +187,198 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
       dictImg.src = "assets/img/dict.png";
       dictImg.setAttribute("class", "dictButton");
       dictImg.style.display = "none";
-      dictImg.onclick = function(){
-        if(dictOn == false){
+      dictImg.onclick = function () {
+        if (dictOn == false) {
           dictPopup.style.display = "flex";
           dictTri.style.display = "flex";
-          //dictText.innerHTML = currentQuestion.translation;  // FIGURE THIS OUT LATER
+          dictText.innerHTML = this.currentQuestion.translation;
           dictOn = true;
-        }
-        else if(dictOn){
+        } else if (dictOn) {
           dictPopup.style.display = "none";
           dictTri.style.display = "none";
           dictOn = false;
         }
-      }
+      };
       newP.appendChild(dictImg);
       isAQuestion = false;
     }
-  
+
     let messages = document.getElementById("bot-messages") as HTMLElement;
-    newMessage.appendChild(newP);  
+    newMessage.appendChild(newP);
     messages.appendChild(newMessage);
   }
 
-  chatAIML(){
-    let output = '';
+  chatAIML() {
+    let output = "";
     var input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     $("form").on("submit", (event) => {
       event.preventDefault();
     });
-    if(input != ""){
+    if (input != "") {
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
       this.appendMessage(false, true, input);
       this.audio(input, this.bubbleId, true);
       setTimeout(() => {
         this.videoPlayer.play();
-        $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+        $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
 
-        const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
-        const body = {
-          message: input,
-          botId: this.pandoraID
-        };
-
-        this.http.post<any>(config.baseurl + 'Chatbot/aiml-message/', body, {headers}).subscribe({
-          next: (response) => {
-            if(response.reply){
-              output = /<that>(.*?)<\/that>/g.exec(response.reply)[1]
-              this.appendTypingIndicator();
-              setTimeout(() => {
-                this.appendMessage(true, false, output);
-                $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-                this.audio(output, this.bubbleId, false);
-                //videoPlayer.pause();
-              }, 2200);
-              //callAudio(output, 'GD');
-            } 
-          }, 
-          error: (error) => {console.log(error)}
-        });
-      }, 2200)
+        this.chatbotService.chatAIML(input, this.pandoraID).subscribe({
+            next: (response) => {
+              if (response.reply) {
+                output = /<that>(.*?)<\/that>/g.exec(response.reply)[1];
+                this.appendTypingIndicator();
+                setTimeout(() => {
+                  this.appendMessage(true, false, output);
+                  $(".chatlogs").animate(
+                    { scrollTop: $(".chatlogs")[0].scrollHeight },
+                    200
+                  );
+                  this.audio(output, this.bubbleId, false);
+                  //videoPlayer.pause();
+                }, 2200);
+                //callAudio(output, 'GD');
+              }
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
+      }, 2200);
     }
   }
 
-  audio(newReply, id, isUser){
-    console.log("Getting audio...")
-    this.audio_reply = newReply;
+  audio(newReply, id, isUser) {
+    console.log("Getting audio...");
     let thisId = id;
     let newBubble;
     var bubbleText = "";
-    if(isUser == false){
+    if (isUser == false) {
       // message is from bot
       // remove html and rivescript tags
-      let editedMessage = this.editMessageForAudio();
-  
+      let editedMessage = this.editMessageForAudio(newReply);
+
       // check if message from bot is a hint
-      if(editedMessage[2] == "//www"){
+      if (editedMessage[2] == "//www") {
         bubbleText = "Úsáid tearma.ie chun cabhrú leat munar thuig tú téarma ar leith.";
         newBubble = { text: bubbleText, id: thisId, url: null, isUser: isUser };
-      }
-      else if(editedMessage[3] == "//www"){
+      } else if (editedMessage[3] == "//www") {
         bubbleText = "An bhfuil aon fhocail nár thuig tú? Féach sa bhfoclóir ag teanglann.ie.";
         newBubble = { text: bubbleText, id: thisId, url: null, isUser: isUser };
-      }
-      else if(editedMessage != null){
+      } else if (editedMessage != null) {
         var notAHint = true;
-        for(let i = 0; i < editedMessage.length; i++){
-          if(editedMessage[i].indexOf("teanglann") != -1){
+        for (let i = 0; i < editedMessage.length; i++) {
+          if (editedMessage[i].indexOf("teanglann") != -1) {
             notAHint = false;
             //@ts-ignore
-            bubbleText = "Mícheart, beagnach ceart ach féach arís air, a " + getName() + ". Hint: teanglann.ie"
-            newBubble = { text: bubbleText, id: thisId, url: null, isUser: isUser };
+            bubbleText = "Mícheart, beagnach ceart ach féach arís air, a " + getName() + ". Hint: teanglann.ie";
+            newBubble = {
+              text: bubbleText,
+              id: thisId,
+              url: null,
+              isUser: isUser,
+            };
           }
         }
-        if(notAHint){
-          for(let i = 0; i < editedMessage.length; i++){
+        if (notAHint) {
+          for (let i = 0; i < editedMessage.length; i++) {
             bubbleText = bubbleText.concat(editedMessage[i], ".");
           }
-          newBubble = { text: bubbleText , id: thisId, url: null, isUser: isUser };
+          newBubble = {
+            text: bubbleText,
+            id: thisId,
+            url: null,
+            isUser: isUser,
+          };
         }
       }
       // bot message contains no rivescript/html tags
-      else{
-        bubbleText = this.audio_reply;
-        newBubble = { text: this.audio_reply , id: thisId, url: null, isUser: isUser };
+      else {
+        bubbleText = newReply;
+        newBubble = {
+          text: newReply,
+          id: thisId,
+          url: null,
+          isUser: isUser,
+        };
       }
-    }
-    else{
+    } else {
       // message is from user or bot message is not a hint
-      bubbleText = this.audio_reply;
-      newBubble = { text: this.audio_reply , id: thisId, url: null, isUser: isUser };
+      bubbleText = newReply;
+      newBubble = {
+        text: newReply,
+        id: thisId,
+        url: null,
+        isUser: isUser,
+      };
     }
-  
+
     newBubble.text = newBubble.text.replace(/(<([^>]+)>)/gi, "");
     bubbleText = bubbleText.replace(/(<([^>]+)>)/gi, "");
-    if(this.currentLanguage == 'Gaeilge'){
+    if (this.currentLanguage == "Gaeilge") {
       this.bubbleObjArr.push(newBubble);
-      //console.log(newBubble);
-      //makeMessageObj(isUser, bubbleText);
+      console.log(newBubble);
+      //makeMessageObj(isUser, bubbleText); (not used in originial)
       // if(this.selectedSynthesisAlgo == 'DNN') testDNN(newBubble, thisId);        // TODO implement this function
       // else if(this.selectedSynthesisAlgo == 'HTS') callAudio(newBubble, thisId); // TODO implement this function
-      this.callAudio(newBubble, thisId)
+      this.callAudio(newBubble, thisId);
     }
   }
 
-  editMessageForAudio(){
+  editMessageForAudio(newReply: string) {
     let inp = [];
-    var inputString = this.audio_reply;
-    var index = inputString.indexOf("Ceist:");
+    var inputString = newReply;
     var j = 0;
     var length;
-    if(inputString.indexOf("<p") != -1){
+    if (inputString.indexOf("<p") != -1) {
       var i = inputString.indexOf("<");
       var j = inputString.indexOf(">");
-      inputString = inputString.replace("<p style=\"display:none\">", "");
+      inputString = inputString.replace('<p style="display:none">', "");
       inputString = inputString.replace("</p>", "");
       inp.push(inputString);
       return;
-    }
-    else{
-      for(i = 0; i < inputString.length; i++){
-        if(inputString[i] == "." || inputString[i] == ":" || inputString[i] == "?" || inputString[i] == "!"){
+    } else {
+      for (i = 0; i < inputString.length; i++) {
+        if (
+          inputString[i] == "." ||
+          inputString[i] == ":" ||
+          inputString[i] == "?" ||
+          inputString[i] == "!"
+        ) {
           length = i - j;
-          var newString = inputString.substr(j, length);
+          var newString = inputString.substring(j, length);
           j = i + 1;
-          if(newString != "ERR" && newString != " ")
-            inp.push(newString);
+          if (newString != "ERR" && newString != " ") inp.push(newString);
         }
-        if(inputString[i] == "'"){
+        if (inputString[i] == "'") {
           inputString[i] == inputString[i].replace("'", "");
         }
       }
       var currentSentence;
-      for(i = 0; i < inp.length; i++){
+      for (i = 0; i < inp.length; i++) {
         currentSentence = inp[i];
-        for(j = 0; j < currentSentence.length; j++){
+        for (j = 0; j < currentSentence.length; j++) {
           let indexOf1 = currentSentence.indexOf("<b>");
           let indexOf2 = currentSentence.indexOf("<i>");
           let indexOf3 = currentSentence.indexOf("</b>");
           let indexOf4 = currentSentence.indexOf("</i>");
           let indexOf5 = currentSentence.indexOf("<br>");
           let indexOf6 = currentSentence.indexOf("-");
-          if(indexOf1 != -1){
+          if (indexOf1 != -1) {
             inp[i] = inp[i].replace("<b>", "");
           }
-          if(indexOf2 != -1){
+          if (indexOf2 != -1) {
             inp[i] = inp[i].replace("<i>", "");
           }
-          if(indexOf3 != -1){
+          if (indexOf3 != -1) {
             inp[i] = inp[i].replace("</b>", "");
           }
-          if(indexOf4 != -1){
+          if (indexOf4 != -1) {
             inp[i] = inp[i].replace("</i>", "");
           }
-          if(indexOf5 != -1){
+          if (indexOf5 != -1) {
             inp[i] = inp[i].replace("<br>", "");
           }
-          if(indexOf6 != -1){
+          if (indexOf6 != -1) {
             inp[i] = inp[i].replace("-", "");
           }
         }
@@ -358,42 +387,45 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
     return inp;
   }
 
-  async callAudio(testString, id){
+  async callAudio(testString, id) {
     var messageBubble = {};
-    if(this.currentDialect == ''){
-      this.currentDialect = 'MU'; 
+    if (this.currentDialect == "") {
+      this.currentDialect = "MU";
     }
-    if(testString.isUser){
-      messageBubble = {text: testString.text, dialect: this.currentDialect};
+    if (testString.isUser) {
+      messageBubble = { text: testString.text, dialect: this.currentDialect };
+    } else {
+      messageBubble = { text: testString.text, dialect: "MU" };
     }
-    else{
-      messageBubble = {text: testString.text, dialect: 'MU'};
-    }
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
-    const body = {
-      messageBubble
+    const headers = {
+      Authorization: "Bearer " + this.auth.getToken(),
+      "Content-Type": "application/json",
     };
-    this.http.post<any>(config.baseurl + 'Chatbot/getAudio/', body, {headers}).subscribe({
+    const body = {
+      messageBubble,
+    };
+    this.http.post<any>(config.baseurl + "Chatbot/getAudio/", body, { headers }).subscribe({
       next: (audioRes) => {
         let bubbleUrl = audioRes.audio;
         //assign audio url to message bubble
-        let bubble = this.bubbleObjArr.find(obj => obj['id'] == id);
-        if (bubble) bubble['url'] = bubbleUrl;
-        if(this.autoPlayAudio){
+        let bubble = this.bubbleObjArr.find((obj) => obj["id"] == id);
+        if (bubble) bubble["url"] = bubbleUrl;
+        if (this.autoPlayAudio) {
           this.playAudio(bubble);
         }
-      }, 
-      error: (error) => {console.log(error)}
+      },
+      error: (error) => {
+        console.log(error);
+      },
     });
   }
 
-  playAudio(bubble){
-    if(bubble.url){
+  playAudio(bubble) {
+    if (bubble.url) {
       this.audioPlayer.src = bubble.url;
       var playPromise = this.audioPlayer.play();
-      if(playPromise !== undefined){
-        playPromise.then(_ => {
-        }).catch(error => {
+      if (playPromise !== undefined) {
+        playPromise.then((_) => {}).catch((error) => {
           console.log(error);
         });
       }
@@ -405,50 +437,52 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * @param scripts list of quizzes
    * @param role role of user
    */
-  appendToPersonalTopics(scripts, role){
-    let button_id = role + '_script_';
+  appendToPersonalTopics(scripts, role) {
+    let button_id = role + "_script_";
     //console.log(scripts);
-    if(typeof scripts == 'object'){
-      
+    if (typeof scripts == "object") {
       //append buttons to personal-topics
-      for(let script of scripts){
+      for (let script of scripts) {
         //label for button
         let topicname = script.name;
         //check not already in DOM
-        if(!this.personal_buttons.includes(button_id + topicname)){
+        if (!this.personal_buttons.includes(button_id + topicname)) {
           //create button
-          let topic = document.createElement('button');
-          topic.setAttribute('class', 'add-personal-topics');
+          let topic = document.createElement("button");
+          topic.setAttribute("class", "add-personal-topics");
           topic.innerText = topicname;
-          topic.setAttribute('id', button_id + topicname);
+          topic.setAttribute("id", button_id + topicname);
           //set teacher quizzes display to none if student
-          if(topic.id.includes('teacher') && this.user.role == 'STUDENT'){
-            topic.style.display = 'none';
-            topic.style.backgroundColor = '#138D75';
-            topic.innerText = topicname.replace('teacher_', '');
-          } 
-          else if(topic.id.includes('teacher') && this.user.role == 'TEACHER'){
-            topic.innerText = topicname.replace('teacher_', '');
-          }
-          else topic.style.display = 'inline';
+          if (topic.id.includes("teacher") && this.user.role == "STUDENT") {
+            topic.style.display = "none";
+            topic.style.backgroundColor = "#138D75";
+            topic.innerText = topicname.replace("teacher_", "");
+          } else if (
+            topic.id.includes("teacher") &&
+            this.user.role == "TEACHER"
+          ) {
+            topic.innerText = topicname.replace("teacher_", "");
+          } else topic.style.display = "inline";
+
           //keep track of buttons
           this.personal_buttons.push(topic.id);
           topic.onclick = () => {
             //console.log(selectedFile);
-            if(this.selectedFile != ''){
-              $('#' + this.selectedFile).css('border', 'none');
+            if (this.selectedFile != "") {
+              $("#" + this.selectedFile).css("border", "none");
             }
-            topic.style.border = 'thick solid #F4D03F';
-            $('#delete-script').css('display', 'block');
-            $('#open-script').css('display', 'block');
+            topic.style.border = "thick solid #F4D03F";
+            $("#delete-script").css("display", "block");
+            $("#open-script").css("display", "block");
             this.selectedFile = topic.id;
             //showContents('p', 'popup-background', false);
             //load(topic.innerText);
-          }
-          setTimeout(function(){
+          };
+
+          setTimeout(function () {
             //append new button
-            $('#personal-container').append(topic);
-          }, 500)
+            $("#personal-container").append(topic);
+          }, 500);
         }
       }
     }
@@ -457,24 +491,28 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
   /**
    * Get any quizzes from the DB that the teacher made
    */
-  async getTeacherScripts(){
+  async getTeacherScripts() {
     this.classroomService.getClassroomOfStudent(this.user._id).subscribe({
       next: (classroom) => {
-        this.http.get<any>(config.baseurl + 'Chatbot/getTeacherScripts/' + classroom.teacherId + '/' + classroom.code).subscribe({
+        this.http.get<any>( config.baseurl + "Chatbot/getTeacherScripts/" + classroom.teacherId + "/" + classroom.code ).subscribe({
           next: (response) => {
-            if(response.status != 404){
-              for(let s of response) this.currentScripts.push(s);
-              if (response.length > 0) this.appendToPersonalTopics(response, this.user.role.toLowerCase());
-            }
-            else{
+            if (response.status != 404) {
+              for (let s of response) this.currentScripts.push(s);
+              if (response.length > 0)
+                this.appendToPersonalTopics( response, this.user.role.toLowerCase() );
+            } else {
               console.log(response);
             }
-          }, 
-          error: (error) => {console.log(error)}
+          },
+          error: (error) => {
+            console.log(error);
+          },
         });
-      }, 
-      error: (error) => {console.log(error)}
-    })
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   /**
@@ -483,37 +521,38 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * @param background_id id of background element for clicked section
    * @param show true if open modal, false if close
    */
-  showContents(content_id, background_id, show){
+  showContents(content_id, background_id, show) {
     $("form").on("submit", (event) => {
       event.preventDefault();
     });
-    if(content_id == 'recording-prompt'){
-      $('#send-recording').css('display', 'none');
-      $('#recording-player').css('display', 'none');
+    if (content_id == "recording-prompt") {
+      $("#send-recording").css("display", "none");
+      $("#recording-player").css("display", "none");
     }
-  
+
     let contentPopup = document.getElementById(content_id);
     let backgroundPopup = document.getElementById(background_id);
-    if(show){
+
+    if (show) {
       //show contents
-      contentPopup.style.display = 'inline-block';
-      backgroundPopup.style.display = 'flex';
-      setTimeout(function(){
+      contentPopup.style.display = "inline-block";
+      backgroundPopup.style.display = "flex";
+      setTimeout(function () {
         contentPopup.style.opacity = "1";
         backgroundPopup.style.opacity = "0.6";
       }, 50);
-      if(content_id == 'p' && this.user.role == 'TEACHER'){
-        $('#to-create').css('margin-top', '5%');
-        $('#to-create').css('left', '5%');
+
+      if (content_id == "p" && this.user.role == "TEACHER") {
+        $("#to-create").css("margin-top", "5%");
+        $("#to-create").css("left", "5%");
       }
-    }
-    else{
+    } else {
       //hide contents
       contentPopup.style.opacity = "0";
       backgroundPopup.style.opacity = "0";
-      setTimeout(function(){
-        contentPopup.style.display = 'none';
-        backgroundPopup.style.display = 'none';
+      setTimeout(function () {
+        contentPopup.style.display = "none";
+        backgroundPopup.style.display = "none";
       }, 500);
     }
   }
@@ -522,38 +561,39 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * Show any personal scripts loaded from the DB depending on user role
    * @param role user role
    */
-  showPersonal(role){
-    if(this.selectedFile != '') $('#' + this.selectedFile).css('border', 'none');
-    if(role == 'student'){
-      $('.personal-topics #teacher').css('background-color', '#FBFCFC');
-      $('.personal-topics #student').css('background-color', '#F4D03F');
-      $('#delete-script').prop('disabled', false);
+  showPersonal(role) {
+    if (this.selectedFile != "")
+      $("#" + this.selectedFile).css("border", "none");
+    if (role == "student") {
+      $(".personal-topics #teacher").css("background-color", "#FBFCFC");
+      $(".personal-topics #student").css("background-color", "#F4D03F");
+      $("#delete-script").prop("disabled", false);
+    } else {
+      $(".personal-topics #student").css("background-color", "#FBFCFC");
+      $(".personal-topics #teacher").css("background-color", "#F4D03F");
+      $("#delete-script").prop("disabled", true);
     }
-    else{
-      $('.personal-topics #student').css('background-color', '#FBFCFC');
-      $('.personal-topics #teacher').css('background-color', '#F4D03F');
-      $('#delete-script').prop('disabled', true);
-    }
-    for(let id of this.personal_buttons){
+    for (let id of this.personal_buttons) {
       let button = document.getElementById(id);
-      if(id.includes(role)){
-        button.style.display = 'inline';
-      } 
-      else button.style.display = 'none';
-  
-      if(role == 'student' && id.includes('teacher')) button.style.display = 'none';
-      $('#delete-script').css('display', 'none');
-      $('#open-script').css('display', 'none');
+      if (id.includes(role)) {
+        button.style.display = "inline";
+      } else button.style.display = "none";
+
+      if (role == "student" && id.includes("teacher"))
+        button.style.display = "none";
+
+      $("#delete-script").css("display", "none");
+      $("#open-script").css("display", "none");
     }
   }
 
-  closePersonal(){
+  closePersonal() {
     this.showContents("p", "popup-background", false);
-    if(this.user.role == 'STUDENT') this.showPersonal('student');
-    if(this.selectedFile != ''){
-      $('#' + this.selectedFile).css('border', 'none');
-      $('#open-script').css('display', 'none');
-      $('#delete-script').css('display', 'none'); 
+    if (this.user.role == "STUDENT") this.showPersonal("student");
+    if (this.selectedFile != "") {
+      $("#" + this.selectedFile).css("border", "none");
+      $("#open-script").css("display", "none");
+      $("#delete-script").css("display", "none");
     }
   }
 
@@ -563,78 +603,75 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * @param start 'start'
    * @param content_id 'c'
    */
- async load(fileId, start, content_id){
+  async load(fileId, start, content_id) {
     this.audioPlayer.pause();
-    let send = document.getElementById('bot-message-button');
+    let send = document.getElementById("bot-message-button");
     send.onclick = () => {
-      console.log("Button clicked!!!!!")
+      console.log("Button clicked!!!!!");
       this.sendInput();
-    }
-  
+    };
+
     // close popup window
-    if(content_id) this.showContents(content_id, 'popup-background', false);
+    if (content_id) this.showContents(content_id, "popup-background", false);
 
     // empty bot text from original greeting message
-    if (this.currentFile == 'start') {
+    if (this.currentFile == "start") {
       $("#bot-messages").empty();
-    }
-    else {
+    } else {
       this.currentFile = fileId;
     }
 
     console.log(fileId);
-  
+
     // @ts-ignore
     await testBotLoad(fileId, start);
 
-    if(start == null) start = 'start';
+    if (start == null) start = "start";
     this.chatSetup(start, false, false);
   }
 
   /**
    * Clear out the user input box
    */
-  sendInput(){
+  sendInput() {
     let input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     $("form").on("submit", (event) => {
       event.preventDefault();
     });
-    if(input != ""){
+    if (input != "") {
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
       this.appendMessage(false, true, input);
       this.videoPlayer.play();
       setTimeout(() => {
         this.chatSetup(input, true, false);
-        this.audio(input, this.bubbleId, true)
+        this.audio(input, this.bubbleId, true);
       }, 1500);
-      $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-  
+      $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
     }
   }
 
-  selectEngine(engine){
-    $(engine).css('backgroundColor', '#F5B041');
-    if(engine == "#select-DNN"){
-      this.selectedSynthesisAlgo = 'DNN';
-      $('#select-HTS').css('backgroundColor', '#FBFCFC');
-      $('#dialect-CM').css('display', 'none');
-      $('#dialect-GD').css('display', 'none');
-      $('#dialect-MU').css('display', 'none');
-  
-      $('#dialect-UL').css('display', 'block');
-      $('#dialect-CO').css('display', 'block');
-      $('#dialect-MU-DNN').css('display', 'block');
-    }
-    else{
-      this.selectedSynthesisAlgo = 'HTS';
-      $('#select-DNN').css('backgroundColor', '#FBFCFC');
-      $('#dialect-CM').css('display', 'block');
-      $('#dialect-GD').css('display', 'block');
-      $('#dialect-MU').css('display', 'block');
-  
-      $('#dialect-UL').css('display', 'none');
-      $('#dialect-CO').css('display', 'none');
-      $('#dialect-MU-DNN').css('display', 'none');
+  selectEngine(engine) {
+    $(engine).css("backgroundColor", "#F5B041");
+    if (engine == "#select-DNN") {
+      this.selectedSynthesisAlgo = "DNN";
+      $("#select-HTS").css("backgroundColor", "#FBFCFC");
+      $("#dialect-CM").css("display", "none");
+      $("#dialect-GD").css("display", "none");
+      $("#dialect-MU").css("display", "none");
+
+      $("#dialect-UL").css("display", "block");
+      $("#dialect-CO").css("display", "block");
+      $("#dialect-MU-DNN").css("display", "block");
+    } else {
+      this.selectedSynthesisAlgo = "HTS";
+      $("#select-DNN").css("backgroundColor", "#FBFCFC");
+      $("#dialect-CM").css("display", "block");
+      $("#dialect-GD").css("display", "block");
+      $("#dialect-MU").css("display", "block");
+
+      $("#dialect-UL").css("display", "none");
+      $("#dialect-CO").css("display", "none");
+      $("#dialect-MU-DNN").css("display", "none");
     }
   }
 
@@ -642,36 +679,97 @@ async chatSetup(text: string, holdMessages: boolean, showButtons: boolean){
    * Set the dialect preference and css styles of dialog popup modal
    * @param dialect selected dialect
    */
-  dialectSelection(dialect: string){
+  dialectSelection(dialect: string) {
     this.autoPlayAudio = true;
-  
+
     // reset colour of previously selected dialect button
-    if(this.currentDialect){
-      this.selectedDialect.style.backgroundColor = '#1ABC9C';
-      this.selectedDialect.style.fontWeight = '';
+    if (this.currentDialect) {
+      this.selectedDialect.style.backgroundColor = "#1ABC9C";
+      this.selectedDialect.style.fontWeight = "";
     }
     // set dialect preference
     this.currentDialect = dialect.substring(8, dialect.length);
-  
+
     // set chatbot header text for selected dialect
-    let dialectElement = document.getElementById('this-dialect') as HTMLElement;
-    if(this.currentDialect == 'MU-DNN') this.currentDialect = 'MU';
-    
-    if(this.selectedSynthesisAlgo == 'HTS'){
-      if (this.currentDialect == 'CM') dialectElement.innerHTML = "Dialect: Connemara - HTS";
-      else if(this.currentDialect == 'GD') dialectElement.innerHTML = "Dialect: Donegál - HTS";
+    let dialectElement = document.getElementById("this-dialect") as HTMLElement;
+    if (this.currentDialect == "MU-DNN") this.currentDialect = "MU";
+
+    if (this.selectedSynthesisAlgo == "HTS") {
+      if (this.currentDialect == "CM")
+        dialectElement.innerHTML = "Dialect: Connemara - HTS";
+      else if (this.currentDialect == "GD")
+        dialectElement.innerHTML = "Dialect: Donegál - HTS";
       else dialectElement.innerHTML = "Dialect: Kerry - HTS";
-    }
-    else{
-      if (this.currentDialect == 'CO') dialectElement.innerHTML = "Dialect: Connemara - DNN";
-      else if(this.currentDialect == 'UL') dialectElement.innerHTML = "Dialect: Gaoth Dobhair - DNN";
+    } else {
+      if (this.currentDialect == "CO")
+        dialectElement.innerHTML = "Dialect: Connemara - DNN";
+      else if (this.currentDialect == "UL")
+        dialectElement.innerHTML = "Dialect: Gaoth Dobhair - DNN";
       else dialectElement.innerHTML = "Dialect: Kerry - DNN";
     }
-  
+
     // set the colour of selected dialect button
-    this.selectedDialect = document.getElementById(dialect) as HTMLButtonElement;
-    this.selectedDialect.style.backgroundColor = '#117A65';
-    this.selectedDialect.style.fontWeight = 'bold';
+    this.selectedDialect = document.getElementById( dialect ) as HTMLButtonElement;
+    this.selectedDialect.style.backgroundColor = "#117A65";
+    this.selectedDialect.style.fontWeight = "bold";
   }
 
+  openScript() {
+    this.quiz_score = 0;
+    let toLoad = "";
+    this.showContents("p", "popup-background", false);
+    $("#" + this.selectedFile).css("border", "none");
+    $("#open-script").css("display", "none");
+    $("#delete-script").css("display", "none");
+    //console.log(selectedFile);
+    if (this.selectedFile.includes("student"))
+      toLoad = this.selectedFile.replace("student_script_", "");
+    else toLoad = this.selectedFile.replace("teacher_script_", "");
+    var file = this.currentScripts.find((obj) => obj.name.includes(toLoad));
+    if (file) {
+      if (file.numberofquestions)
+        this.currentNumberofQuestions = file.numberofquestions;
+      if (file.questionsandanswers)
+        this.current_qandanswers = file.questionsandanswers;
+    }
+    console.log(file);
+    this.loadQuiz(toLoad);
+  }
+
+  async loadQuiz(script) {
+    $("#bot-messages").empty();
+    let send = document.getElementById("bot-message-button");
+    send.onclick = () => {
+      this.sendInput();
+    };
+    var quiz = this.currentScripts.find((obj) => obj.name.includes(script));
+
+    // @ts-ignore
+    await testLoadQuiz(quiz.content);
+    this.chatSetup("start", false, false);
+  }
+
+  deleteScript() {
+    var toDelete = "";
+    if (this.selectedFile.includes("student"))
+      toDelete = this.selectedFile.replace("student_script_", "");
+    else toDelete = this.selectedFile.replace("teacher_script_", "");
+    console.log("to delete: " + toDelete);
+
+    this.chatbotService.deleteScript(toDelete, this.user._id).subscribe({
+      next: (response) => {
+        console.log(response);
+        if (response.message == "script deleted") {
+          console.log("if entered");
+          $("#" + this.selectedFile).remove();
+          var index = this.personal_buttons.indexOf(this.selectedFile);
+          if (index != -1) this.personal_buttons.splice(index, 1);
+          this.showContents("p", "popup-background", false);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
 }

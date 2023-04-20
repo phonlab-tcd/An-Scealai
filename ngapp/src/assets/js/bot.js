@@ -22,6 +22,14 @@ var currentLanguage = 'Gaeilge';
 
 let currentDialectButton = null;
 
+async function testLoadQuiz(quizContent) {
+  console.log("loading quiz bot testLoadQuiz()");
+  bot = new RiveScript({utf8: true});    
+  await bot.stream(quizContent);
+  await bot.sortReplies();
+  console.log("done loading quiz bot");
+}
+
 async function testBotReply(text) {
   console.log("getting bot reply testBotReply() with text: ", text);
   let reply = await bot.reply("local-user", text);

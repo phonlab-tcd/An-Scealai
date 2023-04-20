@@ -56,7 +56,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { TeamComponent } from './team/team.component';
 import { AboutLaraComponent } from './about-lara/about-lara.component';
 import { SponsorsComponent } from './sponsors/sponsors.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';

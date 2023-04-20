@@ -37,6 +37,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   let role = content['role'];
   let shuffle = content['shuffle'];
   console.log(content);
+
   if(content['classId']) var classId = content['classId'];
   delete content['topic-name'];
   delete content['userId'];
@@ -56,7 +57,11 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   line += endQuiz;
   line += firstLine;
 
+  console.log("First line: ", line);
+
   let keys = Object.keys(content);
+  console.log("KEYS: ");
+  console.log(keys);
 
   // if user wants questions shuffled
   if(shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
@@ -64,6 +69,9 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   for(var key of keys){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
+
+    console.log("Current Key: ", key);
+    console.log("Next key: ", nextKey);
 
     questionsAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
 
@@ -110,6 +118,8 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
 
   line += tryAgain;
 
+  console.log("Line: ", line);
+
   //console.log(line);
   //getting ready for db
   if(role == 'TEACHER') topicName = 'teacher_' + topicName;
@@ -129,16 +139,16 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
     Models.PersonalScript.find({"user": userId, name: topicName, classId: classId}, function(err, scripts){
       if(scripts.length > 0){
         console.log("can't save, already there.");
-        res.status(404).send("script already exists");
+        res.status(404).json("script already exists");
       }
       else if(scripts.length == 0){
         let script = new Models.PersonalScript(s);
         script.save().then(script => {
           console.log('success');
-          res.status(200).send("Success saving script to db");
+          res.status(200).json("Success saving script to db");
         }).catch(err => {
           console.log(err);
-          res.status(400).send("Error saving to db");
+          res.status(400).json("Error saving to db");
         });
       }
     });
@@ -151,7 +161,7 @@ chatbotRoute.route('/deleteScript').post(function(req, res){
   Models.PersonalScript.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
-      res.status(200).send('script deleted');
+      res.status(200).send({message: 'script deleted'});
     }
   });
 });
@@ -372,8 +382,8 @@ chatbotRoute.route('/sendScriptVerification').post(function(req, res){
   Models.PersonalScript.findOne(req.body, function(err, script){ 
     //console.log(script);
     mailObj = {
-      from: "gilsenci@tcd.ie",
-      recipients: ["gilsenci@tcd.ie, scealai.info@gmail.com"],
+      from: "scealai.info@gmail.com",
+      recipients: ["scealai.info@gmail.com"],
       subject: 'Taidhgín Script Verification',
       message: "User: " + script.user + "\nVerify Script: \n\n" + script.questionsandanswers,
     };
