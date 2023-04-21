@@ -12,7 +12,10 @@
   <div id="topics">{{ ts.l.taidhgin_choose_topic }}</div>
   <div *ngIf="this.auth.isLoggedIn(); else notLoggedIn">
     <!--<button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>-->
-    <button class="choose-personal" (click)="showContents('p', 'popup-background', true)" >
+    <!-- <button class="choose-personal" (click)="showContents('p', 'popup-background', true)" >
+      {{ ts.l.my_quiz_s }}
+    </button> -->
+    <button class="choose-personal" (click)="openQuizDialog()" >
       {{ ts.l.my_quiz_s }}
     </button>
     <button class="choose-community" (click)="showContents('c', 'popup-background', true)" >
@@ -137,6 +140,20 @@
                                                         <!-- Chat Logs -->
   <div class="chatlogs">
     <div id="bot-messages"></div>
+
+    <!-- <div *ngIf="botIsTyping" class="typing-indicator">
+      <div class="bot-message-photo">
+        <img src="assets/img/logo-S.png" id="bot-img">
+      </div>
+      <div class="dots">
+        <p class="bot-message-ind">
+          <span id="typ1"></span>
+          <span id="typ2"></span>
+          <span id="typ3"></span>
+        </p>
+      </div>
+    </div> -->
+    
   </div>
   <!-- User input form-->
   <form class="chatform">

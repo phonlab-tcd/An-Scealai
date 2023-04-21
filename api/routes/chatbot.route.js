@@ -128,6 +128,7 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
   let s = {
     owner: userId,
     title: topicName,
+    date: new Date(),
     classroomId: classId,
     numOfQuestions: Object.keys(content).length,
     botScript: line,
@@ -345,7 +346,7 @@ chatbotRoute.route('/getTeacherScripts/:id').get(function(req, res){
   ChatbotUserQuiz.find({"classroomId": id}, function(err, quizzes){
     if (quizzes && quizzes.length > 0)
       return res.json(quizzes);
-      
+
     return res.status(400).send(err);
   });
 });

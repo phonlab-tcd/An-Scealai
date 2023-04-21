@@ -6,6 +6,8 @@ import { ClassroomService } from "app/classroom.service";
 import { HttpClient } from "@angular/common/http";
 import { ChatbotService } from "app/services/chatbot.service";
 import { firstValueFrom } from "rxjs";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SelectQuizDialogComponent } from './select-quiz-dialog/select-quiz-dialog.component';
 
 export type Quiz = {
   title: string;
@@ -42,20 +44,23 @@ export class ChatbotComponent implements OnInit {
   currentDialect: string = "MU";
   pandoraID: string = "";
   user: any;
-  currentScripts: Quiz[] = [];
+  quizzes: Quiz[] = [];
   personal_buttons: string[] = [];
   selectedFile: string = "";
   currentFile: string = "";
   quiz_score: number = 0;
   currentNumberofQuestions: number = 0;
   current_qandanswers: string = "";
+  botIsTyping: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(
     public auth: AuthenticationService,
     public ts: TranslationService,
     private http: HttpClient,
     private classroomService: ClassroomService,
-    private chatbotService: ChatbotService
+    private chatbotService: ChatbotService,
+    private dialog: MatDialog
   ) {}
 
   /**
@@ -86,23 +91,29 @@ export class ChatbotComponent implements OnInit {
     this.currentFile = "start";
   }
 
+  /**
+   * Get any quizzes saved in the DB
+   * - Quizzes that the user has made (student or teacher)
+   * - Quizzes that a student user's teacher might have made if the user is part of a classroom
+   */
   async getQuizzes() {
     // Get any user-made quizzes
     let userQuizzes: Quiz[] = await firstValueFrom( this.chatbotService.getUserQuizzes(this.user) );
     if (userQuizzes && userQuizzes.length > 0) {
-      this.currentScripts = userQuizzes;
+      this.quizzes = userQuizzes;
     }
 
+    // get any teacher-made quizzes for the user's classroom
     if (this.user.role == "STUDENT") {
       let classroom = await firstValueFrom(this.classroomService.getClassroomOfStudent(this.user._id));
       if (classroom) {
         let classroomQuizzes: Quiz[] = await firstValueFrom( this.chatbotService.getClassroomQuizzes(classroom._id) );
         if (classroomQuizzes && classroomQuizzes.length > 0) {
           for (let quiz of classroomQuizzes) 
-            this.currentScripts.push(quiz);
+            this.quizzes.push(quiz);
         } 
       }
-      this.addToQuizzList( this.currentScripts, this.user.role.toLowerCase() );
+      this.createQuizList( this.quizzes, this.user.role.toLowerCase() );
     }
   }
 
@@ -162,6 +173,7 @@ export class ChatbotComponent implements OnInit {
    * Display the css for dots when the bot is typing
    */
   appendTypingIndicator() {
+    //this.botIsTyping = true;
     $("#bot-messages").append( $( '<div class="typing-indicator"><div class="bot-message-photo"><img src="assets/img/logo-S.png" id="bot-img"></div><div class="dots"><p class="bot-message-ind"><span id="typ1"></span><span id="typ2"></span><span id="typ3"></span></p></div></div></div>' ) );
     $(".typing-indicator").delay(2000).fadeOut("fast"); // make the typing dots dissapear
     $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
@@ -468,7 +480,7 @@ export class ChatbotComponent implements OnInit {
    * @param scripts list of quizzes
    * @param role role of user
    */
-  addToQuizzList(quizzes: Quiz[], role) {
+  createQuizList(quizzes: Quiz[], role) {
     let button_id = role + "_script_";
     //console.log(scripts);
     //append buttons to personal-topics
@@ -529,8 +541,8 @@ export class ChatbotComponent implements OnInit {
             console.log(quizzes)
             if (quizzes && quizzes.length > 0) {
               for (let quiz of quizzes) 
-                this.currentScripts.push(quiz);
-              this.addToQuizzList( quizzes, this.user.role.toLowerCase() );
+                this.quizzes.push(quiz);
+              this.createQuizList( quizzes, this.user.role.toLowerCase() );
                 
             } else {
               console.log(quizzes);
@@ -757,7 +769,7 @@ export class ChatbotComponent implements OnInit {
     if (this.selectedFile.includes("student"))
       toLoad = this.selectedFile.replace("student_script_", "");
     else toLoad = this.selectedFile.replace("teacher_script_", "");
-    var quiz = this.currentScripts.find((quiz) => quiz.title.includes(toLoad));
+    var quiz = this.quizzes.find((quiz) => quiz.title.includes(toLoad));
     if (quiz) {
       if (quiz.numOfQuestions)
         this.currentNumberofQuestions = quiz.numOfQuestions;
@@ -774,7 +786,7 @@ export class ChatbotComponent implements OnInit {
     send.onclick = () => {
       this.sendInput();
     };
-    var quiz = this.currentScripts.find((quiz) => quiz.title.includes(quizTitle));
+    var quiz = this.quizzes.find((quiz) => quiz.title.includes(quizTitle));
     console.log(quiz.content)
 
     // @ts-ignore
@@ -805,4 +817,22 @@ export class ChatbotComponent implements OnInit {
       },
     });
   }
+
+  openQuizDialog() {
+    this.dialogRef = this.dialog.open(SelectQuizDialogComponent, {
+      data: {
+        role: this.user.role,
+        quizzes: this.quizzes
+      },
+      width: '100vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          console.log(res);
+        }
+    });
+  }
+
 }

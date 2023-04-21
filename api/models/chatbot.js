@@ -69,6 +69,9 @@ const ChatbotUserQuiz = new Schema(
       title: {
         type: String,
       },
+      date: {
+        type: Date,
+      },
       classroomId: {
         type: ObjectId,
         index: true,
