@@ -1,53 +1,71 @@
+
+<mat-dialog-content class="mat-typography">
+
 <mat-tab-group mat-stretch-tabs>
     <mat-tab label="{{ts.l.my_quiz_s}}">
         <table mat-table [dataSource]="userQuizzes" class="mat-elevation-z8">
-        <!-- Position Column -->
-        <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef> {{ts.l.title}} </th>
-            <td mat-cell *matCellDef="let quiz"> {{quiz.title}} </td>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> {{ts.l.date}} </th>
-            <td mat-cell *matCellDef="let quiz"> {{quiz.date}} </td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="numOfQuestions">
-            <th mat-header-cell *matHeaderCellDef> No. Questions </th>
-            <td mat-cell *matCellDef="let quiz"> {{quiz.numOfQuestions}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="tableEntry"></tr>
-        </table>
-    </mat-tab>
-    <mat-tab *ngIf="data.role == 'STUDENT'" label="{{ts.l.my_teachquiz}}">
-        <table mat-table [dataSource]="classroomQuizzes" class="mat-elevation-z8">
-            <!-- Position Column -->
+            <!-- Title Column -->
             <ng-container matColumnDef="title">
                 <th mat-header-cell *matHeaderCellDef> {{ts.l.title}} </th>
                 <td mat-cell *matCellDef="let quiz"> {{quiz.title}} </td>
             </ng-container>
-    
-            <!-- Name Column -->
+
+            <!-- Date Column -->
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> {{ts.l.date}} </th>
                 <td mat-cell *matCellDef="let quiz"> {{quiz.date}} </td>
             </ng-container>
-    
-            <!-- Weight Column -->
+
+            <!-- No. Questions Column -->
             <ng-container matColumnDef="numOfQuestions">
                 <th mat-header-cell *matHeaderCellDef> No. Questions </th>
                 <td mat-cell *matCellDef="let quiz"> {{quiz.numOfQuestions}} </td>
             </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="tableEntry"></tr>
-            </table>
+
+            <!-- Delete Quiz Column -->
+            <ng-container matColumnDef="x">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let quiz">   
+                    <i class="fas fa-trash-alt headerIcon" (click)="openDeleteQuizDialog(quiz._id)"></i>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="userQuizColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: userQuizColumns;" class="tableEntry"></tr>
+        </table>
+    </mat-tab>
+    <mat-tab *ngIf="data.role == 'STUDENT'" label="{{ts.l.my_teachquiz}}">
+        <table mat-table [dataSource]="classroomQuizzes" class="mat-elevation-z8">
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef> {{ts.l.title}} </th>
+                <td mat-cell *matCellDef="let quiz"> {{quiz.title}} </td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> {{ts.l.date}} </th>
+                <td mat-cell *matCellDef="let quiz"> {{quiz.date}} </td>
+            </ng-container>
+
+            <!-- No. Questions Column -->
+            <ng-container matColumnDef="numOfQuestions">
+                <th mat-header-cell *matHeaderCellDef> No. Questions </th>
+                <td mat-cell *matCellDef="let quiz"> {{quiz.numOfQuestions}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="classroomQuizColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: classroomQuizColumns;" class="tableEntry"></tr>
+        </table>
+
     </mat-tab>
     <mat-tab label="{{ts.l.t_community_quiz}}">Community Quizzes</mat-tab>
 </mat-tab-group>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="allQuizzes" cdkFocusInitial> {{ts.l.done}} </button>
+</mat-dialog-actions>
 
 

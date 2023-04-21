@@ -10,10 +10,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SelectQuizDialogComponent } from './select-quiz-dialog/select-quiz-dialog.component';
 
 export type Quiz = {
+  _id: string,
   title: string;
   owner: string;
   numOfQuestions: number;
-  classroomCode: string;
+  classroomId: string;
   botScript: string;
   content: string;
 }
@@ -795,31 +796,32 @@ export class ChatbotComponent implements OnInit {
   }
 
   deleteScript() {
-    var toDelete = "";
-    if (this.selectedFile.includes("student"))
-      toDelete = this.selectedFile.replace("student_script_", "");
-    else toDelete = this.selectedFile.replace("teacher_script_", "");
-    console.log("to delete: " + toDelete);
+    // var toDelete = "";
+    // if (this.selectedFile.includes("student"))
+    //   toDelete = this.selectedFile.replace("student_script_", "");
+    // else toDelete = this.selectedFile.replace("teacher_script_", "");
+    // console.log("to delete: " + toDelete);
 
-    this.chatbotService.deleteScript(toDelete, this.user._id).subscribe({
-      next: (response) => {
-        console.log(response);
-        if (response.message == "script deleted") {
-          console.log("if entered");
-          $("#" + this.selectedFile).remove();
-          var index = this.personal_buttons.indexOf(this.selectedFile);
-          if (index != -1) this.personal_buttons.splice(index, 1);
-          this.showContents("p", "popup-background", false);
-        }
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    // this.chatbotService.deleteScript(toDelete, this.user._id).subscribe({
+    //   next: (response) => {
+    //     console.log(response);
+    //     if (response.message == "script deleted") {
+    //       console.log("if entered");
+    //       $("#" + this.selectedFile).remove();
+    //       var index = this.personal_buttons.indexOf(this.selectedFile);
+    //       if (index != -1) this.personal_buttons.splice(index, 1);
+    //       this.showContents("p", "popup-background", false);
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //   },
+    // });
   }
 
   openQuizDialog() {
     this.dialogRef = this.dialog.open(SelectQuizDialogComponent, {
+      disableClose: true,
       data: {
         role: this.user.role,
         quizzes: this.quizzes
@@ -830,7 +832,7 @@ export class ChatbotComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if(res) {
-          console.log(res);
+          this.quizzes = res;
         }
     });
   }

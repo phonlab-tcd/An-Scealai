@@ -23,7 +23,7 @@ export class ChatbotService {
   }
 
   getClassroomQuizzes(classroomId) {
-    return this.http.get<any>(this.baseUrl + "getTeacherScripts/" + classroomId)
+    return this.http.get<any>(this.baseUrl + "getClassroomQuizzes/" + classroomId)
   }
 
     /**
@@ -47,13 +47,8 @@ export class ChatbotService {
     return this.http.post<any>(this.baseUrl + 'createQuiz', body, {headers});
   }
 
-  deleteScript(toDelete, userId) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
-    const body = {
-      name: toDelete, 
-      user: userId
-    }
-    return this.http.post<any>(this.baseUrl + 'deleteScript', body, {headers});
+  deleteQuiz(id) {
+    return this.http.get<any>(this.baseUrl + 'deleteQuiz/' + id);
   }
 
   sendVerification(currentFileName, userId) {

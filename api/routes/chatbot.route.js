@@ -160,11 +160,12 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
 });
 
 //delete script from db by user and script name
-chatbotRoute.route('/deleteScript').post(function(req, res){
-  console.log(req.body);
+chatbotRoute.route('/deleteQuiz/:id').get(async function(req, res){
+  console.log("Delete: ", req.params.id)
   ChatbotUserQuiz.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
+      console.log("deleted successfully")
       res.status(200).send({message: 'script deleted'});
     }
   });
@@ -341,13 +342,13 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
   }
 });
 
-chatbotRoute.route('/getTeacherScripts/:id').get(function(req, res){
+chatbotRoute.route('/getClassroomQuizzes/:id').get(function(req, res){
   let id = new mongoose.mongo.ObjectId(req.params.id)
+  console.log(id);
   ChatbotUserQuiz.find({"classroomId": id}, function(err, quizzes){
     if (quizzes && quizzes.length > 0)
       return res.json(quizzes);
-
-    return res.status(400).send(err);
+    return res.json({});
   });
 });
 
