@@ -1,5 +1,5 @@
-// Chatbot.js
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 const Schema = mongoose.Schema;
 
 // Define collection and schema for Chatbot
@@ -13,6 +13,7 @@ let Message = new Schema({
   }
 );
 
+// Chatbot logs
 let Log = new Schema({
   date: { type: Date },
   topic: { type: String },
@@ -24,8 +25,8 @@ let Log = new Schema({
   }
 );
 
-var LogModel = mongoose.model('Log', Log);
 
+// Chatbot object
 let Chatbot = new Schema({
   username: { type: String },
   _id: { type: String },
@@ -35,42 +36,17 @@ let Chatbot = new Schema({
   {
     collection: 'chatbot'
   },
-  {
-    __v: {
-      type: Number,
-      select: false
-    }
-  }
 );
 
-var ChatbotModel = mongoose.model('Chatbot', Chatbot);
-//module.exports = mongoose.model('Chatbot', Chatbot);
 
+// Schema for audio bubbles
 let AudioBubble = new Schema({
   text: { type: String },
   dialect: { type: String }
 });
 
-var AudioBubbleModel = mongoose.model('AudioBubble', AudioBubble);
 
-
-
-let PersonalScript = new Schema({
-  name: { type: String },
-  content: { type: String },
-  user: { type: String }, 
-  role: {type: String },
-  classId: {type: String},
-  numberofquestions: {type: Number},
-  questionsandanswers: {type: String},
-},
- {
-   collection: 'personalScripts'
- },
-);
-
-var PersonalScriptModel = mongoose.model('PersonalScripts', PersonalScript);
-
+// Schema for Quizes by the community
 let CommunityScript = new Schema({
   name: { type: String },
   content: { type: String },
@@ -83,10 +59,39 @@ let CommunityScript = new Schema({
 
 var CommunityScriptModel = mongoose.model('CommunityScripts', CommunityScript);
 
+// Schema for Quizes the user creates
+const ChatbotUserQuiz = new Schema(
+    {
+      owner: {
+        type: mongoose.Types.ObjectId,
+        index: true,
+      },
+      title: {
+        type: String,
+      },
+      classroomId: {
+        type: ObjectId,
+        index: true,
+      },
+      numOfQuestions: {
+        type: Number,
+      },
+      botScript: {
+        type: String,
+      },
+      content: {
+        type: String,
+      },
+    },
+    {
+      collection: 'chatbotUserQuizzes',
+    },
+);
+
 module.exports = {
-  Log: LogModel,
-  Chatbot: ChatbotModel,
-  AudioBubble: AudioBubbleModel,
-  PersonalScript: PersonalScriptModel,
-  CommunityScript: CommunityScriptModel,
-}
+  ChatbotUserQuiz: mongoose.model('ChatbotUserQuiz', ChatbotUserQuiz),
+  Log: mongoose.model('Log', Log),
+  Chatbot: mongoose.model('Chatbot', Chatbot),
+  AudioBubble: mongoose.model('AudioBubble', AudioBubble),
+  CommunityScript: mongoose.model('CommunityScript', CommunityScript),
+};

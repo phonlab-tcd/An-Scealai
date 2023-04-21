@@ -7,14 +7,15 @@ const https = require("https");
 const http = require('http');
 const querystring = require('querystring');
 const request = require('request');
-const { parse, stringify } = require('node-html-parser');
+const { parse } = require('node-html-parser');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
+const { ChatbotUserQuiz } = require('../models/chatbot');
+const mongoose = require('mongoose');
 
 // Require Chatbot model in our routes module
 let Models = require('../models/chatbot');
-let classModel = require('../models/classroom');
 var spellings;
 
 // For writing scripts
@@ -29,8 +30,8 @@ let endQuiz = "\n\n> object endOfQuiz javascript\nendOfQuiz();\nreturn '';\n< ob
 
 //Create-Quiz Framwork
 //builds script content as string & stores in the db
-chatbotRoute.route('/SaveScript').post(function(req, res){
-  logger.info({endpoint: '/SaveScript'});
+chatbotRoute.route('/createQuiz').post(async function (req, res) {
+  logger.info({endpoint: '/createQuiz'});
   let content = req.body;
   let topicName = content['topic-name'];
   let userId = content['userId'];
@@ -123,27 +124,29 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
   //console.log(line);
   //getting ready for db
   if(role == 'TEACHER') topicName = 'teacher_' + topicName;
+
   let s = {
-    name: topicName,
-    content: line,
-    user: userId,
-    role: role,
-    classId: classId,
-    numberofquestions: Object.keys(content).length,
-    questionsandanswers: questionsAnswers,
+    owner: userId,
+    title: topicName,
+    classroomId: classId,
+    numOfQuestions: Object.keys(content).length,
+    botScript: line,
+    content: questionsAnswers,
   };
   
   //store in db
-  if(s.user != undefined && s.user != ''){
+  if(s.owner != undefined && s.owner != ''){
     //check not already in DB
-    Models.PersonalScript.find({"user": userId, name: topicName, classId: classId}, function(err, scripts){
+    ChatbotUserQuiz.find({"owner": userId, "title": topicName, "classroomId": classId}, async function(err, scripts){
+      console.log("SCripts: ", scripts);
+      console.log("Error: ", err);
       if(scripts.length > 0){
         console.log("can't save, already there.");
         res.status(404).json("script already exists");
       }
       else if(scripts.length == 0){
-        let script = new Models.PersonalScript(s);
-        script.save().then(script => {
+        let script = await ChatbotUserQuiz.create(s);
+        script.save().then(() => {
           console.log('success');
           res.status(200).json("Success saving script to db");
         }).catch(err => {
@@ -158,7 +161,7 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
 //delete script from db by user and script name
 chatbotRoute.route('/deleteScript').post(function(req, res){
   console.log(req.body);
-  Models.PersonalScript.deleteOne(req.body, function(err, obj){
+  ChatbotUserQuiz.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
       res.status(200).send({message: 'script deleted'});
@@ -166,21 +169,17 @@ chatbotRoute.route('/deleteScript').post(function(req, res){
   });
 });
 
-//gets scripts ready for use in 'Personal Scripts'
-chatbotRoute.route('/getScripts').post(function(req, res){
-  console.log("finding scripts by user...");
-  console.log(req.body);
-  Models.PersonalScript.find({"user": req.body.id}, function(err, scripts){
-    
-    if(scripts.length > 0){
-      res.json({ status: 200, userFiles: scripts});
+// gets scripts ready for use in 'Personal Scripts'
+chatbotRoute.route('/getUserQuizzes').post(function(req, res){
+  ChatbotUserQuiz.find({"owner": req.body.id}, function(err, quizzes){
+    if(quizzes){
+      return res.json(quizzes);
     }
-    else if(scripts.length == 0){
-      console.log("User has no personal scripts");
-      res.json({ status: 404, userFiles: "user has no personal scripts"});
+    else if(quizzes.length == 0){
+      return res.status(404).json("user has no quizzes");
     }
-    else if(err){
-      res.status(400).send(err);
+    else {
+      return res.status(400).send(err);
     }
   });
 }); 
@@ -190,7 +189,7 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
   console.log(req.body);
   if(req.body){
     if(req.body.role == 'TEACHER') req.body.name = 'teacher_' + req.body.name;
-    Models.PersonalScript.findOne(req.body, function(err, script){ 
+    ChatbotUserQuiz.findOne(req.body, function(err, script){ 
       console.log(script);
       if(err){
         console.log(err);
@@ -212,7 +211,7 @@ chatbotRoute.route('/saveSpellings').post(function(req, res){
 
 chatbotRoute.route('/getWords').get(function(req, res){
   console.log(spellings);
-  if(spellings != []) res.send(spellings);
+  if(spellings) res.send(spellings);
 });
 
 chatbotRoute.route('/getAudio').post(function(req, res){
@@ -341,16 +340,13 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
   }
 });
 
-chatbotRoute.route('/getTeacherScripts/:user/:classId').get(function(req, res){
-  console.log('find scripts by teacher...');
-  console.log(req.params);
-  Models.PersonalScript.find(req.params, function(err, scripts){
-    //console.log(scripts);
-    if(scripts.length > 0){
-      console.log('success in scripts!');
-      res.send(scripts);
-    }
-    else console.log('no teacher scripts');
+chatbotRoute.route('/getTeacherScripts/:id').get(function(req, res){
+  let id = new mongoose.mongo.ObjectId(req.params.id)
+  ChatbotUserQuiz.find({"classroomId": id}, function(err, quizzes){
+    if (quizzes && quizzes.length > 0)
+      return res.json(quizzes);
+      
+    return res.status(400).send(err);
   });
 });
 
@@ -379,7 +375,7 @@ chatbotRoute.route('/aiml-message').post(function(req, res){
 chatbotRoute.route('/sendScriptVerification').post(function(req, res){  
   var mailObj = {};
   console.log(req.body);
-  Models.PersonalScript.findOne(req.body, function(err, script){ 
+  ChatbotUserQuiz.findOne(req.body, function(err, script){ 
     //console.log(script);
     mailObj = {
       from: "scealai.info@gmail.com",

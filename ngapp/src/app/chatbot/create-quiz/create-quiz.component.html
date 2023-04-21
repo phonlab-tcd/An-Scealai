@@ -24,6 +24,12 @@
 </div>
 <div id='submit-container'>
   <div id='submit-messages'>
+    <div>
+      <button *ngFor="let classroom of classrooms" (click)="selectedClassroomId = classroom._id">
+        {{classroom.title}}
+      </button>
+    </div>
+
     <div id='save-prompt'>
       {{ts.l.save_script}}
       <input *ngIf="auth.getUserDetails().role === 'TEACHER'" id='class-code-input' type='text' placeholder="class code">

@@ -7,7 +7,6 @@ import { MessageService } from "app/message.service";
 import { UserService } from "app/user.service";
 import { User } from "app/user";
 import { AuthenticationService } from "app/authentication.service";
-import { Message } from "app/message";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 
@@ -38,9 +37,7 @@ export class TeacherDictoglossComponent implements OnInit {
 
   async ngOnInit() {
     // get classroom
-    this.classroom = await firstValueFrom(
-      this.classroomService.getClassroom(this.route.snapshot.params["id"])
-    );
+    this.classroom = await firstValueFrom( this.classroomService.getClassroom(this.route.snapshot.params["id"]) );
     // get list of student users
     for (let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe({

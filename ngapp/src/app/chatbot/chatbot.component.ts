@@ -7,11 +7,29 @@ import { HttpClient } from "@angular/common/http";
 import { ChatbotService } from "app/services/chatbot.service";
 import { firstValueFrom } from "rxjs";
 
+export type Quiz = {
+  title: string;
+  owner: string;
+  numOfQuestions: number;
+  classroomCode: string;
+  botScript: string;
+  content: string;
+}
+
+export type ChatBubble = {
+  id: string;
+  text: string;
+  audioUrl: string;
+  isFromUser: boolean;
+}
+
+
 @Component({
   selector: "app-chatbot",
   templateUrl: "./chatbot.component.html",
   styleUrls: ["./chatbot.component.scss"],
 })
+
 export class ChatbotComponent implements OnInit {
   autoPlayAudio: boolean = true;
   audioPlayer: HTMLAudioElement;
@@ -24,13 +42,13 @@ export class ChatbotComponent implements OnInit {
   currentDialect: string = "MU";
   pandoraID: string = "";
   user: any;
-  currentScripts: any[] = [];
-  personal_buttons: any[] = [];
+  currentScripts: Quiz[] = [];
+  personal_buttons: string[] = [];
   selectedFile: string = "";
   currentFile: string = "";
   quiz_score: number = 0;
   currentNumberofQuestions: number = 0;
-  current_qandanswers: any;
+  current_qandanswers: string = "";
 
   constructor(
     public auth: AuthenticationService,
@@ -40,39 +58,52 @@ export class ChatbotComponent implements OnInit {
     private chatbotService: ChatbotService
   ) {}
 
+  /**
+   * Set any initial variables
+   * Get any quizzes made by the user (or user's teacher)
+   * Set up the initial bot chat
+   */
   async ngOnInit() {
     this.audioPlayer = document.getElementById("botaudio") as HTMLAudioElement;
     this.videoPlayer = document.getElementById("chimp") as HTMLVideoElement;
     this.selectedDialect = document.getElementById( "dialect-MU" ) as HTMLButtonElement;
     this.currentLanguage = this.ts.getCurrentLanguage();
-    let setupFileName = "";
+    let botSetupFileName = "";
 
     if (this.auth.isLoggedIn()) {
-      setupFileName = "startLoggedIn";
+      botSetupFileName = "startLoggedIn";
       this.user = this.auth.getUserDetails();
       this.pandoraID = "da387bedce347878";
-
-      // Get any user-made quizzes
-      let userQuizzes = await firstValueFrom( this.chatbotService.getPersonalScripts(this.user) );
-      console.log(userQuizzes);
-      if (userQuizzes.status !== 404) {
-        this.currentScripts = userQuizzes.userFiles;
-        if (this.currentScripts.length > 0)
-          this.appendToPersonalTopics( this.currentScripts, this.user.role.toLowerCase() );
-      }
-
-      if (this.user.role == "STUDENT") {
-        this.getTeacherScripts();
-      }
+      this.getQuizzes();
     } else {
-      setupFileName = "startNotLoggedIn";
+      botSetupFileName = "startNotLoggedIn";
       this.pandoraID = "c08188e27e34571c";
     }
 
     // @ts-ignore
-    await setup(setupFileName, config.baseurl, this.currentLanguage);
+    await setup(botSetupFileName, config.baseurl, this.currentLanguage);
     this.chatSetup("start" + this.currentLanguage, false, false);
     this.currentFile = "start";
+  }
+
+  async getQuizzes() {
+    // Get any user-made quizzes
+    let userQuizzes: Quiz[] = await firstValueFrom( this.chatbotService.getUserQuizzes(this.user) );
+    if (userQuizzes && userQuizzes.length > 0) {
+      this.currentScripts = userQuizzes;
+    }
+
+    if (this.user.role == "STUDENT") {
+      let classroom = await firstValueFrom(this.classroomService.getClassroomOfStudent(this.user._id));
+      if (classroom) {
+        let classroomQuizzes: Quiz[] = await firstValueFrom( this.chatbotService.getClassroomQuizzes(classroom._id) );
+        if (classroomQuizzes && classroomQuizzes.length > 0) {
+          for (let quiz of classroomQuizzes) 
+            this.currentScripts.push(quiz);
+        } 
+      }
+      this.addToQuizzList( this.currentScripts, this.user.role.toLowerCase() );
+    }
   }
 
   /**
@@ -437,71 +468,72 @@ export class ChatbotComponent implements OnInit {
    * @param scripts list of quizzes
    * @param role role of user
    */
-  appendToPersonalTopics(scripts, role) {
+  addToQuizzList(quizzes: Quiz[], role) {
     let button_id = role + "_script_";
     //console.log(scripts);
-    if (typeof scripts == "object") {
-      //append buttons to personal-topics
-      for (let script of scripts) {
-        //label for button
-        let topicname = script.name;
-        //check not already in DOM
-        if (!this.personal_buttons.includes(button_id + topicname)) {
-          //create button
-          let topic = document.createElement("button");
-          topic.setAttribute("class", "add-personal-topics");
-          topic.innerText = topicname;
-          topic.setAttribute("id", button_id + topicname);
-          //set teacher quizzes display to none if student
-          if (topic.id.includes("teacher") && this.user.role == "STUDENT") {
-            topic.style.display = "none";
-            topic.style.backgroundColor = "#138D75";
-            topic.innerText = topicname.replace("teacher_", "");
-          } else if (
-            topic.id.includes("teacher") &&
-            this.user.role == "TEACHER"
-          ) {
-            topic.innerText = topicname.replace("teacher_", "");
-          } else topic.style.display = "inline";
+    //append buttons to personal-topics
+    for (let quiz of quizzes) {
+      //label for button
+      let topicname = quiz.title;
+      //check not already in DOM
+      if (!this.personal_buttons.includes(button_id + topicname)) {
+        //create button
+        let topic = document.createElement("button");
+        topic.setAttribute("class", "add-personal-topics");
+        topic.innerText = topicname;
+        topic.setAttribute("id", button_id + topicname);
+        //set teacher quizzes display to none if student
+        if (topic.id.includes("teacher") && this.user.role == "STUDENT") {
+          topic.style.display = "none";
+          topic.style.backgroundColor = "#138D75";
+          topic.innerText = topicname.replace("teacher_", "");
+        } else if (
+          topic.id.includes("teacher") &&
+          this.user.role == "TEACHER"
+        ) {
+          topic.innerText = topicname.replace("teacher_", "");
+        } else topic.style.display = "inline";
 
-          //keep track of buttons
-          this.personal_buttons.push(topic.id);
-          topic.onclick = () => {
-            //console.log(selectedFile);
-            if (this.selectedFile != "") {
-              $("#" + this.selectedFile).css("border", "none");
-            }
-            topic.style.border = "thick solid #F4D03F";
-            $("#delete-script").css("display", "block");
-            $("#open-script").css("display", "block");
-            this.selectedFile = topic.id;
-            //showContents('p', 'popup-background', false);
-            //load(topic.innerText);
-          };
+        //keep track of buttons
+        this.personal_buttons.push(topic.id);
+        topic.onclick = () => {
+          //console.log(selectedFile);
+          if (this.selectedFile != "") {
+            $("#" + this.selectedFile).css("border", "none");
+          }
+          topic.style.border = "thick solid #F4D03F";
+          $("#delete-script").css("display", "block");
+          $("#open-script").css("display", "block");
+          this.selectedFile = topic.id;
+          //showContents('p', 'popup-background', false);
+          //load(topic.innerText);
+        };
 
-          setTimeout(function () {
-            //append new button
-            $("#personal-container").append(topic);
-          }, 500);
-        }
+        setTimeout(function () {
+          //append new button
+          $("#personal-container").append(topic);
+        }, 500);
       }
     }
+    console.log(this.personal_buttons)
   }
 
   /**
-   * Get any quizzes from the DB that the teacher made
+   * Get any quizzes from the DB that the teacher made for the clas
    */
   async getTeacherScripts() {
     this.classroomService.getClassroomOfStudent(this.user._id).subscribe({
       next: (classroom) => {
-        this.http.get<any>( config.baseurl + "Chatbot/getTeacherScripts/" + classroom.teacherId + "/" + classroom.code ).subscribe({
-          next: (response) => {
-            if (response.status != 404) {
-              for (let s of response) this.currentScripts.push(s);
-              if (response.length > 0)
-                this.appendToPersonalTopics( response, this.user.role.toLowerCase() );
+        this.http.get<any>( config.baseurl + "chatbot/getTeacherScripts/" + classroom._id).subscribe({
+          next: (quizzes: Quiz[]) => {
+            console.log(quizzes)
+            if (quizzes && quizzes.length > 0) {
+              for (let quiz of quizzes) 
+                this.currentScripts.push(quiz);
+              this.addToQuizzList( quizzes, this.user.role.toLowerCase() );
+                
             } else {
-              console.log(response);
+              console.log(quizzes);
             }
           },
           error: (error) => {
@@ -725,27 +757,28 @@ export class ChatbotComponent implements OnInit {
     if (this.selectedFile.includes("student"))
       toLoad = this.selectedFile.replace("student_script_", "");
     else toLoad = this.selectedFile.replace("teacher_script_", "");
-    var file = this.currentScripts.find((obj) => obj.name.includes(toLoad));
-    if (file) {
-      if (file.numberofquestions)
-        this.currentNumberofQuestions = file.numberofquestions;
-      if (file.questionsandanswers)
-        this.current_qandanswers = file.questionsandanswers;
+    var quiz = this.currentScripts.find((quiz) => quiz.title.includes(toLoad));
+    if (quiz) {
+      if (quiz.numOfQuestions)
+        this.currentNumberofQuestions = quiz.numOfQuestions;
+      if (quiz.content)
+        this.current_qandanswers = quiz.content;
     }
-    console.log(file);
+    console.log(quiz);
     this.loadQuiz(toLoad);
   }
 
-  async loadQuiz(script) {
+  async loadQuiz(quizTitle: string) {
     $("#bot-messages").empty();
     let send = document.getElementById("bot-message-button");
     send.onclick = () => {
       this.sendInput();
     };
-    var quiz = this.currentScripts.find((obj) => obj.name.includes(script));
+    var quiz = this.currentScripts.find((quiz) => quiz.title.includes(quizTitle));
+    console.log(quiz.content)
 
     // @ts-ignore
-    await testLoadQuiz(quiz.content);
+    await testLoadQuiz(quiz.botScript);
     this.chatSetup("start", false, false);
   }
 

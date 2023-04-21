@@ -88,7 +88,7 @@ app.use(checkJwt);
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
-app.use('/Chatbot', chatbotRoute);
+app.use('/chatbot', chatbotRoute);
 app.use('/engagement', engagementRoute);
 app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);

@@ -9,22 +9,28 @@ import { firstValueFrom } from 'rxjs';
 })
 export class ChatbotService {
 
+  baseUrl: string = config.baseurl + "chatbot/";
+
   constructor(private http: HttpClient, public auth: AuthenticationService) { }
 
-  getPersonalScripts(user){
+  getUserQuizzes(user){
     const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
     const body = {
       name: user.username,
       id: user._id
     };
-    return this.http.post<any>(config.baseurl + 'Chatbot/getScripts', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'getUserQuizzes', body, {headers});
+  }
+
+  getClassroomQuizzes(classroomId) {
+    return this.http.get<any>(this.baseUrl + "getTeacherScripts/" + classroomId)
   }
 
     /**
    * Get any quizzes from the DB that the teacher made
    */
   async getTeacherScripts(classroom){
-    return this.http.get<any>(config.baseurl + 'Chatbot/getTeacherScripts/' + classroom.teacherId + '/' + classroom.code)
+    return this.http.get<any>(this.baseUrl + 'getTeacherScripts/' + classroom.teacherId + '/' + classroom.code)
   }
 
   chatAIML(input, pandoraId) {
@@ -33,12 +39,12 @@ export class ChatbotService {
       message: input,
       botId: pandoraId,
     };
-    return this.http.post<any>(config.baseurl + 'Chatbot/aiml-message', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'aiml-message', body, {headers});
   }
 
-  saveScript(body) {
+  createQuiz(body) {
     const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
-    return this.http.post<any>(config.baseurl + 'Chatbot/SaveScript', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'createQuiz', body, {headers});
   }
 
   deleteScript(toDelete, userId) {
@@ -47,7 +53,7 @@ export class ChatbotService {
       name: toDelete, 
       user: userId
     }
-    return this.http.post<any>(config.baseurl + 'Chatbot/deleteScript', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'deleteScript', body, {headers});
   }
 
   sendVerification(currentFileName, userId) {
@@ -56,7 +62,7 @@ export class ChatbotService {
       name: currentFileName, 
       user: userId
     }
-    return this.http.post<any>(config.baseurl + 'Chatbot/sendScriptVerification', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'sendScriptVerification', body, {headers});
   }
 
   downloadNewScript(userId, currentFileName, userRole) {
@@ -66,7 +72,7 @@ export class ChatbotService {
       name: currentFileName, 
       role: userRole
     }
-    return this.http.post<any>(config.baseurl + 'Chatbot/getScriptForDownload', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'getScriptForDownload', body, {headers});
   }
 
 }

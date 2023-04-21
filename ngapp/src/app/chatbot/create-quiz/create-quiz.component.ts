@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/authentication.service';
 import { ChatbotService } from 'app/services/chatbot.service';
 import { TranslationService } from '../../translation.service';
+import { ClassroomService } from "app/classroom.service";
+import { Classroom } from "app/classroom";
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-create-quiz',
@@ -14,13 +17,16 @@ export class CreateQuizComponent implements OnInit {
   user: any;
   currentFilename: string = '';
   numberofanswers = {"answer-1":1, "answer-2":1, "answer-3":1, "answer-4":1, "answer-5":1};
+  classrooms: Classroom[] = [];
+  selectedClassroomId: string = '';
 
   constructor(
     public auth: AuthenticationService,
     public ts: TranslationService,
-    private chatbotService: ChatbotService) { }
+    private chatbotService: ChatbotService,
+    private classroomService: ClassroomService,) { }
 
-  ngOnInit(){
+  async ngOnInit(){
     console.log("create-init");
 
     if(this.auth.isLoggedIn()){
@@ -28,6 +34,8 @@ export class CreateQuizComponent implements OnInit {
       this.user = userDetails;
       if(this.user.role == 'TEACHER'){
         $('#class-code-input').css('display', 'block');
+        this.classrooms = await firstValueFrom( this.classroomService.getClassroomsForTeacher(this.user._id) );
+        console.log(this.classrooms);
       } 
     }
     else {
@@ -39,7 +47,7 @@ export class CreateQuizComponent implements OnInit {
     $('#submit-container').css('top', '14%');
   }
 
-  done(){
+  async done(){
     //current questions available
     let q1 = document.getElementById('q1') as HTMLInputElement;
     let q2 = document.getElementById('q2') as HTMLInputElement;
@@ -79,7 +87,6 @@ export class CreateQuizComponent implements OnInit {
     //make sure all entries have been filled in
     if(!questions.includes('') && !answers.some(row => row.includes(''))){
       let name = (document.getElementById('topic-name') as HTMLInputElement).value;
-      let classId = (document.getElementById('class-code-input') as HTMLInputElement).value;
       var result = {};
       questions.forEach((key, i) => result[key] = answers[i]);
       result["topic-name"] = name;
@@ -87,14 +94,14 @@ export class CreateQuizComponent implements OnInit {
       result['role'] = this.user.role;
       result['shuffle'] = $('#shuffle-box input').prop('checked');
 
-      if(this.user.role == 'TEACHER' && classId != ""){
-        result['classId'] = classId;
+      if(this.user.role == 'TEACHER' && this.selectedClassroomId != ""){
+        result['classId'] = this.selectedClassroomId;
       }
       console.log(result);  
 
       if (name != ''){
         //store questions & answers on the backend to be pulled again from the bot
-        this.chatbotService.saveScript(result).subscribe({
+        this.chatbotService.createQuiz(result).subscribe({
           next: (response) => {
             console.log(response);
             if(response == 'script already exists'){
