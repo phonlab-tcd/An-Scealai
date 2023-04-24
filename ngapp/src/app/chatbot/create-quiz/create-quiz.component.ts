@@ -5,6 +5,7 @@ import { TranslationService } from '../../translation.service';
 import { ClassroomService } from "app/classroom.service";
 import { Classroom } from "app/classroom";
 import { firstValueFrom } from 'rxjs';
+import { Quiz } from '../chatbot.component';
 
 @Component({
   selector: 'app-create-quiz',
@@ -19,6 +20,7 @@ export class CreateQuizComponent implements OnInit {
   numberofanswers = {"answer-1":1, "answer-2":1, "answer-3":1, "answer-4":1, "answer-5":1};
   classrooms: Classroom[] = [];
   selectedClassroomId: string = '';
+  createdQuiz: Quiz;
 
   constructor(
     public auth: AuthenticationService,
@@ -113,6 +115,8 @@ export class CreateQuizComponent implements OnInit {
               $('#ask-publish').css('display', 'block');
               $('#ask-download').css('display', 'block');
               this.currentFilename = name;
+              this.createdQuiz = response;
+              console.log(this.createdQuiz)
             }
           }, 
           error: (error) => {
@@ -135,10 +139,16 @@ export class CreateQuizComponent implements OnInit {
   sendVerification(){
     //send new script to an scealai email
     $('#verified-message').css('display', 'block');
-    this.chatbotService.sendVerification(this.currentFilename, this.user._id).subscribe({
-      next: (res) => {console.log(res)},
-      error: (err) => {console.log(err)}
-    })
+    // TODO: make this validation work
+    // this.chatbotService.sendVerification(this.currentFilename, this.user._id).subscribe({
+    //   next: (res) => {console.log(res)},
+    //   error: (err) => {console.log(err)}
+    // })
+    console.log(this.createdQuiz);
+    if (this.createdQuiz) {
+      this.chatbotService.setAsCommunityScript(this.createdQuiz._id).subscribe({next: ()=> {}, error: (e) => console.log(e)});
+    }
+    
   }
 
   showAbout(){

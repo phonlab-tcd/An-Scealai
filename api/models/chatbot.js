@@ -60,7 +60,7 @@ let CommunityScript = new Schema({
 var CommunityScriptModel = mongoose.model('CommunityScripts', CommunityScript);
 
 // Schema for Quizes the user creates
-const ChatbotUserQuiz = new Schema(
+const ChatbotQuiz = new Schema(
     {
       owner: {
         type: mongoose.Types.ObjectId,
@@ -85,14 +85,17 @@ const ChatbotUserQuiz = new Schema(
       content: {
         type: String,
       },
+      isCommunityScript: {
+        type: Boolean,
+      }
     },
     {
-      collection: 'chatbotUserQuizzes',
+      collection: 'chatbotQuizzes',
     },
 );
 
 module.exports = {
-  ChatbotUserQuiz: mongoose.model('ChatbotUserQuiz', ChatbotUserQuiz),
+  ChatbotQuiz: mongoose.model('ChatbotQuiz', ChatbotQuiz),
   Log: mongoose.model('Log', Log),
   Chatbot: mongoose.model('Chatbot', Chatbot),
   AudioBubble: mongoose.model('AudioBubble', AudioBubble),

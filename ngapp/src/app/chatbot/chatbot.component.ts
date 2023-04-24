@@ -759,64 +759,45 @@ export class ChatbotComponent implements OnInit {
     this.selectedDialect.style.fontWeight = "bold";
   }
 
-  openScript() {
-    this.quiz_score = 0;
-    let toLoad = "";
-    this.showContents("p", "popup-background", false);
-    $("#" + this.selectedFile).css("border", "none");
-    $("#open-script").css("display", "none");
-    $("#delete-script").css("display", "none");
-    //console.log(selectedFile);
-    if (this.selectedFile.includes("student"))
-      toLoad = this.selectedFile.replace("student_script_", "");
-    else toLoad = this.selectedFile.replace("teacher_script_", "");
-    var quiz = this.quizzes.find((quiz) => quiz.title.includes(toLoad));
-    if (quiz) {
-      if (quiz.numOfQuestions)
-        this.currentNumberofQuestions = quiz.numOfQuestions;
-      if (quiz.content)
-        this.current_qandanswers = quiz.content;
-    }
-    console.log(quiz);
-    this.loadQuiz(toLoad);
-  }
+  // openScript(test) {
+  //   console.log("I am read")
+  //   this.quiz_score = 0;
+  //   let toLoad = "";
+  //   // this.showContents("p", "popup-background", false);
+  //   // $("#" + this.selectedFile).css("border", "none");
+  //   // $("#open-script").css("display", "none");
+  //   // $("#delete-script").css("display", "none");
+  //   console.log("sleected file: ", this.selectedFile);
+  //   if (this.selectedFile.includes("student"))
+  //     toLoad = this.selectedFile.replace("student_script_", "");
+  //   else toLoad = this.selectedFile.replace("teacher_script_", "");
+  //   var quiz = this.quizzes.find((quiz) => quiz.title.includes(toLoad));
+  //   if (quiz) {
+  //     if (quiz.numOfQuestions)
+  //       this.currentNumberofQuestions = quiz.numOfQuestions;
+  //     if (quiz.content)
+  //       this.current_qandanswers = quiz.content;
+  //   }
+  //   console.log(quiz);
 
-  async loadQuiz(quizTitle: string) {
+  //   this.loadQuiz(test);
+  // }
+
+  async loadQuiz(quiz: Quiz) {
     $("#bot-messages").empty();
     let send = document.getElementById("bot-message-button");
     send.onclick = () => {
       this.sendInput();
     };
-    var quiz = this.quizzes.find((quiz) => quiz.title.includes(quizTitle));
-    console.log(quiz.content)
+
+    // for user-created scripts:
+    this.quiz_score = 0;
+    if (quiz.numOfQuestions) this.currentNumberofQuestions = quiz.numOfQuestions;
+    if (quiz.content) this.current_qandanswers = quiz.content;
 
     // @ts-ignore
     await testLoadQuiz(quiz.botScript);
     this.chatSetup("start", false, false);
-  }
-
-  deleteScript() {
-    // var toDelete = "";
-    // if (this.selectedFile.includes("student"))
-    //   toDelete = this.selectedFile.replace("student_script_", "");
-    // else toDelete = this.selectedFile.replace("teacher_script_", "");
-    // console.log("to delete: " + toDelete);
-
-    // this.chatbotService.deleteScript(toDelete, this.user._id).subscribe({
-    //   next: (response) => {
-    //     console.log(response);
-    //     if (response.message == "script deleted") {
-    //       console.log("if entered");
-    //       $("#" + this.selectedFile).remove();
-    //       var index = this.personal_buttons.indexOf(this.selectedFile);
-    //       if (index != -1) this.personal_buttons.splice(index, 1);
-    //       this.showContents("p", "popup-background", false);
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   },
-    // });
   }
 
   openQuizDialog() {
@@ -831,8 +812,16 @@ export class ChatbotComponent implements OnInit {
     
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
-        if(res) {
-          this.quizzes = res;
+        if (res) {
+          //  user selected a quiz to open
+          if (res.selectedQuiz) {
+            console.log(res.selectedQuiz)
+            this.loadQuiz(res.selectedQuiz);
+          }
+          // user deleted a quiz from the table
+          else {
+            this.quizzes = res;
+          }
         }
     });
   }

@@ -11,7 +11,7 @@ const { parse } = require('node-html-parser');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
-const { ChatbotUserQuiz } = require('../models/chatbot');
+const { ChatbotQuiz } = require('../models/chatbot');
 const mongoose = require('mongoose');
 
 // Require Chatbot model in our routes module
@@ -37,7 +37,6 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
   let userId = content['userId'];
   let role = content['role'];
   let shuffle = content['shuffle'];
-  console.log(content);
 
   if(content['classId']) var classId = content['classId'];
   delete content['topic-name'];
@@ -58,11 +57,7 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
   line += endQuiz;
   line += firstLine;
 
-  console.log("First line: ", line);
-
   let keys = Object.keys(content);
-  console.log("KEYS: ");
-  console.log(keys);
 
   // if user wants questions shuffled
   if(shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
@@ -70,9 +65,6 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
   for(var key of keys){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
-
-    console.log("Current Key: ", key);
-    console.log("Next key: ", nextKey);
 
     questionsAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
 
@@ -119,8 +111,6 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
 
   line += tryAgain;
 
-  console.log("Line: ", line);
-
   //console.log(line);
   //getting ready for db
   if(role == 'TEACHER') topicName = 'teacher_' + topicName;
@@ -133,23 +123,24 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
     numOfQuestions: Object.keys(content).length,
     botScript: line,
     content: questionsAnswers,
+    isCommunityScript: false,
   };
   
   //store in db
   if(s.owner != undefined && s.owner != ''){
     //check not already in DB
-    ChatbotUserQuiz.find({"owner": userId, "title": topicName, "classroomId": classId}, async function(err, scripts){
-      console.log("SCripts: ", scripts);
+    ChatbotQuiz.find({"owner": userId, "title": topicName, "classroomId": classId}, async function(err, scripts){
+      console.log("Scripts: ", scripts);
       console.log("Error: ", err);
       if(scripts.length > 0){
         console.log("can't save, already there.");
         res.status(404).json("script already exists");
       }
       else if(scripts.length == 0){
-        let script = await ChatbotUserQuiz.create(s);
+        let script = await ChatbotQuiz.create(s);
         script.save().then(() => {
           console.log('success');
-          res.status(200).json("Success saving script to db");
+          res.status(200).json(script);
         }).catch(err => {
           console.log(err);
           res.status(400).json("Error saving to db");
@@ -162,7 +153,7 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
 //delete script from db by user and script name
 chatbotRoute.route('/deleteQuiz/:id').get(async function(req, res){
   console.log("Delete: ", req.params.id)
-  ChatbotUserQuiz.deleteOne(req.body, function(err, obj){
+  ChatbotQuiz.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
       console.log("deleted successfully")
@@ -173,7 +164,7 @@ chatbotRoute.route('/deleteQuiz/:id').get(async function(req, res){
 
 // gets scripts ready for use in 'Personal Scripts'
 chatbotRoute.route('/getUserQuizzes').post(function(req, res){
-  ChatbotUserQuiz.find({"owner": req.body.id}, function(err, quizzes){
+  ChatbotQuiz.find({"owner": req.body.id}, function(err, quizzes){
     if(quizzes){
       return res.json(quizzes);
     }
@@ -186,12 +177,47 @@ chatbotRoute.route('/getUserQuizzes').post(function(req, res){
   });
 }); 
 
+// gets community scripts
+chatbotRoute.route('/getCommunityQuizzes').get(function(req, res){
+  ChatbotQuiz.find({"isCommunityScript": true}, function(err, quizzes){
+    if(quizzes){
+      return res.json(quizzes);
+    }
+    else if(quizzes.length == 0){
+      return res.status(404).json("no community quizzes found");
+    }
+    else {
+      return res.status(400).send(err);
+    }
+  });
+}); 
+
+chatbotRoute.route('/setAsCommunityScript').post(async function(req, res){
+  if (! mongoose.Types.ObjectId.isValid(req.body.id)) {
+    return res.status(400).json({ invalidObjectId: req.body.id, });
+  }
+  
+  const quiz = await ChatbotQuiz.findById(req.body.id);
+  if (quiz) {
+    quiz.isCommunityScript = true;
+    quiz.save().then(() => {
+      return res.json(quiz);
+    }).catch(err => {
+      console.log(err);
+      return res.status(400).json("Error saving to quiz as community quiz");
+    });
+  }
+  else return res.status(404).json("Quiz not found in DB");
+});
+
+
+
 //sets up script for download on user's request
 chatbotRoute.route('/getScriptForDownload').post(function(req, res){
   console.log(req.body);
   if(req.body){
     if(req.body.role == 'TEACHER') req.body.name = 'teacher_' + req.body.name;
-    ChatbotUserQuiz.findOne(req.body, function(err, script){ 
+    ChatbotQuiz.findOne(req.body, function(err, script){ 
       console.log(script);
       if(err){
         console.log(err);
@@ -344,8 +370,7 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
 
 chatbotRoute.route('/getClassroomQuizzes/:id').get(function(req, res){
   let id = new mongoose.mongo.ObjectId(req.params.id)
-  console.log(id);
-  ChatbotUserQuiz.find({"classroomId": id}, function(err, quizzes){
+  ChatbotQuiz.find({"classroomId": id}, function(err, quizzes){
     if (quizzes && quizzes.length > 0)
       return res.json(quizzes);
     return res.json({});
@@ -376,9 +401,7 @@ chatbotRoute.route('/aiml-message').post(function(req, res){
 
 chatbotRoute.route('/sendScriptVerification').post(function(req, res){  
   var mailObj = {};
-  console.log(req.body);
-  ChatbotUserQuiz.findOne(req.body, function(err, script){ 
-    //console.log(script);
+  ChatbotQuiz.findOne(req.body, function(err, script){ 
     mailObj = {
       from: "scealai.info@gmail.com",
       recipients: ["scealai.info@gmail.com"],
@@ -386,7 +409,6 @@ chatbotRoute.route('/sendScriptVerification').post(function(req, res){
       message: "User: " + script.user + "\nVerify Script: \n\n" + script.questionsandanswers,
     };
     sendEmail(mailObj).then((response) => {
-      console.log(response);
       if(response){
         res.send("Email sent");
       }
@@ -423,7 +445,6 @@ const sendEmail = async (mailObj) => {
       
       return `Message sent: ${mailStatus.messageId}`;
   } catch (error) {
-      console.log(error);
       throw new Error(
           `Something went wrong in the sendmail method. Error: ${error.message}`
       );

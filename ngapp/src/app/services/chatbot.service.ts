@@ -26,6 +26,18 @@ export class ChatbotService {
     return this.http.get<any>(this.baseUrl + "getClassroomQuizzes/" + classroomId)
   }
 
+  getCommunityQuizzes() {
+    return this.http.get<any>(this.baseUrl + "getCommunityQuizzes");
+  }
+
+  setAsCommunityScript(quizId) {
+    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const body = {
+      id: quizId
+    };
+    return this.http.post<any>(this.baseUrl + 'setAsCommunityScript', body, {headers});
+  }
+
     /**
    * Get any quizzes from the DB that the teacher made
    */
