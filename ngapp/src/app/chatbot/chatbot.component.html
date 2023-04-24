@@ -7,63 +7,15 @@
 <video id="chimp" src="./assets/img/chimp_talking.mp4"></video>
 
 
-                                                      <!-- Quiz Selection Container-->
+                                                      <!-- Quiz Selection Button-->
 <div id="new-contents">
   <div id="topics">{{ ts.l.taidhgin_choose_topic }}</div>
   <div *ngIf="this.auth.isLoggedIn(); else notLoggedIn">
-    <!--<button class='choose-scealai'  onclick="showContents('sc', 'popup-background', true)">An Scealaí Topics</button>-->
-    <!-- <button class="choose-personal" (click)="showContents('p', 'popup-background', true)" >
-      {{ ts.l.my_quiz_s }}
-    </button> -->
     <button class="choose-personal" (click)="openQuizDialog()" >
       {{ ts.l.my_quiz_s }}
     </button>
-    <button class="choose-community" (click)="showContents('c', 'popup-background', true)" >
-      {{ ts.l.t_community_quiz }}
-    </button>
   </div>
   <ng-template #notLoggedIn><p id="login-rec">{{ ts.l.taidhgin_signup }}</p></ng-template>
-</div>
-
-
-<div class="scealai-topics" id="sc">
-  <div>An Scealaí Topics</div>
-  <i class="fas fa-times close-topics" (click)='showContents("sc", "popup-background", false)' ></i>
-  <!--<button class='contents-button' onclick="load('BriathraNeamhrialta', 'start', 'sc')">Briathra Neamhrialta</button>-->
-  <br /><br />
-  <p>Topics Coming soon!</p>
-</div>
-
-                                                      <!-- My Quizzes Popup-->
-<div class="personal-topics" id="p">
-  <div id="personal-topics-title"></div>
-  <div *ngIf="user?.role == 'STUDENT'" id="student" (click)="showPersonal('student')">
-    <p>{{ ts.l.my_quiz_s }}</p>
-  </div>
-  <button id="to-create" routerLink="/create-quiz">
-    <i class="fas fa-plus"></i>
-  </button>
-  <div *ngIf="user?.role == 'STUDENT'" id="teacher" (click)="showPersonal('teacher')">
-    <p>{{ ts.l.my_teachquiz }}</p>
-  </div>
-  <div id="personal-container"></div>
-  <i class="fas fa-times close-topics" (click)="closePersonal()"></i>
-  <!-- <button id="delete-script" (click)="deleteScript()">
-    {{ ts.l.delete_quiz }}
-  </button> -->
-  <!-- <button id="open-script" (click)="openScript()">{{ ts.l.open_quiz }}</button> -->
-</div>
-
-                                                      <!-- Community Quizzes Popup-->
-<div class="community-topics" id="c">
-  <div>{{ ts.l.t_community_quiz }}</div>
-  <button class="contents-button" (click)="load('Community_Eire', 'start', 'c')" >
-    Éire
-  </button>
-  <button class="contents-button" id="seanfhocail" (click)="load('Community_Seanfhocail', 'start', 'c')" >
-    Seanfhocail
-  </button>
-  <i class="fas fa-times close-topics" (click)='showContents("c", "popup-background", false)' ></i>
 </div>
 
                                                       <!-- Chatbot Container-->
@@ -71,7 +23,7 @@
   <div id="bg-background"></div>
                                                        <!-- Dialect Popup-->
   <div id="bot-audio">
-    <div id="close-audio" (click)='showContents("bot-audio", "bg-background", false)' >
+    <div id="close-audio">
       Close
     </div>
     <div id="dialects">
@@ -117,7 +69,7 @@
       Stop Recording
     </button>
     <audio id="recording-player" src="" controls></audio>
-    <button type="submit" id="cancel-recording" (click)='showContents("recording-prompt", "bg-background", false)' >
+    <button type="submit" id="cancel-recording">
       Cancel
     </button>
   </div>
@@ -163,11 +115,11 @@
       <i class="fas fa-arrow-circle-right arrow"></i>
     </button>
     <!-- Recording button -->
-    <button id="open-record" (click)="showContents('recording-prompt', 'bg-background', true)" >
+    <button id="open-record">
       <i class="fas fa-microphone-alt"></i>
     </button>
     <!-- Choose dialect button-->
-    <button id="choose-dialect" (click)="showContents('bot-audio', 'bg-background', true)" >
+    <button id="choose-dialect">
       {{ ts.l.taidhgin_choose_dialect }}
     </button>
   </form>

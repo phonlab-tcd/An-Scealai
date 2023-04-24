@@ -45,20 +45,6 @@ let AudioBubble = new Schema({
   dialect: { type: String }
 });
 
-
-// Schema for Quizes by the community
-let CommunityScript = new Schema({
-  name: { type: String },
-  content: { type: String },
-  user: { type: String }, 
-},
- {
-   collection: 'communityScripts'
- },
-);
-
-var CommunityScriptModel = mongoose.model('CommunityScripts', CommunityScript);
-
 // Schema for Quizes the user creates
 const ChatbotQuiz = new Schema(
     {
@@ -79,15 +65,15 @@ const ChatbotQuiz = new Schema(
       numOfQuestions: {
         type: Number,
       },
-      botScript: {
-        type: String,
+      isCommunityScript: {
+        type: Boolean,
       },
       content: {
         type: String,
       },
-      isCommunityScript: {
-        type: Boolean,
-      }
+      botScript: {
+        type: String,
+      },
     },
     {
       collection: 'chatbotQuizzes',
@@ -99,5 +85,4 @@ module.exports = {
   Log: mongoose.model('Log', Log),
   Chatbot: mongoose.model('Chatbot', Chatbot),
   AudioBubble: mongoose.model('AudioBubble', AudioBubble),
-  CommunityScript: mongoose.model('CommunityScript', CommunityScript),
 };

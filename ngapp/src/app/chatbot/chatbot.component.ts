@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthenticationService } from "app/authentication.service";
+import { AuthenticationService, UserDetails } from "app/authentication.service";
 import config from "abairconfig";
 import { TranslationService } from "app/translation.service";
 import { ClassroomService } from "app/classroom.service";
@@ -44,14 +44,14 @@ export class ChatbotComponent implements OnInit {
   selectedSynthesisAlgo: string = "HTS";
   currentDialect: string = "MU";
   pandoraID: string = "";
-  user: any;
+  user: UserDetails;
   quizzes: Quiz[] = [];
   personal_buttons: string[] = [];
   selectedFile: string = "";
   currentFile: string = "";
-  quiz_score: number = 0;
+  quizScore: number = 0;
   currentNumberofQuestions: number = 0;
-  current_qandanswers: string = "";
+  currentQandA: string = "";
   botIsTyping: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
@@ -87,7 +87,7 @@ export class ChatbotComponent implements OnInit {
     }
 
     // @ts-ignore
-    await setup(botSetupFileName, config.baseurl, this.currentLanguage);
+    await setupBot(botSetupFileName);
     this.chatSetup("start" + this.currentLanguage, false, false);
     this.currentFile = "start";
   }
@@ -114,8 +114,9 @@ export class ChatbotComponent implements OnInit {
             this.quizzes.push(quiz);
         } 
       }
-      this.createQuizList( this.quizzes, this.user.role.toLowerCase() );
     }
+
+    console.log(this.quizzes)
   }
 
   /**
@@ -133,7 +134,7 @@ export class ChatbotComponent implements OnInit {
       this.audioPlayer.onended = async () => {
         if (text != "") {
           // @ts-ignore
-          let reply = await testBotReply(text);
+          let reply = await getBotReply(text);
           if (reply && reply != "" && !reply.includes("ERR")) {
             console.log("Reply: " + reply);
             this.appendTypingIndicator();
@@ -152,7 +153,7 @@ export class ChatbotComponent implements OnInit {
     // autoplay is off => no need to wait for audio to play for consecutive bubbles
     else {
       // @ts-ignore
-      let reply = await testBotReply(text);
+      let reply = await getBotReply(text);
       console.log(reply);
       if (reply && reply != "" && !reply.includes("ERR")) {
         console.log("Reply: " + reply);
@@ -477,172 +478,6 @@ export class ChatbotComponent implements OnInit {
   }
 
   /**
-   * Add quizzes to HTML
-   * @param scripts list of quizzes
-   * @param role role of user
-   */
-  createQuizList(quizzes: Quiz[], role) {
-    let button_id = role + "_script_";
-    //console.log(scripts);
-    //append buttons to personal-topics
-    for (let quiz of quizzes) {
-      //label for button
-      let topicname = quiz.title;
-      //check not already in DOM
-      if (!this.personal_buttons.includes(button_id + topicname)) {
-        //create button
-        let topic = document.createElement("button");
-        topic.setAttribute("class", "add-personal-topics");
-        topic.innerText = topicname;
-        topic.setAttribute("id", button_id + topicname);
-        //set teacher quizzes display to none if student
-        if (topic.id.includes("teacher") && this.user.role == "STUDENT") {
-          topic.style.display = "none";
-          topic.style.backgroundColor = "#138D75";
-          topic.innerText = topicname.replace("teacher_", "");
-        } else if (
-          topic.id.includes("teacher") &&
-          this.user.role == "TEACHER"
-        ) {
-          topic.innerText = topicname.replace("teacher_", "");
-        } else topic.style.display = "inline";
-
-        //keep track of buttons
-        this.personal_buttons.push(topic.id);
-        topic.onclick = () => {
-          //console.log(selectedFile);
-          if (this.selectedFile != "") {
-            $("#" + this.selectedFile).css("border", "none");
-          }
-          topic.style.border = "thick solid #F4D03F";
-          $("#delete-script").css("display", "block");
-          $("#open-script").css("display", "block");
-          this.selectedFile = topic.id;
-          //showContents('p', 'popup-background', false);
-          //load(topic.innerText);
-        };
-
-        setTimeout(function () {
-          //append new button
-          $("#personal-container").append(topic);
-        }, 500);
-      }
-    }
-    console.log(this.personal_buttons)
-  }
-
-  /**
-   * Get any quizzes from the DB that the teacher made for the clas
-   */
-  async getTeacherScripts() {
-    this.classroomService.getClassroomOfStudent(this.user._id).subscribe({
-      next: (classroom) => {
-        this.http.get<any>( config.baseurl + "chatbot/getTeacherScripts/" + classroom._id).subscribe({
-          next: (quizzes: Quiz[]) => {
-            console.log(quizzes)
-            if (quizzes && quizzes.length > 0) {
-              for (let quiz of quizzes) 
-                this.quizzes.push(quiz);
-              this.createQuizList( quizzes, this.user.role.toLowerCase() );
-                
-            } else {
-              console.log(quizzes);
-            }
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-  }
-
-  /**
-   * Show modal popups for different user options (quizzes, recording, dialects, etc)
-   * @param content_id id of element clicked
-   * @param background_id id of background element for clicked section
-   * @param show true if open modal, false if close
-   */
-  showContents(content_id, background_id, show) {
-    $("form").on("submit", (event) => {
-      event.preventDefault();
-    });
-    if (content_id == "recording-prompt") {
-      $("#send-recording").css("display", "none");
-      $("#recording-player").css("display", "none");
-    }
-
-    let contentPopup = document.getElementById(content_id);
-    let backgroundPopup = document.getElementById(background_id);
-
-    if (show) {
-      //show contents
-      contentPopup.style.display = "inline-block";
-      backgroundPopup.style.display = "flex";
-      setTimeout(function () {
-        contentPopup.style.opacity = "1";
-        backgroundPopup.style.opacity = "0.6";
-      }, 50);
-
-      if (content_id == "p" && this.user.role == "TEACHER") {
-        $("#to-create").css("margin-top", "5%");
-        $("#to-create").css("left", "5%");
-      }
-    } else {
-      //hide contents
-      contentPopup.style.opacity = "0";
-      backgroundPopup.style.opacity = "0";
-      setTimeout(function () {
-        contentPopup.style.display = "none";
-        backgroundPopup.style.display = "none";
-      }, 500);
-    }
-  }
-
-  /**
-   * Show any personal scripts loaded from the DB depending on user role
-   * @param role user role
-   */
-  showPersonal(role) {
-    if (this.selectedFile != "")
-      $("#" + this.selectedFile).css("border", "none");
-    if (role == "student") {
-      $(".personal-topics #teacher").css("background-color", "#FBFCFC");
-      $(".personal-topics #student").css("background-color", "#F4D03F");
-      $("#delete-script").prop("disabled", false);
-    } else {
-      $(".personal-topics #student").css("background-color", "#FBFCFC");
-      $(".personal-topics #teacher").css("background-color", "#F4D03F");
-      $("#delete-script").prop("disabled", true);
-    }
-    for (let id of this.personal_buttons) {
-      let button = document.getElementById(id);
-      if (id.includes(role)) {
-        button.style.display = "inline";
-      } else button.style.display = "none";
-
-      if (role == "student" && id.includes("teacher"))
-        button.style.display = "none";
-
-      $("#delete-script").css("display", "none");
-      $("#open-script").css("display", "none");
-    }
-  }
-
-  closePersonal() {
-    this.showContents("p", "popup-background", false);
-    if (this.user.role == "STUDENT") this.showPersonal("student");
-    if (this.selectedFile != "") {
-      $("#" + this.selectedFile).css("border", "none");
-      $("#open-script").css("display", "none");
-      $("#delete-script").css("display", "none");
-    }
-  }
-
-  /**
    * Load in a community quizz
    * @param fileId quizz name
    * @param start 'start'
@@ -656,9 +491,6 @@ export class ChatbotComponent implements OnInit {
       this.sendInput();
     };
 
-    // close popup window
-    if (content_id) this.showContents(content_id, "popup-background", false);
-
     // empty bot text from original greeting message
     if (this.currentFile == "start") {
       $("#bot-messages").empty();
@@ -669,7 +501,7 @@ export class ChatbotComponent implements OnInit {
     console.log(fileId);
 
     // @ts-ignore
-    await testBotLoad(fileId, start);
+    await setupCommunityBot(fileId, start);
 
     if (start == null) start = "start";
     this.chatSetup(start, false, false);
@@ -759,30 +591,10 @@ export class ChatbotComponent implements OnInit {
     this.selectedDialect.style.fontWeight = "bold";
   }
 
-  // openScript(test) {
-  //   console.log("I am read")
-  //   this.quiz_score = 0;
-  //   let toLoad = "";
-  //   // this.showContents("p", "popup-background", false);
-  //   // $("#" + this.selectedFile).css("border", "none");
-  //   // $("#open-script").css("display", "none");
-  //   // $("#delete-script").css("display", "none");
-  //   console.log("sleected file: ", this.selectedFile);
-  //   if (this.selectedFile.includes("student"))
-  //     toLoad = this.selectedFile.replace("student_script_", "");
-  //   else toLoad = this.selectedFile.replace("teacher_script_", "");
-  //   var quiz = this.quizzes.find((quiz) => quiz.title.includes(toLoad));
-  //   if (quiz) {
-  //     if (quiz.numOfQuestions)
-  //       this.currentNumberofQuestions = quiz.numOfQuestions;
-  //     if (quiz.content)
-  //       this.current_qandanswers = quiz.content;
-  //   }
-  //   console.log(quiz);
-
-  //   this.loadQuiz(test);
-  // }
-
+  /**
+   * Load the selected quiz to the chatbot
+   * @param quiz Quiz to load
+   */
   async loadQuiz(quiz: Quiz) {
     $("#bot-messages").empty();
     let send = document.getElementById("bot-message-button");
@@ -791,15 +603,19 @@ export class ChatbotComponent implements OnInit {
     };
 
     // for user-created scripts:
-    this.quiz_score = 0;
+    this.quizScore = 0;
     if (quiz.numOfQuestions) this.currentNumberofQuestions = quiz.numOfQuestions;
-    if (quiz.content) this.current_qandanswers = quiz.content;
+    if (quiz.content) this.currentQandA = quiz.content;
 
     // @ts-ignore
     await testLoadQuiz(quiz.botScript);
     this.chatSetup("start", false, false);
   }
 
+  /**
+   * Open the dialog component for showing any quizzes the user, 
+   * techer, or community has made
+   */
   openQuizDialog() {
     this.dialogRef = this.dialog.open(SelectQuizDialogComponent, {
       disableClose: true,
@@ -810,6 +626,7 @@ export class ChatbotComponent implements OnInit {
       width: '100vh',
     });
     
+    // get any quiz data sent when the dialog box is closed
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if (res) {
@@ -818,7 +635,7 @@ export class ChatbotComponent implements OnInit {
             console.log(res.selectedQuiz)
             this.loadQuiz(res.selectedQuiz);
           }
-          // user deleted a quiz from the table
+          // user deleted a quiz from the table in the dialog
           else {
             this.quizzes = res;
           }

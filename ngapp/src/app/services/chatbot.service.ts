@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'app/authentication.service';
 import config from 'abairconfig';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,19 +29,12 @@ export class ChatbotService {
     return this.http.get<any>(this.baseUrl + "getCommunityQuizzes");
   }
 
-  setAsCommunityScript(quizId) {
+  setAsCommunityQuiz(quizId) {
     const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
     const body = {
       id: quizId
     };
-    return this.http.post<any>(this.baseUrl + 'setAsCommunityScript', body, {headers});
-  }
-
-    /**
-   * Get any quizzes from the DB that the teacher made
-   */
-  async getTeacherScripts(classroom){
-    return this.http.get<any>(this.baseUrl + 'getTeacherScripts/' + classroom.teacherId + '/' + classroom.code)
+    return this.http.post<any>(this.baseUrl + 'setAsCommunityQuiz', body, {headers});
   }
 
   chatAIML(input, pandoraId) {

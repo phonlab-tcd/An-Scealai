@@ -90,20 +90,30 @@ export class CreateQuizComponent implements OnInit {
     if(!questions.includes('') && !answers.some(row => row.includes(''))){
       let name = (document.getElementById('topic-name') as HTMLInputElement).value;
       var result = {};
-      questions.forEach((key, i) => result[key] = answers[i]);
-      result["topic-name"] = name;
-      result['userId'] = this.user._id;
-      result['role'] = this.user.role;
-      result['shuffle'] = $('#shuffle-box input').prop('checked');
+      let questionsAndAnswers = {};
+      questions.forEach((key, i) => questionsAndAnswers[key] = answers[i]);
+
+      let newQuizData = {
+        questionsAndAnswers: questionsAndAnswers,
+        title: name,
+        userId: this.user._id,
+        shuffle: $('#shuffle-box input').prop('checked'),
+        classroomId: null
+      }
+      // result['questionsAndAnswers']
+      // result["topic-name"] = name;
+      // result['userId'] = this.user._id;
+      // result['role'] = this.user.role;
+      // result['shuffle'] = $('#shuffle-box input').prop('checked');
 
       if(this.user.role == 'TEACHER' && this.selectedClassroomId != ""){
-        result['classId'] = this.selectedClassroomId;
+        newQuizData.classroomId = this.selectedClassroomId;
       }
-      console.log(result);  
+      console.log(newQuizData);  
 
       if (name != ''){
         //store questions & answers on the backend to be pulled again from the bot
-        this.chatbotService.createQuiz(result).subscribe({
+        this.chatbotService.createQuiz(newQuizData).subscribe({
           next: (response) => {
             console.log(response);
             if(response == 'script already exists'){
@@ -146,7 +156,7 @@ export class CreateQuizComponent implements OnInit {
     // })
     console.log(this.createdQuiz);
     if (this.createdQuiz) {
-      this.chatbotService.setAsCommunityScript(this.createdQuiz._id).subscribe({next: ()=> {}, error: (e) => console.log(e)});
+      this.chatbotService.setAsCommunityQuiz(this.createdQuiz._id).subscribe({next: ()=> {}, error: (e) => console.log(e)});
     }
     
   }

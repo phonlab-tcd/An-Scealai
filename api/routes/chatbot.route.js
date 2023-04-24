@@ -32,41 +32,32 @@ let endQuiz = "\n\n> object endOfQuiz javascript\nendOfQuiz();\nreturn '';\n< ob
 //builds script content as string & stores in the db
 chatbotRoute.route('/createQuiz').post(async function (req, res) {
   logger.info({endpoint: '/createQuiz'});
-  let content = req.body;
-  let topicName = content['topic-name'];
-  let userId = content['userId'];
-  let role = content['role'];
-  let shuffle = content['shuffle'];
+  let content = req.body.questionsAndAnswers;
+  let title = req.body.title;
 
-  if(content['classId']) var classId = content['classId'];
-  delete content['topic-name'];
-  delete content['userId'];
-  delete content['role'];
-  delete content['classId'];
-  delete content['shuffle'];
-  var questionsAnswers = '';
+  let formattedQuestionsAndAnswers = '';
   let tryAgain = '\n\n+ tryagain\n- <button class="rive-button"'; 
-  tryAgain += " onclick='tryAgain(\"" + topicName + "\")'>Bain triail as arís?</button>\n"
+  tryAgain += " onclick='tryAgain(\"" + title + "\")'>Bain triail as arís?</button>\n"
   tryAgain += "^ <button class='rive-button' onclick='showAnswers()'>Taispeáin na freagraí?</button>";
 
   //Construct Script
-  var line = "";
+  let line = "";
 
   line += chatSetup;
   line += addScore;
   line += endQuiz;
   line += firstLine;
 
-  let keys = Object.keys(content);
+  let keys = Object.keys(req.body.questionsAndAnswers);
 
   // if user wants questions shuffled
-  if(shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
+  if(req.body.shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
 
-  for(var key of keys){
+  for(let key of keys){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
 
-    questionsAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
+    formattedQuestionsAndAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
 
     //let correctTrigger = "Ceart! <call>addScore</call>An chéad cheist eile:<br><br>" + key;
 
@@ -111,25 +102,25 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
 
   line += tryAgain;
 
-  //console.log(line);
-  //getting ready for db
-  if(role == 'TEACHER') topicName = 'teacher_' + topicName;
-
   let s = {
-    owner: userId,
-    title: topicName,
+    owner: req.body.userId,
+    title: title,
     date: new Date(),
-    classroomId: classId,
-    numOfQuestions: Object.keys(content).length,
+    numOfQuestions: Object.keys(req.body.questionsAndAnswers).length,
     botScript: line,
-    content: questionsAnswers,
+    content: formattedQuestionsAndAnswers,
     isCommunityScript: false,
   };
+
+  let classroomId = req.body.classroomId;
+  if(classroomId) s.classroomId = classroomId;
+
+  console.log(s);
   
   //store in db
   if(s.owner != undefined && s.owner != ''){
     //check not already in DB
-    ChatbotQuiz.find({"owner": userId, "title": topicName, "classroomId": classId}, async function(err, scripts){
+    ChatbotQuiz.find({"owner": req.body.userId, "title": title, "classroomId": classroomId}, async function(err, scripts){
       console.log("Scripts: ", scripts);
       console.log("Error: ", err);
       if(scripts.length > 0){
@@ -192,7 +183,7 @@ chatbotRoute.route('/getCommunityQuizzes').get(function(req, res){
   });
 }); 
 
-chatbotRoute.route('/setAsCommunityScript').post(async function(req, res){
+chatbotRoute.route('/setAsCommunityQuiz').post(async function(req, res){
   if (! mongoose.Types.ObjectId.isValid(req.body.id)) {
     return res.status(400).json({ invalidObjectId: req.body.id, });
   }
