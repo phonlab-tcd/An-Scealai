@@ -30,13 +30,17 @@ async function testLoadQuiz(quizContent) {
   console.log("done loading quiz bot");
 }
 
-async function testBotReply(text) {
+async function getBotReply(text) {
   console.log("getting bot reply testBotReply() with text: ", text);
   let reply = await bot.reply("local-user", text);
   return reply;
 }
 
-async function testBotLoad(fileId, start) {
+/**
+ * Load in the community quizzes
+ * @param {*} fileId 
+ */
+async function setupCommunityBot(fileId) {
   console.log("test loading new bot testBotLoad()")
   // sets thisVerb if the quiz is not of type 'quiz' (i.e. community, eire)
   if(fileId.indexOf("quiz") == -1){
@@ -53,36 +57,20 @@ async function testBotLoad(fileId, start) {
   await bot.loadFile("./assets/rive/" + fileId + '.rive');
   await bot.sortReplies();
   console.log(fileId + ' loaded');
-  if(start == null) start = 'start';
+  //if(start == null) start = 'start';
 }
 
 /**
- * Set up the initial chatbot
- * @param {*} file e.x: 'startNotLoggedIn'
- * @param {*} backendUrlFromAngularComponent e.x: http://localhost:4000/
- * @param {*} languageFromAngular 'Gaeilge' | 'English'
+ * Set up the chatbot with the given filename
+ * @param {*} file name of rive file to load into bot
  */
-async function setup(file, backendUrlFromAngularComponent, languageFromAngular){
-  backendUrl = backendUrlFromAngularComponent;
-  currentLanguage = languageFromAngular;
-  videoPlayer = document.getElementById('chimp');
-  audioPlayer = document.getElementById("botaudio");
-  audioCheckbox = document.querySelector(".audioCheckbox");
-  currentDialectButton = document.getElementById('dialect-MU');
-
-  //file = 'Community_Eire';
+async function setupBot(file){
   bot = new RiveScript({utf8: true});    
-  // bot.loadFile("./assets/rive/" + file + '.rive').then( () => {
-  //   bot.sortReplies();
-  //   currentFile = 'start';
-  //   //chatSetup("start" + currentLanguage.toLowerCase(), false, false);
-  // });
   await bot.loadFile("./assets/rive/" + file + '.rive');
   console.log("bot set up")
   await bot.sortReplies();
   console.log("bot sorted")
   currentFile = 'start';
-  //chatSetup("start" + currentLanguage.toLowerCase(), false, false);
   console.log("done setting up bot")
 }
 
