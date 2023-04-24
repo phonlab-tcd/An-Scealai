@@ -111,7 +111,7 @@
   <form class="chatform">
     <input id="bot-user_input" type="text" autocomplete="off" />
     <!-- Submit text button -->
-    <button type="submit" id="bot-message-button" (click)="chatAIML()">
+    <button type="submit" id="bot-message-button" (click)="isQuizMode? sendQuizResponse() : chatAIML()">
       <i class="fas fa-arrow-circle-right arrow"></i>
     </button>
     <!-- Recording button -->

@@ -9,11 +9,12 @@ import config from 'abairconfig';
 export class ChatbotService {
 
   baseUrl: string = config.baseurl + "chatbot/";
+  headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
 
   constructor(private http: HttpClient, public auth: AuthenticationService) { }
 
   getUserQuizzes(user){
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const headers = this.headers;
     const body = {
       name: user.username,
       id: user._id
@@ -30,24 +31,24 @@ export class ChatbotService {
   }
 
   setAsCommunityQuiz(quizId) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const headers = this.headers;
     const body = {
       id: quizId
     };
     return this.http.post<any>(this.baseUrl + 'setAsCommunityQuiz', body, {headers});
   }
 
-  chatAIML(input, pandoraId) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+  chatAIML(input: string, pandoraId: string) {
+    const headers = this.headers;
     const body = {
       message: input,
       botId: pandoraId,
     };
-    return this.http.post<any>(this.baseUrl + 'aiml-message', body, {headers});
+    return this.http.post<any>(this.baseUrl + 'getAIMLResponse', body, {headers});
   }
 
   createQuiz(body) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const headers = this.headers;
     return this.http.post<any>(this.baseUrl + 'createQuiz', body, {headers});
   }
 
@@ -56,7 +57,7 @@ export class ChatbotService {
   }
 
   sendVerification(currentFileName, userId) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const headers = this.headers;
     const body = {
       name: currentFileName, 
       user: userId
@@ -65,7 +66,7 @@ export class ChatbotService {
   }
 
   downloadNewScript(userId, currentFileName, userRole) {
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken(), 'Content-Type': 'application/json' }
+    const headers = this.headers;
     const body = {
       user: userId, 
       name: currentFileName, 

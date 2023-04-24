@@ -22,7 +22,7 @@ var currentLanguage = 'Gaeilge';
 
 let currentDialectButton = null;
 
-async function testLoadQuiz(quizContent) {
+async function setupQuizBot(quizContent) {
   console.log("loading quiz bot testLoadQuiz()");
   bot = new RiveScript({utf8: true});    
   await bot.stream(quizContent);
@@ -38,6 +38,10 @@ async function getBotReply(text) {
 
 /**
  * Load in the community quizzes
+ * This function is not called, but it contains previous code for
+ * loading in community quizzes that are saved as rive files
+ * TODO: save these files as quizes in the DB and load them from there
+ * using the setupQuizBot() function (i.e. treat them like other quizes)
  * @param {*} fileId 
  */
 async function setupCommunityBot(fileId) {
@@ -72,6 +76,53 @@ async function setupBot(file){
   console.log("bot sorted")
   currentFile = 'start';
   console.log("done setting up bot")
+}
+
+//CHAT REPLIES AND INPUTS from scripts
+function chatSetup(text, holdMessages, showButtons){
+  console.log("text: ", text);
+  console.log("hold messages: ", holdMessages);
+  console.log("showButtons: ", showButtons);
+  console.log("IN chat setup from bot.js")
+  // holdMessages => for autoplay audio
+  // showButtons => for manual audio 
+
+  if(holdMessages == "true" && audioCheckbox.checked == true){
+    // autoplay is on & bot is sending multiple consecutive bubbles
+    audioPlayer.onended = function(){
+      if(text != ""){
+        bot.reply("local-user", text).then( (reply) => {
+          text = "";
+          if(reply != "" && !reply.includes('ERR')){
+            //console.log(reply);
+            appendTypingIndicator();
+            setTimeout(function(){
+              appendMessage(true, false, reply, showButtons);
+              audio(reply, bubbleId, false);
+              $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+            }, 2200);
+          }
+        });
+      }
+    }
+  }
+  else{
+    // autoplay is off => no need to wait for audio to play for consecutive bubbles
+    bot.reply("local-user", text).then( (reply) => {
+      console.log(reply)
+      if(reply != "" && !reply.includes('ERR')){
+        //console.log("Reply: " + reply);
+        this_reply = reply;
+        appendTypingIndicator();
+        setTimeout(function(){
+          appendMessage(true, false, reply, showButtons);
+          //audio(reply, bubbleId, false);
+          $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+        }, 2200);
+      }
+    });
+  }
+  return "";
 }
 
 // function load(fileId, start, content_id){
@@ -113,74 +164,74 @@ async function setupBot(file){
 
 function loadFromChat(fileId, start){ load(fileId, start); }
 
-// function appendTypingIndicator(){
-//   $("#bot-messages").append($("<div class=\"typing-indicator\"><div class=\"bot-message-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"bot-message-ind\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
-//   $(".typing-indicator").delay(2000).fadeOut("fast");
-//   $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
-// }
+function appendTypingIndicator(){
+  $("#bot-messages").append($("<div class=\"typing-indicator\"><div class=\"bot-message-photo\"><img src=\"assets/img/logo-S.png\" id=\"bot-img\"></div><div class=\"dots\"><p class=\"bot-message-ind\"><span id=\"typ1\"></span><span id=\"typ2\"></span><span id=\"typ3\"></span></p></div></div></div>"));
+  $(".typing-indicator").delay(2000).fadeOut("fast");
+  $(".chatlogs").animate({ scrollTop: $(".chatlogs")[0].scrollHeight }, 200);
+}
 
-// function appendMessage(isBot, isUser, text, showButtons){
-//   bubbleId++;
-//   var newMessage = document.createElement("div");
-//   newMessage.setAttribute("class", "message_parent");
-//   newMessage.setAttribute("id", bubbleId);
-//   var newP = document.createElement("p");
-//   var newSpan = document.createElement("span");
-//   var photoDiv = document.createElement("div");
-//   var photo = document.createElement("img");
-//   if(isBot){
-//     newP.setAttribute("class", "bot-message");
-//     photoDiv.setAttribute("class", "bot-message-photo");
-//     photo.src = "assets/img/logo-S.png";
-//     photo.setAttribute("id", "bot-img");
-//   }
-//   else{
-//     newP.setAttribute("class", "user-message");
-//     photoDiv.setAttribute("class", "user-message-photo");
-//     photo.src = "assets/img/apple-user.svg";
-//     photo.setAttribute("id", "user-img");
-//   }
+function appendMessage(isBot, isUser, text, showButtons){
+  bubbleId++;
+  var newMessage = document.createElement("div");
+  newMessage.setAttribute("class", "message_parent");
+  newMessage.setAttribute("id", bubbleId);
+  var newP = document.createElement("p");
+  var newSpan = document.createElement("span");
+  var photoDiv = document.createElement("div");
+  var photo = document.createElement("img");
+  if(isBot){
+    newP.setAttribute("class", "bot-message");
+    photoDiv.setAttribute("class", "bot-message-photo");
+    photo.src = "assets/img/logo-S.png";
+    photo.setAttribute("id", "bot-img");
+  }
+  else{
+    newP.setAttribute("class", "user-message");
+    photoDiv.setAttribute("class", "user-message-photo");
+    photo.src = "assets/img/apple-user.svg";
+    photo.setAttribute("id", "user-img");
+  }
   
-//   photoDiv.appendChild(photo);
-//   newMessage.appendChild(photoDiv);
-//   newSpan.setAttribute("class", "this-message");
-//   newSpan.innerHTML = text;
-//   newP.appendChild(newSpan);
+  photoDiv.appendChild(photo);
+  newMessage.appendChild(photoDiv);
+  newSpan.setAttribute("class", "this-message");
+  newSpan.innerHTML = text;
+  newP.appendChild(newSpan);
 
-//   newMessage.ondblclick = function(){
-//     manualPlay(newMessage.id);
-//   }
+  newMessage.ondblclick = function(){
+    manualPlay(newMessage.id);
+  }
 
-//   if(isAQuestion){
-//     var dictPopup;
-//     var dictTri;
-//     var dictText;
-//     var dictImg;
-//     dictImg = document.createElement("img");
-//     dictImg.src = "assets/img/dict.png";
-//     dictImg.setAttribute("class", "dictButton");
-//     dictImg.style.display = "none";
-//     dictImg.onclick = function(){
-//       if(dictOn == false){
-//         dictPopup.style.display = "flex";
-//         dictTri.style.display = "flex";
-//         dictText.innerHTML = currentQuestion.translation;
-//         dictOn = true;
-//       }
-//       else if(dictOn){
-//         dictPopup.style.display = "none";
-//         dictTri.style.display = "none";
-//         dictOn = false;
-//       }
-//     }
-//     newP.appendChild(dictImg);
-//     isAQuestion = false;
-//   }
+  if(isAQuestion){
+    var dictPopup;
+    var dictTri;
+    var dictText;
+    var dictImg;
+    dictImg = document.createElement("img");
+    dictImg.src = "assets/img/dict.png";
+    dictImg.setAttribute("class", "dictButton");
+    dictImg.style.display = "none";
+    dictImg.onclick = function(){
+      if(dictOn == false){
+        dictPopup.style.display = "flex";
+        dictTri.style.display = "flex";
+        dictText.innerHTML = currentQuestion.translation;
+        dictOn = true;
+      }
+      else if(dictOn){
+        dictPopup.style.display = "none";
+        dictTri.style.display = "none";
+        dictOn = false;
+      }
+    }
+    newP.appendChild(dictImg);
+    isAQuestion = false;
+  }
 
-//   let messages = document.getElementById("bot-messages");
-//   newMessage.appendChild(newP);  
-//   messages.appendChild(newMessage);
-// }
+  let messages = document.getElementById("bot-messages");
+  newMessage.appendChild(newP);  
+  messages.appendChild(newMessage);
+}
 
 //CHAT REPLIES AND INPUTS from scripts
 // function chatSetup(text, holdMessages, showButtons){

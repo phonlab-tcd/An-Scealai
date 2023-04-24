@@ -46,14 +46,12 @@ export class ChatbotComponent implements OnInit {
   pandoraID: string = "";
   user: UserDetails;
   quizzes: Quiz[] = [];
-  personal_buttons: string[] = [];
-  selectedFile: string = "";
-  currentFile: string = "";
   quizScore: number = 0;
   currentNumberofQuestions: number = 0;
   currentQandA: string = "";
   botIsTyping: boolean = false;
   dialogRef: MatDialogRef<unknown>;
+  isQuizMode: boolean = false;
 
   constructor(
     public auth: AuthenticationService,
@@ -88,8 +86,7 @@ export class ChatbotComponent implements OnInit {
 
     // @ts-ignore
     await setupBot(botSetupFileName);
-    this.chatSetup("start" + this.currentLanguage, false, false);
-    this.currentFile = "start";
+    this.chatSetup("start" + this.currentLanguage, false);
   }
 
   /**
@@ -115,36 +112,32 @@ export class ChatbotComponent implements OnInit {
         } 
       }
     }
-
-    console.log(this.quizzes)
   }
 
   /**
-   *
-   * @param {*} text e.x: 'start'
+   * Set up the bot chat response for the given user input 
+   * @param {*} userInput text from the user, or 'start' to load initial bot chat bubble
    * @param {*} holdMessages true | false => true for autoplay audio
-   * @param {*} showButtons true | false => true for manual audio
    * @returns
    */
-  async chatSetup(text: string, holdMessages: boolean, showButtons: boolean) {
-    console.log("Setting up chat with: ", text);
+  async chatSetup(userInput: string, holdMessages: boolean) {
+    console.log("Setting up chat with: ", userInput);
+    console.log(holdMessages);
+    console.log(this.autoPlayAudio)
 
     //autoplay is on & bot is sending multiple consecutive bubbles
     if (holdMessages && this.autoPlayAudio) {
       this.audioPlayer.onended = async () => {
-        if (text != "") {
+        if (userInput != "") {
           // @ts-ignore
-          let reply = await getBotReply(text);
-          if (reply && reply != "" && !reply.includes("ERR")) {
+          let reply = await getBotReply(userInput);
+          if (reply && !reply.includes("ERR")) {
             console.log("Reply: " + reply);
             this.appendTypingIndicator();
             setTimeout(function () {
-              this.appendMessage(true, false, reply);
-              this.audio(reply, this.bubbleId, false);
-              $(".chatlogs").animate(
-                { scrollTop: $(".chatlogs")[0].scrollHeight },
-                200
-              );
+              this.appendMessage(true, reply);
+              //this.audio(reply, this.bubbleId, false);
+              $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
             }, 2200);
           }
         }
@@ -152,27 +145,24 @@ export class ChatbotComponent implements OnInit {
     }
     // autoplay is off => no need to wait for audio to play for consecutive bubbles
     else {
+      console.log("iin the else")
       // @ts-ignore
-      let reply = await getBotReply(text);
-      console.log(reply);
-      if (reply && reply != "" && !reply.includes("ERR")) {
+      let reply = await getBotReply(userInput);
+      if (reply && !reply.includes("ERR")) {
         console.log("Reply: " + reply);
         this.appendTypingIndicator(); // show bot typing
         // wait for the bot to 'finish typing'
         setTimeout(() => {
-          this.appendMessage(true, false, reply);
-          this.audio(reply, this.bubbleId, false);
-          $(".chatlogs").animate(
-            { scrollTop: $(".chatlogs")[0].scrollHeight },
-            200
-          );
+          this.appendMessage(true, reply);
+          //this.audio(reply, this.bubbleId, false);
+          $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
         }, 2200);
       }
     }
   }
 
   /**
-   * Display the css for dots when the bot is typing
+   * Display the css for loading dots when the bot is typing
    */
   appendTypingIndicator() {
     //this.botIsTyping = true;
@@ -182,12 +172,11 @@ export class ChatbotComponent implements OnInit {
   }
 
   /**
-   * Create a new message in the chatbot window
+   * Create a new chat bubble in the chatbot window
    * @param isBot true if message is from bot
-   * @param isUser true if message is from human
    * @param text message text
    */
-  appendMessage(isBot, isUser, text) {
+  appendMessage(isBot, text) {
     console.log("appending message");
     this.bubbleId++;
     var newMessage = document.createElement("div");
@@ -253,32 +242,43 @@ export class ChatbotComponent implements OnInit {
     messages.appendChild(newMessage);
   }
 
+  /**
+   * Send user response to backend service in order to process
+   * and return a response from the chatbot
+   * Used for chatting only (i.e. not quizes)
+   */
   chatAIML() {
     let output = "";
+    // get user chat input
     var input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
-    $("form").on("submit", (event) => {
-      event.preventDefault();
-    });
-    if (input != "") {
+    // don't let the user type anything while the form is being submited
+    $("form").on("submit", (event) => { event.preventDefault(); });
+    console.log("User said: ", input)
+    if (input) {
+      // reset user input box
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
-      this.appendMessage(false, true, input);
-      this.audio(input, this.bubbleId, true);
+      // create and add user chat bubble to conversation
+      this.appendMessage(false, input);
+      // load audio for chat bubble
+      //this.audio(input, this.bubbleId, true);
+      // create and add bot chat bubble to conversation
       setTimeout(() => {
+        console.log("Getting chat response...")
         this.videoPlayer.play();
         $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
 
         this.chatbotService.chatAIML(input, this.pandoraID).subscribe({
             next: (response) => {
-              if (response.reply) {
-                output = /<that>(.*?)<\/that>/g.exec(response.reply)[1];
+              console.log("Bot said: ", response)
+              if (response) {
+                // get the text from the chatbot response (from xml)
+                output = /<that>(.*?)<\/that>/g.exec(response)[1];
                 this.appendTypingIndicator();
+                // add bot chat bubble
                 setTimeout(() => {
-                  this.appendMessage(true, false, output);
-                  $(".chatlogs").animate(
-                    { scrollTop: $(".chatlogs")[0].scrollHeight },
-                    200
-                  );
-                  this.audio(output, this.bubbleId, false);
+                  this.appendMessage(true, output);
+                  $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
+                  //this.audio(output, this.bubbleId, false);
                   //videoPlayer.pause();
                 }, 2200);
                 //callAudio(output, 'GD');
@@ -478,50 +478,19 @@ export class ChatbotComponent implements OnInit {
   }
 
   /**
-   * Load in a community quizz
-   * @param fileId quizz name
-   * @param start 'start'
-   * @param content_id 'c'
-   */
-  async load(fileId, start, content_id) {
-    this.audioPlayer.pause();
-    let send = document.getElementById("bot-message-button");
-    send.onclick = () => {
-      console.log("Button clicked!!!!!");
-      this.sendInput();
-    };
-
-    // empty bot text from original greeting message
-    if (this.currentFile == "start") {
-      $("#bot-messages").empty();
-    } else {
-      this.currentFile = fileId;
-    }
-
-    console.log(fileId);
-
-    // @ts-ignore
-    await setupCommunityBot(fileId, start);
-
-    if (start == null) start = "start";
-    this.chatSetup(start, false, false);
-  }
-
-  /**
    * Clear out the user input box
    */
-  sendInput() {
+  sendQuizResponse() {
     let input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
-    $("form").on("submit", (event) => {
-      event.preventDefault();
-    });
-    if (input != "") {
+    $("form").on("submit", (event) => { event.preventDefault(); });
+    if (input) {
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
-      this.appendMessage(false, true, input);
+      this.appendMessage(false, input);
       this.videoPlayer.play();
       setTimeout(() => {
-        this.chatSetup(input, true, false);
-        this.audio(input, this.bubbleId, true);
+        console.log("CALLING CHAT SETUP")
+        this.chatSetup(input, false); // this was originally true
+        //this.audio(input, this.bubbleId, true);
       }, 1500);
       $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
     }
@@ -597,19 +566,17 @@ export class ChatbotComponent implements OnInit {
    */
   async loadQuiz(quiz: Quiz) {
     $("#bot-messages").empty();
-    let send = document.getElementById("bot-message-button");
-    send.onclick = () => {
-      this.sendInput();
-    };
 
-    // for user-created scripts:
+    // for user-created quizes:
     this.quizScore = 0;
     if (quiz.numOfQuestions) this.currentNumberofQuestions = quiz.numOfQuestions;
     if (quiz.content) this.currentQandA = quiz.content;
 
+    this.isQuizMode = true;
+
     // @ts-ignore
-    await testLoadQuiz(quiz.botScript);
-    this.chatSetup("start", false, false);
+    await setupQuizBot(quiz.botScript);
+    this.chatSetup("start", false);
   }
 
   /**

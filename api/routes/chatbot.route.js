@@ -114,8 +114,6 @@ chatbotRoute.route('/createQuiz').post(async function (req, res) {
 
   let classroomId = req.body.classroomId;
   if(classroomId) s.classroomId = classroomId;
-
-  console.log(s);
   
   //store in db
   if(s.owner != undefined && s.owner != ''){
@@ -209,7 +207,7 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
   if(req.body){
     if(req.body.role == 'TEACHER') req.body.name = 'teacher_' + req.body.name;
     ChatbotQuiz.findOne(req.body, function(err, script){ 
-      console.log(script);
+      console.log("script: ", script);
       if(err){
         console.log(err);
       }
@@ -223,19 +221,19 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
 chatbotRoute.route('/saveSpellings').post(function(req, res){
   if(req.body){
     spellings = req.body;
-    console.log(spellings);
+    console.log("Save spellings: ", spellings);
     res.status(200).send("Spellings Saved");
   }
 });
 
 chatbotRoute.route('/getWords').get(function(req, res){
-  console.log(spellings);
+  console.log("get words: ", spellings);
   if(spellings) res.send(spellings);
 });
 
 chatbotRoute.route('/getAudio').post(function(req, res){
   let bubble = new Models.AudioBubble(req.body);
-  console.log(bubble.text);
+  console.log("bubble text: ", bubble.text);
   if(bubble.text){
     var form = {
       Input: bubble.text,
@@ -266,7 +264,7 @@ chatbotRoute.route('/getAudio').post(function(req, res){
         //console.log(body);
         let audioSource = parse(body).querySelector('audio').id;
         console.log("Success!");
-        console.log(audioSource);
+        console.log("audio source: ", audioSource);
         res.json({ audio : audioSource });
       } else {
         console.log("Fail");
@@ -326,13 +324,13 @@ ga_MU_cmg_nnmnkwii
 */
 chatbotRoute.route('/getDNNAudio').post(function(req, res){
   let bubble = new Models.AudioBubble(req.body);
-  console.log(bubble);
+  console.log("bubble: ", bubble);
   let dialect = '';
   if(bubble.dialect == 'UL') dialect = 'ga_UL_anb_nnmnkwii';
   else if(bubble.dialect == 'CO') dialect = 'ga_CO_pmg_nnmnkwii';
   else dialect = 'ga_MU_cmg_nnmnkwii';
   
-  console.log(dialect);
+  console.log("dialect: ", dialect);
   
   let messageStrings = bubble.text.replace(/([.?!])\s*(?=[A-Z])/g, "$1|").split("|");
   var results = [];
@@ -350,7 +348,7 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
       let thisObj = {id: i, audioString: audioURI};
       results.push(thisObj);
       if(results.length == messageStrings.length){
-        console.log(results.length);
+        console.log("result length: ", results.length);
         res.json({audio: results});
       }
     }).catch(error => {
@@ -370,7 +368,7 @@ chatbotRoute.route('/getClassroomQuizzes/:id').get(function(req, res){
 
 // intro bot --> http://legacy.pandorabots.com/pandora/talk?botid=c08188e27e34571c
 //AIML Chit-Chat
-chatbotRoute.route('/aiml-message').post(function(req, res){
+chatbotRoute.route('/getAIMLResponse').post(function(req, res){
   let path = 'http://demo.vhost.pandorabots.com/pandora/talk-xml?botid=' + req.body.botId + '&input=';
   path += encodeURI(req.body.message);
   http.get(path, (resp) => {
@@ -381,11 +379,11 @@ chatbotRoute.route('/aiml-message').post(function(req, res){
     });
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-      console.log(data);
-      if(data) res.json({status: '200', reply: data});
+      if(data) return res.status(200).json(data);
     });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
+    return res.json(err.message);
   });
 });
 
