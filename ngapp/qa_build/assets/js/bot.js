@@ -80,10 +80,7 @@ async function setupBot(file){
 
 //CHAT REPLIES AND INPUTS from scripts
 function chatSetup(text, holdMessages, showButtons){
-  console.log("text: ", text);
-  console.log("hold messages: ", holdMessages);
-  console.log("showButtons: ", showButtons);
-  console.log("IN chat setup from bot.js")
+  console.log("Bot.js chatSetup: ", text)
   // holdMessages => for autoplay audio
   // showButtons => for manual audio 
 
