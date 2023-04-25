@@ -121,9 +121,7 @@ export class ChatbotComponent implements OnInit {
    * @returns
    */
   async chatSetup(userInput: string, holdMessages: boolean) {
-    console.log("Setting up chat with: ", userInput);
-    console.log(holdMessages);
-    console.log(this.autoPlayAudio)
+    console.log("Component chatSetup: ", userInput);
 
     //autoplay is on & bot is sending multiple consecutive bubbles
     if (holdMessages && this.autoPlayAudio) {
@@ -132,7 +130,7 @@ export class ChatbotComponent implements OnInit {
           // @ts-ignore
           let reply = await getBotReply(userInput);
           if (reply && !reply.includes("ERR")) {
-            console.log("Reply: " + reply);
+            console.log("Component chatSetup Reply: " + reply);
             this.appendTypingIndicator();
             setTimeout(function () {
               this.appendMessage(true, reply);
@@ -145,11 +143,10 @@ export class ChatbotComponent implements OnInit {
     }
     // autoplay is off => no need to wait for audio to play for consecutive bubbles
     else {
-      console.log("iin the else")
       // @ts-ignore
       let reply = await getBotReply(userInput);
       if (reply && !reply.includes("ERR")) {
-        console.log("Reply: " + reply);
+        console.log("Componet chatsetup Reply: " + reply);
         this.appendTypingIndicator(); // show bot typing
         // wait for the bot to 'finish typing'
         setTimeout(() => {
@@ -177,7 +174,7 @@ export class ChatbotComponent implements OnInit {
    * @param text message text
    */
   appendMessage(isBot, text) {
-    console.log("appending message");
+    console.log("Component appending message")
     this.bubbleId++;
     var newMessage = document.createElement("div");
     newMessage.setAttribute("class", "message_parent");
@@ -253,7 +250,6 @@ export class ChatbotComponent implements OnInit {
     var input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     // don't let the user type anything while the form is being submited
     $("form").on("submit", (event) => { event.preventDefault(); });
-    console.log("User said: ", input)
     if (input) {
       // reset user input box
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
@@ -263,13 +259,11 @@ export class ChatbotComponent implements OnInit {
       //this.audio(input, this.bubbleId, true);
       // create and add bot chat bubble to conversation
       setTimeout(() => {
-        console.log("Getting chat response...")
         this.videoPlayer.play();
         $(".chatlogs").animate( { scrollTop: $(".chatlogs")[0].scrollHeight }, 200 );
 
         this.chatbotService.chatAIML(input, this.pandoraID).subscribe({
             next: (response) => {
-              console.log("Bot said: ", response)
               if (response) {
                 // get the text from the chatbot response (from xml)
                 output = /<that>(.*?)<\/that>/g.exec(response)[1];
@@ -293,7 +287,6 @@ export class ChatbotComponent implements OnInit {
   }
 
   audio(newReply, id, isUser) {
-    console.log("Getting audio...");
     let thisId = id;
     let newBubble;
     var bubbleText = "";
@@ -361,7 +354,6 @@ export class ChatbotComponent implements OnInit {
     bubbleText = bubbleText.replace(/(<([^>]+)>)/gi, "");
     if (this.currentLanguage == "Gaeilge") {
       this.bubbleObjArr.push(newBubble);
-      console.log(newBubble);
       //makeMessageObj(isUser, bubbleText); (not used in originial)
       // if(this.selectedSynthesisAlgo == 'DNN') testDNN(newBubble, thisId);        // TODO implement this function
       // else if(this.selectedSynthesisAlgo == 'HTS') callAudio(newBubble, thisId); // TODO implement this function
@@ -481,14 +473,16 @@ export class ChatbotComponent implements OnInit {
    * Clear out the user input box
    */
   sendQuizResponse() {
+    console.log("Getting quiz response")
     let input = (document.getElementById("bot-user_input") as HTMLInputElement).value;
     $("form").on("submit", (event) => { event.preventDefault(); });
     if (input) {
       (document.getElementById("bot-user_input") as HTMLInputElement).value = "";
+      // add user guess to chat conversation
       this.appendMessage(false, input);
       this.videoPlayer.play();
+      // get the bot's response
       setTimeout(() => {
-        console.log("CALLING CHAT SETUP")
         this.chatSetup(input, false); // this was originally true
         //this.audio(input, this.bubbleId, true);
       }, 1500);
@@ -599,7 +593,6 @@ export class ChatbotComponent implements OnInit {
         if (res) {
           //  user selected a quiz to open
           if (res.selectedQuiz) {
-            console.log(res.selectedQuiz)
             this.loadQuiz(res.selectedQuiz);
           }
           // user deleted a quiz from the table in the dialog
