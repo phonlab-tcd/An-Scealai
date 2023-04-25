@@ -17,6 +17,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -175,6 +176,7 @@ import { AddContentComponent } from './admin-components/add-content/add-content.
         MatDialogModule,
         MatSidenavModule,
         MatIconModule,
+        MatTableModule,
         MatInputModule,
         NgbModule,
         NgbDropdownModule,

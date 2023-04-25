@@ -19,40 +19,27 @@ promptRoutes.route("/addContent").post(async function (req, res) {
 
   const prompt = new Prompt({...req.body, lastUpdated: new Date()});
   console.log("PROMPT: ", prompt);
-  // Prompt.findOneAndUpdate(req.body, prompt, function(error, result) {
-  //     if (!error) {
-  //         // If the document doesn't exist
-  //         console.log(result);
-  //         if (!result) {
-  //             // Create it
-  //             console.log("create document")
-  //         }
-  //         // Save the document
-  //         // result.save(function(error) {
-  //         //     if (!error) {
-  //         //         // Do something with the document
-  //         //     } else {
-  //         //         throw error;
-  //         //     }
-  //         // });
-  //         console.log("it exissts");
-  //     }
-  //     console.log(error)
-  // });
-  // prompt.save()
-  // .then((message) => {
-  //   res.json(message);
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  //   if (err?.code) {
-  //     console.log(err.code);
-  //     if (err.code === 11000) {
-  //       return res.status(400).json(err);
-  //     }
-  //   }
-  //   res.status(400).send("unable to save to DB");
-  // });
+
+  prompt.save()
+  .then((message) => {
+    return res.json(message);
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.status(400).send("unable to save to DB");
+  });
+});
+
+/**
+ * Get all prompts from the DB
+ * @param {Object} req
+ * @return {Object} Total number of profiles
+ */
+promptRoutes.route("/getPartOfSpeechData").get(async (req, res) => {
+  const prompts = await Prompt.find({type: "partOfSpeech"});
+  if (prompts) return res.status(200).json(prompts);
+
+  return res.status(404).json({ message: "No prompts found" });
 });
 
 /**
