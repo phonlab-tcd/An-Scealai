@@ -6,29 +6,43 @@ const promptSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
+  prompt: {
+    type: String,
+    unique: true,
+  },
   level: {
     type: String,
-    default: null,
     required: false,
   },
   dialect: {
     type: String,
-    default: null,
     required: false,
   },
-  partOfSpeech: {
-    type: String,
-    default: null,
+  partOfSpeechData: {
+    type: Object,
     required: false,
-  },
-  prompt: {
-    type: String,
-    required: true,
+    index: true,
+    partOfSpeech: {
+      type: String,
+      required: false
+    },
+    word: {
+      type: String,
+      required: false,
+      unique: true,
+      index: true
+    },
+    translation: {
+      type: String,
+      required: false
+    },
   },
   lastUpdated: {
     type: Date,
-    default: null,
   },
+},
+{
+  collection: 'promptData'
 });
 
 

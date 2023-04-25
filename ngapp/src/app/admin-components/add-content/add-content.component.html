@@ -1,0 +1,35 @@
+<div class="headerTitle"> Add Content </div>
+<div style="padding:30px">
+    <mat-form-field appearance="fill">
+        <mat-label>Select Topic</mat-label>
+        <mat-select [(ngModel)]="selectedContent">
+          <mat-option value="partOfSpeech">Part of Speech Data</mat-option>
+          <mat-option value="two">Story Prompt Data</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="selectedContent == 'partOfSpeech'" class="posFields">
+        <mat-form-field appearance="fill">
+            <mat-label>Part of Speech</mat-label>
+            <mat-select [(ngModel)]="selectedPOS">
+              <mat-option value="noun">Noun</mat-option>
+              <mat-option value="verb">Verb</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Word</mat-label>
+            <input matInput [(ngModel)]="posWord">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Translation</mat-label>
+            <input matInput [(ngModel)]="posTranslation">
+          </mat-form-field>
+          <button mat-raised-button (click)="addContent()">Add</button>
+      </div>
+
+      
+</div>
+
+  
+
+
