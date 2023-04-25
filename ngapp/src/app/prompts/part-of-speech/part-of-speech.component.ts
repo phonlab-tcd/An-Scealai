@@ -40,6 +40,7 @@ export class PartOfSpeechComponent implements OnInit {
   buttonsLoading: boolean = false;
   errorButtons: string[];
   selectedVoice: Voice;
+  showTranslation: boolean = false;
   posInformation: Object = {
     "noun": "/assets/pdf/noun_information_ga.pdf",
     "verb": "/assets/pdf/verb_information_ga.pdf",
@@ -132,6 +133,7 @@ export class PartOfSpeechComponent implements OnInit {
   selectRandomWord(type: keyof typeof this.wordDatabase) {
     let wordList = this.wordDatabase[type];
     this.givenWord = wordList[Math.floor(Math.random() * wordList.length)];
+    console.log(this.givenWord)
   }
 
   /**

@@ -106,3 +106,13 @@
     color: red;
     font-size: 12pt;
 }
+
+.showTranslation {
+    font-size: small;
+    float: right;
+}
+
+.showTranslation:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -13,22 +13,15 @@
                   <button class="button" (click)=selectRandomWord(type)>{{ts.l[type]}}</button>
                   <span><i class="fa fa-info-circle" style="cursor:pointer" (click)="openPartOfSpeechDescription(type)"></i></span>
                 </div>
-
               </div>
-              <!-- <div class="btn-group-sm" role="group">
-                <span *ngFor="let type of wordTypes">
-                  <button type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
-                  <i class="fa fa-info-circle" style="cursor:pointer;" (click)="openPartOfSpeechDescription(type)"></i>
-                </span>
-                  <button *ngFor="let type of wordTypes" type=button (click)=selectRandomWord(type) class="button">{{ts.l[type]}}</button>
-              </div> -->
             </div>
           </div>
           <!--Word Card-->
           <div *ngIf="givenWord" class="given-word">
             <div class="card">
-              <h3 class="card-header">{{givenWord}}</h3>
+              <h3 class="card-header">{{givenWord.ga}} <span *ngIf="showTranslation">({{givenWord.en}})</span></h3>
             </div>
+            <div (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? 'Hide translation': 'Show translation'}}</div>
           </div>
           <!--Confirm word choice-->
           <div *ngIf="givenWord" class="content"> 
