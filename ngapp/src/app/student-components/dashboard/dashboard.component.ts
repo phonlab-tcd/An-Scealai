@@ -317,11 +317,9 @@ export class DashboardComponent implements OnInit {
 
     this.engagement.addEventForLoggedInUser(EventType['SAVE-STORY'], this.story);
 
-    const saveStoryPromise = this.storyService.updateStory(updateData, this.story._id).toPromise();
-
     // Save story to the DB
     try {
-      await saveStoryPromise;
+      await firstValueFrom(this.storyService.updateStory(updateData, this.story._id));
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
       } else if (debounceId === 'modal') {
