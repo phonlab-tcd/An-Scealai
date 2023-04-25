@@ -124,21 +124,30 @@
   margin-left: 5px;
 }
 
-.disableDiv{ pointer-events: none; opacity: 2.0;}
-
-.settingsIcon {
-  color: darkgrey;
-  font-size: x-large;
-  border-radius: 2px;
+.grammarMessageBanner {
+  background-color: #8fcaff;
   display: flex;
   align-items: center;
-  background-color: var(--options-btn-background-color);
 }
 
-.settingsIcon:hover {
-  background-color: var(--options-btn-background-color-hover);
-  color: black;
+.grammarMessage {
+  display: block;
+  flex: 1;
 }
+
+.grammarMessage + .displayGrammarTagsIcon {
+  flex: 0 0 auto;
+}
+
+.displayGrammarTagsIcon {
+  margin-right: 20px;
+}
+
+.displayGrammarTagsIcon:hover {
+  cursor: pointer;
+}
+
+.disableDiv{ pointer-events: none; opacity: 2.0;}
 
 .storyContainer {
   z-index: 1;

@@ -30,7 +30,6 @@ export class TeacherClassroomComponent implements OnInit {
   
   classroom : Classroom;
   students : User[] = [];
-  studentIds: String[] = [];
   registrationError : boolean = false;
   newTitle: string;
   unreadMessages: number = 0;
@@ -50,36 +49,17 @@ export class TeacherClassroomComponent implements OnInit {
 /*
 * Loop through student ids in classroom object to get student objects
 */
-  getStudents() {
+  async getStudents() {
     for(let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe((res : User) => {
-        this.students.push(res);
-        //this.students.sort((a, b) => (a.username < b.username) ? -1 : 1);
-        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
-        this.studentIds.push(res._id);
-        if(this.classroom.date) {
-          this.storyService.getStoriesForClassroom(res._id, this.classroom.date.toString()).subscribe( (stories) => {
-            this.numOfStories.set(res.username, Object.keys(stories).length);
-          });
-        }
-        else {
-          this.storyService.getStoriesFor(res.username).subscribe( (stories) => {
-            this.numOfStories.set(res.username, Object.keys(stories).length);
-          });
-        }
+      this.userService.getUserById(id).subscribe({
+        next: async student => {
+          this.students.push(student);
+          let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
+          this.numOfStories.set(student.username, storyCount);
+        },
+        error: () => {console.log(id + " does not exist")}
       });
     }
-  }
-
-/*
-* Edit the title of the classroom with classroom service 
-*/
-  editTitle() {
-    this.classroomService.editTitle(this.classroom._id, this.newTitle).subscribe(() => {
-      this.ngOnInit();
-    }, (err) => {
-      alert(err);
-    });
   }
 
 /*

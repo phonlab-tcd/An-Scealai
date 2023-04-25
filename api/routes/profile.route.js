@@ -56,7 +56,7 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
   Profile.findOne({'userId': req.user._id})
       .then(
           (profile) => res.status(profile ? 200 : 404).json({profile}),
-          (err) => res.status(400).send('An error occurred while trying to find this profile'),
+          (err) => res.status(404).send('An error occurred while trying to find this profile'),
       );
 });
 

@@ -43,12 +43,11 @@ export class TeacherDictoglossComponent implements OnInit {
     );
     // get list of student users
     for (let id of this.classroom.studentIds) {
-      this.students.push(
-        await firstValueFrom(this.userService.getUserById(id))
-      );
-      this.sendTo.push(id);
+      this.userService.getUserById(id).subscribe({
+        next: (student) => {this.students.push(student); this.sendTo.push(id);},
+        error: () => console.log(id + " does not exist")
+      })
     }
-    console.log(this.students);
   }
 
   /**

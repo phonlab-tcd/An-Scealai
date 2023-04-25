@@ -63,7 +63,7 @@ let transports = [
   }),
 ];
 if(process.env.NODE_ENV === 'test') {
-  transports = [];
+  transports = [transports[0]];
 }
 const levels = {
     emerg: 0,

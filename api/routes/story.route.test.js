@@ -17,6 +17,7 @@ const request = supertest(app);
 const mongoose = require("mongoose");
 const Story = require("../models/story");
 const Classroom = require('../models/classroom');
+const recordingUtil = require('../utils/recordingUtils');
 
 describe("story routes", () => {
   xdescribe("GET /myStudentsStory/:id", ()=>{
@@ -77,7 +78,7 @@ describe("story routes", () => {
     });
   });
 
-  describe("/create", () => {
+  describe("POST /create", () => {
     it('200',async()=>{
       await request.post('/create').send().expect(200)
     });
@@ -122,7 +123,7 @@ describe("story routes", () => {
     });
   });
 
-  describe("/viewFeedback/:id", () => {
+  describe("POST /viewFeedback/:id", () => {
     const url = (id) => `/viewFeedback/${id}`;
     it("sets the 'seenByStudent' property for the story with given id to true", async () => {
       const seenByStudent = false;
@@ -143,5 +144,29 @@ describe("story routes", () => {
     const url = (id) => `/feedbackAudio/${id}`;
     it("requires a valid id param", async () =>
       await request.get(url("badId")).expect(400));
+  });
+
+  describe('POST /updateActiveRecording/:id',()=>{
+    const url=(storyId)=>`/updateActiveRecording/${storyId}`;
+    let activeRecording;
+    let storyId;
+    beforeAll(async ()=> {
+      const res = await Promise.all([
+        recordingUtil.upload(Buffer.from('hello'),'filename'),
+        Story.create({}),
+      ]);
+      activeRecording=res[0];
+      storyId=res[1]._id;
+    });
+    it('bug regression test, double send \'Story not found\'',async()=>{
+      await request.post(url('1234'));
+      //make sure server is still running
+      await request.post('/create').send({}).expect(200);
+    });
+    it('400 bad story id',            async()=>await request.post(url('1234')    ).send({activeRecording}            ).expect(400));
+    it('404 fake story id',           async()=>await request.post(url(ObjectId())).send({activeRecording}            ).expect(404));
+    it('400 bad activeRecording id',  async()=>await request.post(url(storyId)   ).send({activeRecording: '1234'}    ).expect(400));
+    it('404 fake activeRecording id', async()=>await request.post(url(storyId)   ).send({activeRecording: ObjectId()}).expect(404));
+    it('200',                         async()=>await request.post(url(storyId)   ).send({activeRecording}            ).expect(200));
   });
 });

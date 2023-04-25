@@ -26,8 +26,6 @@ import { DashboardComponent } from './student-components/dashboard/dashboard.com
 import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
-import { RecordingHistoryComponent } from './student-components/recording-history/recording-history.component';
-import { ViewRecordingComponent } from './student-components/view-recording/view-recording.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
 import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
@@ -79,8 +77,6 @@ const routes: Routes = [
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
   { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
-  { path: 'view-recording/:id', component: ViewRecordingComponent, canActivate: [AuthGuardService]},
-  { path: 'recording-archive/:id', component: RecordingHistoryComponent, canActivate: [AuthGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},

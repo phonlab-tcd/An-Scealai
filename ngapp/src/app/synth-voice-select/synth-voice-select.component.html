@@ -8,7 +8,7 @@
       required
       data-gender={{voice.gender}}
       [value]=voice>
-        {{voice.note + pseudonym(voice) + ' ' + voice.dialect + ' ' + voice.algorithm}}
+        {{voice.note + pseudonym(voice) + ' (' + ts.message(voice.dialect) + ') '}}
     </mat-option>
   </mat-select>
 </mat-form-field>

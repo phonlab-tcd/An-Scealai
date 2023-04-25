@@ -1,79 +1,127 @@
 <div class="content">
-  <!-- back button to return to story and save button to send recordings to db-->
-    <div class="recordingBookHeader" *ngIf="story">
-      <div (click)="goToDashboard()" class="myStoriesBtn"><i class="fa fa-chevron-left"></i> {{ts.l.story}}</div> 
-      <div class="bookTitle">{{story?.title}}<span *ngIf="!recordingSaved">*</span></div>
-      <div class="recordingSaveIcon">
-        <div *ngIf="recordingSaved" class="recordingSavedIcon">
-          {{ts.l.saved}} <i class="fas fa-check"></i>
-        </div>
-        <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="saveRecordings()">
-          {{ts.l.save}} <i class="fas fa-save"></i>
-        </div>
+  <!-- Header title and buttons -->
+  <div class="recordingBookHeader" *ngIf="story">
+    <div (click)="goToDashboard()" class="myStoriesBtn">
+      <i class="fa fa-chevron-left"></i> {{ ts.l.story }}
+    </div>
+    <div class="bookTitle">
+      {{ story?.title }}<span *ngIf="!recordingSaved">*</span>
+    </div>
+    <div class="recordingSaveIcon">
+      <div *ngIf="recordingSaved" class="recordingSavedIcon">
+        {{ ts.l.saved }} <i class="fas fa-check"></i>
+      </div>
+      <div *ngIf="!recordingSaved" class="recordingUnsavedIcon" (click)="saveRecordings()" >
+        {{ ts.l.save }} <i class="fas fa-save"></i>
       </div>
     </div>
+  </div>
+
+  <!-- Open Archive button -->
+  <div *ngIf="recordings.length > 0" (click)="drawer.toggle()" class="archiveButton" >
+    <mat-icon>menu</mat-icon> {{ts.l.archive}}
+  </div>
+
+  <!-- Archive menu -->
+  <mat-drawer-container autosize class="archiveNavContainer">
+    <mat-drawer #drawer class="sidenav" mode="side">
+      <div *ngFor="let recording of recordings">
+        <div class="contentSection" [attr.id]="recording._id" (click)="setCurrentRecording(recording)" >
+          <div class="contentsLink">
+            <div [ngStyle]="{'font-style': !recording.archived ? 'italic' : 'none' }"
+            > {{ recording?.storyData?.title }}</div>
+          </div>
+          <div class="contentsDate">
+            {{ recording.date | date : "d/M/yy, h:mm a" }}
+          </div>
+        </div>
+        <hr />
+      </div>
+    </mat-drawer>
+
+    <!-- Display recording continer -->
     <div class="recordingStoryContainer" *ngIf="story">
       <div class="recordingStoryHeader">
-        {{ts.l.listen_record_compare}}
+        {{ ts.l.listen_record_compare }}
       </div>
-      <div>
-        <!--Main container for story -->
-          <div class="textContainerSynth">
-            <!-- Display synthesising (loading) -->
-            <div *ngIf="!audioFinishedLoading && !recordingsFinishedLoading" class="loaderContainer">
-                <b>{{ts.l.synthesising}}</b>
-                <grid-spinner></grid-spinner>
-            </div>
-            <!-- When synthesis finished loading -->
-            <div *ngIf="audioFinishedLoading">
-              <!-- loop through each section of text -->
-                <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer">
-                    <!-- play / pause synthesiser -->
-                    <div class="textCard">
-                      <div>
-                        <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml"></span>
-                        <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn"><i class="fas fa-pause"></i></button>
-                        <button *ngIf="section.audio.paused" (click)="playSection(section)" class="playAudioBtn"><i class="fa fa-play"></i></button>
-                        <!-- Recording button -->
-                        <button *ngIf="!isRecording(section, index)" class="recordingBtn" (click)="recordAudio(index)"><i class="fas fa-microphone"></i></button>
-                        <button *ngIf="isRecording(section, index)" class="notRecordingBtn blink" (click)="stopRecording(index);"><i class="fas fa-stop-circle"></i></button>
-                      </div>
-                      <hr class="dividerLine" *ngIf="sectionAudioSources[index]">
-                      <!-- Speech Recognition -->
-                        <div *ngIf="isTranscribing[index]" class="recognisedSpeechContainer"><div class="dot-flashing"></div></div>
-                        <div *ngIf="sectionTranscriptions[index]" class="recognisedSpeechContainer"> {{ sectionTranscriptions[index] }} </div>
-                      <!-- Audio player -->
-                      <div class="cardFooter" *ngIf="sectionAudioSources[index]">
-                        <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer"></audio>
-                        <button *ngIf="sectionAudioSources[index]" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)"><i class="fas fa-trash-alt"></i></button>
-                        <div *ngIf="registrationError" class="errorMessage">{{errorText}}</div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-          <!-- Choose paragraph or Sentence buttons -->
-          <div *ngIf="audioFinishedLoading" class="footer">
-            <div class="btnContainer">
-              <div class="footerText">
-                {{ts.l.listen_by}}
-              </div>
-              <div *ngIf="isParagraphMode()">
-                <button class="changeSplitBtn selectedBtn">{{ts.l.paragraph}}</button>
-                <button class="changeSplitBtn" (click)="changeSections(sentences)">{{ts.l.sentence}}</button>
-              </div>
-              <div *ngIf="isSentenceMode()">
-                <button class="changeSplitBtn" (click)="changeSections(paragraphs)">{{ts.l.paragraph}}</button>
-                <button class="changeSplitBtn selectedBtn">{{ts.l.sentence}}</button>
-              </div>
-              <button class="changeSplitBtn" style="margin-left:auto;" (click)="popupVisible = !popupVisible">{{ts.l.options}}</button>
-            </div>
-          </div>
-          <div class="optionsPopupRec" [ngStyle]="{'visibility': popupVisible ? 'visible' : 'hidden'}">
-            <div class="recordingUnsavedIcon" (click)="archive(story)">{{ts.l.archive_recording}} <i class="fas fa-inbox"></i></div>
-            <div class="recordingUnsavedIcon" style="margin-left: 5px;" [routerLink]="['/recording-archive', story._id]">{{ts.l.go_to_archive}} <i class="fas fa-arrow-right"></i></div>
-          </div>
-      </div>
-    </div>
-</div>
 
+        <!-- Story container -->
+        <div class="textContainerSynth">
+          <!-- Loading screen -->
+          <div *ngIf="!audioFinishedLoading && !recordingsFinishedLoading" class="loaderContainer" >
+            <b>{{ ts.l.synthesising }}</b>
+            <grid-spinner></grid-spinner>
+          </div>
+          <!-- When synthesis finished loading -->
+          <div *ngIf="audioFinishedLoading">
+            <!-- loop through each section of text -->
+            <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer" >
+              <div class="textCard">
+                <div>
+                  <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml" ></span>
+                   <!-- play / pause synthesiser -->
+                  <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn" >
+                    <i class="fas fa-pause"></i>
+                  </button>
+                  <button *ngIf="section.audio.paused" (click)="playSection(section)" class="playAudioBtn" >
+                    <i class="fa fa-play"></i>
+                  </button>
+                  <!-- Recording button -->
+                  <button *ngIf=" !isRecording(section, index) && !currentRecording.archived" class="recordingBtn" (click)="recordAudio(index)" >
+                    <i class="fas fa-microphone"></i>
+                  </button>
+                  <button *ngIf=" isRecording(section, index) && !currentRecording.archived" class="notRecordingBtn blink" (click)="stopRecording(index)" >
+                    <i class="fas fa-stop-circle"></i>
+                  </button>
+                </div>
+                <hr class="dividerLine" *ngIf="sectionAudioSources[index]" />
+                <!-- Speech Recognition -->
+                <div *ngIf="isTranscribing[index]" class="recognisedSpeechContainer" >
+                  <div class="dot-flashing"></div>
+                </div>
+                <div *ngIf="sectionTranscriptions[index]" style="height: 40px" >
+                  <span style="opacity:0.5">{{ts.l.speech_recognition_output}} </span><span class="recognisedSpeech">{{ sectionTranscriptions[index] }}</span>
+                </div>
+                <!-- Audio player -->
+                <div class="audioContainer" *ngIf="sectionAudioSources[index]">
+                  <div style="opacity:0.5">{{ts.l.your_recording}}</div>
+                  <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer" ></audio>
+                  <button *ngIf="sectionAudioSources[index] && !currentRecording.archived" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)" >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer buttons -->
+        <div *ngIf="audioFinishedLoading" class="footer" style="padding-top: 10px" >
+          <div class="btnContainer">
+            <div class="footerText">
+              {{ ts.l.listen_by }}
+            </div>
+            <div *ngIf="isParagraphMode()">
+              <button class="changeSplitBtn selectedBtn">
+                {{ ts.l.paragraph }}
+              </button>
+              <button class="changeSplitBtn" (click)="changeSections(sentences)" >
+                {{ ts.l.sentence }}
+              </button>
+            </div>
+            <div *ngIf="isSentenceMode()">
+              <button class="changeSplitBtn" (click)="changeSections(paragraphs)" >
+                {{ ts.l.paragraph }}
+              </button>
+              <button class="changeSplitBtn selectedBtn">
+                {{ ts.l.sentence }}
+              </button>
+            </div>
+            <button class="changeSplitBtn" *ngIf="!currentRecording.archived && currentRecording.storyData.text != story.text" style="margin-left: auto" (click)="archiveRecording()" >
+              {{ ts.l.archive_recording }}
+            </button>
+          </div>
+        </div>
+
+    </div>
+  </mat-drawer-container>
+</div>

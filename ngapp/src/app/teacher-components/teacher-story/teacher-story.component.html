@@ -6,7 +6,7 @@
       <div class="classHeader">
         <div class="backArrow" (click)="goBack()"><i class="fas fa-arrow-left"></i></div>
           {{story?.title}} 
-          <div *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.dashboard_prompts}}</div>
+          <div *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</div>
       </div>
       <!-- story body and feedback details -->
       <div class="storyClassBody">
@@ -19,7 +19,6 @@
               [(ngModel)]="story.feedback.feedbackMarkup" 
               (onEditorCreated)="onEditorCreated($event)"> 
             </quill-editor>
-
           </div>
           <!-- story information -->
           <div class="storyInfoContainer">

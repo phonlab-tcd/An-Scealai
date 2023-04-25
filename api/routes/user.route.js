@@ -55,6 +55,22 @@ userRoutes.get('/verify', ctrlAuth.verify);
 userRoutes.get('/viewUser', checkJwt, ctrlProfile.viewUser);
 userRoutes.get('/teachers', checkJwt, ctrlProfile.getTeachers);
 
+
+/**
+ * Get user by id
+ * @param {Object} req params: User ID
+ * @return {Object} User object or error message
+ */
+userRoutes.route('/getUserById/:id').get(checkJwt, (req, res) => {
+  User.findById(req.params.id)
+      .then(
+          (user) => user ? res.json(user) : res.status(404).json('User not found'),
+          (err) => {
+            console.error(err); res.status(400).json(err);
+          },
+      );
+});
+
 /**
  * Set user language preference
  * @param {Object} req params: User ID

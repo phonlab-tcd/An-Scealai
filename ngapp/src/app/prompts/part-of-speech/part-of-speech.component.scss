@@ -73,6 +73,15 @@
     font-weight: bold;
 }
 
+.wordBankButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 .wordBankButtons {
     display: flex;
     justify-content: space-around;
@@ -96,4 +105,14 @@
     padding-left: 8px;
     color: red;
     font-size: 12pt;
+}
+
+.showTranslation {
+    font-size: small;
+    float: right;
+}
+
+.showTranslation:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

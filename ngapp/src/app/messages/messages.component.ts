@@ -88,8 +88,9 @@ export class MessagesComponent implements OnInit {
     if (userDetails.role === "STUDENT") {
       this.classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
       // get teacher username to display as recipient for sending a new message
-      this.userService.getUserById(this.classroom.teacherId).subscribe((res) => {
-        this.teacherName = res.username;
+      this.userService.getUserById(this.classroom.teacherId).subscribe({
+        next: res => this.teacherName = res.username,
+        error: () => {console.log(this.classroom.teacherId + " does not exist")}
       });
     }
 
@@ -104,9 +105,12 @@ export class MessagesComponent implements OnInit {
   getStudents() {
     this.students = [];
     for (let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe((res: User) => {
-        this.students.push(res);
-        this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()) );
+      this.userService.getUserById(id).subscribe({
+        next: (res: User) => {
+          this.students.push(res);
+          this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()) )
+        },
+        error: () => {console.log(id + " does not exist")}
       });
     }
   }

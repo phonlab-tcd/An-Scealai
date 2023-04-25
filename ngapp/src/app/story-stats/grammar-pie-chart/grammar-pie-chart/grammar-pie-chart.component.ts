@@ -26,14 +26,14 @@ export class GrammarPieChartComponent implements OnInit {
     this.loadPieChart();
   }
   
-  private loadPieChart() {
+  private loadPieChart() {    
     let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
     let ctx = canvasElem.getContext('2d');
     if (this.pieChart) { this.pieChart.destroy(); } 
     this.pieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: Object.keys(this.errorCounts),
+            labels: Object.keys(this.errorCounts).map( err => this.ts.inIrish() ? ERROR_INFO[err].nameGA : ERROR_INFO[err].nameEN),
             datasets: [{
                 label: 'Grammar Error Counts ',
                 data: Object.values(this.errorCounts),

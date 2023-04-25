@@ -93,6 +93,10 @@ export class StoryService {
     return this.http.get(this.baseUrl + "getStoriesForClassroom/" + owner + "/" + date);
   }
 
+  getNumberOfStories(owner: string, date = 'empty'): Observable<any> {
+    return this.http.get(this.baseUrl + "getNumberOfStories/" + owner + "/" + date);
+  }
+
   updateStory(updateData: any, id: string): Observable<any> {
     return this.http.post(
       this.baseUrl + 'update/' + id,

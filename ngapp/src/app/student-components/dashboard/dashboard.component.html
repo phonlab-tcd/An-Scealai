@@ -38,7 +38,7 @@
       >
         {{ story?.title ?? "..." }}
         <span *ngIf="!storySaved">*</span>
-        <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">{{ts.l.dashboard_prompts}}</span>
+        <span style="color: rgba(0, 0, 0, 0.4);" *ngIf="story.createdWithPrompts">{{ts.l.made_using_prompts}}</span>
       </p>
 
       <!-- SAVE ICON  -->
@@ -97,53 +97,28 @@
     </div>
 
     <!-- FEEDBACK -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; getFeedback()"
-    >
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; getFeedback()" >
       {{ ts.l.feedback }}
       <i class="fas fa-comment-dots optionsBtnIcon"></i>
       <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
     </div>
 
     <!-- DICTIONARY -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible"
-    >
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible" >
       {{ ts.l.dictionary }}
       <i class="fas fa-book optionsBtnIcon"></i>
     </div>
 
     <!-- AUDIO CHECK -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; goToSynthesis()"
-    >
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; goToSynthesis()" >
       {{ ts.l.audio_check }}
       <i class="fas fa-volume-up optionsBtnIcon"></i>
     </div>
 
     <!-- INLINE GRAMMAR CHECK -->
-    <div
-      style="display: flex"
-      *ngIf="showOptions"
-      (click)="this.dontToggle = true"
-    >
-      <span class="optionsBtn optionsPopupBtn" (click)="toggleGrammarTags()">
+    <div *ngIf="showOptions" class="optionsBtn optionsPopupBtn" (click)="this.dontToggle = true; toggleGrammarTags()" >
         {{ toggleGrammarButton() }}
         <i class="fas fa-spell-check optionsBtnIcon"></i>
-      </span>
-      <span
-        [hidden]="!showErrorTags"
-        (click)="grammarSettingsHidden = !grammarSettingsHidden"
-        class="settingsIcon"
-      >
-        ⚙
-      </span>
     </div>
 
     <!-- RECORDINGS -->
@@ -219,7 +194,13 @@
     </div>
 
     <!-- SELECTED GRAMMAR SUGGESTION -->
-    <div style="background-color: #8fcaff" [hidden]="!showErrorTags" [innerHTML]="selectedGrammarSuggestion()"></div>
+    <div class="grammarMessageBanner" [hidden]="!showErrorTags" >
+      <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
+      <div class="displayGrammarTagsIcon">
+        <i [ngClass]="grammarSettingsHidden ? 'fas fa-chevron-right' : 'fas fa-chevron-down'" (click)="grammarSettingsHidden = !grammarSettingsHidden"></i>
+        <i class="fa fa-times" style="padding-left:20px;" (click)="this.dontToggle = true; toggleGrammarTags()"></i>
+      </div>
+    </div>
     <!-- GRAMMAR CHECKER SETTINGS -->
     <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags" >
       <span class="dictionaryContainer">
@@ -227,9 +208,6 @@
           <h5>
             {{ ts.message("grammar_checker_settings") }}
           </h5>
-          <div class="closeDictionaryBtn" (click)="grammarSettingsHidden = true">
-            <i class="fa fa-times"></i>
-          </div>
         </div>
         <div class="checkAllBox">
           <input [(ngModel)]="checkBoxes['showAll']" (ngModelChange)="setAllCheckBoxes()" type="checkbox" />

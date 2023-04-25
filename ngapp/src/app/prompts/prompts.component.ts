@@ -122,9 +122,9 @@ export class PromptsComponent implements OnInit {
     this.chosenSetting = promptVariables.setting[this.randomNumber(promptLength)];
     this.chosenTheme = promptVariables.theme[this.randomNumber(promptLength)];
     this.prompt =
-      "[Carachtar: " + this.chosenCharacter +
-      "] [Suíomhanna: " + this.chosenSetting +
-      "] [Téama: " + this.chosenTheme + "]";
+      "Carachtar: " + this.chosenCharacter + "\n" +
+      "Suíomh: " + this.chosenSetting + "\n" +
+      "Téama: " + this.chosenTheme;
     this.promptExists = true;
   }
 
@@ -147,9 +147,9 @@ export class PromptsComponent implements OnInit {
         ];
     }
     this.prompt =
-      "[Carachtar: " + this.chosenCharacter +
-      "] [Suíomhanna: " + this.chosenSetting +
-      "] [Téama: " + this.chosenTheme + "]";
+      "Carachtar: " + this.chosenCharacter + "\n" +
+      "Suíomh: " + this.chosenSetting + "\n" +
+      "Téama: " + this.chosenTheme;
   }
 
   /**
@@ -195,4 +195,42 @@ export class PromptsComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Dialog box to display instructions
+   */
+    openInformationDialog() {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.cen_sceal,
+          type: 'simpleMessage',
+          message: `
+          <h5>${this.ts.l.what_is_cen_sceal}</h5><br>
+          <h6>${this.ts.l.cen_sceal_description_1}</h6><br>
+
+          <h5>${this.ts.l.how_does_it_work}</h5><br>
+          <h6>${this.ts.l.cen_sceal_description_2}</h6><br>
+
+          <h5>${this.ts.l.what_is_it_comprised_of}</h5><br>
+          <h6>${this.ts.l.cen_sceal_description_3}</h6><br>
+
+          <h5>${this.ts.l.the_themes}</h5><br>
+          <ol>
+            <li>${this.ts.l.general_prompts_description}</li>
+            <li>${this.ts.l.combination_generator_description}</li>
+            <li>${this.ts.l.proverb_prompts_description}</li>
+            <li>${this.ts.l.exam_prompts_description}</li>
+            <li>${this.ts.l.lara_prompts_description}</li>
+            <li>${this.ts.l.pos_generator_description}</li>
+          </ol>
+          `,
+          confirmText: this.ts.l.done,
+        },
+        width: '90vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (_) => {
+          this.dialogRef = undefined;
+      });
+    }
 }

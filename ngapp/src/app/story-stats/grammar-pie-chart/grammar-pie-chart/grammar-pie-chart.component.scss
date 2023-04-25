@@ -17,25 +17,24 @@ canvas {
 
 .legendContainer {
   overflow-y: scroll;
-  width: 40%;
   max-height: 300px;
+  max-width: 200px;
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
-  white-space: nowrap;
-  width: auto;
+  word-wrap: break-word;
 }
 
 .legendPair {
   display: flex;
   flex-direction: row;
-  gap:0.5rem;
+  gap: 0.5rem;
   cursor: pointer;
   text-align: left;
 }
 
 .legendMarker {
-  width: 30px;
+  min-width: 30px;
   height: 10px;
 }
 
