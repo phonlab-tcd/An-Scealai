@@ -1,9 +1,9 @@
-
 <div class="mainContainer">
-  <div class="headerTitle" > Add Data to DB </div>
+  <div class="headerTitle">Add Data to DB</div>
+  <!-- Select Content Type-->
   <mat-form-field appearance="fill">
     <mat-label>Select Topic</mat-label>
-    <mat-select [(ngModel)]="selectedContent" (ngModelChange)="showPosData = false; showPromptData = false">
+    <mat-select [(ngModel)]="selectedContent" (ngModelChange)="showPosData = false; showPromptData = false" >
       <mat-option value="partOfSpeech">Part of Speech Data</mat-option>
       <mat-option value="prompt">Prompt Data</mat-option>
     </mat-select>
@@ -13,37 +13,43 @@
   <div *ngIf="selectedContent == 'partOfSpeech'">
     <div class="posFields">
       <mat-form-field appearance="fill">
+        <!-- Part of speech -->
         <mat-label>Part of Speech</mat-label>
         <mat-select [(ngModel)]="selectedPOS">
-          <mat-option value="noun">{{ts.l.noun}}</mat-option>
-          <mat-option value="verb">{{ts.l.verb}}</mat-option>
-          <mat-option value="adjective">{{ts.l.adjective}}</mat-option>
-          <mat-option value="preposition">{{ts.l.preposition}}</mat-option>
-          <mat-option value="adverb">{{ts.l.adverb}}</mat-option>
-          <mat-option value="pronoun">{{ts.l.pronoun}}</mat-option>
-          <mat-option value="article">{{ts.l.article}}</mat-option>
-          <mat-option value="conjunction">{{ts.l.conjunction}}</mat-option>
+          <mat-option value="noun">{{ ts.l.noun }}</mat-option>
+          <mat-option value="verb">{{ ts.l.verb }}</mat-option>
+          <mat-option value="adjective">{{ ts.l.adjective }}</mat-option>
+          <mat-option value="preposition">{{ ts.l.preposition }}</mat-option>
+          <mat-option value="adverb">{{ ts.l.adverb }}</mat-option>
+          <mat-option value="pronoun">{{ ts.l.pronoun }}</mat-option>
+          <mat-option value="article">{{ ts.l.article }}</mat-option>
+          <mat-option value="conjunction">{{ ts.l.conjunction }}</mat-option>
         </mat-select>
       </mat-form-field>
-    <mat-form-field appearance="fill">
+      <!-- Word -->
+      <mat-form-field appearance="fill">
         <mat-label>Word</mat-label>
-        <input matInput [(ngModel)]="posWord">
+        <input matInput [(ngModel)]="posWord" />
       </mat-form-field>
+      <!-- Translation -->
       <mat-form-field appearance="fill">
         <mat-label>Translation</mat-label>
-        <input matInput [(ngModel)]="posTranslation">
+        <input matInput [(ngModel)]="posTranslation" />
       </mat-form-field>
 
-      <div *ngIf="errorMessage" class="errorText">{{errorMessage}}</div>
-      <button mat-raised-button (click)="addPOSContent()" class="viewDataBtn">Add</button>
+      <div *ngIf="errorMessage" class="errorText">{{ errorMessage }}</div>
+      <button mat-raised-button (click)="addPOSContent()" class="viewDataBtn"> Add </button>
     </div>
-
-      <button mat-raised-button (click)="showPosData = !showPosData" class="viewDataBtn">{{showPosData? 'Hide Data' : 'Show Data'}}</button>
+    <!-- Show part of speech data -->
+    <button mat-raised-button (click)="showPosData = !showPosData" class="viewDataBtn" >
+      {{ showPosData ? "Hide Data" : "Show Data" }}
+    </button>
   </div>
 
   <!-- Add prompt data -->
   <div *ngIf="selectedContent == 'prompt'">
     <div class="posFields">
+      <!-- Select prompt type -->
       <mat-form-field appearance="fill">
         <mat-label>Prompt Generator</mat-label>
         <mat-select [(ngModel)]="selectedPromptGenerator">
@@ -54,7 +60,8 @@
           <mat-option value="general">{{ ts.l.general_prompts }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'proverb'">
+      <!-- Choose dialect -->
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'proverb'" >
         <mat-label>{{ ts.l.choose_dialect }}</mat-label>
         <mat-select [(ngModel)]="selectedDialect">
           <mat-option value="munster">{{ this.ts.l.munster }}</mat-option>
@@ -62,115 +69,135 @@
           <mat-option value="ulster">{{ this.ts.l.ulster }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination' || selectedPromptGenerator == 'exam'">
+      <!-- Select level -->
+      <mat-form-field appearance="fill" *ngIf=" selectedPromptGenerator == 'combination' || selectedPromptGenerator == 'exam' " >
         <mat-label>{{ ts.l.choose_level }}</mat-label>
         <mat-select [(ngModel)]="selectedLevel">
-          <mat-option value="jc">{{ this.ts.l.level_preferences[0] }}</mat-option>
-          <mat-option value="lcol">{{ this.ts.l.level_preferences[1] }}</mat-option>
-          <mat-option value="lchl">{{ this.ts.l.level_preferences[2] }}</mat-option>
+          <mat-option value="jc">
+            {{ this.ts.l.level_preferences[0]}}
+          </mat-option>
+          <mat-option value="lcol">
+            {{ this.ts.l.level_preferences[1] }}
+          </mat-option>
+          <mat-option value="lchl">
+            {{ this.ts.l.level_preferences[2]}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator !== 'combination'">
+      <!-- Input prompt text -->
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator !== 'combination'" >
         <mat-label>Prompt Text</mat-label>
-        <input matInput [(ngModel)]="promptText">
+        <input matInput [(ngModel)]="promptText" />
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
-        <mat-label>{{ts.l.character}}</mat-label>
-        <input matInput [(ngModel)]="selectedCharacter">
+      <!-- Input prompt character -->
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+        <mat-label>{{ ts.l.character }}</mat-label>
+        <input matInput [(ngModel)]="selectedCharacter" />
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
-        <mat-label>{{ts.l.setting}}</mat-label>
-        <input matInput [(ngModel)]="selectedSetting">
+      <!-- Input prompt setting -->
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+        <mat-label>{{ ts.l.setting }}</mat-label>
+        <input matInput [(ngModel)]="selectedSetting" />
       </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
-        <mat-label>{{ts.l.theme}}</mat-label>
-        <input matInput [(ngModel)]="selectedTheme">
+      <!-- Input prompt theme -->
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+        <mat-label>{{ ts.l.theme }}</mat-label>
+        <input matInput [(ngModel)]="selectedTheme" />
       </mat-form-field>
-      <div *ngIf="errorMessage" class="errorText">{{errorMessage}}</div>
-      <button mat-raised-button (click)="addPromptContent()" class="viewDataBtn">Add</button>
+
+      <div *ngIf="errorMessage" class="errorText">{{ errorMessage }}</div>
+      <button mat-raised-button (click)="addPromptContent()" class="viewDataBtn" > Add </button>
     </div>
 
-      <button mat-raised-button (click)="showPromptData = !showPromptData" class="viewDataBtn">{{showPromptData? 'Hide Data' : 'Show Data'}}</button>
+    <!-- Show prompt data-->
+    <button mat-raised-button (click)="showPromptData = !showPromptData" class="viewDataBtn" >
+      {{ showPromptData ? "Hide Data" : "Show Data" }}
+    </button>
   </div>
-
 </div>
 
-<!-- part of speech table -->
+<!-- Part of Speech Table -->
 <div *ngIf="showPosData && posDataSource">
-  <table mat-table [dataSource]="posDataSource" class="mat-elevation-z8" >
-  
+  <table mat-table [dataSource]="posDataSource" class="mat-elevation-z8">
     <!-- part of speech Column -->
     <ng-container matColumnDef="pos">
-      <th mat-header-cell *matHeaderCellDef> Part of speech </th>
-      <td mat-cell *matCellDef="let element"> {{element.partOfSpeechData?.partOfSpeech}} </td>
+      <th mat-header-cell *matHeaderCellDef>Part of speech</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.partOfSpeechData?.partOfSpeech }}
+      </td>
     </ng-container>
-  
+
     <!-- word Column -->
     <ng-container matColumnDef="word">
-      <th mat-header-cell *matHeaderCellDef> Word </th>
-      <td mat-cell *matCellDef="let element"> {{element.partOfSpeechData?.word}} </td>
+      <th mat-header-cell *matHeaderCellDef>Word</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.partOfSpeechData?.word }}
+      </td>
     </ng-container>
-  
+
     <!-- translation Column -->
     <ng-container matColumnDef="translation">
-      <th mat-header-cell *matHeaderCellDef> Translation </th>
-      <td mat-cell *matCellDef="let element"> {{element.partOfSpeechData?.translation}} </td>
+      <th mat-header-cell *matHeaderCellDef>Translation</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.partOfSpeechData?.translation }}
+      </td>
     </ng-container>
-  
+
     <!-- last updated Column -->
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Last Updated </th>
-      <td mat-cell *matCellDef="let element"> {{element.lastUpdated | date: 'medium'}} </td>
+      <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.lastUpdated | date : "medium" }}
+      </td>
     </ng-container>
-  
+
     <tr mat-header-row *matHeaderRowDef="posTableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: posTableColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: posTableColumns"></tr>
   </table>
-
 </div>
-    
 
-<!-- prompt table -->
+<!-- Prompt Table -->
 <div *ngIf="showPromptData && promptDataSource">
-  <table mat-table [dataSource]="promptDataSource" class="mat-elevation-z8" >
-  
+  <table mat-table [dataSource]="promptDataSource" class="mat-elevation-z8">
     <!-- part of speech Column -->
     <ng-container matColumnDef="topic">
-      <th mat-header-cell *matHeaderCellDef> Type </th>
-      <td mat-cell *matCellDef="let element"> {{element.prompt?.topic}} </td>
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">{{ element.prompt?.topic }}</td>
     </ng-container>
-  
+
     <!-- word Column -->
     <ng-container matColumnDef="level">
-      <th mat-header-cell *matHeaderCellDef> Level </th>
-      <td mat-cell *matCellDef="let element"> {{ element.prompt?.level? element.prompt.level : '---' }} </td>
+      <th mat-header-cell *matHeaderCellDef>Level</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.prompt?.level ? element.prompt.level : "---" }}
+      </td>
     </ng-container>
-  
+
     <!-- translation Column -->
     <ng-container matColumnDef="dialect">
-      <th mat-header-cell *matHeaderCellDef> Dialect </th>
-      <td mat-cell *matCellDef="let element"> {{ element.prompt?.dialect? element.prompt.dialect : '---' }} </td>
+      <th mat-header-cell *matHeaderCellDef>Dialect</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.prompt?.dialect ? element.prompt.dialect : "---" }}
+      </td>
     </ng-container>
 
     <!-- translation Column -->
     <ng-container matColumnDef="text">
-      <th mat-header-cell *matHeaderCellDef> Text </th>
-      <td mat-cell *matCellDef="let element" class="example-container"> {{element.prompt?.text}} </td>
+      <th mat-header-cell *matHeaderCellDef>Text</th>
+      <td mat-cell *matCellDef="let element" class="example-container">
+        {{ element.prompt?.text }}
+      </td>
     </ng-container>
 
     <!-- last updated Column -->
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Last Updated </th>
-      <td mat-cell *matCellDef="let element"> {{element.lastUpdated | date: 'medium'}} </td>
+      <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.lastUpdated | date : "medium" }}
+      </td>
     </ng-container>
 
-  
     <tr mat-header-row *matHeaderRowDef="promptTableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: promptTableColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: promptTableColumns"></tr>
   </table>
-
 </div>
-
-
-
-
