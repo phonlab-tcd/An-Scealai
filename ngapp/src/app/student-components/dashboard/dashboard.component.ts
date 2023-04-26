@@ -622,7 +622,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  /* Stop recording if already recording, otherwise start recording */
+  /* Stop recording if already recording, otherwise start recording; get transcription */
   async speakStory() {
     if (this.isRecording) {
       this.isTranscribing = true;
@@ -630,11 +630,18 @@ export class DashboardComponent implements OnInit {
       let transcription = await this.recordAudioService.getAudioTranscription();
       this.isTranscribing = false;
       if(transcription) {
-        this.story.text = this.story.text + "\n" + transcription + ".";
-        this.story.htmlText = this.story.htmlText + "<p>" + transcription + ".</p>";
+        // get cursor position for inserting the transcription
+        let selection = this.quillEditor.getSelection(true);
+        this.quillEditor.insertText(selection.index, transcription + ".");
+
+        // update the text and html text with inserted transcription
+        this.story.text = this.quillEditor.getText();
+        this.story.htmlText = this.quillEditor.root.innerHTML;
+        
+        // save story
         this.getWordCount(transcription);
         this.storySaved = false; 
-        this.textUpdated.next(transcription);
+        this.textUpdated.next();
         this.debounceSaveStory();
       }
     }

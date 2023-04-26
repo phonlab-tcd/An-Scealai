@@ -56,7 +56,7 @@ export class BookContentsComponent implements OnInit {
   async ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) {
-      window.alert("no user details available");
+      this.auth.logout();
       return;
     }
     // get stories for the user

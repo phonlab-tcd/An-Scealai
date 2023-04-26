@@ -36,7 +36,10 @@ export class TeacherDashboardComponent implements OnInit {
    */
   async ngOnInit() {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      this.auth.logout();
+      return;
+    }
 
     this.profileService.getForUser(this.auth.getUserDetails).subscribe({
       next: () => {},
