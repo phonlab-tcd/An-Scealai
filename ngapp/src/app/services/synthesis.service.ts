@@ -31,11 +31,11 @@ type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
 const asVoice = (x: readonly VoiceChecks[])=>x;
 export const voices = asVoice([ // for extra type checking (typescript will check that codes are valid)
 //{api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???',                dialect: 'UL', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nnmnkwii', dialect: 'ulster', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nemo', dialect: 'ulster', algorithm: 'dnn'},
   // {api: 'api2', note: '', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nnmnkwii', dialect: 'connacht', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nemo', dialect: 'connacht', algorithm: 'dnn'},
   // {api: 'api2', note: '', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nnmnkwii', dialect: 'munster', algorithm: 'dnn'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nemo', dialect: 'munster', algorithm: 'dnn'},
 
 // //{api: 'api2', note: '',        gender: 'male',   shortCode: '???', code: '???',              dialect: 'UL', algorithm: 'hts'},
 //   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
@@ -88,7 +88,7 @@ export const ApiOptions = {
     base_url: 'https://www.abair.ie/api2/synthesise?',
     audioEncoding: ['MP3','LINEAR16', 'OGG_OPUS'],
     outputType: ['JSON','HTML','JSON_WITH_TIMING'],
-    voice:["ga_UL_anb_exthts","ga_UL_anb_nnmnkwii","ga_CO_pmc_exthts","ga_CO_pmc_exthts-WORLD","ga_CO_pmg_nnmnkwii","ga_CO_snc_exthts","ga_CO_snc_exthts-WORLD","ga_CO_snc_exthts-WORLD-44-48","ga_CO_snc_exthts-WORLD-44-48-full","ga_CO_snc_nnmnkwii","ga_MU_nnc_exthts","ga_MU_nnc_nnmnkwii","ga_MU_cmg_nnmnkwii"],
+    voice:["ga_UL_anb_exthts","ga_UL_anb_nemo","ga_CO_pmc_exthts","ga_CO_pmc_exthts-WORLD","ga_CO_pmg_nemo","ga_CO_snc_exthts","ga_CO_snc_exthts-WORLD","ga_CO_snc_exthts-WORLD-44-48","ga_CO_snc_exthts-WORLD-44-48-full","ga_CO_snc_nemo","ga_MU_nnc_exthts","ga_MU_nnc_nemo","ga_MU_cmg_nemo"],
   },
   nemo: {
     base_url: 'https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?',
@@ -137,11 +137,11 @@ export class SynthesisService {
   api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.api2.voice[number] {
     switch (dialect) {
       case 'connemara':
-        return 'ga_CO_pmg_nnmnkwii';
+        return 'ga_CO_pmg_nemo';
       case 'kerry':
-        return 'ga_MU_nnc_nnmnkwii';
+        return 'ga_MU_nnc_nemo';
       default: // donegal
-        return 'ga_UL_anb_nnmnkwii';
+        return 'ga_UL_anb_nemo';
     }
   }
 

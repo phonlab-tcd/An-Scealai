@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
   grammarCheckerOptions: Object = {
     'anGramadoir': anGramadoir,
     'relativeClause': relativeClauseChecker,
-    'genitive': genitiveChecker,
+    //'genitive': genitiveChecker,
     'broadSlender': leathanCaolChecker,
   }
   
@@ -184,7 +184,8 @@ export class DashboardComponent implements OnInit {
     let checkers = [];
     if (classroom && classroom.grammarCheckers && classroom.grammarCheckers.length > 0) {
       classroom.grammarCheckers.forEach( checker => {
-        checkers.push(this.grammarCheckerOptions[checker]);
+        if (this.grammarCheckerOptions[checker])
+          checkers.push(this.grammarCheckerOptions[checker]);
       })
     }
     // pass all checkers to the grammar engine if no classroom specifications (or do we want to leave it empty?)
