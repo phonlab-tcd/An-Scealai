@@ -48,10 +48,12 @@ promptRoutes.route("/getData/:type").get(async (req, res) => {
  * @param {Object} req
  * @return {Object} Total number of profiles
  */
-promptRoutes.route("/getPromptData").get(async (req, res) => {
-  console.log("getting prompt data")
-  const prompts = await Prompt.find({type: "prompt"});
-  if (prompts) return res.status(200).json(prompts);
+promptRoutes.route("/getPromptDataByTopic/:topic").get(async (req, res) => {
+  console.log("getting prompt data: ", req.params.topic)
+  const prompts = await Prompt.find({type: "prompt", "prompt.topic": req.params.topic });
+  if (prompts) {
+    return res.status(200).json(prompts);
+  };
 
   return res.status(404).json({ message: "No prompts found" });
 });

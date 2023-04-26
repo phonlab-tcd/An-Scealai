@@ -9,19 +9,19 @@
     <div class="container">
       <!-- Instructions popup -->
       <i class="fa fa-info-circle" style="cursor:pointer; float:right;" (click)="openInformationDialog()"></i>
-      <div *ngIf="promptType == 'state-exam'" class="header"> {{ ts.l.exam_prompts }} </div>
+      <div *ngIf="promptType == 'exam'" class="header"> {{ ts.l.exam_prompts }} </div>
       <div *ngIf="promptType == 'proverb'" class="header"> {{ ts.l.proverb_prompts }} </div>
       <div *ngIf="promptType == 'lara'" class="header"> {{ ts.l.lara_prompts }} </div>
-      <div *ngIf="promptType == 'story'" class="header"> {{ ts.l.combination_generator }} </div>
+      <div *ngIf="promptType == 'combination'" class="header"> {{ ts.l.combination_generator }} </div>
       <div *ngIf="promptType == 'general'" class="header"> {{ ts.l.general_prompts }} </div>
       <div>
-        <p *ngIf="promptType == 'state-exam' || promptType == 'proverb'">{{ ts.l.click_below_to_generate_prompt }}</p>
+        <p *ngIf="promptType == 'exam' || promptType == 'proverb'">{{ ts.l.click_below_to_generate_prompt }}</p>
         <p *ngIf="promptType == 'lara'">{{ ts.l.click_below_to_generate_prompt_lara }}</p>
-        <p *ngIf="promptType == 'story'">{{ ts.l.click_to_generate_random_character_setting_theme }}</p>
+        <p *ngIf="promptType == 'combination'">{{ ts.l.click_to_generate_random_character_setting_theme }}</p>
         <p *ngIf="promptType == 'general'">{{ ts.l.press_button_to_generate_start_of_new_story }}</p>
       </div>
       <!-- Choose Level Dropdown -->
-      <div *ngIf="promptType == 'state-exam' || promptType == 'story'" class="button-div">
+      <div *ngIf="promptType == 'exam' || promptType == 'combination'" class="button-div">
         <form [formGroup]="levelForm">
           <div class="formGroup">
             <label class="formLabel">{{ ts.l.choose_level }}</label>
@@ -53,15 +53,15 @@
         </button>
       </div>
       <!--Display Prompt-->
-      <div *ngIf="promptExists; else noPrompt">
+      <div *ngIf="prompt; else noPrompt">
         <!-- Story Prompt Options -->
-        <div *ngIf="promptType == 'story'">
+        <div *ngIf="promptType == 'combination'">
           <div *ngFor="let lp of levelPreferences">
             <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
                 <!-- character -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.character }}</p>
-                <button class="button" (click)="changeStoryPrompt('character')">
+                <button class="button" (click)="changeCombinationPrompt('character')">
                   {{ ts.l.change }}
                 </button>
               </div>
@@ -69,7 +69,7 @@
                <!-- setting -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.setting }}</p>
-                <button class="button" (click)="changeStoryPrompt('setting')">
+                <button class="button" (click)="changeCombinationPrompt('setting')">
                   {{ ts.l.change }}
                 </button>
               </div>
@@ -77,7 +77,7 @@
                <!-- theme -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.theme }}</p>
-                <button class="button" (click)="changeStoryPrompt('theme')">
+                <button class="button" (click)="changeCombinationPrompt('theme')">
                   {{ ts.l.change }}
                 </button>
               </div>
@@ -86,7 +86,7 @@
           </div>
         </div>
         <!-- Generated Prompt -->
-        <div class="prompt" *ngIf="promptType !== 'story'"><i>{{ prompt }}</i></div>
+        <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0"><i>{{ prompt }}</i></div>
         <!-- Create New Story Button-->
         <button *ngIf="auth.getUserDetails().role == 'STUDENT'" class="button" (click)="createNewStory()">
             {{ ts.l.start_my_story }}

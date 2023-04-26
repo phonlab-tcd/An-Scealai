@@ -70,11 +70,22 @@
           <mat-option value="lchl">{{ this.ts.l.level_preferences[2] }}</mat-option>
         </mat-select>
       </mat-form-field>
-    <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator !== 'combination'">
         <mat-label>Prompt Text</mat-label>
         <input matInput [(ngModel)]="promptText">
       </mat-form-field>
-
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
+        <mat-label>{{ts.l.character}}</mat-label>
+        <input matInput [(ngModel)]="selectedCharacter">
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
+        <mat-label>{{ts.l.setting}}</mat-label>
+        <input matInput [(ngModel)]="selectedSetting">
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'">
+        <mat-label>{{ts.l.theme}}</mat-label>
+        <input matInput [(ngModel)]="selectedTheme">
+      </mat-form-field>
       <div *ngIf="errorMessage" class="errorText">{{errorMessage}}</div>
       <button mat-raised-button (click)="addPromptContent()" class="viewDataBtn">Add</button>
     </div>

@@ -24,6 +24,22 @@ const promptSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
+    combinationData: {
+      type: Object,
+      required: false,
+      character: {
+        type: String,
+        required: false,
+      },
+      setting: {
+        type: String,
+        required: false,
+      },
+      theme: {
+        type: String,
+        required: false,
+      },
+    },
   },
   partOfSpeechData: {
     type: Object,

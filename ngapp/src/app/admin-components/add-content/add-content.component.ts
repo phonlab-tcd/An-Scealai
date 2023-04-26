@@ -16,6 +16,9 @@ export class AddContentComponent implements OnInit {
   selectedPromptGenerator: string = '';
   selectedDialect: string = '';
   selectedLevel: string = '';
+  selectedCharacter: string = '';
+  selectedSetting: string = '';
+  selectedTheme: string = '';
   promptText: string = '';
   posWord: string = '';
   posTranslation: string = '';
@@ -73,7 +76,11 @@ export class AddContentComponent implements OnInit {
       this.errorMessage = "Missing information";
       return;
     }
-    if ((this.selectedPromptGenerator == 'exam' || this.selectedPromptGenerator == 'combination') && (!this.selectedLevel || !this.promptText)) {
+    if (this.selectedPromptGenerator == 'exam' && (!this.selectedLevel || !this.promptText)) {
+      this.errorMessage = "Missing information";
+      return;
+    }
+    if (this.selectedPromptGenerator == 'combination' && (!this.selectedLevel || !this.selectedCharacter || !this.selectedSetting || !this.selectedTheme)) {
       this.errorMessage = "Missing information";
       return;
     }
@@ -83,11 +90,16 @@ export class AddContentComponent implements OnInit {
       type: this.selectedContent,
       prompt: {
         topic: this.selectedPromptGenerator,
-        text: this.promptText
+        combinationData: {}
       }
     };
+
+    if (this.promptText) body.prompt['text'] = this.promptText;
     if (this.selectedDialect) body.prompt['dialect'] = this.selectedDialect;
     if (this.selectedLevel) body.prompt['level'] = this.selectedLevel;
+    if (this.selectedCharacter) body.prompt.combinationData['character'] = this.selectedCharacter;
+    if (this.selectedSetting) body.prompt.combinationData['setting'] = this.selectedSetting;
+    if (this.selectedTheme) body.prompt.combinationData['theme'] = this.selectedTheme;
     console.log(body);
     
     this.http.post<any>(config.baseurl + 'prompt/addContent/', body, {headers}).subscribe({
@@ -97,6 +109,9 @@ export class AddContentComponent implements OnInit {
         this.selectedDialect = '';
         this.selectedLevel = '';
         this.errorMessage = '';
+        this.selectedCharacter = '';
+        this.selectedSetting = '';
+        this.selectedTheme = '';
         this.getData('prompt');
       },
       error: (err) => {this.errorMessage = "Entry already exists"}
