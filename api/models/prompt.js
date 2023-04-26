@@ -4,19 +4,26 @@ const promptSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    index: true,
   },
   prompt: {
-    type: String,
+    type: Object,
     unique: true,
-  },
-  level: {
-    type: String,
-    required: false,
-  },
-  dialect: {
-    type: String,
-    required: false,
+    topic: {
+      type: String,
+      required: true,
+    },
+    level: {
+      type: String,
+      required: false,
+    },
+    dialect: {
+      type: String,
+      required: false,
+    },
+    text: {
+      type: String,
+      required: false,
+    },
   },
   partOfSpeechData: {
     type: Object,
@@ -30,7 +37,6 @@ const promptSchema = new mongoose.Schema({
       type: String,
       required: false,
       unique: true,
-      index: true
     },
     translation: {
       type: String,

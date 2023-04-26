@@ -17,18 +17,18 @@
             </div>
           </div>
           <!--Word Card-->
-          <div *ngIf="givenWord" class="given-word">
+          <div *ngIf="givenWordEntry['word']" class="given-word">
             <div class="card">
-              <h3 class="card-header">{{givenWord.ga}} <span *ngIf="showTranslation">({{givenWord.en}})</span></h3>
+              <h3 class="card-header">{{givenWordEntry.word}} <span *ngIf="showTranslation">({{givenWordEntry.translation}})</span></h3>
             </div>
             <div (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? 'Hide translation': 'Show translation'}}</div>
           </div>
           <!--Confirm word choice-->
-          <div *ngIf="givenWord" class="content"> 
+          <div *ngIf="givenWordEntry['word']" class="content"> 
             {{ts.l.would_you_like_add_word_to_wordbank}}
             <div class="pos-confirmation-buttons">
               <button type="button" (click)="addToWordBank()" class="button">{{ts.l.pos_yes}}</button>
-              <button type="button" (click)="givenWord=''" class="button no">{{ts.l.pos_no}}</button>
+              <button type="button" (click)="givenWordEntry={}" class="button no">{{ts.l.pos_no}}</button>
             </div>     
           </div>
         </div>

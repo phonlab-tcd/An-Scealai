@@ -38,6 +38,13 @@ td, th {
 
 .viewDataBtn {
     background-color: var(--scealai-green);
+    color: white;
     float: left;
     margin-left: 20px;
 }
+
+.example-container {
+    overflow-x: scroll;
+    max-width: 60px;
+    text-align: left !important;
+  }

@@ -35,8 +35,22 @@ promptRoutes.route("/addContent").post(async function (req, res) {
  * @param {Object} req
  * @return {Object} Total number of profiles
  */
-promptRoutes.route("/getPartOfSpeechData").get(async (req, res) => {
-  const prompts = await Prompt.find({type: "partOfSpeech"});
+promptRoutes.route("/getData/:type").get(async (req, res) => {
+  console.log("Getting data: ", req.params.type)
+  const prompts = await Prompt.find({type: req.params.type});
+  if (prompts) return res.status(200).json(prompts);
+
+  return res.status(404).json({ message: "No prompts found" });
+});
+
+/**
+ * Get all prompts from the DB
+ * @param {Object} req
+ * @return {Object} Total number of profiles
+ */
+promptRoutes.route("/getPromptData").get(async (req, res) => {
+  console.log("getting prompt data")
+  const prompts = await Prompt.find({type: "prompt"});
   if (prompts) return res.status(200).json(prompts);
 
   return res.status(404).json({ message: "No prompts found" });
