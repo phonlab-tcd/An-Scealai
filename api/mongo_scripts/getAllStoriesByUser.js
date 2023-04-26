@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const config = require('../DB');
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+//mongoose.set('useFindAndModify', false);
 
 
 main = async () => {

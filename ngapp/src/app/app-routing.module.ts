@@ -39,6 +39,7 @@ import { DatabaseStatsComponent } from './admin-components/database-stats/databa
 import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
 import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import { AddContentComponent } from './admin-components/add-content/add-content.component';
 
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
@@ -125,6 +126,10 @@ const routes: Routes = [
       {
         path: 'feature-stats',
         component: FeatureStatsComponent,
+      },
+      {
+        path: 'add-content',
+        component: AddContentComponent,
       },
       {
         path: 'database-stats',

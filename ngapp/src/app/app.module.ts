@@ -17,6 +17,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -93,6 +95,7 @@ import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
+import { AddContentComponent } from './admin-components/add-content/add-content.component';
 
 @NgModule({
     declarations: [
@@ -150,6 +153,7 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         PartOfSpeechComponent,
         DictoglossComponent,
         TeacherDictoglossComponent,
+        AddContentComponent,
     ],
     imports: [
         RegisterModule,
@@ -172,6 +176,8 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         MatDialogModule,
         MatSidenavModule,
         MatIconModule,
+        MatTableModule,
+        MatInputModule,
         NgbModule,
         NgbDropdownModule,
         QuillModule.forRoot({

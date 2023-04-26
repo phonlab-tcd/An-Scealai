@@ -9,9 +9,9 @@ import { SynthItem } from "app/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "../../lib/grammar-engine/types";
-import { PROMPT_DATA } from "../prompt-data";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
+import config from "../../../abairconfig";
 
 type TagForHighlight = {
   fromx: number;
@@ -26,7 +26,7 @@ type TagForHighlight = {
 })
 export class PartOfSpeechComponent implements OnInit {
   wordDatabase: any;
-  givenWord = "";
+  givenWordEntry: Object = {};
   wordBank = [];
   constructedPrompt: string = "";
   newStoryForm: FormGroup;
@@ -42,15 +42,15 @@ export class PartOfSpeechComponent implements OnInit {
   selectedVoice: Voice;
   showTranslation: boolean = false;
   posInformation: Object = {
-    "noun": "/assets/pdf/noun_information_ga.pdf",
-    "verb": "/assets/pdf/verb_information_ga.pdf",
-    "adjective": "/assets/pdf/adjective_information_ga.pdf",
-    "adverb": "/assets/pdf/adverb_information_ga.pdf",
-    "article": "/assets/pdf/article_information_ga.pdf",
-    "conjunction": "/assets/pdf/conjugation_information_ga.pdf",
-    "pronoun": "/assets/pdf/pronoun_information_ga.pdf",
-    "preposition": "/assets/pdf/preposition_information_ga.pdf",
-  }
+    noun: "/assets/pdf/noun_information_ga.pdf",
+    verb: "/assets/pdf/verb_information_ga.pdf",
+    adjective: "/assets/pdf/adjective_information_ga.pdf",
+    adverb: "/assets/pdf/adverb_information_ga.pdf",
+    article: "/assets/pdf/article_information_ga.pdf",
+    conjunction: "/assets/pdf/conjugation_information_ga.pdf",
+    pronoun: "/assets/pdf/pronoun_information_ga.pdf",
+    preposition: "/assets/pdf/preposition_information_ga.pdf",
+  };
 
   constructor(
     private storyService: StoryService,
@@ -59,16 +59,41 @@ export class PartOfSpeechComponent implements OnInit {
     public ts: TranslationService,
     private synth: SynthesisService,
     private http: HttpClient,
-    private dialog: MatDialog,
+    private dialog: MatDialog
   ) {
-    this.wordDatabase = PROMPT_DATA["part-of-speech"];
-    this.wordTypes = Object.keys(this.wordDatabase);
+    this.wordDatabase = {};
     this.createStoryForm();
   }
 
   ngOnInit(): void {
-    //this.grammarEngine = new GrammarEngine([anGramadoir], this.http, this.auth);
+    this.getPosData();
     this.refreshSynthesis();
+  }
+
+  /**
+   * Get POS data from the database
+   * Create a dictionary of pos types and array of coresponding word objects
+   * e.x: {noun: [{1}, {2}, {3}, ...], verb: [{1}, {2}, {3}], ...}
+   */
+  getPosData() {
+    const headers = { Authorization: "Bearer " + this.auth.getToken() };
+    this.http.get<any>(config.baseurl + "prompt/getData/partOfSpeech", { headers }).subscribe({
+      next: (data) => {
+        data.forEach((entry) => {
+          if (!this.wordDatabase[entry.partOfSpeechData.partOfSpeech]) {
+            this.wordDatabase[entry.partOfSpeechData.partOfSpeech] = []; // initialise key as empty array
+          }
+          this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push(
+            entry.partOfSpeechData
+          ); // push data to key
+        });
+        this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
+      },
+      error: (err) => {
+        console.log(err);
+        this.wordDatabase = {};
+      },
+    });
   }
 
   /**
@@ -132,16 +157,15 @@ export class PartOfSpeechComponent implements OnInit {
    */
   selectRandomWord(type: keyof typeof this.wordDatabase) {
     let wordList = this.wordDatabase[type];
-    this.givenWord = wordList[Math.floor(Math.random() * wordList.length)];
-    console.log(this.givenWord)
+    this.givenWordEntry = wordList[Math.floor(Math.random() * wordList.length)];
   }
 
   /**
    * Add randomly selected word to the word bank
    */
   addToWordBank() {
-    if (this.givenWord) {
-      this.wordBank.push(this.givenWord);
+    if (this.givenWordEntry) {
+      this.wordBank.push(this.givenWordEntry["word"]);
     }
   }
 
@@ -196,21 +220,19 @@ export class PartOfSpeechComponent implements OnInit {
   /**
    * Open dialog for part of speech descriptions
    */
-    openPartOfSpeechDescription(type:string) { 
-      this.dialogRef = this.dialog.open(BasicDialogComponent, {
-        data: {
-          title: this.ts.l.pos_instructions[type],
-          type: 'PDF',
-          data: this.posInformation[type],
-          confirmText: this.ts.l.done,
-        },
-        width: '90vh',
-      });
-      
-      this.dialogRef.afterClosed().subscribe( (_) => {
-          this.dialogRef = undefined;
-      });
-    }
+  openPartOfSpeechDescription(type: string) {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.pos_instructions[type],
+        type: "PDF",
+        data: this.posInformation[type],
+        confirmText: this.ts.l.done,
+      },
+      width: "90vh",
+    });
 
-
+    this.dialogRef.afterClosed().subscribe((_) => {
+      this.dialogRef = undefined;
+    });
+  }
 }

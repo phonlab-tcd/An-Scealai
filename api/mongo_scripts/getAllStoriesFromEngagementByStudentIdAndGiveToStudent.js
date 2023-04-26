@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 const config = require('../DB');
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+//mongoose.set('useFindAndModify', false);
 
 function mostRecentStory(arrayOfStories) {
   if (!arrayOfStories instanceof Array) {
