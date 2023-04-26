@@ -25,7 +25,7 @@
         <form [formGroup]="levelForm">
           <div class="formGroup">
             <label class="formLabel">{{ ts.l.choose_level }}</label>
-            <select formControlName="level" class="level-select">
+            <select formControlName="level" class="level-select" (ngModelChange)="prompt = ''">
               <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp">
                 {{ ts.l.level_preferences[i] }}
               </option>
@@ -38,7 +38,7 @@
         <form [formGroup]="dialectForm">
           <div class="formGroup">
             <label class="formLabel">{{ ts.l.choose_dialect }}</label>
-            <select formControlName="dialect" class="level-select">
+            <select formControlName="dialect" class="level-select" (ngModelChange)="prompt = ''">
               <option *ngFor="let dp of dialectPreferences; let i = index" [ngValue]="dp">
                 {{ this.ts.l[dp] }}
               </option>
@@ -53,7 +53,7 @@
         </button>
       </div>
       <!--Display Prompt-->
-      <div *ngIf="prompt; else noPrompt">
+      <div *ngIf="prompt.length > 0; else noPrompt">
         <!-- Story Prompt Options -->
         <div *ngIf="promptType == 'combination'">
           <div *ngFor="let lp of levelPreferences">

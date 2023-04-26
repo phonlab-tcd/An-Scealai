@@ -27,7 +27,7 @@ export class PromptsComponent implements OnInit {
   dialectForm: FormGroup;
 
   // variables for generating prompt
-  prompt: string;
+  prompt: string = '';
   currentPromptBank: string[] = [];
 
   // variables for generating combination prompts
