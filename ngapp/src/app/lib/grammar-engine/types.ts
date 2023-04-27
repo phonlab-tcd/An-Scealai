@@ -150,7 +150,7 @@ export const ERROR_INFO = {
     "MIMHOIRF": {
       nameEN: 'Common Misspelling',
       nameGA: 'Mílitriú Coitianta',
-      color: '#9ADCFF', 
+      color: '#C3B1E1', 
       messageEN: 'Did you mean #? This appears to be a common misspelling.', 
       messageGA: 'An é # a bhí i gceist agat? Tá an chuma air gur mílitriú coitianta é seo.?'
     },
@@ -220,7 +220,7 @@ export const ERROR_INFO = {
     "MOIRF": {
       nameEN: 'Word not in Database',
       nameGA: 'Níl an focal sa chóras',
-      color: '#CAF7E3', 
+      color: '#ff6961', 
       messageEN: 'Not in database - is this formed from the root # ?', 
       messageGA: 'Focal nach bhfuil sa chóras, an bhfuil sé bunaithe ar # ?'
     },

@@ -48,24 +48,24 @@
           {{ ts.l.about }}
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/about" ngbDropdownItem (click)="changeCheck()">
+          <a routerLink="/about" ngbDropdownItem (click)="changeCheck()">
             An Scéalaí
-          </button>
-          <button routerLink="/technology" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/technology" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.technology }}
-          </button>
-          <button routerLink="/user-guides" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/user-guides" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.user_guide }}
-          </button>
-          <button routerLink="/team" ngbDropdownItem (click)="changeCheck()">
+          </a>
+          <a routerLink="/team" ngbDropdownItem (click)="changeCheck()">
             {{ ts.l.the_team }}
-          </button>
-          <button routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/sponsors" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.sponsors }}
-          </button>
-          <button routerLink="/report-an-issue" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/report-an-issue" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.report_an_issue }}
-          </button>
+          </a>
         </div>
       </div>
       <!-- technology menu -->
@@ -86,12 +86,12 @@
           LARA
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()" >
+          <a routerLink="/about-lara" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.what_is_LARA }}
-          </button>
-          <button routerLink="/resources" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/resources" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.irish_stories }}
-          </button>
+          </a>
         </div>
       </div>
       <!--Taidhgín-->
@@ -117,31 +117,31 @@
           Cén Scéal?
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()" >
+          <a routerLink="/prompts/general" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.general_prompts }}
-          </button>
-          <button routerLink="/prompts/proverb" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/prompts/proverb" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.proverb_prompts}}
-          </button>
-          <button routerLink="/prompts/exam" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/prompts/exam" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.exam_prompts }}
-          </button>
-          <button routerLink="/prompts/lara" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/prompts/lara" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.lara_prompts }}
-          </button>
-          <button routerLink="/prompts/combination" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/prompts/combination" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.combination_generator }}
-          </button>
-          <button routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()" >
+          </a>
+          <a routerLink="/prompts/pos" ngbDropdownItem (click)="changeCheck()" >
             {{ ts.l.part_of_speech_generator }}
-          </button>
+          </a>
         </div>
       </div>
       <!--Dictgloss-->
       <div *ngIf="auth.isLoggedIn()" class="d-inline-block">
-        <button class="btn navbarBtn" style="margin-bottom:3px" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()" >
+        <a class="btn navbarBtn" style="margin-bottom:3px" routerLink="/dictogloss" onclick="this.blur();" (click)="changeCheck()" >
           {{ts.l.dictogloss}}
-        </button>
+        </a>
       </div>
 
       <!-- An Bat Mírialta -->

@@ -111,9 +111,9 @@ export class DashboardComponent implements OnInit {
     ],
     imageCompress: { // used to compress any images added to the story
       quality: 0.7,
-      maxWidth: 1000,
-      maxHeight: 1000,
-      imageType: ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+      maxWidth: 500,
+      maxHeight: 500,
+      imageType: 'image/png',
       debug: false, // console logs
       suppressErrorLogging: false,
       insertIntoEditor: undefined,

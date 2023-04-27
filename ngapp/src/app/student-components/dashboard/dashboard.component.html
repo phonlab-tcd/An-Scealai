@@ -222,6 +222,7 @@
           (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
           type="checkbox"
         />
+        <div [ngStyle]="{'background-color': tag.value[0].color}" class="errorColorBox"> </div>
           <!-- Error name -->
         {{
           ts.l.iso_code == "en"
