@@ -364,12 +364,17 @@ export class DashboardComponent implements OnInit {
    * @param tags grammar errors
    * @param boxChecked true if box checked, false otherwise
    */
-  setCheckBox(tags, boxChecked: boolean) {
-    if(boxChecked) {
+  setCheckBox(key, tags) {
+    this.checkBoxes[key] = !this.checkBoxes[key];
+    if (this.checkBoxes['showAll']) this.checkBoxes['showAll'] = false;
+    
+    if(this.checkBoxes[key]) {
       this.quillHighlighter.show(tags);
+      document.getElementById(key).classList.remove("hideLegendItem");;
     }
     else {
       this.quillHighlighter.hide(tags);
+      document.getElementById(key).classList.add("hideLegendItem");;
     }
   }
   

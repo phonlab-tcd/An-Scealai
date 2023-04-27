@@ -222,6 +222,19 @@
   font-weight: bold;
 }
 
+.errorContainer {
+  margin: 2px;
+}
+
+.errorContainer:hover {
+  cursor: pointer;
+}
+
+.hideLegendItem {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
 .errorColorBox {
   display: inline-flex;
   width: 30px;

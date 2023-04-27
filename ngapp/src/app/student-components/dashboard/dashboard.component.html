@@ -202,11 +202,11 @@
       </div>
     </div>
     <!-- GRAMMAR CHECKER SETTINGS -->
-    <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags" >
+    <div class="selectErrorCheckbox" [hidden]="grammarSettingsHidden || !showErrorTags">
       <span class="dictionaryContainer">
         <div class="dictionaryHeader">
           <h5>
-            {{ ts.message("grammar_checker_settings") }}
+            {{ ts.message("grammar_errors") }}
           </h5>
         </div>
         <div class="checkAllBox">
@@ -216,12 +216,7 @@
       </span>
 
       <!-- GRAMMAR ERROR CHECKBOXES -->
-      <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" style="margin: 2px">
-        <input
-          [(ngModel)]="checkBoxes[tag.key]"
-          (ngModelChange)="setCheckBox(tag.value, $event); checkBoxes['showAll'] = false"
-          type="checkbox"
-        />
+      <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="setCheckBox(tag.key, tag.value)" [attr.id]="tag.key">
         <div [ngStyle]="{'background-color': tag.value[0].color}" class="errorColorBox"> </div>
           <!-- Error name -->
         {{

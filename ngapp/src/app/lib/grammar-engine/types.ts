@@ -199,7 +199,7 @@ export const ERROR_INFO = {
     "GENITIVE": {
       nameEN: 'Genitive Missing',
       nameGA: 'Ginideach ar Lár',
-      color: '#BFA2DB', 
+      color: '#9ACD32', 
       messageEN: 'It appears the genitive case is required here', 
       messageGA: 'Féachann sé go bhfuil gá leis an tuiseal ginideach anseo'
     },
