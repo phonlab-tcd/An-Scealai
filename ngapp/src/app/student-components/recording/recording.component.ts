@@ -10,6 +10,9 @@ import { SynthesisService, Paragraph, Sentence, Section, } from "../../services/
 import { EventType } from "../../event";
 import { EngagementService } from "../../engagement.service";
 import { firstValueFrom } from "rxjs";
+import { requestMediaPermissions } from 'mic-check';
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 
 declare var MediaRecorder: any;
 
@@ -27,7 +30,8 @@ export class RecordingComponent implements OnInit {
     private router: Router,
     private recordingService: RecordingService,
     private synthesis: SynthesisService,
-    private engagement: EngagementService
+    private engagement: EngagementService,
+    private dialog: MatDialog
   ) {}
 
   // Synthesis variables
@@ -61,6 +65,8 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
+  micAllowed: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   // ASR variables
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
@@ -89,8 +95,19 @@ export class RecordingComponent implements OnInit {
     const storyId = this.route.snapshot.paramMap.get("id");
     this.story = await firstValueFrom(this.storyService.getStory(storyId));
 
-    // load story recordings if they exist, otherwise create a new recording object
-    this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
+    // check if browser microphone allowed before loading recordings
+    requestMediaPermissions({audio: true, video: false})
+    .then(async () => {
+      this.micAllowed = true;
+      // load story recordings if they exist, otherwise create a new recording object
+      this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
+    })
+    .catch((err) => {
+      // open dialog requesting microphone access if not allowed
+      this.openMicRequestDialog();
+    });
+
+
   }
 
   /**
@@ -439,5 +456,29 @@ export class RecordingComponent implements OnInit {
 
   goToDashboard() {
     this.router.navigateByUrl("/dashboard/" + this.story._id);
+  }
+
+  /**
+   * Dialog for message telling user to unblock their microphone
+   */
+  openMicRequestDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: 'Microphone is blocked',
+        message: 'This page requires access to your microphone.  Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below',
+        confirmText: 'refresh',
+        cancelText: this.ts.l.cancel,
+      },
+      width: "50vh",
+    });
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        console.log(res);
+        if(res) {
+          this.ngOnInit();
+        }
+        else this.goToDashboard();
+      });
   }
 }

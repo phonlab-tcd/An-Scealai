@@ -36,6 +36,7 @@
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.21",
+    "mic-check": "^1.1.0",
     "ng2-pdf-viewer": "^9.1.4",
     "ngx-quill": "^16.2.1",
     "node": "16.16.0",

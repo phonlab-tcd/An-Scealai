@@ -1014,7 +1014,7 @@ export default {
     ga: 'Ainm an úsáideora gan carachtair speisialta!',
     en: 'Username may not contain special characters!' },
   click_new_story: {
-    ga: "Cliceáil 'Scéal Nua' thíos le do chéad scéal a scríobh!",
+    ga: "Cliceáil 'Cum Scéal' thíos le do chéad scéal a scríobh!",
     en: "Click 'New Story' below to create your first story!" },
   my_classrooms: {
     ga: 'Mo Sheomraí Ranga',
