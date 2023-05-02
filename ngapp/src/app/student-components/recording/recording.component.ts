@@ -65,7 +65,6 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
-  micAllowed: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
   // ASR variables
@@ -98,7 +97,6 @@ export class RecordingComponent implements OnInit {
     // check if browser microphone allowed before loading recordings
     requestMediaPermissions({audio: true, video: false})
     .then(async () => {
-      this.micAllowed = true;
       // load story recordings if they exist, otherwise create a new recording object
       this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
     })

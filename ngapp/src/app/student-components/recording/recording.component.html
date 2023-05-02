@@ -23,7 +23,7 @@
   </div>
 
   <!-- Archive menu -->
-  <mat-drawer-container autosize class="archiveNavContainer" *ngIf="micAllowed">
+  <mat-drawer-container autosize class="archiveNavContainer">
     <mat-drawer #drawer class="sidenav" mode="side">
       <div *ngFor="let recording of recordings">
         <div class="contentSection" [attr.id]="recording._id" (click)="setCurrentRecording(recording)" >
