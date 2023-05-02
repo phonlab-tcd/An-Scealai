@@ -65,7 +65,6 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
-  micAllowed: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
   // ASR variables
@@ -98,7 +97,6 @@ export class RecordingComponent implements OnInit {
     // check if browser microphone allowed before loading recordings
     requestMediaPermissions({audio: true, video: false})
     .then(async () => {
-      this.micAllowed = true;
       // load story recordings if they exist, otherwise create a new recording object
       this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
     })
@@ -115,9 +113,7 @@ export class RecordingComponent implements OnInit {
    */
   async loadRecordings() {
     // get a list of all recordings for the story
-    this.recordings = await firstValueFrom(
-      this.recordingService.getRecordings(this.story._id)
-    );
+    this.recordings = await firstValueFrom( this.recordingService.getRecordings(this.story._id) );
     this.recordings.sort((a, b) => (a.date > b.date ? -1 : 1));
 
     // filter out the recording from the list that is currently active (i.e. not archived)
@@ -143,9 +139,7 @@ export class RecordingComponent implements OnInit {
     if (recordingElement) {
       // remove css highlighting for currently highlighted recording (from archive)
       if (this.lastClickedRecordingId) {
-        document
-          .getElementById(this.lastClickedRecordingId)
-          .classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedRecordingId).classList.remove("clickedresultCard");
       }
       this.lastClickedRecordingId = id;
       // add css highlighting to the newly clicked recording
@@ -465,7 +459,7 @@ export class RecordingComponent implements OnInit {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: 'Microphone is blocked',
-        message: 'This page requires access to your microphone.  Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below',
+        message: 'This page requires access to your microphone.  Click on the blocked microphone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below',
         confirmText: 'refresh',
         cancelText: this.ts.l.cancel,
       },

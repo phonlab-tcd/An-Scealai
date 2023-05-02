@@ -190,7 +190,15 @@
 
     <!-- Word Count -->
     <div class="wordCountContainer">
-      <span> {{ ts.l.word_count }}: {{ wordCount }} </span>
+      <div>
+        <span> {{ ts.l.word_count }}: {{ wordCount }} </span>
+      </div>
+      <div class="timerContainer">
+        <span class="timer" (click)="openPomodoroDialog()">{{timeLeft}}</span>
+          <button *ngIf="isTimerStopped" (click)="startTimer()"><i class="fas fa-play"></i></button>
+          <button *ngIf="!isTimerStopped" (click)="stopTimer()"><i class="fas fa-pause"></i></button>
+          <button (click)="resetTimer()"><i class="fas fa-stop"></i></button>
+      </div>
     </div>
 
     <!-- SELECTED GRAMMAR SUGGESTION -->

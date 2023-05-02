@@ -134,6 +134,13 @@ export class DashboardComponent implements OnInit {
   audioSourceASR : SafeUrl;
   isRecording: boolean = false;
   isTranscribing: boolean = false;
+
+  // POMODORO TIMER
+  defaultTimerValue: number = 25 * 60
+  countDownTime: number = this.defaultTimerValue;
+  timerID = null;
+  isTimerStopped: boolean = true;
+  timeLeft: string = "25:00";
   
   constructor(
     private http: HttpClient,
@@ -656,4 +663,75 @@ export class DashboardComponent implements OnInit {
     }
     this.isRecording = !this.isRecording;
   }
+
+  createTimeString = () => {
+    let minutes = String(Math.trunc(this.countDownTime / 60));
+    let seconds = String(this.countDownTime % 60);
+    if (minutes.length === 1) {
+      minutes = "0" + minutes;
+    }
+    if (seconds.length === 1) {
+      seconds = "0" + seconds;
+    }
+    this.timeLeft = minutes + ":" + seconds;
+  };
+
+  startTimer() {
+    if (this.isTimerStopped) {
+      this.isTimerStopped = false;
+      this.timerID = setInterval(this.runCountDown, 1000);
+    }
+  }
+
+  stopTimer() {
+    this.isTimerStopped = true;
+    if (this.timerID) {
+      clearInterval(this.timerID);
+    }
+  }
+
+  resetTimer() {
+    this.stopTimer();
+    this.countDownTime = this.defaultTimerValue;
+    this.createTimeString();
+  };
+
+  runCountDown = () => {
+    // decement time
+    this.countDownTime -= 1;
+    // update display time
+    this.createTimeString();
+  
+    // timeout on zero
+    if (this.countDownTime === 0) {
+      this.stopTimer();
+      this.countDownTime = this.defaultTimerValue;
+      console.log("TIMER FINISHED")
+    }
+  };
+
+  openPomodoroDialog() {
+    this.stopTimer();
+
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: 'Pomodoro Timer',
+        type: 'counter',
+        message: "Explanation about timers blah blah blah",
+        confirmText: this.ts.l.save,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        if(res) {
+          let time = res[0] ?? 25;
+          this.defaultTimerValue = time * 60;
+          this.resetTimer();
+        }
+    });
+  }
+
 }
