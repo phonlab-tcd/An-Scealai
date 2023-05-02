@@ -33,7 +33,7 @@
     <!-- PDF -->
     <pdf-viewer *ngIf="data?.type == 'PDF'" [src]="data.data" [render-text]="true" [original-size]="false" style="width: 100%; height: 600px;" ></pdf-viewer>
     <!-- Countdown -->
-    <input *ngIf="data?.type == 'counter'" type="number" min='1' value="25" (change)="textInputs[0] = $event.target.value ?? '25'">
+    <input *ngIf="data?.type == 'counter'" type="number" min='1' max='60' maxlength="2" value="25" (change)="textInputs[0] = $event.target.value ?? '25'"> Minutes
     
     <div mat-dialog-actions [align]="'center'">
       <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.cancelText"> {{data?.cancelText}} </button>

@@ -664,55 +664,12 @@ export class DashboardComponent implements OnInit {
     this.isRecording = !this.isRecording;
   }
 
-  createTimeString = () => {
-    let minutes = String(Math.trunc(this.countDownTime / 60));
-    let seconds = String(this.countDownTime % 60);
-    if (minutes.length === 1) {
-      minutes = "0" + minutes;
-    }
-    if (seconds.length === 1) {
-      seconds = "0" + seconds;
-    }
-    this.timeLeft = minutes + ":" + seconds;
-  };
-
-  startTimer() {
-    if (this.isTimerStopped) {
-      this.isTimerStopped = false;
-      this.timerID = setInterval(this.runCountDown, 1000);
-    }
-  }
-
-  stopTimer() {
-    this.isTimerStopped = true;
-    if (this.timerID) {
-      clearInterval(this.timerID);
-    }
-  }
-
-  resetTimer() {
-    this.stopTimer();
-    this.countDownTime = this.defaultTimerValue;
-    this.createTimeString();
-  };
-
-  runCountDown = () => {
-    // decement time
-    this.countDownTime -= 1;
-    // update display time
-    this.createTimeString();
-  
-    // timeout on zero
-    if (this.countDownTime === 0) {
-      this.stopTimer();
-      this.countDownTime = this.defaultTimerValue;
-      console.log("TIMER FINISHED")
-    }
-  };
-
+  /**
+   * Open a dialog box where the user can select how many minutes they want to work
+   * Also displays information on the Pomodoro technique
+   */
   openPomodoroDialog() {
     this.stopTimer();
-
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: 'Pomodoro Timer',
@@ -733,5 +690,75 @@ export class DashboardComponent implements OnInit {
         }
     });
   }
+
+
+  /**
+   * Open a dialog box for displaying a message when the timer is finished
+   */
+  openTimerFinishedDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: 'Time is up!',
+        message: "You have finished",
+        cancelText: this.ts.l.done
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( async (res) => {
+        this.dialogRef = undefined;
+        this.resetTimer();
+    });
+  }
+
+  createTimeString = () => {
+    let minutes = String(Math.trunc(this.countDownTime / 60));
+    let seconds = String(this.countDownTime % 60);
+    if (minutes.length === 1) {
+      minutes = "0" + minutes;
+    }
+    if (seconds.length === 1) {
+      seconds = "0" + seconds;
+    }
+    this.timeLeft = minutes + ":" + seconds;
+  };
+
+  /** Start Pomodoro timer */
+  startTimer() {
+    if (this.isTimerStopped) {
+      this.isTimerStopped = false;
+      this.timerID = setInterval(this.runCountDown, 1000);
+    }
+  }
+
+  /** Stop Pomodoro timer */
+  stopTimer() {
+    this.isTimerStopped = true;
+    if (this.timerID) {
+      clearInterval(this.timerID);
+    }
+  }
+
+  /** Reset Pomodoro timer */
+  resetTimer() {
+    this.stopTimer();
+    this.countDownTime = this.defaultTimerValue;
+    this.createTimeString();
+  };
+
+  /** Run the timer once it has been started */
+  runCountDown = () => {
+    // decement time
+    this.countDownTime -= 1;
+    // update display time
+    this.createTimeString();
+  
+    // timeout on zero
+    if (this.countDownTime === 0) {
+      this.stopTimer();
+      this.countDownTime = this.defaultTimerValue;
+      this.openTimerFinishedDialog();
+    }
+  };
 
 }

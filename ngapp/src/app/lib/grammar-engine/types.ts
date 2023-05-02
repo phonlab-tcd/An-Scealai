@@ -276,7 +276,7 @@ export const ERROR_INFO = {
     "DUBAILTE": {
       nameEN: 'Duplication',
       nameGA: 'Dúbláil',
-      color: '#EFF8FF', 
+      color: '#d2cffc', 
       messageEN: 'Repeated word', 
       messageGA: 'An focal céanna faoi dhó'
     },
