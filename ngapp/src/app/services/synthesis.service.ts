@@ -11,41 +11,55 @@ import { SynthesisBankService } from 'app/services/synthesis-bank.service';
 
 
 // type defining all the properties of a voice
-type VoiceChecks = {
+type VoiceConfig = {
   readonly code: VoiceCode;
   readonly api: API;
-  readonly note: string;
-  readonly gender: 'male' | 'female';
-  readonly shortCode: PseudonymKey;
-  //readonly dialect: 'UL'|'CO'|'MU';
-  readonly dialect: 'ulster'|'connacht'|'munster';
-  readonly algorithm: string;
   readonly name: string;
+  readonly gender: 'male' | 'female';
+  readonly shortCode: 'nnc' | 'anb' | 'snc';
+  readonly dialect: 'ulster'|'connacht'|'munster';
+  readonly algorithm: 'dnn' | 'hts' | 'multidialect';
+  readonly note: string;
 };
 
 // type defining the possible values of a voice code
-export type VoiceCode = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
+export type VoiceCode = typeof ApiOptions.api2.voiceCode[number] | typeof ApiOptions.nemo.voiceCode[number];
 
 // type defining either 'api2' or 'nemo' for synthetic voice
 type API = keyof typeof ApiOptions;
 
-// map paring up a short code with a friendly name
-export const pseudonymMap = new Map([
-  ['cmg', 'Tomás'],
-  ['nnc', 'Neasa'],
-  ['anb', 'Áine'],
-  ['pmg', 'Macdara'],
-  ['snc', 'Sibéal'],
-  ['roisin', 'Gráinne'],
+// variable defining the different options for API calls
+export const ApiOptions = {
+  api2: {
+    base_url: 'https://www.abair.ie/api2/synthesise?',
+    audioEncoding: ['MP3','LINEAR16', 'OGG_OPUS'],
+    outputType: ['JSON','HTML','JSON_WITH_TIMING'],
+    voiceCode:[
+      "ga_UL_anb_nemo",
+      "ga_CO_snc_nemo",
+      "ga_MU_nnc_nemo",
+    ],
+  },
+  nemo: {
+    base_url: 'https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?',
+    audioEncoding: ['mp3','wav'],
+    outputType: ['JSON','HTML'],
+    voiceCode: [],
+  },
+} as const;
+
+// function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
+const asVoice = (x: readonly VoiceConfig[])=>x;
+
+// list of possible voice configurations for synthesis
+export const voices = asVoice([
+  {api: 'api2', name: 'Áine', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nemo', dialect: 'ulster', algorithm: 'dnn', note: ''},
+  {api: 'api2', name: 'Sibéal', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nemo', dialect: 'connacht', algorithm: 'dnn', note: ''},
+  {api: 'api2', name: 'Neasa', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nemo', dialect: 'munster', algorithm: 'dnn', note: ''},
 ] as const);
 
-// type defining a short code from the code/name entries of the pseudonymMap
-type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
-
-// function to get the name from a code/name entry of the pseudonymMap
-export function pseudonym(v: Voice) {
-  return pseudonymMap.get(v.shortCode);
-}
+// type defining an entry in the VoiceConfig array
+export type Voice = typeof voices[number];
 
 // type defining the possible values of a voice audio encoding
 export type AudioEncoding = typeof ApiOptions.api2.audioEncoding[number] | typeof ApiOptions.nemo.audioEncoding[number];
@@ -62,51 +76,6 @@ const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
   ['wav',       'audio/wav'],
 ]);
 
-// variable defining the different options for API calls
-export const ApiOptions = {
-  api2: {
-    base_url: 'https://www.abair.ie/api2/synthesise?',
-    audioEncoding: ['MP3','LINEAR16', 'OGG_OPUS'],
-    outputType: ['JSON','HTML','JSON_WITH_TIMING'],
-    voice:["ga_UL_anb_exthts","ga_UL_anb_nemo","ga_CO_pmc_exthts","ga_CO_pmc_exthts-WORLD","ga_CO_pmg_nemo","ga_CO_snc_exthts","ga_CO_snc_exthts-WORLD","ga_CO_snc_exthts-WORLD-44-48","ga_CO_snc_exthts-WORLD-44-48-full","ga_CO_snc_nemo","ga_MU_nnc_exthts","ga_MU_nnc_nemo","ga_MU_cmg_nemo"],
-  },
-  nemo: {
-    base_url: 'https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?',
-    audioEncoding: ['mp3','wav'],
-    outputType: ['JSON','HTML'],
-    voice: [
-      'anyspeaker',
-      'roisin.multidialect',
-      'anb.multidialect',
-      'snc.multidialect',
-      'pmg.multidialect',
-      'nnc.multidialect',
-      'roisin.nemo',
-      'anb.nemo',
-      'snc.nemo',
-      'pmg.nemo',
-      'nnc.nemo'
-    ],
-  },
-} as const;
-
-// function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
-const asVoice = (x: readonly VoiceChecks[])=>x;
-
-// list of possible voice configurations for synthesis
-export const voices = asVoice([
-  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nemo', dialect: 'ulster', algorithm: 'dnn', name: 'Áine'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nemo', dialect: 'connacht', algorithm: 'dnn', name: 'Sibéal'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nemo', dialect: 'munster', algorithm: 'dnn', name: 'Neasa'},
-] as const);
-
-
-// type defining an entry in the VoiceChecks array
-export type Voice = typeof voices[number];
-
-// type defining possible dialect abbreviations -> used externally?
-export type Dialect = 'UL' | 'MU' | 'CO';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -120,17 +89,6 @@ export class SynthesisService {
   ) { }
 
   baseUrl = config.baseurl;
-
-  api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.api2.voice[number] {
-    switch (dialect) {
-      case 'connemara':
-        return 'ga_CO_pmg_nemo';
-      case 'kerry':
-        return 'ga_MU_nnc_nemo';
-      default: // donegal
-        return 'ga_UL_anb_nemo';
-    }
-  }
 
   synthesiseHtml(input: string, ...theRest): Observable<any> {
     input = this.textProcessor.convertHtmlToPlainText(input);
@@ -341,7 +299,7 @@ interface SynthesisResponse {
 
 /////////////////////////////////////////////////////////////////////// Additional Data //////////////////////////////////
 /**
- * Additional short code -> name pairings
+ * Additional short code -> name pairings (data structure now depricated)
  * 
  * ['nnc', 'Caitlín'],
  * ['ulster-male??', 'Aodh'],
@@ -369,4 +327,48 @@ interface SynthesisResponse {
  * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect', dialect: 'CO', algorithm: 'multidialect'},
  * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect', dialect: 'MU', algorithm: 'multidialect'},
  * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect', dialect: 'CO', algorithm: 'multidialect'},
+ */
+
+/**
+ * Additional voiceCode options for the ApiOptions variable
+ * 
+ * api2:
+ *    "ga_UL_anb_exthts",
+ *    "ga_CO_pmc_exthts",
+      "ga_CO_pmc_exthts-WORLD",
+      "ga_CO_pmg_nemo",
+      "ga_CO_snc_exthts",
+      "ga_CO_snc_exthts-WORLD",
+      "ga_CO_snc_exthts-WORLD-44-48",
+      "ga_CO_snc_exthts-WORLD-44-48-full",
+      "ga_MU_nnc_exthts",
+      "ga_MU_cmg_nemo"
+
+  * nemo:
+      'anyspeaker',
+      'roisin.multidialect',
+      'anb.multidialect',
+      'snc.multidialect',
+      'pmg.multidialect',
+      'nnc.multidialect',
+      'roisin.nemo',
+      'anb.nemo',
+      'snc.nemo',
+      'pmg.nemo',
+      'nnc.nemo'
+ */
+
+/**
+ * Depricated function -> voice code from dialect
+ * 
+ * // api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.api2.voiceCode[number] {
+  //   switch (dialect) {
+  //     case 'connemara':
+  //       return 'ga_CO_pmg_nemo';
+  //     case 'kerry':
+  //       return 'ga_MU_nnc_nemo';
+  //     default: // donegal
+  //       return 'ga_UL_anb_nemo';
+  //   }
+  // }
  */
