@@ -9,51 +9,8 @@ import config from 'abairconfig';
 import {TextProcessingService} from './text-processing.service';
 import { SynthesisBankService } from 'app/services/synthesis-bank.service';
 
-interface APIv2Response {
-  audioContent: string;
-}
 
-export const pseudonymMap = new Map([
-  ['cmg', 'Tomás'],
-  // ['nnc', 'Caitlín'],
-  ['nnc', 'Neasa'],
- // ['ulster-male??', 'Aodh'],
-  // ['anb', 'Róisín'],
-  ['anb', 'Áine'],
-  ['pmg', 'Macdara'],
-  // ['snc', 'Anna'],
-  ['snc', 'Sibéal'],
-  ['roisin', 'Gráinne'],
-] as const);
-
-type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
-
-const asVoice = (x: readonly VoiceChecks[])=>x;
-export const voices = asVoice([ // for extra type checking (typescript will check that codes are valid)
-//{api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???',                dialect: 'UL', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nemo', dialect: 'ulster', algorithm: 'dnn'},
-  // {api: 'api2', note: '', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nemo', dialect: 'connacht', algorithm: 'dnn'},
-  // {api: 'api2', note: '', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
-  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nemo', dialect: 'munster', algorithm: 'dnn'},
-
-// //{api: 'api2', note: '',        gender: 'male',   shortCode: '???', code: '???',              dialect: 'UL', algorithm: 'hts'},
-//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
-//   {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'ga_CO_pmc_exthts', dialect: 'CO', algorithm: 'hts'},
-//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_exthts', dialect: 'CO', algorithm: 'hts'},
-//   // {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
-//   {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
-
-//{api: 'nemo', note: '',        gender: 'male',   shortCode: '???', code: '????'                dialect: 'UL', algorithm: 'multidialect'},
-  // {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect',   dialect: 'UL', algorithm: 'multidialect'},
-  // {api: 'nemo', note: '[beta] ', gender: 'male',   shortCode: 'pmg', code: 'pmg.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  // {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect',   dialect: 'CO', algorithm: 'multidialect'},
-  // {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect',   dialect: 'MU', algorithm: 'multidialect'},
-  // {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect',dialect: 'CO', algorithm: 'multidialect'},
-] as const);
-
-type API = keyof typeof ApiOptions;
-
+// type defining all the properties of a voice
 type VoiceChecks = {
   readonly code: VoiceCode;
   readonly api: API;
@@ -63,15 +20,40 @@ type VoiceChecks = {
   //readonly dialect: 'UL'|'CO'|'MU';
   readonly dialect: 'ulster'|'connacht'|'munster';
   readonly algorithm: string;
+  readonly name: string;
 };
 
-export type Voice = typeof voices[number];
+// type defining the possible values of a voice code
+export type VoiceCode = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
 
+// type defining either 'api2' or 'nemo' for synthetic voice
+type API = keyof typeof ApiOptions;
+
+// map paring up a short code with a friendly name
+export const pseudonymMap = new Map([
+  ['cmg', 'Tomás'],
+  ['nnc', 'Neasa'],
+  ['anb', 'Áine'],
+  ['pmg', 'Macdara'],
+  ['snc', 'Sibéal'],
+  ['roisin', 'Gráinne'],
+] as const);
+
+// type defining a short code from the code/name entries of the pseudonymMap
+type PseudonymKey = typeof pseudonymMap extends Map<infer K, any> ? K : never;
+
+// function to get the name from a code/name entry of the pseudonymMap
 export function pseudonym(v: Voice) {
   return pseudonymMap.get(v.shortCode);
 }
 
+// type defining the possible values of a voice audio encoding
+export type AudioEncoding = typeof ApiOptions.api2.audioEncoding[number] | typeof ApiOptions.nemo.audioEncoding[number];
+
+// type defining the different possible audio mime types
 type DataUriMimeType = 'audio/mp3' | 'audio/ogg' | 'audio/x-aiff' | 'audio/wav';
+
+// map paring up a an audio encoding with an audio mime type
 const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
   ['LINEAR16',  'audio/x-aiff'],
   ['MP3',       'audio/mp3'],
@@ -80,9 +62,7 @@ const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
   ['wav',       'audio/wav'],
 ]);
 
-export type VoiceCode = typeof ApiOptions.api2.voice[number] | typeof ApiOptions.nemo.voice[number];
-export type AudioEncoding = typeof ApiOptions.api2.audioEncoding[number] | typeof ApiOptions.nemo.audioEncoding[number];
-
+// variable defining the different options for API calls
 export const ApiOptions = {
   api2: {
     base_url: 'https://www.abair.ie/api2/synthesise?',
@@ -110,15 +90,22 @@ export const ApiOptions = {
   },
 } as const;
 
-export type Dialect = 'UL' | 'MU' | 'CO';
+// function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
+const asVoice = (x: readonly VoiceChecks[])=>x;
 
-export interface SynthRequestObject {
-  input: string;
-  voice?: typeof ApiOptions.api2.voice[number]; // voice takes precedence over dialect. If a valid voice is given, ignore the dialect
-  dialect?: Dialect;
-  speed?: number;
-  audioEncoding?: typeof ApiOptions.api2.audioEncoding[number];
-}
+// list of possible voice configurations for synthesis
+export const voices = asVoice([
+  {api: 'api2', note: '', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_nemo', dialect: 'ulster', algorithm: 'dnn', name: 'Áine'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_nemo', dialect: 'connacht', algorithm: 'dnn', name: 'Sibéal'},
+  {api: 'api2', note: '', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_nemo', dialect: 'munster', algorithm: 'dnn', name: 'Neasa'},
+] as const);
+
+
+// type defining an entry in the VoiceChecks array
+export type Voice = typeof voices[number];
+
+// type defining possible dialect abbreviations -> used externally?
+export type Dialect = 'UL' | 'MU' | 'CO';
 
 @Injectable({
   providedIn: 'root'
@@ -351,3 +338,35 @@ interface SynthesisResponse {
   audio: string[];
   html: Array<string[]>
 }
+
+/////////////////////////////////////////////////////////////////////// Additional Data //////////////////////////////////
+/**
+ * Additional short code -> name pairings
+ * 
+ * ['nnc', 'Caitlín'],
+ * ['ulster-male??', 'Aodh'],
+ * ['anb', 'Róisín'],
+ * ['snc', 'Anna'],
+ */
+
+/**
+ * Additional VoiceCheck entries (DNN, HTS, multidialect)
+ * 
+ * {api: 'api2', note: '', gender: 'male', shortCode: '???', code: '???', dialect: 'UL', algorithm: 'dnn'},
+ * {api: 'api2', note: '', gender: 'male', shortCode: 'pmg', code: 'ga_CO_pmg_nnmnkwii', dialect: 'CO', algorithm: 'dnn'},
+ * {api: 'api2', note: '', gender: 'male', shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'MU', algorithm: 'dnn'},
+ * 
+ * {api: 'api2', note: '', gender: 'male',   shortCode: '???', code: '???', dialect: 'UL', algorithm: 'hts'},
+ * {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'ga_UL_anb_exthts', dialect: 'UL', algorithm: 'hts'},
+ * {api: 'api2', note: '[beta] ', gender: 'male', shortCode: 'pmg', code: 'ga_CO_pmc_exthts', dialect: 'CO', algorithm: 'hts'},
+ * {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'ga_CO_snc_exthts', dialect: 'CO', algorithm: 'hts'},
+ * {api: 'api2', note: '[beta] ', gender: 'male',   shortCode: 'cmg', code: 'ga_MU_cmg_exthts', dialect: 'MU', algorithm: 'hts'},
+ * {api: 'api2', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'ga_MU_nnc_exthts', dialect: 'MU', algorithm: 'hts'},
+ * 
+ * {api: 'nemo', note: '', gender: 'male',   shortCode: '???', code: '????' dialect: 'UL', algorithm: 'multidialect'},
+ * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'anb', code: 'anb.multidialect', dialect: 'UL', algorithm: 'multidialect'},
+ * {api: 'nemo', note: '[beta] ', gender: 'male', shortCode: 'pmg', code: 'pmg.multidialect', dialect: 'CO', algorithm: 'multidialect'},
+ * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'snc', code: 'snc.multidialect', dialect: 'CO', algorithm: 'multidialect'},
+ * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'nnc', code: 'nnc.multidialect', dialect: 'MU', algorithm: 'multidialect'},
+ * {api: 'nemo', note: '[beta] ', gender: 'female', shortCode: 'roisin', code: 'roisin.multidialect', dialect: 'CO', algorithm: 'multidialect'},
+ */
