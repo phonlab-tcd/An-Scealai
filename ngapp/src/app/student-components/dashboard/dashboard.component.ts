@@ -370,11 +370,11 @@ export class DashboardComponent implements OnInit {
     
     if(this.checkBoxes[key]) {
       this.quillHighlighter.show(tags);
-      document.getElementById(key).classList.remove("hideLegendItem");;
+      document.getElementById(key).classList.remove("hideLegendItem");
     }
     else {
       this.quillHighlighter.hide(tags);
-      document.getElementById(key).classList.add("hideLegendItem");;
+      document.getElementById(key).classList.add("hideLegendItem");
     }
   }
   
