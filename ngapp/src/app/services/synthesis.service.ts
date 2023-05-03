@@ -8,24 +8,6 @@ import { map, tap } from "rxjs/operators";
 import config from "abairconfig";
 import { SynthesisBankService } from "app/services/synthesis-bank.service";
 
-// type defining all the properties of a voice
-type VoiceConfig = {
-  readonly code: VoiceCode;
-  readonly api: API;
-  readonly name: string;
-  readonly gender: "male" | "female";
-  readonly shortCode: "nnc" | "anb" | "snc";
-  readonly dialect: "ulster" | "connacht" | "munster";
-  readonly algorithm: "dnn" | "hts" | "multidialect";
-  readonly note: string;
-};
-
-// type defining the possible values of a voice code
-export type VoiceCode = | (typeof ApiOptions.api2.voiceCode)[number] | (typeof ApiOptions.nemo.voiceCode)[number];
-
-// type defining either 'api2' or 'nemo' for synthetic voice
-type API = keyof typeof ApiOptions;
-
 // variable defining the different options for API calls
 export const ApiOptions = {
   api2: {
@@ -41,6 +23,21 @@ export const ApiOptions = {
     voiceCode: [],
   },
 } as const;
+
+// type defining all the properties of a voice
+type VoiceConfig = {
+  readonly code: VoiceCode;
+  readonly api: 'api2' | 'nemo';
+  readonly name: string;
+  readonly gender: "male" | "female";
+  readonly shortCode: "nnc" | "anb" | "snc";
+  readonly dialect: "ulster" | "connacht" | "munster";
+  readonly algorithm: "dnn" | "hts" | "multidialect";
+  readonly note: string;
+};
+
+// type defining the possible values of a voice code
+export type VoiceCode = | (typeof ApiOptions.api2.voiceCode)[number] | (typeof ApiOptions.nemo.voiceCode)[number];
 
 // function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
 const asVoice = (x: readonly VoiceConfig[]) => x;
@@ -102,7 +99,7 @@ export class SynthesisService {
     if (!audioEncoding) audioEncoding = ApiOptions[voice.api].audioEncoding[0];
 
     // Construct the url for the api given the voice options
-    const url = this.request_url(input, voice, audioEncoding as AudioEncoding);
+    const url = this.constructApiUrl(input, voice, audioEncoding as AudioEncoding);
 
     // Get audio from cache if text already synthesised => TODO test
     if (useCache) {
@@ -126,7 +123,7 @@ export class SynthesisService {
    * @param audioEncoding audio encoding as defined in VoiceConfig
    * @returns
    */
-  request_url(
+  constructApiUrl(
     input: string,
     voice: Voice = voices[0],
     audioEncoding: AudioEncoding = undefined
