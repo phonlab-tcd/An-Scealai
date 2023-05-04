@@ -20,6 +20,6 @@ describe('SynthesisService', () => {
   });
 
   it('should generate a url', ()=>{
-    expect(service.request_url('dia dhuit',undefined)).toMatch(/^https/);
+    expect(service.constructApiUrl('dia dhuit',undefined)).toMatch(/^https/);
   });
 });
