@@ -347,7 +347,7 @@ export default {
     ga: 'Níor fíoraíodh do sheoladh ríomhphoist go fóill. Caithfidh tú do sheoladh ríomhphoist a fhíorú chun síniú isteach.',
     en: 'Your email address has not yet been verified. You must verify your email address to sign in.' },
   gender: {
-    ga: 'Gnéas',
+    ga: 'Inscne',
     en: 'Gender' },
   gender_list: {
     ga: [ '', 'Fireann', 'Baineann', 'Uilíoch', "B'fhearr liom gan a rá" ],
@@ -415,7 +415,7 @@ export default {
       'Is dalta bunscoile mé',
       'Is dalta iar-bhunscoile mé',
       'Is mac léinn tríú leibhéal mé in Éirinn',
-      'Táim ag déanamh staidéar ar an nGaeile i Stáit Aontaithe Mheirceá',
+      'Táim ag déanamh staidéar ar an nGaeilge i Stáit Aontaithe Mheirceá',
       'Táim ag déanamh staidéir ar an nGaeilge taobh amuigh d’Éirinn agus de Stáit Aontaithe Mheirceá',
       'Is mac léinn iarchéime mé'
     ],
@@ -2419,5 +2419,14 @@ export default {
   gael_spell_description: {
     ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
     en: 'An Gramadoir is blah blah blah <a> link </a>' },
-    
+  refresh: {
+    ga: 'Athlódáil',
+    en: 'Refresh' },
+  microphone_blocked: {
+    ga: 'Faoi láthair, tá an micreafón blocáilte ar do bhrabhsálaí',
+    en: 'Browser microphone blocked'},
+  page_requires_microphone: {
+    ga: 'Ar an leathanach seo, tá gá le cead an micreafón ar do ríomhaire a úsáid. Cliceáil ar an gcnaipe a léiríonn an micreafón blocáilte ar an mbarra seoltaí chun cead a shocrú. Ansin cliceáil ar \'Athlódáil\' thíos.',
+    en: 'This page requires access to your microphone. Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below' },
+      
 }

@@ -462,9 +462,9 @@ export class RecordingComponent implements OnInit {
   openMicRequestDialog() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
-        title: 'Microphone is blocked',
-        message: 'This page requires access to your microphone.  Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below',
-        confirmText: 'refresh',
+        title: this.ts.l.microphone_blocked,
+        message: this.ts.l.page_requires_microphone,
+        confirmText: this.ts.l.refresh,
         cancelText: this.ts.l.cancel,
       },
       width: "50vh",
