@@ -10,7 +10,6 @@ export class SynthVoiceSelectComponent implements OnInit{
 
   voices = voices;
   selected = this.voices[0];
-  //pseudonym = pseudonym;
 
   @Output() selectVoice = new EventEmitter<Voice>();
 
