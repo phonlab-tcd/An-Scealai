@@ -3,7 +3,7 @@
   <!-- Select Content Type-->
   <mat-form-field appearance="fill">
     <mat-label>Select Topic</mat-label>
-    <mat-select [(ngModel)]="selectedContent" (ngModelChange)="showPosData = false; showPromptData = false" >
+    <mat-select [(ngModel)]="selectedContent" (ngModelChange)=" posDataTable.hideTable = true; promptDataTable.hideTable = true" >
       <mat-option value="partOfSpeech">Part of Speech Data</mat-option>
       <mat-option value="prompt">Prompt Data</mat-option>
     </mat-select>
@@ -36,13 +36,12 @@
         <mat-label>Translation</mat-label>
         <input matInput [(ngModel)]="posTranslation" />
       </mat-form-field>
-
       <div *ngIf="errorMessage" class="errorText">{{ errorMessage }}</div>
       <button mat-raised-button (click)="addPOSContent()" class="viewDataBtn"> Add </button>
     </div>
     <!-- Show part of speech data -->
-    <button mat-raised-button (click)="showPosData = !showPosData" class="viewDataBtn" >
-      {{ showPosData ? "Hide Data" : "Show Data" }}
+    <button mat-raised-button (click)="toggleTable('pos')" class="viewDataBtn">
+      {{ this.posDataTable.hideTable ? "Show Data" : "Hide Data" }}
     </button>
   </div>
 
@@ -56,7 +55,9 @@
           <mat-option value="exam">{{ ts.l.exam_prompts }}</mat-option>
           <mat-option value="proverb">{{ ts.l.proverb_prompts }}</mat-option>
           <mat-option value="lara">{{ ts.l.lara_prompts }}</mat-option>
-          <mat-option value="combination">{{ ts.l.combination_generator }}</mat-option>
+          <mat-option value="combination">{{
+            ts.l.combination_generator
+          }}</mat-option>
           <mat-option value="general">{{ ts.l.general_prompts }}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -73,15 +74,9 @@
       <mat-form-field appearance="fill" *ngIf=" selectedPromptGenerator == 'combination' || selectedPromptGenerator == 'exam' " >
         <mat-label>{{ ts.l.choose_level }}</mat-label>
         <mat-select [(ngModel)]="selectedLevel">
-          <mat-option value="jc">
-            {{ this.ts.l.level_preferences[0]}}
-          </mat-option>
-          <mat-option value="lcol">
-            {{ this.ts.l.level_preferences[1] }}
-          </mat-option>
-          <mat-option value="lchl">
-            {{ this.ts.l.level_preferences[2]}}
-          </mat-option>
+          <mat-option value="jc"> {{ this.ts.l.level_preferences[0] }} </mat-option>
+          <mat-option value="lcol"> {{ this.ts.l.level_preferences[1] }} </mat-option>
+          <mat-option value="lchl"> {{ this.ts.l.level_preferences[2] }} </mat-option>
         </mat-select>
       </mat-form-field>
       <!-- Input prompt text -->
@@ -110,94 +105,12 @@
     </div>
 
     <!-- Show prompt data-->
-    <button mat-raised-button (click)="showPromptData = !showPromptData" class="viewDataBtn" >
-      {{ showPromptData ? "Hide Data" : "Show Data" }}
+    <button mat-raised-button (click)="toggleTable('prompt')" class="viewDataBtn" >
+      {{ this.promptDataTable.hideTable ? "Show Data" : "Hide Data" }}
     </button>
   </div>
 </div>
 
-<!-- Part of Speech Table -->
-<div *ngIf="showPosData && posDataSource">
-  <table mat-table [dataSource]="posDataSource" class="mat-elevation-z8">
-    <!-- part of speech Column -->
-    <ng-container matColumnDef="pos">
-      <th mat-header-cell *matHeaderCellDef>Part of speech</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.partOfSpeechData?.partOfSpeech }}
-      </td>
-    </ng-container>
-
-    <!-- word Column -->
-    <ng-container matColumnDef="word">
-      <th mat-header-cell *matHeaderCellDef>Word</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.partOfSpeechData?.word }}
-      </td>
-    </ng-container>
-
-    <!-- translation Column -->
-    <ng-container matColumnDef="translation">
-      <th mat-header-cell *matHeaderCellDef>Translation</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.partOfSpeechData?.translation }}
-      </td>
-    </ng-container>
-
-    <!-- last updated Column -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Last Updated</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.lastUpdated | date : "medium" }}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="posTableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: posTableColumns"></tr>
-  </table>
-</div>
-
-<!-- Prompt Table -->
-<div *ngIf="showPromptData && promptDataSource">
-  <table mat-table [dataSource]="promptDataSource" class="mat-elevation-z8">
-    <!-- part of speech Column -->
-    <ng-container matColumnDef="topic">
-      <th mat-header-cell *matHeaderCellDef>Type</th>
-      <td mat-cell *matCellDef="let element">{{ element.prompt?.topic }}</td>
-    </ng-container>
-
-    <!-- word Column -->
-    <ng-container matColumnDef="level">
-      <th mat-header-cell *matHeaderCellDef>Level</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.prompt?.level ? element.prompt.level : "---" }}
-      </td>
-    </ng-container>
-
-    <!-- translation Column -->
-    <ng-container matColumnDef="dialect">
-      <th mat-header-cell *matHeaderCellDef>Dialect</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.prompt?.dialect ? element.prompt.dialect : "---" }}
-      </td>
-    </ng-container>
-
-    <!-- translation Column -->
-    <ng-container matColumnDef="text">
-      <th mat-header-cell *matHeaderCellDef>Text</th>
-      <td mat-cell *matCellDef="let element" class="example-container">
-        {{ element.prompt?.text }}
-      </td>
-    </ng-container>
-
-    <!-- last updated Column -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Last Updated</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.lastUpdated | date : "medium" }}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="promptTableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: promptTableColumns"></tr>
-  </table>
-</div>
+<!-- Data Tables -->
+<app-prompt-data-table #promptDataTable [data]="promptDataSource" ></app-prompt-data-table>
+<app-pos-data-table #posDataTable [data]="posDataSource"></app-pos-data-table>

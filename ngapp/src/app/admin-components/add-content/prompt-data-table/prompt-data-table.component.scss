@@ -1,0 +1,24 @@
+table {
+    width: 100%;
+    text-align: center;
+}
+
+td, th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.mat-sort-header-container {
+    justify-content: space-evenly !important;
+}
+
+.example-container {
+    overflow-x: scroll;
+    max-width: 60px;
+    text-align: left !important;
+  }
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}

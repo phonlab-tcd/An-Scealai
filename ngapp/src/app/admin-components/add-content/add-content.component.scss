@@ -22,19 +22,6 @@
     padding: 10px;
 }
 
-table {
-    width: 100%;
-    text-align: center;
-}
-
-td, th {
-    text-align: center !important;
-    vertical-align: middle !important;
-}
-
-.mat-sort-header-container {
-    justify-content: space-evenly !important;
-}
 
 .viewDataBtn {
     background-color: var(--scealai-green);
@@ -42,9 +29,3 @@ td, th {
     float: left;
     margin-left: 20px;
 }
-
-.example-container {
-    overflow-x: scroll;
-    max-width: 60px;
-    text-align: left !important;
-  }

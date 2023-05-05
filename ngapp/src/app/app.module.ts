@@ -19,6 +19,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
+
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -96,6 +101,8 @@ import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.c
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
 import { AddContentComponent } from './admin-components/add-content/add-content.component';
+import { PromptDataTableComponent } from './admin-components/add-content/prompt-data-table/prompt-data-table.component';
+import { PosDataTableComponent } from './admin-components/add-content/pos-data-table/pos-data-table.component';
 
 @NgModule({
     declarations: [
@@ -154,6 +161,8 @@ import { AddContentComponent } from './admin-components/add-content/add-content.
         DictoglossComponent,
         TeacherDictoglossComponent,
         AddContentComponent,
+        PromptDataTableComponent,
+        PosDataTableComponent,
     ],
     imports: [
         RegisterModule,
@@ -178,6 +187,8 @@ import { AddContentComponent } from './admin-components/add-content/add-content.
         MatIconModule,
         MatTableModule,
         MatInputModule,
+        MatPaginatorModule,
+        MatSortModule,
         NgbModule,
         NgbDropdownModule,
         QuillModule.forRoot({
@@ -204,6 +215,8 @@ import { AddContentComponent } from './admin-components/add-content/add-content.
         UserService,
         MatDatepickerModule,
         MatNativeDateModule,
+        MatPaginator,
+        MatSort,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: MatDialogRef, useValue: {} },

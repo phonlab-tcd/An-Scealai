@@ -1,8 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AuthenticationService } from "app/authentication.service";
 import { HttpClient } from "@angular/common/http";
 import config from "../../../abairconfig";
 import { TranslationService } from "../../translation.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { PromptData, PromptDataTableComponent, } from "./prompt-data-table/prompt-data-table.component";
+import { POSData, PosDataTableComponent, } from "./pos-data-table/pos-data-table.component";
 
 @Component({
   selector: "app-add-content",
@@ -22,12 +25,12 @@ export class AddContentComponent implements OnInit {
   selectedSetting: string = "";
   selectedTheme: string = "";
   errorMessage: string = "";
-  posTableColumns: string[] = ["pos", "word", "translation", "date"];
-  promptTableColumns: string[] = ["topic", "level", "dialect", "text", "date"];
-  posDataSource;
-  promptDataSource;
-  showPosData: boolean = false;
-  showPromptData: boolean = false;
+
+  posDataSource: MatTableDataSource<POSData>;
+  promptDataSource: MatTableDataSource<PromptData>;
+
+  @ViewChild("promptDataTable") promptDataTable: PromptDataTableComponent;
+  @ViewChild("posDataTable") posDataTable: PosDataTableComponent;
 
   constructor(
     private auth: AuthenticationService,
@@ -46,9 +49,11 @@ export class AddContentComponent implements OnInit {
    */
   getData(type: string) {
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
-    this.http .get<any>(config.baseurl + "prompt/getData/" + type, { headers }) .subscribe({
+    this.http.get<any>(config.baseurl + "prompt/getData/" + type, { headers }).subscribe({
       next: (data) => {
-        type == "partOfSpeech" ? (this.posDataSource = data) : (this.promptDataSource = data);
+        type == "partOfSpeech"
+          ? (this.posDataSource = new MatTableDataSource(data))
+          : (this.promptDataSource = new MatTableDataSource(data));
       },
       error: (err) => {
         console.log(err);
@@ -140,5 +145,17 @@ export class AddContentComponent implements OnInit {
         this.errorMessage = "Entry already exists";
       },
     });
+  }
+
+  /**
+   * Toggle the selected data table on and off
+   * @param type type of data to display: pos or prompt
+   */
+  toggleTable(type: string) {
+    if (type == "pos") {
+      this.posDataTable.hideTable = !this.posDataTable.hideTable;
+    } else {
+      this.promptDataTable.hideTable = !this.promptDataTable.hideTable;
+    }
   }
 }
