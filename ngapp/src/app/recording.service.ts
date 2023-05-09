@@ -18,6 +18,7 @@ export class RecordingService {
 
   baseUrl: string = config.baseurl + 'recordings/';
 
+  /** Get a recording from the DB */
   get(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + id);
   }
