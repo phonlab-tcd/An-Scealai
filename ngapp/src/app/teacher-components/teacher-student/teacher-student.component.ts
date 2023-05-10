@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Story } from '../../story';
-import { Classroom } from '../../classroom';
+import { Story } from '../../core/models/story';
+import { Classroom } from '../../core/models/classroom';
 import { firstValueFrom } from 'rxjs'
 import { StoryService } from '../../story.service';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
 import { ClassroomService } from '../../classroom.service';
-import { User } from 'app/user';
+import { User } from 'app/core/models/user';
 
 @Component({
   selector: 'app-teacher-student',

@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, ElementRef} from '@angular/core';
 import { SynthesisService } from "../services/synthesis.service";
 import { SynthesisBankService } from "app/services/synthesis-bank.service";
-import { SynthItem } from 'app/synth-item';
+import { SynthItem } from 'app/core/models/synth-item';
 import { EngagementService } from 'app/engagement.service';
 
 @Component({

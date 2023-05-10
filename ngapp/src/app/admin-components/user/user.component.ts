@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Story } from '../../story';
+import { Story } from '../../core/models/story';
 import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
 import { ProfileService } from '../../profile.service';
 import { UserService } from '../../user.service';
-import { Classroom } from '../../classroom';
+import { Classroom } from '../../core/models/classroom';
 import { ClassroomService } from '../../classroom.service';
 import { EngagementService } from '../../engagement.service';
-import { Event } from '../../event';
+import { Event } from '../../core/models/event';
 import { TranslationService } from '../../translation.service';
 import { RecordingService } from '../../recording.service';
 import config from 'abairconfig';

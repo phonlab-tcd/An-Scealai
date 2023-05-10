@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, } f
 import { Router } from "@angular/router";
 import { TextProcessingService } from "app/services/text-processing.service";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
-import { SynthItem } from "app/synth-item";
+import { SynthItem } from "app/core/models/synth-item";
 import { TranslationService } from "app/translation.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 

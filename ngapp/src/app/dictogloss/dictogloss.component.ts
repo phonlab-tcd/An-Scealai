@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { SynthItem } from "app/synth-item";
+import { SynthItem } from "app/core/models/synth-item";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
 import { TranslationService } from "app/translation.service";
 import { SynthesisPlayerComponent } from "app/student-components/synthesis-player/synthesis-player.component";

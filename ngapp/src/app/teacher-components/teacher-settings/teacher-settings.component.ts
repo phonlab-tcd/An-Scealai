@@ -4,8 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { TranslationService } from '../../translation.service';
 import { ClassroomService } from '../../classroom.service';
 import { UserService } from '../../user.service';
-import { Classroom } from '../../classroom';
-import { User } from '../../user'
+import { Classroom } from '../../core/models/classroom';
+import { User } from '../../core/models/user'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 

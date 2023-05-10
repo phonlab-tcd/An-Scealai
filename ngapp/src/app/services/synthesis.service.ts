@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Story } from "../story";
+import { Story } from "../core/models/story";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { EngagementService } from "../engagement.service";
-import { EventType } from "../event";
+import { EventType } from "../core/models/event";
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import config from "abairconfig";

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService, TokenPayload, VerifyEmailRequest } from "../authentication.service";
 import { Router } from "@angular/router";
-import { EventType } from "../event";
+import { EventType } from "../core/models/event";
 import { EngagementService } from "../engagement.service";
 import { TranslationService } from "../translation.service";
 import config from "abairconfig";

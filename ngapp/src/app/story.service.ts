@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Story } from './story';
+import { Story } from './core/models/story';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 //import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable, throwError } from 'rxjs';
 // import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from './engagement.service';
-import { EventType } from './event';
+import { EventType } from './core/models/event';
 import { TranslationService } from './translation.service';
 import config from 'abairconfig';
 

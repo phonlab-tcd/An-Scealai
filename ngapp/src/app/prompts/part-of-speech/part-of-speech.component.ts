@@ -5,7 +5,7 @@ import { AuthenticationService } from "app/authentication.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/services/synthesis.service";
-import { SynthItem } from "app/synth-item";
+import { SynthItem } from "app/core/models/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "../../lib/grammar-engine/types";

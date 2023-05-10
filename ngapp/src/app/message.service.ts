@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from './authentication.service';
 import { Observable } from 'rxjs';
 import { EngagementService } from './engagement.service';
-import { EventType } from './event';
+import { EventType } from './core/models/event';
 import { TranslationService } from './translation.service';
-import { Message } from './message';
-import { User } from './user';
+import { Message } from './core/models/message';
+import { User } from './core/models/user';
 import config from 'abairconfig';
 
 @Injectable({

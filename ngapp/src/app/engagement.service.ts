@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Event, EventType, MouseOverGrammarSuggestionEvent } from './event';
+import { Event, EventType, MouseOverGrammarSuggestionEvent } from 'app/core/models/event';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { SynthItem } from './synth-item';
+import { SynthItem } from './core/models/synth-item';
 import { AuthenticationService } from './authentication.service';
 import { HighlightTag } from './lib/quill-highlight/quill-highlight';
 import config from 'abairconfig';

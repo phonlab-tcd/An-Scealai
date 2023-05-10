@@ -12,8 +12,8 @@ import { distinctUntilChanged     } from 'rxjs/operators';
 import   Quill                      from 'quill';
 import { MessageKey               } from 'app/translation.service';
 
-import { EventType                } from 'app/event';
-import { Story                    } from 'app/story';
+import { EventType                } from 'app/core/models/event';
+import { Story                    } from 'app/core/models/story';
 
 import { StoryService             } from 'app/story.service';
 import { ClassroomService         } from 'app/classroom.service';

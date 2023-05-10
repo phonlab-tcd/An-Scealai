@@ -4,7 +4,7 @@ import { ClassroomService } from '../../classroom.service';
 import { TranslationService } from '../../translation.service';
 import { UserService } from '../../user.service';
 import { AuthenticationService } from 'app/authentication.service';
-import { Classroom } from 'app/classroom';
+import { Classroom } from 'app/core/models/classroom';
 import { firstValueFrom } from 'rxjs';
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 

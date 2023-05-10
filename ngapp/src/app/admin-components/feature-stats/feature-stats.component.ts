@@ -3,7 +3,7 @@ import { StatsService } from '../../stats.service';
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { TranslationService } from '../../translation.service';
 import { EngagementService } from '../../engagement.service';
-import { EventType } from '../../event';
+import { EventType } from '../../core/models/event';
 import { KeyValue } from '@angular/common';
 
 @Component({

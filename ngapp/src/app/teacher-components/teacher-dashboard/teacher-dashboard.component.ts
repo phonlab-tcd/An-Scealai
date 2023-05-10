@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ClassroomService } from "../../classroom.service";
 import { AuthenticationService } from "../../authentication.service";
-import { Classroom } from "../../classroom";
+import { Classroom } from "../../core/models/classroom";
 import { Router } from "@angular/router";
 import { TranslationService } from "../../translation.service";
 import { NotificationService } from "../../notification-service.service";

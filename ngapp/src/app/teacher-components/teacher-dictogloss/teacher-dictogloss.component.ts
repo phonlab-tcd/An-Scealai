@@ -2,12 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { TranslationService } from "app/translation.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ClassroomService } from "app/classroom.service";
-import { Classroom } from "../../classroom";
+import { Classroom } from "../../core/models/classroom";
 import { MessageService } from "app/message.service";
 import { UserService } from "app/user.service";
-import { User } from "app/user";
+import { User } from "app/core/models/user";
 import { AuthenticationService } from "app/authentication.service";
-import { Message } from "app/message";
+import { Message } from "app/core/models/message";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 

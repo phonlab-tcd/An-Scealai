@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { StoryService } from "./story.service";
 import { MessageService } from "./message.service";
-import { Story } from "./story";
-import { Classroom } from "./classroom";
+import { Story } from "./core/models/story";
+import { Classroom } from "./core/models/classroom";
 import { AuthenticationService } from "./authentication.service";
-import { Message } from "./message";
+import { Message } from "./core/models/message";
 import { ClassroomService } from "./classroom.service";
 import { TranslationService } from "./translation.service";
 import { firstValueFrom, Subject } from "rxjs";

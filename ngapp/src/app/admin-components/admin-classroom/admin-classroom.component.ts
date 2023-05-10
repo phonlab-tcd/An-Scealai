@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
 import { firstValueFrom } from 'rxjs';
-import { Classroom } from '../../classroom';
-import { User } from '../../user';
+import { Classroom } from '../../core/models/classroom';
+import { User } from '../../core/models/user';
 import { UserService } from '../../user.service';
 
 @Component({

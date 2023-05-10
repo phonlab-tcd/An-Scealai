@@ -7,7 +7,7 @@ import { TranslationService } from '../translation.service';
 import { UserService } from '../user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
-import { Story } from 'app/story';
+import { Story } from 'app/core/models/story';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';

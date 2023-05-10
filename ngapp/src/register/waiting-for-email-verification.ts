@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectorRef } from "@angular/core";
 import { TranslationService } from "app/translation.service";
 import { EngagementService } from "app/engagement.service";
-import { EventType } from "app/event";
+import { EventType } from "app/core/models/event";
 import { AuthenticationService, RegistrationTokenPayload } from "app/authentication.service";
 import { Router } from "@angular/router";
 

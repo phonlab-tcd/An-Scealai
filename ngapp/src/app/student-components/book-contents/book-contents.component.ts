@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { Story } from "../../story";
+import { Story } from "../../core/models/story";
 import { StoryService } from "../../story.service";
 import { AuthenticationService } from "../../authentication.service";
-import { EventType } from "../../event";
+import { EventType } from "../../core/models/event";
 import { EngagementService } from "../../engagement.service";
 import { TranslationService } from "../../translation.service";
 import { ProfileService } from "../../profile.service";
 import { Router } from "@angular/router";
 import { MessageService } from "../../message.service";
-import { Message } from "../../message";
+import { Message } from "../../core/models/message";
 import { ClassroomService } from "../../classroom.service";
 import { NotificationService } from "../../notification-service.service";
 import { RecordingService } from "../../recording.service";

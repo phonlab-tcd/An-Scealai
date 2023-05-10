@@ -1,4 +1,4 @@
-import { Serializable } from 'app/serializable';
+import { Serializable } from './serializable';
 
 export class Event extends Serializable {
     '_id': string;

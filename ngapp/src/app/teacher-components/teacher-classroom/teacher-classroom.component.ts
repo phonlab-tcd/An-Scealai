@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassroomService } from 'app/classroom.service';
-import { Classroom } from '../../classroom';
-import { User } from '../../user';
+import { Classroom } from '../../core/models/classroom';
+import { User } from '../../core/models/user';
 import { UserService } from '../../user.service';
 import { TranslationService } from '../../translation.service';
 import { StoryService } from '../../story.service';
 import { MessageService } from '../../message.service';
-import { Message } from '../../message';
+import { Message } from '../../core/models/message';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { firstValueFrom } from 'rxjs';
