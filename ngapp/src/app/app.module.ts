@@ -31,7 +31,7 @@ import { QuillModule } from 'ngx-quill';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { RegisterModule } from 'register/register.module';
-import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
+import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { SpinnerModule } from 'spinner/spinner.module';
 
 import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';

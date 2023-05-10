@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
+import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
 import { AboutComponent } from './about/about.component';
