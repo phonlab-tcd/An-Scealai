@@ -1,9 +1,9 @@
 <div [hidden]="hideTable">
   <!-- Prompt Table -->
-  <mat-form-field>
+  <!-- <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
-  </mat-form-field>
+  </mat-form-field> -->
 
   <table mat-table [dataSource]="data" class="mat-elevation-z8" matSort>
     <!-- part of speech Column -->
@@ -33,6 +33,9 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Text</th>
       <td mat-cell *matCellDef="let element" class="example-container">
         {{ element.prompt?.text }}
+        {{ element.prompt?.combinationData?.character }}
+        {{ element.prompt?.combinationData?.setting }}
+        {{ element.prompt?.combinationData?.theme }}
       </td>
     </ng-container>
 

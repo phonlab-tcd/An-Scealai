@@ -11,7 +11,7 @@ promptRoutes.route("/addContent").post(async function (req, res) {
   const existingPrompts = await Prompt.find(req.body); 
   if (existingPrompts.length > 0) {
     console.log("Prompt already exists")
-    return res.status(400).json("data already exists in the DB");
+    return res.status(400).json({msg: "data already exists in the DB", data: existingPrompts});
   }
 
   const prompt = new Prompt({...req.body, lastUpdated: new Date()});
