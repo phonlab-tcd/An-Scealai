@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { TranslationService } from '../../translation.service';
-import { AuthenticationService } from '../../authentication.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 export interface DialogData {
   title: string;

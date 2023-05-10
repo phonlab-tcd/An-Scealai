@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { StoryService } from "../../story.service";
+import { StoryService } from "app/core/services/story.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { TranslationService } from "../../translation.service";
-import { UserService } from "../../user.service";
-import { ProfileService } from "../../profile.service";
-import { AuthenticationService } from "../../authentication.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { UserService } from "../../core/services/user.service";
+import { ProfileService } from "app/core/services/profile.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { RecordingDialogComponent } from "../../dialogs/recording-dialog/recording-dialog.component";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";

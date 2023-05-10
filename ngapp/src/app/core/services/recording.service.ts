@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from './authentication.service';  
-import { Story } from './core/models/story';
-import { Recording } from './core/models/recording';
-import { EventType } from './core/models/event';
-import { EngagementService } from './engagement.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';  
+import { Recording } from '../models/recording';
+import { EngagementService } from 'app/core/services/engagement.service';
 import config from 'abairconfig';
 import { v4 as uuid } from 'uuid';
 
@@ -18,7 +16,6 @@ export class RecordingService {
 
   baseUrl: string = config.baseurl + 'recordings/';
 
-  /** Get a recording from the DB */
   get(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + id);
   }

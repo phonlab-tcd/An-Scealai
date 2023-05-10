@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
-import { AppComponent } from './app.component';
+import { DashboardComponent } from '../../student-components/dashboard/dashboard.component';
+import { RecordingComponent } from '../../student-components/recording/recording.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
-import { TranslationService } from './translation.service';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Injectable({
   providedIn: 'root'

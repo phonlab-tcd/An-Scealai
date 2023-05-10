@@ -2,7 +2,7 @@ import { GrammarChecker, GrammarCache, ErrorTag} from './types';
 import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { AuthenticationService } from 'app/authentication.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Subject } from 'rxjs';
 
 function diffNewErrors(prev: any[], curr: any[]) {

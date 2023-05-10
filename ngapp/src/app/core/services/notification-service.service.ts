@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { StoryService } from "./story.service";
-import { MessageService } from "./message.service";
-import { Story } from "./core/models/story";
-import { Classroom } from "./core/models/classroom";
-import { AuthenticationService } from "./authentication.service";
-import { Message } from "./core/models/message";
-import { ClassroomService } from "./classroom.service";
-import { TranslationService } from "./translation.service";
+import { StoryService } from "app/core/services/story.service";
+import { MessageService } from "app/core/services/message.service";
+import { Story } from "app/core/models/story";
+import { Classroom } from "app/core/models/classroom";
+import { AuthenticationService } from "app/core/services/authentication.service";
+import { Message } from "app/core/models/message";
+import { ClassroomService } from "app/core/services/classroom.service";
+import { TranslationService } from "app/core/services/translation.service";
 import { firstValueFrom, Subject } from "rxjs";
 
 export type TeacherMessage = {

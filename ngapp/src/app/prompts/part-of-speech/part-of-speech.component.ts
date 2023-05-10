@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { TranslationService } from "../../translation.service";
-import { StoryService } from "../../story.service";
-import { AuthenticationService } from "app/authentication.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { StoryService } from "app/core/services/story.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
-import { SynthesisService, Voice } from "app/services/synthesis.service";
+import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { SynthItem } from "app/core/models/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";

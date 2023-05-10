@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, } from "@angular/core";
 import { Router } from "@angular/router";
-import { TextProcessingService } from "app/services/text-processing.service";
-import { SynthesisService, Voice } from "app/services/synthesis.service";
+import { TextProcessingService } from "app/core/services/text-processing.service";
+import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { SynthItem } from "app/core/models/synth-item";
-import { TranslationService } from "app/translation.service";
+import { TranslationService } from "app/core/services/translation.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 
 //------------------------------ Audio Check Component On Dashboard ----------------------------//

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Classroom } from './core/models/classroom';
-import { User } from './core/models/user';
-import { UserService } from './user.service';
+import { Classroom } from 'app/core/models/classroom';
+import { UserService } from 'app/core/services/user.service';
 import { Observable } from 'rxjs';
 import config from 'abairconfig';
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { ClassroomService } from "../../classroom.service";
-import { AuthenticationService } from "../../authentication.service";
+import { ClassroomService } from "app/core/services/classroom.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { Classroom } from "../../core/models/classroom";
 import { Router } from "@angular/router";
-import { TranslationService } from "../../translation.service";
-import { NotificationService } from "../../notification-service.service";
-import { ProfileService } from "../../profile.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { NotificationService } from "app/core/services/notification-service.service";
+import { ProfileService } from "app/core/services/profile.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { firstValueFrom } from "rxjs";

@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { AuthenticationService } from "./authentication.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { HttpClient } from "@angular/common/http";
 import config from "abairconfig";
 import { Observable } from "rxjs";
-import trans_pre from "./translation";
+import trans_pre from "../../translation";
 
 export type MessageKey = keyof typeof trans_pre;
 

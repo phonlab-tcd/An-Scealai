@@ -1,6 +1,6 @@
 import Quill from 'quill';
-import { TranslationService } from 'app/translation.service';
-import { EngagementService } from '../../engagement.service'
+import { TranslationService } from 'app/core/services/translation.service';
+import { EngagementService } from 'app/core/services/engagement.service'
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');

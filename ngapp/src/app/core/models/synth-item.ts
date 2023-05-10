@@ -1,4 +1,4 @@
-import { SynthesisService, voices as synthVoices, Voice } from 'app/services/synthesis.service';
+import { SynthesisService, voices as synthVoices, Voice } from 'app/core/services/synthesis.service';
 import { Subscription } from 'rxjs';
 
 export class SynthItem {

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { RegistrationTokenPayload } from 'app/authentication.service';
-import { TranslationService } from 'app/translation.service';
+import { RegistrationTokenPayload } from 'app/core/services/authentication.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-register',

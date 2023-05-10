@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Router } from '@angular/router';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-landing',

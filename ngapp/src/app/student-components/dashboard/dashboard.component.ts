@@ -10,25 +10,23 @@ import { HttpClient               } from '@angular/common/http';
 import { firstValueFrom, Subject  } from 'rxjs';
 import { distinctUntilChanged     } from 'rxjs/operators';
 import   Quill                      from 'quill';
-import { MessageKey               } from 'app/translation.service';
+import { MessageKey               } from 'app/core/services/translation.service';
 
 import { EventType                } from 'app/core/models/event';
 import { Story                    } from 'app/core/models/story';
 
-import { StoryService             } from 'app/story.service';
-import { ClassroomService         } from 'app/classroom.service';
-import { EngagementService        } from 'app/engagement.service';
-import { AuthenticationService    } from 'app/authentication.service';
-import { NotificationService      } from 'app/notification-service.service';
-
-import { TranslationService       } from 'app/translation.service';
-import { StatsService             } from 'app/stats.service';
+import { StoryService             } from 'app/core/services/story.service';
+import { ClassroomService         } from 'app/core/services/classroom.service';
+import { EngagementService        } from 'app/core/services/engagement.service';
+import { AuthenticationService    } from 'app/core/services/authentication.service';
+import { NotificationService      } from 'app/core/services/notification-service.service';
+import { TranslationService       } from 'app/core/services/translation.service';
 import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
-import { RecordAudioService     } from 'app/services/record-audio.service'
+import { RecordAudioService     } from 'app/core/services/record-audio.service'
 
 import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
 import { QuillHighlighter } from '../../lib/quill-highlight/quill-highlight';
@@ -145,7 +143,6 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private engagement: EngagementService,
     public ts: TranslationService,
-    public statsService: StatsService,
     private dialog: MatDialog,
     private recordAudioService: RecordAudioService,
     private classroomService: ClassroomService,

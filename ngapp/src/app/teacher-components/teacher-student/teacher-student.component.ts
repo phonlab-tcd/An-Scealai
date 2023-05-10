@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Story } from '../../core/models/story';
 import { Classroom } from '../../core/models/classroom';
 import { firstValueFrom } from 'rxjs'
-import { StoryService } from '../../story.service';
-import { UserService } from '../../user.service';
-import { TranslationService } from '../../translation.service';
-import { ClassroomService } from '../../classroom.service';
+import { StoryService } from 'app/core/services/story.service';
+import { UserService } from '../../core/services/user.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { ClassroomService } from 'app/core/services/classroom.service';
 import { User } from 'app/core/models/user';
 
 @Component({

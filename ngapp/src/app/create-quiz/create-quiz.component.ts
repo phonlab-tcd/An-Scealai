@@ -1,9 +1,7 @@
 // import identifierModuleUrl from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { doesNotReject } from 'assert';
-import { AuthenticationService } from 'app/authentication.service';
-import { User } from '../core/models/user';
-import { TranslationService } from '../translation.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
 
 const backendUrl = config.baseurl;

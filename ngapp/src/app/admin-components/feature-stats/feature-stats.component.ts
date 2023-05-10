@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { StatsService } from '../../stats.service';
+import { StatsService } from 'app/core/services/stats.service';
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
-import { TranslationService } from '../../translation.service';
-import { EngagementService } from '../../engagement.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from '../../core/models/event';
 import { KeyValue } from '@angular/common';
 

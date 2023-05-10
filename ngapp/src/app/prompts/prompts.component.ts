@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { TranslationService } from "../translation.service";
-import { StoryService } from "../story.service";
-import { AuthenticationService } from "app/authentication.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { StoryService } from "app/core/services/story.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";

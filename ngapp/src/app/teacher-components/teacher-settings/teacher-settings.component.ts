@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TranslationService } from '../../translation.service';
-import { ClassroomService } from '../../classroom.service';
-import { UserService } from '../../user.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { ClassroomService } from 'app/core/services/classroom.service';
+import { UserService } from '../../core/services/user.service';
 import { Classroom } from '../../core/models/classroom';
 import { User } from '../../core/models/user'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';

@@ -2,7 +2,7 @@ import { Injectable             } from '@angular/core';
 import { HttpRequest            } from '@angular/common/http';
 import { HttpHandler            } from '@angular/common/http'; 
 import { HttpInterceptor        } from '@angular/common/http';
-import { AuthenticationService  } from 'app/authentication.service';
+import { AuthenticationService  } from 'app/core/services/authentication.service';
 
 function authHeader(token: string) {
   if(token) {

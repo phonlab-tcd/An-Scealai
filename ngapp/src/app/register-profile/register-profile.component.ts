@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileService } from '../profile.service';
-import { AuthenticationService } from '../authentication.service'
+import { ProfileService } from 'app/core/services/profile.service';
+import { AuthenticationService } from 'app/core/services/authentication.service'
 import { Router } from '@angular/router';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-register-profile',

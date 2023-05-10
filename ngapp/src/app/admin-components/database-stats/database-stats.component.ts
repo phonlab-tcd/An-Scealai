@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { UserService } from "../../user.service";
-import { StoryService } from "../../story.service";
-import { ClassroomService } from "../../classroom.service";
-import { ProfileService } from "../../profile.service";
+import { UserService } from "../../core/services/user.service";
+import { StoryService } from "app/core/services/story.service";
+import { ClassroomService } from "app/core/services/classroom.service";
+import { ProfileService } from "app/core/services/profile.service";
 import { Chart } from 'chart.js/auto';
 import { ChoroplethChart } from 'chartjs-chart-geo';
 import * as ChartGeo from 'chartjs-chart-geo'

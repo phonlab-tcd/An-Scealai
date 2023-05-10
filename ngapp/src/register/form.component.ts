@@ -1,6 +1,6 @@
 import { OnInit, Component, Output, EventEmitter } from "@angular/core";
-import { TranslationService } from "app/translation.service";
-import { AuthenticationService, RegistrationTokenPayload } from "app/authentication.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { AuthenticationService, RegistrationTokenPayload } from "app/core/services/authentication.service";
 import { UntypedFormControl } from "@angular/forms";
 import config from "abairconfig";
 import { ActivatedRoute } from "@angular/router";

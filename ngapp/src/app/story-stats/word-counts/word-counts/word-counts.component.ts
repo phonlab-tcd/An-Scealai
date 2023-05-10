@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { TranslationService } from '../../../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 import { Chart } from 'chart.js';
 
 const LIGHT_RED = 'rgba(255, 204, 203, 1)';

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { EngagementService } from '../../engagement.service';
+import { EngagementService } from 'app/core/services/engagement.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/core/services/story.service';
 import { Event } from '../../core/models/event';
-import { Story } from '../../core/models/story';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import * as Diff from 'diff';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-story-history',

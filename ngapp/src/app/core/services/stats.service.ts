@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 import config from 'abairconfig';
 
 @Injectable({

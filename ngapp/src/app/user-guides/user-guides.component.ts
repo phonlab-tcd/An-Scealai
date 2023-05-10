@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-user-guides',

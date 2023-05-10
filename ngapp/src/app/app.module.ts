@@ -46,8 +46,8 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
-import { StoryService } from './story.service';
-import { UserService } from './user.service';
+import { StoryService } from 'app/core/services/story.service';
+import { UserService } from './core/services/user.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';

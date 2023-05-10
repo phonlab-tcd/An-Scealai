@@ -3,9 +3,9 @@ import { HostListener } from "@angular/core";
 import { NavigationEnd } from "@angular/router";
 import { Router } from "@angular/router";
 import { filter } from "rxjs/operators";
-import { NotificationService, Notification } from "app/notification-service.service";
-import { TranslationService } from "app/translation.service";
-import { AuthenticationService } from "app/authentication.service";
+import { NotificationService, Notification } from "app/core/services/notification-service.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 
 declare var gtag;
 

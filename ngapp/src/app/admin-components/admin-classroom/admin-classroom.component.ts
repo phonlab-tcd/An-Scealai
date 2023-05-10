@@ -1,11 +1,11 @@
 import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ClassroomService } from 'app/classroom.service';
+import { ClassroomService } from 'app/core/services/classroom.service';
 import { firstValueFrom } from 'rxjs';
-import { Classroom } from '../../core/models/classroom';
-import { User } from '../../core/models/user';
-import { UserService } from '../../user.service';
+import { Classroom } from 'app/core/models/classroom';
+import { User } from 'app/core/models/user';
+import { UserService } from 'app/core/services/user.service';
 
 @Component({
   selector: 'app-admin-classroom',

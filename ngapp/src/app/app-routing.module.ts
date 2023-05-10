@@ -50,11 +50,11 @@ import { TeacherSettingsComponent } from './teacher-components/teacher-settings/
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
-import { AuthGuardService } from './auth-guard.service';
-import { RoleGuardService } from './role-guard.service';
-import { NotificationService } from './notification-service.service';
-import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from './can-deactivate.guard';
-import { StopSoundGuard } from './stop-sound.guard';
+import { AuthGuardService } from 'app/core/services/auth-guard.service';
+import { RoleGuardService } from 'app/core/services/role-guard.service';
+import { NotificationService } from 'app/core/services/notification-service.service';
+import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from 'app/core/guards/can-deactivate.guard';
+import { StopSoundGuard } from 'app/core/guards/stop-sound.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },

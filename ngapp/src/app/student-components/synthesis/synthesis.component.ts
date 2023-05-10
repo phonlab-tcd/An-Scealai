@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/core/services/story.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslationService } from '../../translation.service';
-import { SynthesisService, Paragraph, Sentence, Section } from '../../services/synthesis.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { SynthesisService, Paragraph, Sentence, Section } from 'app/core/services/synthesis.service';
 import { firstValueFrom } from 'rxjs';
 
  //------------------------------ HTS Synthesis Component ----------------------------//

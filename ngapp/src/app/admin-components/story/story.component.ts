@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { StoryService } from '../../story.service';
+import { StoryService } from 'app/core/services/story.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
 
 

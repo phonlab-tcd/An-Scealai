@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 // import identifierModuleUrl from '@angular/compiler';
-import { TranslationService } from '../../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';

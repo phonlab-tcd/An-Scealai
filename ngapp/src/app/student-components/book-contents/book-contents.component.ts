@@ -1,17 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { Story } from "../../core/models/story";
-import { StoryService } from "../../story.service";
-import { AuthenticationService } from "../../authentication.service";
+import { StoryService } from "app/core/services/story.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { EventType } from "../../core/models/event";
-import { EngagementService } from "../../engagement.service";
-import { TranslationService } from "../../translation.service";
-import { ProfileService } from "../../profile.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { ProfileService } from "app/core/services/profile.service";
 import { Router } from "@angular/router";
-import { MessageService } from "../../message.service";
+import { MessageService } from "app/core/services/message.service";
 import { Message } from "../../core/models/message";
-import { ClassroomService } from "../../classroom.service";
-import { NotificationService } from "../../notification-service.service";
-import { RecordingService } from "../../recording.service";
+import { ClassroomService } from "app/core/services/classroom.service";
+import { NotificationService } from "app/core/services/notification-service.service";
+import { RecordingService } from "../../core/services/recording.service";
 import { FilterPipe } from "app/pipes/filter.pipe"; // used in html template
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";

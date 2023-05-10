@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { StoryService } from '../story.service';
-import { MessageService } from '../message.service';
+import { StoryService } from 'app/core/services/story.service';
+import { MessageService } from 'app/core/services/message.service';
 
 @Injectable({
   providedIn: 'root'

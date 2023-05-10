@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { AuthenticationService } from "app/authentication.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { HttpClient } from "@angular/common/http";
 import config from "../../../abairconfig";
-import { TranslationService } from "../../translation.service";
+import { TranslationService } from "app/core/services/translation.service";
 import { MatTableDataSource } from "@angular/material/table";
 import { PromptData, PromptDataTableComponent, } from "./prompt-data-table/prompt-data-table.component";
 import { POSData, PosDataTableComponent, } from "./pos-data-table/pos-data-table.component";

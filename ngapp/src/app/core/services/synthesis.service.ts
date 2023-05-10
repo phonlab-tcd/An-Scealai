@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Story } from "../core/models/story";
+import { Story } from "app/core/models/story";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { EngagementService } from "../engagement.service";
-import { EventType } from "../core/models/event";
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event";
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import config from "abairconfig";
-import { SynthesisBankService } from "app/services/synthesis-bank.service";
+import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
 
 // variable defining the different options for API calls
 export const ApiOptions = {
