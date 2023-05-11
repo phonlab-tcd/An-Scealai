@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
-import { SynthesisPlayerComponent } from "app/student-components/synthesis-player/synthesis-player.component";
+import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { ClassroomService } from "app/core/services/classroom.service";

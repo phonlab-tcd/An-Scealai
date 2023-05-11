@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DashboardComponent } from '../../student-components/dashboard/dashboard.component';
-import { RecordingComponent } from '../../student-components/recording/recording.component';
+import { DashboardComponent } from '../../student/dashboard/dashboard.component';
+import { RecordingComponent } from '../../student/recording/recording.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { TranslationService } from 'app/core/services/translation.service';

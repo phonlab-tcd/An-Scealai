@@ -21,7 +21,7 @@ import { EngagementService        } from 'app/core/services/engagement.service';
 import { AuthenticationService    } from 'app/core/services/authentication.service';
 import { NotificationService      } from 'app/core/services/notification-service.service';
 import { TranslationService       } from 'app/core/services/translation.service';
-import { SynthesisPlayerComponent } from 'app/student-components/synthesis-player/synthesis-player.component';
+import { SynthesisPlayerComponent } from 'app/student/synthesis-player/synthesis-player.component';
 import   clone                      from 'lodash/clone';
 import   config                     from 'abairconfig';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit {
     
     this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
     if(!this.story) return;
-    
+    console.log(this.story)
     this.textUpdated.next();
     this.getWordCount(this.story.text);
     if (this.story.htmlText == null) {
@@ -345,6 +345,7 @@ export class DashboardComponent implements OnInit {
    * @param q quill editor
    */
   onEditorCreated(q: Quill) {
+    console.log(q)
     q['history'].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");

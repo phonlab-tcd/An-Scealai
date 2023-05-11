@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 
@@ -22,11 +21,11 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
 import { PromptsComponent } from './prompts/prompts.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
+import { DashboardComponent } from './student/dashboard/dashboard.component';
+import { BookContentsComponent } from './student/book-contents/book-contents.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+import { RecordingComponent } from './student/recording/recording.component';
+import { SynthesisComponent } from './student/synthesis/synthesis.component';
 
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
@@ -47,14 +46,14 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
+  // { path: 'dashboard/:id', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard] },
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
   { path: 'prompts/:type', component: PromptsComponent},
   { path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
-  { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
-  { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
+  // { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService], canDeactivate: [StopSoundGuard] },
+  // { path: 'contents', component: BookContentsComponent, canActivate: [AuthGuardService] },
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
@@ -65,6 +64,12 @@ const routes: Routes = [
   {
     path: 'report-an-issue',
     loadChildren: () => import('report-an-issue/report-an-issue.module').then(m=>m.ReportAnIssueModule)
+  },
+  {
+    path: 'student',
+    data: { expectedRole: 'STUDENT' },
+    canActivate: [RoleGuardService],
+    loadChildren: () => import('./student/student.module').then(m=>m.StudentModule)
   },
   {
     path: 'teacher',

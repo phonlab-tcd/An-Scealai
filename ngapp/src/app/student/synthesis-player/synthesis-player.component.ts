@@ -143,7 +143,7 @@ export class SynthesisPlayerComponent implements OnInit {
    * route to the HTS synthesiser
    */
   goToFastSynthesiser() {
-    this.router.navigateByUrl("/synthesis/" + this.storyId);
+    this.router.navigateByUrl("/student/synthesis/" + this.storyId);
   }
 
   /**

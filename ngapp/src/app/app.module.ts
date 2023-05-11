@@ -26,7 +26,7 @@ import { MatSortModule } from '@angular/material/sort';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { QuillModule } from 'ngx-quill';
+//import { QuillModule } from 'ngx-quill';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { RegisterModule } from 'register/register.module';
@@ -59,41 +59,17 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
-import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { UserGuidesComponent } from './user-guides/user-guides.component';
 
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
-
-import { TeachersComponent } from './admin/teachers/teachers.component';
-import { UserComponent } from './admin/user/user.component';
-import { StoryComponent } from './admin/story/story.component';
-import { FindUserComponent } from './admin/find-user/find-user.component';
-import { ProfileStatsComponent } from './admin/profile-stats/profile-stats.component';
-import { FeatureStatsComponent } from './admin/feature-stats/feature-stats.component';
-import { AddContentComponent } from './admin/add-content/add-content.component';
-import { PromptDataTableComponent } from './admin/add-content/prompt-data-table/prompt-data-table.component';
-import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-data-table.component';
-import { AdminClassroomComponent } from './admin/admin-classroom/admin-classroom.component';
-import { StoryHistoryComponent } from './admin/story-history/story-history.component';
-import { DatabaseStatsComponent } from './admin/database-stats/database-stats.component';
-
-import { TeacherDashboardComponent } from './teacher/teacher-dashboard/teacher-dashboard.component';
-import { TeacherStudentComponent } from './teacher/teacher-student/teacher-student.component';
-import { TeacherClassroomComponent } from './teacher/teacher-classroom/teacher-classroom.component';
-import { TeacherStoryComponent } from './teacher/teacher-story/teacher-story.component';
-import { TeacherSettingsComponent } from './teacher/teacher-settings/teacher-settings.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+import { SynthesisComponent } from './student/synthesis/synthesis.component';
+import { RecordingComponent } from './student/recording/recording.component';
 
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { TeacherDictoglossComponent } from './teacher/teacher-dictogloss/teacher-dictogloss.component';
 
 
 @NgModule({
@@ -106,51 +82,29 @@ import { TeacherDictoglossComponent } from './teacher/teacher-dictogloss/teacher
         //     RegisterComponent,
         //     RegisterFormComponent,
         //     WaitingForEmailVerificationComponent,
-        DashboardComponent,
-        BookContentsComponent,
         ChatbotComponent,
         ProfileComponent,
-        TeachersComponent,
-        UserComponent,
-        StoryComponent,
-        TeacherDashboardComponent,
-        TeacherStudentComponent,
-        TeacherClassroomComponent,
-        TeacherStoryComponent,
-        AdminClassroomComponent,
         SynthesisComponent,
-        StoryHistoryComponent,
         RecordingComponent,
         RegisterProfileComponent,
-        FindUserComponent,
         HighlightDirective,
-        FilterPipe,
+        //FilterPipe,
         MessagesComponent,
         ResourcesComponent,
         TeamComponent,
         AboutLaraComponent,
         SafeHtmlPipe,
         SponsorsComponent,
-        SynthesisPlayerComponent,
-        ProfileStatsComponent,
-        FeatureStatsComponent,
         CreateQuizComponent,
         AboutTaidhginComponent,
         SynthItemComponent,
-        SynthVoiceSelectComponent,
         ClassroomSelectorComponent,
         BasicDialogComponent,
         RecordingDialogComponent,
         UserGuidesComponent,
-        TeacherSettingsComponent,
-        DatabaseStatsComponent,
         PromptsComponent,
         PartOfSpeechComponent,
         DictoglossComponent,
-        TeacherDictoglossComponent,
-        AddContentComponent,
-        PromptDataTableComponent,
-        PosDataTableComponent,
     ],
     imports: [
         RegisterModule,
@@ -179,18 +133,18 @@ import { TeacherDictoglossComponent } from './teacher/teacher-dictogloss/teacher
         MatSortModule,
         NgbModule,
         NgbDropdownModule,
-        QuillModule.forRoot({
-            customOptions: [{
-                    import: 'formats/font',
-                    whitelist: [
-                        'sans-serif',
-                        'serif',
-                        'monospace',
-                        'arial',
-                        'times-new-roman', // @quill-font
-                    ]
-                }],
-        }),
+        // QuillModule.forRoot({
+        //     customOptions: [{
+        //             import: 'formats/font',
+        //             whitelist: [
+        //                 'sans-serif',
+        //                 'serif',
+        //                 'monospace',
+        //                 'arial',
+        //                 'times-new-roman', // @quill-font
+        //             ]
+        //         }],
+        // }),
         PdfViewerModule
     ],
     providers: [
@@ -204,6 +158,7 @@ import { TeacherDictoglossComponent } from './teacher/teacher-dictogloss/teacher
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+        
     ],
     bootstrap: [
         AppComponent,

@@ -26,17 +26,17 @@
           <mat-option value="conjunction">{{ ts.l.conjunction }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <!-- Word -->
-      <mat-form-field appearance="fill">
-        <mat-label>Word</mat-label>
-        <input matInput [(ngModel)]="posWord" />
+      <div style="width: 50%; padding: 10px"> 
+        POS entries can be added one at a time, or you can add several at once with each entry on a new line (enter key after each one).
+        Enter the word and the translation separated by a ':' Example:
+      </div>
+      <div> an t-aerfort : the airport</div>
+      <div> an teach : the house</div>
+      <mat-form-field appearance="fill" class="inputText">
+        <mat-label>Word/Translation Entry</mat-label>
+        <textarea matInput [(ngModel)]="posInput"></textarea>
       </mat-form-field>
-      <!-- Translation -->
-      <mat-form-field appearance="fill">
-        <mat-label>Translation</mat-label>
-        <input matInput [(ngModel)]="posTranslation" />
-      </mat-form-field>
-      <div *ngIf="errorMessage" class="errorText">{{ errorMessage }}</div>
+      <div *ngIf="errorMessages.length > 0" class="errorText"> <div *ngFor="let message of errorMessages">{{ message }} </div></div>
       <button mat-raised-button (click)="addPOSContent()" class="viewDataBtn"> Add </button>
     </div>
     <!-- Show part of speech data -->
@@ -80,27 +80,33 @@
         </mat-select>
       </mat-form-field>
       <!-- Input prompt text -->
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator !== 'combination'" >
+      <div *ngIf="selectedPromptGenerator !== 'combination'" style="width: 50%; padding: 10px"> 
+        Prompt texts can be added one at a time, or you can add several at once with each prompt on a new line (enter key after each one)
+      </div>
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator !== 'combination'" class="inputText" >
         <mat-label>Prompt Text</mat-label>
-        <input matInput [(ngModel)]="promptText" />
+        <textarea matInput [(ngModel)]="promptText"></textarea>
       </mat-form-field>
+      <div *ngIf="selectedPromptGenerator == 'combination'" style="width: 50%; padding: 10px"> 
+        Please only add one character, setting, and theme at a time
+      </div>
       <!-- Input prompt character -->
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" class="inputText"  >
         <mat-label>{{ ts.l.character }}</mat-label>
-        <input matInput [(ngModel)]="selectedCharacter" />
+        <textarea matInput [(ngModel)]="selectedCharacter"></textarea>
       </mat-form-field>
       <!-- Input prompt setting -->
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" class="inputText"  >
         <mat-label>{{ ts.l.setting }}</mat-label>
-        <input matInput [(ngModel)]="selectedSetting" />
+        <textarea matInput [(ngModel)]="selectedSetting"></textarea>
       </mat-form-field>
       <!-- Input prompt theme -->
-      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" >
+      <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'combination'" class="inputText"  >
         <mat-label>{{ ts.l.theme }}</mat-label>
-        <input matInput [(ngModel)]="selectedTheme" />
+        <textarea matInput [(ngModel)]="selectedTheme"></textarea>
       </mat-form-field>
 
-      <div *ngIf="errorMessage" class="errorText">{{ errorMessage }}</div>
+      <div *ngIf="errorMessages.length > 0" class="errorText"> <div *ngFor="let message of errorMessages">{{ message }} </div></div>
       <button mat-raised-button (click)="addPromptContent()" class="viewDataBtn" > Add </button>
     </div>
 

@@ -33,10 +33,10 @@
     </div>
     <!-- links on the nav bar -->
     <div class="nav-links">
-      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/contents" class="navBtn" (click)="changeCheck()" >
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" routerLink="/student" class="navBtn" (click)="changeCheck()" >
         {{ ts.l.my_stories }}
       </a>
-      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()" >
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher" class="navBtn" (click)="changeCheck()" >
         {{ ts.l.my_classrooms }}
       </a>
       <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin" class="navBtn" (click)="changeCheck()" >
