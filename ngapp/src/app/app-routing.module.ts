@@ -28,16 +28,6 @@ import { ChatbotComponent } from './student-components/chatbot/chatbot.component
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
-import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
-import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
-import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
-import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
-import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
-import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
-import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
-import { StatsDashboardModule } from './stats-dashboard/stats-dashboard.module';
-// import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard/stats-dashboard.component';
-
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
 import { NotificationService } from 'app/core/services/notification-service.service';
@@ -68,47 +58,6 @@ const routes: Routes = [
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  // { path: 'stats-dashboard/:id', component: StatsDashboardModule,},
-  { path: 'teacher',
-    component: TeacherPanelComponent,
-    canActivate: [RoleGuardService],
-    data: { expectedRole: 'TEACHER' },
-    children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
-        path: 'dashboard',
-        component: TeacherDashboardComponent,
-      },
-      {
-        path: 'classroom/:id',
-        component: TeacherClassroomComponent,
-      },
-      {
-        path: 'student/:id',
-        component: TeacherStudentComponent,
-      },
-      {
-        path: 'story/:id',
-        component: TeacherStoryComponent,
-      },
-      {
-        path: 'stats-dashboard/:id',
-        component: StatsDashboardModule,
-      },
-      {
-        path: 'teacher-settings/:id',
-        component: TeacherSettingsComponent,
-      },
-      {
-        path: 'teacher-dictogloss/:id', 
-        component: TeacherDictoglossComponent
-      },
-    ]
-  },
   {
     path: 'stats-dashboard/:id',
     loadChildren: () => import('./stats-dashboard/stats-dashboard.module').then(m=>m.StatsDashboardModule)
@@ -118,7 +67,15 @@ const routes: Routes = [
     loadChildren: () => import('report-an-issue/report-an-issue.module').then(m=>m.ReportAnIssueModule)
   },
   {
+    path: 'teacher',
+    data: { expectedRole: 'TEACHER' },
+    canActivate: [RoleGuardService],
+    loadChildren: () => import('./teacher/teacher.module').then(m=>m.TeacherModule)
+  },
+  {
     path: 'admin',
+    canActivate: [RoleGuardService],
+    data: { expectedRole: 'ADMIN' },
     loadChildren: () => import('./admin/admin.module').then(m=>m.AdminModule)
   },
 ];

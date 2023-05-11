@@ -84,17 +84,16 @@ import { AdminClassroomComponent } from './admin/admin-classroom/admin-classroom
 import { StoryHistoryComponent } from './admin/story-history/story-history.component';
 import { DatabaseStatsComponent } from './admin/database-stats/database-stats.component';
 
-import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
-import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
-import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
-import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
-import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
-import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
+import { TeacherDashboardComponent } from './teacher/teacher-dashboard/teacher-dashboard.component';
+import { TeacherStudentComponent } from './teacher/teacher-student/teacher-student.component';
+import { TeacherClassroomComponent } from './teacher/teacher-classroom/teacher-classroom.component';
+import { TeacherStoryComponent } from './teacher/teacher-story/teacher-story.component';
+import { TeacherSettingsComponent } from './teacher/teacher-settings/teacher-settings.component';
 
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
+import { TeacherDictoglossComponent } from './teacher/teacher-dictogloss/teacher-dictogloss.component';
 
 
 @NgModule({
@@ -118,7 +117,6 @@ import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogl
         TeacherStudentComponent,
         TeacherClassroomComponent,
         TeacherStoryComponent,
-        TeacherPanelComponent,
         AdminClassroomComponent,
         SynthesisComponent,
         StoryHistoryComponent,
