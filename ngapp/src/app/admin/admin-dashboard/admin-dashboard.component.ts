@@ -10,7 +10,7 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(public ts : TranslationService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

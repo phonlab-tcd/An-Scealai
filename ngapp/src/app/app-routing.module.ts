@@ -28,19 +28,6 @@ import { ChatbotComponent } from './student-components/chatbot/chatbot.component
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 
-import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
-import { TeachersComponent } from './admin-components/teachers/teachers.component';
-import { UserComponent } from './admin-components/user/user.component';
-import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
-import { StoryComponent } from './admin-components/story/story.component';
-import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
-import { FindUserComponent } from './admin-components/find-user/find-user.component';
-import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
-import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
-import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
-import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
-import { AddContentComponent } from './admin-components/add-content/add-content.component';
-
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
@@ -81,62 +68,6 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
-  { path: 'admin',
-    component: AdminPanelComponent,
-    canActivate: [RoleGuardService],
-    data: { expectedRole: 'ADMIN' },
-    children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
-        path: 'dashboard',
-        component: AdminDashboardComponent,
-      },
-      {
-        path: 'teachers',
-        component: TeachersComponent,
-      },
-      {
-        path: 'user/:id',
-        component: UserComponent,
-      },
-      {
-        path: 'story/:id',
-        component: StoryComponent,
-      },
-      {
-        path: 'classroom/:id',
-        component: AdminClassroomComponent,
-      },
-      {
-        path: 'story-history/:id',
-        component: StoryHistoryComponent,
-      },
-      {
-        path: 'find-user',
-        component: FindUserComponent,
-      },
-      {
-        path: 'profile-stats',
-        component: ProfileStatsComponent,
-      },
-      {
-        path: 'feature-stats',
-        component: FeatureStatsComponent,
-      },
-      {
-        path: 'add-content',
-        component: AddContentComponent,
-      },
-      {
-        path: 'database-stats',
-        component: DatabaseStatsComponent,
-      }
-    ]
-  },
   { path: 'teacher',
     component: TeacherPanelComponent,
     canActivate: [RoleGuardService],
@@ -181,6 +112,10 @@ const routes: Routes = [
     path: 'report-an-issue',
     loadChildren: () => import('report-an-issue/report-an-issue.module')
       .then(m=>m.ReportAnIssueModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m=>m.AdminModule)
   },
 ];
 

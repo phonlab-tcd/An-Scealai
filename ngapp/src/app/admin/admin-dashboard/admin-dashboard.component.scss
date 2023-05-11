@@ -1,11 +1,34 @@
 .content {
+    width: 90%;
+    margin-left: 5%;
+    height: 72vh;
+    background-color: white;
+    border-radius: 5px;
+    -webkit-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+    box-shadow: -1px 5px 32px 10px rgba(0,0,0,0.2);
+}
+
+.adminTitle {
+    font-size: 20pt;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: var(--scealai-dark-green);
+    border-radius: 5px 5px 0px 0px;
+}
+
+
+
+.buttonContainer {
     padding: 10%;
     padding-top: 25vh;
     align-items: center;
     justify-content: center;
     overflow: auto;
     flex-wrap: wrap;
-    height: 72vh;
 }
 
 .buttonRow {
@@ -13,6 +36,7 @@
   align-items: center;
   justify-content: center;
   padding: 5px;
+  flex-wrap: wrap;
 }
 
 .adminBtnContainer {
@@ -41,6 +65,7 @@
         flex-wrap: nowrap;
         padding-left: 5%;
         padding-right: 5%;
+        margin-top: 0vh;
     }
 
     .adminBtnContainer {

@@ -77,32 +77,30 @@ import { ChatbotComponent } from './student-components/chatbot/chatbot.component
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
 
-import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
-import { TeachersComponent } from './admin-components/teachers/teachers.component';
-import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
-import { UserComponent } from './admin-components/user/user.component';
-import { StoryComponent } from './admin-components/story/story.component';
-import { FindUserComponent } from './admin-components/find-user/find-user.component';
-import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
-import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
+import { TeachersComponent } from './admin/teachers/teachers.component';
+import { UserComponent } from './admin/user/user.component';
+import { StoryComponent } from './admin/story/story.component';
+import { FindUserComponent } from './admin/find-user/find-user.component';
+import { ProfileStatsComponent } from './admin/profile-stats/profile-stats.component';
+import { FeatureStatsComponent } from './admin/feature-stats/feature-stats.component';
 
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
-import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
-import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
+import { AdminClassroomComponent } from './admin/admin-classroom/admin-classroom.component';
+import { StoryHistoryComponent } from './admin/story-history/story-history.component';
 import { RecordingComponent } from './student-components/recording/recording.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
-import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
+import { DatabaseStatsComponent } from './admin/database-stats/database-stats.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
-import { AddContentComponent } from './admin-components/add-content/add-content.component';
-import { PromptDataTableComponent } from './admin-components/add-content/prompt-data-table/prompt-data-table.component';
-import { PosDataTableComponent } from './admin-components/add-content/pos-data-table/pos-data-table.component';
+import { AddContentComponent } from './admin/add-content/add-content.component';
+import { PromptDataTableComponent } from './admin/add-content/prompt-data-table/prompt-data-table.component';
+import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-data-table.component';
 
 @NgModule({
     declarations: [
@@ -118,9 +116,7 @@ import { PosDataTableComponent } from './admin-components/add-content/pos-data-t
         BookContentsComponent,
         ChatbotComponent,
         ProfileComponent,
-        AdminPanelComponent,
         TeachersComponent,
-        AdminDashboardComponent,
         UserComponent,
         StoryComponent,
         TeacherDashboardComponent,

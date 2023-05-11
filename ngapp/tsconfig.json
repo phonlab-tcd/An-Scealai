@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
+    "module": "esnext",
     "baseUrl" : "./src",
     "moduleResolution": "node",
     "outDir": "../out-tsc/app",

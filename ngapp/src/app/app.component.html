@@ -39,7 +39,7 @@
       <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'TEACHER'" routerLink="/teacher/dashboard" class="navBtn" (click)="changeCheck()" >
         {{ ts.l.my_classrooms }}
       </a>
-      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin/dashboard" class="navBtn" (click)="changeCheck()" >
+      <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'ADMIN'" routerLink="/admin" class="navBtn" (click)="changeCheck()" >
         {{ ts.l.admin_dashboard }}
       </a>
       <!-- about menu -->
