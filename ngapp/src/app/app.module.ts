@@ -24,7 +24,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
 
-
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
@@ -34,12 +33,6 @@ import { RegisterModule } from 'register/register.module';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { SpinnerModule } from 'spinner/spinner.module';
 
-import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
-import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
-import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
-import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
-import { GrammarErrorTimeModule } from 'app/story-stats/grammar-error-time/grammar-error-time.module';
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
 
 import { FilterPipe } from './pipes/filter.pipe';
@@ -76,6 +69,7 @@ import { BookContentsComponent } from './student-components/book-contents/book-c
 import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
 import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
 import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
+import { RecordingComponent } from './student-components/recording/recording.component';
 
 import { TeachersComponent } from './admin/teachers/teachers.component';
 import { UserComponent } from './admin/user/user.component';
@@ -83,24 +77,25 @@ import { StoryComponent } from './admin/story/story.component';
 import { FindUserComponent } from './admin/find-user/find-user.component';
 import { ProfileStatsComponent } from './admin/profile-stats/profile-stats.component';
 import { FeatureStatsComponent } from './admin/feature-stats/feature-stats.component';
+import { AddContentComponent } from './admin/add-content/add-content.component';
+import { PromptDataTableComponent } from './admin/add-content/prompt-data-table/prompt-data-table.component';
+import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-data-table.component';
+import { AdminClassroomComponent } from './admin/admin-classroom/admin-classroom.component';
+import { StoryHistoryComponent } from './admin/story-history/story-history.component';
+import { DatabaseStatsComponent } from './admin/database-stats/database-stats.component';
 
 import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
-import { AdminClassroomComponent } from './admin/admin-classroom/admin-classroom.component';
-import { StoryHistoryComponent } from './admin/story-history/story-history.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
-import { DatabaseStatsComponent } from './admin/database-stats/database-stats.component';
+
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
-import { AddContentComponent } from './admin/add-content/add-content.component';
-import { PromptDataTableComponent } from './admin/add-content/prompt-data-table/prompt-data-table.component';
-import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-data-table.component';
+
 
 @NgModule({
     declarations: [
@@ -145,7 +140,6 @@ import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-da
         AboutTaidhginComponent,
         SynthItemComponent,
         SynthVoiceSelectComponent,
-        StatsDashboardComponent,
         ClassroomSelectorComponent,
         BasicDialogComponent,
         RecordingDialogComponent,
@@ -199,11 +193,6 @@ import { PosDataTableComponent } from './admin/add-content/pos-data-table/pos-da
                     ]
                 }],
         }),
-        NgramDistributionModule,
-        WordCountsModule,
-        GrammarPieChartModule,
-        DictionaryLookupsModule,
-        GrammarErrorTimeModule,
         PdfViewerModule
     ],
     providers: [

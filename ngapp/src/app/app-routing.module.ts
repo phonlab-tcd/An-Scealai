@@ -35,7 +35,8 @@ import { TeacherStudentComponent } from './teacher-components/teacher-student/te
 import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
 import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
 import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
+import { StatsDashboardModule } from './stats-dashboard/stats-dashboard.module';
+// import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard/stats-dashboard.component';
 
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
@@ -67,7 +68,7 @@ const routes: Routes = [
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
+  // { path: 'stats-dashboard/:id', component: StatsDashboardModule,},
   { path: 'teacher',
     component: TeacherPanelComponent,
     canActivate: [RoleGuardService],
@@ -96,7 +97,7 @@ const routes: Routes = [
       },
       {
         path: 'stats-dashboard/:id',
-        component: StatsDashboardComponent,
+        component: StatsDashboardModule,
       },
       {
         path: 'teacher-settings/:id',
@@ -109,9 +110,12 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'stats-dashboard/:id',
+    loadChildren: () => import('./stats-dashboard/stats-dashboard.module').then(m=>m.StatsDashboardModule)
+  },
+  {
     path: 'report-an-issue',
-    loadChildren: () => import('report-an-issue/report-an-issue.module')
-      .then(m=>m.ReportAnIssueModule)
+    loadChildren: () => import('report-an-issue/report-an-issue.module').then(m=>m.ReportAnIssueModule)
   },
   {
     path: 'admin',

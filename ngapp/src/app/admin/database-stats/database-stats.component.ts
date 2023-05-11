@@ -10,6 +10,7 @@ import * as ChartGeo from 'chartjs-chart-geo'
 import { COUNTY_NAMES } from './countyNames'
 import config from 'abairconfig';
 import { HttpClient } from '@angular/common/http';
+import { TranslationService } from "app/core/services/translation.service";
 
 export interface StoryStats {
   totalStories: number,
@@ -48,7 +49,7 @@ export class DatabaseStatsComponent implements OnInit {
 
   constructor(private userService: UserService, private storyService: StoryService,
               private classroomService: ClassroomService, private profileService: ProfileService,
-              private http: HttpClient) {}
+              private http: HttpClient, public ts: TranslationService) {}
 
   async ngOnInit() {
     // get stats for users, stories, grammar errors, and classroom data
