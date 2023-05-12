@@ -12,7 +12,7 @@ import { Message } from "../../core/models/message";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { NotificationService } from "app/core/services/notification-service.service";
 import { RecordingService } from "../../core/services/recording.service";
-import { FilterPipe } from "app/pipes/filter.pipe"; // used in html template
+import { FilterPipe } from "app/core/pipes/filter.pipe"; // used in html template
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { firstValueFrom } from "rxjs";

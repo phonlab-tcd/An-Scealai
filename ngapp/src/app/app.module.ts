@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatCardModule } from '@angular/material/card'
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -17,27 +16,20 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
 
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-//import { QuillModule } from 'ngx-quill';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
-import { RegisterModule } from 'register/register.module';
+//import { RegisterModule } from 'app/register/register.module';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
-import { SpinnerModule } from 'spinner/spinner.module';
 
-import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
-
-import { FilterPipe } from './pipes/filter.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 
 import { StoryService } from 'app/core/services/story.service';
 import { UserService } from './core/services/user.service';
@@ -49,7 +41,7 @@ import { AboutComponent } from './about/about.component';
 import { TechnologyComponent } from './technology/technology.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
+import { ReportAnIssueModule } from 'app/report-an-issue/report-an-issue.module';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ResourcesComponent } from './resources/resources.component';
@@ -79,16 +71,12 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         AboutComponent,
         TechnologyComponent,
         LoginComponent,
-        //     RegisterComponent,
-        //     RegisterFormComponent,
-        //     WaitingForEmailVerificationComponent,
         ChatbotComponent,
         ProfileComponent,
         SynthesisComponent,
         RecordingComponent,
         RegisterProfileComponent,
         HighlightDirective,
-        //FilterPipe,
         MessagesComponent,
         ResourcesComponent,
         TeamComponent,
@@ -98,7 +86,6 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         CreateQuizComponent,
         AboutTaidhginComponent,
         SynthItemComponent,
-        ClassroomSelectorComponent,
         BasicDialogComponent,
         RecordingDialogComponent,
         UserGuidesComponent,
@@ -107,9 +94,8 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         DictoglossComponent,
     ],
     imports: [
-        RegisterModule,
+        //RegisterModule,
         ReportAnIssueModule,
-        SpinnerModule,
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
@@ -127,24 +113,11 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         MatDialogModule,
         MatSidenavModule,
         MatIconModule,
-        MatTableModule,
         MatInputModule,
         MatPaginatorModule,
         MatSortModule,
         NgbModule,
         NgbDropdownModule,
-        // QuillModule.forRoot({
-        //     customOptions: [{
-        //             import: 'formats/font',
-        //             whitelist: [
-        //                 'sans-serif',
-        //                 'serif',
-        //                 'monospace',
-        //                 'arial',
-        //                 'times-new-roman', // @quill-font
-        //             ]
-        //         }],
-        // }),
         PdfViewerModule
     ],
     providers: [
@@ -152,7 +125,6 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         UserService,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatPaginator,
         MatSort,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

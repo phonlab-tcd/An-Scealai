@@ -158,7 +158,6 @@ export class DashboardComponent implements OnInit {
     
     this.story = await firstValueFrom(this.storyService.getStory(this.route.snapshot.params['id']));
     if(!this.story) return;
-    console.log(this.story)
     this.textUpdated.next();
     this.getWordCount(this.story.text);
     if (this.story.htmlText == null) {
@@ -345,7 +344,6 @@ export class DashboardComponent implements OnInit {
    * @param q quill editor
    */
   onEditorCreated(q: Quill) {
-    console.log(q)
     q['history'].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
@@ -568,7 +566,7 @@ export class DashboardComponent implements OnInit {
 
   /* Route to record story component */
   goToRecording() {
-    this.router.navigateByUrl('/record-story/' + this.story._id);
+    this.router.navigateByUrl('/student/record-story/' + this.story._id);
   }
 
   /* Set modalClass to visible fade */

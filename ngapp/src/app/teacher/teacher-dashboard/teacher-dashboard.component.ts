@@ -56,7 +56,6 @@ export class TeacherDashboardComponent implements OnInit {
    */
   async getClassrooms(teacherId) {
     this.classrooms = await firstValueFrom( this.classroom.getClassroomsForTeacher(teacherId) );
-    console.log(this.classrooms);
     this.classrooms.sort((a, b) => (a.title < b.title ? -1 : 1));
   }
 

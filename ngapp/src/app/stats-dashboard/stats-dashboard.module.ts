@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 import { WordCountsComponent } from './story-stats/word-counts/word-counts.component';
 import { DictionaryLookupsComponent } from './story-stats/dictionary-lookups/dictionary-lookups.component';
@@ -11,13 +12,19 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+
 
 
 @NgModule({
   declarations: [
     StatsDashboardComponent,
+    ClassroomSelectorComponent,
     WordCountsComponent,
     DictionaryLookupsComponent,
     NgramDistributionComponent,
@@ -32,10 +39,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatSelectModule,
     MatButtonModule,
     FormsModule,
-    NgbModule
+    ReactiveFormsModule,
+    NgbModule,
+    MatDatepickerModule,
+    MatInputModule,
   ],
   exports: [
     StatsDashboardComponent
-  ]
+  ],
+  providers: [
+    MatDatepickerModule,
+    MatNativeDateModule,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+],
 })
 export class StatsDashboardModule { }

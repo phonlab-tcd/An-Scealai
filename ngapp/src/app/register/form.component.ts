@@ -10,7 +10,7 @@ type UsernameMessageKey = "username_no_spaces" | "username_no_special_chars";
 @Component({
   selector: "register-form",
   templateUrl: "./form.component.html",
-  styleUrls: ["./register.component.scss"],
+  styleUrls: ["../register/register.component.scss"],
   host: {
     class: "registerContainer",
   },

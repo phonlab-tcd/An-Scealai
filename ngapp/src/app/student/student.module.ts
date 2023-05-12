@@ -7,11 +7,13 @@ import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.co
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
 
+import { SpinnerModule } from '../spinner/spinner.module';
+
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 
-import { FilterPipe } from 'app/pipes/filter.pipe';
+import { FilterPipe } from 'app/core/pipes/filter.pipe';
 
 
 @NgModule({
@@ -27,6 +29,7 @@ import { FilterPipe } from 'app/pipes/filter.pipe';
     StudentRoutingModule,
     MatSelectModule,
     FormsModule,
+    SpinnerModule,
     QuillModule.forRoot({
       customOptions: [{
               import: 'formats/font',

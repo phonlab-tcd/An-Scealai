@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module'
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SpinnerModule } from '../spinner/spinner.module';
 
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { TeachersComponent } from './teachers/teachers.component'
@@ -46,7 +46,7 @@ import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt
     StoryComponent,
     StoryHistoryComponent,
     PosDataTableComponent,
-    PromptDataTableComponent
+    PromptDataTableComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +63,7 @@ import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt
     MatCardModule,
     MatButtonModule,
     MatDatepickerModule,
+    SpinnerModule
   ],
   providers: [
     MatPaginator,
