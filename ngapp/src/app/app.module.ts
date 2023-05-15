@@ -28,7 +28,7 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
@@ -38,6 +38,7 @@ import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.c
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
+import { SelectQuizDialogComponent } from './chatbot/select-quiz-dialog/select-quiz-dialog.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { RegisterModule } from 'app/register/register.module';
@@ -70,6 +71,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         StatsDashboardComponent,
         ClassroomSelectorComponent,
         DictoglossComponent,
+        SelectQuizDialogComponent,
     ],
     imports: [
         NavBarModule,
@@ -96,6 +98,12 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         MatIconModule,
         MatInputModule,
         PdfViewerModule,
+        NgramDistributionModule,
+        WordCountsModule,
+        GrammarPieChartModule,
+        DictionaryLookupsModule,
+        GrammarErrorTimeModule,
+        PdfViewerModule
     ],
     providers: [
         StoryService,

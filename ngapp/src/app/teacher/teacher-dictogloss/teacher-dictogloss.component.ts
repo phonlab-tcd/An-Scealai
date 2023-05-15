@@ -38,9 +38,7 @@ export class TeacherDictoglossComponent implements OnInit {
 
   async ngOnInit() {
     // get classroom
-    this.classroom = await firstValueFrom(
-      this.classroomService.getClassroom(this.route.snapshot.params["id"])
-    );
+    this.classroom = await firstValueFrom( this.classroomService.getClassroom(this.route.snapshot.params["id"]) );
     // get list of student users
     for (let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe({

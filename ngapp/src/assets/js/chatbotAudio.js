@@ -142,6 +142,7 @@ function callAudio(testString, id){
   else{
     messageBubble = {text: testString.text, dialect: 'MU'};
   }
+  console.log("I AM READ FROM THE ASSETS FOLDER")
   request.open('POST', backendUrl + 'Chatbot/getAudio', true);
   request.setRequestHeader("Content-type", "application/json");
   request.send(JSON.stringify(messageBubble));
