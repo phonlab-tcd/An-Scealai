@@ -20,7 +20,6 @@ import { MatTableModule } from '@angular/material/table';
 
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
-import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 import { StoryService } from 'app/core/services/story.service';
 import { UserService } from './core/services/user.service';
 
@@ -63,7 +62,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         RegisterProfileComponent,
         HighlightDirective,
         MessagesComponent,
-        SafeHtmlPipe,
         CreateQuizComponent,
         SynthItemComponent,
         BasicDialogComponent,
