@@ -7,8 +7,8 @@ import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.c
 import { DashboardComponent } from './dashboard.component';
 import { By } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
-import { TranslationService } from '../../translation.service';
-import { Story } from 'app/story';
+import { TranslationService } from '../../core/services/translation.service';
+import { Story } from '../../core/models/story';
 import { MatDialog } from '@angular/material/dialog';
 
 describe('DashboardComponent', () => {

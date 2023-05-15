@@ -2,7 +2,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing';
 import { SynthItem, } from './synth-item';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SynthesisService } from './services/synthesis.service';
+import { SynthesisService } from '../services/synthesis.service';
 
 describe('SynthItem', () => {
   beforeEach(waitForAsync(()=>{

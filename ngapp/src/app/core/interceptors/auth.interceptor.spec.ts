@@ -9,7 +9,7 @@ import { HttpHeaders              } from '@angular/common/http';
 import { RouterTestingModule      } from '@angular/router/testing';
 
 import { AuthInterceptor          } from './auth.interceptor';
-import { AuthenticationService    } from '../authentication.service';
+import { AuthenticationService    } from '../services/authentication.service';
 import { Observable               } from 'rxjs';
 
 describe('AuthInterceptor', () => {
