@@ -25,7 +25,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
-//import { RegisterModule } from 'app/register/register.module';
+import { RegisterModule } from 'app/register/register.module';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 
 import { HighlightDirective } from './directives/highlight.directive';
@@ -63,6 +63,14 @@ import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
 
+import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
+import { DictionaryLookupsModule } from './story-stats/dictionary-lookups/dictionary-lookups.module';
+import { GrammarPieChartModule } from './story-stats/grammar-pie-chart/grammar-pie-chart.module';
+import { GrammarErrorTimeModule } from './story-stats/grammar-error-time/grammar-error-time.module';
+import { NgramDistributionModule } from './story-stats/ngram-distribution/ngram-distribution.module';
+import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
+import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
+
 
 @NgModule({
     declarations: [
@@ -91,11 +99,18 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         UserGuidesComponent,
         PromptsComponent,
         PartOfSpeechComponent,
+        StatsDashboardComponent,
+        ClassroomSelectorComponent,
         DictoglossComponent,
     ],
     imports: [
-        //RegisterModule,
+        RegisterModule,
         ReportAnIssueModule,
+        DictionaryLookupsModule,
+        GrammarPieChartModule,
+        GrammarErrorTimeModule,
+        NgramDistributionModule,
+        WordCountsModule,
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
@@ -118,7 +133,7 @@ import { DictoglossComponent } from './dictogloss/dictogloss.component';
         MatSortModule,
         NgbModule,
         NgbDropdownModule,
-        PdfViewerModule
+        PdfViewerModule,
     ],
     providers: [
         StoryService,

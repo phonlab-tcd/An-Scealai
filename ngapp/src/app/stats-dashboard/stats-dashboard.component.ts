@@ -6,7 +6,7 @@ import { ClassroomService } from 'app/core/services/classroom.service';
 import { TranslationService } from 'app/core/services/translation.service';
 import { UserService } from 'app/core/services/user.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ClassroomSelectorComponent } from '../classroom-selector/classroom-selector.component';
+import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Story } from 'app/core/models/story';
 import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';

@@ -25,6 +25,7 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
 import { NotificationService } from 'app/core/services/notification-service.service';
+import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -46,10 +47,7 @@ const routes: Routes = [
   { path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  {
-    path: 'stats-dashboard/:id',
-    loadChildren: () => import('./stats-dashboard/stats-dashboard.module').then(m=>m.StatsDashboardModule)
-  },
+  { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
   {
     path: 'report-an-issue',
     loadChildren: () => import('app/report-an-issue/report-an-issue.module').then(m=>m.ReportAnIssueModule)

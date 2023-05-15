@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Chart } from 'chart.js';
+//import { Chart } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import config from 'abairconfig';
 import { TranslationService } from "app/core/services/translation.service";
+import Chart from 'chart.js/auto';
+
 
 const LIGHT_BLUE = 'rgba(54, 162, 235, 0.2)';
 const BLUE = 'rgba(54, 162, 235, 1)';
