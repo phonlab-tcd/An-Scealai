@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { TranslationService } from '../../../translation.service';
-import { AuthenticationService } from '../../../authentication.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-dictionary-lookups',

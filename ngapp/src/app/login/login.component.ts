@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthenticationService, TokenPayload, VerifyEmailRequest } from "../authentication.service";
+import { AuthenticationService, TokenPayload, VerifyEmailRequest } from "app/core/services/authentication.service";
 import { Router } from "@angular/router";
-import { EventType } from "../event";
-import { EngagementService } from "../engagement.service";
-import { TranslationService } from "../translation.service";
+import { EventType } from "../core/models/event";
+import { EngagementService } from "app/core/services/engagement.service";
+import { TranslationService } from "app/core/services/translation.service";
 import config from "abairconfig";
 
 @Component({

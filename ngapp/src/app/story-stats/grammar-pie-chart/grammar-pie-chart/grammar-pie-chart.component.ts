@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TranslationService } from '../../../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 import { Chart } from 'chart.js';
 import { ERROR_INFO} from '../../../lib/grammar-engine/types';
 

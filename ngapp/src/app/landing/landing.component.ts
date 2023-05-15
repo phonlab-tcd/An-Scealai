@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Router } from '@angular/router';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from 'app/core/services/translation.service';
 
 @Component({
   selector: 'app-landing',
@@ -16,7 +16,7 @@ export class LandingComponent implements OnInit {
   ngOnInit() {
     if(this.auth.isLoggedIn()) {  
       if(this.auth.getUserDetails().role === 'STUDENT') {
-        this.router.navigateByUrl('/contents');
+        this.router.navigateByUrl('/student');
       }
       if(this.auth.getUserDetails().role === 'TEACHER') {
         this.router.navigateByUrl('/teacher');

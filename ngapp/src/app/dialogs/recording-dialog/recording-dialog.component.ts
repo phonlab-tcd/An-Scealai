@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslationService } from '../../translation.service';
-import { RecordAudioService } from '../../services/record-audio.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { RecordAudioService } from '../../core/services/record-audio.service';
 import { SafeUrl } from '@angular/platform-browser';
 
 export interface DialogData {

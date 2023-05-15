@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ClassroomService } from '../../classroom.service';
-import { TranslationService } from '../../translation.service';
-import { UserService } from '../../user.service';
-import { AuthenticationService } from 'app/authentication.service';
-import { Classroom } from 'app/classroom';
+import { ClassroomService } from 'app/core/services/classroom.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { UserService } from '../../core/services/user.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Classroom } from 'app/core/models/classroom';
 import { firstValueFrom } from 'rxjs';
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 

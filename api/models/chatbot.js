@@ -1,5 +1,5 @@
-// Chatbot.js
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 const Schema = mongoose.Schema;
 
 // Define collection and schema for Chatbot
@@ -13,6 +13,7 @@ let Message = new Schema({
   }
 );
 
+// Chatbot logs
 let Log = new Schema({
   date: { type: Date },
   topic: { type: String },
@@ -24,8 +25,8 @@ let Log = new Schema({
   }
 );
 
-var LogModel = mongoose.model('Log', Log);
 
+// Chatbot object
 let Chatbot = new Schema({
   username: { type: String },
   _id: { type: String },
@@ -35,58 +36,53 @@ let Chatbot = new Schema({
   {
     collection: 'chatbot'
   },
-  {
-    __v: {
-      type: Number,
-      select: false
-    }
-  }
 );
 
-var ChatbotModel = mongoose.model('Chatbot', Chatbot);
-//module.exports = mongoose.model('Chatbot', Chatbot);
 
+// Schema for audio bubbles
 let AudioBubble = new Schema({
   text: { type: String },
   dialect: { type: String }
 });
 
-var AudioBubbleModel = mongoose.model('AudioBubble', AudioBubble);
-
-
-
-let PersonalScript = new Schema({
-  name: { type: String },
-  content: { type: String },
-  user: { type: String }, 
-  role: {type: String },
-  classId: {type: String},
-  numberofquestions: {type: Number},
-  questionsandanswers: {type: String},
-},
- {
-   collection: 'personalScripts'
- },
+// Schema for Quizes the user creates
+const ChatbotQuiz = new Schema(
+    {
+      owner: {
+        type: mongoose.Types.ObjectId,
+        index: true,
+      },
+      title: {
+        type: String,
+      },
+      date: {
+        type: Date,
+      },
+      classroomId: {
+        type: ObjectId,
+        index: true,
+      },
+      numOfQuestions: {
+        type: Number,
+      },
+      isCommunityScript: {
+        type: Boolean,
+      },
+      content: {
+        type: String,
+      },
+      botScript: {
+        type: String,
+      },
+    },
+    {
+      collection: 'chatbotQuizzes',
+    },
 );
-
-var PersonalScriptModel = mongoose.model('PersonalScripts', PersonalScript);
-
-let CommunityScript = new Schema({
-  name: { type: String },
-  content: { type: String },
-  user: { type: String }, 
-},
- {
-   collection: 'communityScripts'
- },
-);
-
-var CommunityScriptModel = mongoose.model('CommunityScripts', CommunityScript);
 
 module.exports = {
-  Log: LogModel,
-  Chatbot: ChatbotModel,
-  AudioBubble: AudioBubbleModel,
-  PersonalScript: PersonalScriptModel,
-  CommunityScript: CommunityScriptModel,
-}
+  ChatbotQuiz: mongoose.model('ChatbotQuiz', ChatbotQuiz),
+  Log: mongoose.model('Log', Log),
+  Chatbot: mongoose.model('Chatbot', Chatbot),
+  AudioBubble: mongoose.model('AudioBubble', AudioBubble),
+};

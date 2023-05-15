@@ -1,0 +1,114 @@
+<mat-dialog-content class="mat-typography">
+  <mat-tab-group mat-stretch-tabs>
+
+                                                          <!-- User Quiz Tab -->
+    <mat-tab label="{{ ts.l.my_quiz_s }}">
+      <table mat-table [dataSource]="userQuizzes" class="mat-elevation-z8" *ngIf="userQuizzes.length > 0; else noUserQuizData" >
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>
+          <td mat-cell *matCellDef="let quiz" (click)="openQuiz(quiz)">
+            {{ quiz.title }}
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.date }}</th>
+          <td mat-cell *matCellDef="let quiz" (click)="openQuiz(quiz)">
+            {{ quiz.date | date : "mediumDate" }}
+          </td>
+        </ng-container>
+
+        <!-- No. Questions Column -->
+        <ng-container matColumnDef="numOfQuestions">
+          <th mat-header-cell *matHeaderCellDef>No. Questions</th>
+          <td mat-cell *matCellDef="let quiz" (click)="openQuiz(quiz)">
+            {{ quiz.numOfQuestions }}
+          </td>
+        </ng-container>
+
+        <!-- Delete Quiz Column -->
+        <ng-container matColumnDef="x">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let quiz">
+            <i class="fas fa-trash-alt headerIcon" (click)="openDeleteQuizDialog(quiz._id)" ></i>
+          </td>
+        </ng-container>
+
+        <!-- Data to fill the rows and columns -->
+        <tr mat-header-row *matHeaderRowDef="userQuizColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: userQuizColumns" class="tableEntry" ></tr>
+      </table>
+      <!-- Display message if no quiz data -->
+      <ng-template #noUserQuizData class="noDataMessage">
+        No Quizzes
+      </ng-template>
+    </mat-tab>
+
+                                                          <!-- Classroom Quiz Tab -->
+    <mat-tab *ngIf="data.role == 'STUDENT'" label="{{ ts.l.my_teachquiz }}">
+      <table mat-table [dataSource]="classroomQuizzes" class="mat-elevation-z8" *ngIf="classroomQuizzes.length > 0; else noClassroomQuizData" >
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>
+          <td mat-cell *matCellDef="let quiz">{{ quiz.title }}</td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.date }}</th>
+          <td mat-cell *matCellDef="let quiz"> {{ quiz.date | date : "mediumDate" }} </td>
+        </ng-container>
+
+        <!-- No. Questions Column -->
+        <ng-container matColumnDef="numOfQuestions">
+          <th mat-header-cell *matHeaderCellDef>No. Questions</th>
+          <td mat-cell *matCellDef="let quiz">{{ quiz.numOfQuestions }}</td>
+        </ng-container>
+
+        <!-- Data to fill the rows and columns -->
+        <tr mat-header-row *matHeaderRowDef="classroomQuizColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: classroomQuizColumns" class="tableEntry" (click)="openQuiz(row)" ></tr>
+      </table>
+
+      <!-- Display message if no quiz data -->
+      <ng-template #noClassroomQuizData> No Quizzes </ng-template>
+    </mat-tab>
+
+                                                          <!-- Community Quiz Tab -->
+    <mat-tab label="{{ ts.l.t_community_quiz }}">
+      <table mat-table [dataSource]="communityQuizzes" class="mat-elevation-z8" *ngIf="communityQuizzes.length > 0; else noCommunityQuizData" >
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>
+          <td mat-cell *matCellDef="let quiz">{{ quiz.title }}</td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>{{ ts.l.date }}</th>
+          <td mat-cell *matCellDef="let quiz">
+            {{ quiz.date | date : "mediumDate" }}
+          </td>
+        </ng-container>
+
+        <!-- No. Questions Column -->
+        <ng-container matColumnDef="numOfQuestions">
+          <th mat-header-cell *matHeaderCellDef>No. Questions</th>
+          <td mat-cell *matCellDef="let quiz">{{ quiz.numOfQuestions }}</td>
+        </ng-container>
+
+        <!-- Data to fill the rows and columns -->
+        <tr mat-header-row *matHeaderRowDef="classroomQuizColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: classroomQuizColumns" class="tableEntry" (click)="openQuiz(row)" ></tr>
+      </table>
+      <!-- Display message if no quiz data -->
+      <ng-template #noCommunityQuizData> No Community Quizzes </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="allQuizzes" cdkFocusInitial> {{ ts.l.done }} </button>
+</mat-dialog-actions>

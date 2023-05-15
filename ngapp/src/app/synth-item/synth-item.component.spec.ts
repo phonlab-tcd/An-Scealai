@@ -3,8 +3,8 @@ import { By } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SynthItemComponent } from './synth-item.component';
-import { SynthItem } from '../synth-item';
-import { SynthesisService } from '../services/synthesis.service';
+import { SynthItem } from '../core/models/synth-item';
+import { SynthesisService } from '../core/services/synthesis.service';
 
 describe('SynthItemComponent', () => {
   let component: SynthItemComponent;

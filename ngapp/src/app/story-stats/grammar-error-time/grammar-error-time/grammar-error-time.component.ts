@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Chart } from "chart.js";
-import { TranslationService } from "../../../translation.service";
+import { TranslationService } from "app/core/services/translation.service";
 import { ERROR_INFO } from "../../../lib/grammar-engine/types";
 import "chartjs-adapter-date-fns";
 

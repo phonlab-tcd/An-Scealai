@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Voice, voices } from 'app/services/synthesis.service';
-import { TranslationService } from 'app/translation.service';
+import { Voice, voices } from 'app/core/services/synthesis.service';
+import { TranslationService } from 'app/core/services/translation.service';
 @Component({
   selector: 'synth-voice-select',
   templateUrl: './synth-voice-select.component.html',

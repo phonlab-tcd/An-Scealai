@@ -1,0 +1,67 @@
+
+<div id='container'>
+  <button id='about-button' (click)=showAbout()>{{ts.l.taidhgin_about}} <i class="fas fa-info-circle"></i></button>
+  <div id='quiz-name'><input id='topic-name' type="text" placeholder={{ts.l.t_enterName}}></div>
+  <div id='shuffle-box'><input type="checkbox" checked> {{ts.l.shuffle_questions}}</div>
+  <div id='questions'>
+    <p>{{ts.l.quiz_q_title}}</p>
+    <div class='Q'>1. <input id='q1' placeholder={{ts.l.t_insert_q}} type="text"></div>
+    <div class='Q'>2. <input id='q2' placeholder={{ts.l.t_insert_q}} type="text"></div>
+    <div class='Q'>3. <input id='q3' placeholder={{ts.l.t_insert_q}} type="text"></div>
+    <div class='Q'>4. <input id='q4' placeholder={{ts.l.t_insert_q}} type="text"></div>
+    <div class='Q'>5. <input id='q5' placeholder={{ts.l.t_insert_q}} type="text"></div>
+  </div>
+  <div id='answers'>
+    <p>{{ts.l.quiz_a_title}}</p>
+    <div class='Q' id='answer-1'>1. <input placeholder={{ts.l.t_insert_a}} class='A' id='a1' type="text"><button class='add-A' type="submit" id='add-a1' (click)='addAnswer("answer-1", "add-a1")'>{{ts.l.quiz_add_a}}</button></div>
+    <div class='Q' id='answer-2'>2. <input placeholder={{ts.l.t_insert_a}} class='A' id='a2' type="text"><button class='add-A' type="submit" id='add-a2' (click)='addAnswer("answer-2", "add-a2")'>{{ts.l.quiz_add_a}}</button></div>
+    <div class='Q' id='answer-3'>3. <input placeholder={{ts.l.t_insert_a}} class='A' id='a3' type="text"><button class='add-A' type="submit" id='add-a3' (click)='addAnswer("answer-3", "add-a3")'>{{ts.l.quiz_add_a}}</button></div>
+    <div class='Q' id='answer-4'>4. <input placeholder={{ts.l.t_insert_a}} class='A' id='a4' type="text"><button class='add-A' type="submit" id='add-a4' (click)='addAnswer("answer-4", "add-a4")'>{{ts.l.quiz_add_a}}</button></div>
+    <div class='Q' id='answer-5'>5. <input placeholder={{ts.l.t_insert_a}} class='A' id='a5' type="text"><button class='add-A' type="submit" id='add-a5' (click)='addAnswer("answer-5", "add-a5")'>{{ts.l.quiz_add_a}}</button></div>
+  </div>
+  <button id='add-question' (click)='addQuestion()'><i class="fas fa-plus-circle"></i> {{ts.l.quiz_add_q}}</button>
+  <button id='done' (click)=showSubmitSection()>{{ts.l.done}}</button>
+</div>
+<div id='submit-container'>
+  <div id='submit-messages'>
+    <div>
+      <button *ngFor="let classroom of classrooms" (click)="selectedClassroomId = classroom._id">
+        {{classroom.title}}
+      </button>
+    </div>
+
+    <div id='save-prompt'>
+      {{ts.l.save_script}}
+      <input *ngIf="auth.getUserDetails().role === 'TEACHER'" id='class-code-input' type='text' placeholder="class code">
+      <button type='submit' (click)=done() id='yes-publish'>{{ts.l.save_script_y}}</button>
+      <button type='submit' onclick='$("#saved-message").text("Your script will not be saved. Save it to use with Taidhgín."); 
+      $("#saved-message").css("display", "block")' id='no-publish'>{{ts.l.save_script_n}}</button>
+    </div>
+    <div id='thank-message'>{{ts.l.taidhgin_createThankMessage}}</div>
+    <div id='saved-message'>
+      {{ts.l.taidhgin_saved_message}}
+      <button id='go-to-taidhgin' routerLink='/taidhgin'>{{ts.l.go_to_taidhgin}}</button>
+    </div>
+    <div id='verified-message'>
+      {{ts.l.taidhgin_verified_message}}
+    </div>
+    <div id='ask-publish'>
+      {{ts.l.taidhgin_askPublish}}
+      <button id='yes-publish' (click)='sendVerification()'>{{ts.l.publish_script_y}}</button>
+      <button id='no-publish' onclick="$('#saved-message').text('No problem! You can still use your script in Taidhgín under Personal Topics.')">{{ts.l.publish_script_n}}</button>
+    </div>
+    <button id='ask-download' (click)="downloadNewScript()">{{ts.l.t_downloadQuiz}}</button>
+    <div id='remind-message'>{{ts.l.fillAllEntries}}</div>
+    <div id='exists-message'>{{ts.l.script_exists}}</div>
+    <div id='forgetName-message'>{{ts.l.forgetQuizName}}</div>
+  </div>
+  <button id='cancel-submit' type='submit' (click)="closeSubmit()">{{ts.l.closeSubmition}}</button>
+</div>
+<div id='about-container'>
+  <div id='info'>
+    <h2>{{ts.l.how_to_tquiz_title}}</h2>
+    <p id=description innerHTML={{ts.l.how_to_tquiz}}></p>
+  </div>
+  <button id='cancel-submit' type='submit' (click)="closeAbout()">{{ts.l.closeSubmition}}</button>
+</div>
+

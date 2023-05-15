@@ -1,0 +1,35 @@
+mat-tab-group {
+    min-height: 40vh;
+}
+
+table {
+    width: 100%;
+}
+
+td, th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.mat-sort-header-container {
+    justify-content: space-evenly !important;
+}
+
+.tableEntry:hover {
+    cursor: pointer;
+    background-color: #D3D3D3;
+}
+
+.tableEntry:not(:hover){
+    background-color: white;
+}
+
+.trashImg {
+    width: 24px; 
+    padding-right: 8px;
+    margin-left: 8px;
+}
+
+.noDataMessage {
+    text-align: center;
+}

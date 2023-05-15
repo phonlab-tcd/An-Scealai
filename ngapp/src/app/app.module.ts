@@ -1,173 +1,88 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injector } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatExpansionModule } from '@angular/material/expansion'
-import { MatCardModule } from '@angular/material/card'
+
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatSortModule } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
-
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { QuillModule } from 'ngx-quill';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-
-import { RegisterModule } from 'register/register.module';
-import { AuthInterceptor } from 'app/interceptor/auth.interceptor';
-import { SpinnerModule } from 'spinner/spinner.module';
-
-import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
-import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
-import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
-import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
-import { GrammarErrorTimeModule } from 'app/story-stats/grammar-error-time/grammar-error-time.module';
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
-import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
-
-import { FilterPipe } from './pipes/filter.pipe';
-import { HighlightDirective } from './directives/highlight.directive';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-
-import { StoryService } from './story.service';
-import { UserService } from './user.service';
+import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
+import { HighlightDirective } from 'app/core/directives/highlight.directive';
+import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
+import { StoryService } from 'app/core/services/story.service';
+import { UserService } from './core/services/user.service';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
 import { LandingComponent } from './landing/landing.component';
-import { AboutComponent } from './about/about.component';
-import { TechnologyComponent } from './technology/technology.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ReportAnIssueModule } from 'report-an-issue/report-an-issue.module';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
-import { ResourcesComponent } from './resources/resources.component';
-import { TeamComponent } from './team/team.component';
-import { AboutLaraComponent } from './about-lara/about-lara.component';
-import { SponsorsComponent } from './sponsors/sponsors.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
-import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { SynthItemComponent } from './synth-item/synth-item.component';
-import { SynthVoiceSelectComponent } from './synth-voice-select/synth-voice-select.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
-import { UserGuidesComponent } from './user-guides/user-guides.component';
-
-import { DashboardComponent } from './student-components/dashboard/dashboard.component';
-import { BookContentsComponent } from './student-components/book-contents/book-contents.component';
-import { ChatbotComponent } from './student-components/chatbot/chatbot.component';
-import { SynthesisComponent } from './student-components/synthesis/synthesis.component';
-import { SynthesisPlayerComponent } from './student-components/synthesis-player/synthesis-player.component';
-
-import { AdminPanelComponent } from './admin-components/admin-panel/admin-panel.component';
-import { TeachersComponent } from './admin-components/teachers/teachers.component';
-import { AdminDashboardComponent } from './admin-components/admin-dashboard/admin-dashboard.component';
-import { UserComponent } from './admin-components/user/user.component';
-import { StoryComponent } from './admin-components/story/story.component';
-import { FindUserComponent } from './admin-components/find-user/find-user.component';
-import { ProfileStatsComponent } from './admin-components/profile-stats/profile-stats.component';
-import { FeatureStatsComponent } from './admin-components/feature-stats/feature-stats.component';
-
-import { TeacherDashboardComponent } from './teacher-components/teacher-dashboard/teacher-dashboard.component';
-import { TeacherStudentComponent } from './teacher-components/teacher-student/teacher-student.component';
-import { TeacherClassroomComponent } from './teacher-components/teacher-classroom/teacher-classroom.component';
-import { TeacherStoryComponent } from './teacher-components/teacher-story/teacher-story.component';
-import { TeacherPanelComponent } from './teacher-components/teacher-panel/teacher-panel.component';
-import { AdminClassroomComponent } from './admin-components/admin-classroom/admin-classroom.component';
-import { StoryHistoryComponent } from './admin-components/story-history/story-history.component';
-import { RecordingComponent } from './student-components/recording/recording.component';
-import { TeacherSettingsComponent } from './teacher-components/teacher-settings/teacher-settings.component';
-import { DatabaseStatsComponent } from './admin-components/database-stats/database-stats.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { TeacherDictoglossComponent } from './teacher-components/teacher-dictogloss/teacher-dictogloss.component';
-import { AddContentComponent } from './admin-components/add-content/add-content.component';
-import { PromptDataTableComponent } from './admin-components/add-content/prompt-data-table/prompt-data-table.component';
-import { PosDataTableComponent } from './admin-components/add-content/pos-data-table/pos-data-table.component';
+import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
+import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
+import { SelectQuizDialogComponent } from './chatbot/select-quiz-dialog/select-quiz-dialog.component';
+
+import { AppRoutingModule } from './app-routing.module';
+import { RegisterModule } from 'app/register/register.module';
+import { DictionaryLookupsModule } from './story-stats/dictionary-lookups/dictionary-lookups.module';
+import { GrammarPieChartModule } from './story-stats/grammar-pie-chart/grammar-pie-chart.module';
+import { GrammarErrorTimeModule } from './story-stats/grammar-error-time/grammar-error-time.module';
+import { NgramDistributionModule } from './story-stats/ngram-distribution/ngram-distribution.module';
+import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
+import { NavBarModule } from './nav-bar/nav-bar.module';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 
 @NgModule({
     declarations: [
         AppComponent,
         LandingComponent,
-        AboutComponent,
-        TechnologyComponent,
         LoginComponent,
-        //     RegisterComponent,
-        //     RegisterFormComponent,
-        //     WaitingForEmailVerificationComponent,
-        DashboardComponent,
-        BookContentsComponent,
         ChatbotComponent,
         ProfileComponent,
-        AdminPanelComponent,
-        TeachersComponent,
-        AdminDashboardComponent,
-        UserComponent,
-        StoryComponent,
-        TeacherDashboardComponent,
-        TeacherStudentComponent,
-        TeacherClassroomComponent,
-        TeacherStoryComponent,
-        TeacherPanelComponent,
-        AdminClassroomComponent,
-        SynthesisComponent,
-        StoryHistoryComponent,
-        RecordingComponent,
         RegisterProfileComponent,
-        FindUserComponent,
         HighlightDirective,
-        FilterPipe,
         MessagesComponent,
-        ResourcesComponent,
-        TeamComponent,
-        AboutLaraComponent,
         SafeHtmlPipe,
-        SponsorsComponent,
-        SynthesisPlayerComponent,
-        ProfileStatsComponent,
-        FeatureStatsComponent,
         CreateQuizComponent,
-        AboutTaidhginComponent,
         SynthItemComponent,
-        SynthVoiceSelectComponent,
-        StatsDashboardComponent,
-        ClassroomSelectorComponent,
         BasicDialogComponent,
         RecordingDialogComponent,
-        UserGuidesComponent,
-        TeacherSettingsComponent,
-        DatabaseStatsComponent,
         PromptsComponent,
         PartOfSpeechComponent,
+        StatsDashboardComponent,
+        ClassroomSelectorComponent,
         DictoglossComponent,
-        TeacherDictoglossComponent,
-        AddContentComponent,
-        PromptDataTableComponent,
-        PosDataTableComponent,
+        SelectQuizDialogComponent,
     ],
     imports: [
+        NavBarModule,
         RegisterModule,
-        ReportAnIssueModule,
-        SpinnerModule,
+        DictionaryLookupsModule,
+        GrammarPieChartModule,
+        GrammarErrorTimeModule,
+        NgramDistributionModule,
+        WordCountsModule,
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
@@ -175,34 +90,18 @@ import { PosDataTableComponent } from './admin-components/add-content/pos-data-t
         FormsModule,
         TextInputHighlightModule,
         BrowserAnimationsModule,
-        MatExpansionModule,
-        MatCardModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatFormFieldModule,
         MatSelectModule,
         MatButtonModule,
         MatDialogModule,
-        MatSidenavModule,
+        MatCardModule,
         MatIconModule,
-        MatTableModule,
+        MatTabsModule,
         MatInputModule,
-        MatPaginatorModule,
-        MatSortModule,
-        NgbModule,
-        NgbDropdownModule,
-        QuillModule.forRoot({
-            customOptions: [{
-                    import: 'formats/font',
-                    whitelist: [
-                        'sans-serif',
-                        'serif',
-                        'monospace',
-                        'arial',
-                        'times-new-roman', // @quill-font
-                    ]
-                }],
-        }),
+        MatTableModule,
+        PdfViewerModule,
         NgramDistributionModule,
         WordCountsModule,
         GrammarPieChartModule,
@@ -215,12 +114,11 @@ import { PosDataTableComponent } from './admin-components/add-content/pos-data-t
         UserService,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatPaginator,
-        MatSort,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: MatDialogRef, useValue: {} },
         { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+        
     ],
     bootstrap: [
         AppComponent,

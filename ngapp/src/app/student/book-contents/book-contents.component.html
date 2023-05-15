@@ -1,0 +1,84 @@
+<!-- List of stories with delete and add new story button. Each story links to dashboard page-->
+<div class="bookContainer">
+  <div class="contentsContainer">
+    <div class="bookContentsTitle">{{ts.l.my_stories}}</div>
+    <div class="contentsTitleContainer">
+      <div class="contentsLinkTitle">{{ts.l.title}}</div>
+      <div class="contentsDateTitle">{{ts.l.last_updated}}</div>
+    </div>
+    <!-- Search bar -->
+    <div role="main">
+      <div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
+            [(ngModel)]="searchText" placeholder="{{ts.l.search_story_title_or_content}}">
+        </div>
+      </div>
+    </div>
+
+    <div class="contentsLinkContainer">
+      <div> {{ts.l.loading}} </div>
+      <div *ngIf="!storiesLoaded" class="newStoryMessage">
+        <grid-spinner></grid-spinner>
+      </div>
+          <!-- create new story message if no stories -->
+      <div *ngIf="stories.length === 0 && storiesLoaded" class="newStoryMessage">
+        {{ts.l.click_new_story}}
+      </div>
+        <!-- List each story -->
+      <div *ngFor="let story of stories | appFilter: searchText">
+        <div class="contentSection">
+          <div class="contentsLink">
+            <!-- delete check box if deleteMode -->
+            <input type="checkbox" class="deleteCheckbox" *ngIf="deleteMode" (click)="toggleDelete(story._id)">
+            <!-- link the story to its dashboard -->
+            <div 
+              appHighlight
+              [searchedWord]="searchText"
+              [content]="story.title"
+              [classToApply]="'font-weight-bold'"
+              [setTitle]="'true'" 
+              [routerLink]="['../dashboard', story._id]"> 
+                {{story.title}}
+            </div>
+          </div>
+          <div *ngIf="isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'M/d/yy, h:mm a' }}</div>
+          <div *ngIf="!isFromAmerica" class="contentsDate">{{story.lastUpdated | date : 'd/M/yy, h:mm a' }}</div>
+        </div>
+        <hr/>
+      </div>
+    </div>     
+
+    <!-- delte story button -->
+    <div class="contentsBtnsContainer">
+      <button
+          class="btn deleteBtn"
+          [class.deleteModeBtn]="deleteMode"
+          (click)="toggleDeleteMode()">
+        <img src="assets/img/trash.ico" class="trashImg">
+      </button>
+      <!-- messages button -->
+      <button
+          *ngIf="isEnrolled"
+          class="btn messagesBtn"
+          (click)="goToMessages()">
+        {{ts.l.messages}}
+        <span class="notificationBtn" *ngIf="unreadMessages > 0">
+          {{unreadMessages}}
+        </span>
+      </button>
+      <!-- stats button -->
+      <button
+          *ngIf="stories.length > 0"
+          class="btn messagesBtn"
+          (click)="goToStats()">
+        {{ts.l.stats}}
+      </button>
+      <!-- new story button -->
+      <button
+          data-cy=create-story
+          class="btn newStoryBtn" (click)="createNewStory()">{{ts.l.new_story}}
+      </button>
+    </div>        
+  </div>
+</div>

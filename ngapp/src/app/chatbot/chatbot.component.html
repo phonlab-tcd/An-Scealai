@@ -1,0 +1,127 @@
+<!--<button id='test_button' type='submit' onclick=testDownload()>Test</button>-->
+<!--<button id='stop-record' onclick="stopRecording()">Stop</button>-->
+
+<!-- Chimp Video-->
+<div id="popup-background"></div>
+<audio id="botaudio" src=""></audio>
+<video id="chimp" src="./assets/img/chimp_talking.mp4"></video>
+
+
+                                                      <!-- Quiz Selection Button-->
+<div id="new-contents">
+  <div id="topics">{{ ts.l.taidhgin_choose_topic }}</div>
+  <div *ngIf="this.auth.isLoggedIn(); else notLoggedIn">
+    <button class="choose-personal" (click)="openQuizDialog()" >
+      {{ ts.l.my_quiz_s }}
+    </button>
+  </div>
+  <ng-template #notLoggedIn><p id="login-rec">{{ ts.l.taidhgin_signup }}</p></ng-template>
+</div>
+
+                                                      <!-- Chatbot Container-->
+<div class="bot-bg-modal">
+  <div id="bg-background"></div>
+                                                        <!-- Dialect Popup-->
+  <div id="bot-audio">
+    <div id="close-audio">
+      Close
+    </div>
+    <div id="dialects">
+      <div id="select-HTS" (click)="selectEngine('#select-HTS')">
+        HTS
+        <span class="tooltip-text">{{ ts.l.tt_hts }}</span>
+      </div>
+      <div id="select-DNN" (click)="selectEngine('#select-DNN')">
+        DNN
+        <span class="tooltip-text">{{ ts.l.tt_dnn }}</span>
+      </div>
+    </div>
+    <button id="dialect-CM" (click)="dialectSelection('dialect-CM')">
+      Connemara (male)
+    </button>
+    <button id="dialect-GD" (click)="dialectSelection('dialect-GD')">
+      Gaoth Dobhair (female)
+    </button>
+    <button id="dialect-MU" (click)="dialectSelection('dialect-MU')">
+      Corca Dhuibhne (female)
+    </button>
+    <button id="dialect-CO" (click)="dialectSelection('dialect-CO')">
+      Connemara (male)
+    </button>
+    <button id="dialect-UL" (click)="dialectSelection('dialect-UL')">
+      Gaoth Dobhair (female)
+    </button>
+    <button id="dialect-MU-DNN" (click)="dialectSelection('dialect-MU-DNN')">
+      Corca Dhuibhne (male)
+    </button>
+  </div>
+
+                                                        <!-- Recording Container Popup-->
+  <div id="recording-prompt">
+    <p id="record-title">Record your Response</p>
+    <p id="recording-message">
+      Recording in Progress <i class="fas fa-circle"></i>
+    </p>
+    <button type="submit" id="start-record" onclick="startRecording()">
+      Start Recording
+    </button>
+    <button type="submit" id="stop-record" onclick="stopRecording()" disabled>
+      Stop Recording
+    </button>
+    <audio id="recording-player" src="" controls></audio>
+    <button type="submit" id="cancel-recording">
+      Cancel
+    </button>
+  </div>
+
+                                                      <!-- Chatbot Header (Audio/Dialect) -->
+  <div style="display: flex; justify-content: space-between">
+    <div class="audio-checkbox">
+      <input type="checkbox" name="audio" class="audioCheckbox" [(ngModel)]="autoPlayAudio" checked />
+      {{ ts.l.taidhgin_audio_autoplay }}
+    </div>
+    <div class="bot-title">
+      Taidhgín
+      <i class="fa fa-comments"></i>
+    </div>
+    <div id="this-dialect">
+      {{ ts.l.taidhgin_currentDialect }}
+    </div>
+  </div>
+
+                                                        <!-- Chat Logs -->
+  <div class="chatlogs">
+    <div id="bot-messages"></div>
+
+    <!-- <div *ngIf="botIsTyping" class="typing-indicator">
+      <div class="bot-message-photo">
+        <img src="assets/img/logo-S.png" id="bot-img">
+      </div>
+      <div class="dots">
+        <p class="bot-message-ind">
+          <span id="typ1"></span>
+          <span id="typ2"></span>
+          <span id="typ3"></span>
+        </p>
+      </div>
+    </div> -->
+    
+  </div>
+  <!-- User input form-->
+  <form class="chatform">
+    <input id="bot-user_input" type="text" autocomplete="off" />
+    <!-- Submit text button -->
+    <button type="submit" id="bot-message-button" (click)="isQuizMode? sendQuizResponse() : chatAIML()">
+      <i class="fas fa-arrow-circle-right arrow"></i>
+    </button>
+    <!-- Recording button -->
+    <button id="open-record">
+      <i class="fas fa-microphone-alt"></i>
+    </button>
+    <!-- Choose dialect button-->
+    <button id="choose-dialect">
+      {{ ts.l.taidhgin_choose_dialect }}
+    </button>
+  </form>
+
+</div>

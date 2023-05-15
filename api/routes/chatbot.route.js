@@ -7,14 +7,15 @@ const https = require("https");
 const http = require('http');
 const querystring = require('querystring');
 const request = require('request');
-const { parse, stringify } = require('node-html-parser');
+const { parse } = require('node-html-parser');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
+const { ChatbotQuiz } = require('../models/chatbot');
+const mongoose = require('mongoose');
 
 // Require Chatbot model in our routes module
 let Models = require('../models/chatbot');
-let classModel = require('../models/classroom');
 var spellings;
 
 // For writing scripts
@@ -29,43 +30,34 @@ let endQuiz = "\n\n> object endOfQuiz javascript\nendOfQuiz();\nreturn '';\n< ob
 
 //Create-Quiz Framwork
 //builds script content as string & stores in the db
-chatbotRoute.route('/SaveScript').post(function(req, res){
-  logger.info({endpoint: '/SaveScript'});
-  let content = req.body;
-  let topicName = content['topic-name'];
-  let userId = content['userId'];
-  let role = content['role'];
-  let shuffle = content['shuffle'];
-  console.log(content);
-  if(content['classId']) var classId = content['classId'];
-  delete content['topic-name'];
-  delete content['userId'];
-  delete content['role'];
-  delete content['classId'];
-  delete content['shuffle'];
-  var questionsAnswers = '';
+chatbotRoute.route('/createQuiz').post(async function (req, res) {
+  logger.info({endpoint: '/createQuiz'});
+  let content = req.body.questionsAndAnswers;
+  let title = req.body.title;
+
+  let formattedQuestionsAndAnswers = '';
   let tryAgain = '\n\n+ tryagain\n- <button class="rive-button"'; 
-  tryAgain += " onclick='tryAgain(\"" + topicName + "\")'>Bain triail as arís?</button>\n"
+  tryAgain += " onclick='tryAgain(\"" + title + "\")'>Bain triail as arís?</button>\n"
   tryAgain += "^ <button class='rive-button' onclick='showAnswers()'>Taispeáin na freagraí?</button>";
 
   //Construct Script
-  var line = "";
+  let line = "";
 
   line += chatSetup;
   line += addScore;
   line += endQuiz;
   line += firstLine;
 
-  let keys = Object.keys(content);
+  let keys = Object.keys(req.body.questionsAndAnswers);
 
   // if user wants questions shuffled
-  if(shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
+  if(req.body.shuffle) keys = keys.sort((a, b) => 0.5 - Math.random());
 
-  for(var key of keys){
+  for(let key of keys){
     let nextKey = keys[keys.indexOf(key) + 1];
     let trigger = "";
 
-    questionsAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
+    formattedQuestionsAndAnswers += 'Ceist: ' + key + '   Freagra: ' + content[key] + '\n\n';
 
     //let correctTrigger = "Ceart! <call>addScore</call>An chéad cheist eile:<br><br>" + key;
 
@@ -110,35 +102,37 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
 
   line += tryAgain;
 
-  //console.log(line);
-  //getting ready for db
-  if(role == 'TEACHER') topicName = 'teacher_' + topicName;
   let s = {
-    name: topicName,
-    content: line,
-    user: userId,
-    role: role,
-    classId: classId,
-    numberofquestions: Object.keys(content).length,
-    questionsandanswers: questionsAnswers,
+    owner: req.body.userId,
+    title: title,
+    date: new Date(),
+    numOfQuestions: Object.keys(req.body.questionsAndAnswers).length,
+    botScript: line,
+    content: formattedQuestionsAndAnswers,
+    isCommunityScript: false,
   };
+
+  let classroomId = req.body.classroomId;
+  if(classroomId) s.classroomId = classroomId;
   
   //store in db
-  if(s.user != undefined && s.user != ''){
+  if(s.owner != undefined && s.owner != ''){
     //check not already in DB
-    Models.PersonalScript.find({"user": userId, name: topicName, classId: classId}, function(err, scripts){
+    ChatbotQuiz.find({"owner": req.body.userId, "title": title, "classroomId": classroomId}, async function(err, scripts){
+      console.log("Scripts: ", scripts);
+      console.log("Error: ", err);
       if(scripts.length > 0){
         console.log("can't save, already there.");
-        res.status(404).send("script already exists");
+        res.status(404).json("script already exists");
       }
       else if(scripts.length == 0){
-        let script = new Models.PersonalScript(s);
-        script.save().then(script => {
+        let script = await ChatbotQuiz.create(s);
+        script.save().then(() => {
           console.log('success');
-          res.status(200).send("Success saving script to db");
+          res.status(200).json(script);
         }).catch(err => {
           console.log(err);
-          res.status(400).send("Error saving to db");
+          res.status(400).json("Error saving to db");
         });
       }
     });
@@ -146,42 +140,74 @@ chatbotRoute.route('/SaveScript').post(function(req, res){
 });
 
 //delete script from db by user and script name
-chatbotRoute.route('/deleteScript').post(function(req, res){
-  console.log(req.body);
-  Models.PersonalScript.deleteOne(req.body, function(err, obj){
+chatbotRoute.route('/deleteQuiz/:id').get(async function(req, res){
+  console.log("Delete: ", req.params.id)
+  ChatbotQuiz.deleteOne(req.body, function(err, obj){
     if(err) throw err;
     else if(obj){
-      res.status(200).send('script deleted');
+      console.log("deleted successfully")
+      res.status(200).send({message: 'script deleted'});
     }
   });
 });
 
-//gets scripts ready for use in 'Personal Scripts'
-chatbotRoute.route('/getScripts').post(function(req, res){
-  console.log("finding scripts by user...");
-  console.log(req.body);
-  Models.PersonalScript.find({"user": req.body.id}, function(err, scripts){
-    
-    if(scripts.length > 0){
-      res.json({ status: 200, userFiles: scripts});
+// gets scripts ready for use in 'Personal Scripts'
+chatbotRoute.route('/getUserQuizzes').post(function(req, res){
+  ChatbotQuiz.find({"owner": req.body.id}, function(err, quizzes){
+    if(quizzes){
+      return res.json(quizzes);
     }
-    else if(scripts.length == 0){
-      console.log("User has no personal scripts");
-      res.json({ status: 404, userFiles: "user has no personal scripts"});
+    else if(quizzes.length == 0){
+      return res.status(404).json("user has no quizzes");
     }
-    else if(err){
-      res.status(400).send(err);
+    else {
+      return res.status(400).send(err);
     }
   });
 }); 
+
+// gets community scripts
+chatbotRoute.route('/getCommunityQuizzes').get(function(req, res){
+  ChatbotQuiz.find({"isCommunityScript": true}, function(err, quizzes){
+    if(quizzes){
+      return res.json(quizzes);
+    }
+    else if(quizzes.length == 0){
+      return res.status(404).json("no community quizzes found");
+    }
+    else {
+      return res.status(400).send(err);
+    }
+  });
+}); 
+
+chatbotRoute.route('/setAsCommunityQuiz').post(async function(req, res){
+  if (! mongoose.Types.ObjectId.isValid(req.body.id)) {
+    return res.status(400).json({ invalidObjectId: req.body.id, });
+  }
+  
+  const quiz = await ChatbotQuiz.findById(req.body.id);
+  if (quiz) {
+    quiz.isCommunityScript = true;
+    quiz.save().then(() => {
+      return res.json(quiz);
+    }).catch(err => {
+      console.log(err);
+      return res.status(400).json("Error saving to quiz as community quiz");
+    });
+  }
+  else return res.status(404).json("Quiz not found in DB");
+});
+
+
 
 //sets up script for download on user's request
 chatbotRoute.route('/getScriptForDownload').post(function(req, res){
   console.log(req.body);
   if(req.body){
     if(req.body.role == 'TEACHER') req.body.name = 'teacher_' + req.body.name;
-    Models.PersonalScript.findOne(req.body, function(err, script){ 
-      console.log(script);
+    ChatbotQuiz.findOne(req.body, function(err, script){ 
+      console.log("script: ", script);
       if(err){
         console.log(err);
       }
@@ -195,19 +221,19 @@ chatbotRoute.route('/getScriptForDownload').post(function(req, res){
 chatbotRoute.route('/saveSpellings').post(function(req, res){
   if(req.body){
     spellings = req.body;
-    console.log(spellings);
+    console.log("Save spellings: ", spellings);
     res.status(200).send("Spellings Saved");
   }
 });
 
 chatbotRoute.route('/getWords').get(function(req, res){
-  console.log(spellings);
-  if(spellings != []) res.send(spellings);
+  console.log("get words: ", spellings);
+  if(spellings) res.send(spellings);
 });
 
 chatbotRoute.route('/getAudio').post(function(req, res){
   let bubble = new Models.AudioBubble(req.body);
-  console.log(bubble.text);
+  console.log("bubble text: ", bubble.text);
   if(bubble.text){
     var form = {
       Input: bubble.text,
@@ -238,7 +264,7 @@ chatbotRoute.route('/getAudio').post(function(req, res){
         //console.log(body);
         let audioSource = parse(body).querySelector('audio').id;
         console.log("Success!");
-        console.log(audioSource);
+        console.log("audio source: ", audioSource);
         res.json({ audio : audioSource });
       } else {
         console.log("Fail");
@@ -298,13 +324,13 @@ ga_MU_cmg_nnmnkwii
 */
 chatbotRoute.route('/getDNNAudio').post(function(req, res){
   let bubble = new Models.AudioBubble(req.body);
-  console.log(bubble);
+  console.log("bubble: ", bubble);
   let dialect = '';
   if(bubble.dialect == 'UL') dialect = 'ga_UL_anb_nnmnkwii';
   else if(bubble.dialect == 'CO') dialect = 'ga_CO_pmg_nnmnkwii';
   else dialect = 'ga_MU_cmg_nnmnkwii';
   
-  console.log(dialect);
+  console.log("dialect: ", dialect);
   
   let messageStrings = bubble.text.replace(/([.?!])\s*(?=[A-Z])/g, "$1|").split("|");
   var results = [];
@@ -322,7 +348,7 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
       let thisObj = {id: i, audioString: audioURI};
       results.push(thisObj);
       if(results.length == messageStrings.length){
-        console.log(results.length);
+        console.log("result length: ", results.length);
         res.json({audio: results});
       }
     }).catch(error => {
@@ -331,22 +357,18 @@ chatbotRoute.route('/getDNNAudio').post(function(req, res){
   }
 });
 
-chatbotRoute.route('/getTeacherScripts/:user/:classId').get(function(req, res){
-  console.log('find scripts by teacher...');
-  console.log(req.params);
-  Models.PersonalScript.find(req.params, function(err, scripts){
-    //console.log(scripts);
-    if(scripts.length > 0){
-      console.log('success in scripts!');
-      res.send(scripts);
-    }
-    else console.log('no teacher scripts');
+chatbotRoute.route('/getClassroomQuizzes/:id').get(function(req, res){
+  let id = new mongoose.mongo.ObjectId(req.params.id)
+  ChatbotQuiz.find({"classroomId": id}, function(err, quizzes){
+    if (quizzes && quizzes.length > 0)
+      return res.json(quizzes);
+    return res.json({});
   });
 });
 
 // intro bot --> http://legacy.pandorabots.com/pandora/talk?botid=c08188e27e34571c
 //AIML Chit-Chat
-chatbotRoute.route('/aiml-message').post(function(req, res){
+chatbotRoute.route('/getAIMLResponse').post(function(req, res){
   let path = 'http://demo.vhost.pandorabots.com/pandora/talk-xml?botid=' + req.body.botId + '&input=';
   path += encodeURI(req.body.message);
   http.get(path, (resp) => {
@@ -357,28 +379,25 @@ chatbotRoute.route('/aiml-message').post(function(req, res){
     });
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-      console.log(data);
-      if(data) res.json({status: '200', reply: data});
+      if(data) return res.status(200).json(data);
     });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
+    return res.json(err.message);
   });
 });
 
 
 chatbotRoute.route('/sendScriptVerification').post(function(req, res){  
   var mailObj = {};
-  console.log(req.body);
-  Models.PersonalScript.findOne(req.body, function(err, script){ 
-    //console.log(script);
+  ChatbotQuiz.findOne(req.body, function(err, script){ 
     mailObj = {
-      from: "gilsenci@tcd.ie",
-      recipients: ["gilsenci@tcd.ie, scealai.info@gmail.com"],
+      from: "scealai.info@gmail.com",
+      recipients: ["scealai.info@gmail.com"],
       subject: 'Taidhgín Script Verification',
       message: "User: " + script.user + "\nVerify Script: \n\n" + script.questionsandanswers,
     };
     sendEmail(mailObj).then((response) => {
-      console.log(response);
       if(response){
         res.send("Email sent");
       }
@@ -415,7 +434,6 @@ const sendEmail = async (mailObj) => {
       
       return `Message sent: ${mailStatus.messageId}`;
   } catch (error) {
-      console.log(error);
       throw new Error(
           `Something went wrong in the sendmail method. Error: ${error.message}`
       );
