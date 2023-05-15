@@ -9,7 +9,7 @@ import { RegisterComponent } from 'app/register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MessagesComponent } from './messages/messages.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './nav-bar/about-taidhgin/about-taidhgin.component';
 import { PromptsComponent } from './prompts/prompts.component';
 import { DictoglossComponent } from './dictogloss/dictogloss.component';

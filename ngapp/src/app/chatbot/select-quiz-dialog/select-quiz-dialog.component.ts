@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, } from "@angular/material/dialog";
-import { TranslationService } from "../../translation.service";
-import { AuthenticationService } from "../../authentication.service";
+import { TranslationService } from "app/core/services/translation.service";
+import { AuthenticationService } from "app/core/services/authentication.service";
 import { Quiz } from "../chatbot.component";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { ChatbotService } from "app/services/chatbot.service";
+import { ChatbotService } from "app/core/services/chatbot.service";
 import { firstValueFrom } from "rxjs";
 
 @Component({

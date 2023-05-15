@@ -15,6 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
@@ -96,7 +98,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         MatDialogModule,
         MatCardModule,
         MatIconModule,
+        MatTabsModule,
         MatInputModule,
+        MatTableModule,
         PdfViewerModule,
         NgramDistributionModule,
         WordCountsModule,

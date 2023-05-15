@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'app/authentication.service';
-import { ChatbotService } from 'app/services/chatbot.service';
-import { TranslationService } from '../../translation.service';
-import { ClassroomService } from "app/classroom.service";
-import { Classroom } from "app/classroom";
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { ChatbotService } from 'app/core/services/chatbot.service';
+import { TranslationService } from 'app/core/services/translation.service';
+import { ClassroomService } from "app/core/services/classroom.service";
+import { Classroom } from "app/core/models/classroom";
 import { firstValueFrom } from 'rxjs';
 import { Quiz } from '../chatbot.component';
 
