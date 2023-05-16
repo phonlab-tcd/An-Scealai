@@ -1,58 +1,46 @@
-.bodyContainer {
-    width: 100%;
-    height: 80vh;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-  }
-  
-  .example-sidenav-content {
-    background-color: blue;
-  }
-  
-  .example-sidenav {
-    padding: 50px;
-  }
-
-  .storyTitleHeader {
+.storyTitleHeader {
     display: flex;
     justify-content: center;
     margin-top: -30px;  // margin for entire page set in app.component.scss
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 
-  .storyTitle {
+.storyTitle {
     margin: auto;
     overflow: auto;
     font-size: 20px;
     font-weight: bolder;
-  }
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
-  .saveIcon {
+.saveIcon {
     align-self: flex-end;
     white-space: nowrap;
     color: var(--dark-text);
     border-style: none;
     font-size: 11pt;
     padding: 5px;
-  }
-  
-  .savedIcon {
-      color: var(--scealai-light-brown);
-  }
+}
 
-  .optionsBtnContainer > * {
+.savedIcon {
+    color: var(--scealai-light-brown);
+}
+
+.optionsBtnContainer > * {
     height: 2rem;
-  }
-  
-  .optionsBtnContainer {
+}
+
+.optionsBtnContainer {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     --options-btn-background-color-hover : lightgray;
     margin-left: 2%;
     margin-right: 2%;
-  }
+}
   
-  .optionsBtn {
+.optionsBtn {
     background-color: var(--scealai-yellow);
     border-style: none;
     color: #464444;
@@ -62,21 +50,21 @@
     align-items: center;
     padding: 5px;
     background: #dfd9c800;
-  }
-  
-  .optionsBtn:hover {
+}
+
+.optionsBtn:hover {
     background-color: var(--options-btn-background-color-hover);
     color: #35322f;
     cursor: pointer;
     border-radius: 2;
-  }
+}
 
-  .optionsPopupBtn {
+.optionsPopupBtn {
     margin-right: 4px;
 }
 
 .optionsBtnIcon {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 .notRecordingBtn {
@@ -89,41 +77,62 @@
     padding: 4px;
     padding-left: 8px;
     padding-right: 8px;
-  }
-  
-  .blink {
+}
+
+.bodyContainer {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.storyListDrawer {
+    padding: 50px;
+}
+
+.storyContainer {
+    height: 100%;
+}
+
+.ql-container {
+    background-color: #F8F9FA;
+    height: 100%;
+}
+
+.menuButton {
+    float:left;
+    padding-left: 10px;
+    padding-top: 5px;
+    transform: scale(2);
+    z-index: 100;
+}
+
+.menuButton:hover {
+    cursor: pointer;
+}
+
+//<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
+.ql-editor {
+    background-color: white;
+    z-index: 1;
+    margin-top: 20px;
+    font-size: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
+    max-height: 70vh !important;
+}
+
+.blink {
     animation: blinker 2s linear infinite;
-  }
+}
   
-  @keyframes blinker {
+@keyframes blinker {
     0% {
-      background-color:red;
+        background-color:red;
     }
     50% {
-      background-color:rgb(119, 0, 0);
+        background-color:rgb(119, 0, 0);
     }
     100% {
-      background-color:red;
+        background-color:red;
     }
-  }
-
-
-
-// .storyContainer {
-//     flex-basis: 50%;
-//     background-color: green;
-// }
-
-// .storyListDrawerContainer {
-//     flex-basis: 25%;
-//     background-color: red;
-// }
-
-// .storyListDrawer {
-
-// }
-
-// .storyToolDrawer {
-//     flex-basis: 25%;
-//     background-color: blue;
-// }
+}

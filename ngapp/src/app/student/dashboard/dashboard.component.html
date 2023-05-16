@@ -1,7 +1,12 @@
 <!-- STORY TITLE HEADER-->
 <div class="storyTitleHeader">
   <!-- TITLE -->
-  <div class="storyTitle" [ngStyle]="titleStyle()" data-cy="title">
+  <div
+    class="storyTitle"
+    [ngStyle]="titleStyle()"
+    data-cy="title"
+    contenteditable="true"
+  >
     {{ story?.title ?? "..." }}
     <span *ngIf="!storySaved">*</span>
     <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story.createdWithPrompts">{{
@@ -90,7 +95,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; goToSynthesis()"
+    (click)="this.dontToggle = true; goToSynthesis(); drawer2.toggle()"
   >
     {{ ts.l.audio_check }}
     <i class="fas fa-volume-up optionsBtnIcon"></i>
@@ -120,7 +125,8 @@
 
 <!-- BODY CONTAINER-->
 <mat-drawer-container class="bodyContainer" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side">
+  <!-- STORY DRAWER-->
+  <mat-drawer #drawer class="storyListDrawer" mode="side">
     <p>Auto-resizing sidenav</p>
     <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
     <button (click)="showFiller = !showFiller" mat-raised-button>
@@ -128,18 +134,37 @@
     </button>
   </mat-drawer>
 
-  <div class="example-sidenav-content">
-    <button type="button" mat-button (click)="drawer.toggle()">
-      Toggle sidenav
-    </button>
-    <button type="button" mat-button (click)="drawer2.toggle()">
-      Toggle sidenav 2
-    </button>
+  <div class="storyContainer" *ngIf="story">
+    <!-- display story before grammar checked (i.e. writing mode)-->
+    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle">
+      <!-- STORY DRAWER BUTTON-->
+      <mat-icon class="menuButton" (click)="drawer.toggle()">menu</mat-icon>
+      <!-- QUILL EDITOR AND TOOLBAR-->
+      <quill-editor
+        [modules]="quillToolbar"
+        placeholder=""
+        [preserveWhitespace]="true"
+        [debounceTime]="1500"
+        [(ngModel)]="story.htmlText"
+        (onContentChanged)="onContentChanged($event)"
+        (onEditorCreated)="onEditorCreated($event)"
+      ></quill-editor>
+    </div>
   </div>
 
-  <mat-drawer #drawer2 class="example-sidenav" mode="side" position="end">
-    <p>Auto-resizing sidenav</p>
+  <!-- OTHER DRAWER-->
+  <mat-drawer #drawer2 class="storyListDrawer" mode="side" position="end">
+    <p>Drwaer sdfasdfas2</p>
     <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+    <button (click)="showFiller = !showFiller" mat-raised-button>
+      Toggle extra text
+    </button>
+  </mat-drawer>
+
+    <!-- OTHER DRAWER-->
+  <mat-drawer #drawer3 class="storyListDrawer" mode="side" position="end">
+    <p>ADrawer 3</p>
+    <p *ngIf="showFiller">Drawer 3.</p>
     <button (click)="showFiller = !showFiller" mat-raised-button>
       Toggle extra text
     </button>
