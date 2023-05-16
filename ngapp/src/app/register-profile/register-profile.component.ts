@@ -435,7 +435,7 @@ export class RegisterProfileComponent implements OnInit {
 
     this.profileService.create(profile).subscribe((_) => {
       if(userDetails.role === 'STUDENT') {
-        this.router.navigateByUrl('/contents');
+        this.router.navigateByUrl('/student/contents');
       } else if(userDetails.role === 'TEACHER') {
         this.router.navigateByUrl('/teacher/dashboard');
       }
