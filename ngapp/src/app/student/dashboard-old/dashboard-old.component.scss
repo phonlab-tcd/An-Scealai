@@ -1,0 +1,405 @@
+.dashboardContainer {
+    --bookContainerHeight: 95vh;
+    --bookContainerWidth: 100%;
+    --textfieldHeight: calc(var(--bookContainerHeight) / 3);
+    --dictionaryHeight: 60vh;
+    width: var(--bookContainerWidth);
+    height: 95vh;
+    margin-top: -55px;
+}
+
+.modalContainer {
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bookHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+  padding-bottom: 5px;
+}
+
+.myStoriesBtn {
+  white-space: nowrap;
+  border-style: none;
+  color: var(--dark-text);
+  /*color: var(--scealai-light-brown);*/
+  font-size: 11pt;
+  padding: 5px;
+}
+
+.myStoriesBtn:hover {
+    color: var(--scealai-orange); 
+    /*color: var(--dark-text);*/
+    text-decoration: none;
+    cursor: pointer; 
+}
+
+.notRecordingBtn {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  margin-left: 4px;
+  font-size: 10pt;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.blink {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  0% {
+    background-color:red;
+  }
+  50% {
+    background-color:rgb(119, 0, 0);
+  }
+  100% {
+    background-color:red;
+  }
+}
+
+.saveIcon {
+  white-space: nowrap;
+  color: var(--dark-text);
+  border-style: none;
+  font-size: 11pt;
+  padding: 5px;
+}
+
+.savedIcon {
+    color: var(--scealai-light-brown);
+}
+
+.optionsBtnContainer > * {
+  height: 2rem;
+}
+
+.optionsBtnContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  // --options-btn-background-color: rgba(223, 217, 200, 0);
+  // --options-btn-background-color-hover : #aeffc486;
+  --options-btn-background-color-hover : lightgray;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.optionsBtn {
+  background-color: var(--scealai-yellow);
+  border-style: none;
+  color: #464444;
+  margin: 0px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: #dfd9c800;
+}
+
+.optionsBtn:hover {
+  background-color: var(--options-btn-background-color-hover);
+  color: #35322f;
+  cursor: pointer;
+  border-radius: 2;
+}
+
+.optionsPopupBtn {
+    margin-right: 4px;
+}
+
+.optionsBtnIcon {
+  margin-left: 5px;
+}
+
+.grammarMessageBanner {
+  background-color: #8fcaff;
+  display: flex;
+  align-items: center;
+}
+
+.grammarMessage {
+  display: block;
+  flex: 1;
+}
+
+.grammarMessage + .displayGrammarTagsIcon {
+  flex: 0 0 auto;
+}
+
+.displayGrammarTagsIcon {
+  margin-right: 20px;
+}
+
+.displayGrammarTagsIcon:hover {
+  cursor: pointer;
+}
+
+.disableDiv{ pointer-events: none; opacity: 2.0;}
+
+.storyContainer {
+  z-index: 1;
+  --feedbackHeight: 120px;
+  --grammarMessageHeight: 80px;
+  --dictionaryWidth: 100%;
+}
+
+.feedbackHeader {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 30px;
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.closeFeedbackBtn {
+  margin-left: auto;
+}
+
+.closeFeedbackBtn:hover {
+  cursor: pointer;
+}
+
+.textFieldContainer {
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.textField {
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  border: none;
+}
+
+.audioPlayer {
+  height: 30px;
+  width: 90%;
+  background-color: #f1f3f4;
+  border: 1px solid #8c806e86;
+}
+
+.selectErrorCheckbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  text-align: left;
+  background-color: var(--scealai-green);
+  display: flex;
+  color: white;
+}
+
+.checkAllBox {
+  text-align: left;
+  padding: 10px;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
+.errorContainer {
+  margin: 2px;
+}
+
+.errorContainer:hover {
+  cursor: pointer;
+}
+
+.hideLegendItem {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.errorColorBox {
+  display: inline-flex;
+  width: 30px;
+  height: 15px;
+}
+
+.dictionaryContainer {
+  border-top: solid grey 1px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dictionaryHeader {
+  padding: 5px;
+  background-color: var(--scealai-green);
+  color: white;
+  display: flex;
+  align-items: column;
+}
+
+.closeDictionaryBtn {
+  margin-left: auto;
+}
+
+.closeDictionaryBtn:hover {
+  cursor: pointer;
+}
+
+.closeSynthesisBtn {
+  float: right;
+  padding-top: 10px;
+  padding-right: 30px;
+}
+
+.closeSynthesisBtn:hover {
+  cursor: pointer;
+}
+
+.dictionaryHeight {
+  height: var(--dictionaryHeight);
+}
+
+.dictionarySubHeader {
+    padding: 5px;
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+}
+
+.dictionaryName {
+  background-color: var(--scealai-green);
+  font-size: 12px;
+  color: white;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.dictionaryName:hover {
+  color: var(--scealai-light-green);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dictionaryInput {
+  background-color: var(--scealai-green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+  gap: 1rem;
+}
+
+.searchDictionaryBtn {
+  background-color: var(--scealai-yellow);
+  border-style: none;
+  color: white;
+  font-size: 12pt;
+  margin: 0px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.searchDictionaryBtn:hover {
+  background-color: var(--scealai-yellow-hover);
+  color: white;
+}
+
+.dictionaryIframe {
+  height: var(--dictionaryHeight);
+  width: 100%;
+  border-radius: 0px 0px 5px 5px;
+  background: white;
+}
+
+.ql-container {
+  height: auto;
+  background-color: #F8F9FA;
+}
+
+.ql-editor { // the 'page' where the writing happens
+  background-color: white;
+  z-index: 1;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14pt;
+  font-family: "Times New Roman", Times, serif;
+  min-height: 60vh !important;
+  max-height: 60vh !important;
+}
+
+.⚙ {
+  font-size: xx-large;
+  color: darkgrey;
+  cursor: pointer;
+  align-items: center;
+}
+
+.⚙:hover {
+  color: black;
+  background-color: #aeffc486;
+}
+
+.wordCountContainer {
+  display: flex;
+  align-items: center;
+  // padding-bottom: 6px;
+  padding-left: 8px;
+  padding-top: 0;
+  // margin-top: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.quill-editor-dict {
+  /* dictionary view adds another toolbar worth of height */
+  height: calc(var(--textfieldHeight) - 44px);
+}
+
+.text-input-highlight-container .text-highlight-element  {
+  background: var(--scealai-cream-2);
+}
+
+.bg-blue {
+  background-color: lightblue;
+}
+
+.tickIcon {
+    margin-left: 5px;
+}
+
+.refreshGrammar:hover {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 750px) {
+    .dictionaryModeContainer {
+        flex-direction: column-reverse;
+    }
+    .dictionaryContainer {
+        width: 100%;
+    }
+    .textField {
+        width: 100%;
+    }
+}
+

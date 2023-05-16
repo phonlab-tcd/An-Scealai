@@ -4,6 +4,7 @@ import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from 'app/core/guards/can-deactivate.guard';
 import { StopSoundGuard } from 'app/core/guards/stop-sound.guard';
 import { BookContentsComponent } from './book-contents/book-contents.component';
+import { DashboardOldComponent } from './dashboard-old/dashboard-old.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
 import { RecordingComponent } from './recording/recording.component';
