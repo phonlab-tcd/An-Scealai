@@ -82,11 +82,23 @@
 .bodyContainer {
     width: 100%;
     height: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .storyListDrawer {
-    padding: 50px;
+    padding: 20px;
+}
+
+.storyList {
+    height: 90%;
+    overflow-y:scroll
+}
+
+.newStoryButton {
+    float: right;
+}
+
+.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+    background-color: var(--scealai-green);
 }
 
 .storyContainer {
@@ -135,4 +147,21 @@
     100% {
         background-color:red;
     }
+}
+
+.contentSection:hover {
+    cursor: pointer;
+  }
+  
+.contentsLink {
+    color: var(--dark-text);
+    text-align: left;
+    //width: 50%;
+    text-decoration: none;
+    padding-right: 20px;
+}
+
+.contentsLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

@@ -14,6 +14,8 @@ import { SpinnerModule } from '../spinner/spinner.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 
@@ -41,6 +43,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     FormsModule,
     SpinnerModule,
     MatSidenavModule,
+    MatButtonModule,
     MatIconModule,
     QuillModule.forRoot({
       customOptions: [{

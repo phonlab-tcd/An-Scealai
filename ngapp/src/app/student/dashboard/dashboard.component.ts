@@ -1,8 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { firstValueFrom, Subject  } from 'rxjs';
+import { Router } from "@angular/router";
 import { TranslationService, MessageKey } from 'app/core/services/translation.service';
 import Quill from 'quill';
 import ImageCompress from 'quill-image-compress';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { StoryService } from 'app/core/services/story.service';
+import { ProfileService } from "app/core/services/profile.service";
+import { NotificationService } from "app/core/services/notification-service.service";
+import { Story } from 'app/core/models/story';
 
 Quill.register('modules/imageCompress', ImageCompress);
 
@@ -17,6 +23,8 @@ Quill.register('modules/imageCompress', ImageCompress);
   encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
+
+  stories: Story[] = [];
 
   showFiller = false;
   dontToggle = false;
@@ -52,7 +60,8 @@ export class DashboardComponent implements OnInit {
   private textUpdated= new Subject<void | string>();
   
 
-  constructor(public ts: TranslationService,) { }
+  constructor(public ts: TranslationService, private auth: AuthenticationService, private profileService: ProfileService,
+    private router: Router, private storyService: StoryService, private notificationService: NotificationService,) { }
 
   story = {
     text: 'hello',
@@ -61,7 +70,29 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) {
+      this.auth.logout();
+      return;
+    }
+    this.checkIfProfileFilledOut(userDetails._id);
+
+    // get stories for the user
+    this.stories = (await firstValueFrom(this.storyService.getStoriesForLoggedInUser())).map((storyData) => new Story().fromJSON(storyData));
+    
+    this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
+
+    this.notificationService.getStudentNotifications();
+
+    console.log(this.stories)
+  }
+
+  checkIfProfileFilledOut(id) {
+    this.profileService.getForUser(id).subscribe({
+      next: () => {},
+      error: () => this.router.navigateByUrl("/register-profile")
+    })
   }
 
     /* 
@@ -148,6 +179,6 @@ export class DashboardComponent implements OnInit {
     }
 
     goToSynthesis() {
-      
+
     }
 }

@@ -127,11 +127,21 @@
 <mat-drawer-container class="bodyContainer" autosize>
   <!-- STORY DRAWER-->
   <mat-drawer #drawer class="storyListDrawer" mode="side">
-    <p>Auto-resizing sidenav</p>
-    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-    <button (click)="showFiller = !showFiller" mat-raised-button>
-      Toggle extra text
-    </button>
+    <div class="storyList">
+        <div *ngFor="let story of stories">
+            <div class="contentSection" [attr.id]="story._id" >
+              <div class="contentsLink">
+                <div> {{ story?.title }}</div>
+              </div>
+              <div class="contentsDate">
+                {{ story.lastUpdated | date : "d/M/yy" }}
+              </div>
+            </div>
+            <hr />
+          </div>
+    </div>
+
+    <button mat-fab class="newStoryButton"><mat-icon>add</mat-icon></button>
   </mat-drawer>
 
   <div class="storyContainer" *ngIf="story">
