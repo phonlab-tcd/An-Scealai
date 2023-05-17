@@ -22,6 +22,7 @@ import { QuillModule } from 'ngx-quill';
 import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     RecordingComponent,
     FilterPipe,
     SafeHtmlPipe,
-    DashboardComponent
+    DashboardComponent,
+    StoryDrawerComponent
   ],
   imports: [
     CommonModule,

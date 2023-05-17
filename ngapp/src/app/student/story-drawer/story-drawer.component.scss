@@ -1,0 +1,39 @@
+.storyList {
+    height: 90%;
+    overflow-y:scroll
+}
+
+.newStoryButton {
+    float: right;
+}
+
+.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+    background-color: var(--scealai-green);
+}
+
+.contentSection:hover {
+    cursor: pointer;
+  }
+  
+.contentsLink {
+    color: var(--dark-text);
+    text-align: left;
+    text-decoration: none;
+    padding-right: 20px;
+}
+
+.contentsLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.contentsDate {
+    padding-right: 20px;
+}
+
+.clickedresultCard {
+    background-color: #eee;
+    padding: 2px;
+    font-weight: bolder;
+    border-radius: 10px;
+  }

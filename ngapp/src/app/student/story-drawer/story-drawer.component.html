@@ -1,0 +1,16 @@
+<div class="storyList">
+  <div *ngFor="let story of stories" (click)="setStory(story)">
+    <div class="contentSection" [attr.id]="story._id">
+      <div class="contentsLink">
+        <div>{{ story?.title }}</div>
+      </div>
+      <div class="contentsDate">
+        {{ story.lastUpdated | date : "d/M/yy" }}
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>
+<button mat-fab class="newStoryButton" (click)="createNewStory()">
+  <mat-icon>add</mat-icon>
+</button>

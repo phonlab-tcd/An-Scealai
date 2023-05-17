@@ -26,6 +26,7 @@ export class StoryService {
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
+  storiesLoaded: boolean = false;
 
   saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom, Subject } from "rxjs";
@@ -14,6 +14,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
+import { StoryDrawerComponent } from "../story-drawer/story-drawer.component";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -91,50 +92,12 @@ export class DashboardComponent implements OnInit {
       this.auth.logout();
       return;
     }
-    await this.getStories();
     if (!this.story) return;
     this.storySaved = true;
     this.textUpdated.next();
     this.getWordCount(this.story.text);
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
-    }
-  }
-
-  /**
-   * Get stories for the user
-   */
-  async getStories() {
-    this.stories = (
-      await firstValueFrom(this.storyService.getStoriesForLoggedInUser())
-    ).map((storyData) => new Story().fromJSON(storyData));
-    this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-    this.story = this.stories[0];
-    this.storiesLoaded = true;
-  }
-
-  /**
-   * Set the current story to the selected one from the story list
-   * @param story Selected story from HTML
-   */
-  setStory(story: Story) {
-    this.story = story;
-    if (this.story.htmlText == null) {
-      this.story.htmlText = this.story.text;
-    }
-    // set css for selecting a story in the side nav
-    let id = this.story._id;
-    let storyElement = document.getElementById(id);
-    if (storyElement) {
-      // remove css highlighting for currently highlighted recording (from archive)
-      if (this.lastClickedStoryId) {
-        document
-          .getElementById(this.lastClickedStoryId)
-          .classList.remove("clickedresultCard");
-      }
-      this.lastClickedStoryId = id;
-      // add css highlighting to the newly clicked recording
-      storyElement.classList.add("clickedresultCard");
     }
   }
 
@@ -171,57 +134,6 @@ export class DashboardComponent implements OnInit {
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
     //this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts, this.engagement);
-  }
-
-  /**
-   * Create a new story
-   */
-  createNewStory() {
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
-      data: {
-        title: this.ts.l.story_details,
-        type: "select",
-        data: [
-          this.ts.l.enter_title,
-          [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster],
-          [this.ts.l.title, this.ts.l.dialect],
-        ],
-        confirmText: this.ts.l.save_details,
-        cancelText: this.ts.l.cancel,
-      },
-      width: "50vh",
-    });
-
-    this.dialogRef.afterClosed().subscribe(async (res) => {
-      this.dialogRef = undefined;
-      if (res) {
-        if (res[0]) {
-          let dialect = "connemara";
-          if (res[1] == this.ts.l.munster) dialect = "kerry";
-          if (res[1] == this.ts.l.ulster) dialect = "donegal";
-          this.storyService
-            .saveStory(
-              this.auth.getUserDetails()._id,
-              res[0],
-              new Date(),
-              dialect,
-              "",
-              this.auth.getUserDetails().username,
-              false
-            )
-            .subscribe({
-              next: () => {
-                this.getStories();
-              },
-              error: () => {
-                alert("Not able to create a new story");
-              },
-            });
-        } else {
-          alert(this.ts.l.title_required);
-        }
-      }
-    });
   }
 
   getWordCount(text) {}
