@@ -40,13 +40,16 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
-        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+    // this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
+    //   .subscribe(res => {
+    //     this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+    //     // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
 
-        this.router.navigateByUrl('/dashboard/' + res.id);
-      });
+    //     this.router.navigateByUrl('/dashboard/' + res.id);
+    //   });
+
+      this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+      return this.http.post<{id: string}>(this.baseUrl + 'create', storyObj);
   }
 
   getStoriesFor(author : string) {

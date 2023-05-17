@@ -85,7 +85,7 @@
 }
 
 .storyListDrawer {
-    padding: 20px;
+    padding: 40px;
 }
 
 .storyList {
@@ -99,6 +99,15 @@
 
 .mat-fab.mat-accent, .mat-mini-fab.mat-accent {
     background-color: var(--scealai-green);
+}
+
+.newStoryMessage {
+    font-weight: bolder;
+    max-width: 200px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 80vh;
+    width: 100%;
 }
 
 .storyContainer {
@@ -156,7 +165,6 @@
 .contentsLink {
     color: var(--dark-text);
     text-align: left;
-    //width: 50%;
     text-decoration: none;
     padding-right: 20px;
 }
@@ -164,4 +172,8 @@
 .contentsLink:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.contentsDate {
+    padding-right: 20px;
 }
