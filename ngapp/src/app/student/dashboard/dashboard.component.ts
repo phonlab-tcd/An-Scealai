@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { firstValueFrom, Subject } from "rxjs";
 import { TranslationService, MessageKey, } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
 import clone from "lodash/clone";
+import config from 'abairconfig';
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
@@ -33,6 +36,8 @@ export class DashboardComponent implements OnInit {
   storySaved = true;
   dialogRef: MatDialogRef<unknown>;
   storiesLoaded: boolean = false;
+  downloadStoryFormat = '.pdf';
+  lastClickedStoryId: string = "";
 
   // GRAMMAR VARIABLES
   showErrorTags = false;
@@ -70,13 +75,14 @@ export class DashboardComponent implements OnInit {
     },
   };
 
-
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
     private storyService: StoryService,
     private dialog: MatDialog,
-    private engagement: EngagementService
+    private engagement: EngagementService,
+    private http: HttpClient,
+    private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -115,6 +121,20 @@ export class DashboardComponent implements OnInit {
     this.story = story;
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
+    }
+    // set css for selecting a story in the side nav
+    let id = this.story._id;
+    let storyElement = document.getElementById(id);
+    if (storyElement) {
+      // remove css highlighting for currently highlighted recording (from archive)
+      if (this.lastClickedStoryId) {
+        document
+          .getElementById(this.lastClickedStoryId)
+          .classList.remove("clickedresultCard");
+      }
+      this.lastClickedStoryId = id;
+      // add css highlighting to the newly clicked recording
+      storyElement.classList.add("clickedresultCard");
     }
   }
 
@@ -294,7 +314,41 @@ export class DashboardComponent implements OnInit {
     return { "font-style": this.storySaved ? "normal" : "italic" };
   }
 
-  downloadStoryUrl() {}
+  /* Download story in selected format */
+  downloadStory() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.download,
+        type: 'select',
+        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt']],
+        confirmText: this.ts.l.download,
+        cancelText: this.ts.l.cancel
+      },
+      width: '50vh',
+    });
+    
+    this.dialogRef.afterClosed().subscribe( (res) => {
+        this.dialogRef = undefined;
+        // res[0] is download title, res[1] is download format
+        if(res) {
+          res[1] ? this.downloadStoryFormat = res[1] : this.downloadStoryFormat = '.pdf'
+          this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
+              .subscribe(data=>{
+                const elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(data);
+                res[0] ? elem.download = res[0] : elem.download = this.story.title;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+              });
+        }
+    });
+  }
+  
+  /* Create story download url with chosen format */
+  downloadStoryUrl() {
+    return config.baseurl + 'story/downloadStory/' + this.story._id + '/' + this.downloadStoryFormat;
+  }
 
   hasNewFeedback() {}
 
@@ -311,6 +365,11 @@ export class DashboardComponent implements OnInit {
 
   selectedGrammarSuggestion() {
     return "test";
+  }
+
+  /* Route to record story component */
+  goToRecording() {
+    this.router.navigateByUrl('/student/record-story/' + this.story._id);
   }
 
   goToSynthesis() {}
