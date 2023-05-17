@@ -1,6 +1,6 @@
-<div *ngIf="stories.length > 0; else storiesLoading">
+<div *ngIf="storiesLoaded; else storiesLoading">
   <!-- STORY TITLE HEADER-->
-  <div class="storyTitleHeader">
+  <div class="storyTitleHeader" *ngIf="story">
     <!-- TITLE -->
     <div
       class="storyTitle"
@@ -30,7 +30,7 @@
   </div>
 
   <!-- STORY OPTIONS TOOL BAR -->
-  <div class="optionsBtnContainer" (click)="toggleOptions()">
+  <div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="story">
     <div class="optionsBtn">
       <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
       <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
@@ -176,19 +176,11 @@
     <!-- OTHER DRAWER-->
     <mat-drawer #drawer2 class="storyListDrawer" mode="side" position="end">
       <p>Drwaer sdfasdfas2</p>
-      <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
-      <button (click)="showFiller = !showFiller" mat-raised-button>
-        Toggle extra text
-      </button>
     </mat-drawer>
 
     <!-- OTHER DRAWER-->
     <mat-drawer #drawer3 class="storyListDrawer" mode="side" position="end">
       <p>ADrawer 3</p>
-      <p *ngIf="showFiller">Drawer 3.</p>
-      <button (click)="showFiller = !showFiller" mat-raised-button>
-        Toggle extra text
-      </button>
     </mat-drawer>
   </mat-drawer-container>
 </div>

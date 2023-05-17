@@ -1,15 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { firstValueFrom, Subject } from "rxjs";
-import { Router } from "@angular/router";
 import { TranslationService, MessageKey, } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
 import clone from "lodash/clone";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
-import { ProfileService } from "app/core/services/profile.service";
 import { EngagementService } from "app/core/services/engagement.service";
-import { NotificationService } from "app/core/services/notification-service.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
@@ -35,6 +32,7 @@ export class DashboardComponent implements OnInit {
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
   dialogRef: MatDialogRef<unknown>;
+  storiesLoaded: boolean = false;
 
   // GRAMMAR VARIABLES
   showErrorTags = false;
@@ -76,10 +74,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
-    private profileService: ProfileService,
-    private router: Router,
     private storyService: StoryService,
-    private notificationService: NotificationService,
     private dialog: MatDialog,
     private engagement: EngagementService
   ) {}
@@ -90,8 +85,6 @@ export class DashboardComponent implements OnInit {
       this.auth.logout();
       return;
     }
-    this.notificationService.getStudentNotifications();
-    this.checkIfProfileFilledOut(userDetails._id);
     await this.getStories();
     if (!this.story) return;
     this.storySaved = true;
@@ -111,6 +104,7 @@ export class DashboardComponent implements OnInit {
     ).map((storyData) => new Story().fromJSON(storyData));
     this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
     this.story = this.stories[0];
+    this.storiesLoaded = true;
   }
 
   /**
@@ -122,17 +116,6 @@ export class DashboardComponent implements OnInit {
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
     }
-  }
-
-  /**
-   * Check if the user has filled out their profile
-   * @param id user id
-   */
-  checkIfProfileFilledOut(id) {
-    this.profileService.getForUser(id).subscribe({
-      next: () => {},
-      error: () => this.router.navigateByUrl("/register-profile"),
-    });
   }
 
   /*
