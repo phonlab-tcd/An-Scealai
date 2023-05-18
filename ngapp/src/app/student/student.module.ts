@@ -23,6 +23,7 @@ import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
+import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
     FilterPipe,
     SafeHtmlPipe,
     DashboardComponent,
-    StoryDrawerComponent
+    StoryDrawerComponent,
+    DictionaryDrawerComponent
   ],
   imports: [
     CommonModule,

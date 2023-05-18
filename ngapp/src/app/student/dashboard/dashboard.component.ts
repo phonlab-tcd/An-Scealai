@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SafeUrl } from '@angular/platform-browser';
 import { firstValueFrom, Subject } from "rxjs";
 import { TranslationService, MessageKey, } from "app/core/services/translation.service";
 import Quill from "quill";
@@ -10,11 +11,11 @@ import config from 'abairconfig';
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
+import { RecordAudioService } from 'app/core/services/record-audio.service';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
-import { StoryDrawerComponent } from "../story-drawer/story-drawer.component";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -76,12 +77,18 @@ export class DashboardComponent implements OnInit {
     },
   };
 
+  // SPEECH TO TEXT
+  audioSourceASR : SafeUrl;
+  isRecording: boolean = false;
+  isTranscribing: boolean = false;
+
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
     private storyService: StoryService,
-    private dialog: MatDialog,
+    private recordAudioService: RecordAudioService,
     private engagement: EngagementService,
+    private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
   ) {}
@@ -285,4 +292,33 @@ export class DashboardComponent implements OnInit {
   }
 
   goToSynthesis() {}
+
+    /* Stop recording if already recording, otherwise start recording; get transcription */
+    async speakStory() {
+      if (this.isRecording) {
+        this.isTranscribing = true;
+        this.recordAudioService.stopRecording();
+        let transcription = await this.recordAudioService.getAudioTranscription();
+        this.isTranscribing = false;
+        if(transcription) {
+          // get cursor position for inserting the transcription
+          let selection = this.quillEditor.getSelection(true);
+          this.quillEditor.insertText(selection.index, transcription + ".");
+  
+          // update the text and html text with inserted transcription
+          this.story.text = this.quillEditor.getText();
+          this.story.htmlText = this.quillEditor.root.innerHTML;
+          
+          // save story
+          this.getWordCount(transcription);
+          this.storySaved = false; 
+          this.textUpdated.next();
+          this.debounceSaveStory();
+        }
+      }
+      else {
+        this.recordAudioService.recordAudio();
+      }
+      this.isRecording = !this.isRecording;
+    }
 }

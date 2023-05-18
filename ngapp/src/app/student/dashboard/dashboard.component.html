@@ -89,7 +89,7 @@
       *ngIf="showOptions"
       class="optionsBtn optionsPopupBtn"
       (click)="
-        this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible
+        this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible; dictionaryDrawer.toggle()
       "
     >
       {{ ts.l.dictionary }}
@@ -131,7 +131,7 @@
   <!-- BODY CONTAINER-->
   <mat-drawer-container class="bodyContainer" autosize>
     <!-- STORY DRAWER-->
-    <mat-drawer #drawer class="storyListDrawer" mode="side" opened="true">
+    <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
         <app-story-drawer #storyDrawer (storyEmitter)="story = $event" (storiesLoadedEmitter)="storiesLoaded = $event"></app-story-drawer>
     </mat-drawer>
 
@@ -139,7 +139,7 @@
       <!-- display story before grammar checked (i.e. writing mode)-->
       <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
         <!-- STORY DRAWER BUTTON-->
-        <mat-icon class="menuButton" (click)="drawer.toggle()">menu</mat-icon>
+        <mat-icon class="menuButton" (click)="storyDrawer.toggle()">menu</mat-icon>
         <!-- QUILL EDITOR AND TOOLBAR-->
         <quill-editor
           [modules]="quillToolbar"
@@ -158,13 +158,13 @@
       >
     </div>
 
-    <!-- OTHER DRAWER-->
-    <mat-drawer #drawer2 class="storyListDrawer" mode="side" position="end">
-      <p>Drwaer sdfasdfas2</p>
+    <!-- DICTIONARY DRAWER-->
+    <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end" opened="true">
+      <app-dictionary-drawer (closeDictionaryEmitter)="dictionaryDrawer.toggle()"></app-dictionary-drawer>
     </mat-drawer>
 
     <!-- OTHER DRAWER-->
-    <mat-drawer #drawer3 class="storyListDrawer" mode="side" position="end">
+    <mat-drawer #drawer3 mode="side" position="end">
       <p>ADrawer 3</p>
     </mat-drawer>
   </mat-drawer-container>

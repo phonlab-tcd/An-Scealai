@@ -1,0 +1,63 @@
+  <!-- DICTIONARY -->
+  <div class="dictionaryContainer">
+    <div class="dictionaryHeader">
+      <h5>
+        {{ ts.l.dictionary }}
+      </h5>
+      <div class="closeDictionaryBtn" (click)="closeDictionaryEmitter.next(true)">
+        <i class="fa fa-times"></i>
+      </div>
+    </div>
+    <div class="dictionarySubHeader">
+      <div class="dictionaryName" (click)="selectTeanglann = true; selectExternalLinks = false;" >
+        Teanglann
+      </div>
+      |
+      <div class="dictionaryName" (click)="selectExternalLinks = true; selectTeanglann = false" >
+        {{ ts.l.external_links }}
+      </div>
+    </div>
+    <div *ngIf="selectTeanglann" class="dictionaryInput">
+      <label for="dictlookup">{{ ts.l.search }}:</label>
+      <input
+        type="text"
+        id="dictlookup"
+        name="dictlookup"
+        [(ngModel)]="wordLookedUp"
+        (keyup.enter)="lookupWord()"
+        (click)="clearDictInput()"
+        autofocus
+      />
+      <button class="searchDictionaryBtn" (click)="lookupWord()">
+        <i class="fa fa-search" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <!-- TEANGLANN -->
+    <div style="height: 100%">
+        <iframe
+        *ngIf="selectTeanglann"
+        class="dictionaryIframe"
+        id="dictiframe"
+        [src]="defaultDictIframeText"
+      ></iframe>
+
+    </div>
+
+
+    <!-- EXTERNAL LINKS -->
+    <div
+      *ngIf="selectExternalLinks"
+      class="dictionaryIframe"
+      style="text-align: left"
+    >
+      <ul>
+        <li>
+          <a href="http://www.potafocal.com/beo/" target="_blank"
+            >potafocal.com</a
+          >
+        </li>
+        <li><a href="https://www.focloir.ie" target="_blank">focloir.ie</a></li>
+      </ul>
+    </div>
+  </div>
