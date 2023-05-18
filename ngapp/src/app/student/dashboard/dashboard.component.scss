@@ -93,6 +93,52 @@
     height: 100%;
 }
 
+.grammarErrorDrawer {
+    width: 25%;
+    height: 100%;
+}
+
+.grammarMessageBanner {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+  
+  .grammarMessage {
+    display: block;
+    flex: 1;
+  }
+
+  .selectErrorCheckbox {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: left;
+    padding-left: 10px;
+    gap: 1.5rem;
+  }
+
+  .errorContainer {
+    margin: 2px;
+  }
+  
+  .errorContainer:hover {
+    cursor: pointer;
+  }
+  
+  .errorColorBox {
+    display: inline-flex;
+    width: 30px;
+    height: 15px;
+  }
+  
+  .hideLegendItem {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  
+
 .newStoryMessage {
     font-weight: bolder;
     max-width: 200px;
@@ -148,4 +194,19 @@
     100% {
         background-color:red;
     }
+}
+
+.dictionaryHeader {
+    padding: 20px;
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+}
+
+.closeDictionaryBtn {
+    margin-left: auto;
+}
+
+.closeDictionaryBtn:hover {
+    cursor: pointer;
 }

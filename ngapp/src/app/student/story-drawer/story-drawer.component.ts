@@ -48,7 +48,6 @@ export class StoryDrawerComponent implements OnInit {
    * @param story Selected story from HTML
    */
     setStory(story: Story) {
-
       if (story.htmlText == null) {
         story.htmlText = story.text;
       }

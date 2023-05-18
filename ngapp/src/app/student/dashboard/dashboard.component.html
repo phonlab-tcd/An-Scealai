@@ -110,9 +110,9 @@
     <div
       *ngIf="showOptions"
       class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; toggleGrammarTags()"
+      (click)="this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle()"
     >
-      {{ toggleGrammarButton() }}
+      {{ ts.l.grammar_errors }}
       <i class="fas fa-spell-check optionsBtnIcon"></i>
     </div>
 
@@ -131,8 +131,8 @@
   <!-- BODY CONTAINER-->
   <mat-drawer-container class="bodyContainer" autosize>
     <!-- STORY DRAWER-->
-    <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
-        <app-story-drawer #storyDrawer (storyEmitter)="story = $event" (storiesLoadedEmitter)="storiesLoaded = $event"></app-story-drawer>
+    <mat-drawer #storyDrawer class="storyListDrawer" mode="side">
+        <app-story-drawer #storyDrawer (storyEmitter)="story = $event; textUpdated.next(story.text)" (storiesLoadedEmitter)="storiesLoaded = $event"></app-story-drawer>
     </mat-drawer>
 
     <div class="storyContainer">
@@ -158,15 +158,52 @@
       >
     </div>
 
+    <!-- GRAMMAR CHECKER DRAWER-->
+    <mat-drawer #grammarErrorDrawer class="grammarErrorDrawer" mode="side" position="end">
+
+
+        <div class="dictionaryHeader">
+            <h5>
+                {{ ts.message("grammar_errors") }}
+            </h5>
+            <div class="closeDictionaryBtn" (click)="grammarErrorDrawer.toggle(); toggleGrammarTags()">
+              <i class="fa fa-times"></i>
+            </div>
+          </div>
+
+
+        <div class="grammarMessageBanner">
+            <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
+          </div>
+      <!-- GRAMMAR CHECKER SETTINGS -->
+      <div class="selectErrorCheckbox">
+  
+        <!-- GRAMMAR ERROR CHECKBOXES -->
+        <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="setCheckBox(tag.key, tag.value)" [attr.id]="tag.key">
+          <div [ngStyle]="{'background-color': tag.value[0].color}" class="errorColorBox"> </div>
+            <!-- Error name -->
+          {{
+            ts.l.iso_code == "en"
+              ? (tag.value[0].nameEN | titlecase)
+              : (tag.value[0].nameGA | titlecase)
+          }}
+          <!-- Error count -->
+          ({{
+            tag.value[0].nameEN == "Broad/Slender"
+              ? tag.value.length / 2
+              : tag.value.length
+          }})
+        </div>
+      </div>
+
+
+    </mat-drawer>
+
     <!-- DICTIONARY DRAWER-->
-    <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end" opened="true">
+    <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end">
       <app-dictionary-drawer (closeDictionaryEmitter)="dictionaryDrawer.toggle()"></app-dictionary-drawer>
     </mat-drawer>
 
-    <!-- OTHER DRAWER-->
-    <mat-drawer #drawer3 mode="side" position="end">
-      <p>ADrawer 3</p>
-    </mat-drawer>
   </mat-drawer-container>
 
 
