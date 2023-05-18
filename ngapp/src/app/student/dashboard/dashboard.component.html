@@ -1,209 +1,188 @@
-
-  <!-- STORY TITLE HEADER-->
-  <div class="storyTitleHeader" *ngIf="story">
-    <!-- TITLE -->
-    <div
-      class="storyTitle"
-      [ngStyle]="titleStyle()"
-      data-cy="title"
-      contenteditable="true"
-    >
-      {{ story?.title ?? "..." }}
-      <span *ngIf="!storySaved">*</span>
-      <span
-        style="color: rgba(0, 0, 0, 0.4)"
-        *ngIf="story?.createdWithPrompts"
-        >{{ ts.l.made_using_prompts }}</span
-      >
-    </div>
-
-    <!-- SAVE ICON  -->
-    <div class="saveIcon">
-      <div *ngIf="storySaved" class="savedIcon">
-        {{ ts.l.saved }} <i class="fas fa-check"></i>
-      </div>
-      <div *ngIf="!storySaved" class="savedIcon">
-        {{ ts.l.saving }}
-        <i class="fas fa-save"> </i>
-      </div>
-    </div>
+<!-- STORY TITLE HEADER-->
+<div class="storyTitleHeader" *ngIf="story">
+  <!-- TITLE -->
+  <div
+    class="storyTitle"
+    [ngStyle]="titleStyle()"
+    data-cy="title"
+    contenteditable="true"
+  >
+    {{ story?.title ?? "..." }}
+    <span *ngIf="!storySaved">*</span>
+    <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">{{
+      ts.l.made_using_prompts
+    }}</span>
   </div>
 
-  <!-- STORY OPTIONS TOOL BAR -->
-  <div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="story">
-    <div class="optionsBtn">
-      <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
-      <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+  <!-- SAVE ICON  -->
+  <div class="saveIcon">
+    <div *ngIf="storySaved" class="savedIcon">
+      {{ ts.l.saved }} <i class="fas fa-check"></i>
     </div>
-
-    <!-- SPEECH TO TEXT-->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; speakStory()"
-      [ngClass]="{ disableDiv: isTranscribing }"
-    >
-      {{ ts.l.speak }}
-      <!-- Google icon, index.html-->
-      <span
-        *ngIf="!isRecording"
-        class="material-symbols-outlined optionsBtnIcon"
-        >speech_to_text</span
-      >
-      <button
-        *ngIf="isRecording && !isTranscribing"
-        class="notRecordingBtn blink"
-      >
-        <i class="fas fa-stop-circle"></i>
-      </button>
-      <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
-    </div>
-
-    <!-- DOWNLOAD -->
-    <div *ngIf="showOptions" style="display: flex" (click)="dontToggle = true">
-      <button
-        (click)="downloadStory()"
-        style="text-decoration: none"
-        class="optionsBtn optionsPopupBtn"
-        target="_blank"
-        href="{{ downloadStoryUrl() }}"
-      >
-        {{ ts.l.download }}
-        <i class="fas fa-download optionsBtnIcon"></i>
-      </button>
-    </div>
-
-    <!-- FEEDBACK -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; getFeedback()"
-    >
-      {{ ts.l.feedback }}
-      <i class="fas fa-comment-dots optionsBtnIcon"></i>
-      <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
-    </div>
-
-    <!-- DICTIONARY -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="
-        this.dontToggle = true; this.dictionaryVisible = !this.dictionaryVisible; dictionaryDrawer.toggle()
-      "
-    >
-      {{ ts.l.dictionary }}
-      <i class="fas fa-book optionsBtnIcon"></i>
-    </div>
-
-    <!-- AUDIO CHECK -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; goToSynthesis(); drawer2.toggle()"
-    >
-      {{ ts.l.audio_check }}
-      <i class="fas fa-volume-up optionsBtnIcon"></i>
-    </div>
-
-    <!-- GRAMMAR CHECK -->
-    <div
-      *ngIf="showOptions"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle()"
-    >
-      {{ ts.l.grammar_errors }}
-      <i class="fas fa-spell-check optionsBtnIcon"></i>
-    </div>
-
-    <!-- RECORDINGS -->
-    <div
-      *ngIf="showOptions"
-      [hidden]="story.text && story.text.length === 0"
-      class="optionsBtn optionsPopupBtn"
-      (click)="this.dontToggle = true; goToRecording()"
-    >
-      {{ ts.l.recordings }}
-      <i class="fas fa-microphone optionsBtnIcon"></i>
+    <div *ngIf="!storySaved" class="savedIcon">
+      {{ ts.l.saving }}
+      <i class="fas fa-save"> </i>
     </div>
   </div>
+</div>
 
-  <!-- BODY CONTAINER-->
-  <mat-drawer-container class="bodyContainer" autosize>
-    <!-- STORY DRAWER-->
-    <mat-drawer #storyDrawer class="storyListDrawer" mode="side">
-        <app-story-drawer #storyDrawer (storyEmitter)="story = $event; textUpdated.next(story.text)" (storiesLoadedEmitter)="storiesLoaded = $event"></app-story-drawer>
-    </mat-drawer>
+<!-- STORY OPTIONS TOOL BAR -->
+<div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="story">
+  <div class="optionsBtn">
+    <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+    <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+  </div>
 
-    <div class="storyContainer">
-      <!-- display story before grammar checked (i.e. writing mode)-->
-      <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
-        <!-- STORY DRAWER BUTTON-->
-        <mat-icon class="menuButton" (click)="storyDrawer.toggle()">menu</mat-icon>
-        <!-- QUILL EDITOR AND TOOLBAR-->
-        <quill-editor
-          [modules]="quillToolbar"
-          placeholder=""
-          [preserveWhitespace]="true"
-          [debounceTime]="1500"
-          [(ngModel)]="story.htmlText"
-          (onContentChanged)="onContentChanged($event)"
-          (onEditorCreated)="onEditorCreated($event)"
-        ></quill-editor>
-      </div>
-      <ng-template #newStoryMessage
-        ><div class="newStoryMessage">
-          Click on the '+' button below to create your first story!
-        </div></ng-template
+  <!-- SPEECH TO TEXT-->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="this.dontToggle = true; speakStory()"
+    [ngClass]="{ disableDiv: isTranscribing }"
+  >
+    {{ ts.l.speak }}
+    <!-- Google icon, index.html-->
+    <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon"
+      >speech_to_text</span
+    >
+    <button
+      *ngIf="isRecording && !isTranscribing"
+      class="notRecordingBtn blink"
+    >
+      <i class="fas fa-stop-circle"></i>
+    </button>
+    <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
+  </div>
+
+  <!-- DOWNLOAD -->
+  <div *ngIf="showOptions" style="display: flex" (click)="dontToggle = true">
+    <button
+      (click)="downloadStory()"
+      style="text-decoration: none"
+      class="optionsBtn optionsPopupBtn"
+      target="_blank"
+      href="{{ downloadStoryUrl() }}"
+    >
+      {{ ts.l.download }}
+      <i class="fas fa-download optionsBtnIcon"></i>
+    </button>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="this.dontToggle = true; getFeedback()"
+  >
+    {{ ts.l.feedback }}
+    <i class="fas fa-comment-dots optionsBtnIcon"></i>
+    <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
+  </div>
+
+  <!-- DICTIONARY -->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="
+      this.dontToggle = true;
+      this.dictionaryVisible = !this.dictionaryVisible;
+      dictionaryDrawer.toggle()
+    "
+  >
+    {{ ts.l.dictionary }}
+    <i class="fas fa-book optionsBtnIcon"></i>
+  </div>
+
+  <!-- AUDIO CHECK -->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="this.dontToggle = true; goToSynthesis(); drawer2.toggle()"
+  >
+    {{ ts.l.audio_check }}
+    <i class="fas fa-volume-up optionsBtnIcon"></i>
+  </div>
+
+  <!-- GRAMMAR CHECK -->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="
+      this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle()
+    "
+  >
+    {{ ts.l.grammar_errors }}
+    <i class="fas fa-spell-check optionsBtnIcon"></i>
+  </div>
+
+  <!-- RECORDINGS -->
+  <div
+    *ngIf="showOptions"
+    [hidden]="story.text && story.text.length === 0"
+    class="optionsBtn optionsPopupBtn"
+    (click)="this.dontToggle = true; goToRecording()"
+  >
+    {{ ts.l.recordings }}
+    <i class="fas fa-microphone optionsBtnIcon"></i>
+  </div>
+</div>
+
+<!-- BODY CONTAINER-->
+<mat-drawer-container class="bodyContainer" autosize>
+  <!-- STORY DRAWER-->
+  <mat-drawer #storyDrawer class="storyListDrawer" mode="side">
+    <app-story-drawer
+      #storyDrawer
+      (storyEmitter)="story = $event; textUpdated.next(story.text)"
+      (storiesLoadedEmitter)="storiesLoaded = $event"
+    ></app-story-drawer>
+  </mat-drawer>
+
+  <div class="storyContainer">
+    <!-- display story before grammar checked (i.e. writing mode)-->
+    <div
+      class="ql-container"
+      #quillHeightSpan
+      [ngStyle]="quillEditorStyle"
+      *ngIf="story; else newStoryMessage"
+    >
+      <!-- STORY DRAWER BUTTON-->
+      <mat-icon class="menuButton" (click)="storyDrawer.toggle()"
+        >menu</mat-icon
       >
+      <!-- QUILL EDITOR AND TOOLBAR-->
+      <quill-editor
+        [modules]="quillToolbar"
+        placeholder=""
+        [preserveWhitespace]="true"
+        [debounceTime]="1500"
+        [(ngModel)]="story.htmlText"
+        (onContentChanged)="onContentChanged($event)"
+        (onEditorCreated)="onEditorCreated($event)"
+      ></quill-editor>
     </div>
+    <ng-template #newStoryMessage
+      ><div class="newStoryMessage">
+        Click on the '+' button below to create your first story!
+      </div></ng-template
+    >
+  </div>
 
-    <!-- GRAMMAR CHECKER DRAWER-->
-    <mat-drawer #grammarErrorDrawer class="grammarErrorDrawer" mode="side" position="end">
+  <!-- GRAMMAR CHECKER DRAWER-->
+  <mat-drawer #grammarErrorDrawer class="grammarErrorDrawer" mode="side" position="end" >
+    <app-grammar-error-drawer
+      [quillHighlighter]="quillHighlighter"
+      [grammarLoaded]="grammarLoaded"
+      [grammarErrorsTypeDict]="grammarErrorsTypeDict"
+      [checkBoxes]="checkBoxes"
+      (closeGrammarEmitter)="grammarErrorDrawer.toggle(); toggleGrammarTags()"
+    ></app-grammar-error-drawer>
+  </mat-drawer>
 
-
-        <div class="dictionaryHeader">
-            <h5>
-                {{ ts.message("grammar_errors") }}
-            </h5>
-            <div class="closeDictionaryBtn" (click)="grammarErrorDrawer.toggle(); toggleGrammarTags()">
-              <i class="fa fa-times"></i>
-            </div>
-          </div>
-
-
-        <div class="grammarMessageBanner">
-            <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
-          </div>
-      <!-- GRAMMAR CHECKER SETTINGS -->
-      <div class="selectErrorCheckbox">
-  
-        <!-- GRAMMAR ERROR CHECKBOXES -->
-        <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="setCheckBox(tag.key, tag.value)" [attr.id]="tag.key">
-          <div [ngStyle]="{'background-color': tag.value[0].color}" class="errorColorBox"> </div>
-            <!-- Error name -->
-          {{
-            ts.l.iso_code == "en"
-              ? (tag.value[0].nameEN | titlecase)
-              : (tag.value[0].nameGA | titlecase)
-          }}
-          <!-- Error count -->
-          ({{
-            tag.value[0].nameEN == "Broad/Slender"
-              ? tag.value.length / 2
-              : tag.value.length
-          }})
-        </div>
-      </div>
-
-
-    </mat-drawer>
-
-    <!-- DICTIONARY DRAWER-->
-    <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end">
-      <app-dictionary-drawer (closeDictionaryEmitter)="dictionaryDrawer.toggle()"></app-dictionary-drawer>
-    </mat-drawer>
-
-  </mat-drawer-container>
-
-
+  <!-- DICTIONARY DRAWER-->
+  <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end" >
+    <app-dictionary-drawer
+      (closeDictionaryEmitter)="dictionaryDrawer.toggle()"
+    ></app-dictionary-drawer>
+  </mat-drawer>
+</mat-drawer-container>

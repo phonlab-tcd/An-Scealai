@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { SafeUrl } from '@angular/platform-browser';
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
-import { distinctUntilChanged } from 'rxjs/operators';
-import { TranslationService, MessageKey, } from "app/core/services/translation.service";
+import { distinctUntilChanged } from "rxjs/operators";
+import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
 import clone from "lodash/clone";
-import config from 'abairconfig';
+import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
-import { RecordAudioService } from 'app/core/services/record-audio.service';
-import { ClassroomService } from 'app/core/services/classroom.service';
+import { RecordAudioService } from "app/core/services/record-audio.service";
+import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
-import { GrammarEngine } from '../../lib/grammar-engine/grammar-engine';
-import { QuillHighlighter } from '../../lib/quill-highlight/quill-highlight';
-import { HighlightTag } from '../../lib/quill-highlight/quill-highlight';
-import { leathanCaolChecker } from '../../lib/grammar-engine/checkers/leathan-caol-checker';
-import { anGramadoir } from '../../lib/grammar-engine/checkers/an-gramadoir';
-import { genitiveChecker } from '../../lib/grammar-engine/checkers/genitive-checker';
-import { relativeClauseChecker } from '../../lib/grammar-engine/checkers/relative-clause-checker';
-import { ErrorTag } from '../../lib/grammar-engine/types';
+import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
+import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
+import { HighlightTag } from "../../lib/quill-highlight/quill-highlight";
+import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-caol-checker";
+import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
+import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
+import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
+import { ErrorTag } from "../../lib/grammar-engine/types";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
   storySaved = true;
   dialogRef: MatDialogRef<unknown>;
   storiesLoaded: boolean = false;
-  downloadStoryFormat = '.pdf';
+  downloadStoryFormat = ".pdf";
   lastClickedStoryId: string = "";
 
   // GRAMMAR VARIABLES
@@ -58,12 +58,12 @@ export class DashboardComponent implements OnInit {
   showErrorTags = false;
   grammarSettingsHidden: boolean = false;
   grammarCheckerOptions: Object = {
-    'anGramadoir': anGramadoir,
-    'relativeClause': relativeClauseChecker,
+    anGramadoir: anGramadoir,
+    relativeClause: relativeClauseChecker,
     //'genitive': genitiveChecker,
-    'broadSlender': leathanCaolChecker,
-  }
-  checkBoxes: Object = {'showAll': true};
+    broadSlender: leathanCaolChecker,
+  };
+  checkBoxes: Object = { showAll: true };
   grammarErrorsTypeDict: Object = {};
 
   // OPTIONS (to show or not to show dash menu bar)
@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
   };
 
   // SPEECH TO TEXT
-  audioSourceASR : SafeUrl;
+  audioSourceASR: SafeUrl;
   isRecording: boolean = false;
   isTranscribing: boolean = false;
 
@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router,
+    private router: Router
   ) {
     this.setUpGrammarChecking();
   }
@@ -134,98 +134,112 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-    /**
+  /**
    * Initialise the Grammar Engine and Highlighting services
    * Update any error tags/highlighting when the user makes changes to their story
    */
-    async setUpGrammarChecking() {
-      const userDetails = this.auth.getUserDetails();
-      if (!userDetails) return;
-  
-      // get student classroom to see if any grammar checkers were specified in classroom settings
-      let classroom = (await firstValueFrom(this.classroomService.getClassroomOfStudent(userDetails._id)));
-  
-      // populate an array of checkers from classroom settings to pass into the grammar engine
-      let checkers = [];
-      if (classroom && classroom.grammarCheckers && classroom.grammarCheckers.length > 0) {
-        classroom.grammarCheckers.forEach( checker => {
-          if (this.grammarCheckerOptions[checker])
-            checkers.push(this.grammarCheckerOptions[checker]);
-        })
-      }
-      // pass all checkers to the grammar engine if no classroom specifications (or do we want to leave it empty?)
-      else {
-        checkers = Object.values(this.grammarCheckerOptions);
-      }
-    
-      this.grammarEngine = new GrammarEngine(checkers, this.http, this.auth);
-      
-      // subscribe to any changes made to the story text and check for grammar errors
-      this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-        this.grammarLoaded = false;
-  
-        const textToCheck = this.story.text.replace(/\n/g, ' ');
-        if(!textToCheck) return;
-        
-        try {
-          // check text for grammar errors
-          this.grammarErrors = [];
-          this.grammarEngine.check$(this.story.text).subscribe({
-            next: (tag: ErrorTag) => {
-              this.grammarErrors.push(tag);
-              
-              // show error highlighting if button on
-              if(this.showErrorTags) {
-                this.quillHighlighter.show([tag as HighlightTag]);
-              }
-            },
-            error: function () {},
-            complete: () => {
-              if (!this.quillHighlighter) return;
-              // We need to hide all tags to get rid of any old errors that were fixed by the changes
-              this.quillHighlighter.hideAll();
+  async setUpGrammarChecking() {
+    const userDetails = this.auth.getUserDetails();
+    if (!userDetails) return;
 
-              // and then re-show all the latest error tags if button on
-              if(this.showErrorTags) {
-                this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
-              }
-              
-              //save any grammar errors with associated sentences to DB
-              if(this.grammarErrors) {
-                this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
-              }
+    // get student classroom to see if any grammar checkers were specified in classroom settings
+    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
-            
-              // create a dictionary of error type and tags for checkbox filtering
-              this.grammarErrorsTypeDict = this.grammarErrors.reduce(function(map:Object, tag:any) {
-                  if(!map[tag.type]) {
-                    map[tag.type] = [];
-                  }
-                  map[tag.type].push(tag);
-                  return map;
-              }, {});
-
-              
-              // initialise all error checkboxes to true
-              for (const key of Object.keys(this.grammarErrorsTypeDict)) {
-                this.checkBoxes[key] = true;
-              }
-              this.grammarLoaded = true;
-            },
-          });
-          
-        } catch (updateGrammarErrorsError) {
-          if ( !this.grammarErrors) {
-            window.alert(
-              'There was an error while trying to fetch grammar ' +
-              'suggestions from the Gramadóir server:\n' +
-              updateGrammarErrorsError.message + '\n' +
-              'See the browser console for more information');
-          }
-          console.dir(updateGrammarErrorsError);
-        }
+    // populate an array of checkers from classroom settings to pass into the grammar engine
+    let checkers = [];
+    if (
+      classroom &&
+      classroom.grammarCheckers &&
+      classroom.grammarCheckers.length > 0
+    ) {
+      classroom.grammarCheckers.forEach((checker) => {
+        if (this.grammarCheckerOptions[checker])
+          checkers.push(this.grammarCheckerOptions[checker]);
       });
     }
+    // pass all checkers to the grammar engine if no classroom specifications (or do we want to leave it empty?)
+    else {
+      checkers = Object.values(this.grammarCheckerOptions);
+    }
+
+    this.grammarEngine = new GrammarEngine(checkers, this.http, this.auth);
+
+    // subscribe to any changes made to the story text and check for grammar errors
+    this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
+      this.grammarLoaded = false;
+
+      const textToCheck = this.story.text.replace(/\n/g, " ");
+      if (!textToCheck) return;
+
+      try {
+        // check text for grammar errors
+        this.grammarErrors = [];
+        this.grammarEngine.check$(this.story.text).subscribe({
+          next: (tag: ErrorTag) => {
+            this.grammarErrors.push(tag);
+
+            // show error highlighting if button on
+            if (this.showErrorTags) {
+              this.quillHighlighter.show([tag as HighlightTag]);
+            }
+          },
+          error: function () {},
+          complete: () => {
+            if (!this.quillHighlighter) return;
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+
+            // and then re-show all the latest error tags if button on
+            if (this.showErrorTags) {
+              this.quillHighlighter.show(
+                this.grammarErrors.filter(
+                  (tag) =>
+                    this.checkBoxes[tag.type] || this.checkBoxes["showAll"]
+                )
+              );
+            }
+
+            //save any grammar errors with associated sentences to DB
+            if (this.grammarErrors) {
+              this.grammarEngine
+                .saveErrorsWithSentences(this.story._id)
+                .then(console.log, console.error);
+            }
+
+            // create a dictionary of error type and tags for checkbox filtering
+            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function (
+              map: Object,
+              tag: any
+            ) {
+              if (!map[tag.type]) {
+                map[tag.type] = [];
+              }
+              map[tag.type].push(tag);
+              return map;
+            },
+            {});
+
+            // initialise all error checkboxes to true
+            for (const key of Object.keys(this.grammarErrorsTypeDict)) {
+              this.checkBoxes[key] = true;
+            }
+            this.grammarLoaded = true;
+          },
+        });
+      } catch (updateGrammarErrorsError) {
+        if (!this.grammarErrors) {
+          window.alert(
+            "There was an error while trying to fetch grammar " +
+              "suggestions from the Gramadóir server:\n" +
+              updateGrammarErrorsError.message +
+              "\n" +
+              "See the browser console for more information"
+          );
+        }
+        console.dir(updateGrammarErrorsError);
+      }
+    });
+  }
 
   /*
    * Update story text with what the student has written with quill
@@ -259,7 +273,11 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
-    this.quillHighlighter = new QuillHighlighter(this.quillEditor, this.ts, this.engagement);
+    this.quillHighlighter = new QuillHighlighter(
+      this.quillEditor,
+      this.ts,
+      this.engagement
+    );
   }
 
   getWordCount(text) {}
@@ -288,7 +306,9 @@ export class DashboardComponent implements OnInit {
     }
 
     // get story html text without highlighting markup
-    const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml( clone(this.story.htmlText) );
+    const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml(
+      clone(this.story.htmlText)
+    );
 
     const updateData = {
       title: this.story.title,
@@ -305,7 +325,9 @@ export class DashboardComponent implements OnInit {
 
     // Save story to the DB
     try {
-      await firstValueFrom( this.storyService.updateStory(updateData, this.story._id) );
+      await firstValueFrom(
+        this.storyService.updateStory(updateData, this.story._id)
+      );
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
       } else if (debounceId === "modal") {
@@ -332,7 +354,9 @@ export class DashboardComponent implements OnInit {
    * @param text story html text
    */
   stripGramadoirAttributesFromHtml(text: string) {
-    if (!text || !text.replace) { return ""; }
+    if (!text || !text.replace) {
+      return "";
+    }
     return text
       .replace(/\s*style="([^"])+"/g, "")
       .replace(/\s*highlight-tag-type="([^"])+"/g, "")
@@ -357,128 +381,94 @@ export class DashboardComponent implements OnInit {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.download,
-        type: 'select',
-        data: [this.story.title, ['.pdf', '.docx', '.txt', '.odt']],
+        type: "select",
+        data: [this.story.title, [".pdf", ".docx", ".txt", ".odt"]],
         confirmText: this.ts.l.download,
-        cancelText: this.ts.l.cancel
+        cancelText: this.ts.l.cancel,
       },
-      width: '50vh',
+      width: "50vh",
     });
-    
-    this.dialogRef.afterClosed().subscribe( (res) => {
-        this.dialogRef = undefined;
-        // res[0] is download title, res[1] is download format
-        if(res) {
-          res[1] ? this.downloadStoryFormat = res[1] : this.downloadStoryFormat = '.pdf'
-          this.http.get(this.downloadStoryUrl(), {responseType: 'blob'})
-              .subscribe(data=>{
-                const elem = window.document.createElement('a');
-                elem.href = window.URL.createObjectURL(data);
-                res[0] ? elem.download = res[0] : elem.download = this.story.title;
-                document.body.appendChild(elem);
-                elem.click();
-                document.body.removeChild(elem);
-              });
-        }
+
+    this.dialogRef.afterClosed().subscribe((res) => {
+      this.dialogRef = undefined;
+      // res[0] is download title, res[1] is download format
+      if (res) {
+        res[1]
+          ? (this.downloadStoryFormat = res[1])
+          : (this.downloadStoryFormat = ".pdf");
+        this.http
+          .get(this.downloadStoryUrl(), { responseType: "blob" })
+          .subscribe((data) => {
+            const elem = window.document.createElement("a");
+            elem.href = window.URL.createObjectURL(data);
+            res[0]
+              ? (elem.download = res[0])
+              : (elem.download = this.story.title);
+            document.body.appendChild(elem);
+            elem.click();
+            document.body.removeChild(elem);
+          });
+      }
     });
   }
-  
+
   /* Create story download url with chosen format */
   downloadStoryUrl() {
-    return config.baseurl + 'story/downloadStory/' + this.story._id + '/' + this.downloadStoryFormat;
+    return (
+      config.baseurl +
+      "story/downloadStory/" +
+      this.story._id +
+      "/" +
+      this.downloadStoryFormat
+    );
   }
 
   hasNewFeedback() {}
 
-  toggleGrammarButton() {
-    const key: MessageKey = this.showErrorTags
-      ? "hide_grammar_suggestions"
-      : "show_grammar_suggestions";
-    return this.ts.message(key);
-  }
-
-    /**
-   * Apply error highlighting depending on which errors are checked to display
-   * @param tags grammar errors
-   * @param boxChecked true if box checked, false otherwise
-   */
-    setCheckBox(key, tags) {
-      this.checkBoxes[key] = !this.checkBoxes[key];
-      if (this.checkBoxes['showAll']) this.checkBoxes['showAll'] = false;
-      
-      if(this.checkBoxes[key]) {
-        this.quillHighlighter.show(tags);
-        document.getElementById(key).classList.remove("hideLegendItem");
-      }
-      else {
-        this.quillHighlighter.hide(tags);
-        document.getElementById(key).classList.add("hideLegendItem");
-      }
-    }
-    
-    /* Apply error highlighting to all or none of the errors */
-    setAllCheckBoxes() {
-      if(this.checkBoxes['showAll']) {
-        this.quillHighlighter.show(this.grammarErrors);
-      }
-      else {
-        this.quillHighlighter.hideAll();
-      }
-      Object.keys(this.checkBoxes).forEach(key => {
-        this.checkBoxes[key] = this.checkBoxes['showAll']; // reset all error checkboxes
-      });
-    }
-  
-    /* Sets text for bottom blue bar of grammar checker */
-    selectedGrammarSuggestion() {
-      if (this.quillHighlighter)
-        return this.quillHighlighter.getGrammarMessage(this.grammarLoaded)
-      else
-        return '';
-    }
-
-      /* Show or hide error tags */
+  /* Show or hide error tags */
   async toggleGrammarTags() {
-    this.showErrorTags ? 
-      this.quillHighlighter.hideAll() :
-      this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+    this.showErrorTags
+      ? this.quillHighlighter.hideAll()
+      : this.quillHighlighter.show(
+          this.grammarErrors.filter(
+            (tag) => this.checkBoxes[tag.type] || this.checkBoxes["showAll"]
+          )
+        );
     this.showErrorTags = !this.showErrorTags;
-}
-
+  }
 
   /* Route to record story component */
   goToRecording() {
-    this.router.navigateByUrl('/student/record-story/' + this.story._id);
+    this.router.navigateByUrl("/student/record-story/" + this.story._id);
   }
 
   goToSynthesis() {}
 
-    /* Stop recording if already recording, otherwise start recording; get transcription */
-    async speakStory() {
-      if (this.isRecording) {
-        this.isTranscribing = true;
-        this.recordAudioService.stopRecording();
-        let transcription = await this.recordAudioService.getAudioTranscription();
-        this.isTranscribing = false;
-        if(transcription) {
-          // get cursor position for inserting the transcription
-          let selection = this.quillEditor.getSelection(true);
-          this.quillEditor.insertText(selection.index, transcription + ".");
-  
-          // update the text and html text with inserted transcription
-          this.story.text = this.quillEditor.getText();
-          this.story.htmlText = this.quillEditor.root.innerHTML;
-          
-          // save story
-          this.getWordCount(transcription);
-          this.storySaved = false; 
-          //this.textUpdated.next();
-          this.debounceSaveStory();
-        }
+  /* Stop recording if already recording, otherwise start recording; get transcription */
+  async speakStory() {
+    if (this.isRecording) {
+      this.isTranscribing = true;
+      this.recordAudioService.stopRecording();
+      let transcription = await this.recordAudioService.getAudioTranscription();
+      this.isTranscribing = false;
+      if (transcription) {
+        // get cursor position for inserting the transcription
+        let selection = this.quillEditor.getSelection(true);
+        this.quillEditor.insertText(selection.index, transcription + ".");
+
+        // update the text and html text with inserted transcription
+        this.story.text = this.quillEditor.getText();
+        this.story.htmlText = this.quillEditor.root.innerHTML;
+
+        // save story
+        this.getWordCount(transcription);
+        this.storySaved = false;
+        //this.textUpdated.next();
+        this.debounceSaveStory();
       }
-      else {
-        this.recordAudioService.recordAudio();
-      }
-      this.isRecording = !this.isRecording;
+    } else {
+      this.recordAudioService.recordAudio();
     }
+    this.isRecording = !this.isRecording;
+  }
 }
