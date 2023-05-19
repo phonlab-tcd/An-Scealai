@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
+import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
@@ -13,7 +13,6 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
-import { NotificationService } from "app/core/services/notification-service.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
@@ -43,14 +42,13 @@ Quill.register("modules/imageCompress", ImageCompress);
 export class DashboardComponent implements OnInit {
   // STORY VARIABLES
   stories: Story[] = [];
-  story: Story = new Story();
+  story: Story;
   saveStoryDebounceId = 0;
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
   dialogRef: MatDialogRef<unknown>;
   storiesLoaded: boolean = false;
   downloadStoryFormat = ".pdf";
-  audioSource: SafeUrl;
   hasFeedback: boolean = false;
 
   // GRAMMAR VARIABLES
@@ -114,11 +112,9 @@ export class DashboardComponent implements OnInit {
     private recordAudioService: RecordAudioService,
     private engagement: EngagementService,
     private classroomService: ClassroomService,
-    private notificationService: NotificationService,
     private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
-    protected sanitizer: DomSanitizer,
   ) {
     this.setUpGrammarChecking();
   }
@@ -136,6 +132,7 @@ export class DashboardComponent implements OnInit {
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
     }
+    console.log(this.story)
   }
 
   /**
@@ -445,8 +442,6 @@ export class DashboardComponent implements OnInit {
   goToRecording() {
     this.router.navigateByUrl("/student/record-story/" + this.story._id);
   }
-
-  goToSynthesis() {}
 
   /* Stop recording if already recording, otherwise start recording; get transcription */
   async speakStory() {

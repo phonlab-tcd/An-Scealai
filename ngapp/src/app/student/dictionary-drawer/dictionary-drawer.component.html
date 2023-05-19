@@ -9,11 +9,11 @@
     </div>
   </div>
   <div class="dictionarySubHeader">
-    <div class="dictionaryName" (click)="selectTeanglann = true; selectExternalLinks = false" >
+    <div class="dictionaryName" (click)="selectTeanglann = true" >
       Teanglann
     </div>
     |
-    <div class="dictionaryName" (click)="selectExternalLinks = true; selectTeanglann = false" >
+    <div class="dictionaryName" (click)="selectTeanglann = false" >
       {{ ts.l.external_links }}
     </div>
   </div>
@@ -44,7 +44,7 @@
   </div>
 
   <!-- EXTERNAL LINKS -->
-  <div *ngIf="selectExternalLinks" class="dictionaryIframe" style="text-align: left" >
+  <div *ngIf="!selectTeanglann" class="dictionaryIframe" style="text-align: left" >
     <ul>
       <li>
         <a href="http://www.potafocal.com/beo/" target="_blank"

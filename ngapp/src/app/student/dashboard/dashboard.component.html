@@ -93,7 +93,7 @@
     <i class="fas fa-book optionsBtnIcon"></i>
   </div>
 
-  <!-- AUDIO CHECK -->
+  <!-- SYNTHESIS -->
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
@@ -108,7 +108,7 @@
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     (click)="
-      this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle()
+      this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle(); textUpdated.next(story.text)
     "
   >
     {{ ts.l.grammar_errors }}
@@ -133,14 +133,13 @@
   <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
     <app-story-drawer
       #storyDrawer
-      (storyEmitter)="story = $event; textUpdated.next(story.text)"
+      (storyEmitter)="story = $event"
       (hasFeedback)="hasFeedback = $event"
-      (storiesLoadedEmitter)="storiesLoaded = $event"
     ></app-story-drawer>
   </mat-drawer>
 
+  <!-- STORY WRITING CONTAINER-->
   <div class="storyContainer">
-    <!-- display story before grammar checked (i.e. writing mode)-->
     <div
       class="ql-container"
       #quillHeightSpan
@@ -162,9 +161,11 @@
         (onEditorCreated)="onEditorCreated($event)"
       ></quill-editor>
     </div>
+
+    <!-- NO STORIES MESSAGE-->
     <ng-template #newStoryMessage
       ><div class="newStoryMessage">
-        Click on the '+' button below to create your first story!
+        Click on the '+' button to create your first story!
       </div></ng-template
     >
   </div>
@@ -173,7 +174,6 @@
     <mat-drawer [hidden]="!hasFeedback" #feedbackDrawer class="grammarErrorDrawer" mode="side" position="end" >
         <app-feedback-drawer
             [story]="story"
-            [audioSource]="audioSource"
             (closeFeedbackEmitter)="feedbackDrawer.toggle()"
         ></app-feedback-drawer>
     </mat-drawer>

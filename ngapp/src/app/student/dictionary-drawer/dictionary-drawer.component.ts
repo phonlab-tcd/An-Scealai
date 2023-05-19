@@ -16,7 +16,6 @@ export class DictionaryDrawerComponent implements OnInit {
 
     wordLookedUp: string = '';
     selectTeanglann = true;
-    selectExternalLinks: boolean = false;
     defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
       `data:text/html;charset=utf-8,` +
       this.ts.l.search_for_words_in_dictionary

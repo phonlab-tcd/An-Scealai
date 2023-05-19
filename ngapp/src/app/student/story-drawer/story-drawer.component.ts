@@ -39,9 +39,13 @@ export class StoryDrawerComponent implements OnInit {
     this.stories = (
       await firstValueFrom(this.storyService.getStoriesForLoggedInUser())
     ).map((storyData) => new Story().fromJSON(storyData));
-    this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-    this.setStory(this.stories[0]);
-    this.storiesLoadedEmitter.emit(true);
+
+    if (this.stories.length > 0 ) {
+      this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
+      this.setStory(this.stories[0]);
+      this.storiesLoadedEmitter.emit(true);
+    }
+
   }
 
     /**

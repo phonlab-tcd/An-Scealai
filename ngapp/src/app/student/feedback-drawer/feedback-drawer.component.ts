@@ -15,7 +15,7 @@ import { EventType } from "app/core/models/event";
 export class FeedbackDrawerComponent implements OnInit {
   @Output() closeFeedbackEmitter = new EventEmitter();
   @Input() story: Story;
-  @Input() audioSource: SafeUrl;
+  audioSource: SafeUrl;
 
   constructor(
     protected ts: TranslationService,
@@ -29,7 +29,7 @@ export class FeedbackDrawerComponent implements OnInit {
 
   ngOnChanges(changes: any) {
     if (
-      this.story.feedback &&
+      this.story &&
       (this.story.feedback.text ||
       this.story.feedback.audioId ||
       this.story.feedback.feedbackMarkup)
