@@ -70,9 +70,9 @@
 
   <!-- FEEDBACK -->
   <div
-    *ngIf="showOptions"
+    *ngIf="showOptions && hasFeedback"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; getFeedback()"
+    (click)="this.dontToggle = true; feedbackDrawer.toggle()"
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
@@ -129,11 +129,12 @@
 
 <!-- BODY CONTAINER-->
 <mat-drawer-container class="bodyContainer" autosize>
-  <!-- STORY DRAWER-->
-  <mat-drawer #storyDrawer class="storyListDrawer" mode="side">
+  <!-- STORY LIST DRAWER-->
+  <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
     <app-story-drawer
       #storyDrawer
       (storyEmitter)="story = $event; textUpdated.next(story.text)"
+      (hasFeedback)="hasFeedback = $event"
       (storiesLoadedEmitter)="storiesLoaded = $event"
     ></app-story-drawer>
   </mat-drawer>
@@ -167,6 +168,15 @@
       </div></ng-template
     >
   </div>
+
+    <!-- FEEDBACK DRAWER-->
+    <mat-drawer [hidden]="!hasFeedback" #feedbackDrawer class="grammarErrorDrawer" mode="side" position="end" >
+        <app-feedback-drawer
+            [story]="story"
+            [audioSource]="audioSource"
+            (closeFeedbackEmitter)="feedbackDrawer.toggle()"
+        ></app-feedback-drawer>
+    </mat-drawer>
 
   <!-- GRAMMAR CHECKER DRAWER-->
   <mat-drawer #grammarErrorDrawer class="grammarErrorDrawer" mode="side" position="end" >

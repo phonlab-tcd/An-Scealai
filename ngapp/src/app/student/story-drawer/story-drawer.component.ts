@@ -18,6 +18,7 @@ export class StoryDrawerComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
   lastClickedStoryId: string = "";
   @Output() storyEmitter = new EventEmitter<Story>();
+  @Output() hasFeedback = new EventEmitter<Boolean>();
   @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
 
   constructor(
@@ -39,7 +40,7 @@ export class StoryDrawerComponent implements OnInit {
       await firstValueFrom(this.storyService.getStoriesForLoggedInUser())
     ).map((storyData) => new Story().fromJSON(storyData));
     this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-    this.storyEmitter.emit(this.stories[0]);
+    this.setStory(this.stories[0]);
     this.storiesLoadedEmitter.emit(true);
   }
 
@@ -52,6 +53,7 @@ export class StoryDrawerComponent implements OnInit {
         story.htmlText = story.text;
       }
       this.storyEmitter.emit(story);
+      (story.feedback.text || story.feedback.audioId || story.feedback.feedbackMarkup) ? this.hasFeedback.emit(true) : this.hasFeedback.emit(false)
       // set css for selecting a story in the side nav
       let id = story._id;
       let storyElement = document.getElementById(id);

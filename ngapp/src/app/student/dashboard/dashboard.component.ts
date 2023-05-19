@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { SafeUrl } from "@angular/platform-browser";
+import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
@@ -13,6 +13,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
+import { NotificationService } from "app/core/services/notification-service.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
@@ -49,7 +50,8 @@ export class DashboardComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
   storiesLoaded: boolean = false;
   downloadStoryFormat = ".pdf";
-  lastClickedStoryId: string = "";
+  audioSource: SafeUrl;
+  hasFeedback: boolean = false;
 
   // GRAMMAR VARIABLES
   grammarEngine: GrammarEngine;
@@ -112,9 +114,11 @@ export class DashboardComponent implements OnInit {
     private recordAudioService: RecordAudioService,
     private engagement: EngagementService,
     private classroomService: ClassroomService,
+    private notificationService: NotificationService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    protected sanitizer: DomSanitizer,
   ) {
     this.setUpGrammarChecking();
   }
@@ -471,4 +475,5 @@ export class DashboardComponent implements OnInit {
     }
     this.isRecording = !this.isRecording;
   }
+
 }

@@ -201,7 +201,7 @@ export class GrammarEngine {
     * @param storyId - id of story being checked for grammar
     */
     async saveErrorsWithSentences(storyId: string) {
-      if(!this.errorsWithSentences) {
+      if(!this.errorsWithSentences || !storyId) {
         return;
       }
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
