@@ -17,13 +17,11 @@ gramadoirRoutes
 gramadoirRoutes
     .route('/getTimeGrammarCounts/:ownerId')
     .post(auth, getTimeGrammarCounts);
+
+// //////////////////////////////////////////// GET
 gramadoirRoutes
     .route('/callAnGramadoir/:teacs')
-    .post(auth, callAnGramadoir);
-gramadoirRoutes
-    .route('/callAnGramadoirDocker/:teacs')
-    .post(auth, callAnGramadoirDocker);
-// //////////////////////////////////////////// GET
+    .get(auth, callAnGramadoir);
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
     .get(auth, getUniqueErrorTypeCounts);
