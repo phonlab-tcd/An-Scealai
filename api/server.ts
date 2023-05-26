@@ -57,6 +57,7 @@ if(process.env.NODE_ENV !== 'test') {
 }
 
 const app = express();
+app.use(require('express-status-monitor')());
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
