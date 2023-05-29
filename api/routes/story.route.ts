@@ -327,6 +327,7 @@ storyRoutes.route('/updateActiveRecording/:id').post(async (req, res) => {
   if (!req.body.activeRecording)  return res.status(400).json('no activeRecording id');
 
   const story = await Story.findById(req.params.id);
+  console.log(story);
 
   if (!story) {
     return res.status(404).json('story not found');
