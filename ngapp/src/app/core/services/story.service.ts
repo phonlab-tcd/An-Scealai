@@ -44,8 +44,7 @@ export class StoryService {
       .subscribe(res => {
         this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
         // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-
-        this.router.navigateByUrl('/dashboard/' + res.id);
+        this.router.navigateByUrl('/student/dashboard/' + res.id);
       });
   }
 
