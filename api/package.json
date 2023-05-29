@@ -21,10 +21,10 @@
       }
     },
     "setupFiles": [
-      "<rootDir>/test-utils/test-setup.js"
+      "<rootDir>/test-utils/test-setup.ts"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/test-utils/test-setup-per-file.js"
+      "<rootDir>/test-utils/test-setup-per-file.ts"
     ],
     "forceExit": true,
     "collectCoverage": false

@@ -1,3 +1,5 @@
+import { beforeAll, afterAll } from "@jest/globals";
+
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const   mongoose            = require('mongoose');
 
@@ -9,7 +11,6 @@ beforeAll(async ()=>{
 		console.log("ERROR CREATING MEMORY SERVER",mongodResult);
 	}
 	const mongod = mongodResult.ok;
-	console.log("got mongod");
   const uri = mongod.getUri();
   const useNewUrlParser = true;
   const useUnifiedTopology = true;
