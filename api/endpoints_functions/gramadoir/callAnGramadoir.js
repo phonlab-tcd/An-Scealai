@@ -21,14 +21,12 @@ async function callAnGramadoir(req, res) {
           return res.status(200).send(cachedErrors);
     }
 
-    // if errors do not exist in the cache, request them and then set the cache
-    if (cachedErrors == null) {
-      // get errors from An Gramadoir
-      // @ts-ignore
-      const gramadoirRes = await axios.post(url, encodeParams(req.params["teacs"]), options).then(
-        (ok) => ({ ok }),
-        (err) => ({ err })
-      );
+    // get errors from An Gramadoir
+    // @ts-ignore
+    const gramadoirRes = await axios.post(url, encodeParams(req.params["teacs"]), options).then(
+      (ok) => ({ ok }),
+      (err) => ({ err })
+    );
 
     // if response ok, set cache and return errors
     if ("ok" in gramadoirRes) {
