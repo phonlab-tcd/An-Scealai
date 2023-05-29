@@ -5,7 +5,6 @@ const { getUniqueErrorTypeCounts } = require('../endpoints_functions/gramadoir/g
 const { getUserGrammarCounts } = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
 const { getTimeGrammarCounts } = require('../endpoints_functions/gramadoir/getTimeGrammarCounts');
 const { callAnGramadoir } = require('../endpoints_functions/gramadoir/callAnGramadoir');
-const { callAnGramadoirDocker } = require('../endpoints_functions/gramadoir/callAnGramadoirDocker');
 
 // //////////////////////////////////////////// POST
 gramadoirRoutes
