@@ -16,6 +16,7 @@ const dbURL = require('./utils/dbUrl');
 const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 const expressQueue = require('express-queue');
+import logAPICall from './monitoring/api_logger/api_logger';
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -57,6 +58,7 @@ if(process.env.NODE_ENV !== 'test') {
 }
 
 const app = express();
+app.use(logAPICall);
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
