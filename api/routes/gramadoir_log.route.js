@@ -6,7 +6,6 @@ const { getUniqueErrorTypeCounts } = require('../endpoints_functions/gramadoir/g
 const { getUserGrammarCounts } = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
 const { getTimeGrammarCounts } = require('../endpoints_functions/gramadoir/getTimeGrammarCounts');
 const { callAnGramadoir } = require('../endpoints_functions/gramadoir/callAnGramadoir');
-const { callAnGramadoirDocker } = require('../endpoints_functions/gramadoir/callAnGramadoirDocker');
 
 // //////////////////////////////////////////// POST
 const insertHandler = require('../endpoints_functions/gramadoir/insert');
@@ -20,13 +19,11 @@ gramadoirRoutes
 gramadoirRoutes
     .route('/getTimeGrammarCounts/:ownerId')
     .post(auth, getTimeGrammarCounts);
+
+// //////////////////////////////////////////// GET
 gramadoirRoutes
     .route('/callAnGramadoir/:teacs')
-    .post(auth, callAnGramadoir);
-gramadoirRoutes
-    .route('/callAnGramadoirDocker/:teacs')
-    .post(auth, callAnGramadoirDocker);
-// //////////////////////////////////////////// GET
+    .get(auth, callAnGramadoir);
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
     .get(auth, getUniqueErrorTypeCounts);
