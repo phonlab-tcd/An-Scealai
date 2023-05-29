@@ -25,7 +25,9 @@ function errorHandler(err, req, res, next) {
     return res.status(400).json(err.message);
   if (err instanceof API404Error )
     return res.status(404).json(err.message);
-  if (err instanceof API500Error) {/* TODO: Notify us */}
+  if (err instanceof API500Error) {
+    return res.status(500).json(err.message);
+  }
   // Handle other status codes in whatever ways we want
   return res.status(err.status).json(err.message);
 }
