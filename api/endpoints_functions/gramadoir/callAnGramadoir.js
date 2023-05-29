@@ -23,7 +23,7 @@ async function callAnGramadoir(req, res) {
 
     // get errors from An Gramadoir
     // @ts-ignore
-    const gramadoirRes = await axios.post(url, encodeParams(req.params["teacs"]), options).then(
+    const gramadoirRes = await axios.get(url).then(
       (ok) => ({ ok }),
       (err) => ({ err })
     );
