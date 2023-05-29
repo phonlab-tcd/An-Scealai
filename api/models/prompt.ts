@@ -67,5 +67,4 @@ const promptSchema = new mongoose.Schema({
   collection: 'promptData'
 });
 
-
-module.exports = mongoose.model('Prompt', promptSchema);
+export = mongoose.model('Prompt', promptSchema);

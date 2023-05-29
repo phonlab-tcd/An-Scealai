@@ -9,8 +9,8 @@ const nodemailer = require("nodemailer");
  * @param {String} subject - Subject of the email
  * @param {String} message - message
  */
-const path = require('path');
-const fs = require('fs');
+import * as path from 'path'
+import * as fs from 'fs';
 
 // send mail with defined transport object.
 if (process.env.NO_EMAILS) {
@@ -20,7 +20,7 @@ if (process.env.NO_EMAILS) {
   try {
     console.log("Attempting to read sendinblue auth data from ./api/sendinblue.json");
     const rawdata = fs.readFileSync(path.join(__dirname, 'sendinblue.json'));
-    const sendinblueData = JSON.parse(rawdata);
+    const sendinblueData = JSON.parse(rawdata.toString());
     const sendEmail = async (mailObj) => {
       const {from, recipients, subject, message} = mailObj;
       try {

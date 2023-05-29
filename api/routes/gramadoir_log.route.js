@@ -1,3 +1,4 @@
+// @ts-nocheck
 const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 

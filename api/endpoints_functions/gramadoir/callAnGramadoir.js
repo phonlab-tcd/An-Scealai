@@ -30,6 +30,7 @@ async function callAnGramadoir(req, res) {
     // if errors do not exist in the cache, request them and then set the cache
     if (cachedErrors == null) {
       // get errors from An Gramadoir
+      // @ts-ignore
       const gramadoirRes = await axios.post(url, encodeParams(req.params["teacs"]), options).then(
         (ok) => ({ ok }),
         (err) => ({ err })

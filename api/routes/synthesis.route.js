@@ -37,21 +37,14 @@ const abairAPIv2Voices = [
  * @return {boolean} return if valid dialect code
  */
 function isValidAbairAPIv2DialectCode(code) {
-  if (! (typeof code === 'string' )) {
-    return false;
-  }
-  for (const c in abairAPIv2Voices) {
-    if ( c === code ) {
-      return true;
-    }
-  }
+  return abairAPIv2Voices.includes(code);
 }
 
 /**
  * Call Abair synthesis on story text
  * @param {string} text Story text
  * @param {string} dialect dialect choice
- * @return {Object} Synthesis response
+ * @return {Promise<any>} Synthesis response
  */
 async function abairAPIv2Synthesise(text, dialect) {
   if (! isValidAbairAPIv2DialectCode(dialect) ) {

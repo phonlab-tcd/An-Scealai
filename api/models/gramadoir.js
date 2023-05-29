@@ -28,7 +28,7 @@ const GramadoirCache = new Schema({
 
 const GramadoirCacheLink = new Schema({
   gramadoirCacheId: {
-    type: mongoose.ObjectId,
+    type: mongoose.Types.ObjectId,
   },
   timestamp: {
     type: Date,
@@ -38,10 +38,10 @@ const GramadoirCacheLink = new Schema({
 
 const GramadoirStoryHistory = new Schema({
   userId: {
-    type: mongoose.ObjectId,
+    type: mongoose.Types.ObjectId,
   },
   storyId: {
-    type: mongoose.ObjectId,
+    type: mongoose.Types.ObjectId,
   },
   versions: {
     type: [GramadoirCacheLink],

@@ -1,7 +1,7 @@
 let request;
 const Story = require('../models/story');
 const VoiceRecording = require('../models/recording');
-const randomString = require('../utils/random').string;
+const randomString = require('../test-utils/random').string;
 
 beforeAll(()=>{
   let router = require('./recording.route');
