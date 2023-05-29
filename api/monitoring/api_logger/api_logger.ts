@@ -1,9 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
-import * as  onHeaders from 'on-headers';
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as url from 'url';
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
 const LOG_DIRECTORY = 'monitoring/api_logger/logs';
@@ -22,7 +20,7 @@ function appendToCSVFile(csvFilePath: string, text: string): void {
     });
 }
 
-function isFileSizeExceeded(filePath: string, limitInBytes: number): boolean {
+function fileSizeIsExceeded(filePath: string, limitInBytes: number): boolean {
     const stats = fs.statSync(filePath);
     return stats.size >= limitInBytes;
 }
@@ -45,7 +43,7 @@ function appendTextToCSV(text: string): void {
     let currentFilePath = path.join(LOG_DIRECTORY, 'current.csv');
     if (!fs.existsSync(currentFilePath)) fs.writeFileSync(currentFilePath, '');
 
-    if (isFileSizeExceeded(currentFilePath, FILE_SIZE_LIMIT)) {
+    if (fileSizeIsExceeded(currentFilePath, FILE_SIZE_LIMIT)) {
         moveOnToNextCSVFile();
     }
 
