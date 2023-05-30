@@ -57,7 +57,6 @@ if(process.env.NODE_ENV !== 'test') {
 }
 
 const app = express();
-app.use(require('express-status-monitor')());
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
@@ -87,6 +86,7 @@ if(process.env.FUDGE) {
 }
 
 app.use(checkJwt);
+app.use(require('express-status-monitor')());
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);

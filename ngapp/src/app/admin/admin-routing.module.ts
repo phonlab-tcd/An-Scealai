@@ -12,6 +12,7 @@ import { UserComponent } from './user/user.component';
 import { AdminClassroomComponent } from './admin-classroom/admin-classroom.component';
 import { StoryComponent } from './story/story.component';
 import { StoryHistoryComponent } from './story-history/story-history.component';
+import { BackendMonitorComponent } from './backend-monitor/backend-monitor.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: AdminDashboardComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'classroom/:id', pathMatch: 'full', component: AdminClassroomComponent },
   { path: 'story/:id', pathMatch: 'full', component: StoryComponent },
   { path: 'story-history/:id', pathMatch: 'full', component: StoryHistoryComponent },
+  { path: 'backend-monitor', pathMatch: 'full', component: BackendMonitorComponent },
 ];
 
 @NgModule({
