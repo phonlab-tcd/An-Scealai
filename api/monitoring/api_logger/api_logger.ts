@@ -28,7 +28,7 @@ function fileSizeIsExceeded(filePath: string, limitInBytes: number): boolean {
 // This function renames the existing 'current.csv' to 'log_{timestamp}.csv', 
 // and then makes a new empty current.csv.
 // It will be called whenever current.csv hits the upper-bound on memory.
-// By partitioning the logs like this we make it more tractable to load / analyse in python
+// By partitioning the logs like this we make it more convenient to load / analyse in python
 function moveOnToNextCSVFile() {
     const timestamp = getCurrentTimestamp();
     const logFileName = `log_${timestamp}.csv`;
