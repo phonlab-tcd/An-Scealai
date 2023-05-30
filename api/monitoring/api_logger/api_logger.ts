@@ -44,7 +44,7 @@ async function cleanupOldFiles() {
         return;
     }
     const filenames = filenamesResult.ok;
-    if(filenames.length < MAX_LOG_FILES) {
+    if(filenames.length <= MAX_LOG_FILES) {
         return;
     }
 
@@ -62,6 +62,7 @@ async function moveOnToNextCSVFile() {
     const currentFilePath = path.join(LOG_DIRECTORY, 'current.csv');
     await fs.rename(currentFilePath, logFilePath);
     await fs.writeFile(currentFilePath, '');
+    cleanupOldFiles();
 }
 
 async function appendTextToCSV(text: string): Promise<void> {
