@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
-const LOG_DIRECTORY = 'monitoring/api_logger/logs';
+const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_logger/logs';
 
 function getCurrentTimestamp(): string {
   const now = new Date();
@@ -28,7 +28,7 @@ function fileSizeIsExceeded(filePath: string, limitInBytes: number): boolean {
 // This function renames the existing 'current.csv' to 'log_{timestamp}.csv', 
 // and then makes a new empty current.csv.
 // It will be called whenever current.csv hits the upper-bound on memory.
-// By partitioning the logs like this we make it more tractable to load / analyse in python
+// By partitioning the logs like this we make it more convenient to load / analyse in python
 function moveOnToNextCSVFile() {
     const timestamp = getCurrentTimestamp();
     const logFileName = `log_${timestamp}.csv`;
@@ -62,7 +62,7 @@ export default function logAPICall(req, res: Response, next: NextFunction): void
         const latency = end - start; // in milliseconds
         const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         const statusCode = res.statusCode;
-        const reqBody = JSON.stringify(req.body);
+        const reqBody = JSON.stringify(req.body) || "";
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
         const clientIp = req.clientIp;
         const log = getCurrentTimestamp() + ',' + clientIp + ',' + endpointUrl + ',' + statusCode + ',' + reqBodyCsv + ',' + latency + '\n';
