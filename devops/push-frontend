@@ -1,0 +1,3 @@
+#!/bin/bash
+rsync -r --info=progress2 ./ngapp/unpublished_dist/ scealai@abair-vps:/home/scealai/An-Scealai/dist/an-scealai/
+

@@ -158,4 +158,4 @@ userSchema.methods.generateActivationLink = function(baseurl, language) {
       `&verificationCode=${this.verification.code}`;
 }
 
-module.exports = mongoose.model('User', userSchema);
+export = mongoose.model('User', userSchema);

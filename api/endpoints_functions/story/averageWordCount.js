@@ -3,6 +3,7 @@ const Story = require('../../models/story');
 const winkNLP = require( 'wink-nlp' );
 const model = require('wink-eng-lite-web-model');
 
+// @ts-ignore
 const nlp = winkNLP( model );
 const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
 

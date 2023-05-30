@@ -9,7 +9,7 @@ const UserGrammarCounts = new Schema({
     type: Object,
   },
   owner: {
-    type: mongoose.ObjectId,
+    type: mongoose.Types.ObjectId,
     index: true,
   },
 }, {

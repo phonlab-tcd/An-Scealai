@@ -38,4 +38,4 @@ async function getStoryStats(req, res) {
   });
 }
 
-module.exports = getStoryStats;
+export = getStoryStats;

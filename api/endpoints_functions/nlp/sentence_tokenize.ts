@@ -1,13 +1,10 @@
 import {API400Error} from '../../utils/APIError';
-
-const winkNLP = require('wink-nlp');
-const model = require('wink-eng-lite-web-model');
-const nlp = winkNLP(model);
+import { segment } from '../../utils/segment';
 
 // tokenise story text into sentences
-module.exports = async (req, res) => {
+export default async function tokenizeHandler (req, res) {
+  console.log(req.body);
   if (!req.body.text) throw new API400Error('Must include text parameter in the request body.');
-  const tokens = nlp.readDoc(req.body.text).sentences().out();
+  const tokens = segment(req.body.text);
   res.json(tokens);
-  
 }

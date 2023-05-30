@@ -27,7 +27,7 @@ describe('messages routes', () => {
     const _id = ObjectId();
     const m = await request.post('/create').send({_id}).expect(200);
     await request
-        .post(`/addMessageAudio/${m.body.message._id}`)
+        .post(`/addMessageAudio/${m.body._id}`)
         .attach('audio', Buffer.from('hello'), 'fakeFileName')
         .expect(201);
   });

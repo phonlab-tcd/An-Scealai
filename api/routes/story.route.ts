@@ -1,3 +1,4 @@
+// @ts-nocheck
 const multer = require('multer');
 const {Readable} = require('stream');
 const mongodb = require('mongodb');
@@ -326,6 +327,7 @@ storyRoutes.route('/updateActiveRecording/:id').post(async (req, res) => {
   if (!req.body.activeRecording)  return res.status(400).json('no activeRecording id');
 
   const story = await Story.findById(req.params.id);
+  console.log(story);
 
   if (!story) {
     return res.status(404).json('story not found');
@@ -578,4 +580,4 @@ storyRoutes.route('/gramadoir/:id/:lang').get((req, res) => {
 });
 
 
-module.exports = storyRoutes;
+export = storyRoutes;

@@ -11,7 +11,7 @@ const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: O
  * @param {Object} next
  * @return {Promise} Success or error Message
  */
-module.exports = async (req, res, next) => {
+export = async (req, res, next) => {
   const sentences = req.body.sentences;
   
   const storyId = new mongoose.mongo.ObjectId(req.body.storyId);

@@ -38,8 +38,8 @@ async function getTimeGrammarCounts(req, res) {
   // manipulate the data into an object that can be used for graphing:
   // keys: error names (uru, seimhu, etc.)
   // values: {{timestamp: errorCount}, {timestamp2: errorCount2}, etc.}
-  for (let entry of filteredData) {
-    entry = entry.toJSON();
+  for (let entryObj of filteredData) {
+    const entry = entryObj.toJSON();
     for (const [key, val] of Object.entries(entry.errorCounts)) {
       const date = new Date(+entry.updatedAt).toISOString().slice(0, 10);
       if (! (key in errorCountsDict)) {

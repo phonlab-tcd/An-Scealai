@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 const request = require('request');
 const abairBaseUrl = require('../abair_base_url');
 const logger = require('../logger');

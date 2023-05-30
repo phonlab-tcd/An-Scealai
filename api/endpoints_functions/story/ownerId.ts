@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const {API404Error} = require('../../utils/APIError');
 
 // get stories by owner (user) ID and add property if it doesn't exist
-module.exports = async (req, res) => {
+const handler =  async (req, res) => {
   const user = await User.findOne({'_id': req.params.id});
   const oldStories = await Story.find({'author': user.username, 'owner': {$exists: false}});
 
@@ -29,3 +29,5 @@ module.exports = async (req, res) => {
   }
   return res.status(200).json(stories);
 };
+
+export = handler;
