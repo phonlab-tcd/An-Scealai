@@ -41,7 +41,10 @@ function moveOnToNextCSVFile() {
 
 function appendTextToCSV(text: string): void {
     let currentFilePath = path.join(LOG_DIRECTORY, 'current.csv');
-    if (!fs.existsSync(currentFilePath)) fs.writeFileSync(currentFilePath, '');
+    if (!fs.existsSync(currentFilePath)) {
+        fs.mkdirSync(LOG_DIRECTORY, {recursive: true});
+        fs.writeFileSync(currentFilePath, '');
+    }
 
     if (fileSizeIsExceeded(currentFilePath, FILE_SIZE_LIMIT)) {
         moveOnToNextCSVFile();
@@ -60,12 +63,11 @@ export default function logAPICall(req, res: Response, next: NextFunction): void
         if (req.method == 'OPTIONS') return;
         const end = Date.now()
         const latency = end - start; // in milliseconds
-        const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         const statusCode = res.statusCode;
         const reqBody = JSON.stringify(req.body) || "";
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
         const clientIp = req.clientIp;
-        const log = getCurrentTimestamp() + ',' + clientIp + ',' + endpointUrl + ',' + statusCode + ',' + reqBodyCsv + ',' + latency + '\n';
+        const log = [getCurrentTimestamp(), clientIp, req.originalUrl, statusCode, reqBodyCsv, latency, "\n"].join(",");
         appendTextToCSV(log);
     });
     next();
