@@ -3,8 +3,11 @@ import {Request, Response, NextFunction} from 'express';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import fileExists from "../../utils/fileExists";
+import result from "../../utils/result";
+import oldestFileInDir from '../../utils/oldestFileInDir';
 
-const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
+const FILE_SIZE_LIMIT = 32 * 1024 * 1024; // 32 MB
+const MAX_LOG_FILES = 32 * 5; //  32 * 32 * 5 = 5120 MB = ~ 5GB
 const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_logger/logs';
 
 function getCurrentTimestamp(): string {
@@ -20,6 +23,32 @@ async function appendToCSVFile(csvFilePath: string, text: string) {
 async function fileSizeIsExceeded(filePath: string, limitInBytes: number): Promise<boolean> {
     const stats = await fs.stat(filePath);
     return stats.size >= limitInBytes;
+}
+
+async function deleteOldestFile() {
+    const oldestFile = await result(oldestFileInDir(LOG_DIRECTORY));
+    if("err" in oldestFile || !oldestFile.ok) {
+        console.error(oldestFile);
+        return;
+    }
+    const unlinkResult = await result(fs.unlink(oldestFile.ok));
+    if("err" in unlinkResult) {
+        console.error(unlinkResult);
+    }
+}
+
+async function cleanupOldFiles() {
+    const filenamesResult = await result(fs.readdir(LOG_DIRECTORY));
+    if("err" in filenamesResult) {
+        console.error(filenamesResult.err);
+        return;
+    }
+    const filenames = filenamesResult.ok;
+    if(filenames.length < MAX_LOG_FILES) {
+        return;
+    }
+
+    await deleteOldestFile();
 }
 
 // This function renames the existing 'current.csv' to 'log_{timestamp}.csv', 
