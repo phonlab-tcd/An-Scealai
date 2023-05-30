@@ -58,7 +58,7 @@ export default function logAPICall(req: Request, res: Response, next: NextFuncti
         const end = Date.now()
         const latency = end - start; // in milliseconds
         const statusCode = res.statusCode;
-        const reqBody = JSON.stringify(req.body);
+        const reqBody = JSON.stringify(req.body) || "";
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
         const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         if (endpointUrl != '') {
