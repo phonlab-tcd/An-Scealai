@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
-const LOG_DIRECTORY = 'monitoring/api_logger/logs';
+const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_logger/logs';
 
 function getCurrentTimestamp(): string {
   const now = new Date();
