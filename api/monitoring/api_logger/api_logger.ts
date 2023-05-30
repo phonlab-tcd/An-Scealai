@@ -51,21 +51,21 @@ function appendTextToCSV(text: string): void {
 }
 
 
-export default function logAPICall(req: Request, res: Response, next: NextFunction): void {
+export default function logAPICall(req, res: Response, next: NextFunction): void {
     const start = Date.now();
 
-    // This skips preflight requests [1] as their information isn't as useful / representative of user experience.
-    // [1] https://docs.sensedia.com/en/faqs/Latest/apis/preflight.html#:~:text=How%20it%20works-,Preflight%20request,actual%20HTTP%20request%20is%20sent.
-    if (req.method === 'OPTIONS') return;
-
     res.on('finish', () => {
+        // This skips 'preflight requests' [1] as their information isn't as useful / representative of user experience.
+        // [1] https://docs.sensedia.com/en/faqs/Latest/apis/preflight.html#:~:text=How%20it%20works-,Preflight%20request,actual%20HTTP%20request%20is%20sent.
+        if (req.method == 'OPTIONS') return;
         const end = Date.now()
         const latency = end - start; // in milliseconds
+        const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         const statusCode = res.statusCode;
         const reqBody = JSON.stringify(req.body);
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
-        const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
-        const log = getCurrentTimestamp() + ',' + endpointUrl + ',' + statusCode + ',' + reqBodyCsv + ',' + latency + '\n';
+        const clientIp = req.clientIp;
+        const log = getCurrentTimestamp() + ',' + clientIp + ',' + endpointUrl + ',' + statusCode + ',' + reqBodyCsv + ',' + latency + '\n';
         appendTextToCSV(log);
     });
     next();
