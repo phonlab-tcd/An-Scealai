@@ -67,7 +67,7 @@
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
-    <span class="notificationBtn" *ngIf="hasNewFeedback()">1</span>
+    <!-- <span class="notificationBtn" *ngIf="hasFeedback">1</span> -->
   </div>
 
   <!-- DICTIONARY -->
@@ -122,7 +122,7 @@
   <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
     <app-story-drawer
       #storyDrawer
-      (storyEmitter)="story = $event"
+      (storyEmitter)="setCurrentStory($event)"
       (hasFeedback)="hasFeedback = $event"
     ></app-story-drawer>
   </mat-drawer>

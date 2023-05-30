@@ -3,18 +3,10 @@
     overflow-y:scroll
 }
 
-.newStoryButton {
-    float: right;
-}
-
-.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
-    background-color: var(--scealai-green);
-}
-
 .contentSection:hover {
     cursor: pointer;
-  }
-  
+}
+
 .contentsLink {
     color: var(--dark-text);
     text-align: left;
@@ -31,9 +23,17 @@
     padding-right: 20px;
 }
 
+.newStoryButton {
+    float: right;
+}
+
+.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+    background-color: var(--scealai-green);
+}
+
 .clickedresultCard {
     background-color: #eee;
     padding: 2px;
     font-weight: bolder;
     border-radius: 10px;
-  }
+}

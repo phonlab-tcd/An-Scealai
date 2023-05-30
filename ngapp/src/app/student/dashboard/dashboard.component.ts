@@ -70,6 +70,10 @@ export class DashboardComponent implements OnInit {
   dontToggle = false;
   feedbackVisibile: false;
 
+  // WORD COUNT
+  words: string[] = [];
+  wordCount = 0;
+
   textUpdated = new Subject<void | string>();
   quillEditor: Quill;
   quillHighlighter: QuillHighlighter;
@@ -118,20 +122,19 @@ export class DashboardComponent implements OnInit {
     this.setUpGrammarChecking();
   }
 
-  async ngOnInit() {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      this.auth.logout();
-      return;
-    }
+  /* Get story from params id and initialise variables */
+  async ngOnInit() {}
+
+  /**
+   * Set the current story and calculate word count
+   * @param story Story selected from the story drawer
+   */
+  setCurrentStory(story) {
+    this.story = story;
     if (!this.story) return;
     this.storySaved = true;
     this.textUpdated.next();
     this.getWordCount(this.story.text);
-    if (this.story.htmlText == null) {
-      this.story.htmlText = this.story.text;
-    }
-    console.log(this.story);
   }
 
   /**
@@ -143,9 +146,7 @@ export class DashboardComponent implements OnInit {
     if (!userDetails) return;
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    let classroom = await firstValueFrom(
-      this.classroomService.getClassroomOfStudent(userDetails._id)
-    );
+    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers = [];
@@ -159,7 +160,7 @@ export class DashboardComponent implements OnInit {
           checkers.push(this.grammarCheckerOptions[checker]);
       });
     }
-    // pass all checkers to the grammar engine if no classroom specifications (or do we want to leave it empty?)
+    // pass all checkers to the grammar engine if no classroom specifications
     else {
       checkers = Object.values(this.grammarCheckerOptions);
     }
@@ -209,10 +210,7 @@ export class DashboardComponent implements OnInit {
             }
 
             // create a dictionary of error type and tags for checkbox filtering
-            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function (
-              map: Object,
-              tag: any
-            ) {
+            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function ( map: Object, tag: any ) {
               if (!map[tag.type]) {
                 map[tag.type] = [];
               }
@@ -282,7 +280,22 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getWordCount(text) {}
+  /**
+   * Get word count of story text (CURRENTLY NOT USED OR SHOWN IN HTML)
+   * @param text story text
+   */
+  getWordCount(text: string) {
+    if (!text) { return 0; }
+    const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
+    this.words = [];
+    str.map((s: string) => {
+      const trimStr = s.trim();
+      if (trimStr.length > 0) {
+        this.words.push(trimStr);
+      }
+    });
+    this.wordCount = this.words.length;
+  }
 
   /* Call the saveStory function after increasing a debounce id counter */
   debounceSaveStory() {
@@ -308,9 +321,7 @@ export class DashboardComponent implements OnInit {
     }
 
     // get story html text without highlighting markup
-    const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml(
-      clone(this.story.htmlText)
-    );
+    const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml( clone(this.story.htmlText) );
 
     const updateData = {
       title: this.story.title,
@@ -320,16 +331,11 @@ export class DashboardComponent implements OnInit {
       lastUpdated: finishedWritingTime,
     };
 
-    this.engagement.addEventForLoggedInUser(
-      EventType["SAVE-STORY"],
-      this.story
-    );
+    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], this.story );
 
     // Save story to the DB
     try {
-      await firstValueFrom(
-        this.storyService.updateStory(updateData, this.story._id)
-      );
+      await firstValueFrom( this.storyService.updateStory(updateData, this.story._id) );
       if (debounceId === this.saveStoryDebounceId) {
         this.storySaved = true;
       } else if (debounceId === "modal") {
@@ -416,18 +422,10 @@ export class DashboardComponent implements OnInit {
 
   /* Create story download url with chosen format */
   downloadStoryUrl() {
-    return (
-      config.baseurl +
-      "story/downloadStory/" +
-      this.story._id +
-      "/" +
-      this.downloadStoryFormat
-    );
+    return ( config.baseurl + "story/downloadStory/" + this.story._id + "/" + this.downloadStoryFormat );
   }
 
-  hasNewFeedback() {}
-
-  /* Show or hide error tags */
+  /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
       ? this.quillHighlighter.hideAll()
