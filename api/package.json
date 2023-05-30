@@ -46,6 +46,7 @@
     "express-jwt": "^7.7.5",
     "express-queue": "^0.0.13",
     "express-session": "^1.17.3",
+    "express-status-monitor": "file:monitoring/express-status-monitor",
     "formidable": "^1.2.1",
     "generate-password": "^1.6.0",
     "json5": "^2.2.3",
