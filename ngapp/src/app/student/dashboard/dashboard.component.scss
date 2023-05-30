@@ -88,33 +88,6 @@
     padding: 40px;
 }
 
-.dictionaryDrawer {
-    width: 25%;
-    height: 100%;
-}
-
-.grammarErrorDrawer {
-    width: 25%;
-    height: 100%;
-}
-
-.grammarMessageBanner {
-    display: flex;
-    align-items: center;
-    padding-bottom: 10px;
-  }
-  
-.newStoryMessage {
-    font-weight: bolder;
-    max-width: 200px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    height: 80vh;
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-}
-
 .storyContainer {
     height: 100%;
 }
@@ -122,6 +95,17 @@
 .ql-container {
     background-color: #F8F9FA;
     height: 100%;
+}
+
+//<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
+.ql-editor {
+    background-color: white;
+    z-index: 1;
+    margin-top: 20px;
+    font-size: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
+    max-height: 70vh !important;
 }
 
 .menuButton {
@@ -136,17 +120,22 @@
     cursor: pointer;
 }
 
-//<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
-.ql-editor {
-    background-color: white;
-    z-index: 1;
-    margin-top: 20px;
-    font-size: 14pt;
-    font-family: "Times New Roman", Times, serif;
-    min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
-    max-height: 70vh !important;
+.newStoryMessage {
+    font-weight: bolder;
+    max-width: 200px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
 }
 
+.rightDrawer {
+    width: 25%;
+    height: 100%;
+}
+  
 .blink {
     animation: blinker 2s linear infinite;
 }
@@ -161,19 +150,4 @@
     100% {
         background-color:red;
     }
-}
-
-.dictionaryHeader {
-    padding: 20px;
-    background-color: var(--scealai-green);
-    color: white;
-    display: flex;
-}
-
-.closeDictionaryBtn {
-    margin-left: auto;
-}
-
-.closeDictionaryBtn:hover {
-    cursor: pointer;
 }

@@ -1,33 +1,32 @@
+<!-- HEADER -->
 <div class="dictionaryHeader">
-    <h5>
-        {{ ts.message("grammar_errors") }}
-    </h5>
-    <div class="closeDictionaryBtn" (click)="closeGrammarEmitter.next(true)">
-      <i class="fa fa-times"></i>
-    </div>
+  <h5>
+    {{ ts.message("grammar_errors") }}
+  </h5>
+  <div class="closeDictionaryBtn" (click)="closeGrammarEmitter.next(true)">
+    <i class="fa fa-times"></i>
   </div>
-
-
-<div class="grammarMessageBanner">
-    <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
-  </div>
-<!-- GRAMMAR CHECKER SETTINGS -->
-<div class="selectErrorCheckbox">
-
-<!-- GRAMMAR ERROR CHECKBOXES -->
-<div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="setCheckBox(tag.key, tag.value)" [attr.id]="tag.key">
-  <div [ngStyle]="{'background-color': tag.value[0].color}" class="errorColorBox"> </div>
-    <!-- Error name -->
-  {{
-    ts.l.iso_code == "en"
-      ? (tag.value[0].nameEN | titlecase)
-      : (tag.value[0].nameGA | titlecase)
-  }}
-  <!-- Error count -->
-  ({{
-    tag.value[0].nameEN == "Broad/Slender"
-      ? tag.value.length / 2
-      : tag.value.length
-  }})
 </div>
+
+<!-- GRAMMAR ERROR MESSAGE-->
+<div class="grammarMessageBanner">
+  <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
+</div>
+<div class="selectErrorCheckbox">
+  <!-- GRAMMAR ERROR LIST -->
+  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key, tag.value)" [attr.id]="tag.key" >
+    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="errorColorBox" ></div>
+    <!-- Error name -->
+    {{
+      ts.l.iso_code == "en"
+        ? (tag.value[0].nameEN | titlecase)
+        : (tag.value[0].nameGA | titlecase)
+    }}
+    <!-- Error count -->
+    ({{
+      tag.value[0].nameEN == "Broad/Slender"
+        ? tag.value.length / 2
+        : tag.value.length
+    }})
+  </div>
 </div>

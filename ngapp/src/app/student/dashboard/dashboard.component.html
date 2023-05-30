@@ -1,17 +1,12 @@
-<!-- STORY TITLE HEADER-->
+<!-- HEADER -->
 <div class="storyTitleHeader" *ngIf="story">
-  <!-- TITLE -->
-  <div
-    class="storyTitle"
-    [ngStyle]="titleStyle()"
-    data-cy="title"
-    contenteditable="true"
-  >
+  <!-- STORY TITLE -->
+  <div class="storyTitle" [ngStyle]="titleStyle()" data-cy="title" contenteditable="true" >
     {{ story?.title ?? "..." }}
     <span *ngIf="!storySaved">*</span>
-    <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">{{
-      ts.l.made_using_prompts
-    }}</span>
+    <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
+      {{ ts.l.made_using_prompts }}
+    </span>
   </div>
 
   <!-- SAVE ICON  -->
@@ -37,20 +32,16 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; speakStory()"
+    (click)="dontToggle = true; speakStory()"
     [ngClass]="{ disableDiv: isTranscribing }"
   >
     {{ ts.l.speak }}
     <!-- Google icon, index.html-->
-    <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon"
-      >speech_to_text</span
-    >
-    <button
-      *ngIf="isRecording && !isTranscribing"
-      class="notRecordingBtn blink"
-    >
+    <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon" >speech_to_text</span >
+    <button *ngIf="isRecording && !isTranscribing" class="notRecordingBtn blink" >
       <i class="fas fa-stop-circle"></i>
     </button>
+    <!-- transcribing speech/loading animation -->
     <div *ngIf="isTranscribing"><div class="dot-flashing"></div></div>
   </div>
 
@@ -72,7 +63,7 @@
   <div
     *ngIf="showOptions && hasFeedback"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; feedbackDrawer.toggle()"
+    (click)="dontToggle = true; feedbackDrawer.toggle()"
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
@@ -83,11 +74,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="
-      this.dontToggle = true;
-      this.dictionaryVisible = !this.dictionaryVisible;
-      dictionaryDrawer.toggle()
-    "
+    (click)="dontToggle = true; dictionaryDrawer.toggle()"
   >
     {{ ts.l.dictionary }}
     <i class="fas fa-book optionsBtnIcon"></i>
@@ -97,7 +84,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; goToSynthesis(); drawer2.toggle()"
+    (click)="dontToggle = true; goToSynthesis(); drawer2.toggle()"
   >
     {{ ts.l.audio_check }}
     <i class="fas fa-volume-up optionsBtnIcon"></i>
@@ -108,7 +95,10 @@
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     (click)="
-      this.dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle(); textUpdated.next(story.text)
+      dontToggle = true;
+      toggleGrammarTags();
+      grammarErrorDrawer.toggle();
+      textUpdated.next(story.text)
     "
   >
     {{ ts.l.grammar_errors }}
@@ -118,9 +108,8 @@
   <!-- RECORDINGS -->
   <div
     *ngIf="showOptions"
-    [hidden]="story.text && story.text.length === 0"
     class="optionsBtn optionsPopupBtn"
-    (click)="this.dontToggle = true; goToRecording()"
+    (click)="dontToggle = true; goToRecording()"
   >
     {{ ts.l.recordings }}
     <i class="fas fa-microphone optionsBtnIcon"></i>
@@ -140,16 +129,9 @@
 
   <!-- STORY WRITING CONTAINER-->
   <div class="storyContainer">
-    <div
-      class="ql-container"
-      #quillHeightSpan
-      [ngStyle]="quillEditorStyle"
-      *ngIf="story; else newStoryMessage"
-    >
+    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
       <!-- STORY DRAWER BUTTON-->
-      <mat-icon class="menuButton" (click)="storyDrawer.toggle()"
-        >menu</mat-icon
-      >
+      <mat-icon class="menuButton" (click)="storyDrawer.toggle()" >menu</mat-icon >
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor
         [modules]="quillToolbar"
@@ -163,23 +145,21 @@
     </div>
 
     <!-- NO STORIES MESSAGE-->
-    <ng-template #newStoryMessage
-      ><div class="newStoryMessage">
-        Click on the '+' button to create your first story!
-      </div></ng-template
-    >
+    <ng-template #newStoryMessage>
+      <div class="newStoryMessage"> Click on the '+' button to create your first story! </div>
+    </ng-template>
   </div>
 
-    <!-- FEEDBACK DRAWER-->
-    <mat-drawer [hidden]="!hasFeedback" #feedbackDrawer class="grammarErrorDrawer" mode="side" position="end" >
-        <app-feedback-drawer
-            [story]="story"
-            (closeFeedbackEmitter)="feedbackDrawer.toggle()"
-        ></app-feedback-drawer>
-    </mat-drawer>
+  <!-- FEEDBACK DRAWER-->
+  <mat-drawer [hidden]="!hasFeedback" #feedbackDrawer class="rightDrawer" mode="side" position="end" >
+    <app-feedback-drawer
+      [story]="story"
+      (closeFeedbackEmitter)="feedbackDrawer.toggle()"
+    ></app-feedback-drawer>
+  </mat-drawer>
 
   <!-- GRAMMAR CHECKER DRAWER-->
-  <mat-drawer #grammarErrorDrawer class="grammarErrorDrawer" mode="side" position="end" >
+  <mat-drawer #grammarErrorDrawer class="rightDrawer" mode="side" position="end" >
     <app-grammar-error-drawer
       [quillHighlighter]="quillHighlighter"
       [grammarLoaded]="grammarLoaded"
@@ -190,7 +170,7 @@
   </mat-drawer>
 
   <!-- DICTIONARY DRAWER-->
-  <mat-drawer #dictionaryDrawer class="dictionaryDrawer" mode="side" position="end" >
+  <mat-drawer #dictionaryDrawer class="rightDrawer" mode="side" position="end">
     <app-dictionary-drawer
       (closeDictionaryEmitter)="dictionaryDrawer.toggle()"
     ></app-dictionary-drawer>

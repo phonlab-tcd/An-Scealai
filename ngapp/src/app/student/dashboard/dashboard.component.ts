@@ -56,14 +56,13 @@ export class DashboardComponent implements OnInit {
   grammarLoaded: boolean = false;
   grammarErrors: ErrorTag[] = [];
   showErrorTags = false;
-  grammarSettingsHidden: boolean = false;
   grammarCheckerOptions: Object = {
     anGramadoir: anGramadoir,
     relativeClause: relativeClauseChecker,
     //'genitive': genitiveChecker,
     broadSlender: leathanCaolChecker,
   };
-  checkBoxes: Object = { showAll: true };
+  checkBoxes: Object = {};
   grammarErrorsTypeDict: Object = {};
 
   // OPTIONS (to show or not to show dash menu bar)
@@ -114,7 +113,7 @@ export class DashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router,
+    private router: Router
   ) {
     this.setUpGrammarChecking();
   }
@@ -132,7 +131,7 @@ export class DashboardComponent implements OnInit {
     if (this.story.htmlText == null) {
       this.story.htmlText = this.story.text;
     }
-    console.log(this.story)
+    console.log(this.story);
   }
 
   /**
@@ -144,7 +143,9 @@ export class DashboardComponent implements OnInit {
     if (!userDetails) return;
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
+    let classroom = await firstValueFrom(
+      this.classroomService.getClassroomOfStudent(userDetails._id)
+    );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers = [];
@@ -195,7 +196,7 @@ export class DashboardComponent implements OnInit {
               this.quillHighlighter.show(
                 this.grammarErrors.filter(
                   (tag) =>
-                    this.checkBoxes[tag.type] || this.checkBoxes["showAll"]
+                    this.checkBoxes[tag.type]
                 )
               );
             }
@@ -430,12 +431,8 @@ export class DashboardComponent implements OnInit {
   async toggleGrammarTags() {
     this.showErrorTags
       ? this.quillHighlighter.hideAll()
-      : this.quillHighlighter.show(
-          this.grammarErrors.filter(
-            (tag) => this.checkBoxes[tag.type] || this.checkBoxes["showAll"]
-          )
-        );
-    this.showErrorTags = !this.showErrorTags;
+      : this.quillHighlighter.show( this.grammarErrors.filter( (tag) => this.checkBoxes[tag.type] ) );
+      this.showErrorTags = !this.showErrorTags;
   }
 
   /* Route to record story component */
@@ -470,5 +467,4 @@ export class DashboardComponent implements OnInit {
     }
     this.isRecording = !this.isRecording;
   }
-
 }
