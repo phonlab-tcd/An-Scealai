@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
     this.storySaved = true;
     this.textUpdated.next();
     this.getWordCount(this.story.text);
+    this.textUpdated.next(story.text);
   }
 
   /**
@@ -190,7 +191,7 @@ export class DashboardComponent implements OnInit {
           complete: () => {
             if (!this.quillHighlighter) return;
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            this.quillHighlighter.hideAll();
+            // this.quillHighlighter.hideAll();  --> This was part of old dashboard, seems to cause bug in new dashboard
 
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
@@ -204,9 +205,7 @@ export class DashboardComponent implements OnInit {
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
-              this.grammarEngine
-                .saveErrorsWithSentences(this.story._id)
-                .then(console.log, console.error);
+              this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
             }
 
             // create a dictionary of error type and tags for checkbox filtering

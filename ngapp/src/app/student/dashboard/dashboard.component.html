@@ -94,12 +94,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="
-      dontToggle = true;
-      toggleGrammarTags();
-      grammarErrorDrawer.toggle();
-      textUpdated.next(story.text)
-    "
+    (click)="dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle();"
   >
     {{ ts.l.grammar_errors }}
     <i class="fas fa-spell-check optionsBtnIcon"></i>
@@ -158,21 +153,21 @@
     ></app-feedback-drawer>
   </mat-drawer>
 
-  <!-- GRAMMAR CHECKER DRAWER-->
-  <mat-drawer #grammarErrorDrawer class="rightDrawer" mode="side" position="end" >
-    <app-grammar-error-drawer
-      [quillHighlighter]="quillHighlighter"
-      [grammarLoaded]="grammarLoaded"
-      [grammarErrorsTypeDict]="grammarErrorsTypeDict"
-      [checkBoxes]="checkBoxes"
-      (closeGrammarEmitter)="grammarErrorDrawer.toggle(); toggleGrammarTags()"
-    ></app-grammar-error-drawer>
-  </mat-drawer>
-
   <!-- DICTIONARY DRAWER-->
   <mat-drawer #dictionaryDrawer class="rightDrawer" mode="side" position="end">
     <app-dictionary-drawer
       (closeDictionaryEmitter)="dictionaryDrawer.toggle()"
     ></app-dictionary-drawer>
   </mat-drawer>
+
+    <!-- GRAMMAR CHECKER DRAWER-->
+    <mat-drawer #grammarErrorDrawer class="rightDrawer" mode="side" position="end" >
+      <app-grammar-error-drawer
+        [quillHighlighter]="quillHighlighter"
+        [grammarLoaded]="grammarLoaded"
+        [grammarErrorsTypeDict]="grammarErrorsTypeDict"
+        [checkBoxes]="checkBoxes"
+        (closeGrammarEmitter)="grammarErrorDrawer.toggle(); toggleGrammarTags()"
+      ></app-grammar-error-drawer>
+    </mat-drawer>
 </mat-drawer-container>
