@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
@@ -26,6 +26,7 @@ import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
 import { ErrorTag } from "../../lib/grammar-engine/types";
+import { MatDrawer } from "@angular/material/sidenav";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -65,10 +66,12 @@ export class DashboardComponent implements OnInit {
   checkBoxes: Object = {};
   grammarErrorsTypeDict: Object = {};
 
-  // OPTIONS (to show or not to show dash menu bar)
+  // OPTIONS (show menu bar, drawer, etc)
   showOptions = true;
   dontToggle = false;
   feedbackVisibile: false;
+  @ViewChild("rightDrawer") rightDrawer: MatDrawer;
+  selectedDrawer: "grammar" | "dictionary" | "feedback";
 
   // WORD COUNT
   words: string[] = [];
@@ -122,21 +125,7 @@ export class DashboardComponent implements OnInit {
     this.setUpGrammarChecking();
   }
 
-  /* Get story from params id and initialise variables */
   async ngOnInit() {}
-
-  /**
-   * Set the current story and calculate word count
-   * @param story Story selected from the story drawer
-   */
-  setCurrentStory(story) {
-    this.story = story;
-    if (!this.story) return;
-    this.storySaved = true;
-    this.textUpdated.next();
-    this.getWordCount(this.story.text);
-    this.textUpdated.next(story.text);
-  }
 
   /**
    * Initialise the Grammar Engine and Highlighting services
@@ -147,7 +136,9 @@ export class DashboardComponent implements OnInit {
     if (!userDetails) return;
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
+    let classroom = await firstValueFrom(
+      this.classroomService.getClassroomOfStudent(userDetails._id)
+    );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers = [];
@@ -196,20 +187,22 @@ export class DashboardComponent implements OnInit {
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
               this.quillHighlighter.show(
-                this.grammarErrors.filter(
-                  (tag) =>
-                    this.checkBoxes[tag.type]
-                )
+                this.grammarErrors.filter((tag) => this.checkBoxes[tag.type])
               );
             }
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
-              this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
+              this.grammarEngine
+                .saveErrorsWithSentences(this.story._id)
+                .then(console.log, console.error);
             }
 
             // create a dictionary of error type and tags for checkbox filtering
-            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function ( map: Object, tag: any ) {
+            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function (
+              map: Object,
+              tag: any
+            ) {
               if (!map[tag.type]) {
                 map[tag.type] = [];
               }
@@ -217,6 +210,7 @@ export class DashboardComponent implements OnInit {
               return map;
             },
             {});
+            console.log(this.grammarErrorsTypeDict);
 
             // initialise all error checkboxes to true
             for (const key of Object.keys(this.grammarErrorsTypeDict)) {
@@ -238,6 +232,45 @@ export class DashboardComponent implements OnInit {
         console.dir(updateGrammarErrorsError);
       }
     });
+  }
+
+  /**
+   * Toggles the right drawer open/closed
+   * Drawer content is set by 'selectedContent' variable which is determined in the HTML
+   * Hides/shows the grammar highlighting if the grammar drawer is selected
+   * @param selectedContent Indicates which component to be injected into the drawer
+   */
+  toggleRightDrawer(selectedContent) {
+    // set variable that displays selected component inside drawer
+    this.selectedDrawer = selectedContent;
+
+    // close drawer if open, hide grammar errors if showing
+    if (this.rightDrawer.opened) {
+      this.rightDrawer.close();
+      if (this.showErrorTags) {
+        this.showErrorTags = false;
+        this.toggleGrammarTags();
+      }
+    } else {
+      // open drawer, show grammar errors if grammar drawer selected
+      this.rightDrawer.open();
+      if (this.selectedDrawer == "grammar") {
+        this.showErrorTags = true;
+        this.toggleGrammarTags();
+      }
+    }
+  }
+
+  /**
+   * Set the current story displayed and calculate word count
+   * @param story Story selected from the story drawer
+   */
+  setCurrentStory(story) {
+    this.story = story;
+    if (!this.story) return;
+    this.storySaved = true;
+    this.getWordCount(this.story.text);
+    this.textUpdated.next(story.text);
   }
 
   /*
@@ -285,7 +318,7 @@ export class DashboardComponent implements OnInit {
    */
   getWordCount(text: string) {
     if (!text) { return 0; }
-    const str = text.replace(/[\t\n\r\.\?\!]/gm, ' ').split(' ');
+    const str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s: string) => {
       const trimStr = s.trim();
@@ -427,9 +460,8 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.hideAll()
-      : this.quillHighlighter.show( this.grammarErrors.filter( (tag) => this.checkBoxes[tag.type] ) );
-      this.showErrorTags = !this.showErrorTags;
+      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) )
+      : this.quillHighlighter.hideAll();
   }
 
   /* Route to record story component */

@@ -16,7 +16,9 @@ export class GrammarErrorDrawerComponent implements OnInit {
 
   constructor(public ts: TranslationService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.grammarErrorsTypeDict)
+  }
 
   /**
    * Sets text for grammar message of hovered error tag

@@ -63,7 +63,7 @@
   <div
     *ngIf="showOptions && hasFeedback"
     class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; feedbackDrawer.toggle()"
+    (click)="dontToggle = true; toggleRightDrawer('feedback')"
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
@@ -74,7 +74,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; dictionaryDrawer.toggle()"
+    (click)="dontToggle = true; toggleRightDrawer('dictionary')"
   >
     {{ ts.l.dictionary }}
     <i class="fas fa-book optionsBtnIcon"></i>
@@ -94,7 +94,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; toggleGrammarTags(); grammarErrorDrawer.toggle();"
+    (click)="dontToggle = true; toggleRightDrawer('grammar')"
   >
     {{ ts.l.grammar_errors }}
     <i class="fas fa-spell-check optionsBtnIcon"></i>
@@ -145,29 +145,26 @@
     </ng-template>
   </div>
 
-  <!-- FEEDBACK DRAWER-->
-  <mat-drawer [hidden]="!hasFeedback" #feedbackDrawer class="rightDrawer" mode="side" position="end" >
+  <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
+    <!-- FEEDBACK -->
     <app-feedback-drawer
+      *ngIf="selectedDrawer == 'feedback'"
       [story]="story"
-      (closeFeedbackEmitter)="feedbackDrawer.toggle()"
+      (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
     ></app-feedback-drawer>
-  </mat-drawer>
-
-  <!-- DICTIONARY DRAWER-->
-  <mat-drawer #dictionaryDrawer class="rightDrawer" mode="side" position="end">
+    <!-- DICTIONARY -->
     <app-dictionary-drawer
-      (closeDictionaryEmitter)="dictionaryDrawer.toggle()"
+      *ngIf="selectedDrawer == 'dictionary'"
+      (closeDictionaryEmitter)="toggleRightDrawer('dictionary')"
     ></app-dictionary-drawer>
+    <!-- GRAMMAR CHECKER -->
+    <app-grammar-error-drawer
+      *ngIf="selectedDrawer == 'grammar'"
+      [quillHighlighter]="quillHighlighter"
+      [grammarLoaded]="grammarLoaded"
+      [grammarErrorsTypeDict]="grammarErrorsTypeDict"
+      [checkBoxes]="checkBoxes"
+      (closeGrammarEmitter)="toggleRightDrawer('grammar')"
+    ></app-grammar-error-drawer>
   </mat-drawer>
-
-    <!-- GRAMMAR CHECKER DRAWER-->
-    <mat-drawer #grammarErrorDrawer class="rightDrawer" mode="side" position="end" >
-      <app-grammar-error-drawer
-        [quillHighlighter]="quillHighlighter"
-        [grammarLoaded]="grammarLoaded"
-        [grammarErrorsTypeDict]="grammarErrorsTypeDict"
-        [checkBoxes]="checkBoxes"
-        (closeGrammarEmitter)="grammarErrorDrawer.toggle(); toggleGrammarTags()"
-      ></app-grammar-error-drawer>
-    </mat-drawer>
 </mat-drawer-container>
