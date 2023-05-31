@@ -186,23 +186,16 @@ export class DashboardComponent implements OnInit {
 
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show(
-                this.grammarErrors.filter((tag) => this.checkBoxes[tag.type])
-              );
+              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) );
             }
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
-              this.grammarEngine
-                .saveErrorsWithSentences(this.story._id)
-                .then(console.log, console.error);
+              this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
             }
 
             // create a dictionary of error type and tags for checkbox filtering
-            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function (
-              map: Object,
-              tag: any
-            ) {
+            this.grammarErrorsTypeDict = this.grammarErrors.reduce(function ( map: Object, tag: any ) {
               if (!map[tag.type]) {
                 map[tag.type] = [];
               }
@@ -210,7 +203,6 @@ export class DashboardComponent implements OnInit {
               return map;
             },
             {});
-            console.log(this.grammarErrorsTypeDict);
 
             // initialise all error checkboxes to true
             for (const key of Object.keys(this.grammarErrorsTypeDict)) {

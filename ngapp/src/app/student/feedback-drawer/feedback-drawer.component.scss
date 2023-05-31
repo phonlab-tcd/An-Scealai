@@ -1,12 +1,12 @@
 .feedbackHeader {
-    width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-    height: 30px;
-    background-color: var(--scealai-green);
-    color: white;
-    display: flex;
-    align-items: center;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 30px;
+  background-color: var(--scealai-green);
+  color: white;
+  display: flex;
+  align-items: center;
 }
 
 .closeFeedbackBtn {
@@ -18,32 +18,31 @@
 }
 
 .textFieldContainer {
-    width: 100%;
-    resize: none;
-    z-index: 1;
-    color: var(--dark-text);
-    background: white;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-  }
-  
-  .textField {
-    width: 100%;
-    resize: none;
-    z-index: 1;
-    color: var(--dark-text);
-    background: white;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 10px;
-    border: none;
-  }
-  
-  .audioPlayer {
-    height: 30px;
-    width: 90%;
-    background-color: #f1f3f4;
-    border: 1px solid #8c806e86;
-  }
-  
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.textField {
+  width: 100%;
+  resize: none;
+  z-index: 1;
+  color: var(--dark-text);
+  background: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  border: none;
+}
+
+.audioPlayer {
+  height: 30px;
+  width: 90%;
+  background-color: #f1f3f4;
+  border: 1px solid #8c806e86;
+}
