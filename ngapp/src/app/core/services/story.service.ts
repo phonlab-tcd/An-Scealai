@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Story } from 'app/core/models/story';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-//import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from 'app/core/services/authentication.service';
 import { Observable, throwError } from 'rxjs';
-// import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
@@ -91,6 +89,10 @@ export class StoryService {
     console.log(updatedStory);
 
     return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
+  }
+
+  updateTitle(storyId: string, title:string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateTitle/' + storyId, {title});
   }
   
   getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {

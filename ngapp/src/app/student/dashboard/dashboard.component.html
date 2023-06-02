@@ -1,8 +1,14 @@
 <!-- HEADER -->
 <div class="storyTitleHeader" *ngIf="story">
   <!-- STORY TITLE -->
-  <div class="storyTitle" [ngStyle]="titleStyle()" data-cy="title" contenteditable="true" >
-    {{ story?.title ?? "..." }}
+  <div class="storyTitleContainer">
+    <input
+      class="storyTitle"
+      [ngStyle]="titleStyle()"
+      size="{{ updatedTitle.length }}"
+      [(ngModel)]="updatedTitle"
+      (blur)="updateStoryTitle()"
+    />
     <span *ngIf="!storySaved">*</span>
     <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
       {{ ts.l.made_using_prompts }}

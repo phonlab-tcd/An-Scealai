@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
   storiesLoaded: boolean = false;
   downloadStoryFormat = ".pdf";
   hasFeedback: boolean = false;
+  updatedTitle: string = "";
 
   // GRAMMAR VARIABLES
   grammarEngine: GrammarEngine;
@@ -136,9 +137,7 @@ export class DashboardComponent implements OnInit {
     if (!userDetails) return;
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    let classroom = await firstValueFrom(
-      this.classroomService.getClassroomOfStudent(userDetails._id)
-    );
+    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers = [];
@@ -261,6 +260,7 @@ export class DashboardComponent implements OnInit {
     this.story = story;
     if (!this.story) return;
     this.storySaved = true;
+    this.updatedTitle = this.story.title;
     this.getWordCount(this.story.text);
     this.textUpdated.next(story.text);
   }
@@ -406,6 +406,25 @@ export class DashboardComponent implements OnInit {
   /* If story not saved, make title italic */
   titleStyle() {
     return { "font-style": this.storySaved ? "normal" : "italic" };
+  }
+
+  /**
+   * Update the story title (called from HTML blur() function)
+   */
+  updateStoryTitle() {
+    if (this.updatedTitle != this.story.title) {
+      this.storySaved = false;
+      this.story.title = this.updatedTitle;
+      this.storyService
+        .updateTitle(this.story._id, this.story.title)
+        .subscribe({
+          next: () => {
+            this.storySaved = true;
+            console.log("title updated");
+          },
+          error: () => console.log("error updating title"),
+        });
+    }
   }
 
   /* Download story in selected format */

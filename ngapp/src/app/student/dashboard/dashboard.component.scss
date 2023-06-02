@@ -5,13 +5,23 @@
     padding-bottom: 20px;
   }
 
-.storyTitle {
+.storyTitleContainer {
     margin: auto;
     overflow: auto;
     font-size: 20px;
     font-weight: bolder;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.storyTitle {
+    border: 1px solid transparent;
+    text-align:center;
+}
+
+.storyTitle:hover {
+    border: 1px solid;
+    border-radius: 5px;
 }
 
 .saveIcon {
