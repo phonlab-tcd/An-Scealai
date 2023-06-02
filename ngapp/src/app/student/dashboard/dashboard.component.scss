@@ -10,13 +10,15 @@
     overflow: auto;
     font-size: 20px;
     font-weight: bolder;
-    padding-left: 10px;
-    padding-right: 10px;
+    //padding-left: 10px;
+    //padding-right: 10px;
 }
 
 .storyTitle {
     border: 1px solid transparent;
     text-align:center;
+    resize:none;
+
 }
 
 .storyTitle:hover {
@@ -96,6 +98,7 @@
 
 .storyListDrawer {
     padding: 40px;
+    max-width: 35%;
 }
 
 .storyContainer {
