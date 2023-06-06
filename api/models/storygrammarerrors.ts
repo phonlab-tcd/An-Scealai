@@ -35,4 +35,4 @@ const StoryGrammarErrors = new Schema({
   collection: 'storygrammarerrors',
 });
 
-module.exports = mongoose.model('StoryGrammarErrors', StoryGrammarErrors);
+export = mongoose.model('StoryGrammarErrors', StoryGrammarErrors);

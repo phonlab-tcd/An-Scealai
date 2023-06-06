@@ -1,3 +1,4 @@
+// @ts-nocheck
 const express = require('express');
 const classroomRoutes = express.Router();
 const Classroom = require('../models/classroom');

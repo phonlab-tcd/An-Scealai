@@ -49,7 +49,7 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
       const cleanedErrorName = gramadoirId2string(error.ruleId);
       const e_info = ERROR_INFO[cleanedErrorName];
       
-      return {
+      const et = {
         errorText: error.errortext,
         messageGA: (e_info.messageGA).replace('#', error.errortext),
         messageEN: (e_info.messageEN).replace('#', error.errortext),
@@ -61,6 +61,8 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
         toX: +error.tox + 1,
         type: cleanedErrorName
       } as ErrorTag;
+      console.log({input,et});
+      return et;
     });
     resolve(errorTags);
   });
@@ -81,7 +83,6 @@ async function callAnGramadoir(url: string, authToken?: string): Promise<Gramado
 
   const res = await fetch(url, {
        headers: headers,
-       method: 'POST',
      });
 
   if (res.ok) {

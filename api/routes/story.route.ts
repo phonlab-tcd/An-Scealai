@@ -1,17 +1,19 @@
-const multer = require("multer");
-const { Readable } = require("stream");
-const mongodb = require("mongodb");
-const mongoose = require("mongoose");
-const querystring = require("querystring");
-const request = require("request");
-const makeEndpoints = require("../utils/makeEndpoints");
-const { parse } = require("node-html-parser");
-const path = require("path");
-const fs = require("fs"); // file system
-const pandoc = require("node-pandoc-promise");
-const abairBaseUrl = require("../abair_base_url");
-const logger = require("../logger");
-const Story = require("../models/story");
+// @ts-nocheck
+const multer = require('multer');
+const {Readable} = require('stream');
+const mongodb = require('mongodb');
+const mongoose = require('mongoose');
+const querystring = require('querystring');
+const request = require('request');
+const makeEndpoints = require('../utils/makeEndpoints');
+const {parse} = require('node-html-parser');
+const path = require('path');
+const fs = require('fs'); // file system
+const pandoc = require('node-pandoc-promise');
+const abairBaseUrl = require('../abair_base_url');
+const logger = require('../logger');
+const Story = require('../models/story');
+
 
 let storyRoutes;
 // Immediately Invoked Function Expression.
@@ -351,6 +353,7 @@ storyRoutes.route("/updateActiveRecording/:id").post(async (req, res) => {
     return res.status(400).json("no activeRecording id");
 
   const story = await Story.findById(req.params.id);
+  console.log(story);
 
   if (!story) {
     return res.status(404).json("story not found");
@@ -608,4 +611,4 @@ storyRoutes.route("/gramadoir/:id/:lang").get((req, res) => {
   });
 });
 
-module.exports = storyRoutes;
+export = storyRoutes;

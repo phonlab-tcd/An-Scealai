@@ -62,9 +62,9 @@ module.exports = async (req, res) => {
   if (responseObject.saveStoryError) {
     status = 404;
   } else if (responseObject.englishGramadoirError) {
-    status = englishGramadoirError.status;
+    status = responseObject.englishGramadoirError.status;
   } else if (responseObject.irishGramadoirError) {
-    status = irishGramadoirError.status;
+    status = responseObject.irishGramadoirError.status;
   }
 
   logger.info({endpoint: req.url, responseObject});

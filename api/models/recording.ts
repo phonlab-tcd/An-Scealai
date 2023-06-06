@@ -15,4 +15,4 @@ const VoiceRecording = new Schema({
   collection: 'recordings',
 });
 
-module.exports = mongoose.model('VoiceRecording', VoiceRecording);
+export = mongoose.model('VoiceRecording', VoiceRecording);

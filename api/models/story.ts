@@ -69,4 +69,4 @@ const Story = new Schema(
     },
 );
 
-module.exports = mongoose.model('Story', Story);
+export = mongoose.model('Story', Story);

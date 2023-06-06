@@ -11,11 +11,11 @@ else
 fi
 
 # GET SEMVER OF LATEST PUBLISHED BRANCH
-latest_version=$(bash shell/latest_version.sh)
+latest_version=$(bash devops/latest_version.sh)
 
 # MAKE SURE API-VERSION = LATEST
 echo "latest version is: $latest_version"
-if [ $latest_version = "v"$(bash shell/api_version.sh) ]; then
+if [ $latest_version = "v"$(bash devops/api_version.sh) ]; then
   echo -e "${GREEN}api version matches$RESET_COLOR"
 else
   echo -e "${RED}api version doesn't match$RESET_COLOR"
@@ -23,7 +23,7 @@ else
 fi
 
 # MAKE SURE NGAPP-VERSION = LATEST
-if [ $latest_version = "v"$(bash shell/ngapp_version.sh) ]; then
+if [ $latest_version = "v"$(bash devops/ngapp_version.sh) ]; then
   echo -e "${GREEN}ngapp version matches$RESET_COLOR"
 else
   echo -e "${RED}ngapp version doesn't match$RESET_COLOR"
@@ -75,6 +75,6 @@ ssh -t scealai@141.95.1.243 "
   git pull &&
   git checkout $new_api_version &&
   npm i --prefix api &&
-  bash shell/deploy_current_branch_without_building.sh"
+  bash devops/deploy_current_branch_without_building.sh"
 
 curl -X GET "www.abair.ie/anscealaibackend/version"

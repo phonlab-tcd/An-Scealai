@@ -202,4 +202,4 @@ userRoutes.route('/sendNewPassword/').post((req, res) => {
   });
 });
 
-module.exports = userRoutes;
+export = userRoutes;

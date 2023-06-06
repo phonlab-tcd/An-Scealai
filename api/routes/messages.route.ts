@@ -262,4 +262,4 @@ messageRoutes.route("/deleteMessageAudio/:id").get((req, res) => {
   });
 });
 
-module.exports = messageRoutes;
+export = messageRoutes;

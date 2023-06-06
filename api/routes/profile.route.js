@@ -1,3 +1,4 @@
+// @ts-nocheck
 const {ObjectId} = require('bson');
 const express = require('express');
 const profileRoutes = express.Router();

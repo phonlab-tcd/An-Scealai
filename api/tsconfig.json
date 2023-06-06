@@ -7,7 +7,10 @@
     "allowJs": true,
     "checkJs": true,
     "moduleResolution": "node",
-    "types": ["node"]
+    "types": ["node"],
+		"noEmitOnError": false,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true
   },
   "exclude": [
     "utils/test-setup-per-file.js",
