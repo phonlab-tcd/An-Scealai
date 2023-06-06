@@ -1,16 +1,33 @@
-<div class="storyList">
-  <div *ngFor="let story of stories" (click)="setStory(story)">
-    <div class="contentSection" [attr.id]="story._id">
-      <div class="contentsTitle">
-        {{ story?.title }}
-      </div>
-      <div class="contentsDate">
-        {{ story.lastUpdated | date : "d/M/yy" }}
-      </div>
+<div class="body">
+  <div *ngIf="stories.length > 0">
+    <div class="myStories">{{ ts.l.my_stories }}</div>
+    <!-- search bar -->
+    <div class="form-group">
+      <input
+        type="text"
+        class="form-control searchBox"
+        id="search-text"
+        aria-describedby="search-text"
+        [(ngModel)]="searchText"
+        placeholder="{{ ts.l.search_story_title_or_content }}"
+      />
     </div>
-    <hr />
   </div>
+  <!-- list of stories -->
+  <div class="storyList">
+    <div *ngFor="let story of stories | appFilter : searchText" (click)="setStory(story)" >
+      <div class="contentSection" [attr.id]="story._id">
+        <div class="contentsTitle">
+          {{ story?.title }}
+        </div>
+        <div class="contentsDate">
+          {{ story.lastUpdated | date : "d/M/yy" }}
+        </div>
+      </div>
+      <hr />
+    </div>
+  </div>
+  <button mat-fab class="newStoryButton" (click)="createNewStory()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
-<button mat-fab class="newStoryButton" (click)="createNewStory()">
-  <mat-icon>add</mat-icon>
-</button>

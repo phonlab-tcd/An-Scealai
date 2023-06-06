@@ -16,6 +16,7 @@ export class StoryDrawerComponent implements OnInit {
   stories: Story[] = [];
   dialogRef: MatDialogRef<unknown>;
   lastClickedStoryId: string = "";
+  searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
   @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
