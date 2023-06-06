@@ -1,5 +1,5 @@
 <div class="storyList">
-  <div *ngFor="let story of stories" (click)="setStory(story)">
+  <div *ngFor="let story of storiesMetaData" (click)="setStory(story)">
     <div class="contentSection" [attr.id]="story._id">
       <div class="contentsTitle">
         {{ story?.title }}

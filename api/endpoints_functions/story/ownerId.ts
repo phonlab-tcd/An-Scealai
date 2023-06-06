@@ -5,8 +5,13 @@ const {API404Error} = require('../../utils/APIError');
 
 // get stories by owner (user) ID and add property if it doesn't exist
 const handler =  async (req, res) => {
-  const user = await User.findOne({'_id': req.params.id});
-  const oldStories = await Story.find({'author': user.username, 'owner': {$exists: false}});
+  console.log(req.params);
+  const user = await User.findOne({'_id': req.params.id}).then(ok=>({ok}),err=>({err}));
+  if("err" in user || !user.ok) {
+    console.error(user);
+    throw new API404Error("no such user: " + req.params.id)
+  }
+  const oldStories = await Story.find({'author': user.ok.username, 'owner': {$exists: false}});
 
   // add the 'owner' property to any stories that don't have it
   if (oldStories) {

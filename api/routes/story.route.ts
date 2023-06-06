@@ -36,12 +36,14 @@ let storyRoutes;
   const updateStoryAndCheckGrammar = require("../endpoints_functions/story/updateStoryAndCheckGrammar");
   const averageWordCount = require("../endpoints_functions/story/averageWordCount");
   const getStoriesByDate = require("../endpoints_functions/story/getStoriesByDate");
+  const getStoriesMetaData = require("../endpoints_functions/story/getStoriesMetaData").default;
 
   storyRoutes = makeEndpoints({
     get: {
       "/withId/:id": withId,
       // '/myStudentsStory/:id': myStudentsStory,
       "/owner/:id": ownerId,
+      "/getStoriesMetaData/:ownerId": getStoriesMetaData,
       "/:author": author,
       "/feedbackAudio/:id": feedbackAudio,
       "/countGrammarErrors/:id": countGrammarErrors,

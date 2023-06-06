@@ -207,6 +207,7 @@ export class GrammarEngine {
     */
     async saveErrorsWithSentences(storyId: string) {
       if(!this.errorsWithSentences || !storyId) {
+        console.log("errorsWithSentences",this.errorsWithSentences);
         return;
       }
       const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }

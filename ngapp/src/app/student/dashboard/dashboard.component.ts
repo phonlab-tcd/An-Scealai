@@ -17,7 +17,7 @@ import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { SynthesisPlayerComponent } from 'app/student/synthesis-player/synthesis-player.component';
-import { Story } from "app/core/models/story";
+import { Story, StoryMetaData } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
 import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
   // STORY VARIABLES
   stories: Story[] = [];
   story: Story;
+  selectedStoryMetaData: StoryMetaData;
   saveStoryDebounceId = 0;
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
@@ -130,7 +131,9 @@ export class DashboardComponent implements OnInit {
     this.setUpGrammarChecking();
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    console.log("DASHBOARD INIT");
+  }
 
   /**
    * Initialise the Grammar Engine and Highlighting services
@@ -260,13 +263,39 @@ export class DashboardComponent implements OnInit {
    * Set the current story displayed and calculate word count
    * @param story Story selected from the story drawer
    */
-  setCurrentStory(story) {
-    this.story = story;
-    if (!this.story) return;
-    this.storySaved = true;
-    this.updatedTitle = this.story.title;
-    this.getWordCount(this.story.text);
-    this.textUpdated.next(story.text);
+  async setCurrentStory(storyMetaData: StoryMetaData) {
+    if(!( "_id" in storyMetaData )) {
+      return;
+    }
+    this.story = undefined;
+    this.selectedStoryMetaData = storyMetaData;
+
+    this.storyService.getStory(this.selectedStoryMetaData._id).subscribe({
+      next: (function (story) {
+        if(!story || !("_id" in story)){
+          console.error("no story for story:",storyMetaData);
+          return;
+        }
+        if(story._id !== this.selectedStoryMetaData._id) {
+          return;
+        }
+        if(!story.htmlText) {
+          story.htmlText = story.text;
+        }
+        console.log(this.storyService);
+        this.storyService.loadedStory = story;
+        this.story = story;
+        this.storySaved = true;
+        this.updatedTitle = this.story.title;
+        this.getWordCount(this.story.text);
+        this.textUpdated.next(this.story.text);
+      }).bind(this), // anonymous function (but not a closure) with the DashboardComponent bound to 'this'
+      error: function (getStoryError) {
+        console.error(getStoryError);
+        // TODO
+        // log getStoryError on server
+      }
+    });
   }
 
   /*

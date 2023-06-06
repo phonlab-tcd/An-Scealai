@@ -32,16 +32,16 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
     let errors = [];
 
     // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
-    try {
-      errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoir/${encodeURIComponent(input)}`, authToken);
-    }
-    catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
-      try {
-        errors = await callAnGramadoir(`https://cadhan.com/api/gramadoir/1.0/en/${input}`);
-      } catch(_) {
-        reject();
-      }  
-    }
+    // try {
+    errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoir/${encodeURIComponent(input)}`, authToken);
+    // }
+    // catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
+    //   try {
+    //     errors = await callAnGramadoir(`https://cadhan.com/api/gramadoir/1.0/en/${input}`);
+    //   } catch(_) {
+    //     reject();
+    //   }  
+    // }
 
     // map gramadoir responses to generic ErrorTag values
     const errorTags: ErrorTag[] = errors.map((error) => {

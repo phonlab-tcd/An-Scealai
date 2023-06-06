@@ -5,7 +5,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { StoryService } from "app/core/services/story.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { Story } from "app/core/models/story";
+import { Story, StoryMetaData } from "app/core/models/story";
 
 @Component({
   selector: "app-story-drawer",
@@ -13,12 +13,13 @@ import { Story } from "app/core/models/story";
   styleUrls: ["./story-drawer.component.scss"],
 })
 export class StoryDrawerComponent implements OnInit {
-  stories: Story[] = [];
+  // stories: Story[] = [];
+  storiesMetaData: StoryMetaData[] = [];
   dialogRef: MatDialogRef<unknown>;
   lastClickedStoryId: string = "";
-  @Output() storyEmitter = new EventEmitter<Story>();
+  @Output() storySelectionEmitter = new EventEmitter<StoryMetaData>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
+  @Output() storiesMetaDataLoadedEmitter = new EventEmitter<Boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -35,14 +36,13 @@ export class StoryDrawerComponent implements OnInit {
    * Get list of stories for the user and emit when done loading
    */
   async getStories() {
-    this.stories = (
-      await firstValueFrom(this.storyService.getStoriesForLoggedInUser())
-    ).map((storyData) => new Story().fromJSON(storyData));
+    this.storiesMetaData = (await firstValueFrom(this.storyService.getStoriesMetaDataForLoggedInUser()))
+      .map(function (storyData) { return new StoryMetaData().fromJSON(storyData) });
 
-    if (this.stories.length > 0) {
-      this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-      this.setStory(this.stories[0]);
-      this.storiesLoadedEmitter.emit(true);
+    if (this.storiesMetaData.length > 0) {
+      this.storiesMetaData.sort((a, b) => (a.date > b.date ? -1 : 1));
+      this.setStory(this.storiesMetaData[0]);
+      this.storiesMetaDataLoadedEmitter.emit(true);
     }
   }
 
@@ -50,12 +50,12 @@ export class StoryDrawerComponent implements OnInit {
    * Set the current story to the selected one from the story list
    * @param story Selected story from HTML
    */
-  setStory(story: Story) {
-    if (story.htmlText == null) {
-      story.htmlText = story.text;
-    }
+  setStory(story: StoryMetaData) {
+    // if (story.htmlText == null) {
+    //   story.htmlText = story.text;
+    // }
     // emit selected story to dashboard
-    this.storyEmitter.emit(story);
+    this.storySelectionEmitter.emit(story);
 
     // emit whether or not the story has any feedback
     story.feedback.text ||

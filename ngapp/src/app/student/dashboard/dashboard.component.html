@@ -1,16 +1,16 @@
 <!-- HEADER -->
-<div class="storyTitleHeader" *ngIf="story">
+<div class="storyTitleHeader" *ngIf="selectedStoryMetaData">
   <!-- STORY TITLE -->
   <div class="storyTitleContainer">
     <input
       class="storyTitle"
       [ngStyle]="titleStyle()"
-      size="{{ updatedTitle.length }}"
-      [(ngModel)]="updatedTitle"
+      size="{{ selectedStoryMetaData?.title?.length }}"
+      [(ngModel)]="selectedStoryMetaData.title"
       (blur)="updateStoryTitle()"
     />
     <span *ngIf="!storySaved">*</span>
-    <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
+    <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="selectedStoryMetaData?.createdWithPrompts">
       {{ ts.l.made_using_prompts }}
     </span>
   </div>
@@ -122,19 +122,19 @@
   <!-- STORY LIST DRAWER-->
   <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
     <app-story-drawer
-      #storyDrawer
-      (storyEmitter)="setCurrentStory($event)"
+      (storySelectionEmitter)="setCurrentStory($event)"
       (hasFeedback)="hasFeedback = $event"
     ></app-story-drawer>
   </mat-drawer>
 
   <!-- STORY WRITING CONTAINER-->
   <div class="storyContainer">
-    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
+    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="selectedStoryMetaData; else newStoryMessage" >
       <!-- STORY DRAWER BUTTON-->
       <mat-icon class="menuButton" (click)="storyDrawer.toggle()" >menu</mat-icon >
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor
+        *ngIf="story; else storyLoading"
         [modules]="quillToolbar"
         placeholder=""
         [preserveWhitespace]="true"
@@ -143,6 +143,9 @@
         (onContentChanged)="onContentChanged($event)"
         (onEditorCreated)="onEditorCreated($event)"
       ></quill-editor>
+      <ng-template #storyLoading>
+        <grid-spinner></grid-spinner>
+      </ng-template>
     </div>
 
     <!-- NO STORIES MESSAGE-->

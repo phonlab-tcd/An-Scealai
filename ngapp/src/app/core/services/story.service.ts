@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Story } from 'app/core/models/story';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Story, StoryMetaData } from 'app/core/models/story';
+import { HttpClient  } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from 'app/core/services/authentication.service';
-import { Observable, throwError } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Observable } from 'rxjs';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
@@ -24,7 +24,8 @@ export class StoryService {
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
-  storiesLoaded: boolean = false;
+  // storiesLoaded: boolean = false;
+  loadedStory: Story;
 
   saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {
@@ -59,6 +60,10 @@ export class StoryService {
     return this.http.get<Story[]>(this.baseUrl + 'owner/' + owner);
   }
 
+  getStoriesMetaData(owner: string): Observable<StoryMetaData[]> {
+    return this.http.get<StoryMetaData[]>(this.baseUrl + "getStoriesMetaData/" + owner);
+  }
+
   getStory(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'withId/' + id);
   }
@@ -77,6 +82,19 @@ export class StoryService {
     }
     return this.getStoriesByOwner(userDetails._id);
   }
+
+
+  getStoriesMetaDataForLoggedInUser(): Observable<StoryMetaData[]> {
+    const userDetails = this.auth.getUserDetails();
+    if(!userDetails) {
+      return new Observable(subscriber=>{
+        subscriber.next([]);
+        subscriber.complete();
+      });
+    }
+    return this.getStoriesMetaData(userDetails._id);
+  }
+
 
   updateStoryTitleAndDialect(story: Story, title:string, dialect:any): Observable<any> {
     let updatedStory = story;
