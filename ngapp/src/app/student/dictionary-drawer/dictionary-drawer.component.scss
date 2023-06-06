@@ -1,0 +1,71 @@
+.dictionaryContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+  
+.dictionaryHeader {
+    padding: 20px;
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+}
+
+.closeDictionaryBtn {
+    margin-left: auto;
+}
+
+.closeDictionaryBtn:hover {
+    cursor: pointer;
+}
+
+.dictionarySubHeader {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+}
+
+.dictionaryName {
+    background-color: var(--scealai-green);
+    font-size: 12px;
+    color: white;
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+.dictionaryName:hover {
+    color: var(--scealai-light-green);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.dictionaryInput {
+    background-color: var(--scealai-green);
+    color: white;
+    display: flex;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    gap: 1rem;
+}
+
+.searchDictionaryBtn {
+    background-color: var(--scealai-yellow);
+    border-style: none;
+    color: white;
+    font-size: 12pt;
+    margin: 0px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.searchDictionaryBtn:hover {
+    background-color: var(--scealai-yellow-hover);
+    color: white;
+}
+
+.dictionaryIframe {
+    width: 100%;
+    border-radius: 0px 0px 5px 5px;
+}
