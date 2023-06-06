@@ -22,6 +22,7 @@ import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
 import { StoryService } from 'app/core/services/story.service';
 import { UserService } from './core/services/user.service';
+import { LogService } from './core/services/log.service';
 
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
@@ -110,6 +111,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     providers: [
         StoryService,
         UserService,
+        LogService,
         MatDatepickerModule,
         MatNativeDateModule,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
