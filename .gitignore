@@ -19,6 +19,7 @@ session.vim
 
 /api/logs/**
 /api/monitoring/api_request_logger/logs/**
+/api/monitoring/clientside_error_logs/**
 api/globalConfig.json
 /api/node_modules_backup_*
 
