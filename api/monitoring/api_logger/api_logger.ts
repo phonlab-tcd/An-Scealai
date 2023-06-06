@@ -1,9 +1,13 @@
 import {Request, Response, NextFunction} from 'express';
 
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 import * as path from 'path';
+import fileExists from "../../utils/fileExists";
+import result from "../../utils/result";
+import oldestFileInDir from '../../utils/oldestFileInDir';
 
-const FILE_SIZE_LIMIT = 5 * 1024 * 1024; // 5MB
+const FILE_SIZE_LIMIT = 32 * 1024 * 1024; // 32 MB
+const MAX_LOG_FILES = 32 * 5; //  32 * 32 * 5 = 5120 MB = ~ 5GB
 const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_logger/logs';
 
 function getCurrentTimestamp(): string {
@@ -12,52 +16,75 @@ function getCurrentTimestamp(): string {
   return timestamp;
 }
 
-function appendToCSVFile(csvFilePath: string, text: string): void {
-    fs.appendFile(csvFilePath, text, (err) => {
-        if (err) {
-            console.error('Error appending to CSV file:', err);
-        }
-    });
+async function appendToCSVFile(csvFilePath: string, text: string) {
+    await fs.appendFile(csvFilePath, text);
 }
 
-function fileSizeIsExceeded(filePath: string, limitInBytes: number): boolean {
-    const stats = fs.statSync(filePath);
+async function fileSizeIsExceeded(filePath: string, limitInBytes: number): Promise<boolean> {
+    const stats = await fs.stat(filePath);
     return stats.size >= limitInBytes;
+}
+
+async function deleteOldestFile() {
+    const oldestFile = await result(oldestFileInDir(LOG_DIRECTORY));
+    if("err" in oldestFile || !oldestFile.ok) {
+        console.error(oldestFile);
+        return;
+    }
+    const unlinkResult = await result(fs.unlink(oldestFile.ok));
+    if("err" in unlinkResult) {
+        console.error(unlinkResult);
+    }
+}
+
+async function cleanupOldFiles() {
+    const filenamesResult = await result(fs.readdir(LOG_DIRECTORY));
+    if("err" in filenamesResult) {
+        console.error(filenamesResult.err);
+        return;
+    }
+    const filenames = filenamesResult.ok;
+    if(filenames.length <= MAX_LOG_FILES) {
+        return;
+    }
+
+    await deleteOldestFile();
 }
 
 // This function renames the existing 'current.csv' to 'log_{timestamp}.csv', 
 // and then makes a new empty current.csv.
 // It will be called whenever current.csv hits the upper-bound on memory.
 // By partitioning the logs like this we make it more convenient to load / analyse in python
-function moveOnToNextCSVFile() {
+async function moveOnToNextCSVFile() {
     const timestamp = getCurrentTimestamp();
     const logFileName = `log_${timestamp}.csv`;
     const logFilePath = path.join(LOG_DIRECTORY, logFileName);
     const currentFilePath = path.join(LOG_DIRECTORY, 'current.csv');
-    fs.rename(currentFilePath, logFilePath, () => {
-        fs.writeFileSync(currentFilePath, '');
-    });
+    await fs.rename(currentFilePath, logFilePath);
+    await fs.writeFile(currentFilePath, '');
+    cleanupOldFiles();
 }
 
-function appendTextToCSV(text: string): void {
+async function appendTextToCSV(text: string): Promise<void> {
     let currentFilePath = path.join(LOG_DIRECTORY, 'current.csv');
-    if (!fs.existsSync(currentFilePath)) {
-        fs.mkdirSync(LOG_DIRECTORY, {recursive: true});
-        fs.writeFileSync(currentFilePath, '');
+    if (!await fileExists(currentFilePath)) {
+        await fs.mkdir(LOG_DIRECTORY, {recursive: true});
+        await fs.writeFile(currentFilePath, '');
     }
 
-    if (fileSizeIsExceeded(currentFilePath, FILE_SIZE_LIMIT)) {
+    if (await fileSizeIsExceeded(currentFilePath, FILE_SIZE_LIMIT)) {
         moveOnToNextCSVFile();
     }
 
-    appendToCSVFile(currentFilePath, text);
+    await appendToCSVFile(currentFilePath, text);
 }
 
 
-export default function logAPICall(req, res: Response, next: NextFunction): void {
+export default function logAPICall(req: Request, res: Response, next: NextFunction): void {
+    console.log("INCOMING", req.originalUrl);
     const start = Date.now();
 
-    res.on('finish', () => {
+    res.on('finish', async () => {
         // This skips 'preflight requests' [1] as their information isn't as useful / representative of user experience.
         // [1] https://docs.sensedia.com/en/faqs/Latest/apis/preflight.html#:~:text=How%20it%20works-,Preflight%20request,actual%20HTTP%20request%20is%20sent.
         if (req.method == 'OPTIONS') return;
@@ -66,9 +93,9 @@ export default function logAPICall(req, res: Response, next: NextFunction): void
         const statusCode = res.statusCode;
         const reqBody = JSON.stringify(req.body) || "";
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
-        const clientIp = req.clientIp;
+        const clientIp = (req as any).clientIp;
         const log = [getCurrentTimestamp(), clientIp, req.originalUrl, statusCode, reqBodyCsv, latency, "\n"].join(",");
-        appendTextToCSV(log);
+        await appendTextToCSV(log);
     });
     next();
 }
