@@ -35,11 +35,11 @@ export = async (req, res, next) => {
   
   if (sentences && sentences.length > 0) {
     for (const entry of sentences) {
-      if (!entry[1]) {
-        // Sometimes entry[1] is null, and we don't know why. TODO: analyse API request logs to see what's causing this!
-        throw new API400Error();
+      if (!entry || !Array.isArray(entry) || !(entry.length === 3)) {
+        // Sometimes entry is null, and we don't know why. TODO: analyse API request logs to see what's causing this!
+        throw new API400Error("Entry object had the wrong form.");
       }
-      // entry[0] = array of error tags, entry[1] = sentence, entry[2] = index (not used)
+      const [errorTags, sentence, _] = entry;
       await UniqueStoryErrors.updateOne(
         // QUERY: find all uniqueStoryErrors documents without 'sentence'
         {
@@ -47,7 +47,7 @@ export = async (req, res, next) => {
             {"storyId": storyId},
             {
               "sentenceErrors": {
-                $not: { $elemMatch: { sentence: entry[1] } }
+                $not: { $elemMatch: { sentence: sentence } }
               }
             }
           ]
@@ -56,8 +56,8 @@ export = async (req, res, next) => {
         {
           $push: {
             sentenceErrors: {
-              sentence: entry[1],
-              grammarErrors: entry[0]
+              sentence: sentence,
+              grammarErrors: errorTags
             }
           }
         }
