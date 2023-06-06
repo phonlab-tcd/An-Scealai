@@ -65,25 +65,26 @@
     </button>
   </div>
 
+  <!-- RECORDINGS -->
+  <div
+    *ngIf="showOptions"
+    class="optionsBtn optionsPopupBtn"
+    (click)="dontToggle = true; goToRecording()"
+  >
+    {{ ts.l.recordings }}
+    <i class="fas fa-microphone optionsBtnIcon"></i>
+  </div>
+
   <!-- FEEDBACK -->
   <div
     *ngIf="showOptions && hasFeedback"
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'feedback'"
     (click)="dontToggle = true; toggleRightDrawer('feedback')"
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
     <!-- <span class="notificationBtn" *ngIf="hasFeedback">1</span> -->
-  </div>
-
-  <!-- DICTIONARY -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; toggleRightDrawer('dictionary')"
-  >
-    {{ ts.l.dictionary }}
-    <i class="fas fa-book optionsBtnIcon"></i>
   </div>
 
   <!-- SYNTHESIS -->
@@ -100,20 +101,22 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'grammar'"
     (click)="dontToggle = true; toggleRightDrawer('grammar')"
   >
     {{ ts.l.grammar_errors }}
     <i class="fas fa-spell-check optionsBtnIcon"></i>
   </div>
 
-  <!-- RECORDINGS -->
+  <!-- DICTIONARY -->
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToRecording()"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'dictionary'"
+    (click)="dontToggle = true; toggleRightDrawer('dictionary')"
   >
-    {{ ts.l.recordings }}
-    <i class="fas fa-microphone optionsBtnIcon"></i>
+    {{ ts.l.dictionary }}
+    <i class="fas fa-book optionsBtnIcon"></i>
   </div>
 </div>
 
@@ -147,7 +150,9 @@
 
     <!-- NO STORIES MESSAGE-->
     <ng-template #newStoryMessage>
-      <div class="newStoryMessage"> Click on the '+' button to create your first story! </div>
+      <div class="newStoryMessage">
+        Click on the '+' button to create your first story!
+      </div>
     </ng-template>
   </div>
 
@@ -175,11 +180,10 @@
   </mat-drawer>
 </mat-drawer-container>
 
-
 <app-synthesis-player
-#mySynthesisPlayer
-[text]="story?.text"
-[storyId]="story?._id"
-[storyTitle]="story?.title"
+  #mySynthesisPlayer
+  [text]="story?.text"
+  [storyId]="story?._id"
+  [storyTitle]="story?.title"
 >
 </app-synthesis-player>

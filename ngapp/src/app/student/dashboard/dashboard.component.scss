@@ -76,6 +76,12 @@
     margin-left: 5px;
 }
 
+.optionsBtnClicked {
+    background-color: var(--options-btn-background-color-hover);
+    color: #35322f;
+    border-radius: 2;
+}
+
 .notRecordingBtn {
     background-color: red;
     color: white;
