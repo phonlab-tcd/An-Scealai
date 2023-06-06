@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+import { API400Error } from '../../utils/APIError';
 import { UniqueStoryErrors, SentenceError } from './getUniqueErrorTypeCounts';
 
 const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: ObjectId, storyId: ObjectId, sentences: Array, timestamp:Date}))
@@ -34,6 +35,10 @@ export = async (req, res, next) => {
   
   if (sentences && sentences.length > 0) {
     for (const entry of sentences) {
+      if (!entry[1]) {
+        // Sometimes entry[1] is null, and we don't know why. TODO: analyse API request logs to see what's causing this!
+        throw new API400Error();
+      }
       // entry[0] = array of error tags, entry[1] = sentence, entry[2] = index (not used)
       await UniqueStoryErrors.updateOne(
         // QUERY: find all uniqueStoryErrors documents without 'sentence'
