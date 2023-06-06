@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+import { API400Error } from '../../utils/APIError';
 import { UniqueStoryErrors, SentenceError } from './getUniqueErrorTypeCounts';
 
 const model = mongoose.model("storyGrammarErrors", new mongoose.Schema({owner: ObjectId, storyId: ObjectId, sentences: Array, timestamp:Date}))
@@ -34,7 +35,11 @@ export = async (req, res, next) => {
   
   if (sentences && sentences.length > 0) {
     for (const entry of sentences) {
-      // entry[0] = array of error tags, entry[1] = sentence, entry[2] = index (not used)
+      if (!entry || !Array.isArray(entry) || !(entry.length === 3)) {
+        // Sometimes entry is null, and we don't know why. TODO: analyse API request logs to see what's causing this!
+        throw new API400Error("Entry object had the wrong form.");
+      }
+      const [errorTags, sentence, _] = entry;
       await UniqueStoryErrors.updateOne(
         // QUERY: find all uniqueStoryErrors documents without 'sentence'
         {
@@ -42,7 +47,7 @@ export = async (req, res, next) => {
             {"storyId": storyId},
             {
               "sentenceErrors": {
-                $not: { $elemMatch: { sentence: entry[1] } }
+                $not: { $elemMatch: { sentence: sentence } }
               }
             }
           ]
@@ -51,8 +56,8 @@ export = async (req, res, next) => {
         {
           $push: {
             sentenceErrors: {
-              sentence: entry[1],
-              grammarErrors: entry[0]
+              sentence: sentence,
+              grammarErrors: errorTags
             }
           }
         }
