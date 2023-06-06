@@ -128,11 +128,9 @@ export class GrammarEngine {
       this.errorsWithSentences = [];
       // check grammar on text using the initialised grammar checkers 
       const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker => {
-          console.log(sentencesWithOffsets);
           return await Promise.all(sentencesWithOffsets.map(async (o, i) => {
               const s = o.sentence;
               const offset = o.offset;
-              console.log(offset);
               
               // function to set error tag indices based on associated offset
               function mapOffset(errorTag: ErrorTag): ErrorTag {
@@ -168,8 +166,6 @@ export class GrammarEngine {
                       [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                       this.errorsWithSentences[i] = [errorTags, s, i];
               
-              console.log(offsetErrorTags);
-              console.log(this.errorsWithSentences);
               return offsetErrorTags;
           }))
       }))).flat().filter(err => err.length);

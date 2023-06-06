@@ -61,7 +61,6 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
         toX: +error.tox + 1,
         type: cleanedErrorName
       } as ErrorTag;
-      console.log({input,et});
       return et;
     });
     resolve(errorTags);

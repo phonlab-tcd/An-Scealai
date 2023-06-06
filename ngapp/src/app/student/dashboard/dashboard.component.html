@@ -69,6 +69,7 @@
   <div
     *ngIf="showOptions && hasFeedback"
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'feedback'"
     (click)="dontToggle = true; toggleRightDrawer('feedback')"
   >
     {{ ts.l.feedback }}
@@ -80,6 +81,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'dictionary'"
     (click)="dontToggle = true; toggleRightDrawer('dictionary')"
   >
     {{ ts.l.dictionary }}
@@ -100,6 +102,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'grammar'"
     (click)="dontToggle = true; toggleRightDrawer('grammar')"
   >
     {{ ts.l.grammar_errors }}

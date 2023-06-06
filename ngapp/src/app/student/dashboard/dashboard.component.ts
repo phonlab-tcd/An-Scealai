@@ -16,7 +16,7 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { SynthesisPlayerComponent } from 'app/student/synthesis-player/synthesis-player.component';
+import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
@@ -73,13 +73,14 @@ export class DashboardComponent implements OnInit {
   dontToggle = false;
   feedbackVisibile: false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
-  selectedDrawer: "grammar" | "dictionary" | "feedback";
+  rightDrawerOpened: boolean = false;
+  selectedDrawer: "grammar" | "dictionary" | "feedback" = "grammar";
 
   // WORD COUNT
   words: string[] = [];
   wordCount = 0;
 
-  @ViewChild('mySynthesisPlayer')
+  @ViewChild("mySynthesisPlayer")
   synthesisPlayer: SynthesisPlayerComponent;
 
   textUpdated = new Subject<void | string>();
@@ -231,28 +232,36 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Toggles the right drawer open/closed
-   * Drawer content is set by 'selectedContent' variable which is determined in the HTML
+   * Drawer content is set by 'selectedDrawer' variable which is determined in the HTML
    * Hides/shows the grammar highlighting if the grammar drawer is selected
    * @param selectedContent Indicates which component to be injected into the drawer
    */
-  toggleRightDrawer(selectedContent) {
-    // set variable that displays selected component inside drawer
-    this.selectedDrawer = selectedContent;
-
-    // close drawer if open, hide grammar errors if showing
-    if (this.rightDrawer.opened) {
-      this.rightDrawer.close();
-      if (this.showErrorTags) {
-        this.showErrorTags = false;
-        this.toggleGrammarTags();
-      }
+  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback') {
+    if (this.rightDrawerOpened) {
+      // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
+      // once to open the dictionary, and clicked 'dictionary' again to close the drawer
+      // otherwise the drawer stays open and the content changes to whichever other button the user clicked
+      // (i.e. if the user clicked 'dictionary' and then 'grammar check', the drawer doesn't close but content is updated)
+      if (this.selectedDrawer === selectedDrawer) {
+        this.rightDrawer.close();
+        this.rightDrawerOpened = false;
+      } 
     } else {
-      // open drawer, show grammar errors if grammar drawer selected
+      // open the drawer
       this.rightDrawer.open();
-      if (this.selectedDrawer == "grammar") {
-        this.showErrorTags = true;
-        this.toggleGrammarTags();
-      }
+      this.rightDrawerOpened = true;
+    }
+
+    // sets the variable used to display the selected component in the drawer
+    this.selectedDrawer = selectedDrawer;
+
+    // shows/hides the grammar errors if grammar drawer is selected
+    if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
+      this.showErrorTags = true;
+      this.toggleGrammarTags();
+    } else {
+      this.showErrorTags = false;
+      this.toggleGrammarTags();
     }
   }
 
