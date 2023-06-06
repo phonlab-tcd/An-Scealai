@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import { EventType } from "../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { TranslationService } from "app/core/services/translation.service";
+import { ProfileService } from "app/core/services/profile.service";
+import { NotificationService } from 'app/core/services/notification-service.service';
 import config from "abairconfig";
 
 @Component({
@@ -53,7 +55,9 @@ export class LoginComponent implements OnInit {
     private auth: AuthenticationService,
     private router: Router,
     private engagement: EngagementService,
-    public ts: TranslationService
+    public ts: TranslationService,
+    private profileService : ProfileService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -134,7 +138,7 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.credentials).subscribe(
       (res) => {
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
-        this.router.navigateByUrl("/landing");
+        this.routeUser(this.auth.getUserDetails()._id);
       },
       (err) => {
         console.log(err);
@@ -151,6 +155,29 @@ export class LoginComponent implements OnInit {
       () => {}
     );
   }
+
+    /**
+   * Check if the user has filled out their profile and
+   * route to either the profile page or home page accordingly
+   * @param id user id
+   */
+    routeUser(id) {
+      this.profileService.getForUser(id).subscribe({
+        next: () => {
+          if(this.auth.getUserDetails().role === 'STUDENT') {
+            this.notificationService.getStudentNotifications();
+            this.router.navigateByUrl('/student');
+          }
+          if(this.auth.getUserDetails().role === 'TEACHER') {
+            this.router.navigateByUrl('/teacher');
+          }
+          if(this.auth.getUserDetails().role === 'ADMIN') {
+            this.router.navigateByUrl('/admin');
+          }
+        },
+        error: () => this.router.navigateByUrl("/register-profile"),
+      });
+    }
 
   /**
    * Reset the user's password to random if they have forgotten theirs

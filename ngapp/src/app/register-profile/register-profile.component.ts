@@ -330,6 +330,9 @@ export class RegisterProfileComponent implements OnInit {
 
   synthOpinion : string = this.synthOpinions[0];
 
+  /**
+   * Get any previous profile information already saved for the user
+   */
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
@@ -384,6 +387,9 @@ export class RegisterProfileComponent implements OnInit {
     
   }
 
+  /**
+   * Save profile information data to the DB and reroute the user
+   */
   saveDetails() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
@@ -431,17 +437,16 @@ export class RegisterProfileComponent implements OnInit {
       howOftenWriting : this.howOftenWriting,
       synthOpinion : this.synthOpinion,
     };
-    
 
+    // save profile and route user to homepage
     this.profileService.create(profile).subscribe((_) => {
       if(userDetails.role === 'STUDENT') {
-        this.router.navigateByUrl('/student/contents');
+        this.router.navigateByUrl('/student');
       } else if(userDetails.role === 'TEACHER') {
-        this.router.navigateByUrl('/teacher/dashboard');
+        this.router.navigateByUrl('/teacher');
       }
       
     });
-
   }
 
 }
