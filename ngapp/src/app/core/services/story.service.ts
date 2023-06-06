@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Story } from 'app/core/models/story';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-//import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
 import { Router } from '@angular/router';
 import { AuthenticationService, TokenPayload } from 'app/core/services/authentication.service';
 import { Observable, throwError } from 'rxjs';
-// import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
@@ -26,6 +24,7 @@ export class StoryService {
   ) { }
 
   baseUrl: string = config.baseurl + 'story/';
+  storiesLoaded: boolean = false;
 
   saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
     const storyObj = {
@@ -40,12 +39,16 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
-      .subscribe(res => {
-        this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
-        // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
-        this.router.navigateByUrl('/student/dashboard/' + res.id);
-      });
+    // this.http.post<{id: string}>(this.baseUrl + 'create', storyObj)
+    //   .subscribe(res => {
+    //     this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+    //     // this.engagement.addEventForLoggedInUser(EventType["RECORD-STORY"], storyObj);
+
+    //     this.router.navigateByUrl('/dashboard/' + res.id);
+    //   });
+
+      this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+      return this.http.post<{id: string}>(this.baseUrl + 'create', storyObj);
   }
 
   getStoriesFor(author : string) {
@@ -86,6 +89,10 @@ export class StoryService {
     console.log(updatedStory);
 
     return this.http.post(this.baseUrl + 'update/' + story._id, updatedStory);
+  }
+
+  updateTitle(storyId: string, title:string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updateTitle/' + storyId, {title});
   }
   
   getStoriesForClassroom(owner: string, date = 'empty'): Observable<any> {

@@ -1,0 +1,4 @@
+
+
+ssh banba "cd An-Scealai && git pull origin master && git checkout origin master && sudo systemctl restart scealai"
+ssh banba "journalctl -xe scealai"

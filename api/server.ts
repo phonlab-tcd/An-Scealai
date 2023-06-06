@@ -90,6 +90,7 @@ if(process.env.FUDGE) {
 }
 
 app.use(checkJwt);
+app.use(require('express-status-monitor')());
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);

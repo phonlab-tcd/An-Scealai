@@ -21,6 +21,7 @@ function bucket() {
 }
 
 function filesCollection() {
+  // @ts-ignore
   return bucket().s._filesCollection.collectionName;
 }
 

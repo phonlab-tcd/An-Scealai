@@ -1,6 +1,7 @@
 dist
 
 **/node_modules
+api/monitoring/api_logger/logs
 
 priv_key.pem
 pub_key.pem

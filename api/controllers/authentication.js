@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable max-len */
 const logger = require('../logger.js');
 

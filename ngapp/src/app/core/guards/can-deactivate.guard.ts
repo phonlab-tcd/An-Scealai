@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { DashboardComponent } from '../../student/dashboard/dashboard.component';
+import { DashboardOldComponent } from '../../student/dashboard-old/dashboard-old.component';
 import { RecordingComponent } from '../../student/recording/recording.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
@@ -10,9 +10,9 @@ import { TranslationService } from 'app/core/services/translation.service';
 @Injectable({
   providedIn: 'root'
 })
-class CanDeactivateDashboardGuard implements CanDeactivate<DashboardComponent> {
+class CanDeactivateDashboardGuard implements CanDeactivate<DashboardOldComponent> {
   canDeactivate(
-    dashboard: DashboardComponent,
+    dashboard: DashboardOldComponent,
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | boolean {

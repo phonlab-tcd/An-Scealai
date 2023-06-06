@@ -1,3 +1,4 @@
+// @ts-nocheck
 const StoryGrammarErrors = require('../../models/storygrammarerrors');
 const {API404Error} = require('../../utils/APIError');
 const mongoose = require('mongoose');

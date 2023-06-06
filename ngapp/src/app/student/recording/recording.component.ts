@@ -453,7 +453,7 @@ export class RecordingComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigateByUrl("student/dashboard/" + this.story._id);
+    this.router.navigateByUrl("student/dashboard");
   }
 
   /**

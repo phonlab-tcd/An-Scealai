@@ -22,9 +22,10 @@ async function callAnGramadoir(req, res) {
     }
 
     // get errors from An Gramadoir
+    // @ts-ignore
     const gramadoirRes = await axios.get(url).then(
       (ok) => ({ ok }),
-      (err) => ({ err }),
+      (err) => ({ err })
     );
 
     // if response ok, set cache and return errors
