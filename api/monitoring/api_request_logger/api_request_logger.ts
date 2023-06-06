@@ -6,6 +6,15 @@ import fileExists from "../../utils/fileExists";
 import result from "../../utils/result";
 import oldestFileInDir from '../../utils/oldestFileInDir';
 
+
+/**
+ 
+    This script logs some details about all API requests that pass through our Node / Express server.
+    It logs them to a CSV file which we've set up some python notebooks to quickly analyse.
+
+**/
+
+
 const FILE_SIZE_LIMIT = 32 * 1024 * 1024; // 32 MB
 const MAX_LOG_FILES = 32 * 5; //  32 * 32 * 5 = 5120 MB = ~ 5GB
 const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_logger/logs';
@@ -81,7 +90,6 @@ async function appendTextToCSV(text: string): Promise<void> {
 
 
 export default function logAPICall(req: Request, res: Response, next: NextFunction): void {
-    console.log("INCOMING", req.originalUrl);
     const start = Date.now();
 
     res.on('finish', async () => {
@@ -91,10 +99,11 @@ export default function logAPICall(req: Request, res: Response, next: NextFuncti
         const end = Date.now()
         const latency = end - start; // in milliseconds
         const statusCode = res.statusCode;
-        const reqBody = JSON.stringify(req.body) || "";
+        const reqBody = req.body ? JSON.stringify(req.body) : "";
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
+        const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         const clientIp = (req as any).clientIp;
-        const log = [getCurrentTimestamp(), clientIp, req.originalUrl, statusCode, reqBodyCsv, latency, "\n"].join(",");
+        const log = [getCurrentTimestamp(), clientIp, endpointUrl, req.originalUrl, statusCode, reqBodyCsv, latency, "\n"].join(",");
         await appendTextToCSV(log);
     });
     next();
