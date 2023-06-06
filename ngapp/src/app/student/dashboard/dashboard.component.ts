@@ -16,6 +16,7 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
+import { SynthesisPlayerComponent } from 'app/student/synthesis-player/synthesis-player.component';
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
@@ -77,6 +78,9 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount = 0;
+
+  @ViewChild('mySynthesisPlayer')
+  synthesisPlayer: SynthesisPlayerComponent;
 
   textUpdated = new Subject<void | string>();
   quillEditor: Quill;

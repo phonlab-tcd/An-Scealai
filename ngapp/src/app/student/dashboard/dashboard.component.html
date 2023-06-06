@@ -90,7 +90,7 @@
   <div
     *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToSynthesis(); drawer2.toggle()"
+    (click)="dontToggle = true; synthesisPlayer.toggleHidden()"
   >
     {{ ts.l.audio_check }}
     <i class="fas fa-volume-up optionsBtnIcon"></i>
@@ -174,3 +174,12 @@
     ></app-grammar-error-drawer>
   </mat-drawer>
 </mat-drawer-container>
+
+
+<app-synthesis-player
+#mySynthesisPlayer
+[text]="story?.text"
+[storyId]="story?._id"
+[storyTitle]="story?.title"
+>
+</app-synthesis-player>
