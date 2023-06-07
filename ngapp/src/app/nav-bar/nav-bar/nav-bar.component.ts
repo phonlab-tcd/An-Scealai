@@ -16,7 +16,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 })
 export class NavBarComponent implements OnInit {
   title: string = "An Scéalaí";
-  checkVal: boolean = false;
+  smallMenuOpen: boolean = false;
   notificationsShown: boolean = false;
   wasInside: boolean = false;
   currentUser: string = "";
@@ -68,31 +68,64 @@ export class NavBarComponent implements OnInit {
     );
   }
 
-  // Swap value of checkVal
-  // if changed to false set notificationShown to false
-  changeCheck() {
-    if (this.checkVal === false) {
-      this.checkVal = true;
-    } else {
-      this.checkVal = false;
+  /**
+   * Open/close the hamburger (3-bar) small menu that is visible on
+   * phones and devices with smaller screens
+   */
+  toggleSmallMenu() {
+    if (this.smallMenuOpen) {
+      this.smallMenuOpen = false;
       this.notificationsShown = false;
+    }
+    else {
+      this.smallMenuOpen = true;
     }
   }
 
-  // Set value to show notifications to true
+  /* Show/hide notifications */
   showNotifications() {
     this.notificationsShown = !this.notificationsShown;
   }
 
-  // Hide notifications and route to story dashboard component
+  /**
+   * Hide notifications and route to story dashboard component for given story
+   * @param id story id that has feedback
+   */
   goToStory(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl("/student/dashboard/" + id);
   }
 
-  goToMessages(id: string) {
+  /**
+   * Hide notifications and route to messages component
+   */
+  goToMessages() {
     this.notificationsShown = false;
-    this._router.navigateByUrl("/messages/" + id);
+    this._router.navigateByUrl("/messages/" + this.auth.getUserDetails()._id);
+  }
+
+  /**
+   * Hide notifications and route to stats dashboard
+   */
+  goToStats() {
+    this.notificationsShown = false;
+    this._router.navigateByUrl("/stats-dashboard/" + this.auth.getUserDetails()._id);
+  }
+
+  /**
+   * Route the user to the appropriate home page
+   */
+  goToHomePage() {
+    let user = this.auth.getUserDetails();
+    if (user.role === "STUDENT") {
+      this._router.navigateByUrl("/student");
+    }
+    else if (user.role === "TEACHER") {
+      this._router.navigateByUrl("/teacher");
+    }
+    else {
+      this._router.navigateByUrl("/admin");
+    }
   }
 
   toggleLanguage() {

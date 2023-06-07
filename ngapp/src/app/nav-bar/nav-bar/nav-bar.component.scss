@@ -50,7 +50,30 @@
     -webkit-transition: 1s; /* Safari */
     transition: 1s;
   }
-  
+
+
+  .dropdownMenu {
+      border: none;
+      background-color: transparent;
+      color: white;
+      padding: 10px;
+      text-decoration: none;
+      display: inline-block;
+      padding-left: 20px;
+  }
+
+  .dropdownMenu:hover {
+    color: var(--scealai-light-green);
+    text-decoration: none;
+    -webkit-transition: 1s; /* Safari */
+    transition: 1s;
+  }
+
+  .dropdownMenuItem {
+    text-decoration: none;
+    color: inherit;
+  }
+
   .nav {
     height: 50px;
     width: 100%;
