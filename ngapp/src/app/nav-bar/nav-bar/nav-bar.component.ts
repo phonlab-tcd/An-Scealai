@@ -1,28 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { HostListener } from "@angular/core";
-import { NavigationEnd } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { filter } from "rxjs/operators";
-import { NotificationService, Notification } from "app/core/services/notification-service.service";
+import { NotificationService, Notification, } from "app/core/services/notification-service.service";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 
 //declare var gtag;
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+  selector: "app-nav-bar",
+  templateUrl: "./nav-bar.component.html",
+  styleUrls: ["./nav-bar.component.scss"],
 })
 export class NavBarComponent implements OnInit {
-  title: string = "An Scéalaí";
   smallMenuOpen: boolean = false;
   notificationsShown: boolean = false;
-  wasInside: boolean = false;
-  currentUser: string = "";
-  currentLanguage: string = "";
   notifications: Notification[] = [];
   totalNumOfMessages: number = 0;
+  currentLanguageButtonId: string;
 
   constructor(
     private _router: Router,
@@ -32,15 +26,6 @@ export class NavBarComponent implements OnInit {
   ) {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.events.subscribe((_) => {});
-
-    // const navEndEvents = this._router.events.pipe(
-    //   filter((event) => event instanceof NavigationEnd)
-    // );
-    // navEndEvents.subscribe((event: NavigationEnd) => {
-    //   gtag("config", "UA-178889778-1", {
-    //     page_path: event.urlAfterRedirects,
-    //   });
-    // });
   }
 
   /**
@@ -48,7 +33,8 @@ export class NavBarComponent implements OnInit {
    */
   ngOnInit() {
     this.ts.initLanguage();
-    this.currentLanguage = this.ts.getCurrentLanguage();
+    // default set the page to Irish
+    this.setLanguage("ga");
     // subscribe to message emitter
     this.notificationSerivce.notificationEmitter.subscribe(
       (res: Notification[]) => {
@@ -76,7 +62,7 @@ export class NavBarComponent implements OnInit {
     if (this.smallMenuOpen) {
       this.smallMenuOpen = false;
       this.notificationsShown = false;
-    }
+    } 
     else {
       this.smallMenuOpen = true;
     }
@@ -88,7 +74,7 @@ export class NavBarComponent implements OnInit {
   }
 
   /**
-   * Hide notifications and route to story dashboard component for given story
+   * Hide notifications and route to story dashboard component for given story -> TODO implement
    * @param id story id that has feedback
    */
   goToStory(id: string) {
@@ -109,7 +95,7 @@ export class NavBarComponent implements OnInit {
    */
   goToStats() {
     this.notificationsShown = false;
-    this._router.navigateByUrl("/stats-dashboard/" + this.auth.getUserDetails()._id);
+    this._router.navigateByUrl( "/stats-dashboard/" + this.auth.getUserDetails()._id );
   }
 
   /**
@@ -119,45 +105,28 @@ export class NavBarComponent implements OnInit {
     let user = this.auth.getUserDetails();
     if (user.role === "STUDENT") {
       this._router.navigateByUrl("/student");
-    }
+    } 
     else if (user.role === "TEACHER") {
       this._router.navigateByUrl("/teacher");
-    }
+    } 
     else {
       this._router.navigateByUrl("/admin");
     }
   }
 
-  toggleLanguage() {
-    if (this.currentLanguage === "English") {
-      this.changeToIrish();
-    } else {
-      this.changeToEnglish();
+  /**
+   * Set the current language and apply CSS to language code in nav bar
+   * @param languageCode code for selected language
+   */
+  setLanguage(languageCode: "en" | "ga") {
+    this.ts.setLanguage(languageCode);
+
+    // remove css highlighting for currently selected langauge
+    if (this.currentLanguageButtonId) {
+      document.getElementById(this.currentLanguageButtonId).classList.remove("selectedLanguage");
     }
-  }
-
-  changeToEnglish() {
-    this.ts.setLanguage("en");
-    this.currentLanguage = "English";
-  }
-
-  changeToIrish() {
-    this.ts.setLanguage("ga");
-    this.currentLanguage = "Gaeilge";
-  }
-
-  // Keep track of where the user clicks
-  @HostListener("click")
-  clickInside() {
-    this.wasInside = true;
-  }
-
-  // Hide the notification container if user clicks on the page
-  @HostListener("document:click")
-  clickout() {
-    if (!this.wasInside) {
-      this.notificationsShown = false;
-    }
-    this.wasInside = false;
+    this.currentLanguageButtonId = languageCode;
+    // add css highlighting to the newly clicked language
+    document.getElementById(languageCode).classList.add("selectedLanguage");
   }
 }

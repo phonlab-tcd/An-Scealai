@@ -1,149 +1,123 @@
-  <!-- nav bar at the top of the page -->
-  <div class="nav">
-    <!-- nav -> dropdown when screen size gets small-->
-    <input type="checkbox" id="nav-check" [checked]="smallMenuOpen" />
-    <!-- logo -->
-    <div class="nav-header">
-      <div class="nav-title">
-          <img src="assets/img/logo-navbar.png" class="logo" />
+<!-- nav bar at the top of the page -->
+<div class="nav">
+  <!-- nav -> dropdown when screen size gets small-->
+  <input type="checkbox" id="nav-check" [checked]="smallMenuOpen" />
+  <!-- logo -->
+  <div class="nav-header">
+    <div class="nav-title">
+      <img src="assets/img/logo-navbar.png" class="logo" />
+    </div>
+  </div>
+  <!-- Three-bar menu button when screen is small -->
+  <div class="nav-btn" (click)="toggleSmallMenu()">
+    <label *ngIf="!smallMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <div *ngIf="smallMenuOpen" class="closeMenu">
+      <div>
+        <i class="fas fa-times closeMenuTimes"></i>
       </div>
     </div>
-    <!-- Three-bar menu button when screen is small -->
-    <div class="nav-btn" (click)="toggleSmallMenu()">
-      <label *ngIf="!smallMenuOpen">
-        <span></span>
-        <span></span>
-        <span></span>
-      </label>
-      <div *ngIf="smallMenuOpen" class="closeMenu">
-        <div>
-          <i class="fas fa-times closeMenuTimes"></i>
-        </div>
-      </div>
-      <div
-        *ngIf="!smallMenuOpen && notifications.length > 0"
-        class="notificationBtn menuNotificationBtn"
-        (click)="toggleSmallMenu()"
-      ></div>
-    </div>
-    <!-- links on the nav bar -->
-    <div class="nav-links">
+    <div *ngIf="!smallMenuOpen && notifications.length > 0" class="notificationBtn menuNotificationBtn" (click)="toggleSmallMenu()" ></div>
+  </div>
+  <!-- links on the nav bar -->
+  <div class="nav-links">
+    <!-- Home page button-->
+    <a *ngIf="auth.isLoggedIn()" routerLink="" class="navBtn" (click)="toggleSmallMenu(); goToHomePage()" > Home </a>
 
-      <!-- Home page button-->
-      <a *ngIf="auth.isLoggedIn()" routerLink="" class="navBtn" (click)="toggleSmallMenu(); goToHomePage()" > Home </a>
+    <!-- More Apps -->
+    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenu" >
+      More apps
+    </button>
+    <!-- First level: stats, messages, lara, cen sceal, dictogloss, An Bat Mírialta-->
+    <mat-menu #moreApps="matMenu">
+      <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToStats(); toggleSmallMenu()" >{{ ts.l.statistics_dashboard }}</a >
+      <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToMessages(); toggleSmallMenu()" >{{ ts.l.messages }}</a >
+      <button mat-menu-item [matMenuTriggerFor]="LARA">LARA</button>
+      <button *ngIf="auth.isLoggedIn()" mat-menu-item [matMenuTriggerFor]="cenSceal" > Cén Scéal </button>
+      <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" routerLink="/dictogloss" rel="noopener noreferrer" (click)="toggleSmallMenu()" >Dictogloss</a >
+      <a mat-menu-item class="dropdownMenuItem" href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/" target="_blank" rel="noopener noreferrer" (click)="toggleSmallMenu()" >An Bat Mírialta</a >
+    </mat-menu>
 
-      <!-- More Apps -->
-      <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenu">More apps</button>
-      <!-- First level: stats, messages, lara, cen sceal, dictogloss, An Bat Mírialta-->
-      <mat-menu #moreApps="matMenu">
-        <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToStats(); toggleSmallMenu()">Stats Dashboard</a>
-        <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToMessages(); toggleSmallMenu()">Messages</a>
-        <button mat-menu-item [matMenuTriggerFor]="LARA">LARA</button>
-        <button *ngIf="auth.isLoggedIn()" mat-menu-item [matMenuTriggerFor]="cenSceal">Cén Scéal</button>
-        <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" routerLink="/dictogloss" rel="noopener noreferrer" (click)="toggleSmallMenu()">Dictogloss</a>
-        <a mat-menu-item class="dropdownMenuItem" href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/" target="_blank" rel="noopener noreferrer" (click)="toggleSmallMenu()">An Bat Mírialta</a>
-      </mat-menu>
-      
-      <!-- LARA dropdown menu-->
-      <mat-menu #LARA="matMenu">
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/about-lara" > {{ ts.l.what_is_LARA }}</a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/resources" >{{ ts.l.irish_stories }}</a>
-      </mat-menu>
-      
-      <!-- Cen Scéal dropdown menu-->
-      <mat-menu #cenSceal="matMenu">
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/general" (click)="toggleSmallMenu()" >
-          {{ ts.l.general_prompts }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/proverb" (click)="toggleSmallMenu()" >
-          {{ ts.l.proverb_prompts}}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/exam" (click)="toggleSmallMenu()" >
-          {{ ts.l.exam_prompts }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/lara" (click)="toggleSmallMenu()" >
-          {{ ts.l.lara_prompts }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/combination" (click)="toggleSmallMenu()" >
-          {{ ts.l.combination_generator }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/pos" (click)="toggleSmallMenu()" >
-          {{ ts.l.part_of_speech_generator }}
-        </a>
-      </mat-menu>
+    <!-- LARA dropdown menu-->
+    <mat-menu #LARA="matMenu">
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/about-lara"> {{ ts.l.what_is_LARA }}</a >
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/resources">{{ ts.l.irish_stories }}</a>
+    </mat-menu>
 
-      <!-- About menu -->
-      <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="about" class="dropdown-toggle dropdownMenu">About</button>
-      <mat-menu #about="matMenu">
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/about" (click)="toggleSmallMenu()" >
-          An Scéalaí
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/technology" (click)="toggleSmallMenu()" >
-          {{ ts.l.technology }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/user-guides" (click)="toggleSmallMenu()" >
-          {{ ts.l.user_guide }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/team" (click)="toggleSmallMenu()" >
-          {{ ts.l.the_team }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/sponsors" (click)="toggleSmallMenu()" >
-          {{ ts.l.sponsors }}
-        </a>
-        <a mat-menu-item class="dropdownMenuItem" routerLink="/report-an-issue" (click)="toggleSmallMenu()" >
-          {{ ts.l.report_an_issue }}
-        </a>
-      </mat-menu>
+    <!-- Cen Scéal dropdown menu-->
+    <mat-menu #cenSceal="matMenu">
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/general" (click)="toggleSmallMenu()" > {{ ts.l.general_prompts }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/proverb" (click)="toggleSmallMenu()" > {{ ts.l.proverb_prompts }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/exam" (click)="toggleSmallMenu()" > {{ ts.l.exam_prompts }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/lara" (click)="toggleSmallMenu()" > {{ ts.l.lara_prompts }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/combination" (click)="toggleSmallMenu()" > {{ ts.l.combination_generator }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/prompts/pos" (click)="toggleSmallMenu()" > {{ ts.l.part_of_speech_generator }} </a>
+    </mat-menu>
 
-      <!--ABAIR link-->
-      <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn">ABAIR</a >
+    <!-- About menu -->
+    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="about" class="dropdown-toggle dropdownMenu" > {{ ts.l.about }} </button>
+    <mat-menu #about="matMenu">
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/about" (click)="toggleSmallMenu()" > An Scéalaí </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/technology" (click)="toggleSmallMenu()" > {{ ts.l.technology }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/user-guides" (click)="toggleSmallMenu()" > {{ ts.l.user_guide }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/team" (click)="toggleSmallMenu()" > {{ ts.l.the_team }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/sponsors" (click)="toggleSmallMenu()" > {{ ts.l.sponsors }} </a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/report-an-issue" (click)="toggleSmallMenu()" > {{ ts.l.report_an_issue }} </a>
+    </mat-menu>
 
-      <!-- Change language dropdown and login button-->
-      <div class="navBtn rightNavBtn">
-        <button class="btn navbarBtn" (click)="this.toggleLanguage()" >
-          {{ ts.l.other_language }}
+    <!--ABAIR link-->
+    <a href="https://www.abair.tcd.ie/" target="_blank" rel="noopener noreferrer" class="navBtn" >ABAIR</a >
+
+    <!-- Change language dropdown and login button-->
+    <div class="navBtn rightNavBtn">
+      <button class="languageBtn" (click)="setLanguage('ga')" id="ga"> GA </button>
+      /
+      <button class="languageBtn" (click)="setLanguage('en')" id="en"> EN </button>
+
+      <!-- sign in button -->
+      <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="toggleSmallMenu()" onclick="this.blur();" > {{ ts.l.sign_in }} </a>
+      <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
+        <!-- username button -->
+        <button routerLink="/profile" (click)="toggleSmallMenu()" class="btn navbarBtn" >
+          {{ auth.getUserDetails()?.username }}
+          <i class="fas fa-user"></i>
         </button>
-        <!-- sign in button -->
-        <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="toggleSmallMenu()" onclick="this.blur();" >
-          {{ ts.l.sign_in }}
-        </a>
-        <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
-          <!-- username button -->
-          <button routerLink="/profile" (click)="toggleSmallMenu()" class="btn navbarBtn" >
-            {{ auth.getUserDetails()?.username }}
-            <i class="fas fa-user"></i>
-          </button>
-          <!-- notifications circle -->
-          <div class="notificationBtn" *ngIf="totalNumOfMessages > 0" (click)="showNotifications()" >
-            {{ totalNumOfMessages }}
-          </div>
+        <!-- notifications circle -->
+        <div class="notificationBtn" *ngIf="totalNumOfMessages > 0" (click)="showNotifications()" >
+          {{ totalNumOfMessages }}
         </div>
       </div>
     </div>
-    <!-- Notifications Dropdown -->
-    <div *ngIf="notificationsShown && notifications.length > 0" class="optionsPopupOld notifcationPopup" >
-      <div *ngFor="let notificationEntry of notifications">
-        <!-- notification type header -->
-        <div *ngIf="notificationEntry.body.length > 0" class="notificationsHeader" >
-          {{ notificationEntry.header }}
-        </div>
-        <!-- notification body -->
-        <div class="notificationsBody">
-          <div *ngFor="let notification of notificationEntry.body" class="notificationCard" >
-            <!-- story feedback -->
-            <div *ngIf="notification.title" (click)="goToStory(notification._id)" >
-              {{ notification.title }}
-            </div>
-            <!-- student messages -->
-            <div *ngIf="notification.subject" (click)="goToMessages(notification.senderId)" >
-              {{ notification.subject }}
-            </div>
-            <!-- teacher messages -->
-            <div *ngIf="notification.classroom" (click)="goToMessages(notification.classroom._id)" >
-              {{ notification.classroom.title }} ({{ notification.numClassroomMessages }})
-            </div>
+  </div>
+  <!-- Notifications Dropdown -->
+  <div *ngIf="notificationsShown && notifications.length > 0" class="optionsPopupOld notifcationPopup" >
+    <div *ngFor="let notificationEntry of notifications">
+      <!-- notification type header -->
+      <div *ngIf="notificationEntry.body.length > 0" class="notificationsHeader" >
+        {{ notificationEntry.header }}
+      </div>
+      <!-- notification body -->
+      <div class="notificationsBody">
+        <div *ngFor="let notification of notificationEntry.body" class="notificationCard" >
+          <!-- story feedback -->
+          <div *ngIf="notification.title" (click)="goToStory(notification._id)">
+            {{ notification.title }}
+          </div>
+          <!-- student messages -->
+          <div *ngIf="notification.subject" (click)="goToMessages(notification.senderId)" >
+            {{ notification.subject }}
+          </div>
+          <!-- teacher messages -->
+          <div *ngIf="notification.classroom" (click)="goToMessages(notification.classroom._id)" >
+            {{ notification.classroom.title }} ({{
+              notification.numClassroomMessages
+            }})
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

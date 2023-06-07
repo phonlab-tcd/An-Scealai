@@ -74,6 +74,16 @@
     color: inherit;
   }
 
+  .languageBtn {
+    background-color: transparent;
+    border: none;
+    color: white;
+  }
+
+  .selectedLanguage {
+    color: var(--scealai-med-green);
+  }
+
   .nav {
     height: 50px;
     width: 100%;
