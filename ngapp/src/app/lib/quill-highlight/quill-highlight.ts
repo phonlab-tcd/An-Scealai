@@ -21,13 +21,17 @@ Quill.register(
     )
 );
 
+type TagMetadataEntry = {
+  messageGA: string;
+  messageEN: string;
+  nameEN: string;
+  nameGA: string;
+  color: string;
+}
+
 export type HighlightTag = {
     type: string; // this will end up corresponding with the ERROR_INFO keys 
-    messageGA: string;
-    messageEN: string;
-    nameEN: string;
-    nameGA: string;
-    color: string;
+    meta: TagMetadataEntry[];
     fromX: number;
     toX: number;
 }
@@ -50,7 +54,8 @@ export class QuillHighlighter {
     */
     public show(tags: HighlightTag[]): void {
         if(!tags) return;
-        //this.hide(tags);  // remove any previous highlighting 
+        
+        // pre-processing step to merge tags?
       
         tags.forEach((tag) => {
             // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
@@ -59,8 +64,7 @@ export class QuillHighlighter {
                 (tag.toX - tag.fromX),
                 {
                     'highlight-tag': JSON.stringify(tag),
-                    'highlight-tag-type': tag.type,
-                    'background-color': tag.color,
+                    'highlight-tag-type': tag.type
                 },
                 'api'
             );
@@ -139,8 +143,8 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
-        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.messageEN : tag.messageGA;
+        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.meta[0].messageEN : tag.meta[0].messageGA;
+        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.meta[0].messageEN : tag.meta[0].messageGA;
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));

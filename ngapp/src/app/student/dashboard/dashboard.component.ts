@@ -26,7 +26,7 @@ import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-ca
 import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
-import { ErrorTag } from "../../lib/grammar-engine/types";
+import { ErrorTag, ErrorTag2HighlightTag } from "../../lib/grammar-engine/types";
 import { MatDrawer } from "@angular/material/sidenav";
 
 Quill.register("modules/imageCompress", ImageCompress);
@@ -179,7 +179,7 @@ export class DashboardComponent implements OnInit {
 
             // show error highlighting if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show([tag as HighlightTag]);
+              this.quillHighlighter.show([ErrorTag2HighlightTag(tag)]);
             }
           },
           error: function () {},
@@ -190,7 +190,7 @@ export class DashboardComponent implements OnInit {
 
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) );
+              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
             }
 
             //save any grammar errors with associated sentences to DB
@@ -484,7 +484,7 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) )
+      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
       : this.quillHighlighter.hideAll();
   }
 

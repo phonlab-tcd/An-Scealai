@@ -1,3 +1,5 @@
+import { HighlightTag } from "../quill-highlight/quill-highlight";
+
 export type GrammarChecker = {
   check: (input: string, authToken?: string) => Promise<ErrorTag[]>;
   name: string;
@@ -16,6 +18,21 @@ export type ErrorTag = {
   fromX: number;
   toX: number;
   type: string;
+}
+
+export function ErrorTag2HighlightTag(et: ErrorTag): HighlightTag {
+  return {
+    type: et.type,
+    meta: [{
+      messageGA: et.messageGA,
+      messageEN: et.messageEN,
+      nameEN: et.nameEN,
+      nameGA: et.nameGA,
+      color: et.color
+    }],
+    fromX: et.fromX,
+    toX: et.toX
+  }
 }
 
 type ErrorType = keyof typeof ERROR_INFO;

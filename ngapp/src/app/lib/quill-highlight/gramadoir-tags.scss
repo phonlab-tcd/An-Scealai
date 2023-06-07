@@ -9,7 +9,7 @@
 
 [highlight-tag-type]
 {
-  border-radius: 3px;
+  background-color: var(--highlight-error-red);
 }
 span[highlight-tag-type]:hover
 {
@@ -19,12 +19,4 @@ span:not[highlight-tag-type] {
   border-radius: 0;
   padding-left: 0px;
   padding-right: 0px;
-} 
-
-[highlight-tag-type="LEATHAN-CAOL"]
-{
-  border: 1px solid gray;
-  border-radius: 0 !important;
-  padding-left: 0px !important;
-  padding-right: 0px !important;
 }
