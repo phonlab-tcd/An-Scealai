@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { SelectQuizDialogComponent } from './select-quiz-dialog.component';
 
@@ -8,7 +9,11 @@ describe('SelectQuizDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectQuizDialogComponent ]
+      declarations: [ SelectQuizDialogComponent ],
+      providers: [
+        { provide: MatDialog, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} }
+    ]
     })
     .compileComponents();
 
