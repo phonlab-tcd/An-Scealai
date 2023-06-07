@@ -28,7 +28,7 @@
     <a *ngIf="auth.isLoggedIn()" routerLink="" class="navBtn" (click)="toggleSmallMenu(); goToHomePage()" > Home </a>
 
     <!-- More Apps -->
-    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenu" >
+    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenuButton" >
       More apps
     </button>
     <!-- First level: stats, messages, lara, cen sceal, dictogloss, An Bat Mírialta-->
@@ -58,7 +58,7 @@
     </mat-menu>
 
     <!-- About menu -->
-    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="about" class="dropdown-toggle dropdownMenu" > {{ ts.l.about }} </button>
+    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="about" class="dropdown-toggle dropdownMenuButton" > {{ ts.l.about }} </button>
     <mat-menu #about="matMenu">
       <a mat-menu-item class="dropdownMenuItem" routerLink="/about" (click)="toggleSmallMenu()" > An Scéalaí </a>
       <a mat-menu-item class="dropdownMenuItem" routerLink="/technology" (click)="toggleSmallMenu()" > {{ ts.l.technology }} </a>
@@ -73,15 +73,18 @@
 
     <!-- Change language dropdown and login button-->
     <div class="navBtn rightNavBtn">
-      <button class="languageBtn" (click)="setLanguage('ga')" id="ga"> GA </button>
-      /
-      <button class="languageBtn" (click)="setLanguage('en')" id="en"> EN </button>
+      <!-- Language select-->
+      <div>
+        <button class="languageBtn" (click)="setLanguage('ga')" id="ga"> GA </button>
+        /
+        <button class="languageBtn" (click)="setLanguage('en')" id="en"> EN </button>
+      </div>
 
       <!-- sign in button -->
-      <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn navbarBtn" (click)="toggleSmallMenu()" onclick="this.blur();" > {{ ts.l.sign_in }} </a>
+      <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn userBtn" (click)="toggleSmallMenu()" onclick="this.blur();" > {{ ts.l.sign_in }} </a>
       <div *ngIf="auth.isLoggedIn()" class="profileBtnContainer">
         <!-- username button -->
-        <button routerLink="/profile" (click)="toggleSmallMenu()" class="btn navbarBtn" >
+        <button routerLink="/profile" (click)="toggleSmallMenu()" class="btn userBtn" >
           {{ auth.getUserDetails()?.username }}
           <i class="fas fa-user"></i>
         </button>
