@@ -9,7 +9,9 @@
 
 [highlight-tag-type]
 {
-  background-color: var(--highlight-error-red);
+  text-decoration: underline;
+  text-decoration-color: var(--highlight-error-red);
+  text-decoration-thickness: 3px;
 }
 span[highlight-tag-type]:hover
 {
