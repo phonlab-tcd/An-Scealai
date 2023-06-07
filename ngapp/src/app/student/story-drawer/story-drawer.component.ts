@@ -146,7 +146,7 @@ export class StoryDrawerComponent implements OnInit {
    * rename their story. Autofocus this editable div after making editable
    * @param divId id of the div for the story title
    */
-  updateStoryTitle(divId) {
+  makeDivEditable(divId) {
     const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
     contentEditableDiv.setAttribute("contenteditable", "true");
     // auto-focus the div for editing, need to use setTimeout so event is applied

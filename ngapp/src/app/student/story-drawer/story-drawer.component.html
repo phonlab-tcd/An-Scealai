@@ -19,7 +19,7 @@
       <!-- story entry-->
       <div class="contentSection" [attr.id]="story._id">
         <!-- story title-->
-        <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)">
+        <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)" (keydown.enter)="saveStoryTitle(i, story)">
           {{ story?.title }}
         </div>
         <!-- date and menu icon-->
@@ -33,7 +33,7 @@
               <mat-icon>delete</mat-icon>
               <span>{{ts.l.delete}}</span>
             </button>
-            <button mat-menu-item (click)="updateStoryTitle(i)">
+            <button mat-menu-item (click)="makeDivEditable(i)">
               <mat-icon>create</mat-icon>
               <span>{{ ts.l.rename }}</span>
             </button>
