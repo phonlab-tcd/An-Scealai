@@ -21,17 +21,6 @@ export class GrammarErrorDrawerComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Sets text for grammar message of hovered error tag
-   * Either displays the grammar message, or 'checking grammar' if not loaded
-   * @returns 
-   */
-  selectedGrammarSuggestion() {
-    if (this.quillHighlighter)
-      return this.quillHighlighter.getGrammarMessage(this.grammarLoaded);
-    else return "";
-  }
-
-  /**
    * Apply error highlighting depending on which errors are clicked to display
    * @param key error name
    */
