@@ -14,7 +14,7 @@
 </div>
 <div class="selectErrorCheckbox">
   <!-- GRAMMAR ERROR LIST -->
-  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key, tag.value)" [attr.id]="tag.key" >
+  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key)" [attr.id]="tag.key" >
     <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="errorColorBox" ></div>
     <!-- Error name -->
     {{
