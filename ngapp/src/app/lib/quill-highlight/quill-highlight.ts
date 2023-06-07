@@ -1,6 +1,7 @@
 import Quill from 'quill';
 import { TranslationService } from 'app/core/services/translation.service';
 import { EngagementService } from 'app/core/services/engagement.service'
+import {isEqual} from "lodash";
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
@@ -9,14 +10,6 @@ Quill.register(
     new Parchment.Attributor.Attribute(
         'highlight-tag',
         'highlight-tag',
-        {scope: Parchment.Scope.INLINE}
-    )
-);
-
-Quill.register(
-    new Parchment.Attributor.Attribute(
-        'highlight-tag-type',
-        'highlight-tag-type',
         {scope: Parchment.Scope.INLINE}
     )
 );
@@ -63,8 +56,7 @@ export class QuillHighlighter {
                 tag.fromX,
                 (tag.toX - tag.fromX),
                 {
-                    'highlight-tag': JSON.stringify(tag),
-                    'highlight-tag-type': 'e' //tag.type
+                    'highlight-tag': JSON.stringify(tag)
                 },
                 'api'
             );
@@ -102,7 +94,6 @@ export class QuillHighlighter {
             tag.fromX,
             (tag.toX - tag.fromX),
               {'highlight-tag': null,
-              'highlight-tag-type': null,
               'background-color': '',
               'data-selected': null}
           );
@@ -121,12 +112,11 @@ export class QuillHighlighter {
         0,
         this.quillEditor.getLength(),
           {'highlight-tag': null,
-          'highlight-tag-type': null,
           'background-color': '',
           'data-selected': null}
       );
       
-        document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+      document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
     }
 
     /**
@@ -143,14 +133,23 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.data[0].messageEN : tag.data[0].messageGA;
-        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.data[0].messageEN : tag.data[0].messageGA;
+        const tooltipContents = this.makeTooltipContents(tag.data, this.ts.l.iso_code);
+        tooltip.root.innerHTML = tooltipContents;
+        this.mostRecentHoveredMessage = tooltipContents;
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
     
         let style = tooltip.root.getAttribute('style') || '';
-        style = style + 'font-size: medium; z-index: 10000001;';
+        style = style + `
+          font-size: medium;
+          padding: 20px;
+          -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          border: 2px solid var(--scealai-med-brown);
+          border-radius: 2px;
+        `;
         tooltip.root.setAttribute('style', style);
     
         // Ensure that tooltip isn't cut off by the right edge of the editor
@@ -187,8 +186,53 @@ export class QuillHighlighter {
         return this.ts.message('checking_grammar');
     }
 
-    private mergeTags(tags: HighlightTag[]): HighlightTag[] {
-      return [];
+    private makeTooltipContents(data: TagData[], lang: 'en' | 'ga'): string {
+      const getName = (datum) => lang == 'en' ? datum.nameEN : datum.nameGA;
+      const getMessage = (datum) => lang == 'en' ? datum.messageEN : datum.messageGA;
+      return data.map(datum => `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${datum.color}"></span> ${getName(datum)}: ${getMessage(datum)}</div>`).join('<hr>')
+    }
+
+    private overlaps(tagA: HighlightTag, tagB: HighlightTag): boolean {
+      return (tagA.fromX <= tagB.toX) && (tagA.toX >= tagB.fromX);
+    }
+
+    private makeMergedTag(tags: HighlightTag[]): HighlightTag {
+      const lowest_fromX = Math.min(...tags.map(tag => tag.fromX));
+      const highest_toX = Math.max(...tags.map(tag => tag.toX));
+      const merged_data = tags.reduce((acc, tag) => this.arrayToSet(acc.concat(tag.data)), []); // make it a set so we don't duplicate the messages in the tooltip
+      return {
+        data: merged_data,
+        fromX: lowest_fromX,
+        toX: highest_toX
+      }
+    }
+
+    private mergeTags(tags: HighlightTag[], i: number = 0): HighlightTag[] {
+      // step 0: nothing to merge if the list is empty
+      if (!tags.length) return tags; 
+      // step 1: find any tags that overlap with the first tag
+      const tagA = tags[0]
+      const overlap_set = tags.filter(tagB => this.overlaps(tagA, tagB));
+      // step 2: merge all of those overlapping tags into a new 'merged tag'
+      const merged_tag = this.makeMergedTag(overlap_set);
+      // step 3: replace any of the tags that were merged together with the newly created merged_tag
+      const updated_tags = tags.filter(tag => !overlap_set.includes(tag)).concat([merged_tag]);
+      // step 4.1: if there weren't any merges, then we're done. 
+      const noMoreMergesAtCurrentIndex = tags.length == updated_tags.length
+      if (noMoreMergesAtCurrentIndex && i == (tags.length-1)) {
+        return tags;
+      }
+
+      // step 4.2: otherwise, keep merging!
+      return this.mergeTags(updated_tags, noMoreMergesAtCurrentIndex ? (i + 1) : i);
+    }
+
+    private arrayToSet(array: any[]): any[] {
+      return array.filter((obj, index, self) => {
+        return index === self.findIndex((o) =>
+          JSON.stringify(o) === JSON.stringify(obj)
+        );
+      });
     }
 }
 

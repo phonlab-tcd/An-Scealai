@@ -2,18 +2,28 @@
     content: none !important;
 }
 
+.circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
 [data-selected] {
   // box-shadow: 2px 2px;
   margin: 0.3em;
 }
 
-[highlight-tag-type]
+[highlight-tag]
 {
   text-decoration: underline;
   text-decoration-color: var(--highlight-error-red);
   text-decoration-thickness: 3px;
+  position: relative;
 }
-span[highlight-tag-type]:hover
+span[highlight-tag]:hover
 {
   cursor: pointer;
 }

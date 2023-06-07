@@ -7,7 +7,7 @@ import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
-import clone from "lodash/clone";
+import {clone} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
           complete: () => {
             if (!this.quillHighlighter) return;
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            // this.quillHighlighter.hideAll();  --> This was part of old dashboard, seems to cause bug in new dashboard
+            this.quillHighlighter.hideAll();
 
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
