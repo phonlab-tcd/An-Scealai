@@ -22,8 +22,7 @@ export type ErrorTag = {
 
 export function ErrorTag2HighlightTag(et: ErrorTag): HighlightTag {
   return {
-    type: et.type,
-    meta: [{
+    data: [{
       messageGA: et.messageGA,
       messageEN: et.messageEN,
       nameEN: et.nameEN,

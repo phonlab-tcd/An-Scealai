@@ -21,7 +21,7 @@ Quill.register(
     )
 );
 
-type TagMetadataEntry = {
+type TagData = {
   messageGA: string;
   messageEN: string;
   nameEN: string;
@@ -29,9 +29,8 @@ type TagMetadataEntry = {
   color: string;
 }
 
-export type HighlightTag = {
-    type: string; // this will end up corresponding with the ERROR_INFO keys 
-    meta: TagMetadataEntry[];
+export type HighlightTag = {    
+    data: TagData[];
     fromX: number;
     toX: number;
 }
@@ -56,6 +55,7 @@ export class QuillHighlighter {
         if(!tags) return;
         
         // pre-processing step to merge tags?
+        tags = this.mergeTags(tags);
       
         tags.forEach((tag) => {
             // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
@@ -64,7 +64,7 @@ export class QuillHighlighter {
                 (tag.toX - tag.fromX),
                 {
                     'highlight-tag': JSON.stringify(tag),
-                    'highlight-tag-type': tag.type
+                    'highlight-tag-type': 'e' //tag.type
                 },
                 'api'
             );
@@ -143,8 +143,8 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.meta[0].messageEN : tag.meta[0].messageGA;
-        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.meta[0].messageEN : tag.meta[0].messageGA;
+        tooltip.root.innerHTML = this.ts.l.iso_code == 'en' ? tag.data[0].messageEN : tag.data[0].messageGA;
+        this.mostRecentHoveredMessage = this.ts.l.iso_code == 'en' ? tag.data[0].messageEN : tag.data[0].messageGA;
     
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
@@ -185,6 +185,10 @@ export class QuillHighlighter {
       }
       else 
         return this.ts.message('checking_grammar');
+    }
+
+    private mergeTags(tags: HighlightTag[]): HighlightTag[] {
+      return [];
     }
 }
 
