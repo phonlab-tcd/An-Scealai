@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -53,6 +54,7 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
     QuillModule.forRoot({
       customOptions: [{
               import: 'formats/font',

@@ -3,6 +3,9 @@ import { firstValueFrom } from "rxjs";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { RecordingService } from "../../core/services/recording.service";
+import { EventType } from "../../core/models/event";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
@@ -25,6 +28,8 @@ export class StoryDrawerComponent implements OnInit {
     public ts: TranslationService,
     private auth: AuthenticationService,
     private storyService: StoryService,
+    private engagement: EngagementService,
+    private recordingService: RecordingService,
     private dialog: MatDialog
   ) {}
 
@@ -69,12 +74,12 @@ export class StoryDrawerComponent implements OnInit {
     let id = story._id;
     let storyElement = document.getElementById(id);
     if (storyElement) {
-      // remove css highlighting for currently highlighted recording (from archive)
+      // remove css highlighting for currently highlighted story
       if (this.lastClickedStoryId) {
         document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
       }
       this.lastClickedStoryId = id;
-      // add css highlighting to the newly clicked recording
+      // add css highlighting to the newly clicked story
       storyElement.classList.add("clickedresultCard");
     }
   }
@@ -120,5 +125,50 @@ export class StoryDrawerComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Delete the given story and any associated recordings
+   * @param id story id to be deleted
+   */
+  deleteStory(id: string) {
+    this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
+    this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
+    this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
+    // update the current story list by removing the deleted story
+    this.storyService.deleteStory(id).subscribe((_) => {
+      this.stories = this.stories.filter((obj) => obj._id !== id);
+    });
+  }
+
+  /**
+   * Make the div containing the story title editable so the student can
+   * rename their story. Autofocus this editable div after making editable
+   * @param divId id of the div for the story title
+   */
+  updateStoryTitle(divId) {
+    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+    contentEditableDiv.setAttribute("contenteditable", "true");
+    // auto-focus the div for editing, need to use setTimeout so event is applied
+    window.setTimeout(() => contentEditableDiv.focus(), 0);
+  }
+
+  /**
+   * Remove the editable attribute from the div containing the story title
+   * Save the updated title for the story if changes were made
+   * @param divId id of the div for the story title
+   */
+  saveStoryTitle(divId, selectedStory) {
+    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+    contentEditableDiv.setAttribute("contenteditable", "false");
+    // only update the title if changes have been made
+    if (selectedStory.title.trim() != contentEditableDiv.textContent.trim()) {
+      selectedStory.title = contentEditableDiv.textContent;
+      this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
+        .subscribe({
+          next: () => { console.log("title updated"); },
+          error: () => console.log("error updating title"),
+        });
+    }
   }
 }
