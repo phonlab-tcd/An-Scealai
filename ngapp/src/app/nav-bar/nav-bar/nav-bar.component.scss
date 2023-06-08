@@ -33,20 +33,15 @@
 
 .navBtn {
   color: #FFFFFF;
-  display: block;
   line-height: 2em;
   padding: 0.5em 0.5em;
   text-decoration: none;
-  display: inline-block;
 }
 
 .navBtn:hover {
   color: var(--scealai-light-green);
   line-height: 2em;
-  padding: 0.5em 0.5em;
   text-decoration: none;
-  -webkit-transition: 1s; /* Safari */
-  transition: 1s;
 }
 
 .dropdownMenuButton {
@@ -88,11 +83,6 @@
   position: absolute;
   top: 0px;
   right: 20px;
-}
-
-.profileBtnContainer {
-  display: flex;
-  align-items: center;
 }
 
 .userBtn {
@@ -228,7 +218,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: var(--scealai-green);
     height: 0px;
     transition: all 0.3s ease-in;
@@ -247,10 +237,20 @@
     width: 100%;
   }
 
+  .dropdownMenuButton {
+    padding-left: 0px;
+    padding: 0.5em 0.5em;
+  }
+
+  .userBtn {
+    margin-left: -15px;
+  }
+
   .rightNavBtn {
     position: static;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     padding: 0;
     padding-bottom: 10px;
   }

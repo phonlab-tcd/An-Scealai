@@ -34,7 +34,7 @@ export class NavBarComponent implements OnInit {
    */
   async ngOnInit() {
     await this.ts.initLanguage();
-    
+
     // set the language button styling
     if (this.ts.inIrish()) this.setLanguageButton("ga");
     else this.setLanguageButton("en");
