@@ -8,14 +8,10 @@
   </div>
 </div>
 
-<!-- GRAMMAR ERROR MESSAGE-->
-<div class="grammarMessageBanner">
-  <div class="grammarMessage" [innerHTML]="selectedGrammarSuggestion()"></div>
-</div>
 <div class="selectErrorCheckbox">
   <!-- GRAMMAR ERROR LIST -->
-  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key, tag.value)" [attr.id]="tag.key" >
-    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="errorColorBox" ></div>
+  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key)" [attr.id]="tag.key" >
+    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="circle" ></div>
     <!-- Error name -->
     {{
       ts.l.iso_code == "en"

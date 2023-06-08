@@ -7,7 +7,7 @@ import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
-import clone from "lodash/clone";
+import {clone, isEmpty} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
@@ -26,7 +26,7 @@ import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-ca
 import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
-import { ErrorTag } from "../../lib/grammar-engine/types";
+import { ErrorTag, ErrorTag2HighlightTag } from "../../lib/grammar-engine/types";
 import { MatDrawer } from "@angular/material/sidenav";
 
 Quill.register("modules/imageCompress", ImageCompress);
@@ -165,9 +165,13 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      this.grammarLoaded = false;
+      this.runGrammarCheck();
+    });
+  }
 
-      const textToCheck = this.story.text.replace(/\n/g, " ");
+  runGrammarCheck() {
+    this.grammarLoaded = false;
+    const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
 
       try {
@@ -179,19 +183,12 @@ export class DashboardComponent implements OnInit {
 
             // show error highlighting if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show([tag as HighlightTag]);
+              this.quillHighlighter.show([ErrorTag2HighlightTag(tag)]);
             }
           },
           error: function () {},
           complete: () => {
             if (!this.quillHighlighter) return;
-            // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            // this.quillHighlighter.hideAll();  --> This was part of old dashboard, seems to cause bug in new dashboard
-
-            // and then re-show all the latest error tags if button on
-            if (this.showErrorTags) {
-              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) );
-            }
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
@@ -212,6 +209,15 @@ export class DashboardComponent implements OnInit {
             for (const key of Object.keys(this.grammarErrorsTypeDict)) {
               this.checkBoxes[key] = true;
             }
+
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+
+            // and then re-show all the latest error tags if button on
+            if (this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
+            }
+
             this.grammarLoaded = true;
           },
         });
@@ -227,7 +233,6 @@ export class DashboardComponent implements OnInit {
         }
         console.dir(updateGrammarErrorsError);
       }
-    });
   }
 
   /**
@@ -258,6 +263,7 @@ export class DashboardComponent implements OnInit {
     // shows/hides the grammar errors if grammar drawer is selected
     if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
       this.showErrorTags = true;
+      this.runGrammarCheck();
       this.toggleGrammarTags();
     } else {
       this.showErrorTags = false;
@@ -269,7 +275,7 @@ export class DashboardComponent implements OnInit {
    * Set the current story displayed and calculate word count
    * @param story Story selected from the story drawer
    */
-  setCurrentStory(story) {
+  setCurrentStory(story: Story) {
     this.story = story;
     if (!this.story) return;
     this.storySaved = true;
@@ -484,7 +490,7 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) )
+      ? this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
       : this.quillHighlighter.hideAll();
   }
 
