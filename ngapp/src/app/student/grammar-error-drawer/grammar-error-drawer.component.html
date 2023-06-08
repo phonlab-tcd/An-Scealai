@@ -9,10 +9,9 @@
 </div>
 
 <div class="selectErrorCheckbox">
-  <br>
   <!-- GRAMMAR ERROR LIST -->
   <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key)" [attr.id]="tag.key" >
-    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="errorColorBox" ></div>
+    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="circle" ></div>
     <!-- Error name -->
     {{
       ts.l.iso_code == "en"
