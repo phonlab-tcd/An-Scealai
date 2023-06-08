@@ -9,6 +9,10 @@ export default {
     ga: 'Roghnaigh guth',
     en: 'Voice',
   },
+  rename: {
+    ga: "Athainmnigh",
+    en: "Rename",
+  },
   nemo_friendly_pmg_multidialect: {
     ga: 'Pádraig',
     en: 'Pádraig'

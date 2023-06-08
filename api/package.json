@@ -12,6 +12,7 @@
   },
   "jest": {
     "testTimeout": 10000,
+    "modulePathIgnorePatterns": ["<rootDir>/monitoring/express-status-monitor"],
     "preset": "ts-jest/presets/default",
     "globals": {
       "ts-jest": {

@@ -3,6 +3,9 @@ import { firstValueFrom } from "rxjs";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { RecordingService } from "../../core/services/recording.service";
+import { EventType } from "../../core/models/event";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
@@ -19,12 +22,14 @@ export class StoryDrawerComponent implements OnInit {
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
+  @Output() titleUpdated = new EventEmitter<String>();
 
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
     private storyService: StoryService,
+    private engagement: EngagementService,
+    private recordingService: RecordingService,
     private dialog: MatDialog
   ) {}
 
@@ -42,8 +47,11 @@ export class StoryDrawerComponent implements OnInit {
 
     if (this.stories.length > 0) {
       this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-      this.setStory(this.stories[0]);
-      this.storiesLoadedEmitter.emit(true);
+      this.lastClickedStoryId = this.stories[0]._id;
+      // delay seting the currently selected story until the next tick of the event loop
+      setTimeout(() => {
+        this.setStory(this.stories[0]);
+      });
     }
   }
 
@@ -68,13 +76,14 @@ export class StoryDrawerComponent implements OnInit {
     // set css for selecting a story in the side nav
     let id = story._id;
     let storyElement = document.getElementById(id);
+
     if (storyElement) {
-      // remove css highlighting for currently highlighted recording (from archive)
+      // remove css highlighting for currently highlighted story
       if (this.lastClickedStoryId) {
         document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
       }
       this.lastClickedStoryId = id;
-      // add css highlighting to the newly clicked recording
+      // add css highlighting to the newly clicked story
       storyElement.classList.add("clickedresultCard");
     }
   }
@@ -120,5 +129,85 @@ export class StoryDrawerComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Open a dialog asking the user if they really want to delte their story
+   * Call the function to delete the story if the user clicks 'yes'
+   * @param id story id to be deleted
+   */
+  openDeleteStoryDialog(id: string) {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.delete_story,
+        message: "Are you sure you want to delete this story?",
+        confirmText: this.ts.l.yes,
+        cancelText: this.ts.l.no,
+      },
+      width: "50vh",
+    });
+
+    this.dialogRef.afterClosed().subscribe(async (res) => {
+      this.dialogRef = undefined;
+      if (res) {
+        this.deleteStory(id);
+      }
+    });
+  }
+
+  /**
+   * Delete the given story and any associated recordings
+   * Set the new 'current story' => next one in the list, or first one
+   * if the last story in the list was deleted
+   * @param id story id to be deleted
+   */
+  deleteStory(id: string) {
+    // remove any associated recordings
+    this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
+    this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
+
+    // get index of story to be deleted within story list
+    const storyIndex = this.stories.findIndex((story) => story._id === id);
+
+    // delete the story
+    this.storyService.deleteStory(id).subscribe((_) => {
+      this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
+
+      // reset the story list to empty if list contains only one story
+      // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list 
+      this.stories.splice(storyIndex, 1);
+      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit(null);
+    });
+  }
+
+  /**
+   * Make the div containing the story title editable so the student can
+   * rename their story. Autofocus this editable div after making editable
+   * @param divId id of the div for the story title
+   */
+  makeTitleDivEditable(divId: string) {
+    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+    contentEditableDiv.setAttribute("contenteditable", "true");
+    // auto-focus the div for editing, need to use setTimeout so event is applied
+    window.setTimeout(() => contentEditableDiv.focus(), 0);
+  }
+
+  /**
+   * Remove the editable attribute from the div containing the story title
+   * Save the updated title for the story if changes were made
+   * @param divId id of the div for the story title
+   */
+  saveStoryTitle(divId, selectedStory) {
+    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+    contentEditableDiv.setAttribute("contenteditable", "false");
+    // only update the title if changes have been made
+    if (selectedStory.title.trim() != contentEditableDiv.textContent.trim()) {
+      selectedStory.title = contentEditableDiv.textContent;
+      this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
+        .subscribe({
+          next: () => { this.titleUpdated.emit(selectedStory.title.trim()); },
+          error: () => console.log("error updating title"),
+        });
+    }
   }
 }
