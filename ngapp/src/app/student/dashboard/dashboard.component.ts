@@ -7,7 +7,7 @@ import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
-import {clone} from "lodash";
+import {clone, isEmpty} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
@@ -165,9 +165,13 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      this.grammarLoaded = false;
+      this.runGrammarCheck();
+    });
+  }
 
-      const textToCheck = this.story.text.replace(/\n/g, " ");
+  runGrammarCheck() {
+    this.grammarLoaded = false;
+    const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
 
       try {
@@ -190,7 +194,9 @@ export class DashboardComponent implements OnInit {
 
             // and then re-show all the latest error tags if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
+              const toShow = this.grammarErrors.filter((tag) => this.checkBoxes[tag.type])
+              console.log('to show on complete', toShow);
+              this.quillHighlighter.show(toShow.map(ErrorTag2HighlightTag));
             }
 
             //save any grammar errors with associated sentences to DB
@@ -227,7 +233,6 @@ export class DashboardComponent implements OnInit {
         }
         console.dir(updateGrammarErrorsError);
       }
-    });
   }
 
   /**
@@ -484,7 +489,7 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
+      ? this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
       : this.quillHighlighter.hideAll();
   }
 
