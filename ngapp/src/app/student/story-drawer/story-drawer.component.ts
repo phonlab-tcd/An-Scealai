@@ -175,21 +175,9 @@ export class StoryDrawerComponent implements OnInit {
       this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
 
       // reset the story list to empty if list contains only one story
-      if (this.stories.length === 1) {
-        this.storyEmitter.emit(null);
-        this.stories = [];
-      }
-      // set the current story to the next story in the list if there is one
-      else if (storyIndex < this.stories.length - 1) {
-        let nextStory = this.stories[storyIndex + 1];
-        this.setStory(nextStory);
-        this.stories.splice(storyIndex, 1);
-      }
-      // set the first story as current story if the last story in list was deleted
-      else {
-        this.setStory(this.stories[0]);
-        this.stories.splice(storyIndex, 1);
-      }
+      // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list 
+      this.stories.splice(storyIndex, 1);
+      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit(null);
     });
   }
 
