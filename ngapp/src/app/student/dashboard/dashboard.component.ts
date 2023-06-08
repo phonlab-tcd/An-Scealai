@@ -189,15 +189,6 @@ export class DashboardComponent implements OnInit {
           error: function () {},
           complete: () => {
             if (!this.quillHighlighter) return;
-            // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            this.quillHighlighter.hideAll();
-
-            // and then re-show all the latest error tags if button on
-            if (this.showErrorTags) {
-              const toShow = this.grammarErrors.filter((tag) => this.checkBoxes[tag.type])
-              console.log('to show on complete', toShow);
-              this.quillHighlighter.show(toShow.map(ErrorTag2HighlightTag));
-            }
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
@@ -218,6 +209,15 @@ export class DashboardComponent implements OnInit {
             for (const key of Object.keys(this.grammarErrorsTypeDict)) {
               this.checkBoxes[key] = true;
             }
+
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+
+            // and then re-show all the latest error tags if button on
+            if (this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
+            }
+
             this.grammarLoaded = true;
           },
         });
@@ -263,6 +263,7 @@ export class DashboardComponent implements OnInit {
     // shows/hides the grammar errors if grammar drawer is selected
     if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
       this.showErrorTags = true;
+      this.runGrammarCheck();
       this.toggleGrammarTags();
     } else {
       this.showErrorTags = false;

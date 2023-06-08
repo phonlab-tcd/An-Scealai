@@ -47,8 +47,6 @@ export class QuillHighlighter {
     public show(tags: HighlightTag[]): void {
         if(!tags) return;
 
-        console.log('now we are in show()', tags);
-
         // pre-processing step to merge tags?
         tags = this.mergeTags(tags);
       
