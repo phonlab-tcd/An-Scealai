@@ -2,6 +2,15 @@
   padding-bottom: 20px;
 }
 
+.circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
 .selectErrorCheckbox {
   display: flex;
   flex-direction: column;
@@ -9,6 +18,7 @@
   justify-content: space-around;
   text-align: left;
   padding-left: 10px;
+  padding-top: 10px;
   gap: 1.5rem;
   user-select: none;
 }
