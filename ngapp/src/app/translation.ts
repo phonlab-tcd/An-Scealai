@@ -89,6 +89,12 @@ export default {
   tech_in_scealai: {
     ga: 'Teic. in An Scéalaí',
     en: 'Tech. in An Scéalaí' },
+  apps: {
+    ga: 'Aip',
+    en: 'Apps' },
+  home: {
+    ga: 'Baile',
+    en: 'Home' },
   other_CALL_projects: {
     ga: 'Tionscadail eile FRT in ABAIR',
     en: 'Other CALL projects in ABAIR' },
