@@ -269,7 +269,7 @@ export class DashboardComponent implements OnInit {
    * Set the current story displayed and calculate word count
    * @param story Story selected from the story drawer
    */
-  setCurrentStory(story) {
+  setCurrentStory(story: Story) {
     this.story = story;
     if (!this.story) return;
     this.storySaved = true;

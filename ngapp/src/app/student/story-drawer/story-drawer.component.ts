@@ -22,7 +22,7 @@ export class StoryDrawerComponent implements OnInit {
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
+  @Output() titleUpdated = new EventEmitter<String>();
 
   constructor(
     public ts: TranslationService,
@@ -51,7 +51,6 @@ export class StoryDrawerComponent implements OnInit {
       // delay seting the currently selected story until the next tick of the event loop
       setTimeout(() => {
         this.setStory(this.stories[0]);
-        this.storiesLoadedEmitter.emit(true);
       });
     }
   }
@@ -206,7 +205,7 @@ export class StoryDrawerComponent implements OnInit {
       selectedStory.title = contentEditableDiv.textContent;
       this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
         .subscribe({
-          next: () => { console.log("title updated"); },
+          next: () => { this.titleUpdated.emit(selectedStory.title.trim()); },
           error: () => console.log("error updating title"),
         });
     }
