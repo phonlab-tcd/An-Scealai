@@ -26,12 +26,11 @@
   <!-- links on the nav bar -->
   <div class="nav-links">
     <!-- Home page button-->
-    <a *ngIf="auth.isLoggedIn()" routerLink="" class="navBtn" (click)="toggleSmallMenu(); goToHomePage()" > Home </a>
+    <a *ngIf="auth.isLoggedIn()" routerLink="" class="navBtn" (click)="toggleSmallMenu(); goToHomePage()" > {{ts.l.home}} </a>
 
-    <!-- More Apps -->
-    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenuButton" >
-      Apps
-    </button>
+    <!-- Apps -->
+    <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenuButton" > {{ts.l.apps}} </button>
+    
     <!-- First level: stats, messages, lara, cen sceal, dictogloss, An Bat Mírialta-->
     <mat-menu #moreApps="matMenu">
       <a *ngIf="auth.isLoggedIn() && auth.getUserDetails().role === 'STUDENT'" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToStats(); toggleSmallMenu()" >{{ ts.l.statistics_dashboard }}</a >
