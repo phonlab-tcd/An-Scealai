@@ -29,7 +29,7 @@
 
     <!-- More Apps -->
     <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="moreApps" class="dropdown-toggle dropdownMenuButton" >
-      More apps
+      Apps
     </button>
     <!-- First level: stats, messages, lara, cen sceal, dictogloss, An Bat Mírialta-->
     <mat-menu #moreApps="matMenu">
@@ -75,9 +75,9 @@
     <div class="navBtn rightNavBtn">
       <!-- Language select-->
       <div>
-        <button class="languageBtn" (click)="setLanguage('ga')" id="ga"> GA </button>
+        <button class="languageBtn" (click)="setLanguageButton('ga')" id="ga"> GA </button>
         /
-        <button class="languageBtn" (click)="setLanguage('en')" id="en"> EN </button>
+        <button class="languageBtn" (click)="setLanguageButton('en')" id="en"> EN </button>
       </div>
 
       <!-- sign in button -->

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { HttpClient } from "@angular/common/http";
 import config from "abairconfig";
-import { Observable } from "rxjs";
+import { Observable, firstValueFrom } from "rxjs";
 import trans_pre from "../../translation";
 
 export type MessageKey = keyof typeof trans_pre;
@@ -33,11 +33,11 @@ export class TranslationService {
    * Set language preference from user object once logged in,
    * otherwise init the site to Irish (called in app.component)
    */
-  initLanguage() {
+  async initLanguage() {
     if (this.auth.isLoggedIn()) {
-      this.getUserLanguageCode().subscribe((res) => {
-        this.l = this.getTranslationsFromCode(res.language);
-      });
+      let res = await firstValueFrom(this.getUserLanguageCode());
+      if (res) this.l = this.getTranslationsFromCode(res.language);
+      else this.l = this.getTranslationsFromCode("ga");
     } else {
       this.l = this.getTranslationsFromCode("ga");
     }

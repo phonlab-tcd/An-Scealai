@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { NotificationService, Notification, } from "app/core/services/notification-service.service";
 import { TranslationService } from "app/core/services/translation.service";
@@ -13,6 +13,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 })
 export class NavBarComponent implements OnInit {
   smallMenuOpen: boolean = false;
+  insideNotificationDiv: boolean = false;
   notificationsShown: boolean = false;
   notifications: Notification[] = [];
   totalNumOfMessages: number = 0;
@@ -31,10 +32,13 @@ export class NavBarComponent implements OnInit {
   /**
    * Set the page language and get any notifications
    */
-  ngOnInit() {
-    this.ts.initLanguage();
-    // default set the page to Irish
-    this.setLanguage("ga");
+  async ngOnInit() {
+    await this.ts.initLanguage();
+    
+    // set the language button styling
+    if (this.ts.inIrish()) this.setLanguageButton("ga");
+    else this.setLanguageButton("en");
+
     // subscribe to message emitter
     this.notificationSerivce.notificationEmitter.subscribe(
       (res: Notification[]) => {
@@ -118,7 +122,7 @@ export class NavBarComponent implements OnInit {
    * Set the current language and apply CSS to language code in nav bar
    * @param languageCode code for selected language
    */
-  setLanguage(languageCode: "en" | "ga") {
+  setLanguageButton(languageCode: "en" | "ga") {
     this.ts.setLanguage(languageCode);
 
     // remove css highlighting for currently selected langauge
@@ -128,5 +132,20 @@ export class NavBarComponent implements OnInit {
     this.currentLanguageButtonId = languageCode;
     // add css highlighting to the newly clicked language
     document.getElementById(languageCode).classList.add("languageSelected");
+  }
+
+  // Keep track of where the user clicks
+  @HostListener("click")
+  clickInside() {
+    this.insideNotificationDiv = true;
+  }
+
+  // Hide the notification container if user clicks on the page
+  @HostListener("document:click")
+  clickout() {
+    if (!this.insideNotificationDiv) {
+      this.notificationsShown = false;
+    }
+    this.insideNotificationDiv = false;
   }
 }
