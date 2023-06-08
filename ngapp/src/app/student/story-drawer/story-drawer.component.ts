@@ -23,6 +23,7 @@ export class StoryDrawerComponent implements OnInit {
   @Output() storyEmitter = new EventEmitter<Story>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
   @Output() titleUpdated = new EventEmitter<String>();
+  @Output() storiesLoaded = new EventEmitter<Boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -53,6 +54,8 @@ export class StoryDrawerComponent implements OnInit {
         this.setStory(this.stories[0]);
       });
     }
+    this.storiesLoaded.emit(true);
+    console.log("storire laoded")
   }
 
   /**
@@ -140,7 +143,7 @@ export class StoryDrawerComponent implements OnInit {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.delete_story,
-        message: "Are you sure you want to delete this story?",
+        message: this.ts.l.are_you_sure_delete_story,
         confirmText: this.ts.l.yes,
         cancelText: this.ts.l.no,
       },

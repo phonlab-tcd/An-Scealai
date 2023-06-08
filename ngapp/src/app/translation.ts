@@ -1398,6 +1398,9 @@ export default {
   are_you_sure: {
     ga: 'An bhfuil tú cinnte go bhfuil tú ag iarraidh do chuntas a scrios?',
     en: 'Are you sure you want to delete your account?' },
+  are_you_sure_delete_story: {
+    ga: 'An bhfuil tú cinnte gur mhaith leat an scéal seo a scriosadh?',
+    en: 'Are you sure you want to delete this story?' },
   this_includes_story_data: {
     ga: ' Tá na scéalta agus na sonraí staitistiúla go léir san áireamh leis seo',
     en: 'This includes all saved stories and statistical data' },
