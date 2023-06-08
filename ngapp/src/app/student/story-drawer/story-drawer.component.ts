@@ -168,7 +168,7 @@ export class StoryDrawerComponent implements OnInit {
     this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
 
     // get index of story to be deleted within story list
-    let storyIndex = this.stories.findIndex((story) => story._id === id);
+    const storyIndex = this.stories.findIndex((story) => story._id === id);
 
     // delete the story
     this.storyService.deleteStory(id).subscribe((_) => {
