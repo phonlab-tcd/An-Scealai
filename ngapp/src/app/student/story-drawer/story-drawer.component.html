@@ -29,11 +29,11 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="deleteStory(story._id)">
+            <button mat-menu-item (click)="openDeleteStoryDialog(story._id)">
               <mat-icon>delete</mat-icon>
               <span>{{ts.l.delete}}</span>
             </button>
-            <button mat-menu-item (click)="makeDivEditable(i)">
+            <button mat-menu-item (click)="makeTitleDivEditable(i)">
               <mat-icon>create</mat-icon>
               <span>{{ ts.l.rename }}</span>
             </button>
