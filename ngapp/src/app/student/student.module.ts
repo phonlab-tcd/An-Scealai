@@ -5,9 +5,10 @@ import { StudentRoutingModule } from './student-routing.module';
 import { BookContentsComponent } from './book-contents/book-contents.component';
 import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.component';
 import { DashboardOldComponent } from './dashboard-old/dashboard-old.component';
-import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { SynthVoiceSelectComponent } from 'app/student/synth-voice-select/synth-voice-select.component';
 import { RecordingComponent } from './recording/recording.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
+import { SynthItemComponent } from './synth-item/synth-item.component';
 
 import { SpinnerModule } from '../spinner/spinner.module';
 
@@ -36,6 +37,7 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     SynthesisPlayerComponent,
     SynthVoiceSelectComponent,
     SynthesisComponent,
+    SynthItemComponent,
     RecordingComponent,
     FilterPipe,
     SafeHtmlPipe,
