@@ -22,7 +22,7 @@ export class StoryDrawerComponent implements OnInit {
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
   @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() storiesLoadedEmitter = new EventEmitter<Boolean>();
+  @Output() titleUpdated = new EventEmitter<String>();
 
   constructor(
     public ts: TranslationService,
@@ -47,8 +47,11 @@ export class StoryDrawerComponent implements OnInit {
 
     if (this.stories.length > 0) {
       this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
-      this.setStory(this.stories[0]);
-      this.storiesLoadedEmitter.emit(true);
+      this.lastClickedStoryId = this.stories[0]._id;
+      // delay seting the currently selected story until the next tick of the event loop
+      setTimeout(() => {
+        this.setStory(this.stories[0]);
+      });
     }
   }
 
@@ -73,6 +76,7 @@ export class StoryDrawerComponent implements OnInit {
     // set css for selecting a story in the side nav
     let id = story._id;
     let storyElement = document.getElementById(id);
+
     if (storyElement) {
       // remove css highlighting for currently highlighted story
       if (this.lastClickedStoryId) {
@@ -128,16 +132,51 @@ export class StoryDrawerComponent implements OnInit {
   }
 
   /**
+   * Open a dialog asking the user if they really want to delte their story
+   * Call the function to delete the story if the user clicks 'yes'
+   * @param id story id to be deleted
+   */
+  openDeleteStoryDialog(id: string) {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.delete_story,
+        message: "Are you sure you want to delete this story?",
+        confirmText: this.ts.l.yes,
+        cancelText: this.ts.l.no,
+      },
+      width: "50vh",
+    });
+
+    this.dialogRef.afterClosed().subscribe(async (res) => {
+      this.dialogRef = undefined;
+      if (res) {
+        this.deleteStory(id);
+      }
+    });
+  }
+
+  /**
    * Delete the given story and any associated recordings
+   * Set the new 'current story' => next one in the list, or first one
+   * if the last story in the list was deleted
    * @param id story id to be deleted
    */
   deleteStory(id: string) {
-    this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
+    // remove any associated recordings
     this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
     this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
-    // update the current story list by removing the deleted story
+
+    // get index of story to be deleted within story list
+    const storyIndex = this.stories.findIndex((story) => story._id === id);
+
+    // delete the story
     this.storyService.deleteStory(id).subscribe((_) => {
-      this.stories = this.stories.filter((obj) => obj._id !== id);
+      this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
+
+      // reset the story list to empty if list contains only one story
+      // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list 
+      this.stories.splice(storyIndex, 1);
+      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit(null);
     });
   }
 
@@ -146,7 +185,7 @@ export class StoryDrawerComponent implements OnInit {
    * rename their story. Autofocus this editable div after making editable
    * @param divId id of the div for the story title
    */
-  updateStoryTitle(divId) {
+  makeTitleDivEditable(divId: string) {
     const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
     contentEditableDiv.setAttribute("contenteditable", "true");
     // auto-focus the div for editing, need to use setTimeout so event is applied
@@ -166,7 +205,7 @@ export class StoryDrawerComponent implements OnInit {
       selectedStory.title = contentEditableDiv.textContent;
       this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
         .subscribe({
-          next: () => { console.log("title updated"); },
+          next: () => { this.titleUpdated.emit(selectedStory.title.trim()); },
           error: () => console.log("error updating title"),
         });
     }

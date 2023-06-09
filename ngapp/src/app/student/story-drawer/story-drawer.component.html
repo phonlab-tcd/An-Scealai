@@ -19,21 +19,21 @@
       <!-- story entry-->
       <div class="contentSection" [attr.id]="story._id">
         <!-- story title-->
-        <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)">
+        <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)" (keydown.enter)="saveStoryTitle(i, story)">
           {{ story?.title }}
         </div>
         <!-- date and menu icon-->
         <div class="contentsDate">
           {{ story.lastUpdated | date : "d/M/yy" }}
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="deleteStory(story._id)">
+            <button mat-menu-item (click)="openDeleteStoryDialog(story._id)">
               <mat-icon>delete</mat-icon>
               <span>{{ts.l.delete}}</span>
             </button>
-            <button mat-menu-item (click)="updateStoryTitle(i)">
+            <button mat-menu-item (click)="makeTitleDivEditable(i)">
               <mat-icon>create</mat-icon>
               <span>{{ ts.l.rename }}</span>
             </button>
