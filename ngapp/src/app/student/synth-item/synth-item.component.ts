@@ -79,9 +79,11 @@ export class SynthItemComponent {
 // Imagine this is in another file
 
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [SynthItemComponent],
+  imports: [CommonModule],
   exports: [SynthItemComponent]  
 })
 export class SynthItemModule {}
