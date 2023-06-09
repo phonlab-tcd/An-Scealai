@@ -128,13 +128,21 @@
 .menuButton {
     float:left;
     padding-left: 10px;
-    padding-top: 5px;
-    transform: scale(2);
+    padding-top: 7px;
+    transform: scale(1.5);
     z-index: 100;
 }
 
 .menuButton:hover {
     cursor: pointer;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
 }
 
 .newStoryMessage {

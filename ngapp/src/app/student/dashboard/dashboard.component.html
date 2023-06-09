@@ -137,7 +137,7 @@
   <div class="storyContainer">
     <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
       <!-- STORY DRAWER BUTTON-->
-      <mat-icon class="menuButton" (click)="storyDrawer.toggle()" >menu</mat-icon >
+      <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()">menu</span>
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor
         [modules]="quillToolbar"
