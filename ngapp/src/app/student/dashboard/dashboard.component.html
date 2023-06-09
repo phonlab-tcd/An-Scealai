@@ -8,6 +8,7 @@
       size="{{ updatedTitle.length }}"
       [(ngModel)]="updatedTitle"
       (blur)="updateStoryTitle()"
+      (keydown.enter)="updateStoryTitle()"
     />
     <span *ngIf="!storySaved">*</span>
     <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
@@ -28,15 +29,10 @@
 </div>
 
 <!-- STORY OPTIONS TOOL BAR -->
-<div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="story">
-  <div class="optionsBtn">
-    <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
-    <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
-  </div>
+<div class="optionsBtnContainer" *ngIf="story">
 
   <!-- SPEECH TO TEXT-->
   <div
-    *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     (click)="dontToggle = true; speakStory()"
     [ngClass]="{ disableDiv: isTranscribing }"
@@ -52,7 +48,7 @@
   </div>
 
   <!-- DOWNLOAD -->
-  <div *ngIf="showOptions" style="display: flex" (click)="dontToggle = true">
+  <div style="display: flex" (click)="dontToggle = true">
     <button
       (click)="downloadStory()"
       style="text-decoration: none"
@@ -67,7 +63,6 @@
 
   <!-- RECORDINGS -->
   <div
-    *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     (click)="dontToggle = true; goToRecording()"
   >
@@ -77,7 +72,7 @@
 
   <!-- FEEDBACK -->
   <div
-    *ngIf="showOptions && hasFeedback"
+    *ngIf="hasFeedback"
     class="optionsBtn optionsPopupBtn"
     [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'feedback'"
     (click)="dontToggle = true; toggleRightDrawer('feedback')"
@@ -89,7 +84,6 @@
 
   <!-- SYNTHESIS -->
   <div
-    *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     (click)="dontToggle = true; synthesisPlayer.toggleHidden()"
   >
@@ -99,7 +93,6 @@
 
   <!-- GRAMMAR CHECK -->
   <div
-    *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'grammar'"
     (click)="dontToggle = true; toggleRightDrawer('grammar')"
@@ -110,7 +103,6 @@
 
   <!-- DICTIONARY -->
   <div
-    *ngIf="showOptions"
     class="optionsBtn optionsPopupBtn"
     [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'dictionary'"
     (click)="dontToggle = true; toggleRightDrawer('dictionary')"
