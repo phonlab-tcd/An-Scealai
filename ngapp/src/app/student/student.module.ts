@@ -5,7 +5,7 @@ import { StudentRoutingModule } from './student-routing.module';
 import { BookContentsComponent } from './book-contents/book-contents.component';
 import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.component';
 import { DashboardOldComponent } from './dashboard-old/dashboard-old.component';
-import { SynthVoiceSelectComponent } from 'app/synth-voice-select/synth-voice-select.component';
+import { SynthVoiceSelectComponent } from 'app/student/synth-voice-select/synth-voice-select.component';
 import { RecordingComponent } from './recording/recording.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
 
@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { SynthItemModule } from './synth-item/synth-item.component';
 
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -53,6 +55,8 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
+    SynthItemModule,
     QuillModule.forRoot({
       customOptions: [{
               import: 'formats/font',

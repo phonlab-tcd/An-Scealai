@@ -207,7 +207,7 @@ export class DashboardOldComponent implements OnInit {
             
             // show error highlighting if button on
             if(this.showErrorTags) {
-              this.quillHighlighter.show([tag as HighlightTag]);
+              // this.quillHighlighter.show([tag as HighlightTag]);
             }
           },
           error: function () {},
@@ -217,7 +217,7 @@ export class DashboardOldComponent implements OnInit {
             this.quillHighlighter.hideAll();
             // and then re-show all the latest error tags if button on
             if(this.showErrorTags) {
-              this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+              // this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
             }
             
             //save any grammar errors with associated sentences to DB
@@ -377,7 +377,7 @@ export class DashboardOldComponent implements OnInit {
   /* Apply error highlighting to all or none of the errors */
   setAllCheckBoxes() {
     if(this.checkBoxes['showAll']) {
-      this.quillHighlighter.show(this.grammarErrors);
+      // this.quillHighlighter.show(this.grammarErrors);
     }
     else {
       this.quillHighlighter.hideAll();
@@ -405,10 +405,10 @@ export class DashboardOldComponent implements OnInit {
 
   /* Show or hide error tags */
   async toggleGrammarTags() {
-      this.showErrorTags ? 
-        this.quillHighlighter.hideAll() :
-        this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
-      this.showErrorTags = !this.showErrorTags;
+      // this.showErrorTags ? 
+      //   this.quillHighlighter.hideAll() :
+      //   this.quillHighlighter.show(this.grammarErrors.filter(tag => this.checkBoxes[tag.type] || this.checkBoxes['showAll']));
+      // this.showErrorTags = !this.showErrorTags;
   }
   
   /**

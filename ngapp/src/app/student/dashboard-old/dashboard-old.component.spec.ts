@@ -4,16 +4,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SynthesisPlayerComponent } from '../synthesis-player/synthesis-player.component';
-import { DashboardComponent } from './dashboard-old.component';
+import { DashboardOldComponent } from './dashboard-old.component';
 import { By } from '@angular/platform-browser';
 import { QuillModule } from 'ngx-quill';
 import { TranslationService } from '../../core/services/translation.service';
 import { Story } from '../../core/models/story';
 import { MatDialog } from '@angular/material/dialog';
 
-describe('DashboardComponent', () => {
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+describe('DashboardOldComponent', () => {
+  let component: DashboardOldComponent;
+  let fixture: ComponentFixture<DashboardOldComponent>;
   const qm = QuillModule.forRoot();
 
   beforeEach(()=>TestBed
@@ -25,14 +25,14 @@ describe('DashboardComponent', () => {
         CommonModule,
         FormsModule,
       ],
-      declarations: [ DashboardComponent, SynthesisPlayerComponent ],
+      declarations: [ DashboardOldComponent, SynthesisPlayerComponent ],
       providers: [ TranslationService, ...qm.providers, { provide: MatDialog, useValue: {} }]
     })
     .compileComponents()
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(DashboardOldComponent);
     component = fixture.componentInstance;
     component.ts.initLanguage();
     fixture.detectChanges();

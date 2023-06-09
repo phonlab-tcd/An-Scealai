@@ -123,11 +123,13 @@
 <!-- BODY CONTAINER-->
 <mat-drawer-container class="bodyContainer" autosize>
   <!-- STORY LIST DRAWER-->
-  <mat-drawer #storyDrawer class="storyListDrawer" mode="side" opened="true">
+  <mat-drawer #storyDrawer class="storyListDrawer" mode="side" [opened]="!story && storiesLoaded">
     <app-story-drawer
       #storyDrawer
       (storyEmitter)="setCurrentStory($event)"
       (hasFeedback)="hasFeedback = $event"
+      (titleUpdated)="updatedTitle = $event"
+      (storiesLoaded)="storiesLoaded = $event"
     ></app-story-drawer>
   </mat-drawer>
 
@@ -135,7 +137,7 @@
   <div class="storyContainer">
     <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="story; else newStoryMessage" >
       <!-- STORY DRAWER BUTTON-->
-      <mat-icon class="menuButton" (click)="storyDrawer.toggle()" >menu</mat-icon >
+      <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()">menu</span>
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor
         [modules]="quillToolbar"
@@ -150,7 +152,10 @@
 
     <!-- NO STORIES MESSAGE-->
     <ng-template #newStoryMessage>
-      <div class="newStoryMessage">
+      <div *ngIf="!storiesLoaded">
+        <grid-spinner></grid-spinner>
+      </div>
+      <div *ngIf="storiesLoaded" class="newStoryMessage">
         Click on the '+' button to create your first story!
       </div>
     </ng-template>
@@ -174,6 +179,7 @@
       [quillHighlighter]="quillHighlighter"
       [grammarLoaded]="grammarLoaded"
       [grammarErrorsTypeDict]="grammarErrorsTypeDict"
+      [grammarErrors]="grammarErrors"
       [checkBoxes]="checkBoxes"
       (closeGrammarEmitter)="toggleRightDrawer('grammar')"
     ></app-grammar-error-drawer>
