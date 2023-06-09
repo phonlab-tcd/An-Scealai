@@ -1,8 +1,9 @@
-import { Component, Input, ViewChild, ElementRef} from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { SynthesisService } from "app/core/services/synthesis.service";
 import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
 import { SynthItem } from 'app/core/models/synth-item';
 import { EngagementService } from 'app/core/services/engagement.service';
+
 
 @Component({
   selector: 'app-synth-item',
@@ -74,3 +75,13 @@ export class SynthItemComponent {
     return !!this.synthItem && !!this.synthItem.audioUrl;
   }
 }
+
+// Imagine this is in another file
+
+import { NgModule } from '@angular/core';
+
+@NgModule({
+  declarations: [SynthItemComponent],
+  exports: [SynthItemComponent]  
+})
+export class SynthItemModule {}
