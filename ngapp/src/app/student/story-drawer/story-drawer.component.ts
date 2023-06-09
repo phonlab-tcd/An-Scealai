@@ -55,7 +55,6 @@ export class StoryDrawerComponent implements OnInit {
       });
     }
     this.storiesLoaded.emit(true);
-    console.log("storire laoded")
   }
 
   /**
