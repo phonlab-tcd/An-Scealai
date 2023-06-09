@@ -1,11 +1,10 @@
 <span class="flex height center">
-    <span (click)="refresh();" class="flex clickable height reload left">
-      <span>
-        &#8635;
-      </span>
+  <span (click)="refresh();" class="flex clickable height reload left">
+    <span>
+      &#8635;
     </span>
+  </span>
   <span
-    *ngIf=synthItem
     (click)=play()
     class="
       flex
@@ -14,7 +13,7 @@
       right
       "
     style="display: flex;">
-      <span *ngIf="synthItem.audioUrl; else loading" style="display: flex;">
+      <span style="display: flex;">
         <div style="width: 1rem; height: 1rem;"></div>
         <span>&ensp;{{synthItem.text}}</span>
         <audio id="synthAudio" #audioElement>
