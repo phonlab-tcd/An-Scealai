@@ -90,7 +90,7 @@ export default {
     ga: 'Teic. in An Scéalaí',
     en: 'Tech. in An Scéalaí' },
   apps: {
-    ga: 'Aip',
+    ga: 'Feidhmchláir',
     en: 'Apps' },
   home: {
     ga: 'Baile',
