@@ -134,7 +134,7 @@
   </mat-drawer>
 
   <!-- STORY WRITING CONTAINER-->
-  <div class="storyContainer">
+  <div class="storyContainer" >
     <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="storiesLoaded && story; else newStoryMessage" >
       <!-- STORY DRAWER BUTTON-->
       <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()">menu</span>
