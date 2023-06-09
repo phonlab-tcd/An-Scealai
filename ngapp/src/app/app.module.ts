@@ -30,6 +30,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
+import { SynthItemModule } from './student/synth-item/synth-item.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
@@ -69,7 +70,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         StatsDashboardComponent,
         ClassroomSelectorComponent,
         DictoglossComponent,
-        SelectQuizDialogComponent,
+        SelectQuizDialogComponent
     ],
     imports: [
         NavBarModule,
@@ -103,7 +104,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         GrammarPieChartModule,
         DictionaryLookupsModule,
         GrammarErrorTimeModule,
-        PdfViewerModule
+        PdfViewerModule,
+        SynthItemModule
     ],
     providers: [
         StoryService,

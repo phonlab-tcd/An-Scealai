@@ -8,7 +8,6 @@ import { DashboardOldComponent } from './dashboard-old/dashboard-old.component';
 import { SynthVoiceSelectComponent } from 'app/student/synth-voice-select/synth-voice-select.component';
 import { RecordingComponent } from './recording/recording.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
-import { SynthItemComponent } from './synth-item/synth-item.component';
 
 import { SpinnerModule } from '../spinner/spinner.module';
 
@@ -17,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { SynthItemModule } from './synth-item/synth-item.component';
 
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -37,7 +37,6 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     SynthesisPlayerComponent,
     SynthVoiceSelectComponent,
     SynthesisComponent,
-    SynthItemComponent,
     RecordingComponent,
     FilterPipe,
     SafeHtmlPipe,
@@ -57,6 +56,7 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    SynthItemModule,
     QuillModule.forRoot({
       customOptions: [{
               import: 'formats/font',
