@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DictionaryDrawerComponent } from './dictionary-drawer.component';
 
@@ -8,6 +9,7 @@ describe('DictionaryDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule ],
       declarations: [ DictionaryDrawerComponent ]
     })
     .compileComponents();
