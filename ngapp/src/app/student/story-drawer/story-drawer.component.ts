@@ -52,9 +52,9 @@ export class StoryDrawerComponent implements OnInit {
       // delay seting the currently selected story until the next tick of the event loop
       setTimeout(() => {
         this.setStory(this.stories[0]);
+        this.storiesLoaded.emit(true);
       });
     }
-    this.storiesLoaded.emit(true);
   }
 
   /**
