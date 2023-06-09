@@ -21,7 +21,11 @@ export class SynthItemComponent {
     private synth: SynthesisService,
     private synth_bank: SynthesisBankService,
     private engagement: EngagementService,
-  ) {}
+  ) { }
+
+  ngOnInit() {
+    console.log('synth item constructed', this.i);
+  }
 
   /**
    * Play the synthesised audio of the synth item
