@@ -9,7 +9,7 @@ const LOG_DIRECTORY = 'monitoring/clientside_error_logs';
 module.exports = makeEndpoints({
   post: {
     '/clientsideError': async (req, res) => {
-      const logText = [getCurrentTimestamp(), req.body.route, JSON.stringify(req.body.message)].join(',');
+      const logText = [getCurrentTimestamp(), req.body.route, JSON.stringify(req.body.message), '\n'].join(',');
       try {
         await appendTextToCSV(logText, LOG_DIRECTORY);
         res.status(200).json({
