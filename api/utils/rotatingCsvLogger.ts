@@ -57,8 +57,15 @@ async function moveOnToNextCSVFile(log_directory: string) {
     cleanupOldFiles(log_directory);
 }
 
-async function appendTextToCSV(text: string, log_directory: string): Promise<void> {
+async function appendTextToCSV(things: any[], log_directory: string): Promise<void> {
+    function stringify(a) {
+        return JSON.stringify(a);
+    }
+
+    const text = `${things.map(stringify).join(',')}\n`;
+
     let currentFilePath = path.join(log_directory, 'current.csv');
+
     if (!await fileExists(currentFilePath)) {
         await fs.mkdir(log_directory, {recursive: true});
         await fs.writeFile(currentFilePath, '');

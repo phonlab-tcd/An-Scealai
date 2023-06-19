@@ -25,7 +25,7 @@ export default function logAPICall(req: Request, res: Response, next: NextFuncti
         const reqBodyCsv = `"${reqBody.replace(/"/g, '""')}"`;
         const endpointUrl = `${res.req.baseUrl}${req.route ? req.route.path : ''}`;
         const clientIp = (req as any).clientIp;
-        const log = [getCurrentTimestamp(), clientIp, endpointUrl, req.originalUrl, statusCode, reqBodyCsv, latency, "\n"].join(",");
+        const log = [getCurrentTimestamp(), clientIp, endpointUrl, req.originalUrl, statusCode, reqBodyCsv, latency];
         await appendTextToCSV(log, LOG_DIRECTORY);
     });
     next();

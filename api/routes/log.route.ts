@@ -6,19 +6,22 @@ import {appendTextToCSV} from '../utils/rotatingCsvLogger';
 
 const LOG_DIRECTORY = 'monitoring/clientside_error_logs';
 
+async function clientsideErrorHandler(req, res) {
+
+  console.log(req.url);
+  const logThings = [getCurrentTimestamp(), req.body.route, req.body.message];
+  try {
+    await appendTextToCSV(logThings, LOG_DIRECTORY);
+    res.status(200).json({
+      success: true,
+    })
+  } catch(e) {
+    throw new API500Error("Failed to write clientside error log");
+  }
+}
+
 module.exports = makeEndpoints({
   post: {
-    '/clientsideError': async (req, res) => {
-      const logText = [getCurrentTimestamp(), req.body.route, JSON.stringify(req.body.message), '\n'].join(',');
-      try {
-        await appendTextToCSV(logText, LOG_DIRECTORY);
-        res.status(200).json({
-          success: true,
-          logText: logText
-        })
-      } catch(e) {
-        throw new API500Error("Failed to write clientside error log");
-      }
-    }
+    '/clientsideError': clientsideErrorHandler,
   },
 });
