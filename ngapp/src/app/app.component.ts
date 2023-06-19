@@ -33,7 +33,7 @@ export class AppComponent {
       const error = arguments[1];
       log.clientsideError(route, error.message).subscribe();
     
-      consoleError.apply(this, arguments);
+      consoleError.apply(this, ...arguments);
     })(console.error);
   }
 }
