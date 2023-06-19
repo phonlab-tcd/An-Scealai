@@ -17,19 +17,7 @@ export class AppComponent {
     private _router: Router,
     private log: LogService
   ) {
-    const originalConsoleError = console.error;
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this._router.events.subscribe((routeEvent) => {
-      if (routeEvent instanceof NavigationEnd) {
-        console.error = (consoleError => function () {
-          const route = routeEvent.urlAfterRedirects
-          const error = arguments[1];
-          log.clientsideError(route, error.message).subscribe();
-        
-          consoleError.apply(this, arguments);
-        })(originalConsoleError);
-      }
-    });
     // add google analytics tag
     const navEndEvents = this._router.events.pipe(
       filter((event) => event instanceof NavigationEnd)
@@ -39,5 +27,13 @@ export class AppComponent {
         page_path: event.urlAfterRedirects,
       });
     });
+
+    console.error = (consoleError => function () {
+      const route = window.location.hash
+      const error = arguments[1];
+      log.clientsideError(route, error.message).subscribe();
+    
+      consoleError.apply(this, arguments);
+    })(console.error);
   }
 }
