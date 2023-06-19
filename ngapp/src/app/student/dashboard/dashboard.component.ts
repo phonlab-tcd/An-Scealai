@@ -7,7 +7,7 @@ import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import ImageCompress from "quill-image-compress";
-import clone from "lodash/clone";
+import {clone, isEmpty} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
@@ -16,7 +16,7 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { SynthesisPlayerComponent } from 'app/student/synthesis-player/synthesis-player.component';
+import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
@@ -26,7 +26,7 @@ import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-ca
 import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
-import { ErrorTag } from "../../lib/grammar-engine/types";
+import { ErrorTag, ErrorTag2HighlightTag } from "../../lib/grammar-engine/types";
 import { MatDrawer } from "@angular/material/sidenav";
 
 Quill.register("modules/imageCompress", ImageCompress);
@@ -73,13 +73,14 @@ export class DashboardComponent implements OnInit {
   dontToggle = false;
   feedbackVisibile: false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
-  selectedDrawer: "grammar" | "dictionary" | "feedback";
+  rightDrawerOpened: boolean = false;
+  selectedDrawer: "grammar" | "dictionary" | "feedback" = "grammar";
 
   // WORD COUNT
   words: string[] = [];
   wordCount = 0;
 
-  @ViewChild('mySynthesisPlayer')
+  @ViewChild("mySynthesisPlayer")
   synthesisPlayer: SynthesisPlayerComponent;
 
   textUpdated = new Subject<void | string>();
@@ -164,9 +165,13 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      this.grammarLoaded = false;
+      this.runGrammarCheck();
+    });
+  }
 
-      const textToCheck = this.story.text.replace(/\n/g, " ");
+  runGrammarCheck() {
+    this.grammarLoaded = false;
+    const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
 
       try {
@@ -178,19 +183,12 @@ export class DashboardComponent implements OnInit {
 
             // show error highlighting if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show([tag as HighlightTag]);
+              this.quillHighlighter.show([ErrorTag2HighlightTag(tag)]);
             }
           },
           error: function () {},
           complete: () => {
             if (!this.quillHighlighter) return;
-            // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            // this.quillHighlighter.hideAll();  --> This was part of old dashboard, seems to cause bug in new dashboard
-
-            // and then re-show all the latest error tags if button on
-            if (this.showErrorTags) {
-              this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) );
-            }
 
             //save any grammar errors with associated sentences to DB
             if (this.grammarErrors) {
@@ -211,6 +209,15 @@ export class DashboardComponent implements OnInit {
             for (const key of Object.keys(this.grammarErrorsTypeDict)) {
               this.checkBoxes[key] = true;
             }
+
+            // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            this.quillHighlighter.hideAll();
+
+            // and then re-show all the latest error tags if button on
+            if (this.showErrorTags) {
+              this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
+            }
+
             this.grammarLoaded = true;
           },
         });
@@ -226,33 +233,41 @@ export class DashboardComponent implements OnInit {
         }
         console.dir(updateGrammarErrorsError);
       }
-    });
   }
 
   /**
    * Toggles the right drawer open/closed
-   * Drawer content is set by 'selectedContent' variable which is determined in the HTML
+   * Drawer content is set by 'selectedDrawer' variable which is determined in the HTML
    * Hides/shows the grammar highlighting if the grammar drawer is selected
    * @param selectedContent Indicates which component to be injected into the drawer
    */
-  toggleRightDrawer(selectedContent) {
-    // set variable that displays selected component inside drawer
-    this.selectedDrawer = selectedContent;
-
-    // close drawer if open, hide grammar errors if showing
-    if (this.rightDrawer.opened) {
-      this.rightDrawer.close();
-      if (this.showErrorTags) {
-        this.showErrorTags = false;
-        this.toggleGrammarTags();
-      }
+  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback') {
+    if (this.rightDrawerOpened) {
+      // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
+      // once to open the dictionary, and clicked 'dictionary' again to close the drawer
+      // otherwise the drawer stays open and the content changes to whichever other button the user clicked
+      // (i.e. if the user clicked 'dictionary' and then 'grammar check', the drawer doesn't close but content is updated)
+      if (this.selectedDrawer === selectedDrawer) {
+        this.rightDrawer.close();
+        this.rightDrawerOpened = false;
+      } 
     } else {
-      // open drawer, show grammar errors if grammar drawer selected
+      // open the drawer
       this.rightDrawer.open();
-      if (this.selectedDrawer == "grammar") {
-        this.showErrorTags = true;
-        this.toggleGrammarTags();
-      }
+      this.rightDrawerOpened = true;
+    }
+
+    // sets the variable used to display the selected component in the drawer
+    this.selectedDrawer = selectedDrawer;
+
+    // shows/hides the grammar errors if grammar drawer is selected
+    if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
+      this.showErrorTags = true;
+      this.runGrammarCheck();
+      this.toggleGrammarTags();
+    } else {
+      this.showErrorTags = false;
+      this.toggleGrammarTags();
     }
   }
 
@@ -260,7 +275,7 @@ export class DashboardComponent implements OnInit {
    * Set the current story displayed and calculate word count
    * @param story Story selected from the story drawer
    */
-  setCurrentStory(story) {
+  setCurrentStory(story: Story) {
     this.story = story;
     if (!this.story) return;
     this.storySaved = true;
@@ -475,7 +490,7 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]) )
+      ? this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
       : this.quillHighlighter.hideAll();
   }
 

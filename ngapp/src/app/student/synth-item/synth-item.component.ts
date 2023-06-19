@@ -1,8 +1,9 @@
-import { Component, Input, ViewChild, ElementRef} from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { SynthesisService } from "app/core/services/synthesis.service";
 import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
 import { SynthItem } from 'app/core/models/synth-item';
 import { EngagementService } from 'app/core/services/engagement.service';
+
 
 @Component({
   selector: 'app-synth-item',
@@ -21,7 +22,7 @@ export class SynthItemComponent {
     private synth: SynthesisService,
     private synth_bank: SynthesisBankService,
     private engagement: EngagementService,
-  ) {}
+  ) { }
 
   /**
    * Play the synthesised audio of the synth item
@@ -74,3 +75,15 @@ export class SynthItemComponent {
     return !!this.synthItem && !!this.synthItem.audioUrl;
   }
 }
+
+// Imagine this is in another file
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+  declarations: [SynthItemComponent],
+  imports: [CommonModule],
+  exports: [SynthItemComponent]  
+})
+export class SynthItemModule {}

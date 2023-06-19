@@ -15,16 +15,9 @@ export default async function oldestFileInDir(dir): Promise<PathLike | false> {
             time: await fs.stat(path.join(dir,fileName)).then(stats=>stats.mtime.getTime()),
         };
     }));
-    const oldestName = fileTimes.reduce((a, b) => a.time < b.time ? a : b, Number.MAX_VALUE).name
-    return path.join(dir,oldestName);
-}
-
-function seekOldest(arr: {name: string, time: number}[]): string {
-    let oldest = arr[0];
-    for (const next of arr) {
-        if(next.time < oldest.time) {
-            oldest = next;
-        }
+    if(!fileTimes[0]) {
+        return false;
     }
-    return oldest.name;
+    const oldestName = fileTimes.reduce((a, b) => a.time < b.time ? a : b, fileTimes[0]).name
+    return path.join(dir,oldestName);
 }

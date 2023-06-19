@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { BackendMonitorComponent } from './backend-monitor.component';
 
@@ -8,6 +9,7 @@ describe('BackendMonitorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [ BackendMonitorComponent ]
     })
     .compileComponents();
