@@ -152,10 +152,17 @@ export class StatsDashboardComponent implements OnInit {
   */
   async getWordCounts(studentIds:string[], startDate:string, endDate:string) {
     const data = {};
-    await Promise.all(studentIds.map(async (id) =>
-      data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
-      ((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount)
-    ));
+    await Promise.all(studentIds.map(async (id) => {
+      try {
+        let student = await firstValueFrom(this.userService.getUserById(id));
+        if (student) {
+          let wordCountData = ((await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount);
+          data[student.username] = wordCountData  
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }));
     return data;
   }
 
