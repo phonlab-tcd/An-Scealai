@@ -82,7 +82,7 @@
 
       <!-- sign in button -->
       <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn userBtn" (click)="toggleSmallMenu()" onclick="this.blur();" > {{ ts.l.sign_in }} </a>
-      <div *ngIf="auth.isLoggedIn()">
+      <div *ngIf="auth.isLoggedIn()" style="display:flex; align-items: center;">
         <!-- username button -->
         <button routerLink="/profile" (click)="toggleSmallMenu()" class="btn userBtn" >
           {{ auth.getUserDetails()?.username }}
