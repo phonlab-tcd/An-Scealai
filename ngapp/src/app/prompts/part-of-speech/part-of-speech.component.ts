@@ -3,6 +3,7 @@ import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { SynthItem } from "app/core/models/synth-item";
@@ -56,6 +57,7 @@ export class PartOfSpeechComponent implements OnInit {
     private storyService: StoryService,
     public auth: AuthenticationService,
     private fb: FormBuilder,
+    private router: Router,
     public ts: TranslationService,
     private synth: SynthesisService,
     private http: HttpClient,
@@ -78,22 +80,22 @@ export class PartOfSpeechComponent implements OnInit {
   getPosData() {
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
     this.http.get<any>(config.baseurl + "prompt/getData/partOfSpeech", { headers }).subscribe({
-      next: (data) => {
-        data.forEach((entry) => {
-          if (!this.wordDatabase[entry.partOfSpeechData.partOfSpeech]) {
-            this.wordDatabase[entry.partOfSpeechData.partOfSpeech] = []; // initialise key as empty array
-          }
-          this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push(
-            entry.partOfSpeechData
-          ); // push data to key
-        });
-        this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
-      },
-      error: (err) => {
-        console.log(err);
-        this.wordDatabase = {};
-      },
-    });
+        next: (data) => {
+          data.forEach((entry) => {
+            if (!this.wordDatabase[entry.partOfSpeechData.partOfSpeech]) {
+              this.wordDatabase[entry.partOfSpeechData.partOfSpeech] = []; // initialise key as empty array
+            }
+            this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push(
+              entry.partOfSpeechData
+            ); // push data to key
+          });
+          this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
+        },
+        error: (err) => {
+          console.log(err);
+          this.wordDatabase = {};
+        },
+      });
   }
 
   /**
@@ -140,15 +142,24 @@ export class PartOfSpeechComponent implements OnInit {
    * Save new story to DB
    */
   createNewStory() {
-    this.storyService.saveStory(
-      this.auth.getUserDetails()._id,
-      this.newStoryForm.controls["title"].value,
-      new Date(),
-      this.newStoryForm.controls["dialect"].value,
-      this.constructedPrompt,
-      this.auth.getUserDetails().username,
-      true
-    );
+    this.storyService
+      .saveStory(
+        this.auth.getUserDetails()._id,
+        this.newStoryForm.controls["title"].value,
+        new Date(),
+        this.newStoryForm.controls["dialect"].value,
+        this.constructedPrompt,
+        this.auth.getUserDetails().username,
+        true
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl("/student");
+        },
+        error: () => {
+          alert("Not able to create a new story");
+        },
+      });
   }
 
   /**
