@@ -7,4 +7,4 @@ if [ ! -d ngapp/qa_build ] ; then
 fi
 
 # push local ngapp/qa_build to server
-rsync -r --info=progress2 ngapp/qa_build/ scealai@abair-vps:/home/scealai/an_scealai_qa/dist/an-scealai
+rsync -r --info=progress2 ngapp/qa_build/ scealai@ovh:/home/scealai/an_scealai_qa/dist/an-scealai
