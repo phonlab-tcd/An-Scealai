@@ -1,0 +1,33 @@
+.contents {
+    display: flex;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.titleInput {
+    margin-top: 10px;
+    padding-left: 4px;
+}
+
+.classHeader {
+    padding-right: 16px;
+}
+
+.addClassBtn {
+    margin-left: auto;
+}
+
+.addClassBtn:hover {
+    cursor: pointer;
+    color: var(--scealai-green);
+    transition: color 0.5s;
+}
+
+.keyNumStudents {
+    margin-left: auto;
+}
+
+.numStudents {
+    margin-left: auto;
+    margin-right: 45px;
+}

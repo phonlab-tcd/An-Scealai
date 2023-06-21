@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { TeacherRoutingModule } from './teacher-routing.module';
 
+import { TeacherDashboardOldComponent } from './teacher-dashboard-old/teacher-dashboard-old.component';
 import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-classroom/teacher-classroom.component';
@@ -17,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
+    TeacherDashboardOldComponent,
     TeacherDashboardComponent,
     TeacherStudentComponent,
     TeacherClassroomComponent,
