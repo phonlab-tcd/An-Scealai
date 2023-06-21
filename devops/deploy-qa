@@ -6,7 +6,7 @@ if [ -z "$commit_sha" ]; then
 fi
 
 if [ ! -f ./devops/publish_qa_static.sh ]; then
-    echo "SCEALAI ERROR: REQUIRE DIRECTORY IN cwd: ./devops/publish_qa_static.sh"
+    echo "SCEALAI ERROR: REQUIRE FILE IN cwd: ./devops/publish_qa_static.sh"
     exit
 fi
 
@@ -16,8 +16,13 @@ cmd="cd /home/scealai/qa/An-Scealai && \
     git checkout $commit_sha && \
     git submodule update --recursive && \
     npm i --prefix api && \
-    sudo /bin/systemctl restart scealai-qa && \
-    sleep 3 && \
-    journalctl -u scealai-qa"
+    sudo /bin/systemctl restart scealai-qa"
 ssh -v -t scealai@banba "$cmd"
-bash ./devops/publish_qa_static.sh
+
+if [ $? == "0" ]; then
+	bash ./devops/publish_qa_static.sh
+else
+	echo "SOMETHING WENT WRONG ON THE SERVER"
+fi
+
+ssh -t scealai@banba "/bin/systemctl status --no-pager scealai-qa"
