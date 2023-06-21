@@ -13,8 +13,14 @@ import { TeacherSettingsComponent } from './teacher-settings/teacher-settings.co
 import { TeacherDictoglossComponent } from './teacher-dictogloss/teacher-dictogloss.component';
 
 import { QuillModule } from 'ngx-quill';
-import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.component';
+import { FilterPipe } from 'app/core/pipes/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -24,13 +30,19 @@ import { ReactiveFormsModule } from '@angular/forms';
     TeacherClassroomComponent,
     TeacherStoryComponent,
     TeacherSettingsComponent,
-    TeacherDictoglossComponent
+    TeacherDictoglossComponent,
+    ClassroomDrawerComponent,
+    FilterPipe
   ],
   imports: [
     CommonModule,
     TeacherRoutingModule,
     FormsModule,
     MatCardModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
     ReactiveFormsModule,
     QuillModule.forRoot({
       customOptions: [{

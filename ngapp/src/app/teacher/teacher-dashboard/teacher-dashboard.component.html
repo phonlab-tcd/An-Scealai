@@ -1,1 +1,158 @@
-<p>teacher-dashboard works!</p>
+<!-- HEADER -->
+<div class="storyTitleHeader" *ngIf="classroom">
+    <!-- STORY TITLE -->
+    <div class="storyTitleContainer">
+      <input
+        class="storyTitle"
+        size="{{ updatedTitle.length }}"
+        [(ngModel)]="updatedTitle"
+        (blur)="updateClassroomTitle()"
+      />
+      <span *ngIf="!storySaved">*</span>
+      <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
+        {{ ts.l.made_using_prompts }}
+      </span>
+    </div>
+  </div>
+  
+  <!-- STORY OPTIONS TOOL BAR -->
+  <div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="classroom">
+    <div class="optionsBtn">
+      <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
+      <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
+    </div>
+  
+    <!-- DOWNLOAD -->
+    <div *ngIf="showOptions" style="display: flex" (click)="dontToggle = true">
+      <button
+        (click)="downloadStory()"
+        style="text-decoration: none"
+        class="optionsBtn optionsPopupBtn"
+        target="_blank"
+        href="{{ downloadStoryUrl() }}"
+      >
+        {{ ts.l.download }}
+        <i class="fas fa-download optionsBtnIcon"></i>
+      </button>
+    </div>
+  
+    <!-- RECORDINGS -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="dontToggle = true; goToRecording()"
+    >
+      {{ ts.l.recordings }}
+      <i class="fas fa-microphone optionsBtnIcon"></i>
+    </div>
+  
+    <!-- FEEDBACK -->
+    <div
+      *ngIf="showOptions && hasFeedback"
+      class="optionsBtn optionsPopupBtn"
+      [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'feedback'"
+      (click)="dontToggle = true; toggleRightDrawer('feedback')"
+    >
+      {{ ts.l.feedback }}
+      <i class="fas fa-comment-dots optionsBtnIcon"></i>
+      <!-- <span class="notificationBtn" *ngIf="hasFeedback">1</span> -->
+    </div>
+  
+    <!-- SYNTHESIS -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      (click)="dontToggle = true; synthesisPlayer.toggleHidden()"
+    >
+      {{ ts.l.audio_check }}
+      <i class="fas fa-volume-up optionsBtnIcon"></i>
+    </div>
+  
+    <!-- GRAMMAR CHECK -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'grammar'"
+      (click)="dontToggle = true; toggleRightDrawer('grammar')"
+    >
+      {{ ts.l.grammar_errors }}
+      <i class="fas fa-spell-check optionsBtnIcon"></i>
+    </div>
+  
+    <!-- DICTIONARY -->
+    <div
+      *ngIf="showOptions"
+      class="optionsBtn optionsPopupBtn"
+      [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'dictionary'"
+      (click)="dontToggle = true; toggleRightDrawer('dictionary')"
+    >
+      {{ ts.l.dictionary }}
+      <i class="fas fa-book optionsBtnIcon"></i>
+    </div>
+  </div>
+  
+  <!-- BODY CONTAINER-->
+  <mat-drawer-container class="bodyContainer" autosize>
+    <!-- CLASSROOM LIST DRAWER-->
+    <mat-drawer #classroomDrawer class="storyListDrawer" mode="side" [opened]="!classroom && classroomsLoaded">
+      <app-classroom-drawer
+        #classroomDrawer
+        (storyEmitter)="setCurrentClassroom($event)"
+        (titleUpdated)="updatedTitle = $event"
+        (storiesLoaded)="classroomsLoaded = $event"
+      ></app-classroom-drawer>
+    </mat-drawer>
+  
+    <!-- CENTER CONTAINER-->
+    <div class="storyContainer">
+      <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="classroom; else newClassroomMessage" >
+        <!-- STORY DRAWER BUTTON-->
+        <span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()">menu</span>
+        <!-- QUILL EDITOR AND TOOLBAR-->
+        <quill-editor
+          [modules]="quillToolbar"
+          placeholder=""
+          [preserveWhitespace]="true"
+          [debounceTime]="1500"
+          [(ngModel)]="story.htmlText"
+          (onContentChanged)="onContentChanged($event)"
+          (onEditorCreated)="onEditorCreated($event)"
+        ></quill-editor>
+      </div>
+  
+      <!-- NO CLASSROOMS MESSAGE-->
+      <ng-template #newClassroomMessage>
+        <div *ngIf="!classroomsLoaded">
+          <grid-spinner></grid-spinner>
+        </div>
+        <div *ngIf="classroomsLoaded" class="newStoryMessage">
+          Click on the '+' button to create your first classroom!
+        </div>
+      </ng-template>
+    </div>
+  
+    <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
+      <!-- FEEDBACK -->
+      <app-feedback-drawer
+        *ngIf="selectedDrawer == 'feedback'"
+        [story]="story"
+        (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
+      ></app-feedback-drawer>
+      <!-- DICTIONARY -->
+      <app-dictionary-drawer
+        *ngIf="selectedDrawer == 'dictionary'"
+        (closeDictionaryEmitter)="toggleRightDrawer('dictionary')"
+      ></app-dictionary-drawer>
+      <!-- GRAMMAR CHECKER -->
+      <app-grammar-error-drawer
+        *ngIf="selectedDrawer == 'grammar'"
+        [quillHighlighter]="quillHighlighter"
+        [grammarLoaded]="grammarLoaded"
+        [grammarErrorsTypeDict]="grammarErrorsTypeDict"
+        [grammarErrors]="grammarErrors"
+        [checkBoxes]="checkBoxes"
+        (closeGrammarEmitter)="toggleRightDrawer('grammar')"
+      ></app-grammar-error-drawer>
+    </mat-drawer>
+  </mat-drawer-container>
+  
