@@ -5,11 +5,6 @@ if [ -z "$commit_sha" ]; then
     exit
 fi
 
-if [ ! -f ./devops/publish_qa_static.sh ]; then
-    echo "SCEALAI ERROR: REQUIRE FILE IN cwd: ./devops/publish_qa_static.sh"
-    exit
-fi
-
 cmd="cd /home/scealai/qa/An-Scealai && \
     git stash && \
     git fetch && \
@@ -24,7 +19,7 @@ if [ $? == "0" ]; then
     # i.e. ngapp/qa_build/x.txt gets moved to /home/scealai/an_scealai_qa/dist/an-scealai/x.txt
 
     if [ ! -d ngapp/qa_build ] ; then
-        echo "need ngapp/qa_build folder in path (try running from root of git tree)"
+        echo "WARNING: need ngapp/qa_build folder in path (try running from root of git tree)"
     fi
 
     # push local ngapp/qa_build to server
