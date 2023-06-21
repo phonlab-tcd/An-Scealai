@@ -2,9 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StudentRoutingModule } from './student-routing.module';
-import { BookContentsComponent } from './book-contents/book-contents.component';
 import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.component';
-import { DashboardOldComponent } from './dashboard-old/dashboard-old.component';
 import { SynthVoiceSelectComponent } from 'app/student/synth-voice-select/synth-voice-select.component';
 import { RecordingComponent } from './recording/recording.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
@@ -32,8 +30,6 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
 
 @NgModule({
   declarations: [
-    BookContentsComponent,
-    DashboardOldComponent,
     SynthesisPlayerComponent,
     SynthVoiceSelectComponent,
     SynthesisComponent,
