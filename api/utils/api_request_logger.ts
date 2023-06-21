@@ -9,7 +9,7 @@ import {appendTextToCSV} from '../../utils/rotatingCsvLogger';
 
 **/
 
-const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'monitoring/api_request_logger/logs';
+const LOG_DIRECTORY = process.env.LOG_DIRECTORY || 'logs/backend_requests/';
 
 export default function logAPICall(req: Request, res: Response, next: NextFunction): void {
     const start = Date.now();
