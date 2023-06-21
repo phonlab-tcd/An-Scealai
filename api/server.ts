@@ -17,7 +17,7 @@ const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ?
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
-import logAPICall from './monitoring/api_request_logger/api_request_logger';
+import logAPICall from './utils/api_request_logger';
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
