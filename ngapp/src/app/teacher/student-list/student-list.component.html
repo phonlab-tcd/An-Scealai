@@ -1,0 +1,26 @@
+<mat-card class="container">
+  <h4>Students</h4>
+
+  <!-- list of students-->
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let student of students">
+      <!-- header: username and num of stories-->
+      <mat-expansion-panel-header>
+        <mat-panel-title style="font-weight: bolder">
+          {{ student.username }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ numOfStories.get(student.username) }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <!-- opened panel: list of stories-->
+      <div *ngFor="let story of studentStories[student.username]">
+        <div class="storyEntry">
+          <div> {{ story.title }} </div>
+          <div> {{ story.lastUpdated | date : "d/M/yy" }} </div>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>

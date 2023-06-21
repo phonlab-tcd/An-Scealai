@@ -11,7 +11,10 @@
   </div>
 </div>
 
-<!-- STORY OPTIONS TOOL BAR -->
+<!-- CLASSROOM DRAWER BUTTON-->
+<span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()" >menu</span >
+
+<!-- CLASSROOM OPTIONS TOOL BAR -->
 <div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="classroom">
   <div class="optionsBtn">
     <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
@@ -84,15 +87,12 @@
   <!-- CENTER CONTAINER-->
   <div class="storyContainer">
     <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="classroom; else newClassroomMessage" >
-      <!-- STORY DRAWER BUTTON-->
-      <span
-        class="menuButton material-symbols-outlined"
-        (click)="classroomDrawer.toggle()"
-        >menu</span
-      >
-      <div style="height: 80vh; width: 100vw">
-        <!-- FILLER DIV FOR CONTENT-->
+      <div style="height: 80vh; width: 100%">
+        <app-student-list
+        [classroom]="classroom"
+        ></app-student-list>
       </div>
+
     </div>
 
     <!-- NO CLASSROOMS MESSAGE-->

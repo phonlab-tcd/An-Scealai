@@ -16,7 +16,6 @@ import { EngagementService } from "app/core/services/engagement.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { Story } from "app/core/models/story";
 import { Classroom } from "../../core/models/classroom";
 import { EventType } from "app/core/models/event";
