@@ -34,9 +34,6 @@ const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
 
-/* use this to test where uncaughtExceptions get logged */
-// throw new Error('test error');
-
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
 
@@ -110,8 +107,6 @@ app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoi
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
-
-
 app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,res,next)=>{
   function allowUrl(url) {
     const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie|https:\/\/cadhan.com\/api\/gaelspell\/1.0/;
@@ -127,7 +122,6 @@ app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,re
 });
 
 app.use('/synthesis', synthesisRoute);
-
 
 const port = process.env.PORT || 4000;
 
