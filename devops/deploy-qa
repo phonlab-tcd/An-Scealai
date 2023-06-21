@@ -1,0 +1,28 @@
+#!/bin/bash
+commit_sha=`git rev-parse --verify HEAD`
+if [ -z "$commit_sha" ]; then
+    echo "SCEALAI ERROR: COMMIT SHA EMTPY: QUITTING"
+    exit
+fi
+
+if [ ! -f ./devops/publish_qa_static.sh ]; then
+    echo "SCEALAI ERROR: REQUIRE FILE IN cwd: ./devops/publish_qa_static.sh"
+    exit
+fi
+
+cmd="cd /home/scealai/qa/An-Scealai && \
+    git stash && \
+    git fetch && \
+    git checkout $commit_sha && \
+    git submodule update --recursive && \
+    npm i --prefix api && \
+    sudo /bin/systemctl restart scealai-qa"
+ssh -v -t scealai@banba "$cmd"
+
+if [ $? == "0" ]; then
+	bash ./devops/publish_qa_static.sh
+else
+	echo "SOMETHING WENT WRONG ON THE SERVER"
+fi
+
+ssh -t scealai@banba "/bin/systemctl status --no-pager scealai-qa"
