@@ -4,7 +4,7 @@ import { API500Error } from '../utils/APIError';
 import getCurrentTimestamp from '../utils/getCurrentTimestamp';
 import {appendTextToCSV} from '../utils/rotatingCsvLogger';
 
-const LOG_DIRECTORY = 'monitoring/clientside_error_logs';
+const LOG_DIRECTORY = 'logs/clientside_errors/';
 
 async function clientsideErrorHandler(req, res) {
 
