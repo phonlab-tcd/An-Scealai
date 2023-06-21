@@ -76,8 +76,8 @@ export const ERROR_INFO = {
       nameEN: 'Error',
       nameGA: 'Botún',
       color: '#FFA3A3', 
-      messageEN: 'Word not recognised: #?', 
-      messageGA: 'Níl an fhoirm seo den fhocal sa bhfoclóir: #?'
+      messageEN: 'Word not recognised. #suggestion#?', 
+      messageGA: 'Níl an fhoirm seo den fhocal sa bhfoclóir. #suggestion#?'
     },
     "CAIGHDEAN": {
       nameEN: 'Non-standard Form',
@@ -255,15 +255,15 @@ export const ERROR_INFO = {
       messageGA: 'Breischéim? Seiceáil an aidiacht tar éis "níos / ní ba"'
     },
     "NIAITCH": {
-      nameEN: 'Prefix "h" missing',
-      nameGA: 'Gá le réamhmhír "h"',
+      nameEN: 'Unnecessary "h"',
+      nameGA: 'Réamhmhír "h" Gan ',
       color: '#DE8971', 
       messageEN: 'Does the prefix "h" follow in this context?', 
       messageGA: 'An bhfuil an comhthéacs ceart ann don réamhlitir "h" anseo?'
     },
     "NEEDART": {
       nameEN: 'Definite Article Required',
-      nameGA: 'Alt De Ghá',
+      nameGA: 'Alt Ag Teastáil',
       color: '#BBBBBB', 
       messageEN: 'Use definite article "an" / "na"?', 
       messageGA: 'Úsáid an t-alt "an" / "na"?'
