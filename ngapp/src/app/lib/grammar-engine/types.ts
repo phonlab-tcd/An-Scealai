@@ -60,10 +60,10 @@ export const ERROR_INFO = {
     },
     "GAELSPELL": {
       nameEN: 'Spelling',
-      nameGA: 'Spelling',
+      nameGA: 'Litriú',
       color: 'orange', 
-      messageEN: 'Spelling Error', 
-      messageGA: 'Spelling Error.'
+      messageEN: 'Spelling mistake.', 
+      messageGA: 'Botún litrithe.'
     },
     "MICHEART": {
       nameEN: 'Minor Error',
@@ -116,14 +116,14 @@ export const ERROR_INFO = {
     },
     "NISEIMHIU": {
       nameEN: 'Remove Séimhiú/Lenition',
-      nameGA: 'Séimhiú le baint',
+      nameGA: 'Séimhiú le Baint',
       color: '#FFAACF', 
       messageEN: 'Séimhiú/lenition does not appear to be needed here', 
       messageGA: 'Níl an chuma air go bhfuil gá le séimhiú anseo'
     },
     "COMHCHAIGH": {
       nameEN: 'Non Standard Compound?',
-      nameGA: 'Comhfhocal as an Ngnáth',
+      nameGA: 'Comhfhocal as an nGnáth',
       color: '#A7727D', 
       messageEN: 'Not in database but could it be a non-standard compound (#)?', 
       messageGA: "Níl an focal seo sa bhfoclóir ach an comhfhocal neamhchaighdeánach é (#)?"
@@ -137,28 +137,28 @@ export const ERROR_INFO = {
     },
     "NOGENITIVE": {
       nameEN: 'Unnecessary Genitive',
-      nameGA: 'Ginideach gan ghá',
+      nameGA: 'Ginideach gan Ghá',
       color: '#93C572', 
       messageEN: 'Appears to be an unnecessary use of the genitive case', 
       messageGA: 'Níl sé soiléir go bhfuil an tuiseal ginideach ag teastáil anseo'
     },
     "URU": {
       nameEN: 'Urú/Eclipsis Missing',
-      nameGA: 'Urú Ar Lár?',
+      nameGA: 'Urú ar Lár?',
       color: '#CDFCF6', 
       messageEN: 'It looks as though Urú / Eclipsis is needed here', 
       messageGA: 'Tá an chuma air go bhfuil urú ag teastáil anseo'
     },
     "NEAMHCHOIT": {
       nameEN: 'Rare but Valid',
-      nameGA: 'Neamhghnách Ach Bailí',
+      nameGA: 'Neamhghnách ach Bailí',
       color: '#E8DFCA', 
       messageEN: 'The is a valid word but extremely rare in actual usage. are you sure this is the word you want here?', 
       messageGA: 'Tá an focal seo bailí ach ní úsáidtear go minic é - an é atá uait anseo?'
     },
     "DROCHMHOIRF": {
       nameEN: 'Mismatch to Root',
-      nameGA: 'Difriúil ón fhréamh',
+      nameGA: 'Difriúil ón Fhréamh',
       color: '#6D8B74', 
       messageEN: 'Are you sure about this spelling? It differs from the root #suggestion# we have in database', 
       messageGA: 'An bhfuil tú cinnte faoin leagan seo den fhocal? Difriúil ón bhfréamh #suggestion# san fhoclóir'
@@ -193,7 +193,7 @@ export const ERROR_INFO = {
     },
     "NIURU": {
       nameEN: 'Unnecessary Urú/Eclipsis',
-      nameGA: 'Urú gan ghá',
+      nameGA: 'Urú gan Ghá',
       color: '#D3E4CD', 
       messageEN: 'Unnecessary urú/eclipsis (or problem with preceding word) - check this phrase', 
       messageGA: 'Urú gan ghá (nó focal mícheart roimhe) - seiceáil an nath seo'
@@ -206,8 +206,8 @@ export const ERROR_INFO = {
       messageGA: 'Séimhiú nó urú ag teastáil anseo'
     },
     "PREFIXT": {
-      nameEN: '"T" Missing',
-      nameGA: '"T" Ar Lár',
+      nameEN: '<b>t</b> Missing',
+      nameGA: '<b>t</b> ar Lár',
       color: '#79B4B7', 
       messageEN: 'Prefix "t" missing - this could be a masculine noun, a feminine noun starting with "s" or the genitive case ', 
       messageGA: 'Réamhlitir "t" in easnamh - féach ainmfhocail fhirinscneacha / ainmfhocail bhaininscneacha ag tosú le "s" nó focail sa tuiseal ginideach'
@@ -220,8 +220,8 @@ export const ERROR_INFO = {
       messageGA: 'Féachann sé go bhfuil gá leis an tuiseal ginideach anseo'
     },
     "PREFIXH": {
-      nameEN: '"H" Missing',
-      nameGA: '"H" Ar Lár',
+      nameEN: '<b>h</b> Missing',
+      nameGA: '<b>h</b> ar Lár',
       color: '#B97A95', 
       messageEN: 'Prefix "h" missing - two vowels together here, one ending a word and the next beginning a new word', 
       messageGA: 'Réamhlitir "h" in easnamh - dhá ghuta ag teacht le chéile anseo, ceann ag deireadh focail agus ceann ag tús an chéad fhocail eile'
@@ -263,7 +263,7 @@ export const ERROR_INFO = {
     },
     "NEEDART": {
       nameEN: 'Definite Article Required',
-      nameGA: 'Alt Ag Teastáil',
+      nameGA: 'Alt ag Teastáil',
       color: '#BBBBBB', 
       messageEN: 'Use definite article "an" / "na"?', 
       messageGA: 'Úsáid an t-alt "an" / "na"?'
@@ -311,11 +311,11 @@ export const ERROR_INFO = {
       messageGA: 'An bhfuil gá leis an bhfoirm spleách anseo? (nó an bhfuil an focal roimhe litrithe mícheart?)'
     },
     "PREFIXD": {
-      nameEN: 'Prefix \'D\' Missing',
-      nameGA: 'Gá le Réamhmhír \'D\'',
+      nameEN: 'Prefix <b>d\'</b> Missing',
+      nameGA: 'Gá le Réamhmhír <b>d\'</b>',
       color: '#CCF6C8', 
-      messageEN: 'Is the prefix \/d\'\/ missing here? (see past tense/conditional verbs beginning with a vowel/\'f\')', 
-      messageGA: 'An bhfuil gá leis an réamhlitir \/d\'\/ anseo? (féach aimsir chaite / modh coinníollach le focail a thosaíonn le guta/\'f\')'
+      messageEN: 'Is the prefix <b>d\'</b> missing here? (past tense/conditional verbs beginning with a vowel or an "f")', // TODO cross reference to explanation of d' 
+      messageGA: 'An bhfuil gá leis an réamhlitir <b>d\'</b> anseo? (aimsir chaite / modh coinníollach le focail a thosaíonn le guta nó "f")'
     },
     "ONEART": {
       nameEN: 'Two definite articles',
@@ -381,11 +381,11 @@ export const ERROR_INFO = {
       messageGA: 'An bhfuil gá leis an dara séimhiú?'
     },
     "NIBEE": {
-      nameEN: 'Prefix \'B\'',
-      nameGA: 'Réamhlitir \'B\'',
+      nameEN: 'Prefix <b>b\'</b>',
+      nameGA: 'Réamhlitir <b>b\'</b>',
       color: '#a594f9', 
-      messageEN: 'Is prefix «b\'» required here?', 
-      messageGA: 'An bhfuil gá leis an réamhlitir «b\'»?'
+      messageEN: 'Is prefix <b>b\'</b> required here?', 
+      messageGA: 'An bhfuil gá leis an réamhlitir <b>b\'</b>?'
     },
     "GENDER": {
       nameEN: 'Gender Disagreement',
