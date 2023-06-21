@@ -61,6 +61,19 @@ if(process.env.NODE_ENV !== 'test') {
 const app = express();
 app.use(logAPICall);
 app.use(requestIp.mw())
+if(process.env.FUDGE) {
+  console.log('ADD FUDGE VERIFICATION ENDPOINT');
+  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
+    console.log(req.query);
+    const User = require('./models/user');
+    User.findOneAndUpdate(
+      {username: req.params.username},
+      {$set: {status: 'Active'}}).then(
+        u => {logger.info(u);           res.json(u)},
+        e => {logger.error(e.stack);    res.json(e)},
+      );
+  });
+}
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
@@ -76,19 +89,7 @@ app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
 
 app.use('/user', userRoute);
-if(process.env.FUDGE) {
-  console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
-    console.log(req.query);
-    const User = require('./models/user');
-    User.findOneAndUpdate(
-      {username: req.params.username},
-      {$set: {status: 'Active'}}).then(
-        u => {logger.info(u);           res.json(u)},
-        e => {logger.error(e.stack);    res.json(e)},
-      );
-  });
-}
+
 
 app.use(checkJwt);
 //app.use(require('express-status-monitor')());
