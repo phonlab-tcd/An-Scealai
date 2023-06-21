@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { StoryDrawerComponent } from './story-drawer.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FilterPipe } from '../../core/pipes/filter.pipe';
 
 describe('StoryDrawerComponent', () => {
   let component: StoryDrawerComponent;
@@ -9,8 +11,8 @@ describe('StoryDrawerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      declarations: [ StoryDrawerComponent ]
+      imports: [ MatDialogModule, HttpClientTestingModule ],
+      declarations: [ StoryDrawerComponent, FilterPipe ],
     })
     .compileComponents();
 

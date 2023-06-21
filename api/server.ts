@@ -17,7 +17,7 @@ const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ?
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
-import logAPICall from './monitoring/api_request_logger/api_request_logger';
+import logAPICall from './utils/api_request_logger';
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -33,9 +33,6 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
-
-/* use this to test where uncaughtExceptions get logged */
-// throw new Error('test error');
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
@@ -61,20 +58,8 @@ if(process.env.NODE_ENV !== 'test') {
 const app = express();
 app.use(logAPICall);
 app.use(requestIp.mw())
-if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
-app.use(session({
-  secret: 'SECRET',
-  resave: true,
-  saveUninitialized: true
-}));
-app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
-app.use('/version', require('./routes/version.route'));
-app.use(bodyParser.json({limit: '50mb', type: 'application/json'})); // default is 100kb
-app.use(cors());
-app.use(passport.initialize());
-app.use(require('cookie-parser')('big secret'));
 
-app.use('/user', userRoute);
+// add ability to fudge verification for cypress testing
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
   app.get('/user/fudgeVerification/:username', (req,res,next)=>{
@@ -89,8 +74,26 @@ if(process.env.FUDGE) {
   });
 }
 
+// log all request urls with `DEBUG=true npm start`
+if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+app.use(session({
+  secret: 'SECRET',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use('/log', require('./routes/log.route'));
+app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
+app.use('/version', require('./routes/version.route'));
+app.use(bodyParser.json({limit: '50mb', type: 'application/json'})); // default is 100kb
+app.use(cors());
+app.use(passport.initialize());
+app.use(require('cookie-parser')('big secret'));
+
+app.use('/user', userRoute);
+
+
 app.use(checkJwt);
-app.use(require('express-status-monitor')());
+//app.use(require('express-status-monitor')());
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
@@ -103,8 +106,6 @@ app.use('/messages', messageRoute);
 app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
-
-
 
 app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,res,next)=>{
   function allowUrl(url) {
@@ -121,8 +122,6 @@ app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,re
 });
 
 app.use('/synthesis', synthesisRoute);
-
-app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
 

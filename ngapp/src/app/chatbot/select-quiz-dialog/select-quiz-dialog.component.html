@@ -3,7 +3,7 @@
 
                                                           <!-- User Quiz Tab -->
     <mat-tab label="{{ ts.l.my_quiz_s }}">
-      <table mat-table [dataSource]="userQuizzes" class="mat-elevation-z8" *ngIf="userQuizzes.length > 0; else noUserQuizData" >
+      <table mat-table [dataSource]="userQuizzes" class="mat-elevation-z8" *ngIf="userQuizzes?.length > 0; else noUserQuizData" >
         <!-- Title Column -->
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>
@@ -48,7 +48,7 @@
 
                                                           <!-- Classroom Quiz Tab -->
     <mat-tab *ngIf="data.role == 'STUDENT'" label="{{ ts.l.my_teachquiz }}">
-      <table mat-table [dataSource]="classroomQuizzes" class="mat-elevation-z8" *ngIf="classroomQuizzes.length > 0; else noClassroomQuizData" >
+      <table mat-table [dataSource]="classroomQuizzes" class="mat-elevation-z8" *ngIf="classroomQuizzes?.length > 0; else noClassroomQuizData" >
         <!-- Title Column -->
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>
@@ -78,7 +78,7 @@
 
                                                           <!-- Community Quiz Tab -->
     <mat-tab label="{{ ts.l.t_community_quiz }}">
-      <table mat-table [dataSource]="communityQuizzes" class="mat-elevation-z8" *ngIf="communityQuizzes.length > 0; else noCommunityQuizData" >
+      <table mat-table [dataSource]="communityQuizzes" class="mat-elevation-z8" *ngIf="communityQuizzes?.length > 0; else noCommunityQuizData" >
         <!-- Title Column -->
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>{{ ts.l.title }}</th>

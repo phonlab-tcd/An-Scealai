@@ -106,7 +106,7 @@ export class CreateQuizComponent implements OnInit {
       // result['role'] = this.user.role;
       // result['shuffle'] = $('#shuffle-box input').prop('checked');
 
-      if(this.user.role == 'TEACHER' && this.selectedClassroomId != ""){
+      if("role" in this.user && this.user.role == 'TEACHER' && this.selectedClassroomId != ""){
         newQuizData.classroomId = this.selectedClassroomId;
       }
       console.log(newQuizData);  

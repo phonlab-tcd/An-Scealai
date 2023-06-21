@@ -32,7 +32,7 @@
 
     <div id='save-prompt'>
       {{ts.l.save_script}}
-      <input *ngIf="auth.getUserDetails().role === 'TEACHER'" id='class-code-input' type='text' placeholder="class code">
+      <input *ngIf="auth.getUserDetails()?.role === 'TEACHER'" id='class-code-input' type='text' placeholder="class code">
       <button type='submit' (click)=done() id='yes-publish'>{{ts.l.save_script_y}}</button>
       <button type='submit' onclick='$("#saved-message").text("Your script will not be saved. Save it to use with Taidhgín."); 
       $("#saved-message").css("display", "block")' id='no-publish'>{{ts.l.save_script_n}}</button>
