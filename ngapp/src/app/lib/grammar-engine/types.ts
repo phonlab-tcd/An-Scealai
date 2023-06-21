@@ -256,7 +256,7 @@ export const ERROR_INFO = {
     },
     "NIAITCH": {
       nameEN: 'Unnecessary "h"',
-      nameGA: 'Réamhmhír "h" Gan ',
+      nameGA: 'Réamhmhír "h" Gan Ghá',
       color: '#DE8971', 
       messageEN: 'Does the prefix "h" follow in this context?', 
       messageGA: 'An bhfuil an comhthéacs ceart ann don réamhlitir "h" anseo?'
