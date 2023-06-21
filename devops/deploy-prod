@@ -42,10 +42,10 @@ ssh -t scealai@banba "$cmd"
      # NOTE: trailing slash in ngapp/unpublished_dist/ causes rsync to copy contents of unpublished_dist to an-scealai, without keeping top level name `unpublished_dist`
  
      if [ ! -d ngapp/unpublished_dist ] ; then
-         echo "WARNING: need ngapp/qa_build folder in path (try running from root of git tree)"
+         echo "WARNING: need ngapp/unpublished_dist folder in path (try running from root of git tree)"
      fi
  
-     # push local ngapp/qa_build to server
+     # push local ngapp/unpublisded_dist to server
      rsync -r ngapp/unpublished_dist/ scealai@ovh:/home/scealai/An-Scealai/dist/an-scealai
  else
  	echo "SOMETHING WENT WRONG ON THE SERVER"
