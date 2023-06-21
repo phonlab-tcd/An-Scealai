@@ -61,6 +61,8 @@ if(process.env.NODE_ENV !== 'test') {
 const app = express();
 app.use(logAPICall);
 app.use(requestIp.mw())
+
+// add ability to fudge verification for cypress testing
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
   app.get('/user/fudgeVerification/:username', (req,res,next)=>{
@@ -74,6 +76,8 @@ if(process.env.FUDGE) {
       );
   });
 }
+
+// log all request urls with `DEBUG=true npm start`
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
