@@ -3,7 +3,7 @@ import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.component";
 import { HttpClient } from "@angular/common/http";
@@ -46,6 +46,7 @@ export class PromptsComponent implements OnInit {
     private fb: FormBuilder,
     public ts: TranslationService,
     private route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog,
     private http: HttpClient
   ) {
@@ -194,7 +195,16 @@ export class PromptsComponent implements OnInit {
           let dialect = "connemara";
           if (res[1] == this.ts.l.munster) dialect = "kerry";
           if (res[1] == this.ts.l.ulster) dialect = "donegal";
-          this.storyService.saveStory( this.auth.getUserDetails()._id, res[0], new Date(), dialect, this.prompt, this.auth.getUserDetails().username, true );
+          this.storyService
+          .saveStory( this.auth.getUserDetails()._id, res[0], new Date(), dialect, this.prompt, this.auth.getUserDetails().username, true )
+          .subscribe({
+            next: () => {
+              this.router.navigateByUrl("/student");
+            },
+            error: () => {
+              alert("Not able to create a new story");
+            },
+          });
         } else {
           alert(this.ts.l.title_required);
         }
