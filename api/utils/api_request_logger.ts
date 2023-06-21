@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import getCurrentTimestamp from '../../utils/getCurrentTimestamp';
-import {appendTextToCSV} from '../../utils/rotatingCsvLogger';
+import getCurrentTimestamp from './getCurrentTimestamp';
+import {appendTextToCSV} from './rotatingCsvLogger';
 
 /**
  
