@@ -11,6 +11,7 @@ import {clone, isEmpty} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
+import { ClassroomService } from "app/core/services/classroom.service";
 import { EngagementService } from "app/core/services/engagement.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -19,14 +20,6 @@ import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis
 import { Story } from "app/core/models/story";
 import { Classroom } from "../../core/models/classroom";
 import { EventType } from "app/core/models/event";
-import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
-import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
-import { HighlightTag } from "../../lib/quill-highlight/quill-highlight";
-import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-caol-checker";
-import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
-import { genitiveChecker } from "../../lib/grammar-engine/checkers/genitive-checker";
-import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
-import { ErrorTag, ErrorTag2HighlightTag } from "../../lib/grammar-engine/types";
 import { MatDrawer } from "@angular/material/sidenav";
 
 @Component({
@@ -48,11 +41,13 @@ export class TeacherDashboardComponent implements OnInit {
   classroom: Classroom;
   updatedTitle: string = "";
   classroomsLoaded: boolean = true;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
     private storyService: StoryService,
+    private classroomService: ClassroomService,
     private recordAudioService: RecordAudioService,
     private engagement: EngagementService,
     private dialog: MatDialog,
@@ -129,14 +124,46 @@ export class TeacherDashboardComponent implements OnInit {
    */
     updateClassroomTitle() {
       if (this.updatedTitle != this.classroom.title) {
-        this.story.title = this.updatedTitle;
-        // this.storyService
-        //   .updateTitle(this.classroom._id, this.classroom.title)
-        //   .subscribe({
-        //     next: () => { console.log("title updated"); },
-        //     error: () => console.log("error updating title"),
-        //   });
+        this.classroom.title = this.updatedTitle;
+        this.classroomService.editTitle(this.classroom._id, this.classroom.title).subscribe({
+          next: () => { console.log("title updated"); },
+          error: () => { alert("Not able to save new classroom title"); },
+        });
       }
     }
+
+    /**
+     * Open the dialog displaying the current classroom's code
+     */
+    openCodeDialog() {    
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.classroom_code,
+          type: 'classCode',
+          data: this.classroom.code,
+          confirmText: this.ts.l.done,
+        },
+        width: '15vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( () => this.dialogRef = undefined);
+    }
+
+    goToMessages() {
+      this.router.navigateByUrl('/messages/' + this.classroom._id);
+    }
+    
+    goToStats() {
+      this.router.navigateByUrl('/stats-dashboard/' + this.classroom._id);
+    }
+    
+    goToSettings() {
+      this.router.navigateByUrl('/teacher/teacher-settings/' + this.classroom._id);
+    }
+  
+    goToDictogloss() {
+      this.router.navigateByUrl('/teacher/teacher-dictogloss/' + this.classroom._id);
+    }
+    
 
 }

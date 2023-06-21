@@ -3,7 +3,6 @@ import { firstValueFrom } from "rxjs";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { ClassroomService } from "app/core/services/classroom.service";
-import { EngagementService } from "app/core/services/engagement.service";
 import { NotificationService } from "app/core/services/notification-service.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
@@ -18,7 +17,7 @@ export class ClassroomDrawerComponent implements OnInit {
   classrooms: Classroom[] = [];
   dialogRef: MatDialogRef<unknown>;
   lastClickedClassroomId: string = "";
-  searchText: string = ""; // used to filter stories in search bar
+  searchText: string = ""; // used to filter classrooms in search bar
   @Output() classroomEmitter = new EventEmitter<Classroom>();
   @Output() titleUpdated = new EventEmitter<String>();
   @Output() classroomsLoaded = new EventEmitter<Boolean>();
@@ -213,12 +212,8 @@ export class ClassroomDrawerComponent implements OnInit {
       selectedClassroom.title = contentEditableDiv.textContent;
 
       this.classroomService.editTitle(selectedClassroom._id, selectedClassroom.title.trim()).subscribe({
-        next: () => {
-          this.ngOnInit();
-        },
-        error: () => {
-          alert("Not able to save new classroom title");
-        },
+        next: () => { this.ngOnInit(); },
+        error: () => { alert("Not able to save new classroom title"); },
       });
     }
   }
