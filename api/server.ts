@@ -67,6 +67,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+app.use('/log', require('./routes/log.route'));
 app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
 app.use(bodyParser.json({limit: '50mb', type: 'application/json'})); // default is 100kb
@@ -122,7 +123,6 @@ app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,re
 
 app.use('/synthesis', synthesisRoute);
 
-app.use('/log', require('./routes/log.route'));
 
 const port = process.env.PORT || 4000;
 
