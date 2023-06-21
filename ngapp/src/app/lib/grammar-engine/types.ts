@@ -256,7 +256,7 @@ export const ERROR_INFO = {
     },
     "NIAITCH": {
       nameEN: 'Unnecessary "h"',
-      nameGA: 'Réamhmhír "h" Gan Ghá',
+      nameGA: 'Réamhmhír "h" gan Ghá',
       color: '#DE8971', 
       messageEN: 'Does the prefix "h" follow in this context?', 
       messageGA: 'An bhfuil an comhthéacs ceart ann don réamhlitir "h" anseo?'
@@ -347,21 +347,21 @@ export const ERROR_INFO = {
     },
     "NIDEE": {
       nameEN: 'Unnecessary Prefix "d"',
-      nameGA: 'Réamhmhír "d" Gan Ghá',
+      nameGA: 'Réamhmhír "d" gan Ghá',
       color: '#f8ad9d', 
       messageEN: 'Unnecessary prefix "d"?', 
       messageGA: 'Réamhmhír  "d" gan ghá?'
     },
     "BADART": {
       nameEN: 'Unnecessary Definite Article',
-      nameGA: 'An t-alt Gan Ghá',
+      nameGA: 'An t-alt gan Ghá',
       color: '#84dcc6', 
       messageEN: 'Unnecessary use of the definite article? (double check spelling of noun)', 
       messageGA: 'An bhfuil gá leis an alt anseo?  (féach siar ar litriú an ainmfhocail)'
     },
     "NIGA": {
       nameEN: 'Unnecessary Word',
-      nameGA: 'Focal Gan Ghá',
+      nameGA: 'Focal gan Ghá',
       color: '#7bf1a8', 
       messageEN: 'Is the word # needed?', 
       messageGA: 'An bhfuil gá leis an bhfocal #?'
