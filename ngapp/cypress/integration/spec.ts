@@ -25,7 +25,7 @@ describe('Register Teacher', () => {
     cy.get('img[class="landingImg"]').should('be.visible');;
     cy.get('div[class="nav"]').should('be.visible');;
     cy.get('label').click();
-    cy.get('button[class="btn navbarBtn"]').contains('English').click();
+    cy.get('[data-cy=switch-to-english]').click();
     cy.get('button[class="btn teacherRegisterBtn"]').contains('I am a teacher').click();
     const username = randomString();
     cy.get('input[name="username"]').type(username);
@@ -36,7 +36,7 @@ describe('Register Teacher', () => {
         cy.wrap(p).type(password);
       })
     })
-    cy.get('button').contains('Register').click();
+    cy.get('[data-cy=register]').click();
     fudgeVerification(username);
     cy.get('[data-cy=sign-in]').click();
     cy.get('button i.fa-user').click();

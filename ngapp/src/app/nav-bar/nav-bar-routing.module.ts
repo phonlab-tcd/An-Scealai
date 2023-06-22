@@ -11,7 +11,6 @@ import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.compon
 import { ResourcesComponent } from './resources/resources.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 
-
 const routes: Routes = [
   { path: 'about', component: AboutComponent},
   { path: 'about-lara', component: AboutLaraComponent },

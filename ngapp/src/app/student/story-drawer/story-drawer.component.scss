@@ -24,6 +24,7 @@
 
 .contentSection {
     display: flex;
+    padding: 5px;
 }   
 
 .contentSection:hover {
@@ -37,6 +38,7 @@
     min-width: 50%;
     flex: 1 0 50%;
     overflow-wrap: break-word;
+    padding-left: 5px;
 }
 
 .contentsTitle:hover {
@@ -46,7 +48,6 @@
 .contentsDate {
     flex: 1 0 50%;
     text-align: right;
-    padding-right: 20px;
 }
 
 .newStoryButton {
@@ -60,7 +61,6 @@
 
 .clickedresultCard {
     background-color: #eee;
-    padding: 2px;
-    font-weight: bolder;
-    border-radius: 10px;
+    font-weight: bold;
+    border-radius: 5px;
 }

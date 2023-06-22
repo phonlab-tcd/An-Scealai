@@ -43,13 +43,13 @@ Quill.register("modules/imageCompress", ImageCompress);
 })
 export class DashboardComponent implements OnInit {
   // STORY VARIABLES
-  stories: Story[] = [];
   story: Story;
   saveStoryDebounceId = 0;
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
   dialogRef: MatDialogRef<unknown>;
   storiesLoaded: boolean = false;
+  isFirstStory: boolean = false;
   downloadStoryFormat = ".pdf";
   hasFeedback: boolean = false;
   updatedTitle: string = "";

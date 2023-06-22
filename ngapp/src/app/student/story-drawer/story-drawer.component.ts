@@ -24,6 +24,7 @@ export class StoryDrawerComponent implements OnInit {
   @Output() hasFeedback = new EventEmitter<Boolean>();
   @Output() titleUpdated = new EventEmitter<String>();
   @Output() storiesLoaded = new EventEmitter<Boolean>();
+  @Output() isFirstStory = new EventEmitter<Boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -54,7 +55,9 @@ export class StoryDrawerComponent implements OnInit {
         this.setStory(this.stories[0]);
       });
     }
-    this.storiesLoaded.emit(true);
+    setTimeout(() => {
+      this.storiesLoaded.emit(true);
+    });
   }
 
   /**
@@ -108,6 +111,7 @@ export class StoryDrawerComponent implements OnInit {
    * Create a new story
    */
   createNewStory() {
+    this.isFirstStory.emit(this.stories.length == 0);
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.story_details,
