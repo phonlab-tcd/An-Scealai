@@ -170,6 +170,7 @@ export class DashboardComponent implements OnInit {
   }
 
   runGrammarCheck() {
+    const startTime = Date.now();
     this.grammarLoaded = false;
     const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
@@ -183,7 +184,8 @@ export class DashboardComponent implements OnInit {
 
             // show error highlighting if button on
             if (this.showErrorTags) {
-              this.quillHighlighter.show([ErrorTag2HighlightTag(tag)]);
+              //this.quillHighlighter.show([ErrorTag2HighlightTag(tag)]);
+              this.quillHighlighter.addTag(ErrorTag2HighlightTag(tag));
             }
           },
           error: function () {},
@@ -211,14 +213,15 @@ export class DashboardComponent implements OnInit {
             }
 
             // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            this.quillHighlighter.hideAll();
+            // this.quillHighlighter.hideAll();
 
             // and then re-show all the latest error tags if button on
-            if (this.showErrorTags) {
-              this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
-            }
+            // if (this.showErrorTags) {
+            //   this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
+            // }
 
             this.grammarLoaded = true;
+            console.log("COMPLETED CHECKS IN:", (Date.now() - startTime));
           },
         });
       } catch (updateGrammarErrorsError) {
@@ -231,7 +234,7 @@ export class DashboardComponent implements OnInit {
               "See the browser console for more information"
           );
         }
-        console.dir(updateGrammarErrorsError);
+        console.error(updateGrammarErrorsError);
       }
   }
 
@@ -490,7 +493,7 @@ export class DashboardComponent implements OnInit {
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
     this.showErrorTags
-      ? this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
+      ? this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag).forEach(tag => this.quillHighlighter.addTag(tag))
       : this.quillHighlighter.hideAll();
   }
 

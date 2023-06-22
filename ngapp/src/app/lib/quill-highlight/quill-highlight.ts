@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import { TranslationService } from 'app/core/services/translation.service';
 import { EngagementService } from 'app/core/services/engagement.service'
-import {isEqual} from "lodash";
+import { ErrorTag } from '../grammar-engine/types';
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
@@ -12,6 +12,13 @@ Quill.register(
         'highlight-tag',
         {scope: Parchment.Scope.INLINE}
     )
+);
+Quill.register(
+  new Parchment.Attributor.Attribute(
+      'id',
+      'id',
+      {scope: Parchment.Scope.INLINE}
+  )
 );
 
 type TagData = {
@@ -39,50 +46,95 @@ export class QuillHighlighter {
         this.ts = ts;
         this.engagement = engagement;
     }
+
+    public addTag(tag: HighlightTag) {
+      const cursorStart = tag.fromX;
+      const cursorLength = tag.toX - tag.fromX;
+      // TODO: Instead of stringify tag create an id for tag and store id in a map
+      const data = JSON.stringify(tag);
+      const id = crypto.randomUUID();
+      const attributes = {'highlight-tag': data, 'id': id.toString()};
+      console.log(attributes);
+      console.log(tag);
+      //this.quillEditor.formatText(cursorStart, cursorLength,attributes,'api');
+      setTimeout(()=>this.quillEditor.formatText(cursorStart, cursorLength,attributes,'api'),0);
+
+      setTimeout(()=>{
+        const tagElement = document.querySelector(`[id="${id}"]`);
+        console.log(tagElement);
+        if(!tagElement) {
+          console.warn("no tagElement");
+          return;
+        }
+
+        const tagData = tagElement.getAttribute('highlight-tag');
+        if (!tagData) {
+          return;
+        } 
+        const highlightTag = JSON.parse(tagData) as HighlightTag;
+        const tooltip = new Tooltip(this.quillEditor);
+        tooltip.root.classList.add('custom-tooltip');
+
+        tagElement.addEventListener('mouseover', () => {
+            this.mouseOverTagElem(highlightTag, tagElement, tooltip);
+        });
+        
+        tagElement.addEventListener('mouseout', () => {
+          tagElement.removeAttribute('data-selected');
+          tooltip.hide();
+        });
+      });
+    }
     
     /**
     * Apply css highlighting to given error tags
     * @param tags - array of tags to highlight
     */
-    public show(tags: HighlightTag[]): void {
-        if(!tags) return;
+    // public show(tags: HighlightTag[]): void {
+    //     console.log(tags);
+    //     console.count("show");
+    //     if(!tags) return;
 
-        // pre-processing step to merge tags?
-        tags = this.mergeTags(tags);
+    //     // pre-processing step to merge tags?
+    //     tags = this.mergeTags(tags);
       
-        tags.forEach((tag) => {
-            // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
-            this.quillEditor.formatText(
-                tag.fromX,
-                (tag.toX - tag.fromX),
-                {
-                    'highlight-tag': JSON.stringify(tag)
-                },
-                'api'
-            );
-        });
+    //     // tags.forEach((tag) => {
+    //     //     // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
+    //     //     const FormatTextReturn = this.quillEditor.formatText(
+    //     //         tag.fromX,
+    //     //         (tag.toX - tag.fromX),
+    //     //         {
+    //     //             // TODO: Instead of stringify tag create an id for tag and store id in a map
+    //     //             'highlight-tag': JSON.stringify(tag)
+    //     //         },
+    //     //         'api'
+    //     //     );
 
-        // Create message popups with tooltips
-        const tagElements = document.querySelectorAll('[highlight-tag]');
-        tagElements.forEach(tagElement => {
-            const tagData = tagElement.getAttribute('highlight-tag');
-            if (!tagData) {
-              return;
-            } 
-            const highlightTag = JSON.parse(tagData) as HighlightTag;
-            const tooltip = new Tooltip(this.quillEditor);
-            tooltip.root.classList.add('custom-tooltip');
+    //     //     console.log(FormatTextReturn);
+    //     // });
 
-            tagElement.addEventListener('mouseover', () => {
-                this.mouseOverTagElem(highlightTag, tagElement, tooltip);
-            });
+    //     // Create message popups with tooltips
+    //     const tagElements = document.querySelectorAll('[highlight-tag]');
+
+    //     tagElements.forEach(tagElement => {
+    //         const tagData = tagElement.getAttribute('highlight-tag');
+    //         if (!tagData) {
+    //           return;
+    //         } 
+    //         const highlightTag = JSON.parse(tagData) as HighlightTag;
+    //         const tooltip = new Tooltip(this.quillEditor);
+    //         tooltip.root.classList.add('custom-tooltip');
+
+    //         tagElement.addEventListener('mouseover', () => {
+    //             this.mouseOverTagElem(highlightTag, tagElement, tooltip);
+    //         });
             
-            tagElement.addEventListener('mouseout', () => {
-              tagElement.removeAttribute('data-selected');
-              tooltip.hide();
-            });
-        });
-    }
+    //         tagElement.addEventListener('mouseout', () => {
+    //           tagElement.removeAttribute('data-selected');
+    //           tooltip.hide();
+    //         });
+    //     });
+    // }
 
     /**
     * Remove css highlighting to input array of error tags
@@ -95,7 +147,7 @@ export class QuillHighlighter {
             (tag.toX - tag.fromX),
               {'highlight-tag': null,
               'background-color': '',
-              'data-selected': null}
+              'data-selected': null},
           );
         });
     
@@ -140,17 +192,17 @@ export class QuillHighlighter {
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
     
-        let style = tooltip.root.getAttribute('style') || '';
-        style = style + `
-          font-size: medium;
-          padding: 20px;
-          -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-          -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-          box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-          border: 2px solid var(--scealai-med-brown);
-          border-radius: 2px;
-        `;
-        tooltip.root.setAttribute('style', style);
+        // let style = tooltip.root.getAttribute('style') || '';
+        // style = style + `
+        //   font-size: medium;
+        //   padding: 20px;
+        //   -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+        //   -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+        //   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+        //   border: 2px solid var(--scealai-med-brown);
+        //   border-radius: 2px;
+        // `;
+        // tooltip.root.setAttribute('style', style);
     
         // Ensure that tooltip isn't cut off by the right edge of the editor
         const rightOverflow =
@@ -168,7 +220,7 @@ export class QuillHighlighter {
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
           
-        this.engagement.mouseOverGrammarSuggestionEvent(tag);
+        // ABLATION // this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
       
     /**

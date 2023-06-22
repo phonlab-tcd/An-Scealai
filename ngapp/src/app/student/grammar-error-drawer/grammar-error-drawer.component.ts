@@ -28,7 +28,9 @@ export class GrammarErrorDrawerComponent implements OnInit {
     this.checkBoxes[key] = !this.checkBoxes[key];
 
     this.quillHighlighter.hideAll();
-    this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
+    for ( const tag of this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) ) {
+      this.quillHighlighter.addTag(tag);
+    }
 
     if (this.checkBoxes[key]) {
       document.getElementById(key).classList.remove("hideLegendItem");
