@@ -89,7 +89,6 @@
     <div class="studentListContainer" *ngIf="classroom; else newClassroomMessage" >
       <app-student-list
         [classroom]="classroom"
-        (storyEmitter)="storyForFeedback = $event; rightDrawer.open()"
       ></app-student-list>
     </div>
     <!-- NO CLASSROOMS MESSAGE-->

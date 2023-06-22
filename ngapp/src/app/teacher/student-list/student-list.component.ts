@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Classroom } from "../../core/models/classroom";
 import { User } from "../../core/models/user";
 import { Story } from "../../core/models/story";
 import { UserService } from "../../core/services/user.service";
 import { StoryService } from "app/core/services/story.service";
 import { firstValueFrom } from "rxjs";
+import { MatDrawer } from "@angular/material/sidenav";
 
 @Component({
   selector: "app-student-list",
@@ -17,6 +18,8 @@ export class StudentListComponent implements OnInit {
   students: User[] = [];
   studentStories: Object = {};
   storyForFeedback: Story;
+  lastClickedStoryId: string = "";
+  @ViewChild("rightDrawer") rightDrawer: MatDrawer;
 
   constructor(
     private userService: UserService,
@@ -65,5 +68,30 @@ export class StudentListComponent implements OnInit {
   setStoryForFeedback(story: Story) {
     this.storyEmitter.emit(story);
     this.storyForFeedback = story;
+    // set css for selecting a classroom in the side nav
+    let id = story._id;
+    let classroomElement = document.getElementById(id);
+
+    if (classroomElement) {
+      // remove css highlighting for currently highlighted classroom
+      if (this.lastClickedStoryId && document.getElementById(this.lastClickedStoryId)) {
+        document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
+      }
+      this.lastClickedStoryId = id;
+      // add css highlighting to the newly clicked classroom
+      classroomElement.classList.add("clickedresultCard");
+    }
+  }
+
+  /**
+   * Remove any highlighted story previously selected for feedback
+   * Close the feedback drawer if opened
+   */
+  resetFeedbackDrawer() {
+    // remove css highlighting for currently highlighted classroom
+    if (this.lastClickedStoryId && document.getElementById(this.lastClickedStoryId)) {
+      document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
+    }
+    if (this.rightDrawer.opened) this.rightDrawer.close();
   }
 }
