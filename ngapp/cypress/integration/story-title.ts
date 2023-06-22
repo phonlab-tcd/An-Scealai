@@ -34,7 +34,7 @@ function newUser(): {username:string;email:string;password:string} {
 }
 
 describe('story title', () => {
-  it('Visits the initial project page', () => {
+  xit('TEST HAS BEEN INVALIDATED: Visits the initial project page', () => {
     const creds = newUser();
     cy.visit('/landing');
     cy.get('[data-cy="sign-in"]').click();

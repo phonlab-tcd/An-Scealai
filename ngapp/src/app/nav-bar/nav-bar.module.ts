@@ -42,7 +42,7 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
     MatExpansionModule,
     MatCardModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
   ]
 })
 export class NavBarModule { }

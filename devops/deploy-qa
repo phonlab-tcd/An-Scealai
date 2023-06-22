@@ -1,0 +1,32 @@
+#!/bin/bash
+commit_sha=`git rev-parse --verify HEAD`
+if [ -z "$commit_sha" ]; then
+    echo "SCEALAI ERROR: COMMIT SHA EMTPY: QUITTING"
+    exit
+fi
+
+cmd="cd /home/scealai/qa/An-Scealai && \
+    git stash && \
+    git fetch && \
+    git checkout $commit_sha && \
+    git submodule update --recursive && \
+    npm i --prefix api && \
+    sudo /bin/systemctl restart scealai-qa"
+ssh -t scealai@banba "$cmd"
+
+ if [ $? == "0" ]; then
+     # NOTE: trailing slash in ngapp/qa_build/ causes rsync to copy contents of qa_build to an-scealai, without keeping top level name `qa_build`
+     # i.e. ngapp/qa_build/x.txt gets moved to /home/scealai/an_scealai_qa/dist/an-scealai/x.txt
+ 
+     if [ ! -d ngapp/qa_build ] ; then
+         echo "WARNING: need ngapp/qa_build folder in path (try running from root of git tree)"
+     fi
+ 
+     # push local ngapp/qa_build to server
+     rsync -r ngapp/qa_build/ scealai@ovh:/home/scealai/an_scealai_qa/dist/an-scealai
+ else
+ 	echo "SOMETHING WENT WRONG ON THE SERVER"
+	exit 1
+ fi
+
+ssh -t scealai@banba "/bin/systemctl status --no-pager scealai-qa"

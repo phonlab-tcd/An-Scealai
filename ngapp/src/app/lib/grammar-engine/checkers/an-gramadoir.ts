@@ -48,11 +48,25 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
       // get simple rule name from an gramadoir's ruleId response attribute
       const cleanedErrorName = gramadoirId2string(error.ruleId);
       const e_info = ERROR_INFO[cleanedErrorName];
+
+      function extractStringBetweenSlashes(inputString) {
+        const regex = /\/([^/]+)\//; // Regular expression to match the string between slashes
+        const match = inputString.match(regex); // Find the first match in the inputString
+      
+        if (match && match.length > 1) {
+          return match[1]; // Return the captured group (string between slashes)
+        } else {
+          return false; // Return false if no match or captured group found
+        }
+      }
+      
+      const suggestion = `"${extractStringBetweenSlashes(error.msg)}"`;
+      const errortext = `"${error.errortext}"`;
       
       const et = {
         errorText: error.errortext,
-        messageGA: (e_info.messageGA).replace('#', error.errortext),
-        messageEN: (e_info.messageEN).replace('#', error.errortext),
+        messageGA: (e_info.messageGA).replace("#suggestion#", suggestion).replace('#', errortext),
+        messageEN: (e_info.messageEN).replace("#suggestion#", suggestion).replace('#', errortext),
         context: error.context,
         nameEN: e_info.nameEN,
         nameGA: e_info.nameGA,
