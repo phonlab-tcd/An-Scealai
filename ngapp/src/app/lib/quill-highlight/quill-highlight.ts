@@ -192,17 +192,17 @@ export class QuillHighlighter {
         tooltip.show();
         tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
     
-        // let style = tooltip.root.getAttribute('style') || '';
-        // style = style + `
-        //   font-size: medium;
-        //   padding: 20px;
-        //   -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-        //   -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-        //   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
-        //   border: 2px solid var(--scealai-med-brown);
-        //   border-radius: 2px;
-        // `;
-        // tooltip.root.setAttribute('style', style);
+        let style = tooltip.root.getAttribute('style') || '';
+        style = style + `
+          font-size: medium;
+          padding: 20px;
+          -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+          border: 2px solid var(--scealai-med-brown);
+          border-radius: 2px;
+        `;
+        tooltip.root.setAttribute('style', style);
     
         // Ensure that tooltip isn't cut off by the right edge of the editor
         const rightOverflow =
