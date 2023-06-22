@@ -24,6 +24,7 @@ export class StoryDrawerComponent implements OnInit {
   @Output() hasFeedback = new EventEmitter<Boolean>();
   @Output() titleUpdated = new EventEmitter<String>();
   @Output() storiesLoaded = new EventEmitter<Boolean>();
+  @Output() isFirstStory = new EventEmitter<Boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -54,7 +55,9 @@ export class StoryDrawerComponent implements OnInit {
         this.setStory(this.stories[0]);
       });
     }
-    this.storiesLoaded.emit(true);
+    setTimeout(() => {
+      this.storiesLoaded.emit(true);
+    });
   }
 
   /**
@@ -91,9 +94,24 @@ export class StoryDrawerComponent implements OnInit {
   }
 
   /**
+   * Returns true if the story has unseen feedback, otherwise false
+   * @param story story in story list
+   * @returns true or false
+   */
+  hasUnreadFeedback(story: Story) {
+    return (
+      (story.feedback.text ||
+        story.feedback.audioId ||
+        story.feedback.feedbackMarkup) &&
+      !story.feedback.seenByStudent
+    );
+  }
+
+  /**
    * Create a new story
    */
   createNewStory() {
+    this.isFirstStory.emit(this.stories.length == 0);
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.story_details,
@@ -176,7 +194,7 @@ export class StoryDrawerComponent implements OnInit {
       this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
 
       // reset the story list to empty if list contains only one story
-      // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list 
+      // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list
       this.stories.splice(storyIndex, 1);
       this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit(null);
     });

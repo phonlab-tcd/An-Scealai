@@ -4,8 +4,6 @@ import { NotificationService, Notification, } from "app/core/services/notificati
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 
-//declare var gtag;
-
 @Component({
   selector: "app-nav-bar",
   templateUrl: "./nav-bar.component.html",
@@ -83,15 +81,15 @@ export class NavBarComponent implements OnInit {
    */
   goToStory(id: string) {
     this.notificationsShown = false;
-    this._router.navigateByUrl("/student/dashboard/" + id);
   }
 
   /**
    * Hide notifications and route to messages component
+   * @param id user id if student, classroom id if teacher
    */
-  goToMessages() {
+  goToMessages(id:string) {
     this.notificationsShown = false;
-    this._router.navigateByUrl("/messages/" + this.auth.getUserDetails()._id);
+    this._router.navigateByUrl("/messages/" + id);
   }
 
   /**

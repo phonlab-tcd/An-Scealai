@@ -30,6 +30,7 @@
     border-style: none;
     font-size: 11pt;
     padding: 5px;
+    margin-right: 20px;
 }
 
 .savedIcon {
@@ -42,11 +43,11 @@
 
 .optionsBtnContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
     --options-btn-background-color-hover : lightgray;
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
   
 .optionsBtn {

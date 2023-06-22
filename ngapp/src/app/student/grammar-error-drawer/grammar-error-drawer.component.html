@@ -8,16 +8,13 @@
   </div>
 </div>
 
-<div class="selectErrorCheckbox">
+<div *ngIf="hasGrammarErrors(); else noGrammarErrorsMessage" class="selectErrorCheckbox">
   <!-- GRAMMAR ERROR LIST -->
   <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key)" [attr.id]="tag.key" >
-    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="circle" ></div>
-    <!-- Error name -->
-    {{
-      ts.l.iso_code == "en"
-        ? (tag.value[0].nameEN | titlecase)
-        : (tag.value[0].nameGA | titlecase)
-    }}
+    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="circle" > </div>
+    <span *ngIf="ts.l.iso_code == 'en'" [innerHtml]='" " + tag.value[0].nameEN'></span>
+    <span *ngIf="ts.l.iso_code == 'ga'" [innerHtml]='" " + tag.value[0].nameGA'></span>
+
     <!-- Error count -->
     ({{
       tag.value[0].nameEN == "Broad/Slender"
@@ -26,3 +23,7 @@
     }})
   </div>
 </div>
+<ng-template #noGrammarErrorsMessage>
+  <div *ngIf="grammarLoaded" class="errorContainer"> {{ts.l.no_grammar_errors}} </div>
+  <div *ngIf="!grammarLoaded" class="errorContainer"> {{ts.l.checking_grammar}} </div>
+</ng-template>
