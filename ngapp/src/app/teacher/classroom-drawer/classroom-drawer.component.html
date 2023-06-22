@@ -1,8 +1,8 @@
 <div class="body">
-    <div *ngIf="classrooms.length > 0">
-      <div class="myStories">{{ ts.l.my_classrooms }}</div>
-      <!-- search bar -->
-      <!-- <div class="form-group">
+  <div *ngIf="classrooms.length > 0">
+    <div class="myStories">{{ ts.l.my_classrooms }}</div>
+    <!-- search bar -->
+    <!-- <div class="form-group">
         <input
           type="text"
           class="form-control searchBox"
@@ -12,39 +12,38 @@
           placeholder="{{ ts.l.search_story_title_or_content }}"
         />
       </div> -->
-    </div>
-    <!-- list of stories -->
-    <div class="storyList">
-      <div *ngFor="let classroom of classrooms; let i = index" (click)="setClassroom(classroom)" >
-        <!-- story entry-->
-        <div class="contentSection" [attr.id]="classroom._id">
-          <!-- story title-->
-          <div class="contentsTitle" [attr.id]="i" (blur)="saveClassroomTitle(i, classroom)" (keydown.enter)="saveClassroomTitle(i, classroom)">
-            {{ classroom?.title }}
-          </div>
-          <!-- date and menu icon-->
-          <div class="contentsDate">
-            {{ classroom?.studentIds.length }}
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your classroom">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openDeleteClassroomDialog(classroom._id)">
-                <mat-icon>delete</mat-icon>
-                <span>{{ts.l.delete}}</span>
-              </button>
-              <button mat-menu-item (click)="makeTitleDivEditable(i)">
-                <mat-icon>create</mat-icon>
-                <span>{{ ts.l.rename }}</span>
-              </button>
-            </mat-menu>
-          </div>
-        </div>
-        <hr />
-      </div>
-    </div>
-    <button mat-fab class="newStoryButton" (click)="createNewClassroom()">
-      <mat-icon>add</mat-icon>
-    </button>
   </div>
-  
+  <!-- list of stories -->
+  <div class="storyList">
+    <div *ngFor="let classroom of classrooms; let i = index" (click)="setClassroom(classroom)" >
+      <!-- story entry-->
+      <div class="contentSection" [attr.id]="classroom._id">
+        <!-- story title-->
+        <div class="contentsTitle" [attr.id]="i" (blur)="saveClassroomTitle(i, classroom)" (keydown.enter)="saveClassroomTitle(i, classroom)" >
+          {{ classroom?.title }}
+        </div>
+        <!-- date and menu icon-->
+        <div class="contentsDate">
+          {{ classroom?.studentIds.length }}
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your classroom" >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDeleteClassroomDialog(classroom._id)" >
+              <mat-icon>delete</mat-icon>
+              <span>{{ ts.l.delete }}</span>
+            </button>
+            <button mat-menu-item (click)="makeTitleDivEditable(i)">
+              <mat-icon>create</mat-icon>
+              <span>{{ ts.l.rename }}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </div>
+  <button mat-fab class="newStoryButton" (click)="createNewClassroom()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

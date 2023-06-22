@@ -49,7 +49,7 @@ export class ClassroomDrawerComponent implements OnInit {
    * Set the current classroom to the first in the list
    * @param teacherId
    */
-  async getClassrooms(teacherId) {
+  async getClassrooms(teacherId: string) {
     this.classrooms = await firstValueFrom( this.classroomService.getClassroomsForTeacher(teacherId) );
 
     if (this.classrooms.length > 0) {

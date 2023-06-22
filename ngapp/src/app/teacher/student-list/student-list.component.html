@@ -1,26 +1,30 @@
-<mat-card class="container">
-  <h4>Students</h4>
-
+<div class="studentListContainer">
   <!-- list of students-->
-  <mat-accordion>
+  <mat-accordion *ngIf="students.length > 0; else noStudentsMessage">
     <mat-expansion-panel *ngFor="let student of students">
-      <!-- header: username and num of stories-->
+      <!-- panel header: username and num of stories-->
       <mat-expansion-panel-header>
         <mat-panel-title style="font-weight: bolder">
           {{ student.username }}
         </mat-panel-title>
         <mat-panel-description>
-          {{ numOfStories.get(student.username) }}
+          {{ studentStories[student.username].length }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <!-- opened panel: list of stories-->
+      <!-- panel opened body: list of stories-->
       <div *ngFor="let story of studentStories[student.username]">
-        <div class="storyEntry" (click)="openFeedbackForStory(story)">
-          <div> {{ story.title }} </div>
-          <div> {{ story.lastUpdated | date : "d/M/yy" }} </div>
+        <div class="storyEntry" (click)="setStoryForFeedback(story)">
+          <div>{{ story.title }}</div>
+          <div>{{ story.lastUpdated | date : "d/M/yy" }}</div>
         </div>
         <mat-divider></mat-divider>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-</mat-card>
+  <ng-template #noStudentsMessage>
+    <div class="noStudentsMessage">
+      Click on the 'Share Code' button to get the classroom code. Your students
+      can use this code to join the classroom.
+    </div>
+  </ng-template>
+</div>

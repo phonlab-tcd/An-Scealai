@@ -1,6 +1,7 @@
-.container {
+.studentListContainer {
     height: 100%;
     width: 100%;
+    padding: 20px;
     overflow-y: scroll;
 }
 
@@ -15,3 +16,8 @@
     cursor: pointer;
 }
 
+.noStudentsMessage {
+    font-size: 20px;
+    text-align: center;
+    padding-top: 100px;
+}
