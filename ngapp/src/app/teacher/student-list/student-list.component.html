@@ -1,30 +1,41 @@
-<div class="studentListContainer">
-  <!-- list of students-->
-  <mat-accordion *ngIf="students.length > 0; else noStudentsMessage">
-    <mat-expansion-panel *ngFor="let student of students">
-      <!-- panel header: username and num of stories-->
-      <mat-expansion-panel-header>
-        <mat-panel-title style="font-weight: bolder">
-          {{ student.username }}
-        </mat-panel-title>
-        <mat-panel-description>
-          {{ studentStories[student.username].length }}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <!-- panel opened body: list of stories-->
-      <div *ngFor="let story of studentStories[student.username]">
-        <div class="storyEntry" (click)="setStoryForFeedback(story)">
-          <div>{{ story.title }}</div>
-          <div>{{ story.lastUpdated | date : "d/M/yy" }}</div>
-        </div>
-        <mat-divider></mat-divider>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <ng-template #noStudentsMessage>
-    <div class="noStudentsMessage">
-      Click on the 'Share Code' button to get the classroom code. Your students
-      can use this code to join the classroom.
-    </div>
-  </ng-template>
-</div>
+
+
+
+<!-- BODY CONTAINER-->
+<mat-drawer-container class="studentListContainer" autosize>
+        <!-- list of students-->
+        <mat-accordion *ngIf="students.length > 0; else noStudentsMessage">
+          <mat-expansion-panel *ngFor="let student of students">
+            <!-- panel header: username and num of stories-->
+            <mat-expansion-panel-header>
+              <mat-panel-title style="font-weight: bolder">
+                {{ student.username }}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ studentStories[student.username].length }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <!-- panel opened body: list of stories-->
+            <div *ngFor="let story of studentStories[student.username]">
+              <mat-divider></mat-divider>
+              <div class="storyEntry" (click)="setStoryForFeedback(story); rightDrawer.open()">
+                <div>{{ story.title }}</div>
+                <div>{{ story.lastUpdated | date : "d/M/yy" }}</div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <ng-template #noStudentsMessage>
+          <div class="noStudentsMessage">
+            Click on the 'Share Code' button to get the classroom code. Your students
+            can use this code to join the classroom.
+          </div>
+        </ng-template>
+    <!-- STORY FEEDBACK DRAWER -->
+    <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end" style="width: 80%" >
+      <app-teacher-story
+        [story]="storyForFeedback"
+        (closeFeedbackEmitter)="rightDrawer.close()"
+      ></app-teacher-story>
+    </mat-drawer>
+  </mat-drawer-container>

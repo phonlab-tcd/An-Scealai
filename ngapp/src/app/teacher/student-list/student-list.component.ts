@@ -16,6 +16,7 @@ export class StudentListComponent implements OnInit {
   @Output() storyEmitter = new EventEmitter<Story>();
   students: User[] = [];
   studentStories: Object = {};
+  storyForFeedback: Story;
 
   constructor(
     private userService: UserService,
@@ -63,5 +64,6 @@ export class StudentListComponent implements OnInit {
    */
   setStoryForFeedback(story: Story) {
     this.storyEmitter.emit(story);
+    this.storyForFeedback = story;
   }
 }

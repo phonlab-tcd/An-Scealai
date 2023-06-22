@@ -4,7 +4,6 @@ import { TranslationService } from "app/core/services/translation.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { Story } from "app/core/models/story";
 import { Classroom } from "../../core/models/classroom";
 
 @Component({
@@ -20,7 +19,6 @@ export class TeacherDashboardComponent implements OnInit {
   updatedTitle: string = "";
   classroomsLoaded: boolean = true;
   dialogRef: MatDialogRef<unknown>;
-  storyForFeedback: Story;
 
   constructor(
     public ts: TranslationService,
