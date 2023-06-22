@@ -79,7 +79,7 @@
   >
     {{ ts.l.feedback }}
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
-    <!-- <span class="notificationBtn" *ngIf="hasFeedback">1</span> -->
+    <span class="notificationBtn" *ngIf="hasFeedback && !story.feedback.seenByStudent">1</span>
   </div>
 
   <!-- SYNTHESIS -->
