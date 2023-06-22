@@ -2,7 +2,7 @@
     <div *ngIf="classrooms.length > 0">
       <div class="myStories">{{ ts.l.my_classrooms }}</div>
       <!-- search bar -->
-      <div class="form-group">
+      <!-- <div class="form-group">
         <input
           type="text"
           class="form-control searchBox"
@@ -11,11 +11,11 @@
           [(ngModel)]="searchText"
           placeholder="{{ ts.l.search_story_title_or_content }}"
         />
-      </div>
+      </div> -->
     </div>
     <!-- list of stories -->
     <div class="storyList">
-      <div *ngFor="let classroom of classrooms | appFilter : searchText; let i = index" (click)="setClassroom(classroom)" >
+      <div *ngFor="let classroom of classrooms; let i = index" (click)="setClassroom(classroom)" >
         <!-- story entry-->
         <div class="contentSection" [attr.id]="classroom._id">
           <!-- story title-->

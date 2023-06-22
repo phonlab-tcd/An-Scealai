@@ -22,12 +22,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.component';
-import { FilterPipe } from 'app/core/pipes/filter.pipe';
+//import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { StudentListComponent } from './student-list/student-list.component';
 
 @NgModule({
   declarations: [
-    FilterPipe,
+    //FilterPipe,
     TeacherDashboardOldComponent,
     TeacherDashboardComponent,
     TeacherStudentComponent,
@@ -36,7 +36,7 @@ import { StudentListComponent } from './student-list/student-list.component';
     TeacherSettingsComponent,
     TeacherDictoglossComponent,
     ClassroomDrawerComponent,
-    StudentListComponent
+    StudentListComponent,
   ],
   imports: [
     CommonModule,

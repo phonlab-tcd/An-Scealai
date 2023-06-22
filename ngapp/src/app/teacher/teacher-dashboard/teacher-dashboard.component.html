@@ -90,6 +90,7 @@
       <div style="height: 80vh; width: 100%">
         <app-student-list
         [classroom]="classroom"
+        (storyEmitter)="storyForFeedback = $event; rightDrawer.open()"
         ></app-student-list>
       </div>
 
@@ -106,27 +107,10 @@
     </ng-template>
   </div>
 
-  <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
-    <!-- FEEDBACK -->
-    <app-feedback-drawer
-      *ngIf="selectedDrawer == 'feedback'"
-      [story]="story"
-      (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
-    ></app-feedback-drawer>
-    <!-- DICTIONARY -->
-    <app-dictionary-drawer
-      *ngIf="selectedDrawer == 'dictionary'"
-      (closeDictionaryEmitter)="toggleRightDrawer('dictionary')"
-    ></app-dictionary-drawer>
-    <!-- GRAMMAR CHECKER -->
-    <app-grammar-error-drawer
-      *ngIf="selectedDrawer == 'grammar'"
-      [quillHighlighter]="quillHighlighter"
-      [grammarLoaded]="grammarLoaded"
-      [grammarErrorsTypeDict]="grammarErrorsTypeDict"
-      [grammarErrors]="grammarErrors"
-      [checkBoxes]="checkBoxes"
-      (closeGrammarEmitter)="toggleRightDrawer('grammar')"
-    ></app-grammar-error-drawer>
+  <mat-drawer #rightDrawer class="rightDrawer" mode="over" position="end" style="width: 80%">
+    <app-teacher-story
+    [story]="storyForFeedback"
+    (closeFeedbackEmitter)="rightDrawer.close()"
+    ></app-teacher-story>
   </mat-drawer>
 </mat-drawer-container>

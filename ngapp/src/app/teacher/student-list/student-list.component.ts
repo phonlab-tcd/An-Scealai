@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Classroom } from "../../core/models/classroom";
 import { User } from '../../core/models/user';
+import { Story } from '../../core/models/story';
 import { UserService } from '../../core/services/user.service';
 import { StoryService } from 'app/core/services/story.service';
 import { firstValueFrom } from 'rxjs';
@@ -13,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
 export class StudentListComponent implements OnInit {
 
   @Input() classroom: Classroom;
+  @Output() storyEmitter = new EventEmitter<Story>();
   students : User[] = [];
   numOfStories: Map<string, number> = new Map();
   studentStories: Object = {};
@@ -48,6 +50,10 @@ export class StudentListComponent implements OnInit {
         error: () => {console.log(id + " does not exist")}
       });
     }
+  }
+
+  openFeedbackForStory(story: Story) {
+    this.storyEmitter.emit(story);
   }
 
 }

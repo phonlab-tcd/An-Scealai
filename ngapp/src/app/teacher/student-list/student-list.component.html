@@ -15,7 +15,7 @@
       </mat-expansion-panel-header>
       <!-- opened panel: list of stories-->
       <div *ngFor="let story of studentStories[student.username]">
-        <div class="storyEntry">
+        <div class="storyEntry" (click)="openFeedbackForStory(story)">
           <div> {{ story.title }} </div>
           <div> {{ story.lastUpdated | date : "d/M/yy" }} </div>
         </div>

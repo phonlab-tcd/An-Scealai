@@ -41,6 +41,7 @@ export class TeacherDashboardComponent implements OnInit {
   updatedTitle: string = "";
   classroomsLoaded: boolean = true;
   dialogRef: MatDialogRef<unknown>;
+  storyForFeedback: Story;
 
   constructor(
     public ts: TranslationService,
