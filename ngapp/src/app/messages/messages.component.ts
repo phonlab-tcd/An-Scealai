@@ -324,9 +324,9 @@ export class MessagesComponent implements OnInit {
       this.audioSource = null;
     } else {
       if (this.isTeacher) {
-        this.router.navigateByUrl(`teacher/classroom/${this.classroom._id}`);
+        this.router.navigateByUrl('teacher/dashboard');
       } else {
-        this.router.navigateByUrl("contents");
+        this.router.navigateByUrl("student/dashboard");
       }
     }
   }
