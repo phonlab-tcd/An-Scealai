@@ -260,6 +260,9 @@ export default {
   checking_grammar: {
     ga: '...an ghramadach á seiceáil',
     en: '...Checking Grammar' },
+  no_grammar_errors: {
+    ga: 'Ní bhfuarthas aon earráidí gramadaí',
+    en: 'No grammar errors found' },
   gramadoir: {
     ga: 'An Gramadóir',
     en: 'An Gramadóir' },
