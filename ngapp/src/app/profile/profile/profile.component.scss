@@ -1,185 +1,35 @@
 .profileContainer {
-    width: 500px;
-    display: inline-block;
-    background-color: var(--scealai-med-green);
-    color: white;
-    border-radius: 10px;
-    -webkit-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    -moz-box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-    box-shadow: 0px 0px 13px 2px rgba(0,0,0,0.18);
-}
-
-.headerIconBtn {
-    margin-left: 25px;
-}
-
-.formBody {
-    width: 500px;
+    //background-color: green;
+    width: 100%;
+    height: 90vh;
     display: flex;
-    justify-content: center;
-    padding: 15px;
-    color: var(--dark-text);
-    background-color: white;
-    border-radius: 0px 0px 10px 10px;
+    margin-top: -55px; // margin defined in app.css
 }
 
-.profileFormContainer {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
+.sideMenu {
+    //background-color:red;
+    flex: 0 0 20%; /* width of the side menu */
+    //width: fit-content; -> this works too
+    border-right: 1px solid black; 
+
 }
 
-.formLabel {
-    white-space: nowrap;
+.sideMenu > * {
+    text-align: left;
+    padding: 50px;
+    font-size: 16pt;
+    font-weight: bolder;
 }
 
-.userInfo {
-    padding-left: 5%;
-    white-space: nowrap;
-}
-
-.form-group {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    border: 1px solid rgb(189, 189, 189);
-    border-radius: 4px;
-}
-
-.form-group-vertical {
-    display: flex;
-    align-items: left;
-    padding: 5px;
-    border: 1px solid rgb(189, 189, 189);
-    border-radius: 4px;
-    flex-direction : column;
-    margin-bottom: 15px;
-}
-
-.form-group-section {
-    display: flex;
-    align-items: center;
-}
-
-.inputField {
-    margin-left: 5%;
-    min-width: 0;
-}
-
-.leaveClassroomButton {
-    background-color: var(--delete-red);
-    border-radius: 5px;
-    padding: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 12pt;
-    margin-left: 20px;
-    z-index: 1;
-}
-
-.leaveClassroomButton:hover {
-    background-color: var(--delete-red-hover);
-    transition: 0.5s;
-}
-
-.classroomMessage {
-    margin: 10px;
-}
-
-.notFoundText {
-    color: var(--delete-red);
-}
-
-.greenLink {
-    text-decoration: underline;
-    color: var(--scealai-green);
-    font-size: 12pt;
-}
-
-.greenLink:hover {
+.sideMenu > :hover {
     cursor: pointer;
+    font-style: italic;
+    color: var(--scealai-green)
 }
 
-.languageButtonContainer {
-    display: flex;
-    margin-left: 4px;
-}
-
-.accountButtonContainer {
-  display: flex;
-  margin-left: 20%;
-}
-
-.deleteAccountButton {
-  background-color: var(--delete-red);
-  margin-bottom: 10px;
-  font-size: 9px;
-  border-radius: 10px 10px 10px 10px;
-  padding: 5px;
-}
-
-.deleteAccountButton:hover {
-    background-color: var(--delete-red-hover);
-    transition: 0.5s;
-}
-
-.passwordButton {
-  background-color: var(--scealai-green);
-  color: white;
-  margin-bottom: 10px;
-  font-size: 9px;
-  border-radius: 10px 10px 10px 10px;
-  padding: 5px;
-  margin-left: 10px;
-}
-
-.passwordButton:hover {
-    background-color: var(--scealai-med-green);
-    transition: 0.5s;
-}
-
-.profileBtnContainer {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 15px;
-}
-
-.logoutBtn {
-    font-size: 12pt;
-    background-color: var(--scealai-green);
-    border-radius: 10px 10px 10px 10px;
-    padding: 5px;
-    z-index: 1;
-}
-
-.logoutBtn:hover {
-    background-color: var(--scealai-med-green);
-}
-
-@media only screen and (max-width: 700px) {
-    .profileContainer {
-        width: 90%;
-    }
-    .formBody {
-        width: 100%;
-    }
-    .logoutBtn {
-        font-size: 10pt;
-    }
-}
-
-@media only screen and (max-width: 550px) {
-    .profileContainer {
-        width: 90%;
-    }
-    .formBody {
-        width: 100%;
-    }
-    .profileFormContainer {
-        width: 95%;
-    }
-    .logoutBtn {
-        font-size: 10pt;
-    }
+.body {
+    //background-color: blue;
+    flex-grow: 1; /* take up the remaining width space */
+    padding-top: 50px;
+    overflow-y: scroll;
 }

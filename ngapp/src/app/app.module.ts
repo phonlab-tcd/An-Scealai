@@ -27,7 +27,7 @@ import { LogService } from './core/services/log.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterProfileComponent } from './register-profile/register-profile.component';
+//import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { SynthItemModule } from './student/synth-item/synth-item.component';
@@ -59,7 +59,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         LandingComponent,
         LoginComponent,
         ChatbotComponent,
-        RegisterProfileComponent,
+        //RegisterProfileComponent,
         HighlightDirective,
         MessagesComponent,
         CreateQuizComponent,
