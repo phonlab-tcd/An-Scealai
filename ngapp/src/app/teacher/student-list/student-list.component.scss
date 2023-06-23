@@ -8,9 +8,8 @@
 .storyEntry {
     text-align: left;
     display: flex;
-    justify-content: space-between;
     padding: 20px;
-}
+} 
 
 .storyEntry:hover {
     cursor: pointer;
@@ -38,5 +37,13 @@
 .mat-expansion-panel-header[aria-disabled=true] {
     color: black;
     font-weight:bolder;
+}
+
+.storyListHeader {
+    display: flex;
+    padding: 20px;
+    font-weight: bolder;
+    text-decoration: underline;
+    text-align: left;
 }
 
