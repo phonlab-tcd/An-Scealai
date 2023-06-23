@@ -1,19 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { ClassroomService } from 'app/core/services/classroom.service';
-import { UntypedFormControl } from '@angular/forms';
-import { Classroom } from 'app/core/models/classroom';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
-import { StoryService } from 'app/core/services/story.service';
-import { Story } from 'app/core/models/story';
-import { ProfileService } from 'app/core/services/profile.service';
-import { MessageService } from 'app/core/services/message.service';
-import { UserService } from 'app/core/services/user.service';
-import { RecordingService } from 'app/core/services/recording.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from 'app/dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -22,28 +11,12 @@ import { BasicDialogComponent } from 'app/dialogs/basic-dialog/basic-dialog.comp
 })
 export class ProfileComponent implements OnInit {
 
-  classroomCodeOutput: string;
-  codeInput : UntypedFormControl;
-  foundClassroom: Classroom;
-  classroom: Classroom;
-  updatedUsername: string;
-  errorMessage = '';
-  newPassword: string;
-  newPasswordConfirm: string;
-  dialogRef: MatDialogRef<unknown>;
   displayComponent: string;
   lastClickedMenuId: string = "";
 
   constructor(public auth: AuthenticationService,
-              private classroomService: ClassroomService,
               private engagement: EngagementService,
-              public ts: TranslationService,
-              public storyService: StoryService,
-              public profileService: ProfileService,
-              public messageService: MessageService,
-              public userService: UserService,
-              public recordingService: RecordingService,
-              private dialog: MatDialog) { }
+              public ts: TranslationService) { }
 
   /**
    * Set the first button on the side menu as currently selected
@@ -53,6 +26,12 @@ export class ProfileComponent implements OnInit {
     this.lastClickedMenuId = '1';
   }
 
+  /**
+   * Define the component to display in the html body
+   * Highlight the selected menu option on the side nav bar
+   * @param componentToDisplay name of component to display
+   * @param id id of menu div to highlight
+   */
   setCurrentDisplay(componentToDisplay, id) {
     this.displayComponent = componentToDisplay;
     // set css for selecting an option in the side nav
@@ -69,6 +48,9 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  /**
+   * Logout the user
+   */
   logout() {
     this.engagement.addEventForLoggedInUser(EventType.LOGOUT);
     this.auth.logout();

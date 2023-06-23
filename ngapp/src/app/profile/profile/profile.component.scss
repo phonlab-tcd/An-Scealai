@@ -1,17 +1,14 @@
 .profileContainer {
-    //background-color: green;
     width: 100%;
     height: 90vh;
     display: flex;
-    margin-top: -55px; // margin defined in app.css
+    margin-top: -55px; // app margin defined in app.css
 }
 
 .sideMenu {
-    //background-color:red;
     flex: 0 0 20%; /* width of the side menu */
     //width: fit-content; -> this works too
     border-right: 1px solid black; 
-
 }
 
 .sideMenu > * {
@@ -28,7 +25,6 @@
 }
 
 .body {
-    //background-color: blue;
     flex-grow: 1; /* take up the remaining width space */
     padding-top: 50px;
     overflow-y: scroll;
