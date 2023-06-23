@@ -1,6 +1,16 @@
 <mat-drawer-container class="studentListContainer" autosize>
   <!-- list of students-->
   <mat-accordion *ngIf="students.length > 0; else noStudentsMessage" [multi]="true">
+    <mat-expansion-panel disabled class="expansionHeader" style="cursor:pointer" >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Student
+          </mat-panel-title>
+          <mat-panel-description>
+           Num. of stories
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
     <mat-expansion-panel *ngFor="let student of students">
       <!-- panel header: username and num of stories-->
       <mat-expansion-panel-header (click)="resetFeedbackDrawer()">
@@ -8,9 +18,10 @@
           {{ student.username }}
         </mat-panel-title>
         <mat-panel-description *ngIf="studentStories[student.username]">
-          {{ studentStories[student.username].length }}
+          <!-- {{ studentStories[student.username].length }} -->
         </mat-panel-description>
       </mat-expansion-panel-header>
+      <div> Test </div>
       <!-- panel opened body: list of stories-->
       <div *ngFor="let story of studentStories[student.username]">
         <mat-divider></mat-divider>
