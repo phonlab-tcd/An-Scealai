@@ -1,9 +1,9 @@
 <div class="profileContainer">
   <div class="sideMenu">
-    <div (click)="displayComponent = 'accountSettings'">Account Settings</div>
-    <div (click)="displayComponent = 'languageInfo'">My Language Info</div>
-    <div (click)="displayComponent = 'learningGoals'">Learning Goals</div>
-    <div>Sign Out</div>
+    <div (click)="setCurrentDisplay('accountSettings', '1')" id="1">Account Settings</div>
+    <div (click)="setCurrentDisplay('languageInfo', '2')" id="2">My Language Info</div>
+    <div (click)="setCurrentDisplay('learningGoals', '3')" id="3">Learning Goals</div>
+    <div (click)="logout()"> {{ts.l.sign_out}} <i class="fas fa-sign-out-alt"></i></div>
   </div>
   <div class="body" [ngSwitch]="displayComponent">
     <app-account-settings *ngSwitchDefault>account settings</app-account-settings>

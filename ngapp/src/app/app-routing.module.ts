@@ -6,7 +6,7 @@ import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from 'app/register/register.component';
-//import { RegisterProfileComponent } from './register-profile/register-profile.component';
+import { RegisterProfileComponent } from './profile/register-profile/register-profile.component';
 import { ProfileComponent } from './profile/profile/profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'landing', component: LandingComponent },
   { path: 'login', component: LoginComponent},
   { path: 'register/:role', component: RegisterComponent},
-  //{ path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
+  { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
   { path: 'taidhgin', component: ChatbotComponent },
   { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
