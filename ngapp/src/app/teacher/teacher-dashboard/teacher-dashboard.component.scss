@@ -2,7 +2,6 @@
     display: flex;
     justify-content: center;
     margin-top: -30px;  // margin for entire page set in app.component.scss
-    padding-bottom: 20px;
   }
 
 .storyTitleContainer {
@@ -32,8 +31,9 @@
     justify-content: space-between;
     flex-wrap: wrap;
     --options-btn-background-color-hover : lightgray;
-    margin-left: 2%;
-    margin-right: 2%;
+    background-color:white;
+    padding-left: 30px;
+    padding-right: 30px;
 }
   
 .optionsBtn {
@@ -55,18 +55,8 @@
     border-radius: 2;
 }
 
-.optionsPopupBtn {
-    margin-right: 4px;
-}
-
 .optionsBtnIcon {
     margin-left: 5px;
-}
-
-.optionsBtnClicked {
-    background-color: var(--options-btn-background-color-hover);
-    color: #35322f;
-    border-radius: 2;
 }
 
 .bodyContainer {
@@ -91,9 +81,7 @@
 
 .menuButton {
     float:left;
-    padding-left: 10px;
-    padding-top: 7px;
-    padding-right: 10px;
+    padding: 10px;
     transform: scale(1.5);
     z-index: 100;
 }

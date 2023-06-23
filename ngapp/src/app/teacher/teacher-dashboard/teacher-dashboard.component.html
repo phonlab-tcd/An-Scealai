@@ -14,64 +14,6 @@
 <!-- CLASSROOM DRAWER BUTTON-->
 <span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()" >menu</span >
 
-<!-- CLASSROOM OPTIONS TOOL BAR -->
-<div class="optionsBtnContainer" (click)="toggleOptions()" *ngIf="classroom">
-  <div class="optionsBtn">
-    <i *ngIf="!showOptions" class="fas fa-chevron-down"></i>
-    <i *ngIf="showOptions" class="fas fa-chevron-right"></i>
-  </div>
-
-  <!-- SHARE CODE -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; openCodeDialog()"
-  >
-    {{ ts.l.share_code }}
-    <i class="fas fa-share-alt headerIcon"></i>
-  </div>
-
-  <!-- STATISTICS -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToStats()"
-  >
-    {{ ts.l.stats }}
-    <i class="fas fa-calculator optionsBtnIcon"></i>
-  </div>
-
-  <!-- MESSAGES -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToMessages()"
-  >
-    {{ ts.l.messages }}
-    <i class="fa fa-envelope optionsBtnIcon"></i>
-  </div>
-
-  <!-- DICTOGLOSS -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToDictogloss()"
-  >
-    {{ ts.l.dictogloss }}
-    <i class="fas fa-file-audio optionsBtnIcon"></i>
-  </div>
-
-  <!-- SETTINGS -->
-  <div
-    *ngIf="showOptions"
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; goToSettings()"
-  >
-    {{ ts.l.settings }}
-    <i class="fas fa-cog optionsBtnIcon"></i>
-  </div>
-</div>
-
 <!-- BODY CONTAINER-->
 <mat-drawer-container class="bodyContainer" autosize>
   <!-- CLASSROOM LIST DRAWER-->
@@ -84,12 +26,45 @@
     ></app-classroom-drawer>
   </mat-drawer>
 
-  <!-- CENTER CONTAINER-->
+  <!-- CLASSROOM OPTIONS TOOL BAR -->
+  <div *ngIf="classroom">
+    <div class="optionsBtnContainer">
+      <!-- SHARE CODE -->
+      <div class="optionsBtn" (click)="openCodeDialog()">
+        {{ ts.l.share_code }}
+        <i class="fas fa-share-alt headerIcon"></i>
+      </div>
+
+      <!-- STATISTICS -->
+      <div class="optionsBtn" (click)="goToStats()">
+        {{ ts.l.stats }}
+        <i class="fas fa-calculator optionsBtnIcon"></i>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="optionsBtn" (click)="goToMessages()">
+        {{ ts.l.messages }}
+        <i class="fa fa-envelope optionsBtnIcon"></i>
+      </div>
+
+      <!-- DICTOGLOSS -->
+      <div class="optionsBtn" (click)="goToDictogloss()">
+        {{ ts.l.dictogloss }}
+        <i class="fas fa-file-audio optionsBtnIcon"></i>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="optionsBtn" (click)="goToSettings()">
+        {{ ts.l.settings }}
+        <i class="fas fa-cog optionsBtnIcon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST OF STUDENTS/STORIES-->
   <div class="storyContainer">
     <div class="studentListContainer" *ngIf="classroom; else newClassroomMessage" >
-      <app-student-list
-        [classroom]="classroom"
-      ></app-student-list>
+      <app-student-list [classroom]="classroom"></app-student-list>
     </div>
     <!-- NO CLASSROOMS MESSAGE-->
     <ng-template #newClassroomMessage>

@@ -12,8 +12,6 @@ import { Classroom } from "../../core/models/classroom";
   styleUrls: ["./teacher-dashboard.component.scss"],
 })
 export class TeacherDashboardComponent implements OnInit {
-  showOptions = true;
-  dontToggle = false;
   classrooms: Classroom[];
   classroom: Classroom;
   updatedTitle: string = "";
@@ -28,14 +26,6 @@ export class TeacherDashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit() {}
-
-  /* Toggle upper menu buttons */
-  toggleOptions() {
-    if (!this.dontToggle) {
-      this.showOptions = !this.showOptions;
-    }
-    this.dontToggle = false;
-  }
 
   /**
    * Set the current classroom displayed in the main window

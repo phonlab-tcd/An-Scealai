@@ -1,6 +1,6 @@
 <mat-drawer-container class="studentListContainer" autosize>
   <!-- list of students-->
-  <mat-accordion *ngIf="students.length > 0; else noStudentsMessage">
+  <mat-accordion *ngIf="students.length > 0; else noStudentsMessage" [multi]="true">
     <mat-expansion-panel *ngFor="let student of students">
       <!-- panel header: username and num of stories-->
       <mat-expansion-panel-header (click)="resetFeedbackDrawer()">
