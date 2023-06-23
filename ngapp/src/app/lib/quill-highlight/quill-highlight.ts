@@ -2,6 +2,7 @@ import Quill from 'quill';
 import { TranslationService } from 'app/core/services/translation.service';
 import { EngagementService } from 'app/core/services/engagement.service'
 import {isEqual} from "lodash";
+import { hi } from 'date-fns/locale';
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
@@ -12,6 +13,13 @@ Quill.register(
         'highlight-tag',
         {scope: Parchment.Scope.INLINE}
     )
+);
+Quill.register(
+  new Parchment.Attributor.Attribute(
+      'id',
+      'id',
+      {scope: Parchment.Scope.INLINE}
+  )
 );
 
 type TagData = {
@@ -33,11 +41,88 @@ export class QuillHighlighter {
     mostRecentHoveredMessage: String = '';
     private ts: TranslationService;
     private engagement: EngagementService;
+    private editorElement: HTMLElement;
 
     constructor(quillEditor: Quill, ts: TranslationService, engagement: EngagementService) {
         this.quillEditor = quillEditor;
         this.ts = ts;
         this.engagement = engagement;
+        this.editorElement = document.querySelector(".ql-editor");
+        window["quillEditor"] = this.quillEditor;
+    }
+    // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
+    private getHighlightTagsForRange(startIndex, endIndex): Set<string> {
+      const highlightTags = new Set<string>();
+    
+      for (let i = startIndex; i <= endIndex; i++) {
+        const format = this.quillEditor.getFormat(i);
+        console.log("GOT FORMAT:", format);
+        const ht = format["highlight-tag"] as string;
+        if (ht) {
+          highlightTags.add(ht);
+        }
+      }
+    
+      return highlightTags;
+    }
+
+    public addTag(tag: HighlightTag) {
+
+      // find the overlapping highlight tags
+      const highlightTagsSet = this.getHighlightTagsForRange(tag.fromX -1, tag.toX +1);
+      const highlightTags = Array.from(highlightTagsSet).map(function(s){ return JSON.parse(s) });
+      console.log("Set:", highlightTagsSet)
+      console.log("Parsed:", highlightTags);
+      console.log("Stringified", JSON.stringify(highlightTags));
+      let htdata = [];
+      for (const tagArray of highlightTags) {
+        htdata = htdata.concat(tagArray);
+      }
+      console.log("HTDATA", htdata);
+      console.log("tag.data",tag.data);
+      const tagDatas = [...htdata, ...tag.data].filter(x=>x);
+      console.log("tagDatas", tagDatas);
+
+      if (highlightTags.length > 0) {
+        console.log("HIGHLIGHT TAGS ALREADY THERE:", highlightTags, tag, "JOINED:", tagDatas);
+      }
+
+      const span: HighlightTag = {fromX: tag.fromX, toX: tag.toX, data: tagDatas as any};
+      htdata.forEach(function(t) {
+        console.log("CHECKING T:",t)
+        if(t.fromX < span.fromX) {
+          console.log("LT", t,span);
+          span.fromX = t.fromX;
+        }
+        if(t.toX   > span.toX)   {
+          span.toX = t.toX;
+        }
+       });
+
+
+       const id = crypto.randomUUID().toString();
+       const s = JSON.stringify(tagDatas);
+       console.log("STRINGIFIED:", s);
+       console.log(id, span);
+       this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {}, 'api');
+       this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": s, "id": id}, 'api');
+
+       const tagElement = this.editorElement.querySelector(`[id="${id}"`);
+       if (!tagElement) {
+        throw new Error("failed to find tag element for newly created highlight-tag");
+       }
+
+       const tooltip = new Tooltip(this.quillEditor);
+       tooltip.root.classList.add('custom-tooltip');
+
+       tagElement.addEventListener('mouseover', () => {
+           this.mouseOverTagElem(span, tagElement, tooltip);
+       });
+       
+       tagElement.addEventListener('mouseout', () => {
+         tagElement.removeAttribute('data-selected');
+         tooltip.hide();
+       });
     }
     
     /**
@@ -45,6 +130,13 @@ export class QuillHighlighter {
     * @param tags - array of tags to highlight
     */
     public show(tags: HighlightTag[]): void {
+        // window["addTag"] = this.addTag.bind(this);
+        // window["getHighlightTagsForRange"] = this.getHighlightTagsForRange.bind(this);
+        for(const tag of tags) {
+          console.log(tag.data);
+          this.addTag(tag);
+        }
+        return;
         if(!tags) return;
 
         // pre-processing step to merge tags?
