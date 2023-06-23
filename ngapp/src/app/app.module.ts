@@ -27,7 +27,6 @@ import { LogService } from './core/services/log.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
-import { ProfileComponent } from './profile/profile.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
@@ -50,6 +49,7 @@ import { GrammarErrorTimeModule } from './story-stats/grammar-error-time/grammar
 import { NgramDistributionModule } from './story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
 import { NavBarModule } from './nav-bar/nav-bar.module';
+import { ProfileModule } from './profile/profile.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 
@@ -59,7 +59,6 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         LandingComponent,
         LoginComponent,
         ChatbotComponent,
-        ProfileComponent,
         RegisterProfileComponent,
         HighlightDirective,
         MessagesComponent,
@@ -75,6 +74,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     ],
     imports: [
         NavBarModule,
+        ProfileModule,
         RegisterModule,
         DictionaryLookupsModule,
         GrammarPieChartModule,

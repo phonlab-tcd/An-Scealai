@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { ClassroomService } from 'app/core/services/classroom.service';
 import { UntypedFormControl } from '@angular/forms';
-import { Classroom } from '../core/models/classroom';
+import { Classroom } from 'app/core/models/classroom';
 import { EngagementService } from 'app/core/services/engagement.service';
-import { EventType } from '../core/models/event';
+import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
 import { StoryService } from 'app/core/services/story.service';
-import { Story } from '../core/models/story';
+import { Story } from 'app/core/models/story';
 import { ProfileService } from 'app/core/services/profile.service';
 import { MessageService } from 'app/core/services/message.service';
-import { UserService } from '../core/services/user.service';
-import { RecordingService } from '../core/services/recording.service';
+import { UserService } from 'app/core/services/user.service';
+import { RecordingService } from 'app/core/services/recording.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
+import { BasicDialogComponent } from 'app/dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: 'app-profile',

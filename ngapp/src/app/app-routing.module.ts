@@ -7,7 +7,7 @@ import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from 'app/register/register.component';
 import { RegisterProfileComponent } from './register-profile/register-profile.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './profile/profile/profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
 import { AboutTaidhginComponent } from './nav-bar/about-taidhgin/about-taidhgin.component';
