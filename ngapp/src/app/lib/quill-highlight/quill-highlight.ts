@@ -14,6 +14,7 @@ Quill.register(
         {scope: Parchment.Scope.INLINE}
     )
 );
+
 Quill.register(
   new Parchment.Attributor.Attribute(
       'id',
@@ -22,18 +23,14 @@ Quill.register(
   )
 );
 
-type TagData = {
+export type HighlightTag = {
   messageGA: string;
   messageEN: string;
   nameEN: string;
   nameGA: string;
   color: string;
-}
-
-export type HighlightTag = {    
-    data: TagData[];
-    fromX: number;
-    toX: number;
+  fromX: number;
+  toX: number;
 }
 
 export class QuillHighlighter {
@@ -42,6 +39,7 @@ export class QuillHighlighter {
     private ts: TranslationService;
     private engagement: EngagementService;
     private editorElement: HTMLElement;
+    private mergedGroupData: Map<string, string[]> = new Map();
 
     constructor(quillEditor: Quill, ts: TranslationService, engagement: EngagementService) {
         this.quillEditor = quillEditor;
@@ -49,49 +47,47 @@ export class QuillHighlighter {
         this.engagement = engagement;
         this.editorElement = document.querySelector(".ql-editor");
         window["quillEditor"] = this.quillEditor;
+        window["dbug"] = [this.mergedGroupData];
+    }
+    private onlyUnique(value, index, array){
+      return array.map(x=>x.symbol).indexOf(value.symbol) === index;
     }
     // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
-    private getHighlightTagsForRange(startIndex, endIndex): Set<string> {
-      const highlightTags = new Set<string>();
+    private tagDataForRange(startIndex, endIndex) {
     
+      let allMessages = [];
       for (let i = startIndex; i <= endIndex; i++) {
         const format = this.quillEditor.getFormat(i);
-        console.log("GOT FORMAT:", format);
-        const ht = format["highlight-tag"] as string;
-        if (ht) {
-          highlightTags.add(ht);
+
+        // group of messages id
+        const id = format["id"];
+        console.log("index:", i, id);
+        if (id) {
+          const messages = this.mergedGroupData.get(id);
+          allMessages = allMessages.concat(messages);
         }
       }
     
-      return highlightTags;
+      return allMessages.filter(x=>x).filter(this.onlyUnique);
     }
 
     public addTag(tag: HighlightTag) {
-
       // find the overlapping highlight tags
-      const highlightTagsSet = this.getHighlightTagsForRange(tag.fromX -1, tag.toX +1);
-      const highlightTags = Array.from(highlightTagsSet).map(function(s){ return JSON.parse(s) });
-      console.log("Set:", highlightTagsSet)
-      console.log("Parsed:", highlightTags);
-      console.log("Stringified", JSON.stringify(highlightTags));
-      let htdata = [];
-      for (const tagArray of highlightTags) {
-        htdata = htdata.concat(tagArray);
-      }
-      console.log("HTDATA", htdata);
-      console.log("tag.data",tag.data);
-      const tagDatas = [...htdata, ...tag.data].filter(x=>x);
-      console.log("tagDatas", tagDatas);
+      let highlightTagsSet = this.tagDataForRange(tag.fromX, tag.toX);
+      
+      highlightTagsSet.push(tag)
 
-      if (highlightTags.length > 0) {
-        console.log("HIGHLIGHT TAGS ALREADY THERE:", highlightTags, tag, "JOINED:", tagDatas);
-      }
+      // collapse to unique tags by serializing, creating a Set, then deserializing
+      highlightTagsSet = Array.from(new Set(highlightTagsSet.map(o=>JSON.stringify(o)))).map(s=>JSON.parse(s));
 
-      const span: HighlightTag = {fromX: tag.fromX, toX: tag.toX, data: tagDatas as any};
-      htdata.forEach(function(t) {
-        console.log("CHECKING T:",t)
+
+      highlightTagsSet = highlightTagsSet.filter(x=>x);
+
+      window["hts"] = highlightTagsSet;
+
+      const span = {fromX: tag.fromX, toX: tag.toX};
+      highlightTagsSet.forEach(function(t) {
         if(t.fromX < span.fromX) {
-          console.log("LT", t,span);
           span.fromX = t.fromX;
         }
         if(t.toX   > span.toX)   {
@@ -99,30 +95,44 @@ export class QuillHighlighter {
         }
        });
 
-
        const id = crypto.randomUUID().toString();
-       const s = JSON.stringify(tagDatas);
-       console.log("STRINGIFIED:", s);
-       console.log(id, span);
+       this.mergedGroupData.set(id, highlightTagsSet);
+
        this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {}, 'api');
-       this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": s, "id": id}, 'api');
+       this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": true, "id": id}, 'api');
 
        const tagElement = this.editorElement.querySelector(`[id="${id}"`);
        if (!tagElement) {
         throw new Error("failed to find tag element for newly created highlight-tag");
        }
+       if (tagElement["cleanup"]) {
+        tagElement["cleanup"]();
+       }
 
-       const tooltip = new Tooltip(this.quillEditor);
-       tooltip.root.classList.add('custom-tooltip');
 
-       tagElement.addEventListener('mouseover', () => {
-           this.mouseOverTagElem(span, tagElement, tooltip);
-       });
+        // TODO (memory optimization): create tooltips lazily with an id, delete using id instead of reference to dom node
+        const tooltip = new Tooltip(this.quillEditor);
+        tooltip.root.classList.add("custom-tooltip");
+
+        // TODO (optimization): use just one 'mouseover' listener that finds data using tagData Map
+        const mouseover = () => {
+          this.mouseOverTagElem(highlightTagsSet, span, tagElement, tooltip);
+        }
+        tagElement.addEventListener('mouseenter', mouseover);
        
-       tagElement.addEventListener('mouseout', () => {
-         tagElement.removeAttribute('data-selected');
-         tooltip.hide();
-       });
+        const mouseout = () => {
+          // tagElement.removeAttribute('data-selected');
+          tooltip.hide();
+        }
+        tagElement.addEventListener('mouseleave', mouseout);
+
+        function cleanup(){
+          tagElement.removeEventListener("mouseenter", mouseover);
+          tagElement.removeEventListener("mouseleave", mouseout);
+          tooltip.hide();
+        }
+
+        tagElement["cleanup"] = cleanup;
     }
     
     /**
@@ -130,50 +140,12 @@ export class QuillHighlighter {
     * @param tags - array of tags to highlight
     */
     public show(tags: HighlightTag[]): void {
-        // window["addTag"] = this.addTag.bind(this);
-        // window["getHighlightTagsForRange"] = this.getHighlightTagsForRange.bind(this);
         for(const tag of tags) {
-          console.log(tag.data);
-          this.addTag(tag);
+          setTimeout(()=>{
+            this.addTag(tag);
+          },0);
         }
         return;
-        if(!tags) return;
-
-        // pre-processing step to merge tags?
-        tags = this.mergeTags(tags);
-      
-        tags.forEach((tag) => {
-            // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
-            this.quillEditor.formatText(
-                tag.fromX,
-                (tag.toX - tag.fromX),
-                {
-                    'highlight-tag': JSON.stringify(tag)
-                },
-                'api'
-            );
-        });
-
-        // Create message popups with tooltips
-        const tagElements = document.querySelectorAll('[highlight-tag]');
-        tagElements.forEach(tagElement => {
-            const tagData = tagElement.getAttribute('highlight-tag');
-            if (!tagData) {
-              return;
-            } 
-            const highlightTag = JSON.parse(tagData) as HighlightTag;
-            const tooltip = new Tooltip(this.quillEditor);
-            tooltip.root.classList.add('custom-tooltip');
-
-            tagElement.addEventListener('mouseover', () => {
-                this.mouseOverTagElem(highlightTag, tagElement, tooltip);
-            });
-            
-            tagElement.addEventListener('mouseout', () => {
-              tagElement.removeAttribute('data-selected');
-              tooltip.hide();
-            });
-        });
     }
 
     /**
@@ -198,11 +170,12 @@ export class QuillHighlighter {
     * Remove css highlighting from all error tags
     */
     public hideAll() {
+      this.mergedGroupData = new Map();
       const tagElements = document.querySelectorAll('[data-selected]');
       tagElements.forEach(tag => tag.removeAttribute('data-selected'))
       this.quillEditor.formatText(
         0,
-        this.quillEditor.getLength(),
+        Number.MAX_SAFE_INTEGER,
           {'highlight-tag': null,
           'background-color': '',
           'data-selected': null}
@@ -217,20 +190,21 @@ export class QuillHighlighter {
     * @param tagElement - html element associated with tag
     * @param tooltip - tooltip to be applied to tag
     */
-    private mouseOverTagElem(tag: HighlightTag, tagElement: Element, tooltip) {
-        tagElement.setAttribute('data-selected', '');
+    private mouseOverTagElem(tags: HighlightTag[], span: {fromX: number, toX: number},tagElement: Element, tooltip) {
+        console.log(tags);
+        // tagElement.setAttribute('data-selected', '');
     
         // for some reason bounds aren't calculated correctly until someone scrolls
         const scrollTop = this.quillEditor.root.scrollTop;
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        const tooltipContents = this.makeTooltipContents(tag.data, this.ts.l.iso_code);
+        const tooltipContents = this.makeTooltipContents(tags, this.ts.l.iso_code);
         tooltip.root.innerHTML = tooltipContents;
         this.mostRecentHoveredMessage = tooltipContents;
     
         tooltip.show();
-        tooltip.position(this.quillEditor.getBounds(tag.fromX, tag.toX - tag.fromX));
+        tooltip.position(this.quillEditor.getBounds(span.fromX, span.toX - span.fromX));
     
         let style = tooltip.root.getAttribute('style') || '';
         style = style + `
@@ -260,7 +234,7 @@ export class QuillHighlighter {
           `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
           tooltip.root.style.left;
           
-        this.engagement.mouseOverGrammarSuggestionEvent(tag);
+        // this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
       
     /**
@@ -278,7 +252,7 @@ export class QuillHighlighter {
         return this.ts.message('checking_grammar');
     }
 
-    private makeTooltipContents(data: TagData[], lang: 'en' | 'ga'): string {
+    private makeTooltipContents(data: HighlightTag[], lang: 'en' | 'ga'): string {
       const getName = (datum) => lang == 'en' ? datum.nameEN : datum.nameGA;
       const getMessage = (datum) => lang == 'en' ? datum.messageEN : datum.messageGA;
       return data.map(datum => `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${datum.color}"></span> ${getName(datum)}: ${getMessage(datum)}</div>`).join('<hr>')
@@ -288,36 +262,36 @@ export class QuillHighlighter {
       return (tagA.fromX <= tagB.toX) && (tagA.toX >= tagB.fromX);
     }
 
-    private makeMergedTag(tags: HighlightTag[]): HighlightTag {
-      const lowest_fromX = Math.min(...tags.map(tag => tag.fromX));
-      const highest_toX = Math.max(...tags.map(tag => tag.toX));
-      const merged_data = tags.reduce((acc, tag) => this.arrayToSet(acc.concat(tag.data)), []); // make it a set so we don't duplicate the messages in the tooltip
-      return {
-        data: merged_data,
-        fromX: lowest_fromX,
-        toX: highest_toX
-      }
-    }
+    // private makeMergedTag(tags: HighlightTag[]): HighlightTag {
+    //   const lowest_fromX = Math.min(...tags.map(tag => tag.fromX));
+    //   const highest_toX = Math.max(...tags.map(tag => tag.toX));
+    //   const merged_data = tags.reduce((acc, tag) => this.arrayToSet(acc.concat(tag.data)), []); // make it a set so we don't duplicate the messages in the tooltip
+    //   return {
+    //     data: merged_data,
+    //     fromX: lowest_fromX,
+    //     toX: highest_toX
+    //   }
+    // }
 
-    private mergeTags(tags: HighlightTag[], i: number = 0): HighlightTag[] {
-      // step 0: nothing to merge if the list is empty
-      if (!tags.length) return tags; 
-      // step 1: find any tags that overlap with the first tag
-      const tagA = tags[0]
-      const overlap_set = tags.filter(tagB => this.overlaps(tagA, tagB));
-      // step 2: merge all of those overlapping tags into a new 'merged tag'
-      const merged_tag = this.makeMergedTag(overlap_set);
-      // step 3: replace any of the tags that were merged together with the newly created merged_tag
-      const updated_tags = tags.filter(tag => !overlap_set.includes(tag)).concat([merged_tag]);
-      // step 4.1: if there weren't any merges, then we're done. 
-      const noMoreMergesAtCurrentIndex = tags.length == updated_tags.length
-      if (noMoreMergesAtCurrentIndex && i == (tags.length-1)) {
-        return tags;
-      }
+    // private mergeTags(tags: HighlightTag[], i: number = 0): HighlightTag[] {
+    //   // step 0: nothing to merge if the list is empty
+    //   if (!tags.length) return tags; 
+    //   // step 1: find any tags that overlap with the first tag
+    //   const tagA = tags[0]
+    //   const overlap_set = tags.filter(tagB => this.overlaps(tagA, tagB));
+    //   // step 2: merge all of those overlapping tags into a new 'merged tag'
+    //   const merged_tag = this.makeMergedTag(overlap_set);
+    //   // step 3: replace any of the tags that were merged together with the newly created merged_tag
+    //   const updated_tags = tags.filter(tag => !overlap_set.includes(tag)).concat([merged_tag]);
+    //   // step 4.1: if there weren't any merges, then we're done. 
+    //   const noMoreMergesAtCurrentIndex = tags.length == updated_tags.length
+    //   if (noMoreMergesAtCurrentIndex && i == (tags.length-1)) {
+    //     return tags;
+    //   }
 
-      // step 4.2: otherwise, keep merging!
-      return this.mergeTags(updated_tags, noMoreMergesAtCurrentIndex ? (i + 1) : i);
-    }
+    //   // step 4.2: otherwise, keep merging!
+    //   return this.mergeTags(updated_tags, noMoreMergesAtCurrentIndex ? (i + 1) : i);
+    // }
 
     private arrayToSet(array: any[]): any[] {
       return array.filter((obj, index, self) => {

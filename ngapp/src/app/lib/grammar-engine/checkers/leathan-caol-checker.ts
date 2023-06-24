@@ -39,7 +39,7 @@ async function check(input: string): Promise<ErrorTag[]>{
         nameGA: ERROR_INFO['LEATHAN-CAOL'].nameGA,
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
-        toX: error.first + 1,
+        toX: error.second + 1,
         type: 'LEATHAN-CAOL'
       }
       errorTags.push(tag1);
@@ -55,7 +55,7 @@ async function check(input: string): Promise<ErrorTag[]>{
         toX: error.second + 1,
         type: 'LEATHAN-CAOL'
       }
-      errorTags.push(tag2);
+      //errorTags.push(tag2);
     }
     resolve(errorTags);
   });

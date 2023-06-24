@@ -21,14 +21,13 @@ export type ErrorTag = {
 }
 
 export function ErrorTag2HighlightTag(et: ErrorTag): HighlightTag {
+  console.log(et);
   return {
-    data: [{
-      messageGA: et.messageGA,
-      messageEN: et.messageEN,
-      nameEN: et.nameEN,
-      nameGA: et.nameGA,
-      color: et.color
-    }],
+    messageGA: et.messageGA,
+    messageEN: et.messageEN,
+    nameEN: et.nameEN,
+    nameGA: et.nameGA,
+    color: et.color,
     fromX: et.fromX,
     toX: et.toX
   }

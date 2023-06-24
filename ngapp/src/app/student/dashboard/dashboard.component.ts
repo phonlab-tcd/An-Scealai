@@ -171,6 +171,7 @@ export class DashboardComponent implements OnInit {
 
   runGrammarCheck() {
     this.grammarLoaded = false;
+    this.quillHighlighter.hideAll();
     const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
 
@@ -210,13 +211,13 @@ export class DashboardComponent implements OnInit {
               this.checkBoxes[key] = true;
             }
 
-            // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            this.quillHighlighter.hideAll();
+            // // We need to hide all tags to get rid of any old errors that were fixed by the changes
+            // this.quillHighlighter.hideAll();
 
-            // and then re-show all the latest error tags if button on
-            if (this.showErrorTags) {
-              this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
-            }
+            // // and then re-show all the latest error tags if button on
+            // if (this.showErrorTags) {
+            //   this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
+            // }
 
             this.grammarLoaded = true;
           },
