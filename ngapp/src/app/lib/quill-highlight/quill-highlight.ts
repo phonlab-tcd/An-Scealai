@@ -1,8 +1,9 @@
 import Quill from 'quill';
 import { TranslationService } from 'app/core/services/translation.service';
 import { EngagementService } from 'app/core/services/engagement.service'
-import {isEqual} from "lodash";
-import { hi } from 'date-fns/locale';
+
+// This is required to top quill from adding "Visit link:" before our text
+export const tooltipClassname = "custom-tooltip";
 
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
@@ -33,21 +34,43 @@ export type HighlightTag = {
   toX: number;
 }
 
+type MessageRenderer = (ht: HighlightTag)=>string;
+
 export class QuillHighlighter {
     quillEditor: Quill;
     mostRecentHoveredMessage: String = '';
     private ts: TranslationService;
     private engagement: EngagementService;
     private editorElement: HTMLElement;
-    private mergedGroupData: Map<string, string[]> = new Map();
+    private mergedGroupData: Map<string, HighlightTag[]> = new Map();
+    private mergedGroupSpan: Map<string, {fromX: number, toX: number}> = new Map();
+    private messageRenderer: MessageRenderer;
+    private tooltip;
 
-    constructor(quillEditor: Quill, ts: TranslationService, engagement: EngagementService) {
+    constructor(quillEditor: Quill, messageRenderer: MessageRenderer, engagement: EngagementService) {
         this.quillEditor = quillEditor;
-        this.ts = ts;
+        this.tooltip = new Tooltip(quillEditor);
+        this.tooltip.root.classList.add(tooltipClassname);
+        this.messageRenderer = messageRenderer;
         this.engagement = engagement;
         this.editorElement = document.querySelector(".ql-editor");
-        window["quillEditor"] = this.quillEditor;
-        window["dbug"] = [this.mergedGroupData];
+        this.editorElement.addEventListener("mouseover",(event)=>{
+          if (event.target instanceof Element){
+            const id = event.target.getAttribute("id");
+            if(id){
+              console.log(id.toString());
+              console.log(id);
+              const span = this.mergedGroupSpan.get(id);
+              const data = this.mergedGroupData.get(id);
+              if (span && data) {
+                this.mouseOverTagElem(data,span);
+              }
+            } else {
+              this.tooltip.hide();
+            }
+          }
+          // console.log(event.target);
+        })
     }
     private onlyUnique(value, index, array){
       return array.map(x=>x.symbol).indexOf(value.symbol) === index;
@@ -56,7 +79,7 @@ export class QuillHighlighter {
     private tagDataForRange(startIndex, endIndex) {
     
       let allMessages = [];
-      for (let i = startIndex; i <= endIndex; i++) {
+      for (let i = startIndex + 1; i <= endIndex - 1; i++) {
         const format = this.quillEditor.getFormat(i);
 
         // group of messages id
@@ -97,42 +120,49 @@ export class QuillHighlighter {
 
        const id = crypto.randomUUID().toString();
        this.mergedGroupData.set(id, highlightTagsSet);
+       this.mergedGroupSpan.set(id, span);
 
-       this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {}, 'api');
        this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": true, "id": id}, 'api');
+       const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+       tagElements[0].classList.add("left-edge");
+       Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
 
-       const tagElement = this.editorElement.querySelector(`[id="${id}"`);
-       if (!tagElement) {
-        throw new Error("failed to find tag element for newly created highlight-tag");
-       }
-       if (tagElement["cleanup"]) {
-        tagElement["cleanup"]();
-       }
+      //  const tagElements = this.editorElement.querySelectorAll(`[id="${id}"`);
+      //  if (tagElements.length === 0) {
+      //   throw new Error("failed to find tag element for newly created highlight-tag");
+      //  }
+      //  tagElements.forEach(tagElement=>{
+      //   if (tagElement["cleanup"]) {
+      //    tagElement["cleanup"]();
+      //   }
+      //  });
 
 
         // TODO (memory optimization): create tooltips lazily with an id, delete using id instead of reference to dom node
-        const tooltip = new Tooltip(this.quillEditor);
-        tooltip.root.classList.add("custom-tooltip");
+        // const tooltip = new Tooltip(this.quillEditor);
+        // tooltip.root.classList.add("custom-tooltip");
 
         // TODO (optimization): use just one 'mouseover' listener that finds data using tagData Map
-        const mouseover = () => {
-          this.mouseOverTagElem(highlightTagsSet, span, tagElement, tooltip);
-        }
-        tagElement.addEventListener('mouseenter', mouseover);
-       
-        const mouseout = () => {
+        // const mouseover = () => {
+          // this.mouseOverTagElem(highlightTagsSet, span);
+        // }
+      //  
+        // const mouseout = () => {
           // tagElement.removeAttribute('data-selected');
-          tooltip.hide();
-        }
-        tagElement.addEventListener('mouseleave', mouseout);
+          // this.tooltip.hide();
+        // }
+        // tagElements.forEach((tagElement)=>{
+          // tagElement.addEventListener('mouseover', mouseover);
+          // tagElement.addEventListener('mouseout', mouseout);
+          // function cleanup(){
+            // tagElement.removeEventListener('mouseover', mouseover);
+            // tagElement.removeEventListener('mouseover', mouseout);
+            // this.tooltip.hide();
+          // }
+          // tagElement["cleanup"] = cleanup;
+        // });
 
-        function cleanup(){
-          tagElement.removeEventListener("mouseenter", mouseover);
-          tagElement.removeEventListener("mouseleave", mouseout);
-          tooltip.hide();
-        }
 
-        tagElement["cleanup"] = cleanup;
     }
     
     /**
@@ -163,7 +193,7 @@ export class QuillHighlighter {
           );
         });
     
-        document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+        document.querySelectorAll(`.${tooltipClassname}`).forEach(elem => elem.remove());
     }
     
     /**
@@ -171,8 +201,8 @@ export class QuillHighlighter {
     */
     public hideAll() {
       this.mergedGroupData = new Map();
+      this.mergedGroupSpan = new Map();
       const tagElements = document.querySelectorAll('[data-selected]');
-      tagElements.forEach(tag => tag.removeAttribute('data-selected'))
       this.quillEditor.formatText(
         0,
         Number.MAX_SAFE_INTEGER,
@@ -180,8 +210,7 @@ export class QuillHighlighter {
           'background-color': '',
           'data-selected': null}
       );
-      
-      document.querySelectorAll('.custom-tooltip').forEach(elem => elem.remove());
+      this.tooltip.hide()
     }
 
     /**
@@ -190,7 +219,7 @@ export class QuillHighlighter {
     * @param tagElement - html element associated with tag
     * @param tooltip - tooltip to be applied to tag
     */
-    private mouseOverTagElem(tags: HighlightTag[], span: {fromX: number, toX: number},tagElement: Element, tooltip) {
+    private mouseOverTagElem(tags: HighlightTag[], span: {fromX: number, toX: number}) {
         console.log(tags);
         // tagElement.setAttribute('data-selected', '');
     
@@ -199,14 +228,14 @@ export class QuillHighlighter {
         this.quillEditor.root.scroll({top: + scrollTop + 1});
         this.quillEditor.root.scroll({top: + scrollTop});
     
-        const tooltipContents = this.makeTooltipContents(tags, this.ts.l.iso_code);
-        tooltip.root.innerHTML = tooltipContents;
+        const tooltipContents = this.makeTooltipContents(tags);
+        this.tooltip.root.innerHTML = tooltipContents;
         this.mostRecentHoveredMessage = tooltipContents;
     
-        tooltip.show();
-        tooltip.position(this.quillEditor.getBounds(span.fromX, span.toX - span.fromX));
+        this.tooltip.show();
+        this.tooltip.position(this.quillEditor.getBounds(span.fromX, span.toX - span.fromX));
     
-        let style = tooltip.root.getAttribute('style') || '';
+        let style = this.tooltip.root.getAttribute('style') || '';
         style = style + `
           font-size: medium;
           padding: 20px;
@@ -216,89 +245,37 @@ export class QuillHighlighter {
           border: 2px solid var(--scealai-med-brown);
           border-radius: 2px;
         `;
-        tooltip.root.setAttribute('style', style);
+        this.tooltip.root.setAttribute('style', style);
     
         // Ensure that tooltip isn't cut off by the right edge of the editor
         const rightOverflow =
-          (tooltip.root.offsetLeft + tooltip.root.offsetWidth) -
+          (this.tooltip.root.offsetLeft + this.tooltip.root.offsetWidth) -
           this.quillEditor.root.offsetWidth;
     
-        tooltip.root.style.left =
+        this.tooltip.root.style.left =
           (rightOverflow > 0) ?
-          `${(tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
-          tooltip.root.style.left;
+          `${(this.tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
+          this.tooltip.root.style.left;
     
         // Ensure that tooltip isn't cut off by the left edge of the editor
-        tooltip.root.style.left =
-          (tooltip.root.offsetLeft < 0) ?
-          `${(tooltip.root.offsetLeft - tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
-          tooltip.root.style.left;
+        this.tooltip.root.style.left =
+          (this.tooltip.root.offsetLeft < 0) ?
+          `${(this.tooltip.root.offsetLeft - this.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
+          this.tooltip.root.style.left;
           
+        // TODO: implement observable which emits interesting events (e.g. how long someone hovered on a message)
         // this.engagement.mouseOverGrammarSuggestionEvent(tag);
       }
       
-    /**
-    * Return either last tag hovered, checking grammar, or instructions message
-    * @param grammarLoaded - boolean to determine if grammar is finished loading
-    */
-    public getGrammarMessage(grammarLoaded: boolean) {
-      if(grammarLoaded) {
-        if (!this.mostRecentHoveredMessage)
-          return this.ts.message('hover_over_a_highlighted_word_for_a_grammar_suggestion');
-        else 
-          return this.mostRecentHoveredMessage;
+    private makeTooltipContents(data: HighlightTag[]): string {
+      function alphabeticalSort(a,b) {
+        if(a.nameGA < b.nameGA) return -1;
+        return 1;
       }
-      else 
-        return this.ts.message('checking_grammar');
-    }
-
-    private makeTooltipContents(data: HighlightTag[], lang: 'en' | 'ga'): string {
-      const getName = (datum) => lang == 'en' ? datum.nameEN : datum.nameGA;
-      const getMessage = (datum) => lang == 'en' ? datum.messageEN : datum.messageGA;
-      return data.map(datum => `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${datum.color}"></span> ${getName(datum)}: ${getMessage(datum)}</div>`).join('<hr>')
-    }
-
-    private overlaps(tagA: HighlightTag, tagB: HighlightTag): boolean {
-      return (tagA.fromX <= tagB.toX) && (tagA.toX >= tagB.fromX);
-    }
-
-    // private makeMergedTag(tags: HighlightTag[]): HighlightTag {
-    //   const lowest_fromX = Math.min(...tags.map(tag => tag.fromX));
-    //   const highest_toX = Math.max(...tags.map(tag => tag.toX));
-    //   const merged_data = tags.reduce((acc, tag) => this.arrayToSet(acc.concat(tag.data)), []); // make it a set so we don't duplicate the messages in the tooltip
-    //   return {
-    //     data: merged_data,
-    //     fromX: lowest_fromX,
-    //     toX: highest_toX
-    //   }
-    // }
-
-    // private mergeTags(tags: HighlightTag[], i: number = 0): HighlightTag[] {
-    //   // step 0: nothing to merge if the list is empty
-    //   if (!tags.length) return tags; 
-    //   // step 1: find any tags that overlap with the first tag
-    //   const tagA = tags[0]
-    //   const overlap_set = tags.filter(tagB => this.overlaps(tagA, tagB));
-    //   // step 2: merge all of those overlapping tags into a new 'merged tag'
-    //   const merged_tag = this.makeMergedTag(overlap_set);
-    //   // step 3: replace any of the tags that were merged together with the newly created merged_tag
-    //   const updated_tags = tags.filter(tag => !overlap_set.includes(tag)).concat([merged_tag]);
-    //   // step 4.1: if there weren't any merges, then we're done. 
-    //   const noMoreMergesAtCurrentIndex = tags.length == updated_tags.length
-    //   if (noMoreMergesAtCurrentIndex && i == (tags.length-1)) {
-    //     return tags;
-    //   }
-
-    //   // step 4.2: otherwise, keep merging!
-    //   return this.mergeTags(updated_tags, noMoreMergesAtCurrentIndex ? (i + 1) : i);
-    // }
-
-    private arrayToSet(array: any[]): any[] {
-      return array.filter((obj, index, self) => {
-        return index === self.findIndex((o) =>
-          JSON.stringify(o) === JSON.stringify(obj)
-        );
-      });
+      return data
+        .sort(alphabeticalSort)
+        .map(this.messageRenderer)
+        .join("<hr>");
     }
 }
 

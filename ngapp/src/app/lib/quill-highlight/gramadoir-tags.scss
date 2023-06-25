@@ -11,6 +11,14 @@
   border-radius: 6px;
 }
 
+[highlight-tag].left-edge {
+  padding-left: 1px;
+}
+
+[highlight-tag].right-edge {
+  padding-left: 1px;
+}
+
 [data-selected] {
   // box-shadow: 2px 2px;
   margin: 0.3em;
@@ -23,6 +31,7 @@
   text-decoration-thickness: 3px;
   position: relative;
 }
+
 span[highlight-tag]:hover
 {
   cursor: pointer;

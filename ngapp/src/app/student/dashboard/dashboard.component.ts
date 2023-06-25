@@ -317,9 +317,18 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
+    const renderer = (function (ht: HighlightTag) {
+        const [name, message] = this.ts.l.iso_code == 'en' ? 
+          [ht.nameEN, ht.messageEN] : 
+          [ht.nameGA, ht.messageGA];
+        return `<div style="white-space: pre-wrap; text-align: left;">
+                  <span class="circle" style="background: ${ht.color}"></span>
+                  ${name}: ${message}
+                </div>`;
+    }).bind(this)
     this.quillHighlighter = new QuillHighlighter(
       this.quillEditor,
-      this.ts,
+      renderer,
       this.engagement
     );
   }
@@ -490,9 +499,11 @@ export class DashboardComponent implements OnInit {
 
   /* Show or hide error highlighting in the story text */
   async toggleGrammarTags() {
-    this.showErrorTags
-      ? this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
-      : this.quillHighlighter.hideAll();
+    if(this.showErrorTags) {
+      this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
+    } else {
+      this.quillHighlighter.hideAll();
+    }
   }
 
   /* Route to record story component */

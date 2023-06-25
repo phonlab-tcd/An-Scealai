@@ -16,11 +16,7 @@
     <span *ngIf="ts.l.iso_code == 'ga'" [innerHtml]='" " + tag.value[0].nameGA'></span>
 
     <!-- Error count -->
-    ({{
-      tag.value[0].nameEN == "Broad/Slender"
-        ? tag.value.length / 2
-        : tag.value.length
-    }})
+    ({{ tag.value.length }})
   </div>
 </div>
 <ng-template #noGrammarErrorsMessage>
