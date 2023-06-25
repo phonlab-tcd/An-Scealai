@@ -15,9 +15,14 @@
   padding-left: 1px;
 }
 
-[highlight-tag].right-edge {
-  padding-left: 1px;
-}
+// [highlight-tag].right-edge {
+//   padding-right: 1px;
+// }
+
+// div.ql-editor [id][highlight-tag]:not(.right-edge):not(.left-edge) {
+//   margin-right: -1px !important;
+//   margin-left: -1px !important;
+// }
 
 [data-selected] {
   // box-shadow: 2px 2px;
@@ -30,14 +35,4 @@
   text-decoration-color: var(--highlight-error-red);
   text-decoration-thickness: 3px;
   position: relative;
-}
-
-span[highlight-tag]:hover
-{
-  cursor: pointer;
-}
-span:not[highlight-tag-type] {
-  border-radius: 0;
-  padding-left: 0px;
-  padding-right: 0px;
 }

@@ -199,13 +199,15 @@ fdescribe('QuillEditorComponent', () => {
     }, {} as any );
     highlighter.addTag({fromX: 10, toX: 25} as any);
     highlighter.addTag({fromX: 25, toX: 40} as any);
+    highlighter.addTag({fromX: 40, toX: 41} as any);
+    highlighter.addTag({fromX: 41, toX: 42} as any);
 
     const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
 
     const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0] as any;
     bubblingMouseover(lastSpan);
     const tooltips = allTooltips();
-    expect(numberOfTagGroups()).toBe(2);
+    expect(numberOfTagGroups()).toBe(4);
   }));
 
   it("should merge overlapping highlights",fakeAsync(()=>{

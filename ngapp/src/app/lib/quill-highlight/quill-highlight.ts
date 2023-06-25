@@ -125,7 +125,7 @@ export class QuillHighlighter {
        this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": true, "id": id}, 'api');
        const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
        tagElements[0].classList.add("left-edge");
-       Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
+      //  Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
 
       //  const tagElements = this.editorElement.querySelectorAll(`[id="${id}"`);
       //  if (tagElements.length === 0) {
