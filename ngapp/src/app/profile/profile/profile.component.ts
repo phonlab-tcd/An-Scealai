@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
    * Define the component to display in the html body
    * Highlight the selected menu option on the side nav bar
    * @param componentToDisplay name of component to display
-   * @param id id of menu div to highlight
+   * @param id id of side menu div to highlight
    */
   setCurrentDisplay(componentToDisplay, id) {
     this.displayComponent = componentToDisplay;

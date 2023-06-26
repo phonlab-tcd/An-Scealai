@@ -30,6 +30,13 @@ export class AccountSettingsComponent implements OnInit {
   newPassword: string;
   newPasswordConfirm: string;
   dialogRef: MatDialogRef<unknown>;
+  dialectPreferences : string[] = [
+    "munster",
+    "connacht",
+    "ulster"
+  ];
+
+  dialectPreference : string = this.dialectPreferences[0];
 
   constructor(public auth: AuthenticationService,
               private classroomService: ClassroomService,
@@ -40,7 +47,8 @@ export class AccountSettingsComponent implements OnInit {
               public messageService: MessageService,
               public userService: UserService,
               public recordingService: RecordingService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog) { 
+              }
 
   ngOnInit() {
     this.codeInput = new UntypedFormControl();
