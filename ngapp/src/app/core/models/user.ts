@@ -5,4 +5,5 @@ export class User extends Serializable {
     username: string;
     role: string;
     language: string;
+    email: string;
 }
