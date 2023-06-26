@@ -93,7 +93,6 @@ export class ClassroomDrawerComponent implements OnInit {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.add_new_classroom,
-        message: this.ts.l.enter_title,
         type: "updateText",
         confirmText: this.ts.l.create,
         cancelText: this.ts.l.cancel,

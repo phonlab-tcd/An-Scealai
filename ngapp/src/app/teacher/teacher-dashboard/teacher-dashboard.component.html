@@ -62,7 +62,7 @@
   </div>
 
   <!-- LIST OF STUDENTS/STORIES-->
-  <div class="storyContainer">
+  <div class="storyContainer" style="display:flex; justify-content: center; align-items: center;">
     <div class="studentListContainer" *ngIf="classroom; else newClassroomMessage" >
       <app-student-list [classroom]="classroom"></app-student-list>
     </div>
@@ -72,7 +72,7 @@
         <grid-spinner></grid-spinner>
       </div>
       <div *ngIf="classroomsLoaded" class="newStoryMessage">
-        Click on the '+' button to create your first classroom!
+        Click on the '+' button below to create your first classroom!
       </div>
     </ng-template>
   </div>
