@@ -1,0 +1,55 @@
+#!/bin/bash
+
+function check_git_branch_and_changes() {
+  # Check if Git is on "master" branch
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+  if [[ "$current_branch" != "master" ]]; then
+    echo "Error: Git is not on the 'master' branch."
+    return 1
+  fi
+
+  # Check if "ngapp/unpublished_dist" has changes
+  changes=$(git status --porcelain ngapp/unpublished_dist)
+  if [[ -n "$changes" ]]; then
+    echo "Error: Changes found in 'ngapp/unpublished_dist' directory. Commit changes to master to deploy to production."
+    return 1
+  fi
+
+  echo "Git is on the 'master' branch and 'ngapp/unpublished_dist' has no changes."
+}
+
+# Call the function
+check_git_branch_and_changes
+
+exit 1
+
+commit_sha=`git rev-parse --verify HEAD`
+if [ -z "$commit_sha" ]; then
+    echo "SCEALAI ERROR: COMMIT SHA EMTPY: QUITTING"
+    exit
+fi
+
+cmd="cd /home/scealai/An-Scealai && \
+    git stash && \
+    git fetch && \
+    git checkout $commit_sha && \
+    git submodule update --recursive && \
+    npm i --prefix api && \
+    sudo /bin/systemctl restart scealai"
+ssh -t scealai@banba "$cmd"
+
+ if [ $? == "0" ]; then
+     # NOTE: trailing slash in ngapp/unpublished_dist/ causes rsync to copy contents of unpublished_dist to an-scealai, without keeping top level name `unpublished_dist`
+ 
+     if [ ! -d ngapp/unpublished_dist ] ; then
+         echo "WARNING: need ngapp/unpublished_dist folder in path (try running from root of git tree)"
+     fi
+ 
+     # push local ngapp/unpublisded_dist to server
+     rsync -r ngapp/unpublished_dist/ scealai@ovh:/home/scealai/An-Scealai/dist/an-scealai
+ else
+ 	echo "SOMETHING WENT WRONG ON THE SERVER"
+	exit 1
+ fi
+
+ssh -t scealai@banba "/bin/systemctl status --no-pager scealai"

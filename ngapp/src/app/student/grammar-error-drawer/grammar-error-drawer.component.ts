@@ -36,4 +36,12 @@ export class GrammarErrorDrawerComponent implements OnInit {
       document.getElementById(key).classList.add("hideLegendItem");
     }
   }
+
+  /**
+   * Returns true if the grammarErrorsTypeDict object has any key/value pairs
+   * @returns true or false
+   */
+  hasGrammarErrors():boolean {
+    return Object.keys(this.grammarErrorsTypeDict).length > 0
+  }
 }

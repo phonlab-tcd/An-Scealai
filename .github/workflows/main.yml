@@ -29,32 +29,6 @@ jobs:
       - run: "parallel npm i --prefix ::: api ngapp"
       - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start:nocheck & npm run --prefix ngapp e2e
 
-  build-frontend-qa:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm i --prefix ngapp
-      - run: npm run --prefix ngapp build:qa
-      - run: git pull
-      - uses: EndBug/add-and-commit@v9
-        with:
-          add: 'ngapp/qa_build'
-          push: true
-
-  build-frontend-prod:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm i --prefix ngapp
-      - run: npm run --prefix ngapp build:prod
-      - run: git pull
-      - uses: EndBug/add-and-commit@v9
-        with:
-          add: 'ngapp/unpublished_dist'
-          push: true
-
   test-backend:
     runs-on: ubuntu-latest
     steps:

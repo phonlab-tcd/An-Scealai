@@ -17,7 +17,7 @@ const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ?
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
-import logAPICall from './monitoring/api_request_logger/api_request_logger';
+import logAPICall from './utils/api_request_logger';
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -33,9 +33,6 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
-
-/* use this to test where uncaughtExceptions get logged */
-// throw new Error('test error');
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
@@ -61,6 +58,23 @@ if(process.env.NODE_ENV !== 'test') {
 const app = express();
 app.use(logAPICall);
 app.use(requestIp.mw())
+
+// add ability to fudge verification for cypress testing
+if(process.env.FUDGE) {
+  console.log('ADD FUDGE VERIFICATION ENDPOINT');
+  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
+    console.log(req.query);
+    const User = require('./models/user');
+    User.findOneAndUpdate(
+      {username: req.params.username},
+      {$set: {status: 'Active'}}).then(
+        u => {logger.info(u);           res.json(u)},
+        e => {logger.error(e.stack);    res.json(e)},
+      );
+  });
+}
+
+// log all request urls with `DEBUG=true npm start`
 if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
 app.use(session({
   secret: 'SECRET',
@@ -76,19 +90,7 @@ app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
 
 app.use('/user', userRoute);
-if(process.env.FUDGE) {
-  console.log('ADD FUDGE VERIFICATION ENDPOINT');
-  app.get('/user/fudgeVerification/:username', (req,res,next)=>{
-    console.log(req.query);
-    const User = require('./models/user');
-    User.findOneAndUpdate(
-      {username: req.params.username},
-      {$set: {status: 'Active'}}).then(
-        u => {logger.info(u);           res.json(u)},
-        e => {logger.error(e.stack);    res.json(e)},
-      );
-  });
-}
+
 
 app.use(checkJwt);
 //app.use(require('express-status-monitor')());
@@ -105,8 +107,6 @@ app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoi
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
-
-
 app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,res,next)=>{
   function allowUrl(url) {
     const allowedUrls = /^https:\/\/phoneticsrv3.lcs.tcd.ie\/nemo\/synthesise|https:\/\/www.abair.ie\/api2\/synthesise|https:\/\/www.teanglann.ie|https:\/\/cadhan.com\/api\/gaelspell\/1.0/;
@@ -122,7 +122,6 @@ app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,re
 });
 
 app.use('/synthesis', synthesisRoute);
-
 
 const port = process.env.PORT || 4000;
 

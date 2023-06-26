@@ -38,9 +38,9 @@ export class ClassroomSelectorComponent implements OnInit {
 
   async ngOnInit() {
     const { _id } = this.auth.getUserDetails();
-    this.classrooms = await firstValueFrom(
-      this.classroomService.getClassroomsForTeacher(_id)
-    );
+    const allClassrooms = await firstValueFrom( this.classroomService.getClassroomsForTeacher(_id) );
+    // only display classrooms that have students
+    this.classrooms = allClassrooms.filter(classroom => classroom.studentIds.length > 0);
 
     // create dictionary for student ids -> usernames
     this.classrooms.forEach( (classroom) => {

@@ -46,8 +46,14 @@ export class AppComponent {
         try { return JSON.stringify(e); }
         catch(e) { return "ERROR NOT SERIALIZABLE"}
       }
-      const errorSerial = validateError(arguments);
-      this.log.clientsideError(this.currentRoute, errorSerial).subscribe();
+      try {
+        const errorSerial = validateError(arguments);
+        this.log.clientsideError(this.currentRoute, errorSerial)
+          .subscribe({error: console["originalError"]});
+      } catch(e) {
+        console["originalError"](e);
+      }
+
     }).bind(this);
 
     console.error = (async function () {
