@@ -24,12 +24,13 @@
 
 .contentSection {
     display: flex;
+    padding: 5px;
 }   
 
 .contentSection:hover {
     cursor: pointer;
     background-color: #eee;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .contentsTitle {
@@ -39,6 +40,7 @@
     min-width: 50%;
     flex: 1 0 50%;
     overflow-wrap: break-word;
+    padding-left: 5px;
 }
 
 .contentsTitle:hover {
@@ -62,7 +64,6 @@
 
 .clickedresultCard {
     background-color: #eee;
-    padding: 2px;
-    font-weight: bolder;
-    border-radius: 10px;
+    font-weight: bold;
+    border-radius: 5px;
 }
