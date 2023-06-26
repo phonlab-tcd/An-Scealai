@@ -1,0 +1,52 @@
+<mat-drawer-container class="studentListContainer" autosize>
+  <mat-accordion *ngIf="students.length > 0; else noStudentsMessage" [multi]="true" >
+    <!-- Student description header-->
+    <mat-expansion-panel disabled class="expansionHeader" style="cursor: pointer" >
+      <mat-expansion-panel-header>
+        <mat-panel-title> Student </mat-panel-title>
+        <mat-panel-description> Num. of stories </mat-panel-description>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <!-- List of students-->
+    <mat-expansion-panel *ngFor="let student of students">
+      <!-- panel header: username and num of stories-->
+      <mat-expansion-panel-header (click)="resetFeedbackDrawer()">
+        <mat-panel-title style="font-weight: bolder">
+          {{ student.username }}
+        </mat-panel-title>
+        <mat-panel-description *ngIf="studentStories[student.username]">
+          {{ studentStories[student.username].length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <!-- Story description header -->
+      <div class="storyListHeader">
+        <div style="flex: 2">{{ ts.l.title }}</div>
+        <div style="flex: 2">{{ ts.l.last_updated }}</div>
+        <div style="flex: 1">Feedback given</div>
+      </div>
+      <!-- panel opened body: list of stories-->
+      <div *ngFor="let story of studentStories[student.username]">
+        <mat-divider></mat-divider>
+        <div class="storyEntry" (click)="setStoryForFeedback(story); rightDrawer.open()" [attr.id]="story._id" >
+          <div style="flex: 2">{{ story.title }}</div>
+          <div style="flex: 2">{{ story.lastUpdated | date : "d/M/yy" }}</div>
+          <div style="flex: 1"> <i *ngIf="hasFeedback(story)" class="fas fa-check"></i> </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- No students message -->
+  <ng-template #noStudentsMessage>
+    <div class="noStudentsMessage">
+      Click on the 'Share Code' button to get the classroom code. Your students
+      can use this code to join the classroom.
+    </div>
+  </ng-template>
+  <!-- STORY FEEDBACK DRAWER -->
+  <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end" style="width: 80%" >
+    <app-teacher-story
+      [story]="storyForFeedback"
+      (closeFeedbackEmitter)="resetFeedbackDrawer()"
+    ></app-teacher-story>
+  </mat-drawer>
+</mat-drawer-container>

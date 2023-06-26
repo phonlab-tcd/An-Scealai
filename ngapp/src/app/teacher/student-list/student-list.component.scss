@@ -1,0 +1,49 @@
+.studentListContainer {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow-y: scroll;
+}
+
+.storyEntry {
+    text-align: left;
+    display: flex;
+    padding: 20px;
+} 
+
+.storyEntry:hover {
+    cursor: pointer;
+    background-color:rgba(0,0,0,.04);
+}
+
+.noStudentsMessage {
+    font-size: 20px;
+    text-align: center;
+    padding-top: 100px;
+}
+
+.clickedresultCard {
+    background-color: #eee;
+    font-weight: bolder;
+    border-radius: 10px;
+}
+
+.expansionHeader {
+    padding-top:20px;
+    padding-bottom:20px;
+    text-decoration: underline;
+}
+
+.mat-expansion-panel-header[aria-disabled=true] {
+    color: black;
+    font-weight:bolder;
+}
+
+.storyListHeader {
+    display: flex;
+    padding: 20px;
+    font-weight: bolder;
+    text-decoration: underline;
+    text-align: left;
+}
+

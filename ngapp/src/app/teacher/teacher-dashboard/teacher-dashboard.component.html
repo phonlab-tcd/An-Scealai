@@ -1,21 +1,79 @@
-<!--Lists all of the teacher's classrooms -->
-<div class="contents">
-  <div class="classContainer">
-    <!-- header plus add classroom button -->
-    <div class="classHeader">
-      {{ts.l.classrooms}} <div class="addClassBtn" (click)="openCreateClassroomDialog()"><i class="fas fa-plus"></i></div>
-    </div>
-    <!-- title and number of students headers -->
-    <div class="classroomKey">
-      <div>{{ts.l.title}}</div>
-      <div class="keyNumStudents">{{ts.l.no_students}}</div>
-    </div>
-    <!-- display list of classrooms-->
-    <div class="classBody">
-      <div class="classroomCard" *ngFor="let classroom of classrooms" (click)="goToClassroom(classroom._id)">
-        <div>{{classroom.title}}</div>
-        <div class="numStudents">{{classroom.studentIds.length}}</div>
+<!-- HEADER -->
+<div class="storyTitleHeader" *ngIf="classroom">
+  <!-- CLASSROOM TITLE -->
+  <div class="storyTitleContainer">
+    <input
+      class="storyTitle"
+      size="{{ updatedTitle.length }}"
+      [(ngModel)]="updatedTitle"
+      (blur)="updateClassroomTitle()"
+    />
+  </div>
+</div>
+
+<!-- CLASSROOM DRAWER BUTTON-->
+<span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()" >menu</span >
+
+<!-- BODY CONTAINER-->
+<mat-drawer-container class="bodyContainer" autosize>
+  <!-- CLASSROOM LIST DRAWER-->
+  <mat-drawer #classroomDrawer class="storyListDrawer" mode="side" [opened]="true" >
+    <app-classroom-drawer
+      #classroomDrawer
+      (classroomEmitter)="setCurrentClassroom($event)"
+      (titleUpdated)="updatedTitle = $event"
+      (classroomsLoaded)="classroomsLoaded = $event"
+    ></app-classroom-drawer>
+  </mat-drawer>
+
+  <!-- CLASSROOM OPTIONS TOOL BAR -->
+  <div *ngIf="classroom">
+    <div class="optionsBtnContainer">
+      <!-- SHARE CODE -->
+      <div class="optionsBtn" (click)="openCodeDialog()">
+        {{ ts.l.share_code }}
+        <i class="fas fa-share-alt headerIcon"></i>
+      </div>
+
+      <!-- STATISTICS -->
+      <div class="optionsBtn" (click)="goToStats()">
+        {{ ts.l.stats }}
+        <i class="fas fa-calculator optionsBtnIcon"></i>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="optionsBtn" (click)="goToMessages()">
+        {{ ts.l.messages }}
+        <i class="fa fa-envelope optionsBtnIcon"></i>
+      </div>
+
+      <!-- DICTOGLOSS -->
+      <div class="optionsBtn" (click)="goToDictogloss()">
+        {{ ts.l.dictogloss }}
+        <i class="fas fa-file-audio optionsBtnIcon"></i>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="optionsBtn" (click)="goToSettings()">
+        {{ ts.l.settings }}
+        <i class="fas fa-cog optionsBtnIcon"></i>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- LIST OF STUDENTS/STORIES-->
+  <div class="storyContainer" style="display:flex; justify-content: center; align-items: center;">
+    <div class="studentListContainer" *ngIf="classroom; else newClassroomMessage" >
+      <app-student-list [classroom]="classroom"></app-student-list>
+    </div>
+    <!-- NO CLASSROOMS MESSAGE-->
+    <ng-template #newClassroomMessage>
+      <div *ngIf="!classroomsLoaded">
+        <grid-spinner></grid-spinner>
+      </div>
+      <div *ngIf="classroomsLoaded" class="newStoryMessage">
+        Click on the '+' button below to create your first classroom!
+      </div>
+    </ng-template>
+  </div>
+</mat-drawer-container>
