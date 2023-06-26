@@ -87,7 +87,7 @@ export class NavBarComponent implements OnInit {
    * Hide notifications and route to messages component
    * @param id user id if student, classroom id if teacher
    */
-  goToMessages(id:string) {
+  goToMessages(id: string) {
     this.notificationsShown = false;
     this._router.navigateByUrl("/messages/" + id);
   }

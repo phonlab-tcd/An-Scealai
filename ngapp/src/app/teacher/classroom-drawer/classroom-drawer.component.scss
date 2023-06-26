@@ -1,0 +1,69 @@
+.body {
+    display: flex;
+    width: 100%;
+    height: 98%;
+    flex-direction: column;
+}
+
+.storyList {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.myStories {
+    color: var(--dark-text);
+    font-size: 16pt;
+    padding-bottom: 10px;
+    text-align: left;
+    font-weight: bolder;
+}
+
+.searchBox {
+    min-width: 300px;
+}
+
+.contentSection {
+    display: flex;
+    padding: 5px;
+}   
+
+.contentSection:hover {
+    cursor: pointer;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.contentsTitle {
+    color: var(--dark-text);
+    text-align: left;
+    text-decoration: none;
+    min-width: 50%;
+    flex: 1 0 50%;
+    overflow-wrap: break-word;
+    padding-left: 5px;
+}
+
+.contentsTitle:hover {
+    cursor: pointer;
+}
+
+.contentsDate {
+    flex: 1 0 50%;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.newStoryButton {
+    margin-left: auto;
+}
+
+.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+    background-color: var(--scealai-green);
+    box-shadow: none;
+}
+
+.clickedresultCard {
+    background-color: #eee;
+    font-weight: bold;
+    border-radius: 5px;
+}

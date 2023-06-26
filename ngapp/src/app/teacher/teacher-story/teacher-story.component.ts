@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { StoryService } from "app/core/services/story.service";
@@ -10,6 +10,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { RecordingDialogComponent } from "../../dialogs/recording-dialog/recording-dialog.component";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
+import { Story } from 'app/core/models/story';
 import Quill from "quill";
 import config from "abairconfig";
 
@@ -33,7 +34,6 @@ export class TeacherStoryComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
-  story: any;
   audioSource: SafeUrl;
   feedbackText: string;
   authorPossessive: string;
@@ -51,27 +51,17 @@ export class TeacherStoryComponent implements OnInit {
       ["bold", "italic", "underline", "strike"],
     ],
   };
+  @Input() story: Story;
+  @Output() closeFeedbackEmitter = new EventEmitter();
 
   ngOnInit() {
-    this.getStoryData();
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    //set date format
-    this.profileService.getForUser(userDetails._id).subscribe((res) => {
-      let p = res.profile;
-      let country = p.country;
-      if (
-        country == "United States of America" ||
-        country == "America" ||
-        country == "USA" ||
-        country == "United States"
-      ) {
-        this.isFromAmerica = true;
-      } else {
-        this.isFromAmerica = false;
-      }
-    });
+  }
+
+  ngOnChanges(_) {
+    this.getStoryData();
   }
 
   /*
@@ -79,28 +69,26 @@ export class TeacherStoryComponent implements OnInit {
    * with possessive ending, and the user's id
    */
   getStoryData() {
-    this.http
-      .get(this.baseUrl + "story/viewStory/" + this.route.snapshot.params["id"])
-      .subscribe((res) => {
-        this.story = res[0];
-        // get story text from previous markup if it exists, otherwise just get story html
-        if (this.story.feedback.feedbackMarkup == null) {
-          this.story.feedback.feedbackMarkup =
-            this.story.htmlText || this.story.text;
-        }
-        // check if student has updated story since last teacher edits made, if so refresh button is displayed
-        else {
-          this.storyUpdated = this.checkTextDifference(
-            this.story.feedback.feedbackMarkup,
-            this.story.text
-          );
-        }
-        // set variable to initial markup text to check for saving changes before leaving page
-        this.initialMarkupText = this.story.feedback.feedbackMarkup;
-        this.getFeedbackAudio();
-        this.getAuthorPossessive();
-        this.getUserId();
-      });
+    if (this.story) {
+      // get story text from previous markup if it exists, otherwise just get story html
+      if (this.story.feedback.feedbackMarkup == null) {
+        this.story.feedback.feedbackMarkup =
+          this.story.htmlText || this.story.text;
+      }
+      // check if student has updated story since last teacher edits made, if so refresh button is displayed
+      else {
+        this.storyUpdated = this.checkTextDifference(
+          this.story.feedback.feedbackMarkup,
+          this.story.text
+        );
+      }
+      // set variable to initial markup text to check for saving changes before leaving page
+      this.initialMarkupText = this.story.feedback.feedbackMarkup;
+      this.getFeedbackAudio();
+      this.getAuthorPossessive();
+      this.getUserId();
+    }
+
   }
 
   /* 

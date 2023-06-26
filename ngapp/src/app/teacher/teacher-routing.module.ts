@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TeacherDashboardOldComponent } from './teacher-dashboard-old/teacher-dashboard-old.component';
 import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
 import { TeacherClassroomComponent } from './teacher-classroom/teacher-classroom.component';
 import { TeacherStudentComponent } from './teacher-student/teacher-student.component';
