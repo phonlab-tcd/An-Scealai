@@ -214,13 +214,9 @@ fdescribe('QuillEditorComponent', () => {
     }, {} as any );
     highlighter.addTag({fromX: 7, toX: 8} as any);
     highlighter.addTag({fromX: 10, toX: 25} as any);
-    console.log(highlighter);
     highlighter.addTag({fromX: 25, toX: 40} as any);
-    console.log(highlighter);
     highlighter.addTag({fromX: 40, toX: 41} as any);
-    console.log(highlighter);
     highlighter.addTag({fromX: 41, toX: 42} as any);
-    console.log(highlighter);
 
     const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
 
@@ -283,10 +279,10 @@ fdescribe('QuillEditorComponent', () => {
     const renderer = () => renderText;
     const highlighter = new qh.QuillHighlighter(component.quillEditor, renderer, {} as any );
 
-    const idToRemove = crypto.randomUUID();
-    highlighter.addTag({fromX: 10, toX: 20, id: idToRemove} as any);
+    const tag = {fromX: 10, toX: 20} as any;
+    highlighter.addTag(tag);
     highlighter.addTag({fromX: 19, toX: 25} as any);
-    highlighter.removeTagById(idToRemove);
+    highlighter.removeTag(tag);
 
     expect(numberOfTagGroups()).toBe(1);
   }));

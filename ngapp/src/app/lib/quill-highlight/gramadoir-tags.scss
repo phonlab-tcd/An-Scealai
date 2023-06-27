@@ -11,10 +11,6 @@
   border-radius: 6px;
 }
 
-[highlight-tag].left-edge {
-  padding-left: 1px;
-}
-
 // [highlight-tag].right-edge {
 //   padding-right: 1px;
 // }
@@ -35,4 +31,8 @@
   text-decoration-color: var(--highlight-error-red);
   text-decoration-thickness: 3px;
   position: relative;
+}
+
+[highlight-tag].left-edge {
+  padding: 0.5px;
 }

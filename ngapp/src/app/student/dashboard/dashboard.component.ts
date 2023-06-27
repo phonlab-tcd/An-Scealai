@@ -321,10 +321,7 @@ export class DashboardComponent implements OnInit {
         const [name, message] = this.ts.l.iso_code == 'en' ? 
           [ht.nameEN, ht.messageEN] : 
           [ht.nameGA, ht.messageGA];
-        return `<div style="white-space: pre-wrap; text-align: left;">
-                  <span class="circle" style="background: ${ht.color}"></span>
-                  ${name}: ${message}
-                </div>`;
+        return `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${ht.color}"></span> ${name}: ${message}</div>`;
     }).bind(this)
     this.quillHighlighter = new QuillHighlighter(
       this.quillEditor,

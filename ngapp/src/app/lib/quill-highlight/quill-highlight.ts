@@ -85,6 +85,7 @@ export class QuillHighlighter {
         this.engagement = engagement;
 
         // TODO: assuming the underlying .ql-editor element never gets swapped out, but is that true?????
+        // update: (seems to be fine, even with changing pages)
         this.editorElement = document.querySelector(".ql-editor");
 
         // start ql-document wide event listener, branch within event listener to see if tooltip should be rendered
@@ -103,9 +104,11 @@ export class QuillHighlighter {
           }
         })
     }
+
     private onlyUnique(value, index, array){
       return array.map(x=>x.symbol).indexOf(value.symbol) === index;
     }
+
     // Add highlighting to error text (https://quilljs.com/docs/api/#formattext)
     private tagDataForRange(startIndex, endIndex) {
     
@@ -119,13 +122,14 @@ export class QuillHighlighter {
         if (id) {
           const messages = this.mergedGroupData.get(id);
           const existingSpan = this.mergedGroupSpan.get(id);
-          if(spansOverlap(span, existingSpan)) {
+          if(existingSpan && spansOverlap(span, existingSpan)) {
             span.fromX = Math.min(span.fromX, existingSpan.fromX);
             span.toX = Math.max(span.toX, existingSpan.toX);
             console.log("overlap", span,existingSpan);
             allMessages = allMessages.concat(messages);
             i = span.toX;
           } else {
+            // TODO: skip through loop based on length of text at position i
             console.log("no overlap", startIndex, endIndex, existingSpan);
           }
         }
@@ -158,57 +162,46 @@ export class QuillHighlighter {
 
        const id = crypto.randomUUID().toString();
        this.mergedGroupData.set(id, highlightTagsSet);
-       console.log("setspan", id, span);
        this.mergedGroupSpan.set(id, span);
 
-       console.log(span.fromX, span.toX - span.fromX);
        this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": true, "id": id}, 'api');
        const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+
+       // TODO: only add left-edge or right-edge class if adjacent to avoid unnecc
        tagElements[0].classList.add("left-edge");
-      //  Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
+    }
 
-      //  const tagElements = this.editorElement.querySelectorAll(`[id="${id}"`);
-      //  if (tagElements.length === 0) {
-      //   throw new Error("failed to find tag element for newly created highlight-tag");
-      //  }
-      //  tagElements.forEach(tagElement=>{
-      //   if (tagElement["cleanup"]) {
-      //    tagElement["cleanup"]();
-      //   }
-      //  });
+    public equivalentTag(a,b) {
+      if(a.fromX === b.fromX, a.toX === b.toX) {
+        for(const k of Object.keys(a)) {
+          if(a[k] !== b[k]) {
+            return false;
+          }
+        }
+      }
+      return false;
+    }
 
+    public removeTag(tag) {
+      const format = this.quillEditor.getFormat(tag.fromX);
+      const id = format["id"];
+      if(id) {
+        const messages = this.mergedGroupData.get(id);
+        const groupSpan = this.mergedGroupSpan.get(id);
 
-        // TODO (memory optimization): create tooltips lazily with an id, delete using id instead of reference to dom node
-        // const tooltip = new Tooltip(this.quillEditor);
-        // tooltip.root.classList.add("custom-tooltip");
+        // TODO: check that this doesn't destroy other formatting
+        this.quillEditor.formatText(groupSpan.fromX, groupSpan.toX, {}, 'api');
 
-        // TODO (optimization): use just one 'mouseover' listener that finds data using tagData Map
-        // const mouseover = () => {
-          // this.mouseOverTagElem(highlightTagsSet, span);
-        // }
-      //  
-        // const mouseout = () => {
-          // tagElement.removeAttribute('data-selected');
-          // this.tooltip.hide();
-        // }
-        // tagElements.forEach((tagElement)=>{
-          // tagElement.addEventListener('mouseover', mouseover);
-          // tagElement.addEventListener('mouseout', mouseout);
-          // function cleanup(){
-            // tagElement.removeEventListener('mouseover', mouseover);
-            // tagElement.removeEventListener('mouseover', mouseout);
-            // this.tooltip.hide();
-          // }
-          // tagElement["cleanup"] = cleanup;
-        // });
-
-
+        for(const leaveTag of messages) {
+          if(!this.equivalentTag(tag,leaveTag)) {
+            this.addTag(leaveTag);
+          }
+        }
+      }
     }
     
-    /**
-    * Apply css highlighting to given error tags
-    * @param tags - array of tags to highlight
-    */
+    // Apply css highlighting to given error tags
+    // @param tags - array of tags to highlight
     public show(tags: HighlightTag[]): void {
         for(const tag of tags) {
           setTimeout(()=>{
@@ -218,10 +211,8 @@ export class QuillHighlighter {
         return;
     }
 
-    /**
-    * Remove css highlighting to input array of error tags
-    * @param tags - array of tags to remove highlighting
-    */
+    // Remove css highlighting to input array of error tags
+    // @param tags - array of tags to remove highlighting
     public hide(tags: HighlightTag[]) {
         tags.forEach((tag) => {
           this.quillEditor.formatText(
@@ -236,9 +227,7 @@ export class QuillHighlighter {
         document.querySelectorAll(`.${tooltipClassname}`).forEach(elem => elem.remove());
     }
     
-    /**
-    * Remove css highlighting from all error tags
-    */
+    // Remove css highlighting from all error tags
     public hideAll() {
       this.mergedGroupData = new Map();
       this.mergedGroupSpan = new Map();
@@ -253,12 +242,7 @@ export class QuillHighlighter {
       this.tooltip.hide()
     }
 
-    /**
-    * Set styling for tooltip
-    * @param tag - error tag for applying tooltip
-    * @param tagElement - html element associated with tag
-    * @param tooltip - tooltip to be applied to tag
-    */
+    // Set styling and contents for tooltip
     private mouseOverTagElem(tags: HighlightTag[], span: {fromX: number, toX: number}) {
         // tagElement.setAttribute('data-selected', '');
     
