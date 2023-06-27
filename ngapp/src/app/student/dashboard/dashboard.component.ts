@@ -171,7 +171,7 @@ export class DashboardComponent implements OnInit {
 
   runGrammarCheck() {
     this.grammarLoaded = false;
-    this.quillHighlighter.hideAll();
+    this.quillHighlighter?.hideAll();
     const textToCheck = this.story.text.replace(/\n/g, " ");
       if (!textToCheck) return;
 
