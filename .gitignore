@@ -32,3 +32,9 @@ api/globalConfig.json
 /shell/*.log
 
 load-test/.env
+
+ngapp/qa_build/**
+
+ngapp/unpublished_dist/**
+
+ngapp/coverage/**
