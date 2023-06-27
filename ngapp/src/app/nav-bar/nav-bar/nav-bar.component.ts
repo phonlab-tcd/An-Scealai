@@ -101,18 +101,24 @@ export class NavBarComponent implements OnInit {
   }
 
   /**
-   * Route the user to the appropriate home page
+   * Route the user to the appropriate home page if logged in
+   * Otherwise route to the landing apge
    */
   goToHomePage() {
-    let user = this.auth.getUserDetails();
-    if (user.role === "STUDENT") {
-      this._router.navigateByUrl("/student");
-    } 
-    else if (user.role === "TEACHER") {
-      this._router.navigateByUrl("/teacher");
-    } 
+    if (this.auth.isLoggedIn()) {
+      let user = this.auth.getUserDetails();
+      if (user.role === "STUDENT") {
+        this._router.navigateByUrl("/student");
+      } 
+      else if (user.role === "TEACHER") {
+        this._router.navigateByUrl("/teacher");
+      } 
+      else {
+        this._router.navigateByUrl("/admin");
+      }
+    }
     else {
-      this._router.navigateByUrl("/admin");
+      this._router.navigateByUrl("/landing");
     }
   }
 

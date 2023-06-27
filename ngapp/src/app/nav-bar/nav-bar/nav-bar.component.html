@@ -3,7 +3,7 @@
   <!-- nav -> dropdown when screen size gets small-->
   <input type="checkbox" id="nav-check" [checked]="smallMenuOpen" />
   <!-- logo -->
-  <div routerLink="/landing"  class="nav-header">
+  <div (click)="goToHomePage()" class="nav-header">
     <div class="nav-title">
       <img src="assets/img/logo-navbar.png" class="logo" />
     </div>
