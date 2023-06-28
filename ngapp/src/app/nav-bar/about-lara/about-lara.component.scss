@@ -29,3 +29,16 @@
   width: 250px;
   height: auto;
 }
+
+.viewStoryBtn {
+  padding: 7px;
+  background-color: var(--scealai-green);
+  color: white;
+  border-radius: 4px;
+  text-decoration:none;
+  text-align: center;
+}
+
+.viewStoryBtn:hover {
+  cursor: pointer;
+}

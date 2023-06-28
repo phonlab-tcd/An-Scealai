@@ -1531,6 +1531,9 @@ export default {
   view_story: {
     ga: 'Léigh an Scéal',
     en: 'View Story' },
+  view_stories: {
+    ga: 'Léigh na Scéalta',
+    en: 'View Stories' },
   sign_in_to_view_more: {
     ga: 'Sínigh isteach le tuilleadh scéalta a léamh!',
     en: 'Sign in to view more stories!' },
