@@ -19,29 +19,6 @@
           <i class="fas fa-edit headerIconBtn" (click)="openUpdatePasswordDialog()" ></i>
         </div>
       </div>
-      <!-- Classroom -->
-      <div class="settingsEntryContainer" *ngIf="auth.getUserDetails().role === 'STUDENT'" >
-        <div class="settingsLabel">{{ ts.l.classroom }}</div>
-        <!-- classroom if already joined -->
-        <div class="settingsEntry" *ngIf="classroom">
-          <div class="settingsValue">{{ classroom?.title }}</div>
-          <button *ngIf="classroom" class="btn leaveClassroomButton" (click)="leaveClassroom()" >
-            {{ ts.l.leave }}
-          </button>
-        </div>
-        <!-- join classroom if not joined -->
-        <div *ngIf="!classroom">
-          <div class="settingsEntry">
-            <div style="padding-top: 10px">{{ ts.l.enter_code }} :</div>
-            <input type="text" class="codeInputField" maxlength="7" size="7" [formControl]="codeInput" />
-          </div>
-          <!-- join classroom message / error message -->
-          <div *ngIf="classroomCodeOutput" class="errorMessage">
-            {{ classroomCodeOutput }}
-          </div>
-          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()" > {{ ts.l.join_classroom }} '<b>{{ foundClassroom.title }}</b >'? </div>
-        </div>
-      </div>
     </div>
     <!-- column two-->
     <div>
@@ -54,11 +31,34 @@
         </div>
       </div>
       <!-- Dialect -->
-      <div class="settingsEntryContainer">
+      <!-- <div class="settingsEntryContainer">
         <div class="settingsLabel">{{ ts.l.dialect }}</div>
         <select [(ngModel)]="dialectPreference" style="width: 300px" id="dialectSelect">
           <option *ngFor="let opt of dialectPreferences">{{ opt }}</option>
         </select>
+      </div> -->
+      <div class="settingsEntryContainer" *ngIf="auth.getUserDetails().role === 'STUDENT'" >
+        <div class="settingsLabel">{{ ts.l.classroom }}</div>
+        <!-- classroom if already joined -->
+        <div class="settingsEntry" *ngIf="classroom">
+          <div class="settingsValue">{{ classroom?.title }}</div>
+          <button *ngIf="classroom" class="btn leaveClassroomButton" (click)="leaveClassroom()" >
+            {{ ts.l.leave }}
+          </button>
+        </div>
+        <!-- Classroom -->
+        <!-- join classroom if not joined -->
+        <div *ngIf="!classroom">
+          <div class="settingsEntry">
+            <div style="padding-top: 10px">{{ ts.l.enter_code }} :</div>
+            <input type="text" class="codeInputField" maxlength="7" size="7" [formControl]="codeInput" />
+          </div>
+          <!-- join classroom message / error message -->
+          <div *ngIf="classroomCodeOutput" class="errorMessage">
+            {{ classroomCodeOutput }}
+          </div>
+          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()" > {{ ts.l.join_classroom }} '<b>{{ foundClassroom.title }}</b >'? </div>
+        </div>
       </div>
     </div>
   </div>

@@ -11,7 +11,7 @@ import { TranslationService } from 'app/core/services/translation.service';
 })
 export class ProfileComponent implements OnInit {
 
-  displayComponent: string;
+  componentToDisplay: string = "";
   lastClickedMenuId: string = "";
 
   constructor(public auth: AuthenticationService,
@@ -22,18 +22,18 @@ export class ProfileComponent implements OnInit {
    * Set the first button on the side menu as currently selected
    */         
   ngOnInit() {
-    document.getElementById('1').classList.add("clickedMenu");
-    this.lastClickedMenuId = '1';
+    document.getElementById('accountSettings').classList.add("clickedMenu");
+    this.lastClickedMenuId = "accountSettings";
   }
 
   /**
-   * Define the component to display in the html body
+   * Define which component to display based on selected menu option
    * Highlight the selected menu option on the side nav bar
-   * @param componentToDisplay name of component to display
+   * @param componentToDisplay name of component to display (used in HTML switch)
    * @param id id of side menu div to highlight
    */
-  setCurrentDisplay(componentToDisplay, id) {
-    this.displayComponent = componentToDisplay;
+  setCurrentDisplay(componentToDisplay: string, id: string) {
+    this.componentToDisplay = componentToDisplay;
     // set css for selecting an option in the side nav
     let menuElement = document.getElementById(id);
 
