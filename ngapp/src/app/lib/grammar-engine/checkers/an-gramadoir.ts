@@ -1,4 +1,4 @@
-import { GrammarChecker, ErrorTag, ERROR_INFO} from '../types';
+import { GrammarChecker, ErrorTag, ERROR_INFO, ERROR_TYPES, ErrorType} from '../types';
 import config from 'abairconfig';
 
 // initialise the grammar checker
@@ -47,6 +47,9 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
     const errorTags: ErrorTag[] = errors.map((error) => {
       // get simple rule name from an gramadoir's ruleId response attribute
       const cleanedErrorName = gramadoirId2string(error.ruleId);
+      if(!(cleanedErrorName in ERROR_TYPES)) {
+        console.warn("INVALIDE ERROR TYPE:", cleanedErrorName);
+      }
       const e_info = ERROR_INFO[cleanedErrorName];
 
       function extractStringBetweenSlashes(inputString) {
@@ -63,7 +66,7 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
       const suggestion = `"${extractStringBetweenSlashes(error.msg)}"`;
       const errortext = `"${error.errortext}"`;
       
-      const et = {
+      const et: ErrorTag = {
         errorText: error.errortext,
         messageGA: (e_info.messageGA).replace("#suggestion#", suggestion).replace('#', errortext),
         messageEN: (e_info.messageEN).replace("#suggestion#", suggestion).replace('#', errortext),
@@ -73,8 +76,9 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
         color: e_info.color,
         fromX: +error.fromx,
         toX: +error.tox + 1,
-        type: cleanedErrorName
-      } as ErrorTag;
+        type: cleanedErrorName as ErrorType,
+        id: crypto.randomUUID(),
+      };
       return et;
     });
     resolve(errorTags);
@@ -109,11 +113,12 @@ async function callAnGramadoir(url: string, authToken?: string): Promise<Gramado
 * @param str - An Gramadoir ruleId
 * @returns - simplified string
 */
-function gramadoirId2string(str: string): string {
-  if (!str) { return ''; }
+function gramadoirId2string(str: string): ErrorType {
+  // TODO: on failure return an FAILURE error type and put FAILURE into ERROR_INFO in grammar-engine/types.ts
+  // if (!str) { return ''; }
   const subString = str.replace(/[A-Za-z:]+\//, '');
-  if (!subString) { return ''; }
+  // if (!subString) { return ''; }
   const ruleIdShortArray = /[A-Z]+/.exec(subString);
-  if (!ruleIdShortArray || !ruleIdShortArray[0]) { return ''; }
-  return ruleIdShortArray[0];
+  // if (!ruleIdShortArray || !ruleIdShortArray[0]) { return ''; }
+  return ruleIdShortArray[0] as ErrorType;
 }

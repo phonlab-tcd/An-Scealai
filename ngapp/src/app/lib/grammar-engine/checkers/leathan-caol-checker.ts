@@ -40,7 +40,8 @@ async function check(input: string): Promise<ErrorTag[]>{
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.first,
         toX: error.second + 1,
-        type: 'LEATHAN-CAOL'
+        type: 'LEATHAN-CAOL',
+        id: crypto.randomUUID(),
       }
       errorTags.push(tag1);
       let tag2:ErrorTag = {
@@ -53,7 +54,8 @@ async function check(input: string): Promise<ErrorTag[]>{
         color: ERROR_INFO['LEATHAN-CAOL'].color,
         fromX: error.second,
         toX: error.second + 1,
-        type: 'LEATHAN-CAOL'
+        type: 'LEATHAN-CAOL',
+        id: crypto.randomUUID(),
       }
       //errorTags.push(tag2);
     }

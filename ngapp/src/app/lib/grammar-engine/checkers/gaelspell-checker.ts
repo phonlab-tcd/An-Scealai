@@ -27,26 +27,26 @@ export type GramadoirTag = {
 */
 async function check(input: string):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
-    
-    let errors = [];
-    
-    errors = await callGaelSpell(input, 'https://cadhan.com/api/gaelspell/1.0');
+    const errors = await callGaelSpell(input, 'https://cadhan.com/api/gaelspell/1.0');
     console.log(errors);
     
     // map gramadoir responses to generic ErrorTag values: TODO: get actual response and test
+    const type = "GAELSPELL";
+    const info = ERROR_INFO[type];
     const errorTags: ErrorTag[] = errors.map((error, i) => {
       return {
         errorText: input,
-        messageGA: ERROR_INFO['GaelSpell'].messageGA,
-        messageEN: ERROR_INFO['GaelSpell'].messageEN,
+        messageGA: info.messageGA,
+        messageEN: info.messageEN,
         context: input,
-        nameEN: ERROR_INFO['GaelSpell'].nameEN,
-        nameGA: ERROR_INFO['GaelSpell'].nameGA,
-        color: ERROR_INFO['GaelSpell'].color,
+        nameEN: info.nameEN,
+        nameGA: info.nameGA,
+        color: info.color,
         fromX: +error.fromx,
         toX: +error.tox + 1,
-        type: 'GaelSpell'
-      } as ErrorTag;
+        type: type,
+        id: crypto.randomUUID(),
+      };
     });
     resolve(errorTags);
   });
