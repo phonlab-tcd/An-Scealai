@@ -43,7 +43,7 @@ export class TeacherDashboardComponent implements OnInit {
 
     this.profileService.getForUser(this.auth.getUserDetails).subscribe({
       next: () => {},
-      error: () => {console.log('no profile'); this.router.navigateByUrl("/register-profile");}
+      error: () => {this.router.navigateByUrl("/register-profile");}
    });
 
     this.getClassrooms(userDetails._id);

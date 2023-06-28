@@ -19,7 +19,6 @@ export class SynthesisBankService {
       try {
         return sessionStorage.setItem(key, data);
       } catch (e) {
-        console.count('FAILED TO SET ITEM IN SESSION STORAGE');
       }
     }
   }

@@ -43,7 +43,6 @@ export class TeacherDictoglossComponent implements OnInit {
     for (let id of this.classroom.studentIds) {
       this.userService.getUserById(id).subscribe({
         next: (student) => {this.students.push(student); this.sendTo.push(id);},
-        error: () => console.log(id + " does not exist")
       })
     }
   }
@@ -66,9 +65,6 @@ export class TeacherDictoglossComponent implements OnInit {
       this.newDictogloss.controls["passage"].value !== ""
     ) {
       let passage = this.newDictogloss.get("passage").value;
-
-      console.log(passage);
-      console.log(this.sendTo);
 
       let message = {
         subject: "Dictogloss",
@@ -96,7 +92,6 @@ export class TeacherDictoglossComponent implements OnInit {
     if (this.allStudentsSelected) {
       this.students.forEach((student) => this.sendTo.push(student._id));
     }
-    console.log("All students selected/deselected: ", this.sendTo);
   }
 
   /**

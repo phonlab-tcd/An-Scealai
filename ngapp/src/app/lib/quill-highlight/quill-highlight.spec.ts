@@ -107,7 +107,6 @@ fdescribe('QuillEditorComponent', () => {
     numberOfTagGroups = function () {
         const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
         const uniqueIds = Array.from(new Set(Array.from(spans).map((span: any)=>span.getAttribute("id")))) 
-        console.log(uniqueIds);
         return uniqueIds.length;
     }
 
@@ -150,7 +149,6 @@ fdescribe('QuillEditorComponent', () => {
     const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0]as any;
     expect(spans[0].dispatchEvent);
     expect(lastSpan.dispatchEvent);
-    console.log(spans);
     for (const span of spans) {
         bubblingMouseover(span);
     }
@@ -180,7 +178,6 @@ fdescribe('QuillEditorComponent', () => {
     const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
 
     const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0]as any;
-    console.log(spans);
     for (const span of spans) {
         bubblingMouseover(span);
     }
@@ -206,7 +203,6 @@ fdescribe('QuillEditorComponent', () => {
     const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0] as any;
     bubblingMouseover(lastSpan);
     const tooltipEl = visibleTooltips()[0];
-    console.log(tooltipEl);
     
     expect(tooltipEl).toBeTruthy();
     expect(tooltipEl.innerText).toBe(renderText);

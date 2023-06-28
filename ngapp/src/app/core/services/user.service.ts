@@ -59,7 +59,6 @@ export class UserService {
   }
 
   deleteUser(id: string): Observable<any> {
-    console.log("delete acount for ", id)
     return this.http.get(this.baseUrl + 'deleteUser/' + id);
   }
 

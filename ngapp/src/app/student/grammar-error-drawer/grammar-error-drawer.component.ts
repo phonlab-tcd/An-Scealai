@@ -44,7 +44,6 @@ export class GrammarErrorDrawerComponent implements OnInit {
     if(!errorsToToggle) return;
     if(!this.quillHighlighter) return;
 
-    console.log(errorsToToggle);
     if(this.checkBoxes[key])  this.quillHighlighter.show(errorsToToggle);
     else                      this.quillHighlighter.hide(errorsToToggle);
 

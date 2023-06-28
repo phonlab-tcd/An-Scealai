@@ -69,9 +69,6 @@ export class PromptsComponent implements OnInit {
       next: (data) => {
         this.data = data;
       },
-      error: (err) => {
-        console.log(err);
-      },
     });
   }
 

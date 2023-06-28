@@ -33,15 +33,11 @@ export class WaitingForEmailVerificationComponent {
   login(credentials: RegistrationTokenPayload) {
     this.auth.login(credentials).subscribe(
       (_ok) => {
-        console.log("LOGIN OK");
         this.engagement.addEventForLoggedInUser(EventType.REGISTER);
         this.ts.setLanguage(this.ts.l.iso_code);
         this.router.navigateByUrl("register-profile");
       },
       (err) => {
-        console.error(err);
-        console.log("LOGIN ERROR");
-        console.log(err.error);
         this.errorKeys = err.error.messageKeys;
         this.cd.detectChanges();
       }

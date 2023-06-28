@@ -472,7 +472,6 @@ export class RecordingComponent implements OnInit {
     
     this.dialogRef.afterClosed().subscribe( async (res) => {
         this.dialogRef = undefined;
-        console.log(res);
         if(res) {
           this.ngOnInit();
         }

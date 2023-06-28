@@ -28,7 +28,6 @@ export type GramadoirTag = {
 async function check(input: string):Promise<ErrorTag[]>{
   return new Promise<ErrorTag[]>(async (resolve, reject) => {
     const errors = await callGaelSpell(input, 'https://cadhan.com/api/gaelspell/1.0');
-    console.log(errors);
     
     // map gramadoir responses to generic ErrorTag values: TODO: get actual response and test
     const type = "GAELSPELL";

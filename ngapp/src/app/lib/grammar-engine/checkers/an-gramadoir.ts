@@ -48,7 +48,7 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
       // get simple rule name from an gramadoir's ruleId response attribute
       const cleanedErrorName = gramadoirId2string(error.ruleId);
       if(!(cleanedErrorName in ERROR_TYPES)) {
-        console.warn("INVALIDE ERROR TYPE:", cleanedErrorName);
+        window.onerror(new ErrorEvent(`invalid grammar error type ${cleanedErrorName}`));
       }
       const e_info = ERROR_INFO[cleanedErrorName];
 

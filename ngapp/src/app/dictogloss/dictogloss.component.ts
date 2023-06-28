@@ -76,12 +76,10 @@ export class DictoglossComponent implements OnInit {
     // see if dictogloss is generated from messages
     try {
       this.texts = this.router.getCurrentNavigation().extras.state.text; //Doesn't work with full stops.
-      console.log("Generated from message.");
       this.playWithTimer = true;
       this.gameInProgress = true;
       this.generatedFromMessages = true;
     } catch {
-      console.log("Not generated from message.");
       this.playWithTimer = false;
       this.gameInProgress = false;
       this.generatedFromMessages = false;
@@ -125,7 +123,6 @@ export class DictoglossComponent implements OnInit {
       s.dispose();
     });
     this.synthItems = [];
-    console.log('refresh synth')
     this.collateSynths();
   }
 
@@ -337,12 +334,6 @@ export class DictoglossComponent implements OnInit {
     if (this.sentences.length > 0) {
       this.collateSynths();
     }
-
-    console.log("WORDS: ", this.words);
-    console.log("PUNCTUATED WORDS LOWER: ", this.wordsPuncLower);
-    console.log("PUNCTUATED WORDS: ", this.wordsPunc);
-    console.log("SENTENCES: ", this.sentences);
-    console.log("SHOWN WORDS: ", this.shownWords);
   }
 
   /**

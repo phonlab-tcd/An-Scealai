@@ -211,7 +211,7 @@ export class DashboardComponent implements OnInit {
           },
         });
       } catch (updateGrammarErrorsError) {
-        console.error(updateGrammarErrorsError);
+        window.onerror(updateGrammarErrorsError);
         // if (!this.grammarErrors) {
         //   window.alert(
         //     "There was an error while trying to fetch grammar " +
@@ -221,7 +221,6 @@ export class DashboardComponent implements OnInit {
         //       "See the browser console for more information"
         //   );
         // }
-        // console.dir(updateGrammarErrorsError);
       }
   }
 
@@ -435,9 +434,7 @@ export class DashboardComponent implements OnInit {
         .subscribe({
           next: () => {
             this.storySaved = true;
-            console.log("title updated");
           },
-          error: () => console.log("error updating title"),
         });
     }
   }

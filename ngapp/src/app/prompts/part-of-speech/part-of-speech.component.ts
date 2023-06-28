@@ -92,7 +92,6 @@ export class PartOfSpeechComponent implements OnInit {
           this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
         },
         error: (err) => {
-          console.log(err);
           this.wordDatabase = {};
         },
       });

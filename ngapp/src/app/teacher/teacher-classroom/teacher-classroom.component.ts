@@ -57,7 +57,6 @@ export class TeacherClassroomComponent implements OnInit {
           let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
           this.numOfStories.set(student.username, storyCount);
         },
-        error: () => {console.log(id + " does not exist")}
       });
     }
   }

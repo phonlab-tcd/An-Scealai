@@ -21,19 +21,6 @@ export type ErrorTag = {
   id: ReturnType<typeof crypto.randomUUID>;
 }
 
-// export function ErrorTag2HighlightTag(et: ErrorTag): HighlightTag {
-//   console.log(et);
-//   return {
-//     messageGA: et.messageGA,
-//     messageEN: et.messageEN,
-//     nameEN: et.nameEN,
-//     nameGA: et.nameGA,
-//     color: et.color,
-//     fromX: et.fromX,
-//     toX: et.toX
-//   }
-// }
-
 export type ErrorType = keyof typeof ERROR_INFO;
 
 export const ERROR_INFO = {

@@ -54,7 +54,6 @@ export class EngagementService {
       event.type = type;
       event.statsData = stats;
       event.userId = this.auth.getUserDetails()._id;
-      console.log("event to record: ", event);
       return this.http.post(this.baseUrl + "addAnalysisEvent/", {event:event}).subscribe();
     }
   }

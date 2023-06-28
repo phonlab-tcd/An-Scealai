@@ -138,7 +138,6 @@ export class ProfileComponent implements OnInit {
   * Update account username and all data associated with it
   */
   async updateUsername() {
-    console.log(this.updatedUsername)
     if (!this.updatedUsername){
       this.errorMessage = this.ts.l.please_input_a_new_username;
       return

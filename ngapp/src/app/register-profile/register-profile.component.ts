@@ -382,7 +382,6 @@ export class RegisterProfileComponent implements OnInit {
         this.howOftenWriting = p.howOftenWriting;
         this.synthOpinion = p.synthOpinion;
       },
-      error: () => {console.log('no profile')}
    });
     
   }

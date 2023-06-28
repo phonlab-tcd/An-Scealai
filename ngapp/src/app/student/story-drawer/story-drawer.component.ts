@@ -226,7 +226,6 @@ export class StoryDrawerComponent implements OnInit {
       this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
         .subscribe({
           next: () => { this.titleUpdated.emit(selectedStory.title.trim()); },
-          error: () => console.log("error updating title"),
         });
     }
   }

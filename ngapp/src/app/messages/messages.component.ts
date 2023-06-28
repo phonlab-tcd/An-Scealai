@@ -90,7 +90,6 @@ export class MessagesComponent implements OnInit {
       // get teacher username to display as recipient for sending a new message
       this.userService.getUserById(this.classroom.teacherId).subscribe({
         next: res => this.teacherName = res.username,
-        error: () => {console.log(this.classroom.teacherId + " does not exist")}
       });
     }
 
@@ -110,7 +109,6 @@ export class MessagesComponent implements OnInit {
           this.students.push(res);
           this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()) )
         },
-        error: () => {console.log(id + " does not exist")}
       });
     }
   }

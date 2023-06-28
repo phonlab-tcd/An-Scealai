@@ -58,7 +58,6 @@ export class FindUserComponent implements OnInit {
       new RegExp(this.searchText, 'i'); // i for case insensitive
     }
     catch (e) {
-      console.log('Caught error:', e);
       alert("invalid regular expression");
       return false;
     }

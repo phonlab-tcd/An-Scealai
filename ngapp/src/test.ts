@@ -12,7 +12,6 @@ import {
 
 declare const require: any;
 
-console.log('USER AGENT', window.navigator.userAgent);
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,

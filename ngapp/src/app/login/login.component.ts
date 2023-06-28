@@ -141,7 +141,6 @@ export class LoginComponent implements OnInit {
         this.routeUser(this.auth.getUserDetails()._id);
       },
       (err) => {
-        console.log(err);
         this.errorMsgKeys = err.error.messageKeys;
         if (err.error.messageKeys.includes("email_not_verified")) {
           // THIS MAKES THE EMAIL BOX APPEAR

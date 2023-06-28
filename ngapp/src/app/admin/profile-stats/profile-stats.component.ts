@@ -32,7 +32,6 @@ export class ProfileStatsComponent implements OnInit {
   ngOnInit(): void {
     this.engagement.getPreviousAnalysisData("PROFILE-STATS").subscribe( (res) => {
       this.previousLogs = res.sort((a, b) => b.date - a.date);
-      console.log("previous profiles: ", this.previousLogs);
       //this.previousLogs = this.previousLogs.sort((a, b) => b.date - a.date);
     });
   }
@@ -48,7 +47,6 @@ export class ProfileStatsComponent implements OnInit {
     
     return new Promise<void>( (resolve, reject) => {
       this.statsService.getProfileDataByDate(startDate, endDate).subscribe( async (res) => {
-        console.log("Profiles returned for given dates: ", res);
         await this.calculateStats(res);
         this.numProfilesFound = res.length;
         this.dataLoaded = true;
@@ -65,7 +63,6 @@ export class ProfileStatsComponent implements OnInit {
   */
   async calculateStats(profiles) {
     let totals = {};
-    console.log("PROFILES TO CALCULATE: ", profiles);
     profiles.forEach( profile => {
       profile = profile[0];
       if (profile !== undefined) {
@@ -129,7 +126,6 @@ export class ProfileStatsComponent implements OnInit {
       }
     });
     let totalData = {};
-    console.log("totals: ", totals);
     totalData["age"] = await this.getTotals(totals["age"]);
     totalData["country"] = await this.getTotals(totals["country"]);
     totalData["county"] = await this.getTotals(totals["county"]);
@@ -192,13 +188,10 @@ export class ProfileStatsComponent implements OnInit {
     // Previous log exists
     if(this.previousLogs.length > 0) {
       let mostRecentLog = this.previousLogs[this.previousLogs.length-1];
-      console.log(this.previousLogs);
-      console.log("Last log: ", mostRecentLog);
       
       new Promise<void>( (resolve, reject) => {
         this.statsService.getProfileDataByDate(mostRecentLog.date, "empty").subscribe( async (res) => {
           await this.calculateStats(res);
-          console.log("Most recent added data: ", this.dataToDisplay);
           let dataToLog = {};
           let fieldValues = {};
           
@@ -218,24 +211,20 @@ export class ProfileStatsComponent implements OnInit {
               if (mostRecentLog.statsData[field]) {
                 //last log contains the given field and key
                 if(mostRecentLog.statsData[field][key]){
-                  //console.log("[", field, "][", key, "]", (value + mostRecentLog.statsData[field][key]), " = ", value, " + ", mostRecentLog.statsData[field][key]);
                   fieldValues[key] = (value + mostRecentLog.statsData[field][key]);
                 }
                 // last log does not have the key for given field
                 else {
-                  //console.log("Last log did not have the key [", key, "] for [", field, "]");
                   fieldValues[key] = value;
                 }
               }
               //last log does not have the given field
               else {
-                //console.log("Last log did not have the field [", field, "]");
                 fieldValues[key] = value;
               }
             });
             dataToLog[field] = fieldValues;
           });
-          console.log("Profile to log: ", dataToLog);
           this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], dataToLog);
           this.setDataToDisplay(dataToLog);
           this.ngOnInit();
@@ -257,9 +246,6 @@ export class ProfileStatsComponent implements OnInit {
     this.dataLoaded = false;
     this.dataToDisplay = {};
     this.dataToDisplay = data;
-    console.log("Data sent to function: ", data);
-    console.log("Profile to display: ", this.dataToDisplay);
-    console.log("previous profiles: ", this.previousLogs.length);
     this.dataLoaded = true;
   }
 

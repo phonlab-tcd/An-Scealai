@@ -44,7 +44,6 @@ export class TeacherSettingsComponent implements OnInit {
           this.students.push(student);
           this.students.sort((a, b) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()));
         },
-        error: () => console.log(id + " does not exist")
       });
     }
     
