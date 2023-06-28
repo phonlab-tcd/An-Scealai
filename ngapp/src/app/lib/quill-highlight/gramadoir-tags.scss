@@ -59,7 +59,7 @@
   background: var(--highlight-error-red);
 }
 
-[left-edge]::after {
+[highlight-tag][left-edge]::after {
   content: "";
   position: absolute;
   left: 2.5px;
@@ -69,7 +69,7 @@
   background: var(--highlight-error-red);
 }
 
-[right-edge]::after {
+[highlight-tag][right-edge]::after {
   content: "";
   position: absolute;
   left: 0;
@@ -79,7 +79,7 @@
   background: var(--highlight-error-red);
 }
 
-[left-edge][right-edge]::after {
+[highlight-tag][left-edge][right-edge]::after {
   content: "";
   position: absolute;
   bottom: -1px;
