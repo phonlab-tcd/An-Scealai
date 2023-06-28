@@ -18,6 +18,22 @@ Quill.register(
 
 Quill.register(
   new Parchment.Attributor.Attribute(
+      'left-edge',
+      'left-edge',
+      {scope: Parchment.Scope.INLINE}
+  )
+);
+
+Quill.register(
+  new Parchment.Attributor.Attribute(
+      'right-edge',
+      'right-edge',
+      {scope: Parchment.Scope.INLINE}
+  )
+);
+
+Quill.register(
+  new Parchment.Attributor.Attribute(
       'id',
       'id',
       {scope: Parchment.Scope.INLINE}
@@ -35,6 +51,7 @@ export type HighlightTag = {
 }
 
 type MessageRenderer = (ht: HighlightTag)=>string;
+type Span = {fromX: number, toX: number};
 
 export class QuillHighlighter {
     quillEditor: Quill;
@@ -43,7 +60,7 @@ export class QuillHighlighter {
     private engagement: EngagementService;
     private editorElement: HTMLElement;
     private mergedGroupData: Map<string, HighlightTag[]> = new Map();
-    private mergedGroupSpan: Map<string, {fromX: number, toX: number}> = new Map();
+    private mergedGroupSpan: Map<string, Span> = new Map();
     private messageRenderer: MessageRenderer;
     private tooltip;
 
@@ -58,8 +75,8 @@ export class QuillHighlighter {
           if (event.target instanceof Element){
             const id = event.target.getAttribute("id");
             if(id){
-              console.log(id.toString());
-              console.log(id);
+              // console.log(id.toString());
+              // console.log(id);
               const span = this.mergedGroupSpan.get(id);
               const data = this.mergedGroupData.get(id);
               if (span && data) {
@@ -124,8 +141,13 @@ export class QuillHighlighter {
 
        this.quillEditor.formatText(span.fromX, span.toX - span.fromX, {"highlight-tag": true, "id": id}, 'api');
        const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
-       tagElements[0].classList.add("left-edge");
-      //  Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
+       tagElements.forEach(function(tagElement) {
+         tagElement.removeAttribute("left-edge");
+         tagElement.removeAttribute("right-edge");
+       });
+       tagElements[0].setAttribute("left-edge", "");
+       tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+       // Array.from(tagElements).slice(-1)[0].classList.add("right-edge");
 
       //  const tagElements = this.editorElement.querySelectorAll(`[id="${id}"`);
       //  if (tagElements.length === 0) {
@@ -178,6 +200,27 @@ export class QuillHighlighter {
         return;
     }
 
+    public tidyUp(spans: Span[]) {
+      console.log('tidyUp time!');
+      for (const span of spans) {
+        console.log('span:', span);
+        for (let i = span.fromX; i < span.toX; i++) {
+          const format = this.quillEditor.getFormat(i, 1);
+          const id = format["id"];
+          if (id) {
+            const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+            console.log(`elements to tidy for i=${i}, id=${id}:`, tagElements);
+            tagElements.forEach(function(tagElement) {
+              tagElement.removeAttribute("left-edge");
+              tagElement.removeAttribute("right-edge");
+            });
+            tagElements[0].setAttribute("left-edge", "");
+            tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+          }
+        }
+      }
+    }
+
     /**
     * Remove css highlighting to input array of error tags
     * @param tags - array of tags to remove highlighting
@@ -219,7 +262,7 @@ export class QuillHighlighter {
     * @param tagElement - html element associated with tag
     * @param tooltip - tooltip to be applied to tag
     */
-    private mouseOverTagElem(tags: HighlightTag[], span: {fromX: number, toX: number}) {
+    private mouseOverTagElem(tags: HighlightTag[], span: Span) {
         console.log(tags);
         // tagElement.setAttribute('data-selected', '');
     
