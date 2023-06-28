@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const UserGrammarCounts = require('../../models/userGrammarCounts');
+const mongoose = require("mongoose");
+const UserGrammarCounts = require("../../models/userGrammarCounts");
 
 /**
  * Returns a dictionary of errors and dates for a given student
@@ -11,16 +11,28 @@ const UserGrammarCounts = require('../../models/userGrammarCounts');
 async function getTimeGrammarCounts(req, res) {
   const ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
 
-  const conditions = {'owner': ownerId};
-  if (req.body.startDate !== '' && req.body.endDate !== '') {
-    let endDate = new Date(req.body.endDate)
+  const conditions = { owner: ownerId };
+
+  // set date range restrition on data retrieval
+  if (req.body.startDate !== "" && req.body.endDate !== "") {  // teacher has provided date range
+    let endDate = new Date(req.body.endDate);
     endDate.setDate(endDate.getDate() + 1);
 
-    conditions['updatedAt'] = {
-      '$gte': new Date(req.body.startDate),
-      '$lte': endDate,
+    conditions["updatedAt"] = {
+      $gte: new Date(req.body.startDate),
+      $lte: endDate,
     };
-  };
+  } else {                                                    // teach has not provided date range - default 90 days
+    let endDate = new Date();
+    endDate.setDate(endDate.getDate() + 1);
+    let startDate = new Date();
+    startDate.setTime(endDate.getTime() - 90 * 24 * 60 * 60 * 1000);
+
+    conditions["updatedAt"] = {
+      $gte: startDate,
+      $lte: endDate,
+    };
+  }
 
   const userGrammarCounts = await UserGrammarCounts.find(conditions);
 
@@ -29,7 +41,7 @@ async function getTimeGrammarCounts(req, res) {
   }
 
   // filter out entries that don't have error counts
-  const filteredData = userGrammarCounts.filter(function(el) {
+  const filteredData = userGrammarCounts.filter(function (el) {
     return el.errorCounts != null;
   });
 
@@ -42,7 +54,7 @@ async function getTimeGrammarCounts(req, res) {
     const entry = entryObj.toJSON();
     for (const [key, val] of Object.entries(entry.errorCounts)) {
       const date = new Date(+entry.updatedAt).toISOString().slice(0, 10);
-      if (! (key in errorCountsDict)) {
+      if (!(key in errorCountsDict)) {
         errorCountsDict[key] = {};
       }
       errorCountsDict[key][date] = val;
@@ -51,4 +63,4 @@ async function getTimeGrammarCounts(req, res) {
   return res.json(errorCountsDict);
 }
 
-module.exports = {getTimeGrammarCounts};
+module.exports = { getTimeGrammarCounts };

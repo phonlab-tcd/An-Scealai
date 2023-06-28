@@ -41,6 +41,7 @@ export class StatsDashboardComponent implements OnInit {
   grammarErrorTimeCounts: {startDate: Date, endDate: Date, data: Object[]} = {startDate: null, endDate: null, data: []};
   userRole: string = '';
   dialogRef: MatDialogRef<unknown>;
+  statsLoaded: boolean = false;
   
   async ngOnInit() {
     // determine if user is a teacher or student
@@ -90,6 +91,8 @@ export class StatsDashboardComponent implements OnInit {
    * @param endDate end date if teacher selects date range
    */
   async loadDataForCharts(studentIds:string[] = [], startDate:string = '', endDate:string = '') {
+    this.statsLoaded = false;
+    
     // get n-gram data
     this.textsToAnalyse = await this.getNGramData(studentIds, startDate, endDate);
 
@@ -104,6 +107,8 @@ export class StatsDashboardComponent implements OnInit {
     
     // get grammar error time data
     this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate);
+
+    this.statsLoaded = true;
   }
 
   /**

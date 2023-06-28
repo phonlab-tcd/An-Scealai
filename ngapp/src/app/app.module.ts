@@ -52,6 +52,8 @@ import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
 import { NavBarModule } from './nav-bar/nav-bar.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
+import { SpinnerModule } from './spinner/spinner.module';
+
 
 @NgModule({
     declarations: [
@@ -76,6 +78,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     imports: [
         NavBarModule,
         RegisterModule,
+        SpinnerModule,
         DictionaryLookupsModule,
         GrammarPieChartModule,
         GrammarErrorTimeModule,

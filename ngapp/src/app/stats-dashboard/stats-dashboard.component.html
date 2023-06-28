@@ -1,4 +1,4 @@
-<mat-card class="dashboard" *ngIf="!dialogRef">
+<mat-card class="dashboard" *ngIf="!dialogRef && statsLoaded; else loading">
     <div class="dashboard-header">
         <h3 class="dashboard-title">{{ts.l.statistics_dashboard}}</h3>
         <button *ngIf="userRole == 'TEACHER'" mat-stroked-button (click)="openClassroomSelector()">
@@ -74,3 +74,6 @@
         </mat-card>
     </div>
 </mat-card>
+<div #loading style="padding-top: 15%;">
+    <grid-spinner></grid-spinner>
+</div>

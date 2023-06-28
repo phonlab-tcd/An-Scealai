@@ -35,7 +35,7 @@ export class GrammarErrorTimeComponent implements OnInit {
    */
   createDateRange() {
     this.dateRange = [];
-    let numOfDays = 30; // default date range length if no dates given
+    let numOfDays = 90; // default date range length if no dates given
     let endDate = new Date(); // initial date for calculating range, default today (calc begins with most recent date, i.e. end)
 
     // get date range from given start and end date
