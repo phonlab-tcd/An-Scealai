@@ -302,6 +302,7 @@ export class DashboardComponent implements OnInit {
   }) {
     this.story.text = q.text;
     this.getWordCount(q.text);
+    // by 'cosmetic' here I mean that it doesn't affect the text content but just styling
     const deltaIsCosmetic: boolean = q.delta.ops.every(op => 'retain' in op)
     if (deltaIsCosmetic) {
       const formattingChangeSpans = q.delta.ops.reduce(
