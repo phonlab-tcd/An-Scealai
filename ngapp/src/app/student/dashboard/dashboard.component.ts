@@ -6,6 +6,7 @@ import { firstValueFrom, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
+import { Delta } from "quill";
 import ImageCompress from "quill-image-compress";
 import {clone} from "lodash";
 import config from "abairconfig";
@@ -163,6 +164,7 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
+      console.log('Text updated');
       this.runGrammarCheck();
     });
   }
@@ -283,12 +285,26 @@ export class DashboardComponent implements OnInit {
     html: string;
     text: string;
     content: any;
-    delta: any; // TODO actual type is Quill Delta
-    oldDelta: any; // TODO actual type is Quill Delta
+    delta: Delta;
+    oldDelta: Delta;
     source: "user" | "api" | "silent" | undefined;
   }) {
     this.story.text = q.text;
     this.getWordCount(q.text);
+    // by 'cosmetic' here I mean that it doesn't affect the text content but just styling
+    const deltaIsCosmetic: boolean = q.delta.ops.every(op => 'retain' in op)
+    if (deltaIsCosmetic) {
+      const formattingChangeSpans = q.delta.ops.reduce(
+        (acc, cur) => {
+          return {
+            i: acc.i + cur.retain,
+            spans: ('attributes' in cur) ? acc.spans.concat([{fromX: acc.i, toX: acc.i + cur.retain}]) : acc.spans
+          }
+        },
+        {i: 0, spans: []}
+      ).spans;
+      formattingChangeSpans.forEach(span => this.quillHighlighter.tidyUp(span));
+    }
     switch (q.source) {
       case "user":
         this.storySaved = false;

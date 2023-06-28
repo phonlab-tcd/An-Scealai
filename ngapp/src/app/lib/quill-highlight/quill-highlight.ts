@@ -18,13 +18,29 @@ Quill.register(
 
 Quill.register(
   new Parchment.Attributor.Attribute(
+    'left-edge',
+    'left-edge',
+    { scope: Parchment.Scope.INLINE }
+  )
+);
+
+Quill.register(
+  new Parchment.Attributor.Attribute(
+    'right-edge',
+    'right-edge',
+    { scope: Parchment.Scope.INLINE }
+  )
+);
+
+Quill.register(
+  new Parchment.Attributor.Attribute(
     'id',
     'id',
     { scope: Parchment.Scope.INLINE }
   )
 );
 
-type Span = { fromX: number, toX: number };
+
 
 export function spansOverlap(a: Span, b: Span) {
   if (a.fromX >= b.toX || b.fromX >= a.toX) {
@@ -36,6 +52,7 @@ export function spansOverlap(a: Span, b: Span) {
 export type HighlightTag = ErrorTag;
 
 type MessageRenderer = (ht: HighlightTag) => string;
+type Span = { fromX: number, toX: number };
 
 export class QuillHighlighter {
   quillEditor: Quill;
@@ -47,7 +64,8 @@ export class QuillHighlighter {
   private mergedGroupData: Map<string, HighlightTag[]> = new Map();
 
   // not necessarily the spans of any individual highlight-tag, but the span of a group of overlapping highlight tags
-  private mergedGroupSpan: Map<string, { fromX: number, toX: number }> = new Map();
+  private mergedGroupSpan: Map<string, Span> = new Map();
+
   private messageRenderer: MessageRenderer;
   private tooltip: typeof Tooltip;
 
@@ -117,11 +135,11 @@ export class QuillHighlighter {
           allMessages = allMessages.concat(messages);
           i = existingSpan.toX;
         } else {
-          // TODO: skip through loop based on length of text at position i
         }
       }
     }
 
+    
     const idsIn = {};
     const tags = allMessages.filter(x => {
       if(idsIn[x.id]) return false;
@@ -140,14 +158,14 @@ export class QuillHighlighter {
     highlightTagsSet.push(tag)
 
     // collapse to unique tags by serializing, creating a Set, then deserializing
-    // TODO: does this definitely work? What about objects {a: 1, b: 2} vs {b: 2, a: 1}??? Let's replace this with an implementatino based on tag ids.
-    // highlightTagsSet = Array.from(new Set(highlightTagsSet.map(o => JSON.stringify(o)))).map(s => JSON.parse(s));
+    // TODO: does this definitely work? What about objects {a: 1, b: 2} vs {b: 2, a: 1}???
+    /// highlightTagsSet = Array.from(new Set(highlightTagsSet.map(o => JSON.stringify(o)))).map(s => JSON.parse(s));
 
     function alphabeticalSort(a, b) {
       if (a.nameGA < b.nameGA) return -1;
       return 1;
     }
-    highlightTagsSet = highlightTagsSet.filter(x => x);//.sort(alphabeticalSort);
+    highlightTagsSet = highlightTagsSet.filter(x => x).sort(alphabeticalSort);
 
     const id = crypto.randomUUID().toString();
     this.mergedGroupData.set(id, highlightTagsSet);
@@ -156,8 +174,39 @@ export class QuillHighlighter {
     this.quillEditor.formatText(span.fromX, span.toX - span.fromX, { "highlight-tag": true, "id": id }, 'api');
     const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
 
-    tagElements[0].classList.add("left-edge");
+    tagElements.forEach(function (tagElement) {
+      tagElement.removeAttribute("left-edge");
+      tagElement.removeAttribute("right-edge");
+    });
+    tagElements[0].setAttribute("left-edge", "");
+    tagElements[tagElements.length - 1].setAttribute("right-edge", "");
   }
+  
+  // Ensures that the tag groups encompassed by 'span' have 
+  // coherent highlighting.
+  // This is used to prevent undesired gaps from appearing
+  // in highlight tags when some format operation is applied
+  // in quill, e.g. making some text bold or italic.
+  public tidyUp(span: Span) {
+    let i = span.fromX;
+    while (i < span.toX) {
+      const format = this.quillEditor.getFormat(i, 1);
+      const id = format["id"];
+      if (!id) { ++i; continue; }
+      const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+      tagElements.forEach(function (tagElement) {
+        tagElement.removeAttribute("left-edge");
+        tagElement.removeAttribute("right-edge");
+      });
+      tagElements[0].setAttribute("left-edge", "");
+      tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+      // Because we have already formatted the whole merge group here we can
+      // skip i forward to the end of the group
+      const groupSpan = this.mergedGroupSpan.get(id);
+      i = groupSpan ? groupSpan.toX : i + 1;
+    }
+  
+
 
   public equivalentTag(a: HighlightTag, b: HighlightTag) {
     return a.id === b.id;

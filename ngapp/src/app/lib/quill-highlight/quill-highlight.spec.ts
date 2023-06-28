@@ -313,6 +313,114 @@ fdescribe('QuillEditorComponent', () => {
     expect(numberOfTagGroups()).toBe(1);
   }));
 
+
+  describe("tidyUp()", () => {
+    it("correctly sets left-edge and right-edge when formatted across a tag boundary", fakeAsync(() => {
+      // formatting:      ---
+      //       text:  A B C D E F
+      //       tags:  ----- -----
+      // 
+      // i.e. * there are two tags: [ABC][DEF]
+      //      * we format [CD]
+
+      // Arrange
+      quillEditor.setText("ABCDEF");
+      const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
+        return "tooltip text";
+      }, {} as any );
+      highlighter.addTag({fromX: 0, toX: 3} as any);
+      highlighter.addTag({fromX: 3, toX: 6} as any);
+
+      // Act
+      component.quillEditor.formatText(2, 2, {"bold": "true"}, 'api');
+
+      // Assert
+      const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
+      expect(spans.length).toBe(4);
+      expect(spans[0].hasAttribute('left-edge'))
+      expect(spans[1].hasAttribute('right-edge'))
+      expect(spans[2].hasAttribute('left-edge'))
+      expect(spans[3].hasAttribute('right-edge'))
+    }));
+
+    it("correctly sets left-edge and right-edge when formatted within a tag", fakeAsync(() => {
+      // formatting:    -----
+      //       text:  M O   M A D R A
+      //       tags:  ---------------
+      // 
+      // i.e. * there is one tag: [MO MADRA]
+      //      * we format [O M]
+
+      // Arrange
+      quillEditor.setText("mo madra");
+      const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
+        return "tooltip text";
+      }, {} as any );
+      highlighter.addTag({fromX: 0, toX: 8} as any);
+
+      // Act
+      component.quillEditor.formatText(1, 3, {"bold": "true"}, 'api');
+
+      // Assert
+      const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
+      expect(spans.length).toBe(3);
+      expect(spans[0].hasAttribute('left-edge'))
+      expect(!(spans[1].hasAttribute('left-edge') || spans[1].hasAttribute('right-edge')))
+      expect(spans[2].hasAttribute('right-edge'))
+    }));
+
+    it("correctly sets left-edge and right-edge when formatted at the left edge of a tag", fakeAsync(() => {
+      // formatting:  -
+      //       text:  M O   M A D R A
+      //       tags:  ---------------
+      // 
+      // i.e. * there is one tag: [MO MADRA]
+      //      * we format [M]
+
+      // Arrange
+      quillEditor.setText("mo madra");
+      const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
+        return "tooltip text";
+      }, {} as any );
+      highlighter.addTag({fromX: 0, toX: 8} as any);
+
+      // Act
+      component.quillEditor.formatText(0, 1, {"bold": "true"}, 'api');
+
+      // Assert
+      const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
+      expect(spans.length).toBe(2);
+      expect(spans[0].hasAttribute('left-edge'))
+      expect(spans[1].hasAttribute('right-edge'))
+    }));
+
+    it("correctly sets left-edge and right-edge when formatted at the right edge of a tag", fakeAsync(() => {
+      // formatting:                -
+      //       text:  M O   M A D R A
+      //       tags:  ---------------
+      // 
+      // i.e. * there is one tag: [MO MADRA]
+      //      * we format [A]
+
+      // Arrange
+      quillEditor.setText("mo madra");
+      const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
+        return "tooltip text";
+      }, {} as any );
+      highlighter.addTag({fromX: 0, toX: 8} as any);
+
+      // Act
+      component.quillEditor.formatText(7, 1, {"bold": "true"}, 'api');
+
+      // Assert
+      const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
+      expect(spans.length).toBe(2);
+      expect(spans[0].hasAttribute('left-edge'))
+      expect(spans[1].hasAttribute('right-edge'))
+    }));
+  })
+
+  
   it("should remove one tag from a group of densely overlapping tags",fakeAsync(async ()=>{
     // GIVEN quill editor with text on multiple lines
     quillEditor.setText("0123456789\n0123456789\n0123456789\n0123456789\n0123456789\n");
