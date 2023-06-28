@@ -3,8 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { TeacherRoutingModule } from './teacher-routing.module';
-
-import { TeacherDashboardOldComponent } from './teacher-dashboard-old/teacher-dashboard-old.component';
 import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-classroom/teacher-classroom.component';
@@ -28,7 +26,6 @@ import { StudentListComponent } from './student-list/student-list.component';
 @NgModule({
   declarations: [
     //FilterPipe,
-    TeacherDashboardOldComponent,
     TeacherDashboardComponent,
     TeacherStudentComponent,
     TeacherClassroomComponent,

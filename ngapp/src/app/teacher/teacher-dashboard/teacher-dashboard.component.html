@@ -36,19 +36,19 @@
       </div>
 
       <!-- STATISTICS -->
-      <div class="optionsBtn" (click)="goToStats()">
+      <div *ngIf="classroom.studentIds.length > 0" class="optionsBtn" (click)="goToStats()">
         {{ ts.l.stats }}
         <i class="fas fa-calculator optionsBtnIcon"></i>
       </div>
 
       <!-- MESSAGES -->
-      <div class="optionsBtn" (click)="goToMessages()">
+      <div *ngIf="classroom.studentIds.length > 0" class="optionsBtn" (click)="goToMessages()">
         {{ ts.l.messages }}
         <i class="fa fa-envelope optionsBtnIcon"></i>
       </div>
 
       <!-- DICTOGLOSS -->
-      <div class="optionsBtn" (click)="goToDictogloss()">
+      <div *ngIf="classroom.studentIds.length > 0" class="optionsBtn" (click)="goToDictogloss()">
         {{ ts.l.dictogloss }}
         <i class="fas fa-file-audio optionsBtnIcon"></i>
       </div>
