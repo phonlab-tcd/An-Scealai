@@ -1,6 +1,7 @@
 import Quill from 'quill';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { ErrorTag } from '../grammar-engine/types';
+import { Observable, fromEvent } from 'rxjs';
 
 // This is required to top quill from adding "Visit link:" before our text
 export const tooltipClassname = "custom-tooltip";
@@ -69,11 +70,36 @@ export class QuillHighlighter {
   private messageRenderer: MessageRenderer;
   private tooltip: typeof Tooltip;
 
+  // todo better type for text change
+  private textChange$: Observable<any>;
+
   constructor(quillEditor: Quill, messageRenderer: MessageRenderer, engagement: EngagementService) {
     this.quillEditor = quillEditor;
+    console.log(this.quillEditor);
 
     // only need to instantiate one tooltip, reuse it when hover on a new highlight
     this.tooltip = new Tooltip(quillEditor);
+
+    this.textChange$ = fromEvent(this.quillEditor, 'text-change')
+    this.textChange$.subscribe({
+      next: ([delta, content, source]) => {
+        if (source === "api") return;
+        // by 'cosmetic' here I mean that it doesn't affect the text content but just styling
+        const deltaIsCosmetic: boolean = delta.ops.every(op => 'retain' in op)
+        if (deltaIsCosmetic) {
+          const formattingChangeSpans = delta.ops.reduce(
+            (acc, cur) => {
+              return {
+                i: acc.i + cur.retain,
+                spans: ('attributes' in cur) ? acc.spans.concat([{ fromX: acc.i, toX: acc.i + cur.retain }]) : acc.spans
+              }
+            },
+            { i: 0, spans: [] }
+          ).spans;
+          formattingChangeSpans.forEach(span => this.tidyUp(span));
+        }
+      }
+    });
 
     // add "custom-tooltip" class so that Quil doesn't prepend with "View Link:" hyperlink text
     this.tooltip.root.classList.add(tooltipClassname);
@@ -205,8 +231,7 @@ export class QuillHighlighter {
       const groupSpan = this.mergedGroupSpan.get(id);
       i = groupSpan ? groupSpan.toX : i + 1;
     }
-  
-
+  }
 
   public equivalentTag(a: HighlightTag, b: HighlightTag) {
     return a.id === b.id;
@@ -263,7 +288,7 @@ export class QuillHighlighter {
         'highlight-tag': null,
         'background-color': '',
         'data-selected': null
-      }
+      }, 'api'
     );
     this.tooltip.hide();
   }

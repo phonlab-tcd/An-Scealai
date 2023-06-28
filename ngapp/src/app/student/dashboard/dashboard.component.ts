@@ -214,16 +214,6 @@ export class DashboardComponent implements OnInit {
         });
       } catch (updateGrammarErrorsError) {
         console.error(updateGrammarErrorsError);
-        // if (!this.grammarErrors) {
-        //   window.alert(
-        //     "There was an error while trying to fetch grammar " +
-        //       "suggestions from the Gramadóir server:\n" +
-        //       updateGrammarErrorsError.message +
-        //       "\n" +
-        //       "See the browser console for more information"
-        //   );
-        // }
-        // console.dir(updateGrammarErrorsError);
       }
   }
 
@@ -291,25 +281,11 @@ export class DashboardComponent implements OnInit {
   }) {
     this.story.text = q.text;
     this.getWordCount(q.text);
-    // by 'cosmetic' here I mean that it doesn't affect the text content but just styling
-    const deltaIsCosmetic: boolean = q.delta.ops.every(op => 'retain' in op)
-    if (deltaIsCosmetic) {
-      const formattingChangeSpans = q.delta.ops.reduce(
-        (acc, cur) => {
-          return {
-            i: acc.i + cur.retain,
-            spans: ('attributes' in cur) ? acc.spans.concat([{fromX: acc.i, toX: acc.i + cur.retain}]) : acc.spans
-          }
-        },
-        {i: 0, spans: []}
-      ).spans;
-      formattingChangeSpans.forEach(span => this.quillHighlighter.tidyUp(span));
-    }
-    switch (q.source) {
-      case "user":
-        this.storySaved = false;
-        this.textUpdated.next(q.text);
-        this.debounceSaveStory();
+
+    if (q.source === "user") {
+      this.storySaved = false;
+      this.textUpdated.next(q.text);
+      this.debounceSaveStory();
     }
   }
 

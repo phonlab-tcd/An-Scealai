@@ -47,8 +47,8 @@ async function check(input: string, authToken: string):Promise<ErrorTag[]>{
     const errorTags: ErrorTag[] = errors.map((error) => {
       // get simple rule name from an gramadoir's ruleId response attribute
       const cleanedErrorName = gramadoirId2string(error.ruleId);
-      if(!(cleanedErrorName in ERROR_TYPES)) {
-        console.warn("INVALIDE ERROR TYPE:", cleanedErrorName);
+      if(!(cleanedErrorName in ERROR_INFO)) {
+        console.warn("INVALID ERROR TYPE:", cleanedErrorName);
       }
       const e_info = ERROR_INFO[cleanedErrorName];
 
