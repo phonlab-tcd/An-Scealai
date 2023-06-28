@@ -3,6 +3,31 @@ import { QuillEditorComponent } from 'ngx-quill';
 // import { expect, describe, fdescribe, beforeEach, it, fit } from "jasmine-core";
 import * as qh from "./quill-highlight";
 import Quill from 'quill';
+import { ErrorTag, ErrorType } from '../grammar-engine/types';
+
+const errorTagRest = {
+  errorText: '',
+  messageGA: '',
+  messageEN: '',
+  context: '',
+  nameEN: '',
+  nameGA: '',
+  color: '',
+  type: 'GAELSPELL' as ErrorType,
+};
+
+function i() {
+  return crypto.randomUUID();
+}
+
+function mkTag(f,t): ErrorTag {
+  return {
+    fromX: f,
+    toX: t,
+    id: i(),
+    ...errorTagRest,
+  }
+}
 
 // trigger a mouseover event that bubbles up to parent elements
 function bubblingMouseover(el: Element) {
@@ -279,13 +304,15 @@ fdescribe('QuillEditorComponent', () => {
     const renderer = () => renderText;
     const highlighter = new qh.QuillHighlighter(component.quillEditor, renderer, {} as any );
 
-    const tag = {fromX: 10, toX: 20} as any;
-    highlighter.addTag(tag);
-    highlighter.addTag({fromX: 19, toX: 25} as any);
-    highlighter.removeTag(tag);
+    const t1 = mkTag(10,20);
+    const t2 = mkTag(15,25);
+    highlighter.addTag(t1);
+    highlighter.addTag(t2);
+    highlighter.removeTag(t2);
 
     expect(numberOfTagGroups()).toBe(1);
   }));
+
 
   describe("tidyUp()", () => {
     it("correctly sets left-edge and right-edge when formatted across a tag boundary", fakeAsync(() => {
@@ -392,4 +419,62 @@ fdescribe('QuillEditorComponent', () => {
       expect(spans[1].hasAttribute('right-edge'))
     }));
   })
+
+  
+  it("should remove one tag from a group of densely overlapping tags",fakeAsync(async ()=>{
+    // GIVEN quill editor with text on multiple lines
+    quillEditor.setText("0123456789\n0123456789\n0123456789\n0123456789\n0123456789\n");
+    // add some color to the text for an extra challenge
+    component.quillEditor.formatText(16, 2, {"color": "red"}, 'api');
+
+    const renderText = "text in tooltip";
+    const renderer = () => renderText;
+    const highlighter = new qh.QuillHighlighter(component.quillEditor, renderer, {} as any );
+
+    const ErrorTag = {
+      errorText: '',
+      messageGA: '',
+      messageEN: '',
+      context: '',
+      nameEN: '',
+      nameGA: '',
+      color: '',
+      type: 'GAELSPELL' as ErrorType,
+    };
+
+    function i() {
+      return crypto.randomUUID();
+    }
+
+    const t1 = mkTag(0,1);
+    const t2 = mkTag(1,2);
+    const t3 = mkTag(0,2);
+    highlighter.addTag(t1);
+    highlighter.addTag(t2);
+    highlighter.addTag(t3);
+    highlighter.removeTag(t3);
+
+    expect(numberOfTagGroups()).toBe(2);
+  }));
+
+  it("should remove one tag from a group of densely overlapping tags",fakeAsync(async ()=>{
+    // GIVEN quill editor with text on multiple lines
+    quillEditor.setText("0123456789\n0123456789\n0123456789\n0123456789\n0123456789\n");
+    // add some color to the text for an extra challenge
+    component.quillEditor.formatText(16, 2, {"color": "red"}, 'api');
+
+    const renderText = "text in tooltip";
+    const renderer = () => renderText;
+    const highlighter = new qh.QuillHighlighter(component.quillEditor, renderer, {} as any );
+
+    const t1 = mkTag(0, 10);
+    const t2 = mkTag(10,20);
+    const t3 = mkTag(0, 20);
+    highlighter.addTag(t1);
+    highlighter.addTag(t2);
+    highlighter.addTag(t3);
+    highlighter.removeTag(t3);
+
+    expect(numberOfTagGroups()).toBe(2);
+  }));
 });

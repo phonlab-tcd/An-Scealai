@@ -10,14 +10,15 @@
 
 <div *ngIf="hasGrammarErrors(); else noGrammarErrorsMessage" class="selectErrorCheckbox">
   <!-- GRAMMAR ERROR LIST -->
-  <div *ngFor="let tag of grammarErrorsTypeDict | keyvalue" class="errorContainer" (click)="toggleLegendTag(tag.key)" [attr.id]="tag.key" >
-    <div [ngStyle]="{ 'background-color': tag.value[0].color }" class="circle" > </div>
-    <span *ngIf="ts.l.iso_code == 'en'" [innerHtml]='" " + tag.value[0].nameEN'></span>
-    <span *ngIf="ts.l.iso_code == 'ga'" [innerHtml]='" " + tag.value[0].nameGA'></span>
-
-    <!-- Error count -->
-    ({{ tag.value.length }})
-  </div>
+  <ng-container *ngFor="let tagType of nonEmptyErrorTypes()">
+    <div *ngIf="displayTagType(tagType)" class="errorContainer" (click)="toggleLegendTag(tagType)" [attr.id]="tagType">
+      <div [ngStyle]="{ 'background-color': ERROR_INFO[tagType].color }" class="circle" > </div>
+      <span *ngIf="ts.l.iso_code == 'en'" [innerHtml]='" " + ERROR_INFO[tagType].nameEN'></span>
+      <span *ngIf="ts.l.iso_code == 'ga'" [innerHtml]='" " + ERROR_INFO[tagType].nameGA'></span>
+          <!-- Error count -->
+      ({{ grammarEngine.errorStoreForLatestCheck.getType(tagType).length }})
+    </div>
+  </ng-container>
 </div>
 <ng-template #noGrammarErrorsMessage>
   <div *ngIf="grammarLoaded" class="errorContainer"> {{ts.l.no_grammar_errors}} </div>
