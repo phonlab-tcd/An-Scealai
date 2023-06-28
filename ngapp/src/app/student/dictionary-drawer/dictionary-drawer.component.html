@@ -34,17 +34,15 @@
   </div>
 
   <!-- TEANGLANN -->
-  <div style="height: 100%">
-    <iframe
-      *ngIf="selectTeanglann"
-      class="dictionaryIframe"
-      id="dictiframe"
-      [src]="defaultDictIframeText"
-    ></iframe>
-  </div>
+  <iframe
+    *ngIf="selectTeanglann"
+    class="dictionaryIframe"
+    id="dictiframe"
+    [src]="defaultDictIframeText"
+  ></iframe>
 
   <!-- EXTERNAL LINKS -->
-  <div *ngIf="!selectTeanglann" class="dictionaryIframe" style="text-align: left" >
+  <div *ngIf="!selectTeanglann" class="dictionaryIframe externalLinks">
     <ul>
       <li>
         <a href="http://www.potafocal.com/beo/" target="_blank"

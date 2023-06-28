@@ -1,8 +1,8 @@
 .dictionaryContainer {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
   
 .dictionaryHeader {
@@ -67,5 +67,11 @@
 
 .dictionaryIframe {
     width: 100%;
+    height: 100%;
     border-radius: 0px 0px 5px 5px;
+}
+
+.externalLinks {
+    text-align: left;
+    padding-top: 20px;
 }
