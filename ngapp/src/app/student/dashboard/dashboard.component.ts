@@ -304,7 +304,6 @@ export class DashboardComponent implements OnInit {
     this.getWordCount(q.text);
     const deltaIsCosmetic: boolean = q.delta.ops.every(op => 'retain' in op)
     if (deltaIsCosmetic) {
-      console.log('delta', q.delta);
       const formattingChangeSpans = q.delta.ops.reduce(
         (acc, cur) => {
           return {
@@ -314,8 +313,7 @@ export class DashboardComponent implements OnInit {
         },
         {i: 0, spans: []}
       ).spans;
-      console.log('formattingChangeSpans', formattingChangeSpans);
-      this.quillHighlighter.tidyUp(formattingChangeSpans);
+      formattingChangeSpans.forEach(span => this.quillHighlighter.tidyUp(span));
     }
     switch (q.source) {
       case "user":

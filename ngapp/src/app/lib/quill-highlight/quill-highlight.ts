@@ -200,24 +200,30 @@ export class QuillHighlighter {
         return;
     }
 
-    public tidyUp(spans: Span[]) {
-      console.log('tidyUp time!');
-      for (const span of spans) {
-        console.log('span:', span);
-        for (let i = span.fromX; i < span.toX; i++) {
-          const format = this.quillEditor.getFormat(i, 1);
-          const id = format["id"];
-          if (id) {
-            const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
-            console.log(`elements to tidy for i=${i}, id=${id}:`, tagElements);
-            tagElements.forEach(function(tagElement) {
-              tagElement.removeAttribute("left-edge");
-              tagElement.removeAttribute("right-edge");
-            });
-            tagElements[0].setAttribute("left-edge", "");
-            tagElements[tagElements.length - 1].setAttribute("right-edge", "");
-          }
-        }
+    /**
+     * Ensures that the tag groups encompassed by 'span' have 
+     * coherent highlighting.
+     * This is used to prevent undesired gaps from appearing
+     * in highlight tags when some format operation is applied
+     * in quill, e.g. making some text bold or italic.
+     */
+    public tidyUp(span: Span) {
+      let i = span.fromX; 
+      while (i < span.toX) {
+        const format = this.quillEditor.getFormat(i, 1);
+        const id = format["id"];
+        if (!id) { ++i; continue;}
+        const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+        tagElements.forEach(function(tagElement) {
+          tagElement.removeAttribute("left-edge");
+          tagElement.removeAttribute("right-edge");
+        });
+        tagElements[0].setAttribute("left-edge", "");
+        tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+        // Because we have already formatted the whole merge group here we can
+        // skip i forward to the end of the group
+        const groupSpan = this.mergedGroupSpan.get(id);
+        i = groupSpan ? groupSpan.toX : i + 1;
       }
     }
 
