@@ -28,6 +28,11 @@
   margin: auto !important;
 }
 
+.ql-editor span {
+  // Making this relative helps avoid an annoying highlighting bug
+  // where a highlight bar with 100% width fills the bottom of the editor
+  position: relative;
+}
 
 // [highlight-tag].right-edge {
   //   padding-right: 1px;
@@ -53,9 +58,9 @@
 [left-edge]::after {
   content: "";
   position: absolute;
-  left: 10%;
+  left: 2.5px;
   bottom: -1px;
-  width: 90%;
+  width: calc(100% - 2.5px);
   height: 3px;
   background: var(--highlight-error-red);
 }
@@ -65,7 +70,7 @@
   position: absolute;
   left: 0;
   bottom: -1px;
-  width: 90%;
+  width: calc(100% - 2.5px);
   height: 3px;
   background: var(--highlight-error-red);
 }
@@ -73,9 +78,9 @@
 [left-edge][right-edge]::after {
   content: "";
   position: absolute;
-  left: 5%;
   bottom: -1px;
-  width: 90%;
+  left: 2.5px;
+  width: calc(100% - 5px);
   height: 3px;
   background: var(--highlight-error-red);
 }
