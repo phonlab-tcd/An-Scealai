@@ -56,10 +56,14 @@ export class AppComponent {
 
     }).bind(this);
 
-    console.error = (async function () {
-      logBackend(...arguments);
-      console["originalError"](...arguments);
-    }).bind(this);
+    // console.error = (async function () {
+    //   try {
+    //   logBackend(...arguments);
+    //   } catch(e) {
+    //     console["originalError"]();
+    //   }
+    //   console["originalError"](...arguments);
+    // }).bind(this);
 
     window.onerror = logBackend;
   }

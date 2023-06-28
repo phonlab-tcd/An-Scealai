@@ -9,7 +9,7 @@ function bubblingMouseover(el: Element) {
     el.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
 }
 
-describe('QuillEditorComponent', () => {
+fdescribe('QuillEditorComponent', () => {
   let component: QuillEditorComponent;
   let fixture: ComponentFixture<QuillEditorComponent>;
   let quillEditor: Quill;
@@ -23,6 +23,7 @@ describe('QuillEditorComponent', () => {
   let countAllTooltips: Function;
   let lastHighlightElement: Function;
   let numberOfTagGroups: Function;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -81,10 +82,28 @@ describe('QuillEditorComponent', () => {
     numberOfTagGroups = function () {
         const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
         const uniqueIds = Array.from(new Set(Array.from(spans).map((span: any)=>span.getAttribute("id")))) 
+        console.log(uniqueIds);
         return uniqueIds.length;
     }
 
   }));
+
+  it("adjacent spans are not overlapping",()=>{
+    expect(qh.spansOverlap({fromX: 0, toX: 1},{fromX: 1, toX: 2})).toBeFalsy();
+  });
+
+  it("knows if two spans are overlapping",()=>{
+    expect(qh.spansOverlap({fromX: 0, toX: 1},{fromX: 1, toX: 2})).toBeFalsy();
+    expect(qh.spansOverlap({fromX: 0, toX: 5},{fromX: 1, toX: 2})).toBeTruthy();
+    expect(qh.spansOverlap({fromX: 3, toX: 5},{fromX: 0, toX: 6})).toBeTruthy();
+    expect(qh.spansOverlap({fromX: 3, toX: 5},{fromX: 0, toX: 1})).toBeFalsy();
+
+  })
+
+  // adversarial examples
+  xit("handles misformed input reasonably", ()=>{
+   expect(qh.spansOverlap({fromX: 10, toX: 5},{fromX: 9, toX: 12})).toBeTruthy();
+  })
 
   it('should create the Quill editor', () => {
     expect(component).toBeTruthy();
@@ -168,24 +187,20 @@ describe('QuillEditorComponent', () => {
     expect(tooltipEl.innerText).toBe(renderText);
   }));
 
-  it("should merge overlapping highlights",fakeAsync(()=>{
+  it("should merge overlapping highlights (minimum overlap)",fakeAsync(()=>{
     // GIVEN quill editor with text on multiple lines
-    quillEditor.setText("0123456789\n0123456789\n0123456789\n0123456789\n0123456789\n");
+    quillEditor.setText("012345678901234567890123456789\n0123456789\n0123456789\n");
     component.quillEditor.formatText(16, 2, {"color": "red"}, 'api');
 
     const renderText = "text in tooltip";
     const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
         return renderText;
     }, {} as any );
+    highlighter.addTag({fromX: 9,  toX: 11} as any);
     highlighter.addTag({fromX: 10, toX: 20} as any);
-    highlighter.addTag({fromX: 15, toX: 25} as any);
+    highlighter.addTag({fromX: 19, toX: 25} as any);
 
-    const spans = component.elementRef.nativeElement.querySelectorAll("[highlight-tag]");
-
-    const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0] as any;
-    bubblingMouseover(lastSpan);
-    const tooltips = component.elementRef.nativeElement.querySelectorAll(".custom-tooltip")
-    expect(tooltips.length).toBe(1);
+    expect(numberOfTagGroups()).toBe(1);
   }));
 
   it("should NOT merge adjacent highlights",fakeAsync(()=>{
@@ -197,6 +212,7 @@ describe('QuillEditorComponent', () => {
     const highlighter = new qh.QuillHighlighter(component.quillEditor, ()=>{
         return renderText;
     }, {} as any );
+    highlighter.addTag({fromX: 7, toX: 8} as any);
     highlighter.addTag({fromX: 10, toX: 25} as any);
     highlighter.addTag({fromX: 25, toX: 40} as any);
     highlighter.addTag({fromX: 40, toX: 41} as any);
@@ -207,7 +223,7 @@ describe('QuillEditorComponent', () => {
     const lastSpan: HTMLElement = Array.from(spans).slice(-1)[0] as any;
     bubblingMouseover(lastSpan);
     const tooltips = allTooltips();
-    expect(numberOfTagGroups()).toBe(4);
+    expect(numberOfTagGroups()).toBe(5);
   }));
 
   it("should merge overlapping highlights",fakeAsync(()=>{
@@ -253,7 +269,25 @@ describe('QuillEditorComponent', () => {
     expect(numberOfTagGroups()).toBe(2);
   }));
 
-  fdescribe("tidyUp()", () => {
+  it("remove one tag from a group of tags",fakeAsync(()=>{
+    // GIVEN quill editor with text on multiple lines
+    quillEditor.setText("0123456789\n0123456789\n0123456789\n0123456789\n0123456789\n");
+    // add some color to the text for an extra challenge
+    component.quillEditor.formatText(16, 2, {"color": "red"}, 'api');
+
+    const renderText = "text in tooltip";
+    const renderer = () => renderText;
+    const highlighter = new qh.QuillHighlighter(component.quillEditor, renderer, {} as any );
+
+    const tag = {fromX: 10, toX: 20} as any;
+    highlighter.addTag(tag);
+    highlighter.addTag({fromX: 19, toX: 25} as any);
+    highlighter.removeTag(tag);
+
+    expect(numberOfTagGroups()).toBe(1);
+  }));
+
+  describe("tidyUp()", () => {
     it("correctly sets left-edge and right-edge when formatted across a tag boundary", fakeAsync(() => {
       // formatting:      ---
       //       text:  A B C D E F
