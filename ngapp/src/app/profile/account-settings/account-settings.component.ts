@@ -62,33 +62,40 @@ export class AccountSettingsComponent implements OnInit {
     this.user = await firstValueFrom( this.userService.getUserById(this.auth.getUserDetails()._id) );
     if (!this.user) return;
 
-    // set dialect preference
-    this.profileService.getForUser(this.user._id).subscribe({
-      next: (profile) => {
-        (<HTMLInputElement>document.getElementById("dialectSelect")).value = profile.profile.dialectPreference;
-        this.dialectPreference = profile.profile.dialectPreference;
-    }})
-
+    // set dialect preference - To be integrated if we want this to be an option
+    // this.profileService.getForUser(this.user._id).subscribe({
+    //   next: (profile) => {
+    //     (<HTMLInputElement>document.getElementById("dialectSelect")).value = profile.profile.dialectPreference;
+    //     this.dialectPreference = profile.profile.dialectPreference;
+    // }})
 
     // get possible classroom codes if user is a student
     if (this.user.role === "STUDENT") {
       this.getClassroom();
-      this.codeInput.valueChanges.subscribe((code) => {
-        if (code.length > 0) {
-          this.classroomService.getClassroomFromCode(code).subscribe((res) => {
-            if (res.found) {
-              this.classroomCodeOutput = null;
-              this.foundClassroom = res.classroom;
-            } else {
-              this.foundClassroom = null;
-              this.classroomCodeOutput = res.message;
-            }
-          });
-        } else {
-          this.classroomCodeOutput = null;
-        }
-      });
+      this.listenForClassroomCodeInput();
     }
+  }
+
+  /**
+   * Check if classroom found for input code and return either
+   * 'not found' message or the found classroom title
+   */
+  listenForClassroomCodeInput() {
+    this.codeInput.valueChanges.subscribe((code) => {
+      if (code.length > 0) {
+        this.classroomService.getClassroomFromCode(code).subscribe((res) => {
+          if (res.found) {
+            this.classroomCodeOutput = null;
+            this.foundClassroom = res.classroom;
+          } else {
+            this.foundClassroom = null;
+            this.classroomCodeOutput = res.message;
+          }
+        });
+      } else {
+        this.classroomCodeOutput = null;
+      }
+    });
   }
 
   /*
@@ -122,7 +129,8 @@ export class AccountSettingsComponent implements OnInit {
   leaveClassroom() {
     this.classroomService.removeStudentFromClassroom( this.classroom._id, this.auth.getUserDetails()._id ).subscribe((_) => {
       this.classroom = null;
-      this.codeInput = null;
+      this.codeInput = new UntypedFormControl();
+      this.listenForClassroomCodeInput();
     });
   }
 
@@ -273,6 +281,27 @@ export class AccountSettingsComponent implements OnInit {
         this.newPassword = res[0];
         this.newPasswordConfirm = res[1];
         this.updatePassword();
+      }
+    });
+  }
+
+  openLeaveClassroomDialog() {
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: 'Leave Classroom',
+        message: 'Are you sure you want to leave this classroom? Your teacher will no longer have access to your stories, and you will no longer be able to view any feedback or messages from your teacher',
+        confirmText: this.ts.l.leave,
+        cancelText: this.ts.l.cancel,
+      },
+      width: "50vh",
+    });
+
+    this.dialogRef.afterClosed().subscribe((res) => {
+      this.dialogRef = undefined;
+      this.errorMessage = "";
+      if (res) {
+        this.classroomCodeOutput = null;
+        this.leaveClassroom();
       }
     });
   }

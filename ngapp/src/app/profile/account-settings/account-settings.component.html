@@ -42,7 +42,7 @@
         <!-- classroom if already joined -->
         <div class="settingsEntry" *ngIf="classroom">
           <div class="settingsValue">{{ classroom?.title }}</div>
-          <button *ngIf="classroom" class="btn leaveClassroomButton" (click)="leaveClassroom()" >
+          <button *ngIf="classroom" class="btn leaveClassroomButton" (click)="openLeaveClassroomDialog()" >
             {{ ts.l.leave }}
           </button>
         </div>

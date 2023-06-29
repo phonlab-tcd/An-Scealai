@@ -30,11 +30,12 @@
 .settingsEntry {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .settingsValue {
     width: 300px;
-    overflow-x: scroll;
+    word-wrap: break-word;
 }
 
 .deleteAccount {

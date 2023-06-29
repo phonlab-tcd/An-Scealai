@@ -319,7 +319,7 @@ export default {
     en: 'Please input a new username' },
   leave: {
     ga: 'Fág',
-    en: 'leave' },
+    en: 'Leave' },
   classroom: {
     ga: 'Rang',
     en: 'Classroom' },
