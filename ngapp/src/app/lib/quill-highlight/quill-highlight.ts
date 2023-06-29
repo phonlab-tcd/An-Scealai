@@ -311,24 +311,9 @@ export class QuillHighlighter {
           box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
           border: 2px solid var(--scealai-med-brown);
           border-radius: 2px;
+          max-width: 400px;
         `;
         this.tooltip.root.setAttribute('style', style);
-    
-        // Ensure that tooltip isn't cut off by the right edge of the editor
-        const rightOverflow =
-          (this.tooltip.root.offsetLeft + this.tooltip.root.offsetWidth) -
-          this.quillEditor.root.offsetWidth;
-    
-        this.tooltip.root.style.left =
-          (rightOverflow > 0) ?
-          `${(this.tooltip.root.offsetLeft - rightOverflow) - 5}px` : // - 5px for right padding
-          this.tooltip.root.style.left;
-    
-        // Ensure that tooltip isn't cut off by the left edge of the editor
-        this.tooltip.root.style.left =
-          (this.tooltip.root.offsetLeft < 0) ?
-          `${(this.tooltip.root.offsetLeft - this.tooltip.root.offsetLeft) + 5}px` : // + 5px for left padding
-          this.tooltip.root.style.left;
           
         // TODO: implement observable which emits interesting events (e.g. how long someone hovered on a message)
         // TODO: reenable engagement service
