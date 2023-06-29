@@ -48,9 +48,6 @@ export class GrammarErrorDrawerComponent implements OnInit {
     if(this.checkBoxes[key])  this.quillHighlighter.show(errorsToToggle);
     else                      this.quillHighlighter.hide(errorsToToggle);
 
-    // this.quillHighlighter.hideAll();
-    // this.quillHighlighter.show( this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) )
-
     if (this.checkBoxes[key]) {
       document.getElementById(key).classList.remove("hideLegendItem");
     } else {      
@@ -71,13 +68,5 @@ export class GrammarErrorDrawerComponent implements OnInit {
   public nonEmptyErrorTypes() {
     if(!this.grammarEngine || !this.grammarEngine.errorStoreForLatestCheck) return [];
     return this.grammarEngine.errorStoreForLatestCheck.nonEmptyTypes();
-  }
-
-  /**
-   * Returns true if the grammarErrorsTypeDict object has any key/value pairs
-   * @returns true or false
-   */
-  hasGrammarErrors():boolean {
-    return true; // TODO fix this
   }
 }

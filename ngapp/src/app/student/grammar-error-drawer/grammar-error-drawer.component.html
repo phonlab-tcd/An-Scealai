@@ -8,7 +8,7 @@
   </div>
 </div>
 
-<div *ngIf="hasGrammarErrors(); else noGrammarErrorsMessage" class="selectErrorCheckbox">
+<div *ngIf="nonEmptyErrorTypes().length > 0; else noGrammarErrorsMessage" class="selectErrorCheckbox">
   <!-- GRAMMAR ERROR LIST -->
   <ng-container *ngFor="let tagType of nonEmptyErrorTypes()">
     <div *ngIf="displayTagType(tagType)" class="errorContainer" (click)="toggleLegendTag(tagType)" [attr.id]="tagType">
