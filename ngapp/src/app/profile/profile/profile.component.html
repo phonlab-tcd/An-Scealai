@@ -1,0 +1,23 @@
+<div class="profileContainer">
+  <!-- Side menu for selecting which component to view -->
+  <div class="sideMenu">
+    <div (click)="setCurrentDisplay('accountSettings', 'accountSettings')" id="accountSettings">
+      {{ts.l.account_settings}}
+    </div>
+    <div (click)="setCurrentDisplay('languageInfo', 'languageInfo')" id="languageInfo">
+      {{ts.l.my_language_info}}
+    </div>
+    <!-- <div (click)="setCurrentDisplay('learningGoals', 'learningGoals')" id="learningGoals">
+      Learning Goals
+    </div> -->
+    <div (click)="logout()">
+      {{ ts.l.sign_out }} <i class="fas fa-sign-out-alt"></i>
+    </div>
+  </div>
+  <!-- Body showing the different selected components -->
+  <div class="body" [ngSwitch]="componentToDisplay">
+    <app-account-settings *ngSwitchDefault ></app-account-settings >
+    <app-register-profile *ngSwitchCase="'languageInfo'" ></app-register-profile >
+    <div *ngSwitchCase="'learningGoals'">Coming Soon!</div>
+  </div>
+</div>

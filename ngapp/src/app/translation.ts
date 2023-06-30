@@ -319,7 +319,19 @@ export default {
     en: 'Please input a new username' },
   leave: {
     ga: 'Fág',
-    en: 'leave' },
+    en: 'Leave' },
+  leave_classroom: {
+    ga: 'Fág an Seomra Ranga',
+    en: 'Leave Classroom' },
+  my_language_info: {
+    ga: 'Mo chuid sonraí teanga',
+    en: 'My Language Information' },
+  account_settings: {
+    ga: 'Socruithe Cuntais',
+    en: 'Account Settings' },
+  are_you_sure_leave_classroom: {
+    ga: 'An bhfuil tú cinnte gur mhaith leat an seomra ranga a fhágáil? Má fhágann tú an seomra ranga ní bheidh teacht ag do mhúinteoir ag do chuidse scéalta agus ní bheidh teacht agatsa ar aon aiseolas/teachtaireachtaí ó do mhúinteoir.',
+    en: 'Are you sure you want to leave this classroom? Your teacher will no longer have access to your stories, and you will no longer be able to view any feedback or messages from your teacher.' },
   classroom: {
     ga: 'Rang',
     en: 'Classroom' },
