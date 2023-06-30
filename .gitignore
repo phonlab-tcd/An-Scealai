@@ -33,8 +33,8 @@ api/globalConfig.json
 
 load-test/.env
 
-ngapp/qa_build/**
+**/qa_build/**
 
-ngapp/unpublished_dist/**
+**/unpublished_dist/**
 
-ngapp/coverage/**
+**/coverage/**
