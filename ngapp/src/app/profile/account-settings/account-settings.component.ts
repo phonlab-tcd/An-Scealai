@@ -288,8 +288,8 @@ export class AccountSettingsComponent implements OnInit {
   openLeaveClassroomDialog() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
-        title: 'Leave Classroom',
-        message: 'Are you sure you want to leave this classroom? Your teacher will no longer have access to your stories, and you will no longer be able to view any feedback or messages from your teacher',
+        title: this.ts.l.leave_classroom,
+        message: this.ts.l.are_you_sure_leave_classroom,
         confirmText: this.ts.l.leave,
         cancelText: this.ts.l.cancel,
       },
