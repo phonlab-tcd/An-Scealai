@@ -6,7 +6,7 @@
     "ng_version": "ng version",
     "start": "ng serve --configuration=dev",
     "dev": "mongod --config ./mongotest/mongotest.conf & npm --prefix ../api start & npm",
-    "build:prod": "ng build --base-href /scealai/",
+    "build:prod": "ng build",
     "build:qa": "ng build --configuration=qa --base-href /qa/scealai/ --output-path qa_build",
     "build:prod:local": "ng build --base-href / --output-path build_prod_local",
     "test": "ng test",

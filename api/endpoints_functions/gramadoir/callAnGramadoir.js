@@ -11,7 +11,7 @@ const cache = new NodeCache({ stdTTL: 600 });
  * @return {Promise} object of errors
  */
 async function callAnGramadoir(req, res) {
-  const url = "https://www.abair.ie/gramadoir/" + encodeURIComponent(req.params["teacs"]);
+  const url = "https://scealai.abair.ie/gramadoir/" + encodeURIComponent(req.params["teacs"]);
 
   try {
     // try to get the errors from the cache if sentence already requested
