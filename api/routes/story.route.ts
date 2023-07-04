@@ -137,12 +137,10 @@ storyRoutes.route("/update/:id").post((req, res) => {
       console.log("story is null!");
       return res.status(404).json("story not found");
     }
-    if (req.body.text) {
-      story.text = req.body.text;
-    }
-    if (req.body.htmlText) {
-      story.htmlText = req.body.htmlText;
-    }
+
+    story.text = req.body.text ?? "";
+    story.htmlText = req.body.htmlText ?? "";
+
     if (req.body.lastUpdated) {
       story.lastUpdated = req.body.lastUpdated;
     }
