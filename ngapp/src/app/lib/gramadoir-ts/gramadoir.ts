@@ -15,11 +15,11 @@ type GrammarError =   {
   contextoffset: string
 }
 
-async function grammarCheck(text: string): Promise<GrammarError[]> {
+export async function grammarCheck(text: string): Promise<GrammarError[]> {
   return get<GrammarError[]>(`${BASE_URL}/gram/${encodeURIComponent(text)}`);
 }
 
-async function grammarCheckStepByStep(text: string): Promise<GrammarError[]> {
+export async function grammarCheckStepByStep(text: string): Promise<GrammarError[]> {
   // Step 0. make a 'pristine' version of the text
   const pristine = await post<string, string>(`${BASE_URL}/tidy_input`, text);
   // Step 1. sentence tokenize the text
@@ -38,7 +38,7 @@ async function grammarCheckStepByStep(text: string): Promise<GrammarError[]> {
   return outputs.flat();
 }
 
-(async () => {
-  const grammarErrors = await grammarCheckStepByStep('Dia duit. Mo madra.');
-  console.log(grammarErrors);
-})();
+// (async () => {
+//   const grammarErrors = await grammarCheckStepByStep('This is a test sentence.');
+//   console.log(grammarErrors);
+// })();

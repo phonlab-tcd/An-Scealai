@@ -10,6 +10,7 @@
       "experimentalDecorators": true
     },
     "include": [
-      "*.ts"
+      "*.ts",
+      "tests/*.ts"
     ]
   }

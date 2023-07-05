@@ -11,6 +11,7 @@ async function get<RECEIVE>(url: string): Promise<RECEIVE> {
     return data;
   } catch (error) {
     console.error('Error:', error);
+    console.log('URL:', url);
     throw error;
   }
 }
