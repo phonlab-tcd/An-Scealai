@@ -8,7 +8,6 @@
 
 import TEST_SENTENCES from './test-sentences';
 import { grammarCheck, grammarCheckStepByStep } from '../gramadoir';
-import { strict as assert } from 'assert';
 import { SingleBar } from 'cli-progress';
 
 const progressBar = new SingleBar({
@@ -18,7 +17,7 @@ const progressBar = new SingleBar({
   hideCursor: true
 });
 
-function compareArraysOfObjects(arr1, arr2) {
+function arraysOfObjectsAreEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
     return false;
   }
@@ -48,7 +47,14 @@ function compareArraysOfObjects(arr1, arr2) {
   for (const sentence of TEST_SENTENCES) {
     const grammarCheckOutput = await grammarCheck(sentence);
     const grammarCheckStepByStepOutput = await grammarCheckStepByStep(sentence);
-    assert(compareArraysOfObjects(grammarCheckOutput, grammarCheckStepByStepOutput));
+    if(!arraysOfObjectsAreEqual(grammarCheckOutput, grammarCheckStepByStepOutput)) {
+      console.log(`
+        \n❌ Test ${index} has failed.\n
+        Input text: "${sentence}" \n
+        grammarCheckOutput: ${JSON.stringify(grammarCheckOutput)} \n
+        grammarCheckStepByStepOutput: ${JSON.stringify(grammarCheckStepByStepOutput)} \n\n
+      `);
+    }
     progressBar.update(index++);
   }
   console.log(`\nAll ${TEST_SENTENCES.length} tests have passed ✅`);
