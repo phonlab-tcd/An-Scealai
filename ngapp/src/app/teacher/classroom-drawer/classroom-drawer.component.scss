@@ -5,6 +5,13 @@
     flex-direction: column;
 }
 
+.subHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10pt;
+    padding-top: 5px;
+}
+
 .storyList {
     flex-grow: 1;
     overflow-y: auto;
@@ -21,11 +28,6 @@
 .searchBox {
     min-width: 300px;
 }
-
-.contentSection {
-    display: flex;
-    padding: 5px;
-}   
 
 .contentSection:hover {
     cursor: pointer;
