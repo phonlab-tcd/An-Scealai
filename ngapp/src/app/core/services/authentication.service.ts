@@ -70,7 +70,6 @@ export class AuthenticationService {
   public register( user: TokenPayload | RegistrationTokenPayload ): Observable<any> {
     return this.http.post(this.baseUrl + "register", user).pipe(
       map((data: TokenResponse) => {
-        console.log(data);
         if (data.token) {
           this.saveToken(data.token);
         }

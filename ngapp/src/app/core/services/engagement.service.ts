@@ -67,19 +67,19 @@ export class EngagementService {
     return this.http.get(this.baseUrl + 'eventsForUser/' + id);
   }
 
-  mouseOverGrammarSuggestionEvent(tag: HighlightTag) {
+  mouseOverGrammarSuggestionEvent(tags: HighlightTag[]) {
     if (! this.auth.isLoggedIn()) {
       throw new Error('Cannot add event if user is not logged in');
     }
     const event: MouseOverGrammarSuggestionEvent =
       new MouseOverGrammarSuggestionEvent();
     event.type = EventType['MOUSE-OVER-GRAMMAR-SUGGESTION'];
-    event.grammarSuggestionData = {};
-    for (const key of Object.getOwnPropertyNames(tag)) {
-      if ( key !== 'tooltip'){
-        event.grammarSuggestionData[key] = tag[key];
-      }
-    }
+    event.grammarSuggestionData = tags;
+    // for (const key of Object.getOwnPropertyNames(tag)) {
+    //   if ( key !== 'tooltip'){
+    //     event.grammarSuggestionData[key] = tags;
+    //   }
+    // }
     event.userId = this.auth.getUserDetails()._id;
     this.http
         .post(
