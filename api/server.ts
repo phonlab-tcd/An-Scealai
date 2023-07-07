@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 if(process.env.NODE_ENV==='prod') require('./keys/load');
 else require('./keys/dev/load');
 

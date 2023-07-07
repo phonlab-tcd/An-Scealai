@@ -14,10 +14,6 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  // getUserById(id: string): Observable<User> {
-  //   return this.http.get<User>(this.baseUrl + 'viewUser', {headers: {_id: id}});
-  // }
-
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'getUserById/' + id);
   }
@@ -69,12 +65,5 @@ export class UserService {
 
   updatePassword(id: string, password: string): Observable<any> {
     return this.http.post(this.baseUrl + 'updatePassword/' + id, { password });
-  }
-
-  sendNewPassword(username: string, email: string): Observable<any> {
-    return this.http.post(this.baseUrl + 'sendNewPassword/', {
-      username,
-      email
-    });
   }
 }

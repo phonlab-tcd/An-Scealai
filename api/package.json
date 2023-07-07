@@ -12,7 +12,9 @@
   },
   "jest": {
     "testTimeout": 10000,
-    "modulePathIgnorePatterns": ["<rootDir>/express-status-monitor"],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/express-status-monitor"
+    ],
     "preset": "ts-jest/presets/default",
     "globals": {
       "ts-jest": {
@@ -34,6 +36,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.363.0",
     "@google-cloud/speech": "^4.8.0",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
@@ -43,6 +46,7 @@
     "cookie-parser": "^1.4.6",
     "cookiejar": "^2.1.4",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.17.0",
     "express-jwt": "^7.7.5",
     "express-queue": "^0.0.13",
@@ -83,7 +87,8 @@
     "wink-nlp-utils": "^2.1.0",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7",
-    "winston-stackify": "^1.0.3"
+    "winston-stackify": "^1.0.3",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.2",
@@ -97,6 +102,7 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.21",
     "supertest": "^6.2.3",
-    "ts-jest": "^28.0.7"
+    "ts-jest": "^28.0.7",
+    "ts-node-dev": "^2.0.0"
   }
 }
