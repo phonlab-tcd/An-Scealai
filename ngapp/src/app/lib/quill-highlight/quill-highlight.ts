@@ -1,6 +1,5 @@
 import Quill from 'quill';
 import { EngagementService } from 'app/core/services/engagement.service';
-import { ErrorTag } from '../grammar-engine/types';
 import { Observable, fromEvent } from 'rxjs';
 
 // This is required to top quill from adding "Visit link:" before our text
@@ -41,8 +40,6 @@ Quill.register(
   )
 );
 
-
-
 export function spansOverlap(a: Span, b: Span) {
   if (a.fromX >= b.toX || b.fromX >= a.toX) {
     return false;
@@ -50,12 +47,12 @@ export function spansOverlap(a: Span, b: Span) {
   return true;
 }
 
-export type HighlightTag = ErrorTag;
 
-type MessageRenderer = (ht: HighlightTag) => string;
-type Span = { fromX: number, toX: number };
+type MessageRenderer<Input> = (ht: Input) => string;
+type Span = { fromX: number, toX: number};
+type IndexedSpan = {id: any} & Span;
 
-export class QuillHighlighter {
+export class QuillHighlighter<HighlightTag extends IndexedSpan>{
   quillEditor: Quill;
   mostRecentHoveredMessage: String = '';
   private engagement: EngagementService; // TODO: QuillHighlighter shouldn't know about engagement service
@@ -67,17 +64,17 @@ export class QuillHighlighter {
   // not necessarily the spans of any individual highlight-tag, but the span of a group of overlapping highlight tags
   private mergedGroupSpan: Map<string, Span> = new Map();
 
-  private messageRenderer: MessageRenderer;
+  private messageRenderer: MessageRenderer<HighlightTag>;
   private tooltip: typeof Tooltip;
 
   // todo better type for text change
   private textChange$: Observable<any>;
 
-  constructor(quillEditor: Quill, messageRenderer: MessageRenderer, engagement: EngagementService) {
+  constructor(quillEditor: Quill, messageRenderer: MessageRenderer<HighlightTag>, engagement: EngagementService) {
     this.quillEditor = quillEditor;
-    console.log(this.quillEditor);
 
-    // only need to instantiate one tooltip, reuse it when hover on a new highlight
+    // only need to instantiate one tooltip, 
+    // reuse it when hover on a new highlight
     this.tooltip = new Tooltip(quillEditor);
 
     this.textChange$ = fromEvent(this.quillEditor, 'text-change')
@@ -136,6 +133,18 @@ export class QuillHighlighter {
         }
       }
     })
+  }
+
+  private fixEdges(span: Span, id: any) {
+    const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+  
+    tagElements.forEach(function (tagElement) {
+      tagElement.removeAttribute("left-edge");
+      tagElement.removeAttribute("right-edge");
+    });
+  
+    tagElements[0].setAttribute("left-edge", "");
+    tagElements[tagElements.length-1].setAttribute("right-edge", "");
   }
 
   private onlyUnique(value, index, array) {
@@ -198,14 +207,8 @@ export class QuillHighlighter {
     this.mergedGroupSpan.set(id, span);
 
     this.quillEditor.formatText(span.fromX, span.toX - span.fromX, { "highlight-tag": true, "id": id }, 'api');
-    const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
 
-    tagElements.forEach(function (tagElement) {
-      tagElement.removeAttribute("left-edge");
-      tagElement.removeAttribute("right-edge");
-    });
-    tagElements[0].setAttribute("left-edge", "");
-    tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+    this.fixEdges(span, id);
   }
   
   // Ensures that the tag groups encompassed by 'span' have 
@@ -218,18 +221,16 @@ export class QuillHighlighter {
     while (i < span.toX) {
       const format = this.quillEditor.getFormat(i, 1);
       const id = format["id"];
-      if (!id) { ++i; continue; }
-      const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
-      tagElements.forEach(function (tagElement) {
-        tagElement.removeAttribute("left-edge");
-        tagElement.removeAttribute("right-edge");
-      });
-      tagElements[0].setAttribute("left-edge", "");
-      tagElements[tagElements.length - 1].setAttribute("right-edge", "");
-      // Because we have already formatted the whole merge group here we can
-      // skip i forward to the end of the group
-      const groupSpan = this.mergedGroupSpan.get(id);
-      i = groupSpan ? groupSpan.toX : i + 1;
+      if (id) {
+        // Because we have already formatted the whole merge group here we can
+        // skip i forward to the end of the group
+        const groupSpan = this.mergedGroupSpan.get(id);
+        this.fixEdges(groupSpan, id);
+        i = groupSpan ? groupSpan.toX : i + 1;
+      }
+      else {
+        i++; 
+      }
     }
   }
 
@@ -260,11 +261,11 @@ export class QuillHighlighter {
   // Apply css highlighting to given error tags
   // @param tags - array of tags to highlight
   public show(tags: HighlightTag[]): void {
+    const start = Date.now();
     for (const tag of tags) {
-      setTimeout(() => {
-        this.addTag(tag);
-      }, 0);
+      setTimeout(this.addTag.bind(this, tag));
     }
+    console.log("Time taken", tags, tags.length, Date.now() -start);
     return;
   }
 

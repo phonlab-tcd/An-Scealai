@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
-import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
+import { QuillHighlighter } from "app/lib/quill-highlight/quill-highlight";
 import { ERROR_TYPES, ERROR_INFO, ErrorTag, ErrorType } from "app/lib/grammar-engine/types";
 import { GrammarEngine } from "app/lib/grammar-engine/grammar-engine";
 
@@ -11,7 +11,7 @@ import { GrammarEngine } from "app/lib/grammar-engine/grammar-engine";
 })
 export class GrammarErrorDrawerComponent implements OnInit {
   @Output() closeGrammarEmitter = new EventEmitter();
-  @Input() quillHighlighter: QuillHighlighter;
+  @Input() quillHighlighter: QuillHighlighter<any>;
   @Input() grammarLoaded: boolean;
   @Input() grammarErrorsTypeDict: Object;
   @Input() grammarErrors: ErrorTag[];

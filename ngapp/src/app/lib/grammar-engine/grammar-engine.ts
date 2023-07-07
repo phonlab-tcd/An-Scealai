@@ -118,142 +118,148 @@ class ErrorsByTypeForCurrentCheck {
   }
 }
 
-
 export class GrammarEngine {
-    private cacheMap: Map<string, GrammarCache>;
-    private grammarCheckers: GrammarChecker[];
-    private http: HttpClient;
-    private auth: AuthenticationService;
-    private previousErrorTags: Object[];
-    private errorsWithSentences = [];
+  private cacheMap: Map<string, GrammarCache>;
+  private grammarCheckers: GrammarChecker[];
+  private http: HttpClient;
+  private auth: AuthenticationService;
+  private previousErrorTags: Object[];
+  private activeCheckId: ReturnType<typeof crypto.randomUUID>;
+  private _allFinished: boolean;
+  private errorsWithSentences = [];
 
-    public errorStoreForLatestCheck: ErrorsByTypeForCurrentCheck;
-    
-    constructor(grammarCheckers: GrammarChecker[], http: HttpClient, auth: AuthenticationService) {
-        this.http = http;
-        this.auth = auth;
-        this.grammarCheckers = grammarCheckers;
-        // make empty caches for each checker
-        this.cacheMap = new Map<string, GrammarCache>();
-        for (const checker of grammarCheckers) {
-            this.cacheMap.set(checker.name, {});
-        }
-    }
-    
-    /**
-    * Check grammar on given input story text
-    * @param input - story text
-    */
-    public check$(input: string) {
-      const subject = new Subject<ErrorTag>();
-      const errorStoreForThisCheck = new ErrorsByTypeForCurrentCheck();
-      this.errorStoreForLatestCheck = errorStoreForThisCheck;
-      this.check(normalizeWhitespace(input), subject);
-      return subject.pipe(
-        tap(function(tag: ErrorTag) { errorStoreForThisCheck.storeTag(tag);})
-      );
-    }
-    
-    /**
-    * Check grammar on given input story text
-    * @param input - story text
-    * @param subj - Subject to handle the errors as they come in
-    */
-    public async check(input: string, subj: Subject<ErrorTag>) {
-      // Sentence tokenization to make gramadoir requests for each sentence independently
-      const sentences = await firstValueFrom(
-          this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
-      );
-      
-      // calculate offset indices for each sentence in relation to entire text
-      const sentencesWithOffsets = getOffsets(sentences, input);
 
-      // keep an array of errors associated with particular sentences
-      this.errorsWithSentences = [];
-      // check grammar on text using the initialised grammar checkers 
-      const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker => {
-          return await Promise.all(sentencesWithOffsets.map(async (o, i) => {
-              const s = o.sentence;
-              const offset = o.offset;
-              
-              // function to set error tag indices based on associated offset
-              function mapOffset(errorTag: ErrorTag): ErrorTag {
-                  errorTag.fromX += offset;
-                  errorTag.toX += offset;
-                  subj.next(errorTag);
-                  return errorTag;
-              }
-              
-              // get errors from cache map if already stored and return
-              if (s in this.cacheMap.get(checker.name)) {
-                let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
-                
-                this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
-                        [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
-                        this.errorsWithSentences[i] = [errorTags, s, i];
-                return errorTags;
-              }
-              // get errors from grammar checker if not in cache map
-              const errorTags = await checker.check(s, this.auth.getToken());
-              this.cacheMap.get(checker.name)[s] = errorTags;
-              // calculate error offset based on sentence indices
-              const offsetErrorTags = errorTags.map(clone).map(mapOffset)
-              
-              // add the error tags and sentence pair to array
-              // TODO: initailly mapped this to {errors, sentence} (would need to fix insert.js)
-              /*
-              sentences: (await Promise.all(errorTagsArray))
-              .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
-              .map(([errors, sentence]) => ({errors, sentence})),
-              */
-              this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
-                      [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
-                      this.errorsWithSentences[i] = [errorTags, s, i];
-              
-              return offsetErrorTags;
-          }))
-      }))).flat().filter(err => err.length);
-      subj.complete();
-      
-      // log error counts to the DB
-      this.countNewErrors(allErrorTags.flat());
+  public allFinished(): boolean {
+    return this._allFinished;
+  }
 
-      return allErrorTags;
-    }
-
-    
-    /**
-    * Check number of new errors and save to DB
-    * @param newTags - array of grammar tags since most recent grammar check
-    */
-    async countNewErrors(newTags:any[]) {      
-      this.previousErrorTags = newTags;
-      this.countNewErrors = this._countNewErrorsAfterFirstTime;
-    }
-
-    private async _countNewErrorsAfterFirstTime(newTags: any[]) {
-      const toCount = diffNewErrors(this.previousErrorTags, newTags);
-      const counts = countErrorTypes(toCount);
-      const body = {countsByType: counts};
-      this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
-      
-      this.previousErrorTags = newTags;
-    }
-
-    
-    /**
-    * Save an array containing sentences, associated errors, and indexes to the DB
-    * @param storyId - id of story being checked for grammar
-    */
-    async saveErrorsWithSentences(storyId: string) {
-      if(!this.errorsWithSentences || !storyId) {
-        return;
+  public errorStoreForLatestCheck: ErrorsByTypeForCurrentCheck;
+  
+  constructor(grammarCheckers: GrammarChecker[], http: HttpClient, auth: AuthenticationService) {
+      this.http = http;
+      this.auth = auth;
+      this.grammarCheckers = grammarCheckers;
+      // make empty caches for each checker
+      this.cacheMap = new Map<string, GrammarCache>();
+      for (const checker of grammarCheckers) {
+          this.cacheMap.set(checker.name, {});
       }
-      const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
-      const body = {
-        storyId,
-        sentences: this.errorsWithSentences,
-      };
-      this.http.post<any>(config.baseurl + 'gramadoir/insert/', body, {headers}).subscribe();
+  }
+  
+  /**
+  * Check grammar on given input story text
+  * @param input - story text
+  */
+  public check$(input: string) {
+    const subject = new Subject<ErrorTag>();
+    const errorStoreForThisCheck = new ErrorsByTypeForCurrentCheck();
+    this.activeCheckId = crypto.randomUUID();
+    this.errorStoreForLatestCheck = errorStoreForThisCheck;
+    this.check(normalizeWhitespace(input), subject, this.activeCheckId);
+    return subject.pipe(tap(errorStoreForThisCheck.storeTag.bind(errorStoreForThisCheck)));
+  }
+  
+  /**
+  * Check grammar on given input story text
+  * @param input - story text
+  * @param subj - Subject to handle the errors as they come in
+  */
+  public async check(input: string, subj: Subject<ErrorTag>, checkId) {
+    // Sentence tokenization to make gramadoir requests for each sentence independently
+    const sentences = await firstValueFrom(
+        this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
+    );
+    
+    // calculate offset indices for each sentence in relation to entire text
+    const sentencesWithOffsets = getOffsets(sentences, input);
+
+    // keep an array of errors associated with particular sentences
+    this.errorsWithSentences = [];
+    // check grammar on text using the initialised grammar checkers 
+    const allErrorTags = (await Promise.all(this.grammarCheckers.map(async checker => {
+      return await Promise.all(sentencesWithOffsets.map(async (o, i) => {
+        const s = o.sentence;
+        const offset = o.offset;
+        
+        // function to set error tag indices based on associated offset
+        function mapOffset(errorTag: ErrorTag): ErrorTag {
+            errorTag.fromX += offset;
+            errorTag.toX += offset;
+            subj.next(errorTag);
+            return errorTag;
+        }
+        
+        // get errors from cache map if already stored and return
+        if (s in this.cacheMap.get(checker.name)) {
+          let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
+          
+          this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
+                  [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
+                  this.errorsWithSentences[i] = [errorTags, s, i];
+          return errorTags;
+        }
+        // get errors from grammar checker if not in cache map
+        const errorTags = await checker.check(s, this.auth.getToken());
+        this.cacheMap.get(checker.name)[s] = errorTags;
+        // calculate error offset based on sentence indices
+        const offsetErrorTags = errorTags.map(clone).map(mapOffset)
+        
+        // add the error tags and sentence pair to array
+        // TODO: initailly mapped this to {errors, sentence} (would need to fix insert.js)
+        /*
+        sentences: (await Promise.all(errorTagsArray))
+        .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
+        .map(([errors, sentence]) => ({errors, sentence})),
+        */
+        this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
+                [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
+                this.errorsWithSentences[i] = [errorTags, s, i];
+        
+        return offsetErrorTags;
+      }))
+    }))).flat().filter(err => err.length);
+    this._allFinished = this.activeCheckId === checkId;
+    subj.complete();
+    
+    // log error counts to the DB
+    this.countNewErrors(allErrorTags.flat());
+
+    return allErrorTags;
+  }
+
+  
+  /**
+  * Check number of new errors and save to DB
+  * @param newTags - array of grammar tags since most recent grammar check
+  */
+  async countNewErrors(newTags:any[]) {      
+    this.previousErrorTags = newTags;
+    this.countNewErrors = this._countNewErrorsAfterFirstTime;
+  }
+
+  private async _countNewErrorsAfterFirstTime(newTags: any[]) {
+    const toCount = diffNewErrors(this.previousErrorTags, newTags);
+    const counts = countErrorTypes(toCount);
+    const body = {countsByType: counts};
+    this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
+    
+    this.previousErrorTags = newTags;
+  }
+
+  
+  /**
+  * Save an array containing sentences, associated errors, and indexes to the DB
+  * @param storyId - id of story being checked for grammar
+  */
+  async saveErrorsWithSentences(storyId: string) {
+    if(!this.errorsWithSentences || !storyId) {
+      return;
     }
+    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
+    const body = {
+      storyId,
+      sentences: this.errorsWithSentences,
+    };
+    this.http.post<any>(config.baseurl + 'gramadoir/insert/', body, {headers}).subscribe();
+  }
 }

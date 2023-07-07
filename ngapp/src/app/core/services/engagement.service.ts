@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SynthItem } from 'app/core/models/synth-item';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { HighlightTag } from '../../lib/quill-highlight/quill-highlight';
+import { ErrorTag } from 'app/lib/grammar-engine/types';
 import config from 'abairconfig';
 
 @Injectable({
@@ -67,7 +67,7 @@ export class EngagementService {
     return this.http.get(this.baseUrl + 'eventsForUser/' + id);
   }
 
-  mouseOverGrammarSuggestionEvent(tags: HighlightTag[]) {
+  mouseOverGrammarSuggestionEvent(tags: ErrorTag[]) {
     if (! this.auth.isLoggedIn()) {
       throw new Error('Cannot add event if user is not logged in');
     }

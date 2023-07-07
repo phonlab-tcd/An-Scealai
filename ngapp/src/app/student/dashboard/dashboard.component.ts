@@ -22,7 +22,6 @@ import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
 import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
-import { HighlightTag } from "../../lib/quill-highlight/quill-highlight";
 import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-caol-checker";
 import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
@@ -84,7 +83,7 @@ export class DashboardComponent implements OnInit {
 
   textUpdated = new Subject<void | string>();
   quillEditor: Quill;
-  quillHighlighter: QuillHighlighter;
+  quillHighlighter: QuillHighlighter<ErrorTag>;
   quillToolbar = {
     toolbar: [
       ["bold", "italic", "underline", "strike"],
@@ -178,7 +177,8 @@ export class DashboardComponent implements OnInit {
       try {
         // check text for grammar errors
         // this.grammarErrors = [];
-        this.grammarEngine.check$(this.story.text).subscribe({
+        const checkSubject = this.grammarEngine.check$(this.story.text)
+        checkSubject.subscribe({
           next: (tag: ErrorTag) => {
 
             // show error highlighting if button on
@@ -193,23 +193,7 @@ export class DashboardComponent implements OnInit {
             //save any grammar errors with associated sentences to DB
             this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
 
-            // create a dictionary of error type and tags for checkbox filtering
-            // this.grammarErrorsTypeDict = this.grammarEngine.errorStoreForLatestCheck.truthyKeys
-
-            // // initialise all error checkboxes to true
-            // for (const key of Object.keys(this.grammarErrorsTypeDict)) {
-            //   this.checkBoxes[key] = true;
-            // }
-
-            // // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            // this.quillHighlighter.hideAll();
-
-            // // and then re-show all the latest error tags if button on
-            // if (this.showErrorTags) {
-            //   this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
-            // }
-
-            this.grammarLoaded = true;
+            this.grammarLoaded = this.grammarEngine.allFinished();
           },
         });
       } catch (updateGrammarErrorsError) {
@@ -284,8 +268,11 @@ export class DashboardComponent implements OnInit {
 
     if (q.source === "user") {
       this.storySaved = false;
+      console.log("textUpdated.next(",q, ")");
       this.textUpdated.next(q.text);
       this.debounceSaveStory();
+    } else {
+      console.count("textApiUpdate");
     }
   }
 
@@ -298,7 +285,7 @@ export class DashboardComponent implements OnInit {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
-    const renderer = (function (ht: HighlightTag) {
+    const renderer = (function (ht: ErrorTag) {
         const [name, message] = this.ts.l.iso_code == 'en' ? 
           [ht.nameEN, ht.messageEN] : 
           [ht.nameGA, ht.messageGA];
@@ -484,7 +471,6 @@ export class DashboardComponent implements OnInit {
           this.quillHighlighter?.show(tagsToAdd);
         }
       }
-      // this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
     } else {
       this.quillHighlighter.hideAll();
     }
