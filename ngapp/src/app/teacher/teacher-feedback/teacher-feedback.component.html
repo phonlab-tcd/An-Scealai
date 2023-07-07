@@ -54,7 +54,7 @@
       <div class="storyTitleAndDate">
         <div>{{ story.title }}</div>
         <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
-        <button> <i class="fa fa-envelope refresh" (click)="createComment()"></i> </button>
+        <button> <i class="fa fa-envelope" (click)="createComment()"></i> </button>
       </div>
       <div><i class="fa fa-times closeFeedbackButton"></i></div>
     </div>
@@ -69,6 +69,7 @@
           [debounceTime]="1500"
           [(ngModel)]="story.feedback.feedbackMarkup"
           (onEditorCreated)="onEditorCreated($event)"
+          (onSelectionChanged)="showInlineCommentButton($event)"
         ></quill-editor>
       </div>
 
