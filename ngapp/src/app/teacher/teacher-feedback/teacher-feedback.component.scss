@@ -1,0 +1,205 @@
+.storyTitleHeader {
+    display: flex;
+    justify-content: center;
+    margin-top: -30px;  // margin for entire page set in app.component.scss
+  }
+
+.storyTitleContainer {
+    margin: auto;
+    overflow: auto;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.teacherOptionsBtnContainer > * {
+    height: 2rem;
+}
+
+.teacherOptionsBtnContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    --options-btn-background-color-hover : lightgray;
+    background-color:white;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+  
+.optionsBtn {
+    background-color: var(--scealai-yellow);
+    border-style: none;
+    color: #464444;
+    margin: 0px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background: #dfd9c800;
+}
+
+.optionsBtn:hover {
+    background-color: var(--options-btn-background-color-hover);
+    color: #35322f;
+    cursor: pointer;
+    border-radius: 2;
+}
+
+.optionsBtnIcon {
+    margin-left: 5px;
+}
+
+.bodyDrawerContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.storyAndCommentsContainer {
+    height: 100%;
+}
+
+.storyTitleContainer{
+    font-size: 16pt;
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.storyTitleAndDate {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.closeFeedbackButton {
+    margin-left: auto;
+    padding-right: 20px;
+}
+  
+.closeFeedbackButton:hover {
+    cursor: pointer;
+}
+
+.quillAndCommentsContainer{
+    background-color: #F8F9FA;
+    height: 90%;
+    display: flex;
+}
+
+.quillContainer {
+    flex: 0 0 80%;
+}
+
+.ql-editor {
+    background-color: white;
+    z-index: 1;
+    font-size: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 20px;
+    min-height: 60vh !important;        // current way to set the height, would like to make it dynamic
+    max-height: 60vh !important;
+}
+
+.commentsContainer {
+    flex: 1;
+    padding-top: 50px;
+    background-color: white;
+}
+
+.commentsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    height: 100%;
+}
+
+.comment {
+    width: 60%;
+    text-align: left;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    font-size: 10pt;
+}
+
+.comment:hover {
+    background-color:rgba(0,0,0,.04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.ql-toolbar.ql-snow {
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
+    text-align: center;
+}
+  
+.refresh {
+    float:right;
+    padding: 5px;
+    padding-right: 30px;
+    padding-top: 15px;
+}
+
+.refresh:hover {
+    cursor: pointer;
+}
+
+.menuButton {
+    float:left;
+    padding: 10px;
+    transform: scale(1.5);
+    z-index: 100;
+}
+
+.menuButton:hover {
+    cursor: pointer;
+}
+
+.closeFeedbackBtn:hover {
+    cursor: pointer;
+}
+
+.madeWithPrompts {
+    color: rgba(255, 255, 255, 0.4);
+    padding-left:5px
+}
+
+.seenByStudent {
+    font-size: 10pt;
+    color: var(--scealai-light-gray);
+    margin-left: 4px;
+}
+
+.sendFeedbackBtn {
+    margin-left: auto;
+}
+
+.feedbackBtnContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5px;
+}
+
+.audioPlayer {
+    height: 32px;
+    margin-top: 7px;
+}
+
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@-webkit-keyframes blinker {  
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }

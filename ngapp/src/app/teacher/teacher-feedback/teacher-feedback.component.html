@@ -1,0 +1,83 @@
+<!-- HEADER -->
+<div class="storyTitleHeader">
+  <!-- CLASSROOM TITLE -->
+  <div class="storyTitleContainer">
+    <div>Classroom Title</div>
+  </div>
+</div>
+
+<!-- CLASSROOM DRAWER BUTTON-->
+<span class="menuButton material-symbols-outlined">menu</span>
+
+<!-- BODY CONTAINER-->
+<mat-drawer-container class="bodyDrawerContainer" autosize>
+  <!-- CLASSROOM LIST DRAWER-->
+
+  <!-- CLASSROOM OPTIONS TOOL BAR -->
+  <div>
+    <div class="teacherOptionsBtnContainer">
+      <!-- SHARE CODE -->
+      <div class="optionsBtn">
+        {{ ts.l.share_code }}
+        <i class="fas fa-share-alt headerIcon"></i>
+      </div>
+
+      <!-- STATISTICS -->
+      <div class="optionsBtn">
+        {{ ts.l.stats }}
+        <i class="fas fa-calculator optionsBtnIcon"></i>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="optionsBtn">
+        {{ ts.l.messages }}
+        <i class="fa fa-envelope optionsBtnIcon"></i>
+      </div>
+
+      <!-- DICTOGLOSS -->
+      <div class="optionsBtn">
+        {{ ts.l.dictogloss }}
+        <i class="fas fa-file-audio optionsBtnIcon"></i>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="optionsBtn">
+        {{ ts.l.settings }}
+        <i class="fas fa-cog optionsBtnIcon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="storyAndCommentsContainer">
+    <div class="storyTitleContainer">
+      <div class="storyTitleAndDate">
+        <div>{{ story.title }}</div>
+        <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
+        <button> <i class="fa fa-envelope refresh" (click)="createComment()"></i> </button>
+      </div>
+      <div><i class="fa fa-times closeFeedbackButton"></i></div>
+    </div>
+    <div class="quillAndCommentsContainer">
+      <!-- <span> <i class="fa fa-redo-alt refresh" (click)="openUpdateStoryTextDialog()"></i></span> -->
+      <!-- <button style="display:inline"><i class="fa fa-envelope refresh" (click)="createComment()"></i></button> -->
+      <div class="quillContainer">
+        <quill-editor
+          placeholder=""
+          [modules]="config"
+          [preserveWhitespace]="true"
+          [debounceTime]="1500"
+          [(ngModel)]="story.feedback.feedbackMarkup"
+          (onEditorCreated)="onEditorCreated($event)"
+        ></quill-editor>
+      </div>
+
+      <div class="commentsContainer">
+        <div id="comments-container" class="commentsList">
+          <div class="comment"> Text </div>
+              <div class="comment"> Text </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

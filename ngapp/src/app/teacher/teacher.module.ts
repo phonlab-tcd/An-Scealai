@@ -22,6 +22,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.component';
 //import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { StudentListComponent } from './student-list/student-list.component';
+import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { StudentListComponent } from './student-list/student-list.component';
     TeacherDictoglossComponent,
     ClassroomDrawerComponent,
     StudentListComponent,
+    TeacherFeedbackComponent,
   ],
   imports: [
     CommonModule,

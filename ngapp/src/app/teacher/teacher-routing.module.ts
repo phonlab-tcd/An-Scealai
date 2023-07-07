@@ -6,6 +6,7 @@ import { TeacherStudentComponent } from './teacher-student/teacher-student.compo
 import { TeacherStoryComponent } from './teacher-story/teacher-story.component';
 import { TeacherSettingsComponent } from './teacher-settings/teacher-settings.component';
 import { TeacherDictoglossComponent } from './teacher-dictogloss/teacher-dictogloss.component';
+import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'story/:id', pathMatch: 'full', component: TeacherStoryComponent },
   { path: 'teacher-settings/:id', pathMatch: 'full', component: TeacherSettingsComponent },
   { path: 'teacher-dictogloss/:id', pathMatch: 'full', component: TeacherDictoglossComponent },
+  { path: 'feedback', pathMatch: 'full', component: TeacherFeedbackComponent },
 ];
 
 @NgModule({
