@@ -54,13 +54,12 @@
       <div class="storyTitleAndDate">
         <div>{{ story.title }}</div>
         <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
-        <button> <i class="fa fa-envelope" (click)="createComment()"></i> </button>
+        <button> <i class="fa-solid fa-message" (click)="createComment()"></i></button>
+        
       </div>
-      <div><i class="fa fa-times closeFeedbackButton"></i></div>
+      <div><i class="fa-solid fa-times closeFeedbackButton"></i></div>
     </div>
     <div class="quillAndCommentsContainer">
-      <!-- <span> <i class="fa fa-redo-alt refresh" (click)="openUpdateStoryTextDialog()"></i></span> -->
-      <!-- <button style="display:inline"><i class="fa fa-envelope refresh" (click)="createComment()"></i></button> -->
       <div class="quillContainer">
         <quill-editor
           placeholder=""
@@ -75,8 +74,16 @@
 
       <div class="commentsContainer">
         <div id="comments-container" class="commentsList">
-          <div class="comment"> Text </div>
-              <div class="comment"> Text </div>
+          <app-feedback-comment
+            *ngFor="let comment of commentsList; let i = index"
+            class="comment"
+            (click)="highlightCommentReferenceInQuill(i)"
+            [comment]="comment"
+            [commentIndex] = "i"
+            (deleteEmitter)="deleteComment(i, comment)"
+            (editTextEmitter)="editCommentText()"
+          >
+          </app-feedback-comment>
         </div>
       </div>
     </div>

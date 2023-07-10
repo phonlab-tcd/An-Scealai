@@ -23,6 +23,7 @@ import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.co
 //import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { StudentListComponent } from './student-list/student-list.component';
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component';
+import { FeedbackCommentComponent } from './feedback-comment/feedback-comment.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.co
     ClassroomDrawerComponent,
     StudentListComponent,
     TeacherFeedbackComponent,
+    FeedbackCommentComponent,
   ],
   imports: [
     CommonModule,

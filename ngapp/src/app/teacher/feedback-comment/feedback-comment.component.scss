@@ -1,0 +1,19 @@
+.commentContainer {
+    text-align: left;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    font-size: 10pt;
+    word-wrap: break-word;
+}
+
+.commentContainer:hover {
+    background-color:rgba(0,0,0,.04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.disabled-clicks {
+    pointer-events: none;
+}
