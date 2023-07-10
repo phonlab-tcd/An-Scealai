@@ -3,9 +3,11 @@
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 20px;
+    padding: 10px;
     font-size: 10pt;
     word-wrap: break-word;
+    display: flex;
+    height: 100%;
 }
 
 .commentContainer:hover {
@@ -14,6 +16,12 @@
     cursor: pointer;
 }
 
-.disabled-clicks {
-    pointer-events: none;
+.commentText {
+    width: 100%;
+    resize: none;
+    background-color: white;
+}
+
+.commentText:disabled {
+    cursor: pointer;
 }

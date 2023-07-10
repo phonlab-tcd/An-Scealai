@@ -113,11 +113,11 @@ export class TeacherFeedbackComponent implements OnInit {
         this.createComment();
         this.deleteExistingCommentButton();
       });
+      buttonElement.classList.add("commentButton");
       buttonElement.style.position = "absolute";
       buttonElement.id = "commentButton";
       buttonElement.style.left = `${bounds.right}px`;
       buttonElement.style.top = `${top + bounds.bottom}px`;
-      buttonElement.style.zIndex = "999";
 
       // create icon inside button
       const iconElement = document.createElement("i");
@@ -160,6 +160,10 @@ export class TeacherFeedbackComponent implements OnInit {
   deleteComment(indexToDelete: number, comment: FeedbackComment) {
     this.quillEditor.removeFormat(comment.range.index, comment.range.length);
     this.commentsList.splice(indexToDelete, 1);
+  }
+
+  editCommentText() {
+    console.log("save edited text")
   }
 
   /*

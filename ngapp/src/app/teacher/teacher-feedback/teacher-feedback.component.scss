@@ -55,6 +55,7 @@
 
 .storyAndCommentsContainer {
     height: 100%;
+    overflow-y: scroll;
 }
 
 .storyTitleContainer{
@@ -120,6 +121,19 @@
 
 .comment {
     width: 60%;
+    max-height: 300px;
+}
+
+.commentButton {
+    color: white;
+    background-color: var(--scealai-green);
+    z-index: 999; // important so the button appears over the quill text
+    border-radius: 25%; 
+    border: none;
+}
+
+.commentButton:hover {
+    color: var(--scealai-light-green);
 }
 
 .ql-toolbar.ql-snow {

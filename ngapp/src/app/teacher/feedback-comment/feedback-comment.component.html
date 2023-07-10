@@ -1,9 +1,18 @@
 <div id="commentContainer" class="commentContainer">
-  <button mat-icon-button [matMenuTriggerFor]="menu" style="float: right">
+  <textarea
+    id="commentIndex"
+    class="commentText"
+    [disabled]="!isEditing"
+    (click)="$event.stopPropagation()"
+    (blur)="saveCommentText()"
+    >{{ comment.comment }}</textarea
+  >
+
+  <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item >
+    <button mat-menu-item>
       <mat-icon>delete</mat-icon>
       <span>{{ ts.l.delete }}</span>
     </button>
@@ -12,7 +21,4 @@
       <span> Edit </span>
     </button>
   </mat-menu>
-  <div [attr.id]="commentIndex" (blur)="saveCommentText()" (keydown.enter)="saveCommentText()" >
-    {{comment.comment}}
-  </div>
 </div>

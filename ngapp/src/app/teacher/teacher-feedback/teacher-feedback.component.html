@@ -54,7 +54,7 @@
       <div class="storyTitleAndDate">
         <div>{{ story.title }}</div>
         <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
-        <button> <i class="fa-solid fa-message" (click)="createComment()"></i></button>
+        <button class="commentButton"> <i class="fa-solid fa-message" (click)="createComment()"></i></button>
         
       </div>
       <div><i class="fa-solid fa-times closeFeedbackButton"></i></div>
