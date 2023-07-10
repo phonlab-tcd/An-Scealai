@@ -1,6 +1,5 @@
 // endpoint prefix = '/user'
 const logger = require('../logger');
-const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
 const checkJwt = require('../utils/jwtAuthMw');
@@ -8,6 +7,10 @@ const crypto = require('node:crypto');
 const User = require('../models/user');
 const ctrlProfile = require('../controllers/profile');
 const ctrlAuth = require('../controllers/authentication');
+
+import register from "../endpoints_functions/user/register";
+import verifyOldAccount from "../endpoints_functions/user/verifyOldAccount";
+import login from "../endpoints_functions/user/login";
 
 let userRoutes;
 // Immediately Invoked Function Expression.
@@ -44,9 +47,9 @@ let userRoutes;
   });
 })();
 
-userRoutes.post('/register', ctrlAuth.register);
-userRoutes.post('/login', passport.authenticate('local'), ctrlAuth.login);
-userRoutes.post('/verifyOldAccount', ctrlAuth.verifyOldAccount);
+userRoutes.post('/register', register);
+userRoutes.post('/login', passport.authenticate('local'), login);
+userRoutes.post('/verifyOldAccount', verifyOldAccount);
 userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
 
 userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);

@@ -34,15 +34,13 @@ const clientConfig: SESClientConfig = {
 const client = new SESClient(clientConfig);
 
 export async function send_mail_aws(opts:z.infer<typeof sendOpts>) {
-  const v = sendOpts.safeParse(opts);
-  if(!v.success) return v; // propogate error
-  const command = new SendEmailCommand(v.data);
+  const command = new SendEmailCommand(opts);
   return await client.send(command);
 };
 
 export function send_mail_opts(i: {to: string; subject: string; text: string}) {
-  return {
-    Source: "scealai@abair.ie",
+  return sendOpts.safeParse({
+    Source: "no-reply-scealai@abair.ie",
     Destination: {
       ToAddresses: [i.to],
     },
@@ -50,7 +48,7 @@ export function send_mail_opts(i: {to: string; subject: string; text: string}) {
       Subject: { Data: i.subject },
       Body: { Text: { Data: i.text } },
     }
-  }
+  });
 }
 
 
@@ -68,6 +66,5 @@ function startupEmail() {
 (async function main() {
   try { await startupEmail() }
   catch(e) {console.log("AWS SES EMAIL SERVICE: expected startup error ocurred (for some reason the first email always fails)")};
-  await startupEmail(); // shutdown if this fails
+  // await startupEmail(); // will throw error if startup email fails to send
 })();
-

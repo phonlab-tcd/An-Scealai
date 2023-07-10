@@ -22,6 +22,8 @@ const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
 import logAPICall from './utils/api_request_logger';
 
+import login from "./endpoints_functions/user/login";
+
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
@@ -91,6 +93,8 @@ app.use(bodyParser.json({limit: '50mb', type: 'application/json'})); // default 
 app.use(cors());
 app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
+
+app.use("/user/login", login);
 
 app.use('/user', userRoute);
 
