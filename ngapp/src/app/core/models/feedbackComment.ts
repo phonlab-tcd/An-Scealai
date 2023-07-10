@@ -3,9 +3,9 @@ export class FeedbackComment {
     index: number,
     length: number
   };
-  comment: string;
-  constructor(range: {index: number, length: number}, comment: string) {
+  text: string;
+  constructor(range: {index: number, length: number}, text: string) {
     this.range = range;
-    this.comment = comment;
+    this.text = text;
   }
 }

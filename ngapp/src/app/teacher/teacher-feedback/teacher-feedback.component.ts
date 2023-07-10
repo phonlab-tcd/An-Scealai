@@ -59,8 +59,7 @@ export class TeacherFeedbackComponent implements OnInit {
       index: 0,
       length: 20,
     },
-    comment:
-      "lkajdfl;sajflk;sdjf;lkasjfdlskjflk;asjf;ldksjfakljflkdajsd;fj;alksjdfioa;sdjfkasjdfi;lakfjja;sfldjf;lajsdlkfjalksdjfkladsjfaksdjf",
+    text: "lkajdfl;sajflk;sdjf;lkasjfdlskjflk;asjf;ldksjfakljflkdajsd;fj;alksjdfioa;sdjfkasjdfi;lakfjja;sfldjf;lajsdlkfjalksdjfkladsjfaksdjf",
   };
 
   ngOnInit() {
@@ -69,26 +68,31 @@ export class TeacherFeedbackComponent implements OnInit {
     this.commentsList.push(this.testComment);
   }
 
+  /*
+   * Initialise quill editor
+   */
+  onEditorCreated(q: Quill) {
+    this.quillEditor = q;
+    this.quillEditor.root.setAttribute("spellcheck", "false");
+  }
+
   /**
    * Create a new comment object where the user selects the text,
    * and highlight the text in quill that the comment refers to
    */
   createComment() {
-    const commentInput = window.prompt("Please enter Comment", "");
+    let range = this.quillEditor.getSelection();
 
-    if (commentInput != null && commentInput !== "") {
-      let range = this.quillEditor.getSelection();
-
-      // comment regarding entire text, no highlighting applied
-      if (!range || range.length === 0) {
-        range = { index: 0, length: 0 };
-      }
-
-      this.commentsList.push({ range: range, comment: commentInput });
-      this.quillEditor.formatText(range.index, range.length, {
-        background: "#fff72b",
-      });
+    // default range for entire text, no highlighting applied
+    if (!range || range.length === 0) {
+      range = { index: 0, length: 0 };
     }
+    this.commentsList.push({ range: range, text: "" });
+
+    // highlight text in quill
+    this.quillEditor.formatText(range.index, range.length, {
+      background: "#fff72b",
+    });
   }
 
   /**
@@ -133,15 +137,12 @@ export class TeacherFeedbackComponent implements OnInit {
 
   /**
    * Show where in quill the clicked comment is refering to
-   * @param commentElement clicked on comment HTML element 
+   * @param commentElement clicked on comment HTML element
    */
-    highlightCommentReferenceInQuill(index: number) {
-      let commentData = this.commentsList[index];
-      this.quillEditor.setSelection(
-        commentData.range.index,
-        commentData.range.length
-      );
-    }
+  highlightCommentReferenceInQuill(index: number) {
+    let commentData = this.commentsList[index];
+    this.quillEditor.setSelection( commentData.range.index, commentData.range.length );
+  }
 
   /**
    * Remove any existing comment buttons that might be in the quill editor
@@ -162,15 +163,11 @@ export class TeacherFeedbackComponent implements OnInit {
     this.commentsList.splice(indexToDelete, 1);
   }
 
-  editCommentText() {
-    console.log("save edited text")
-  }
-
-  /*
-   * Initialise quill editor
+  /**
+   * Save updated comment to the DB
+   * @param comment comment to update
    */
-  onEditorCreated(q: Quill) {
-    this.quillEditor = q;
-    this.quillEditor.root.setAttribute("spellcheck", "false");
+  saveComment(comment: FeedbackComment) {
+    // TODO: save updated comment to the DB
   }
 }

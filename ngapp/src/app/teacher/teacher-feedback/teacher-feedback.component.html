@@ -79,9 +79,8 @@
             class="comment"
             (click)="highlightCommentReferenceInQuill(i)"
             [comment]="comment"
-            [commentIndex] = "i"
             (deleteEmitter)="deleteComment(i, comment)"
-            (editTextEmitter)="editCommentText()"
+            (editTextEmitter)="saveComment(comment)"
           >
           </app-feedback-comment>
         </div>

@@ -1,18 +1,19 @@
 <div id="commentContainer" class="commentContainer">
   <textarea
-    id="commentIndex"
+    #commentIndex
     class="commentText"
+    [(ngModel)]="comment.text"
     [disabled]="!isEditing"
     (click)="$event.stopPropagation()"
     (blur)="saveCommentText()"
-    >{{ comment.comment }}</textarea
+    >{{ comment.text }}</textarea
   >
 
   <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="deleteComment()">
       <mat-icon>delete</mat-icon>
       <span>{{ ts.l.delete }}</span>
     </button>
