@@ -91,7 +91,7 @@
 }
 
 .quillContainer {
-    flex: 0 0 80%;
+    flex: 0 0 70%;
 }
 
 .ql-editor {
@@ -120,7 +120,7 @@
 }
 
 .comment {
-    width: 60%;
+    width: 80%;
     max-height: 300px;
 }
 
@@ -179,30 +179,3 @@
     color: var(--scealai-light-gray);
     margin-left: 4px;
 }
-
-.sendFeedbackBtn {
-    margin-left: auto;
-}
-
-.feedbackBtnContainer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 5px;
-}
-
-.audioPlayer {
-    height: 32px;
-    margin-top: 7px;
-}
-
-@keyframes blinker {  
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@-webkit-keyframes blinker {  
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }

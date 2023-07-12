@@ -12,7 +12,6 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   @Input("comment") comment: FeedbackComment;
   @Output() deleteEmitter = new EventEmitter();
-  @Output() editTextEmitter = new EventEmitter();
 
   @ViewChild("commentTextArea", { static: false }) commentTextArea: ElementRef;
 
@@ -38,7 +37,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   /**
    * Enable editing and set cursor focus
    */
-  editCommentText() {
+  editComment() {
     this.isEditing = true;
     this.commentTextArea.nativeElement.focus();
   }
@@ -47,10 +46,10 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Send edited comment changes to the parent component
    * if comment has text
    */
-  saveCommentText() {
-    if (this.commentTextArea.nativeElement.value.trim().length > 0) {
-      this.editTextEmitter.next(this.comment.text);
+  saveComment() {
+    if (this.commentTextArea.nativeElement.value.trim().length > 0 || this.audioSource) {
       this.isEditing = false;
+      // TODO: save updated text and/or audio to DB
     } else {
       this.deleteComment();
     }
@@ -61,6 +60,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    */
   deleteComment() {
     this.deleteEmitter.next(null);
+    // TODO: delete comment from DB
   }
 
   /**
@@ -75,6 +75,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
       }, 500);
     } else {
       this.recordAudioService.recordAudio();
+      this.isEditing = true;
     }
     this.isRecording = !this.isRecording;
   }

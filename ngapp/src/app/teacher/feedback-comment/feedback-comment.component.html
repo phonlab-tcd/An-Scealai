@@ -1,15 +1,17 @@
 <div id="commentContainer" class="commentContainer">
   <div class="textAndOptionsMenuContainer">
+    <!-- Writing area-->
     <textarea
+      *ngIf="comment.text.length > 0 || isEditing"
       #commentTextArea
-      class="commentText"
+      class="commentTextArea"
       [(ngModel)]="comment.text"
       [disabled]="!isEditing"
       (click)="$event.stopPropagation()"
-      (blur)="saveCommentText()"
-      >{{ comment.text }}</textarea
-    >
+      >{{ comment.text }}
+    </textarea>
 
+    <!-- Edit comment menu -->
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -18,22 +20,29 @@
         <mat-icon>delete</mat-icon>
         <span>{{ ts.l.delete }}</span>
       </button>
-      <button mat-menu-item (click)="editCommentText()">
+      <button mat-menu-item (click)="editComment()">
         <mat-icon>create</mat-icon>
         <span> Edit </span>
       </button>
     </mat-menu>
   </div>
-  <div class="audioContainer">
 
+  <!-- Audio -->
+  <div class="audioContainer" *ngIf="isEditing || audioSource">
     <div (click)="recordFeedbackMessage(); $event.stopPropagation()">
-      <button *ngIf="!isRecording" class="recordingBtn">
+      <button *ngIf="!isRecording && isEditing" class="recordingBtn">
         <i class="fas fa-microphone"></i>
       </button>
-      <button *ngIf="isRecording" class="notRecordingBtn blink">
+      <button *ngIf="isRecording && isEditing" class="notRecordingBtn blink">
         <i class="fas fa-stop-circle"></i>
       </button>
     </div>
-        <audio *ngIf="audioSource" [src]="audioSource" class="feedbackAudioPlayer" id="player" controls></audio>
+    <audio *ngIf="audioSource" [src]="audioSource" class="feedbackAudioPlayer" controls ></audio>
+  </div>
+
+  <!-- Save/Delete buttons-->
+  <div class="commentButtonContainer" *ngIf="isEditing">
+    <button class="editButton deleteRedBtn" style="float: right" (click)="deleteComment()" > {{ ts.l.delete }} </button>
+    <button class="editButton createBtnGreen" style="float: right" (click)="saveComment()" > {{ ts.l.save }} </button>
   </div>
 </div>

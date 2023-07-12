@@ -22,13 +22,6 @@ export class TeacherFeedbackComponent implements OnInit {
   ) {}
 
   quillEditor: Quill;
-  config = {
-    toolbar: [
-      [{ color: [] }, { background: [] }],
-      ["bold", "italic", "underline", "strike"],
-    ],
-  };
-
   commentsList: FeedbackComment[] = [];
 
   // dummy story object
@@ -160,16 +153,8 @@ export class TeacherFeedbackComponent implements OnInit {
    * Delete comment and remove any highlighting in quill
    * @param indexToDelete index of comment to delete
    */
-  deleteComment(indexToDelete: number, comment: FeedbackComment) {
+  removeComment(indexToDelete: number, comment: FeedbackComment) {
     this.quillEditor.removeFormat(comment.range.index, comment.range.length);
     this.commentsList.splice(indexToDelete, 1);
-  }
-
-  /**
-   * Save updated comment to the DB
-   * @param comment comment to update
-   */
-  saveComment(comment: FeedbackComment) {
-    // TODO: save updated comment to the DB
   }
 }

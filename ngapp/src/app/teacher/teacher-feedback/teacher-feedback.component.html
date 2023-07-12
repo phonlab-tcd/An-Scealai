@@ -54,8 +54,6 @@
       <div class="storyTitleAndDate">
         <div>{{ story.title }}</div>
         <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
-        <button class="commentButton"> <i class="fa-solid fa-message" (click)="createComment()"></i></button>
-        
       </div>
       <div><i class="fa-solid fa-times closeFeedbackButton"></i></div>
     </div>
@@ -63,24 +61,41 @@
       <div class="quillContainer">
         <quill-editor
           placeholder=""
-          [modules]="config"
           [preserveWhitespace]="true"
           [debounceTime]="1500"
           [(ngModel)]="story.feedback.feedbackMarkup"
           (onEditorCreated)="onEditorCreated($event)"
           (onSelectionChanged)="showInlineCommentButton($event)"
-        ></quill-editor>
+        >
+          <!-- Toolbar styles: https://github.com/quilljs/quill/blob/f75ff2973f068c3db44f949915eb8a74faf162a8/docs/_includes/full-toolbar.html-->
+          <div quill-editor-toolbar>
+            <span class="ql-formats">
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+              <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+              <select class="ql-color"></select>
+              <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+              <button style=" color: white; background-color: var(--scealai-green); border-radius: 25%;" >
+                <i class="fa-solid fa-message" (click)="createComment()"></i>
+              </button>
+            </span>
+          </div>
+        </quill-editor>
       </div>
 
       <div class="commentsContainer">
-        <div id="comments-container" class="commentsList">
+        <div class="commentsList">
           <app-feedback-comment
             *ngFor="let comment of commentsList; let i = index"
             class="comment"
             (click)="highlightCommentReferenceInQuill(i)"
             [comment]="comment"
-            (deleteEmitter)="deleteComment(i, comment)"
-            (editTextEmitter)="saveComment(comment)"
+            (deleteEmitter)="removeComment(i, comment)"
           >
           </app-feedback-comment>
         </div>
