@@ -47,11 +47,24 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * if comment has text
    */
   saveComment() {
-    if (this.commentTextArea.nativeElement.value.trim().length > 0 || this.audioSource) {
+    if ( this.commentTextArea.nativeElement.value.trim().length > 0 || this.audioSource ) {
       this.isEditing = false;
+      this.adjustTextAreaHeight();
       // TODO: save updated text and/or audio to DB
     } else {
       this.deleteComment();
+    }
+  }
+
+  /**
+   * Set textarea height depending on text length, with max height of 100px
+   */
+  adjustTextAreaHeight() {
+    if (this.commentTextArea.nativeElement.scrollHeight < 100) {
+      this.commentTextArea.nativeElement.style.height = "auto";
+      this.commentTextArea.nativeElement.style.height = `${this.commentTextArea.nativeElement.scrollHeight}px`;
+    } else {
+      this.commentTextArea.nativeElement.style.height = "100px";
     }
   }
 

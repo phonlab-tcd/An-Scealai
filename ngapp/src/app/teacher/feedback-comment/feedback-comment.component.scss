@@ -24,11 +24,17 @@
     width: 100%;
     resize: none;
     background-color: white;
+    border-radius: 4px;
+    border-color: rgba(118, 118, 118, 0.3);
 }
 
 .commentTextArea:disabled {
     cursor: pointer;
     color: black;
+}
+
+.commentTextArea:focus {
+    outline: none;
 }
 
 .commentButtonContainer {
