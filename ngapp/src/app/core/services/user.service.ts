@@ -62,8 +62,4 @@ export class UserService {
   updateUsername(id: string, newUsername: string): Observable<any> {
     return this.http.post(this.baseUrl + 'updateUsername/' + id, { newUsername: newUsername });
   }
-
-  updatePassword(id: string, password: string): Observable<any> {
-    return this.http.post(this.baseUrl + 'updatePassword/' + id, { password });
-  }
 }
