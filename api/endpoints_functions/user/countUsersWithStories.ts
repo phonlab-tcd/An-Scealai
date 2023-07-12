@@ -16,7 +16,6 @@ export default async function countUsersWithStories(req: Request, res: Response)
   let usersWithStories = 0;
 
   // count the number of users that have written at least one story
-  // TODO author is deprecated use "story._id"
   // OUCH! that's a long for loop! (neimhin 12/07/23)
   for (const owner of owners) {
     const numOfStories = await Story.find({owner}).countDocuments();

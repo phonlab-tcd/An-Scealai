@@ -50,6 +50,6 @@ export default async function searchUser(req: Request, res: Response) {
 
   if (!users) return fail("no users", [users, userCount, req.body])
 
-  // TODO we should not send user's resetPassword and verification codes
+  // TODO we should not send sensitive user data
   return res.json({users: users, count: userCount});
 }
