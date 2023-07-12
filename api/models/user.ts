@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var crypto = require('node:crypto');
 var jwt = require('jsonwebtoken');
+import { z } from "zod";
 
 const generate_password = require('generate-password');
 
@@ -116,6 +117,20 @@ userSchema.methods.generateNewPassword = function() {
     numbers: true,
   });
 };
+
+userSchema.methods.canResetPassword = function() {
+  // user must have a valid email address
+  if(!z.string().email().safeParse(this.email).success) {
+    return false;
+  }
+
+  // user must be activated (confirmed email address)
+  if(!z.literal("Active").safeParse(this.status).success) {
+    return false;
+  }
+
+  return true;
+}
 
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();

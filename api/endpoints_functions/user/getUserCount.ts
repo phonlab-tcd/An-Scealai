@@ -1,4 +1,5 @@
-const User = require('../../models/user');
+import User from "../../models/user";
+import { Request, Response } from "express";
 
 /**
 * Returns the total number of users on the DB as well as individual
@@ -7,7 +8,7 @@ const User = require('../../models/user');
 * @param {Object} res
 * @return {Promise} Dictionary of role types and total counts
 */
-async function getUserCount(req, res) {
+async function getUserCount(req: Request, res: Response) {
   const total = await User.where({}).countDocuments();
   const student = await User.where({role: 'STUDENT'}).countDocuments();
   const teacher = await User.where({role: 'TEACHER'}).countDocuments();

@@ -1,4 +1,5 @@
-const User = require('../../models/user');
+import User from "../../models/user";
+import { Request, Response } from "express";
 
 /**
 * Count the number of uses with English and Irish langauge settings
@@ -6,7 +7,7 @@ const User = require('../../models/user');
 * @param {Object} res
 * @return {Promise} Number of English and Irish users
 */
-async function getLanguageCount(req, res) {
+export default async function getLanguageCount(req: Request, res: Response) {
   const englishCount = await User.find({'language': 'en'}).countDocuments();
   const irishCount = await User.find({'language': 'ga'}).countDocuments();
 
@@ -15,5 +16,3 @@ async function getLanguageCount(req, res) {
     irishCount: irishCount,
   });
 }
-
-module.exports = getLanguageCount;

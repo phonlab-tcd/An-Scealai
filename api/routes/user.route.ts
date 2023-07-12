@@ -5,12 +5,16 @@ const passport = require('passport');
 const checkJwt = require('../utils/jwtAuthMw');
 const crypto = require('node:crypto');
 const User = require('../models/user');
-const ctrlProfile = require('../controllers/profile');
-const ctrlAuth = require('../controllers/authentication');
 
 import register from "../endpoints_functions/user/register";
 import verifyOldAccount from "../endpoints_functions/user/verifyOldAccount";
 import login from "../endpoints_functions/user/login";
+import resetPassword from "../endpoints_functions/user/resetPassword";
+import generateNewPassword from "../endpoints_functions/user/generateNewPassword";
+import verify from "../endpoints_functions/user/verify";
+import viewUser from "../endpoints_functions/user/viewUser";
+import teachers from "../endpoints_functions/user/teachers";
+import getUserById from "../endpoints_functions/user/getUserById";
 
 let userRoutes;
 // Immediately Invoked Function Expression.
@@ -50,28 +54,16 @@ let userRoutes;
 userRoutes.post('/register', register);
 userRoutes.post('/login', passport.authenticate('local'), login);
 userRoutes.post('/verifyOldAccount', verifyOldAccount);
-userRoutes.post('/resetPassword', ctrlAuth.resetPassword);
+userRoutes.post('/resetPassword', resetPassword);
 
-userRoutes.get('/generateNewPassword', ctrlAuth.generateNewPassword);
-userRoutes.get('/verify', ctrlAuth.verify);
-userRoutes.get('/viewUser', checkJwt, ctrlProfile.viewUser);
-userRoutes.get('/teachers', checkJwt, ctrlProfile.getTeachers);
+userRoutes.get('/generateNewPassword', generateNewPassword);
+userRoutes.get('/verify', verify);
+userRoutes.get('/viewUser', checkJwt, viewUser);
+userRoutes.get('/teachers', checkJwt, teachers);
+
+userRoutes.get('/getUserById/:id', checkJwt, getUserById);
 
 
-/**
- * Get user by id
- * @param {Object} req params: User ID
- * @return {Object} User object or error message
- */
-userRoutes.route('/getUserById/:id').get(checkJwt, (req, res) => {
-  User.findById(req.params.id)
-      .then(
-          (user) => user ? res.json(user) : res.status(404).json('User not found'),
-          (err) => {
-            console.error(err); res.status(400).json(err);
-          },
-      );
-});
 
 /**
  * Set user language preference
