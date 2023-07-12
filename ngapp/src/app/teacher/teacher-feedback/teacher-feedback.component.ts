@@ -58,7 +58,6 @@ export class TeacherFeedbackComponent implements OnInit {
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    this.commentsList.push(this.testComment);
   }
 
   /*
