@@ -56,10 +56,14 @@ export class UserService {
 
   deleteUser(id: string): Observable<any> {
     console.log("delete acount for ", id)
-    return this.http.get(this.baseUrl + 'deleteUser/' + id);
+    return this.http.get(this.baseUrl + 'deleteUser');
   }
 
   updateUsername(id: string, newUsername: string): Observable<any> {
     return this.http.post(this.baseUrl + 'updateUsername/' + id, { newUsername: newUsername });
+  }
+
+  updatePassword(id: string, password: string): Observable<any> {
+    return this.http.post(this.baseUrl + 'updatePassword', { password });
   }
 }

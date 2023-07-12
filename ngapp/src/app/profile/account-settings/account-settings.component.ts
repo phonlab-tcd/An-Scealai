@@ -163,7 +163,7 @@ export class AccountSettingsComponent implements OnInit {
 
     this.messageService.deleteAllMessages(userDetails._id).subscribe((_) => {});
     this.profileService.deleteProfile(userDetails._id).subscribe((_) => {});
-    this.userService.deleteUser(userDetails._id).subscribe((_) => {});
+    this.userService.deleteUser().subscribe((_) => {});
     this.auth.logout();
   }
 

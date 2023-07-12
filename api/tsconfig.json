@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "isolatedModules": true,
     "strict": true,
     "outDir": "dist",
     "module": "CommonJS",

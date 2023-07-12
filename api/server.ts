@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 if(process.env.NODE_ENV==='prod') require('./keys/load');
@@ -16,14 +16,14 @@ const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
 const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
-const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
 import logAPICall from './utils/api_request_logger';
 
+import userRoute from "./routes/user.route";
+
 const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');

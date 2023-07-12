@@ -2,6 +2,11 @@ import User from "../../models/user";
 import { Request, Response } from "express";
 import { z } from "zod";
 
+// Custom interface for Request object
+interface AuthenticatedRequest extends Request {
+  user?: string; // Assuming `user` is a string property, you can adjust the type accordingly
+}
+
 const authenticated_user_schema = z.object({
   role: z.literal("ADMIN"),
 });
@@ -11,13 +16,13 @@ const authenticated_user_schema = z.object({
  * @param {Object} req headers: user ID
  * @param {Object} res List of teachers
  */
-export default async function teachers(req: Request, res: Response) {
+export default async function teachers(req: AuthenticatedRequest, res: Response) {
 
   if (!("user" in req)) {
     return res.status(401).json("no authenticated user found");
   }
 
-  const user = authenticated_user_schema.safeParse(req?.user);
+  const user = authenticated_user_schema.safeParse(req.user);
 
   if (!user.success) {
     return res.status(401).json("user not authorized");

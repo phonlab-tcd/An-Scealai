@@ -1,4 +1,4 @@
-const synth = require('./routes/synthesis.route');
+const synth = require('../routes/synthesis.route');
 
 
 synth.abairAPIv2Synthesise('Dia duit', 'bloop');
