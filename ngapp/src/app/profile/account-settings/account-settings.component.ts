@@ -207,6 +207,7 @@ export class AccountSettingsComponent implements OnInit {
         } else {
           this.errorMessage = "";
           this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((_) => {});
+          // TODO: is it necessary to log the user out here? If it is, shouldn't we wait for the password update to succeed before logging out?
           this.auth.logout();
         }
       } else {
