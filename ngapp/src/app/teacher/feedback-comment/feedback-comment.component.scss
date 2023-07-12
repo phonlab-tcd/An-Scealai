@@ -6,8 +6,11 @@
     padding: 10px;
     font-size: 10pt;
     word-wrap: break-word;
-    display: flex;
     height: 100%;
+}
+
+.textAndOptionsMenuContainer {
+    display: flex;
 }
 
 .commentContainer:hover {
@@ -25,3 +28,59 @@
 .commentText:disabled {
     cursor: pointer;
 }
+
+.audioContainer {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.feedbackAudioPlayer {
+    width: 100%;
+  }
+  
+  
+.feedbackAudioPlayer:focus {
+    outline: none;
+  }
+  
+
+  .recordingBtn {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    padding-left: 10px 4px 10px 4px;
+
+  }
+  
+  .recordingBtn:hover {
+    background-color: var(--scealai-med-green);
+    transition: 0.5s;
+  }
+  
+  .notRecordingBtn {
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    padding-left: 10px 4px 10px 4px;
+  }
+
+  .blink {
+    animation: blinker 2s linear infinite;
+  }
+
+  @keyframes blinker {
+    0% {
+      background-color:red;
+    }
+    50% {
+      background-color:rgb(119, 0, 0);
+    }
+    100% {
+      background-color:red;
+    }
+  }

@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { RecordAudioService } from "app/core/services/record-audio.service";
 
 @Component({
   selector: "app-feedback-comment",
@@ -12,20 +14,25 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   @Output() deleteEmitter = new EventEmitter();
   @Output() editTextEmitter = new EventEmitter();
 
-  @ViewChild("commentIndex", { static: false }) commentTextElement: ElementRef;
+  @ViewChild("commentTextArea", { static: false }) commentTextArea: ElementRef;
 
   isEditing = true;
+  audioSource: SafeUrl;
+  isRecording: boolean = false;
 
-  constructor(public ts: TranslationService) {}
+  constructor(
+    public ts: TranslationService,
+    protected sanitizer: DomSanitizer,
+    private recordAudioService: RecordAudioService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   /**
    * Focus the text editor
    */
   ngAfterViewInit(): void {
-    this.commentTextElement.nativeElement.focus();
+    this.commentTextArea.nativeElement.focus();
   }
 
   /**
@@ -33,7 +40,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    */
   editCommentText() {
     this.isEditing = true;
-    this.commentTextElement.nativeElement.focus();
+    this.commentTextArea.nativeElement.focus();
   }
 
   /**
@@ -41,16 +48,34 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * if comment has text
    */
   saveCommentText() {
-    if (this.commentTextElement.nativeElement.value.trim().length > 0) {
+    if (this.commentTextArea.nativeElement.value.trim().length > 0) {
       this.editTextEmitter.next(this.comment.text);
       this.isEditing = false;
-    }
-    else {
+    } else {
       this.deleteComment();
     }
   }
 
+  /**
+   * Send delete event to the parent component
+   */
   deleteComment() {
-    this.deleteEmitter.next(null)
+    this.deleteEmitter.next(null);
+  }
+
+  /**
+   * Start or stop recording audio
+   */
+  async recordFeedbackMessage() {
+    if (this.isRecording) {
+      this.recordAudioService.stopRecording();
+      setTimeout(() => {
+        this.audioSource = this.recordAudioService.playbackAudio();
+        console.log(this.audioSource);
+      }, 500);
+    } else {
+      this.recordAudioService.recordAudio();
+    }
+    this.isRecording = !this.isRecording;
   }
 }

@@ -1,25 +1,39 @@
 <div id="commentContainer" class="commentContainer">
-  <textarea
-    #commentIndex
-    class="commentText"
-    [(ngModel)]="comment.text"
-    [disabled]="!isEditing"
-    (click)="$event.stopPropagation()"
-    (blur)="saveCommentText()"
-    >{{ comment.text }}</textarea
-  >
+  <div class="textAndOptionsMenuContainer">
+    <textarea
+      #commentTextArea
+      class="commentText"
+      [(ngModel)]="comment.text"
+      [disabled]="!isEditing"
+      (click)="$event.stopPropagation()"
+      (blur)="saveCommentText()"
+      >{{ comment.text }}</textarea
+    >
 
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="deleteComment()">
-      <mat-icon>delete</mat-icon>
-      <span>{{ ts.l.delete }}</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <button mat-menu-item (click)="editCommentText()">
-      <mat-icon>create</mat-icon>
-      <span> Edit </span>
-    </button>
-  </mat-menu>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="deleteComment()">
+        <mat-icon>delete</mat-icon>
+        <span>{{ ts.l.delete }}</span>
+      </button>
+      <button mat-menu-item (click)="editCommentText()">
+        <mat-icon>create</mat-icon>
+        <span> Edit </span>
+      </button>
+    </mat-menu>
+  </div>
+  <div class="audioContainer">
+
+    <div (click)="recordFeedbackMessage(); $event.stopPropagation()">
+      <button *ngIf="!isRecording" class="recordingBtn">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button *ngIf="isRecording" class="notRecordingBtn blink">
+        <i class="fas fa-stop-circle"></i>
+      </button>
+    </div>
+        <audio *ngIf="audioSource" [src]="audioSource" class="feedbackAudioPlayer" id="player" controls></audio>
+  </div>
 </div>

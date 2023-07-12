@@ -87,6 +87,8 @@ export class TeacherFeedbackComponent implements OnInit {
     if (!range || range.length === 0) {
       range = { index: 0, length: 0 };
     }
+
+    // creates a new feedback-comment component
     this.commentsList.push({ range: range, text: "" });
 
     // highlight text in quill
