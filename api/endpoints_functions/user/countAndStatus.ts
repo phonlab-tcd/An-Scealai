@@ -1,5 +1,6 @@
 import User from "../../models/user";
 import { Request, Response } from "express";
+
 /**
 * Returns the total number of users on the DB for each roll as well as
 * numbers for active and pending accounts
@@ -7,7 +8,7 @@ import { Request, Response } from "express";
 * @param {Object} res
 * @return {Promise} Dictionary of role types, account status, and total counts
 */
-export default async function getUserCountAndStatus(req: Request, res: Response) {
+export default async function countAndStatus(req: Request, res: Response) {
   const totalStudents = await User.where({role: 'STUDENT'}).countDocuments();
   const activeStudents = await User.where({role: 'STUDENT', status: 'Active'}).countDocuments();
   const pendingStudents = await User.where({role: 'STUDENT', status: 'Pending'}).countDocuments();
