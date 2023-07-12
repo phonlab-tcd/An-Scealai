@@ -2,17 +2,17 @@
 const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 
-const { getUniqueErrorTypeCounts } = require('../endpoints_functions/gramadoir/getUniqueErrorTypeCounts');
-const { getUserGrammarCounts } = require('../endpoints_functions/gramadoir/getUserGrammarCounts');
-const { getTimeGrammarCounts } = require('../endpoints_functions/gramadoir/getTimeGrammarCounts');
-const { callAnGramadoir } = require('../endpoints_functions/gramadoir/callAnGramadoir');
+const { getUniqueErrorTypeCounts } = require('../endpoint/gramadoir/getUniqueErrorTypeCounts');
+const { getUserGrammarCounts } = require('../endpoint/gramadoir/getUserGrammarCounts');
+const { getTimeGrammarCounts } = require('../endpoint/gramadoir/getTimeGrammarCounts');
+const { callAnGramadoir } = require('../endpoint/gramadoir/callAnGramadoir');
 
 // //////////////////////////////////////////// POST
-const insertHandler = require('../endpoints_functions/gramadoir/insert');
+const insertHandler = require('../endpoint/gramadoir/insert');
 gramadoirRoutes
     .route('/insert')
     .post(auth, insertHandler);
-const userGrammarCountsHandler = require('../endpoints_functions/gramadoir/userGrammarCounts');
+const userGrammarCountsHandler = require('../endpoint/gramadoir/userGrammarCounts');
 gramadoirRoutes
     .route('/userGrammarCounts')
     .post(auth, userGrammarCountsHandler);

@@ -4,27 +4,27 @@ import checkJwt from "../utils/jwtAuthMw";
 import crypto from "node:crypto";
 import User from "../models/user";
 
-import register from "../endpoints_functions/user/register";
-import verifyOldAccount from "../endpoints_functions/user/verifyOldAccount";
-import login from "../endpoints_functions/user/login";
-import resetPassword from "../endpoints_functions/user/resetPassword";
-import generateNewPassword from "../endpoints_functions/user/generateNewPassword";
-import verify from "../endpoints_functions/user/verify";
-import viewUser from "../endpoints_functions/user/viewUser";
-import teachers from "../endpoints_functions/user/teachers";
-import getUserById from "../endpoints_functions/user/getUserById";
+import register from "../endpoint/user/register";
+import verifyOldAccount from "../endpoint/user/verifyOldAccount";
+import login from "../endpoint/user/login";
+import resetPassword from "../endpoint/user/resetPassword";
+import generateNewPassword from "../endpoint/user/generateNewPassword";
+import verify from "../endpoint/user/verify";
+import viewUser from "../endpoint/user/viewUser";
+import teachers from "../endpoint/user/teachers";
+import getUserById from "../endpoint/user/getUserById";
 
-import searchUser from "../endpoints_functions/user/searchUser";
-import count from "../endpoints_functions/user/count";
-import countAndStatus from "../endpoints_functions/user/countAndStatus";
+import searchUser from "../endpoint/user/searchUser";
+import count from "../endpoint/user/count";
+import countAndStatus from "../endpoint/user/countAndStatus";
 
-import updateUsername from "../endpoints_functions/user/updateUsername";
-import countUsersWithStories from "../endpoints_functions/user/countUsersWithStories";
-import countTeachersWithClassrooms from "../endpoints_functions/user/countTeachersWithClassrooms";
-import getLanguageCount from "../endpoints_functions/user/getLanguageCount";
-import setLanguage from "../endpoints_functions/user/setLanguage";
-import getLanguage from "../endpoints_functions/user/getLanguage";
-import getUserByUsername from "../endpoints_functions/user/getUserByUsername";
+import updateUsername from "../endpoint/user/updateUsername";
+import countUsersWithStories from "../endpoint/user/countUsersWithStories";
+import countTeachersWithClassrooms from "../endpoint/user/countTeachersWithClassrooms";
+import getLanguageCount from "../endpoint/user/getLanguageCount";
+import setLanguage from "../endpoint/user/setLanguage";
+import getLanguage from "../endpoint/user/getLanguage";
+import getUserByUsername from "../endpoint/user/getUserByUsername";
 
 export const userRoutes = makeEndpoints({
   get: {

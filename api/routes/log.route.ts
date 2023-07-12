@@ -1,7 +1,7 @@
 const logger = require('../logger');
 const makeEndpoints = require('../utils/makeEndpoints');
 
-import clientsideErrorHandler from "../endpoints_functions/log/clientsideError";
+import clientsideErrorHandler from "../endpoint/log/clientsideError";
 
 
 module.exports = makeEndpoints({
