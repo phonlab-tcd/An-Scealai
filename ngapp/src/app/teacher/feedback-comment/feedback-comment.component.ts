@@ -3,6 +3,7 @@ import { TranslationService } from "app/core/services/translation.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { RecordAudioService } from "app/core/services/record-audio.service";
+import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 
 @Component({
   selector: "app-feedback-comment",
@@ -22,16 +23,22 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   constructor(
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
-    private recordAudioService: RecordAudioService
+    private recordAudioService: RecordAudioService,
+    private feedbackCommentService: FeedbackCommentService
   ) {}
 
   ngOnInit(): void {}
 
   /**
-   * Focus the text editor
+   * Focus the text editor if new comment
    */
   ngAfterViewInit(): void {
-    this.commentTextArea.nativeElement.focus();
+    if (!this.comment.text && !this.comment.audioId) {
+      this.isEditing = true;
+      this.commentTextArea.nativeElement.focus();
+    } else {
+      this.isEditing = false;
+    }
   }
 
   /**
@@ -47,10 +54,13 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * if comment has text
    */
   saveComment() {
-    if ( this.commentTextArea.nativeElement.value.trim().length > 0 || this.audioSource ) {
+    if ( this.comment.text || this.audioSource ) {
       this.isEditing = false;
-      this.adjustTextAreaHeight();
-      // TODO: save updated text and/or audio to DB
+      this.feedbackCommentService.updateFeedbackComment(this.comment).subscribe({
+          next: () => {
+            this.adjustTextAreaHeight();
+          },
+        });
     } else {
       this.deleteComment();
     }
@@ -72,8 +82,15 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Send delete event to the parent component
    */
   deleteComment() {
-    this.deleteEmitter.next(null);
-    // TODO: delete comment from DB
+    // TODO: delete any feedback audio recordings
+    this.feedbackCommentService.deleteFeedbackComment(this.comment._id).subscribe({
+      next: () => {
+        this.deleteEmitter.next(null);
+      },
+      error: () => {
+        console.log("Error deleting comment")
+      }
+    })
   }
 
   /**

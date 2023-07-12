@@ -1,11 +1,13 @@
 export class FeedbackComment {
+  _id: string;
   range: {
-    index: number,
-    length: number
+    index: number;
+    length: number;
   };
   text: string;
-  constructor(range: {index: number, length: number}, text: string) {
+  audioId: string;
+  lastUpdated: Date;
+  constructor(range: { index: number; length: number }) {
     this.range = range;
-    this.text = text;
   }
 }

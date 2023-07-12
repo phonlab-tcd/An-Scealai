@@ -2,7 +2,7 @@
   <div class="textAndOptionsMenuContainer">
     <!-- Writing area-->
     <textarea
-      *ngIf="comment.text.length > 0 || isEditing"
+      *ngIf="comment.text || isEditing"
       #commentTextArea
       class="commentTextArea"
       [(ngModel)]="comment.text"
