@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 * @param {Object} res
 * @return {Promise} Number of teachers who have at least one classroom
 */
-async function countTeachersWithClassrooms(req: Request, res: Response) {
+export default async function countTeachersWithClassrooms(req: Request, res: Response) {
   const userIds = await User.find({'role': 'TEACHER'}, {'_id': 1});
   const ids = userIds.map(u=>u._id);
 
@@ -26,5 +26,3 @@ async function countTeachersWithClassrooms(req: Request, res: Response) {
 
   return res.status(200).json(teachersWithClassrooms);
 }
-
-module.exports = countTeachersWithClassrooms;

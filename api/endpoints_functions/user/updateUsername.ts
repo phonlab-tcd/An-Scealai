@@ -1,12 +1,13 @@
-const User = require('../../models/user');
-const {API404Error} = require('../../utils/APIError');
+import User from "../../models/user";
+import { API404Error } from "../../utils/APIError";
+import { Request, Response } from "express";
 
 /**
  * Update username
  * @param {Object} req Includes user id and new username
  * @param {Object} res Returns response success code
  */
-async function updateUsername(req, res) {
+export default async function updateUsername(req: Request, res: Response) {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -21,5 +22,3 @@ async function updateUsername(req, res) {
     return res.status(500).send(err);
   }
 }
-
-module.exports = updateUsername;
