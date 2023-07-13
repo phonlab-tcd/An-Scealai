@@ -1,7 +1,8 @@
 .storyTitleHeader {
     display: flex;
     justify-content: center;
-    margin-top: -30px;  // margin for entire page set in app.component.scss
+    align-items: flex-end;
+    margin-top: -55px;  // margin for entire page set in app.component.scss
   }
 
 .storyTitleContainer {

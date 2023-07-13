@@ -1,61 +1,6 @@
-.storyTitleHeader {
-    display: flex;
-    justify-content: center;
-    margin-top: -30px;  // margin for entire page set in app.component.scss
-  }
-
-.storyTitleContainer {
-    margin: auto;
-    overflow: auto;
-    font-size: 20px;
-    font-weight: bolder;
-}
-
-.teacherOptionsBtnContainer > * {
-    height: 2rem;
-}
-
-.teacherOptionsBtnContainer {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    --options-btn-background-color-hover : lightgray;
-    background-color:white;
-    padding-left: 30px;
-    padding-right: 30px;
-}
-  
-.optionsBtn {
-    background-color: var(--scealai-yellow);
-    border-style: none;
-    color: #464444;
-    margin: 0px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background: #dfd9c800;
-}
-
-.optionsBtn:hover {
-    background-color: var(--options-btn-background-color-hover);
-    color: #35322f;
-    cursor: pointer;
-    border-radius: 2;
-}
-
-.optionsBtnIcon {
-    margin-left: 5px;
-}
-
-.bodyDrawerContainer {
-    width: 100%;
+.feedbackBody {
     height: 100%;
-}
-
-.storyAndCommentsContainer {
-    height: 100%;
-    overflow-y: scroll;
+    //overflow-y: scroll;
 }
 
 .storyTitleContainer{
@@ -67,7 +12,7 @@
 }
 
 .storyTitleAndDate {
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 3rem;
@@ -86,7 +31,6 @@
 
 .quillAndCommentsContainer{
     background-color: #F8F9FA;
-    height: 90%;
     display: flex;
 }
 

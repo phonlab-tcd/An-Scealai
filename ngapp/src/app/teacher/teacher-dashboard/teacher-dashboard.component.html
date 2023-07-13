@@ -1,5 +1,7 @@
 <!-- HEADER -->
 <div class="storyTitleHeader" *ngIf="classroom">
+  <!-- CLASSROOM DRAWER BUTTON-->
+  <span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()" >menu</span >
   <!-- CLASSROOM TITLE -->
   <div class="storyTitleContainer">
     <input
@@ -10,9 +12,6 @@
     />
   </div>
 </div>
-
-<!-- CLASSROOM DRAWER BUTTON-->
-<span class="menuButton material-symbols-outlined" (click)="classroomDrawer.toggle()" >menu</span >
 
 <!-- BODY CONTAINER-->
 <mat-drawer-container class="bodyContainer" autosize>

@@ -1,9 +1,17 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
+import { Story } from "app/core/models/story";
 import Quill from "quill";
 
 @Component({
@@ -25,9 +33,13 @@ export class TeacherFeedbackComponent implements OnInit {
 
   quillEditor: Quill;
   commentsList: FeedbackComment[] = [];
+  @Input() story: Story;
+  @Output() closeFeedbackEmitter = new EventEmitter();
+
+  storyUpdated: boolean = false;
 
   // dummy story object
-  story = {
+  story2 = {
     _id: "64919ca6f63532ef70c34afb",
     title: "story title",
     date: new Date(),
@@ -62,20 +74,57 @@ export class TeacherFeedbackComponent implements OnInit {
     if (!userDetails) return;
   }
 
+  ngOnChanges(_) {
+    if (this.story) {
+      this.loadStory();
+    }
+  }
+
   /*
    * Initialise quill editor
    */
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
+  }
+
+  loadStory() {
+    // get story text from previous markup if it exists, otherwise just get story html
+    if (this.story.feedback.feedbackMarkup == null) {
+      this.story.feedback.feedbackMarkup =
+        this.story.htmlText || this.story.text;
+    }
+    // check if student has updated story since last teacher edits made, if so refresh button is displayed
+    else {
+      this.storyUpdated = this.checkTextDifference(
+        this.story.feedback.feedbackMarkup,
+        this.story.text
+      );
+    }
+
+    this.commentsList = [];
+
     this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
       next: (comments) => {
         comments.forEach((comment) => {
-          this.quillEditor.formatText( comment.range.index, comment.range.length, { background: "#fff72b", } );
+          this.quillEditor.formatText(
+            comment.range.index,
+            comment.range.length,
+            { background: "#fff72b" }
+          );
           this.commentsList.push(comment);
         });
       },
     });
+  }
+
+  /*
+   * Returns true if the texts are different, otherwise return false
+   */
+  checkTextDifference(text1: string, text2: string) {
+    let stripped1 = text1.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, "");
+    let stripped2 = text2.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, "");
+    return stripped1 !== stripped2;
   }
 
   /**
@@ -91,14 +140,18 @@ export class TeacherFeedbackComponent implements OnInit {
     }
 
     // creates a new feedback-comment component
-    this.feedbackCommentService.createNewComment(new FeedbackComment(range, this.story._id)).subscribe({
-      next: (comment) => {
-        // highlight text in quill
-        this.quillEditor.formatText(range.index, range.length, { background: "#fff72b", });
-        this.commentsList.push(comment);
-      },
-      error: () => {},
-    });
+    this.feedbackCommentService
+      .createNewComment(new FeedbackComment(range, this.story._id))
+      .subscribe({
+        next: (comment) => {
+          // highlight text in quill
+          this.quillEditor.formatText(range.index, range.length, {
+            background: "#fff72b",
+          });
+          this.commentsList.push(comment);
+        },
+        error: () => {},
+      });
   }
 
   /**
@@ -107,7 +160,8 @@ export class TeacherFeedbackComponent implements OnInit {
    */
   showInlineCommentButton(event) {
     let range = event.range;
-    if (range && range.length > 0 && event.source == "user") { // don't want to create button when highlightCommentReferenceInQuill() is fired
+    if (range && range.length > 0 && event.source == "user") {
+      // don't want to create button when highlightCommentReferenceInQuill() is fired
       const length = range.length;
       // get bounds of selected text
       const bounds = this.quillEditor.getBounds(range.index, length);
@@ -147,7 +201,10 @@ export class TeacherFeedbackComponent implements OnInit {
    */
   highlightCommentReferenceInQuill(index: number) {
     const commentData = this.commentsList[index];
-    this.quillEditor.setSelection( commentData.range.index, commentData.range.length );
+    this.quillEditor.setSelection(
+      commentData.range.index,
+      commentData.range.length
+    );
   }
 
   /**

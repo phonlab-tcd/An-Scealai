@@ -44,9 +44,9 @@
   </ng-template>
   <!-- STORY FEEDBACK DRAWER -->
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end" style="width: 100%" >
-    <app-teacher-story
+    <app-teacher-feedback
       [story]="storyForFeedback"
       (closeFeedbackEmitter)="resetFeedbackDrawer()"
-    ></app-teacher-story>
+    ></app-teacher-feedback>
   </mat-drawer>
 </mat-drawer-container>
