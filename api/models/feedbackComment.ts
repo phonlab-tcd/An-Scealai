@@ -12,6 +12,10 @@ const FeedbackComment = new Schema(
         length: { type: Number, required: false },
       },
     },
+    storyId: {
+      type: mongoose.Types.ObjectId,
+      index: true,
+    },
     lastUpdated: { type: Date, required: true },
   },
   {

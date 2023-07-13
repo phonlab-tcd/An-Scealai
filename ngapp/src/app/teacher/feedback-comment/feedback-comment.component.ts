@@ -31,6 +31,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
 
   /**
    * Focus the text editor if new comment
+   * Show text/audio data for existing comment
    */
   ngAfterViewInit(): void {
     if (!this.comment.text && !this.comment.audioId) {
@@ -38,7 +39,17 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
       this.commentTextArea.nativeElement.focus();
     } else {
       this.isEditing = false;
+      if (this.comment.audioId) {
+        this.feedbackCommentService.getAudioFeedback(this.comment.audioId).subscribe({
+          next: (res) => {
+            if (res.type == "audio/mp3") {
+              this.audioSource = this.sanitizer.bypassSecurityTrustUrl( URL.createObjectURL(res) );
+            }
+          },
+        });
+      }
     }
+    this.adjustTextAreaHeight();
   }
 
   /**
@@ -50,17 +61,25 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Send edited comment changes to the parent component
-   * if comment has text
+   * Save comment to DB
    */
   saveComment() {
-    if ( this.comment.text || this.audioSource ) {
+    if (this.comment.text || this.audioSource) {
       this.isEditing = false;
+      // save audio data
+      if (this.audioSource) {
+        let audioBlob = this.recordAudioService.getAudioBlob();
+        if (audioBlob) {
+          this.feedbackCommentService.addAudioFeedback(this.comment._id, audioBlob).subscribe({
+            next: (res) => { console.log(res); },
+            error: () => { console.log("Error saving audio feedback"); },
+          });
+        }
+      }
+      // save rest of the data
       this.feedbackCommentService.updateFeedbackComment(this.comment).subscribe({
-          next: () => {
-            this.adjustTextAreaHeight();
-          },
-        });
+        next: () => { this.adjustTextAreaHeight(); },
+      });
     } else {
       this.deleteComment();
     }
@@ -79,18 +98,13 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Send delete event to the parent component
+   * Delete comment (and any associated audio)
    */
   deleteComment() {
-    // TODO: delete any feedback audio recordings
     this.feedbackCommentService.deleteFeedbackComment(this.comment._id).subscribe({
-      next: () => {
-        this.deleteEmitter.next(null);
-      },
-      error: () => {
-        console.log("Error deleting comment")
-      }
-    })
+      next: () => { this.deleteEmitter.next(null); },
+      error: () => { console.log("Error deleting comment"); },
+    });
   }
 
   /**

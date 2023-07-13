@@ -8,13 +8,13 @@ export default async function updateFeedbackComment( req: Request, res: Response
       return res.json(err);
     }
     if (comment === null) {
-      console.log("comment is null!");
       return res.status(404).json("comment not found");
     }
 
     if (req.body.comment.text) comment.text = req.body.comment.text;
     if (req.body.comment.audioId) comment.audioId = req.body.comment.audioId;
     if (req.body.comment.range) comment.range = req.body.comment.range;
+    comment.lastUpdated = new Date();
 
     comment.save().then(
       () => res.json("Update complete"),

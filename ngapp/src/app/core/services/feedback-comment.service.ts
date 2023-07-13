@@ -16,8 +16,8 @@ export class FeedbackCommentService {
     return this.http.post(`${this.baseUrl}/createNewComment/`, { comment });
   }
 
-  getFeedbackComments(ids: string[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/getFeedbackComments/`, { ids });
+  getFeedbackComments(storyId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/getFeedbackComments/${storyId}`);
   }
 
   updateFeedbackComment(comment: FeedbackComment): Observable<any> {
@@ -26,5 +26,15 @@ export class FeedbackCommentService {
 
   deleteFeedbackComment(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/deleteFeedbackComment/${id}`);
+  }
+
+  addAudioFeedback(id: string, audioBlob: Blob) : Observable<any>{
+    let formData = new FormData();
+    formData.append('audio', audioBlob);
+    return this.http.post(this.baseUrl + "/addAudioFeedback/" + id, formData);
+  }
+
+  getAudioFeedback(id: string) : Observable<any> {
+    return this.http.get(this.baseUrl + "/getAudioFeedback/" + id, {responseType: "blob"});
   }
 }

@@ -28,7 +28,7 @@ export class TeacherFeedbackComponent implements OnInit {
 
   // dummy story object
   story = {
-    _id: "1111",
+    _id: "64919ca6f63532ef70c34afb",
     title: "story title",
     date: new Date(),
     lastUpdated: new Date(),
@@ -43,7 +43,6 @@ export class TeacherFeedbackComponent implements OnInit {
       feedbackMarkup:
         "Tá an ceathrú dáileog den vacsaín le tairiscint do gach duine sa stát atá 65 nó níos sine. Dheimhnigh an tAire Sláinte Stephen Donnelly ar maidin gurb í sin comhairle NIAC, an Coiste Comhairleach Náisiúnta um Imdhíonadh, agus gur ghlac sé leis an gcomhairle sin. Ag labhairt dó ar Morning Ireland ar RTÉ, dúirt Donnelly go raibh Feidhmeannacht na Seirbhíse Sláinte ag ullmhú cheana féin chun an ceathrú snáthaid a dháileadh. De réir chomhairle NIAC ba chóir an dara teanndáileog a thabhairt do dhaoine atá 12 nó níos sine atá imdhíon-lagaithe. Ba chóir a deir siad bundáileog trí shnáthaid a thabhairt do pháistí atá idir 5-11 atá imdhíon-lagaithe. Maidir leis an gceathrú snáthaid do dhaoine os cionn 65 is í comhairle NIAC ná go bhfágfaí sé mhí idir an tríú dáileog agus an ceann nua, ach go deir siad bhféadfadh go mbeadh ceithre mhí inmholta i gcásanna áirithe. Dúirt Stephen Donnelly go rabhthas ag súil moltaí NIAC a chur i gcrích “an sciobtha”. Dhéanfaí scagadh anois ar ar cheart vacsaín eile a dháileadh ar dhaoine in aoisghrúpaí eile, a dúirt sé.",
       audioId: "11111",
-      comments: ["64aedef6dfd8a21a861cd7a0"]
     },
     activeRecording: "1111",
     createdWithPrompts: false,
@@ -69,17 +68,14 @@ export class TeacherFeedbackComponent implements OnInit {
   onEditorCreated(q: Quill) {
     this.quillEditor = q;
     this.quillEditor.root.setAttribute("spellcheck", "false");
-        this.feedbackCommentService.getFeedbackComments(this.story.feedback.comments).subscribe({
+    this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
       next: (comments) => {
-        comments.forEach(comment => {
-          console.log(comment)
-          this.quillEditor.formatText(comment.range.index, comment.range.length, {
-            background: "#fff72b",
-          });
-          this.commentsList.push(comment)
-        })
-      }
-    })
+        comments.forEach((comment) => {
+          this.quillEditor.formatText( comment.range.index, comment.range.length, { background: "#fff72b", } );
+          this.commentsList.push(comment);
+        });
+      },
+    });
   }
 
   /**
@@ -95,18 +91,15 @@ export class TeacherFeedbackComponent implements OnInit {
     }
 
     // creates a new feedback-comment component
-    this.feedbackCommentService.createNewComment(new FeedbackComment(range)).subscribe({
+    this.feedbackCommentService.createNewComment(new FeedbackComment(range, this.story._id)).subscribe({
       next: (comment) => {
         console.log(comment);
-            // highlight text in quill
-    this.quillEditor.formatText(range.index, range.length, {
-      background: "#fff72b",
-    });
-    this.commentsList.push(comment)
+        // highlight text in quill
+        this.quillEditor.formatText(range.index, range.length, { background: "#fff72b", });
+        this.commentsList.push(comment);
       },
-      error: () => {}
-    })
-
+      error: () => {},
+    });
   }
 
   /**
@@ -115,7 +108,7 @@ export class TeacherFeedbackComponent implements OnInit {
    */
   showInlineCommentButton(event) {
     let range = this.quillEditor.getSelection();
-    if (range && range.length > 0 && event.source == "user") { // don't want to create button when showCommentInQuill() is fired
+    if (range && range.length > 0 && event.source == "user") { // don't want to create button when highlightCommentReferenceInQuill() is fired
       const length = range.length;
       // get bounds of selected text
       const bounds = this.quillEditor.getBounds(range.index, length);

@@ -12,7 +12,9 @@
   },
   "jest": {
     "testTimeout": 10000,
-    "modulePathIgnorePatterns": ["<rootDir>/express-status-monitor"],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/express-status-monitor"
+    ],
     "preset": "ts-jest/presets/default",
     "globals": {
       "ts-jest": {
@@ -89,6 +91,7 @@
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.2",
     "@types/jest": "^28.1.6",
+    "@types/multer": "^1.4.7",
     "@types/node": "^18.7.3",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
