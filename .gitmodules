@@ -1,3 +1,0 @@
-[submodule "api/express-status-monitor"]
-	path = api/express-status-monitor
-	url = git@github.com:OisinNolan/express-status-monitor.git
