@@ -71,8 +71,8 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
         let audioBlob = this.recordAudioService.getAudioBlob();
         if (audioBlob) {
           this.feedbackCommentService.addAudioFeedback(this.comment._id, audioBlob).subscribe({
-            next: (res) => { console.log(res); },
-            error: () => { console.log("Error saving audio feedback"); },
+            next: () => {},
+            error: () => {},
           });
         }
       }
@@ -89,12 +89,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Set textarea height depending on text length, with max height of 100px
    */
   adjustTextAreaHeight() {
-    if (this.commentTextArea.nativeElement.scrollHeight < 100) {
-      this.commentTextArea.nativeElement.style.height = "auto";
-      this.commentTextArea.nativeElement.style.height = `${this.commentTextArea.nativeElement.scrollHeight}px`;
-    } else {
-      this.commentTextArea.nativeElement.style.height = "100px";
-    }
+    this.commentTextArea.nativeElement.style.height = `${Math.min(this.commentTextArea.nativeElement.scrollHeight, 100)}px`;
   }
 
   /**
@@ -103,7 +98,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   deleteComment() {
     this.feedbackCommentService.deleteFeedbackComment(this.comment._id).subscribe({
       next: () => { this.deleteEmitter.next(null); },
-      error: () => { console.log("Error deleting comment"); },
+      error: () => { },
     });
   }
 
@@ -115,7 +110,6 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
       this.recordAudioService.stopRecording();
       setTimeout(() => {
         this.audioSource = this.recordAudioService.playbackAudio();
-        console.log(this.audioSource);
       }, 500);
     } else {
       this.recordAudioService.recordAudio();

@@ -93,7 +93,6 @@ export class TeacherFeedbackComponent implements OnInit {
     // creates a new feedback-comment component
     this.feedbackCommentService.createNewComment(new FeedbackComment(range, this.story._id)).subscribe({
       next: (comment) => {
-        console.log(comment);
         // highlight text in quill
         this.quillEditor.formatText(range.index, range.length, { background: "#fff72b", });
         this.commentsList.push(comment);
@@ -107,7 +106,7 @@ export class TeacherFeedbackComponent implements OnInit {
    * @param event quill on-select event
    */
   showInlineCommentButton(event) {
-    let range = this.quillEditor.getSelection();
+    let range = event.range;
     if (range && range.length > 0 && event.source == "user") { // don't want to create button when highlightCommentReferenceInQuill() is fired
       const length = range.length;
       // get bounds of selected text
@@ -147,7 +146,7 @@ export class TeacherFeedbackComponent implements OnInit {
    * @param commentElement clicked on comment HTML element
    */
   highlightCommentReferenceInQuill(index: number) {
-    let commentData = this.commentsList[index];
+    const commentData = this.commentsList[index];
     this.quillEditor.setSelection( commentData.range.index, commentData.range.length );
   }
 
