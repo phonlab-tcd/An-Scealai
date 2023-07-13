@@ -199,7 +199,7 @@ export class UserComponent implements OnInit {
     
     this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});  
     this.profileService.deleteProfile(this.user._id).subscribe( () => {});
-    this.userService.deleteUser(this.user._id).subscribe( () => {});
+    this.userService.deleteUser().subscribe( () => {});
     
     this.router.navigateByUrl('admin/find-user');
     
