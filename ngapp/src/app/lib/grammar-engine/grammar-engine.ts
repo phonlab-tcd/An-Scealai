@@ -1,7 +1,7 @@
-import { GrammarChecker, GrammarCache, ErrorTag} from './types';
+import { GrammarChecker, GrammarCache, ErrorTag, ErrorType, CHECKBOX_TYPE, ERROR_TYPES} from './types';
 import config from '../../../abairconfig';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, tap } from 'rxjs';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Subject } from 'rxjs';
 import normalizeWhitespace from "../../../../../api/utils/normalize-whitespace";
@@ -80,6 +80,44 @@ function clone(object) {
   return Object.assign({}, object);
 }
 
+class ErrorsByTypeForCurrentCheck {
+  private tagStore: Map<string, ErrorTag[]>;
+
+  constructor() {
+    this.tagStore = new Map();
+  }
+
+  public storeTag(tag: ErrorTag) {
+    const stored = this.tagStore.get(tag.type);
+    if(stored) {
+      stored.push(tag);
+    } else {
+      this.tagStore.set(tag.type, [tag]);
+    }
+  }
+
+  public getType(type: ErrorType): ErrorTag[] {
+    const stored = this.tagStore.get(type);
+    if(stored) return stored;
+    else return [];
+  }
+
+  public nonEmptyTypes():  ErrorType[] {
+    const nonEmpty: ErrorType[] = [];
+    for(const type of ERROR_TYPES) {
+      const store = this.tagStore.get(type);
+      if(store) {
+        nonEmpty.push(type);
+      }
+    }
+    return nonEmpty;
+  }
+
+  public typeIsNonEmpty(type: ErrorType): boolean {
+    return !!this.tagStore.get(type);
+  }
+}
+
 
 export class GrammarEngine {
     private cacheMap: Map<string, GrammarCache>;
@@ -88,6 +126,8 @@ export class GrammarEngine {
     private auth: AuthenticationService;
     private previousErrorTags: Object[];
     private errorsWithSentences = [];
+
+    public errorStoreForLatestCheck: ErrorsByTypeForCurrentCheck;
     
     constructor(grammarCheckers: GrammarChecker[], http: HttpClient, auth: AuthenticationService) {
         this.http = http;
@@ -106,8 +146,12 @@ export class GrammarEngine {
     */
     public check$(input: string) {
       const subject = new Subject<ErrorTag>();
+      const errorStoreForThisCheck = new ErrorsByTypeForCurrentCheck();
+      this.errorStoreForLatestCheck = errorStoreForThisCheck;
       this.check(normalizeWhitespace(input), subject);
-      return subject;
+      return subject.pipe(
+        tap(function(tag: ErrorTag) { errorStoreForThisCheck.storeTag(tag);})
+      );
     }
     
     /**

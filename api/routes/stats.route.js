@@ -28,7 +28,7 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get(async (req, r
     const ids = (await User.find(conditions, {_id: 1})).map((u)=>u._id);
     const promises = ids.map((id)=>Profile.find({userId: id}).limit(1));
     const profiles = await Promise.all(promises);
-    res.json(profiles);
+    return res.json(profiles);
   } catch (e) {
     console.error(e); next(e);
   }
@@ -40,23 +40,23 @@ statsRoutes.route('/getProfileDataByDate/:startDate/:endDate').get(async (req, r
  * @param {Object} req params: end date for date range
  * @return {Object} Dictionary of feature type and number of counts
  */
-statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get(async (req, res) => {
+statsRoutes.route('/getFeatureDataByDate/:startDate/:endDate').get((req, res) => {
   let conditions = {};
   if (req.params.startDate !== 'empty' && req.params.endDate !== 'empty') {
     conditions = {'date': {'$gte': req.params.startDate, '$lte': req.params.endDate}};
   }
 
-  await Event.find(conditions, (err, events) => {
+  Event.find(conditions, (err, events) => {
     if (err) {
       console.log(err);
-      res.status(400).send('An error occurred while trying to find users by date');
+      return res.status(400).send('An error occurred while trying to find users by date');
     }
     if (!events) {
-      res.status(404).send({'message': 'No feature stats in this date range were not found'});
+      return res.status(404).send({'message': 'No feature stats in this date range were not found'});
     } else {
       const types = events.map((entry) => entry.type);
       const typesCount = countTypes(types);
-      res.status(200).json(typesCount);
+      return res.status(200).json(typesCount);
     }
   });
 });
@@ -70,14 +70,14 @@ statsRoutes.route('/getFeatureDataSinceLog/:date').get((req, res) => {
   Event.find({'date': {'$gt': req.params.date}}, (err, events) => {
     if (err) {
       console.log(err);
-      res.status(400).send('An error occurred while trying to find the latest feature record');
+      return res.status(400).send('An error occurred while trying to find the latest feature record');
     }
     if (!events) {
-      res.status(404).send({'message': 'No previous feature stats were found'});
+      return res.status(404).send({'message': 'No previous feature stats were found'});
     } else {
       const types = events.map((entry) => entry.type);
       const typesCount = countTypes(types);
-      res.status(200).json(typesCount);
+      return res.status(200).json(typesCount);
     }
   });
 });

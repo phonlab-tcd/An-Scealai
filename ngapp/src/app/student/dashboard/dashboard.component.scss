@@ -146,13 +146,24 @@
     'opsz' 48
 }
 
+.wordCount {
+    float: right;
+    padding-right: 20px;
+    padding-top: 7px;
+    font-size: 12pt;
+}
+
 .newStoryMessage {
     font-weight: bolder;
-    max-width: 200px;
+    max-width: 300px;
     padding-top: 50px;
     padding-bottom: 50px;
+    padding-left: 50px;
     height: 80vh;
     width: 100%;
+    display:flex;
+    align-items: end;
+    justify-content: center;
 }
 
 .rightDrawer {

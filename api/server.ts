@@ -104,7 +104,7 @@ app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);
 app.use('/prompt', promptRoute);
 app.use('/messages', messageRoute);
-app.use('/gramadoir', expressQueue({activeLimit: 10, queuedLimit: -1}), gramadoirLogRoute);
+app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirLogRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 app.use('/feedbackComment', feedbackCommentRoute);
