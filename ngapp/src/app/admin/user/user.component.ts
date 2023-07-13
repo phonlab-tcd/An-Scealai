@@ -94,10 +94,10 @@ export class UserComponent implements OnInit {
     let mmStr = mm.toString();
     if (dd < 10) {
       ddStr = '0' + dd;
-    } 
+    }
     if (mm < 10) {
       mmStr = '0' + mm;
-    } 
+    }
     return ddStr + '/' + mmStr + '/' + yyyy;
   }
 
@@ -135,7 +135,7 @@ export class UserComponent implements OnInit {
     });
     this.maximised = false;
   }
-  
+
   maximiseEvents() {
     this.allEvents.forEach((e) => {
       this.eventSelected[e._id] = true;
@@ -173,7 +173,7 @@ export class UserComponent implements OnInit {
   goToClassroom(classroomId:string) {
     this.router.navigateByUrl('admin/classroom/' + classroomId);
   }
-  
+
   deleteAccount() {
     if (!this.user) return;
 
@@ -183,28 +183,27 @@ export class UserComponent implements OnInit {
           this.classroomService.removeStudentFromClassroom(res._id, this.user._id).subscribe(() => {});
         }
       });
-      
+
       this.storyService.getStoriesFor(this.user.username).subscribe( (res: Story[]) => {
         for(let story of res) {
           this.recordingService.deleteStoryRecordingAudio(story._id).subscribe(() => {});
           this.recordingService.deleteStoryRecording(story._id).subscribe( () => {})
         }
       });
-    
+
       this.storyService.deleteAllStories(this.user._id).subscribe( () => {});
     }
     if(this.user.role === "TEACHER") {
-      this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( () => {});  
+      this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe( () => {});
     }
-    
-    this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});  
+
+    this.messageService.deleteAllMessages(this.user._id).subscribe( () => {});
     this.profileService.deleteProfile(this.user._id).subscribe( () => {});
     this.userService.deleteUser().subscribe( () => {});
-    
+
     this.router.navigateByUrl('admin/find-user');
-    
   }
-  
+
   openDeleteDialog() {
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
@@ -216,7 +215,7 @@ export class UserComponent implements OnInit {
       },
       width: '50%',
     });
-    
+
     this.dialogRef.afterClosed().subscribe( (res) => {
         this.dialogRef = undefined;
         if(res) {
