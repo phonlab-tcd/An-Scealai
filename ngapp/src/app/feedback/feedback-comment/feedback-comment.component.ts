@@ -12,6 +12,7 @@ import { FeedbackCommentService } from "app/core/services/feedback-comment.servi
 })
 export class FeedbackCommentComponent implements OnInit, AfterViewInit {
   @Input("comment") comment: FeedbackComment;
+  @Input("isTeacher") isTeacher: boolean;
   @Output() deleteEmitter = new EventEmitter();
 
   @ViewChild("commentTextArea", { static: false }) commentTextArea: ElementRef;
@@ -24,7 +25,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
     private recordAudioService: RecordAudioService,
-    private feedbackCommentService: FeedbackCommentService
+    private feedbackCommentService: FeedbackCommentService,
   ) {}
 
   ngOnInit(): void {}

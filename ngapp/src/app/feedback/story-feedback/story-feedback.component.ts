@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter, } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
@@ -15,63 +8,30 @@ import { Story } from "app/core/models/story";
 import Quill from "quill";
 
 @Component({
-  selector: "app-teacher-feedback",
-  templateUrl: "./teacher-feedback.component.html",
-  styleUrls: [
-    "./teacher-feedback.component.scss",
-    "./../../../quill.fonts.scss",
-  ],
-  encapsulation: ViewEncapsulation.None,
+  selector: 'app-story-feedback',
+  templateUrl: './story-feedback.component.html',
+  styleUrls: ['./story-feedback.component.scss', "./../../../quill.fonts.scss",],   encapsulation: ViewEncapsulation.None,
 })
-export class TeacherFeedbackComponent implements OnInit {
+export class StoryFeedbackComponent implements OnInit {
+
   constructor(
     protected sanitizer: DomSanitizer,
     public ts: TranslationService,
-    private auth: AuthenticationService,
+    public auth: AuthenticationService,
     private feedbackCommentService: FeedbackCommentService
   ) {}
 
   quillEditor: Quill;
   commentsList: FeedbackComment[] = [];
+  isTeacher: boolean = true;
   @Input() story: Story;
   @Output() closeFeedbackEmitter = new EventEmitter();
-
   storyUpdated: boolean = false;
-
-  // dummy story object
-  story2 = {
-    _id: "64919ca6f63532ef70c34afb",
-    title: "story title",
-    date: new Date(),
-    lastUpdated: new Date(),
-    dialect: "munster",
-    text: "this is a test",
-    htmlText: "this is a test",
-    author: "nuage",
-    studentId: "11111",
-    feedback: {
-      seenByStudent: false,
-      text: "great job",
-      feedbackMarkup:
-        "Tá an ceathrú dáileog den vacsaín le tairiscint do gach duine sa stát atá 65 nó níos sine. Dheimhnigh an tAire Sláinte Stephen Donnelly ar maidin gurb í sin comhairle NIAC, an Coiste Comhairleach Náisiúnta um Imdhíonadh, agus gur ghlac sé leis an gcomhairle sin. Ag labhairt dó ar Morning Ireland ar RTÉ, dúirt Donnelly go raibh Feidhmeannacht na Seirbhíse Sláinte ag ullmhú cheana féin chun an ceathrú snáthaid a dháileadh. De réir chomhairle NIAC ba chóir an dara teanndáileog a thabhairt do dhaoine atá 12 nó níos sine atá imdhíon-lagaithe. Ba chóir a deir siad bundáileog trí shnáthaid a thabhairt do pháistí atá idir 5-11 atá imdhíon-lagaithe. Maidir leis an gceathrú snáthaid do dhaoine os cionn 65 is í comhairle NIAC ná go bhfágfaí sé mhí idir an tríú dáileog agus an ceann nua, ach go deir siad bhféadfadh go mbeadh ceithre mhí inmholta i gcásanna áirithe. Dúirt Stephen Donnelly go rabhthas ag súil moltaí NIAC a chur i gcrích “an sciobtha”. Dhéanfaí scagadh anois ar ar cheart vacsaín eile a dháileadh ar dhaoine in aoisghrúpaí eile, a dúirt sé.",
-      audioId: "11111",
-    },
-    activeRecording: "1111",
-    createdWithPrompts: false,
-  };
-
-  // dummy comment object
-  testComment = {
-    range: {
-      index: 0,
-      length: 20,
-    },
-    text: "lkajdfl;sajflk;sdjf;lkasjfdlskjflk;asjf;ldksjfakljflkdajsd;fj;alksjdfioa;sdjfkasjdfi;lakfjja;sfldjf;lajsdlkfjalksdjfkladsjfaksdjf",
-  };
 
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
+    if (userDetails.role === 'STUDENT') this.isTeacher = false;
   }
 
   ngOnChanges(_) {
@@ -225,4 +185,5 @@ export class TeacherFeedbackComponent implements OnInit {
     this.quillEditor.removeFormat(comment.range.index, comment.range.length);
     this.commentsList.splice(indexToDelete, 1);
   }
+
 }
