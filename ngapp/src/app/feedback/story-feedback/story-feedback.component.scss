@@ -1,14 +1,13 @@
 .feedbackBody {
     height: 100%;
-    //overflow-y: scroll;
 }
 
-.storyTitleContainer{
+.storyFeedbackTitleContainer {
     font-size: 16pt;
     padding: 20px;
     background-color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .storyTitleAndDate {

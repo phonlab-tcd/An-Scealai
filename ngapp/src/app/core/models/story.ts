@@ -12,9 +12,9 @@ export class Story extends Serializable {
     studentId: string;
     feedback: {
         seenByStudent: boolean;
-        text: string;
+        text: string; // DEPRECATED
         feedbackMarkup: string;
-        audioId: string;
+        audioId: string; // DEPRECATED
     };
     activeRecording: string;
     createdWithPrompts: boolean = false;

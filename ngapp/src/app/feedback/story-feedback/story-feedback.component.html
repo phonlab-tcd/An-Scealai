@@ -1,12 +1,9 @@
 
   <!-- BODY -->
   <div class="feedbackBody">
-    <div class="storyTitleContainer" *ngIf="isTeacher" >
-      <div class="storyTitleAndDate">
-        <div>{{ story?.title }}</div>
-        <div>({{ story?.date | date : "dd/MM/yyyy, hh:mm aa" }})</div>
-      </div>
-      <div (click)="closeFeedbackEmitter.next(true)"><i class="fa-solid fa-times closeFeedbackButton"></i></div>
+    <div class="storyFeedbackTitleContainer" *ngIf="isTeacher" >
+        <div style="margin: auto;">{{ story?.title }}</div>
+        <div style=" margin-left: auto;" (click)="updateFeedbackStatus()"><i class="fa-solid fa-times closeFeedbackButton"></i></div>
     </div>
     <div class="quillAndCommentsContainer">
       <div class="quillContainer">

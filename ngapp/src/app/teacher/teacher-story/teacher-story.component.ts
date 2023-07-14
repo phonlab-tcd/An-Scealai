@@ -141,11 +141,11 @@ export class TeacherStoryComponent implements OnInit {
     if (this.story.htmlText !== this.story.feedback.feedbackMarkup) {
       markupText = this.story.feedback.feedbackMarkup;
     }
-    this.storyService
-      .addFeedback(this.story._id, this.story.feedback.text, markupText)
-      .subscribe((res) => {
-        this.feedbackSent = true;
-      });
+    // this.storyService
+    //   .addFeedback(this.story._id, /*this.story.feedback.text,*/ markupText)
+    //   .subscribe((res) => {
+    //     this.feedbackSent = true;
+    //   });
     this.initialMarkupText = markupText;
   }
 

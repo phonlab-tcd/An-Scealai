@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter, } fr
 import { DomSanitizer } from "@angular/platform-browser";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
+import { StoryService } from "app/core/services/story.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
 import { Story } from "app/core/models/story";
@@ -18,7 +19,8 @@ export class StoryFeedbackComponent implements OnInit {
     protected sanitizer: DomSanitizer,
     public ts: TranslationService,
     public auth: AuthenticationService,
-    private feedbackCommentService: FeedbackCommentService
+    private feedbackCommentService: FeedbackCommentService,
+    private storyService: StoryService
   ) {}
 
   quillEditor: Quill;
@@ -27,6 +29,7 @@ export class StoryFeedbackComponent implements OnInit {
   @Input() story: Story;
   @Output() closeFeedbackEmitter = new EventEmitter();
   storyUpdated: boolean = false;
+  initialMarkupText: string;
 
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
@@ -61,6 +64,9 @@ export class StoryFeedbackComponent implements OnInit {
         this.story.text
       );
     }
+
+    // set variable to initial markup text to check for saving changes before leaving page
+    this.initialMarkupText = this.story.feedback.feedbackMarkup;
 
     this.commentsList = [];
 
@@ -185,5 +191,22 @@ export class StoryFeedbackComponent implements OnInit {
     this.quillEditor.removeFormat(comment.range.index, comment.range.length);
     this.commentsList.splice(indexToDelete, 1);
   }
+
+    /*
+   * Add feedback text to the story using the story service
+   */
+    updateFeedbackStatus() {
+      if (this.commentsList.length > 0 || (this.initialMarkupText !== this.story.feedback.feedbackMarkup)) {
+        this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup).subscribe({next: ()=> {
+          this.closeFeedbackEmitter.next(true);
+        }, error: () => {
+          alert("error saving feedback")
+        }});
+      }
+      else {
+        this.closeFeedbackEmitter.next(true);
+      }
+
+    }
 
 }
