@@ -18,6 +18,7 @@ require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
 import logAPICall from './utils/api_request_logger';
+import fs from "fs";
 
 const storyRoute = require('./routes/story.route');
 const userRoute = require('./routes/user.route');
@@ -130,8 +131,13 @@ app.use(errorHandler);
 // We don't want to call app.listen while testing
 // See: https://github.com/visionmedia/supertest/issues/568#issuecomment-575994602
 if (!(process.env.NODE_ENV === 'test')) {
-  const server = app.listen(port, function(){
-      logger.info('Listening on port ' + port);
+  const server = app.listen(port, function() {
+      const realPort = server.address().port.toString();
+      fs.writeFile("./CURRENTPORT", realPort, function(err){
+        if(err) return console.error(err);
+        console.log(`Port written to file: CURRENTPORT`);
+      });
+      logger.info('Listening on port ' + realPort);
   });
 }
 
