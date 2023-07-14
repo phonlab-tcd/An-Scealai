@@ -1,3 +1,23 @@
+ready: dist dist/keys/dev/jwt* dist/sendinblue.json dist/.env dist/monitoring dist/views
+
+dist/monitoring:
+	mkdir -p dist/monitoring
+
+dist/views:
+	cp -r views $@
+
+dist/.env:
+	cp .env dist/.env
+
+dist/sendinblue.json:
+	cp sendinblue.json $@
+
+dist/keys/dev/jwt*:
+	cp keys/dev/jwt* dist/keys/dev/
+
+dist:
+	tsc
+
 network:
 	docker network create -d bridge scealai-api-network
 
