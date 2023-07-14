@@ -28,6 +28,7 @@ import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
 import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
 import { CHECKBOXES, ERROR_INFO, ERROR_TYPES, ErrorTag, ErrorType } from "../../lib/grammar-engine/types";
 import { MatDrawer } from "@angular/material/sidenav";
+import { NotificationService } from "app/core/services/notification-service.service";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -125,7 +126,8 @@ export class DashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.setUpGrammarChecking();
   }
@@ -164,7 +166,6 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      console.log('Text updated');
       this.runGrammarCheck();
     });
   }
@@ -237,6 +238,13 @@ export class DashboardComponent implements OnInit {
       // open the drawer
       this.rightDrawer.open();
       this.rightDrawerOpened = true;
+      // add view feedback event to DB
+      if (selectedDrawer == 'feedback') {
+        this.storyService.viewFeedback(this.story._id).subscribe(() => {
+          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+          this.notificationService.getStudentNotifications();
+        });
+      }
     }
 
     // sets the variable used to display the selected component in the drawer

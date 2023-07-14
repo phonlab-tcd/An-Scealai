@@ -72,8 +72,7 @@ export class StoryDrawerComponent implements OnInit {
     this.storyEmitter.emit(story);
 
     // emit whether or not the story has any feedback
-    story.feedback.text ||
-    story.feedback.audioId ||
+    story.feedback.hasComments ||
     story.feedback.feedbackMarkup
       ? this.hasFeedback.emit(true)
       : this.hasFeedback.emit(false);

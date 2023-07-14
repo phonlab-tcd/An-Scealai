@@ -247,6 +247,7 @@ storyRoutes.route("/updateFeedbackStatus/:id").post((req, res) => {
       //story.feedback.text = req.body.feedback; // DEPRECATED
       story.feedback.seenByStudent = false;
       story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.feedback.hasComments = req.body.hasComments;
       story.feedback.lastUpdated = new Date();
       story.save();
       return res.status(200).json({ message: "Feedback added successfully" });

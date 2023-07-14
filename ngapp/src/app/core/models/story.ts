@@ -15,6 +15,7 @@ export class Story extends Serializable {
         text: string; // DEPRECATED
         feedbackMarkup: string;
         audioId: string; // DEPRECATED
+        hasComments: boolean;
     };
     activeRecording: string;
     createdWithPrompts: boolean = false;

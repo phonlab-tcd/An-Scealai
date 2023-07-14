@@ -36,6 +36,7 @@ const Story = new Schema(
         type: String,
       },
       feedback: {
+        // DEPRECATED
         text: {
           type: String,
           default: null,
@@ -44,6 +45,7 @@ const Story = new Schema(
           type: Boolean,
           default: null,
         },
+        // DEPRECATED
         audioId: {
           type: String,
           default: null,
@@ -51,6 +53,10 @@ const Story = new Schema(
         feedbackMarkup: {
           type: String,
           default: null,
+        },
+        hasComments: {
+          type: Boolean,
+          default: false,
         },
         lastUpdated: {
           type: Date,

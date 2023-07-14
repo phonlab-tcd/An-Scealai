@@ -109,8 +109,8 @@ export class StoryService {
     return this.http.get(this.baseUrl + 'deleteAllStories/' + id);
   }
 
-  updateFeedbackStatus(id: string, feedbackMarkup: string) : Observable<any> {
-    return this.http.post(this.baseUrl + "updateFeedbackStatus/" + id, {feedbackMarkup});
+  updateFeedbackStatus(id: string, feedbackMarkup: string, hasComments: boolean) : Observable<any> {
+    return this.http.post(this.baseUrl + "updateFeedbackStatus/" + id, {feedbackMarkup: feedbackMarkup, hasComments: hasComments});
   }
 
   updateFeedbackMarkup(id, feedbackMarkup: string) : Observable<any> {

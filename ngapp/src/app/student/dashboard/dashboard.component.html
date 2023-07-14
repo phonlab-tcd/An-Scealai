@@ -154,12 +154,11 @@
 
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
     <!-- FEEDBACK -->
-    <app-story-feedback
-      *ngIf="selectedDrawer == 'feedback'"
-      [story]="story"
-      (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
-    >
-    </app-story-feedback>
+    <app-feedback-drawer
+    [story]="story"
+    [hasFeedback]="hasFeedback"
+    (closeFeedbackEmitter)="toggleRightDrawer('feedback')">
+    </app-feedback-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer
       *ngIf="selectedDrawer == 'dictionary'"

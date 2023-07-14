@@ -9,12 +9,12 @@ import { Story } from "app/core/models/story";
 import Quill from "quill";
 
 @Component({
-  selector: 'app-story-feedback',
-  templateUrl: './story-feedback.component.html',
-  styleUrls: ['./story-feedback.component.scss', "./../../../quill.fonts.scss",],   encapsulation: ViewEncapsulation.None,
+  selector: "app-story-feedback",
+  templateUrl: "./story-feedback.component.html",
+  styleUrls: ["./story-feedback.component.scss", "./../../../quill.fonts.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class StoryFeedbackComponent implements OnInit {
-
   constructor(
     protected sanitizer: DomSanitizer,
     public ts: TranslationService,
@@ -34,9 +34,12 @@ export class StoryFeedbackComponent implements OnInit {
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    if (userDetails.role === 'STUDENT') this.isTeacher = false;
+    if (userDetails.role === "STUDENT") this.isTeacher = false;
   }
 
+  /**
+   * Load any feedback if story selected from parent component
+   */
   ngOnChanges(_) {
     if (this.story) {
       this.loadStory();
@@ -52,12 +55,12 @@ export class StoryFeedbackComponent implements OnInit {
   }
 
   loadStory() {
-    // get story text from previous markup if it exists, otherwise just get story html
+    // get previous feedback markup if it exists, otherwise just get story html
     if (this.story.feedback.feedbackMarkup == null) {
       this.story.feedback.feedbackMarkup =
         this.story.htmlText || this.story.text;
     }
-    // check if student has updated story since last teacher edits made, if so refresh button is displayed
+    // check if student has updated story since last teacher edits made, if so refresh button is displayed => TODO
     else {
       this.storyUpdated = this.checkTextDifference(
         this.story.feedback.feedbackMarkup,
@@ -70,6 +73,7 @@ export class StoryFeedbackComponent implements OnInit {
 
     this.commentsList = [];
 
+    // load in any comments left on story
     this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
       next: (comments) => {
         comments.forEach((comment) => {
@@ -80,6 +84,7 @@ export class StoryFeedbackComponent implements OnInit {
           );
           this.commentsList.push(comment);
         });
+        console.log(this.commentsList)
       },
     });
   }
@@ -192,21 +197,26 @@ export class StoryFeedbackComponent implements OnInit {
     this.commentsList.splice(indexToDelete, 1);
   }
 
-    /*
-   * Add feedback text to the story using the story service
+  /*
+   * Save feedback changes and update status
    */
-    updateFeedbackStatus() {
-      if (this.commentsList.length > 0 || (this.initialMarkupText !== this.story.feedback.feedbackMarkup)) {
-        this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup).subscribe({next: ()=> {
+  updateFeedbackStatus() {
+    if (
+      this.commentsList.length > 0 ||
+      this.initialMarkupText !== this.story.feedback.feedbackMarkup
+    ) {
+      const hasComments = this.commentsList.length > 0 ? true : false;
+      this.story.feedback.hasComments = hasComments;
+      this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup, hasComments).subscribe({
+        next: () => {
           this.closeFeedbackEmitter.next(true);
-        }, error: () => {
-          alert("error saving feedback")
-        }});
-      }
-      else {
-        this.closeFeedbackEmitter.next(true);
-      }
-
+        },
+        error: () => {
+          console.error("error saving feedback");
+        },
+      });
+    } else {
+      this.closeFeedbackEmitter.next(true);
     }
-
+  }
 }
