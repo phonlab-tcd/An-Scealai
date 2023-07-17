@@ -25,7 +25,7 @@
             {{ story?.title }}
           </div>
           <!-- feedback notification -->
-          <div class="notificationBtn" *ngIf="!story.feedback.seenByStudent">1</div>
+          <div class="notificationBtn" *ngIf="!story.feedback.seenByStudent && storyHasFeedback(story)">1</div>
         </div>
         <!-- date and menu icon-->
         <div class="contentsDate">

@@ -74,6 +74,7 @@ export class StoryFeedbackComponent implements OnInit {
     }
     // check if student has updated story since last teacher edits made, if so refresh button is displayed => TODO
     else {
+      this.feedbackSent = true;
       this.storyTextWithMarkup = this.story.feedback.feedbackMarkup;
       this.storyUpdated = this.checkTextDifference(
         this.story.feedback.feedbackMarkup,
@@ -83,24 +84,31 @@ export class StoryFeedbackComponent implements OnInit {
 
     // set variable to initial markup text to check for saving changes before leaving page
     this.initialStoryTextWithMarkup = this.storyTextWithMarkup;
+    this.loadComments();
+  }
 
-    // load in any comments left on story
+  /**
+   * Load in any comments left on story
+   */
+  loadComments() {
     this.commentsList = [];
-    this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
-      next: (comments) => {
-        comments.forEach((comment) => {
-          this.quillEditor.formatText(
-            comment.range.index,
-            comment.range.length,
-            { background: "#fff72b" }
-          );
-          this.commentsList.push(comment);
-        });
-        if (this.commentsList.length > 0) {
-          this.feedbackSent = true;
-        }
-      },
-    });
+    if (this.story.feedback.hasComments) {
+      this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
+        next: (comments) => {
+          comments.forEach((comment) => {
+            this.quillEditor.formatText(
+              comment.range.index,
+              comment.range.length,
+              { background: "#fff72b" }
+            );
+            this.commentsList.push(comment);
+          });
+          if (this.commentsList.length > 0) {
+            this.feedbackSent = true;
+          }
+        },
+      });
+    }
   }
 
   /*
@@ -139,6 +147,10 @@ export class StoryFeedbackComponent implements OnInit {
         },
         error: () => {},
       });
+  }
+
+  test(ev) {
+    console.log("content changed")
   }
 
   /**
@@ -257,6 +269,7 @@ export class StoryFeedbackComponent implements OnInit {
     this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
+        this.story.feedback.seenByStudent = false;
       },
       error: () => {
         console.error("error saving feedback");

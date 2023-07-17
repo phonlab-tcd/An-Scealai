@@ -72,10 +72,7 @@ export class StoryDrawerComponent implements OnInit {
     this.storyEmitter.emit(story);
 
     // emit whether or not the story has any feedback
-    story.feedback.hasComments ||
-    story.feedback.feedbackMarkup
-      ? this.hasFeedback.emit(true)
-      : this.hasFeedback.emit(false);
+    this.hasFeedback.emit(this.storyHasFeedback(story))
 
     // set css for selecting a story in the side nav
     let id = story._id;
@@ -90,6 +87,15 @@ export class StoryDrawerComponent implements OnInit {
       // add css highlighting to the newly clicked story
       storyElement.classList.add("clickedresultCard");
     }
+  }
+
+  /**
+   * Returns true if the story has feedback left from the teacher
+   * @param story story selected from list
+   * @returns true or false
+   */
+  storyHasFeedback(story) {
+    return story.feedback.hasComments || story.feedback.feedbackMarkup
   }
 
   /**

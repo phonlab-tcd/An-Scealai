@@ -1,9 +1,12 @@
 <!-- BODY -->
 <div class="feedbackBody">
   <div class="storyFeedbackTitleContainer" *ngIf="isTeacher">
-    <!-- <button class="createBtnGreen sendFeedbackButton" (click)="updateFeedbackStatus()" > {{ ts.l.save }} </button> -->
-    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
-    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled >{{ts.l.sent}} <i class="fas fa-check"></i></button>
+    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()" >
+      {{ ts.l.send }} <i class="fas fa-paper-plane"></i>
+    </button>
+    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled>
+      {{ ts.l.sent }} <i class="fas fa-check"></i>
+    </button>
     <div style="margin: auto">{{ story?.title }}</div>
     <div style="margin-left: auto" (click)="closeFeedback()">
       <i class="fa-solid fa-times closeFeedbackButton"></i>
@@ -47,8 +50,21 @@
       </quill-editor>
     </div>
 
-    <div class="commentsContainer">
-      <div class="commentsList" *ngIf="commentsList.length > 0; else noCommentsMessage" >
+    <!-- Leave a comment message for teachers-->
+    <div *ngIf="isTeacher && commentsList.length === 0" class="commentsContainer">
+      Click on the <i class="fa-solid fa-message" style="padding: 5px"></i> icon
+      or highlight a section of text to leave a comment for {{ story?.author }}.
+    </div>
+
+    <!-- List of comments -->
+    <div *ngIf="commentsList.length > 0" class="commentsContainer">
+      <div *ngIf="feedbackSent && isTeacher && story.feedback.seenByStudent" class="seenByStudent" >
+        {{ ts.l.seen_by }} {{ story?.author }} <i class="fas fa-check"></i>
+      </div>
+      <div *ngIf="feedbackSent && isTeacher && !story.feedback.seenByStudent" class="seenByStudent" >
+        {{ ts.l.not_seen_by }} {{ story?.author }}
+      </div>
+      <div class="commentsList">
         <app-feedback-comment
           *ngFor="let comment of commentsList; let i = index"
           class="comment"
@@ -59,11 +75,6 @@
         >
         </app-feedback-comment>
       </div>
-      <ng-template #noCommentsMessage>
-        <div style="width: 80%; padding-left: 10%" *ngIf="isTeacher">
-          Click on the <i class="fa-solid fa-message" style="padding: 5px"></i> icon or highlight a section of text to leave a comment for {{ story?.author }}.
-        </div>
-      </ng-template>
     </div>
   </div>
 </div>
