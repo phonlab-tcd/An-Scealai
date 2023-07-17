@@ -6,6 +6,8 @@ import { StoryService } from "app/core/services/story.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
 import { Story } from "app/core/models/story";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import Quill from "quill";
 
 @Component({
@@ -20,7 +22,8 @@ export class StoryFeedbackComponent implements OnInit {
     public ts: TranslationService,
     public auth: AuthenticationService,
     private feedbackCommentService: FeedbackCommentService,
-    private storyService: StoryService
+    private storyService: StoryService,
+    private dialog: MatDialog
   ) {}
 
   quillEditor: Quill;
@@ -30,6 +33,8 @@ export class StoryFeedbackComponent implements OnInit {
   @Output() closeFeedbackEmitter = new EventEmitter();
   storyUpdated: boolean = false;
   initialMarkupText: string;
+  feedbackSent: boolean = false;
+  dialogRef: MatDialogRef<unknown>;
 
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
@@ -57,6 +62,7 @@ export class StoryFeedbackComponent implements OnInit {
   loadStory() {
     // get previous feedback markup if it exists, otherwise just get story html
     if (this.story.feedback.feedbackMarkup == null) {
+      this.feedbackSent = false;
       this.story.feedback.feedbackMarkup =
         this.story.htmlText || this.story.text;
     }
@@ -84,7 +90,9 @@ export class StoryFeedbackComponent implements OnInit {
           );
           this.commentsList.push(comment);
         });
-        console.log(this.commentsList)
+        if (this.commentsList.length > 0 ) {
+          this.feedbackSent = true;
+        }
       },
     });
   }
@@ -103,6 +111,8 @@ export class StoryFeedbackComponent implements OnInit {
    * and highlight the text in quill that the comment refers to
    */
   async createComment() {
+    if (this.feedbackSent) this.feedbackSent = false;
+
     let range = this.quillEditor.getSelection();
 
     // default range for entire text, no highlighting applied
@@ -131,6 +141,7 @@ export class StoryFeedbackComponent implements OnInit {
    */
   showInlineCommentButton(event) {
     let range = event.range;
+    if (this.feedbackSent) this.feedbackSent = false;
     if (range && range.length > 0 && event.source == "user") {
       // don't want to create button when highlightCommentReferenceInQuill() is fired
       const length = range.length;
@@ -197,26 +208,47 @@ export class StoryFeedbackComponent implements OnInit {
     this.commentsList.splice(indexToDelete, 1);
   }
 
+  closeFeedback() {
+    if ((this.commentsList.length > 0 || this.initialMarkupText !== this.story.feedback.feedbackMarkup) && !this.feedbackSent) {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.save_changes,
+          message: "Would you like to send your feedback to student?",
+          confirmText: this.ts.l.yes,
+          cancelText: this.ts.l.no,
+        },
+        width: "60vh",
+      });
+
+      this.dialogRef.afterClosed().subscribe((res) => {
+        this.dialogRef = undefined;
+        if (res) {
+          this.sendFeedback();
+        }
+        else {
+          this.closeFeedbackEmitter.next(true);
+        }
+      });
+    }
+    else {
+      this.closeFeedbackEmitter.next(true);
+    }
+
+  }
+
   /*
    * Save feedback changes and update status
    */
-  updateFeedbackStatus() {
-    if (
-      this.commentsList.length > 0 ||
-      this.initialMarkupText !== this.story.feedback.feedbackMarkup
-    ) {
-      const hasComments = this.commentsList.length > 0 ? true : false;
-      this.story.feedback.hasComments = hasComments;
-      this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup, hasComments).subscribe({
-        next: () => {
-          this.closeFeedbackEmitter.next(true);
-        },
-        error: () => {
-          console.error("error saving feedback");
-        },
-      });
-    } else {
-      this.closeFeedbackEmitter.next(true);
-    }
+  sendFeedback() {
+    const hasComments = this.commentsList.length > 0 ? true : false;
+    this.story.feedback.hasComments = hasComments;
+    this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup, hasComments).subscribe({
+      next: () => {
+        this.feedbackSent = true;
+      },
+      error: () => {
+        console.error("error saving feedback");
+      },
+    });
   }
 }

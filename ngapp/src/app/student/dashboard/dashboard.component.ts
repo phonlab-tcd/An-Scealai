@@ -241,6 +241,7 @@ export class DashboardComponent implements OnInit {
       // add view feedback event to DB
       if (selectedDrawer == 'feedback') {
         this.storyService.viewFeedback(this.story._id).subscribe(() => {
+          this.story.feedback.seenByStudent = true;
           this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
           this.notificationService.getStudentNotifications();
         });

@@ -93,20 +93,6 @@ export class StoryDrawerComponent implements OnInit {
   }
 
   /**
-   * Returns true if the story has unseen feedback, otherwise false
-   * @param story story in story list
-   * @returns true or false
-   */
-  hasUnreadFeedback(story: Story) {
-    return (
-      (story.feedback.text ||
-        story.feedback.audioId ||
-        story.feedback.feedbackMarkup) &&
-      !story.feedback.seenByStudent
-    );
-  }
-
-  /**
    * Create a new story
    */
   createNewStory() {

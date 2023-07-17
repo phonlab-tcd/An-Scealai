@@ -50,7 +50,6 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
         });
       }
     }
-    this.adjustTextAreaHeight();
   }
 
   /**

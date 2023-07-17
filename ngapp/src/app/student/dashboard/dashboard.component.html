@@ -155,6 +155,7 @@
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
     <!-- FEEDBACK -->
     <app-feedback-drawer
+    *ngIf="selectedDrawer == 'feedback'"
     [story]="story"
     [hasFeedback]="hasFeedback"
     (closeFeedbackEmitter)="toggleRightDrawer('feedback')">

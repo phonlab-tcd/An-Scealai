@@ -1,8 +1,11 @@
 <!-- BODY -->
 <div class="feedbackBody">
   <div class="storyFeedbackTitleContainer" *ngIf="isTeacher">
+    <!-- <button class="createBtnGreen sendFeedbackButton" (click)="updateFeedbackStatus()" > {{ ts.l.save }} </button> -->
+    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()">{{ts.l.send}} <i class="fas fa-paper-plane"></i></button>
+    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled >{{ts.l.sent}} <i class="fas fa-check"></i></button>
     <div style="margin: auto">{{ story?.title }}</div>
-    <div style="margin-left: auto" (click)="updateFeedbackStatus()">
+    <div style="margin-left: auto" (click)="closeFeedback()">
       <i class="fa-solid fa-times closeFeedbackButton"></i>
     </div>
   </div>
