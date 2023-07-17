@@ -1,3 +1,7 @@
 globalConfig.json
 CURRENTPORT
 .env
+
+src/sendinblue.json
+src/keys/dev
+src/logs
