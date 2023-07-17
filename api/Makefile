@@ -9,7 +9,7 @@ SRC_TS_JS_FILES := $(wildcard $(SRC_DIR)/*.ts $(SRC_DIR)/*.js)
 ready: dist/server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
 
 dist/server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
-	npx webpack --config $(WEBPACK_CONFIG) || exit 0
+	npx webpack --progress --config $(WEBPACK_CONFIG) || exit 0
 
 dist/monitoring:
 	mkdir -p dist/monitoring
