@@ -1,11 +1,11 @@
 dist
 .vscode
 
-**/node_modules
-api/monitoring/api_logger/logs
 
-priv_key.pem
-pub_key.pem
+.vscode
+**/node_modules
+
+api/monitoring/api_logger/logs
 
 .DS_Store
 
@@ -22,7 +22,6 @@ session.vim
 /api/monitoring/api_request_logger/logs/**
 /api/monitoring/clientside_error_logs/**
 api/globalConfig.json
-/api/node_modules_bacDaskup_*
 
 /sshlogin
 /login_to_phonetics.sh
