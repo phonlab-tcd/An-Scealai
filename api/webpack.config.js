@@ -1,40 +1,44 @@
-const path = require('path');
-const isProduction = process.env.NODE_ENV == 'production';
+const path = require("path");
+const env = process.env.NODE_ENV || "dev";
+const isProduction = env == "production";
+console.log(env);
+
 const config = {
-  target: 'node',
-  entry: './src/server.ts',
+  target: "node",
+  entry: "./src/server.ts",
   output: {
-    filename: 'server.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: `${env}-server.js`,
+    path: path.resolve(__dirname, "dist"),
   },
   devServer: {
     open: true,
-    host: 'localhost',
+    host: "localhost",
   },
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/i,
         exclude: [
-          path.resolve(__dirname, 'coverage/'),
-          path.resolve(__dirname, 'bin/'),
-          path.resolve(__dirname, 'node_modules/'),
+          path.resolve(__dirname, "coverage/"),
+          path.resolve(__dirname, "bin/"),
+          path.resolve(__dirname, "node_modules/"),
         ],
-        loader: 'ts-loader',
+        loader: "ts-loader",
       },
     ],
   },
   resolve: {
-      extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
+      extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
   },
 };
 
 module.exports = () => {
   if (isProduction) {
-    config.mode = 'production';
+    config.mode = "production";
   } else {
-    config.mode = 'development';
-    config.watch = true;
+    config.mode = "development";
+    if(process.env.watch) config.watch = eval(process.env.watch);
+    else config.watch = true;
   }
   return config;
 };
