@@ -3,8 +3,8 @@
     <!-- Student description header-->
     <mat-expansion-panel disabled class="expansionHeader" style="cursor: pointer" >
       <mat-expansion-panel-header>
-        <mat-panel-title> Student </mat-panel-title>
-        <mat-panel-description> Num. of stories </mat-panel-description>
+        <mat-panel-title> {{ts.l.student}} </mat-panel-title>
+        <mat-panel-description> {{ts.l.no_of_stories}} </mat-panel-description>
       </mat-expansion-panel-header>
     </mat-expansion-panel>
     <!-- List of students-->
@@ -22,7 +22,7 @@
       <div class="storyListHeader">
         <div style="flex: 2">{{ ts.l.title }}</div>
         <div style="flex: 2">{{ ts.l.last_updated }}</div>
-        <div style="flex: 1">Feedback given</div>
+        <div style="flex: 1">{{ts.l.feedback_given}}</div>
       </div>
       <!-- panel opened body: list of stories-->
       <div *ngFor="let story of studentStories[student.username]">
