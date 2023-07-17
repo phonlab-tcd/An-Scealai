@@ -16,7 +16,7 @@
         placeholder=""
         [preserveWhitespace]="true"
         [debounceTime]="1500"
-        [(ngModel)]="story?.feedback.feedbackMarkup"
+        [(ngModel)]="storyTextWithMarkup"
         (onEditorCreated)="onEditorCreated($event)"
         (onSelectionChanged)=" isTeacher ? showInlineCommentButton($event) : null "
       >

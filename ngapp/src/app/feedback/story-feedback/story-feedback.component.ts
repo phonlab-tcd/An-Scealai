@@ -26,16 +26,20 @@ export class StoryFeedbackComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
+  @Input() story: Story;
+  @Output() closeFeedbackEmitter = new EventEmitter();
   quillEditor: Quill;
   commentsList: FeedbackComment[] = [];
   isTeacher: boolean = true;
-  @Input() story: Story;
-  @Output() closeFeedbackEmitter = new EventEmitter();
-  storyUpdated: boolean = false;
-  initialMarkupText: string;
+  storyUpdated: boolean = false; // TODO implement refresh button if student has udpated text
+  initialStoryTextWithMarkup: string;
+  storyTextWithMarkup: string;
   feedbackSent: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
+  /**
+   * Set variable if user is student, hides certain views in HTML
+   */
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
@@ -59,15 +63,18 @@ export class StoryFeedbackComponent implements OnInit {
     this.quillEditor.root.setAttribute("spellcheck", "false");
   }
 
+  /**
+   * Load in the story and feedback
+   */
   loadStory() {
     // get previous feedback markup if it exists, otherwise just get story html
     if (this.story.feedback.feedbackMarkup == null) {
       this.feedbackSent = false;
-      this.story.feedback.feedbackMarkup =
-        this.story.htmlText || this.story.text;
+      this.storyTextWithMarkup = this.story.htmlText || this.story.text;
     }
     // check if student has updated story since last teacher edits made, if so refresh button is displayed => TODO
     else {
+      this.storyTextWithMarkup = this.story.feedback.feedbackMarkup;
       this.storyUpdated = this.checkTextDifference(
         this.story.feedback.feedbackMarkup,
         this.story.text
@@ -75,11 +82,10 @@ export class StoryFeedbackComponent implements OnInit {
     }
 
     // set variable to initial markup text to check for saving changes before leaving page
-    this.initialMarkupText = this.story.feedback.feedbackMarkup;
-
-    this.commentsList = [];
+    this.initialStoryTextWithMarkup = this.storyTextWithMarkup;
 
     // load in any comments left on story
+    this.commentsList = [];
     this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
       next: (comments) => {
         comments.forEach((comment) => {
@@ -90,7 +96,7 @@ export class StoryFeedbackComponent implements OnInit {
           );
           this.commentsList.push(comment);
         });
-        if (this.commentsList.length > 0 ) {
+        if (this.commentsList.length > 0) {
           this.feedbackSent = true;
         }
       },
@@ -208,8 +214,16 @@ export class StoryFeedbackComponent implements OnInit {
     this.commentsList.splice(indexToDelete, 1);
   }
 
+  /**
+   * Check if any feedback was given and if so
+   * prompt user to send feedback before closing the component
+   */
   closeFeedback() {
-    if ((this.commentsList.length > 0 || this.initialMarkupText !== this.story.feedback.feedbackMarkup) && !this.feedbackSent) {
+    if (
+      (this.commentsList.length > 0 ||
+        this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) &&
+      !this.feedbackSent
+    ) {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
           title: this.ts.l.save_changes,
@@ -224,16 +238,13 @@ export class StoryFeedbackComponent implements OnInit {
         this.dialogRef = undefined;
         if (res) {
           this.sendFeedback();
-        }
-        else {
+        } else {
           this.closeFeedbackEmitter.next(true);
         }
       });
-    }
-    else {
+    } else {
       this.closeFeedbackEmitter.next(true);
     }
-
   }
 
   /*
@@ -242,7 +253,8 @@ export class StoryFeedbackComponent implements OnInit {
   sendFeedback() {
     const hasComments = this.commentsList.length > 0 ? true : false;
     this.story.feedback.hasComments = hasComments;
-    this.storyService.updateFeedbackStatus(this.story._id, this.story.feedback.feedbackMarkup, hasComments).subscribe({
+    if (this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) this.story.feedback.feedbackMarkup = this.storyTextWithMarkup;
+    this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
       },
