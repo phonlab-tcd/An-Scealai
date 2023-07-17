@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 require('../keys/dev/load');
 const config = require('../DB');
 jest.setTimeout(10000);
