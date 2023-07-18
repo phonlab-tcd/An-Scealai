@@ -92,6 +92,7 @@
     z-index: 999; // important so the button appears over the quill text
     border-radius: 25%; 
     border: none;
+    position: absolute;
 }
 
 .commentButton:hover {

@@ -30,7 +30,8 @@ export class StoryFeedbackComponent implements OnInit {
   @Output() closeFeedbackEmitter = new EventEmitter();
   quillEditor: Quill;
   commentsList: FeedbackComment[] = [];
-  isTeacher: boolean = true;
+  commentButton: HTMLButtonElement;
+  isTeacher: boolean = false;
   storyUpdated: boolean = false; // TODO implement refresh button if student has udpated text
   initialStoryTextWithMarkup: string;
   storyTextWithMarkup: string;
@@ -39,11 +40,15 @@ export class StoryFeedbackComponent implements OnInit {
 
   /**
    * Set variable if user is student, hides certain views in HTML
+   * Create an inline comment button if user is teacher
    */
   ngOnInit() {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
-    if (userDetails.role === "STUDENT") this.isTeacher = false;
+    if (userDetails.role === "TEACHER") {
+      this.isTeacher = true;
+      this.createInlineCommentButton();
+    }
   }
 
   /**
@@ -112,12 +117,33 @@ export class StoryFeedbackComponent implements OnInit {
   }
 
   /*
-   * Returns true if the texts are different, otherwise return false
+   * Returns true if the texts are different, otherwise returns false
    */
   checkTextDifference(text1: string, text2: string) {
     let stripped1 = text1.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, "");
     let stripped2 = text2.replace(/(<([^>]+)>)/gi, "").replace(/[\s,\.]+/g, "");
     return stripped1 !== stripped2;
+  }
+
+  /**
+   * Create comment button that appears when teacher highlights the text
+   */
+  createInlineCommentButton() {
+    this.commentButton = document.createElement("button");
+    this.commentButton.id = "commentButton";
+    this.commentButton.addEventListener("click", () => {
+      this.createComment();
+      this.hideExistingCommentButton();
+    });
+    this.commentButton.classList.add("commentButton");
+    this.commentButton.style.visibility = "hidden";
+
+    // create icon inside button
+    const iconElement = document.createElement("i");
+    iconElement.classList.add("fa-solid", "fa-message");
+    this.commentButton.appendChild(iconElement);
+
+    document.body.appendChild(this.commentButton);
   }
 
   /**
@@ -150,7 +176,7 @@ export class StoryFeedbackComponent implements OnInit {
   }
 
   /**
-   * Create and display a comment button when the user selects a range of text
+   * Move and display the comment button where the user selects a range of text
    * @param event quill on-select event
    */
   showInlineCommentButton(event) {
@@ -165,31 +191,21 @@ export class StoryFeedbackComponent implements OnInit {
       // get bounds of entire quill editor
       const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
       const { top } = editorContainer.getBoundingClientRect();
-
-      // delete any existing comment buttons
-      this.deleteExistingCommentButton();
-
-      const buttonElement = document.createElement("button");
-      buttonElement.addEventListener("click", () => {
-        this.createComment();
-        this.deleteExistingCommentButton();
-      });
-      buttonElement.classList.add("commentButton");
-      buttonElement.style.position = "absolute";
-      buttonElement.id = "commentButton";
-      buttonElement.style.left = `${bounds.right}px`;
-      buttonElement.style.top = `${top + bounds.bottom}px`;
-
-      // create icon inside button
-      const iconElement = document.createElement("i");
-      iconElement.classList.add("fa-solid", "fa-message");
-      buttonElement.appendChild(iconElement);
-
-      document.body.appendChild(buttonElement);
+      // set the location of the button
+      this.commentButton.style.left = `${bounds.right}px`;
+      this.commentButton.style.top = `${top + bounds.bottom}px`;
+      this.commentButton.style.visibility = "visible";
     } else {
       // remove any previous comment button added
-      this.deleteExistingCommentButton();
+      this.hideExistingCommentButton();
     }
+  }
+
+  /**
+   * Hide the inline comment button from view
+   */
+  hideExistingCommentButton() {
+    this.commentButton.style.visibility = "hidden";
   }
 
   /**
@@ -202,16 +218,6 @@ export class StoryFeedbackComponent implements OnInit {
       commentData.range.index,
       commentData.range.length
     );
-  }
-
-  /**
-   * Remove any existing comment buttons that might be in the quill editor
-   */
-  deleteExistingCommentButton() {
-    let buttonElement = document.getElementById("commentButton");
-    if (buttonElement) {
-      buttonElement.remove();
-    }
   }
 
   /**
@@ -228,7 +234,6 @@ export class StoryFeedbackComponent implements OnInit {
    * prompt user to send feedback before closing the component
    */
   closeFeedback() {
-    console.log(this.feedbackSent)
     if (
       (this.commentsList.length > 0 ||
         this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) &&
@@ -264,10 +269,10 @@ export class StoryFeedbackComponent implements OnInit {
     const hasComments = this.commentsList.length > 0 ? true : false;
     this.story.feedback.hasComments = hasComments;
     if (this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) this.story.feedback.feedbackMarkup = this.storyTextWithMarkup;
+    
     this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
-        console.log("done updating feedback sent")
         this.story.feedback.seenByStudent = false;
       },
       error: () => {
