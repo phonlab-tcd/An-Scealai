@@ -5,6 +5,9 @@ WEBPACK_CONFIG := webpack.config.js
 
 
 SRC_TS_JS_FILES := $(wildcard $(SRC_DIR)/*.ts $(SRC_DIR)/*.js)
+ifndef NODE_ENV
+NODE_ENV := dev
+endif
 
 ready: dist/$(NODE_ENV)-server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
 
@@ -15,7 +18,7 @@ dist/monitoring:
 	mkdir -p dist/monitoring
 
 dist/views:
-	cp -r views $@
+	cp -r src/views $@
 
 dist/.env:
 	cp .env dist/.env
