@@ -6,9 +6,9 @@ WEBPACK_CONFIG := webpack.config.js
 
 SRC_TS_JS_FILES := $(wildcard $(SRC_DIR)/*.ts $(SRC_DIR)/*.js)
 
-ready: dist/server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
+ready: dist/$(NODE_ENV)-server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
 
-dist/server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
+dist/$(NODE_ENV)-server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
 	npx webpack --progress --config $(WEBPACK_CONFIG) || exit 0
 
 dist/monitoring:

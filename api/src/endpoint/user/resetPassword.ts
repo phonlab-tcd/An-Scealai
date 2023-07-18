@@ -3,13 +3,14 @@ import * as aws_ses from "../../utils/aws-ses-send-email";
 import { z } from "zod";
 import { ObjectId } from "mongodb";
 import obscure_email_address from "../../utils/obscure_email_address";
+import result from "../../utils/result";
 
 function objectId(v)  {
     return new ObjectId(v);
 }
 
 const reset_password_schema = z.object({
-    userId: z.string().nonempty().refine(objectId),
+    username: z.string().nonempty(),
     baseurl: z.string().url(),
 });
 
@@ -20,6 +21,7 @@ const reset_password_schema = z.object({
  * @return {Promise} Success or error message
  */
 export default async function (req, res) {
+    console.log(req.body);
     const v = reset_password_schema.safeParse(req.body);
 
     if(!v.success) {
@@ -30,9 +32,9 @@ export default async function (req, res) {
     }
 
     req.body = v.data;
-  
+
     // get user from DB by username
-    const user_result = await User.findOne({_id: req.body.userId}).then(ok=>({ok}), err=>({err}));
+    const user_result = await result(User.findOne({username: req.body.username}));
 
     if ("err" in user_result) {
         console.warn(new Error("findOne failure searching for user"), user_result);
@@ -48,7 +50,7 @@ export default async function (req, res) {
         messageKeys: ['username_not_found'],
       });
     }
-  
+
     // check user has certain properties set: an email, active or pending status
     if (! user.canResetPassword() ) {
       console.warn(new Error("user is not allowed to reset password"), user);
@@ -56,12 +58,12 @@ export default async function (req, res) {
         messageKeys: ['user_not_verified_cannot_reset_password'],
       });
     }
-  
+
     // Generate a reset password link for the user
     const resetPasswordLink = user.generateResetPasswordLink(req.body.baseurl);
-  
-    const user_save = await user.save().then(ok=>({ok}), err=>({err}))
-  
+
+    const user_save = await result(user.save());
+
     if("err" in user_save) {
         console.warn(new Error("failed to save user's reset password link"), user_save);
         return res.status(400).json({
@@ -88,7 +90,7 @@ export default async function (req, res) {
             messageKeys: [`There was a fatal error. Unable to queue password reset email for email address: ${user.email}`]
         })
     }
-  
+
     // make email private for display by replacing characters with stars ***
     let hiddenEmail: any = obscure_email_address(user.email);
 
@@ -97,10 +99,10 @@ export default async function (req, res) {
     } else {
         hiddenEmail = hiddenEmail.ok;
     }
-  
+
     // send the email
-    const send_email_result = await aws_ses.send_mail_aws(mailOpts.data).then(ok=>({ok}), err=>({err}));
-  
+    const send_email_result = await result(aws_ses.send_mail_aws(mailOpts.data));
+
     if ("err" in send_email_result) {
       console.warn(new Error("Failed to send password reset email. Deleting user's resetPassword link."),)
       res.status(500).json({
@@ -110,7 +112,7 @@ export default async function (req, res) {
       user.resetPassword = null;
       await user.save()
     }
-  
+
     return res.status(200).json({
       messageKeys: [`email_sent`],
       sentTo: hiddenEmail,

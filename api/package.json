@@ -6,17 +6,14 @@
   "scripts": {
     "test": "jest",
     "dev": "webpack serve --config webpack.config.js --open",
-    "start": "node dist/server.js",
-    "start:nocheck": "nodemon -x ts-node --transpile-only server.ts",
-    "start:prod": "DB=an-scealai PORT=40000 NODE_ENV=prod node dist/server.js",
-    "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 node dist/server.js",
+    "start": "node dist/dev-server.js",
+    "start:prod": "DB=an-scealai PORT=40000 NODE_ENV=prod node dist/prod-server.js",
+    "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 node dist/prod-server.js",
     "build": "make ready"
   },
   "jest": {
     "testTimeout": 10000,
-    "modulePathIgnorePatterns": [
-      "<rootDir>/express-status-monitor"
-    ],
+    "modulePathIgnorePatterns": [],
     "preset": "ts-jest/presets/default",
     "globals": {
       "ts-jest": {
@@ -54,7 +51,7 @@
     "express-jwt": "^7.7.5",
     "express-queue": "^0.0.13",
     "express-session": "^1.17.3",
-    "express-status-monitor": "file:express-status-monitor",
+    "express-status-monitor": "file:../express-status-monitor",
     "formidable": "^1.2.1",
     "generate-password": "^1.6.0",
     "json5": "^2.2.3",
@@ -97,10 +94,11 @@
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.2",
     "@types/chai": "^4.3.5",
-    "@types/jest": "^28.1.6",
-    "@types/node": "^18.7.3",
-    "@types/supertest": "^2.0.12",
     "@types/express": "^4.17.17",
+    "@types/jest": "^28.1.8",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.16.19",
+    "@types/supertest": "^2.0.12",
     "@types/webpack": "^5.28.1",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
