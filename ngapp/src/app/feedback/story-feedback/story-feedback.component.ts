@@ -149,17 +149,14 @@ export class StoryFeedbackComponent implements OnInit {
       });
   }
 
-  test(ev) {
-    console.log("content changed")
-  }
-
   /**
    * Create and display a comment button when the user selects a range of text
    * @param event quill on-select event
    */
   showInlineCommentButton(event) {
     let range = event.range;
-    if (this.feedbackSent) this.feedbackSent = false;
+    //if (this.feedbackSent) this.feedbackSent = false;
+
     if (range && range.length > 0 && event.source == "user") {
       // don't want to create button when highlightCommentReferenceInQuill() is fired
       const length = range.length;
@@ -231,6 +228,7 @@ export class StoryFeedbackComponent implements OnInit {
    * prompt user to send feedback before closing the component
    */
   closeFeedback() {
+    console.log(this.feedbackSent)
     if (
       (this.commentsList.length > 0 ||
         this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) &&
@@ -239,7 +237,7 @@ export class StoryFeedbackComponent implements OnInit {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
           title: this.ts.l.save_changes,
-          message: "Would you like to send your feedback to student?",
+          message: `${this.ts.l.would_you_like_send_feedback} ${this.story.author}?`,
           confirmText: this.ts.l.yes,
           cancelText: this.ts.l.no,
         },
@@ -269,6 +267,7 @@ export class StoryFeedbackComponent implements OnInit {
     this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
+        console.log("done updating feedback sent")
         this.story.feedback.seenByStudent = false;
       },
       error: () => {

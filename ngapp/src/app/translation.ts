@@ -962,6 +962,9 @@ export default {
   share_code: {
     ga: 'Roinn an cód',
     en: 'Share code' },
+  click_on_share_code_button: {
+    ga: 'Cliceáil ar \'Roinn an Cód\' chun an cód don seomra ranga a ghiniúint. Roinn an cód seo le do chuid daltaí ionas gur féidir leo teacht isteach i do sheomra ranga.',
+    en: 'Click on the \'Share Code\' button to get the classroom code. Share this code with your students can they can join the classroom.' },
   student_username: {
     ga: 'Ainm úsáideora an dalta',
     en: 'Student username' },
@@ -1010,6 +1013,15 @@ export default {
   leave_feedback_for: {
     ga: 'Fág aiseolas do',
     en: 'Leave some feedback for' },
+  would_you_like_send_feedback: {
+    ga: 'Ar mhaith leat aiseolas a sheoladh chuig',
+    en: 'Would you like to send your feedback to' },
+  highlight_text_to_leave_comment_1: {
+    ga: 'Cliceál ar an gcnaipe',
+    en: 'Click on the' },
+  highlight_text_to_leave_comment_2: {
+    ga: 'nó aibhsigh cuid den téacs chun nóta tráchta a fhágáil do',
+    en: 'icon or highlight a section of text to leave a comment for' },
   save_changes: {
     ga: 'Sabháil na hathruithe',
     en: 'Save changes'

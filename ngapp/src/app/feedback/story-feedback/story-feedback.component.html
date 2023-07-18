@@ -7,7 +7,7 @@
     <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled>
       {{ ts.l.sent }} <i class="fas fa-check"></i>
     </button>
-    <div style="margin: auto">{{ story?.title }}</div>
+    <div style="margin: auto">{{ story?.title }} <span *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</span></div>
     <div style="margin-left: auto" (click)="closeFeedback()">
       <i class="fa-solid fa-times closeFeedbackButton"></i>
     </div>
@@ -52,8 +52,7 @@
 
     <!-- Leave a comment message for teachers-->
     <div *ngIf="isTeacher && commentsList.length === 0" class="commentsContainer">
-      Click on the <i class="fa-solid fa-message" style="padding: 5px"></i> icon
-      or highlight a section of text to leave a comment for {{ story?.author }}.
+      {{ts.l.highlight_text_to_leave_comment_1}} <i class="fa-solid fa-message" style="padding: 5px"></i> {{ts.l.highlight_text_to_leave_comment_2}} {{ story?.author }}.
     </div>
 
     <!-- List of comments -->
