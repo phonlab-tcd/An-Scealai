@@ -1,9 +1,12 @@
 import User from "../../models/user";
-import * as aws_ses from "../../utils/aws-ses-send-email";
+import * as _aws_ses from "../../utils/aws-ses-send-email";
 import { z } from "zod";
 import { ObjectId } from "mongodb";
 import obscure_email_address from "../../utils/obscure_email_address";
 import result from "../../utils/result";
+
+const aws_ses = _aws_ses.init(process.env as any);
+
 
 function objectId(v)  {
     return new ObjectId(v);

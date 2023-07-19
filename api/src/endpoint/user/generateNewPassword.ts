@@ -1,7 +1,9 @@
 import User from "../../models/user";
-import * as aws_ses from "../../utils/aws-ses-send-email";
+import * as _aws_ses from "../../utils/aws-ses-send-email";
 import { Request, Response } from "express";
 import { z } from "zod";
+
+const aws_ses = _aws_ses.init(process.env as any);
 
 const query_schema = z.object({
   username: z.string().nonempty(),

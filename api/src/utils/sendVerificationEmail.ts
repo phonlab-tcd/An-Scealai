@@ -1,5 +1,8 @@
-import * as aws_ses from "./aws-ses-send-email";
+import * as _aws_ses from "./aws-ses-send-email";
 import User from "../models/user";
+
+const aws_ses = _aws_ses.init(process.env as any);
+
 
 function createMessage(language: "en" | "ga", username: string, activationLink) {
     return (language === 'ga') ?
