@@ -34,7 +34,7 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirLogRoute = require('./routes/gramadoir_log.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
-const feedbackCommentRoute = require('./routes/feedbackComment.route');
+import feedbackCommentRoute from './routes/feedbackComment.route';
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)

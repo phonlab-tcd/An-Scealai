@@ -8,7 +8,8 @@
     "start": "nodemon -x ts-node server.ts",
     "start:nocheck": "nodemon -x ts-node --transpile-only server.ts",
     "start:prod": "DB=an-scealai PORT=40000 NODE_ENV=prod ts-node --transpile-only server.ts",
-    "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 ts-node --transpile-only server.ts"
+    "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 ts-node --transpile-only server.ts",
+    "build": "make ready"
   },
   "jest": {
     "testTimeout": 10000,
@@ -100,6 +101,8 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.21",
     "supertest": "^6.2.3",
-    "ts-jest": "^28.0.7"
+    "ts-jest": "^28.0.7",
+    "ts-loader": "^9.4.4",
+    "webpack-cli": "^5.1.4"
   }
 }

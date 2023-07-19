@@ -7,8 +7,7 @@ import deleteFeedbackComment from "../endpoints_functions/feedback/deleteFeedbac
 import addAudioFeedback from "../endpoints_functions/feedback/addAudioFeedback";
 import getAudioFeedback from '../endpoints_functions/feedback/getAudioFeedback';
 
-
-module.exports = makeEndpoints({
+export default makeEndpoints({
   post: {
     '/createNewComment': createFeedbackComment,
     '/updateFeedbackComment': updateFeedbackComment,
