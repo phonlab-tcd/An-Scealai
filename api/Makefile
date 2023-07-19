@@ -39,4 +39,4 @@ dist/jwtRS256.key dist/jwtRS256.key.pub:
 # 	docker run --rm -v $(shell pwd):/app scealai-api npm install
 # 
 # run:
-	docker run --interactive --restart=always --net=scealai-api-network -v $(shell pwd):/app -p 4000:4000 --name scealai-api scealai-api
+#	docker run --interactive --restart=always --net=scealai-api-network -v $(shell pwd):/app -p 4000:4000 --name scealai-api scealai-api
