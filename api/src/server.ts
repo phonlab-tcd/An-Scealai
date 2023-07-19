@@ -1,7 +1,10 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-require("./utils/load_keys");
+import "./utils/load_keys";
+
+console.log(process.env.PRIVATE_KEY);
+console.log(process.env.PUBLIC_KEY);
 
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
