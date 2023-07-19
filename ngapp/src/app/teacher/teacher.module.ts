@@ -6,7 +6,6 @@ import { TeacherRoutingModule } from './teacher-routing.module';
 import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
 import { TeacherStudentComponent } from './teacher-student/teacher-student.component';
 import { TeacherClassroomComponent } from './teacher-classroom/teacher-classroom.component';
-import { TeacherStoryComponent } from './teacher-story/teacher-story.component';
 import { TeacherSettingsComponent } from './teacher-settings/teacher-settings.component';
 import { TeacherDictoglossComponent } from './teacher-dictogloss/teacher-dictogloss.component';
 import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.component';
@@ -27,7 +26,6 @@ import { FeedbackModule } from '../feedback/feedback.module';
     TeacherDashboardComponent,
     TeacherStudentComponent,
     TeacherClassroomComponent,
-    TeacherStoryComponent,
     TeacherSettingsComponent,
     TeacherDictoglossComponent,
     ClassroomDrawerComponent,
