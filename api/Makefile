@@ -11,8 +11,11 @@ endif
 
 ready: dist/$(NODE_ENV)-server.js dist/monitoring dist/views
 
+dist/:
+	mkdir -p dist
+
 dist/$(NODE_ENV)-server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
-	watch=false npx webpack --progress --config $(WEBPACK_CONFIG) || exit 0
+	watch=false npx webpack --progress --config $(WEBPACK_CONFIG)
 
 dist/views:
 	cp -r src/views $@
