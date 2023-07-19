@@ -4,6 +4,13 @@ dotenv.config();
 if(process.env.NODE_ENV==='prod') require('./keys/load');
 else require('./keys/dev/load');
 
+const jwt_priv = process.env.JWT_RS256_PRIVATE_KEY;
+const jwt_pub = process.env.JWT_RS256_PUBLIC_KEY;
+if(!jwt_priv) throw new Error("no private signing key");
+if(!jwt_pub) throw new Error("no public signing key");
+process.env.PRIVATE_KEY = Buffer.from(jwt_priv).toString("ascii");
+process.env.PUBLIC_KEY = Buffer.from(jwt_pub).toString("ascii");
+
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
@@ -52,6 +59,7 @@ async function prodConnection() {
     heartbeatFrequencyMS,
     serverSelectionTimeoutMS,
   };
+  console.log(dbURL);
   await mongoose.connect(dbURL, opts);
 }
 
