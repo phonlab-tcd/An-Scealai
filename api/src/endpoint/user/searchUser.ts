@@ -1,5 +1,4 @@
 import User from "../../models/user";
-import { API404Error, API400Error } from "../../utils/APIError";
 import { z } from  "zod";
 import { Request, Response } from "express";
 
@@ -9,7 +8,7 @@ const body_schema = z.object({
   searchString: z.string().default(""),
   limit: z.number().min(0).default(20),
   currentPage: z.number().min(0).default(0),
-  roles: z.array(roles_enum).max(3).min(1),
+  roles: z.array(roles_enum).max(3).default(["STUDENT"]),
 });
 
 /**
@@ -22,7 +21,7 @@ const body_schema = z.object({
 */
 export default async function searchUser(req: Request, res: Response) {
   function fail(why: string, things: any[] = []) {
-    console.warn(new Error(), ...things);
+    console.warn(new Error(why), ...things);
     return res.status(400).json("an error occurred");
   }
 

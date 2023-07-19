@@ -9,22 +9,13 @@ ifndef NODE_ENV
 NODE_ENV := dev
 endif
 
-ready: dist/$(NODE_ENV)-server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
+ready: dist/$(NODE_ENV)-server.js dist/monitoring dist/views
 
 dist/$(NODE_ENV)-server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
 	watch=false npx webpack --progress --config $(WEBPACK_CONFIG) || exit 0
 
-dist/monitoring:
-	mkdir -p dist/monitoring
-
 dist/views:
 	cp -r src/views $@
-
-dist/.env:
-	cp .env dist/.env
-
-dist/sendinblue.json:
-	cp sendinblue.json $@
 
 .PHONY: dist/keys
 dist/keys: dist/jwtRS256.key dist/jwtRS256.key.pub

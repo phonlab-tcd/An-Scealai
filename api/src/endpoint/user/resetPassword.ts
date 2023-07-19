@@ -7,11 +7,6 @@ import result from "../../utils/result";
 
 const aws_ses = _aws_ses.init(process.env as any);
 
-
-function objectId(v)  {
-    return new ObjectId(v);
-}
-
 const reset_password_schema = z.object({
     username: z.string().nonempty(),
     baseurl: z.string().url(),
@@ -24,7 +19,7 @@ const reset_password_schema = z.object({
  * @return {Promise} Success or error message
  */
 export default async function (req, res) {
-    console.log(req.body);
+
     const v = reset_password_schema.safeParse(req.body);
 
     if(!v.success) {
