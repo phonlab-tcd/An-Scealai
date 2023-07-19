@@ -5,11 +5,12 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "dev": "webpack serve --config webpack.config.js --open",
     "start": "node dist/dev-server.js",
     "start:prod": "DB=an-scealai PORT=40000 NODE_ENV=prod node dist/prod-server.js",
     "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 node dist/prod-server.js",
-    "build": "make ready"
+    "build": "make ready",
+    "build:dev": "webpack --progress",
+    "watch": "nodemon dist/dev-server.js"
   },
   "jest": {
     "testTimeout": 10000,
@@ -111,6 +112,7 @@
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
