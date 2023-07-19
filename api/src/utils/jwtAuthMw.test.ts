@@ -1,9 +1,11 @@
 const express = require('express');
 const supertest = require('supertest');
 const cookieParser = require('cookie-parser');
-const auth = require('./jwtAuthMw');
 const User = require('../models/user');
 const { ObjectId } = require('bson');
+
+import auth from "./jwtAuthMw";
+import { describe, test, expect } from "@jest/globals";
 
 const app = express()
   .use(cookieParser())

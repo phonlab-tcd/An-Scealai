@@ -1,3 +1,5 @@
+require("dotenv");
+require("../utils/load_keys");
 const config = require("../DB");
 const mongoose = require("mongoose");
 

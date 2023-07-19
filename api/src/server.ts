@@ -1,15 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-if(process.env.NODE_ENV==='prod') require('./keys/load');
-else require('./keys/dev/load');
-
-const jwt_priv = process.env.JWT_RS256_PRIVATE_KEY;
-const jwt_pub = process.env.JWT_RS256_PUBLIC_KEY;
-if(!jwt_priv) throw new Error("no private signing key");
-if(!jwt_pub) throw new Error("no public signing key");
-process.env.PRIVATE_KEY = Buffer.from(jwt_priv).toString("ascii");
-process.env.PUBLIC_KEY = Buffer.from(jwt_pub).toString("ascii");
+require("./utils/load_keys");
 
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
@@ -21,7 +13,6 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
-const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
 require('./config/passport');
 const expressQueue = require('express-queue');
@@ -29,6 +20,7 @@ const requestIp = require('request-ip');
 import logAPICall from './utils/api_request_logger';
 import fs from "fs";
 
+import checkJwt from "./utils/jwtAuthMw";
 import userRoute from "./routes/user.route";
 
 const storyRoute = require('./routes/story.route');
@@ -41,7 +33,7 @@ const profileRoute = require('./routes/profile.route');
 const promptRoute = require('./routes/prompt.route');
 const messageRoute = require('./routes/messages.route');
 const recordingRoute = require('./routes/recording.route');
-const gramadoirLogRoute = require('./routes/gramadoir_log.route');
+const gramadoirRoute = require('./routes/gramadoir.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
 
@@ -116,7 +108,7 @@ app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);
 app.use('/prompt', promptRoute);
 app.use('/messages', messageRoute);
-app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirLogRoute);
+app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 

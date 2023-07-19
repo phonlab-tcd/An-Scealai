@@ -1,4 +1,4 @@
-import server from "../server";
+import server from "./server";
 import { describe, it } from "@jest/globals";
 import supertest from "supertest";
 
@@ -10,8 +10,6 @@ const request = supertest(server);
 
 describe("scealai backend express app object", function(){
     it("does not need Bearer token for /user/verify endpoint", async function() {
-        console.log(process.env);
         const res = await request.get("/user/verify");
-        console.log(res);
     });
 });

@@ -1,5 +1,4 @@
 // @ts-nocheck
-const auth = require('../utils/jwtAuthMw');
 const gramadoirRoutes = require('express').Router();
 
 const { getUniqueErrorTypeCounts } = require('../endpoint/gramadoir/getUniqueErrorTypeCounts');
@@ -8,27 +7,29 @@ const { getTimeGrammarCounts } = require('../endpoint/gramadoir/getTimeGrammarCo
 const { callAnGramadoir } = require('../endpoint/gramadoir/callAnGramadoir');
 
 // //////////////////////////////////////////// POST
-const insertHandler = require('../endpoint/gramadoir/insert');
+import insertHandler from "../endpoint/gramadoir/insert";
+import checkJwt from "../utils/jwtAuthMw";
+
 gramadoirRoutes
     .route('/insert')
-    .post(auth, insertHandler);
+    .post(checkJwt, insertHandler);
 const userGrammarCountsHandler = require('../endpoint/gramadoir/userGrammarCounts');
 gramadoirRoutes
     .route('/userGrammarCounts')
-    .post(auth, userGrammarCountsHandler);
+    .post(checkJwt, userGrammarCountsHandler);
 gramadoirRoutes
     .route('/getTimeGrammarCounts/:ownerId')
-    .post(auth, getTimeGrammarCounts);
+    .post(checkJwt, getTimeGrammarCounts);
 
 // //////////////////////////////////////////// GET
 gramadoirRoutes
     .route('/callAnGramadoir/:teacs')
-    .get(auth, callAnGramadoir);
+    .get(checkJwt, callAnGramadoir);
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
-    .get(auth, getUniqueErrorTypeCounts);
+    .get(checkJwt, getUniqueErrorTypeCounts);
 gramadoirRoutes
     .route('/getUserGrammarCounts')
-    .get(auth, getUserGrammarCounts);
+    .get(checkJwt, getUserGrammarCounts);
 
 module.exports = gramadoirRoutes;
