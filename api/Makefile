@@ -9,10 +9,13 @@ ifndef NODE_ENV
 NODE_ENV := dev
 endif
 
-ready: dist/$(NODE_ENV)-server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
+ready: dist/ dist/$(NODE_ENV)-server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
+
+dist/:
+	mkdir -p dist
 
 dist/$(NODE_ENV)-server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
-	watch=false npx webpack --progress --config $(WEBPACK_CONFIG) || exit 0
+	watch=false npx webpack --progress --config $(WEBPACK_CONFIG)
 
 dist/monitoring:
 	mkdir -p dist/monitoring
