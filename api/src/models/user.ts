@@ -166,11 +166,12 @@ userSchema.methods.generateActivationLink = function(baseurl, language) {
 
   this.verification.date = new Date();
 
+  // TODO: encode the uri components. Email address may be valid while being illegal in url. (neimhin 20/July/23)
   return `${baseurl}user/verify?` +
       `username=${this.username}` +
       `&email=${this.email}` +
       `&language=${language}` +
-      `&verificationCode=${this.verification.code}`;
+      `&code=${this.verification.code}`;
 }
 
 export = mongoose.model('User', userSchema);
