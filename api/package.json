@@ -11,7 +11,8 @@
     "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 node dist/prod-server.js",
     "build": "make ready",
     "build:dev": "webpack --progress",
-    "watch": "nodemon dist/dev-server.js"
+    "watch": "nodemon dist/dev-server.js",
+    "neimhin:watch": "PORT=41001 nodemon dist/dev-server.js"
   },
   "jest": {
     "testTimeout": 10000,
