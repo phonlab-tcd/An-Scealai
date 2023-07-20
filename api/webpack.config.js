@@ -2,15 +2,18 @@ const path = require('path');
 const isProduction = process.env.NODE_ENV == 'production';
 const config = {
   target: 'node',
+  watch: !process.env.CICD,
   entry: './src/server.ts',
   output: {
     filename: 'server.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname),
   },
   devServer: {
     open: true,
     host: 'localhost',
   },
+  plugins: [
+  ],
   module: {
     rules: [
       {
@@ -34,7 +37,7 @@ module.exports = () => {
     config.mode = 'production';
   } else {
     config.mode = 'development';
-    config.watch = true;
   }
+  console.log("mode: ", config.mode);
   return config;
 };
