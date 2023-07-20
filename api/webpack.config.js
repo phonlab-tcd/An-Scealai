@@ -4,6 +4,7 @@ const isProduction = env == "production";
 console.log(env);
 
 const config = {
+  devtool: false,
   target: "node",
   entry: "./src/server.ts",
   output: {
