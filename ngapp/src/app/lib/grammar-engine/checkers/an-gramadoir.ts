@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { GrammarChecker, ErrorTag, ERROR_INFO, ERROR_TYPES, ErrorType} from '../types';
-import config from 'abairconfig';
+import { firstValueFrom } from 'rxjs';
+import { retry } from "rxjs/operators";
 
 // initialise the grammar checker
 export const anGramadoir: GrammarChecker = {
@@ -27,62 +29,48 @@ export type GramadoirTag = {
 * @returns - Promise of an array of ErrorTags
 */
 async function check(input: string, authToken: string):Promise<ErrorTag[]>{
-  return new Promise<ErrorTag[]>(async (resolve, reject) => {
+  const res = await fetch('https://gramadoir.abair.ie/' + encodeURIComponent(input));
+  const errors = await res.json();
+
+  // map gramadoir responses to generic ErrorTag values
+  const errorTags: ErrorTag[] = errors.map((error) => {
+    // get simple rule name from an gramadoir's ruleId response attribute
+    const cleanedErrorName = gramadoirId2string(error.ruleId);
+    if(!(cleanedErrorName in ERROR_INFO)) {
+      console.warn("INVALID ERROR TYPE:", cleanedErrorName);
+    }
+    const e_info = ERROR_INFO[cleanedErrorName];
+
+    function extractStringBetweenSlashes(inputString) {
+      const regex = /\/([^/]+)\//; // Regular expression to match the string between slashes
+      const match = inputString.match(regex); // Find the first match in the inputString
     
-    let errors = [];
-
-    // try calling an gramadoir on lab server, otherwise use an gramadoir from cadhan.com
-    try {
-      errors = await callAnGramadoir(`${config.baseurl}gramadoir/callAnGramadoir/${encodeURIComponent(input)}`, authToken);
-    }
-    catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
-      try {
-        errors = await callAnGramadoir(`https://cadhan.com/api/gramadoir/1.0/en/${input}`);
-      } catch(_) {
-        reject();
-      }  
-    }
-
-    // map gramadoir responses to generic ErrorTag values
-    const errorTags: ErrorTag[] = errors.map((error) => {
-      // get simple rule name from an gramadoir's ruleId response attribute
-      const cleanedErrorName = gramadoirId2string(error.ruleId);
-      if(!(cleanedErrorName in ERROR_INFO)) {
-        console.warn("INVALID ERROR TYPE:", cleanedErrorName);
+      if (match && match.length > 1) {
+        return match[1]; // Return the captured group (string between slashes)
+      } else {
+        return false; // Return false if no match or captured group found
       }
-      const e_info = ERROR_INFO[cleanedErrorName];
-
-      function extractStringBetweenSlashes(inputString) {
-        const regex = /\/([^/]+)\//; // Regular expression to match the string between slashes
-        const match = inputString.match(regex); // Find the first match in the inputString
-      
-        if (match && match.length > 1) {
-          return match[1]; // Return the captured group (string between slashes)
-        } else {
-          return false; // Return false if no match or captured group found
-        }
-      }
-      
-      const suggestion = `"${extractStringBetweenSlashes(error.msg)}"`;
-      const errortext = `"${error.errortext}"`;
-      
-      const et: ErrorTag = {
-        errorText: error.errortext,
-        messageGA: (e_info.messageGA).replace("#suggestion#", suggestion).replace('#', errortext),
-        messageEN: (e_info.messageEN).replace("#suggestion#", suggestion).replace('#', errortext),
-        context: error.context,
-        nameEN: e_info.nameEN,
-        nameGA: e_info.nameGA,
-        color: e_info.color,
-        fromX: +error.fromx,
-        toX: +error.tox + 1,
-        type: cleanedErrorName as ErrorType,
-        id: crypto.randomUUID(),
-      };
-      return et;
-    });
-    resolve(errorTags);
+    }
+    
+    const suggestion = `"${extractStringBetweenSlashes(error.msg)}"`;
+    const errortext = `"${error.errortext}"`;
+    
+    const et: ErrorTag = {
+      errorText: error.errortext,
+      messageGA: (e_info.messageGA).replace("#suggestion#", suggestion).replace('#', errortext),
+      messageEN: (e_info.messageEN).replace("#suggestion#", suggestion).replace('#', errortext),
+      context: error.context,
+      nameEN: e_info.nameEN,
+      nameGA: e_info.nameGA,
+      color: e_info.color,
+      fromX: +error.fromx,
+      toX: +error.tox + 1,
+      type: cleanedErrorName as ErrorType,
+      id: crypto.randomUUID(),
+    };
+    return et;
   });
+  return errorTags;
 }
 
 /**
