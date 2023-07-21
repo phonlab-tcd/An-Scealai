@@ -12,7 +12,7 @@ dist/monitoring:
 	mkdir -p dist/monitoring
 
 dist/views:
-	cp -r views $@
+	cp -r src/views $@
 
 dist/.env:
 	cp .env dist/.env
