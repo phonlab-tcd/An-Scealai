@@ -13,6 +13,10 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true
   },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts"
+  ],
   "exclude": [
     "node_modules/typescript/lib/lib.dom.d.ts",
     "src/express-status-monitor/src/public/*",
