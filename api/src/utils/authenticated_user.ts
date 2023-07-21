@@ -1,4 +1,6 @@
 import { Request } from "express";
 export default function authenticated_user(req: Request) {
-  return (req as any).user;
+  const user = (req as any).user;
+  if(!user) throw new Error("no authenticated user");
+  return user;
 }
