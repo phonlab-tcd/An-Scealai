@@ -79,7 +79,6 @@ if(process.env.FUDGE) {
 
 // log all request urls with `DEBUG=true npm start`
 if(process.env.DEBUG) app.use((req,res,next)=>{
-	console.log(req.host);
 	console.log(req.hostname);
 	console.log(req.url);
 	next();
