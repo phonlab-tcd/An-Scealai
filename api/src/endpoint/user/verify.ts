@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../../models/user";
 import path from "path";
+import result from "../../utils/result";
 
 /**
  * Set a user's status to Active when they click on the activation link
@@ -23,16 +24,17 @@ export default async function verify (req: Request, res: Response) {
     return res.status(400).json('verificationCode required to verify account email address');
   }
 
-  const user = await User.findOne({username: req.query.username, email: req.query.email}).then(ok=>({ok}), err=>({err}));
+  const user_result = await result( User.findOne({username: req.query.username, email: req.query.email}) );
 
-  if("err" in user) return fail();
-  if (!user.ok) return fail();
+  if("err" in user_result) return fail();
+  const user = user_result.ok;
+  if (!user) return fail();
   if (user.verification.code !== req.query.verificationCode) return fail();
 
 
   user.status = 'Active';
-  const save = await user.save().then(ok=>({ok}), err=>({err}));
+  const save = await result( user.save() );
   if ("err" in save) return fail()
 
-  return res.sendFile(path.join(__dirname, '../views/account_verification.html'));
+  return res.sendFile(path.join(__dirname, '../../views/account_verification.html'));
 };
