@@ -1,9 +1,6 @@
-const logger = require('../logger');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const mongoose = require('mongoose');
-const User = require('../models/user');
-mongoose.model('User');
+import passport from "passport";
+import { Strategy } from "passport-local";
+import User from "../models/user";
 
 /**
  * Authenticate a user with their username and password
@@ -31,16 +28,18 @@ function verify(username, password, cb) {
     }
 
     // If everything is correct, return user object
-    logger.info('Successfully authenticated user: ' + username);
+    console.log('Successfully authenticated user: ' + username);
     return cb(null, user);
   });
 }
 
 // call the verify function to find user in the DB that matches the credentials
-passport.use(new LocalStrategy(verify));
+// @ts-ignore
+passport.use( new Strategy( verify));
 
 // save user id to session so it can be used in deseriaizeUser()
 passport.serializeUser((user, done)=>{
+  // @ts-ignore
   done(null, user._id);
 });
 
