@@ -31,7 +31,7 @@ jobs:
       - run: mongod &
       - run: mongod_pid=$!
       - run: mv ./api/.env.example ./api/.env
-      - run: FUDGE=1 AWS_SES_DISABLE=1 npm run --prefix npm start & 
+      - run: FUDGE=1 AWS_SES_DISABLE=1 npm run --prefix api start & 
       - run: backend_pid=$!
       - run: npm run --prefix ngapp e2e
 
