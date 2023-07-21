@@ -23,7 +23,7 @@
           "options": {
 
             "aot": true,
-            "outputPath": "unpublished_dist",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
