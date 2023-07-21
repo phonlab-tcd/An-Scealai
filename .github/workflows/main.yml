@@ -45,4 +45,5 @@ jobs:
       - uses: actions/setup-node@v3
       - run: mv ./api/.env.example ./api/.env
       - run: npm install --prefix api
+      - run: npm run --prefix api build
       - run: NO_EMAILS=1 npm run test --prefix api 
