@@ -1,10 +1,9 @@
-// @ts-nocheck
+import { callAnGramadoir } from "../endpoint/gramadoir/callAnGramadoir";
 const gramadoirRoutes = require('express').Router();
 
 const { getUniqueErrorTypeCounts } = require('../endpoint/gramadoir/getUniqueErrorTypeCounts');
 const { getUserGrammarCounts } = require('../endpoint/gramadoir/getUserGrammarCounts');
 const { getTimeGrammarCounts } = require('../endpoint/gramadoir/getTimeGrammarCounts');
-const { callAnGramadoir } = require('../endpoint/gramadoir/callAnGramadoir');
 
 // //////////////////////////////////////////// POST
 import insertHandler from "../endpoint/gramadoir/insert";
