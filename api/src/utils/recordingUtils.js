@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const mongodb = require('mongodb');
 const { Readable } = require('stream');
 
+// TODO: why double await here? (neimhin 21/July/23)
 async function upload(buffer, filename, metadata) {
   return await new Promise((resolve,reject)=>{
     const us = bucket().openUploadStream(filename, {metadata});
@@ -27,7 +28,6 @@ function filesCollection() {
 
 async function file(_id) {
   const a = await bucket().find({ "_id": _id }).toArray();
-  console.log('array', a);
   return a[0];
 }
 module.exports = {upload, bucket, filesCollection, file};

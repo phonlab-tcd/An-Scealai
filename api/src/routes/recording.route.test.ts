@@ -1,7 +1,8 @@
+import random from "../test-utils/random";
+import { beforeAll, describe, it, expect } from "@jest/globals";
 let request;
 const Story = require('../models/story');
 const VoiceRecording = require('../models/recording');
-const random = require('../test-utils/random').string;
 
 beforeAll(()=>{
   let router = require('./recording.route');
@@ -16,11 +17,11 @@ function debug(it) {
   expect(1).toBe(it);
 }
 
-fdescribe('using gridfs', ()=>{
+describe('using gridfs', ()=>{
   describe('POST /saveAudio/:storyId/:index/:uuid', ()=>{
     const story = new Story();
     const index = '1234';
-    const uuid = randomString();
+    const uuid = random.string();
     const url = (storyId,index,uuid)=>`/saveAudio/${storyId}/${index}/${uuid}`;
     const buffer = Buffer.from('hello');
     it('400 invalid file', async ()=>{

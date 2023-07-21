@@ -3,9 +3,6 @@ dotenv.config();
 
 import "./utils/load_keys";
 
-console.log(process.env.PRIVATE_KEY);
-console.log(process.env.PUBLIC_KEY);
-
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
