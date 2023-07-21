@@ -1,3 +1,5 @@
+import source_map_support from "source-map-support";
+source_map_support.install();
 import * as dotenv from "dotenv";
 dotenv.config();
 

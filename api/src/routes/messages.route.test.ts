@@ -1,3 +1,10 @@
+import { ObjectId as oid } from "mongodb";
+import { describe, it, expect } from "@jest/globals";
+
+function ObjectId() {
+  return new oid();
+}
+
 const app = require('express')()
     .use(require('body-parser').json())
     .use(require('./messages.route'));
@@ -5,7 +12,6 @@ const supertest = require('supertest');
 const request = supertest(app);
 const mongoose = require('mongoose');
 const Message = require('../models/message');
-const {ObjectId} = require('bson');
 
 describe('messages routes', () => {
   it('/viewMessges/:id', async ()=>{

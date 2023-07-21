@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "inlineSourceMap": true,
     "isolatedModules": true,
     "strict": true,
     "outDir": "dist",

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import searchUser from "./searchUser";
-import { it, describe, expect, fit } from "@jest/globals";
+import { it, describe, expect, fit, xit } from "@jest/globals";
 import User from "../../models/user";
 import random from "../../test-utils/random";
 import mongoose from "mongoose";
