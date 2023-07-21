@@ -1,30 +1,30 @@
-import dotenv from "dotenv";
+import source_map_support from "source-map-support";
+source_map_support.install();
+import * as dotenv from "dotenv";
 dotenv.config();
 
-if(process.env.NODE_ENV==='prod') require('./keys/load');
-else require('./keys/dev/load');
+import "./utils/load_keys";
 
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
-const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
-const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
-const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');
 import logAPICall from './utils/api_request_logger';
 import fs from "fs";
 
+import checkJwt from "./utils/jwtAuthMw";
+import userRoute from "./routes/user.route";
+
 const storyRoute = require('./routes/story.route');
-const userRoute = require('./routes/user.route');
 const teacherCodeRoute = require('./routes/teacherCode.route');
 const classroomRoute = require('./routes/classroom.route');
 const chatbotRoute = require('./routes/chatbot.route');
@@ -34,7 +34,7 @@ const profileRoute = require('./routes/profile.route');
 const promptRoute = require('./routes/prompt.route');
 const messageRoute = require('./routes/messages.route');
 const recordingRoute = require('./routes/recording.route');
-const gramadoirLogRoute = require('./routes/gramadoir_log.route');
+const gramadoirRoute = require('./routes/gramadoir.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
 
@@ -52,6 +52,7 @@ async function prodConnection() {
     heartbeatFrequencyMS,
     serverSelectionTimeoutMS,
   };
+  console.log(dbURL);
   await mongoose.connect(dbURL, opts);
 }
 
@@ -79,12 +80,18 @@ if(process.env.FUDGE) {
 }
 
 // log all request urls with `DEBUG=true npm start`
-if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+if(process.env.DEBUG) app.use((req,res,next)=>{
+	console.log(req.host);
+	console.log(req.hostname);
+	console.log(req.url);
+	next();
+});
 app.use(session({
   secret: 'SECRET',
   resave: true,
   saveUninitialized: true
 }));
+app.use(express.static("public"));
 app.use('/log', require('./routes/log.route'));
 app.use('/whoami',checkJwt, (req,res)=>res.json(req.user))
 app.use('/version', require('./routes/version.route'));
@@ -107,7 +114,7 @@ app.use('/stats', statsRoute);
 app.use('/profile', profileRoute);
 app.use('/prompt', promptRoute);
 app.use('/messages', messageRoute);
-app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirLogRoute);
+app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 
@@ -145,3 +152,5 @@ if (!(process.env.NODE_ENV === 'test')) {
 }
 
 module.exports = app;
+
+export default app;

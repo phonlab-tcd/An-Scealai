@@ -1,4 +1,5 @@
 import obscure_email_address from "./obscure_email_address";
+import { expect, describe, it } from "@jest/globals";
 
 const valid_email_addresses = ['email@example.com',
     'firstname.lastname@example.com',

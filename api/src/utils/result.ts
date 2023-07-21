@@ -1,14 +1,13 @@
+import { ZodParsedType } from "zod";
 
-type ResultFunc = <T>(input: Promise<T>) => Promise<{ok: T} | {err: any}>;
-
-
-const result: ResultFunc = function(p){
-    function isOk(ok: any) {
-        return {ok};
+// this function is more useful without a (full) type specification (e.g. do not specify return value)
+// because TypeScript is able to infer the types of ok and err properties.
+export default function result(p: Promise<any>){
+    function on_resolve(ok: any) {
+        return {ok} as {ok: Awaited<typeof p>};
     }
-    function isErr(err: any) {
+    function on_reject(err: any) {
         return {err};
     }
-    return p.then(isOk,isErr);
+    return p.then(on_resolve,on_reject);
 }
-export default result;

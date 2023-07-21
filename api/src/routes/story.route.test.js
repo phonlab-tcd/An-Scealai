@@ -1,28 +1,30 @@
-const { ObjectId } = require("bson");
+import { describe, xdescribe, it, expect, xit, beforeAll } from "@jest/globals";
+import * as recordingUtil from "../utils/recordingUtils";
+import Story from "../models/story";
+import Classroom from "../models/classroom";
+import { ObjectId } from "mongodb";
 const user = {
   username: "fake user",
-  _id: ObjectId(),
+  _id: new ObjectId(),
 };
 const app = require("express")()
   .use(require("body-parser").json())
   .use((req, res, next) => {
     const header = req.header('x-authenticated-user');
-    if(header) req.user = JSON.parse(header);
-    else req.user = user;
+    if(header) req["user"] = JSON.parse(header);
+    else req["user"] = user;
     next();
   })
   .use(require("./story.route"));
 const supertest = require("supertest");
 const request = supertest(app);
 const mongoose = require("mongoose");
-const Story = require("../models/story");
-const Classroom = require('../models/classroom');
-const recordingUtil = require('../utils/recordingUtils');
+
 
 describe("story routes", () => {
   xdescribe("GET /myStudentsStory/:id", ()=>{
     it("200 owner is in teacher's classrom", async ()=>{
-      const [studentId,teacherId] = [ObjectId(),user._id];
+      const [studentId,teacherId] = [new ObjectId(),user._id];
       const [classroom,story] = await Promise.all([
         Classroom.create({teacherId, studentIds: [studentId]}),
         Story.create({owner: studentId}),
@@ -33,9 +35,9 @@ describe("story routes", () => {
         .expect(200);
     });
     it("404 owner is not in teacher's classrom", async ()=>{
-      const [studentId,teacherId] = [ObjectId(),user._id];
+      const [studentId,teacherId] = [new ObjectId(),user._id];
       const [classroom,story] = await Promise.all([
-        Classroom.create({teacherId, studentIds: [ObjectId()]}),
+        Classroom.create({teacherId, studentIds: [new ObjectId()]}),
         Story.create({owner: studentId}),
       ]);
       const u = {...user,role: 'TEACHER'};
@@ -54,7 +56,7 @@ describe("story routes", () => {
 
     it("404 authenticated user is not the owner", async () => {
       const story = await Story.create({
-        owner: ObjectId(),
+        owner: new ObjectId(),
         title: "Hello world!",
         text: "Story is ainm dom.",
       });
@@ -63,12 +65,12 @@ describe("story routes", () => {
     });
 
     it("404 not in database", async () => {
-      const nonExistantStoryId = mongoose.Types.ObjectId();
+      const nonExistantStoryId = new ObjectId();
       await request.get(`/withId/${nonExistantStoryId}`).expect(404);
     });
 
     it("404 auth user is teacher of owner (that's not what this endpoint is for)", async () => {
-      const studentId = ObjectId();
+      const studentId = new ObjectId();
       const [classroom,story] = await Promise.all([
         Classroom.create({teacherId: user._id, studentIds: [studentId]}),
         Story.create({owner: studentId}),
@@ -96,19 +98,19 @@ describe("story routes", () => {
       const AUTHOR_USERNAME = "alice";
       await Story.create([
         {
-          owner: ObjectId(),
+          owner: new ObjectId(),
           title: "Scéal 1",
           text: "Story 1 is ainm dom.",
           author: AUTHOR_USERNAME,
         },
         {
-          owner: ObjectId(),
+          owner: new ObjectId(),
           title: "Scéal 2",
           text: "Story eile atá ann.",
           author: AUTHOR_USERNAME,
         },
         {
-          owner: ObjectId(),
+          owner: new ObjectId(),
           title: "Scéal 3",
           text: "Bob wrote this one!",
           author: "bob",
@@ -128,7 +130,7 @@ describe("story routes", () => {
     it("sets the 'seenByStudent' property for the story with given id to true", async () => {
       const seenByStudent = false;
       const story = await Story.create({
-        owner: ObjectId(),
+        owner: new ObjectId(),
         feedback: { seenByStudent },
       });
       await request.post(url(story._id));
@@ -152,7 +154,7 @@ describe("story routes", () => {
     let storyId;
     beforeAll(async ()=> {
       const res = await Promise.all([
-        recordingUtil.upload(Buffer.from('hello'),'filename'),
+        recordingUtil.upload(Buffer.from('hello'),'filename',{}),
         Story.create({}),
       ]);
       activeRecording=res[0];
@@ -164,9 +166,9 @@ describe("story routes", () => {
       await request.post('/create').send({}).expect(200);
     });
     xit('400 bad story id',            async()=>await request.post(url('1234')    ).send({activeRecording}            ).expect(400));
-    it('404 fake story id',           async()=>await request.post(url(ObjectId())).send({activeRecording}            ).expect(404));
+    it('404 fake story id',           async()=>await request.post(url(new ObjectId())).send({activeRecording}            ).expect(404));
     xit('400 bad activeRecording id',  async()=>await request.post(url(storyId)   ).send({activeRecording: '1234'}    ).expect(400));
-    xit('404 fake activeRecording id', async()=>await request.post(url(storyId)   ).send({activeRecording: ObjectId()}).expect(404));
+    xit('404 fake activeRecording id', async()=>await request.post(url(storyId)   ).send({activeRecording: new ObjectId()}).expect(404));
     it('200',                         async()=>await request.post(url(storyId)   ).send({activeRecording}            ).expect(200));
   });
 });
