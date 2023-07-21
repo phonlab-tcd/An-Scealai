@@ -43,5 +43,6 @@ jobs:
           mongodb-version: 3.6
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      - run: mv ./api/.env.example ./api/.env
       - run: npm install --prefix api
       - run: NO_EMAILS=1 npm run test --prefix api 
