@@ -87,6 +87,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/passport": "^1.0.12",
     "@jest-mock/express": "^1.4.2",
     "@shelf/jest-mongodb": "^2.2.2",
     "@types/chai": "^4.3.5",
