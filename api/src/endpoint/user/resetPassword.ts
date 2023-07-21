@@ -1,9 +1,9 @@
 import User from "../../models/user";
 import * as _aws_ses from "../../utils/aws-ses-send-email";
 import { z } from "zod";
-import { ObjectId } from "mongodb";
 import obscure_email_address from "../../utils/obscure_email_address";
 import result from "../../utils/result";
+import base_url from "../../utils/base_url";
 
 const aws_ses = _aws_ses.init(process.env as any);
 
@@ -19,6 +19,7 @@ const reset_password_schema = z.object({
  * @return {Promise} Success or error message
  */
 export default async function (req, res) {
+    req.body.baseurl = base_url(req);
 
     const v = reset_password_schema.safeParse(req.body);
 
