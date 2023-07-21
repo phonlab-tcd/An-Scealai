@@ -18,21 +18,13 @@
   "jest": {
     "testTimeout": 10000,
     "modulePathIgnorePatterns": [
-      "<rootDir>/src/express-status-monitor"
+      "<rootDir>/src/"
     ],
-    "preset": "ts-jest/presets/default",
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true,
-        "diagnostics": false,
-        "tsconfig": "tsconfig.json"
-      }
-    },
     "setupFiles": [
-      "<rootDir>/src/test-utils/test-setup.ts"
+      "<rootDir>/dist/test-utils/test-setup.js"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/src/test-utils/test-setup-per-file.ts"
+      "<rootDir>/dist/test-utils/test-setup-per-file.js"
     ],
     "forceExit": true,
     "collectCoverage": false
@@ -83,7 +75,6 @@
     "stackify": "^1.0.17",
     "stackify-logger": "^3.0.11",
     "stream": "0.0.2",
-    "ts-node": "^10.9.1",
     "util": "^0.12.1",
     "uuid": "^3.3.2",
     "wink-eng-lite-web-model": "^1.4.3",
@@ -111,11 +102,6 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.21",
     "supertest": "^6.2.3",
-    "ts-jest": "^28.0.7",
-    "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
   }
 }
