@@ -4,7 +4,6 @@ const generator = require('generate-password');
 const makeEndpoints = require('../utils/makeEndpoints');
 const passport = require('passport');
 const checkJwt = require('../utils/jwtAuthMw');
-const mail = require('../mail');
 const crypto = require('node:crypto');
 const User = require('../models/user');
 const ctrlProfile = require('../controllers/profile');
@@ -156,48 +155,6 @@ userRoutes.route('/updatePassword/:id').post((req, res) => {
       });
     } else {
       res.status(404).send(`User with _id ${req.params.id} could not be found`);
-    }
-  });
-});
-
-/**
- * Send user an email with randomly generated password and update user object => DEPRICATED?
- * @param {Object} req body: Classroom object
- * @return {Object} Success or error message
- */
-userRoutes.route('/sendNewPassword/').post((req, res) => {
-  User.findOne({'username': req.body.username}, (err, user) => {
-    if (err) {
-      return res.status(500).json(err);
-    }
-    if (user) {
-      const randomPassword = generator.generate({
-        length: 10,
-        numbers: true,
-      });
-      user.salt = crypto.randomBytes(16).toString('hex');
-      user.hash = crypto.pbkdf2Sync(randomPassword, user.salt, 1000, 64, 'sha512').toString('hex');
-      console.log('change password to: ', randomPassword);
-      user.save().then(() => {
-        const mailObj = {
-          from: 'scealai.info@gmail.com',
-          recipients: [req.body.email],
-          subject: 'Update Password -- An Scéalaí',
-          message: `Hello ${req.body.username},\nYour An Scéalaí password has been updated to:\n${randomPassword}`, // TODO ask the user to change their password again
-        };
-
-        mail.sendEmail(mailObj).then( (nodemailerRes) => {
-          logger.info(nodemailerRes);
-          res.status(200).json('Password updated successfully');
-        }).catch( (err) => {
-          logger.error(err);
-          res.status(500);
-        });
-      }).catch((err) => {
-        res.status(500).json(err);
-      });
-    } else {
-      res.status(404).json(`User with _id ${req.params.id} could not be found`);
     }
   });
 });

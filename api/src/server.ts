@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-
 dotenv.config();
 if(process.env.NODE_ENV==='prod') require('./keys/load');
 else require('./keys/dev/load');
@@ -7,7 +6,6 @@ else require('./keys/dev/load');
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
-const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -16,7 +14,6 @@ const axios = require('axios');
 const errorHandler = require('./utils/errorHandler');
 const checkJwt = require('./utils/jwtAuthMw');
 const dbURL = require('./utils/dbUrl');
-const jwtAuthMw = require('./utils/jwtAuthMw'); // DUPLICATE, NOT USED ? 
 require('./config/passport');
 const expressQueue = require('express-queue');
 const requestIp = require('request-ip');

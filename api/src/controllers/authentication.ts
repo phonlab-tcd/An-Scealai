@@ -3,12 +3,6 @@ import base_url from "../utils/base_url";
 
 /* eslint-disable max-len */
 const logger = require('../logger.js');
-
-const mail = require('../mail');
-if (mail.couldNotCreate) {
-  logger.error('Failed to create mail module in ./api/controllers/authentication.js');
-}
-
 const path = require('path');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -16,6 +10,9 @@ const pendingRegEx = /^Pending$/;
 const activeRegEx = /^Active$/;
 // /<pattern>/i => ignore case
 const validUsernameRegEx = /^[a-z0-9]+$/i;
+
+import * as aws_ses from "../utils/aws-ses-send-email";
+import obscure_email_address from "../utils/obscure_email_address";
 
 /**
  * Generate a new password for a given user
@@ -47,25 +44,32 @@ module.exports.generateNewPassword = async (req, res) => {
     return res.status(400).json('Codes do not match. Refusing to change password.');
   }
 
-  // generate new random password and save to user
+  // generate new random password
   const newPassword = user.generateNewPassword();
   user.setPassword(newPassword);
 
-  user.save().catch((err) => {
-    logger.error(err);
+
+  const mailOpts = aws_ses.send_mail_opts({
+    to: req.query.email,
+    subject: 'New Password -- An Scéalaí',
+    text: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${newPassword}`,
   });
 
-  const mailObj = {
-    from: 'scealai.info@gmail.com',
-    recipients: req.query.email,
-    subject: 'New Password -- An Scéalaí',
-    body: `Your An Scéalaí password has been reset.\nusername: ${req.query.username}\npassword: ${newPassword}`,
-  };
-
   // send email with new random password
-  const mailRes = mail.sendEmail(mailObj);
+  const mail_response = await aws_ses.send_mail_aws(mailOpts).then(ok=>({ok}), err=>({err}));
 
-  res.status(200).send(`<h1>Password reset successfully</h1><ul><li>username:${req.query.username}</li><li>password:${newPassword}</li></ul>`);
+  if ("ok" in mail_response) {
+    const user_save_result = await user.save().then(ok=>({ok}), err=>({err}))
+    if("ok" in user_save_result) {
+      return res.status(200).send(`<h1>Password reset successfully</h1><p>Please check your email (the email may end up in the spam folder).</p>`);
+    } else {
+      console.error({mail_response, user_save_result});
+      return res.send("<p>Failed to update user record. We have sent you an email with a new password, but we failed to update you record. This means the password we sent you will not work! Please try again.</p>");
+    }
+  } else {
+    console.error({mail_response});
+    return res.send("<p>Failed to send email. Your password was not updated because we failed to send you your new password. Please try again.</p>");
+  }
 };
 
 
@@ -121,11 +125,10 @@ module.exports.resetPassword = async (req, res) => {
         logger.error(err);
       });
 
-  const mailObj = {
-    from: 'scealai.info@gmail.com',
-    recipients: [user.email],
+  const mailOpts = aws_ses.send_mail_opts({
+    to: user.email,
     subject: 'An Scéalaí account verification',
-    message:
+    text:
     `Dear ${user.username},\n\
       Please use this link to generate a new password for your account:\n\n\
       ${resetPasswordLink}\n\n\
@@ -133,40 +136,25 @@ module.exports.resetPassword = async (req, res) => {
       Kindly,\n\
       \n\
       The An Scéalaí team`,
-  };
+  });
 
-  try {
-    // make email private for display by replacing characters with ***
-    let hiddenEmail = user.email;
-    for (let i = 0; i < hiddenEmail.indexOf('@') -3; i++) {
-      hiddenEmail = hiddenEmail.replace(hiddenEmail.charAt(i), '*');
-    }
+  // make email private for display by replacing characters with ***
+  const hiddenEmail = obscure_email_address(user.email);
 
-    // send the email
-    const sendEmailRes = await mail.sendEmail(mailObj);
-    if (!sendEmailRes) {
-      return res.status(500).json({
-        messageKeys: [`There seems to have been error while trying to send 
-          an email to ${hiddenEmail}`],
-      });
-    }
+  // send the email
+  const send_email_result = await aws_ses.send_mail_aws(mailOpts).then(ok=>({ok}), err=>({err}));
 
-    if (sendEmailRes.rejected.length && sendEmailRes.rejected.length !== 0) {
-      return res.status(500).json({
-        messageKeys: [`Failed to send verification email 
-          to ${sendEmailRes.rejected}.`],
-      });
-    }
-
-    return res.status(200).json({
-      messageKeys: [`email_sent`],
-      sentTo: hiddenEmail,
-    });
-  } catch (err) {
+  if (!("ok" in send_email_result)) {
     return res.status(500).json({
-      messageKeys: [err.message],
+      messageKeys: [`There seems to have been error while trying to send 
+        an email to ${hiddenEmail}`],
     });
   }
+
+  return res.status(200).json({
+    messageKeys: [`email_sent`],
+    sentTo: hiddenEmail,
+  });
 };
 
 /**
