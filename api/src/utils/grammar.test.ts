@@ -1,9 +1,11 @@
+import { afterEach, afterAll, describe, it, expect } from "@jest/globals";
+import { removeAllCollections } from "../utils/test-utils";
+
 const app = require('../server');
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const Story = require('../models/story');
 const gramadoirModels = require('../models/gramadoir');
-const {removeAllCollections} = require('../utils/test-utils');
 const grammarUtils = require('../utils/grammar');
 
 afterEach(async () => {

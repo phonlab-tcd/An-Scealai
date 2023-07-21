@@ -1,9 +1,13 @@
-require("dotenv");
-require("../utils/load_keys");
-const config = require("../DB");
-const mongoose = require("mongoose");
+import dotenv from "dotenv";
+dotenv.config();
 
-async function removeAllCollections() {
+// side effect loads keys to process.env
+import "../utils/load_keys";
+
+const config = require("../DB");
+import mongoose from "mongoose";
+
+export async function removeAllCollections() {
   // We only want to remove the collections if mongoose
   // is connected to the test db.
   if (mongoose.connection.name !== config.TEST_DB_NAME) {
@@ -20,5 +24,3 @@ async function removeAllCollections() {
       await collection.deleteMany({});
   }
 }
-
-module.exports = {removeAllCollections};

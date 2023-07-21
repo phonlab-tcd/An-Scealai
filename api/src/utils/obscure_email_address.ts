@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 export default function obscure_email_address(email: string) {
   const v = z.string().email().safeParse(email);
   if(!v.success) return {err: v.error};

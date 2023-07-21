@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
+import mongoose from "mongoose";
+import multer from "multer";
+
 const recordingRoutes = express.Router();
-const multer = require("multer");
-const mongoose = require("mongoose");
 const logger = require("../logger.js");
 
 const VoiceRecording = require("../models/recording");
