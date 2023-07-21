@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
   feedbackVisibile: false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
   rightDrawerOpened: boolean = false;
-  selectedDrawer: "grammar" | "dictionary" | "feedback" = "grammar";
+  selectedDrawer: "grammar" | "dictionary" | "feedback" | "synthesis" = "grammar";
 
   // WORD COUNT
   words: string[] = [];
@@ -223,7 +223,7 @@ export class DashboardComponent implements OnInit {
    * Hides/shows the grammar highlighting if the grammar drawer is selected
    * @param selectedContent Indicates which component to be injected into the drawer
    */
-  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback') {
+  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback' | 'synthesis') {
     if (this.rightDrawerOpened) {
       // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
       // once to open the dictionary, and clicked 'dictionary' again to close the drawer

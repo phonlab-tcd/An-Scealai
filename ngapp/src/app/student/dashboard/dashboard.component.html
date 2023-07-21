@@ -83,9 +83,17 @@
   </div>
 
   <!-- SYNTHESIS -->
-  <div
+  <!-- <div
     class="optionsBtn optionsPopupBtn"
     (click)="dontToggle = true; synthesisPlayer.toggleHidden()"
+  >
+    {{ ts.l.audio_check }}
+    <i class="fas fa-volume-up optionsBtnIcon"></i>
+  </div> -->
+    <div
+    class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'synthesis'"
+    (click)="dontToggle = true; toggleRightDrawer('synthesis')"
   >
     {{ ts.l.audio_check }}
     <i class="fas fa-volume-up optionsBtnIcon"></i>
@@ -176,6 +184,12 @@
       [checkBoxes]="checkBoxes"
       (closeGrammarEmitter)="toggleRightDrawer('grammar')"
     ></app-grammar-error-drawer>
+    <!-- SYNTHESIS -->
+    <app-synthesis-drawer
+    *ngIf="selectedDrawer == 'synthesis'"
+    [quillEditor]="quillEditor"
+    (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
+  ></app-synthesis-drawer>
   </mat-drawer>
 </mat-drawer-container>
 

@@ -26,6 +26,7 @@ import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
 import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
 import { GrammarErrorDrawerComponent } from './grammar-error-drawer/grammar-error-drawer.component';
 import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.component';
+import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.compo
     StoryDrawerComponent,
     DictionaryDrawerComponent,
     GrammarErrorDrawerComponent,
-    FeedbackDrawerComponent
+    FeedbackDrawerComponent,
+    SynthesisDrawerComponent
   ],
   imports: [
     CommonModule,
