@@ -5,3 +5,7 @@ CURRENTPORT
 src/sendinblue.json
 src/keys/dev
 src/logs
+
+jwt*
+
+.DS*

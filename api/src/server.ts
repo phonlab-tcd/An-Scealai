@@ -9,7 +9,6 @@ console.log(process.env.PUBLIC_KEY);
 const logger = require('./logger');  // Best to initialize the logger first
 const express = require('express');
 const session = require('express-session');
-const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -82,7 +81,12 @@ if(process.env.FUDGE) {
 }
 
 // log all request urls with `DEBUG=true npm start`
-if(process.env.DEBUG) app.use((req,res,next)=>{console.log(req.url); next();});
+if(process.env.DEBUG) app.use((req,res,next)=>{
+	console.log(req.host);
+	console.log(req.hostname);
+	console.log(req.url);
+	next();
+});
 app.use(session({
   secret: 'SECRET',
   resave: true,
