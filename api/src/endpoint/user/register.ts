@@ -1,7 +1,8 @@
+import { z } from "zod";
+import { Request, Response } from "express";
 import sendVerificationEmail from "../../utils/sendVerificationEmail";
 import is_valid_username from "../../utils/is_valid_username";
 import User from "../../models/user";
-import { z } from "zod";
 import base_url from "../../utils/base_url";
 
 // schema for body of post request
@@ -29,15 +30,14 @@ type RegisterResponse = keyof typeof REGISTER_RESPONSE;
  * @param {Object} res
  * @return {Promise} Success or error message
  */
-export default async function (req, res) {
-
+export default async function (req: Request, res: Response) {
     console.log("USER REGISTER");
     const resObj: {messageKeys:RegisterResponse[], errors: any[]} = {
       messageKeys: [],
       errors: [],
     };
 
-    req.body = base_url(req)
+    req.body.baseurl = base_url(req)
 
     const body_validation = user_register_schema.safeParse(req.body);
     if(! body_validation.success) {
