@@ -5,12 +5,15 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "dev": "webpack serve --config webpack.config.js --open",
+    "dev": "nodemon dist/server.js",
     "start": "node dist/server.js",
-    "start:nocheck": "nodemon -x ts-node --transpile-only server.ts",
     "start:prod": "DB=an-scealai PORT=40000 NODE_ENV=prod node dist/server.js",
     "start:qa": "DB_HOSTNAME=localhost:27018/ DB=qa PORT=4002 node dist/server.js",
-    "build": "make ready"
+    "build": "make ready",
+    "build:watch": "tsc --watch",
+    "start:neimhin": "DB=neimhin-dev PORT=41001 nodemon dist/server.js",
+    "start:maddie": "DB=neimhin-dev PORT=42001 nodemon dist/server.js",
+    "start:oisin": "DB=neimhin-dev PORT=43001 nodemon dist/server.js"
   },
   "jest": {
     "testTimeout": 10000,
