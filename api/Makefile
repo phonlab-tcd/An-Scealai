@@ -3,16 +3,13 @@ DIST_DIR := dist
 
 SRC_TS_JS_FILES := $(wildcard $(SRC_DIR)/*.ts $(SRC_DIR)/*.js)
 
-ready: dist/server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring dist/views
+ready: dist/server.js dist/keys dist/sendinblue.json dist/.env dist/monitoring
 
 dist/server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
 	npx tsc
 
 dist/monitoring:
 	mkdir -p dist/monitoring
-
-dist/views:
-	cp -r src/views $@
 
 dist/.env:
 	cp .env dist/.env
