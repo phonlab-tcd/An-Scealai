@@ -1,4 +1,6 @@
 // @ts-nocheck
+import base_url from "../utils/base_url";
+
 /* eslint-disable max-len */
 const logger = require('../logger.js');
 
@@ -67,6 +69,9 @@ module.exports.generateNewPassword = async (req, res) => {
 };
 
 
+
+
+
 /**
  * Reset the password for a given user
  * @param {Object} req body: Username, baseUrl
@@ -80,10 +85,7 @@ module.exports.resetPassword = async (req, res) => {
     });
   }
 
-  if ( !req.body.baseurl ) {
-    logger.warning('baseurl not provided. defaulting to dev server: http://localhost:4000/');
-    req.body.baseurl = 'http://localhost:4000/';
-  }
+  req.body.baseurl = base_url(req);
 
   // get user from DB by username
   try {
@@ -333,10 +335,8 @@ module.exports.verifyOldAccount = async (req, res) => {
       );
       return res.status(400).json(resObj);
     }
-    if (!req.body.baseurl) {
-      logger.warning('baseurl not provided to verifyOldAccount. Defaulting to dev server: http://localhost:4000/');
-      req.body.baseurl = 'http://localhost:4000/';
-    }
+
+    req.body.baseurl = base_url(req);
 
     logger.info('Beginning verification of ' + req.body.username);
 
@@ -402,7 +402,7 @@ module.exports.verifyOldAccount = async (req, res) => {
             req.body.username,
             req.body.password,
             req.body.email,
-            req.body.baseurl,
+	    req.body.baseurl,
             req.body.language,
         );
 
@@ -433,7 +433,7 @@ module.exports.verifyOldAccount = async (req, res) => {
     return res
         .status(500)
         .json({messageKeys: messageKeys,
-          file: '.api/controllers/authentication.js',
+          file: './api/controllers/authentication.js',
           functionName: 'verifyOldAccount',
           error: error,
         });
@@ -459,12 +459,8 @@ module.exports.register = async (req, res) => {
     resObj.messageKeys.push('username_password_and_email_required');
     return res.status(400).json(resObj);
   }
-  if (!req.body.baseurl) {
-    logger.warning(
-        'Property baseurl missing from registration request.' +
-        'Using default (dev server).');
-    req.body.baseurl = 'http://localhost:4000/';
-  }
+
+  req.body.baseurl = base_url(req);
 
   if (!req.body.username.match(validUsernameRegEx)) {
     resObj.messageKeys.push('username_no_special_chars');
