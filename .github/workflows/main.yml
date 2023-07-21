@@ -27,7 +27,7 @@ jobs:
       - run: npm -v
       - run: npx --prefix ngapp node -v
       - run: "parallel npm i --prefix ::: api ngapp"
-      - run: npx --prefix api tsc
+      - run: npm run --prefix api build
       - run: mongod &
       - run: mongod_pid=$!
       - run: mv .env.example .env
