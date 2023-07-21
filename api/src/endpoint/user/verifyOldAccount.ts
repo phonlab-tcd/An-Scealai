@@ -1,13 +1,17 @@
 import sendVerificationEmail from "../../utils/sendVerificationEmail";
 import User from "../../models/user";
+import { Request, Response } from "express";
+import base_url from "../../utils/base_url";
 
 /**
- * Verify older accounts in the DB that did not have email verification upon registration
+ * Verify older accounts in the DB that did not have email verification upon registration, i.e. find an existing account to verify rather than creating one.
  * @param {Object} req query: username, email, password
  * @param {Object} res
  * @return {Promise} Success or error message
  */
-export default async function verifyOldAccount(req, res) {
+export default async function verifyOldAccount(req: Request, res: Response) {
+    req.body.baseurl = base_url(req);
+
     const resObj: any = {
         messageKeys: [],
         errors: [],
@@ -18,10 +22,6 @@ export default async function verifyOldAccount(req, res) {
             'username_password_and_email_required',
         );
         return res.status(400).json(resObj);
-    }
-    if (!req.body.baseurl) {
-        console.warn('baseurl not provided to verifyOldAccount. Defaulting to dev server: http://localhost:4000/');
-        req.body.baseurl = 'http://localhost:4000/';
     }
 
     console.log('Beginning verification of ' + req.body.username);
