@@ -23,11 +23,18 @@ jobs:
           mongodb-version: 3.6
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - run: sudo apt-get install -y parallel
+      - run: sudo apt-get install -y parallel openssl
       - run: npm -v
       - run: npx --prefix ngapp node -v
       - run: "parallel npm i --prefix ::: api ngapp"
-      - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start:nocheck & npm run --prefix ngapp e2e
+      - run: npx --prefix api tsc
+      - run: mongod &
+      - run: mongod_pid=$!
+      - run: bash keys/dev/jwtRS256-gen.sh
+      - run: mv jwt* dist/keys/dev/
+      - run: FUDGE=1 AWS_SES_DISABLE=1 npm run --prefix npm start & 
+      - run: backend_pid=$!
+      - run: npm run --prefix ngapp e2e
 
   test-backend:
     runs-on: ubuntu-latest
