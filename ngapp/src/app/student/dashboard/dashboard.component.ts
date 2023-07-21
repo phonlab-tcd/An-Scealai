@@ -397,9 +397,10 @@ export class DashboardComponent implements OnInit {
       return "";
     }
     return text
-      .replace(/\s*style="([^"])+"/g, "")
-      .replace(/\s*highlight-tag-type="([^"])+"/g, "")
-      .replace(/\s*highlight-tag="([^"])+"/g, "");
+      .replace(/\s*id="([^"])+"/g, "")
+      .replace(/\s*highlight-tag="([^"])+"/g, "")
+      .replace(/\s*left-edge=".*?"/g, '')
+      .replace(/\s*right-edge=".*?"/g, '');
   }
 
   /* Toggle upper menu buttons */
@@ -436,6 +437,7 @@ export class DashboardComponent implements OnInit {
 
   /* Download story in selected format */
   downloadStory() {
+    this.debounceSaveStory();
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.download,
