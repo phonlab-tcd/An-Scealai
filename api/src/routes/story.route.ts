@@ -450,7 +450,7 @@ storyRoutes.route("/downloadStory/:id/:format").get(async (req, res) => {
 });
 
 /**
- * Synthesise a given story by ID
+ * Synthesise a given story by ID => DEPRECATED?
  * @param {Object} req params: Story ID
  * @return {Object} Synthesis data
  */
