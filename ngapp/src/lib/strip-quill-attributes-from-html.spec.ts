@@ -5,35 +5,35 @@ function no_change(x: any) {
 }
 
 const tests = [
-  { 
+  {
     in: `<span highlight-tag="abcdefg"> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span id="abcdefg"> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span left-edge="abcedf"> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span right-edge="abcedf"> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span highlight-tag=""> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span id=""> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span left-edge=""> hello </span>`,
     out: `<span> hello </span>`,
   },
-  { 
+  {
     in: `<span right-edge=""> hello </span>`,
     out: `<span> hello </span>`,
   },
@@ -44,7 +44,7 @@ const tests = [
   },
 ];
 
-fdescribe("removes html attributes from a string", function(){
+describe("removes html attributes from a string", function(){
   for( const test of tests ) {
     it(`in:  ${test.in}\nout: ${test.out}`, function(){
       expect(stripQuillAttributesFromHTML(test.in)).toEqual(test.out);
