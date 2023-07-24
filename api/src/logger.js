@@ -76,6 +76,7 @@ const levels = {
     debug: 7,
   };
 logger = winston.createLogger({
+  silent: process.env.NODE_ENV === "test",
   transports,
   levels,
 });

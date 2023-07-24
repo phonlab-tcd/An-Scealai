@@ -21,21 +21,21 @@ let storyRoutes;
 (() => {
   // ENDPOINT HANDLERS
   // GET
-  const withId = require("../endpoints_functions/story/withId");
+  const withId = require("../endpoint/story/withId");
   // const myStudentsStory =
-  //   require('../endpoints_functions/story/myStudentsStory');
-  const ownerId = require("../endpoints_functions/story/ownerId");
-  const author = require("../endpoints_functions/story/author");
-  const feedbackAudio = require("../endpoints_functions/story/feedbackAudio");
-  const countGrammarErrors = require("../endpoints_functions/story/countGrammarErrors");
-  const getStoryStats = require("../endpoints_functions/story/getStoryStats");
+  //   require('../endpoint/story/myStudentsStory');
+  const ownerId = require("../endpoint/story/ownerId");
+  const author = require("../endpoint/story/author");
+  const feedbackAudio = require("../endpoint/story/feedbackAudio");
+  const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
+  const getStoryStats = require("../endpoint/story/getStoryStats");
 
   // POST
-  const create = require("../endpoints_functions/story/create");
-  const viewFeedback = require("../endpoints_functions/story/viewFeedback");
-  const updateStoryAndCheckGrammar = require("../endpoints_functions/story/updateStoryAndCheckGrammar");
-  const averageWordCount = require("../endpoints_functions/story/averageWordCount");
-  const getStoriesByDate = require("../endpoints_functions/story/getStoriesByDate");
+  const create = require("../endpoint/story/create");
+  const viewFeedback = require("../endpoint/story/viewFeedback");
+  const updateStoryAndCheckGrammar = require("../endpoint/story/updateStoryAndCheckGrammar");
+  const averageWordCount = require("../endpoint/story/averageWordCount");
+  const getStoriesByDate = require("../endpoint/story/getStoriesByDate");
 
   storyRoutes = makeEndpoints({
     get: {
