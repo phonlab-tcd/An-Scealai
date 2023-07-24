@@ -29,7 +29,7 @@ export type GramadoirTag = {
 * @returns - Promise of an array of ErrorTags
 */
 async function check(input: string, authToken: string):Promise<ErrorTag[]>{
-  const res = await fetch('https://gramadoir.abair.ie/' + encodeURIComponent(input));
+  const res = await fetch('https://gramadoir.abair.ie?text=' + encodeURIComponent(input));
   const errors = await res.json();
 
   // map gramadoir responses to generic ErrorTag values
