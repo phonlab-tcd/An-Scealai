@@ -23,7 +23,7 @@ const REGISTER_RESPONSE = {
 } as const;
 
 type RegisterResponse = keyof typeof REGISTER_RESPONSE;
- 
+
 /**
  * Register new users
  * @param {Object} req body: username, email, password, baseurl
@@ -53,15 +53,15 @@ export default async function (req: Request, res: Response) {
         const k = "username_no_special_chars";
         resObj.messageKeys.push(k);
         return res.status(REGISTER_RESPONSE[k]).json(resObj);
-    }  
-  
+    }
+
     // set new user properties and save user to the DB
     const user = new User();
     user.username = req.body.username;
     user.email = req.body.email;
     user.setPassword(req.body.password);
     user.role = req.body.role;
-  
+
     const save_result = await user.save().then(ok=>({ok}), err=>({err}));
     if("err" in save_result) {
         if(!save_result.err.code) {
@@ -74,7 +74,7 @@ export default async function (req: Request, res: Response) {
         }
         else return res.status(500).json(resObj);
     }
-  
+
     // send verification email so new users can verify their accounts
     const send_mail_result = await sendVerificationEmail(
         user.username,
