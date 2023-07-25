@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const FeedbackComment = new Schema(
   {
+    owner: { type: mongoose.Types.ObjectId },
+    storyId: {
+      type: mongoose.Types.ObjectId,
+      index: true,
+    },
     text: { type: String, required: false },
     audioId: { type: String, required: false },
     range: {
@@ -11,10 +16,6 @@ const FeedbackComment = new Schema(
         index: { type: Number, required: false },
         length: { type: Number, required: false },
       },
-    },
-    storyId: {
-      type: mongoose.Types.ObjectId,
-      index: true,
     },
     lastUpdated: { type: Date, required: true },
   },

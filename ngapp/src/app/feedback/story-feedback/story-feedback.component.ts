@@ -162,7 +162,7 @@ export class StoryFeedbackComponent implements OnInit {
 
     // creates a new feedback-comment component
     this.feedbackCommentService
-      .createNewComment(new FeedbackComment(range, this.story._id))
+      .createNewComment(new FeedbackComment(this.auth.getUserDetails()._id, range, this.story._id))
       .subscribe({
         next: (comment) => {
           // highlight text in quill

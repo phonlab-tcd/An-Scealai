@@ -1,15 +1,17 @@
 export class FeedbackComment {
   _id: string;
+  owner: string;
+  storyId: string;
   range: {
     index: number;
     length: number;
   };
   text: string;
   audioId: string;
-  storyId: string;
   lastUpdated: Date;
 
-  constructor(range: { index: number; length: number }, storyId: string) {
+  constructor(owner: string, range: { index: number; length: number }, storyId: string) {
+    this.owner = owner;
     this.range = range;
     this.storyId = storyId;
   }
