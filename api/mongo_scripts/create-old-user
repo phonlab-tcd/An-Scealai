@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# MongoDB connection string
+MONGODB_CONNECTION_STRING="mongodb://localhost:27017/an-scealai?retryWrites=true&w=majority"
+
+# Document data
+DOCUMENT_DATA='{
+  "username": "John Doe",
+}'
+
+# Execute mongosh command
+mongosh "$MONGODB_CONNECTION_STRING" --eval "db.users.insertOne($DOCUMENT_DATA)"
+

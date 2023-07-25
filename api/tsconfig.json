@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "inlineSourceMap": true,
+    "isolatedModules": true,
     "strict": true,
     "outDir": "dist",
     "rootDir": "src",
@@ -24,8 +26,6 @@
     "src/utils/test-setup-per-file.js",
     "src/utils/test-setup.js",
     "src/utils/test-utils.js",
-    "**/*.test.js",
-    "**/*.test.ts", 
     "**/*.spec.js",
     "**/*.spec.ts", 
     "dist/*"]
