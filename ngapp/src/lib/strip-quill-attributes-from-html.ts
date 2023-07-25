@@ -1,12 +1,8 @@
+import { QUILL_HIGHLIGHT_ATTRIBUTES } from "./quill-highlight/quill-highlight";
 
 const EMPTY_STRING = "";
 
-const ATTRIBUTES_TO_REMOVE = [
-  "id",
-  "highlight-tag",
-  "left-edge",
-  "right-edge",
-];
+const ATTRIBUTES_TO_REMOVE = QUILL_HIGHLIGHT_ATTRIBUTES;
 
 // ? means evaluate lazily  (take minimum number of matches);
 const ATTRIBUTE_VALUE_REGEX = /=".*?"/;
