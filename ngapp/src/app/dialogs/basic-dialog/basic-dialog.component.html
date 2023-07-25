@@ -18,7 +18,9 @@
       <div class="modalText"> {{ts.l.confirm_password}}: <input class="titleInput" type="password" name="passwordConfirm" [(ngModel)]="textInputs[1]"></div>
     </div>
     <!-- teacher classroom code -->
-    <pre *ngIf="data?.type == 'classCode'" class="codeView">{{data?.data}}</pre>
+    <div style="display:flex; align-items: center; justify-content: center; gap: 1rem;">
+      <pre *ngIf="data?.type == 'classCode'" class="codeView">{{data?.data}}</pre> <i [cdkCopyToClipboard]="data?.data" class="fas fa-solid fa-copy copyBtn"></i>
+    </div>
     <!-- single text input -->
     <input *ngIf="data?.type == 'updateText'" type="text" class="titleInput" placeholder="{{ts.l.enter_title}}" name="title" [(ngModel)]="textInputs[0]">
     <!-- select -->
