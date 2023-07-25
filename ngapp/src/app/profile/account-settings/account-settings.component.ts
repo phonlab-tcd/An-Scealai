@@ -182,17 +182,16 @@ export class AccountSettingsComponent implements OnInit {
       return;
     }
 
-    const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
-
-    if (studentsWithThisUsername.length > 0) {
-      this.errorMessage = this.ts.l.username_in_use;
-      this.updatedUsername = "";
-      return;
-    }
-
-    this.userService .updateUsername(this.auth.getUserDetails()._id, this.updatedUsername) .subscribe({
+    this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe({
       next: () => { this.auth.logout(); },
-      error: () => { this.errorMessage = "An error occured"; },
+      error: (error) => { 
+        if (error.error.code == "11000") {
+          this.errorMessage = this.ts.l.username_in_use;
+          this.updatedUsername = "";
+        } else {
+          this.errorMessage = "An error occured"; 
+        }
+      },
     });
   }
 
