@@ -31,7 +31,7 @@ export function init(config: z.infer<typeof email_config>) {
   if(config.AWS_SES_DISABLE) {
     return {
       send_mail_opts: function() { return {success: true} as any },
-      send_mail_aws: function() { return {success: true} as any}
+      send_mail_aws: function() { return Promise.resolve({success: true}) as any}
     }
   }
   const v = email_config.parse(config);

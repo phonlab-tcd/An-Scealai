@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { QuillEditorComponent } from 'ngx-quill';
-// import { expect, describe, fdescribe, beforeEach, it, fit } from "jasmine-core";
 import * as qh from "./quill-highlight";
 import Quill from 'quill';
 import { ErrorTag, ErrorType } from '../grammar-engine/types';
@@ -34,7 +33,7 @@ function bubblingMouseover(el: Element) {
     el.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
 }
 
-fdescribe('QuillEditorComponent', () => {
+describe('QuillEditorComponent', () => {
   let component: QuillEditorComponent;
   let fixture: ComponentFixture<QuillEditorComponent>;
   let quillEditor: Quill;
