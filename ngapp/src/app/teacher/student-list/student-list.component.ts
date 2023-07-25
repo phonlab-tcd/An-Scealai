@@ -88,7 +88,7 @@ export class StudentListComponent implements OnInit {
    * @returns true if story has feedback
    */
   hasFeedback(story) {
-    return (story.feedback.text || story.feedback.audioId)
+    return (story.feedback.hasComments || story.feedback.feedbackMarkup)
   }
 
   /**

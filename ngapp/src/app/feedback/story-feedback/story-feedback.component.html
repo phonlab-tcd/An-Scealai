@@ -1,0 +1,79 @@
+<!-- BODY -->
+<div class="feedbackBody">
+  <div class="storyFeedbackTitleContainer" *ngIf="isTeacher">
+    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()" >
+      {{ ts.l.send }} <i class="fas fa-paper-plane"></i>
+    </button>
+    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled>
+      {{ ts.l.sent }} <i class="fas fa-check"></i>
+    </button>
+    <div style="margin: auto">{{ story?.title }} <span *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</span></div>
+    <div style="margin-left: auto" (click)="closeFeedback()">
+      <i class="fa-solid fa-times closeFeedbackButton"></i>
+    </div>
+  </div>
+  <div class="quillAndCommentsContainer">
+    <div class="quillContainer">
+      <quill-editor
+        [disabled]="!isTeacher"
+        [preserveWhitespace]="true"
+        [debounceTime]="1500"
+        [(ngModel)]="storyTextWithMarkup"
+        (onEditorCreated)="onEditorCreated($event)"
+        (onSelectionChanged)=" isTeacher ? showInlineCommentButton($event) : null "
+        (onContentChanged)="updateFeedbackSentStatus()"
+      >
+        <!-- Toolbar styles: https://github.com/quilljs/quill/blob/f75ff2973f068c3db44f949915eb8a74faf162a8/docs/_includes/full-toolbar.html-->
+        <div quill-editor-toolbar [hidden]="!isTeacher">
+          <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+          </span>
+          <span class="ql-formats">
+            <button
+              style="
+                color: white;
+                background-color: var(--scealai-green);
+                border-radius: 25%;
+              "
+            >
+              <i class="fa-solid fa-message" (click)="createComment()"></i>
+            </button>
+          </span>
+        </div>
+      </quill-editor>
+    </div>
+
+    <!-- Leave a comment message for teachers-->
+    <div *ngIf="isTeacher && commentsList.length === 0" class="commentsContainer">
+      {{ts.l.highlight_text_to_leave_comment_1}} <i class="fa-solid fa-message" style="padding: 5px"></i> {{ts.l.highlight_text_to_leave_comment_2}} {{ story?.author }}.
+    </div>
+
+    <!-- List of comments -->
+    <div *ngIf="commentsList.length > 0" class="commentsContainer">
+      <div *ngIf="feedbackSent && isTeacher && story.feedback.seenByStudent" class="seenByStudent" >
+        {{ ts.l.seen_by }} {{ story?.author }} <i class="fas fa-check"></i>
+      </div>
+      <div *ngIf="feedbackSent && isTeacher && !story.feedback.seenByStudent" class="seenByStudent" >
+        {{ ts.l.not_seen_by }} {{ story?.author }}
+      </div>
+      <div class="commentsList">
+        <app-feedback-comment
+          *ngFor="let comment of commentsList; let i = index"
+          class="comment"
+          (click)="highlightCommentReferenceInQuill(i)"
+          [comment]="comment"
+          [isTeacher]="isTeacher"
+          (deleteEmitter)="removeComment(i, comment)"
+        >
+        </app-feedback-comment>
+      </div>
+    </div>
+  </div>
+</div>
