@@ -5,19 +5,10 @@ const NodeCache = require("node-cache");
 
 const cache = new NodeCache({ stdTTL: 600 });
 
-/**
- * Send request to An Gramadoir for request input
- * Returns any error data found
- * @param {Object} req input text to check
- * @param {Object} res
- * @return {Promise} object of errors
- */
-async function callAnGramadoir(req, res) {
-if(!process.env.GRAMADOIR_URL) process.env.GRAMADOIR_URL = "https://gramadoir.abair.ie/";
+if(!process.env.GRAMADOIR_URL) process.env.GRAMADOIR_URL = "https://gramadoir.abair.ie";
 
 export async function callAnGramadoir(req: Request, res: Response) {
-  const url = process.env.GRAMADOIR_URL + encodeURIComponent(req.params["teacs"]);
-
+  const url = process.env.GRAMADOIR_URL + "?text=" + encodeURIComponent(req.params["teacs"]);
   try {
     // try to get the errors from the cache if sentence already requested
     let cachedErrors = cache.get(req.params["teacs"]);
