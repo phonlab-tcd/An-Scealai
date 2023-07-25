@@ -181,24 +181,23 @@ export class StoryFeedbackComponent implements OnInit {
    */
   showInlineCommentButton(event) {
     let range = event.range;
-    //if (this.feedbackSent) this.feedbackSent = false;
 
-    if (range && range.length > 0 && event.source == "user") {
-      // don't want to create button when highlightCommentReferenceInQuill() is fired
-      const length = range.length;
-      // get bounds of selected text
-      const bounds = this.quillEditor.getBounds(range.index, length);
-      // get bounds of entire quill editor
-      const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
-      const { top } = editorContainer.getBoundingClientRect();
-      // set the location of the button
-      this.commentButton.style.left = `${bounds.right}px`;
-      this.commentButton.style.top = `${top + bounds.bottom}px`;
-      this.commentButton.style.visibility = "visible";
-    } else {
-      // remove any previous comment button added
+    if(!range  ||  !(range.length > 0) || !(event.source == "user")) {
       this.hideExistingCommentButton();
+      return;
     }
+
+    // don't want to create button when highlightCommentReferenceInQuill() is fired
+    const length = range.length;
+    // get bounds of selected text
+    const bounds = this.quillEditor.getBounds(range.index + length, 0);
+    // get bounds of entire quill editor
+    const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
+    const editorRect = editorContainer.getBoundingClientRect();
+    // set the location of the button
+    this.commentButton.style.left = `${editorRect.left + bounds.right}px`;
+    this.commentButton.style.top = `${editorRect.top + bounds.bottom}px`;
+    this.commentButton.style.visibility = "visible";
   }
 
   /**
