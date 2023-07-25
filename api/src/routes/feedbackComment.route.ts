@@ -6,6 +6,8 @@ import updateFeedbackComment from "../endpoint/feedback/updateFeedbackComment";
 import deleteFeedbackComment from "../endpoint/feedback/deleteFeedbackComment";
 import addAudioFeedback from "../endpoint/feedback/addAudioFeedback";
 import getAudioFeedback from '../endpoint/feedback/getAudioFeedback';
+import deleteFeedbackCommentsForOwner from "../endpoint/feedback/deleteFeedbackCommentsForOwner";
+import deleteFeedbackCommentsForStory from "../endpoint/feedback/deleteFeedbackCommentsForStory";
 
 export default makeEndpoints({
   post: {
@@ -15,6 +17,8 @@ export default makeEndpoints({
   },
   get: {
     '/deleteFeedbackComment/:id': deleteFeedbackComment,
+    '/deleteFeedbackCommentsForOwner/:ownerId': deleteFeedbackCommentsForOwner,
+    '/deleteFeedbackCommentsForStory/:storyId': deleteFeedbackCommentsForStory,
     '/getFeedbackComments/:storyId': getFeedbackComments,
     '/getAudioFeedback/:id': getAudioFeedback,
   },

@@ -28,6 +28,14 @@ export class FeedbackCommentService {
     return this.http.get(`${this.baseUrl}/deleteFeedbackComment/${id}`);
   }
 
+  deleteFeedbackCommentsForOwner(ownerId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/deleteFeedbackCommentsForOwner/${ownerId}`);
+  }
+
+  deleteFeedbackCommentsForStory(storyId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/deleteFeedbackCommentsForStory/${storyId}`);
+  }
+
   addAudioFeedback(id: string, audioBlob: Blob) : Observable<any>{
     let formData = new FormData();
     formData.append('audio', audioBlob);
