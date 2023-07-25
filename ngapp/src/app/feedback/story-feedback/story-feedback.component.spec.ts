@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialog} from '@angular/material/dialog';
 
 import { StoryFeedbackComponent } from './story-feedback.component';
 
@@ -8,7 +10,11 @@ describe('StoryFeedbackComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StoryFeedbackComponent ]
+      declarations: [ StoryFeedbackComponent ],
+      imports: [HttpClientTestingModule],
+      providers: [
+        { provide: MatDialog, useValue: {} }
+    ]
     })
     .compileComponents();
 
