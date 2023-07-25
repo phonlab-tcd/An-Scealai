@@ -1,4 +1,3 @@
-import { callAnGramadoir } from "../endpoint/gramadoir/callAnGramadoir";
 const gramadoirRoutes = require('express').Router();
 
 const { getUniqueErrorTypeCounts } = require('../endpoint/gramadoir/getUniqueErrorTypeCounts');
@@ -21,9 +20,6 @@ gramadoirRoutes
     .post(checkJwt, getTimeGrammarCounts);
 
 // //////////////////////////////////////////// GET
-gramadoirRoutes
-    .route('/callAnGramadoir/:teacs')
-    .get(checkJwt, callAnGramadoir);
 gramadoirRoutes
     .route('/getUniqueErrorTypeCounts/:storyId')
     .get(checkJwt, getUniqueErrorTypeCounts);
