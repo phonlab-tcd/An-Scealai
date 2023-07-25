@@ -77,7 +77,7 @@ export class StoryFeedbackComponent implements OnInit {
       this.feedbackSent = false;
       this.storyTextWithMarkup = this.story.htmlText || this.story.text;
     }
-    // check if student has updated story since last teacher edits made, if so refresh button is displayed => TODO
+    // check if student has updated story since last teacher edits made
     else {
       this.feedbackSent = true;
       this.storyTextWithMarkup = this.story.feedback.feedbackMarkup;
@@ -187,7 +187,6 @@ export class StoryFeedbackComponent implements OnInit {
       return;
     }
 
-    // don't want to create button when highlightCommentReferenceInQuill() is fired
     const length = range.length;
     // get bounds of selected text
     const bounds = this.quillEditor.getBounds(range.index + length, 0);
@@ -198,6 +197,17 @@ export class StoryFeedbackComponent implements OnInit {
     this.commentButton.style.left = `${editorRect.left + bounds.right}px`;
     this.commentButton.style.top = `${editorRect.top + bounds.bottom}px`;
     this.commentButton.style.visibility = "visible";
+  }
+
+  /**
+   * Check if the teacher has made edits in the student's story after sending feedback
+   */
+  updateFeedbackSentStatus() {
+    if (this.feedbackSent) {
+      if (this.checkTextDifference( this.initialStoryTextWithMarkup, this.storyTextWithMarkup)) {
+        this.feedbackSent = false;
+      } 
+    }
   }
 
   /**
