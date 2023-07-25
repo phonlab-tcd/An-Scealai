@@ -9,6 +9,7 @@ if(!process.env.GRAMADOIR_URL) process.env.GRAMADOIR_URL = "https://gramadoir.ab
 
 export async function callAnGramadoir(req: Request, res: Response) {
   const url = process.env.GRAMADOIR_URL + "?text=" + encodeURIComponent(req.params["teacs"]);
+
   try {
     // try to get the errors from the cache if sentence already requested
     let cachedErrors = cache.get(req.params["teacs"]);
