@@ -241,11 +241,13 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   openDeleteDialog() {
+    const userDetails = this.auth.getUserDetails();
+    if(!userDetails) return;
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.are_you_sure,
         message:
-          this.auth.getUserDetails().role === "STUDENT"
+          userDetails.role === "STUDENT"
             ? this.ts.l.this_includes_story_data
             : this.ts.l.this_includes_personal_data,
         type: "",

@@ -37,7 +37,7 @@
           <option *ngFor="let opt of dialectPreferences">{{ opt }}</option>
         </select>
       </div> -->
-      <div class="settingsEntryContainer" *ngIf="auth.getUserDetails().role === 'STUDENT'" >
+      <div class="settingsEntryContainer" *ngIf="auth.getUserDetails()?.role === 'STUDENT'" >
         <div class="settingsLabel">{{ ts.l.classroom }}</div>
         <!-- classroom if already joined -->
         <div class="settingsEntry" *ngIf="classroom">

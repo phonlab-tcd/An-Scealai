@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { TeacherDashboardComponent } from './teacher-dashboard.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('TeacherDashboardComponent', () => {
   let component: TeacherDashboardComponent;
@@ -8,7 +9,8 @@ describe('TeacherDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TeacherDashboardComponent ]
+      declarations: [ TeacherDashboardComponent ],
+      imports: [ HttpClientTestingModule, MatDialogModule ],
     })
     .compileComponents();
 
