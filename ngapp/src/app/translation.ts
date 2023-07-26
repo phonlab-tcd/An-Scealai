@@ -344,6 +344,9 @@ export default {
   register: {
     ga: 'Cláraigh',
     en: 'Register' },
+  failed_to_send_email: {
+    ga: 'Chlis ar sheachadadh an rphoist seo. Triail arís é le do thoil.',
+    en: 'An error occurred while trying to send an email. Please try again.', },
   username_in_use: {
     ga: '*An t-ainm tógtha cheana',
     en: '*Username already in use' },
@@ -2456,5 +2459,4 @@ export default {
   page_requires_microphone: {
     ga: 'Ar an leathanach seo, tá gá le cead an micreafón ar do ríomhaire a úsáid. Cliceáil ar an gcnaipe a léiríonn an micreafón blocáilte ar an mbarra seoltaí chun cead a shocrú. Ansin cliceáil ar \'Athlódáil\' thíos.',
     en: 'This page requires access to your microphone. Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below' },
-      
 }
