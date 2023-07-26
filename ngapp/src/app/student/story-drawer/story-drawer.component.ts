@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, Input, EventEmitter } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
 import { RecordingService } from "../../core/services/recording.service";
+import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { EventType } from "../../core/models/event";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
@@ -32,6 +33,7 @@ export class StoryDrawerComponent implements OnInit {
     private storyService: StoryService,
     private engagement: EngagementService,
     private recordingService: RecordingService,
+    private feedbackCommentService: FeedbackCommentService,
     private dialog: MatDialog
   ) {}
 
@@ -72,11 +74,7 @@ export class StoryDrawerComponent implements OnInit {
     this.storyEmitter.emit(story);
 
     // emit whether or not the story has any feedback
-    story.feedback.text ||
-    story.feedback.audioId ||
-    story.feedback.feedbackMarkup
-      ? this.hasFeedback.emit(true)
-      : this.hasFeedback.emit(false);
+    this.hasFeedback.emit(this.storyHasFeedback(story))
 
     // set css for selecting a story in the side nav
     let id = story._id;
@@ -94,17 +92,12 @@ export class StoryDrawerComponent implements OnInit {
   }
 
   /**
-   * Returns true if the story has unseen feedback, otherwise false
-   * @param story story in story list
+   * Returns true if the story has feedback left from the teacher
+   * @param story story selected from list
    * @returns true or false
    */
-  hasUnreadFeedback(story: Story) {
-    return (
-      (story.feedback.text ||
-        story.feedback.audioId ||
-        story.feedback.feedbackMarkup) &&
-      !story.feedback.seenByStudent
-    );
+  storyHasFeedback(story) {
+    return story.feedback.hasComments || story.feedback.feedbackMarkup
   }
 
   /**
@@ -185,6 +178,9 @@ export class StoryDrawerComponent implements OnInit {
     // remove any associated recordings
     this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
     this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
+
+    // remove any associated feedback comments
+    this.feedbackCommentService.deleteFeedbackCommentsForStory(id).subscribe((_) => {});
 
     // get index of story to be deleted within story list
     const storyIndex = this.stories.findIndex((story) => story._id === id);

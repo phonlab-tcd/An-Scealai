@@ -5,6 +5,7 @@ import { UntypedFormControl } from "@angular/forms";
 import { Classroom } from "app/core/models/classroom";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
+import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { Story } from "app/core/models/story";
 import { User } from "app/core/models/user";
 import { ProfileService } from "app/core/services/profile.service";
@@ -48,6 +49,7 @@ export class AccountSettingsComponent implements OnInit {
     public messageService: MessageService,
     public userService: UserService,
     public recordingService: RecordingService,
+    private feedbackCommentService: FeedbackCommentService,
     private dialog: MatDialog
   ) {}
 
@@ -159,6 +161,7 @@ export class AccountSettingsComponent implements OnInit {
 
     if (userDetails.role === "TEACHER") {
       this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe((_) => {});
+      this.feedbackCommentService.deleteFeedbackCommentsForOwner(userDetails._id).subscribe((_) => {});
     }
 
     this.messageService.deleteAllMessages(userDetails._id).subscribe((_) => {});
@@ -182,17 +185,16 @@ export class AccountSettingsComponent implements OnInit {
       return;
     }
 
-    const studentsWithThisUsername = await this.userService.getUserByUsername(this.updatedUsername).toPromise();
-
-    if (studentsWithThisUsername.length > 0) {
-      this.errorMessage = this.ts.l.username_in_use;
-      this.updatedUsername = "";
-      return;
-    }
-
-    this.userService .updateUsername(this.auth.getUserDetails()._id, this.updatedUsername) .subscribe({
+    this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe({
       next: () => { this.auth.logout(); },
-      error: () => { this.errorMessage = "An error occured"; },
+      error: (error) => { 
+        if (error.error.code == "11000") {
+          this.errorMessage = this.ts.l.username_in_use;
+          this.updatedUsername = "";
+        } else {
+          this.errorMessage = "An error occured"; 
+        }
+      },
     });
   }
 

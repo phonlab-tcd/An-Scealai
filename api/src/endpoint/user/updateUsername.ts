@@ -8,12 +8,14 @@ export default async function updateUsername(req: Request, res: Response) {
   if (!user) throw new API404Error(`No users with this id were found.`);
 
   user.username = req.body.newUsername;
-
-  try {
-    await user.save();
-    return res.status(200).json('Username updated successfully');
-  } catch (err) {
-    console.warn(new Error("failed to save user"), user, req.params)
-    return res.status(500).send(err);
-  }
+  user.save().then(
+    () => {
+      return res.status(200).json("Username updated successfully");
+    },
+    (err) => {
+      console.log(err.code);
+      console.error(new Error("failed to update username"), err);
+      return res.status(400).json({ code: err.code });
+    }
+  );
 }
