@@ -1,4 +1,4 @@
-export default {
+const translations = {
   iso_code: {
     ga: 'ga',
     en: 'en' },
@@ -2492,4 +2492,7 @@ export default {
   create_first_classroom: {
     ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
     en: 'Click on the \'+\' button to create your first classroom!' },
-}
+} as const;
+
+export default translations;
+export type TRANSLATION_KEY = keyof typeof translations;
