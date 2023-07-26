@@ -237,21 +237,22 @@ storyRoutes.route("/feedback/:id").get(function (req, res) {
  * @param {Object} req body: Feedback data
  * @return {Object} Success or error message
  */
-storyRoutes.route("/addFeedback/:id").post((req, res) => {
+storyRoutes.route("/updateFeedbackStatus/:id").post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
-      console.log(err);
-      res.json(err);
+      console.error(err);
+      return res.json(err);
     }
     if (story) {
-      story.feedback.text = req.body.feedback;
+      //story.feedback.text = req.body.feedback; // DEPRECATED
       story.feedback.seenByStudent = false;
       story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.feedback.hasComments = req.body.hasComments;
       story.feedback.lastUpdated = new Date();
       story.save();
-      res.status(200).json({ message: "Feedback added successfully" });
+      return res.status(200).json({ message: "Feedback added successfully" });
     } else {
-      res.status(404).json({ message: "Story does not exist" });
+      return res.status(404).json({ message: "Story does not exist" });
     }
   });
 });

@@ -30,7 +30,6 @@
 
 <!-- STORY OPTIONS TOOL BAR -->
 <div class="optionsBtnContainer" *ngIf="story">
-
   <!-- SPEECH TO TEXT-->
   <div
     class="optionsBtn optionsPopupBtn"
@@ -127,11 +126,11 @@
   </mat-drawer>
 
   <!-- STORY WRITING CONTAINER-->
-  <div class="storyContainer" >
-    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="storiesLoaded && story; else newStoryMessage" >
+  <div class="storyContainer">
+    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="storiesLoaded && story; else newStoryMessage">
       <!-- STORY DRAWER BUTTON-->
-      <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()">menu</span>
-      <div class="wordCount">{{ts.l.word_count}}: {{wordCount}}</div>
+      <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()" >menu</span >
+      <div class="wordCount">{{ ts.l.word_count }}: {{ wordCount }}</div>
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor
         [modules]="quillToolbar"
@@ -147,8 +146,8 @@
     <!-- NO STORIES MESSAGE-->
     <ng-template #newStoryMessage>
       <div *ngIf="storiesLoaded" class="newStoryMessage">
-        <i class="fas fa-arrow-left fa-3x" style="animation: pulse 2s infinite linear;"></i>
-        <div>Click on the '+' button to create your first story!</div>
+        <i class="fas fa-arrow-left fa-3x" style="animation: pulse 2s infinite linear" ></i>
+        <div>{{ts.l.create_first_story}}</div>
       </div>
     </ng-template>
   </div>
@@ -156,10 +155,11 @@
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
     <!-- FEEDBACK -->
     <app-feedback-drawer
-      *ngIf="selectedDrawer == 'feedback'"
-      [story]="story"
-      (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
-    ></app-feedback-drawer>
+    *ngIf="selectedDrawer == 'feedback'"
+    [story]="story"
+    [hasFeedback]="hasFeedback"
+    (closeFeedbackEmitter)="toggleRightDrawer('feedback')">
+    </app-feedback-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer
       *ngIf="selectedDrawer == 'dictionary'"
