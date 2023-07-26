@@ -69,6 +69,9 @@ const Story = new Schema(
       createdWithPrompts: {
         type: Boolean,
       },
+      timeSpentOnStory: {
+        type: Number,
+      },
     },
     {
       collection: 'story',
