@@ -22,7 +22,8 @@ const REGISTER_RESPONSE = {
     'failed_to_send_email': 500,
 } as const;
 
-const ensureType: Partial<Record<TRANSLATION_KEY, number>> = REGISTER_RESPONSE;
+// this variable is just used to trigger type checking, not used at runtime.
+const ensureKeysExist: Partial<Record<TRANSLATION_KEY, number>> = REGISTER_RESPONSE;
 
 type RegisterResponse = keyof typeof REGISTER_RESPONSE;
 
