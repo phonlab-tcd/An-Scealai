@@ -1,0 +1,146 @@
+.feedbackBody {
+    height: 100%;
+}
+
+.storyFeedbackTitleContainer {
+    font-size: 16pt;
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.storyTitleAndDate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sendFeedbackButton {
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    background-color: var(--scealai-green);
+    color: white;
+}
+
+.sendFeedbackButton:hover {
+    cursor: pointer;
+    background-color: var(--scealai-dark-green);
+}
+  
+.sendFeedbackButton:disabled {
+    cursor: auto;
+    background-color: var(--scealai-green);
+}
+
+.closeFeedbackButton {
+    margin-left: auto;
+    padding-right: 20px;
+}
+  
+.closeFeedbackButton:hover {
+    cursor: pointer;
+}
+
+.quillAndCommentsContainer{
+    background-color: #F8F9FA;
+    display: flex;
+}
+
+.quillContainer {
+    flex: 0 0 70%;
+}
+
+.ql-editor {
+    background-color: white;
+    z-index: 1;
+    font-size: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 20px;
+    min-height: 60vh !important;        // current way to set the height, would like to make it dynamic
+    max-height: 60vh !important;
+}
+
+.commentsContainer {
+    flex: 1;
+    padding-top: 50px;
+    background-color: white;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.commentsList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    height: 100%;
+}
+
+.comment {
+    width: 80%;
+    max-height: 300px;
+}
+
+.commentButton {
+    color: white;
+    background-color: var(--scealai-green);
+    z-index: 999; // important so the button appears over the quill text
+    border-radius: 25%; 
+    border: none;
+    position: absolute;
+}
+
+.commentButton:hover {
+    color: var(--scealai-light-green);
+}
+
+.ql-toolbar.ql-snow {
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
+    text-align: center;
+}
+  
+.refresh {
+    float:right;
+    padding: 5px;
+    padding-right: 30px;
+    padding-top: 15px;
+}
+
+.refresh:hover {
+    cursor: pointer;
+}
+
+.menuButton {
+    float:left;
+    padding: 10px;
+    transform: scale(1.5);
+    z-index: 100;
+}
+
+.menuButton:hover {
+    cursor: pointer;
+}
+
+.closeFeedbackBtn:hover {
+    cursor: pointer;
+}
+
+.madeWithPrompts {
+    padding-left: 5px;
+    color: grey;
+}
+
+.seenByStudent {
+    font-size: 10pt;
+    color: var(--scealai-light-gray);
+    text-align: left;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}

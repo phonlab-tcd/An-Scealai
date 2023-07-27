@@ -1,4 +1,4 @@
-export default {
+const translations = {
   iso_code: {
     ga: 'ga',
     en: 'en' },
@@ -344,6 +344,9 @@ export default {
   register: {
     ga: 'Cláraigh',
     en: 'Register' },
+  failed_to_send_email: {
+    ga: 'Chlis ar sheachadadh an rphoist seo. Triail arís é le do thoil.',
+    en: 'An error occurred while trying to send an email. Please try again.', },
   username_in_use: {
     ga: '*An t-ainm tógtha cheana',
     en: '*Username already in use' },
@@ -866,9 +869,12 @@ export default {
   choose_an_error: {
     ga: 'Roghnaigh earráid len í a fhiosrú',
     en: 'Choose an error to see details' },
-  edit: {
+  edit_title_dialect: {
     ga: 'Athraigh teideal/canúint',
     en: 'Edit Title/Dialect' },
+  edit: {
+    ga: 'Déan eagarthóireacht ar',
+    en: 'Edit' },
   no_feedback_provided: {
     ga: 'Níl aon aiseolas tugtha faoin scéal seo',
     en: 'No feedback has been provided for this story' },
@@ -890,6 +896,9 @@ export default {
   no_feedback_given: {
     ga: 'Gan aiseolas (tugtha)',
     en: 'No feedback given' },
+  feedback_given: {
+    ga: 'Aiseolas curtha ar fáil',
+    en: 'Feedback given' },
   filter_by: {
     ga: 'Scag trí',
     en: 'Filter by' },
@@ -956,6 +965,9 @@ export default {
   share_code: {
     ga: 'Roinn an cód',
     en: 'Share code' },
+  click_on_share_code_button: {
+    ga: 'Cliceáil ar \'Roinn an Cód\' chun an cód don seomra ranga a ghiniúint. Roinn an cód seo le do chuid daltaí ionas gur féidir leo teacht isteach i do sheomra ranga.',
+    en: 'Click on the \'Share Code\' button to get the classroom code. Share this code with your students can they can join the classroom.' },
   student_username: {
     ga: 'Ainm úsáideora an dalta',
     en: 'Student username' },
@@ -1004,6 +1016,15 @@ export default {
   leave_feedback_for: {
     ga: 'Fág aiseolas do',
     en: 'Leave some feedback for' },
+  would_you_like_send_feedback: {
+    ga: 'Ar mhaith leat aiseolas a sheoladh chuig',
+    en: 'Would you like to send your feedback to' },
+  highlight_text_to_leave_comment_1: {
+    ga: 'Cliceál ar an gcnaipe',
+    en: 'Click on the' },
+  highlight_text_to_leave_comment_2: {
+    ga: 'nó aibhsigh cuid den téacs chun nóta tráchta a fhágáil do',
+    en: 'icon or highlight a section of text to leave a comment for' },
   save_changes: {
     ga: 'Sabháil na hathruithe',
     en: 'Save changes'
@@ -2456,5 +2477,22 @@ export default {
   page_requires_microphone: {
     ga: 'Ar an leathanach seo, tá gá le cead an micreafón ar do ríomhaire a úsáid. Cliceáil ar an gcnaipe a léiríonn an micreafón blocáilte ar an mbarra seoltaí chun cead a shocrú. Ansin cliceáil ar \'Athlódáil\' thíos.',
     en: 'This page requires access to your microphone. Click on the blocked microhone icon in your browser\'s address bar to allow access, then click on the \'Refresh\' button below' },
-      
-}
+  no_of_students: {
+    ga: 'Líon na bhfoghlaimeoirí',
+    en: 'No. of students' },
+  no_of_stories: {
+    ga: 'Líon scéalta',
+    en: 'No. of stories' },
+  student: {
+    ga: 'Foghlaimeoir',
+    en: 'Student' },
+  create_first_story: {
+    ga: 'Cliceáil ar \'+\' chun tosú ar do chéad scéal!',
+    en: 'Click on the \'+\' button to create your first story!' },
+  create_first_classroom: {
+    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    en: 'Click on the \'+\' button to create your first classroom!' },
+} as const;
+
+export default translations;
+export type TRANSLATION_KEY = keyof typeof translations;

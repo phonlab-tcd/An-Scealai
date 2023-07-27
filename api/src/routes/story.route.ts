@@ -21,21 +21,21 @@ let storyRoutes;
 (() => {
   // ENDPOINT HANDLERS
   // GET
-  const withId = require("../endpoints_functions/story/withId");
+  const withId = require("../endpoint/story/withId");
   // const myStudentsStory =
-  //   require('../endpoints_functions/story/myStudentsStory');
-  const ownerId = require("../endpoints_functions/story/ownerId");
-  const author = require("../endpoints_functions/story/author");
-  const feedbackAudio = require("../endpoints_functions/story/feedbackAudio");
-  const countGrammarErrors = require("../endpoints_functions/story/countGrammarErrors");
-  const getStoryStats = require("../endpoints_functions/story/getStoryStats");
+  //   require('../endpoint/story/myStudentsStory');
+  const ownerId = require("../endpoint/story/ownerId");
+  const author = require("../endpoint/story/author");
+  const feedbackAudio = require("../endpoint/story/feedbackAudio");
+  const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
+  const getStoryStats = require("../endpoint/story/getStoryStats");
 
   // POST
-  const create = require("../endpoints_functions/story/create");
-  const viewFeedback = require("../endpoints_functions/story/viewFeedback");
-  const updateStoryAndCheckGrammar = require("../endpoints_functions/story/updateStoryAndCheckGrammar");
-  const averageWordCount = require("../endpoints_functions/story/averageWordCount");
-  const getStoriesByDate = require("../endpoints_functions/story/getStoriesByDate");
+  const create = require("../endpoint/story/create");
+  const viewFeedback = require("../endpoint/story/viewFeedback");
+  const updateStoryAndCheckGrammar = require("../endpoint/story/updateStoryAndCheckGrammar");
+  const averageWordCount = require("../endpoint/story/averageWordCount");
+  const getStoriesByDate = require("../endpoint/story/getStoriesByDate");
 
   storyRoutes = makeEndpoints({
     get: {
@@ -237,21 +237,22 @@ storyRoutes.route("/feedback/:id").get(function (req, res) {
  * @param {Object} req body: Feedback data
  * @return {Object} Success or error message
  */
-storyRoutes.route("/addFeedback/:id").post((req, res) => {
+storyRoutes.route("/updateFeedbackStatus/:id").post((req, res) => {
   Story.findById(req.params.id, (err, story) => {
     if (err) {
-      console.log(err);
-      res.json(err);
+      console.error(err);
+      return res.json(err);
     }
     if (story) {
-      story.feedback.text = req.body.feedback;
+      //story.feedback.text = req.body.feedback; // DEPRECATED
       story.feedback.seenByStudent = false;
       story.feedback.feedbackMarkup = req.body.feedbackMarkup;
+      story.feedback.hasComments = req.body.hasComments;
       story.feedback.lastUpdated = new Date();
       story.save();
-      res.status(200).json({ message: "Feedback added successfully" });
+      return res.status(200).json({ message: "Feedback added successfully" });
     } else {
-      res.status(404).json({ message: "Story does not exist" });
+      return res.status(404).json({ message: "Story does not exist" });
     }
   });
 });

@@ -15,6 +15,7 @@ import { EventType } from "app/core/models/event";
 export class FeedbackDrawerComponent implements OnInit {
   @Output() closeFeedbackEmitter = new EventEmitter();
   @Input() story: Story;
+  @Input() hasFeedback: boolean;
   audioSource: SafeUrl;
 
   constructor(
@@ -28,13 +29,16 @@ export class FeedbackDrawerComponent implements OnInit {
   ngOnInit(): void {}
 
   ngOnChanges(changes: any) {
-    if (
-      this.story &&
-      (this.story.feedback.text ||
-      this.story.feedback.audioId ||
-      this.story.feedback.feedbackMarkup)
-    ) {
-      this.getFeedback();
+    // if (
+    //   this.story &&
+    //   (this.story.feedback.text ||
+    //   this.story.feedback.audioId ||
+    //   this.story.feedback.feedbackMarkup)
+    // ) {
+    //   this.getFeedback();
+    // }
+    if (!this.hasFeedback) {
+      this.closeFeedbackEmitter.next(true)
     }
   }
 

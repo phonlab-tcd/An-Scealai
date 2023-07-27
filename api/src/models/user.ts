@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var crypto = require('node:crypto');
 var jwt = require('jsonwebtoken');
+import { z } from "zod";
 
 const generate_password = require('generate-password');
 
@@ -117,6 +118,20 @@ userSchema.methods.generateNewPassword = function() {
   });
 };
 
+userSchema.methods.canResetPassword = function() {
+  // user must have a valid email address
+  if(!z.string().email().safeParse(this.email).success) {
+    return false;
+  }
+
+  // user must be activated (confirmed email address)
+  if(!z.literal("Active").safeParse(this.status).success) {
+    return false;
+  }
+
+  return true;
+}
+
 // NOTE This function does not save the details.
 // They must be saved with <document>.save();
 userSchema.methods.generateResetPasswordLink = function(baseurl) {
@@ -131,7 +146,7 @@ userSchema.methods.generateResetPasswordLink = function(baseurl) {
 
   this.resetPassword.date = new Date();
 
-  return `${baseurl}user/generateNewPassword` +
+  return `${baseurl}/user/generateNewPassword` +
     `?username=${this.username}` +
     `&email=${this.email}` +
     `&code=${this.resetPassword.code}`;
@@ -151,7 +166,8 @@ userSchema.methods.generateActivationLink = function(baseurl, language) {
 
   this.verification.date = new Date();
 
-  return `${baseurl}user/verify?` +
+  // TODO: encode the uri components. Email address may be valid while being illegal in url. (neimhin 20/July/23)
+  return `${baseurl}/user/verify?` +
       `username=${this.username}` +
       `&email=${this.email}` +
       `&language=${language}` +

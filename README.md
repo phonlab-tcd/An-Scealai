@@ -1,3 +1,5 @@
+[![on-push](https://github.com/phonlab-tcd/An-Scealai/actions/workflows/main.yml/badge.svg)](https://github.com/phonlab-tcd/An-Scealai/actions/workflows/main.yml)
+
 # An Scéalaí
 
 https://abair.ie/scealai/
@@ -40,61 +42,32 @@ or
 $ bash reinstall.sh
 ```
 
-## Running the App
-### With `tmux`
-There is a `bash`/`tmux` script in
-the root folder called `spinup.sh`.
-Run it with `bash spinup.sh`. If you have
-all the required dependencies installed you should now
-be able to view the site at `http://localhost:4200`
-
+## Running the App (in development mode)
 ### Manually starting all services
+#### nginx
+An Scéalaí should be run behind nginx. Install it on your system.
+Setup nginx using the config in ./conf/dev.nginx.conf (i.e. copy that config to <nginx-prefix>/sites-available (on debian etc.) or to <nginx-prefix>/servers/ if installed with HomeBrew). There is a script in ./bin/macos_install_dev_nginx.sh with an example of how to set up nginx.
+
 #### Frontend
 1) From the root directory, `/an-scealai`, navigate to the `ngapp` directory, which contains the frontend project:
-```
+```bash
 $ cd ngapp
 ```
 2) Start the frontend app:
-
-*  a) (Using global installation of Angular):
-  ```bash
-  $ ng serve
-  ```
-*  b) (Using local installation of Angular):
   ```bash
   $ npm start
 ```
 #### Database
-3) Run the Mongo Daemon with the following command:
-```bash
-$ mongod
-```
-* If this doesn't work you may need root priveleges:
-```bash
-$ sudo mongod
-```
-* If it still doesn't work, you may need to create a folder called `/data/db` or `C:\data\db` on Windows. This is where MongoDB will store files.
-```bash
-$ mkdir data
-$ mkdir data/db
-$ sudo mongod --dbpath=data/db
-```
-(See https://stackoverflow.com/a/61423909 for more)
-#### Backend
-4) Add the following [sendinblue](https://www.sendinblue.com/) authentication details to `/an-scealai/api/sendinblue.json`. This allows the backend to send verification emails for user registration. [See this tutorial for more information](https://schadokar.dev/posts/how-to-send-email-in-nodejs/).
-```javascript
-{
-  "user": "<username>",
-  "pass": "<password>"
-}
-```
-5) In the API folder, `/an-scealai/api`, run the following command to start the Backend server:
-```bash
-$ cd api/
-$ nodemon server.js
-```
+3) Run the Mongo Daemon (perhaps set up mongo as a systemd service). Depends on your OS.
 
-6) Navigate to http://localhost:4200/.
+#### Backend
+4) copy the ./api/.env.example file to ./api/.env and fill in the missing fields in ./api/.env. Consider setting the "AWS_SES_DISABLE=true" option, if you do not have keys for AWS Simple Email Service.
+
+5) In development, start the typescript compiler in watch mode, `cd ./api; npx tsc --watch`.
+
+6) Start the backend nodejs server: `cd ./api; npm start`
+
+7) Navigate to http://localhost:4040/ (if nginx is running), or to http://localhost:4200/ to go straight to the angular server (backend won't work).
 
 
 # CHANGE LOG

@@ -27,7 +27,13 @@ jobs:
       - run: npm -v
       - run: npx --prefix ngapp node -v
       - run: "parallel npm i --prefix ::: api ngapp"
-      - run: mongod & FUDGE=1 NO_EMAILS=1 npm run --prefix api start:nocheck & npm run --prefix ngapp e2e
+      - run: npm run --prefix api build || echo build had problems
+      - run: mongod &
+      - run: mongod_pid=$!
+      - run: mv ./api/.env.example ./api/.env
+      - run: FUDGE=1 AWS_SES_DISABLE=1 npm run --prefix api start & 
+      - run: backend_pid=$!
+      - run: npm run --prefix ngapp e2e
 
   test-backend:
     runs-on: ubuntu-latest
@@ -37,5 +43,7 @@ jobs:
           mongodb-version: 3.6
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      - run: mv ./api/.env.example ./api/.env
       - run: npm install --prefix api
+      - run: npm run --prefix api build || echo build had problems
       - run: NO_EMAILS=1 npm run test --prefix api 

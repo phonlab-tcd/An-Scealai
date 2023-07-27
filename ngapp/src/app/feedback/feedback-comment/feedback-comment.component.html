@@ -1,0 +1,50 @@
+<div id="commentContainer" class="commentContainer">
+  <div class="textAndOptionsMenuContainer">
+    <!-- Writing area-->
+    <ng-container *ngIf="comment">
+      <textarea
+        *ngIf="comment && comment.text || isEditing"
+        #commentTextArea
+        class="commentTextArea"
+        [(ngModel)]="comment.text"
+        [disabled]="!isEditing"
+        (click)="$event.stopPropagation()"
+        >{{ comment.text }}
+      </textarea>
+    </ng-container>
+
+    <!-- Edit comment menu -->
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isTeacher">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="deleteComment()">
+        <mat-icon>delete</mat-icon>
+        <span>{{ ts.l.delete }}</span>
+      </button>
+      <button mat-menu-item (click)="editComment()">
+        <mat-icon>create</mat-icon>
+        <span> {{ts.l.edit}} </span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- Audio -->
+  <div class="audioContainer" *ngIf="isEditing || audioSource">
+    <div (click)="recordFeedbackMessage(); $event.stopPropagation()">
+      <button *ngIf="!isRecording && isEditing" class="recordingBtn">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button *ngIf="isRecording && isEditing" class="notRecordingBtn blink">
+        <i class="fas fa-stop-circle"></i>
+      </button>
+    </div>
+    <audio *ngIf="audioSource" [src]="audioSource" class="feedbackAudioPlayer" controls ></audio>
+  </div>
+
+  <!-- Save/Delete buttons-->
+  <div class="commentButtonContainer" *ngIf="isEditing">
+    <button class="editButton deleteRedBtn" style="float: right" (click)="deleteComment()" > {{ ts.l.delete }} </button>
+    <button class="editButton createBtnGreen" style="float: right" (click)="saveComment()" > {{ ts.l.save }} </button>
+  </div>
+</div>

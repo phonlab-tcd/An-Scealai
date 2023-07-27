@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../out-tsc/spec",
+    "sourceMap": true,
     "types": [
       "jasmine",
       "node",

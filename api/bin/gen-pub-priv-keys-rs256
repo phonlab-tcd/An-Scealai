@@ -1,0 +1,32 @@
+#!/bin/bash
+
+
+# USAGE: this script generate a pub/priv key pair and prints them to stdout as
+# key-value pairs, i.e.:
+# JWT_RS256_PRIVATE_KEY=<new private key>
+# JWT_RS256_PUBLIC_KEY=<new public key>
+#
+# You can append these to .env if you do not already have these variables
+
+stderr() {
+	>&2 echo $@
+}
+
+mv tmp-rs256.kek{,.bak}
+mv tmp-rs356.key.pub{,.bak}
+
+stderr "gen private key"
+ssh-keygen -t rsa -b 4096 -m PEM -f tmp-rs256.key -q -N ""
+
+stderr "gen public key"
+openssl rsa -in tmp-rs256.key -pubout -outform PEM -out tmp-rs256.key.pub
+
+
+priv=$(cat tmp-rs256.key     | base64 -w0)
+pub=$(cat tmp-rs256.key.pub | base64 -w0)
+
+echo JWT_RS256_PRIVATE_KEY=$priv
+echo JWT_RS256_PUBLIC_KEY=$pub
+
+rm tmp-rs256.key
+rm tmp-rs256.key.pub

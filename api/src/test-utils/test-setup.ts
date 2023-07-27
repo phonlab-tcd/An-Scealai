@@ -1,7 +1,17 @@
-import { jest } from "@jest/globals";
-require('../keys/dev/load');
+import dotenv from "dotenv";
+dotenv.config();
+import "../utils/load_keys";
 const config = require('../DB');
+import { jest } from "@jest/globals";
 jest.setTimeout(10000);
+
+function id(){
+  return arguments;
+}
+
+console.log = id;
+console.error = id;
+console.warn = id;
 
 // Setup for mongo to connect to 'process.env.TEST_MONGO_URL' for tests.
 process.env.TEST_MONGO_URL = (

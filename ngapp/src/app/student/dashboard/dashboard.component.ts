@@ -20,14 +20,16 @@ import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.co
 import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
-import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
-import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
-import { HighlightTag } from "../../lib/quill-highlight/quill-highlight";
-import { leathanCaolChecker } from "../../lib/grammar-engine/checkers/leathan-caol-checker";
-import { anGramadoir } from "../../lib/grammar-engine/checkers/an-gramadoir";
-import { relativeClauseChecker } from "../../lib/grammar-engine/checkers/relative-clause-checker";
-import { CHECKBOXES, ERROR_INFO, ERROR_TYPES, ErrorTag, ErrorType } from "../../lib/grammar-engine/types";
+import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
+import { QuillHighlighter } from "lib/quill-highlight/quill-highlight";
+import { HighlightTag } from "lib/quill-highlight/quill-highlight";
+import { leathanCaolChecker } from "lib/grammar-engine/checkers/leathan-caol-checker";
+import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
+import { relativeClauseChecker } from "lib/grammar-engine/checkers/relative-clause-checker";
+import { CHECKBOXES, ERROR_INFO, ERROR_TYPES, ErrorTag, ErrorType } from "lib/grammar-engine/types";
+import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
+import { NotificationService } from "app/core/services/notification-service.service";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -36,7 +38,7 @@ Quill.register("modules/imageCompress", ImageCompress);
   templateUrl: "./dashboard.component.html",
   styleUrls: [
     "./dashboard.component.scss",
-    "./../../lib/quill-highlight/gramadoir-tags.scss",
+    "./../../../lib/quill-highlight/gramadoir-tags.scss",
     "./../../../quill.fonts.scss",
   ],
   encapsulation: ViewEncapsulation.None,
@@ -125,7 +127,8 @@ export class DashboardComponent implements OnInit {
     private classroomService: ClassroomService,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.setUpGrammarChecking();
   }
@@ -164,7 +167,6 @@ export class DashboardComponent implements OnInit {
 
     // subscribe to any changes made to the story text and check for grammar errors
     this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      console.log('Text updated');
       this.runGrammarCheck();
     });
   }
@@ -237,6 +239,14 @@ export class DashboardComponent implements OnInit {
       // open the drawer
       this.rightDrawer.open();
       this.rightDrawerOpened = true;
+      // add view feedback event to DB
+      if (selectedDrawer == 'feedback') {
+        this.storyService.viewFeedback(this.story._id).subscribe(() => {
+          this.story.feedback.seenByStudent = true;
+          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+          this.notificationService.getStudentNotifications();
+        });
+      }
     }
 
     // sets the variable used to display the selected component in the drawer
@@ -392,15 +402,17 @@ export class DashboardComponent implements OnInit {
    * Get rid of highlighting markup from html text
    * @param text story html text
    */
-  stripGramadoirAttributesFromHtml(text: string) {
-    if (!text || !text.replace) {
-      return "";
-    }
-    return text
-      .replace(/\s*style="([^"])+"/g, "")
-      .replace(/\s*highlight-tag-type="([^"])+"/g, "")
-      .replace(/\s*highlight-tag="([^"])+"/g, "");
-  }
+  stripGramadoirAttributesFromHtml = stripQuillAttributesFromHTML;
+  // (text: string) {
+  //   if (!text || !text.replace) {
+  //     return "";
+  //   }
+  //   return text
+  //     .replace(/\s*id="([^"])+"/g, "")
+  //     .replace(/\s*highlight-tag="([^"])+"/g, "")
+  //     .replace(/\s*left-edge=".*?"/g, '')
+  //     .replace(/\s*right-edge=".*?"/g, '');
+  // }
 
   /* Toggle upper menu buttons */
   toggleOptions() {
@@ -436,6 +448,7 @@ export class DashboardComponent implements OnInit {
 
   /* Download story in selected format */
   downloadStory() {
+    this.debounceSaveStory();
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.download,

@@ -1,0 +1,105 @@
+.commentContainer {
+    text-align: left;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 12pt;
+    word-wrap: break-word;
+    height: 100%;
+}
+
+.commentContainer:hover {
+    background-color:rgba(0,0,0,.04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.textAndOptionsMenuContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.commentTextArea {
+    width: 100%;
+    resize: none;
+    background-color: white;
+    border-radius: 4px;
+    border-color: rgba(118, 118, 118, 0.3);
+}
+
+.commentTextArea:disabled {
+    cursor: pointer;
+    color: black;
+}
+
+.commentTextArea:focus {
+    outline: none;
+}
+
+.commentButtonContainer {
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.editButton {
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    padding-left: 10px 4px 10px 4px;
+}
+
+.audioContainer {
+    padding-top: 10px;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.feedbackAudioPlayer {
+    width: 100%;
+}
+
+.feedbackAudioPlayer:focus {
+    outline: none;
+}
+  
+.recordingBtn {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    padding-left: 10px 4px 10px 4px;
+}
+  
+.recordingBtn:hover {
+    background-color: var(--scealai-med-green);
+    transition: 0.5s;
+}
+
+.notRecordingBtn {
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    font-size: 10pt;
+    padding-left: 10px 4px 10px 4px;
+}
+
+.blink {
+    animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+    0% {
+        background-color:red;
+    }
+    50% {
+        background-color:rgb(119, 0, 0);
+    }
+    100% {
+        background-color:red;
+    }
+}
