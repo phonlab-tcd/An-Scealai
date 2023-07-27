@@ -102,9 +102,13 @@ app.use(require('cookie-parser')('big secret'));
 
 app.use('/user', userRoute);
 
+const monitor_conf = {
+	socketPath: "/api/socket.io"
+};
+
+app.use(require('express-status-monitor')(monitor_conf));
 
 app.use(checkJwt);
-app.use(require('./express-status-monitor/index')());
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
