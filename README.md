@@ -42,7 +42,7 @@ or
 $ bash reinstall.sh
 ```
 
-## Running the App
+## Running the App (in development mode)
 ### Manually starting all services
 #### nginx
 An Scéalaí should be run behind nginx. Install it on your system.
