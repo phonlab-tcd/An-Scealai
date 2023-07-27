@@ -37,6 +37,7 @@ const recordingRoute = require('./routes/recording.route');
 const gramadoirRoute = require('./routes/gramadoir.route');
 const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
+import feedbackCommentRoute from './routes/feedbackComment.route';
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
@@ -116,6 +117,7 @@ app.use('/messages', messageRoute);
 app.use('/gramadoir', expressQueue({activeLimit: 40, queuedLimit: -1}), gramadoirRoute);
 app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
+app.use('/feedbackComment', feedbackCommentRoute);
 
 app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,res,next)=>{
   function allowUrl(url) {

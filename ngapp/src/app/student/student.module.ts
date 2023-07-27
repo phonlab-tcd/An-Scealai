@@ -6,21 +6,6 @@ import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.co
 import { SynthVoiceSelectComponent } from 'app/student/synth-voice-select/synth-voice-select.component';
 import { RecordingComponent } from './recording/recording.component';
 import { SynthesisComponent } from './synthesis/synthesis.component';
-
-import { SpinnerModule } from '../spinner/spinner.module';
-
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-import { SynthItemModule } from './synth-item/synth-item.component';
-
-import { FormsModule } from '@angular/forms';
-import { QuillModule } from 'ngx-quill';
-
-import { FilterPipe } from 'app/core/pipes/filter.pipe';
-import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
 import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
@@ -28,6 +13,19 @@ import { GrammarErrorDrawerComponent } from './grammar-error-drawer/grammar-erro
 import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.component';
 import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.component';
 
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { FeedbackModule } from '../feedback/feedback.module';
+import { SpinnerModule } from '../spinner/spinner.module';
+import { SynthItemModule } from './synth-item/synth-item.component';
+
+import { FilterPipe } from 'app/core/pipes/filter.pipe';
+import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -55,6 +53,7 @@ import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.co
     MatIconModule,
     MatMenuModule,
     SynthItemModule,
+    FeedbackModule,
     QuillModule.forRoot({
       customOptions: [{
               import: 'formats/font',

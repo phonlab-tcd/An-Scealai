@@ -9,39 +9,13 @@ export const tooltipClassname = "custom-tooltip";
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
 
-Quill.register(
-  new Parchment.Attributor.Attribute(
-    'highlight-tag',
-    'highlight-tag',
-    { scope: Parchment.Scope.INLINE }
-  )
-);
+export const QUILL_HIGHLIGHT_ATTRIBUTES = ["highlight-tag", "id", "right-edge", "left-edge"];
 
-Quill.register(
-  new Parchment.Attributor.Attribute(
-    'left-edge',
-    'left-edge',
-    { scope: Parchment.Scope.INLINE }
-  )
-);
-
-Quill.register(
-  new Parchment.Attributor.Attribute(
-    'right-edge',
-    'right-edge',
-    { scope: Parchment.Scope.INLINE }
-  )
-);
-
-Quill.register(
-  new Parchment.Attributor.Attribute(
-    'id',
-    'id',
-    { scope: Parchment.Scope.INLINE }
-  )
-);
-
-
+for(const attr of QUILL_HIGHLIGHT_ATTRIBUTES) {
+  const opts = { scope: Parchment.Scope.INLINE};
+  const attribute = new Parchment.Attributor.Attribute(attr, attr, opts);
+  Quill.register(attribute);
+}
 
 export function spansOverlap(a: Span, b: Span) {
   if (a.fromX >= b.toX || b.fromX >= a.toX) {

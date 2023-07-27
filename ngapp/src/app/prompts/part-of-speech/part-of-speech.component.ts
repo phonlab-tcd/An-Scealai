@@ -8,11 +8,11 @@ import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { SynthItem } from "app/core/models/synth-item";
 import { HttpClient } from "@angular/common/http";
-import { GrammarEngine } from "../../lib/grammar-engine/grammar-engine";
-import { ErrorTag } from "../../lib/grammar-engine/types";
+import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
+import { ErrorTag } from "lib/grammar-engine/types";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import config from "../../../abairconfig";
+import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
+import config from "app/../abairconfig";
 
 type TagForHighlight = {
   fromx: number;

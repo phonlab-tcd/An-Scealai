@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
-import { QuillHighlighter } from "../../lib/quill-highlight/quill-highlight";
-import { ERROR_TYPES, ERROR_INFO, ErrorTag, ErrorType } from "app/lib/grammar-engine/types";
-import { GrammarEngine } from "app/lib/grammar-engine/grammar-engine";
+import { QuillHighlighter } from "lib/quill-highlight/quill-highlight";
+import { ERROR_TYPES, ERROR_INFO, ErrorTag, ErrorType } from "lib/grammar-engine/types";
+import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
 
 @Component({
   selector: "app-grammar-error-drawer",

@@ -49,8 +49,7 @@ export class NotificationService {
       (story) =>
         story &&
         story.feedback.seenByStudent === false &&
-        (story.feedback.text ||
-          story.feedback.audioId ||
+        (story.feedback.hasComments ||
           story.feedback.feedbackMarkup)
     );
     // create notification entry for stories

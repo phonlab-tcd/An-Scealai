@@ -1,0 +1,1 @@
+../../ngapp/src/app/translation.ts
