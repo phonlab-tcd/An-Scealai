@@ -13,7 +13,7 @@ dist/server.js: $(SRC_TS_JS_FILES)
 
 dist/express-status-monitor/src/public/:
 	mkdir -p dist/express-status-monitor/src/
-	cp -r src/express-status-monitor/src/public/ dist/express/status-monitor/src/
+	cp -r src/express-status-monitor/src/public/ dist/express-status-monitor/src/
 
 dist/$(NODE_ENV)-server.js: $(WEBPACK_CONFIG) $(SRC_TS_JS_FILES)
 	watch=false npx webpack --progress --config $(WEBPACK_CONFIG)
