@@ -1,15 +1,17 @@
 <div id="commentContainer" class="commentContainer">
   <div class="textAndOptionsMenuContainer">
     <!-- Writing area-->
-    <textarea
-      *ngIf="comment.text || isEditing"
-      #commentTextArea
-      class="commentTextArea"
-      [(ngModel)]="comment.text"
-      [disabled]="!isEditing"
-      (click)="$event.stopPropagation()"
-      >{{ comment.text }}
-    </textarea>
+    <ng-container *ngIf="comment">
+      <textarea
+        *ngIf="comment && comment.text || isEditing"
+        #commentTextArea
+        class="commentTextArea"
+        [(ngModel)]="comment.text"
+        [disabled]="!isEditing"
+        (click)="$event.stopPropagation()"
+        >{{ comment.text }}
+      </textarea>
+    </ng-container>
 
     <!-- Edit comment menu -->
     <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isTeacher">
