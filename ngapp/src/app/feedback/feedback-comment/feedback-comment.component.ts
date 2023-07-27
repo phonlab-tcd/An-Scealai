@@ -35,6 +35,9 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Show text/audio data for existing comment
    */
   ngAfterViewInit(): void {
+
+    if(!this.comment) return;
+
     if (!this.comment.text && !this.comment.audioId) {
       this.isEditing = true;
       this.commentTextArea.nativeElement.focus();
