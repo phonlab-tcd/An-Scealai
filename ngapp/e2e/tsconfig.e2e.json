@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "commonjs",
+    "sourceMap": true,
     "target": "es5",
     "types": [
       "jasmine",
