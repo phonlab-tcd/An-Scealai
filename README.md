@@ -1,3 +1,5 @@
+[![on-push](https://github.com/phonlab-tcd/An-Scealai/actions/workflows/main.yml/badge.svg)](https://github.com/phonlab-tcd/An-Scealai/actions/workflows/main.yml)
+
 # An Scéalaí
 
 https://abair.ie/scealai/
