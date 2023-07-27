@@ -15,9 +15,9 @@
     "e2e": "ng e2e",
     "cypress:open": "./node_modules/cypress/bin/cypress open",
     "cypress:run": "./node_modules/cypress/bin/cypress run",
-    "start:neimhin": "ng serve --port 41000 --configuration=production",
-    "start:maddie": "ng serve --port 42000 --configuration=production",
-    "start:oisin": "ng serve --port 43000 --configuration=production"
+    "start:neimhin": "ng serve --port 41000 --configuration=dev",
+    "start:maddie": "ng serve --port 42000 --configuration=dev",
+    "start:oisin": "ng serve --port 43000 --configuration=dev"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",

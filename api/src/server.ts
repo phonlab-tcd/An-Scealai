@@ -104,7 +104,7 @@ app.use('/user', userRoute);
 
 
 app.use(checkJwt);
-//app.use(require('express-status-monitor')());
+app.use(require('./express-status-monitor/index')());
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);
