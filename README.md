@@ -51,6 +51,10 @@ all the required dependencies installed you should now
 be able to view the site at `http://localhost:4200`
 
 ### Manually starting all services
+#### nginx
+An Scéalaí should be run behind nginx. Install it on your system.
+Setup nginx using the config in ./conf/dev.nginx.conf (i.e. copy that config to <nginx-prefix>/sites-available (on debian etc.) or to <nginx-prefix>/servers/ if installed with HomeBrew). There is a script in ./bin/macos_install_dev_nginx.sh with an example of how to set up nginx.
+
 #### Frontend
 1) From the root directory, `/an-scealai`, navigate to the `ngapp` directory, which contains the frontend project:
 ```
