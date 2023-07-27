@@ -4,6 +4,7 @@ import sendVerificationEmail from "../../utils/sendVerificationEmail";
 import is_valid_username from "../../utils/is_valid_username";
 import User from "../../models/user";
 import base_url from "../../utils/base_url";
+import type { TRANSLATION_KEY } from "../../translation";
 
 // schema for body of post request
 const user_register_schema = z.object({
@@ -19,8 +20,10 @@ const REGISTER_RESPONSE = {
     'username_no_special_chars': 400,
     'username_taken_msg': 409,
     'failed_to_send_email': 500,
-
 } as const;
+
+// this variable is just used to trigger type checking, not used at runtime.
+const ensureKeysExist: Partial<Record<TRANSLATION_KEY, number>> = REGISTER_RESPONSE;
 
 type RegisterResponse = keyof typeof REGISTER_RESPONSE;
 
@@ -50,9 +53,9 @@ export default async function (req: Request, res: Response) {
 
 
     if(! is_valid_username(req.body.username)) {
-        const k = "username_no_special_chars";
+        const k = "username_no_special_chars" as const;
         resObj.messageKeys.push(k);
-        return res.status(REGISTER_RESPONSE[k]).json(resObj);
+        return res.status(REGISTER_RESPONSE["username_no_special_chars"]).json(resObj);
     }
 
     // set new user properties and save user to the DB
