@@ -388,7 +388,7 @@ export class BackendMonitorComponent implements OnInit {
 	heartbeat() {
 		function heartbeat_recurse(){
 			if(this.isVisible()) {
-				this.http.get("/api/version").subscribe();
+				this.http.get(config.baseurl + "version").subscribe();
 			}
 			this.heartbeat();	
 		}
