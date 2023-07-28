@@ -20,6 +20,8 @@
     "start:oisin": "ng serve --port 43000 --configuration=production"
   },
   "dependencies": {
+    "socket.io-client.4.4.1.js": "file:./socket.io-client.4.4.1.js",
+    "chart.2.2.2.js": "file:chart.2.2.2.js",
     "@popperjs/core": "^2.9.2",
     "@tweenjs/tween.js": "^18.6.4",
     "@types/quill": "^1.3.10",
