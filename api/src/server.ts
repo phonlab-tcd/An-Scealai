@@ -121,8 +121,8 @@ app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
 
 app.use('/user', userRoute);
-app.use(checkJwt);
 
+app.use(checkJwt);
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);

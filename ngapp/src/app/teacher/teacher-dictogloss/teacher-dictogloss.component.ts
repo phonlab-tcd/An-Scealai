@@ -10,6 +10,8 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { Message } from "app/core/models/message";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({
   selector: "app-teacher-dictogloss",
@@ -25,7 +27,8 @@ export class TeacherDictoglossComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dialog: MatDialog,
   ) {
     this.createDictoglosForm();
   }
@@ -35,6 +38,7 @@ export class TeacherDictoglossComponent implements OnInit {
   newDictogloss: FormGroup;
   classroom: Classroom;
   allStudentsSelected: boolean = true;
+  dialogRef: MatDialogRef<unknown>;
 
   async ngOnInit() {
     // get classroom
@@ -114,4 +118,37 @@ export class TeacherDictoglossComponent implements OnInit {
   goToDashboard() {
     this.router.navigateByUrl("teacher/dashboard");
   }
+
+    /**
+   * Dialog box to display instructions
+   */
+    openInformationDialog() {
+      this.dialogRef = this.dialog.open(BasicDialogComponent, {
+        data: {
+          title: this.ts.l.how_to_use_dictogloss,
+          type: 'simpleMessage',
+          message: `
+          <h6>${this.ts.l.can_you_reconstruct_text_just_heard}</h6><br>
+          <h6>${this.ts.l.following_are_the_steps}</h6><br>
+          <ol>
+            <li>${this.ts.l.dictogloss_instructions_1}</li>
+            <li>${this.ts.l.dictogloss_instructions_2}</li>
+            <li>${this.ts.l.dictogloss_instructions_3}</li>
+            <li>${this.ts.l.dictogloss_instructions_4}</li>
+            <li>${this.ts.l.dictogloss_instructions_5}</li>
+          </ol>
+          <ul>
+            <li>${this.ts.l.dictogloss_tip_1}</li>
+            <li>${this.ts.l.dictogloss_tip_2}</li>
+          </ul>
+          `,
+          confirmText: this.ts.l.done,
+        },
+        width: '90vh',
+      });
+      
+      this.dialogRef.afterClosed().subscribe( (_) => {
+          this.dialogRef = undefined;
+      });
+    }
 }
