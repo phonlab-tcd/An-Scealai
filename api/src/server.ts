@@ -65,6 +65,26 @@ const app = express();
 app.use(logAPICall);
 app.use(requestIp.mw())
 
+import status_monitor from "./status-monitor/index";
+const monitor_config = {
+	socketPath: '/api/socket.io',
+	// iframe: true,
+};
+
+// const monitor_password = process.env.STATUS_MONITOR_PASSWORD
+// function check_password(req,res,next) {
+// 	const supplied_password = req.query.password;
+// 	if(!monitor_password) return next();
+// 	if(supplied_password === monitor_password) return next();
+// 	return res.status(401).send("not authorized");
+// }
+
+app.use('/status', checkJwt);
+
+app.use(status_monitor(monitor_config));
+
+
+
 // add ability to fudge verification for cypress testing
 if(process.env.FUDGE) {
   console.log('ADD FUDGE VERIFICATION ENDPOINT');
@@ -101,10 +121,8 @@ app.use(passport.initialize());
 app.use(require('cookie-parser')('big secret'));
 
 app.use('/user', userRoute);
-
-
 app.use(checkJwt);
-//app.use(require('express-status-monitor')());
+
 app.use('/story', storyRoute);
 app.use('/teacherCode', teacherCodeRoute);
 app.use('/classroom', classroomRoute);

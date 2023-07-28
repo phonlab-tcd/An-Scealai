@@ -19,18 +19,20 @@ const middlewareWrapper = config => {
     }, [])
     .join(' ');
 
+	console.log(JSON.stringify(bodyClasses));
+
   const data = {
     title: validatedConfig.title,
     port: validatedConfig.port,
     socketPath: validatedConfig.socketPath,
     bodyClasses,
-    script: fs.readFileSync(path.join(__dirname, '/public/javascripts/app.js')),
-    style: fs.readFileSync(path.join(__dirname, '/public/stylesheets/', validatedConfig.theme)),
+    script: fs.readFileSync('dist/asset/status_monitor.js'),
+    style: fs.readFileSync('dist/asset/' + validatedConfig.theme),
     healthCheckResults: undefined,
   };
 
   const htmlTmpl = fs
-    .readFileSync(path.join(__dirname, '/public/index.html'))
+    .readFileSync('dist/asset/status_monitor_index.html')
     .toString();
 
   const render = Handlebars.compile(htmlTmpl);
