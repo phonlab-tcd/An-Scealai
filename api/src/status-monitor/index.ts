@@ -1,41 +1,10 @@
-const fs = require('fs');
-const path = require('path');
 const onHeaders = require('on-headers');
-const Handlebars = require('handlebars');
 const validate = require('./helpers/validate');
 const onHeadersListener = require('./helpers/on-headers-listener');
 const socketIoInit = require('./helpers/socket-io-init');
-const healthChecker = require('./helpers/health-checker');
-const jwt = require('jsonwebtoken');
 
 const middlewareWrapper = config => {
   const validatedConfig = validate(config);
-  const bodyClasses = Object.keys(validatedConfig.chartVisibility)
-    .reduce((accumulator: string[], key) => {
-      if (validatedConfig.chartVisibility[key] === false) {
-        accumulator.push(`hide-${key}`);
-      }
-      return accumulator;
-    }, [])
-    .join(' ');
-
-	console.log(JSON.stringify(bodyClasses));
-
-  const data = {
-    title: validatedConfig.title,
-    port: validatedConfig.port,
-    socketPath: validatedConfig.socketPath,
-    bodyClasses,
-    script: fs.readFileSync('dist/asset/status_monitor.js'),
-    style: fs.readFileSync('dist/asset/' + validatedConfig.theme),
-    healthCheckResults: undefined,
-  };
-
-  const htmlTmpl = fs
-    .readFileSync('dist/asset/status_monitor_index.html')
-    .toString();
-
-  const render = Handlebars.compile(htmlTmpl);
 
   const middleware = (req, res, next) => {
     socketIoInit(req.socket.server, validatedConfig);
@@ -43,25 +12,12 @@ const middlewareWrapper = config => {
     const startTime = process.hrtime();
 
     if (req.path === validatedConfig.path) {
-      healthChecker(validatedConfig.healthChecks).then(results => {
-        data.healthCheckResults = results;
-        if (validatedConfig.iframe) {
-          if (res.removeHeader) {
-            res.removeHeader('X-Frame-Options');
-          }
-
-          if (res.remove) {
-            res.remove('X-Frame-Options');
-          }
-        }
-
         // TODO: we should update Access-Control-Allow-Origin to only accept requests
         // from scealai client (should work better in prod, localhost causing some issues)
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
         res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-        res.send(render(data));
-      });
+        res.send("ok");
     } else {
       if (!req.path.startsWith(validatedConfig.ignoreStartsWith)) {
         onHeaders(res, () => {
@@ -85,10 +41,7 @@ const middlewareWrapper = config => {
    */
   middleware.middleware = middleware;
   middleware.pageRoute = (req, res) => {
-    healthChecker(validatedConfig.healthChecks).then(results => {
-      data.healthCheckResults = results;
-      res.send(render(data));
-    });
+      res.send("ok"); 
   };
   return middleware;
 };
