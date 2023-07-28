@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -89,6 +90,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
+        ClipboardModule,
         TextInputHighlightModule,
         BrowserAnimationsModule,
         MatDatepickerModule,
