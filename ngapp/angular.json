@@ -113,6 +113,7 @@
           },
 					"options": {
 						"main": "src/test.ts",
+            "sourceMap": true,
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "tsconfig.spec.json",
 						"karmaConfig": "karma.conf.ts",

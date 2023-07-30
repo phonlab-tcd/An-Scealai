@@ -1,4 +1,4 @@
-export default {
+const translations = {
   iso_code: {
     ga: 'ga',
     en: 'en' },
@@ -344,6 +344,9 @@ export default {
   register: {
     ga: 'Cláraigh',
     en: 'Register' },
+  failed_to_send_email: {
+    ga: 'Chlis ar sheachadadh an rphoist seo. Triail arís é le do thoil.',
+    en: 'An error occurred while trying to send an email. Please try again.', },
   username_in_use: {
     ga: '*An t-ainm tógtha cheana',
     en: '*Username already in use' },
@@ -2489,4 +2492,7 @@ export default {
   create_first_classroom: {
     ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
     en: 'Click on the \'+\' button to create your first classroom!' },
-}
+} as const;
+
+export default translations;
+export type TRANSLATION_KEY = keyof typeof translations;

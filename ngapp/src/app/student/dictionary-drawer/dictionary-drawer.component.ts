@@ -35,7 +35,7 @@ export class DictionaryDrawerComponent implements OnInit {
         const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
         
         // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
-        const exampleLinks = teanglannDoc.querySelectorAll('.ex > .head > a');
+        const exampleLinks = teanglannDoc.querySelectorAll('a');
         exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
         `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
   
