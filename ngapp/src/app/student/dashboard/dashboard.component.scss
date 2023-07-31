@@ -1,3 +1,14 @@
+.synthesis-button {
+    background-color: var(--scealai-green);
+    z-index: 999; // important so the button appears over the quill text
+    position: absolute;
+}
+
+.ql-editor { 
+    position: relative;
+}
+
+
 .storyTitleHeader {
     display: flex;
     justify-content: center;

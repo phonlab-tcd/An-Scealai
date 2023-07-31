@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
-import { distinctUntilChanged } from "rxjs/operators";
+import { distinctUntilChanged, ignoreElements } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 import Quill from "quill";
 import { Delta } from "quill";
@@ -118,6 +118,17 @@ export class DashboardComponent implements OnInit {
   isRecording: boolean = false;
   isTranscribing: boolean = false;
 
+  synthesisPlayButtonsEnabled = false;
+
+  toggleSynthesisPlayButtons() {
+    this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
+    if(!this.synthesisPlayButtonsEnabled) {
+      this.hideSynthesisButtons();
+    }
+  }
+
+
+  playSynthesisButton: {word: HTMLButtonElement, sentence: HTMLButtonElement } = {word: null, sentence: null};
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
@@ -128,12 +139,75 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {
     this.setUpGrammarChecking();
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+
+  }
+
+  // create hideable button to play a single synthesised word (reuse this button for different syntheses)
+  createSynthesisPlayButton(type: keyof DashboardComponent["playSynthesisButton"]) {
+    function clickPlayWord () {
+      alert("play " + type);
+    }
+
+    const button = document.createElement("button");
+    this.playSynthesisButton[type] = button;
+    button.id = "playSynthesisButton." + type;
+    button.addEventListener("click", clickPlayWord.bind(this));
+    button.classList.add("synthesis-button");
+    button.style.visibility = "hidden";
+    button.innerHTML = "▸";
+    document.body.appendChild(button);
+  }
+
+  topLeftOfCursorIndex(location) {
+    // get bounds of entire quill editor
+    const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
+    const editorRect = editorContainer.getBoundingClientRect();
+    // get bounds of selected text
+    const bounds = this.quillEditor.getBounds(location, 0);
+    const left = editorRect.left + bounds.left;
+    const top = editorRect.top + bounds.top;
+    return { top, left };
+  }
+
+  bottomRightOfCursorIndex(location) {
+    // get bounds of entire quill editor
+    const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
+    const editorRect = editorContainer.getBoundingClientRect();
+    // get bounds of selected text
+    const bounds = this.quillEditor.getBounds(location, 0);
+    const left = editorRect.left + bounds.right;
+    const top = editorRect.top + bounds.bottom;
+    return { top, left };
+  }
+
+  showSynthesisPlaySentenceButtonAtIndex(location: number) {
+    const { height, width } = this.playSynthesisButton.sentence.getBoundingClientRect();
+    const { left, top } = this.topLeftOfCursorIndex(location);
+    const style = this.playSynthesisButton.sentence.style;
+    style.left = `${left - width}px`;
+    style.top = `${top - height}px`;
+    style.visibility = "visible";
+  }
+
+  showSynthesisPlayWordButtonAtIndex(location: number) {
+    const { left, top } = this.bottomRightOfCursorIndex(location);
+    const style = this.playSynthesisButton.word.style;
+    style.left = `${left}px`;
+    style.top = `${top}px`;
+    style.visibility = "visible";
+  }
+
+  hideSynthesisButtons() {
+    for(const button of Object.values(this.playSynthesisButton)) {
+      button.style.visibility = "hidden";
+    }
+  }
 
   /**
    * Initialise the Grammar Engine and Highlighting services
@@ -306,8 +380,26 @@ export class DashboardComponent implements OnInit {
   onEditorCreated(q: Quill) {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
+
+    this.createSynthesisPlayButton("word");
+    this.createSynthesisPlayButton("sentence");
+
+    this.showSynthesisPlayWordButtonAtIndex(10);
+    this.showSynthesisPlaySentenceButtonAtIndex(23);
+
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
+
+    function onSelectionChange_showSynthButtons(range){
+      if(range.length !== 0) {
+        return this.hideSynthesisButtons();
+      }
+      this.showSynthesisPlayWordButtonAtIndex(range.index);
+      this.showSynthesisPlaySentenceButtonAtIndex(range.index);
+    }
+
+    this.quillEditor.on("selection-change", onSelectionChange_showSynthButtons.bind(this));
+
     const renderer = (function (ht: HighlightTag) {
         const [name, message] = this.ts.l.iso_code == 'en' ? 
           [ht.nameEN, ht.messageEN] : 

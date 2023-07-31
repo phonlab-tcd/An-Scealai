@@ -90,6 +90,16 @@
     <i class="fas fa-volume-up optionsBtnIcon"></i>
   </div>
 
+    <!-- INLINE SYNTHESIS -->
+    <div
+    class="optionsBtn optionsPopupBtn"
+    (click)="dontToggle = true; toggleSynthesisPlayButtons()"
+  >
+    <input type="checkbox" [checked]="synthesisPlayButtonsEnabled"/>
+    inline: {{ ts.l.audio_check }}
+    <i class="fas fa-volume-up optionsBtnIcon"></i>
+  </div>
+
   <!-- GRAMMAR CHECK -->
   <div
     class="optionsBtn optionsPopupBtn"
