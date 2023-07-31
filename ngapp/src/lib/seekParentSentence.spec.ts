@@ -81,11 +81,13 @@ const TESTS = [
 ]
 
 
-fdescribe("seekParentSentence", () => {
-    it("returns the word that the cursor starts at", function() {
-        // "|Hello world" -> "Hello"
-        expect(seekParentWord("Hello world", 0)).toEqual("Hello");
-    });
+fdescribe("seekParentSentence", function() {
+    for (const test of TESTS) {
+        it(test.desc, function() {
+            const output = seekParentSentence(test.pre.concat(test.after), test.pre.length);
+            expect(output).toEqual(test.expected);
+        });
+    }
 });
 
 
