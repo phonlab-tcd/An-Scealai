@@ -420,7 +420,7 @@ export class DashboardComponent implements OnInit {
           'api'
         );
       }
-      this.playSynthesisButton.word.onclick = (_) => {
+      this.playSynthesisButton.word.root.onclick = (_) => {
         const options = { params: new HttpParams().set('input', parentWord.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
         this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => console.log('synth res word!', res));
       }
@@ -441,7 +441,7 @@ export class DashboardComponent implements OnInit {
           'api'
         );
       }
-      this.playSynthesisButton.sentence.onclick = (_) => {
+      this.playSynthesisButton.sentence.root.onclick = (_) => {
         const options = { params: new HttpParams().set('input', parentSentence.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
         this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => {
           console.log(res);
