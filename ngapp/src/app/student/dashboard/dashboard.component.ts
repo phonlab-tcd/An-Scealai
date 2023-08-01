@@ -33,21 +33,13 @@ import { NotificationService } from "app/core/services/notification-service.serv
 import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
 import findLocationsInText, {Location as LocationInText}  from "lib/findLocationsInText";
+import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 
 
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
 
-function newTimeout(delay: number, handler: Function) {
-  const id = setTimeout(handler, delay);
-  const clear = clearTimeout.bind(null, id);
-  function trigger() {
-    clear();
-    handler();
-  }
-  return {id, clear, trigger};
-};
 
 function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComponent, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
   const start = location.startIndex;
