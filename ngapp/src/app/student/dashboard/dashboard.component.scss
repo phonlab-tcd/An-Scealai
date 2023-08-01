@@ -2,6 +2,20 @@
     background-color: var(--scealai-green);
     z-index: 999; // important so the button appears over the quill text
     position: absolute;
+    height: 15px;
+    width: 30px;
+    border: none;
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding-bottom: 2.5px;
+    opacity: 0.5;
+}
+
+.synthesis-button:hover {
+    opacity: 1;
 }
 
 .ql-editor { 

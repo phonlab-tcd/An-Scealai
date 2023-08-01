@@ -30,6 +30,8 @@ import { CHECKBOXES, ERROR_INFO, ERROR_TYPES, ErrorTag, ErrorType } from "lib/gr
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
+import seekParentWord from "lib/seekParentWord";
+import seekParentSentence from "lib/seekParentSentence";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -160,7 +162,7 @@ export class DashboardComponent implements OnInit {
     button.addEventListener("click", clickPlayWord.bind(this));
     button.classList.add("synthesis-button");
     button.style.visibility = "hidden";
-    button.innerHTML = "▸";
+    button.innerHTML = "<span>▸<span>";
     document.body.appendChild(button);
   }
 
@@ -394,8 +396,13 @@ export class DashboardComponent implements OnInit {
       if(range.length !== 0) {
         return this.hideSynthesisButtons();
       }
-      this.showSynthesisPlayWordButtonAtIndex(range.index);
-      this.showSynthesisPlaySentenceButtonAtIndex(range.index);
+      const parentWord = seekParentWord(this.story.text, range.index);
+      const parentSentence = seekParentSentence(this.story.text, range.index);
+      console.log('parent word:', parentWord);
+      console.log('parent sentence:', parentSentence);
+
+      this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
+      this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
     }
 
     this.quillEditor.on("selection-change", onSelectionChange_showSynthButtons.bind(this));
