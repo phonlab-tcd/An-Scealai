@@ -246,7 +246,7 @@ export class DashboardComponent implements OnInit {
     button.root.classList.add("synthesis-button");
     button.root.classList.add("custom-tooltip");
     button.root.innerHTML = "<span>▸<span>";
-    button.show();
+    button.hide();
   }
 
   topLeftOfCursorIndex(location) {

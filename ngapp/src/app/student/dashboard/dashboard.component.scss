@@ -18,6 +18,47 @@
     visibility: hidden;
 }
 
+/* Hide the default checkbox */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  /* Define the custom checkbox when it's checked */
+  input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  /* Style the checkmark inside the custom checkbox */
+  input[type="checkbox"]:checked::after {
+    content: "\2713";
+    font-size: 14px;
+    color: white;
+    display: block;
+    text-align: center;
+    line-height: 20px;
+  }
+  
+  /* Style the custom checkbox on hover */
+  input[type="checkbox"]:hover {
+    border-color: #0056b3;
+  }
+  
+  /* Style the custom checkbox when it's checked and hovered */
+  input[type="checkbox"]:checked:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  }
+    
+
 .test-location {
     z-index: 999;
     position: absolute;
@@ -102,6 +143,10 @@
     align-items: center;
     padding: 5px;
     background: #dfd9c800;
+}
+
+.optionsBtn.enabled {
+    background-color: var(--scealai-yellow);
 }
 
 .optionsBtn:hover {
