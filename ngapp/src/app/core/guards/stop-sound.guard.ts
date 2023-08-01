@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SynthesisComponent } from '../../student/synthesis/synthesis.component';
+import { DashboardComponent } from 'app/student/dashboard/dashboard.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StopSoundGuard implements CanDeactivate<SynthesisComponent> {
+export class StopSoundGuard implements CanDeactivate<DashboardComponent> {
   
   canDeactivate(
-    synthesis: SynthesisComponent,
+    dashboard: DashboardComponent,
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | boolean {
-    if(synthesis.chosenSections){
-      for (const section of synthesis.chosenSections) {
-        section.stop();
-      }
+    console.log('dashboard stop guard trigger');
+    if (dashboard.synthesisPlayback.audio && Object.keys(dashboard.synthesisPlayback.turnEmphOnTimeout).length) {
+      dashboard.synthesisPlayback.cancelTurnOn();
+      dashboard.synthesisPlayback.audio.pause();
     }
     return true;
   }

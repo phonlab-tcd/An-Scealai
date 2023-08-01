@@ -187,8 +187,9 @@ export class DashboardComponent implements OnInit {
     },
   }
 
-  async synthesisSentenceButton_onclick(parentSentence: ReturnType<typeof seekParentSentence> ) {
-    const options = { params: new HttpParams().set('input', parentSentence.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+  /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
+  async synthesisButton_onclick(text: string, startIndex: number) {
+    const options = { params: new HttpParams().set('input', text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
     this.synthesisPlayback.startNew();
     const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
     this.synthesisPlayback.startNew();
@@ -196,7 +197,7 @@ export class DashboardComponent implements OnInit {
     if(!v.success) throw v;
 
     const res = v.data;
-    const locations = findLocationsInText(parentSentence.text, res.timing.map(e => e.word), parentSentence.startIndex);
+    const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
     console.log(locations.length);
     console.log(res.timing.length);
     const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
@@ -487,22 +488,13 @@ export class DashboardComponent implements OnInit {
       const parentWord = seekParentWord(this.story.text, range.index);
       wordTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentWord);
       wordTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentWord);
-      wordTooltip.root.onclick = (_) => {
-        const options = { params: new HttpParams().set('input', parentWord.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
-        this.synthesisPlayback.startNew();
-        this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => {
-          this.synthesisPlayback.startNew();
-          const audio = new Audio(`data:audio/ogg;base64,${res.audioContent}`);
-          audio.play();
-          this.synthesisPlaybacke.audio = audio;
-        });
-      }
+      wordTooltip.root.onclick = this.synthesisButton_onclick.bind(this, parentWord.text, parentWord.startIndex);
 
       const sentenceTooltip = this.playSynthesisButton.sentence;
       const parentSentence = seekParentSentence(this.story.text, range.index);
       sentenceTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentSentence);
       sentenceTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentSentence);
-      sentenceTooltip.root.onclick = this.synthesisSentenceButton_onclick.bind(this, parentSentence);
+      sentenceTooltip.root.onclick = this.synthesisButton_onclick.bind(this, parentSentence.text, parentSentence.startIndex);
 
       this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
       this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);

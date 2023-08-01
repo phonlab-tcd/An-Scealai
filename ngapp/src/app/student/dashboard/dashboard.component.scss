@@ -5,13 +5,17 @@
     height: 15px;
     width: 30px;
     border: none;
-    border-radius: 1px;
+    border-radius: 2px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    padding-bottom: 2.5px;
+    padding-bottom: 5px;
     opacity: 0.5;
+}
+
+.ql-tooltip.synthesis-button:hover {
+    cursor: pointer;
 }
 
 .ql-tooltip.synthesis-button.ql-hidden {
