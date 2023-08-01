@@ -120,17 +120,17 @@ export class DashboardComponent implements OnInit {
   isRecording: boolean = false;
   isTranscribing: boolean = false;
 
+  // TEXT TO SPEECH
   synthesisPlayButtonsEnabled = false;
-
   toggleSynthesisPlayButtons() {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
     if(!this.synthesisPlayButtonsEnabled) {
       this.hideSynthesisButtons();
     }
   }
-
-
   playSynthesisButton: {word: HTMLButtonElement, sentence: HTMLButtonElement } = {word: null, sentence: null};
+  
+  
   constructor(
     public ts: TranslationService,
     private auth: AuthenticationService,
@@ -400,6 +400,40 @@ export class DashboardComponent implements OnInit {
       const parentSentence = seekParentSentence(this.story.text, range.index);
       console.log('parent word:', parentWord);
       console.log('parent sentence:', parentSentence);
+
+      this.playSynthesisButton.word.onmouseover = (_) => {
+        this.quillEditor.formatText(
+          parentWord.startIndex,
+          parentWord.endIndex - parentWord.startIndex,
+          { "background": "#dbece2"},
+          'api'
+        );
+      }
+      this.playSynthesisButton.word.onmouseout = (_) => {
+        this.quillEditor.formatText(
+          parentWord.startIndex,
+          parentWord.endIndex - parentWord.startIndex,
+          { "background": "transparent"},
+          'api'
+        );
+      }
+
+      this.playSynthesisButton.sentence.onmouseover = (_) => {
+        this.quillEditor.formatText(
+          parentSentence.startIndex,
+          parentSentence.endIndex - parentSentence.startIndex,
+          { "background": "#dbece2"},
+          'api'
+        );
+      }
+      this.playSynthesisButton.sentence.onmouseout = (_) => {
+        this.quillEditor.formatText(
+          parentSentence.startIndex,
+          parentSentence.endIndex - parentSentence.startIndex,
+          { "background": "transparent"},
+          'api'
+        );
+      }
 
       this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
       this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
