@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
@@ -32,6 +32,7 @@ import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
 import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
+import findLocationsInText from "lib/findLocationsInText";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
@@ -152,14 +153,9 @@ export class DashboardComponent implements OnInit {
 
   // create hideable button to play a single synthesised word (reuse this button for different syntheses)
   createSynthesisPlayButton(type: keyof DashboardComponent["playSynthesisButton"]) {
-    function clickPlayWord () {
-      alert("play " + type);
-    }
-
     const button = document.createElement("button");
     this.playSynthesisButton[type] = button;
     button.id = "playSynthesisButton." + type;
-    button.addEventListener("click", clickPlayWord.bind(this));
     button.classList.add("synthesis-button");
     button.style.visibility = "hidden";
     button.innerHTML = "<span>▸<span>";
@@ -398,8 +394,6 @@ export class DashboardComponent implements OnInit {
       }
       const parentWord = seekParentWord(this.story.text, range.index);
       const parentSentence = seekParentSentence(this.story.text, range.index);
-      console.log('parent word:', parentWord);
-      console.log('parent sentence:', parentSentence);
 
       this.playSynthesisButton.word.onmouseover = (_) => {
         this.quillEditor.formatText(
@@ -417,6 +411,10 @@ export class DashboardComponent implements OnInit {
           'api'
         );
       }
+      this.playSynthesisButton.word.onclick = (_) => {
+        const options = { params: new HttpParams().set('input', parentWord.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+        this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => console.log('synth res word!', res));
+      }
 
       this.playSynthesisButton.sentence.onmouseover = (_) => {
         this.quillEditor.formatText(
@@ -433,6 +431,16 @@ export class DashboardComponent implements OnInit {
           { "synth-highlight": false },
           'api'
         );
+      }
+      this.playSynthesisButton.sentence.onclick = (_) => {
+        const options = { params: new HttpParams().set('input', parentSentence.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+        this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => {
+          console.log(res);
+          const locations = findLocationsInText(parentSentence.text, res.timing.map(e => e.word), parentSentence.startIndex);
+          console.log(locations);
+          const audio = new Audio(`data:audio/ogg;base64,${res.audioContent}`);
+          audio.play();
+        });
       }
 
       this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
