@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
@@ -32,6 +32,26 @@ import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
 import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
+import findLocationsInText, {Location as LocationInText}  from "lib/findLocationsInText";
+import { z } from "zod";
+
+function newTimeout(delay: number, handler: Function) {
+  const id = setTimeout(handler, delay);
+  const clear = clearTimeout.bind(null, id);
+  function trigger() {
+    clear();
+    handler();
+  }
+  return {id, clear, trigger};
+};
+
+function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComponent, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
+  const start = location.startIndex;
+  const length = location.endIndex - location.startIndex;
+  const props = { "synth-highlight-em": turnEmphasisOn};
+  this.quillEditor.formatText(start, length, props, 'api');
+  delete this.synthesisPlayback[turnEmphasisOn ? "turnEmphOnTimeout" : "turnEmphOffTimeout"][myId];
+}
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -137,6 +157,72 @@ export class DashboardComponent implements OnInit {
     }
   }
   playSynthesisButton: {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
+
+  synthAPI2validator = z.object({
+    audioContent: z.string(),
+    timing: z.array(z.object({word: z.string(), end: z.number()})),
+  });
+
+  synthesisPlayback = {
+    turnEmphOnTimeout: {},
+    turnEmphOffTimeout: {},
+    audio: null,
+    cancelTurnOn() {
+      for(const timeoutHandle of Object.values(this.turnEmphOnTimeout)) {
+        // @ts-ignore
+        timeoutHandle.clear();
+        this.turnEmphOnTimeout = {};
+      }
+    },
+    cancelTurnOff() {
+      for(const timeoutHandle of Object.values(this.turnEmphOnTimeout)) {
+        // @ts-ignore
+        timeoutHandle.trigger();
+      }
+      this.turnEmphOnTimeout = {};
+    },
+    startNew(){
+      this.cancelTurnOn();
+      this.cancelTurnOff();
+      if(this.audio instanceof HTMLAudioElement) {
+        console.log("PAUSING");
+        this.audio.pause();
+      }
+    },
+  }
+
+  async synthesisSentenceButton_onclick(parentSentence: ReturnType<typeof seekParentSentence> ) {
+    const options = { params: new HttpParams().set('input', parentSentence.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+    this.synthesisPlayback.startNew();
+    const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
+    this.synthesisPlayback.startNew();
+    const v = this.synthAPI2validator.safeParse(prevalid);
+    if(!v.success) throw v;
+
+    const res = v.data;
+    const locations = findLocationsInText(parentSentence.text, res.timing.map(e => e.word), parentSentence.startIndex);
+    console.log(locations.length);
+    console.log(res.timing.length);
+    const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
+    audio.play();
+
+    this.synthesisPlayback.audio = audio;
+
+    for(let i = 0; i < res.timing.length; i++) {
+      const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
+      const timing = res.timing[i];
+      const location = locations[i];
+      const myId = i;
+
+      const startms = startTimeSeconds * 1000;
+      const endms = timing.end * 1000;
+      
+      const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
+      const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
+      this.synthesisPlayback.turnEmphOnTimeout[myId] = newTimeout(startms, on);
+      this.synthesisPlayback.turnEmphOffTimeout[myId] = newTimeout(endms, off);
+    }
+  }
   
   
   constructor(
@@ -158,26 +244,16 @@ export class DashboardComponent implements OnInit {
 
   // create hideable button to play a single synthesised word (reuse this button for different syntheses)
   createSynthesisPlayButton(type: keyof DashboardComponent["playSynthesisButton"]) {
-    function clickPlayWord () {
-      alert("play " + type);
-    }
-
     const button = new QuillTooltip(this.quillEditor)
     this.playSynthesisButton[type] = button;
     button.root.id = "playSynthesisButton." + type;
-    button.root.addEventListener("click", clickPlayWord.bind(this));
     button.root.classList.add("synthesis-button");
     button.root.classList.add("custom-tooltip");
     button.root.innerHTML = "<span>▸<span>";
-    button.position(this.quillEditor.getBounds(10,3));
     button.show();
   }
 
   topLeftOfCursorIndex(location) {
-    // get bounds of entire quill editor
-    const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
-    const editorRect = editorContainer.getBoundingClientRect();
-    // get bounds of selected text
     const bounds = this.quillEditor.getBounds(location, 0);
     const quillStuff = document.querySelector(".ql-editor");
     const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
@@ -411,16 +487,26 @@ export class DashboardComponent implements OnInit {
     function onSelectionChange_showSynthButtons(range, r2){
       if(!range) return;
 
-      const parentWord = seekParentWord(this.story.text, range.index);
-      const parentSentence = seekParentSentence(this.story.text, range.index);
-
       const wordTooltip = this.playSynthesisButton.word;
+      const parentWord = seekParentWord(this.story.text, range.index);
       wordTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentWord);
       wordTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentWord);
+      wordTooltip.root.onclick = (_) => {
+        const options = { params: new HttpParams().set('input', parentWord.text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+        this.synthesisPlayback.startNew();
+        this.http.get('https://www.abair.ie/api2/synthesise', options).subscribe(res => {
+          this.synthesisPlayback.startNew();
+          const audio = new Audio(`data:audio/ogg;base64,${res.audioContent}`);
+          audio.play();
+          this.synthesisPlaybacke.audio = audio;
+        });
+      }
 
       const sentenceTooltip = this.playSynthesisButton.sentence;
+      const parentSentence = seekParentSentence(this.story.text, range.index);
       sentenceTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentSentence);
       sentenceTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentSentence);
+      sentenceTooltip.root.onclick = this.synthesisSentenceButton_onclick.bind(this, parentSentence);
 
       this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
       this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
