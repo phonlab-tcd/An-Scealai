@@ -9,7 +9,7 @@ export const tooltipClassname = "custom-tooltip";
 const Parchment = Quill.import('parchment');
 const Tooltip = Quill.import('ui/tooltip');
 
-export const QUILL_HIGHLIGHT_ATTRIBUTES = ["highlight-tag", "id", "right-edge", "left-edge"];
+export const QUILL_HIGHLIGHT_ATTRIBUTES = ["highlight-tag", "id", "right-edge", "left-edge", "synth-highlight"];
 
 for(const attr of QUILL_HIGHLIGHT_ATTRIBUTES) {
   const opts = { scope: Parchment.Scope.INLINE};

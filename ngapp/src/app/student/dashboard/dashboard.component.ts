@@ -405,7 +405,7 @@ export class DashboardComponent implements OnInit {
         this.quillEditor.formatText(
           parentWord.startIndex,
           parentWord.endIndex - parentWord.startIndex,
-          { "background": "#dbece2"},
+          { "synth-highlight": true },
           'api'
         );
       }
@@ -413,7 +413,7 @@ export class DashboardComponent implements OnInit {
         this.quillEditor.formatText(
           parentWord.startIndex,
           parentWord.endIndex - parentWord.startIndex,
-          { "background": "transparent"},
+          { "synth-highlight": false },
           'api'
         );
       }
@@ -422,7 +422,7 @@ export class DashboardComponent implements OnInit {
         this.quillEditor.formatText(
           parentSentence.startIndex,
           parentSentence.endIndex - parentSentence.startIndex,
-          { "background": "#dbece2"},
+          { "synth-highlight": true },
           'api'
         );
       }
@@ -430,7 +430,7 @@ export class DashboardComponent implements OnInit {
         this.quillEditor.formatText(
           parentSentence.startIndex,
           parentSentence.endIndex - parentSentence.startIndex,
-          { "background": "transparent"},
+          { "synth-highlight": false },
           'api'
         );
       }
