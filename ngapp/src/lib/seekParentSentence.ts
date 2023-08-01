@@ -12,12 +12,12 @@ function seekBoundary(text: string, reverse: boolean = false): number {
 }
 
 function isAtBoundary(text: string, index: number): boolean {
-    return text[index - 1] === '.' && text[index] === '\s';
+    return text[index - 1] === '.' && text[index] === ' ';
 }
 
 export default function seekParentSentece(text: string, index: number): string {
     const [before, after] = [text.slice(0, index), text.slice(index)];
-    const startIndex = isAtBoundary(text, index) ? index : index - seekBoundary(reverseString(before), true);
-    const endIndex = index + seekBoundary(after);
-    return text.slice(startIndex, endIndex);
+    const startIndex = index - seekBoundary(reverseString(before), true);
+    const endIndex = isAtBoundary(text, index) ? index : (index + seekBoundary(after));
+    return text.slice(startIndex, endIndex).trim();
 }
