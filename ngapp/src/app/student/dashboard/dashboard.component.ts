@@ -36,7 +36,12 @@ import seekParentSentence from "lib/seekParentSentence";
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
 
-const WEIRD_QUILL_TOOLTIP_TOP_OFFSET = -10;
+function synthesisButton_onMouseInOrOut(this: DashboardComponent,isMouseIn: boolean, parentSpan: ReturnType<typeof seekParentWord>) {
+  const start = parentSpan.startIndex;
+  const length = parentSpan.endIndex - start;
+  const props = { "synth-highlight": isMouseIn};
+  this.quillEditor.formatText(start, length, props, 'api');
+}
 
 @Component({
   selector: "app-dashboard",
@@ -405,45 +410,17 @@ export class DashboardComponent implements OnInit {
 
     function onSelectionChange_showSynthButtons(range, r2){
       if(!range) return;
-      
+
       const parentWord = seekParentWord(this.story.text, range.index);
       const parentSentence = seekParentSentence(this.story.text, range.index);
-      console.log('parent word:', parentWord);
-      console.log('parent sentence:', parentSentence);
 
-      this.playSynthesisButton.word.root.onmouseover = (_) => {
-        this.quillEditor.formatText(
-          parentWord.startIndex,
-          parentWord.endIndex - parentWord.startIndex,
-          { "synth-highlight": true },
-          'api'
-        );
-      }
-      this.playSynthesisButton.word.root.onmouseout = (_) => {
-        this.quillEditor.formatText(
-          parentWord.startIndex,
-          parentWord.endIndex - parentWord.startIndex,
-          { "synth-highlight": false },
-          'api'
-        );
-      }
+      const wordTooltip = this.playSynthesisButton.word;
+      wordTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentWord);
+      wordTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentWord);
 
-      this.playSynthesisButton.sentence.root.onmouseover = (_) => {
-        this.quillEditor.formatText(
-          parentSentence.startIndex,
-          parentSentence.endIndex - parentSentence.startIndex,
-          { "synth-highlight": true },
-          'api'
-        );
-      }
-      this.playSynthesisButton.sentence.root.onmouseout = (_) => {
-        this.quillEditor.formatText(
-          parentSentence.startIndex,
-          parentSentence.endIndex - parentSentence.startIndex,
-          { "synth-highlight": false },
-          'api'
-        );
-      }
+      const sentenceTooltip = this.playSynthesisButton.sentence;
+      sentenceTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentSentence);
+      sentenceTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentSentence);
 
       this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
       this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
