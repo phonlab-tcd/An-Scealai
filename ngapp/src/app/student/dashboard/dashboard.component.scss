@@ -1,4 +1,4 @@
-.synthesis-button {
+.ql-tooltip.synthesis-button {
     background-color: var(--scealai-green);
     z-index: 999; // important so the button appears over the quill text
     position: absolute;
@@ -12,6 +12,15 @@
     color: white;
     padding-bottom: 2.5px;
     opacity: 0.5;
+}
+
+.ql-tooltip.synthesis-button.ql-hidden {
+    visibility: hidden;
+}
+
+.test-location {
+    z-index: 999;
+    position: absolute;
 }
 
 [synth-highlight] {
