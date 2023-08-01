@@ -21,6 +21,18 @@ const TESTS = [
         after: 'tence ',
         expected: 'This is a sentence',
     },
+    {
+        desc: 'Gets sentence when cursor at the start of the string',
+        pre: '',
+        after: 'This is a sentence.',
+        expected: 'This is a sentence.',
+    },
+    {
+        desc: 'Gets sentence when cursor at the end of the string',
+        pre: 'This is a sentence.',
+        after: '',
+        expected: 'This is a sentence.',
+    },
     // Trivial cases
     {
         desc: 'Empty string should return empty string',
@@ -78,6 +90,30 @@ const TESTS = [
         after: ' sentence\n some stuff here',
         expected: 'This is a sentence',
     },
+    {
+        desc: '? as start',
+        pre: 'Some stuff before? This is a',
+        after: ' sentence.',
+        expected: 'This is a sentence.',
+    },
+    {
+        desc: '? as end',
+        pre: 'This is a',
+        after: ' sentence? some stuff here',
+        expected: 'This is a sentence?',
+    },
+    {
+        desc: '! as start',
+        pre: 'Some stuff before! This is a',
+        after: ' sentence.',
+        expected: 'This is a sentence.',
+    },
+    {
+        desc: '! as end',
+        pre: 'This is a',
+        after: ' sentence! some stuff here',
+        expected: 'This is a sentence!',
+    },
 ]
 
 
@@ -85,7 +121,7 @@ fdescribe("seekParentSentence", function() {
     for (const test of TESTS) {
         it(test.desc, function() {
             const output = seekParentSentence(test.pre.concat(test.after), test.pre.length);
-            expect(output).toEqual(test.expected);
+            expect(output.text).toEqual(test.expected);
         });
     }
 });
