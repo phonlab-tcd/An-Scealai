@@ -1,0 +1,216 @@
+.bookHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.myStoriesBtn {
+    display: inline;
+    border-style: none;
+    color: var(--dark-text);
+    width: 100px;
+    font-size: 12pt;
+    padding-top: 10px;
+    padding-left: 5%;
+}
+
+.myStoriesBtn:hover {
+    color: var(--scealai-orange);
+    cursor: pointer;
+    transition: color 0.5s;
+}
+
+.storyContainer {
+    margin-top: 10px;
+}
+
+.storyHeader {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px 4px 0px 0px;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.playAudioBtn {
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    border: none;
+    margin-left: 4px;
+    font-size: 10pt;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.playAudioBtn:hover {
+    background-color: var(--scealai-med-green);
+    transition: 0.5s;
+}
+
+.footerText {
+  display: flex;
+  align-items: center;
+  font-size: 12pt;
+  margin-right: 5px;
+}
+
+.changeSplitBtn:hover {
+  background-color: var(--scealai-med-green);
+}
+
+.selectedBtn {
+  background-color: var(--scealai-med-green);
+}
+
+@media only screen and (max-width: 350px) {
+  .footerText {
+    font-size: 10pt;
+  }
+  .changeSplitBtn {
+    font-size: 10pt;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  .footerText {
+    font-size: 8pt;
+  }
+  .changeSplitBtn {
+    font-size: 8pt;
+  }
+}
+
+@media only screen and (max-width: 700px) { 
+  .bookImg {
+      display: none;
+  }
+  .bookContainerSynth {
+     width: 90%;
+     margin-left: 5%;
+  }
+  
+}
+
+@media only screen and (min-width: 700px) {
+    .bookImg {
+        z-index: -10;
+        width: 630px;
+        left: 50%;
+        margin-left: -315px;
+    }
+
+    .bookContainerSynth {
+        width: 490px;
+        position: fixed;
+        left: 50%;
+        margin-left: -245px;
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (min-width: 1000px) and (min-height: 750px) {
+  .bookImg {
+      z-index: -10;
+      width: 800px;
+      height: 600px;
+      left: 50%;
+      margin-left: -400px;
+  }
+
+  .bookContainerSynth {
+      width: 620px;
+      height: 510px;
+      position: fixed;
+      left: 50%;
+      margin-left: -310px;
+      margin-top: 20px;
+  }
+
+  .textContainerSynth {
+      height: 390px;
+  }
+}
+
+@media only screen and (min-width: 1400px) and (min-height: 900px) {
+  .bookImg {
+      z-index: -10;
+      width: 1000px;
+      height: 740px;
+      left: 50%;
+      margin-left: -500px;
+  }
+
+  .bookContainerSynth {
+      width: 800px;
+      height: 600px;
+      position: fixed;
+      left: 50%;
+      margin-left: -400px;
+      margin-top: 30px;
+  }
+
+  .textContainerSynth {
+      height: 480px;
+  }
+}
+
+@media only screen and (min-width: 1900px) and (min-height: 1000px) {
+  .bookImg {
+      z-index: -10;
+      width: 1200px;
+      height: 850px;
+      left: 50%;
+      margin-left: -600px;
+  }
+
+  .bookContainerSynth {
+      width: 980px;
+      height: 730px;
+      position: fixed;
+      left: 50%;
+      margin-left: -490px;
+      margin-top: 30px;
+  }
+
+  .textContainerSynth {
+      height: 610px;
+  }
+
+  .myStoriesBtn {
+    width: 120px;
+  }
+}
+
+/* 
+
+Some pseudo-classes used to highlight text
+
+*/
+
+.paragraphContainer ::ng-deep .highlightable {
+    position: relative;
+}
+
+.paragraphContainer ::ng-deep .highlightable::before {
+    content: '';
+    height: 22px;
+    width: 0%;
+    background: var(--scealai-light-blue);
+    position: absolute;
+    transition: var(--trans);
+}
+
+.paragraphContainer ::ng-deep .highlight::before {
+    width: 100%;
+}
+
+.paragraphContainer ::ng-deep .noHighlight::before {
+    right: 0;
+    width: 0%;
+}
+
+.paragraphContainer ::ng-deep .wordBtn:hover {
+  background: var(--scealai-light-blue-hover);
+  cursor: pointer;
+}
