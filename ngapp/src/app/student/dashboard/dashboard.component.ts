@@ -35,6 +35,10 @@ import seekParentSentence from "lib/seekParentSentence";
 import findLocationsInText, {Location as LocationInText}  from "lib/findLocationsInText";
 import { z } from "zod";
 
+
+const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
+const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
+
 function newTimeout(delay: number, handler: Function) {
   const id = setTimeout(handler, delay);
   const clear = clearTimeout.bind(null, id);
@@ -219,8 +223,8 @@ export class DashboardComponent implements OnInit {
       
       const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
       const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
-      this.synthesisPlayback.turnEmphOnTimeout[myId] = newTimeout(startms, on);
-      this.synthesisPlayback.turnEmphOffTimeout[myId] = newTimeout(endms, off);
+      this.synthesisPlayback.turnEmphOnTimeout[myId] = newTimeout(startms - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+      this.synthesisPlayback.turnEmphOffTimeout[myId] = newTimeout(endms  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
     }
   }
   
