@@ -21,7 +21,7 @@ import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
-import { QuillHighlighter } from "lib/quill-highlight/quill-highlight";
+import { QuillHighlighter, tooltipClassname } from "lib/quill-highlight/quill-highlight";
 import { HighlightTag } from "lib/quill-highlight/quill-highlight";
 import { leathanCaolChecker } from "lib/grammar-engine/checkers/leathan-caol-checker";
 import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
@@ -34,6 +34,9 @@ import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
 
 Quill.register("modules/imageCompress", ImageCompress);
+const QuillTooltip = Quill.import("ui/tooltip");
+
+const WEIRD_QUILL_TOOLTIP_TOP_OFFSET = -10;
 
 @Component({
   selector: "app-dashboard",
@@ -128,7 +131,7 @@ export class DashboardComponent implements OnInit {
       this.hideSynthesisButtons();
     }
   }
-  playSynthesisButton: {word: HTMLButtonElement, sentence: HTMLButtonElement } = {word: null, sentence: null};
+  playSynthesisButton: {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
   
   
   constructor(
@@ -146,9 +149,7 @@ export class DashboardComponent implements OnInit {
     this.setUpGrammarChecking();
   }
 
-  async ngOnInit() {
-
-  }
+  async ngOnInit() { }
 
   // create hideable button to play a single synthesised word (reuse this button for different syntheses)
   createSynthesisPlayButton(type: keyof DashboardComponent["playSynthesisButton"]) {
@@ -156,14 +157,15 @@ export class DashboardComponent implements OnInit {
       alert("play " + type);
     }
 
-    const button = document.createElement("button");
+    const button = new QuillTooltip(this.quillEditor)
     this.playSynthesisButton[type] = button;
-    button.id = "playSynthesisButton." + type;
-    button.addEventListener("click", clickPlayWord.bind(this));
-    button.classList.add("synthesis-button");
-    button.style.visibility = "hidden";
-    button.innerHTML = "<span>▸<span>";
-    document.body.appendChild(button);
+    button.root.id = "playSynthesisButton." + type;
+    button.root.addEventListener("click", clickPlayWord.bind(this));
+    button.root.classList.add("synthesis-button");
+    button.root.classList.add("custom-tooltip");
+    button.root.innerHTML = "<span>▸<span>";
+    button.position(this.quillEditor.getBounds(10,3));
+    button.show();
   }
 
   topLeftOfCursorIndex(location) {
@@ -172,42 +174,54 @@ export class DashboardComponent implements OnInit {
     const editorRect = editorContainer.getBoundingClientRect();
     // get bounds of selected text
     const bounds = this.quillEditor.getBounds(location, 0);
-    const left = editorRect.left + bounds.left;
-    const top = editorRect.top + bounds.top;
+    const quillStuff = document.querySelector(".ql-editor");
+    const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
+
+    console.log(padding_top);
+    const left =  bounds.left + quillStuff.scrollLeft;
+    const top =  bounds.top + quillStuff.scrollTop - padding_top;
     return { top, left };
   }
 
   bottomRightOfCursorIndex(location) {
     // get bounds of entire quill editor
     const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
-    const editorRect = editorContainer.getBoundingClientRect();
     // get bounds of selected text
     const bounds = this.quillEditor.getBounds(location, 0);
-    const left = editorRect.left + bounds.right;
-    const top = editorRect.top + bounds.bottom;
+    const quillStuff = document.querySelector(".ql-editor");
+    const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
+    const left = bounds.right + quillStuff.scrollLeft;
+    const top = bounds.bottom + quillStuff.scrollTop - padding_top;
     return { top, left };
   }
 
   showSynthesisPlaySentenceButtonAtIndex(location: number) {
-    const { height, width } = this.playSynthesisButton.sentence.getBoundingClientRect();
+    if(!this.synthesisPlayButtonsEnabled) return;
+
+    const { height, width } = this.playSynthesisButton.sentence.root.getBoundingClientRect();
     const { left, top } = this.topLeftOfCursorIndex(location);
-    const style = this.playSynthesisButton.sentence.style;
-    style.left = `${left - width}px`;
-    style.top = `${top - height}px`;
-    style.visibility = "visible";
+    const tooltip = this.playSynthesisButton.sentence;
+    const style = tooltip.root.style;
+    style.left = `${left - width }px`;
+    style.top  = `${top  - height }px`;
+    tooltip.show();
   }
 
   showSynthesisPlayWordButtonAtIndex(location: number) {
+    if(!this.synthesisPlayButtonsEnabled) return;
+
     const { left, top } = this.bottomRightOfCursorIndex(location);
-    const style = this.playSynthesisButton.word.style;
+    const tooltip = this.playSynthesisButton.word;
+    const style = tooltip.root.style;
     style.left = `${left}px`;
     style.top = `${top}px`;
-    style.visibility = "visible";
+    tooltip.show()
   }
 
   hideSynthesisButtons() {
     for(const button of Object.values(this.playSynthesisButton)) {
-      button.style.visibility = "hidden";
+      console.log("hide button:", button);
+      button.hide();
     }
   }
 
@@ -386,22 +400,18 @@ export class DashboardComponent implements OnInit {
     this.createSynthesisPlayButton("word");
     this.createSynthesisPlayButton("sentence");
 
-    this.showSynthesisPlayWordButtonAtIndex(10);
-    this.showSynthesisPlaySentenceButtonAtIndex(23);
-
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
 
-    function onSelectionChange_showSynthButtons(range){
-      if(range.length !== 0) {
-        return this.hideSynthesisButtons();
-      }
+    function onSelectionChange_showSynthButtons(range, r2){
+      if(!range) return;
+      
       const parentWord = seekParentWord(this.story.text, range.index);
       const parentSentence = seekParentSentence(this.story.text, range.index);
       console.log('parent word:', parentWord);
       console.log('parent sentence:', parentSentence);
 
-      this.playSynthesisButton.word.onmouseover = (_) => {
+      this.playSynthesisButton.word.root.onmouseover = (_) => {
         this.quillEditor.formatText(
           parentWord.startIndex,
           parentWord.endIndex - parentWord.startIndex,
@@ -409,7 +419,7 @@ export class DashboardComponent implements OnInit {
           'api'
         );
       }
-      this.playSynthesisButton.word.onmouseout = (_) => {
+      this.playSynthesisButton.word.root.onmouseout = (_) => {
         this.quillEditor.formatText(
           parentWord.startIndex,
           parentWord.endIndex - parentWord.startIndex,
@@ -418,7 +428,7 @@ export class DashboardComponent implements OnInit {
         );
       }
 
-      this.playSynthesisButton.sentence.onmouseover = (_) => {
+      this.playSynthesisButton.sentence.root.onmouseover = (_) => {
         this.quillEditor.formatText(
           parentSentence.startIndex,
           parentSentence.endIndex - parentSentence.startIndex,
@@ -426,7 +436,7 @@ export class DashboardComponent implements OnInit {
           'api'
         );
       }
-      this.playSynthesisButton.sentence.onmouseout = (_) => {
+      this.playSynthesisButton.sentence.root.onmouseout = (_) => {
         this.quillEditor.formatText(
           parentSentence.startIndex,
           parentSentence.endIndex - parentSentence.startIndex,
