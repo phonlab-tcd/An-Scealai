@@ -81,22 +81,14 @@
     <span class="notificationBtn" *ngIf="hasFeedback && !story.feedback.seenByStudent">1</span>
   </div>
 
-  <!-- SYNTHESIS -->
-  <div
-    class="optionsBtn optionsPopupBtn"
-    (click)="dontToggle = true; synthesisPlayer.toggleHidden()"
-  >
-    {{ ts.l.audio_check }}
-    <i class="fas fa-volume-up optionsBtnIcon"></i>
-  </div>
-
     <!-- INLINE SYNTHESIS -->
     <div
     class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="synthesisPlayButtonsEnabled"
     (click)="dontToggle = true; toggleSynthesisPlayButtons()"
   >
-    <input type="checkbox" [checked]="synthesisPlayButtonsEnabled"/>
-    inline: {{ ts.l.audio_check }}
+  
+     {{ ts.l.audio_check }}
     <i class="fas fa-volume-up optionsBtnIcon"></i>
   </div>
 
@@ -188,11 +180,3 @@
     ></app-grammar-error-drawer>
   </mat-drawer>
 </mat-drawer-container>
-
-<app-synthesis-player
-  #mySynthesisPlayer
-  [text]="story?.text"
-  [storyId]="story?._id"
-  [storyTitle]="story?.title"
->
-</app-synthesis-player>
