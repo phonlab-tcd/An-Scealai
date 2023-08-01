@@ -145,10 +145,6 @@ input[type="checkbox"] {
     background: #dfd9c800;
 }
 
-.optionsBtn.enabled {
-    background-color: var(--scealai-yellow);
-}
-
 .optionsBtn:hover {
     background-color: var(--options-btn-background-color-hover);
     color: #35322f;
@@ -200,6 +196,10 @@ input[type="checkbox"] {
 .ql-container {
     background-color: #F8F9FA;
     height: 100%;
+}
+
+.ql-tooltip {
+    z-index: 998;
 }
 
 //<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"

@@ -84,7 +84,7 @@
     <!-- INLINE SYNTHESIS -->
     <div
     class="optionsBtn optionsPopupBtn"
-    [ngClass]="{enabled: synthesisPlayButtonsEnabled}"
+    [class.optionsBtnClicked]="synthesisPlayButtonsEnabled"
     (click)="dontToggle = true; toggleSynthesisPlayButtons()"
   >
   
