@@ -36,6 +36,7 @@ let storyRoutes;
   const updateStoryAndCheckGrammar = require("../endpoint/story/updateStoryAndCheckGrammar");
   const averageWordCount = require("../endpoint/story/averageWordCount");
   const getStoriesByDate = require("../endpoint/story/getStoriesByDate");
+  const updateTimeWritingStory = require("../endpoint/story/updateTimeWritingStory");
 
   storyRoutes = makeEndpoints({
     get: {
@@ -53,6 +54,7 @@ let storyRoutes;
       "/updateStoryAndCheckGrammar": updateStoryAndCheckGrammar,
       "/averageWordCount/:studentId": averageWordCount,
       "/getStoriesByDate/:studentId": getStoriesByDate,
+      "/updateTimeWritingStory/:id": updateTimeWritingStory
     },
   });
 })();

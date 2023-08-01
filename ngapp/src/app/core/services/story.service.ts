@@ -117,6 +117,10 @@ export class StoryService {
     return this.http.post(this.baseUrl + "updateFeedbackMarkup/" + id, {feedbackMarkup: feedbackMarkup});
   }
 
+  updateTimeWritingStory(id: string, seconds: number) : Observable<any> {
+    return this.http.post(this.baseUrl + "updateTimeWritingStory/" + id, {seconds: seconds});
+  }
+
   getFeedback(id) : Observable<any> {
     return this.http.get(this.baseUrl + "feedback/" + id);
   }

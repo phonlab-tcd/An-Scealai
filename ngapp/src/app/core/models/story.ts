@@ -19,4 +19,5 @@ export class Story extends Serializable {
     };
     activeRecording: string;
     createdWithPrompts: boolean = false;
+    timeSpentOnStory: number;
 }

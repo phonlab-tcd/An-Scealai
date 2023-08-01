@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
@@ -43,7 +43,7 @@ Quill.register("modules/imageCompress", ImageCompress);
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   // STORY VARIABLES
   story: Story;
   saveStoryDebounceId = 0;
@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
   rightDrawerOpened: boolean = false;
   selectedDrawer: "grammar" | "dictionary" | "feedback" = "grammar";
+  startWritingTime: number;
 
   // WORD COUNT
   words: string[] = [];
@@ -265,15 +266,31 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Set the current story displayed and calculate word count
+   * Also save the writing time of previous story
    * @param story Story selected from the story drawer
    */
   setCurrentStory(story: Story) {
+    this.updateTimeWritingStory(this.story);
     this.story = story;
     if (!this.story) return;
     this.storySaved = true;
     this.updatedTitle = this.story.title;
     this.getWordCount(this.story.text);
     this.textUpdated.next(story.text);
+  }
+
+  /**
+   * Update the time spent writing the given story in seconds
+   * @param story most recently edited story
+   */
+ updateTimeWritingStory(story: Story) {
+  if (this.startWritingTime) {
+    const endTime = Date.now();
+    const timeSpent = (endTime - this.startWritingTime) / 1000;
+    this.startWritingTime = null;
+    this.storyService.updateTimeWritingStory(story._id, timeSpent).subscribe({next: () => {}, error: () => {}})
+  }
+
   }
 
   /*
@@ -296,6 +313,9 @@ export class DashboardComponent implements OnInit {
       this.storySaved = false;
       this.textUpdated.next(q.text);
       this.debounceSaveStory();
+      if (!this.startWritingTime) {
+        this.startWritingTime = Date.now();
+      }
     }
   }
 
@@ -439,7 +459,6 @@ export class DashboardComponent implements OnInit {
         .subscribe({
           next: () => {
             this.storySaved = true;
-            console.log("title updated");
           },
           error: () => console.log("error updating title"),
         });
@@ -534,5 +553,12 @@ export class DashboardComponent implements OnInit {
       this.recordAudioService.recordAudio();
     }
     this.isRecording = !this.isRecording;
+  }
+
+  /**
+   * Update the story writing time when student leaves the dashboard
+   */
+  ngOnDestroy() {
+    this.updateTimeWritingStory(this.story);
   }
 }
