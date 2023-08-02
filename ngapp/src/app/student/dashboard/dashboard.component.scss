@@ -1,3 +1,16 @@
+.mat-slide-toggle-content {
+    font-family: "Open Sans" !important;
+}
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: white !important;
+}
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: var(--scealai-green) !important;
+}
+.mat-ripple-element {
+    background-color: var(--scealai-light-green) !important;
+}
+
 .ql-tooltip.synthesis-button {
     background-color: var(--scealai-green);
     z-index: 999; // important so the button appears over the quill text
@@ -94,7 +107,7 @@ input[type="checkbox"] {
 }
 
 [synth-highlight-em] {
-    background: rgb(182, 236, 204);  
+    background: var(--scealai-light-green);  
 }
 
 .synthesis-button:hover {
@@ -235,7 +248,6 @@ input[type="checkbox"] {
     font-family: "Times New Roman", Times, serif;
     min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
     max-height: 70vh !important;
-    padding-top: 25px;
 }
 
 .menuButton {

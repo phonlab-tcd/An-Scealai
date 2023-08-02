@@ -29,12 +29,14 @@ import { relativeClauseChecker } from "lib/grammar-engine/checkers/relative-clau
 import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NotificationService } from "app/core/services/notification-service.service";
 import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
 import findLocationsInText, {Location as LocationInText}  from "lib/findLocationsInText";
 import newTimeout from "lib/newTimeout";
 import { z } from "zod";
+import { Renderer2 } from "@angular/core";
 
 
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
@@ -150,6 +152,7 @@ export class DashboardComponent implements OnInit {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
     if(!this.synthesisPlayButtonsEnabled) {
       this.hideSynthesisButtons();
+      this.synthesisPlayback.stopPlayingAndHighlighting();
     }
   }
   playSynthesisButton: {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
@@ -185,6 +188,10 @@ export class DashboardComponent implements OnInit {
         this.audio.pause();
       }
     },
+    stopPlayingAndHighlighting(){
+      this.cancelTurnOn();
+      if (this.audio) this.audio.pause();
+    }
   }
 
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
@@ -233,8 +240,15 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private notificationService: NotificationService,
+    private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
+    this.renderer.listen('window', 'click', (e: Event) => {
+      // If user clicks outside the quill editor, the synthesis audio playback will stop
+      if (this.synthesisPlayButtonsEnabled && !this.quillEditor.root.contains(e.target as HTMLElement)) {
+        this.synthesisPlayback.stopPlayingAndHighlighting();
+      } 
+    });
   }
 
   async ngOnInit() { }
@@ -255,7 +269,6 @@ export class DashboardComponent implements OnInit {
     const quillStuff = document.querySelector(".ql-editor");
     const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
 
-    console.log(padding_top);
     const left =  bounds.left + quillStuff.scrollLeft;
     const top =  bounds.top + quillStuff.scrollTop - padding_top;
     return { top, left };

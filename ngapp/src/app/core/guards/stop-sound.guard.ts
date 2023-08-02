@@ -15,8 +15,7 @@ export class StopSoundGuard implements CanDeactivate<DashboardComponent> {
   ): Observable<boolean> | boolean {
     console.log('dashboard stop guard trigger');
     if (dashboard.synthesisPlayback.audio && Object.keys(dashboard.synthesisPlayback.turnEmphOnTimeout).length) {
-      dashboard.synthesisPlayback.cancelTurnOn();
-      dashboard.synthesisPlayback.audio.pause();
+      dashboard.synthesisPlayback.stopPlayingAndHighlighting();
     }
     return true;
   }

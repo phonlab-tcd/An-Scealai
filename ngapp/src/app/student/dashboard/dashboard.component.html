@@ -87,9 +87,14 @@
     [class.optionsBtnClicked]="synthesisPlayButtonsEnabled"
     (click)="dontToggle = true; toggleSynthesisPlayButtons()"
   >
-  
-     {{ ts.l.audio_check }}
-    <i class="fas fa-volume-up optionsBtnIcon"></i>
+    <mat-slide-toggle
+      class="example-margin"
+      [color]="primary"
+      [checked]="checked"
+      [disabled]="disabled">
+        {{ ts.l.audio_check }}
+        <i class="fas fa-volume-up optionsBtnIcon"></i>
+    </mat-slide-toggle>
   </div>
 
   <!-- GRAMMAR CHECK -->

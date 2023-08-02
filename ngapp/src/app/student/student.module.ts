@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { FeedbackModule } from '../feedback/feedback.module';
@@ -50,6 +51,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatSlideToggleModule,
     SynthItemModule,
     FeedbackModule,
     QuillModule.forRoot({

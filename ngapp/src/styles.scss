@@ -1,5 +1,4 @@
-@import './lib/quill-highlight/gramadoir-tags.scss';
-@import './quill.fonts.scss';
+@use '@angular/material' as mat;
 
 :root {
   --scealai-green: #70a87f;
