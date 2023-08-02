@@ -197,8 +197,8 @@ export class DashboardComponent implements OnInit {
       
       const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
       const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
-      this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout(startms - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-      this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout(endms  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
+      this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+      this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
     }
   }
   
