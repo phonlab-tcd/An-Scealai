@@ -497,8 +497,10 @@ export class DashboardComponent implements OnInit {
       sentenceTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentSentence);
       sentenceTooltip.root.onclick = this.synthesisButton_onclick.bind(this, parentSentence.text, parentSentence.startIndex);
 
-      this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
-      this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
+      if(parentWord.text) this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
+      else wordTooltip.hide();
+      if(parentSentence.text) this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
+      else sentenceTooltip.hide();
     }
 
     this.quillEditor.on("selection-change", onSelectionChange_showSynthButtons.bind(this));
