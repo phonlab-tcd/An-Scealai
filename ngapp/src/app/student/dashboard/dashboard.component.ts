@@ -36,6 +36,7 @@ import findLocationsInText, {Location as LocationInText}  from "lib/findLocation
 import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 import { Renderer2 } from "@angular/core";
+import { VoiceCode } from "app/core/services/synthesis.service";
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -103,7 +104,7 @@ export class DashboardComponent implements OnInit {
   feedbackVisibile: false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
   rightDrawerOpened: boolean = false;
-  selectedDrawer: "grammar" | "dictionary" | "feedback" = "grammar";
+  selectedDrawer: "grammar" | "dictionary" | "feedback" | "synthesis" = "grammar";
 
   // WORD COUNT
   words: string[] = [];
@@ -147,6 +148,7 @@ export class DashboardComponent implements OnInit {
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
+  selectedVoice: VoiceCode = "ga_UL_anb_nemo";
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
@@ -191,7 +193,7 @@ export class DashboardComponent implements OnInit {
 
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
   async synthesisButton_onclick(text: string, startIndex: number) {
-    const options = { params: new HttpParams().set('input', text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
+    const options = { params: new HttpParams().set('input', text).set('voice', this.selectedVoice).set('outputType', 'JSON').set('timing', 'WORD') }
     this.synthesisPlayback.clear();
     const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
     this.synthesisPlayback.clear();
@@ -398,7 +400,7 @@ export class DashboardComponent implements OnInit {
    * Hides/shows the grammar highlighting if the grammar drawer is selected
    * @param selectedContent Indicates which component to be injected into the drawer
    */
-  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback') {
+  toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback' | 'synthesis') {
     if (this.rightDrawerOpened) {
       // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
       // once to open the dictionary, and clicked 'dictionary' again to close the drawer

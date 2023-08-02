@@ -81,20 +81,24 @@
     <span class="notificationBtn" *ngIf="hasFeedback && !story.feedback.seenByStudent">1</span>
   </div>
 
-    <!-- INLINE SYNTHESIS -->
-    <div
+  <!-- INLINE SYNTHESIS -->
+  <div
     class="optionsBtn optionsPopupBtn"
     [class.optionsBtnClicked]="synthesisPlayButtonsEnabled"
-    (click)="dontToggle = true; toggleSynthesisPlayButtons()"
+    (click)="dontToggle = true"
   >
     <mat-slide-toggle
       class="example-margin"
       [color]="primary"
       [checked]="checked"
-      [disabled]="disabled">
-        {{ ts.l.audio_check }}
-        <i class="fas fa-volume-up optionsBtnIcon"></i>
+      [disabled]="disabled"
+      (click)="toggleSynthesisPlayButtons()"
+    >
     </mat-slide-toggle>
+    <span (click)="toggleRightDrawer('synthesis')">
+      {{ ts.l.audio_check }}
+      <i class="fas fa-volume-up optionsBtnIcon"></i>
+    </span>
   </div>
 
   <!-- GRAMMAR CHECK -->
@@ -154,7 +158,7 @@
     <ng-template #newStoryMessage>
       <div *ngIf="storiesLoaded" class="newStoryMessage">
         <i class="fas fa-arrow-left fa-3x" style="animation: pulse 2s infinite linear" ></i>
-        <div>{{ts.l.create_first_story}}</div>
+        <div>{{ ts.l.create_first_story }}</div>
       </div>
     </ng-template>
   </div>
@@ -162,11 +166,19 @@
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
     <!-- FEEDBACK -->
     <app-feedback-drawer
-    *ngIf="selectedDrawer == 'feedback'"
-    [story]="story"
-    [hasFeedback]="hasFeedback"
-    (closeFeedbackEmitter)="toggleRightDrawer('feedback')">
+      *ngIf="selectedDrawer == 'feedback'"
+      [story]="story"
+      [hasFeedback]="hasFeedback"
+      (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
+    >
     </app-feedback-drawer>
+    <!-- SYNTHESIS SETTINGS -->
+    <app-synthesis-drawer
+      *ngIf="selectedDrawer == 'synthesis'"
+      [quillEditor]="quillEditor"
+      (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
+      (selectedVoice)="this.selectedVoice = $event"
+    ></app-synthesis-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer
       *ngIf="selectedDrawer == 'dictionary'"
