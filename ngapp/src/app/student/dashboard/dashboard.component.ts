@@ -37,6 +37,7 @@ import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 import { Renderer2 } from "@angular/core";
 import { VoiceCode } from "app/core/services/synthesis.service";
+import SynthPlaybackHandle from "lib/synth/playbackHandle";
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -51,8 +52,8 @@ function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComp
   const length = location.endIndex - location.startIndex;
   const props = { "synth-highlight-em": turnEmphasisOn};
   this.quillEditor.formatText(start, length, props, 'api');
-  const timeout = this.synthesisPlayback[turnEmphasisOn ? "turnHighlightOnTimeout" : "turnHighlightOffTimeout"];
-  if(timeout[myId] instanceof Object) delete timeout[myId];
+  const timeoutHandles = this.synthesisPlayback.timeoutHandles(turnEmphasisOn);
+  if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
 }
 
 /** TODO => make this a method of the quill editor */
@@ -149,6 +150,7 @@ export class DashboardComponent implements OnInit {
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
+  synthesisPlayback: SynthPlaybackHandle;
   selectedVoice: VoiceCode = "ga_UL_anb_nemo";
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
@@ -165,32 +167,7 @@ export class DashboardComponent implements OnInit {
     timing: z.array(z.object({word: z.string(), end: z.number()})),
   });
 
-  synthesisPlayback = {
-    turnHighlightOnTimeout: {},
-    turnHighlightOffTimeout: {},
-    audio: null,
-    cancelTurnOn() {
-      for(const timeoutHandle of Object.values(this.turnHighlightOnTimeout)) {
-        // @ts-ignore
-        timeoutHandle.clear();
-        this.turnEmphOnTimeout = {};
-      }
-    },
-    cancelTurnOff() {
-      for(const timeoutHandle of Object.values(this.turnHighlightOffTimeout)) {
-        // @ts-ignore
-        timeoutHandle.trigger();
-      }
-      this.turnEmphOnTimeout = {};
-    },
-    clear(){
-      this.cancelTurnOn();
-      this.cancelTurnOff();
-      if(this.audio instanceof HTMLAudioElement) {
-        this.audio.pause();
-      }
-    },
-  }
+
 
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
   async synthesisButton_onclick(text: string, startIndex: number) {
@@ -239,6 +216,8 @@ export class DashboardComponent implements OnInit {
     private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
+
+    this.synthesisPlayback = new SynthPlaybackHandle();
     const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
       const clickedNode = e.target instanceof Node;
       if(!clickedNode) return;
