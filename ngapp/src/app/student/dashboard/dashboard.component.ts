@@ -184,7 +184,6 @@ export class DashboardComponent implements OnInit {
       this.cancelTurnOn();
       this.cancelTurnOff();
       if(this.audio instanceof HTMLAudioElement) {
-        console.log("PAUSING");
         this.audio.pause();
       }
     },
@@ -205,8 +204,6 @@ export class DashboardComponent implements OnInit {
 
     const res = v.data;
     const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
-    console.log(locations.length);
-    console.log(res.timing.length);
     const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
     audio.play();
 
@@ -311,7 +308,6 @@ export class DashboardComponent implements OnInit {
 
   hideSynthesisButtons() {
     for(const button of Object.values(this.playSynthesisButton)) {
-      console.log("hide button:", button);
       button.hide();
     }
   }
