@@ -30,39 +30,14 @@ import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
-import seekParentWord from "lib/seekParentWord";
-import seekParentSentence from "lib/seekParentSentence";
-import findLocationsInText, {Location as LocationInText}  from "lib/findLocationsInText";
-import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 import { Renderer2 } from "@angular/core";
 import { VoiceCode } from "app/core/services/synthesis.service";
-import synth from "lib/synth/playbackHandle";
+import synth from "lib/synth";
+import Buttons from "lib/synth/buttons";
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
-
-
-const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
-const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
-
-/** turns on or off the highlighting for sentence level synthesis, call in timeout */
-function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComponent, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
-  const start = location.startIndex;
-  const length = location.endIndex - location.startIndex;
-  const props = { "synth-highlight-em": turnEmphasisOn};
-  this.quillEditor.formatText(start, length, props, 'api');
-  const timeoutHandles = this.synthesisPlayback.timeoutHandles(turnEmphasisOn);
-  if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
-}
-
-/** TODO => make this a method of the quill editor */
-function synthesisButton_onMouseInOrOut(this: DashboardComponent,isMouseIn: boolean, parentSpan: ReturnType<typeof seekParentWord>) {
-  const start = parentSpan.startIndex;
-  const length = parentSpan.endIndex - start;
-  const props = { "synth-highlight": isMouseIn};
-  this.quillEditor.formatText(start, length, props, 'api');
-}
 
 @Component({
   selector: "app-dashboard",
@@ -150,7 +125,8 @@ export class DashboardComponent implements OnInit {
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
-  synthesisPlayback: synth.PlaybackHandle;
+  synthButtons: Buttons;
+  synthesisPlayback = new synth.PlaybackHandle();
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
@@ -160,7 +136,7 @@ export class DashboardComponent implements OnInit {
       this.synthesisPlayback.clear();
     }
   }
-  playSynthesisButton: {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
+  // : {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
 
   synthAPI2validator = z.object({
     audioContent: z.string(),
@@ -169,40 +145,40 @@ export class DashboardComponent implements OnInit {
 
 
 
-  /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
-  async synthesisButton_onclick(text: string, startIndex: number) {
-    const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
-    const clickId = this.synthesisPlayback.newClick();
-    this.synthesisPlayback.clear();
-    const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
-    if(!this.synthesisPlayback.isMostRecentClick(clickId)) return this.synthesisPlayback.clear();
+  // /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
+  // async synthesisButton_onclick(text: string, startIndex: number) {
+  //   const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
+  //   const clickId = this.synthesisPlayback.newClick();
+  //   this.synthesisPlayback.clear();
+  //   const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
+  //   if(!this.synthesisPlayback.isMostRecentClick(clickId)) return this.synthesisPlayback.clear();
     
-    const v = this.synthAPI2validator.safeParse(prevalid);
-    if(!v.success) throw v;
+  //   const v = this.synthAPI2validator.safeParse(prevalid);
+  //   if(!v.success) throw v;
 
-    const res = v.data;
-    const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
-    const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
-    audio.playbackRate = this.synthSettings.speed;
-    audio.play();
+  //   const res = v.data;
+  //   const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
+  //   const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
+  //   audio.playbackRate = this.synthSettings.speed;
+  //   audio.play();
 
-    this.synthesisPlayback.audio = audio;
+  //   this.synthesisPlayback.audio = audio;
 
-    for(let i = 0; i < res.timing.length; i++) {
-      const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
-      const timing = res.timing[i];
-      const location = locations[i];
-      const myId = i;
+  //   for(let i = 0; i < res.timing.length; i++) {
+  //     const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
+  //     const timing = res.timing[i];
+  //     const location = locations[i];
+  //     const myId = i;
 
-      const startms = startTimeSeconds * 1000;
-      const endms = timing.end * 1000;
+  //     const startms = startTimeSeconds * 1000;
+  //     const endms = timing.end * 1000;
       
-      const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
-      const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
-      this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-      this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
-    }
-  }
+  //     const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
+  //     const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
+  //     this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+  //     this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
+  //   }
+  // }
   
   
   constructor(
@@ -213,14 +189,14 @@ export class DashboardComponent implements OnInit {
     private engagement: EngagementService,
     private classroomService: ClassroomService,
     private dialog: MatDialog,
-    private http: HttpClient,
+    public http: HttpClient,
     private router: Router,
     private notificationService: NotificationService,
     private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
 
-    this.synthesisPlayback = new synth.PlaybackHandle();
+    // this.synthesisPlayback = new synth.PlaybackHandle();
     const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
       const clickedNode = e.target instanceof Node;
       if(!clickedNode) return;
@@ -239,17 +215,6 @@ export class DashboardComponent implements OnInit {
   }
 
   async ngOnInit() { }
-
-  // create hideable button to play a single synthesised word (reuse this button for different syntheses)
-  createSynthesisPlayButton(type: keyof DashboardComponent["playSynthesisButton"]) {
-    const button = new QuillTooltip(this.quillEditor)
-    this.playSynthesisButton[type] = button;
-    button.root.id = "playSynthesisButton." + type;
-    button.root.classList.add("synthesis-button");
-    button.root.classList.add("custom-tooltip");
-    button.root.innerHTML = "<span>▸<span>";
-    button.hide();
-  }
 
   topLeftOfCursorIndex(location) {
     const bounds = this.quillEditor.getBounds(location, 0);
@@ -276,9 +241,9 @@ export class DashboardComponent implements OnInit {
   showSynthesisPlaySentenceButtonAtIndex(location: number) {
     if(!this.synthesisPlayButtonsEnabled) return;
 
-    const { height, width } = this.playSynthesisButton.sentence.root.getBoundingClientRect();
+    const tooltip = this.synthButtons.sentTooltip;
+    const { height, width } = tooltip.root.getBoundingClientRect();
     const { left, top } = this.topLeftOfCursorIndex(location);
-    const tooltip = this.playSynthesisButton.sentence;
     const style = tooltip.root.style;
     style.left = `${left - width }px`;
     style.top  = `${top  - height }px`;
@@ -289,7 +254,7 @@ export class DashboardComponent implements OnInit {
     if(!this.synthesisPlayButtonsEnabled) return;
 
     const { left, top } = this.bottomRightOfCursorIndex(location);
-    const tooltip = this.playSynthesisButton.word;
+    const tooltip = this.synthButtons.wordTooltip;
     const style = tooltip.root.style;
     style.left = `${left}px`;
     style.top = `${top}px`;
@@ -297,9 +262,8 @@ export class DashboardComponent implements OnInit {
   }
 
   hideSynthesisButtons() {
-    for(const button of Object.values(this.playSynthesisButton)) {
-      button.hide();
-    }
+    this.synthButtons.wordTooltip.hide();
+    this.synthButtons.sentTooltip.hide();
   }
 
   /**
@@ -476,34 +440,12 @@ export class DashboardComponent implements OnInit {
 
     new ResizeObserver(this.hideSynthesisButtons.bind(this)).observe(this.quillEditor.root.parentElement);
 
-    this.createSynthesisPlayButton("word");
-    this.createSynthesisPlayButton("sentence");
+    this.synthButtons = new synth.Buttons(this.quillEditor);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
 
-    function onSelectionChange_showSynthButtons(range){
-      if(!range) return;
-
-      const wordTooltip = this.playSynthesisButton.word;
-      const parentWord = seekParentWord(this.story.text, range.index);
-      wordTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentWord);
-      wordTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentWord);
-      wordTooltip.root.onclick = this.synthesisButton_onclick.bind(this, parentWord.text, parentWord.startIndex);
-
-      const sentenceTooltip = this.playSynthesisButton.sentence;
-      const parentSentence = seekParentSentence(this.story.text, range.index);
-      sentenceTooltip.root.onmouseover = synthesisButton_onMouseInOrOut.bind(this, true,  parentSentence);
-      sentenceTooltip.root.onmouseout  = synthesisButton_onMouseInOrOut.bind(this, false, parentSentence);
-      sentenceTooltip.root.onclick = this.synthesisButton_onclick.bind(this, parentSentence.text, parentSentence.startIndex);
-
-      if(parentWord.text) this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
-      else wordTooltip.hide();
-      if(parentSentence.text) this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
-      else sentenceTooltip.hide();
-    }
-
-    this.quillEditor.on("selection-change", onSelectionChange_showSynthButtons.bind(this));
+    this.quillEditor.on("selection-change", synth.showButtons.bind(this));
 
     const renderer = (function (ht: HighlightTag) {
         const [name, message] = this.ts.l.iso_code == 'en' ? 

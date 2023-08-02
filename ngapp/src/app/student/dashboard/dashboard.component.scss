@@ -15,6 +15,18 @@
     padding-right: 10px;
 }
 
+.ql-tooltip.synthesis-button.synth-button-word {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.ql-tooltip.synthesis-button.synth-button-sent {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 .ql-tooltip.synthesis-button {
     background-color: var(--scealai-green);
     z-index: 999; // important so the button appears over the quill text
