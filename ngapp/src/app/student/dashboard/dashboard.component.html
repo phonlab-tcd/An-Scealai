@@ -177,7 +177,8 @@
       *ngIf="selectedDrawer == 'synthesis'"
       [quillEditor]="quillEditor"
       (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
-      (selectedVoice)="this.selectedVoice = $event"
+      (selectedVoice)="this.synthSettings.voice= $event"
+      (selectedSpeed)="this.synthSettings.speed= $event"
     ></app-synthesis-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer

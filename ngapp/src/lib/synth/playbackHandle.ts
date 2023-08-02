@@ -3,6 +3,7 @@ import newTimeout from "../newTimeout";
 export default class SynthPlaybackHandle {
   turnHighlightOnTimeout: {[key in number]: ReturnType<typeof newTimeout>} = {};
   turnHighlightOffTimeout:  {[key in number]: ReturnType<typeof newTimeout>} = {};
+  clickCount = 0;
   public audio: HTMLAudioElement;
   cancelTurnOn() {
     for(const timeoutHandle of Object.values(this.turnHighlightOnTimeout)) {
@@ -27,5 +28,8 @@ export default class SynthPlaybackHandle {
   timeoutHandles(forTurningHighlightOn: boolean) {
     if(forTurningHighlightOn) return this.turnHighlightOnTimeout;
     return this.turnHighlightOffTimeout;
+  }
+  newClick() {
+    return this.clickCount++;
   }
 }

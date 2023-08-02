@@ -151,7 +151,7 @@ export class DashboardComponent implements OnInit {
 
   // TEXT TO SPEECH
   synthesisPlayback: SynthPlaybackHandle;
-  selectedVoice: VoiceCode = "ga_UL_anb_nemo";
+  synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
@@ -171,7 +171,7 @@ export class DashboardComponent implements OnInit {
 
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
   async synthesisButton_onclick(text: string, startIndex: number) {
-    const options = { params: new HttpParams().set('input', text).set('voice', this.selectedVoice).set('outputType', 'JSON').set('timing', 'WORD') }
+    const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
     this.synthesisPlayback.clear();
     const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
     this.synthesisPlayback.clear();
@@ -181,6 +181,7 @@ export class DashboardComponent implements OnInit {
     const res = v.data;
     const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
     const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
+    audio.playbackRate = this.synthSettings.speed;
     audio.play();
 
     this.synthesisPlayback.audio = audio;
@@ -479,7 +480,7 @@ export class DashboardComponent implements OnInit {
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
 
-    function onSelectionChange_showSynthButtons(range, r2){
+    function onSelectionChange_showSynthButtons(range){
       if(!range) return;
 
       const wordTooltip = this.playSynthesisButton.word;

@@ -11,9 +11,12 @@ import { Voice, VoiceCode, } from "app/core/services/synthesis.service";
 export class SynthesisDrawerComponent implements OnInit {
   @Output() closeSynthesisEmitter = new EventEmitter();
   @Output() selectedVoice = new EventEmitter<VoiceCode>();
+  @Output() selectedSpeed = new EventEmitter<Number>();
   @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
-  playbackSpeed: number = 1; //Shoud range from 0.5x to 2x speed incrementing in 0.5.
   audioLoaded: boolean = true;
+  audioSpeeds: number[] = [0.2, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2];
+  audioSelectionIndex: number = 3;
+  playbackSpeed: number = this.audioSpeeds[this.audioSelectionIndex];
 
   constructor(public ts: TranslationService) {}
 
@@ -29,14 +32,16 @@ export class SynthesisDrawerComponent implements OnInit {
 
   /**
    * Increase or decrease synthesis speed
-   * @param increment selected voice speed level
+   * @param incrementDirection +1 for increase, -1 for decrease
    */
-  changeVoiceSpeed(increment: number) {
-    if (increment > 0 && this.playbackSpeed < 2) {
-      this.playbackSpeed += 0.5;
+  changeVoiceSpeed(incrementDirection: number) {
+    if (incrementDirection > 0 && this.audioSelectionIndex < this.audioSpeeds.length - 1) {
+      this.audioSelectionIndex++;
     }
-    if (increment < 0 && this.playbackSpeed > 0.5) {
-      this.playbackSpeed -= 0.5;
+    if (incrementDirection < 0 && this.audioSelectionIndex > 0) {
+      this.audioSelectionIndex--;
     }
+    this.playbackSpeed = this.audioSpeeds[this.audioSelectionIndex]
+    this.selectedSpeed.emit(this.playbackSpeed)
   }
 }
