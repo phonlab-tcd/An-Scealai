@@ -1,0 +1,33 @@
+<div class="synthesisContainer">
+  <div class="synthesisHeader">
+    <h5> {{ ts.l["listen_back_to_your_story"] ? ts.l["listen_back_to_your_story"] : "listen_back_to_your_story" }} </h5>
+    <div class="closeDictionaryBtn" (click)="closeSynthesisEmitter.next(true)">
+      <i class="fa fa-times"></i>
+    </div>
+  </div>
+
+  <div class="synthVoiceContainer">
+    <!-- Select voice -->
+    <synth-voice-select
+      style="margin: 4px"
+      (selectVoice)="setVoice($event)"
+    ></synth-voice-select>
+    <!-- Select speed -->
+    <div>
+      <div>{{ ts.l.playback_speed }}</div>
+      <span class="speedButton" (click)="changeVoiceSpeed(-1)">〈</span>
+      <span style="margin: 0px 8px 0px 8px">{{ playbackSpeed }}x</span>
+      <span class="speedButton" (click)="changeVoiceSpeed(1)">〉</span>
+    </div>
+  </div>
+  <div class="synthButtonContainer">
+    <button [disabled]="!audioLoaded" class="synthButton">
+      <div *ngIf="!audioLoaded" class="spinner-grow"></div>
+      {{ ts.l.play }}
+    </button>
+    <button [disabled]="!audioLoaded" class="synthButton">
+      <div *ngIf="!audioLoaded" class="spinner-grow"></div>
+      {{ ts.l.download }}
+    </button>
+  </div>
+</div>

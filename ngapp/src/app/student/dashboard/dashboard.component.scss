@@ -11,6 +11,10 @@
     background-color: var(--scealai-light-green) !important;
 }
 
+.mat-slide-toggle-label {
+    padding-right: 10px;
+}
+
 .ql-tooltip.synthesis-button {
     background-color: var(--scealai-green);
     z-index: 999; // important so the button appears over the quill text
