@@ -29,7 +29,6 @@ import { relativeClauseChecker } from "lib/grammar-engine/checkers/relative-clau
 import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NotificationService } from "app/core/services/notification-service.service";
 import seekParentWord from "lib/seekParentWord";
 import seekParentSentence from "lib/seekParentSentence";
@@ -38,11 +37,14 @@ import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 import { Renderer2 } from "@angular/core";
 
+Quill.register("modules/imageCompress", ImageCompress);
+const QuillTooltip = Quill.import("ui/tooltip");
+
 
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
 
-
+/** turns on or off the highlighting for sentence level synthesis, call in timeout */
 function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComponent, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
   const start = location.startIndex;
   const length = location.endIndex - location.startIndex;
@@ -51,9 +53,7 @@ function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComp
   delete this.synthesisPlayback[turnEmphasisOn ? "turnEmphOnTimeout" : "turnEmphOffTimeout"][myId];
 }
 
-Quill.register("modules/imageCompress", ImageCompress);
-const QuillTooltip = Quill.import("ui/tooltip");
-
+/** TODO => make this a method of the quill editor */
 function synthesisButton_onMouseInOrOut(this: DashboardComponent,isMouseIn: boolean, parentSpan: ReturnType<typeof seekParentWord>) {
   const start = parentSpan.startIndex;
   const length = parentSpan.endIndex - start;
@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
     if(!this.synthesisPlayButtonsEnabled) {
       this.hideSynthesisButtons();
-      this.synthesisPlayback.stopPlayingAndHighlighting();
+      this.synthesisPlayback.clear();
     }
   }
   playSynthesisButton: {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
@@ -163,8 +163,8 @@ export class DashboardComponent implements OnInit {
   });
 
   synthesisPlayback = {
-    turnEmphOnTimeout: {},
-    turnEmphOffTimeout: {},
+    turnHighlightOnTimeout: {},
+    turnHighlightOffTimeout: {},
     audio: null,
     cancelTurnOn() {
       for(const timeoutHandle of Object.values(this.turnEmphOnTimeout)) {
@@ -180,25 +180,21 @@ export class DashboardComponent implements OnInit {
       }
       this.turnEmphOnTimeout = {};
     },
-    startNew(){
+    clear(){
       this.cancelTurnOn();
       this.cancelTurnOff();
       if(this.audio instanceof HTMLAudioElement) {
         this.audio.pause();
       }
     },
-    stopPlayingAndHighlighting(){
-      this.cancelTurnOn();
-      if (this.audio) this.audio.pause();
-    }
   }
 
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
   async synthesisButton_onclick(text: string, startIndex: number) {
     const options = { params: new HttpParams().set('input', text).set('voice', 'ga_UL_anb_nemo').set('outputType', 'JSON').set('timing', 'WORD') }
-    this.synthesisPlayback.startNew();
+    this.synthesisPlayback.clear();
     const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
-    this.synthesisPlayback.startNew();
+    this.synthesisPlayback.clear();
     const v = this.synthAPI2validator.safeParse(prevalid);
     if(!v.success) throw v;
 
@@ -220,8 +216,8 @@ export class DashboardComponent implements OnInit {
       
       const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
       const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
-      this.synthesisPlayback.turnEmphOnTimeout[myId] = newTimeout(startms - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-      this.synthesisPlayback.turnEmphOffTimeout[myId] = newTimeout(endms  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
+      this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout(startms - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+      this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout(endms  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
     }
   }
   
@@ -243,7 +239,7 @@ export class DashboardComponent implements OnInit {
     this.renderer.listen('window', 'click', (e: Event) => {
       // If user clicks outside the quill editor, the synthesis audio playback will stop
       if (this.synthesisPlayButtonsEnabled && !this.quillEditor.root.contains(e.target as HTMLElement)) {
-        this.synthesisPlayback.stopPlayingAndHighlighting();
+        this.synthesisPlayback.clear();
       } 
     });
   }

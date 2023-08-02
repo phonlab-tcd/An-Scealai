@@ -14,8 +14,8 @@ export class StopSoundGuard implements CanDeactivate<DashboardComponent> {
     state: RouterStateSnapshot
   ): Observable<boolean> | boolean {
     console.log('dashboard stop guard trigger');
-    if (dashboard.synthesisPlayback.audio && Object.keys(dashboard.synthesisPlayback.turnEmphOnTimeout).length) {
-      dashboard.synthesisPlayback.stopPlayingAndHighlighting();
+    if (dashboard.synthesisPlayback.audio && Object.keys(dashboard.synthesisPlayback.turnHighlightOnTimeout).length) {
+      dashboard.synthesisPlayback.clear();
     }
     return true;
   }
