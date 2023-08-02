@@ -22,6 +22,10 @@
     visibility: hidden;
 }
 
+quill-editor > [quill-editor-element] {
+    overflow-y: hidden;
+}
+
 /* Hide the default checkbox */
 input[type="checkbox"] {
     appearance: none;
