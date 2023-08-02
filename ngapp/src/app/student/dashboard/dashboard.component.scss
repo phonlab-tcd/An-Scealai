@@ -231,11 +231,11 @@ input[type="checkbox"] {
 .ql-editor {
     background-color: white;
     z-index: 1;
-    margin-top: 20px;
     font-size: 14pt;
     font-family: "Times New Roman", Times, serif;
     min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
     max-height: 70vh !important;
+    padding-top: 25px;
 }
 
 .menuButton {
