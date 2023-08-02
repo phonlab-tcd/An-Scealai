@@ -25,17 +25,17 @@ function highlightTokenToggle_timeoutHandler(this: DashboardComponent, turnEmpha
   const length = location.endIndex - location.startIndex;
   const props = { "synth-highlight-em": turnEmphasisOn};
   this.quillEditor.formatText(start, length, props, 'api');
-  const timeoutHandles = this.synthesisPlayback.timeoutHandles(turnEmphasisOn);
+  const timeoutHandles = this.synthButtons.playback.timeoutHandles(turnEmphasisOn);
   if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
 }
 
 /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
 async function onclick(this: DashboardComponent, text: string, startIndex: number) {
   const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
-  const clickId = this.synthesisPlayback.newClick();
-  this.synthesisPlayback.clear();
+  const clickId = this.synthButtons.playback.newClick();
+  this.synthButtons.playback.clear();
   const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
-  if(!this.synthesisPlayback.isMostRecentClick(clickId)) return this.synthesisPlayback.clear();
+  if(!this.synthButtons.playback.isMostRecentClick(clickId)) return this.synthButtons.playback.clear();
 
   const v = this.synthAPI2validator.safeParse(prevalid);
   if(!v.success) throw v;
@@ -46,7 +46,7 @@ async function onclick(this: DashboardComponent, text: string, startIndex: numbe
   audio.playbackRate = this.synthSettings.speed;
   audio.play();
 
-  this.synthesisPlayback.audio = audio;
+  this.synthButtons.playback.audio = audio;
 
   for(let i = 0; i < res.timing.length; i++) {
     const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
@@ -59,8 +59,8 @@ async function onclick(this: DashboardComponent, text: string, startIndex: numbe
     
     const on = highlightTokenToggle_timeoutHandler.bind(this, true, location, myId);
     const off = highlightTokenToggle_timeoutHandler.bind(this, false, location, myId);
-    this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-    this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
+    this.synthButtons.playback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+    this.synthButtons.playback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
   }
 }
 

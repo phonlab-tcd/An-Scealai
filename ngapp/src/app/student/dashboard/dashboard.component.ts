@@ -126,60 +126,20 @@ export class DashboardComponent implements OnInit {
 
   // TEXT TO SPEECH
   synthButtons: Buttons;
-  synthesisPlayback = new synth.PlaybackHandle();
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
     this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
     if(!this.synthesisPlayButtonsEnabled) {
       this.hideSynthesisButtons();
-      this.synthesisPlayback.clear();
+      this.synthButtons.playback.clear();
     }
   }
-  // : {[key in "word" | "sentence"]: typeof QuillTooltip} = {word: null, sentence: null};
 
   synthAPI2validator = z.object({
     audioContent: z.string(),
     timing: z.array(z.object({word: z.string(), end: z.number()})),
   });
-
-
-
-  // /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
-  // async synthesisButton_onclick(text: string, startIndex: number) {
-  //   const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
-  //   const clickId = this.synthesisPlayback.newClick();
-  //   this.synthesisPlayback.clear();
-  //   const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
-  //   if(!this.synthesisPlayback.isMostRecentClick(clickId)) return this.synthesisPlayback.clear();
-    
-  //   const v = this.synthAPI2validator.safeParse(prevalid);
-  //   if(!v.success) throw v;
-
-  //   const res = v.data;
-  //   const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
-  //   const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
-  //   audio.playbackRate = this.synthSettings.speed;
-  //   audio.play();
-
-  //   this.synthesisPlayback.audio = audio;
-
-  //   for(let i = 0; i < res.timing.length; i++) {
-  //     const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
-  //     const timing = res.timing[i];
-  //     const location = locations[i];
-  //     const myId = i;
-
-  //     const startms = startTimeSeconds * 1000;
-  //     const endms = timing.end * 1000;
-      
-  //     const on = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, true, location, myId);
-  //     const off = synthesisSentenceButton_emphasiseTokenToggleTimeout.bind(this, false, location, myId);
-  //     this.synthesisPlayback.turnHighlightOnTimeout[myId] = newTimeout((startms / this.synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-  //     this.synthesisPlayback.turnHighlightOffTimeout[myId] = newTimeout((endms / this.synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
-  //   }
-  // }
-  
   
   constructor(
     public ts: TranslationService,
@@ -208,7 +168,7 @@ export class DashboardComponent implements OnInit {
       if(clickedOnTooltip) return;
 
       // otherwise (clicked outside quill editor)
-      this.synthesisPlayback.clear();
+      this.synthButtons.playback.clear();
       this.hideSynthesisButtons();
     });
 
