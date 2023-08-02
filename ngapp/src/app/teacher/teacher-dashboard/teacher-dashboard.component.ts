@@ -67,7 +67,7 @@ export class TeacherDashboardComponent implements OnInit {
         data: this.classroom.code,
         confirmText: this.ts.l.done,
       },
-      width: "15vh",
+      width: "30vh",
     });
 
     this.dialogRef.afterClosed().subscribe(() => (this.dialogRef = undefined));

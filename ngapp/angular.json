@@ -84,6 +84,9 @@
 					}
 				},
 				"serve": {
+					"options": {
+						"disableHostCheck": true
+					},
 					"defaultConfiguration": "dev",
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {

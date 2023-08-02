@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { GrammarChecker, ErrorTag, ERROR_INFO, ERROR_TYPES, ErrorType} from '../types';
-import { firstValueFrom } from 'rxjs';
-import { retry } from "rxjs/operators";
+import { GrammarChecker as GrammarCheckerGramadoirTS } from '@phonlab-tcd/gramadoir-ts';
+
+const grammarCheckerGramadoirTS = new GrammarCheckerGramadoirTS('https://gramadoir-breakdown.scealai.abair.ie');
 
 // initialise the grammar checker
 export const anGramadoir: GrammarChecker = {
@@ -28,9 +28,8 @@ export type GramadoirTag = {
 * @param input - sentence from story text
 * @returns - Promise of an array of ErrorTags
 */
-async function check(input: string, authToken: string):Promise<ErrorTag[]>{
-  const res = await fetch('https://gramadoir.abair.ie?text=' + encodeURIComponent(input));
-  const errors = await res.json();
+async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
+  const errors = await grammarCheckerGramadoirTS.check(input);
 
   // map gramadoir responses to generic ErrorTag values
   const errorTags: ErrorTag[] = errors.map((error) => {
