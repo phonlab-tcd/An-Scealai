@@ -68,9 +68,6 @@ quill-editor > [quill-editor-element] {
     opacity: 1;
 }
 
-.ql-editor { 
-    position: relative;
-}
 
 
 .storyTitleHeader {
@@ -202,6 +199,7 @@ quill-editor > [quill-editor-element] {
     font-family: "Times New Roman", Times, serif;
     min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
     max-height: 70vh !important;
+    position: relative;
 }
 
 .menuButton {

@@ -50,7 +50,8 @@ function synthesisSentenceButton_emphasiseTokenToggleTimeout(this: DashboardComp
   const length = location.endIndex - location.startIndex;
   const props = { "synth-highlight-em": turnEmphasisOn};
   this.quillEditor.formatText(start, length, props, 'api');
-  delete this.synthesisPlayback[turnEmphasisOn ? "turnEmphOnTimeout" : "turnEmphOffTimeout"][myId];
+  const timeout = this.synthesisPlayback[turnEmphasisOn ? "turnHighlightOnTimeout" : "turnHighlightOffTimeout"];
+  if(timeout[myId] instanceof Object) delete timeout[myId];
 }
 
 /** TODO => make this a method of the quill editor */
@@ -167,14 +168,14 @@ export class DashboardComponent implements OnInit {
     turnHighlightOffTimeout: {},
     audio: null,
     cancelTurnOn() {
-      for(const timeoutHandle of Object.values(this.turnEmphOnTimeout)) {
+      for(const timeoutHandle of Object.values(this.turnHighlightOnTimeout)) {
         // @ts-ignore
         timeoutHandle.clear();
         this.turnEmphOnTimeout = {};
       }
     },
     cancelTurnOff() {
-      for(const timeoutHandle of Object.values(this.turnEmphOnTimeout)) {
+      for(const timeoutHandle of Object.values(this.turnHighlightOffTimeout)) {
         // @ts-ignore
         timeoutHandle.trigger();
       }
@@ -236,12 +237,21 @@ export class DashboardComponent implements OnInit {
     private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
-    this.renderer.listen('window', 'click', (e: Event) => {
-      // If user clicks outside the quill editor, the synthesis audio playback will stop
-      if (this.synthesisPlayButtonsEnabled && !this.quillEditor.root.contains(e.target as HTMLElement)) {
-        this.synthesisPlayback.clear();
-      } 
+    const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
+      const clickedNode = e.target instanceof Node;
+      if(!clickedNode) return;
+
+      const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
+      if(clickedOnQuillEditor) return;
+
+      const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
+      if(clickedOnTooltip) return;
+
+      // otherwise (clicked outside quill editor)
+      this.synthesisPlayback.clear();
+      this.hideSynthesisButtons();
     });
+
   }
 
   async ngOnInit() { }
@@ -479,6 +489,8 @@ export class DashboardComponent implements OnInit {
   onEditorCreated(q: Quill) {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
+
+    new ResizeObserver(this.hideSynthesisButtons.bind(this)).observe(this.quillEditor.root.parentElement);
 
     this.createSynthesisPlayButton("word");
     this.createSynthesisPlayButton("sentence");
