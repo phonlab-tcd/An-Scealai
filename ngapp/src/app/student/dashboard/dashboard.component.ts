@@ -37,7 +37,7 @@ import newTimeout from "lib/newTimeout";
 import { z } from "zod";
 import { Renderer2 } from "@angular/core";
 import { VoiceCode } from "app/core/services/synthesis.service";
-import SynthPlaybackHandle from "lib/synth/playbackHandle";
+import synth from "lib/synth/playbackHandle";
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
-  synthesisPlayback: SynthPlaybackHandle;
+  synthesisPlayback: synth.PlaybackHandle;
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
   synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
@@ -172,9 +172,11 @@ export class DashboardComponent implements OnInit {
   /** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
   async synthesisButton_onclick(text: string, startIndex: number) {
     const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
+    const clickId = this.synthesisPlayback.newClick();
     this.synthesisPlayback.clear();
     const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
-    this.synthesisPlayback.clear();
+    if(!this.synthesisPlayback.isMostRecentClick(clickId)) return this.synthesisPlayback.clear();
+    
     const v = this.synthAPI2validator.safeParse(prevalid);
     if(!v.success) throw v;
 
@@ -218,7 +220,7 @@ export class DashboardComponent implements OnInit {
   ) {
     this.setUpGrammarChecking();
 
-    this.synthesisPlayback = new SynthPlaybackHandle();
+    this.synthesisPlayback = new synth.PlaybackHandle();
     const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
       const clickedNode = e.target instanceof Node;
       if(!clickedNode) return;
