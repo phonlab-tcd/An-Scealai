@@ -29,7 +29,6 @@ import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
-import { z } from "zod";
 import { VoiceCode } from "app/core/services/synthesis.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
@@ -122,11 +121,6 @@ export class DashboardComponent implements OnInit {
   // TEXT TO SPEECH
   synthButtons: Buttons;
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
-
-  synthAPI2validator = z.object({
-    audioContent: z.string(),
-    timing: z.array(z.object({word: z.string(), end: z.number()})),
-  });
   
   constructor(
     public ts: TranslationService,
@@ -298,12 +292,10 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
-    this.synthButtons = new synth.Buttons(this.quillEditor);
+    this.synthButtons = new synth.Buttons(this.quillEditor, this.story, this.synthSettings);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
-
-    this.quillEditor.on("selection-change", synth.showButtons.bind(this));
 
     const renderer = (function (ht: HighlightTag) {
         const [name, message] = this.ts.l.iso_code == 'en' ? 
