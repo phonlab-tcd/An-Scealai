@@ -218,9 +218,9 @@ const translations = {
   new_feedback: {
     ga: 'Aiseolas Nua',
     en: 'New Feedback' },
-  audio_check: {
-    ga: 'Seiceáil ó Chluas',
-    en: 'Audio Check' },
+  listen: {
+    ga: 'Éist leis',
+    en: 'Listen' },
   genitive: {
     ga: 'Tuiseal ginideach',
     en: 'Genitive' },

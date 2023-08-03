@@ -7,6 +7,7 @@ import newTimeout from "lib/newTimeout";
 import synth from "lib/synth";
 import type Settings from "lib/synth/settings";
 import { z } from "zod";
+import { fromEvent } from 'rxjs';
 
 
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -145,7 +146,7 @@ export default class Buttons {
   quillEditor: Quill;
   synthSettings: Settings;
   playback = new synth.PlaybackHandle();
-  enabled = false;
+  enabled = true;
   clickEventListener;
   mostRecent = {
     word: null,
@@ -168,6 +169,10 @@ export default class Buttons {
     this.sentTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "sent");
     this.sentTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "sent");
     this.quillEditor.on("selection-change", this.show.bind(this));
+    fromEvent(this.quillEditor, 'text-change').subscribe({next: ([_, _content, source]) => {
+      if (source == 'api') return;
+      this.hide();
+    }})
     this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
   }
 
