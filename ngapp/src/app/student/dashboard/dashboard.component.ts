@@ -150,26 +150,6 @@ export class DashboardComponent implements OnInit {
     private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
-
-    // this.synthesisPlayback = new synth.PlaybackHandle();
-    const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
-      const clickedNode = e.target instanceof Node;
-      if(!clickedNode) return;
-
-      const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
-      if(clickedOnQuillEditor) return;
-
-      const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
-      if(clickedOnTooltip) return;
-
-      const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
-      if(clickedInsideTooltip) return;
-
-      // otherwise (clicked outside quill editor)
-      this.synthButtons.playback.clear();
-      this.hideSynthesisButtons();
-    });
-
   }
 
   async ngOnInit() { }
