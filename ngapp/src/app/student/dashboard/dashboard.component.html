@@ -89,10 +89,10 @@
   >
     <mat-slide-toggle
       class="example-margin"
+      *ngIf="synthButtons"
       [color]="primary"
-      [checked]="checked"
-      [disabled]="disabled"
-      (click)="toggleSynthesisPlayButtons()"
+      [checked]="synthButtons.checked()"
+      (click)="synthButtons.toggle()"
     >
     </mat-slide-toggle>
     <span (click)="toggleRightDrawer('synthesis')">
