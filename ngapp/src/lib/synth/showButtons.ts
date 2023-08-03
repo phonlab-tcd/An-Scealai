@@ -11,6 +11,31 @@ import type { Location as LocationInText } from "../findLocationsInText";
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
 
+function synthesisUrl(input: string, voice: string) {
+  const outputType = "JSON";
+  const timing = "WORD";
+  const params = new URLSearchParams({input, voice, outputType, timing});
+  return `https://www.abair.ie/api2/synthesise?${params}` 
+}
+
+function result(p) {
+  function Ok(ok) { return { ok } }
+  function Err(err) { return { err } }
+  return p.then(Ok,Err);
+}
+
+const fetch_cache = {};
+
+async function fetch_cached(url: string) {
+  const cached = fetch_cache[url];
+  if(cached) {
+    return cached;
+  }
+  const p = fetch(url).then(r=>r.json());
+  fetch_cache[url] = p;
+  return p;
+}
+
 /**
  * Apply/remove synth-highlight styles when hovering over play buttons
  * TODO => make this a method of the quill editor
@@ -48,10 +73,9 @@ function highlightTokenToggle_timeoutHandler(this: DashboardComponent, turnEmpha
  * @param startIndex index to start highlighting
  */
 async function onclick(this: DashboardComponent, text: string, startIndex: number) {
-  const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
   const clickId = this.synthButtons.playback.newClick();
   this.synthButtons.playback.clear();
-  const prevalid = await firstValueFrom(this.http.get('https://www.abair.ie/api2/synthesise', options));
+  const prevalid = await fetch_cached(synthesisUrl(text,this.synthSettings.voice));
   if(!this.synthButtons.playback.isMostRecentClick(clickId)) return this.synthButtons.playback.clear();
 
   const v = this.synthAPI2validator.safeParse(prevalid);
@@ -104,9 +128,9 @@ export default function showButtons(this: DashboardComponent, range){
   sentenceTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentSentence);
   sentenceTooltip.root.onclick = onclick.bind(this, parentSentence.text, parentSentence.startIndex);
 
-  if(parentWord.text) this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
+  if(parentWord.text) this.synthButtons.showWordButtonAtIndex(parentWord.endIndex);
   else wordTooltip.hide();
 
-  if(parentSentence.text) this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
+  if(parentSentence.text) this.synthButtons.showSentenceButtonAtIndex(parentSentence.startIndex);
   else sentenceTooltip.hide();
 }

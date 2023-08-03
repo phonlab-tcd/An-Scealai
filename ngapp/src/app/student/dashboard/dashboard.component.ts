@@ -30,66 +30,12 @@ import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
 import { z } from "zod";
-import { Renderer2 } from "@angular/core";
 import { VoiceCode } from "app/core/services/synthesis.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
+import "lib/quill-tooltip-shim";
 
 Quill.register("modules/imageCompress", ImageCompress);
-
-const QuillTooltip = Quill.import("ui/tooltip");
-
-QuillTooltip.prototype.positionBottomRight = function(this: typeof QuillTooltip, location) {
-  const bounds = this.quill.getBounds(location, 0);
-  const quillStuff = document.querySelector(".ql-editor");
-  const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-  const left = bounds.right + quillStuff.scrollLeft;
-  const top = bounds.bottom + quillStuff.scrollTop - padding_top;
-
-  this.root.style.left = left + "px";
-  this.root.style.top = top + "px";
-}
-
-// const tooltip = this.synthButtons.sentTooltip;
-// const { height, width } = tooltip.root.getBoundingClientRect();
-// const { left, top } = this.topLeftOfCursorIndex(location);
-// const style = tooltip.root.style;
-// style.left = `${left - width }px`;
-// style.top  = `${top  - height }px`;
-
-QuillTooltip.prototype.positionTopLeft = function(this: typeof QuillTooltip, location) {
-  const bounds = this.quill.getBounds(location, 0);
-  const quillStuff = document.querySelector(".ql-editor");
-  const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-  const left =  bounds.left + quillStuff.scrollLeft;
-  const top =  bounds.top + quillStuff.scrollTop - padding_top;
-  const { width, height } = this.root.getBoundingClientRect();
-  this.root.style.left = `${left - width }px`;
-  this.root.style.top = `${top - height}px`;
-  console.log(this.style);
-}
-
-// topLeftOfCursorIndex(location) {
-//   const bounds = this.quillEditor.getBounds(location, 0);
-//   const quillStuff = document.querySelector(".ql-editor");
-//   const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-
-//   const left =  bounds.left + quillStuff.scrollLeft;
-//   const top =  bounds.top + quillStuff.scrollTop - padding_top;
-//   return { top, left };
-// }
-
-// bottomRightOfCursorIndex(location) {
-//   // get bounds of entire quill editor
-//   const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
-//   // get bounds of selected text
-//   const bounds = this.quillEditor.getBounds(location, 0);
-//   const quillStuff = document.querySelector(".ql-editor");
-//   const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-//   const left = bounds.right + quillStuff.scrollLeft;
-//   const top = bounds.bottom + quillStuff.scrollTop - padding_top;
-//   return { top, left };
-// }
 
 @Component({
   selector: "app-dashboard",
@@ -193,26 +139,11 @@ export class DashboardComponent implements OnInit {
     public http: HttpClient,
     private router: Router,
     private notificationService: NotificationService,
-    private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
   }
 
   async ngOnInit() { }
-
-  showSynthesisPlaySentenceButtonAtIndex(location: number) {
-    if(!this.synthButtons.enabled) return;
-    const tooltip = this.synthButtons.sentTooltip;
-    tooltip.positionTopLeft(location);
-    tooltip.show();
-  }
-
-  showSynthesisPlayWordButtonAtIndex(location: number) {
-    if(!this.synthButtons.enabled) return;
-    const tooltip = this.synthButtons.wordTooltip;
-    tooltip.positionBottomRight(location);
-    tooltip.show()
-  }
 
   /**
    * Initialise the Grammar Engine and Highlighting services

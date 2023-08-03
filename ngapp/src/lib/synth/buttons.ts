@@ -62,4 +62,18 @@ export default class Buttons {
       this.hide();
     }
   }
+
+  showSentenceButtonAtIndex(location: number) {
+    if(!this.enabled) return;
+    const tooltip = this.sentTooltip;
+    tooltip.positionTopLeft(location);
+    tooltip.show();
+  }
+
+  showWordButtonAtIndex(location: number) {
+    if(!this.enabled) return;
+    const tooltip = this.wordTooltip;
+    tooltip.positionBottomRight(location);
+    tooltip.show()
+  }
 }
