@@ -90,9 +90,7 @@
     <mat-slide-toggle
       class="example-margin"
       [color]="primary"
-      [checked]="checked"
-      [disabled]="disabled"
-      (click)="toggleSynthesisPlayButtons()"
+      (click)="synthButtons?.toggle()"
     >
     </mat-slide-toggle>
     <span (click)="toggleRightDrawer('synthesis')">

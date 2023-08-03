@@ -28,6 +28,7 @@ export default class Buttons {
 
   constructor(qlEditor: Quill) {
     this.quillEditor = qlEditor;
+    new ResizeObserver(this.hide.bind(this)).observe(this.quillEditor.root.parentElement);
     this.wordTooltip = createSynthesisPlayButton(qlEditor, "word");
     this.sentTooltip = createSynthesisPlayButton(qlEditor, "sent");
     // this.synthesisPlayback = new synth.PlaybackHandle();
@@ -53,5 +54,12 @@ export default class Buttons {
     this.wordTooltip.hide();
     this.sentTooltip.hide();
     this.playback.clear();
+  }
+
+  toggle() {
+    this.enabled = !this.enabled;
+    if(!this.enabled) {
+      this.hide();
+    }
   }
 }

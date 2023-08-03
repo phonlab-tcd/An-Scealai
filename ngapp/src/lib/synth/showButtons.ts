@@ -88,24 +88,25 @@ async function onclick(this: DashboardComponent, text: string, startIndex: numbe
  * @param range range of selected text
  */
 export default function showButtons(this: DashboardComponent, range){
-    if(!range) return;
+  console.log(range);
+  if(!range) return;
 
-    const quill = this.quillEditor;
-    const wordTooltip = this.synthButtons.wordTooltip;
-    const parentWord = seekParentWord(this.story.text, range.index);
-    wordTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentWord);
-    wordTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentWord);
-    wordTooltip.root.onclick = onclick.bind(this, parentWord.text, parentWord.startIndex);
+  const quill = this.quillEditor;
+  const wordTooltip = this.synthButtons.wordTooltip;
+  const parentWord = seekParentWord(this.story.text, range.index);
+  wordTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentWord);
+  wordTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentWord);
+  wordTooltip.root.onclick = onclick.bind(this, parentWord.text, parentWord.startIndex);
 
-    const sentenceTooltip = this.synthButtons.sentTooltip;
-    const parentSentence = seekParentSentence(this.story.text, range.index);
-    sentenceTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentSentence);
-    sentenceTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentSentence);
-    sentenceTooltip.root.onclick = onclick.bind(this, parentSentence.text, parentSentence.startIndex);
+  const sentenceTooltip = this.synthButtons.sentTooltip;
+  const parentSentence = seekParentSentence(this.story.text, range.index);
+  sentenceTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentSentence);
+  sentenceTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentSentence);
+  sentenceTooltip.root.onclick = onclick.bind(this, parentSentence.text, parentSentence.startIndex);
 
-    if(parentWord.text) this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
-    else wordTooltip.hide();
+  if(parentWord.text) this.showSynthesisPlayWordButtonAtIndex(parentWord.endIndex);
+  else wordTooltip.hide();
 
-    if(parentSentence.text) this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
-    else sentenceTooltip.hide();
+  if(parentSentence.text) this.showSynthesisPlaySentenceButtonAtIndex(parentSentence.startIndex);
+  else sentenceTooltip.hide();
 }

@@ -37,6 +37,19 @@ import Buttons from "lib/synth/buttons";
 
 Quill.register("modules/imageCompress", ImageCompress);
 
+const QuillTooltip = Quill.import("ui/tooltip");
+
+QuillTooltip.prototype.positionBottomRight = function(this: typeof QuillTooltip, qlEditor: Quill, location) {
+  const bounds = qlEditor.getBounds(location, 0);
+  const quillStuff = document.querySelector(".ql-editor");
+  const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
+  const left = bounds.right + quillStuff.scrollLeft;
+  const top = bounds.bottom + quillStuff.scrollTop - padding_top;
+
+  this.root.style.left = left + "px";
+  this.root.style.top = top + "px";
+}
+
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
@@ -193,9 +206,10 @@ export class DashboardComponent implements OnInit {
 
     const { left, top } = this.bottomRightOfCursorIndex(location);
     const tooltip = this.synthButtons.wordTooltip;
-    const style = tooltip.root.style;
-    style.left = `${left}px`;
-    style.top = `${top}px`;
+    tooltip.positionBottomRight(this.quillEditor, location);
+    // const style = tooltip.root.style;
+    // style.left = `${left}px`;
+    // style.top = `${top}px`;
     tooltip.show()
   }
 
@@ -356,8 +370,6 @@ export class DashboardComponent implements OnInit {
   onEditorCreated(q: Quill) {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
-
-    new ResizeObserver(this.hideSynthesisButtons.bind(this)).observe(this.quillEditor.root.parentElement);
 
     this.synthButtons = new synth.Buttons(this.quillEditor);
 
