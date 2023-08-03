@@ -35,7 +35,6 @@ import { Renderer2 } from "@angular/core";
 import { VoiceCode } from "app/core/services/synthesis.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
-import { isThisYear } from "date-fns";
 
 Quill.register("modules/imageCompress", ImageCompress);
 const QuillTooltip = Quill.import("ui/tooltip");
@@ -128,6 +127,14 @@ export class DashboardComponent implements OnInit {
   // TEXT TO SPEECH
   synthButtons: Buttons;
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
+  synthesisPlayButtonsEnabled = false;
+  toggleSynthesisPlayButtons() {
+    this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
+    if(!this.synthesisPlayButtonsEnabled) {
+      this.hideSynthesisButtons();
+      this.synthButtons.playback.clear();
+    }
+  }
 
   synthAPI2validator = z.object({
     audioContent: z.string(),
@@ -145,8 +152,25 @@ export class DashboardComponent implements OnInit {
     public http: HttpClient,
     private router: Router,
     private notificationService: NotificationService,
+    private renderer: Renderer2
   ) {
     this.setUpGrammarChecking();
+
+    // this.synthesisPlayback = new synth.PlaybackHandle();
+    const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
+      const clickedNode = e.target instanceof Node;
+      if(!clickedNode) return;
+
+      const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
+      if(clickedOnQuillEditor) return;
+
+      const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
+      if(clickedOnTooltip) return;
+
+      // otherwise (clicked outside quill editor)
+      this.synthButtons.playback.clear();
+      this.hideSynthesisButtons();
+    });
 
   }
 
@@ -175,7 +199,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showSynthesisPlaySentenceButtonAtIndex(location: number) {
-    if(!this.synthButtons.checked()) return;
+    if(!this.synthesisPlayButtonsEnabled) return;
 
     const tooltip = this.synthButtons.sentTooltip;
     const { height, width } = tooltip.root.getBoundingClientRect();
@@ -187,7 +211,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showSynthesisPlayWordButtonAtIndex(location: number) {
-    if(!this.synthButtons.checked()) return;
+    if(!this.synthesisPlayButtonsEnabled) return;
 
     const { left, top } = this.bottomRightOfCursorIndex(location);
     const tooltip = this.synthButtons.wordTooltip;
@@ -195,6 +219,11 @@ export class DashboardComponent implements OnInit {
     style.left = `${left}px`;
     style.top = `${top}px`;
     tooltip.show()
+  }
+
+  hideSynthesisButtons() {
+    this.synthButtons.wordTooltip.hide();
+    this.synthButtons.sentTooltip.hide();
   }
 
   /**
@@ -369,10 +398,9 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
+    new ResizeObserver(this.hideSynthesisButtons.bind(this)).observe(this.quillEditor.root.parentElement);
 
     this.synthButtons = new synth.Buttons(this.quillEditor);
-
-    new ResizeObserver(this.synthButtons.hideCb).observe(this.quillEditor.root.parentElement);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
