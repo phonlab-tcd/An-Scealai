@@ -134,19 +134,12 @@ function hideOnClickAway(this: Buttons, e: MouseEvent) {
  * @param isMouseIn true if hover on synth button, false if hover out
  * @param parentSpan start/end indices of text to be highlighted
  */
-function onMouseInOrOutWord(this: Buttons, isMouseIn: boolean) {
-  const start = this.mostRecentParentWord.startIndex;
-  const length = this.mostRecentParentWord.endIndex - start;
+function onMouseInOrOut(this: Buttons, isMouseIn: boolean, whichButton: "word" | "sent") {
+  const start = this.mostRecent[whichButton].startIndex;
+  const length = this.mostRecent[whichButton].endIndex - start;
   const props = { "synth-highlight": isMouseIn};
   this.quillEditor.formatText(start, length, props, 'api');
 }
-function onMouseInOrOutSent(this: Buttons, isMouseIn: boolean) {
-  const start = this.mostRecentParentWord.startIndex;
-  const length = this.mostRecentParentWord.endIndex - start;
-  const props = { "synth-highlight": isMouseIn};
-  this.quillEditor.formatText(start, length, props, 'api');
-}
-
 
 export default class Buttons {
   quillEditor: Quill;
@@ -154,9 +147,11 @@ export default class Buttons {
   playback = new synth.PlaybackHandle();
   enabled = false;
   clickEventListener;
+  mostRecent = {
+    word: null,
+    sent: null,
+  };
   mostRecentSelectionRange;
-  mostRecentParentWord;
-  mostRecentParentSentence;
   public wordTooltip: typeof QuillTooltip;
   public sentTooltip: typeof QuillTooltip;
 
@@ -168,10 +163,10 @@ export default class Buttons {
     new ResizeObserver(this.hide.bind(this)).observe(this.quillEditor.root.parentElement);
     this.wordTooltip = createSynthesisPlayButton(qlEditor, "word");
     this.sentTooltip = createSynthesisPlayButton(qlEditor, "sent");
-    this.wordTooltip.root.onmouseover = onMouseInOrOutWord.bind(this, true);
-    this.wordTooltip.root.onmouseout  = onMouseInOrOutWord.bind(this, false);
-    this.sentTooltip.root.onmouseover = onMouseInOrOutSent.bind(this, true);
-    this.sentTooltip.root.onmouseout  = onMouseInOrOutSent.bind(this, false);
+    this.wordTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "word");
+    this.wordTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "word");
+    this.sentTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "sent");
+    this.sentTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "sent");
     this.quillEditor.on("selection-change", this.show.bind(this));
     this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
   }
@@ -224,17 +219,17 @@ export default class Buttons {
 
     const quill = this.quillEditor;
     const wordTooltip = this.wordTooltip;
-    this.mostRecentParentWord = seekParentWord(text, range.index);
-    wordTooltip.root.onclick = onclick.bind(this, this.mostRecentParentWord.text, this.mostRecentParentWord.startIndex, this.synthSettings);
+    this.mostRecent.word = seekParentWord(text, range.index);
+    wordTooltip.root.onclick = onclick.bind(this, this.mostRecent.word.text, this.mostRecent.word.startIndex, this.synthSettings);
 
     const sentenceTooltip = this.sentTooltip;
-    this.mostRecentParentSentence = seekParentSentence(text, range.index);
-    sentenceTooltip.root.onclick = onclick.bind(this, this.mostRecentParentSentence.text, this.mostRecentParentSentence.startIndex, this.synthSettings);
+    this.mostRecent.sent = seekParentSentence(text, range.index);
+    sentenceTooltip.root.onclick = onclick.bind(this, this.mostRecent.sent.text, this.mostRecent.sent.startIndex, this.synthSettings);
 
-    if(this.mostRecentParentWord.text) this.showWordButtonAtIndex(this.mostRecentParentWord.endIndex);
+    if(this.mostRecent.word.text) this.showWordButtonAtIndex(this.mostRecent.word.endIndex);
     else wordTooltip.hide();
 
-    if(this.mostRecentParentSentence.text) this.showSentenceButtonAtIndex(this.mostRecentParentSentence.startIndex);
+    if(this.mostRecent.sent.text) this.showSentenceButtonAtIndex(this.mostRecent.sent.startIndex);
     else sentenceTooltip.hide();
   }
 }
