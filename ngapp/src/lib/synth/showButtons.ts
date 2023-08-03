@@ -11,7 +11,13 @@ import type { Location as LocationInText } from "../findLocationsInText";
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
 
-/** TODO => make this a method of the quill editor */
+/**
+ * Apply/remove synth-highlight styles when hovering over play buttons
+ * TODO => make this a method of the quill editor
+ * @param this Quill editor
+ * @param isMouseIn true if hover on synth button, false if hover out
+ * @param parentSpan start/end indices of text to be highlighted
+ */
 function onMouseInOrOut(this: Quill, isMouseIn: boolean, parentSpan: ReturnType<typeof seekParentWord>) {
   const start = parentSpan.startIndex;
   const length = parentSpan.endIndex - start;
@@ -19,7 +25,13 @@ function onMouseInOrOut(this: Quill, isMouseIn: boolean, parentSpan: ReturnType<
   this.formatText(start, length, props, 'api');
 }
 
-/** turns on or off the highlighting for sentence level synthesis, call in timeout */
+/**
+ * Turns on or off the highlighting for sentence level synthesis, call in timeout 
+ * @param this Dashboard component
+ * @param turnEmphasisOn true for highlighting on, false for highlighting off
+ * @param location start/end indices for highlighting
+ * @param myId index of word in array of words to synthesise
+ */
 function highlightTokenToggle_timeoutHandler(this: DashboardComponent, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
   const start = location.startIndex;
   const length = location.endIndex - location.startIndex;
@@ -29,7 +41,12 @@ function highlightTokenToggle_timeoutHandler(this: DashboardComponent, turnEmpha
   if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
 }
 
-/** Synthesise and playback with live text highlighting the text in @param text, whose starting index in the overall text is @param startIndex */
+/**
+ * Synthesise text, playback audio, and highlight text
+ * @param this Dashboard component
+ * @param text text to highlight
+ * @param startIndex index to start highlighting
+ */
 async function onclick(this: DashboardComponent, text: string, startIndex: number) {
   const options = { params: new HttpParams().set('input', text).set('voice', this.synthSettings.voice).set('outputType', 'JSON').set('timing', 'WORD') }
   const clickId = this.synthButtons.playback.newClick();
@@ -64,6 +81,12 @@ async function onclick(this: DashboardComponent, text: string, startIndex: numbe
   }
 }
 
+/**
+ * Get word and sentence text to synthesise
+ * Create and show synthesis play buttons
+ * @param this Dashboard component
+ * @param range range of selected text
+ */
 export default function showButtons(this: DashboardComponent, range){
     if(!range) return;
 

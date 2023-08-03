@@ -3,7 +3,12 @@ import Quill from "quill";
 
 const QuillTooltip = Quill.import("ui/tooltip");
 
-// create quill tooltip that acts as button to play synthesis
+/**
+ * Create quill tooltip that acts as button to play synthesis
+ * @param quillEditor Quill editor
+ * @param type 'word' or 'sent'
+ * @returns new quill tooltip with styles
+ */
 function createSynthesisPlayButton(quillEditor: Quill, type: string) {
   const button = new QuillTooltip(quillEditor);
   button.root.classList.add("synth-button-" + type);

@@ -1,5 +1,8 @@
 import type newTimeout from "../newTimeout";
 
+/**
+ * Handles the playing/pausing of synth audio
+ */
 export default class PlaybackHandle {
   turnHighlightOnTimeout: {[key in number]: ReturnType<typeof newTimeout>} = {};
   turnHighlightOffTimeout:  {[key in number]: ReturnType<typeof newTimeout>} = {};

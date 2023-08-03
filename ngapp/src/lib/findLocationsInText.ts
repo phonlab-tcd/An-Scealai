@@ -3,6 +3,13 @@ export type Location = {
     endIndex: number;
 }
 
+/**
+ * Get the start and end indices of each synthesised word res in relation to Quill plaintext
+ * @param text plaintext of word or sentence synthesised
+ * @param tokens array of words returned from synth api response
+ * @param offset start index of 'text' in relation to quill editor
+ * @returns array of start and end indices for each word in quill
+ */
 export default function findLocationsInText(text: string, tokens: string[], offset: number = 0): Location[] {
     const locations: Location[] = []
     let textPointer = 0;

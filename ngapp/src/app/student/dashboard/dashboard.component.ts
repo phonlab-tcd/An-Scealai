@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
@@ -17,7 +17,6 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
@@ -37,7 +36,6 @@ import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
 
 Quill.register("modules/imageCompress", ImageCompress);
-const QuillTooltip = Quill.import("ui/tooltip");
 
 @Component({
   selector: "app-dashboard",
@@ -86,9 +84,6 @@ export class DashboardComponent implements OnInit {
   // WORD COUNT
   words: string[] = [];
   wordCount = 0;
-
-  @ViewChild("mySynthesisPlayer")
-  synthesisPlayer: SynthesisPlayerComponent;
 
   textUpdated = new Subject<void | string>();
   quillEditor: Quill;
@@ -270,10 +265,8 @@ export class DashboardComponent implements OnInit {
 
       try {
         // check text for grammar errors
-        // this.grammarErrors = [];
         this.grammarEngine.check$(this.story.text).subscribe({
           next: (tag: ErrorTag) => {
-
             // show error highlighting if button on
             if (this.showErrorTags) {
               this.quillHighlighter.addTag(tag);
@@ -285,23 +278,6 @@ export class DashboardComponent implements OnInit {
 
             //save any grammar errors with associated sentences to DB
             this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
-
-            // create a dictionary of error type and tags for checkbox filtering
-            // this.grammarErrorsTypeDict = this.grammarEngine.errorStoreForLatestCheck.truthyKeys
-
-            // // initialise all error checkboxes to true
-            // for (const key of Object.keys(this.grammarErrorsTypeDict)) {
-            //   this.checkBoxes[key] = true;
-            // }
-
-            // // We need to hide all tags to get rid of any old errors that were fixed by the changes
-            // this.quillHighlighter.hideAll();
-
-            // // and then re-show all the latest error tags if button on
-            // if (this.showErrorTags) {
-            //   this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag));
-            // }
-
             this.grammarLoaded = true;
           },
         });
@@ -499,19 +475,8 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Get rid of highlighting markup from html text
-   * @param text story html text
    */
   stripGramadoirAttributesFromHtml = stripQuillAttributesFromHTML;
-  // (text: string) {
-  //   if (!text || !text.replace) {
-  //     return "";
-  //   }
-  //   return text
-  //     .replace(/\s*id="([^"])+"/g, "")
-  //     .replace(/\s*highlight-tag="([^"])+"/g, "")
-  //     .replace(/\s*left-edge=".*?"/g, '')
-  //     .replace(/\s*right-edge=".*?"/g, '');
-  // }
 
   /* Toggle upper menu buttons */
   toggleOptions() {
