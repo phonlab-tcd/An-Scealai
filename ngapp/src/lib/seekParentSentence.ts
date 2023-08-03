@@ -26,6 +26,12 @@ type SeekResult = {
     endIndex: number
 }
 
+/**
+ * Return the sentence of wherever the cursor is in the quill editor
+ * @param text entire story text
+ * @param index index of cursor in quill
+ * @returns sentence along with its start/end indices
+ */
 export default function seekParentSentence(text: string, index: number): SeekResult {
     if (!text) return {text: text, startIndex: index, endIndex: index};
     const [before, after] = [text.slice(0, index), text.slice(index)];

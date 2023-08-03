@@ -16,7 +16,12 @@ type SeekResult = {
     endIndex: number
 }
 
-/* This function returns the word in 'text' that contains the index 'index'. */
+/**
+ * Return the word of wherever the cursor is in the quill editor
+ * @param text entire story text
+ * @param index index of cursor in quill
+ * @returns word along with its start/end indices
+ */
 export default function seekParentWord(text: string, index: number): SeekResult {
     const [before, after] = [text.slice(0, index), text.slice(index)];
     const startIndex = index - seekBoundary(reverseString(before));
