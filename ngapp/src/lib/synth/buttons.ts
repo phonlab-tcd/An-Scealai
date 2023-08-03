@@ -17,6 +17,7 @@ function createSynthesisPlayButton(quillEditor: Quill, type: string) {
 export default class Buttons {
     quillEditor: Quill;
     playback = new synth.PlaybackHandle();
+    enabled = false;
     public wordTooltip: typeof QuillTooltip;
     public sentTooltip: typeof QuillTooltip;
 

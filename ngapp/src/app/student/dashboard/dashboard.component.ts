@@ -127,10 +127,10 @@ export class DashboardComponent implements OnInit {
   // TEXT TO SPEECH
   synthButtons: Buttons;
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
-  synthesisPlayButtonsEnabled = false;
   toggleSynthesisPlayButtons() {
-    this.synthesisPlayButtonsEnabled = !this.synthesisPlayButtonsEnabled;
-    if(!this.synthesisPlayButtonsEnabled) {
+    if(!this.synthButtons) return;
+    this.synthButtons.enabled = !this.synthButtons.enabled;
+    if(!this.synthButtons.enabled) {
       this.hideSynthesisButtons();
       this.synthButtons.playback.clear();
     }
@@ -167,6 +167,9 @@ export class DashboardComponent implements OnInit {
       const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
       if(clickedOnTooltip) return;
 
+      const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
+      if(clickedInsideTooltip) return;
+
       // otherwise (clicked outside quill editor)
       this.synthButtons.playback.clear();
       this.hideSynthesisButtons();
@@ -199,7 +202,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showSynthesisPlaySentenceButtonAtIndex(location: number) {
-    if(!this.synthesisPlayButtonsEnabled) return;
+    if(!this.synthButtons.enabled) return;
 
     const tooltip = this.synthButtons.sentTooltip;
     const { height, width } = tooltip.root.getBoundingClientRect();
@@ -211,7 +214,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showSynthesisPlayWordButtonAtIndex(location: number) {
-    if(!this.synthesisPlayButtonsEnabled) return;
+    if(!this.synthButtons.enabled) return;
 
     const { left, top } = this.bottomRightOfCursorIndex(location);
     const tooltip = this.synthButtons.wordTooltip;
