@@ -46,6 +46,7 @@ function highlightTokenToggle_timeoutHandler(this: Buttons, turnEmphasisOn: bool
   const length = location.endIndex - location.startIndex;
   const props = { "synth-highlight-em": turnEmphasisOn};
   this.quillEditor.formatText(start, length, props, 'api');
+  console.log(start, length, props);
   const timeoutHandles = this.playback.timeoutHandles(turnEmphasisOn);
   if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
 }
@@ -87,7 +88,13 @@ async function onclick(this: Buttons, text: string, startIndex: number) {
   if(!v.success) throw v;
 
   const res = v.data;
-  const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
+  console.log(res);
+
+  const tokens = res.timing.map(e=>e.word);
+  const locations = findLocationsInText(text, tokens, startIndex);
+  console.log(text, tokens, startIndex, locations);
+  console.log(JSON.stringify(locations));
+  console.log(locations);
   const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
   const speed = this.synthSettings.speed;
   audio.playbackRate = speed;
@@ -232,6 +239,7 @@ export default class Buttons {
 
     const sentenceTooltip = this.sentTooltip;
     this.mostRecent.sent = seekParentSentence(text, range.index);
+    console.log(this.mostRecent.sent.startIndex);
     sentenceTooltip.root.onclick = onclick.bind(this, this.mostRecent.sent.text, this.mostRecent.sent.startIndex, this.synthSettings);
 
     if(this.mostRecent.word.text) this.showWordButtonAtIndex(this.mostRecent.word.endIndex);

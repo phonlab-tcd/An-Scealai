@@ -114,6 +114,13 @@ const TESTS = [
         after: ' sentence! some stuff here',
         expected: 'This is a sentence!',
     },
+    {
+        desc: "weird space position",
+        pre: 'Ní fheicim sibh ',
+        after: 'ar an scáileain  .',
+        expected: 'Ní fheicim sibh ar an scáileain  .',
+        expectedStartIndex: 0,
+    },
 ]
 
 
@@ -122,6 +129,9 @@ fdescribe("seekParentSentence", function() {
         it(test.desc, function() {
             const output = seekParentSentence(test.pre.concat(test.after), test.pre.length);
             expect(output.text).toEqual(test.expected);
+            if(test.expectedStartIndex){
+                expect(output.startIndex).toEqual(test.expectedStartIndex);
+            }
         });
     }
 });
