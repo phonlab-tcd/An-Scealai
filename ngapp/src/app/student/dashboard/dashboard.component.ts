@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
 
   // TEXT TO SPEECH
   synthButtons: Buttons;
-  synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
+  synthSettings = new synth.Settings();
   
   constructor(
     public ts: TranslationService,
@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
-    this.synthButtons = new synth.Buttons(this.quillEditor, this.story, this.synthSettings);
+    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();

@@ -1,13 +1,13 @@
 import seekParentSentence from "lib/seekParentSentence";
 import seekParentWord from "lib/seekParentWord";
-import synth from "lib/synth";
 import Quill from "quill";
-import { DashboardComponent } from "app/student/dashboard/dashboard.component";
 import type { Location as LocationInText } from "../findLocationsInText";
 import findLocationsInText from "../findLocationsInText";
 import newTimeout from "lib/newTimeout";
+import synth from "lib/synth";
+import type Settings from "lib/synth/settings";
 import { z } from "zod";
-import { Story } from "app/core/models/story";
+
 
 const QuillTooltip = Quill.import("ui/tooltip");
 
@@ -76,10 +76,10 @@ const synthAPI2validator = z.object({
  * @param text text to highlight
  * @param startIndex index to start highlighting
  */
-async function onclick(this: Buttons, text: string, startIndex: number, synthSettings) {
+async function onclick(this: Buttons, text: string, startIndex: number) {
   const clickId = this.playback.newClick();
   this.playback.clear();
-  const prevalid = await fetch_cached(synthesisUrl(text,synthSettings.voice));
+  const prevalid = await fetch_cached(synthesisUrl(text,this.synthSettings.voice));
   if(!this.playback.isMostRecentClick(clickId)) return this.playback.clear();
 
   const v = synthAPI2validator.safeParse(prevalid);
@@ -88,7 +88,8 @@ async function onclick(this: Buttons, text: string, startIndex: number, synthSet
   const res = v.data;
   const locations = findLocationsInText(text, res.timing.map(e => e.word), startIndex);
   const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
-  audio.playbackRate = synthSettings.speed;
+  const speed = this.synthSettings.speed;
+  audio.playbackRate = speed;
   audio.play();
 
   this.playback.audio = audio;
@@ -104,9 +105,26 @@ async function onclick(this: Buttons, text: string, startIndex: number, synthSet
     
     const on = highlightTokenToggle_timeoutHandler.bind(this, true, location, myId);
     const off = highlightTokenToggle_timeoutHandler.bind(this, false, location, myId);
-    this.playback.turnHighlightOnTimeout[myId] = newTimeout((startms / synthSettings.speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-    this.playback.turnHighlightOffTimeout[myId] = newTimeout((endms / synthSettings.speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
+    this.playback.turnHighlightOnTimeout[myId] = newTimeout((startms / speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
+    this.playback.turnHighlightOffTimeout[myId] = newTimeout((endms / speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
   }
+}
+
+function hideOnClickAway(this: Buttons, e: MouseEvent) {
+  const clickedNode = e.target instanceof Node;
+  if(!clickedNode) return;
+
+  const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
+  if(clickedOnQuillEditor) return;
+
+  const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
+  if(clickedOnTooltip) return;
+
+  const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
+  if(clickedInsideTooltip) return;
+
+  // otherwise (clicked outside quill editor)
+  this.hide();
 }
 
 /**
@@ -125,38 +143,23 @@ function onMouseInOrOut(this: Quill, isMouseIn: boolean, parentSpan: ReturnType<
 
 export default class Buttons {
   quillEditor: Quill;
-  synthSettings;
+  synthSettings: Settings;
   playback = new synth.PlaybackHandle();
   enabled = false;
+  clickEventListener;
   public wordTooltip: typeof QuillTooltip;
   public sentTooltip: typeof QuillTooltip;
 
-  constructor(qlEditor: Quill, story: Story, synthSettings) {
+  constructor(qlEditor: Quill, synthSettings: Settings) {
     this.quillEditor = qlEditor;
     this.synthSettings = synthSettings;
+
+    // TODO instead of hiding should just update position
     new ResizeObserver(this.hide.bind(this)).observe(this.quillEditor.root.parentElement);
     this.wordTooltip = createSynthesisPlayButton(qlEditor, "word");
     this.sentTooltip = createSynthesisPlayButton(qlEditor, "sent");
-
-    this.quillEditor.on("selection-change", this.show.bind(this, story, synthSettings));
-
-    // this.synthesisPlayback = new synth.PlaybackHandle();
-    const clickEventListener = window.addEventListener('click', (e: MouseEvent) => {
-      const clickedNode = e.target instanceof Node;
-      if(!clickedNode) return;
-
-      const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
-      if(clickedOnQuillEditor) return;
-
-      const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
-      if(clickedOnTooltip) return;
-
-      const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
-      if(clickedInsideTooltip) return;
-
-      // otherwise (clicked outside quill editor)
-      this.hide();
-    });
+    this.quillEditor.on("selection-change", this.show.bind(this));
+    this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
   }
 
   hide(){
@@ -192,22 +195,24 @@ export default class Buttons {
    * @param this Dashboard component
    * @param range range of selected text
    */
-  show(story, synthSettings, range){
+  show(range){
     console.log(range);
     if(!range) return;
 
+    const text = this.quillEditor.getText();
+
     const quill = this.quillEditor;
     const wordTooltip = this.wordTooltip;
-    const parentWord = seekParentWord(story.text, range.index);
+    const parentWord = seekParentWord(text, range.index);
     wordTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentWord);
     wordTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentWord);
-    wordTooltip.root.onclick = onclick.bind(this, parentWord.text, parentWord.startIndex, synthSettings);
+    wordTooltip.root.onclick = onclick.bind(this, parentWord.text, parentWord.startIndex, this.synthSettings);
 
     const sentenceTooltip = this.sentTooltip;
-    const parentSentence = seekParentSentence(story.text, range.index);
+    const parentSentence = seekParentSentence(text, range.index);
     sentenceTooltip.root.onmouseover = onMouseInOrOut.bind(quill, true,  parentSentence);
     sentenceTooltip.root.onmouseout  = onMouseInOrOut.bind(quill, false, parentSentence);
-    sentenceTooltip.root.onclick = onclick.bind(this, parentSentence.text, parentSentence.startIndex, synthSettings);
+    sentenceTooltip.root.onclick = onclick.bind(this, parentSentence.text, parentSentence.startIndex, this.synthSettings);
 
     if(parentWord.text) this.showWordButtonAtIndex(parentWord.endIndex);
     else wordTooltip.hide();
