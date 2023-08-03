@@ -176,14 +176,6 @@ export class DashboardComponent implements OnInit {
   // TEXT TO SPEECH
   synthButtons: Buttons;
   synthSettings: {voice: VoiceCode, speed: number} = {voice: "ga_UL_anb_nemo", speed: 1}
-  toggleSynthesisPlayButtons() {
-    if(!this.synthButtons) return;
-    this.synthButtons.enabled = !this.synthButtons.enabled;
-    if(!this.synthButtons.enabled) {
-      this.hideSynthesisButtons();
-      this.synthButtons.playback.clear();
-    }
-  }
 
   synthAPI2validator = z.object({
     audioContent: z.string(),
@@ -208,28 +200,6 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() { }
 
-  topLeftOfCursorIndex(location) {
-    const bounds = this.quillEditor.getBounds(location, 0);
-    const quillStuff = document.querySelector(".ql-editor");
-    const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-
-    const left =  bounds.left + quillStuff.scrollLeft;
-    const top =  bounds.top + quillStuff.scrollTop - padding_top;
-    return { top, left };
-  }
-
-  bottomRightOfCursorIndex(location) {
-    // get bounds of entire quill editor
-    const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
-    // get bounds of selected text
-    const bounds = this.quillEditor.getBounds(location, 0);
-    const quillStuff = document.querySelector(".ql-editor");
-    const padding_top = Number.parseInt(window.getComputedStyle(quillStuff).getPropertyValue('padding-top').split("px")[0]);
-    const left = bounds.right + quillStuff.scrollLeft;
-    const top = bounds.bottom + quillStuff.scrollTop - padding_top;
-    return { top, left };
-  }
-
   showSynthesisPlaySentenceButtonAtIndex(location: number) {
     if(!this.synthButtons.enabled) return;
     const tooltip = this.synthButtons.sentTooltip;
@@ -242,11 +212,6 @@ export class DashboardComponent implements OnInit {
     const tooltip = this.synthButtons.wordTooltip;
     tooltip.positionBottomRight(location);
     tooltip.show()
-  }
-
-  hideSynthesisButtons() {
-    this.synthButtons.wordTooltip.hide();
-    this.synthButtons.sentTooltip.hide();
   }
 
   /**
