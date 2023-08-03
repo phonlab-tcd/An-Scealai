@@ -142,6 +142,12 @@ function onMouseInOrOut(this: Buttons, isMouseIn: boolean, whichButton: "word" |
   this.quillEditor.formatText(start, length, props, 'api');
 }
 
+function userTextChange(f: Function) {
+  return function(_a,_b,source) {
+    if(source === "user") return f(_a,_b,source);
+  }
+}
+
 export default class Buttons {
   quillEditor: Quill;
   synthSettings: Settings;
@@ -169,10 +175,7 @@ export default class Buttons {
     this.sentTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "sent");
     this.sentTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "sent");
     this.quillEditor.on("selection-change", this.show.bind(this));
-    fromEvent(this.quillEditor, 'text-change').subscribe({next: ([_, _content, source]) => {
-      if (source == 'api') return;
-      this.hide();
-    }})
+    this.quillEditor.on("text-change",userTextChange(this.hide.bind(this)));
     this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
   }
 
