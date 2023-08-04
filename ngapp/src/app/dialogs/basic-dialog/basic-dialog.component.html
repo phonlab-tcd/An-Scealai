@@ -29,8 +29,8 @@
       </div>
     </div>
     <!-- teacher classroom code -->
-    <div style=" display: flex; align-items: center; justify-content: center; gap: 1rem; " >
-      <pre *ngIf="data?.type == 'classCode'" class="codeView">{{ data?.data }}</pre>
+    <div *ngIf="data?.type == 'classCode'" style=" display: flex; align-items: center; justify-content: center; gap: 1rem; " >
+      <pre class="codeView">{{ data?.data }}</pre>
       <div *ngIf="!copyIconClicked" class="copyBtn" (click)="copyIconClicked = true" [cdkCopyToClipboard]="data?.data" > <i class="fas fa-solid fa-copy"></i> Copy </div>
       <div *ngIf="copyIconClicked" class="copyBtn"> <i class="fas fa-solid fa-check"> </i> Copied </div>
     </div>
