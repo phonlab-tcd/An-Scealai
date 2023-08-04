@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "../out-tsc/spec",
     "sourceMap": true,
+    "strictBindCallApply": true,
     "types": [
       "jasmine",
       "node",

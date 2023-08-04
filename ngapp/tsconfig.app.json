@@ -22,6 +22,7 @@
     "experimentalDecorators": true,
     "importHelpers": true, 
     "target": "es2020",
+    "strictBindCallApply": true,
     "typeRoots": [
       "node_modules/@types"
     ],
