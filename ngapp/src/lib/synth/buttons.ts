@@ -75,6 +75,7 @@ const synthAPI2validator = z.object({
 /**
  * Synthesise text, playback audio, and highlight text
  * @param this Dashboard component
+ * @param tooltipReference the parent tooltip object on to which this onclick is added
  * @param text text to highlight
  * @param startIndex index to start highlighting
  */
