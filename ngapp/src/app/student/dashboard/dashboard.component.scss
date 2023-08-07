@@ -55,224 +55,282 @@ quill-editor > [quill-editor-element] {
     overflow-y: hidden;
 }
 
-// ::-webkit-scrollbar {
-//     background-color: transparent;
-//     width: 10px;
-// }
-// * {
-//     scrollbar-width: thin;
-//     scrollbar-color: rgb(200, 200, 200);
-// }
-// *::-webkit-scrollbar-track {
-//     background-color: white;
-// }
-// *::-webkit-scrollbar-thumb {
-//     background-color: rgb(200, 200, 200) ;
-//     border-radius: 20px;
-//     border: 3px solid white;
-// }
-
-[synth-highlight] {
-    background: rgb(219, 236, 226);
-}
-
-[synth-highlight-em] {
-    background: rgb(176, 255, 207);  
-}
-
-.synthesis-button:hover {
-    opacity: 1;
-}
-
-.storyTitleHeader {
-    display: flex;
-    justify-content: center;
-    margin-top: -30px;  // margin for entire page set in app.component.scss
-    padding-bottom: 20px;
-  }
-
-.storyTitleContainer {
-    margin: auto;
-    overflow: auto;
-    font-size: 20px;
-    font-weight: bolder;
-}
-
-.storyTitle {
-    border: 1px solid transparent;
-    text-align:center;
-    resize:none;
-}
-
-.storyTitle:hover {
-    border: 1px solid;
-    border-radius: 5px;
-}
-
-.saveIcon {
-    align-self: flex-end;
-    white-space: nowrap;
-    color: var(--dark-text);
-    border-style: none;
-    font-size: 11pt;
-    padding: 5px;
-    margin-right: 20px;
-}
-
-.savedIcon {
-    color: var(--scealai-light-brown);
-}
-
-.optionsBtnContainer > * {
-    height: 2rem;
-}
-
-.optionsBtnContainer {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    --options-btn-background-color-hover : lightgray;
-    margin-left: 10%;
-    margin-right: 10%;
-}
-  
-.optionsBtn {
-    background-color: var(--scealai-yellow);
-    border-style: none;
-    color: #464444;
-    margin: 0px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background: #dfd9c800;
-}
-
-.optionsBtn:hover {
-    background-color: var(--options-btn-background-color-hover);
-    color: #35322f;
-    cursor: pointer;
-    border-radius: 2;
-}
-
-.optionsPopupBtn {
-    margin-right: 4px;
-}
-
-.optionsBtnIcon {
-    margin-left: 5px;
-}
-
-.optionsBtnClicked {
-    background-color: var(--options-btn-background-color-hover);
-    color: #35322f;
-    border-radius: 2;
-}
-
-.notRecordingBtn {
-    background-color: red;
-    color: white;
-    border-radius: 4px;
-    border: none;
-    margin-left: 4px;
-    font-size: 10pt;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-.bodyContainer {
-    width: 100%;
-    height: 100%;
-}
-
-.storyListDrawer {
-    padding: 40px;
-    max-width: 35%;
-    height: 100%;
-}
-
-.storyContainer {
-    height: 100%;
-}
-
-.ql-container {
-    background-color: #F8F9FA;
-    height: 100%;
-}
-
-.ql-tooltip {
-    z-index: 9998;
-}
-
-//<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
-.ql-editor {
-    background-color: white;
-    z-index: 0;
-    font-size: 14pt;
-    font-family: "Times New Roman", Times, serif;
-    min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
-    max-height: 70vh !important;
+// CSS for synthesis loading spinner from https://loading.io/css/
+.ql-tooltip > .lds-ellipsis {
+    display: inline-block;
     position: relative;
+    width: 30px;
+    height: 30px;
+    left: -7px;
 }
-
-.menuButton {
-    float:left;
-    padding-left: 10px;
-    padding-top: 7px;
-    transform: scale(1.5);
-    z-index: 100;
+.ql-tooltip > .lds-ellipsis div {
+    position: absolute;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
-
-.menuButton:hover {
-    cursor: pointer;
+.ql-tooltip > .lds-ellipsis div:nth-child(1) {
+    left: 0px;
+    animation: lds-ellipsis1 0.6s infinite;
 }
-
-.material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 48
+.ql-tooltip > .lds-ellipsis div:nth-child(2) {
+    left: 0px;
+    animation: lds-ellipsis2 0.6s infinite;
 }
-
-.wordCount {
-    float: right;
-    padding-right: 20px;
-    padding-top: 7px;
-    font-size: 12pt;
+.ql-tooltip > .lds-ellipsis div:nth-child(3) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
 }
-
-.newStoryMessage {
-    font-weight: bolder;
-    max-width: 300px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    padding-left: 50px;
-    height: 80vh;
-    width: 100%;
-    display:flex;
-    align-items: flex-end;
-    justify-content: center;
+.ql-tooltip > .lds-ellipsis div:nth-child(4) {
+    left: 16px;
+    animation: lds-ellipsis3 0.6s infinite;
 }
-
-.rightDrawer {
-    min-width: 25%;
-    height: 100%;
-}
-  
-.blink {
-    animation: blinker 2s linear infinite;
-}
-  
-@keyframes blinker {
+@keyframes lds-ellipsis1 {
     0% {
-        background-color:red;
-    }
-    50% {
-        background-color:rgb(119, 0, 0);
+        transform: scale(0);
     }
     100% {
-        background-color:red;
+        transform: scale(1);
     }
 }
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(8px, 0);
+    }
+}  
+
+// ::-webkit-scrollbar {
+    //     background-color: transparent;
+    //     width: 10px;
+    // }
+    // * {
+        //     scrollbar-width: thin;
+        //     scrollbar-color: rgb(200, 200, 200);
+        // }
+        // *::-webkit-scrollbar-track {
+            //     background-color: white;
+            // }
+            // *::-webkit-scrollbar-thumb {
+                //     background-color: rgb(200, 200, 200) ;
+                //     border-radius: 20px;
+                //     border: 3px solid white;
+                // }
+                
+                [synth-highlight] {
+                    background: rgb(219, 236, 226);
+                }
+                
+                [synth-highlight-em] {
+                    background: rgb(176, 255, 207);  
+                }
+                
+                .synthesis-button:hover {
+                    opacity: 1;
+                }
+                
+                .storyTitleHeader {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: -30px;  // margin for entire page set in app.component.scss
+                    padding-bottom: 20px;
+                }
+                
+                .storyTitleContainer {
+                    margin: auto;
+                    overflow: auto;
+                    font-size: 20px;
+                    font-weight: bolder;
+                }
+                
+                .storyTitle {
+                    border: 1px solid transparent;
+                    text-align:center;
+                    resize:none;
+                }
+                
+                .storyTitle:hover {
+                    border: 1px solid;
+                    border-radius: 5px;
+                }
+                
+                .saveIcon {
+                    align-self: flex-end;
+                    white-space: nowrap;
+                    color: var(--dark-text);
+                    border-style: none;
+                    font-size: 11pt;
+                    padding: 5px;
+                    margin-right: 20px;
+                }
+                
+                .savedIcon {
+                    color: var(--scealai-light-brown);
+                }
+                
+                .optionsBtnContainer > * {
+                    height: 2rem;
+                }
+                
+                .optionsBtnContainer {
+                    display: flex;
+                    justify-content: space-around;
+                    flex-wrap: wrap;
+                    --options-btn-background-color-hover : lightgray;
+                    margin-left: 10%;
+                    margin-right: 10%;
+                }
+                
+                .optionsBtn {
+                    background-color: var(--scealai-yellow);
+                    border-style: none;
+                    color: #464444;
+                    margin: 0px;
+                    border-radius: 2px;
+                    display: flex;
+                    align-items: center;
+                    padding: 5px;
+                    background: #dfd9c800;
+                }
+                
+                .optionsBtn:hover {
+                    background-color: var(--options-btn-background-color-hover);
+                    color: #35322f;
+                    cursor: pointer;
+                    border-radius: 2;
+                }
+                
+                .optionsPopupBtn {
+                    margin-right: 4px;
+                }
+                
+                .optionsBtnIcon {
+                    margin-left: 5px;
+                }
+                
+                .optionsBtnClicked {
+                    background-color: var(--options-btn-background-color-hover);
+                    color: #35322f;
+                    border-radius: 2;
+                }
+                
+                .notRecordingBtn {
+                    background-color: red;
+                    color: white;
+                    border-radius: 4px;
+                    border: none;
+                    margin-left: 4px;
+                    font-size: 10pt;
+                    padding: 4px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                }
+                
+                .bodyContainer {
+                    width: 100%;
+                    height: 100%;
+                }
+                
+                .storyListDrawer {
+                    padding: 40px;
+                    max-width: 35%;
+                    height: 100%;
+                }
+                
+                .storyContainer {
+                    height: 100%;
+                }
+                
+                .ql-container {
+                    background-color: #F8F9FA;
+                    height: 100%;
+                }
+                
+                .ql-tooltip {
+                    z-index: 9998;
+                }
+                
+                //<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"
+                .ql-editor {
+                    background-color: white;
+                    z-index: 0;
+                    font-size: 14pt;
+                    font-family: "Times New Roman", Times, serif;
+                    min-height: 70vh !important;        // current way to set the height, would like to make it dynamic
+                    max-height: 70vh !important;
+                    position: relative;
+                }
+                
+                .menuButton {
+                    float:left;
+                    padding-left: 10px;
+                    padding-top: 7px;
+                    transform: scale(1.5);
+                    z-index: 100;
+                }
+                
+                .menuButton:hover {
+                    cursor: pointer;
+                }
+                
+                .material-symbols-outlined {
+                    font-variation-settings:
+                    'FILL' 0,
+                    'wght' 400,
+                    'GRAD' 0,
+                    'opsz' 48
+                }
+                
+                .wordCount {
+                    float: right;
+                    padding-right: 20px;
+                    padding-top: 7px;
+                    font-size: 12pt;
+                }
+                
+                .newStoryMessage {
+                    font-weight: bolder;
+                    max-width: 300px;
+                    padding-top: 50px;
+                    padding-bottom: 50px;
+                    padding-left: 50px;
+                    height: 80vh;
+                    width: 100%;
+                    display:flex;
+                    align-items: flex-end;
+                    justify-content: center;
+                }
+                
+                .rightDrawer {
+                    min-width: 25%;
+                    height: 100%;
+                }
+                
+                .blink {
+                    animation: blinker 2s linear infinite;
+                }
+                
+                @keyframes blinker {
+                    0% {
+                        background-color:red;
+                    }
+                    50% {
+                        background-color:rgb(119, 0, 0);
+                    }
+                    100% {
+                        background-color:red;
+                    }
+                }
