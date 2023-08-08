@@ -55,6 +55,64 @@ quill-editor > [quill-editor-element] {
     overflow-y: hidden;
 }
 
+// CSS for synthesis loading spinner from https://loading.io/css/
+.ql-tooltip > .lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    left: -7px;
+}
+.ql-tooltip > .lds-ellipsis div {
+    position: absolute;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.ql-tooltip > .lds-ellipsis div:nth-child(1) {
+    left: 0px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.ql-tooltip > .lds-ellipsis div:nth-child(2) {
+    left: 0px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.ql-tooltip > .lds-ellipsis div:nth-child(3) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.ql-tooltip > .lds-ellipsis div:nth-child(4) {
+    left: 16px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(8px, 0);
+    }
+}  
+
 // ::-webkit-scrollbar {
 //     background-color: transparent;
 //     width: 10px;
@@ -71,7 +129,7 @@ quill-editor > [quill-editor-element] {
 //     border-radius: 20px;
 //     border: 3px solid white;
 // }
-
+                
 [synth-highlight] {
     background: rgb(219, 236, 226);
 }
@@ -89,7 +147,7 @@ quill-editor > [quill-editor-element] {
     justify-content: center;
     margin-top: -30px;  // margin for entire page set in app.component.scss
     padding-bottom: 20px;
-  }
+}
 
 .storyTitleContainer {
     margin: auto;
@@ -135,7 +193,7 @@ quill-editor > [quill-editor-element] {
     margin-left: 10%;
     margin-right: 10%;
 }
-  
+
 .optionsBtn {
     background-color: var(--scealai-yellow);
     border-style: none;
@@ -260,11 +318,11 @@ quill-editor > [quill-editor-element] {
     min-width: 25%;
     height: 100%;
 }
-  
+
 .blink {
     animation: blinker 2s linear infinite;
 }
-  
+
 @keyframes blinker {
     0% {
         background-color:red;

@@ -75,12 +75,14 @@ const synthAPI2validator = z.object({
 /**
  * Synthesise text, playback audio, and highlight text
  * @param this Dashboard component
+ * @param tooltipReference the parent tooltip object on to which this onclick is added
  * @param text text to highlight
  * @param startIndex index to start highlighting
  */
-async function onclick(this: Buttons, text: string, startIndex: number) {
+async function onclick(this: Buttons, tooltipReference: typeof QuillTooltip, text: string, startIndex: number) {
   const clickId = this.playback.newClick();
   this.playback.clear();
+  Buttons.toggleLoadingSpinner(tooltipReference, 'on');
   const prevalid = await fetch_cached(synthesisUrl(text,this.synthSettings.voice));
   if(!this.playback.isMostRecentClick(clickId)) return this.playback.clear();
 
@@ -98,6 +100,7 @@ async function onclick(this: Buttons, text: string, startIndex: number) {
   const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
   const speed = this.synthSettings.speed;
   audio.playbackRate = speed;
+  Buttons.toggleLoadingSpinner(tooltipReference, 'off');
   audio.play();
 
   this.playback.audio = audio;
@@ -186,6 +189,19 @@ export default class Buttons {
     this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
   }
 
+  /** 
+   * Toggles the contents of a synth play button between the standard ▸ play button and a loading spinner.
+   * @param tooltip a reference to the tooltip representing the synth button
+   * @param mode 'on' to set as a spinner or 'off' to set as a play button
+  */
+  static toggleLoadingSpinner(tooltip: typeof QuillTooltip, mode: 'on' | 'off') {
+    if (mode === 'on') {
+      tooltip.root.innerHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`;
+    } else {
+      tooltip.root.innerHTML = "<span>▸<span>";
+    }
+  }
+
   hide(){
     this.wordTooltip.hide();
     this.sentTooltip.hide();
@@ -235,12 +251,12 @@ export default class Buttons {
     const quill = this.quillEditor;
     const wordTooltip = this.wordTooltip;
     this.mostRecent.word = seekParentWord(text, range.index);
-    wordTooltip.root.onclick = onclick.bind(this, this.mostRecent.word.text, this.mostRecent.word.startIndex, this.synthSettings);
+    wordTooltip.root.onclick = onclick.bind(this, wordTooltip, this.mostRecent.word.text, this.mostRecent.word.startIndex);
 
     const sentenceTooltip = this.sentTooltip;
     this.mostRecent.sent = seekParentSentence(text, range.index);
     console.log(this.mostRecent.sent.startIndex);
-    sentenceTooltip.root.onclick = onclick.bind(this, this.mostRecent.sent.text, this.mostRecent.sent.startIndex, this.synthSettings);
+    sentenceTooltip.root.onclick = onclick.bind(this, sentenceTooltip, this.mostRecent.sent.text, this.mostRecent.sent.startIndex);
 
     if(this.mostRecent.word.text) this.showWordButtonAtIndex(this.mostRecent.word.endIndex);
     else wordTooltip.hide();
