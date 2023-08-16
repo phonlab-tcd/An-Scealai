@@ -2493,109 +2493,109 @@ const translations = {
     ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
     en: 'Click on the \'+\' button to create your first classroom!' },
   fios_title: {
-    ga: 'Cliceáil ar \'+\' chun tosú ar do chéad scéal!',
+    ga: 'FioS: Foghlaim le hIntleacht Shaorga – Fiosracht a Spreagadh',
     en: 'Trinity College Dublin – FIoS: Foghlaim le hIntleacht Shaorga' },
   fios_intro: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Táimid thar a bheith sásta FioS a fhógairt i gColáiste na Tríonóide. Is é seo ár meitheal taighde ceannródaíoch atá dírithe ar Intleacht Shaorga a iniúchadh agus a chomhcheangal le teagasc agus le foghlaim na Gaeilge. ',
     en: 'At Trinity College Dublin, we are excited to introduce FioS, our cutting-edge research group dedicated to the exploration and integration of Artificial Intelligence (AI) in Irish language teaching and learning.' },
   fios_welcome: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Fáilte go FioS: Meitheal Taighde ar FRT-chliste don Ghaeilge',
     en: 'Welcome to FIoS: iCALL for Irish Research Group' },
   our_mission: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Ár Misean',
     en: 'Our mission' },
   fios_mission: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Tagraíonn \'FioS\' d’eolas agus is é tóraíocht an eolais ár mbun aidhm: an chumhacht atá ag Intleacht Shaorga a ionramháil agus a chur in oiriúint d’fhoghlaimeoirí agus do lucht labhartha na Gaeilge go ginearálta. Tá labhairt na teanga ar an gcloch is mó ar ár bpaidrín agus creidimid go mba cheart go mbeadh fáil ag gach teanga, go háirithe iad siúd atá faoi bhagairt, ar an teicneolaíocht nua-aimseartha. Is gá a bheith cruthaitheach agus an nua-theicneolaíocht á cur in oiriúint do na teangacha neamh-fhorleathana ionas go bhfanfaidh siad beo beathach agus ábalta páirt a ghlacach  sa ré dhigiteach.',
     en: 'Our name, “Fios”, meaning \'knowledge\', captures the essence of our mission: harnessing the power of Artificial Intelligence to revolutionise how we learn and engage with the Irish language. Speech, as a vital component of language learning, sits at the heart of our endeavours. We believe that every language, especially those like our own native tongue that face the challenges of endangerment, deserves the advantage of modern technology. For such languages, creativity in adaptation becomes imperative, ensuring they not only survive but thrive in the digital age.' },
   what_we_do: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Ár Saothar',
     en: 'What we do' },
   what_we_do_1: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Tá FioS dírithe go príomha ar theicneolaíochtaí na teanga agus na hurlabhra a fhorbairt agus a chur in oiriúint d’fhoghlaimeoirí na Gaeilge. Ní mór a bheith an-cháiréiseach le forbairt na n-uirlisí seo agus an fhorbairt a dhéanamh i gcomhpháirt le múinteoirí agus le pobal na Gaeilge i gcoiteann ionas go mbeidh siad oiriúnach don teagasc agus do shaol na Gaeilge. Tá sé mar aidhm againn go mbeidh an teicneolaíocht chliste éifeachtach mar mheán teagaisc agus go léireoidh sí saibhreas na Gaeilge do gach foghlaimeoir.',
     en: 'Our primary focus at FioS is to create speech and language technology-based tools and resources tailored the needs of our Irish language learners. These tools are meticulously crafted in close collaboration with teachers and the broader Irish-language community,  aiming to be both pedagogically sound and aligned with real-world learning needs. Our objective is to ensure that the learning experience is not only technologically advanced but also educationally effective, bringing the rich tapestry of the Irish language to every learner.' },
   what_we_do_2: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Is forbairt nádúrtha é FioS ar an obair cheannródaíoch a rinneadh mar chuid de thionscadal ABAIR. Tá obair mhór á déanamh mar chuid de thionscadal ABAIR i bhforbairt na mbunteicneolaíochtaí, téacs go hurlabhra agus aithint cainte. Toisc go bhfuilimid nasctha go dlúth le ABAIR tá teacht againn ar theicneolaíochtaí ilchanúnacha, rud a chuireann lenár ndúthracht chun an Ghaeilge a chur ar fáil go héasca don uile dhuine.',
     en: 'FIoS has naturally evolved from the pioneering work carried out as part of the ABAIR initiative, which develops the core speech technologies, text-to-speech (TTS) synthesis and automatic speech recognition (ASR). Our close collaboration with ABAIR not only equips us with state-of-the-art multidialect speech technologies, but also fortifies our resolve to make Irish more accessible and engaging.' },
   what_we_do_3: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Tá an aidhm atá againn níos leithne ná an teicneolaíocht. Táimid ag iarraidh an teanga bheo a chur os comhair gach foghlaimeora.  Samhlaímid comhthéacs foghlama ina mbeadh fáil ag gach foghlaimeoir ar mhúinteoir den scoth atá deartha le díogras ag muintir FioS.',
     en: 'Our goal goes beyond the integration of advanced technologies. We strive to bring the living language directly to every learner. We envision a learning environment where every learner, regardless of their background or resources, reaps the benefits of a great teacher – by design, not by chance. ' },
   key_CALL_for_irish_initiatives: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'FRT-chliste don Ghaeilge',
     en: 'Key CALL for Irish Initiatives' },
   an_scealai_interactive_learning_platform: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'An Scéalaí - Ardán Foghlama Idirghníomhach',
     en: 'An Scéalaí Interactive Learning Platform' },
   key_CALL_1: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'táimid ag tógáil ardáin FRT-chliste don Ghaeilge atá dearaithe chun cleachtadh foghlama bunaithe ar a shainriachtanais féin a thabhairt do gach foghlaimeoir agus freagairt dá luas foghlama, dá bhuanna agus dá riachtanais.',
     en: 'We are constructing an iCALL platform for Irish which is tailored to provide personalised learning experiences, which adapt responsively to a learner’s pace, strengths, and areas for improvement.' },
   key_CALL_2: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'dírithe ar na briathra neamhrialta é seo lenar féidir le foghlaimeoirí idirghníomhú le teagascóir ríomhbhunaithe agus cleachtadh a dhéanamh ar 11 bhriathar neamhrialta sna haimsirí agus sna foirmeacha éagsúla.',
     en: 'an irregular (verb) bot where learners can interact with an irregular verb tutor, practice the 11 irregular verbs in various tenses and forms' },
   key_CALL_3: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'gineann sé seo spreagadh d’fhonn tús a chur le scéal.',
     en: 'a prompt generator to help inspire the beginning of a story' },
   key_CALL_4: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'cuntóir foghlama agus léitheoireachta atá cruthaithe i gcomhphairt le hOllscoil na Ginéive chun téacsanna traidisiúnta a thiontú isteach ina dtéacsanna ilmhódacha. Tá go leor eolais faoin ngramadach curtha leis. Tá an téacs go hurlabhra lárnach sa leagan Gaeilge de seo, rud a chabhraíonn le foghlaimeoir dul i dtaithí ar an gceangal idir an focal scríofa agus an fuaimniú.',
     en: 'the Learning and Reading Assistant, a collaboration with the University of Geneva to produce a multimodal version of traditional texts. Much grammar information is included. In Irish LARA text-to-speech is central and helps learners can become familiar with letter to sound correspondences' },
   dictogloss_snatu: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Deachtú Snasta',
     en: 'Dictogloss' },
   key_CALL_5: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'cleachtadh traidisiúnta ar théacs a athchruthú – is féidir leis an gcóras téasc go hurlabhra an spreagadh a léamh a mhinicí agus is mian leis an bhfoghlaimeoir.',
     en: 'a traditional text reconstruction exercise – a text-to-speech voice can read the prompt aloud as many times as suits the learner' },
   key_CALL_6: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'céile comhraic atá in ann comhrá bunúsach a choimeád i réimsí éagsúla cainte - an teaghlach, cúrsaí baile, laethanta saoire agus a leithéid eile',
     en: 'a chatbot, conversational partner who can hold a basic conversation on many different areas such as family, home, holidays, etc.' },
   key_CALL_7: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'corpas foghlaimeoirí atá á thiomsiú ó shonraíocht a thagann ó ardán FRT-chliste - An Scéalaí',
     en: 'a learner corpus being gathered from the An Scéalaí iCALL platform' },
   core_technologies_employed_for_CALL: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Na Bunteicneolaíochtaí atá in úsáid in FRTchliste don Ghaeilge – tionscadal ABAIR ',
     en: 'Core Technologies employed for Irish iCALL - the ABAIR initiative' },
   text_to_speech_synthesis: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Téacs go húrlabhra - Caint Shintéiseach',
     en: 'Core Technologies employed for Irish iCALL - the ABAIR initiative' },
   core_technologies_1: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Aistríonn an córas seo an focal scríofa isteach ina chaint nádúrtha intuigthe. Tá an comhcheangal  idir guthanna sintéiseacha ABAIR, a chuireann múnlaí de chaint dhúchasach sna trí mhórchanúint ar fáil, thar a bheith tábhachtach chun an ceangal idir an focal scríofa agus an focal labhartha a dhaingniú d’fhoghlaimeoirí. Trí thum-thimplleacht a chruthú ina bhfuil an léitheoireacht agus an scríbhneoireacht comhtháite go dlúth leis an gcaint beidh teacht ag foghlaimeoirí ar Ghaeilge nádúrtha na Gaeltachta mar mhúnla dá gcaint féin.',
     en: 'transforms written Irish content into natural, comprehensible spoken output. The integration of the ABAIR synthetic voices, which offer native speaker models for the three main dialects of Irish, is invaluable in assisting learners to reinforce the linkages between the spoken Irish language and its written forms. By creating an immersive environment where speech is inextricably linked with reading and writing activities, learners are continually exposed to native spoken language, setting native speaker pronunciation as the benchmark.' },
   speech_recognition_for_irish: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Aithint Cainte don Ghaeilge',
     en: 'Speech Recognition for Irish' },
   core_technologies_2: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'is féidir lenár gcóras an chaint a aistriú go dtí an focal scríofa agus trascríobh a thabhairt don bhfoghlaimeoir ar an bpointe. Nuair atá aithint cainte leabaithe mar dhlúthchuid den ardán tugtar an deis chun tús áite a thabhairt don gcaint. Is athrú mór é seo ar mhodhanna teagaisc a leag béim ar an téacs scríofa agus tugann sé deis modhanna nua teagaisc a chleachtadh, modhanna nach raibh ar fáil roimhe seo. ',
     en: 'our systems can transcribe spoken Irish, providing instant feedback to learners on pronunciation. By embedding ASR within language learning platforms, we foster an environment where the spoken word is placed centre stage. This marks a significant shift from the traditional text-centric language learning methods, heralding a new era of instruction and engagement that leverages technology in ways previously unattainable.' },
   nlp_for_irish: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Próiseáil Teanga Nádúrtha don Ghaeilge',
     en: 'Natural Language Processing (NLP) for Irish' },
   core_technologies_3: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Tá sé de bhuntáiste againn sa Scéalaí gur féidir linn An Gramadóir, bunsaothar Kevin Scannell a dhéanann seiceáil ar ghramadach, a úsáid. Faoi láthair táimid ag forbairt modúl dár gcuid féin chomh maith chun an litriú agus gnéithe den ghramadach a cheartú agus aiseolas cuí a thabhairt don bhfoghlaimeoir de réir a leibhéil agus a riachtanas féin.',
     en: 'Within An Scéalaí we benefit from the foundational work of Kevin Scannell’s who is behind the development of the grammar checker, An Gramadóir. Concurrently we are actively evolving, using learner input to develop our own spelling and grammar checking modules, ensuring feedback is both precise and relevant to our learners’ needs.' },
   collaboration_and_outreach: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Caidreamh agus Comhoibriú',
     en: 'Collaboration & Outreach' },
   collaboration_and_outreach_text: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Ba bhreá linn comhoibriú le hoideachasóirí, teicneolaithe, teangeolaithe agus leo siúd gur spéis leo an Ghaeilge. Is é an cuspóir atá againn ná pobal a chruthú ina mbeidh comhnascadh de shaineolas agus díogras i leith na Gaeilge',
     en: 'We are eager to collaborate with educators, technologists, linguists and Irish language enthusiasts. Our goal is to create a community where knowledge, expertise, and passion for the Irish language intersect.' },
   join_us: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Tar Linn',
     en: 'Join us' },
   join_us_text: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Ba mhaith linn cuireadh a thabhairt duit teacht ar an ród linn más macléinn tú gur spéis leat ár dtaighde, nó múinteoir atá ag iarraidh ár gcóras a úsáid mar chuid de do chleachtas múinteoireachta, nó duine a bhfuil paisean ar leith acu don Ghaeilge.',
     en: 'Whether you’re a student keen on participating in our research projects, an educator wanting to integrate our tools into your teaching, or someone enthusiastic about the future of the Irish language, we invite you to join us in our mission.' },
   contact_us: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Déan Teagmháil Linn',
     en: 'Contact us' },
   address: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Seoladh',
     en: 'Address' },
   updates_and_news: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Updates & News',
     en: 'Updates & News' },
   updates_and_news_1: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'Stay tuned for our latest research findings, tool releases, and events. Be a part of the FIoS community!',
     en: 'Stay tuned for our latest research findings, tool releases, and events. Be a part of the FIoS community!' },
   updates_and_news_2: {
-    ga: 'Cliceáil ar \'+\' chun do chéad seomra ranga a chruthú!',
+    ga: 'We at Trinity College Dublin are proud to be at the forefront of integrating technology and tradition. With FIoS, we are bridging the past and future, ensuring that our rich linguistic heritage remains relevant and accessible to all.',
     en: 'We at Trinity College Dublin are proud to be at the forefront of integrating technology and tradition. With FIoS, we are bridging the past and future, ensuring that our rich linguistic heritage remains relevant and accessible to all.    ' },
 
 } as const;
