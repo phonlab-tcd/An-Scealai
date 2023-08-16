@@ -10,9 +10,11 @@ import { TeamComponent } from './team/team.component';
 import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { FiosComponent } from './fios/fios.component';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent},
+  { path: 'fios', component: FiosComponent},
   { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},

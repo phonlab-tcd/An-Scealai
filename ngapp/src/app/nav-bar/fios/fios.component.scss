@@ -1,0 +1,70 @@
+.container {
+    width: 100%;
+}
+
+.quote {
+    font-size: 12pt;
+    font-style: italic;
+}
+
+.author {
+    font-style: normal;
+}
+
+.fileDownloadBtn {
+    padding: 5px;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.fileDownloadBtn:hover {
+  color: var(--scealai-light-green);
+  cursor: pointer;
+  -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
+}
+
+.textContent {
+  font-size: 12pt;
+}
+
+.paperHeader {
+  padding-bottom: 10px;
+  font-size: 20px;
+  color: #000000DE;
+  font-family: Roboto, "Helvetica Neue";
+  margin: 15px;
+  font-weight: 500;
+}
+
+.paperDescription {
+  padding-top: 20px;
+  font-size: 12pt;
+}
+
+.fiosLogo {
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
+
+@media only screen and (max-width: 700px) {
+    .container {
+        width: 95%;
+    }
+    .aboutContent {
+        font-size: 10pt;
+    }
+    .header {
+        font-size: 15pt;
+    }
+    .quote {
+        font-size: 10pt;
+    }
+}

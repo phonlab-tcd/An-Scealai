@@ -60,6 +60,7 @@
     <!-- About menu -->
     <button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="about" class="dropdown-toggle dropdownMenuButton" > {{ ts.l.about }} </button>
     <mat-menu #about="matMenu">
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/fios" (click)="toggleSmallMenu()" > FioS </a>
       <a mat-menu-item class="dropdownMenuItem" routerLink="/about" (click)="toggleSmallMenu()" > An Scéalaí </a>
       <a mat-menu-item class="dropdownMenuItem" routerLink="/technology" (click)="toggleSmallMenu()" > {{ ts.l.technology }} </a>
       <a mat-menu-item class="dropdownMenuItem" routerLink="/user-guides" (click)="toggleSmallMenu()" > {{ ts.l.user_guide }} </a>

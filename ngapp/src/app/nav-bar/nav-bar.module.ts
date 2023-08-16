@@ -19,6 +19,7 @@ import { TeamComponent } from './team/team.component';
 import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
+import { FiosComponent } from './fios/fios.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.componen
     TeamComponent,
     ReportAnIssueComponent,
     ResourcesComponent,
-    AboutTaidhginComponent
+    AboutTaidhginComponent,
+    FiosComponent
   ],
   exports: [NavBarComponent],
   imports: [
