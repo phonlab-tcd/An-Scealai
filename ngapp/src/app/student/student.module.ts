@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -27,6 +28,7 @@ import { SynthItemModule } from './synth-item/synth-item.component';
 
 import { FilterPipe } from 'app/core/pipes/filter.pipe';
 import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     DictionaryDrawerComponent,
     GrammarErrorDrawerComponent,
     FeedbackDrawerComponent,
-    SynthesisDrawerComponent
+    SynthesisDrawerComponent,
+    HomePageComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +56,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatCardModule,
     MatSlideToggleModule,
     SynthItemModule,
     FeedbackModule,

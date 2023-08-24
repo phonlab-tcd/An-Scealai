@@ -1,0 +1,49 @@
+<div class="homeContainer">
+  <div class="appCards">
+    <mat-card routerLink="/student/dashboard">
+      <mat-card-header>
+        <mat-card-title> Story Dashboard </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <mat-card (click)="goToStats()">
+      <mat-card-header>
+        <mat-card-title> {{ts.l.statistics_dashboard}} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <mat-card (click)="goToMessages()">
+      <mat-card-header>
+        <mat-card-title> {{ts.l.messages}} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title> LARA </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title> Cén Scéal </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <mat-card routerLink="/dictogloss">
+      <mat-card-header>
+        <mat-card-title> Dictogloss </mat-card-title>
+      </mat-card-header>
+      <mat-card-content> Content </mat-card-content>
+    </mat-card>
+    <a href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/" target="_blank" rel="noopener noreferrer">
+        <mat-card>
+            <mat-card-header>
+              <mat-card-title> An Bat Mírialta </mat-card-title>
+            </mat-card-header>
+            <mat-card-content> Content </mat-card-content>
+          </mat-card>
+    </a>
+
+  </div>
+</div>

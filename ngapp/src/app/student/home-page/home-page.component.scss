@@ -1,0 +1,25 @@
+.homeContainer {
+    padding: 50px;
+}
+
+.appCards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+mat-card {
+    width: 500px;
+    text-align: left;
+}
+
+mat-card:hover {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none; /* Remove underline from the link */
+    cursor: pointer;
+  }
