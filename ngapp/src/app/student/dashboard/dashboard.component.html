@@ -150,6 +150,7 @@
         [(ngModel)]="story.htmlText"
         (onContentChanged)="onContentChanged($event)"
         (onEditorCreated)="onEditorCreated($event)"
+        (onSelectionChanged)="getWordCountSelectedText($event)"
       ></quill-editor>
     </div>
 

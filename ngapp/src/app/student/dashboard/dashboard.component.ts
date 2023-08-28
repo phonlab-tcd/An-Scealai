@@ -327,6 +327,19 @@ export class DashboardComponent implements OnInit {
     this.wordCount = this.words.length;
   }
 
+  /**
+   * Set the word count to the number of words the user has selected
+   * @param event quill selection event
+   */
+  getWordCountSelectedText(event) {
+    let range = event.range;
+    if(!range  ||  !(range.length > 0) || !(event.source == "user")) {
+      return;
+    }
+    const selectedText = this.quillEditor.getText(range.index, range.length);
+    this.getWordCount(selectedText);
+  }
+
   /* Call the saveStory function after increasing a debounce id counter */
   debounceSaveStory() {
     this.saveStoryDebounceId++;
