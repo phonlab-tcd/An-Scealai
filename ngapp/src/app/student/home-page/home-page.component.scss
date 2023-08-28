@@ -7,21 +7,24 @@
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: center;
-    gap: 4rem;
+    gap: 3rem;
 }
 
+
 mat-card {
-    //width: 500px;
     text-align: left;
     background-color: rgba(#70a87f, 0.3);
 }
 
-mat-card:hover {
-    cursor: pointer;
-}
-
 .dashButton {
     width: 500px;
+    min-width: 500px;
+}
+
+.main:hover,
+.dashSubButton:hover {
+    background-color: rgba(#568162, 0.3);
+    cursor: pointer;
 }
 
 a {

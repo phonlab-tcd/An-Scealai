@@ -1,6 +1,6 @@
 <div class="homeContainer">
   <div class="appCards">
-    <mat-card routerLink="/student/dashboard" class="dashButton">
+    <mat-card routerLink="/student/dashboard" class="dashButton main">
       <mat-card-header>
         <mat-card-title> Story Dashboard </mat-card-title>
       </mat-card-header>
@@ -9,13 +9,19 @@
         text-to-speech tools
       </mat-card-content>
     </mat-card>
-    <mat-card (click)="goToStats()" class="dashButton">
+
+    <mat-card (click)="goToStats()" class="dashButton main">
       <mat-card-header>
         <mat-card-title> {{ ts.l.statistics_dashboard }} </mat-card-title>
       </mat-card-header>
       <mat-card-content> View statistics on your writing </mat-card-content>
     </mat-card>
-    <mat-card *ngIf="isEnrolled" (click)="goToMessages()" class="dashButton">
+
+    <mat-card
+      *ngIf="isEnrolled"
+      (click)="goToMessages()"
+      class="dashButton main"
+    >
       <mat-card-header>
         <mat-card-title> {{ ts.l.messages }} </mat-card-title>
       </mat-card-header>
@@ -23,61 +29,78 @@
         Send and receive messages to/from your teacher
       </mat-card-content>
     </mat-card>
+
+
+
+    <div>
+      <mat-card routerLink="/dictogloss" class="dashButton main">
+        <mat-card-header>
+          <mat-card-title> Dictogloss </mat-card-title>
+        </mat-card-header>
+        <mat-card-content> Practise your listening skills </mat-card-content>
+      </mat-card>
+      <br /><br />
+
+      <a
+        href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <mat-card class="dashButton main">
+          <mat-card-header>
+            <mat-card-title> An Bat Mírialta </mat-card-title>
+          </mat-card-header>
+          <mat-card-content> Irregular verb bot </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+
     <mat-card class="dashButton">
       <mat-card-header>
         <mat-card-title> LARA </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-card routerLink="/about-lara">
-          <mat-card-content> {{ts.l.what_is_LARA}} </mat-card-content>
+        <div style="padding-bottom: 10px">Practise your reading skills</div>
+        <mat-card routerLink="/about-lara" class="dashSubButton">
+          <mat-card-content> {{ ts.l.what_is_LARA }} </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/resources">
-          <mat-card-content> {{ts.l.irish_stories}} </mat-card-content>
+        <mat-card routerLink="/resources" class="dashSubButton">
+          <mat-card-content> {{ ts.l.irish_stories }} </mat-card-content>
         </mat-card>
       </mat-card-content>
     </mat-card>
+
     <mat-card class="dashButton">
       <mat-card-header>
         <mat-card-title> Cén Scéal </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-card routerLink="/prompts/general">
-          <mat-card-content> {{ts.l.general_prompts}} </mat-card-content>
+        <div style="padding-bottom: 10px">
+          Story starter generators and composition inspiration
+        </div>
+        <mat-card routerLink="/prompts/general" class="dashSubButton">
+          <mat-card-content> {{ ts.l.general_prompts }} </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/prompts/proverb">
-          <mat-card-content> {{ts.l.proverb_prompts}} </mat-card-content>
+        <mat-card routerLink="/prompts/proverb" class="dashSubButton">
+          <mat-card-content> {{ ts.l.proverb_prompts }} </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/prompts/exam">
-          <mat-card-content> {{ts.l.exam_prompts}} </mat-card-content>
+        <mat-card routerLink="/prompts/exam" class="dashSubButton">
+          <mat-card-content> {{ ts.l.exam_prompts }} </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/prompts/lara">
-          <mat-card-content> {{ts.l.lara_prompts}} </mat-card-content>
+        <mat-card routerLink="/prompts/lara" class="dashSubButton">
+          <mat-card-content> {{ ts.l.lara_prompts }} </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/prompts/combination">
-          <mat-card-content> {{ts.l.combination_generator}} </mat-card-content>
+        <mat-card routerLink="/prompts/combination" class="dashSubButton">
+          <mat-card-content>
+            {{ ts.l.combination_generator }}
+          </mat-card-content>
         </mat-card>
-        <mat-card routerLink="/prompts/pos">
-          <mat-card-content> {{ts.l.part_of_speech_generator}} </mat-card-content>
+        <mat-card routerLink="/prompts/pos" class="dashSubButton">
+          <mat-card-content>
+            {{ ts.l.part_of_speech_generator }}
+          </mat-card-content>
         </mat-card>
       </mat-card-content>
     </mat-card>
-    <mat-card routerLink="/dictogloss" class="dashButton">
-      <mat-card-header>
-        <mat-card-title> Dictogloss </mat-card-title>
-      </mat-card-header>
-      <mat-card-content> Practise your listening skills </mat-card-content>
-    </mat-card>
-    <a
-      href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <mat-card class="dashButton">
-        <mat-card-header>
-          <mat-card-title> An Bat Mírialta </mat-card-title>
-        </mat-card-header>
-        <mat-card-content> Irregular verb bot </mat-card-content>
-      </mat-card>
-    </a>
   </div>
 </div>
