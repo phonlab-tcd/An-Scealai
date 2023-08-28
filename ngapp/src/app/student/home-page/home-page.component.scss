@@ -5,21 +5,26 @@
 .appCards {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    gap: 2rem;
+    gap: 4rem;
 }
 
 mat-card {
-    width: 500px;
+    //width: 500px;
     text-align: left;
+    background-color: rgba(#70a87f, 0.3);
 }
 
 mat-card:hover {
     cursor: pointer;
 }
 
+.dashButton {
+    width: 500px;
+}
+
 a {
     text-decoration: none; /* Remove underline from the link */
     cursor: pointer;
-  }
+}
