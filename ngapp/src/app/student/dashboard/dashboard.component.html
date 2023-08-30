@@ -179,6 +179,7 @@
       (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
       (selectedVoice)="this.synthSettings.voice= $event"
       (selectedSpeed)="this.synthSettings.speed= $event"
+      [storyText]="story.text"
     ></app-synthesis-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer
