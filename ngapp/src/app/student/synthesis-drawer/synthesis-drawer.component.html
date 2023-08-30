@@ -20,8 +20,8 @@
       <span class="speedButton" (click)="changeVoiceSpeed(1)">〉</span>
     </div>
   </div>
-  <!-- <div class="synthButtonContainer">
-    <button [disabled]="!audioLoaded" class="synthButton">
+  <div class="synthButtonContainer">
+    <button [disabled]="!audioLoaded" class="synthButton" (click)="test6()">
       <div *ngIf="!audioLoaded" class="spinner-grow"></div>
       {{ ts.l.play }}
     </button>
@@ -29,5 +29,5 @@
       <div *ngIf="!audioLoaded" class="spinner-grow"></div>
       {{ ts.l.download }}
     </button>
-  </div> -->
+  </div>
 </div>
