@@ -29,7 +29,6 @@ import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
-import { VoiceCode } from "app/core/services/synthesis.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
 import "lib/quill-tooltip-shim";
