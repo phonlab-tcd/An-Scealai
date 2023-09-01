@@ -93,8 +93,6 @@ export class SynthesisDrawerComponent implements OnInit {
     } else {
       this.audio.pause();
       this.isPlaying = false;
-      //this.audio.currentTime = 0; // or set audio to null to restart?
-      //this.audio = null;
     }
   }
 
@@ -155,4 +153,34 @@ export class SynthesisDrawerComponent implements OnInit {
     const params = new URLSearchParams({ input, voice, outputType, timing });
     return `https://www.abair.ie/api2/synthesise?${params}`;
   }
+
+  async downloadAudio() {
+    this.audioLoaded = false;
+    const sentences = this.textProcessor.sentences(this.storyText);
+    let proms = sentences.map((uri) =>
+      fetch( this.synthesisUrl(uri, this.selectedVoiceCode)).then((r) => r.blob())
+    );
+    
+    await Promise.all(proms).then((blobs) => {
+      console.log('done getting sentences')
+      console.log(blobs)
+      let blob = new Blob(blobs);
+      const blobUrl = URL.createObjectURL(blob);
+      this.download(blobUrl)
+    });
+  }
+
+  download(blobUrl) {
+      const a = document.createElement("a");
+      a.style.display = "none";
+      console.log(blobUrl)
+      a.href = blobUrl;
+      a.download = "audio.mp3";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+      this.audioLoaded = true;
+  }
+
 }

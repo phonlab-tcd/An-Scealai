@@ -29,7 +29,7 @@
       <div *ngIf="!audioLoaded" class="spinner-grow"></div>
       Restart
     </button>
-    <button [disabled]="!audioLoaded" class="synthButton">
+    <button [disabled]="!audioLoaded" class="synthButton" (click)="downloadAudio()">
       <div *ngIf="!audioLoaded" class="spinner-grow"></div>
       {{ ts.l.download }}
     </button>
