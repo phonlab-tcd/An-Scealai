@@ -25,6 +25,7 @@ export class SynthesisDrawerComponent implements OnInit {
   isHittingAPI: boolean = true;
   isPlaying: boolean = false;
   audioQueue: string[] = [];
+  fetch_cache: Object = {};
 
   constructor(
     public ts: TranslationService,
@@ -88,9 +89,12 @@ export class SynthesisDrawerComponent implements OnInit {
   toggleAudioPlayback() {
     if (this.audio.paused) {
       this.audio.play();
+      this.isPlaying = true;
     } else {
       this.audio.pause();
+      this.isPlaying = false;
       //this.audio.currentTime = 0; // or set audio to null to restart?
+      //this.audio = null;
     }
   }
 
@@ -107,6 +111,7 @@ export class SynthesisDrawerComponent implements OnInit {
   /* Add audio to queue if current track is playing, otherwise play audio */
   queueAudio(audioData) {
     if (this.isPlaying) {
+      this.audioLoaded = false;
       this.audioQueue.push(audioData);
     } else {
       this.playAudio(audioData);
@@ -118,6 +123,7 @@ export class SynthesisDrawerComponent implements OnInit {
     this.audio = new Audio(`data:audio/ogg;base64,${audioData}`);
     this.audioLoaded = true;
     this.audio.play();
+    console.log("playing sentence")
     this.isPlaying = true;
     this.audio.onended = () => {
       this.isPlaying = false;
@@ -133,11 +139,12 @@ export class SynthesisDrawerComponent implements OnInit {
 
   async fetchAudioData(url: string) {
     const response = await this.fetch_cached( this.synthesisUrl(url, this.selectedVoiceCode) );
+    console.log("Got sentence")
     return response.audioContent;
   }
 
   async fetch_cached(url: string) {
-    const p = fetch(url).then((r) => r.json());
+    const p = fetch(url).then(r=>r.json());
     return p;
   }
 
