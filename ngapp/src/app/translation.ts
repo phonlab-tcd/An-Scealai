@@ -2596,7 +2596,31 @@ const translations = {
     en: 'Stay tuned for our latest research findings, tool releases, and events. Be a part of the FIoS community!' },
   updates_and_news_2: {
     ga: 'We at Trinity College Dublin are proud to be at the forefront of integrating technology and tradition. With FIoS, we are bridging the past and future, ensuring that our rich linguistic heritage remains relevant and accessible to all.',
-    en: 'We at Trinity College Dublin are proud to be at the forefront of integrating technology and tradition. With FIoS, we are bridging the past and future, ensuring that our rich linguistic heritage remains relevant and accessible to all.    ' },
+    en: 'We at Trinity College Dublin are proud to be at the forefront of integrating technology and tradition. With FIoS, we are bridging the past and future, ensuring that our rich linguistic heritage remains relevant and accessible to all.' },
+  story_dashboard: {
+    ga: 'Do Scáileán Scéalaíochta',
+    en: 'Story Dashboard' },
+  story_dashboard_description: {
+    ga: 'Cum scéalta le cabhair ón ngramadóir agus ó na huirlisí \'téacs-go-hurlabhra\' agus \'urlabhra-go-téacs\'',
+    en: 'Create compositions using our grammar checkers, speech-to-text, andtext-to-speech tools' },
+  statistics_description: {
+    ga: 'Féach ar na staitisticí a bhaineann le do chuid scríbhneoireachta',
+    en: 'View your writing statistics' },
+  messages_description: {
+    ga: 'Cuir teachtaireachtaí go dtí do mhúinteoir agus faigh freagraí ar ais',
+    en: 'Send and receive messages to/from your teacher' },
+  dictogloss_description: {
+    ga: 'Déan cleachtadh ar do chuid scileanna éisteachta',
+    en: 'Practise your listening skills' },
+  lara_description: {
+    ga: 'Déan cleachtadh ar do chuid scileanna léitheoireachta',
+    en: 'Practise your reading skills' },
+  cen_sceal_description: {
+    ga: 'Spreagthaí nó túsphointí chun do chuid scéalta a thosú',
+    en: 'Story starter generators and composition inspiration' },
+  bat_mirialta_description: {
+    ga: 'Déan cleachtadh ar na briathra neamhrialta',
+    en: 'Irregular verb bot' },
 
 } as const;
 

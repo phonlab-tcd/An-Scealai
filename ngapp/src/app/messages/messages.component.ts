@@ -326,7 +326,7 @@ export class MessagesComponent implements OnInit {
       if (this.isTeacher) {
         this.router.navigateByUrl('teacher/dashboard');
       } else {
-        this.router.navigateByUrl("student/dashboard");
+        this.router.navigateByUrl("student");
       }
     }
   }
