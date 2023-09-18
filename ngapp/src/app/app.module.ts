@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
@@ -104,6 +105,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         MatTabsModule,
         MatInputModule,
         MatTableModule,
+        MatProgressSpinnerModule,
         PdfViewerModule,
         NgramDistributionModule,
         WordCountsModule,
