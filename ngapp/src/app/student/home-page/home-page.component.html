@@ -2,11 +2,10 @@
   <div class="appCards">
     <mat-card routerLink="/student/dashboard" class="dashButton main">
       <mat-card-header>
-        <mat-card-title> Story Dashboard </mat-card-title>
+        <mat-card-title> {{ ts.l.story_dashboard }} </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        Create compositions using our grammar checkers, speech-to-text, and
-        text-to-speech tools
+        {{ ts.l.story_dashboard_description }}
       </mat-card-content>
     </mat-card>
 
@@ -14,7 +13,7 @@
       <mat-card-header>
         <mat-card-title> {{ ts.l.statistics_dashboard }} </mat-card-title>
       </mat-card-header>
-      <mat-card-content> View statistics on your writing </mat-card-content>
+      <mat-card-content> {{ ts.l.statistics_description }} </mat-card-content>
     </mat-card>
 
     <mat-card
@@ -26,18 +25,16 @@
         <mat-card-title> {{ ts.l.messages }} </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        Send and receive messages to/from your teacher
+        {{ ts.l.messages_description }}
       </mat-card-content>
     </mat-card>
-
-
 
     <div>
       <mat-card routerLink="/dictogloss" class="dashButton main">
         <mat-card-header>
-          <mat-card-title> Dictogloss </mat-card-title>
+          <mat-card-title> {{ ts.l.dictogloss_snatu }} </mat-card-title>
         </mat-card-header>
-        <mat-card-content> Practise your listening skills </mat-card-content>
+        <mat-card-content> {{ ts.l.dictogloss_description }} </mat-card-content>
       </mat-card>
       <br /><br />
 
@@ -50,7 +47,9 @@
           <mat-card-header>
             <mat-card-title> An Bat Mírialta </mat-card-title>
           </mat-card-header>
-          <mat-card-content> Irregular verb bot </mat-card-content>
+          <mat-card-content>
+            {{ ts.l.bat_mirialta_description }}
+          </mat-card-content>
         </mat-card>
       </a>
     </div>
@@ -60,7 +59,7 @@
         <mat-card-title> LARA </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div style="padding-bottom: 10px">Practise your reading skills</div>
+        <div style="padding-bottom: 10px">{{ ts.l.lara_description }}</div>
         <mat-card routerLink="/about-lara" class="dashSubButton">
           <mat-card-content> {{ ts.l.what_is_LARA }} </mat-card-content>
         </mat-card>
@@ -76,7 +75,7 @@
       </mat-card-header>
       <mat-card-content>
         <div style="padding-bottom: 10px">
-          Story starter generators and composition inspiration
+          {{ ts.l.cen_sceal_description }}
         </div>
         <mat-card routerLink="/prompts/general" class="dashSubButton">
           <mat-card-content> {{ ts.l.general_prompts }} </mat-card-content>
