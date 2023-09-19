@@ -14,9 +14,9 @@ import { Router } from "@angular/router";
   },
 })
 export class WaitingForEmailVerificationComponent {
-  errorKeys: string[];
+  errorKeys: string[] = [];
   // user credentials passed after successful registration
-  @Input() credentials: RegistrationTokenPayload;
+  @Input() credentials?: RegistrationTokenPayload;
 
   constructor(
     public ts: TranslationService,

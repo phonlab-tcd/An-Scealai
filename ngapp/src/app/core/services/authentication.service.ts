@@ -54,11 +54,11 @@ export interface RegistrationTokenPayload {
 })
 export class AuthenticationService {
   baseUrl: string = config.baseurl + "user/";
-  private token: string;
+  private token: string = '';
   public jwtTokenName = "scealai-token" as const;
 
   // set in login component -> still needed?
-  public pendingUserPayload: LoginTokenPayload = null;
+  public pendingUserPayload: LoginTokenPayload | null = null;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -68,7 +68,7 @@ export class AuthenticationService {
    * @returns Observable containing success/error info
    */
   public register( user: TokenPayload | RegistrationTokenPayload ): Observable<any> {
-    return this.http.post(this.baseUrl + "register", user).pipe(
+    return this.http.post<any>(this.baseUrl + "register", user).pipe(
       map((data: TokenResponse) => {
         if (data.token) {
           this.saveToken(data.token);
@@ -91,9 +91,15 @@ export class AuthenticationService {
    * Gets the JWT token from local storage
    * @returns Token saved in local storage
    */
-  public getToken(): string {
-    this.token = localStorage.getItem(this.jwtTokenName);
-    return this.token;
+  public getToken(): string | null {
+    const storedToken = localStorage.getItem(this.jwtTokenName);
+    if (storedToken != null) {
+      this.token = storedToken;
+      return this.token;
+    } 
+    else {
+      return null;
+    }
   }
 
   /**
@@ -101,7 +107,7 @@ export class AuthenticationService {
    * the payload information for user details
    * @returns object containing user details
    */
-  public getUserDetails(): UserDetails {
+  public getUserDetails(): UserDetails | null {
     const token = this.getToken();
     let payload: any;
     if (token) {
@@ -156,7 +162,7 @@ export class AuthenticationService {
    * @returns token saved in local storage
    */
   public login(user: TokenPayload | LoginTokenPayload): Observable<any> {
-    return this.http.post(this.baseUrl + "login", user).pipe(
+    return this.http.post<any>(this.baseUrl + "login", user).pipe(
       map((data: TokenResponse) => {
         if (data.token) this.saveToken(data.token);
         return data;

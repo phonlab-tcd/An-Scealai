@@ -23,30 +23,28 @@ export class LoginComponent implements OnInit {
 
   // copy of credentials after the user has input the data in the HTML
   frozenCredentials: VerifyEmailRequest = {
-    username: null,
-    password: null,
-    role: null,
+    username: '',
+    password: '',
+    role: '',
     baseurl: config.baseurl,
-    email: null,
+    email: '',
     language: "ga", // gaeilge by default
   };
 
   // generic login errors
-  loginError: boolean;
   errorMsgKeys: string[] = [];
 
   // variables for forgot password
   forgotPassword = false; // updated in HTML
-  usernameForgotPassword: string;
-  emailForgotPassword: string;
-  errorMessageKey = "";
-  resetPasswordOkKeys = null;
-  resetPasswordErrKeys = null;
+  usernameForgotPassword: string = '';
+  emailForgotPassword: string = '';
+  resetPasswordOkKeys: any[] = [];
+  resetPasswordErrKeys: any[] = [];
 
   // variables for user email verification
-  emailToVerify = null;
+  emailToVerify: string = '';
   userHasNotBeenVerified = false;
-  userToVerify: string = null;
+  userToVerify: string = '';
   verificationEmailHasBeenSent = false;
   waitingForEmailVerification = false;
   waitingErrorTextKeys = [];
@@ -61,7 +59,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loginError = false;
   }
 
   /**
@@ -80,7 +77,7 @@ export class LoginComponent implements OnInit {
     if (this.userToVerify !== this.credentials.username) {
       this.errorMsgKeys = ["username_changed_starting_from_scratch"];
       this.userHasNotBeenVerified = false;
-      this.userToVerify = null;
+      this.userToVerify = '';
       return;
     }
 
@@ -99,7 +96,6 @@ export class LoginComponent implements OnInit {
         this.verificationEmailHasBeenSent = true;
         // Shallow copy frozen credentials to auth service.
         this.auth.pendingUserPayload = {
-          baseurl: config.baseurl,
           ...this.frozenCredentials,
         };
         this.waitingForEmailVerification = true;
@@ -138,7 +134,8 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.credentials).subscribe(
       (res) => {
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
-        this.routeUser(this.auth.getUserDetails()._id);
+        const user = this.auth.getUserDetails();
+        if (user) this.routeUser(user._id)
       },
       (err) => {
         console.log(err);
@@ -148,8 +145,6 @@ export class LoginComponent implements OnInit {
           this.emailToVerify = err.error.email ?? "";
           this.userHasNotBeenVerified = true;
           this.userToVerify = this.credentials.username;
-        } else if (err.status === 400) {
-          this.loginError = true;
         }
       },
       () => {}
@@ -161,18 +156,24 @@ export class LoginComponent implements OnInit {
    * route to either the profile page or home page accordingly
    * @param id user id
    */
-    routeUser(id) {
+    routeUser(id: string) {
       this.profileService.getForUser(id).subscribe({
         next: () => {
-          if(this.auth.getUserDetails().role === 'STUDENT') {
-            this.notificationService.getStudentNotifications();
-            this.router.navigateByUrl('/student');
+          const user = this.auth.getUserDetails();
+          if (user) {
+            if(user.role === 'STUDENT') {
+              this.notificationService.getStudentNotifications();
+              this.router.navigateByUrl('/student');
+            }
+            if(user.role === 'TEACHER') {
+              this.router.navigateByUrl('/teacher');
+            }
+            if(user.role === 'ADMIN') {
+              this.router.navigateByUrl('/admin');
+            }
           }
-          if(this.auth.getUserDetails().role === 'TEACHER') {
-            this.router.navigateByUrl('/teacher');
-          }
-          if(this.auth.getUserDetails().role === 'ADMIN') {
-            this.router.navigateByUrl('/admin');
+          else {
+            console.log("Not able to get user details, user object is null: ", id);
           }
         },
         error: () => this.router.navigateByUrl("/register-profile"),
