@@ -1,6 +1,6 @@
 <div class="dialogContainer">
   <div *ngIf="data?.title" class="header">
-    <h2 mat-dialog-title>{{ data?.title }}</h2>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
   </div>
 
   <div *ngIf="data?.message" mat-dialog-content [innerHTML]="data.message" ></div>
@@ -9,7 +9,7 @@
     <br />
     <!-- change username -->
     <div *ngIf="data?.type == 'updatUsername'">
-      <div class="modalText"> {{ ts.l.current_username }}: <i>{{ auth.getUserDetails().username }}</i> </div>
+      <div class="modalText"> {{ ts.l.current_username }}: <i>{{ auth.getUserDetails()?.username }}</i> </div>
       <br />
       <div class="modalText">
         {{ ts.l.new_username }}:
@@ -30,8 +30,8 @@
     </div>
     <!-- teacher classroom code -->
     <div *ngIf="data?.type == 'classCode'" style=" display: flex; align-items: center; justify-content: center; gap: 1rem; " >
-      <pre class="codeView">{{ data?.data }}</pre>
-      <div *ngIf="!copyIconClicked" class="copyBtn" (click)="copyIconClicked = true" [cdkCopyToClipboard]="data?.data" > <i class="fas fa-solid fa-copy"></i> Copy </div>
+      <pre class="codeView">{{ data.data }}</pre>
+      <div *ngIf="!copyIconClicked" class="copyBtn" (click)="copyIconClicked = true" [cdkCopyToClipboard]="data.data" > <i class="fas fa-solid fa-copy"></i> Copy </div>
       <div *ngIf="copyIconClicked" class="copyBtn"> <i class="fas fa-solid fa-check"> </i> Copied </div>
     </div>
     <!-- single text input -->
@@ -50,8 +50,8 @@
     <pdf-viewer *ngIf="data?.type == 'PDF'" [src]="data.data" [render-text]="true" [original-size]="false" style="width: 100%; height: 600px" ></pdf-viewer>
 
     <div mat-dialog-actions [align]="'center'">
-      <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.cancelText" > {{ data?.cancelText }} </button>
-      <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInputs" *ngIf="data.confirmText" > {{ data?.confirmText }} </button>
+      <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.cancelText" > {{ data.cancelText }} </button>
+      <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="textInputs" *ngIf="data.confirmText" > {{ data.confirmText }} </button>
     </div>
   </div>
 </div>

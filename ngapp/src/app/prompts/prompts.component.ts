@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
+import { Prompt } from "app/core/models/prompt";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -16,7 +17,7 @@ import config from "abairconfig";
   encapsulation: ViewEncapsulation.None,
 })
 export class PromptsComponent implements OnInit {
-  data: any;
+  data: Prompt[] = [];
   promptType: string;
   dialogRef: MatDialogRef<unknown>;
 
@@ -28,21 +29,21 @@ export class PromptsComponent implements OnInit {
 
   // variables for generating prompt
   prompt: string = '';
-  currentPromptBank: string[] = [];
+  currentPromptBank: Prompt[] = [];
 
   // variables for generating combination prompts
-  chosenCharacter: string;
-  chosenSetting: string;
-  chosenTheme: string;
+  chosenCharacter: string = "";
+  chosenSetting: string = "";
+  chosenTheme: string = "";
   currentCombinationPromptBank: {
     character: string[];
     setting: string[];
     theme: string[];
-  };
+  } = {character: [], setting: [], theme: []};
 
   constructor(
     private storyService: StoryService,
-    private auth: AuthenticationService,
+    public auth: AuthenticationService,
     private fb: FormBuilder,
     public ts: TranslationService,
     private route: ActivatedRoute,
@@ -51,7 +52,12 @@ export class PromptsComponent implements OnInit {
     private http: HttpClient
   ) {
     this.promptType = this.route.snapshot.params["type"];
-    this.createForms();
+    this.levelForm = this.fb.group({
+      level: ["jc"],
+    });
+    this.dialectForm = this.fb.group({
+      dialect: ["munster"],
+    });
   }
 
   async ngOnInit() {
@@ -65,25 +71,13 @@ export class PromptsComponent implements OnInit {
    */
   getPromptData() {
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
-    this.http.get<any>( config.baseurl + "prompt/getPromptDataByTopic/" + this.promptType, { headers } ).subscribe({
+    this.http.get<Prompt[]>( config.baseurl + "prompt/getPromptDataByTopic/" + this.promptType, { headers } ).subscribe({
       next: (data) => {
         this.data = data;
       },
       error: (err) => {
         console.log(err);
       },
-    });
-  }
-
-  /**
-   * Initialise forms for level selection and dialect selection
-   */
-  createForms() {
-    this.levelForm = this.fb.group({
-      level: ["jc"],
-    });
-    this.dialectForm = this.fb.group({
-      dialect: ["munster"],
     });
   }
 
@@ -96,11 +90,11 @@ export class PromptsComponent implements OnInit {
 
     if (this.promptType == "combination") {
       // create arrays for characters, settings, and themes for the selected level
-      let filteredData = this.data.filter( (entry) => entry.prompt.level == this.levelForm.controls["level"].value );
-      let characters = [];
-      let settings = [];
-      let themes = [];
-      filteredData.forEach((entry) => {
+      let filteredData = this.data.filter( (entry: any) => entry.prompt.level == this.levelForm.controls["level"].value );
+      const characters: string[] = [];
+      const settings: string[] = [];
+      const themes: string[] = [];
+      filteredData.forEach((entry: any) => {
         characters.push(entry.prompt.combinationData.character);
         settings.push(entry.prompt.combinationData.setting);
         themes.push(entry.prompt.combinationData.theme);
@@ -192,11 +186,16 @@ export class PromptsComponent implements OnInit {
       // res[0] is the title, res[1] is the dialect
       if (res) {
         if (res[0]) {
+          const user = this.auth.getUserDetails();
+          if (!user) {
+            console.log("Can't create new story from prompt, current user is null");
+            return;
+          }
           let dialect = "connemara";
           if (res[1] == this.ts.l.munster) dialect = "kerry";
           if (res[1] == this.ts.l.ulster) dialect = "donegal";
           this.storyService
-          .saveStory( this.auth.getUserDetails()._id, res[0], new Date(), dialect, this.prompt, this.auth.getUserDetails().username, true )
+          .saveStory( user._id, res[0], new Date(), dialect, this.prompt, user.username, true )
           .subscribe({
             next: () => {
               this.router.navigateByUrl("/student");

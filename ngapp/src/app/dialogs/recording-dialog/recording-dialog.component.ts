@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslationService } from 'app/core/services/translation.service';
 import { RecordAudioService } from '../../core/services/record-audio.service';
 import { SafeUrl } from '@angular/platform-browser';
@@ -27,7 +27,7 @@ export class RecordingDialogComponent{
   isRecording: boolean = false;
   showAudio: boolean = false;
   errorText: string = "";  
-  audioSource : SafeUrl;
+  audioSource : SafeUrl | null = null;
   
   /*
   * Start and stop recording

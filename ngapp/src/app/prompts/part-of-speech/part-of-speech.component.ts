@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
+import { Prompt, PartOfSpeechData } from "app/core/models/prompt";
 import { SynthItem } from "app/core/models/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
@@ -26,23 +27,23 @@ type TagForHighlight = {
   encapsulation: ViewEncapsulation.None,
 })
 export class PartOfSpeechComponent implements OnInit {
-  wordDatabase: any;
-  givenWordEntry: Object = {};
-  wordBank = [];
+  wordDatabase: Record<string, PartOfSpeechData[]> = {};
+  givenWordEntry: PartOfSpeechData = {} as PartOfSpeechData;
+  wordBank: string[] = [];
   constructedPrompt: string = "";
   newStoryForm: FormGroup;
-  grammarEngine: GrammarEngine;
-  bankHighlights: Observable<any>;
+  //grammarEngine: GrammarEngine;
+  //: Observable<any>;
   highlightIndices: TagForHighlight[] = [];
-  synthItem: SynthItem;
+  synthItem: SynthItem | null = null;
   wordTypes: string[] = [];
   showSynthesis: boolean = false;
   dialogRef: MatDialogRef<unknown>;
   buttonsLoading: boolean = false;
-  errorButtons: string[];
-  selectedVoice: Voice;
+  errorButtons: string[] = [];
+  selectedVoice: Voice | undefined;
   showTranslation: boolean = false;
-  posInformation: Object = {
+  posInformation: {[key: string]: string;} = {
     noun: "/assets/pdf/noun_information_ga.pdf",
     verb: "/assets/pdf/verb_information_ga.pdf",
     adjective: "/assets/pdf/adjective_information_ga.pdf",
@@ -63,8 +64,10 @@ export class PartOfSpeechComponent implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog
   ) {
-    this.wordDatabase = {};
-    this.createStoryForm();
+    this.newStoryForm = this.fb.group({
+      title: ["", Validators.required],
+      dialect: ["connemara"],
+    });
   }
 
   ngOnInit(): void {
@@ -79,15 +82,13 @@ export class PartOfSpeechComponent implements OnInit {
    */
   getPosData() {
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
-    this.http.get<any>(config.baseurl + "prompt/getData/partOfSpeech", { headers }).subscribe({
+    this.http.get<Prompt[]>(config.baseurl + "prompt/getData/partOfSpeech", { headers }).subscribe({
         next: (data) => {
-          data.forEach((entry) => {
+          data.forEach((entry: Prompt) => {
             if (!this.wordDatabase[entry.partOfSpeechData.partOfSpeech]) {
               this.wordDatabase[entry.partOfSpeechData.partOfSpeech] = []; // initialise key as empty array
             }
-            this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push(
-              entry.partOfSpeechData
-            ); // push data to key
+            this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push( entry.partOfSpeechData ); // push data to key
           });
           this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
         },
@@ -102,7 +103,7 @@ export class PartOfSpeechComponent implements OnInit {
    * Reset synthesis voice and audio url
    * @param voice Selected synthetic voice
    */
-  refreshSynthesis(voice: Voice = undefined) {
+  refreshSynthesis(voice: Voice | undefined = undefined) {
     if (voice) this.selectedVoice = voice;
     if (this.synthItem) {
       this.synthItem.audioUrl = undefined;
@@ -129,27 +130,22 @@ export class PartOfSpeechComponent implements OnInit {
   }
 
   /**
-   * Create a story form for saving a new story
-   */
-  createStoryForm() {
-    this.newStoryForm = this.fb.group({
-      title: ["", Validators.required],
-      dialect: ["connemara"],
-    });
-  }
-
-  /**
    * Save new story to DB
    */
   createNewStory() {
+    const user = this.auth.getUserDetails();
+    if (!user) {
+      console.log("Can't create new story from prompt, current user is null");
+      return;
+    }
     this.storyService
       .saveStory(
-        this.auth.getUserDetails()._id,
+        user._id,
         this.newStoryForm.controls["title"].value,
         new Date(),
         this.newStoryForm.controls["dialect"].value,
         this.constructedPrompt,
-        this.auth.getUserDetails().username,
+        user.username,
         true
       )
       .subscribe({
@@ -167,7 +163,7 @@ export class PartOfSpeechComponent implements OnInit {
    * @param type part of speech
    */
   selectRandomWord(type: keyof typeof this.wordDatabase) {
-    let wordList = this.wordDatabase[type];
+    const wordList = this.wordDatabase[type];
     this.givenWordEntry = wordList[Math.floor(Math.random() * wordList.length)];
   }
 
@@ -176,7 +172,7 @@ export class PartOfSpeechComponent implements OnInit {
    */
   addToWordBank() {
     if (this.givenWordEntry) {
-      this.wordBank.push(this.givenWordEntry["word"]);
+      this.wordBank.push(this.givenWordEntry.word);
     }
   }
 
@@ -194,39 +190,39 @@ export class PartOfSpeechComponent implements OnInit {
   /**
    * Add grammar highlighting to constructed prompt (Currently disabled)
    */
-  async getBankHighlights() {
-    this.grammarEngine.check$(this.constructedPrompt).subscribe({
-      next: (tag: ErrorTag) => {
-        let entry: TagForHighlight = {
-          fromx: Number(tag.fromX),
-          tox: Number(tag.toX),
-        };
-        this.highlightIndices.push(entry);
-      },
-      error: function () {},
-      complete: () => {
-        if (this.highlightIndices.length !== 0) {
-          let newStart: number = 0;
-          let lastBitToAdd: number = 0;
-          for (let i = 0; i < this.highlightIndices.length; i++) {
-            let nonHighlightStart: number = newStart;
-            let highlightStart: number = this.highlightIndices[i].fromx;
-            let highlightEnd: number = this.highlightIndices[i].tox + 1;
-            lastBitToAdd = highlightEnd;
+  // async getBankHighlights() {
+  //   this.grammarEngine.check$(this.constructedPrompt).subscribe({
+  //     next: (tag: ErrorTag) => {
+  //       let entry: TagForHighlight = {
+  //         fromx: Number(tag.fromX),
+  //         tox: Number(tag.toX),
+  //       };
+  //       this.highlightIndices.push(entry);
+  //     },
+  //     error: function () {},
+  //     complete: () => {
+  //       if (this.highlightIndices.length !== 0) {
+  //         let newStart: number = 0;
+  //         let lastBitToAdd: number = 0;
+  //         for (let i = 0; i < this.highlightIndices.length; i++) {
+  //           let nonHighlightStart: number = newStart;
+  //           let highlightStart: number = this.highlightIndices[i].fromx;
+  //           let highlightEnd: number = this.highlightIndices[i].tox + 1;
+  //           lastBitToAdd = highlightEnd;
 
-            // this.innerHTMLWordBank +=
-            //   this.arrayString.slice(nonHighlightStart, highlightStart)
-            //   + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
+  //           // this.innerHTMLWordBank +=
+  //           //   this.arrayString.slice(nonHighlightStart, highlightStart)
+  //           //   + '<b class="highlight">' + this.arrayString.slice(highlightStart, highlightEnd) + '</b>';
 
-            newStart = this.highlightIndices[i].tox + 1;
-          }
-          // this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
-        } else {
-          // this.innerHTMLWordBank = this.arrayString;
-        }
-      },
-    });
-  }
+  //           newStart = this.highlightIndices[i].tox + 1;
+  //         }
+  //         // this.innerHTMLWordBank += this.arrayString.slice(lastBitToAdd, this.arrayString.length);
+  //       } else {
+  //         // this.innerHTMLWordBank = this.arrayString;
+  //       }
+  //     },
+  //   });
+  // }
 
   /**
    * Open dialog for part of speech descriptions

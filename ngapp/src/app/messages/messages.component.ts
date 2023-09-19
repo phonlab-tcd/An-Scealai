@@ -47,7 +47,7 @@ export class MessagesComponent implements OnInit {
   messageSent: boolean = false;
 
   // record audio variables
-  audioSource: SafeUrl;
+  audioSource: SafeUrl | null = null;
   showAudio: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
@@ -139,16 +139,17 @@ export class MessagesComponent implements OnInit {
    */
   showMessageBody(message: Message) {
     if (message) {
-      let id = message._id;
-      let messageElement = document.getElementById(id);
+      const id = message._id;
+      const messageElement = document.getElementById(id);
 
       // remove css highlighting for currently highlighted message
       if (this.lastClickedMessageId) {
-        document.getElementById(this.lastClickedMessageId).classList.remove("clickedresultCard");
+        const element = document.getElementById(this.lastClickedMessageId);
+        if (element) element.classList.remove("clickedresultCard");
       }
       this.lastClickedMessageId = id;
       // add css highlighting to the newly clicked message
-      messageElement.classList.add("clickedresultCard");
+      if (messageElement) messageElement.classList.add("clickedresultCard");
 
       // if the message is for a Dictogloss, show pre-written content,
       // otherwise display regular message body
@@ -203,14 +204,20 @@ export class MessagesComponent implements OnInit {
    */
   async sendMessage() {
     if (this.newMessageText && this.newMessageSubject) {
+      const user = this.auth.getUserDetails();
+      if (!user) {
+        console.log("Can't send message, can't get logged in user details");
+        return;
+      }
+
       // create a new message
       let newMessage = {
         subject: this.newMessageSubject,
         text: this.newMessageText,
         date: new Date(),
         seenByRecipient: false,
-        senderUsername: this.auth.getUserDetails().username,
-        senderId: this.auth.getUserDetails()._id,
+        senderUsername: user.username,
+        senderId: user._id,
       };
 
       let recipients = [];
