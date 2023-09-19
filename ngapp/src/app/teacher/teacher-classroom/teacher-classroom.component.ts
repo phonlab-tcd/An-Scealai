@@ -31,11 +31,10 @@ export class TeacherClassroomComponent implements OnInit {
   classroom : Classroom;
   students : User[] = [];
   registrationError : boolean = false;
-  newTitle: string;
   unreadMessages: number = 0;
   messagesForNotifications: Message[] = [];
   numOfStories: Map<string, number> = new Map();
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
 
   async ngOnInit() {
     this.classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));

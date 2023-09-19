@@ -18,7 +18,7 @@ import { Story } from "app/core/models/story";
 })
 export class StoryDrawerComponent implements OnInit {
   stories: Story[] = [];
-  dialogRef: MatDialogRef<unknown> | unknown;
+  dialogRef: MatDialogRef<unknown>;
   lastClickedStoryId: string = "";
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
@@ -83,8 +83,7 @@ export class StoryDrawerComponent implements OnInit {
     if (storyElement) {
       // remove css highlighting for currently highlighted story
       if (this.lastClickedStoryId) {
-        const element = document.getElementById(this.lastClickedStoryId);
-        if (element) element.classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedStoryId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedStoryId = id;
       // add css highlighting to the newly clicked story

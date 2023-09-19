@@ -5,7 +5,7 @@
       <!-- Nav bar -->
       <div class="classHeader">
         <div class="backArrow" routerLink="/teacher/dashboard"><i class="fas fa-arrow-left"></i></div>
-        {{classroom?.title}}
+        {{classroom.title}}
         <div class="headerIconContainer">
           <div class="headerIconBtn" (click)="openCodeDialog()">{{ts.l.share_code}}<i class="fas fa-share-alt headerIcon"></i></div>
           <div *ngIf="students.length > 0" class="headerIconBtn" (click)="goToMessages()"> {{ts.l.messages}} <i class="fa fa-envelope"></i><span class="notificationBtn" *ngIf="unreadMessages > 0">{{unreadMessages}}</span></div>

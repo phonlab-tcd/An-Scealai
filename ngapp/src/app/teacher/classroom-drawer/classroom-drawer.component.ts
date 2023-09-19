@@ -15,12 +15,12 @@ import { Classroom } from "app/core/models/classroom";
 })
 export class ClassroomDrawerComponent implements OnInit {
   classrooms: Classroom[] = [];
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
   lastClickedClassroomId: string = "";
   searchText: string = ""; // used to filter classrooms in search bar
   @Output() classroomEmitter = new EventEmitter<Classroom>();
-  @Output() titleUpdated = new EventEmitter<String>();
-  @Output() classroomsLoaded = new EventEmitter<Boolean>();
+  @Output() titleUpdated = new EventEmitter<string>();
+  @Output() classroomsLoaded = new EventEmitter<boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -78,7 +78,7 @@ export class ClassroomDrawerComponent implements OnInit {
     if (classroomElement) {
       // remove css highlighting for currently highlighted classroom
       if (this.lastClickedClassroomId) {
-        document.getElementById(this.lastClickedClassroomId).classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedClassroomId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedClassroomId = id;
       // add css highlighting to the newly clicked classroom
@@ -180,7 +180,7 @@ export class ClassroomDrawerComponent implements OnInit {
       this.classrooms.splice(classroomIndex, 1);
       this.classrooms.length
         ? this.setClassroom(this.classrooms[0])
-        : this.classroomEmitter.emit(null);
+        : this.classroomEmitter.emit();
     });
   }
 
@@ -189,8 +189,8 @@ export class ClassroomDrawerComponent implements OnInit {
    * rename their classroom. Autofocus this editable div after making editable
    * @param divId id of the div for the classroom title
    */
-  makeTitleDivEditable(divId: string) {
-    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+  makeTitleDivEditable(divId: number) {
+    const contentEditableDiv = document.getElementById(String(divId)) as HTMLDivElement;
     contentEditableDiv.setAttribute("contenteditable", "true");
     // auto-focus the div for editing, need to use setTimeout so event is applied
     window.setTimeout(() => contentEditableDiv.focus(), 0);
@@ -201,14 +201,15 @@ export class ClassroomDrawerComponent implements OnInit {
    * Save the updated title for the classroom if changes were made
    * @param divId id of the div for the classroom title
    */
-  saveClassroomTitle(divId, selectedClassroom) {
-    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+  saveClassroomTitle(divId: number, selectedClassroom: Classroom) {
+    const contentEditableDiv = document.getElementById(String(divId)) as HTMLDivElement;
     contentEditableDiv.setAttribute("contenteditable", "false");
+    if (!contentEditableDiv || !selectedClassroom) return;
     // only update the title if changes have been made
     if (
-      selectedClassroom.title.trim() != contentEditableDiv.textContent.trim()
+      selectedClassroom.title.trim() != contentEditableDiv!.textContent!.trim()
     ) {
-      selectedClassroom.title = contentEditableDiv.textContent;
+      selectedClassroom.title = contentEditableDiv.textContent!;
 
       this.classroomService.editTitle(selectedClassroom._id, selectedClassroom.title.trim()).subscribe({
         next: () => { this.ngOnInit(); },
