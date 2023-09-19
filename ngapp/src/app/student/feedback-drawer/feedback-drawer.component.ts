@@ -16,7 +16,7 @@ export class FeedbackDrawerComponent implements OnInit {
   @Output() closeFeedbackEmitter = new EventEmitter();
   @Input() story: Story;
   @Input() hasFeedback: boolean;
-  audioSource: SafeUrl;
+  audioSource: SafeUrl | null = null;
 
   constructor(
     protected ts: TranslationService,

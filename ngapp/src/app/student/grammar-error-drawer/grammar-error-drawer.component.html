@@ -16,7 +16,7 @@
       <span *ngIf="ts.l.iso_code == 'en'" [innerHtml]='" " + ERROR_INFO[tagType].nameEN'></span>
       <span *ngIf="ts.l.iso_code == 'ga'" [innerHtml]='" " + ERROR_INFO[tagType].nameGA'></span>
           <!-- Error count -->
-      ({{ grammarEngine.errorStoreForLatestCheck.getType(tagType).length }})
+      ({{ grammarEngine?.errorStoreForLatestCheck?.getType(tagType)?.length }})
     </div>
   </ng-container>
 </div>

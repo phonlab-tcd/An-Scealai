@@ -25,7 +25,7 @@ import { HighlightTag } from "lib/quill-highlight/quill-highlight";
 import { leathanCaolChecker } from "lib/grammar-engine/checkers/leathan-caol-checker";
 import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
 import { relativeClauseChecker } from "lib/grammar-engine/checkers/relative-clause-checker";
-import { CHECKBOXES, ERROR_TYPES, ErrorTag, } from "lib/grammar-engine/types";
+import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-engine/types";
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   saveStoryDebounceId = 0;
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
   storiesLoaded: boolean = false;
   isFirstStory: boolean = false;
   downloadStoryFormat = ".pdf";
@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
   grammarEngine: GrammarEngine;
   grammarLoaded: boolean = false;
   showErrorTags = false;
-  grammarCheckerOptions: Object = {
+  grammarCheckerOptions: {[key: string]: GrammarChecker} = {
     anGramadoir: anGramadoir,
     relativeClause: relativeClauseChecker,
     //'genitive': genitiveChecker,
@@ -75,7 +75,6 @@ export class DashboardComponent implements OnInit {
   // OPTIONS (show menu bar, drawer, etc)
   showOptions = true;
   dontToggle = false;
-  feedbackVisibile: false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
   rightDrawerOpened: boolean = false;
   selectedDrawer: "grammar" | "dictionary" | "feedback" | "synthesis" = "grammar";
@@ -114,12 +113,12 @@ export class DashboardComponent implements OnInit {
   };
 
   // SPEECH TO TEXT
-  audioSourceASR: SafeUrl;
+  audioSourceASR: SafeUrl | null = null;
   isRecording: boolean = false;
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
-  synthButtons: Buttons;
+  synthButtons: Buttons | undefined;
   synthSettings = new synth.Settings();
   
   constructor(
@@ -151,15 +150,15 @@ export class DashboardComponent implements OnInit {
     let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
-    let checkers = [];
+    let checkers: GrammarChecker[] = [];
     if (
       classroom &&
       classroom.grammarCheckers &&
       classroom.grammarCheckers.length > 0
     ) {
-      classroom.grammarCheckers.forEach((checker) => {
-        if (this.grammarCheckerOptions[checker])
-          checkers.push(this.grammarCheckerOptions[checker]);
+      classroom.grammarCheckers.forEach((checkerName: string) => {
+        if (this.grammarCheckerOptions[checkerName])
+          checkers.push(this.grammarCheckerOptions[checkerName]);
       });
     }
     // pass all checkers to the grammar engine if no classroom specifications
@@ -315,7 +314,7 @@ export class DashboardComponent implements OnInit {
    * @param text story text
    */
   getWordCount(text: string) {
-    if (!text) { return 0; }
+    if (!text) { this.wordCount = 0; }
     const str = text.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
     this.words = [];
     str.map((s: string) => {
@@ -331,7 +330,7 @@ export class DashboardComponent implements OnInit {
    * Set the word count to the number of words the user has selected
    * @param event quill selection event
    */
-  getWordCountSelectedText(event) {
+  getWordCountSelectedText(event: any) {
     let range = event.range;
     if(!range  ||  !(range.length > 0) || !(event.source == "user")) {
       return;
@@ -385,7 +384,7 @@ export class DashboardComponent implements OnInit {
         this.storySaved = true;
       }
     } catch (error) {
-      window.alert("Error while trying to save story: " + error.message);
+      window.alert("Error while trying to save story: " + (error as Error).message);
       throw error;
     }
     // Set story status to saved if dates match
@@ -394,7 +393,7 @@ export class DashboardComponent implements OnInit {
         this.storySaved = true;
       }
     } catch (error) {
-      window.alert("Error setting storySaved to true: " + error.message);
+      window.alert("Error setting storySaved to true: " + (error as Error).message);
       throw error;
     }
     return;

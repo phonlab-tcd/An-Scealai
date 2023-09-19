@@ -22,10 +22,10 @@ export class StoryDrawerComponent implements OnInit {
   lastClickedStoryId: string = "";
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
-  @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() titleUpdated = new EventEmitter<String>();
-  @Output() storiesLoaded = new EventEmitter<Boolean>();
-  @Output() isFirstStory = new EventEmitter<Boolean>();
+  @Output() hasFeedback = new EventEmitter<boolean>();
+  @Output() titleUpdated = new EventEmitter<string>();
+  @Output() storiesLoaded = new EventEmitter<boolean>();
+  @Output() isFirstStory = new EventEmitter<boolean>();
 
   constructor(
     public ts: TranslationService,

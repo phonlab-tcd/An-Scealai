@@ -5,7 +5,7 @@
       <i class="fa fa-chevron-left"></i> {{ ts.l.story }}
     </div>
     <div class="bookTitle">
-      {{ story?.title }}<span *ngIf="!recordingSaved">*</span>
+      {{ story.title }}<span *ngIf="!recordingSaved">*</span>
     </div>
     <div class="recordingSaveIcon">
       <div *ngIf="recordingSaved" class="recordingSavedIcon">
@@ -48,7 +48,7 @@
         <!-- Story container -->
         <div class="textContainerSynth">
           <!-- Loading screen -->
-          <div *ngIf="!audioFinishedLoading && !recordingsFinishedLoading" class="loaderContainer" >
+          <div *ngIf="!audioFinishedLoading" class="loaderContainer" >
             <b>{{ ts.l.synthesising }}</b>
             <grid-spinner></grid-spinner>
           </div>
@@ -67,10 +67,10 @@
                     <i class="fa fa-play"></i>
                   </button>
                   <!-- Recording button -->
-                  <button *ngIf=" !isRecording(section, index) && !currentRecording.archived" class="recordingBtn" (click)="recordAudio(index)" >
+                  <button *ngIf=" !isRecording(section, index) && !currentRecording?.archived" class="recordingBtn" (click)="recordAudio(index)" >
                     <i class="fas fa-microphone"></i>
                   </button>
-                  <button *ngIf=" isRecording(section, index) && !currentRecording.archived" class="notRecordingBtn blink" (click)="stopRecording(index)" >
+                  <button *ngIf=" isRecording(section, index) && !currentRecording?.archived" class="notRecordingBtn blink" (click)="stopRecording(index)" >
                     <i class="fas fa-stop-circle"></i>
                   </button>
                 </div>
@@ -86,7 +86,7 @@
                 <div class="audioContainer" *ngIf="sectionAudioSources[index]">
                   <div style="opacity:0.5">{{ts.l.your_recording}}</div>
                   <audio *ngIf="sectionAudioSources[index]" [attr.src]="sectionAudioSources[index]" controls #audioTag class="audioPlayer" ></audio>
-                  <button *ngIf="sectionAudioSources[index] && !currentRecording.archived" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)" >
+                  <button *ngIf="sectionAudioSources[index] && !currentRecording?.archived" class="notRecordingBtn trashBtn" (click)="deleteRecording(index)" >
                     <i class="fas fa-trash-alt"></i>
                   </button>
                 </div>
@@ -116,7 +116,7 @@
                 {{ ts.l.sentence }}
               </button>
             </div>
-            <button class="changeSplitBtn" *ngIf="!currentRecording.archived && currentRecording.storyData.text != story.text" style="margin-left: auto" (click)="archiveRecording()" >
+            <button class="changeSplitBtn" *ngIf="!currentRecording?.archived && currentRecording?.storyData?.text != story.text" style="margin-left: auto" (click)="archiveRecording()" >
               {{ ts.l.archive_recording }}
             </button>
           </div>

@@ -19,7 +19,7 @@ import config from "abairconfig";
 export class PromptsComponent implements OnInit {
   data: Prompt[] = [];
   promptType: string;
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
 
   // options and forms for prompt preferences
   levelPreferences: string[] = ["jc", "lcol", "lchl"];

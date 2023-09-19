@@ -54,7 +54,7 @@ export class StoryFeedbackComponent implements OnInit {
   /**
    * Load any feedback if story selected from parent component
    */
-  ngOnChanges(_) {
+  ngOnChanges(_: any) {
     if (this.story) {
       this.loadStory();
     }
@@ -267,14 +267,14 @@ export class StoryFeedbackComponent implements OnInit {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
           title: this.ts.l.save_changes,
-          message: `${this.ts.l.would_you_like_send_feedback} ${this.story.author}?`,
+          message: `${this.ts.l.would_you_like_send_feedback} ${this.story?.author}?`,
           confirmText: this.ts.l.yes,
           cancelText: this.ts.l.no,
         },
         width: "60vh",
       });
 
-      this.dialogRef.afterClosed().subscribe((res) => {
+      this.dialogRef.afterClosed().subscribe((res: any) => {
         this.dialogRef = undefined;
         if (res) {
           this.sendFeedback();
@@ -302,7 +302,7 @@ export class StoryFeedbackComponent implements OnInit {
     this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
-        this.story.feedback.seenByStudent = false;
+        this.story!.feedback.seenByStudent = false;
       },
       error: () => {
         console.error("error saving feedback");

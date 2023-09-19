@@ -49,7 +49,7 @@ export class MessagesComponent implements OnInit {
   // record audio variables
   audioSource: SafeUrl | null = null;
   showAudio: boolean = false;
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
 
   constructor(
     private classroomService: ClassroomService,
