@@ -2202,7 +2202,7 @@ const translations = {
     ga: '(Déanta le leideanna)',
     en: '(Made using prompts)' },
   dictogloss: {
-    ga: 'Deachtú',
+    ga: 'Deachtú Snasta',
     en: 'Dictogloss' },
   dictogloss_title: {
     ga: 'Meaisín Deachtúcháin',
@@ -2451,7 +2451,7 @@ const translations = {
     ga: 'Teideal',
     en: 'Save as' },
   format: {
-    ga: 'Canúint',
+    ga: 'Formáid',
     en: 'Format' },
   an_gramadoir_description: {
     ga: 'An Gramadoir is blah blah blah <a target="_blank" href="https://cadhan.com/gramadoir/foirm.html"> link </a>',
@@ -2537,9 +2537,6 @@ const translations = {
   key_CALL_4: {
     ga: 'cuntóir foghlama agus léitheoireachta atá cruthaithe i gcomhphairt le hOllscoil na Ginéive chun téacsanna traidisiúnta a thiontú isteach ina dtéacsanna ilmhódacha. Tá go leor eolais faoin ngramadach curtha leis. Tá an téacs go hurlabhra lárnach sa leagan Gaeilge de seo, rud a chabhraíonn le foghlaimeoir dul i dtaithí ar an gceangal idir an focal scríofa agus an fuaimniú.',
     en: 'the Learning and Reading Assistant, a collaboration with the University of Geneva to produce a multimodal version of traditional texts. Much grammar information is included. In Irish LARA text-to-speech is central and helps learners can become familiar with letter to sound correspondences' },
-  dictogloss_snatu: {
-    ga: 'Deachtú Snasta',
-    en: 'Dictogloss' },
   key_CALL_5: {
     ga: 'cleachtadh traidisiúnta ar théacs a athchruthú – is féidir leis an gcóras téasc go hurlabhra an spreagadh a léamh a mhinicí agus is mian leis an bhfoghlaimeoir.',
     en: 'a traditional text reconstruction exercise – a text-to-speech voice can read the prompt aloud as many times as suits the learner' },

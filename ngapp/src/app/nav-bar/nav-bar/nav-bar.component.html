@@ -37,7 +37,7 @@
       <a *ngIf="auth.isLoggedIn()  && auth.getUserDetails().role === 'STUDENT'" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToMessages(); toggleSmallMenu()" >{{ ts.l.messages }}</a >
       <button mat-menu-item [matMenuTriggerFor]="LARA">LARA</button>
       <button *ngIf="auth.isLoggedIn()" mat-menu-item [matMenuTriggerFor]="cenSceal" > Cén Scéal </button>
-      <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" routerLink="/dictogloss" rel="noopener noreferrer" (click)="toggleSmallMenu()" >Dictogloss</a >
+      <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" routerLink="/dictogloss" rel="noopener noreferrer" (click)="toggleSmallMenu()" >{{ts.l.dictogloss}}</a >
       <a mat-menu-item class="dropdownMenuItem" href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/" target="_blank" rel="noopener noreferrer" (click)="toggleSmallMenu()" >An Bat Mírialta</a >
     </mat-menu>
 
