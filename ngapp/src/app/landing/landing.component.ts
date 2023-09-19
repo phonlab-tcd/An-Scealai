@@ -15,14 +15,20 @@ export class LandingComponent implements OnInit {
 
   ngOnInit() {
     if (this.auth.isLoggedIn()) {
-      if(this.auth.getUserDetails().role === 'STUDENT') {
-        this.router.navigateByUrl('/student');
+      const user = this.auth.getUserDetails();
+      if (user) {
+        if(user.role === 'STUDENT') {
+          this.router.navigateByUrl('/student');
+        }
+        if(user.role === 'TEACHER') {
+          this.router.navigateByUrl('/teacher');
+        }
+        if(user.role === 'ADMIN') {
+          this.router.navigateByUrl('/admin');
+        }
       }
-      if(this.auth.getUserDetails().role === 'TEACHER') {
-        this.router.navigateByUrl('/teacher');
-      }
-      if(this.auth.getUserDetails().role === 'ADMIN') {
-        this.router.navigateByUrl('/admin');
+      else {
+        console.log("Not able to get user details, user object is null");
       }
     }
   }

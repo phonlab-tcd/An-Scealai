@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit {
   notificationsShown: boolean = false;
   notifications: Notification[] = [];
   totalNumOfMessages: number = 0;
-  currentLanguageButtonId: string;
+  currentLanguageButtonId: string = '';
 
   constructor(
     private _router: Router,
@@ -44,12 +44,15 @@ export class NavBarComponent implements OnInit {
         // reset message counter to 0
         this.totalNumOfMessages = 0;
         // calculate total number of notifictions
-        this.notifications.forEach((entry) => {
+        this.notifications.forEach((entry: Notification) => {
           entry.body.forEach((notification) => {
             // for teachers, add number of messages per classroom, otherwise simply increase message counter
-            notification.numClassroomMessages
-              ? (this.totalNumOfMessages += notification.numClassroomMessages)
-              : this.totalNumOfMessages++;
+            if ('numClassroomMessages' in notification) {
+              (this.totalNumOfMessages += notification.numClassroomMessages)
+            }
+            else {
+              this.totalNumOfMessages++;
+            }
           });
         });
       }
@@ -97,7 +100,9 @@ export class NavBarComponent implements OnInit {
    */
   goToStats() {
     this.notificationsShown = false;
-    this._router.navigateByUrl( "/stats-dashboard/" + this.auth.getUserDetails()._id );
+    const user = this.auth.getUserDetails();
+    if (user) this._router.navigateByUrl( "/stats-dashboard/" + user._id );
+    else console.log("Can't navigate to stats, user is null");
   }
 
   /**
@@ -106,15 +111,20 @@ export class NavBarComponent implements OnInit {
    */
   goToHomePage() {
     if (this.auth.isLoggedIn()) {
-      let user = this.auth.getUserDetails();
-      if (user.role === "STUDENT") {
-        this._router.navigateByUrl("/student");
-      } 
-      else if (user.role === "TEACHER") {
-        this._router.navigateByUrl("/teacher");
-      } 
+      const user = this.auth.getUserDetails();
+      if (user) {
+        if (user.role === "STUDENT") {
+          this._router.navigateByUrl("/student");
+        } 
+        else if (user.role === "TEACHER") {
+          this._router.navigateByUrl("/teacher");
+        } 
+        else {
+          this._router.navigateByUrl("/admin");
+        }
+      }
       else {
-        this._router.navigateByUrl("/admin");
+        console.log("Not able to get user details, user object is null");
       }
     }
     else {
@@ -131,11 +141,13 @@ export class NavBarComponent implements OnInit {
 
     // remove css highlighting for currently selected langauge
     if (this.currentLanguageButtonId) {
-      document.getElementById(this.currentLanguageButtonId).classList.remove("languageSelected");
+      const element = document.getElementById(this.currentLanguageButtonId);
+      if (element) element.classList.remove("languageSelected");
     }
     this.currentLanguageButtonId = languageCode;
     // add css highlighting to the newly clicked language
-    document.getElementById(languageCode).classList.add("languageSelected");
+    const element = document.getElementById(languageCode);
+    if (element) element.classList.add("languageSelected");
   }
 
   // Keep track of where the user clicks
