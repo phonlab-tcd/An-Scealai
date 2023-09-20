@@ -141,13 +141,11 @@ export class NavBarComponent implements OnInit {
 
     // remove css highlighting for currently selected langauge
     if (this.currentLanguageButtonId) {
-      const element = document.getElementById(this.currentLanguageButtonId);
-      if (element) element.classList.remove("languageSelected");
+      document.getElementById(this.currentLanguageButtonId)?.classList.remove("languageSelected");
     }
     this.currentLanguageButtonId = languageCode;
     // add css highlighting to the newly clicked language
-    const element = document.getElementById(languageCode);
-    if (element) element.classList.add("languageSelected");
+    document.getElementById(languageCode)?.classList.add("languageSelected");
   }
 
   // Keep track of where the user clicks

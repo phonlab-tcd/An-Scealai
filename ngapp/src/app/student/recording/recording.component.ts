@@ -145,8 +145,7 @@ export class RecordingComponent implements OnInit {
     if (recordingElement) {
       // remove css highlighting for currently highlighted recording (from archive)
       if (this.lastClickedRecordingId) {
-        const element = document.getElementById(this.lastClickedRecordingId);
-        if (element) element.classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedRecordingId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedRecordingId = id;
       // add css highlighting to the newly clicked recording

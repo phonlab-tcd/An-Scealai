@@ -144,8 +144,7 @@ export class MessagesComponent implements OnInit {
 
       // remove css highlighting for currently highlighted message
       if (this.lastClickedMessageId) {
-        const element = document.getElementById(this.lastClickedMessageId);
-        if (element) element.classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedMessageId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedMessageId = id;
       // add css highlighting to the newly clicked message
