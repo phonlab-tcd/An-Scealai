@@ -1,11 +1,14 @@
 export class Message {
-    _id: string;
-    subject: string;
-    date: Date;
-    senderId: string;
-    senderUsername: string;
-    recipientId: string;
-    text: string;
-    seenByRecipient: Boolean;
-    audioId: string;
+
+  constructor(
+    public _id: string,
+    public subject: string,
+    public date: Date,
+    public senderId: string,
+    public senderUsername: string,
+    public recipientId: string,
+    public text: string,
+    public seenByRecipient: boolean,
+    public audioId: string
+  ) {}
 }

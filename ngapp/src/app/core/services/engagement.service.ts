@@ -32,8 +32,10 @@ export class EngagementService {
     this.addEventObservable(type, storyData, dictionaryLookup).subscribe();
   }
 
-  addEventObservable(type: EventType, storyData: object, dictionaryLookup: string): Observable<any> {
-    if (! this.auth.isLoggedIn()) {
+  addEventObservable(type: EventType, storyData: object | undefined, dictionaryLookup: string | undefined): Observable<any> {
+    const user = this.auth.getUserDetails();
+
+    if (!this.auth.isLoggedIn() || !user) {
       throw new Error('Cannot add event if user is not logged in');
     }
 
@@ -41,7 +43,7 @@ export class EngagementService {
     event.type = type;
     if (storyData) { event.storyData = storyData; }
     if (dictionaryLookup) { event.dictionaryLookup = dictionaryLookup; }
-    event.userId = this.auth.getUserDetails()._id;
+    event.userId = user._id;
 
     return this.http
         .post(this.baseUrl + 'addEventForUser/' +
@@ -49,15 +51,15 @@ export class EngagementService {
               { event });
   }
   
-  addAnalysisEvent(type: EventType, stats: Object) {
-    if(this.auth.isLoggedIn()) {
-      let event: Event = new Event();
-      event.type = type;
-      event.statsData = stats;
-      event.userId = this.auth.getUserDetails()._id;
-      console.log("event to record: ", event);
-      return this.http.post(this.baseUrl + "addAnalysisEvent/", {event:event}).subscribe();
-    }
+  addAnalysisEvent(type: EventType, stats: Object){
+    const user = this.auth.getUserDetails();
+    if (!user || !this.auth.isLoggedIn()) return;
+    let event: Event = new Event();
+    event.type = type;
+    event.statsData = stats;
+    event.userId = user._id;
+    console.log("event to record: ", event);
+    return this.http.post(this.baseUrl + "addAnalysisEvent/", {event:event}).subscribe();
   }
   
   getPreviousAnalysisData(type: string): Observable<any> {
@@ -69,7 +71,8 @@ export class EngagementService {
   }
 
   mouseOverGrammarSuggestionEvent(tags: HighlightTag[]) {
-    if (! this.auth.isLoggedIn()) {
+    const user = this.auth.getUserDetails();
+    if (! this.auth.isLoggedIn() || !user) {
       throw new Error('Cannot add event if user is not logged in');
     }
     const event: MouseOverGrammarSuggestionEvent =
@@ -81,7 +84,7 @@ export class EngagementService {
     //     event.grammarSuggestionData[key] = tags;
     //   }
     // }
-    event.userId = this.auth.getUserDetails()._id;
+    event.userId = user._id;
     this.http
         .post(
             this.baseUrl + 'addEventForUser/' + event.userId,

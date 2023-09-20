@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Story } from 'app/core/models/story';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from 'app/core/services/authentication.service';
-import { Observable, throwError } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Observable } from 'rxjs';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
@@ -26,7 +26,7 @@ export class StoryService {
   baseUrl: string = config.baseurl + 'story/';
   storiesLoaded: boolean = false;
 
-  saveStory(studentId, title, date, dialect, text, author, createdWithPrompts) {
+  saveStory(studentId: string, title: string, date: Date, dialect: string, text: string, author: string, createdWithPrompts: boolean) {
     const storyObj = {
       title: title,
       date: date,
@@ -101,11 +101,11 @@ export class StoryService {
       updateData);
   }
 
-  deleteStory(id) {
+  deleteStory(id: string) {
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
   
-  deleteAllStories(id) {
+  deleteAllStories(id: string) {
     return this.http.get(this.baseUrl + 'deleteAllStories/' + id);
   }
 
@@ -113,23 +113,23 @@ export class StoryService {
     return this.http.post(this.baseUrl + "updateFeedbackStatus/" + id, {feedbackMarkup: feedbackMarkup, hasComments: hasComments});
   }
 
-  updateFeedbackMarkup(id, feedbackMarkup: string) : Observable<any> {
+  updateFeedbackMarkup(id: string, feedbackMarkup: string) : Observable<any> {
     return this.http.post(this.baseUrl + "updateFeedbackMarkup/" + id, {feedbackMarkup: feedbackMarkup});
   }
 
-  getFeedback(id) : Observable<any> {
+  getFeedback(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + "feedback/" + id);
   }
 
-  viewFeedback(id) : Observable<any> {
+  viewFeedback(id: string) : Observable<any> {
     return this.http.post(this.baseUrl + "viewFeedback/" + id, {});
   }
 
-  getFeedbackAudio(id) : Observable<any> {
+  getFeedbackAudio(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + "feedbackAudio/" + id, {responseType: "blob"});
   }
 
-  addFeedbackAudio(id, audioBlob: Blob) : Observable<any>{
+  addFeedbackAudio(id: string, audioBlob: Blob) : Observable<any>{
     let formData = new FormData();
     formData.append('audio', audioBlob);
     return this.http.post(this.baseUrl + "addFeedbackAudio/" + id, formData);

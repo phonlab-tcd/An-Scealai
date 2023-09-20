@@ -66,6 +66,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/jquery": "^3.3.31",
+    "@types/jwt-decode": "^3.1.0",
     "@types/lodash": "^4.14.172",
     "@types/node": "^12.11.1",
     "@types/uuid": "^3.4.4",

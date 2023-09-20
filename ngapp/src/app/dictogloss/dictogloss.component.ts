@@ -13,6 +13,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
+import { Message } from "app/core/models/message";
 
 @Component({
   selector: "app-dictogloss",
@@ -214,7 +215,7 @@ export class DictoglossComponent implements OnInit {
       console.log("Not able to get logged in user, can't send dictogloss report");
       return;
     }
-    let message = {
+    let message: Partial<Message> = {
       subject: '"' + user.username + '" Finished Dictogloss!',
       date: new Date(),
       senderId: this.studentId,

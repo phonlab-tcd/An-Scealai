@@ -22,7 +22,7 @@ export class StatsService {
     return this.http.get(this.baseUrl + 'getFeatureDataByDate/' + startDate + "/" + endDate);
   }
   
-  getFeatureDataSinceLog(date): Observable<any> {
+  getFeatureDataSinceLog(date: Date): Observable<any> {
     return this.http.get(this.baseUrl + 'getFeatureDataSinceLog/' + date.toString());
   }
 

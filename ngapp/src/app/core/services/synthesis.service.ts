@@ -89,9 +89,9 @@ export class SynthesisService {
    */
   synthesiseText(
     input: string,
-    voice: Voice = undefined,
+    voice: Voice | undefined = undefined,
     useCache = true,
-    audioEncoding: AudioEncoding = undefined
+    audioEncoding: AudioEncoding | undefined = undefined
   ): Observable<any> {
     // Validation
     if (!input) throw new Error("input required");
@@ -108,9 +108,9 @@ export class SynthesisService {
     }
     console.log(url);
     // Otherwise send text to api
-    return this.http.post(this.baseUrl + "proxy", { url }).pipe(
+    return this.http.post<any>(this.baseUrl + "proxy", { url }).pipe(
       // construct returned api audio url with given encoding preferences
-      map((data: { audioContent: string }) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding) ),
+      map((data: { audioContent: string }) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding!) ),
       // store audio in cache
       tap((data) => this.synthBankService.storeAudioUrlOfSentence(url, data))
     );
@@ -126,7 +126,7 @@ export class SynthesisService {
   constructApiUrl(
     input: string,
     voice: Voice = voices[0],
-    audioEncoding: AudioEncoding = undefined
+    audioEncoding: AudioEncoding | undefined = undefined
   ): string {
     // get all possible options given the api type
     const options = ApiOptions[voice.api];
@@ -179,12 +179,12 @@ export class SynthesisService {
       for (const sentenceHtml of sentenceHtmlArray) {
         // sentenceSpan contains a span child for each word in the sentence
         const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
-        const startTime = +sentenceSpan.children[0].getAttribute("data-begin");
+        const startTime = +sentenceSpan.children[0].getAttribute("data-begin")!;
         const lastSentenceChild =
           sentenceSpan.children[sentenceSpan.childElementCount - 1];
         const duration =
-          +lastSentenceChild.getAttribute("data-begin") +
-          +lastSentenceChild.getAttribute("data-dur") -
+          +lastSentenceChild.getAttribute("data-begin")! +
+          +lastSentenceChild.getAttribute("data-dur")! -
           startTime;
         const audio = new Audio(synthesisResponse.audio[i]);
 
@@ -222,7 +222,7 @@ export class SynthesisService {
   textToElem(htmlString: string): Node {
     var div = document.createElement("div");
     div.innerHTML = htmlString.trim();
-    return div.firstChild;
+    return div.firstChild!;
   }
 }
 
@@ -290,7 +290,7 @@ export abstract class Section {
           if (previousSpan) previousSpan.classList.add("noHighlight");
           s.classList.add("highlight");
           previousSpan = s;
-        }, +s.getAttribute("data-begin") * 1000 + (+s.getAttribute("data-dur") / 2) * 1000 - this.startTime * 1000)
+        }, +s.getAttribute("data-begin")! * 1000 + (+s.getAttribute("data-dur")! / 2) * 1000 - this.startTime * 1000)
       );
     }
     this.highlightTimeouts.push(

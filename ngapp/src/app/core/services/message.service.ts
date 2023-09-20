@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-//import { DefaultIterableDifferFactory } from '@angular/core/src/change_detection/change_detection';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthenticationService, TokenPayload } from 'app/core/services/authentication.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from '../../core/models/event';
@@ -24,7 +23,7 @@ export class MessageService {
   /*
   * save a new message to the database
   */
-  saveMessage(message, recipientId): Observable<any> {
+  saveMessage(message: Partial<Message>, recipientId: string): Observable<any> {
     const messageObj = {
       date: message.date,
       subject: message.subject,
@@ -40,8 +39,10 @@ export class MessageService {
   }
   
   // Return messages from the database for the logged in user
-  getMessagesForLoggedInUser(): Observable<any> {
-    let id = this.auth.getUserDetails()._id;
+  getMessagesForLoggedInUser(): Observable<any>  {
+    const user = this.auth.getUserDetails();
+    if (!user) throw new Error('Cannot add event if user is not logged in');
+    let id = user._id;
     return this.http.get(this.baseUrl + 'viewMessges/' + id);
   }
   
@@ -55,14 +56,14 @@ export class MessageService {
   /*
   * Given a message id, change the seenByRecipient value of the message to true
   */
-  markAsOpened(id): Observable<any> {
+  markAsOpened(id: string): Observable<any> {
     return this.http.post(this.baseUrl + "markAsOpened/" + id, {});
   }
   
   /*
   * Delete message from the database
   */
-  deleteMessage(id) : Observable<any> {
+  deleteMessage(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'delete/' + id);
   }
   
@@ -97,14 +98,14 @@ export class MessageService {
   /*
   * Get audio file from DB for assoiaated message
   */
-  getMessageAudio(id) : Observable<any> {
+  getMessageAudio(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + "messageAudio/" + id, {responseType: "blob"});
   }
 
   /*
   * Add an audio file to the DB for associated message
   */
-  addMessageAudio(id, audioBlob: Blob) : Observable<any> {
+  addMessageAudio(id: string, audioBlob: Blob) : Observable<any> {
     let formData = new FormData();
     formData.append('audio', audioBlob);
     return this.http.post(this.baseUrl + "addMessageAudio/" + id, formData);
@@ -113,7 +114,7 @@ export class MessageService {
   /*
   * Delete all messages for given recipient id
   */  
-  deleteAllMessages(userId): Observable<any> {
+  deleteAllMessages(userId: string): Observable<any> {
     return this.http.get(this.baseUrl + 'deleteAllMessages/' + userId);
   }
 
