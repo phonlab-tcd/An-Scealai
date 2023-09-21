@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthenticationService, TokenPayload, VerifyEmailRequest } from "app/core/services/authentication.service";
+import { AuthenticationService, TokenPayload, VerifyEmailRequest, } from "app/core/services/authentication.service";
 import { Router } from "@angular/router";
 import { EventType } from "../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { TranslationService } from "app/core/services/translation.service";
 import { ProfileService } from "app/core/services/profile.service";
-import { NotificationService } from 'app/core/services/notification-service.service';
+import { NotificationService } from "app/core/services/notification-service.service";
 import config from "abairconfig";
 
 @Component({
@@ -23,11 +23,11 @@ export class LoginComponent implements OnInit {
 
   // copy of credentials after the user has input the data in the HTML
   frozenCredentials: VerifyEmailRequest = {
-    username: '',
-    password: '',
-    role: '',
+    username: "",
+    password: "",
+    role: "",
     baseurl: config.baseurl,
-    email: '',
+    email: "",
     language: "ga", // gaeilge by default
   };
 
@@ -36,15 +36,15 @@ export class LoginComponent implements OnInit {
 
   // variables for forgot password
   forgotPassword = false; // updated in HTML
-  usernameForgotPassword: string = '';
-  emailForgotPassword: string = '';
+  usernameForgotPassword: string = "";
+  emailForgotPassword: string = "";
   resetPasswordOkKeys: any[] = [];
   resetPasswordErrKeys: any[] = [];
 
   // variables for user email verification
-  emailToVerify: string = '';
+  emailToVerify: string = "";
   userHasNotBeenVerified = false;
-  userToVerify: string = '';
+  userToVerify: string = "";
   verificationEmailHasBeenSent = false;
   waitingForEmailVerification = false;
   waitingErrorTextKeys = [];
@@ -56,12 +56,11 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private engagement: EngagementService,
     public ts: TranslationService,
-    private profileService : ProfileService,
+    private profileService: ProfileService,
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /**
    * Verify an account that has an email on file but is not yet active
@@ -79,30 +78,31 @@ export class LoginComponent implements OnInit {
     if (this.userToVerify !== this.credentials.username) {
       this.errorMsgKeys = ["username_changed_starting_from_scratch"];
       this.userHasNotBeenVerified = false;
-      this.userToVerify = '';
+      this.userToVerify = "";
       return;
     }
 
     this.errorMsgKeys = [];
 
     // verify old account and set current HTML view to waiting for verification
-    this.auth.verifyOldAccount(this.frozenCredentials).subscribe(
-      (data) => {
+    this.auth.verifyOldAccount(this.frozenCredentials).subscribe({
+      next: () => {
         this.waitingForEmailVerification = true; // does this need to be set here?
       },
-      (error) => {
+      error: (error) => {
+        console.error("ERROR VERIFYING OLD ACCOUNT: ", error);
         this.verificationEmailHasBeenSent = false;
         this.errorMsgKeys = error.error.messageKeys;
       },
-      () => {
+      complete: () => {
         this.verificationEmailHasBeenSent = true;
         // Shallow copy frozen credentials to auth service.
         this.auth.pendingUserPayload = {
           ...this.frozenCredentials,
         };
         this.waitingForEmailVerification = true;
-      }
-    );
+      },
+    });
   }
 
   /**
@@ -115,16 +115,16 @@ export class LoginComponent implements OnInit {
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       // if login successful, redirect to register profile page
-      this.auth.login(this.frozenCredentials).subscribe(
-        () => {
+      this.auth.login(this.frozenCredentials).subscribe({
+        next: () => {
           this.router.navigateByUrl("register-profile");
         },
-        (err) => {
+        error: (err) => {
+          console.error( "ERROR LOGGING IN USER WAITING FOR EMAIL VERIFICATION: ", err );
           this.isLoading = false;
           this.waitingErrorTextKeys = err.error.messageKeys;
         },
-        () => {}
-      );
+      });
       return;
     }
 
@@ -139,13 +139,13 @@ export class LoginComponent implements OnInit {
 
     // log in a user if they have been verified already (i.e. returning users)
     this.auth.login(this.credentials).subscribe({
-      next: (_) => {
+      next: () => {
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
-        if (user) this.routeUser(user._id)
+        if (user) this.routeUser(user._id);
       },
       error: (err) => {
-        console.log(err);
+        console.error("ERROR LOGGING IN USER: ", err);
         this.isLoading = false;
         this.errorMsgKeys = err.error.messageKeys;
         if (err.error.messageKeys.includes("email_not_verified")) {
@@ -158,34 +158,36 @@ export class LoginComponent implements OnInit {
     });
   }
 
-    /**
+  /**
    * Check if the user has filled out their profile and
    * route to either the profile page or home page accordingly
    * @param id user id
    */
-    routeUser(id: string) {
-      this.profileService.getForUser(id).subscribe({
-        next: () => {
-          const user = this.auth.getUserDetails();
-          if (user) {
-            if(user.role === 'STUDENT') {
-              this.notificationService.getStudentNotifications();
-              this.router.navigateByUrl('/student');
-            }
-            if(user.role === 'TEACHER') {
-              this.router.navigateByUrl('/teacher');
-            }
-            if(user.role === 'ADMIN') {
-              this.router.navigateByUrl('/admin');
-            }
+  routeUser(id: string) {
+    this.profileService.getForUser(id).subscribe({
+      next: () => {
+        const user = this.auth.getUserDetails();
+        if (user) {
+          if (user.role === "STUDENT") {
+            this.notificationService.getStudentNotifications();
+            this.router.navigateByUrl("/student");
+          } else if (user.role === "TEACHER") {
+            this.router.navigateByUrl("/teacher");
+          } else if (user.role === "ADMIN") {
+            this.router.navigateByUrl("/admin");
+          } else {
+            console.error( "User ROLE is not defined after logging in, cannot redirect" );
           }
-          else {
-            console.log("Not able to get user details, user object is null: ", id);
-          }
-        },
-        error: () => this.router.navigateByUrl("/register-profile"),
-      });
-    }
+        } else {
+          console.error( "Not able to get user details, user object is null: ", id );
+        }
+      },
+      error: () => {
+        console.error("USER DOES NOT HAVE A PROFILE FILLED OUT: ");
+        this.router.navigateByUrl("/register-profile");
+      },
+    });
+  }
 
   /**
    * Reset the user's password to random if they have forgotten theirs
@@ -195,16 +197,16 @@ export class LoginComponent implements OnInit {
     this.resetPasswordErrKeys = [];
     const name = this.usernameForgotPassword;
     if (name) {
-      this.auth.resetPassword(name).subscribe(
-        (okRes) => {
+      this.auth.resetPassword(name).subscribe({
+        next: (okRes) => {
           this.resetPasswordOkKeys = okRes.messageKeys;
           this.resetPasswordOkKeys.push(`[${okRes.sentTo}]`);
         },
-        (errRes) => {
-          this.resetPasswordErrKeys = errRes.error.messageKeys;
+        error: (err) => {
+          console.error("ERROR RESETTING USER PASSWORD: ", err);
+          this.resetPasswordErrKeys = err.error.messageKeys;
         },
-        () => {}
-      );
-    }
+      });
+    } else console.log("USERNAME NULL FOR RESETTING PASSWORD");
   }
 }
