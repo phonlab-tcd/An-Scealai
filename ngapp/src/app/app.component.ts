@@ -65,6 +65,6 @@ export class AppComponent {
     //   console["originalError"](...arguments);
     // }).bind(this);
 
-    window.onerror = logBackend;
+    //window.onerror = logBackend;
   }
 }

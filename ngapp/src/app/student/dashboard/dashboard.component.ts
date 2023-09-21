@@ -194,7 +194,7 @@ export class DashboardComponent implements OnInit {
             if (!this.quillHighlighter) return;
 
             //save any grammar errors with associated sentences to DB
-            this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
+            //this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
             this.grammarLoaded = true;
           },
         });
