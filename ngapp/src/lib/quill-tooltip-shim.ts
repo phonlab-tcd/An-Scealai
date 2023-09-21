@@ -27,5 +27,4 @@ QuillTooltip.prototype.positionTopLeft = function(this: typeof QuillTooltip, loc
   const { width, height } = this.root.getBoundingClientRect();
   this.root.style.left = `${left - width }px`;
   this.root.style.top = `${top - height}px`;
-  console.log(this.style);
 }

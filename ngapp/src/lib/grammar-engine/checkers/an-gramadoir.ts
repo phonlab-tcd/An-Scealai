@@ -29,7 +29,16 @@ export type GramadoirTag = {
 * @returns - Promise of an array of ErrorTags
 */
 async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
-  const errors = await grammarCheckerGramadoirTS.check(input);
+
+  let errors = [];
+  try {
+    errors = await grammarCheckerGramadoirTS.check(input);
+  }
+  catch (error) {
+    console.log("AN GRAMADOIR ERROR: ", error);
+  }
+  
+  //const errors = await grammarCheckerGramadoirTS.check(input);
 
   // map gramadoir responses to generic ErrorTag values
   const errorTags: ErrorTag[] = errors.map((error) => {
