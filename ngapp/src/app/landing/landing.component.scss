@@ -29,21 +29,21 @@
     margin: 10px;
     background-color: var(--scealai-yellow);
     color: white;
-}
 
-.teacherRegisterBtn:hover {
-    background-color: var(--scealai-yellow-hover);
-    color: white;
+    &:hover {
+        background-color: var(--scealai-yellow-hover);
+        color: white;
+    }
 }
 
 .studentRegisterBtn {
     font-size: 14pt;
     background-color: var(--scealai-orange);
-}
 
-.studentRegisterBtn:hover {
-    background-color: #843c1d;
-    color: white;
+    &:hover {
+        background-color: #843c1d;
+        color: white;
+    }
 }
 
 .loginTextContainer {
@@ -80,7 +80,6 @@
     position: fixed;
     margin-left: -10%;
     z-index: -1;
-    
 }
 
 .catWalkingImg {

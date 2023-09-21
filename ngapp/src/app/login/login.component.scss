@@ -13,16 +13,23 @@
     margin-left: 10%;
 }
 
+input:autofill {
+  background: #fff;
+}
+// input:-webkit-autofill{
+//   -webkit-box-shadow: 0 0 0 30px white inset !important;
+// }
+
 .forgotPassword {
   float: left;
   padding-left: 12%;
   font-size: 12px;
   color: #0000EE;
-}
 
-.forgotPassword:hover {
-  cursor: pointer;
-  text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 
 .loginBtn {
@@ -34,19 +41,19 @@
       border: none;
       opacity: 1;
     }
-}
 
-.loginBtn:hover {
-    background-color: #af5503;
+    &:hover {
+      background-color: #af5503;
+    }
 }
-
 
 .closeForgotPasswordBtn {
-  float: riht;
-}
-.closeForgotPasswordBtn:hover {
-  cursor: pointer;
-  color: black;
+  float: right;
+
+  &:hover {
+    cursor: pointer;
+    color: black;
+  }
 }
 
 :host ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {   
