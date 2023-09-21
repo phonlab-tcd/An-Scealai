@@ -51,9 +51,9 @@
           {{ ts.l.verify_email_address }}
         </button>
       </div>
-
-      <button class="btn loginBtn" data-cy="sign-in" *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent" >
-        {{ ts.l.sign_in }}
+      <button class="btn loginBtn" data-cy="sign-in" *ngIf="!userHasNotBeenVerified || verificationEmailHasBeenSent" [disabled]="isLoading">
+        <span *ngIf="!isLoading">  {{ ts.l.sign_in }} </span>
+        <mat-progress-spinner mode="indeterminate" *ngIf="isLoading && errorMsgKeys.length == 0" diameter="30"></mat-progress-spinner>
       </button>
       <div *ngFor="let errorMsgKey of errorMsgKeys" class="errorMessage" style="margin-left: 10%; margin-right: 10%" >
         {{ ts.l[errorMsgKey] ? ts.l[errorMsgKey] : errorMsgKey }}

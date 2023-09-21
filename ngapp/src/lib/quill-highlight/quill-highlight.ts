@@ -49,7 +49,6 @@ export class QuillHighlighter {
 
   constructor(quillEditor: Quill, messageRenderer: MessageRenderer, engagement: EngagementService) {
     this.quillEditor = quillEditor;
-    console.log(this.quillEditor);
 
     // only need to instantiate one tooltip, reuse it when hover on a new highlight
     this.tooltip = new Tooltip(quillEditor);

@@ -164,7 +164,6 @@ export class GrammarEngine {
       const sentences = await firstValueFrom(
           this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
       );
-      console.log(sentences);
       
       // calculate offset indices for each sentence in relation to entire text
       const sentencesWithOffsets = getOffsets(sentences, input);

@@ -49,6 +49,8 @@ export class LoginComponent implements OnInit {
   waitingForEmailVerification = false;
   waitingErrorTextKeys = [];
 
+  isLoading: boolean = false;
+
   constructor(
     private auth: AuthenticationService,
     private router: Router,
@@ -108,6 +110,7 @@ export class LoginComponent implements OnInit {
    */
   login() {
     this.errorMsgKeys = [];
+    this.isLoading = true;
     // check if user waiting to be verified has been verified
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
@@ -117,28 +120,33 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl("register-profile");
         },
         (err) => {
+          this.isLoading = false;
           this.waitingErrorTextKeys = err.error.messageKeys;
         },
         () => {}
       );
       return;
     }
+
     // If the user hits the sign in button we are starting again from scratch
     this.verificationEmailHasBeenSent = false;
     // verify account if user is not verified
     if (this.userHasNotBeenVerified) {
       this.verifyOldAccount();
+      this.isLoading = false;
       return;
     }
+
     // log in a user if they have been verified already (i.e. returning users)
-    this.auth.login(this.credentials).subscribe(
-      (res) => {
+    this.auth.login(this.credentials).subscribe({
+      next: (_) => {
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
         if (user) this.routeUser(user._id)
       },
-      (err) => {
+      error: (err) => {
         console.log(err);
+        this.isLoading = false;
         this.errorMsgKeys = err.error.messageKeys;
         if (err.error.messageKeys.includes("email_not_verified")) {
           // THIS MAKES THE EMAIL BOX APPEAR
@@ -147,8 +155,7 @@ export class LoginComponent implements OnInit {
           this.userToVerify = this.credentials.username;
         }
       },
-      () => {}
-    );
+    });
   }
 
     /**

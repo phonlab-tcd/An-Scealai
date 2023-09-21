@@ -27,6 +27,13 @@
 
 .loginBtn {
     background-color: #cc670a;
+    
+    &:disabled {
+      color: white;
+      pointer-events: none;
+      border: none;
+      opacity: 1;
+    }
 }
 
 .loginBtn:hover {
@@ -40,6 +47,10 @@
 .closeForgotPasswordBtn:hover {
   cursor: pointer;
   color: black;
+}
+
+:host ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {   
+    stroke: white;
 }
 
 @media only screen and (max-width: 700px) {
