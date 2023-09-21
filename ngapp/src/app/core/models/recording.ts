@@ -12,7 +12,7 @@ export class Recording {
     sentenceTranscriptions: string[];
     archived: boolean;
 
-    constructor(story, paragraphAudioIds=[], paragraphIndices=[], paragraphTranscriptions=[], sentenceAudioIds=[], sentenceIndices=[], sentenceTranscriptions=[]) {
+    constructor(story: Story, paragraphAudioIds=[], paragraphIndices=[], paragraphTranscriptions=[], sentenceAudioIds=[], sentenceIndices=[], sentenceTranscriptions=[]) {
         this.paragraphAudioIds = paragraphAudioIds;
         this.paragraphIndices = paragraphIndices;
         this.paragraphTranscriptions = paragraphTranscriptions;

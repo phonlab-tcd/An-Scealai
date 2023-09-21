@@ -11,14 +11,14 @@ import { FeedbackCommentService } from "app/core/services/feedback-comment.servi
   styleUrls: ["./feedback-comment.component.scss"],
 })
 export class FeedbackCommentComponent implements OnInit, AfterViewInit {
-  @Input("comment") comment: FeedbackComment;
-  @Input("isTeacher") isTeacher: boolean;
+  @Input("comment") comment?: FeedbackComment;
+  @Input("isTeacher") isTeacher?: boolean;
   @Output() deleteEmitter = new EventEmitter();
 
-  @ViewChild("commentTextArea", { static: false }) commentTextArea: ElementRef;
+  @ViewChild("commentTextArea", { static: false }) commentTextArea?: ElementRef;
 
   isEditing = true;
-  audioSource: SafeUrl;
+  audioSource: SafeUrl | null = null;
   isRecording: boolean = false;
 
   constructor(
@@ -40,7 +40,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
 
     if (!this.comment.text && !this.comment.audioId) {
       this.isEditing = true;
-      this.commentTextArea.nativeElement.focus();
+      if (this.commentTextArea) this.commentTextArea.nativeElement.focus();
     } else {
       this.isEditing = false;
       if (this.comment.audioId) {
@@ -60,14 +60,14 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    */
   editComment() {
     this.isEditing = true;
-    this.commentTextArea.nativeElement.focus();
+    if (this.commentTextArea) this.commentTextArea.nativeElement.focus();
   }
 
   /**
    * Save comment to DB
    */
   saveComment() {
-    if (this.comment.text || this.audioSource) {
+    if (this.comment && (this.comment.text || this.audioSource)) {
       this.isEditing = false;
       // save audio data
       if (this.audioSource) {
@@ -92,6 +92,7 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Set textarea height depending on text length, with max height of 100px
    */
   adjustTextAreaHeight() {
+    if (this.commentTextArea)
     this.commentTextArea.nativeElement.style.height = `${Math.min(this.commentTextArea.nativeElement.scrollHeight, 100)}px`;
   }
 
@@ -99,9 +100,9 @@ export class FeedbackCommentComponent implements OnInit, AfterViewInit {
    * Delete comment (and any associated audio)
    */
   deleteComment() {
-    this.feedbackCommentService.deleteFeedbackComment(this.comment._id).subscribe({
+    this.feedbackCommentService.deleteFeedbackComment(this.comment!._id).subscribe({
       next: () => { this.deleteEmitter.next(null); },
-      error: () => { },
+      error: (err) => { console.log(err) },
     });
   }
 

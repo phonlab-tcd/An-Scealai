@@ -11,7 +11,7 @@ import { Voice, VoiceCode, } from "app/core/services/synthesis.service";
 export class SynthesisDrawerComponent implements OnInit {
   @Output() closeSynthesisEmitter = new EventEmitter();
   @Output() selectedVoice = new EventEmitter<VoiceCode>();
-  @Output() selectedSpeed = new EventEmitter<Number>();
+  @Output() selectedSpeed = new EventEmitter<number>();
   @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
   audioLoaded: boolean = true;
   audioSpeeds: number[] = [0.2, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2];

@@ -53,7 +53,7 @@
         </button>
       </div>
       <!--Display Prompt-->
-      <div *ngIf="prompt.length > 0; else noPrompt">
+      <div *ngIf="prompt.length > 0">
         <!-- Story Prompt Options -->
         <div *ngIf="promptType == 'combination'">
           <div *ngFor="let lp of levelPreferences">
@@ -88,7 +88,7 @@
         <!-- Generated Prompt -->
         <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0"><i>{{ prompt }}</i></div>
         <!-- Create New Story Button-->
-        <button *ngIf="auth.getUserDetails().role == 'STUDENT'" class="button" (click)="createNewStory()">
+        <button *ngIf="auth.getUserDetails()?.role == 'STUDENT'" class="button" (click)="createNewStory()">
             {{ ts.l.start_my_story }}
         </button>
       </div>

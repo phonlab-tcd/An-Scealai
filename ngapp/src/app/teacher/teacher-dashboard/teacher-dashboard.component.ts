@@ -12,7 +12,7 @@ import { Classroom } from "../../core/models/classroom";
   styleUrls: ["./teacher-dashboard.component.scss"],
 })
 export class TeacherDashboardComponent implements OnInit {
-  classrooms: Classroom[];
+  classrooms: Classroom[] = [];
   classroom: Classroom;
   updatedTitle: string = "";
   classroomsLoaded: boolean = true;

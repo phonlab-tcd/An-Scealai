@@ -17,7 +17,7 @@ export class StudentListComponent implements OnInit {
   @Input() classroom: Classroom;
   @Output() storyEmitter = new EventEmitter<Story>();
   students: User[] = [];
-  studentStories: Object = {};
+  studentStories: {[key: string]: Story[]} = {};
   storyForFeedback: Story;
   lastClickedStoryId: string = "";
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
@@ -30,7 +30,7 @@ export class StudentListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  ngOnChanges(_) {
+  ngOnChanges(_: any) {
     this.getStudents();
   }
 
@@ -43,7 +43,7 @@ export class StudentListComponent implements OnInit {
       this.userService.getUserById(id).subscribe({
         next: async (student) => {
           this.students.push(student); let stories = await firstValueFrom( this.storyService.getStoriesForClassroom( student._id, this.classroom.date?.toString() ) );
-          stories.sort((a, b) => (a.lastUpdated > b.lastUpdated ? -1 : 1));
+          stories.sort((a: Story, b: Story) => (a.lastUpdated > b.lastUpdated ? -1 : 1));
           if (stories) {
             this.studentStories[student.username] = stories;
           } else {
@@ -74,7 +74,7 @@ export class StudentListComponent implements OnInit {
     if (classroomElement) {
       // remove css highlighting for currently highlighted classroom
       if (this.lastClickedStoryId && document.getElementById(this.lastClickedStoryId)) {
-        document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
+          document.getElementById(this.lastClickedStoryId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedStoryId = id;
       // add css highlighting to the newly clicked classroom
@@ -87,7 +87,7 @@ export class StudentListComponent implements OnInit {
    * @param story story to check for feedback
    * @returns true if story has feedback
    */
-  hasFeedback(story) {
+  hasFeedback(story: Story) {
     return (story.feedback.hasComments || story.feedback.feedbackMarkup)
   }
 
@@ -98,7 +98,7 @@ export class StudentListComponent implements OnInit {
   resetFeedbackDrawer() {
     // remove css highlighting for currently highlighted classroom
     if (this.lastClickedStoryId && document.getElementById(this.lastClickedStoryId)) {
-      document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
+      document.getElementById(this.lastClickedStoryId)?.classList.remove("clickedresultCard");
     }
     if (this.rightDrawer.opened) this.rightDrawer.close();
   }

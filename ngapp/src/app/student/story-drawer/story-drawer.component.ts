@@ -22,10 +22,10 @@ export class StoryDrawerComponent implements OnInit {
   lastClickedStoryId: string = "";
   searchText: string = ""; // used to filter stories in search bar
   @Output() storyEmitter = new EventEmitter<Story>();
-  @Output() hasFeedback = new EventEmitter<Boolean>();
-  @Output() titleUpdated = new EventEmitter<String>();
-  @Output() storiesLoaded = new EventEmitter<Boolean>();
-  @Output() isFirstStory = new EventEmitter<Boolean>();
+  @Output() hasFeedback = new EventEmitter<boolean>();
+  @Output() titleUpdated = new EventEmitter<string>();
+  @Output() storiesLoaded = new EventEmitter<boolean>();
+  @Output() isFirstStory = new EventEmitter<boolean>();
 
   constructor(
     public ts: TranslationService,
@@ -83,7 +83,7 @@ export class StoryDrawerComponent implements OnInit {
     if (storyElement) {
       // remove css highlighting for currently highlighted story
       if (this.lastClickedStoryId) {
-        document.getElementById(this.lastClickedStoryId).classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedStoryId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedStoryId = id;
       // add css highlighting to the newly clicked story
@@ -96,8 +96,8 @@ export class StoryDrawerComponent implements OnInit {
    * @param story story selected from list
    * @returns true or false
    */
-  storyHasFeedback(story) {
-    return story.feedback.hasComments || story.feedback.feedbackMarkup
+  storyHasFeedback(story: Story): boolean {
+    return story.feedback.hasComments || story.feedback.feedbackMarkup != null
   }
 
   /**
@@ -120,15 +120,20 @@ export class StoryDrawerComponent implements OnInit {
       width: "50vh",
     });
 
-    this.dialogRef.afterClosed().subscribe(async (res) => {
+    this.dialogRef.afterClosed().subscribe(async (res: any) => {
       this.dialogRef = undefined;
       if (res) {
         if (res[0]) {
           let dialect = "connemara";
           if (res[1] == this.ts.l.munster) dialect = "kerry";
           if (res[1] == this.ts.l.ulster) dialect = "donegal";
+          const user = this.auth.getUserDetails();
+          if (!user) {
+            console.log("Can't save story, current user is null");
+            return;
+          }
           this.storyService
-            .saveStory( this.auth.getUserDetails()._id, res[0], new Date(), dialect, "", this.auth.getUserDetails().username, false )
+            .saveStory( user._id, res[0], new Date(), dialect, "", user.username, false )
             .subscribe({
               next: () => {
                 this.getStories();
@@ -160,7 +165,7 @@ export class StoryDrawerComponent implements OnInit {
       width: "50vh",
     });
 
-    this.dialogRef.afterClosed().subscribe(async (res) => {
+    this.dialogRef.afterClosed().subscribe(async (res: any) => {
       this.dialogRef = undefined;
       if (res) {
         this.deleteStory(id);
@@ -192,7 +197,7 @@ export class StoryDrawerComponent implements OnInit {
       // reset the story list to empty if list contains only one story
       // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list
       this.stories.splice(storyIndex, 1);
-      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit(null);
+      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit();
     });
   }
 
@@ -201,8 +206,9 @@ export class StoryDrawerComponent implements OnInit {
    * rename their story. Autofocus this editable div after making editable
    * @param divId id of the div for the story title
    */
-  makeTitleDivEditable(divId: string) {
-    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+  makeTitleDivEditable(divId: number) {
+    console.log(typeof divId)
+    const contentEditableDiv = document.getElementById(String(divId)) as HTMLDivElement;
     contentEditableDiv.setAttribute("contenteditable", "true");
     // auto-focus the div for editing, need to use setTimeout so event is applied
     window.setTimeout(() => contentEditableDiv.focus(), 0);
@@ -213,12 +219,13 @@ export class StoryDrawerComponent implements OnInit {
    * Save the updated title for the story if changes were made
    * @param divId id of the div for the story title
    */
-  saveStoryTitle(divId, selectedStory) {
-    const contentEditableDiv = document.getElementById(divId) as HTMLDivElement;
+  saveStoryTitle(divId: number, selectedStory: Story) {
+    const contentEditableDiv = document.getElementById(String(divId)) as HTMLDivElement;
+    if (!contentEditableDiv || !selectedStory) return;
     contentEditableDiv.setAttribute("contenteditable", "false");
     // only update the title if changes have been made
-    if (selectedStory.title.trim() != contentEditableDiv.textContent.trim()) {
-      selectedStory.title = contentEditableDiv.textContent;
+    if (selectedStory.title.trim() != contentEditableDiv!.textContent!.trim()) {
+      selectedStory.title = contentEditableDiv.textContent!;
       this.storyService.updateTitle(selectedStory._id, selectedStory.title.trim())
         .subscribe({
           next: () => { this.titleUpdated.emit(selectedStory.title.trim()); },

@@ -13,6 +13,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
+import { Message } from "app/core/models/message";
 
 @Component({
   selector: "app-dictogloss",
@@ -22,7 +23,7 @@ import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.compo
 export class DictoglossComponent implements OnInit {
   // dictogloss variables
   generatedFromMessages: boolean;
-  texts: string;
+  texts: string = "";
   wrongWordsDiv: string = "";
   words: string[] = [];
   shownWords: string[] = [];
@@ -31,7 +32,7 @@ export class DictoglossComponent implements OnInit {
   wordsPuncLower: string[] = [];
   sentences: string[] = [];
   hasText: boolean = false;
-  guess: string;
+  guess: string = "";
   regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
   regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
   gameInProgress: boolean = false;
@@ -52,14 +53,14 @@ export class DictoglossComponent implements OnInit {
   synthesisPlayer: SynthesisPlayerComponent;
   playbackSpeed: number = 1; //Shoud range from 0.5x to 2x speed incrementing in 0.5.
   @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
-  selectedVoice: Voice;
+  selectedVoice: Voice | undefined;
   synthItem: SynthItem;
-  errorText: boolean;
+  errorText: boolean = false;
   synthItems: SynthItem[] = [];
 
   // user variables
-  studentId: string;
-  teacherId: string;
+  studentId: string = "";
+  teacherId: string = "";
 
   constructor(
     private messageService: MessageService,
@@ -118,9 +119,9 @@ export class DictoglossComponent implements OnInit {
    * @param voice Synthesis voice option
    * @returns
    */
-  refreshVoice(voice: Voice = undefined) {
+  refreshVoice(voice: Voice | undefined = undefined) {
     if (voice) this.selectedVoice = voice;
-    this.synthItems.forEach((s) => {
+    this.synthItems.forEach((s: SynthItem) => {
       s.audioUrl = undefined;
       s.dispose();
     });
@@ -209,11 +210,16 @@ export class DictoglossComponent implements OnInit {
    * Send a message to the teacher with the student's stats
    */
   async sendDictoglossReport() {
-    let message = {
-      subject: '"' + this.auth.getUserDetails().username + '" Finished Dictogloss!',
+    const user = this.auth.getUserDetails();
+    if (!user) {
+      console.log("Not able to get logged in user, can't send dictogloss report");
+      return;
+    }
+    let message: Partial<Message> = {
+      subject: '"' + user.username + '" Finished Dictogloss!',
       date: new Date(),
       senderId: this.studentId,
-      senderUsername: this.auth.getUserDetails().username,
+      senderUsername: user.username,
       text:
         "The final time was: \t" +
         this.displayTime(this.totalTime) +

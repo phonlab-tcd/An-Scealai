@@ -57,10 +57,10 @@
 
     <!-- List of comments -->
     <div *ngIf="commentsList.length > 0" class="commentsContainer">
-      <div *ngIf="feedbackSent && isTeacher && story.feedback.seenByStudent" class="seenByStudent" >
+      <div *ngIf="feedbackSent && isTeacher && story?.feedback?.seenByStudent" class="seenByStudent" >
         {{ ts.l.seen_by }} {{ story?.author }} <i class="fas fa-check"></i>
       </div>
-      <div *ngIf="feedbackSent && isTeacher && !story.feedback.seenByStudent" class="seenByStudent" >
+      <div *ngIf="feedbackSent && isTeacher && !story?.feedback?.seenByStudent" class="seenByStudent" >
         {{ ts.l.not_seen_by }} {{ story?.author }}
       </div>
       <div class="commentsList">

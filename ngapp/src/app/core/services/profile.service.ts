@@ -16,14 +16,14 @@ export class ProfileService {
 /*
 * Send a new profile to the database 
 */
-  create(profile) : Observable<any> {
+  create(profile: object) : Observable<any> {
     return this.http.post(this.baseUrl + 'create', profile);
   }
 
 /*
 * Get a profile from the database using the user id
 */
-  getForUser(userId) : Observable<any> {
+  getForUser(userId: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'getForUser/' + userId);
   }
 
@@ -45,7 +45,7 @@ export class ProfileService {
 /*
 * Delete a profile from the DB for a given user id
 */
-  deleteProfile(userId) : Observable<any> {
+  deleteProfile(userId: string) : Observable<any> {
     return this.http.get(this.baseUrl + 'deleteProfile/' + userId);
   }
 

@@ -38,13 +38,13 @@ export class RecordingComponent implements OnInit {
   story: Story = new Story();
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
-  chosenSections: Section[];
+  chosenSections: Section[] = [];
 
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
-  recorder;
-  stream;
-  chunks;
+  recorder: any;
+  stream: any;
+  chunks: any;
 
   isRecordingParagraph: boolean[] = [];
   isRecordingSentence: boolean[] = [];
@@ -65,18 +65,18 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
-  dialogRef: MatDialogRef<unknown>;
+  dialogRef: MatDialogRef<unknown> | undefined;
 
   // ASR variables
   url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
-  sentenceTranscriptions: string[] = [];
-  paragraphTranscriptions: string[] = [];
-  sectionTranscriptions: string[] = [];
+  sentenceTranscriptions: string[] | null[] = [];
+  paragraphTranscriptions: string[] | null[] = [];
+  sectionTranscriptions: string[] | null[] = [];
   isTranscribing: boolean[] = [false];
 
   // Archived recordings variables
   recordings: Recording[] = [];
-  currentRecording: Recording = null;
+  currentRecording: Recording | null = null;
   lastClickedRecordingId: string = "";
 
   /*
@@ -92,6 +92,10 @@ export class RecordingComponent implements OnInit {
     this.isRecordingSection = this.isRecordingParagraph;
 
     const storyId = this.route.snapshot.paramMap.get("id");
+    if (!storyId) {
+      console.log("Can't initialise, story id is null")
+      return;
+    }
     this.story = await firstValueFrom(this.storyService.getStory(storyId));
 
     // check if browser microphone allowed before loading recordings
@@ -141,9 +145,7 @@ export class RecordingComponent implements OnInit {
     if (recordingElement) {
       // remove css highlighting for currently highlighted recording (from archive)
       if (this.lastClickedRecordingId) {
-        document
-          .getElementById(this.lastClickedRecordingId)
-          .classList.remove("clickedresultCard");
+        document.getElementById(this.lastClickedRecordingId)?.classList.remove("clickedresultCard");
       }
       this.lastClickedRecordingId = id;
       // add css highlighting to the newly clicked recording
@@ -170,6 +172,10 @@ export class RecordingComponent implements OnInit {
    * Call a function to create a new recording object
    */
   async archiveRecording() {
+    if (!this.currentRecording) {
+      console.log("Can't archive recording, current recording is null");
+      return;
+    }
     await firstValueFrom( this.recordingService.updateArchiveStatus(this.currentRecording._id) );
     this.createNewRecording();
   }
@@ -254,7 +260,7 @@ export class RecordingComponent implements OnInit {
         this.sectionChunks[index] = [];
         this.recorder.start();
         this.isRecordingSection[index] = true;
-        this.recorder.ondataavailable = (e) => {
+        this.recorder.ondataavailable = (e: any) => {
           this.sectionChunks[index].push(e.data);
           if (this.recorder.state == "inactive") {
           }
@@ -267,7 +273,7 @@ export class RecordingComponent implements OnInit {
   stopRecording(index: number) {
     this.recorder.stop();
     this.isRecordingSection[index] = false;
-    this.stream.getTracks().forEach((track) => track.stop());
+    this.stream.getTracks().forEach((track: any) => track.stop());
     setTimeout(() => {
       const blob = new Blob(this.sectionChunks[index], { type: "audio/mp3" });
       this.sectionBlobs[index] = blob;
@@ -395,7 +401,7 @@ export class RecordingComponent implements OnInit {
     let updatedRecording = await firstValueFrom( this.recordingService.update(this.story.activeRecording, trackData) );
 
     // reload the current recording to display the updated audio/transcriptions
-    if (updatedRecording) {
+    if (updatedRecording && this.currentRecording) {
       this.recordingSaved = true;
       const currentRecordingIndex = this.recordings.indexOf(this.currentRecording);
       this.recordings.splice(currentRecordingIndex, 1, updatedRecording);
@@ -412,6 +418,10 @@ export class RecordingComponent implements OnInit {
     } else if (section instanceof Paragraph) {
       return this.isRecordingParagraph[index];
     }
+    else {
+      console.log("This section is neither a paragraph or sentence");
+      return;
+    }
   }
 
   isSentenceMode() {
@@ -423,7 +433,7 @@ export class RecordingComponent implements OnInit {
   }
 
   // toggle paragraph / sentence mode
-  changeSections(sections) {
+  changeSections(sections: Section[]) {
     this.chosenSections = sections;
     const allSections = this.paragraphs.concat(this.sentences);
     allSections.forEach((section) => this.stopSection(section));
@@ -447,7 +457,7 @@ export class RecordingComponent implements OnInit {
     section.highlight();
   }
 
-  stopSection(section) {
+  stopSection(section: Section) {
     section.stop();
     section.removeHighlight();
   }

@@ -53,7 +53,6 @@
       style="text-decoration: none"
       class="optionsBtn optionsPopupBtn"
       target="_blank"
-      href="{{ downloadStoryUrl() }}"
     >
       {{ ts.l.download }}
       <i class="fas fa-download optionsBtnIcon"></i>
@@ -89,7 +88,6 @@
   >
     <mat-slide-toggle
       class="listenToggle"
-      [color]="primary"
       (click)="synthButtons?.toggle()"
       checked="true"
     >
@@ -137,7 +135,7 @@
 
   <!-- STORY WRITING CONTAINER-->
   <div class="storyContainer">
-    <div class="ql-container" #quillHeightSpan [ngStyle]="quillEditorStyle" *ngIf="storiesLoaded && story; else newStoryMessage">
+    <div class="ql-container" #quillHeightSpan *ngIf="storiesLoaded && story; else newStoryMessage">
       <!-- STORY DRAWER BUTTON-->
       <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()" >menu</span >
       <div class="wordCount">{{ ts.l.word_count }}: {{ wordCount }}</div>
@@ -175,7 +173,6 @@
     <!-- SYNTHESIS SETTINGS -->
     <app-synthesis-drawer
       *ngIf="selectedDrawer == 'synthesis'"
-      [quillEditor]="quillEditor"
       (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
       (selectedVoice)="this.synthSettings.voice= $event"
       (selectedSpeed)="this.synthSettings.speed= $event"
@@ -191,7 +188,6 @@
       [quillHighlighter]="quillHighlighter"
       [grammarLoaded]="grammarLoaded"
       [grammarErrorsTypeDict]="grammarErrorsTypeDict"
-      [grammarErrors]="grammarErrors"
       [grammarEngine]="grammarEngine"
       [checkBoxes]="checkBoxes"
       (closeGrammarEmitter)="toggleRightDrawer('grammar')"

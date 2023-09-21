@@ -30,7 +30,14 @@ export = async (req, res, next) => {
         sentenceErrors: []
       }
     );
-    await uniqueStoryErrors.save();
+    try {
+      await uniqueStoryErrors.save();
+    }
+    catch (error) {
+      console.log("ERROR CREATING uniqueStoryErrors OBJECT IN INSERT.JS");
+      console.error(error);
+    }
+    
   }
   
   if (sentences && sentences.length > 0) {

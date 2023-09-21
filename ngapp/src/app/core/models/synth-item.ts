@@ -2,9 +2,9 @@ import { SynthesisService, voices as synthVoices, Voice } from 'app/core/service
 import { Subscription } from 'rxjs';
 
 export class SynthItem {
-  audioUrl: string = undefined;
-  subscription: Subscription
-  requestUrl: string;
+  audioUrl: string | undefined = undefined;
+  subscription: Subscription;
+  requestUrl: string = "";
   exceptions: object[] = [];
   constructor(
     public text: string,

@@ -109,8 +109,10 @@ export class TranslationService {
    * @param code en or ga
    */
   updateUserLanguage(code: string): Observable<any> {
+    const user = this.auth.getUserDetails();
+    if (!user) throw new Error("Can't udate user language, user is null");
     return this.http.post(
-      this.baseUrl + "user/setLanguage/" + this.auth.getUserDetails()._id,
+      this.baseUrl + "user/setLanguage/" + user._id,
       { language: code }
     );
   }
@@ -119,8 +121,10 @@ export class TranslationService {
    * Get the current user's language preference from the DB
    */
   getUserLanguageCode(): Observable<any> {
+    const user = this.auth.getUserDetails();
+    if (!user) throw new Error("Can't get user language code, user is null")
     return this.http.get(
-      this.baseUrl + "user/getLanguage/" + this.auth.getUserDetails()._id
+      this.baseUrl + "user/getLanguage/" + user._id
     );
   }
 }

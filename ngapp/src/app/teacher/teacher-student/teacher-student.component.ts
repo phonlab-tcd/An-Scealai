@@ -44,7 +44,7 @@ export class TeacherStudentComponent implements OnInit {
       })
     }
 
-    goToStory(storyId) {
+    goToStory(storyId: string) {
       this.router.navigateByUrl('teacher/story/' + storyId.toString());
     }
 

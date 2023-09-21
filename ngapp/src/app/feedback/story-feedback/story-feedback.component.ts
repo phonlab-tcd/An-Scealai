@@ -26,15 +26,15 @@ export class StoryFeedbackComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
-  @Input() story: Story;
+  @Input() story?: Story;
   @Output() closeFeedbackEmitter = new EventEmitter();
-  quillEditor: Quill;
+  quillEditor: Quill | undefined;
   commentsList: FeedbackComment[] = [];
-  commentButton: HTMLButtonElement;
+  commentButton: HTMLButtonElement | undefined;
   isTeacher: boolean = false;
   storyUpdated: boolean = false; // TODO implement refresh button if student has udpated text
-  initialStoryTextWithMarkup: string;
-  storyTextWithMarkup: string;
+  initialStoryTextWithMarkup: string = "";
+  storyTextWithMarkup: string = "";
   feedbackSent: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
@@ -54,7 +54,7 @@ export class StoryFeedbackComponent implements OnInit {
   /**
    * Load any feedback if story selected from parent component
    */
-  ngOnChanges(_) {
+  ngOnChanges(_: any) {
     if (this.story) {
       this.loadStory();
     }
@@ -72,6 +72,10 @@ export class StoryFeedbackComponent implements OnInit {
    * Load in the story and feedback
    */
   loadStory() {
+    if (!this.story) {
+      console.log("Can't load story, story object null");
+      return;
+    }
     // get previous feedback markup if it exists, otherwise just get story html
     if (this.story.feedback.feedbackMarkup == null) {
       this.feedbackSent = false;
@@ -97,10 +101,15 @@ export class StoryFeedbackComponent implements OnInit {
    */
   loadComments() {
     this.commentsList = [];
+    if (!this.story) {
+      console.log("Can't load comments, story object is null");
+      return;
+    }
     if (this.story.feedback.hasComments) {
       this.feedbackCommentService.getFeedbackComments(this.story._id).subscribe({
-        next: (comments) => {
-          comments.forEach((comment) => {
+        next: (comments: FeedbackComment[]) => {
+          comments.forEach((comment: FeedbackComment) => {
+            if (!this.quillEditor) return;
             this.quillEditor.formatText(
               comment.range.index,
               comment.range.length,
@@ -152,6 +161,7 @@ export class StoryFeedbackComponent implements OnInit {
    */
   async createComment() {
     if (this.feedbackSent) this.feedbackSent = false;
+    if (!this.quillEditor) return;
 
     let range = this.quillEditor.getSelection();
 
@@ -161,12 +171,17 @@ export class StoryFeedbackComponent implements OnInit {
     }
 
     // creates a new feedback-comment component
+    const user = this.auth.getUserDetails();
+    if (!user || !this.story) {
+      console.log("Can't create comment, user or story is null ", user, this.story);
+      return;
+    }
     this.feedbackCommentService
-      .createNewComment(new FeedbackComment(this.auth.getUserDetails()._id, range, this.story._id))
+      .createNewComment(new FeedbackComment(user._id, range, this.story._id))
       .subscribe({
         next: (comment) => {
           // highlight text in quill
-          this.quillEditor.formatText(range.index, range.length, {
+          this.quillEditor.formatText(range!.index, range!.length, {
             background: "#fff72b",
           });
           this.commentsList.push(comment);
@@ -179,7 +194,7 @@ export class StoryFeedbackComponent implements OnInit {
    * Move and display the comment button where the user selects a range of text
    * @param event quill on-select event
    */
-  showInlineCommentButton(event) {
+  showInlineCommentButton(event: any) {
     let range = event.range;
 
     if(!range  ||  !(range.length > 0) || !(event.source == "user")) {
@@ -194,6 +209,7 @@ export class StoryFeedbackComponent implements OnInit {
     const editorContainer = this.quillEditor.root.parentNode as HTMLElement;
     const editorRect = editorContainer.getBoundingClientRect();
     // set the location of the button
+    if (!this.commentButton) return;
     this.commentButton.style.left = `${editorRect.left + bounds.right}px`;
     this.commentButton.style.top = `${editorRect.top + bounds.bottom}px`;
     this.commentButton.style.visibility = "visible";
@@ -214,7 +230,7 @@ export class StoryFeedbackComponent implements OnInit {
    * Hide the inline comment button from view
    */
   hideExistingCommentButton() {
-    this.commentButton.style.visibility = "hidden";
+    this.commentButton!.style.visibility = "hidden";
   }
 
   /**
@@ -223,7 +239,7 @@ export class StoryFeedbackComponent implements OnInit {
    */
   highlightCommentReferenceInQuill(index: number) {
     const commentData = this.commentsList[index];
-    this.quillEditor.setSelection(
+    this.quillEditor!.setSelection(
       commentData.range.index,
       commentData.range.length
     );
@@ -234,7 +250,7 @@ export class StoryFeedbackComponent implements OnInit {
    * @param indexToDelete index of comment to delete
    */
   removeComment(indexToDelete: number, comment: FeedbackComment) {
-    this.quillEditor.removeFormat(comment.range.index, comment.range.length);
+    this.quillEditor!.removeFormat(comment.range.index, comment.range.length);
     this.commentsList.splice(indexToDelete, 1);
   }
 
@@ -251,14 +267,14 @@ export class StoryFeedbackComponent implements OnInit {
       this.dialogRef = this.dialog.open(BasicDialogComponent, {
         data: {
           title: this.ts.l.save_changes,
-          message: `${this.ts.l.would_you_like_send_feedback} ${this.story.author}?`,
+          message: `${this.ts.l.would_you_like_send_feedback} ${this.story?.author}?`,
           confirmText: this.ts.l.yes,
           cancelText: this.ts.l.no,
         },
         width: "60vh",
       });
 
-      this.dialogRef.afterClosed().subscribe((res) => {
+      this.dialogRef.afterClosed().subscribe((res: any) => {
         this.dialogRef = undefined;
         if (res) {
           this.sendFeedback();
@@ -275,6 +291,10 @@ export class StoryFeedbackComponent implements OnInit {
    * Save feedback changes and update status
    */
   sendFeedback() {
+    if (!this.story) {
+      console.log("Can't send feedback, story is null");
+      return;
+    }
     const hasComments = this.commentsList.length > 0 ? true : false;
     this.story.feedback.hasComments = hasComments;
     if (this.initialStoryTextWithMarkup !== this.storyTextWithMarkup) this.story.feedback.feedbackMarkup = this.storyTextWithMarkup;
@@ -282,7 +302,7 @@ export class StoryFeedbackComponent implements OnInit {
     this.storyService.updateFeedbackStatus( this.story._id, this.story.feedback.feedbackMarkup, hasComments ).subscribe({
       next: () => {
         this.feedbackSent = true;
-        this.story.feedback.seenByStudent = false;
+        this.story!.feedback.seenByStudent = false;
       },
       error: () => {
         console.error("error saving feedback");

@@ -7,7 +7,6 @@ import { MessageService } from "app/core/services/message.service";
 import { UserService } from "app/core/services/user.service";
 import { User } from "app/core/models/user";
 import { AuthenticationService } from "app/core/services/authentication.service";
-import { Message } from "app/core/models/message";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -30,7 +29,9 @@ export class TeacherDictoglossComponent implements OnInit {
     private messageService: MessageService,
     private dialog: MatDialog,
   ) {
-    this.createDictoglosForm();
+    this.newDictogloss = this.fb.group({
+      passage: ["", Validators.required],
+    });
   }
 
   students: User[] = [];
@@ -53,15 +54,6 @@ export class TeacherDictoglossComponent implements OnInit {
   }
 
   /**
-   * Create a form to send text (passage) with the dictogloss
-   */
-  createDictoglosForm() {
-    this.newDictogloss = this.fb.group({
-      passage: ["", Validators.required],
-    });
-  }
-
-  /**
    * Send Dictogloss message to all students on the list
    */
   async sendDictogloss() {
@@ -74,11 +66,17 @@ export class TeacherDictoglossComponent implements OnInit {
       console.log(passage);
       console.log(this.sendTo);
 
+      const user = this.auth.getUserDetails();
+      if (!user) {
+        console.log("Can't send dictogloss, current user is null");
+        return;
+      }
+
       let message = {
         subject: "Dictogloss",
         date: new Date(),
-        senderId: this.auth.getUserDetails()._id, //Teacher ID
-        senderUsername: this.auth.getUserDetails().username, //Teacher Username
+        senderId: user._id, //Teacher ID
+        senderUsername: user.username, //Teacher Username
         text: passage,
         seenByRecipient: false,
       };

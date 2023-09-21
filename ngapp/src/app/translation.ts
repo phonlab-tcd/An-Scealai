@@ -2599,7 +2599,7 @@ const translations = {
     en: 'Story Dashboard' },
   story_dashboard_description: {
     ga: 'Cum scéalta le cabhair ón ngramadóir agus ó na huirlisí \'téacs-go-hurlabhra\' agus \'urlabhra-go-téacs\'',
-    en: 'Create compositions using our grammar checkers, speech-to-text, andtext-to-speech tools' },
+    en: 'Create compositions using our grammar checkers, speech-to-text, and text-to-speech tools' },
   statistics_description: {
     ga: 'Féach ar na staitisticí a bhaineann le do chuid scríbhneoireachta',
     en: 'View your writing statistics' },
