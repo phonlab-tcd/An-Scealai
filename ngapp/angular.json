@@ -50,6 +50,7 @@
           },
 					"configurations": {
 						"production": {
+              "sourceMap": true,
               "optimization": {
                 "scripts": true,
                 "styles": {

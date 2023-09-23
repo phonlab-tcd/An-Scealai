@@ -29,7 +29,6 @@ import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-e
 import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
-import { VoiceCode } from "app/core/services/synthesis.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
 import "lib/quill-tooltip-shim";
@@ -144,10 +143,13 @@ export class DashboardComponent implements OnInit {
    */
   async setUpGrammarChecking() {
     const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    if (!userDetails) {
+      console.error("CANNOT SET UP GRAMMAR CHECKING, USER IS NULL");
+      return
+    };
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    let classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
+    const classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers: GrammarChecker[] = [];
@@ -189,7 +191,7 @@ export class DashboardComponent implements OnInit {
               this.quillHighlighter.addTag(tag);
             }
           },
-          error: function () {},
+          error: function (err) {console.error("ERROR GETTING THE 'CHECK()' RES: ", err)},
           complete: () => {
             if (!this.quillHighlighter) return;
 
@@ -199,6 +201,7 @@ export class DashboardComponent implements OnInit {
           },
         });
       } catch (updateGrammarErrorsError) {
+        console.error("ERROR RUNNING THE GRAMMAR CHECKERS")
         console.error(updateGrammarErrorsError);
       }
   }
@@ -431,7 +434,7 @@ export class DashboardComponent implements OnInit {
             this.storySaved = true;
             console.log("title updated");
           },
-          error: () => console.log("error updating title"),
+          error: (err) => console.error("error updating story title: ", err),
         });
     }
   }
