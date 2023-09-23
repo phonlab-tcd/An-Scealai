@@ -52,6 +52,9 @@ async function callRelativeClauseChecker(input: string): Promise<any> {
     if (res.ok) {
       return await res.json();
     }
+    else {
+      console.log("ISSUE GETTING A RESPONSE FROM THE REL CLAUSE CHECKER")
+    }
     // throw new Error(res.statusText);
     return [];
 }

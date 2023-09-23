@@ -216,7 +216,7 @@ export class GrammarEngine {
       subj.complete();
       
       // log error counts to the DB
-      this.countNewErrors(allErrorTags.flat());
+      //this.countNewErrors(allErrorTags.flat());
 
       return allErrorTags;
     }
@@ -233,6 +233,7 @@ export class GrammarEngine {
 
     private async _countNewErrorsAfterFirstTime(newTags: any[]) {
       const toCount = diffNewErrors(this.previousErrorTags, newTags);
+      if (!toCount) console.log("ISSUE GETTING NEW ERROR COUNTS: ", toCount)
       const counts = countErrorTypes(toCount);
       const body = {countsByType: counts};
       this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
