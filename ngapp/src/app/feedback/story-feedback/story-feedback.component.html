@@ -1,16 +1,16 @@
 <!-- BODY -->
 <div class="feedbackBody">
   <div class="storyFeedbackTitleContainer" *ngIf="isTeacher">
-    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()" >
+    <div (click)="closeFeedback()">
+      <i class="fas fa-arrow-left closeFeedbackButton"></i>
+    </div>
+    <div style="margin: auto">{{ story?.title }} <span *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</span></div>
+    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()" style="margin-left: auto" >
       {{ ts.l.send }} <i class="fas fa-paper-plane"></i>
     </button>
-    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled>
+    <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled style="margin-left: auto">
       {{ ts.l.sent }} <i class="fas fa-check"></i>
     </button>
-    <div style="margin: auto">{{ story?.title }} <span *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</span></div>
-    <div style="margin-left: auto" (click)="closeFeedback()">
-      <i class="fa-solid fa-times closeFeedbackButton"></i>
-    </div>
   </div>
   <div class="quillAndCommentsContainer">
     <div class="quillContainer">

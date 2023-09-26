@@ -11,7 +11,7 @@
     <mat-expansion-panel *ngFor="let student of students">
       <!-- panel header: username and num of stories-->
       <mat-expansion-panel-header (click)="resetFeedbackDrawer()">
-        <mat-panel-title style="font-weight: bolder">
+        <mat-panel-title class="studentUsernameTitle">
           {{ student.username }}
         </mat-panel-title>
         <mat-panel-description *ngIf="studentStories[student.username]">
@@ -42,7 +42,7 @@
     </div>
   </ng-template>
   <!-- STORY FEEDBACK DRAWER -->
-  <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end" style="width: 100%" >
+  <mat-drawer #rightDrawer class="rightDrawer" mode="over" position="end" style="width: 100%">
     <app-story-feedback
       [story]="storyForFeedback"
       (closeFeedbackEmitter)="resetFeedbackDrawer()"

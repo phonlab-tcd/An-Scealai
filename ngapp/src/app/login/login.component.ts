@@ -117,6 +117,7 @@ export class LoginComponent implements OnInit {
       // if login successful, redirect to register profile page
       this.auth.login(this.frozenCredentials).subscribe({
         next: () => {
+          console.log("Login successfull, redirecting to register-profile");
           this.router.navigateByUrl("register-profile");
         },
         error: (err) => {
@@ -140,9 +141,11 @@ export class LoginComponent implements OnInit {
     // log in a user if they have been verified already (i.e. returning users)
     this.auth.login(this.credentials).subscribe({
       next: () => {
-        this.engagement.addEventForLoggedInUser(EventType.LOGIN);
+        console.log("Login successfull, redirecting to route-user")
+        //this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
-        if (user) this.routeUser(user._id);
+        if (user) this.routeUser(user._id, user);
+        else console.error("No user exists");
       },
       error: (err) => {
         console.error("ERROR LOGGING IN USER: ", err);
@@ -163,13 +166,12 @@ export class LoginComponent implements OnInit {
    * route to either the profile page or home page accordingly
    * @param id user id
    */
-  routeUser(id: string) {
-    this.profileService.getForUser(id).subscribe({
-      next: () => {
-        const user = this.auth.getUserDetails();
-        if (user) {
+  routeUser(id: string, user: any) {
+    console.log("user exists, rerouting ", user.role, " user");
+    
+            if (user) {
           if (user.role === "STUDENT") {
-            this.notificationService.getStudentNotifications();
+            //this.notificationService.getStudentNotifications();
             this.router.navigateByUrl("/student");
           } else if (user.role === "TEACHER") {
             this.router.navigateByUrl("/teacher");
@@ -181,12 +183,29 @@ export class LoginComponent implements OnInit {
         } else {
           console.error( "Not able to get user details, user object is null: ", id );
         }
-      },
-      error: () => {
-        console.error("USER DOES NOT HAVE A PROFILE FILLED OUT: ");
-        this.router.navigateByUrl("/register-profile");
-      },
-    });
+    // this.profileService.getForUser(id).subscribe({
+    //   next: () => {
+    //     const user = this.auth.getUserDetails();
+    //     if (user) {
+    //       if (user.role === "STUDENT") {
+    //         this.notificationService.getStudentNotifications();
+    //         this.router.navigateByUrl("/student");
+    //       } else if (user.role === "TEACHER") {
+    //         this.router.navigateByUrl("/teacher");
+    //       } else if (user.role === "ADMIN") {
+    //         this.router.navigateByUrl("/admin");
+    //       } else {
+    //         console.error( "User ROLE is not defined after logging in, cannot redirect" );
+    //       }
+    //     } else {
+    //       console.error( "Not able to get user details, user object is null: ", id );
+    //     }
+    //   },
+    //   error: () => {
+    //     console.error("USER DOES NOT HAVE A PROFILE FILLED OUT: ");
+    //     this.router.navigateByUrl("/register-profile");
+    //   },
+    // });
   }
 
   /**

@@ -10,7 +10,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home', canActivate: [AuthGuardService] },
-  { path: 'home', pathMatch: 'full', component: HomePageComponent },
+  { path: 'home', component: HomePageComponent, canActivate: [AuthGuardService] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard, StopSoundGuard] },
   { path: 'synthesis/:id', component: SynthesisComponent, canActivate: [AuthGuardService]},
   { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },

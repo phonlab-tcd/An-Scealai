@@ -107,11 +107,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         MatTableModule,
         MatProgressSpinnerModule,
         PdfViewerModule,
-        NgramDistributionModule,
-        WordCountsModule,
-        GrammarPieChartModule,
         DictionaryLookupsModule,
-        GrammarErrorTimeModule,
         PdfViewerModule,
         SynthItemModule
     ],
@@ -132,6 +128,6 @@ import { SpinnerModule } from './spinner/spinner.module';
     ]
 })
 export class AppModule {
-  constructor(private injector: Injector) {
-  }
+//   constructor(private injector: Injector) {
+//   }
  }
