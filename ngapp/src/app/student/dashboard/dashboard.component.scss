@@ -334,3 +334,16 @@ quill-editor > [quill-editor-element] {
         background-color:red;
     }
 }
+
+@media (max-width: 700px) {
+    .rightDrawer {
+        min-width: 40%;
+        height: 100%;
+    }
+
+    .storyListDrawer {
+        padding: 40px;
+        max-width: 70%;
+        height: 100%;
+    }
+}

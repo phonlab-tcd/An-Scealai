@@ -54,7 +54,7 @@
     width: 300px;
     height: auto;
     left: 0px;
-    bottom: 55px;
+    bottom: 90px;
     position: fixed;
     z-index: -2;
 }
@@ -63,7 +63,7 @@
     width: 300px;
     height: auto;
     right: 0px;
-    bottom: 40px;
+    bottom: 90px;
     position: fixed;
     z-index: -2;
 }
@@ -71,12 +71,14 @@
 .catContainer {
     width: 100%;
     text-align: center;
+    position: fixed;
+    bottom: 90px;
 }
 
 .catJumpingImg {
     width: 180px;
     height: auto;
-    bottom: 80px;
+    bottom: 90px;
     position: fixed;
     margin-left: -10%;
     z-index: -1;
@@ -98,7 +100,7 @@
 .copyright {
     text-align: left;
     font-size: 8pt;
-    height: 15px;
+    //height: 15px;
     opacity: 0.5;
 }
 
@@ -112,12 +114,6 @@
     height: 40px;
 }
 
-.separator {
-    width: 1px;
-    opacity: 0;
-    height: 40px;
-    background-color: grey;
-}
 
 @media only screen and (max-width: 620px) {
     .catJumpingImg {
@@ -144,7 +140,9 @@
     .landingTextContainer {
         margin-top: -2vh;
     }
-
+    .logoImg {
+        height: 20px;
+    }
 }
 
 @media only screen and (min-width: 900px) {
