@@ -34,13 +34,22 @@ export class TranslationService {
    * otherwise init the site to Irish (called in app.component)
    */
   async initLanguage() {
+    const storedToken = localStorage.getItem("languagePreference");
+    if (storedToken && storedToken === 'en') {
+      this.l = this.getTranslationsFromCode(storedToken)
+    }
+    else {
+      this.l = this.getTranslationsFromCode("ga");
+    }
+    /*
     if (this.auth.isLoggedIn()) {
-      let res = await firstValueFrom(this.getUserLanguageCode());
+      let res = await firstValueFrom(this.getUserLanguageCode()); // Language choice not persisted, do we want to do this instead?
       if (res) this.l = this.getTranslationsFromCode(res.language);
       else this.l = this.getTranslationsFromCode("ga");
     } else {
       this.l = this.getTranslationsFromCode("ga");
     }
+    */
   }
 
   /**
@@ -50,10 +59,11 @@ export class TranslationService {
   setLanguage(code: "ga" | "en") {
     // get all translations for given code
     this.l = this.getTranslationsFromCode(code);
+    localStorage.setItem("languagePreference", code);
 
     // update user language preference
     if (this.auth.isLoggedIn()) {
-      this.updateUserLanguage(code).subscribe();
+      this.updateUserLanguage(code).subscribe(); // Is this actually working?
     }
   }
 
