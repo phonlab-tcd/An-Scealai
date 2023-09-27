@@ -92,7 +92,7 @@ async function onclick(this: Buttons, tooltipReference: typeof QuillTooltip, tex
 
   const tokens = res.timing.map(e=>e.word);
   const locations = findLocationsInText(text, tokens, startIndex);
-  const audio = new Audio(`data:audio/ogg;base64,${v.data.audioContent}`);
+  const audio = new Audio(`data:audio/mp3;base64,${v.data.audioContent}`);
   const speed = this.synthSettings.speed;
   audio.playbackRate = speed;
   Buttons.toggleLoadingSpinner(tooltipReference, 'off');
@@ -123,10 +123,12 @@ function hideOnClickAway(this: Buttons, e: MouseEvent) {
   const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
   if(clickedOnQuillEditor) return;
 
+  if (!e.target.parentNode) return;
+
   const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
   if(clickedOnTooltip) return;
 
-  const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
+  const clickedInsideTooltip =  e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
   if(clickedInsideTooltip) return;
 
   // otherwise (clicked outside quill editor)

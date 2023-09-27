@@ -164,9 +164,12 @@ export class GrammarEngine {
       const sentences = await firstValueFrom(
           this.http.post<string[]>(config.baseurl + 'nlp/sentenceTokenize', {text: input})
       );
+      console.log("Tokenised all the sentences");
       
       // calculate offset indices for each sentence in relation to entire text
       const sentencesWithOffsets = getOffsets(sentences, input);
+
+      console.log("Caclulated all the offsets")
 
       // keep an array of errors associated with particular sentences
       this.errorsWithSentences = [];
@@ -186,6 +189,7 @@ export class GrammarEngine {
               
               // get errors from cache map if already stored and return
               if (s in this.cacheMap.get(checker.name)) {
+                console.log("Getting sentence from cache")
                 let errorTags = this.cacheMap.get(checker.name)[s].map(clone).map(mapOffset);
                 
                 this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
@@ -194,8 +198,10 @@ export class GrammarEngine {
                 return errorTags;
               }
               // get errors from grammar checker if not in cache map
+              console.log("getting sentence from checker")
               const errorTags = await checker.check(s, this.auth.getToken());
               this.cacheMap.get(checker.name)[s] = errorTags;
+              console.log("got errors from checker, setting the cache")
               // calculate error offset based on sentence indices
               const offsetErrorTags = errorTags.map(clone).map(mapOffset)
               
@@ -209,6 +215,8 @@ export class GrammarEngine {
               this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
                       [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                       this.errorsWithSentences[i] = [errorTags, s, i];
+
+              console.log("Concatenating error tags")
               
               return offsetErrorTags;
           }))

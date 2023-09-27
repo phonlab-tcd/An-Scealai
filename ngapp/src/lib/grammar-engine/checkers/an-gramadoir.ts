@@ -32,6 +32,7 @@ async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
 
   let errors = [];
   try {
+    console.log("Getting errors from an gramadoir...")
     errors = await grammarCheckerGramadoirTS.check(input);
   }
   catch (error) {
