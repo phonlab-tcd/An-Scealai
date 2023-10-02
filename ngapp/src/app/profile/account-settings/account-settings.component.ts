@@ -168,17 +168,17 @@ export class AccountSettingsComponent implements OnInit {
   
         this.storyService.getStoriesFor(this.user.username).subscribe((res: Story[]) => {
           for (let story of res) {
-            console.log(story);
             this.recordingService.deleteStoryRecordingAudio(story._id).subscribe({next: () => {console.log('deleted audio')}, error: (err) => {console.error(err)}});
             this.recordingService.deleteStoryRecording(story._id).subscribe({next: () => {console.log('deleted recording object')}, error: (err) => {console.error(err)}})
+            this.feedbackCommentService.deleteFeedbackCommentsForStory(story._id).subscribe({next: ()=> {console.log('deleted feedback comments for story')}, error: (err) => {console.error(err)}});
           }
         });
        this.storyService.deleteAllStories(this.user._id).subscribe({next: ()=> {console.log('deleted all stories')}, error: (err) => {console.error(err)}});
       }
   
       if (this.user.role === "TEACHER") {
+        this.feedbackCommentService.deleteFeedbackCommentsForOwner(this.user._id).subscribe({next: ()=> {console.log('deleted feedback comments for teacher')}, error: (err) => {console.error(err)}});
         this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe({next: ()=> {console.log('deleted classrooms')}, error: (err) => {console.error(err)}});
-        this.feedbackCommentService.deleteFeedbackCommentsForOwner(this.user._id).subscribe({next: ()=> {'deleted feedback comments'}, error: (err) => {console.error(err)}});
       }
   
       this.messageService.deleteAllMessages(this.user._id).subscribe({next: ()=> {console.log('deleted messages')}, error: (err) => {console.error(err)}});

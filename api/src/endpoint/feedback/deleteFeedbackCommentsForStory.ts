@@ -3,22 +3,37 @@ import FeedbackComment from "../../models/feedbackComment";
 const mongodb = require("mongodb");
 const mongoose = require("mongoose");
 
-export default async function deleteFeedbackCommentsForStory( req: Request, res: Response ) {
-
+export default async function deleteFeedbackCommentsForStory(
+  req: Request,
+  res: Response
+) {
   const comments = await FeedbackComment.find({ storyId: req.params.storyId });
-  
+
   if (comments) {
-    comments.forEach((comment) => {
+    deleteComments(comments)
+      .then((response) => {
+        return res.status(200).json(response);
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json(err);
+      });
+  }
+}
+
+async function deleteComments(comments) {
+  try {
+    for (const comment of comments) {
       // delete any audio if added to comment
       if (comment.audioId) {
         let audioId;
         try {
           audioId = new mongoose.mongo.ObjectId(comment.audioId);
         } catch (err) {
-          return res.status(400).json({
-            message:
+          return {
+            status:
               "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters",
-          });
+          };
         }
 
         const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
@@ -28,16 +43,15 @@ export default async function deleteFeedbackCommentsForStory( req: Request, res:
         bucket.delete(audioId, (err) => {
           if (err) {
             console.error("Error deleting comment audio");
-            return res.status(404).json("Error deleting comment audio");
+            return { status: "Error deleting comment audio" };
           }
         });
       }
+      await comment.remove();
+    }
 
-      // delete comment
-      comment.remove().then(
-        () => res.json("Comment deleted"),
-        (err) => res.status(400).json(err)
-      );
-    });
+    return { status: "Comments deleted successfully" };
+  } catch (err: any) {
+    return { status: "Error deleting comments", error: err.message };
   }
 }
