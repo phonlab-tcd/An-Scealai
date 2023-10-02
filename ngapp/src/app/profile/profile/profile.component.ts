@@ -1,28 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'app/core/services/authentication.service';
-import { EngagementService } from 'app/core/services/engagement.service';
-import { EventType } from 'app/core/models/event';
-import { TranslationService } from 'app/core/services/translation.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { BreakpointObserver, Breakpoints, BreakpointState, } from "@angular/cdk/layout";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { AuthenticationService } from "app/core/services/authentication.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event";
+import { TranslationService } from "app/core/services/translation.service";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: "app-profile",
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
-
   componentToDisplay: string = "";
   lastClickedMenuId: string = "";
+  @ViewChild("drawer") drawer: any;
 
-  constructor(public auth: AuthenticationService,
-              private engagement: EngagementService,
-              public ts: TranslationService) { }
+  constructor(
+    public auth: AuthenticationService,
+    private engagement: EngagementService,
+    public ts: TranslationService,
+    private breakpointObserver: BreakpointObserver
+  ) {}
+
+  // check if the device is mobile or desktop
+  public isMobile$: Observable<boolean> = this.breakpointObserver
+  .observe(Breakpoints.Handset)
+  .pipe(map((result: BreakpointState) => result.matches));
 
   /**
    * Set the first button on the side menu as currently selected
-   */         
+   */
   ngOnInit() {
-    document.getElementById('accountSettings').classList.add("clickedMenu");
+    document.getElementById("accountSettings")?.classList.add("clickedMenu");
     this.lastClickedMenuId = "accountSettings";
   }
 
@@ -40,11 +51,18 @@ export class ProfileComponent implements OnInit {
     if (menuElement) {
       // remove css highlighting for currently highlighted story
       if (this.lastClickedMenuId) {
-        document.getElementById(this.lastClickedMenuId).classList.remove("clickedMenu");
+        document
+          .getElementById(this.lastClickedMenuId)
+          ?.classList.remove("clickedMenu");
       }
       this.lastClickedMenuId = id;
       // add css highlighting to the newly clicked story
       menuElement.classList.add("clickedMenu");
+    }
+
+    // close sidenav if the device is mobile
+    if (this.drawer._mode == "over") {
+      this.drawer.close();
     }
   }
 

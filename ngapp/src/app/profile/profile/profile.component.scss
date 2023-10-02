@@ -1,31 +1,37 @@
 .profileContainer {
     width: 100%;
     height: 90vh;
-    display: flex;
     margin-top: -55px; // app margin defined in app.css
 }
 
-.sideMenu {
-    flex: 0 0 20%; /* width of the side menu */
-    //width: fit-content; -> this works too
-    border-right: 1px solid black; 
-}
-
-.sideMenu > * {
+.menuOption {
     text-align: left;
     padding: 50px;
     font-size: 16pt;
     font-weight: bolder;
+    cursor: pointer;
+
+    &:hover {
+        font-style: italic;
+        color: var(--scealai-green)
+    }
 }
 
-.sideMenu > :hover {
-    cursor: pointer;
-    font-style: italic;
-    color: var(--scealai-green)
+mat-sidenav-content {
+    background-color: white;
+}
+
+.menuButton {
+    float: left;
+    padding-top: 10px;
+    font-size: 40px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .body {
-    flex-grow: 1; /* take up the remaining width space */
     padding-top: 50px;
     overflow-y: scroll;
 }
@@ -34,3 +40,8 @@
     font-style: italic;
     color: var(--scealai-green)
 }
+
+i {
+    margin-left: 5px;
+}
+
