@@ -142,7 +142,7 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.credentials).subscribe({
       next: () => {
         console.log("Login successfull, redirecting to route-user")
-        //this.engagement.addEventForLoggedInUser(EventType.LOGIN);
+        this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
         if (user) this.routeUser(user._id, user);
         else console.error("No user exists");

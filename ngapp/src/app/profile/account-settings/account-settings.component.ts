@@ -22,17 +22,17 @@ import { firstValueFrom } from "rxjs";
   styleUrls: ["./account-settings.component.scss"],
 })
 export class AccountSettingsComponent implements OnInit {
-  classroomCodeOutput: string;
+  classroomCodeOutput: string = "";
   codeInput: UntypedFormControl;
-  foundClassroom: Classroom;
-  classroom: Classroom;
-  updatedUsername: string;
-  errorMessage = "";
-  newPassword: string;
-  newPasswordConfirm: string;
-  dialogRef: MatDialogRef<unknown>;
+  foundClassroom: Classroom | null = null;
+  classroom: Classroom | null = null;
+  updatedUsername: string = "";
+  errorMessage: string = "";
+  newPassword: string = "";
+  newPasswordConfirm: string = "";
+  dialogRef: MatDialogRef<unknown> | undefined = undefined;
   user: User;
-  dialectPreference: string;
+  dialectPreference: string = "";
   dialectPreferences : string[] = [
     "Gaeilge Uladh",
     "Gaeilge Chonnact",
@@ -51,17 +51,22 @@ export class AccountSettingsComponent implements OnInit {
     public recordingService: RecordingService,
     private feedbackCommentService: FeedbackCommentService,
     private dialog: MatDialog
-  ) {}
+  ) {
+      // create new form control for joining a classroom
+      this.codeInput = new UntypedFormControl();
+  }
 
   /**
    * Get logged-in user
    * Get possible classroom codes if user is a student
    */
   async ngOnInit() {
-    // create new form control for joining a classroom
-    this.codeInput = new UntypedFormControl();
+
+    const user = this.auth.getUserDetails();
+    if (!user) return;
+
     // get logged-in user details
-    this.user = await firstValueFrom( this.userService.getUserById(this.auth.getUserDetails()._id) );
+    this.user = await firstValueFrom( this.userService.getUserById(user._id) );
     if (!this.user) return;
 
     // set dialect preference - To be integrated if we want this to be an option
@@ -87,7 +92,7 @@ export class AccountSettingsComponent implements OnInit {
       if (code.length > 0) {
         this.classroomService.getClassroomFromCode(code).subscribe((res) => {
           if (res.found) {
-            this.classroomCodeOutput = null;
+            this.classroomCodeOutput = "";
             this.foundClassroom = res.classroom;
           } else {
             this.foundClassroom = null;
@@ -95,7 +100,7 @@ export class AccountSettingsComponent implements OnInit {
           }
         });
       } else {
-        this.classroomCodeOutput = null;
+        this.classroomCodeOutput = "";
       }
     });
   }
@@ -104,7 +109,7 @@ export class AccountSettingsComponent implements OnInit {
    * Join a classroom with a given classroom code
    */
   joinClassroom() {
-    this.classroomService.addStudentToClassroom( this.foundClassroom._id, this.auth.getUserDetails()._id ).subscribe((res) => {
+    this.classroomService.addStudentToClassroom( this.foundClassroom._id, this.user._id ).subscribe((res) => {
       if (res.status === 200) {
         this.classroom = this.foundClassroom;
         this.foundClassroom = null;
@@ -118,7 +123,7 @@ export class AccountSettingsComponent implements OnInit {
   getClassroom() {
     this.classroomService.getAllClassrooms().subscribe((res: Classroom[]) => {
       for (let classroom of res) {
-        if (classroom.studentIds.includes(this.auth.getUserDetails()._id)) {
+        if (classroom.studentIds.includes(this.user._id)) {
           this.classroom = classroom;
         }
       }
@@ -129,45 +134,61 @@ export class AccountSettingsComponent implements OnInit {
    * Remove studenet from classroom
    */
   leaveClassroom() {
-    this.classroomService.removeStudentFromClassroom( this.classroom._id, this.auth.getUserDetails()._id ).subscribe((_) => {
-      this.classroom = null;
-      this.codeInput = new UntypedFormControl();
-      this.listenForClassroomCodeInput();
-    });
+    if (!this.classroom) {
+      console.log("Cannot leave classroom, classroom is null");
+      return;
+    }
+ 
+    this.classroomService.removeStudentFromClassroom(this.classroom._id, this.user._id).subscribe({
+      next: () => {
+        this.classroom = null;
+        this.codeInput = new UntypedFormControl();
+        this.listenForClassroomCodeInput();
+      },
+      error: (err) => {
+        console.error("Error trying to leave classroom", err);
+      }
+    })
   }
 
   /*
    * Delete user account and all data associated with the user
    */
-  deleteAccount() {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
+  async deleteAccount() {
+    if (!this.user) {
+      console.log("Cannot delete account, user is null");
       return;
     }
 
-    if (userDetails.role === "STUDENT") {
-      if (this.classroom) {
-        this.leaveClassroom();
-      }
-
-      this.storyService.getStoriesFor(userDetails.username).subscribe((res: Story[]) => {
-        for (let story of res) {
-          this.recordingService.deleteStoryRecordingAudio(story._id) .subscribe((_) => {});
-          this.recordingService.deleteStoryRecording(story._id) .subscribe((_) => {});
+    try {
+      if (this.user.role === "STUDENT") {
+        if (this.classroom) {
+          this.leaveClassroom();
         }
-      });
-      this.storyService.deleteAllStories(userDetails._id).subscribe((_) => {});
+  
+        this.storyService.getStoriesFor(this.user.username).subscribe((res: Story[]) => {
+          for (let story of res) {
+            this.recordingService.deleteStoryRecordingAudio(story._id).subscribe({next: () => {console.log('deleted audio')}, error: (err) => {console.error(err)}});
+            this.recordingService.deleteStoryRecording(story._id).subscribe({next: () => {console.log('deleted recording object')}, error: (err) => {console.error(err)}})
+            this.feedbackCommentService.deleteFeedbackCommentsForStory(story._id).subscribe({next: ()=> {console.log('deleted feedback comments for story')}, error: (err) => {console.error(err)}});
+          }
+        });
+       this.storyService.deleteAllStories(this.user._id).subscribe({next: ()=> {console.log('deleted all stories')}, error: (err) => {console.error(err)}});
+      }
+  
+      if (this.user.role === "TEACHER") {
+        this.feedbackCommentService.deleteFeedbackCommentsForOwner(this.user._id).subscribe({next: ()=> {console.log('deleted feedback comments for teacher')}, error: (err) => {console.error(err)}});
+        this.classroomService.deleteClassroomsForTeachers(this.user._id).subscribe({next: ()=> {console.log('deleted classrooms')}, error: (err) => {console.error(err)}});
+      }
+  
+      this.messageService.deleteAllMessages(this.user._id).subscribe({next: ()=> {console.log('deleted messages')}, error: (err) => {console.error(err)}});
+      this.profileService.deleteProfile(this.user._id).subscribe({next: ()=> {console.log('deleted profile')}, error: (err) => {console.error(err)}});
+      this.userService.deleteUser(this.user).subscribe({next: ()=> {console.log('deleted user')}, error: (err) => {console.error(err)}});
+      this.auth.logout();
     }
-
-    if (userDetails.role === "TEACHER") {
-      this.classroomService.deleteClassroomsForTeachers(userDetails._id).subscribe((_) => {});
-      this.feedbackCommentService.deleteFeedbackCommentsForOwner(userDetails._id).subscribe((_) => {});
+    catch (error) {
+      console.error(error);
     }
-
-    this.messageService.deleteAllMessages(userDetails._id).subscribe((_) => {});
-    this.profileService.deleteProfile(userDetails._id).subscribe((_) => {});
-    this.userService.deleteUser().subscribe((_) => {});
-    this.auth.logout();
   }
 
   /*
@@ -185,7 +206,7 @@ export class AccountSettingsComponent implements OnInit {
       return;
     }
 
-    this.userService.updateUsername(this.auth.getUserDetails()._id, this.updatedUsername).subscribe({
+    this.userService.updateUsername(this.user._id, this.updatedUsername).subscribe({
       next: () => { this.auth.logout(); },
       error: (error) => { 
         if (error.error.code == "11000") {
@@ -208,7 +229,7 @@ export class AccountSettingsComponent implements OnInit {
           this.errorMessage = this.ts.l.passwords_5_char_long;
         } else {
           this.errorMessage = "";
-          this.userService.updatePassword(this.auth.getUserDetails()._id, this.newPassword).subscribe((_) => {});
+          this.userService.updatePassword(this.user._id, this.newPassword).subscribe((_) => {});
           // TODO: is it necessary to log the user out here? If it is, shouldn't we wait for the password update to succeed before logging out?
           this.auth.logout();
         }
@@ -305,7 +326,7 @@ export class AccountSettingsComponent implements OnInit {
       this.dialogRef = undefined;
       this.errorMessage = "";
       if (res) {
-        this.classroomCodeOutput = null;
+        this.classroomCodeOutput = "";
         this.leaveClassroom();
       }
     });

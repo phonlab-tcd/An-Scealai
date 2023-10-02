@@ -40,7 +40,6 @@ export const userRoutes = makeEndpoints({
     "/verify": verify,
     "/viewUser": [ checkJwt, viewUser],
     "/teachers": [ checkJwt, teachers],
-
     "/getUserById/:id": [ checkJwt, getUserById],
     "/getUserByUsername/:username": [ checkJwt, getUserByUsername],
   },
@@ -53,6 +52,7 @@ export const userRoutes = makeEndpoints({
     "/verifyOldAccount": verifyOldAccount,
     "/resetPassword": resetPassword,
     "/setLanguage/:id": [checkJwt, setLanguage],
+    "/deleteUser": [checkJwt, deleteUser],
   },
 });
 

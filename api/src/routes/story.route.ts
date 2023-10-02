@@ -207,8 +207,8 @@ storyRoutes.route("/deleteAllStories/:id").get(function (req, res) {
   Story.deleteMany({ owner: req.params.id }, function (err, story) {
     if (err) {
       console.log(err);
-      res.json(err);
-    } else res.json("Successfully removed all stories for user");
+      return res.json(err);
+    } else return res.json("Successfully removed all stories for user");
   });
 });
 

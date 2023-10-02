@@ -54,8 +54,8 @@ export class UserService {
     return this.http.get(this.baseUrl + 'getLanguageCount/');
   }
 
-  deleteUser(): Observable<any> {
-    return this.http.get(this.baseUrl + 'deleteUser');
+  deleteUser(user: User): Observable<any> {
+    return this.http.post(this.baseUrl + 'deleteUser', user);
   }
 
   updateUsername(id: string, newUsername: string): Observable<any> {

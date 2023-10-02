@@ -21,6 +21,10 @@ mat-sidenav-content {
     background-color: white;
 }
 
+mat-sidenav-container {
+    background-color: white;
+}
+
 .menuButton {
     float: left;
     padding-top: 10px;
@@ -34,6 +38,7 @@ mat-sidenav-content {
 .body {
     padding-top: 50px;
     overflow-y: scroll;
+    width: 100%;
 }
 
 .clickedMenu {
