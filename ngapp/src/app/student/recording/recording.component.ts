@@ -108,8 +108,6 @@ export class RecordingComponent implements OnInit {
       // open dialog requesting microphone access if not allowed
       this.openMicRequestDialog();
     });
-
-
   }
 
   /**
@@ -120,6 +118,12 @@ export class RecordingComponent implements OnInit {
     this.recordings = await firstValueFrom(
       this.recordingService.getRecordings(this.story._id)
     );
+
+    if (this.recordings.length == 0) {
+      this.createNewRecording();
+      return;
+    }
+
     this.recordings.sort((a, b) => (a.date > b.date ? -1 : 1));
 
     // filter out the recording from the list that is currently active (i.e. not archived)

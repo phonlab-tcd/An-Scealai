@@ -69,8 +69,8 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
 profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
   Profile.findOneAndRemove({'userId': req.user._id}, function(err, profile) {
     if (err) {
-      res.json(err);
-    } else res.json('Successfully removed profile');
+      return res.status(500).json(err);
+    } else return res.json('Successfully removed profile');
   });
 });
 

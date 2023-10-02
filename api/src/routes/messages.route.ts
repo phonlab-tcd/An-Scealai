@@ -117,8 +117,8 @@ messageRoutes.route("/deleteAllMessages/:userId").get(function (req, res) {
   Message.deleteMany(
     { recipientId: req.params.userId },
     function (err, message) {
-      if (err) res.json(err);
-      else res.json("Successfully removed all messages for user");
+      if (err) return res.status(500).json(err);
+      else return res.json("Successfully removed all messages for user");
     }
   );
 });

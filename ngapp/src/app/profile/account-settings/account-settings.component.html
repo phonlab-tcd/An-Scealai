@@ -41,7 +41,7 @@
         <div class="settingsLabel">{{ ts.l.classroom }}</div>
         <!-- classroom if already joined -->
         <div class="settingsEntry" *ngIf="classroom">
-          <div class="settingsValue">{{ classroom?.title }}</div>
+          <div class="settingsValue">{{ classroom.title }}</div>
           <button *ngIf="classroom" class="btn leaveClassroomButton" (click)="openLeaveClassroomDialog()" >
             {{ ts.l.leave }}
           </button>
@@ -57,10 +57,14 @@
           <div *ngIf="classroomCodeOutput" class="errorMessage">
             {{ classroomCodeOutput }}
           </div>
-          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()" > {{ ts.l.join_classroom }} '<b>{{ foundClassroom.title }}</b >'? </div>
+          <div *ngIf="foundClassroom" class="greenLink" (click)="joinClassroom()" >
+            {{ ts.l.join_classroom }} '<b>{{ foundClassroom.title }}</b>'?
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="deleteAccount">{{ ts.l.delete_my_account }}</div>
+  <div class="deleteAccountContainer">
+    <span class="deleteAccount" (click)="openDeleteDialog()">{{ ts.l.delete_my_account }}</span>
+  </div>
 </div>

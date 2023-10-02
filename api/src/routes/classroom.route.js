@@ -180,7 +180,7 @@ classroomRoutes.route('/addStudent/:id').post((req, res) => {
 classroomRoutes.route('/removeStudent/:id').post((req, res) => {
   Classroom.findById(req.params.id, (err, classroom) => {
     if (err) {
-      res.json(err);
+      return res.status(400).json(err);
     }
     if (classroom) {
       const index = classroom.studentIds.indexOf(req.body.studentId);
@@ -189,10 +189,13 @@ classroomRoutes.route('/removeStudent/:id').post((req, res) => {
         // [ ... id[n], id[index], id[n+2], ... ] => [ ... id[n], id[n+2], ... ]
         classroom.studentIds.splice(index, 1);
         classroom.save();
-        res.status(200).json('Student removed successfully');
+        return res.status(200).json('Student removed successfully');
       } else {
-        res.status(404).json('This student ID is not associated with the classroom');
+        return res.status(404).json('This student ID is not associated with the classroom');
       }
+    }
+    else {
+      return res.status(404).json("Classroom not found");
     }
   });
 });

@@ -240,10 +240,10 @@ recordingRoutes.route("/updateArchiveStatus/:recordingId").get((req, res) => {
  */
 recordingRoutes.route("/deleteStoryRecordingAudio/:id").get((req, res) => {
   VoiceRecording.find({ "storyData._id": req.params.id }, (err, recordings) => {
-    if (err) res.status(400).json(err);
+    if (err) return res.status(400).json(err);
 
     if (!recordings) {
-      res.status(404).json({ message: "Voice Recording does not exist" });
+      return res.status(404).json({ message: "Voice Recording does not exist" });
     }
 
     let bucket = recordingUtil.bucket();
@@ -254,7 +254,7 @@ recordingRoutes.route("/deleteStoryRecordingAudio/:id").get((req, res) => {
           if (err) {
             // console.log("File does not exist");
             logger.error(err);
-            res.status(404).json("Paragraph audio file does not exist");
+            return res.status(404).json("Paragraph audio file does not exist");
           }
         });
       });
@@ -264,13 +264,13 @@ recordingRoutes.route("/deleteStoryRecordingAudio/:id").get((req, res) => {
           if (err) {
             // console.log("File does not exist");
             logger.error(err);
-            res.status(404).json("Sentence audio file does not exist");
+            return res.status(404).json("Sentence audio file does not exist");
           }
         });
       });
     });
 
-    res.status(200).json("Successfully deleted all audio recordiings for story");
+    return res.status(200).json("Successfully deleted all audio recordiings for story");
   });
 });
 
@@ -283,10 +283,10 @@ recordingRoutes.route("/deleteStoryRecording/:id").get(function (req, res) {
   VoiceRecording.deleteMany({ "storyData._id": req.params.id }, function (err, recordings) {
       if (err) {
         logger.error(err);
-        res.json(err);
+        return res.status(500).json(err);
       }
       else
-        res.json("Successfully removed all voice recording objects for story");
+        return res.json("Successfully removed all voice recording objects for story");
     }
   );
 });

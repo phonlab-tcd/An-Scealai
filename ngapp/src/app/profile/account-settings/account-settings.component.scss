@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 4rem;
     height: 100%;
 }
 
@@ -38,10 +39,14 @@
     word-wrap: break-word;
 }
 
+.deleteAccountContainer {
+    text-align: left;
+    padding-left: 60px;
+}
+
 .deleteAccount {
     color: var(--delete-red);
-    text-align: left;
-    padding-left: 20%;
+    
 
     &:hover {
         color: var(--delete-red-hover);

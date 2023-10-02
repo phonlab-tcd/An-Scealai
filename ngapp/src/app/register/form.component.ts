@@ -85,7 +85,7 @@ export class RegisterFormComponent implements OnInit {
     this.credentials.language = this.ts.inIrish() ? "ga" : "en";
     this.auth.register(this.credentials).subscribe(
       (_ok) => {
-        console.log("SUCCESFUL REGISTRATION", this.credentials);
+        console.log("SUCCESFUL REGISTRATION");
         this.registerSuccess.emit(this.credentials);
       },
       (err) => {
