@@ -17,7 +17,7 @@ export class RegisterProfileComponent implements OnInit {
               public ts : TranslationService) { }
 
   //input : string;
-  showError : boolean;
+  showError : boolean = false;
 
   genders : string[] = [
     "",
@@ -86,7 +86,7 @@ export class RegisterProfileComponent implements OnInit {
 
   notFromIreland : boolean = false;
 
-  country : string;
+  country : string = "";
 
   schools : string[] = [
     "",
@@ -109,7 +109,7 @@ export class RegisterProfileComponent implements OnInit {
     "I am a postgraduate student"
   ];
   
-  studentSchoolLevel: string;
+  studentSchoolLevel: string = "";
   
   primaryYears: string[] = [
     "",
@@ -121,7 +121,7 @@ export class RegisterProfileComponent implements OnInit {
     "I am in 6th class"
   ];
   
-  primaryYear: string;
+  primaryYear: string = "";
   
   secondaryYears: string[] = [
     "",
@@ -133,7 +133,7 @@ export class RegisterProfileComponent implements OnInit {
     "I am in 6th year",
   ];
   
-  secondaryYear: string;
+  secondaryYear: string = "";
   
   thirdLevelOptions: string[] = [
     "",
@@ -144,7 +144,7 @@ export class RegisterProfileComponent implements OnInit {
     "Other"
   ];
   
-  thirdLevelOption: string;
+  thirdLevelOption: string = "";
   
   thirdLevelYearsShort: string[] = [
     "",
@@ -162,11 +162,11 @@ export class RegisterProfileComponent implements OnInit {
     "I am in final year"
   ]
   
-  thirdLevelYear: string;
+  thirdLevelYear: string = "";
   
-  postgradYear: string;
+  postgradYear: string = "";
   
-  otherStudies: string;
+  otherStudies: string = "";
   
   usaOptions: string[] = [
     "",
@@ -175,11 +175,11 @@ export class RegisterProfileComponent implements OnInit {
   ];
   
   
-  usaOption: string;
+  usaOption: string = "";
   
-  otherCountryOfStudy: string;
+  otherCountryOfStudy: string = "";
   
-  otherPostgradStudies: string;
+  otherPostgradStudies: string = "";
   
   immersionOptions: string[] = [
     "",
@@ -196,8 +196,8 @@ export class RegisterProfileComponent implements OnInit {
     gaeltacht : false
   };
   
-  teacherPrimaryType: string;
-  teacherSecondaryType: string;
+  teacherPrimaryType: string = "";
+  teacherSecondaryType: string = "";
 
   nativeSpeakerStatuses : string[] = [
     "",
@@ -230,15 +230,15 @@ export class RegisterProfileComponent implements OnInit {
 
   spokenComprehensionLevel : string = this.spokenComprehensionLevels[0];
 
-  yearsOfIrish: number;
+  yearsOfIrish: number | null = null;
   
-  otherLanguages: string;
+  otherLanguages: string = "";
   
-  fatherNativeTongue: string;
+  fatherNativeTongue: string = "";
   
-  motherNativeTongue: string;
+  motherNativeTongue: string = "";
   
-  otherLanguageProficiency: string;
+  otherLanguageProficiency: string = "";
 
   howOftenOptions : string[] = [
     "",
@@ -422,7 +422,7 @@ export class RegisterProfileComponent implements OnInit {
       nativeSpeakerStatus : this.nativeSpeakerStatus,
       dialectPreference : this.dialectPreference,
       spokenComprehensionLevel : this.spokenComprehensionLevel,
-      yearsOfIrish: (this.yearsOfIrish) ? this.yearsOfIrish : null, 
+      yearsOfIrish: (this.yearsOfIrish != null) ? this.yearsOfIrish : null, 
       otherLanguages: (this.otherLanguages) ? this.otherLanguages : null,
       fatherNativeTongue: (this.fatherNativeTongue) ? this.fatherNativeTongue : null,
       motherNativeTongue: this.motherNativeTongue,
@@ -439,14 +439,16 @@ export class RegisterProfileComponent implements OnInit {
     };
 
     // save profile and route user to homepage
-    this.profileService.create(profile).subscribe((_) => {
-      if(userDetails.role === 'STUDENT') {
-        this.router.navigateByUrl('/student');
-      } else if(userDetails.role === 'TEACHER') {
-        this.router.navigateByUrl('/teacher');
+    this.profileService.create(profile).subscribe({
+      next: () => {},
+      error: (error) => { console.error(error); },
+      complete: () => {
+        if(userDetails.role === 'STUDENT') {
+          this.router.navigateByUrl('/student');
+        } else if(userDetails.role === 'TEACHER') {
+          this.router.navigateByUrl('/teacher');
+        }
       }
-      
     });
   }
-
 }

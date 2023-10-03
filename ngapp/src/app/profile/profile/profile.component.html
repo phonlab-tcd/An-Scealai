@@ -1,6 +1,7 @@
 <mat-sidenav-container class="profileContainer">
   <mat-sidenav
     #drawer
+    [autoFocus]="false"
     [attr.role]="(isMobile$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isMobile$ | async) ? 'over' : 'side'"
     [opened]="!(isMobile$ | async)"
