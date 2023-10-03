@@ -13,3 +13,20 @@
 .greenBtn:hover {
   color: var(--scealai-light-green);
 }
+
+mat-card-content {
+  text-align: center;
+  width: 100%;
+}
+
+iframe {
+  width: 560px;
+  height: 340px;
+}
+
+@media (max-width: 700px) {
+  iframe {
+    width: auto;
+    height: auto;
+  }
+}

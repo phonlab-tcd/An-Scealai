@@ -53,3 +53,12 @@
   height: 350px;
   padding: 5px;
 }
+
+@media (max-width: 700px) {
+  .teamImg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; 
+  }
+}
