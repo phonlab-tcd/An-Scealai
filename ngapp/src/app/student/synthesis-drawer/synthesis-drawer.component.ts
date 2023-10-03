@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
-import { SynthVoiceSelectComponent } from "app/student/synth-voice-select/synth-voice-select.component";
+import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { Voice, VoiceCode, } from "app/core/services/synthesis.service";
 
 @Component({

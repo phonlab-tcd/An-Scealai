@@ -8,7 +8,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { ClassroomService } from "app/core/services/classroom.service";
 import { MessageService } from "app/core/services/message.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
-import { SynthVoiceSelectComponent } from "app/student/synth-voice-select/synth-voice-select.component";
+import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';

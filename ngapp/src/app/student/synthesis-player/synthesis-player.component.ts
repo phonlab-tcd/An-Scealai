@@ -4,7 +4,7 @@ import { TextProcessingService } from "app/core/services/text-processing.service
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { SynthItem } from "app/core/models/synth-item";
 import { TranslationService } from "app/core/services/translation.service";
-import { SynthVoiceSelectComponent } from "app/student/synth-voice-select/synth-voice-select.component";
+import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 
 //------------------------------ Audio Check Component On Dashboard ----------------------------//
 

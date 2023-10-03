@@ -29,10 +29,8 @@ import { LogService } from './core/services/log.service';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterProfileComponent } from './profile/register-profile/register-profile.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
-import { SynthItemModule } from './student/synth-item/synth-item.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
 import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
@@ -53,6 +51,8 @@ import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
 import { NavBarModule } from './nav-bar/nav-bar.module';
 import { ProfileModule } from './profile/profile.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { SynthItemModule } from './synth-item/synth-item.module';
+import { SynthVoiceSelectModule } from './synth-voice-select/synth-voice-select.module';
 
 import { SpinnerModule } from './spinner/spinner.module';
 
@@ -109,7 +109,8 @@ import { SpinnerModule } from './spinner/spinner.module';
         PdfViewerModule,
         DictionaryLookupsModule,
         PdfViewerModule,
-        SynthItemModule
+        SynthItemModule,
+        SynthVoiceSelectModule
     ],
     providers: [
         StoryService,
