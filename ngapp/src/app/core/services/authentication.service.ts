@@ -109,7 +109,7 @@ export class AuthenticationService {
    */
   public getUserDetails(): UserDetails | null {
     const token = this.getToken();
-    let payload: any;
+    let payload: string;
     if (token) {
       payload = token.split(".")[1];
       if (!payload) return null;

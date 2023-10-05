@@ -7,6 +7,7 @@ import { TranslationService } from "app/core/services/translation.service";
 import { ProfileService } from "app/core/services/profile.service";
 import { NotificationService } from "app/core/services/notification-service.service";
 import config from "abairconfig";
+import { ReplaySubject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-login",
@@ -50,6 +51,7 @@ export class LoginComponent implements OnInit {
   waitingErrorTextKeys = [];
 
   isLoading: boolean = false;
+  private readonly destroyed = new ReplaySubject<void>();
 
   constructor(
     private auth: AuthenticationService,
@@ -85,7 +87,7 @@ export class LoginComponent implements OnInit {
     this.errorMsgKeys = [];
 
     // verify old account and set current HTML view to waiting for verification
-    this.auth.verifyOldAccount(this.frozenCredentials).subscribe({
+    this.auth.verifyOldAccount(this.frozenCredentials).pipe(takeUntil(this.destroyed)).subscribe({
       next: () => {
         this.waitingForEmailVerification = true; // does this need to be set here?
       },
@@ -115,7 +117,7 @@ export class LoginComponent implements OnInit {
     if (this.waitingForEmailVerification) {
       this.waitingErrorTextKeys = [];
       // if login successful, redirect to register profile page
-      this.auth.login(this.frozenCredentials).subscribe({
+      this.auth.login(this.frozenCredentials).pipe(takeUntil(this.destroyed)).subscribe({
         next: () => {
           console.log("Login successfull, redirecting to register-profile");
           this.router.navigateByUrl("register-profile");
@@ -139,7 +141,7 @@ export class LoginComponent implements OnInit {
     }
 
     // log in a user if they have been verified already (i.e. returning users)
-    this.auth.login(this.credentials).subscribe({
+    this.auth.login(this.credentials).pipe(takeUntil(this.destroyed)).subscribe({
       next: () => {
         console.log("Login successfull, redirecting to route-user")
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
@@ -171,8 +173,8 @@ export class LoginComponent implements OnInit {
     
             if (user) {
           if (user.role === "STUDENT") {
-            //this.notificationService.getStudentNotifications();
-            this.router.navigateByUrl("/student");
+            this.notificationService.getStudentNotifications();
+            this.router.navigateByUrl("/student/home");
           } else if (user.role === "TEACHER") {
             this.router.navigateByUrl("/teacher");
           } else if (user.role === "ADMIN") {
@@ -216,7 +218,7 @@ export class LoginComponent implements OnInit {
     this.resetPasswordErrKeys = [];
     const name = this.usernameForgotPassword;
     if (name) {
-      this.auth.resetPassword(name).subscribe({
+      this.auth.resetPassword(name).pipe(takeUntil(this.destroyed)).subscribe({
         next: (okRes) => {
           this.resetPasswordOkKeys = okRes.messageKeys;
           this.resetPasswordOkKeys.push(`[${okRes.sentTo}]`);
