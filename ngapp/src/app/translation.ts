@@ -1019,6 +1019,12 @@ const translations = {
   would_you_like_send_feedback: {
     ga: 'Ar mhaith leat aiseolas a sheoladh chuig',
     en: 'Would you like to send your feedback to' },
+  feedback_no: {
+    ga: 'Níor mhaith',
+    en: 'No' },
+  feedback_yes: {
+    ga: 'Ba mhaith',
+    en: 'Yes' },
   highlight_text_to_leave_comment_1: {
     ga: 'Cliceál ar an gcnaipe',
     en: 'Click on the' },

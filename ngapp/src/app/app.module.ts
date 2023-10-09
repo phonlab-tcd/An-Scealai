@@ -107,7 +107,6 @@ import { SpinnerModule } from './spinner/spinner.module';
         MatTableModule,
         MatProgressSpinnerModule,
         PdfViewerModule,
-        DictionaryLookupsModule,
         PdfViewerModule,
         SynthItemModule,
         SynthVoiceSelectModule

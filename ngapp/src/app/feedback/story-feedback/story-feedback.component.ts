@@ -268,8 +268,8 @@ export class StoryFeedbackComponent implements OnInit {
         data: {
           title: this.ts.l.save_changes,
           message: `${this.ts.l.would_you_like_send_feedback} ${this.story?.author}?`,
-          confirmText: this.ts.l.yes,
-          cancelText: this.ts.l.no,
+          confirmText: this.ts.l.feedback_yes,
+          cancelText: this.ts.l.feedback_no,
         },
         width: "60vh",
       });
