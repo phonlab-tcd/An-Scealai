@@ -5,7 +5,7 @@ import { Prompt } from "app/core/models/prompt";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.component";
 import { HttpClient } from "@angular/common/http";
 import config from "abairconfig";

@@ -8,7 +8,7 @@ import { TranslationService } from 'app/core/services/translation.service';
 import { StoryService } from 'app/core/services/story.service';
 import { MessageService } from 'app/core/services/message.service';
 import { Message } from '../../core/models/message';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { firstValueFrom } from 'rxjs';
 

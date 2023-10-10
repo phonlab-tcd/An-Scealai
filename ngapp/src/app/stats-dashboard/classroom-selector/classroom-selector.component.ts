@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { ClassroomService } from 'app/core/services/classroom.service';
 import { TranslationService } from 'app/core/services/translation.service';
 import { UserService } from '../../core/services/user.service';

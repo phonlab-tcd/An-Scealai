@@ -3,7 +3,7 @@ import { ProfileComponent } from './profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatDialog} from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;

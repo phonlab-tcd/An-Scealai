@@ -13,7 +13,7 @@ import { Event } from '../../core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
 import { RecordingService } from '../../core/services/recording.service';
 import config from 'abairconfig';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({

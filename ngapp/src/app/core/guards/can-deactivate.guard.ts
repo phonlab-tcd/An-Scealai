@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@ang
 import { Observable } from 'rxjs';
 import { DashboardComponent } from '../../student/dashboard/dashboard.component';
 import { RecordingComponent } from '../../student/recording/recording.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 import { TranslationService } from 'app/core/services/translation.service';
 

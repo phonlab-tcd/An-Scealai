@@ -15,7 +15,7 @@ import { StoryService } from "app/core/services/story.service";
 import { EngagementService } from "app/core/services/engagement.service";
 import { RecordAudioService } from "app/core/services/record-audio.service";
 import { ClassroomService } from "app/core/services/classroom.service";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";

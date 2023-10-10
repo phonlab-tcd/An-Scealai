@@ -6,7 +6,7 @@ import { ClassroomService } from 'app/core/services/classroom.service';
 import { UserService } from '../../core/services/user.service';
 import { Classroom } from '../../core/models/classroom';
 import { User } from '../../core/models/user'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
 
 @Component({

@@ -11,7 +11,7 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 import { Message } from "app/core/models/message";
 
