@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "ES2022",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
@@ -12,7 +12,8 @@
       "node",
       "jquery"
     ],
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "useDefineForClassFields": false
   },
   "files": [
     "src/test.ts",

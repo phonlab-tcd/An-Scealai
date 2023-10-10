@@ -10,8 +10,6 @@ import {
   environment
 } from  './environments/environment';
 
-declare const require: any;
-
 console.log('USER AGENT', window.navigator.userAgent);
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
@@ -19,7 +17,3 @@ getTestBed().initTestEnvironment(
   platformBrowserDynamicTesting(),
   {teardown: {destroyAfterEach: environment.moduleTeardownOptions.destroyAfterEach}},
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
