@@ -9,7 +9,7 @@ import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer
 import { GrammarErrorDrawerComponent } from './grammar-error-drawer/grammar-error-drawer.component';
 import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.component';
 import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.component';
-import { HomePageComponent } from './home-page/home-page.component';
+//import { HomePageComponent } from './home-page/home-page.component';
 
 import { StudentRoutingModule } from './student-routing.module';
 import { SpinnerModule } from '../spinner/spinner.module';
@@ -42,7 +42,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     GrammarErrorDrawerComponent,
     FeedbackDrawerComponent,
     SynthesisDrawerComponent,
-    HomePageComponent
+    //HomePageComponent
   ],
   imports: [
     CommonModule,
