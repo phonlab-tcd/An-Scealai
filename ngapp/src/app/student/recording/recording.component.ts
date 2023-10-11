@@ -467,7 +467,7 @@ export class RecordingComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigateByUrl("student/dashboard");
+    this.router.navigateByUrl("dashboard");
   }
 
   /**

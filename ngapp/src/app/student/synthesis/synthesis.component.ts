@@ -65,6 +65,6 @@ export class SynthesisComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigateByUrl('/student/dashboard/' + this.storyId);
+    this.router.navigateByUrl('dashboard/' + this.storyId);
   }
 }

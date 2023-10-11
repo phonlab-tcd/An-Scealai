@@ -6,12 +6,13 @@ import { StopSoundGuard } from 'app/core/guards/stop-sound.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RecordingComponent } from './recording/recording.component';
 import { HomePageComponent } from './home-page/home-page.component';
+console.log('I am loaded')
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'home'},
-  { path: 'home', component: HomePageComponent, canActivate: [AuthGuardService] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard, StopSoundGuard] },
-  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
+  // { path: '', pathMatch: 'full', redirectTo: 'home'},
+  // { path: 'home', component: HomePageComponent, canActivate: [AuthGuardService] },
+  // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard, StopSoundGuard] },
+  // { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
 
 ];
 

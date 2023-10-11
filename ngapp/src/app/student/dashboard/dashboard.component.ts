@@ -498,7 +498,7 @@ export class DashboardComponent implements OnInit {
 
   /* Route to record story component */
   goToRecording() {
-    this.router.navigateByUrl("/student/record-story/" + this.story._id);
+    this.router.navigateByUrl("/record-story/" + this.story._id);
   }
 
   /* Stop recording if already recording, otherwise start recording; get transcription */

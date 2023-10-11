@@ -198,7 +198,7 @@ export class PromptsComponent implements OnInit {
           .saveStory( user._id, res[0], new Date(), dialect, this.prompt, user.username, true )
           .subscribe({
             next: () => {
-              this.router.navigateByUrl("/student");
+              this.router.navigateByUrl("/dashboard");
             },
             error: () => {
               alert("Not able to create a new story");

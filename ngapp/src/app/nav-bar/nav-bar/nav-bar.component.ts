@@ -114,7 +114,7 @@ export class NavBarComponent implements OnInit {
       const user = this.auth.getUserDetails();
       if (user) {
         if (user.role === "STUDENT") {
-          this._router.navigateByUrl("/student");
+          this._router.navigateByUrl("/home");
         } 
         else if (user.role === "TEACHER") {
           this._router.navigateByUrl("/teacher");

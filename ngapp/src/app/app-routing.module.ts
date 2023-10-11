@@ -21,6 +21,12 @@ import { NotificationService } from 'app/core/services/notification-service.serv
 
 import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
+import { CanDeactivateDashboardGuard, CanDeactivateRecordingGuard } from 'app/core/guards/can-deactivate.guard';
+import { StopSoundGuard } from 'app/core/guards/stop-sound.guard';
+import { DashboardComponent } from 'app/student/dashboard/dashboard.component';
+import { RecordingComponent } from 'app/student/recording/recording.component';
+import { HomePageComponent } from 'app/student/home-page/home-page.component';
+
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
@@ -35,12 +41,15 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
   { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
-  {
-    path: 'student',
-    data: { expectedRole: 'STUDENT' },
-    canActivate: [RoleGuardService],
-    loadChildren: () => import('./student/student.module').then(m=>m.StudentModule)
-  },
+  { path: 'home', component: HomePageComponent, canActivate: [AuthGuardService] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard, StopSoundGuard] },
+  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
+  // {
+  //   path: 'student',
+  //   data: { expectedRole: 'STUDENT' },
+  //   canActivate: [RoleGuardService],
+  //   loadChildren: () => import('./student/student.module').then(m=>m.StudentModule)
+  // },
   {
     path: 'teacher',
     data: { expectedRole: 'TEACHER' },
