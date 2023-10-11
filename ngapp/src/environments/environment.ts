@@ -5,7 +5,7 @@ const moduleTeardownOptions: ModuleTeardownOptions =
 }
 
 export const environment = {
-  production: true,
+  production: false,
   moduleTeardownOptions,
 };
 

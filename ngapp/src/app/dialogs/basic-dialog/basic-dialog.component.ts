@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslationService } from 'app/core/services/translation.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 export interface DialogData {
   title: string;
@@ -25,6 +26,7 @@ export class BasicDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) 
               public data: DialogData,
               public ts: TranslationService,
-              public auth: AuthenticationService) {}
+              public auth: AuthenticationService,
+              ) {}
 }
 

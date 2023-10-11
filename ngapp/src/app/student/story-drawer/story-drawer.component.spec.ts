@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { StoryDrawerComponent } from './story-drawer.component';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FilterPipe } from '../../core/pipes/filter.pipe';
 
 describe('StoryDrawerComponent', () => {

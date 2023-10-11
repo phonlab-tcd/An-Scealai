@@ -16,9 +16,9 @@ mat-card {
     background-color: rgba(#70a87f, 0.3);
 }
 
-mat-card-title {
-    margin-left: -15px;
-}
+// mat-card-title {
+//     //font-weight: 500;
+// }
 
 .dashButton {
     width: 500px;
@@ -37,6 +37,7 @@ mat-card-title {
 
 a {
     text-decoration: none;
+    color: black;
 }
 
 @media (max-width: 700px) {

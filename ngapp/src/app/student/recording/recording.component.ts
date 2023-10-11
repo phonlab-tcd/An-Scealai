@@ -11,7 +11,7 @@ import { EventType } from "../../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { firstValueFrom } from "rxjs";
 import { requestMediaPermissions } from 'mic-check';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 
 declare var MediaRecorder: any;

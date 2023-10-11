@@ -16,13 +16,16 @@ import { SpinnerModule } from '../spinner/spinner.module';
 import { SynthItemModule } from '../synth-item/synth-item.module';
 import { SynthVoiceSelectModule } from 'app/synth-voice-select/synth-voice-select.module';
 
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import {MatDialogModule} from '@angular/material/dialog';
+
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { FeedbackModule } from '../feedback/feedback.module';
@@ -56,6 +59,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     MatMenuModule,
     MatCardModule,
     MatSlideToggleModule,
+    MatDialogModule,
     SynthItemModule,
     SynthVoiceSelectModule,
     FeedbackModule,

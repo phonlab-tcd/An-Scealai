@@ -7,7 +7,7 @@ import { EngagementService } from "app/core/services/engagement.service";
 import { RecordingService } from "../../core/services/recording.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { EventType } from "../../core/models/event";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Story } from "app/core/models/story";
 
@@ -122,6 +122,7 @@ export class StoryDrawerComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
       this.dialogRef = undefined;
+      console.log(res)
       if (res) {
         if (res[0]) {
           let dialect = "connemara";
