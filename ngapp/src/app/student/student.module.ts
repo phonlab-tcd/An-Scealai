@@ -16,14 +16,14 @@ import { StudentRoutingModule } from './student-routing.module';
 //import { SynthItemModule } from '../synth-item/synth-item.module';
 //import { SynthVoiceSelectModule } from 'app/synth-voice-select/synth-voice-select.module';
 
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
+// import { MatSelectModule } from '@angular/material/select';
+// import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatCardModule } from '@angular/material/card';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { FormsModule } from '@angular/forms';
+// import { MatButtonModule } from '@angular/material/button';
+// import { MatMenuModule } from '@angular/material/menu';
+// import { MatCardModule } from '@angular/material/card';
+// import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+// import { FormsModule } from '@angular/forms';
 //import { QuillModule } from 'ngx-quill';
 //import { FeedbackModule } from '../feedback/feedback.module';
 
@@ -47,15 +47,15 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     StudentRoutingModule,
-    MatSelectModule,
-    FormsModule,
     //SpinnerModule,
     MatSidenavModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatCardModule,
-    MatSlideToggleModule,
+    // MatButtonModule,
+    // MatIconModule,
+    // MatMenuModule,
+    // MatCardModule,
+    // MatSlideToggleModule,
+    // MatSelectModule,
+    // FormsModule,
     //SynthItemModule,
     //SynthVoiceSelectModule,
     //FeedbackModule,
