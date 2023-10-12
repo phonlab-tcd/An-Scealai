@@ -5,9 +5,9 @@ import { SafeUrl } from "@angular/platform-browser";
 import { firstValueFrom, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
-import Quill from "quill";
+//import Quill from "quill";
 import { Delta } from "quill";
-import ImageCompress from "quill-image-compress";
+//import ImageCompress from "quill-image-compress";
 import {clone} from "lodash";
 import config from "abairconfig";
 import { AuthenticationService } from "app/core/services/authentication.service";
@@ -33,7 +33,7 @@ import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
 import "lib/quill-tooltip-shim";
 
-Quill.register("modules/imageCompress", ImageCompress);
+//Quill.register("modules/imageCompress", ImageCompress);
 
 @Component({
   selector: "app-dashboard",
@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
   wordCount = 0;
 
   textUpdated = new Subject<void | string>();
-  quillEditor: Quill;
+  //quillEditor: Quill;
   quillHighlighter: QuillHighlighter;
   quillToolbar = {
     toolbar: [
@@ -279,7 +279,7 @@ export class DashboardComponent implements OnInit {
    * Call functions to save story to DB
    */
   onContentChanged(q: {
-    editor: Quill;
+    editor: any;
     html: string;
     text: string;
     content: any;
@@ -301,13 +301,13 @@ export class DashboardComponent implements OnInit {
    * Initialise quill editor and highlighter
    * @param q quill editor
    */
-  onEditorCreated(q: Quill) {
+  onEditorCreated(q: any) {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
-    this.quillEditor = q;
+    //this.quillEditor = q;
 
     //this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
 
-    this.quillEditor.root.setAttribute("spellcheck", "false");
+    //this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
 
     // const renderer = (function (ht: HighlightTag) {
@@ -349,8 +349,8 @@ export class DashboardComponent implements OnInit {
     if(!range  ||  !(range.length > 0) || !(event.source == "user")) {
       return;
     }
-    const selectedText = this.quillEditor.getText(range.index, range.length);
-    this.getWordCount(selectedText);
+    //const selectedText = this.quillEditor.getText(range.index, range.length);
+    this.getWordCount("");
   }
 
   /* Call the saveStory function after increasing a debounce id counter */
@@ -521,12 +521,12 @@ export class DashboardComponent implements OnInit {
       this.isTranscribing = false;
       if (transcription) {
         // get cursor position for inserting the transcription
-        let selection = this.quillEditor.getSelection(true);
-        this.quillEditor.insertText(selection.index, transcription + ".");
+        //let selection = this.quillEditor.getSelection(true);
+        //this.quillEditor.insertText(selection.index, transcription + ".");
 
         // update the text and html text with inserted transcription
-        this.story.text = this.quillEditor.getText();
-        this.story.htmlText = this.quillEditor.root.innerHTML;
+        //this.story.text = this.quillEditor.getText();
+        //this.story.htmlText = this.quillEditor.root.innerHTML;
 
         // save story
         this.getWordCount(transcription);
