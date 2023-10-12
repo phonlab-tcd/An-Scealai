@@ -20,18 +20,18 @@ import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.co
 import { Story } from "app/core/models/story";
 import { EventType } from "app/core/models/event";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
-import { QuillHighlighter } from "lib/quill-highlight/quill-highlight";
-import { HighlightTag } from "lib/quill-highlight/quill-highlight";
+//import { QuillHighlighter } from "lib/quill-highlight/quill-highlight";
+//import { HighlightTag } from "lib/quill-highlight/quill-highlight";
 import { leathanCaolChecker } from "lib/grammar-engine/checkers/leathan-caol-checker";
 import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
 import { relativeClauseChecker } from "lib/grammar-engine/checkers/relative-clause-checker";
 import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-engine/types";
-import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
+//import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
-import "lib/quill-tooltip-shim";
+//import "lib/quill-tooltip-shim";
 
 //Quill.register("modules/imageCompress", ImageCompress);
 
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
 
   textUpdated = new Subject<void | string>();
   //quillEditor: Quill;
-  quillHighlighter: QuillHighlighter;
+  //quillHighlighter: QuillHighlighter;
   quillToolbar = {
     toolbar: [
       ["bold", "italic", "underline", "strike"],
@@ -416,7 +416,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Get rid of highlighting markup from html text
    */
-  stripGramadoirAttributesFromHtml = stripQuillAttributesFromHTML;
+  //stripGramadoirAttributesFromHtml = stripQuillAttributesFromHTML;
 
   /* Toggle upper menu buttons */
   toggleOptions() {
