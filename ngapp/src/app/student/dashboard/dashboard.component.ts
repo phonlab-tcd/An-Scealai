@@ -47,7 +47,7 @@ Quill.register("modules/imageCompress", ImageCompress);
 })
 export class DashboardComponent implements OnInit {
   // STORY VARIABLES
-  story: Story;
+  story: Partial<Story>;
   saveStoryDebounceId = 0;
   mostRecentAttemptToSaveStory = new Date();
   storySaved = true;
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
   updatedTitle: string = "";
 
   // GRAMMAR VARIABLES
-  grammarEngine: GrammarEngine;
+  //grammarEngine: GrammarEngine;
   grammarLoaded: boolean = false;
   showErrorTags = false;
   grammarCheckerOptions: {[key: string]: GrammarChecker} = {
@@ -132,7 +132,18 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService,
   ) {
-    this.setUpGrammarChecking();
+    //this.setUpGrammarChecking();
+
+    this.story = {
+      title: "test",
+      _id: "1234",
+      htmlText: "this is a test"
+    }
+
+    this.hasFeedback = false;
+    this.updatedTitle = "";
+    this.storiesLoaded = true;
+    this.isFirstStory = true;
   }
 
   async ngOnInit() { }
@@ -141,70 +152,70 @@ export class DashboardComponent implements OnInit {
    * Initialise the Grammar Engine and Highlighting services
    * Update any error tags/highlighting when the user makes changes to their story
    */
-  async setUpGrammarChecking() {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) {
-      console.error("CANNOT SET UP GRAMMAR CHECKING, USER IS NULL");
-      return
-    };
+  // async setUpGrammarChecking() {
+  //   const userDetails = this.auth.getUserDetails();
+  //   if (!userDetails) {
+  //     console.error("CANNOT SET UP GRAMMAR CHECKING, USER IS NULL");
+  //     return
+  //   };
 
-    // get student classroom to see if any grammar checkers were specified in classroom settings
-    const classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
+  //   // get student classroom to see if any grammar checkers were specified in classroom settings
+  //   const classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
-    // populate an array of checkers from classroom settings to pass into the grammar engine
-    let checkers: GrammarChecker[] = [];
-    if (
-      classroom &&
-      classroom.grammarCheckers &&
-      classroom.grammarCheckers.length > 0
-    ) {
-      classroom.grammarCheckers.forEach((checkerName: string) => {
-        if (this.grammarCheckerOptions[checkerName])
-          checkers.push(this.grammarCheckerOptions[checkerName]);
-      });
-    }
-    // pass all checkers to the grammar engine if no classroom specifications
-    else {
-      checkers = Object.values(this.grammarCheckerOptions);
-    }
+  //   // populate an array of checkers from classroom settings to pass into the grammar engine
+  //   let checkers: GrammarChecker[] = [];
+  //   if (
+  //     classroom &&
+  //     classroom.grammarCheckers &&
+  //     classroom.grammarCheckers.length > 0
+  //   ) {
+  //     classroom.grammarCheckers.forEach((checkerName: string) => {
+  //       if (this.grammarCheckerOptions[checkerName])
+  //         checkers.push(this.grammarCheckerOptions[checkerName]);
+  //     });
+  //   }
+  //   // pass all checkers to the grammar engine if no classroom specifications
+  //   else {
+  //     checkers = Object.values(this.grammarCheckerOptions);
+  //   }
 
-    this.grammarEngine = new GrammarEngine(checkers, this.http, this.auth);
+  //   this.grammarEngine = new GrammarEngine(checkers, this.http, this.auth);
 
-    // subscribe to any changes made to the story text and check for grammar errors
-    this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
-      this.runGrammarCheck();
-    });
-  }
+  //   // subscribe to any changes made to the story text and check for grammar errors
+  //   this.textUpdated.pipe(distinctUntilChanged()).subscribe(async () => {
+  //     //this.runGrammarCheck();
+  //   });
+  // }
 
-  runGrammarCheck() {
-    this.grammarLoaded = false;
-    this.quillHighlighter?.hideAll();
-    const textToCheck = this.story.text.replace(/\n/g, " ");
-      if (!textToCheck) return;
+  // runGrammarCheck() {
+  //   this.grammarLoaded = false;
+  //   this.quillHighlighter?.hideAll();
+  //   const textToCheck = this.story.text.replace(/\n/g, " ");
+  //     if (!textToCheck) return;
 
-      try {
-        // check text for grammar errors
-        this.grammarEngine.check$(this.story.text).subscribe({
-          next: (tag: ErrorTag) => {
-            // show error highlighting if button on
-            if (this.showErrorTags) {
-              this.quillHighlighter.addTag(tag);
-            }
-          },
-          error: function (err) {console.error("ERROR GETTING THE 'CHECK()' RES: ", err)},
-          complete: () => {
-            if (!this.quillHighlighter) return;
+  //     try {
+  //       // check text for grammar errors
+  //       this.grammarEngine.check$(this.story.text).subscribe({
+  //         next: (tag: ErrorTag) => {
+  //           // show error highlighting if button on
+  //           if (this.showErrorTags) {
+  //             this.quillHighlighter.addTag(tag);
+  //           }
+  //         },
+  //         error: function (err) {console.error("ERROR GETTING THE 'CHECK()' RES: ", err)},
+  //         complete: () => {
+  //           if (!this.quillHighlighter) return;
 
-            //save any grammar errors with associated sentences to DB
-            //this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
-            this.grammarLoaded = true;
-          },
-        });
-      } catch (updateGrammarErrorsError) {
-        console.error("ERROR RUNNING THE GRAMMAR CHECKERS")
-        console.error(updateGrammarErrorsError);
-      }
-  }
+  //           //save any grammar errors with associated sentences to DB
+  //           //this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
+  //           this.grammarLoaded = true;
+  //         },
+  //       });
+  //     } catch (updateGrammarErrorsError) {
+  //       console.error("ERROR RUNNING THE GRAMMAR CHECKERS")
+  //       console.error(updateGrammarErrorsError);
+  //     }
+  // }
 
   /**
    * Toggles the right drawer open/closed
@@ -213,55 +224,55 @@ export class DashboardComponent implements OnInit {
    * @param selectedContent Indicates which component to be injected into the drawer
    */
   toggleRightDrawer(selectedDrawer: 'dictionary' | 'grammar' | 'feedback' | 'synthesis') {
-    if (this.rightDrawerOpened) {
-      // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
-      // once to open the dictionary, and clicked 'dictionary' again to close the drawer
-      // otherwise the drawer stays open and the content changes to whichever other button the user clicked
-      // (i.e. if the user clicked 'dictionary' and then 'grammar check', the drawer doesn't close but content is updated)
-      if (this.selectedDrawer === selectedDrawer) {
-        this.rightDrawer.close();
-        this.rightDrawerOpened = false;
-      } 
-    } else {
-      // open the drawer
-      this.rightDrawer.open();
-      this.rightDrawerOpened = true;
-      // add view feedback event to DB
-      if (selectedDrawer == 'feedback') {
-        this.storyService.viewFeedback(this.story._id).subscribe(() => {
-          this.story.feedback.seenByStudent = true;
-          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
-          this.notificationService.getStudentNotifications();
-        });
-      }
-    }
+    // if (this.rightDrawerOpened) {
+    //   // close the drawer if the same button has been pressed (i.e. the user clicked 'dictionary'
+    //   // once to open the dictionary, and clicked 'dictionary' again to close the drawer
+    //   // otherwise the drawer stays open and the content changes to whichever other button the user clicked
+    //   // (i.e. if the user clicked 'dictionary' and then 'grammar check', the drawer doesn't close but content is updated)
+    //   if (this.selectedDrawer === selectedDrawer) {
+    //     this.rightDrawer.close();
+    //     this.rightDrawerOpened = false;
+    //   } 
+    // } else {
+    //   // open the drawer
+    //   this.rightDrawer.open();
+    //   this.rightDrawerOpened = true;
+    //   // add view feedback event to DB
+    //   if (selectedDrawer == 'feedback') {
+    //     this.storyService.viewFeedback(this.story._id).subscribe(() => {
+    //       this.story.feedback.seenByStudent = true;
+    //       this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+    //       this.notificationService.getStudentNotifications();
+    //     });
+    //   }
+    // }
 
-    // sets the variable used to display the selected component in the drawer
-    this.selectedDrawer = selectedDrawer;
+    // // sets the variable used to display the selected component in the drawer
+    // this.selectedDrawer = selectedDrawer;
 
-    // shows/hides the grammar errors if grammar drawer is selected
-    if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
-      this.showErrorTags = true;
-      this.runGrammarCheck();
-      this.toggleGrammarTags();
-    } else {
-      this.showErrorTags = false;
-      this.toggleGrammarTags();
-    }
+    // // shows/hides the grammar errors if grammar drawer is selected
+    // if (this.selectedDrawer == "grammar" && this.rightDrawerOpened) {
+    //   this.showErrorTags = true;
+    //   //this.runGrammarCheck();
+    //   //this.toggleGrammarTags();
+    // } else {
+    //   this.showErrorTags = false;
+    //   this.toggleGrammarTags();
+    // }
   }
 
   /**
    * Set the current story displayed and calculate word count
    * @param story Story selected from the story drawer
    */
-  setCurrentStory(story: Story) {
-    this.story = story;
-    if (!this.story) return;
-    this.storySaved = true;
-    this.updatedTitle = this.story.title;
-    this.getWordCount(this.story.text);
-    this.textUpdated.next(story.text);
-  }
+  // setCurrentStory(story: Story) {
+  //   this.story = story;
+  //   if (!this.story) return;
+  //   this.storySaved = true;
+  //   this.updatedTitle = this.story.title;
+  //   this.getWordCount(this.story.text);
+  //   this.textUpdated.next(story.text);
+  // }
 
   /*
    * Update story text with what the student has written with quill
@@ -294,22 +305,22 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
-    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
+    //this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
 
-    const renderer = (function (ht: HighlightTag) {
-        const [name, message] = this.ts.l.iso_code == 'en' ? 
-          [ht.nameEN, ht.messageEN] : 
-          [ht.nameGA, ht.messageGA];
-        return `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${ht.color}"></span> ${name}: ${message}</div>`;
-    }).bind(this)
-    this.quillHighlighter = new QuillHighlighter(
-      this.quillEditor,
-      renderer,
-      this.engagement
-    );
+    // const renderer = (function (ht: HighlightTag) {
+    //     const [name, message] = this.ts.l.iso_code == 'en' ? 
+    //       [ht.nameEN, ht.messageEN] : 
+    //       [ht.nameGA, ht.messageGA];
+    //     return `<div style="white-space: pre-wrap; text-align: left;"><span class="circle" style="background: ${ht.color}"></span> ${name}: ${message}</div>`;
+    // }).bind(this)
+    // this.quillHighlighter = new QuillHighlighter(
+    //   this.quillEditor,
+    //   renderer,
+    //   this.engagement
+    // );
   }
 
   /**
@@ -358,48 +369,48 @@ export class DashboardComponent implements OnInit {
    * Add logged event for saved story using engagement service
    */
   async saveStory(debounceId: number | "modal", finishedWritingTime: Date) {
-    const saveAttempt = new Date();
-    this.mostRecentAttemptToSaveStory = saveAttempt;
+    // const saveAttempt = new Date();
+    // this.mostRecentAttemptToSaveStory = saveAttempt;
 
-    if (!this.story._id) {
-      return window.alert("Cannot save story. The id is not known");
-    }
+    // if (!this.story._id) {
+    //   return window.alert("Cannot save story. The id is not known");
+    // }
 
-    // get story html text without highlighting markup
-    const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml( clone(this.story.htmlText) );
+    // // get story html text without highlighting markup
+    // const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml( clone(this.story.htmlText) );
 
-    const updateData = {
-      title: this.story.title,
-      dialect: this.story.dialect,
-      text: this.story.text,
-      htmlText: unhighlightedHtmlText,
-      lastUpdated: finishedWritingTime,
-    };
+    // const updateData = {
+    //   title: this.story.title,
+    //   dialect: this.story.dialect,
+    //   text: this.story.text,
+    //   htmlText: unhighlightedHtmlText,
+    //   lastUpdated: finishedWritingTime,
+    // };
 
-    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], this.story );
+    // this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], this.story );
 
-    // Save story to the DB
-    try {
-      await firstValueFrom( this.storyService.updateStory(updateData, this.story._id) );
-      if (debounceId === this.saveStoryDebounceId) {
-        this.storySaved = true;
-      } else if (debounceId === "modal") {
-        this.storySaved = true;
-      }
-    } catch (error) {
-      window.alert("Error while trying to save story: " + (error as Error).message);
-      throw error;
-    }
-    // Set story status to saved if dates match
-    try {
-      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
-        this.storySaved = true;
-      }
-    } catch (error) {
-      window.alert("Error setting storySaved to true: " + (error as Error).message);
-      throw error;
-    }
-    return;
+    // // Save story to the DB
+    // try {
+    //   await firstValueFrom( this.storyService.updateStory(updateData, this.story._id) );
+    //   if (debounceId === this.saveStoryDebounceId) {
+    //     this.storySaved = true;
+    //   } else if (debounceId === "modal") {
+    //     this.storySaved = true;
+    //   }
+    // } catch (error) {
+    //   window.alert("Error while trying to save story: " + (error as Error).message);
+    //   throw error;
+    // }
+    // // Set story status to saved if dates match
+    // try {
+    //   if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+    //     this.storySaved = true;
+    //   }
+    // } catch (error) {
+    //   window.alert("Error setting storySaved to true: " + (error as Error).message);
+    //   throw error;
+    // }
+    // return;
   }
 
   /**
@@ -482,19 +493,19 @@ export class DashboardComponent implements OnInit {
   }
 
   /* Show or hide error highlighting in the story text */
-  async toggleGrammarTags() {
-    if(this.showErrorTags) {
-      for(const type of ERROR_TYPES ) {
-        if(this.checkBoxes[type]) {
-          const tagsToAdd = this.grammarEngine.errorStoreForLatestCheck.getType(type);
-          this.quillHighlighter?.show(tagsToAdd);
-        }
-      }
-      // this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
-    } else {
-      this.quillHighlighter.hideAll();
-    }
-  }
+  // async toggleGrammarTags() {
+  //   if(this.showErrorTags) {
+  //     for(const type of ERROR_TYPES ) {
+  //       if(this.checkBoxes[type]) {
+  //         const tagsToAdd = this.grammarEngine.errorStoreForLatestCheck.getType(type);
+  //         this.quillHighlighter?.show(tagsToAdd);
+  //       }
+  //     }
+  //     // this.quillHighlighter.show(this.grammarErrors.filter((tag) => this.checkBoxes[tag.type]).map(ErrorTag2HighlightTag) );
+  //   } else {
+  //     this.quillHighlighter.hideAll();
+  //   }
+  // }
 
   /* Route to record story component */
   goToRecording() {

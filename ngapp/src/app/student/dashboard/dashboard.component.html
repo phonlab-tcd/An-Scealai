@@ -2,14 +2,15 @@
 <div class="storyTitleHeader" *ngIf="story">
   <!-- STORY TITLE -->
   <div class="storyTitleContainer">
-    <input
+    <!-- <input
       class="storyTitle"
       [ngStyle]="titleStyle()"
       size="{{ updatedTitle.length }}"
       [(ngModel)]="updatedTitle"
       (blur)="updateStoryTitle()"
       (keydown.enter)="updateStoryTitle()"
-    />
+    /> -->
+    {{story.title}}
     <span *ngIf="!storySaved">*</span>
     <span style="color: rgba(0, 0, 0, 0.4)" *ngIf="story?.createdWithPrompts">
       {{ ts.l.made_using_prompts }}
@@ -86,12 +87,12 @@
     [class.optionsBtnClicked]="synthButtons?.enabled"
     (click)="dontToggle = true"
   >
-    <mat-slide-toggle
+    <!-- <mat-slide-toggle
       class="listenToggle"
       (click)="synthButtons?.toggle()"
       checked="true"
     >
-    </mat-slide-toggle>
+    </mat-slide-toggle> -->
     <span (click)="toggleRightDrawer('synthesis')">
       {{ ts.l.listen }}
       <i class="fas fa-volume-up optionsBtnIcon"></i>
@@ -123,14 +124,14 @@
 <mat-drawer-container class="bodyContainer" autosize>
   <!-- STORY LIST DRAWER-->
   <mat-drawer #storyDrawer class="storyListDrawer" mode="side" [opened]="storiesLoaded && (!story || isFirstStory)">
-    <app-story-drawer
+    <!-- <app-story-drawer
       #storyDrawer
       (storyEmitter)="setCurrentStory($event)"
       (hasFeedback)="hasFeedback = $event"
       (titleUpdated)="updatedTitle = $event"
       (storiesLoaded)="storiesLoaded = $event"
       (isFirstStory)="isFirstStory = $event"
-    ></app-story-drawer>
+    ></app-story-drawer> -->
   </mat-drawer>
 
   <!-- STORY WRITING CONTAINER-->
@@ -163,27 +164,27 @@
 
   <mat-drawer #rightDrawer class="rightDrawer" mode="side" position="end">
     <!-- FEEDBACK -->
-    <app-feedback-drawer
+    <!-- <app-feedback-drawer
       *ngIf="selectedDrawer == 'feedback'"
       [story]="story"
       [hasFeedback]="hasFeedback"
       (closeFeedbackEmitter)="toggleRightDrawer('feedback')"
     >
-    </app-feedback-drawer>
+    </app-feedback-drawer> -->
     <!-- SYNTHESIS SETTINGS -->
-    <app-synthesis-drawer
+    <!-- <app-synthesis-drawer
       *ngIf="selectedDrawer == 'synthesis'"
       (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
       (selectedVoice)="this.synthSettings.voice= $event"
       (selectedSpeed)="this.synthSettings.speed= $event"
-    ></app-synthesis-drawer>
+    ></app-synthesis-drawer> -->
     <!-- DICTIONARY -->
-    <app-dictionary-drawer
+    <!-- <app-dictionary-drawer
       *ngIf="selectedDrawer == 'dictionary'"
       (closeDictionaryEmitter)="toggleRightDrawer('dictionary')"
-    ></app-dictionary-drawer>
+    ></app-dictionary-drawer> -->
     <!-- GRAMMAR CHECKER -->
-    <app-grammar-error-drawer
+    <!-- <app-grammar-error-drawer
       *ngIf="selectedDrawer == 'grammar'"
       [quillHighlighter]="quillHighlighter"
       [grammarLoaded]="grammarLoaded"
@@ -191,6 +192,6 @@
       [grammarEngine]="grammarEngine"
       [checkBoxes]="checkBoxes"
       (closeGrammarEmitter)="toggleRightDrawer('grammar')"
-    ></app-grammar-error-drawer>
+    ></app-grammar-error-drawer> -->
   </mat-drawer>
 </mat-drawer-container>

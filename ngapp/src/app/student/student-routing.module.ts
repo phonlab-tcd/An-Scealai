@@ -9,9 +9,9 @@ import { HomePageComponent } from './home-page/home-page.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home'},
-  { path: 'home', component: HomePageComponent, canActivate: [AuthGuardService] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateDashboardGuard, StopSoundGuard] },
-  { path: 'record-story/:id', component: RecordingComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateRecordingGuard] },
+  { path: 'home', component: HomePageComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'record-story/:id', component: RecordingComponent },
 
 ];
 
