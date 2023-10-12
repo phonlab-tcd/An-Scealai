@@ -6,7 +6,7 @@ import { firstValueFrom, Subject } from "rxjs";
 import { distinctUntilChanged } from "rxjs/operators";
 import { TranslationService } from "app/core/services/translation.service";
 //import Quill from "quill";
-import { Delta } from "quill";
+//import { Delta } from "quill";
 //import ImageCompress from "quill-image-compress";
 import {clone} from "lodash";
 import config from "abairconfig";
@@ -29,8 +29,8 @@ import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-e
 //import stripQuillAttributesFromHTML from "lib/strip-quill-attributes-from-html";
 import { MatDrawer } from "@angular/material/sidenav";
 import { NotificationService } from "app/core/services/notification-service.service";
-import synth from "lib/synth";
-import Buttons from "lib/synth/buttons";
+//import synth from "lib/synth";
+//import Buttons from "lib/synth/buttons";
 //import "lib/quill-tooltip-shim";
 
 //Quill.register("modules/imageCompress", ImageCompress);
@@ -117,8 +117,8 @@ export class DashboardComponent implements OnInit {
   isTranscribing: boolean = false;
 
   // TEXT TO SPEECH
-  synthButtons: Buttons | undefined;
-  synthSettings = new synth.Settings();
+  //synthButtons: any;
+  //synthSettings = new synth.Settings();
   
   constructor(
     public ts: TranslationService,
@@ -283,8 +283,8 @@ export class DashboardComponent implements OnInit {
     html: string;
     text: string;
     content: any;
-    delta: Delta;
-    oldDelta: Delta;
+    delta: any;
+    oldDelta: any;
     source: "user" | "api" | "silent" | undefined;
   }) {
     this.story.text = q.text;
