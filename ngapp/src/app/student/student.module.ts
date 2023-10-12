@@ -2,17 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 //import { SynthesisPlayerComponent } from './synthesis-player/synthesis-player.component';
-import { RecordingComponent } from './recording/recording.component';
+//import { RecordingComponent } from './recording/recording.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 //import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
-import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
+//import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
 //import { GrammarErrorDrawerComponent } from './grammar-error-drawer/grammar-error-drawer.component';
 //import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.component';
 //import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.component';
-import { HomePageComponent } from './home-page/home-page.component';
+//import { HomePageComponent } from './home-page/home-page.component';
 
 import { StudentRoutingModule } from './student-routing.module';
-import { SpinnerModule } from '../spinner/spinner.module';
+//import { SpinnerModule } from '../spinner/spinner.module';
 //import { SynthItemModule } from '../synth-item/synth-item.module';
 //import { SynthVoiceSelectModule } from 'app/synth-voice-select/synth-voice-select.module';
 
@@ -27,29 +27,29 @@ import { FormsModule } from '@angular/forms';
 //import { QuillModule } from 'ngx-quill';
 //import { FeedbackModule } from '../feedback/feedback.module';
 
-import { FilterPipe } from 'app/core/pipes/filter.pipe';
-import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
+//import { FilterPipe } from 'app/core/pipes/filter.pipe';
+//import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
 
 @NgModule({
   declarations: [
     //SynthesisPlayerComponent,
-    RecordingComponent,
-    FilterPipe,
-    SafeHtmlPipe,
+    //RecordingComponent,
+    //FilterPipe,
+    //SafeHtmlPipe,
     DashboardComponent,
     //StoryDrawerComponent,
-    DictionaryDrawerComponent,
+    //DictionaryDrawerComponent,
     //GrammarErrorDrawerComponent,
     //FeedbackDrawerComponent,
     //awerComponent,
-    HomePageComponent
+    //HomePageComponent
   ],
   imports: [
     CommonModule,
     StudentRoutingModule,
     MatSelectModule,
     FormsModule,
-    SpinnerModule,
+    //SpinnerModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,

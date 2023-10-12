@@ -174,7 +174,7 @@ export class LoginComponent implements OnInit {
             if (user) {
           if (user.role === "STUDENT") {
             this.notificationService.getStudentNotifications();
-            this.router.navigateByUrl("/student/home");
+            this.router.navigateByUrl("/student");
           } else if (user.role === "TEACHER") {
             this.router.navigateByUrl("/teacher");
           } else if (user.role === "ADMIN") {
