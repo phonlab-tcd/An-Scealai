@@ -19,7 +19,8 @@ function synthesisUrl(input: string, voice: string) {
   const outputType = "JSON";
   const timing = "WORD";
   const params = new URLSearchParams({input, voice, outputType, timing});
-  return `https://www.abair.ie/api2/synthesise?${params}` 
+  //return `https://www.abair.ie/api2/synthesise?${params}` 
+  return `https://phoneticsrv3.lcs.tcd.ie/api2/synthesise?${params}`;
 }
 
 const fetch_cache = {};
