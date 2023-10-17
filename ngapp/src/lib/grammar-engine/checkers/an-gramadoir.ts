@@ -4,10 +4,10 @@ import { GrammarChecker, ErrorTag, ERROR_INFO, ERROR_TYPES, ErrorType} from '../
 // const grammarCheckerGramadoirTS = new GrammarCheckerGramadoirTS('https://gramadoir-breakdown.scealai.abair.ie');
 
 let grammarCheckerGramadoirTS: any;
-let grammarCheckerImportedSuccessfully = false;
+let grammarCheckerImportedSuccessfully: boolean = false;
 
 /**
- * Import the Grammar checker if the user has enough memory to handle it
+ * Import the TS Grammar checker if the user has enough memory to handle it
  * Otherwise, need to call An Gramadoir that is on the abair server
  */
 try {
@@ -21,7 +21,7 @@ try {
       console.log("Grammar checker import worked");
       grammarCheckerImportedSuccessfully = true;
       const memory = (window.performance as Performance & { memory?: any }).memory;
-    console.log(memory);
+      console.log(memory);
     }).catch(error => {
       const memory = (window.performance as Performance & { memory?: any }).memory;
       console.error('Error occurred importing the grammar checker module:', error, memory);

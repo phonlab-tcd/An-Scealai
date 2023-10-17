@@ -34,6 +34,7 @@ import Buttons from "lib/synth/buttons";
 import "lib/quill-tooltip-shim";
 
 Quill.register("modules/imageCompress", ImageCompress);
+Quill.register("modules/spellcheck", true);
 
 @Component({
   selector: "app-dashboard",
@@ -109,6 +110,7 @@ export class DashboardComponent implements OnInit {
       suppressErrorLogging: false,
       insertIntoEditor: undefined,
     },
+    spellcheck: false
   };
 
   // SPEECH TO TEXT
