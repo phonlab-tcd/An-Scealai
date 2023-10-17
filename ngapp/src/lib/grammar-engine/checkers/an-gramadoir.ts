@@ -1,7 +1,42 @@
 import { GrammarChecker, ErrorTag, ERROR_INFO, ERROR_TYPES, ErrorType} from '../types';
-import { GrammarChecker as GrammarCheckerGramadoirTS } from '@phonlab-tcd/gramadoir-ts';
+//import { GrammarChecker as GrammarCheckerGramadoirTS } from '@phonlab-tcd/gramadoir-ts';
 
-const grammarCheckerGramadoirTS = new GrammarCheckerGramadoirTS('https://gramadoir-breakdown.scealai.abair.ie');
+// const grammarCheckerGramadoirTS = new GrammarCheckerGramadoirTS('https://gramadoir-breakdown.scealai.abair.ie');
+
+let grammarCheckerGramadoirTS: any;
+let grammarCheckerImportedSuccessfully: boolean = false;
+
+/**
+ * Import the TS Grammar checker if the user has enough memory to handle it
+ * Otherwise, need to call An Gramadoir that is on the abair server
+ */
+try {
+  const memory = (window.performance as Performance & { memory?: any }).memory;
+  const memoryThreshold = 2000000000;
+
+  if (memory && memory.usedJSHeapSize < memoryThreshold) {
+    import('@phonlab-tcd/gramadoir-ts').then(module => {
+      const GrammarCheckerGramadoirTS = module.GrammarChecker;
+      grammarCheckerGramadoirTS = new GrammarCheckerGramadoirTS('https://gramadoir-breakdown.scealai.abair.ie');
+      console.log("Grammar checker import worked");
+      grammarCheckerImportedSuccessfully = true;
+      const memory = (window.performance as Performance & { memory?: any }).memory;
+      console.log(memory);
+    }).catch(error => {
+      const memory = (window.performance as Performance & { memory?: any }).memory;
+      console.error('Error occurred importing the grammar checker module:', error, memory);
+    });
+  }
+  else {
+    console.log("Not enough memeory to import the grammar checker");
+    const memory = (window.performance as Performance & { memory?: any }).memory;
+    console.log(memory);
+    console.log("Grammar checker puts memory ", (memory.usedJSHeapSize - memoryThreshold), " bytes over threshold")
+  }
+} catch (error) {
+  console.error('Error occurred while dynamically importing the grammar checker module:', error);
+}
+
 
 // initialise the grammar checker
 export const anGramadoir: GrammarChecker = {
@@ -31,18 +66,39 @@ export type GramadoirTag = {
 async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
 
   let errors = [];
-  try {
-    console.log("Getting errors from an gramadoir...")
-    errors = await grammarCheckerGramadoirTS.check(input);
+
+  // Use the TS Grammar Checker if it was imported successfully
+  if (grammarCheckerImportedSuccessfully) {
+    console.log("Using TS Grammar checker")
+    try {
+      console.log("Getting errors from an gramadoir for sentence...")
+      errors = await grammarCheckerGramadoirTS.check(input);
+    }
+    catch (error) {
+      console.log("AN GRAMADOIR ERROR: ", error);
+    }
   }
-  catch (error) {
-    console.log("AN GRAMADOIR ERROR: ", error);
+  // Otherwise call An Gramadoir that is hosted on the server
+  else {
+    console.log("Using srv.abair.ie grammar checker")
+    try {
+      const gramadoirRes = await fetch(`https://gramadoir.abair.ie?text=${encodeURI(input)}`, {});
+      const data = await gramadoirRes.json();
+      errors = data;
+    }
+    catch(_) { // Try the cadhan hosted API as a backup, if abair.ie is down.
+      console.log("Srv.abair.ie call did not work")
+      try {
+        errors = await callAnGramadoir(`https://cadhan.com/api/gramadoir/1.0/en/${input}`);
+      } catch(_) {
+        console.log("Nothing works");
+        errors = [];
+      }  
+    }
   }
-  
-  //const errors = await grammarCheckerGramadoirTS.check(input);
 
   // map gramadoir responses to generic ErrorTag values
-  const errorTags: ErrorTag[] = errors.map((error) => {
+  const errorTags: ErrorTag[] = errors.map((error: any) => {
     // get simple rule name from an gramadoir's ruleId response attribute
     const cleanedErrorName = gramadoirId2string(error.ruleId);
     if(!(cleanedErrorName in ERROR_INFO)) {
@@ -50,7 +106,7 @@ async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
     }
     const e_info = ERROR_INFO[cleanedErrorName];
 
-    function extractStringBetweenSlashes(inputString) {
+    function extractStringBetweenSlashes(inputString: string) {
       const regex = /\/([^/]+)\//; // Regular expression to match the string between slashes
       const match = inputString.match(regex); // Find the first match in the inputString
     

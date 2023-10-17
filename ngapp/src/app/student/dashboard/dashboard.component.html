@@ -137,7 +137,7 @@
   <div class="storyContainer">
     <div class="ql-container" #quillHeightSpan *ngIf="storiesLoaded && story; else newStoryMessage">
       <!-- STORY DRAWER BUTTON-->
-      <span class="menuButton material-symbols-outlined" (click)="storyDrawer.toggle()" >menu</span >
+      <span class="menuButton" (click)="storyDrawer.toggle()"><mat-icon style="display: inline-block">menu</mat-icon></span>
       <div class="wordCount">{{ ts.l.word_count }}: {{ wordCount }}</div>
       <!-- QUILL EDITOR AND TOOLBAR-->
       <quill-editor

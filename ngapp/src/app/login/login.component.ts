@@ -119,7 +119,6 @@ export class LoginComponent implements OnInit {
       // if login successful, redirect to register profile page
       this.auth.login(this.frozenCredentials).pipe(takeUntil(this.destroyed)).subscribe({
         next: () => {
-          console.log("Login successfull, redirecting to register-profile");
           this.router.navigateByUrl("register-profile");
         },
         error: (err) => {
@@ -143,7 +142,7 @@ export class LoginComponent implements OnInit {
     // log in a user if they have been verified already (i.e. returning users)
     this.auth.login(this.credentials).pipe(takeUntil(this.destroyed)).subscribe({
       next: () => {
-        console.log("Login successfull, redirecting to route-user")
+        console.log("User logged in")
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
         if (user) this.routeUser(user._id, user);
@@ -169,7 +168,6 @@ export class LoginComponent implements OnInit {
    * @param id user id
    */
   routeUser(id: string, user: any) {
-    console.log("user exists, rerouting ", user.role, " user");
     
             if (user) {
           if (user.role === "STUDENT") {
@@ -228,6 +226,6 @@ export class LoginComponent implements OnInit {
           this.resetPasswordErrKeys = err.error.messageKeys;
         },
       });
-    } else console.log("USERNAME NULL FOR RESETTING PASSWORD");
+    } else console.error("USERNAME NULL FOR RESETTING PASSWORD");
   }
 }
