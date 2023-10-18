@@ -6,7 +6,7 @@ import { StoryService } from "app/core/services/story.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 import { FeedbackComment } from "app/core/models/feedbackComment";
 import { Story } from "app/core/models/story";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import Quill from "quill";
 

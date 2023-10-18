@@ -5,7 +5,7 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
 import { ClassroomService } from 'app/core/services/classroom.service';
 import { TranslationService } from 'app/core/services/translation.service';
 import { UserService } from 'app/core/services/user.service';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Story } from 'app/core/models/story';
 import { HttpClient } from '@angular/common/http';

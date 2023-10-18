@@ -11,7 +11,7 @@ import { SynthItem } from "app/core/models/synth-item";
 import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "lib/grammar-engine/types";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import config from "app/../abairconfig";
 

@@ -11,7 +11,7 @@ import { MessageService } from "app/core/services/message.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { NotificationService } from "app/core/services/notification-service.service";
 import { RecordAudioService } from "../core/services/record-audio.service";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { RecordingDialogComponent } from "../dialogs/recording-dialog/recording-dialog.component";
 import { firstValueFrom } from "rxjs";
 

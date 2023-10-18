@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { StoryFeedbackComponent } from './story-feedback/story-feedback.component';
 import { FeedbackCommentComponent } from './feedback-comment/feedback-comment.component';
 import { QuillModule } from 'ngx-quill';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [

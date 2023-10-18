@@ -6,7 +6,7 @@ import { ClassroomService } from "app/core/services/classroom.service";
 import { HttpClient } from "@angular/common/http";
 import { ChatbotService } from "app/core/services/chatbot.service";
 import { firstValueFrom } from "rxjs";
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SelectQuizDialogComponent } from './select-quiz-dialog/select-quiz-dialog.component';
 
 export type Quiz = {

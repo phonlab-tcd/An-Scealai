@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import { MatDialog} from '@angular/material/dialog';
 
 describe('MessagesComponent', () => {
   let component: MessagesComponent;

@@ -1,13 +1,13 @@
 <div class="body">
   <div *ngIf="classrooms.length > 0">
-    <div class="myStories">{{ ts.l.my_classrooms }}</div>
+    <div class="myClassroom">{{ ts.l.my_classrooms }}</div>
     <div class="subHeader">
       <div>{{ts.l.title}}</div><div> {{ts.l.no_of_students}} </div>
     </div>
     <hr />
   </div>
   <!-- list of stories -->
-  <div class="storyList">
+  <div class="classroomList">
     <div *ngFor="let classroom of classrooms; let i = index" (click)="setClassroom(classroom)" >
       <!-- story entry-->
       <div class="contentSection" [attr.id]="classroom._id">
@@ -16,8 +16,8 @@
           {{ classroom?.title }}
         </div>
         <!-- date and menu icon-->
-        <div class="contentsDate">
-          {{ classroom?.studentIds?.length }}
+        <div class="contentsSettings">
+          <div style="padding-top: 6px;">{{ classroom?.studentIds?.length }}</div>
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your classroom" >
             <mat-icon>more_vert</mat-icon>
           </button>

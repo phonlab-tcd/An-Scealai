@@ -5,7 +5,7 @@
       <p class="studentName">{{student.key}}</p>
       <div *ngIf="student.value.length > 0; else noWords" class="dictionaryWordContainer">
         <div *ngFor="let entry of student.value" style="padding-top: 5px;">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-content class="cardContent">
               <div> <b>{{entry.dictionaryLookup}}</b> </div>
               <div> {{entry.date | date : 'd/M/yy'}} </div>
@@ -28,7 +28,7 @@
     <div *ngFor="let student of dictionaryLookups | keyvalue ">
       <div *ngIf="student.value.length > 0; else noWordsStudent">
         <div *ngFor="let entry of student.value" style="padding-top: 5px;">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-content class="cardContent">
               <div> <b>{{entry.dictionaryLookup}}</b> </div>
               <div> {{entry.date | date : 'd/M/yy'}} </div>
