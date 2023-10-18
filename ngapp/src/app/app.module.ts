@@ -27,7 +27,6 @@ import { UserService } from './core/services/user.service';
 import { LogService } from './core/services/log.service';
 
 import { AppComponent } from './app.component';
-import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { MessagesComponent } from './messages/messages.component';
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
@@ -57,7 +56,6 @@ import { SpinnerModule } from './spinner/spinner.module';
 @NgModule({
     declarations: [
         AppComponent,
-        LandingComponent,
         LoginComponent,
         //RegisterProfileComponent,
         HighlightDirective,

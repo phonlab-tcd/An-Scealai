@@ -1,10 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "app/core/services/authentication.service";
-import { Router } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { TranslationService } from "app/core/services/translation.service";
+import { CommonModule } from "@angular/common";
 
 @Component({
+  standalone: true,
   selector: "app-landing",
+  imports: [CommonModule, RouterModule],
   templateUrl: "./landing.component.html",
   styleUrls: ["./landing.component.scss"],
 })
