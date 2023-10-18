@@ -59,7 +59,8 @@
     margin-left: auto;
 }
 
-.mat-fab.mat-accent, .mat-mini-fab.mat-accent {
+// add classroom button
+.mat-mdc-fab.mat-accent, .mat-mdc-mini-fab.mat-accent {
     background-color: var(--scealai-green);
     box-shadow: none;
 }

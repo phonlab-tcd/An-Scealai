@@ -12,13 +12,14 @@ import { ClassroomDrawerComponent } from './classroom-drawer/classroom-drawer.co
 import { StudentListComponent } from './student-list/student-list.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FeedbackModule } from '../feedback/feedback.module';
 
 @NgModule({
@@ -42,6 +43,7 @@ import { FeedbackModule } from '../feedback/feedback.module';
     MatMenuModule,
     MatExpansionModule,
     MatDividerModule,
+    MatDialogModule,
     ReactiveFormsModule,
     FeedbackModule,
   ]

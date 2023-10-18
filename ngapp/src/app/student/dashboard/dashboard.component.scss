@@ -1,50 +1,36 @@
+.mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-track-color: var(--scealai-green); // toggle slide track
+    --mdc-switch-selected-handle-color: white; // toggle circle color
+    --mdc-switch-selected-hover-track-color: var(--scealai-green);
+    --mdc-switch-selected-hover-handle-color: white;
+    --mdc-switch-selected-pressed-track-color: var(--scealai-green); // click down on track
+    --mdc-switch-selected-focus-track-color: var(--scealai-green); // when track actively switching
+    --mdc-switch-selected-focus-handle-color: white; // toggle circle when activated
+    --mdc-switch-selected-focus-state-layer-color: none; // ripple activated
+    --mdc-switch-selected-hover-state-layer-color: none; // hover over toggle circle (ripple)
+    --mdc-switch-selected-pressed-state-layer-color: none; // click down on toggle circle (ripple)
+    --mdc-switch-selected-pressed-handle-color: white; // click down on toggle circle
+    --mdc-switch-selected-icon-color: #fff; // check icon color
+    padding-right: 8px;
+    font-family: "Open Sans" !important;
+    --mdc-switch-unselected-track-color: #00000061;
+    --mdc-switch-unselected-handle-color: white;
+    --mdc-switch-unselected-hover-track-color: #00000061;
+    --mdc-switch-unselected-hover-handle-color: white;
+    --mdc-switch-unselected-pressed-track-color: #00000061;
+    --mdc-switch-unselected-focus-track-color: #00000061;
+    --mdc-switch-unselected-focus-handle-color: white;
+    --mdc-switch-unselected-focus-state-layer-color: none;
+    --mdc-switch-unselected-hover-state-layer-color: none;
+    --mdc-switch-unselected-pressed-state-layer-color: none;
+    --mdc-switch-unselected-pressed-handle-color: white;
+    --mdc-switch-handle-surface-color: var(--mdc-theme-surface, #fff);
+    --mdc-switch-unselected-icon-color: #fff;
+}
 
-// /* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.*/
-// .mat-slide-toggle-content {
-//     font-family: "Open Sans" !important;
-// }
-// /* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.*/
-// .mat-mdc-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-//     background-color: white !important;
-// }
-// /* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.*/
-// .mat-mdc-slide-toggle.mat-checked .mat-slide-toggle-bar {
-//     background-color: var(--scealai-green) !important;
-// }
-// .listenToggle .mat-ripple-element {
-//     background-color: var(--scealai-light-green) !important;
-// }
-
-// /* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version.*/
-// .mat-slide-toggle-label {
-//     //padding-right: 10px;
-// }
-
-// .mat-mdc-slide-toggle.mat-accent {
-//     --mdc-switch-selected-handle-color: white !important;
-//     --mdc-switch-selected-track-color: var(--scealai-green) !important;
-// }
-
-// .mat-mdc-slide-toggle .mdc-form-field .mdc-switch {
-//     --mdc-switch-selected-track-color: green;
-//     --mdc-switch-unselected-track-color: gray;
-  
-//     --mdc-switch-selected-icon-color: yellow;
-//     --mdc-switch-unlected-icon-color: black;
-//   }
-
-// .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked:not(.mat-disabled) .mdc-switch__shadow {
-//     background-color: rgb(50, 170, 118);
-//     /*replace with your color*/
-//   }
-
-// .mdc-switch.mdc-switch--selected.mdc-switch--checked {
-//     background-color: blue;
-// }
-
-// .mdc-switch.mdc-switch__track {
-//     background-color: red;
-// }
+.listenToggle .mat-ripple-element {
+    background-color: var(--scealai-light-green) !important;
+}
 
 
 .ql-tooltip.synthesis-button.synth-button-word {
