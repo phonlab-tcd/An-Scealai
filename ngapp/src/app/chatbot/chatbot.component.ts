@@ -6,8 +6,9 @@ import { ClassroomService } from "app/core/services/classroom.service";
 import { HttpClient } from "@angular/common/http";
 import { ChatbotService } from "app/core/services/chatbot.service";
 import { firstValueFrom } from "rxjs";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { SelectQuizDialogComponent } from './select-quiz-dialog/select-quiz-dialog.component';
+import { FormsModule } from "@angular/forms";
 
 export type Quiz = {
   _id: string,
@@ -28,7 +29,9 @@ export type ChatBubble = {
 
 
 @Component({
+  standalone: true,
   selector: "app-chatbot",
+  imports: [FormsModule, MatDialogModule],
   templateUrl: "./chatbot.component.html",
   styleUrls: ["./chatbot.component.scss"],
 })

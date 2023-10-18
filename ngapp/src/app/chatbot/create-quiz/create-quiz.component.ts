@@ -8,6 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { Quiz } from '../chatbot.component';
 
 @Component({
+  standalone: true,
   selector: 'app-create-quiz',
   templateUrl: './create-quiz.component.html',
   styleUrls: ['./create-quiz.component.scss']
