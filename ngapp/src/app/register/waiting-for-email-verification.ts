@@ -4,8 +4,11 @@ import { EngagementService } from "app/core/services/engagement.service";
 import { EventType } from "app/core/models/event";
 import { AuthenticationService, RegistrationTokenPayload } from "app/core/services/authentication.service";
 import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: "waiting-for-email-verification",
   templateUrl: "./waiting-for-email-verification.html",
   styleUrls: ["./register.component.scss"],

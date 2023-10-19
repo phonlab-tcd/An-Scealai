@@ -15,8 +15,11 @@ import { RecordingService } from "app/core/services/recording.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import { firstValueFrom } from "rxjs";
+import { CommonModule } from "@angular/common";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: "app-account-settings",
   templateUrl: "./account-settings.component.html",
   styleUrls: ["./account-settings.component.scss"],

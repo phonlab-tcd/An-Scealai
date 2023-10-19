@@ -29,14 +29,12 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { RegisterModule } from 'app/register/register.module';
 import { DictionaryLookupsModule } from './story-stats/dictionary-lookups/dictionary-lookups.module';
 import { GrammarPieChartModule } from './story-stats/grammar-pie-chart/grammar-pie-chart.module';
 import { GrammarErrorTimeModule } from './story-stats/grammar-error-time/grammar-error-time.module';
 import { NgramDistributionModule } from './story-stats/ngram-distribution/ngram-distribution.module';
 import { WordCountsModule } from './story-stats/word-counts/word-counts.module';
 import { NavBarModule } from './nav-bar/nav-bar.module';
-import { ProfileModule } from './profile/profile.module';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SynthItemModule } from './synth-item/synth-item.module';
 import { SynthVoiceSelectModule } from './synth-voice-select/synth-voice-select.module';
@@ -55,9 +53,6 @@ import { SpinnerModule } from './spinner/spinner.module';
         ReactiveFormsModule,
         AppRoutingModule,
         NavBarModule,
-        ProfileModule,
-        RegisterModule,
-        FormsModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatDialogModule,

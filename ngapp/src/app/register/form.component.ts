@@ -1,13 +1,17 @@
 import { OnInit, Component, Output, EventEmitter } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService, RegistrationTokenPayload } from "app/core/services/authentication.service";
-import { UntypedFormControl } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from "@angular/forms";
 import config from "abairconfig";
 import { ActivatedRoute } from "@angular/router";
+import { WaitingForEmailVerificationComponent } from "./waiting-for-email-verification";
+import { CommonModule } from "@angular/common";
 
 type UsernameMessageKey = "username_no_spaces" | "username_no_special_chars";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, WaitingForEmailVerificationComponent],
   selector: "register-form",
   templateUrl: "./form.component.html",
   styleUrls: ["../register/register.component.scss"],

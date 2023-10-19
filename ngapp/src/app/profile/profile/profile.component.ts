@@ -6,8 +6,14 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { EngagementService } from "app/core/services/engagement.service";
 import { EventType } from "app/core/models/event";
 import { TranslationService } from "app/core/services/translation.service";
+import { CommonModule } from "@angular/common";
+import { RegisterProfileComponent } from "../register-profile/register-profile.component";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { AccountSettingsComponent } from "../account-settings/account-settings.component";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RegisterProfileComponent, MatSidenavModule, AccountSettingsComponent],
   selector: "app-profile",
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.scss"],

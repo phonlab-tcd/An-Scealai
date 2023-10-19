@@ -3,8 +3,12 @@ import { ProfileService } from 'app/core/services/profile.service';
 import { AuthenticationService } from 'app/core/services/authentication.service'
 import { Router } from '@angular/router';
 import { TranslationService } from 'app/core/services/translation.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   selector: 'app-register-profile',
   templateUrl: './register-profile.component.html',
   styleUrls: ['./register-profile.component.scss']
