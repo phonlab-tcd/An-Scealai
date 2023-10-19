@@ -24,7 +24,7 @@ import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.compo
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
-  { path: 'login', component: LoginComponent},
+  { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)},
   //{ path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)},
   { path: 'register/:role', component: RegisterComponent},
   { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},

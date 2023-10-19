@@ -47,7 +47,6 @@ import { SpinnerModule } from './spinner/spinner.module';
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent
     ],
     imports: [
         BrowserModule,
