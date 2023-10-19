@@ -12,8 +12,20 @@ import { HttpClient } from '@angular/common/http';
 import config from 'abairconfig';
 import { ActivatedRoute } from '@angular/router';
 import { EngagementService } from 'app/core/services/engagement.service';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { NgramDistributionModule } from 'app/story-stats/ngram-distribution/ngram-distribution.module';
+import { WordCountsModule } from 'app/story-stats/word-counts/word-counts.module';
+import { DictionaryLookupsModule } from 'app/story-stats/dictionary-lookups/dictionary-lookups.module';
+import { GrammarPieChartModule } from 'app/story-stats/grammar-pie-chart/grammar-pie-chart.module';
+import { GrammarErrorTimeModule } from 'app/story-stats/grammar-error-time/grammar-error-time.module';
+import { SpinnerModule } from 'app/spinner/spinner.module';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatCardModule, MatButtonModule, SpinnerModule, NgramDistributionModule, WordCountsModule, DictionaryLookupsModule, GrammarPieChartModule, GrammarErrorTimeModule],
   selector: 'app-stats-dashboard',
   templateUrl: './stats-dashboard.component.html',
   styleUrls: ['./stats-dashboard.component.scss']
