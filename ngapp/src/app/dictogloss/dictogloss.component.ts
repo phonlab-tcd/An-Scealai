@@ -11,7 +11,7 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 import { Message } from "app/core/models/message";
 import { CommonModule } from "@angular/common";
@@ -20,7 +20,7 @@ import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-selec
 
 @Component({
   standalone: true,
-  imports: [CommonModule, SynthItemModule, SynthVoiceSelectModule],
+  imports: [CommonModule, SynthItemModule, SynthVoiceSelectModule, MatDialogModule],
   selector: "app-dictogloss",
   templateUrl: "./dictogloss.component.html",
   styleUrls: ["./dictogloss.component.scss"],

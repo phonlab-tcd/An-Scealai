@@ -5,7 +5,7 @@ import { Prompt } from "app/core/models/prompt";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.component";
 import { HttpClient } from "@angular/common/http";
 import config from "abairconfig";
@@ -14,7 +14,7 @@ import { PartOfSpeechComponent } from "./part-of-speech/part-of-speech.component
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PartOfSpeechComponent],
+  imports: [CommonModule, ReactiveFormsModule, PartOfSpeechComponent, MatDialogModule],
   selector: "app-prompts",
   templateUrl: "./prompts.component.html",
   styleUrls: ["./prompts.component.scss"],

@@ -4,22 +4,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from 'app/register/register.component';
-import { RegisterProfileComponent } from './profile/register-profile/register-profile.component';
-import { ProfileComponent } from './profile/profile/profile.component';
-import { MessagesComponent } from './messages/messages.component';
-import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
-import { AboutTaidhginComponent } from './nav-bar/about-taidhgin/about-taidhgin.component';
-import { PromptsComponent } from './prompts/prompts.component';
-import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { ChatbotComponent } from './chatbot/chatbot.component';
 
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
 import { NotificationService } from 'app/core/services/notification-service.service';
 
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },

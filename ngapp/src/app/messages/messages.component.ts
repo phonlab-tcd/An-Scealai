@@ -11,7 +11,7 @@ import { MessageService } from "app/core/services/message.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { NotificationService } from "app/core/services/notification-service.service";
 import { RecordAudioService } from "../core/services/record-audio.service";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RecordingDialogComponent } from "../dialogs/recording-dialog/recording-dialog.component";
 import { firstValueFrom } from "rxjs";
 import { CommonModule } from "@angular/common";
@@ -19,7 +19,7 @@ import { FormsModule } from "@angular/forms";
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatDialogModule],
   selector: "app-messages",
   templateUrl: "./messages.component.html",
   styleUrls: ["./messages.component.scss"],
