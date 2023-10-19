@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injector } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputHighlightModule } from 'angular-text-input-highlight';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
@@ -21,21 +21,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
-import { HighlightDirective } from 'app/core/directives/highlight.directive';
 import { StoryService } from 'app/core/services/story.service';
 import { UserService } from './core/services/user.service';
 import { LogService } from './core/services/log.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { MessagesComponent } from './messages/messages.component';
-import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component';
-import { RecordingDialogComponent } from './dialogs/recording-dialog/recording-dialog.component';
-import { PromptsComponent } from './prompts/prompts.component';
-import { PartOfSpeechComponent } from './prompts/part-of-speech/part-of-speech.component';
-import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
-import { ClassroomSelectorComponent } from './stats-dashboard/classroom-selector/classroom-selector.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { RegisterModule } from 'app/register/register.module';
@@ -56,52 +47,22 @@ import { SpinnerModule } from './spinner/spinner.module';
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent,
-        //RegisterProfileComponent,
-        //HighlightDirective,
-        //MessagesComponent,
-        //BasicDialogComponent,
-        //RecordingDialogComponent,
-        //PromptsComponent,
-        //PartOfSpeechComponent,
-        //StatsDashboardComponent,
-        //ClassroomSelectorComponent,
-        //DictoglossComponent,
+        LoginComponent
     ],
     imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        AppRoutingModule,
         NavBarModule,
         ProfileModule,
         RegisterModule,
-        SpinnerModule,
-        DictionaryLookupsModule,
-        GrammarPieChartModule,
-        GrammarErrorTimeModule,
-        NgramDistributionModule,
-        WordCountsModule,
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
         FormsModule,
-        ClipboardModule,
-        TextInputHighlightModule,
-        BrowserAnimationsModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatButtonModule,
         MatDialogModule,
-        MatCardModule,
-        MatIconModule,
-        MatTabsModule,
-        MatInputModule,
-        MatTableModule,
         MatProgressSpinnerModule,
-        PdfViewerModule,
-        PdfViewerModule,
-        SynthItemModule,
-        SynthVoiceSelectModule
     ],
     providers: [
         StoryService,

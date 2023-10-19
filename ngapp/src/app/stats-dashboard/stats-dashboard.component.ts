@@ -5,7 +5,7 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
 import { ClassroomService } from 'app/core/services/classroom.service';
 import { TranslationService } from 'app/core/services/translation.service';
 import { UserService } from 'app/core/services/user.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ClassroomSelectorComponent } from './classroom-selector/classroom-selector.component';
 import { Story } from 'app/core/models/story';
 import { HttpClient } from '@angular/common/http';
@@ -25,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, SpinnerModule, NgramDistributionModule, WordCountsModule, DictionaryLookupsModule, GrammarPieChartModule, GrammarErrorTimeModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatDialogModule, SpinnerModule, NgramDistributionModule, WordCountsModule, DictionaryLookupsModule, GrammarPieChartModule, GrammarErrorTimeModule],
   selector: 'app-stats-dashboard',
   templateUrl: './stats-dashboard.component.html',
   styleUrls: ['./stats-dashboard.component.scss']
