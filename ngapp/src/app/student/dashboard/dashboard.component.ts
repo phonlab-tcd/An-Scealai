@@ -149,7 +149,8 @@ export class DashboardComponent implements OnInit {
     };
 
     // get student classroom to see if any grammar checkers were specified in classroom settings
-    const classroom = await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
+    const classroom_cache = localStorage.getItem("classroom");
+    const classroom = classroom_cache ? JSON.parse(classroom_cache) : await firstValueFrom( this.classroomService.getClassroomOfStudent(userDetails._id) );
 
     // populate an array of checkers from classroom settings to pass into the grammar engine
     let checkers: GrammarChecker[] = [];

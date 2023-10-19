@@ -176,6 +176,7 @@ export class AuthenticationService {
   public logout(): void {
     this.token = "";
     window.localStorage.removeItem("scealai-token");
+    window.localStorage.removeItem("classroom");
     this.router.navigateByUrl("/landing");
   }
 }
