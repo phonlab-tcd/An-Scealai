@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslationService } from 'app/core/services/translation.service';
 import { RecordAudioService } from '../../core/services/record-audio.service';
 import { SafeUrl } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 export interface DialogData {
   type: string;
@@ -11,6 +12,8 @@ export interface DialogData {
 }
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatDialogModule],
   selector: 'app-recording-dialog',
   templateUrl: './recording-dialog.component.html',
   styleUrls: ['./recording-dialog.component.scss']
