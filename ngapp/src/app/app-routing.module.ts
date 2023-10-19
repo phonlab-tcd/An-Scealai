@@ -35,7 +35,7 @@ const routes: Routes = [
   //{ path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'dictogloss', loadComponent: () => import('./dictogloss/dictogloss.component').then(m => m.DictoglossComponent), canActivate: [AuthGuardService], data :{ text:''} },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
+  { path: 'messages/:id', loadComponent: () => import('./messages/messages.component').then(m => m.MessagesComponent), canActivate: [AuthGuardService]},
   { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
   {
     path: 'student',

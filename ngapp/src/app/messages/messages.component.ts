@@ -14,8 +14,12 @@ import { RecordAudioService } from "../core/services/record-audio.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { RecordingDialogComponent } from "../dialogs/recording-dialog/recording-dialog.component";
 import { firstValueFrom } from "rxjs";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   selector: "app-messages",
   templateUrl: "./messages.component.html",
   styleUrls: ["./messages.component.scss"],

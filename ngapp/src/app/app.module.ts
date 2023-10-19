@@ -59,7 +59,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         LoginComponent,
         //RegisterProfileComponent,
         HighlightDirective,
-        MessagesComponent,
+        //MessagesComponent,
         BasicDialogComponent,
         RecordingDialogComponent,
         PromptsComponent,
