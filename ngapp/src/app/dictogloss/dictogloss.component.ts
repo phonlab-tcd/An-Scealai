@@ -14,8 +14,13 @@ import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 import { Message } from "app/core/models/message";
+import { CommonModule } from "@angular/common";
+import { SynthItemModule } from "app/synth-item/synth-item.module";
+import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, SynthItemModule, SynthVoiceSelectModule],
   selector: "app-dictogloss",
   templateUrl: "./dictogloss.component.html",
   styleUrls: ["./dictogloss.component.scss"],

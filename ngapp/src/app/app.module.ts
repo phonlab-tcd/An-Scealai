@@ -66,7 +66,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         PartOfSpeechComponent,
         StatsDashboardComponent,
         ClassroomSelectorComponent,
-        DictoglossComponent,
+        //DictoglossComponent,
     ],
     imports: [
         NavBarModule,
