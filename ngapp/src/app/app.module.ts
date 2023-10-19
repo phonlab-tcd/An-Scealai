@@ -58,7 +58,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         AppComponent,
         LoginComponent,
         //RegisterProfileComponent,
-        HighlightDirective,
+        //HighlightDirective,
         //MessagesComponent,
         //BasicDialogComponent,
         //RecordingDialogComponent,

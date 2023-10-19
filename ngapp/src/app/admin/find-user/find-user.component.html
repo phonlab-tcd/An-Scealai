@@ -49,7 +49,7 @@
       <div style="margin: 5px;">{{ts.l.results}} ({{resultCount}})</div>
       <div class='resultContainer' *ngIf="resultCount > 0">
         <div class='resultCard' routerLink="../user/{{user._id}}" *ngFor="let user of userResults" >
-          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="'true'">
+          <div appHighlight [searchedWord]="searchText" [content]="user.username" [classToApply]="'font-weight-bold'" [setTitle]="true">
           {{user.username}}</div>
           <div>{{user.role}}</div>
         </div>

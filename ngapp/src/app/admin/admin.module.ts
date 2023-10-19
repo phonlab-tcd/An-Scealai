@@ -30,6 +30,7 @@ import { StoryComponent } from './story/story.component';
 import { StoryHistoryComponent } from './story-history/story-history.component';
 import { PosDataTableComponent } from './add-content/pos-data-table/pos-data-table.component';
 import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt-data-table.component';
+import { HighlightDirective } from 'app/core/directives/highlight.directive';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt
     StoryHistoryComponent,
     PosDataTableComponent,
     PromptDataTableComponent,
+    HighlightDirective
   ],
   imports: [
     CommonModule,
