@@ -65,7 +65,7 @@ import { SpinnerModule } from './spinner/spinner.module';
         PromptsComponent,
         PartOfSpeechComponent,
         //StatsDashboardComponent,
-        ClassroomSelectorComponent,
+        //ClassroomSelectorComponent,
         //DictoglossComponent,
     ],
     imports: [
