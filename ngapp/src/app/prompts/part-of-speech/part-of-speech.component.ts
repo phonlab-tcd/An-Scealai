@@ -21,6 +21,8 @@ type TagForHighlight = {
 };
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: "app-part-of-speech",
   templateUrl: "./part-of-speech.component.html",
   styleUrls: ["./part-of-speech.component.scss"],
@@ -150,7 +152,7 @@ export class PartOfSpeechComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.router.navigateByUrl("/student");
+          this.router.navigateByUrl("/student/dashboard");
         },
         error: () => {
           alert("Not able to create a new story");
