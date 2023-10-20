@@ -15,7 +15,7 @@ export class TeacherDashboardComponent implements OnInit {
   classrooms: Classroom[] = [];
   classroom: Classroom;
   updatedTitle: string = "";
-  classroomsLoaded: boolean = true;
+  classroomsLoaded: boolean = false;
   dialogRef: MatDialogRef<unknown>;
 
   constructor(

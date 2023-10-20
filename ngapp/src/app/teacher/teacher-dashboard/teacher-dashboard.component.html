@@ -61,7 +61,7 @@
   </div>
 
   <!-- LIST OF STUDENTS/STORIES-->
-  <div class="storyContainer" style="display:flex; justify-content: center; align-items: center;">
+  <div class="storyContainer" *ngIf="classroomsLoaded" style="display:flex; justify-content: center; align-items: center;">
     <div class="studentListContainer" *ngIf="classroom; else newClassroomMessage" >
       <app-student-list [classroom]="classroom"></app-student-list>
     </div>
