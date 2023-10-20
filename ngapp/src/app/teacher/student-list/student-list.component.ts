@@ -21,6 +21,7 @@ export class StudentListComponent implements OnInit {
   storyForFeedback: Story;
   lastClickedStoryId: string = "";
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
+  studentCache: { [key: string]: any } = {}
 
   constructor(
     public ts: TranslationService,
@@ -36,27 +37,35 @@ export class StudentListComponent implements OnInit {
 
   /*
    * Loop through student ids in classroom object to get student objects
+   * Get students from cache first if the classrooms exists, otherwise from the DB
    */
   async getStudents() {
     this.students = [];
-    for (let id of this.classroom.studentIds) {
-      this.userService.getUserById(id).subscribe({
-        next: async (student) => {
-          this.students.push(student); let stories = await firstValueFrom( this.storyService.getStoriesForClassroom( student._id, this.classroom.date?.toString() ) );
-          stories.sort((a: Story, b: Story) => (a.lastUpdated > b.lastUpdated ? -1 : 1));
-          if (stories) {
-            this.studentStories[student.username] = stories;
-          } else {
-            this.studentStories[student.username] = [];
-          }
-        },
-        error: () => {
-          console.log(id + " does not exist");
-        },
-        complete: () => {
-          this.students.sort((a, b) => (a.username > b.username ? 1 : -1));
-        },
-      });
+    if (this.classroom._id in this.studentCache) {
+      this.students = this.studentCache[this.classroom._id]
+    }
+    else {
+      for (let id of this.classroom.studentIds) {
+        this.userService.getUserById(id).subscribe({
+          next: async (student) => {
+            this.students.push(student);
+            const stories = await firstValueFrom( this.storyService.getStoriesForClassroom( student._id, this.classroom.date?.toString() ) );
+            stories.sort((a: Story, b: Story) => (a.lastUpdated > b.lastUpdated ? -1 : 1));
+            if (stories) {
+              this.studentStories[student.username] = stories;
+            } else {
+              this.studentStories[student.username] = [];
+            }
+          },
+          error: () => {
+            console.log(id + " does not exist");
+          },
+          complete: () => {
+            this.students.sort((a, b) => (a.username > b.username ? 1 : -1));
+            this.studentCache[this.classroom._id] = this.students;
+          },
+        });
+      }
     }
   }
 
