@@ -150,7 +150,7 @@ export class PartOfSpeechComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.router.navigateByUrl("/student");
+          this.router.navigateByUrl("/student/dashboard");
         },
         error: () => {
           alert("Not able to create a new story");
