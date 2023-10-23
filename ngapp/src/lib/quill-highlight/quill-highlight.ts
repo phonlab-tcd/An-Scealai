@@ -172,13 +172,20 @@ export class QuillHighlighter {
 
     this.quillEditor.formatText(span.fromX, span.toX - span.fromX, { "highlight-tag": true, "id": id }, 'api');
     const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
+    console.log(tagElements);
 
     tagElements.forEach(function (tagElement) {
       tagElement.removeAttribute("left-edge");
       tagElement.removeAttribute("right-edge");
     });
-    tagElements[0].setAttribute("left-edge", "");
-    tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+    if (tagElements[0]) {
+      tagElements[0].setAttribute("left-edge", "");
+      tagElements[tagElements.length - 1].setAttribute("right-edge", "");
+    }
+    else {
+      console.log("tagElements at position 0 is undefined: ", tagElements)
+    }
+
   }
   
   // Ensures that the tag groups encompassed by 'span' have 

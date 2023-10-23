@@ -31,7 +31,6 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./stats-dashboard.component.scss']
 })
 export class StatsDashboardComponent implements OnInit {
-
   constructor(
     private storyService: StoryService,
     private classroomService: ClassroomService,
@@ -39,54 +38,58 @@ export class StatsDashboardComponent implements OnInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private ts: TranslationService,
-    private route:ActivatedRoute,
-    private engagement:EngagementService,
-    private auth: AuthenticationService,
-  ) { }
+    private route: ActivatedRoute,
+    private engagement: EngagementService,
+    private auth: AuthenticationService
+  ) {}
 
   stories: Story[] = [];
   classroomTitle = this.ts.l.select_a_classroom; // By default we'll display this
   textsToAnalyse: string[] = [];
-  grammarErrorCounts: {[type: string]: number} = {};
+  grammarErrorCounts: { [type: string]: number } = {};
   wordCountData: Object = {};
   dictionaryLookups: Object = {};
-  grammarErrorTimeCounts: {startDate: Date, endDate: Date, data: Object[]} = {startDate: null, endDate: null, data: []};
-  userRole: string = '';
+  grammarErrorTimeCounts: { startDate: Date | null; endDate: Date | null; data: Object[] } = {
+    startDate: null,
+    endDate: null,
+    data: [],
+  };
+  userRole: string = "";
   dialogRef: MatDialogRef<unknown>;
   statsLoaded: boolean = false;
-  
+
   async ngOnInit() {
     // determine if user is a teacher or student
-    this.userRole = this.auth.getUserDetails().role;
+    const user = this.auth.getUserDetails();
+    if (!user) return;
+    this.userRole = user.role;
 
     // get classroom students if teacher, otherwise get auth id for logged in student
-    if (this.userRole == 'TEACHER') {
-      let classroom = await firstValueFrom(this.classroomService.getClassroom(this.route.snapshot.params['id']));
-      if(classroom) await this.loadDataForCharts(classroom.studentIds); 
+    if (this.userRole == "TEACHER") {
+      let classroom = await firstValueFrom(
+        this.classroomService.getClassroom(this.route.snapshot.params["id"])
+      );
+      if (classroom) await this.loadDataForCharts(classroom.studentIds);
       this.classroomTitle = classroom.title;
-    }
-    else {
-      await this.loadDataForCharts([this.auth.getUserDetails()._id]); 
+    } else {
+      await this.loadDataForCharts([user._id]);
     }
   }
 
   /* Open and close the dialog to make graphs full screen */
   openModal(templateRef: TemplateRef<unknown>) {
     this.dialogRef = this.dialog.open(templateRef, {
-         width: '100vw',
+      width: "100vw",
     });
-    this.dialogRef.afterClosed().subscribe(_ => {
-        this.dialogRef = undefined;
+    this.dialogRef.afterClosed().subscribe((_) => {
+      this.dialogRef = undefined;
     });
   }
 
   /* Open dialog to select which classroom teacher wants for stats */
   async openClassroomSelector() {
-    const classroomDialogRef = this.dialog.open(
-      ClassroomSelectorComponent,
-      { width: '60%' }
-    );
-    const classroomResponse = await firstValueFrom(classroomDialogRef.afterClosed());
+    const classroomDialogRef = this.dialog.open(ClassroomSelectorComponent, { width: "60%", });
+    const classroomResponse = await firstValueFrom( classroomDialogRef.afterClosed() );
     const classroom = classroomResponse.classroom;
     const startDate = classroomResponse.startDate;
     const endDate = classroomResponse.endDate;
@@ -95,43 +98,66 @@ export class StatsDashboardComponent implements OnInit {
       this.classroomTitle = classroom.title;
     }
   }
-  
+
   /**
    * Make calls to the backend to get stats data for teachers
    * @param studentIds array of student ids (only one id if user is student)
    * @param startDate start date if teacher selects date range
    * @param endDate end date if teacher selects date range
    */
-  async loadDataForCharts(studentIds:string[] = [], startDate:string = '', endDate:string = '') {
+  async loadDataForCharts( studentIds: string[] = [], startDate: string = "", endDate: string = "" ) {
     this.statsLoaded = false;
-    
+
+    // get student stories
+    this.stories = await this.getStudentStories(studentIds, startDate, endDate);
+    if (!this.stories) return;
+
     // get n-gram data
-    this.textsToAnalyse = await this.getNGramData(studentIds, startDate, endDate);
+    this.textsToAnalyse = await this.getNGramData();
 
     // get grammar eror data for pie chart
     this.grammarErrorCounts = await this.getGrammarErrorsPieChart();
-    
+
     // get word count data
-    this.wordCountData = await this.getWordCounts(studentIds, startDate, endDate);
-    
-    // get dictionary lookups 
+    this.wordCountData = await this.getWordCounts( studentIds, startDate, endDate );
+
+    // get dictionary lookups
     this.dictionaryLookups = await this.getDictionaryLookups(studentIds, startDate, endDate);
-    
+    //this.dictionaryLookups = await this.getDictionaryLookups( ["12345", "5eecb2edb3d14b78e1c74e9c"], startDate, endDate );
+
     // get grammar error time data
-    this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate);
+    this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate );
 
     this.statsLoaded = true;
   }
 
   /**
-   * Get stories for students and calculate data for n-gram chart
+   *
+   * @param studentIds array of student ids
+   * @param startDate start date limit for when stories created
+   * @param endDate end date limit for when stories created
+   * @returns list of stories from each student
    */
-  async getNGramData(studentIds:string[], startDate:string, endDate:string) {
-    this.stories = (await Promise.all(studentIds.map(async (id) =>
-      await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate))
-    ))).flat();
-    
-    let textArray = this.stories.reduce(function(result, story) {
+  async getStudentStories(studentIds: string[], startDate: string, endDate: string) {
+    const stories = await Promise.all(
+      studentIds.map(async (id) => {
+        try {
+          const stories = await firstValueFrom(this.storyService.getStoriesByDate(id, startDate, endDate));
+          return stories;
+        } catch (error) {
+          console.error(`Error while fetching stories for student ${id}: ${error.message}`);
+          return [];
+        }
+      })
+    );
+    return stories.flat();
+  }
+
+  /**
+   * Calculate data for n-gram chart
+   */
+  async getNGramData() {
+    let textArray = this.stories.reduce(function (result: string[], story: Story) {
       if (story.text) result.push(story.text);
       return result;
     }, []);
@@ -143,11 +169,21 @@ export class StatsDashboardComponent implements OnInit {
    */
   async getGrammarErrorsPieChart() {
     let data = {};
-    data = (await Promise.all(this.stories.map(async story =>
-      await firstValueFrom(
-        this.http.get(`${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}`)
+    data = (
+      await Promise.all(
+        this.stories.map(async (story) => {
+          try {
+            const result = await firstValueFrom(
+              this.http.get( `${config.baseurl}gramadoir/getUniqueErrorTypeCounts/${story._id}` )
+            );
+            return result;
+          } catch (error) {
+            console.error(`Pie Chart error for story ${story._id}: ${error.message}`);
+            return {};
+          }
+        })
       )
-    ))).reduce(this.countDictSum, {});
+    ).reduce(this.countDictSum, {});
     return data;
   }
 
@@ -157,61 +193,86 @@ export class StatsDashboardComponent implements OnInit {
    * @param B object of grammar error names and counts
    * @returns merged object
    */
-    countDictSum(A:any, B:any) {
-      for (const key of Object.keys(B)) {
-        A[key] = A[key] ? A[key] + B[key] : B[key] 
-      }
-      return A;
+  countDictSum(A: any, B: any) {
+    for (const key of Object.keys(B)) {
+      A[key] = A[key] ? A[key] + B[key] : B[key];
     }
-  
+    return A;
+  }
+
   /*
-  * Get average word count and username for each student in classroom (over all stories)
-  */
-  async getWordCounts(studentIds:string[], startDate:string, endDate:string) {
+   * Get average word count and username for each student in classroom (over all stories)
+   */
+  async getWordCounts( studentIds: string[], startDate: string, endDate: string ) {
     const data = {};
-    await Promise.all(studentIds.map(async (id) => {
-      try {
-        const student = await firstValueFrom(this.userService.getUserById(id));
-        if (student) {
-          const wordCountData = (await firstValueFrom(this.storyService.averageWordCount(id, startDate, endDate))).avgWordCount;
-          data[student.username] = wordCountData  
+    await Promise.all(
+      studentIds.map(async (id) => {
+        try {
+          const student = await firstValueFrom(
+            this.userService.getUserById(id)
+          );
+          if (student) {
+            const wordCountData = (
+              await firstValueFrom( this.storyService.averageWordCount(id, startDate, endDate) )
+            ).avgWordCount;
+            data[student.username] = wordCountData;
+          }
+        } catch (error) {
+          console.error(`Word Count error for student ${id}: ${error.message}`);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    }));
+      })
+    );
     return data;
   }
 
   /**
    * Get list of dictionary lookups for each student in classroom
    */
-  async getDictionaryLookups(studentIds:string[], startDate:string, endDate:string) {
+  async getDictionaryLookups( studentIds: string[], startDate: string, endDate: string ) {
     const data = {};
-    await Promise.all(studentIds.map(async (id) =>
-      data[(await firstValueFrom(this.userService.getUserById(id))).username] =  
-      await firstValueFrom(this.engagement.getDictionaryLookups(id, startDate, endDate))
-    ));
+    await Promise.all(
+      studentIds.map(async (id) => {
+        try {
+          const user = await firstValueFrom(this.userService.getUserById(id));
+          const username = user.username;
+          const dictionaryLookups = await firstValueFrom( this.engagement.getDictionaryLookups(id, startDate, endDate) );
+          data[username] = dictionaryLookups;
+        } catch (error) {
+          // Handle the error here (e.g., logging, error handling)
+          console.error(`Dictionary error for student ${id}: ${error.message}`);
+        }
+      })
+    );
     return data;
   }
 
   /**
    * Get grammar error time data for each student in classroom
    */
-  async getGrammarErrorTimeSeries(studentIds:string[], startDate:string, endDate:string) {
-    let totalGrammarCounts = [];
-    const headers = { 'Authorization': 'Bearer ' + this.auth.getToken() }
-    await Promise.all(studentIds.map(async (id) => {
-      let studentGrammarCounts = await firstValueFrom(this.http.post(`${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`, {startDate, endDate}, {headers}))
-      totalGrammarCounts.push(studentGrammarCounts);
-     }
-    ));
-
+  async getGrammarErrorTimeSeries(studentIds: string[], startDate: string, endDate: string) {
+    let totalGrammarCounts: Object[] = [];
+    const headers = { Authorization: "Bearer " + this.auth.getToken() };
+    await Promise.all(
+      studentIds.map(async (id) => {
+        try {
+          let studentGrammarCounts = await firstValueFrom(
+            this.http.post(
+              `${config.baseurl}gramadoir/getTimeGrammarCounts/${id}`,
+              { startDate, endDate },
+              { headers }
+            )
+          );
+          totalGrammarCounts.push(studentGrammarCounts);
+        } catch (error) {
+          console.error(`Time series error for student ${id}: ${error.message}`);
+        }
+      })
+    );
+  
     return {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
-      data: totalGrammarCounts
-    }
+      data: totalGrammarCounts,
+    };
   }
-  
 }

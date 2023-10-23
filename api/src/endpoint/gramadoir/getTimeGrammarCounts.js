@@ -9,7 +9,15 @@ const UserGrammarCounts = require("../../models/userGrammarCounts");
  * @return {Promise} error dictionary
  */
 async function getTimeGrammarCounts(req, res) {
-  const ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
+
+  let ownerId = null;
+
+  try {
+    ownerId = new mongoose.mongo.ObjectId(req.params.ownerId);
+  }
+  catch (error) {
+    return res.status(404).json(`id ${req.params.ownerId} is not a valid ObjectId`);
+  }
 
   const conditions = { owner: ownerId };
 
