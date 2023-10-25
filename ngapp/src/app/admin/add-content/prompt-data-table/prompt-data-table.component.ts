@@ -90,34 +90,49 @@ export class PromptDataTableComponent {
     private dialog: MatDialog,) {}
 
   ngOnInit() {
-    const headers = { Authorization: "Bearer " + this.auth.getToken() };
     // TODO: udpate the following request with the get described in the example service class
-    /*
-      this.promptService.getPrompts().subscribe((res: any) => {
-      this.dataSource.data = res
-    })
-    */
-    this.http .get<any>(config.baseurl + "prompt/getData/prompt", { headers }).subscribe({
-      next: (data) => {
-        const flattenedData = data.map((item: PromptDataRow) => {
-          return {
-            _id: item._id,
-            type: item.type,
-            topic: item.prompt.topic,
-            level: item.prompt.level,
-            dialect: item.prompt.dialect,
-            text: item.prompt.text,
-            lastUpdated: item.lastUpdated,
-          };
-        });
-        this.dataSource.data = flattenedData;
-        this.dataSource.paginator = this.paginator;
-        console.log(this.dataSource.data)
-      },
+      this.promptService.getPromptDataRows("prompt").subscribe({
+        next: (data: any) => {
+          console.log(data)
+          const flattenedData = data.map((item: PromptDataRow) => {
+              return {
+                _id: item._id,
+                type: item.type,
+                //topic: item.prompt.topic,
+                //level: item.prompt.level,
+                //dialect: item.prompt.dialect,
+                //text: item.prompt.text,
+                lastUpdated: item.lastUpdated,
+              };
+            });
+          this.dataSource.data = flattenedData;
+          console.log(this.dataSource.data)
+        },
       error: (err) => {
-        console.log(err);
-      },
-    });
+        console.error(err);
+      }})
+  
+    // this.http .get<any>(config.baseurl + "prompt/getData/prompt", { headers }).subscribe({
+    //   next: (data) => {
+    //     const flattenedData = data.map((item: PromptDataRow) => {
+    //       return {
+    //         _id: item._id,
+    //         type: item.type,
+    //         topic: item.prompt.topic,
+    //         level: item.prompt.level,
+    //         dialect: item.prompt.dialect,
+    //         text: item.prompt.text,
+    //         lastUpdated: item.lastUpdated,
+    //       };
+    //     });
+    //     this.dataSource.data = flattenedData;
+    //     this.dataSource.paginator = this.paginator;
+    //     console.log(this.dataSource.data)
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //   },
+    // });
   }
 
   editRow(row: PromptDataRow) {

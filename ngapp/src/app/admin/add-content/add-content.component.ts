@@ -39,8 +39,8 @@ export class AddContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getData("partOfSpeech");
-    this.getData("prompt");
+    //this.getData("partOfSpeech");
+    //this.getData("prompt");
   }
 
   /**

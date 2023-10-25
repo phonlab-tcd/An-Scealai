@@ -10,14 +10,14 @@ import config from "../../../abairconfig";
 })
 export class PromptService {
 
-  baseUrl: string = config.baseurl + "propmt";
+  baseUrl: string = config.baseurl + "prompt";
 
   constructor(private http: HttpClient) { }
 
-  getPromptDataRows(): Observable<PromptDataRow[]> {
+  getPromptDataRows(type: string): Observable<PromptDataRow[]> {
     return this.http
-      .get(this.baseUrl)
-      .pipe<PromptDataRow[]>(map((data: any) => data.PromptDataRows));
+      .get(`${this.baseUrl}/getPrompts/${type}`)
+      .pipe<PromptDataRow[]>(map((data: any) => data));
   }
 
   updatePromptDataRow(PromptDataRow: PromptDataRow): Observable<PromptDataRow> {
@@ -33,11 +33,6 @@ export class PromptService {
   }
 
   deletePromptDataRows(PromptDataRows: PromptDataRow[]): Observable<PromptDataRow[]> {
-    // return forkJoin(
-    //   PromptDataRows.map((PromptDataRow) =>
-    //     this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${PromptDataRow.id}`)
-    //   )
-    // );
     const deleteRequests = PromptDataRows.map((PromptDataRow) =>
     this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${PromptDataRow._id}`).pipe(
       catchError((error) => {
