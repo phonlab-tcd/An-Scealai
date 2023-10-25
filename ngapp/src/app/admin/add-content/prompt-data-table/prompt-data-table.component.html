@@ -1,62 +1,107 @@
-<div [hidden]="hideTable">
-  <!-- Prompt Table -->
-  <!-- <mat-form-field>
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
-  </mat-form-field> -->
-
-  <table mat-table [dataSource]="data" class="mat-elevation-z8" matSort>
-    <!-- part of speech Column -->
-    <ng-container matColumnDef="topic">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-      <td mat-cell *matCellDef="let element">{{ element.prompt?.topic }}</td>
-    </ng-container>
-
-    <!-- word Column -->
-    <ng-container matColumnDef="level">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Level</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.prompt?.level ? element.prompt.level : "---" }}
-      </td>
-    </ng-container>
-
-    <!-- translation Column -->
-    <ng-container matColumnDef="dialect">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Dialect</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.prompt?.dialect ? element.prompt.dialect : "---" }}
-      </td>
-    </ng-container>
-
-    <!-- translation Column -->
-    <ng-container matColumnDef="text">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Text</th>
-      <td mat-cell *matCellDef="let element" class="example-container">
-        {{ element.prompt?.text }}
-        {{ element.prompt?.combinationData?.character }}
-        {{ element.prompt?.combinationData?.setting }}
-        {{ element.prompt?.combinationData?.theme }}
-      </td>
-    </ng-container>
-
-    <!-- last updated Column -->
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.lastUpdated | date : "medium" }}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="promptTableColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: promptTableColumns"></tr>
-
-    <!-- Row shown when there is no matching data. -->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="5">
-        No data matching the filter "{{ input.value }}"
-      </td>
-    </tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users" ></mat-paginator>
-</div>
+<article class="table-header">
+  <div>
+    <i>First Name is required | Must have a valid Email Address</i>
+  </div>
+  <div>
+    <button
+      class="button-remove-rows"
+      mat-button
+      (click)="removeSelectedRows()"
+    >
+      Remove Rows
+    </button>
+    <button class="button-add-row" mat-button (click)="addRow()">
+      Add Row
+    </button>
+  </div>
+</article>
+<table mat-table [dataSource]="dataSource">
+  <!-- one ng-container to describe each column, 'key' in schema determines what is displayed -->
+  <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+    <!-- header: either a checkbox or a textual label -->
+    <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+      <span *ngSwitchCase="'isSelected'">
+        <mat-checkbox
+          (change)="selectAll($event)"
+          [checked]="isAllSelected()"
+          [indeterminate]="!isAllSelected() && isAnySelected()"
+        ></mat-checkbox>
+      </span>
+      <span *ngSwitchDefault>{{ col.label }}</span>
+    </th>
+    <!-- row data: element is a row, row 'type' determines what is displayed -->
+    <td mat-cell *matCellDef="let element">
+      <!-- display data in view mode -->
+      <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+        <ng-container *ngSwitchCase="'isSelected'">
+          <mat-checkbox
+            (change)="element.isSelected = $event.checked"
+            [checked]="element.isSelected"
+          ></mat-checkbox>
+        </ng-container>
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button mat-button (click)="element.isEdit = !element.isEdit">
+            Edit
+          </button>
+          <button
+            mat-button
+            class="button-remove"
+            (click)="removeRow(element.id)"
+          >
+            Delete
+          </button>
+        </div>
+        <span *ngSwitchCase="'date'">
+          {{ element[col.key] | date: 'mediumDate' }}
+        </span>
+        <span *ngSwitchDefault>
+          {{ element[col.key] }}
+        </span>
+      </div>
+      <!-- display data in edit mode -->
+      <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+        <div *ngSwitchCase="'isSelected'"></div>
+        <div class="btn-edit" *ngSwitchCase="'isEdit'">
+          <button
+            mat-button
+            (click)="editRow(element)"
+            [disabled]="disableSubmit(element.id)"
+          >
+            Done
+          </button>
+        </div>
+        <div *ngSwitchCase="'date'"></div>
+        <!-- <mat-form-field
+          class="form-input"
+          *ngSwitchCase="'date'"
+          appearance="fill"
+        >
+          <mat-label>Choose a date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="element[col.key]"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field> -->
+        <mat-form-field class="form-input" *ngSwitchDefault>
+          <input
+            matInput
+            [required]="col.required"
+            [pattern]="col.pattern"
+            [type]="col.type"
+            [(ngModel)]="element[col.key]"
+            (change)="inputHandler($event, element.id, col.key)"
+          />
+        </mat-form-field>
+      </div>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users" ></mat-paginator>

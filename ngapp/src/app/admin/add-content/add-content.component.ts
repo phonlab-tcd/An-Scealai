@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import config from "../../../abairconfig";
 import { TranslationService } from "app/core/services/translation.service";
 import { MatTableDataSource } from "@angular/material/table";
-import { PromptData, PromptDataTableComponent, } from "./prompt-data-table/prompt-data-table.component";
+import { PromptDataRow, PromptDataTableComponent, } from "./prompt-data-table/prompt-data-table.component";
 import { POSData, PosDataTableComponent, } from "./pos-data-table/pos-data-table.component";
 import { firstValueFrom } from "rxjs";
 
@@ -27,7 +27,7 @@ export class AddContentComponent implements OnInit {
   errorMessages: string[] = [];
 
   posDataSource: MatTableDataSource<POSData>;
-  promptDataSource: MatTableDataSource<PromptData>;
+  promptDataSource: MatTableDataSource<PromptDataRow>;
 
   @ViewChild("promptDataTable") promptDataTable: PromptDataTableComponent;
   @ViewChild("posDataTable") posDataTable: PosDataTableComponent;

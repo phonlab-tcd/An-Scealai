@@ -18,8 +18,8 @@ promptRoutes.route("/addContent").post(async function (req, res) {
   console.log("PROMPT: ", prompt);
 
   prompt.save()
-  .then((message) => {
-    return res.json(message);
+  .then(() => {
+    return res.json(prompt);
   })
   .catch((err) => {
     console.log(err);

@@ -31,6 +31,10 @@ import { StoryHistoryComponent } from './story-history/story-history.component';
 import { PosDataTableComponent } from './add-content/pos-data-table/pos-data-table.component';
 import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt-data-table.component';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -65,7 +69,11 @@ import { HighlightDirective } from 'app/core/directives/highlight.directive';
     MatCardModule,
     MatButtonModule,
     MatDatepickerModule,
-    SpinnerModule
+    SpinnerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    HttpClientModule,
   ],
   providers: [
     MatPaginator,

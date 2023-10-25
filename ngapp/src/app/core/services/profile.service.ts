@@ -9,7 +9,6 @@ import config from 'abairconfig';
 export class ProfileService {
 
   baseUrl:string = config.baseurl + 'profile/';
-  american: boolean = false;
 
   constructor(private http: HttpClient) { }
 
