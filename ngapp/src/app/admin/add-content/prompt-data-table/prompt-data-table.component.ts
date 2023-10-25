@@ -9,10 +9,11 @@ import config from "../../../../abairconfig";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { PromptService } from "app/core/services/prompt.service";
 
 
 export interface PromptDataRow {
-  id: number | null;
+  _id: string | null;
   isSelected: boolean;
   isEdit: boolean;
   type: string;
@@ -68,16 +69,6 @@ const PromptDataColumns = [
   },
 ];
 
-export interface User {
-  isSelected: boolean;
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  birthDate: string;
-  isEdit: boolean;
-}
-
 @Component({
   selector: "app-prompt-data-table",
   templateUrl: "./prompt-data-table.component.html",
@@ -94,6 +85,7 @@ export class PromptDataTableComponent {
 
   constructor(private auth: AuthenticationService,
     private http: HttpClient,
+    private promptService: PromptService,
     public ts: TranslationService,
     private dialog: MatDialog,) {}
 
@@ -109,6 +101,7 @@ export class PromptDataTableComponent {
       next: (data) => {
         const flattenedData = data.map((item: PromptDataRow) => {
           return {
+            _id: item._id,
             type: item.type,
             topic: item.prompt.topic,
             level: item.prompt.level,
@@ -129,14 +122,14 @@ export class PromptDataTableComponent {
 
   editRow(row: PromptDataRow) {
     console.log(row);
-    row.id = 111;
+    row._id = "111";
     row.isEdit = false;
     // TODO: Update the following code with the data design update
     //this.promptService.updatePrompt(row).subscribe({next: () => {row.isEdit = false}, error: () => {}})
     
-    // if (row.id === null) {
+    // if (row._id === null) {
     //   this.userService.addUser(row).subscribe((newUser: User) => {
-    //     row.id = newUser.id
+    //     row._id = newUser._id
     //     row.isEdit = false
     //   })
     // } else {
@@ -154,7 +147,7 @@ export class PromptDataTableComponent {
 
   addRow() {
     const newRow: PromptDataRow = {
-      id: null,
+      _id: null,
       type: "",
       prompt: {
         topic: "",
@@ -170,12 +163,12 @@ export class PromptDataTableComponent {
     this.dataSource.data = [newRow, ...this.dataSource.data]
   }
 
-  removeRow(id: number) {
+  removeRow(id: string) {
     console.log(id)
-    this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p.id !== id)
+    this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p._id !== id)
     // TODO: Add this function to the service and backend
     // this.promptService.deletePrompt(id).subscribe({next: () => {
-    //   this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p.id !== id)
+    //   this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p._id !== id)
     // },
     // error: (err: Error) => {
     //   alert(err);
@@ -198,14 +191,11 @@ export class PromptDataTableComponent {
       .subscribe((confirm) => {
         if (confirm) {
           console.log("Dete: ", prompts)
-          this.dataSource.data = this.dataSource.data.filter(
-            (p: PromptDataRow) => !p.isSelected,
-          )
-          // this.profileService.deletePrompts(prompts).subscribe(() => {
-          //   this.dataSource.data = this.dataSource.data.filter(
-          //     (p: PromptDataRow) => !p.isSelected,
-          //   )
-          // })
+          this.promptService.deletePromptDataRows(prompts).subscribe(() => {
+            this.dataSource.data = this.dataSource.data.filter(
+              (p: PromptDataRow) => !p.isSelected,
+            )
+          })
         }
       })
     }
