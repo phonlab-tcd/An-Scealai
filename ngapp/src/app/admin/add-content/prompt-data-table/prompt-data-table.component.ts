@@ -10,10 +10,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PromptService } from "app/core/services/prompt.service";
 import { } from "app/core/models/prompt";
+import { AuthenticationService } from "app/core/services/authentication.service";
 
 
 export interface PromptDataRow {
-  _id: string | null;
+  _id?: string | null;
   isSelected: boolean;
   isEdit: boolean;
   prompt?: string;
@@ -102,14 +103,15 @@ const PromptDataColumns = [
 export class PromptDataTableComponent {
 
   @Input("selectedPromptGenerator") selectedPromptGenerator: string;
-  displayedColumns: string[] = PromptDataColumns.map((col) => col.key)
+  //displayedColumns: string[] = PromptDataColumns.map((col) => col.key)
+  displayedColumns = ['isSelected']
   columnsSchema: any = PromptDataColumns
   dataSource = new MatTableDataSource<PromptDataRow>()
   valid: any = {}
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
-  constructor(
+  constructor(    private auth: AuthenticationService,
+    private http: HttpClient,
     private promptService: PromptService,
     public ts: TranslationService,
     private dialog: MatDialog,) {}
@@ -117,7 +119,8 @@ export class PromptDataTableComponent {
   ngOnChanges() {
     if (this.selectedPromptGenerator) {
       console.log(this.selectedPromptGenerator);
-      this.displayedColumns = PromptDataColumns.map((col) => col.key)
+      this.displayedColumns = ['isSelected']
+      //this.displayedColumns = PromptDataColumns.map((col) => col.key)
       this.getPromptData();
       // this.data.paginator = this.paginator;
       // this.data.sort = this.sort;
@@ -127,25 +130,17 @@ export class PromptDataTableComponent {
   getPromptData() {
     // TODO: udpate the following request with the get described in the example service class
     this.promptService.getPromptDataRows(this.selectedPromptGenerator).subscribe({
-      next: (data: PromptDataRow[]) => {
-        // const flattenedData = data.map((item: PromptDataRow) => {
-        //     return {
-        //       _id: item._id,
-        //       type: item.type,
-        //       //topic: item.prompt.topic,
-        //       //level: item.prompt.level,
-        //       //dialect: item.prompt.dialect,
-        //       //text: item.prompt.text,
-        //       lastUpdated: item.lastUpdated,
-        //     };
-        //   });
+      next: (data: any) => {
         this.dataSource.data = data;
-        this.displayedColumns = this.displayedColumns.filter(key => {
-          return this.dataSource.data[0].hasOwnProperty(key);
+        Object.keys(this.dataSource.data[0]).forEach((key) => {
+          if (key != "_id" && !this.displayedColumns.includes(key)) {
+            this.displayedColumns.push(key);
+          }
         });
-        this.dataSource.paginator = this.paginator;
-        console.log(this.dataSource.data)
+        this.displayedColumns.push('isEdit')
+
         console.log(this.displayedColumns)
+        this.dataSource.paginator = this.paginator;
       },
     error: (err) => {
       console.error(err);
@@ -153,45 +148,34 @@ export class PromptDataTableComponent {
   }
 
   ngOnInit() {  
-    console.log(this.dataSource.data[0])
-    // this.http .get<any>(config.baseurl + "prompt/getData/prompt", { headers }).subscribe({
-    //   next: (data) => {
-    //     const flattenedData = data.map((item: PromptDataRow) => {
-    //       return {
-    //         _id: item._id,
-    //         type: item.type,
-    //         topic: item.prompt.topic,
-    //         level: item.prompt.level,
-    //         dialect: item.prompt.dialect,
-    //         text: item.prompt.text,
-    //         lastUpdated: item.lastUpdated,
-    //       };
-    //     });
-    //     this.dataSource.data = flattenedData;
-    //     this.dataSource.paginator = this.paginator;
-    //     console.log(this.dataSource.data)
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   },
-    // });
+    //this.getOldData()
   }
 
-  editRow(row: PromptDataRow) {
-    console.log(row);
-    row._id = "111";
-    row.isEdit = false;
-    // TODO: Update the following code with the data design update
-    //this.promptService.updatePrompt(row).subscribe({next: () => {row.isEdit = false}, error: () => {}})
-    
-    // if (row._id === null) {
-    //   this.userService.addUser(row).subscribe((newUser: User) => {
-    //     row._id = newUser._id
-    //     row.isEdit = false
-    //   })
-    // } else {
-    //   this.userService.updateUser(row).subscribe(() => (row.isEdit = false))
-    // }
+  getOldData() {
+    const headers = { Authorization: "Bearer " + this.auth.getToken() };
+    this.http .get<any>(config.baseurl + "prompt/getPrompts/general", { headers }).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+
+  /**
+   * Save the contents of either a new row or edited row to the DB
+   * @param row row in the table
+   */
+  saveRow(row: PromptDataRow) {
+    if (!row._id) { // new row
+      this.promptService.addPromptDataRow(row, this.selectedPromptGenerator).subscribe((newPrompt: PromptDataRow) => {
+        row._id = newPrompt._id;
+        row.isEdit = false;
+      })
+    } else { // edited row
+      this.promptService.updatePromptDataRow(row, this.selectedPromptGenerator).subscribe(() => (row.isEdit = false))
+    }
   }
 
   disableSubmit(id: number) {
@@ -202,37 +186,34 @@ export class PromptDataTableComponent {
     return false
   }
 
+  /**
+   * Create a new blank row in the table with initial values
+   */
   addRow() {
     const newRow: PromptDataRow = {
-      _id: null,
-      type: "",
       lastUpdated: new Date(),
       isEdit: true,
       isSelected: false,
-      prompt: "",
-      word: "",
-      translation: "",
-      level: "",
-      dialect: "",
-      storyTitle: "",
-      partOfSpeech: ""
     }
-    // insert line here to update data in the DB and then add the newly added content to table
     this.dataSource.data = [newRow, ...this.dataSource.data]
   }
 
+  /**
+   * Delete the prompt from the DB and remove from table
+   * @param id id of row to delete
+   */
   removeRow(id: string) {
-    console.log(id)
-    this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p._id !== id)
-    // TODO: Add this function to the service and backend
-    // this.promptService.deletePrompt(id).subscribe({next: () => {
-    //   this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p._id !== id)
-    // },
-    // error: (err: Error) => {
-    //   alert(err);
-    // }})
+    this.promptService.deletePromptDataRow(id, this.selectedPromptGenerator).subscribe({next: () => {
+      this.dataSource.data = this.dataSource.data.filter((p: PromptDataRow) => p._id !== id)
+    },
+    error: (err: Error) => {
+      alert(err);
+    }})
   }
 
+  /**
+   * Delete the selected prompts from the DB and remove from table
+   */
   removeSelectedRows() {
     const prompts = this.dataSource.data.filter((p: PromptDataRow) => p.isSelected)
     this.dialog
@@ -249,7 +230,7 @@ export class PromptDataTableComponent {
       .subscribe((confirm) => {
         if (confirm) {
           console.log("Dete: ", prompts)
-          this.promptService.deletePromptDataRows(prompts).subscribe(() => {
+          this.promptService.deletePromptDataRows(prompts, this.selectedPromptGenerator).subscribe(() => {
             this.dataSource.data = this.dataSource.data.filter(
               (p: PromptDataRow) => !p.isSelected,
             )

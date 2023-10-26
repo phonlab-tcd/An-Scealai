@@ -41,7 +41,6 @@ function getCollection(collectionName) {
  */
 promptRoutes.route("/getPrompts/:type").get(async (req, res) => {
   const collection = getCollection(req.params.type);
-  console.log(collection);
   if (!collection) return res.status(404).json({ message: "Invalid collection name" });
 
   const prompts = await collection.find();
@@ -49,6 +48,70 @@ promptRoutes.route("/getPrompts/:type").get(async (req, res) => {
 
   return res.status(404).json({ message: "No prompts found" });
 });
+
+/**
+ * Get prompts from the DB by type (i.e. general, proverb, etc.)
+ * @param {Object} req
+ * @return {Object} Array of prompts
+ */
+promptRoutes.route("/addPrompt/:type").post(async (req, res) => {
+  const collection = getCollection(req.params.type);
+  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+  console.log(req.body);
+
+  const prompt = new collection({...req.body});
+
+  prompt.save()
+  .then(() => {
+    return res.json(prompt);
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.status(400).send("unable to save to DB");
+  });
+
+});
+
+/**
+ * Get prompts from the DB by type (i.e. general, proverb, etc.)
+ * @param {Object} req
+ * @return {Object} Array of prompts
+ */
+promptRoutes.route("/updatePrompt/:type").patch(async (req, res) => {
+  const collection = getCollection(req.params.type);
+  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+
+  collection.findOneAndUpdate(
+    { _id: req.body._id },
+    req.body
+  ).then((updatedDocument) => {
+    return res.json(updatedDocument);
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.status(400).send("unable to update prompt");
+  });
+});
+
+/**
+ * Get prompts from the DB by type (i.e. general, proverb, etc.)
+ * @param {Object} req
+ * @return {Object} Array of prompts
+ */
+promptRoutes.route("/deletePrompt/:type/:id").delete(async (req, res) => {
+  const collection = getCollection(req.params.type);
+  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+
+  collection.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json('Successfully removed prompt from the DB');
+    }
+  });
+});
+
+
 
 // /**
 //  * Add new prompt entry if it doesn't already exist

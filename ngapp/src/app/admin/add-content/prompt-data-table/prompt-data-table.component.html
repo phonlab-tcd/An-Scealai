@@ -46,7 +46,7 @@
           <button
             mat-button
             class="button-remove"
-            (click)="removeRow(element.id)"
+            (click)="removeRow(element._id)"
           >
             Delete
           </button>
@@ -64,8 +64,8 @@
         <div class="btn-edit" *ngSwitchCase="'isEdit'">
           <button
             mat-button
-            (click)="editRow(element)"
-            [disabled]="disableSubmit(element.id)"
+            (click)="saveRow(element)"
+            [disabled]="disableSubmit(element._id)"
           >
             Done
           </button>

@@ -20,21 +20,21 @@ export class PromptService {
       .pipe<PromptDataRow[]>(map((data: any) => data));
   }
 
-  updatePromptDataRow(PromptDataRow: PromptDataRow): Observable<PromptDataRow> {
-    return this.http.patch<PromptDataRow>(`${this.baseUrl}/updatePrompt/${PromptDataRow._id}`, PromptDataRow);
+  updatePromptDataRow(PromptDataRow: PromptDataRow, type: string): Observable<PromptDataRow> {
+    return this.http.patch<PromptDataRow>(`${this.baseUrl}/updatePrompt/${type}`, PromptDataRow);
   }
 
-  addPromptDataRow(PromptDataRow: PromptDataRow): Observable<PromptDataRow> {
-    return this.http.post<PromptDataRow>(`${this.baseUrl}/addPrompt`, PromptDataRow);
+  addPromptDataRow(PromptDataRow: PromptDataRow, type: string): Observable<PromptDataRow> {
+    return this.http.post<PromptDataRow>(`${this.baseUrl}/addPrompt/${type}`, PromptDataRow);
   }
 
-  deletePromptDataRow(id: number): Observable<PromptDataRow> {
-    return this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${id}`);
+  deletePromptDataRow(id: string, type: string): Observable<PromptDataRow> {
+    return this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${type}/${id}`);
   }
 
-  deletePromptDataRows(PromptDataRows: PromptDataRow[]): Observable<PromptDataRow[]> {
+  deletePromptDataRows(PromptDataRows: PromptDataRow[], type: string): Observable<PromptDataRow[]> {
     const deleteRequests = PromptDataRows.map((PromptDataRow) =>
-    this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${PromptDataRow._id}`).pipe(
+    this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${type}/${PromptDataRow._id}`).pipe(
       catchError((error) => {
         console.error('Delete request error: ', error);
         return throwError(() => new Error(`Error deleting prompt: ${PromptDataRow} `));
