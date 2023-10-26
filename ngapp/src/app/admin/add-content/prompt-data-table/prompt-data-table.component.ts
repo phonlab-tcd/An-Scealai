@@ -3,26 +3,27 @@ import { Component, OnInit, ViewChild, Input } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { AuthenticationService } from "app/core/services/authentication.service";
 import { TranslationService } from "app/core/services/translation.service";
 import config from "../../../../abairconfig";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PromptService } from "app/core/services/prompt.service";
+import { } from "app/core/models/prompt";
 
 
 export interface PromptDataRow {
   _id: string | null;
   isSelected: boolean;
   isEdit: boolean;
-  type: string;
-  prompt: {
-    topic: string;
-    level: string;
-    dialect: string;
-    text: string;
-  },
+  prompt?: string;
+  word?: string;
+  translation?: string;
+  level?: string;
+  dialect?: string;
+  storyTitle?: string;
+  type?: string;
+  partOfSpeech?: string;
   lastUpdated: Date;
 }
 
@@ -33,15 +34,21 @@ const PromptDataColumns = [
     label: '',
   },
   {
-    key: 'topic',
+    key: 'prompt',
     type: 'text',
-    label: 'Topic',
+    label: 'Prompt Text',
     required: true,
   },
   {
-    key: 'text',
+    key: 'word',
     type: 'text',
-    label: 'Prompt Text',
+    label: 'Word',
+    required: false,
+  },
+  {
+    key: 'translation',
+    type: 'text',
+    label: 'Translation',
     required: true,
   },
   {
@@ -54,6 +61,24 @@ const PromptDataColumns = [
     key: 'dialect',
     type: 'text',
     label: 'Dialect',
+    required: false,
+  },
+  {
+    key: 'storyTitle',
+    type: 'text',
+    label: 'Story Title',
+    required: false,
+  },
+  {
+    key: 'type',
+    type: 'text',
+    label: 'Type',
+    required: false,
+  },
+  {
+    key: 'partOfSpeech',
+    type: 'text',
+    label: 'Part of Speech',
     required: false,
   },
   {
@@ -76,6 +101,7 @@ const PromptDataColumns = [
 })
 export class PromptDataTableComponent {
 
+  @Input("selectedPromptGenerator") selectedPromptGenerator: string;
   displayedColumns: string[] = PromptDataColumns.map((col) => col.key)
   columnsSchema: any = PromptDataColumns
   dataSource = new MatTableDataSource<PromptDataRow>()
@@ -83,35 +109,51 @@ export class PromptDataTableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
 
-  constructor(private auth: AuthenticationService,
-    private http: HttpClient,
+  constructor(
     private promptService: PromptService,
     public ts: TranslationService,
     private dialog: MatDialog,) {}
 
-  ngOnInit() {
+  ngOnChanges() {
+    if (this.selectedPromptGenerator) {
+      console.log(this.selectedPromptGenerator);
+      this.displayedColumns = PromptDataColumns.map((col) => col.key)
+      this.getPromptData();
+      // this.data.paginator = this.paginator;
+      // this.data.sort = this.sort;
+    }
+  }
+
+  getPromptData() {
     // TODO: udpate the following request with the get described in the example service class
-      this.promptService.getPromptDataRows("prompt").subscribe({
-        next: (data: any) => {
-          console.log(data)
-          const flattenedData = data.map((item: PromptDataRow) => {
-              return {
-                _id: item._id,
-                type: item.type,
-                //topic: item.prompt.topic,
-                //level: item.prompt.level,
-                //dialect: item.prompt.dialect,
-                //text: item.prompt.text,
-                lastUpdated: item.lastUpdated,
-              };
-            });
-          this.dataSource.data = flattenedData;
-          console.log(this.dataSource.data)
-        },
-      error: (err) => {
-        console.error(err);
-      }})
-  
+    this.promptService.getPromptDataRows(this.selectedPromptGenerator).subscribe({
+      next: (data: PromptDataRow[]) => {
+        // const flattenedData = data.map((item: PromptDataRow) => {
+        //     return {
+        //       _id: item._id,
+        //       type: item.type,
+        //       //topic: item.prompt.topic,
+        //       //level: item.prompt.level,
+        //       //dialect: item.prompt.dialect,
+        //       //text: item.prompt.text,
+        //       lastUpdated: item.lastUpdated,
+        //     };
+        //   });
+        this.dataSource.data = data;
+        this.displayedColumns = this.displayedColumns.filter(key => {
+          return this.dataSource.data[0].hasOwnProperty(key);
+        });
+        this.dataSource.paginator = this.paginator;
+        console.log(this.dataSource.data)
+        console.log(this.displayedColumns)
+      },
+    error: (err) => {
+      console.error(err);
+    }})
+  }
+
+  ngOnInit() {  
+    console.log(this.dataSource.data[0])
     // this.http .get<any>(config.baseurl + "prompt/getData/prompt", { headers }).subscribe({
     //   next: (data) => {
     //     const flattenedData = data.map((item: PromptDataRow) => {
@@ -164,15 +206,16 @@ export class PromptDataTableComponent {
     const newRow: PromptDataRow = {
       _id: null,
       type: "",
-      prompt: {
-        topic: "",
-        level: "",
-        dialect: "",
-        text: "",
-      },
       lastUpdated: new Date(),
       isEdit: true,
       isSelected: false,
+      prompt: "",
+      word: "",
+      translation: "",
+      level: "",
+      dialect: "",
+      storyTitle: "",
+      partOfSpeech: ""
     }
     // insert line here to update data in the DB and then add the newly added content to table
     this.dataSource.data = [newRow, ...this.dataSource.data]

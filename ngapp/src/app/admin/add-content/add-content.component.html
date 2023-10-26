@@ -1,16 +1,20 @@
 <div class="mainContainer">
-  <div class="headerTitle">Add Data to DB</div>
+  <div class="headerTitle">Add Prompt Data to DB</div>
   <!-- Select Content Type-->
   <mat-form-field appearance="fill">
-    <mat-label>Select Topic</mat-label>
-    <mat-select [(ngModel)]="selectedContent" (ngModelChange)=" posDataTable.hideTable = true; promptDataTable.hideTable = true" >
-      <mat-option value="partOfSpeech">Part of Speech Data</mat-option>
-      <mat-option value="prompt">Prompt Data</mat-option>
+    <mat-label>Select Prompt Type</mat-label>
+    <mat-select [(ngModel)]="selectedPromptGenerator" >
+      <mat-option value="general">General Prompts</mat-option>
+      <mat-option value="proverb">Proverb Prompts</mat-option>
+      <mat-option value="exam">Exam Prompts</mat-option>
+      <mat-option value="lara">LARA Prompts</mat-option>
+      <mat-option value="combination">Combination Prompts</mat-option>
+      <mat-option value="partOfSpeech">Part-of-Speech Prompts</mat-option>
     </mat-select>
   </mat-form-field>
 
   <!-- Add part of speech data -->
-  <div *ngIf="selectedContent == 'partOfSpeech'">
+  <div *ngIf="selectedPromptGenerator == 'partOfSpeech'">
     <div class="posFields">
       <mat-form-field appearance="fill">
         <!-- Part of speech -->
@@ -40,27 +44,14 @@
       <button mat-raised-button (click)="addPOSContent()" class="viewDataBtn"> Add </button>
     </div>
     <!-- Show part of speech data -->
-    <button mat-raised-button (click)="toggleTable('pos')" class="viewDataBtn">
+    <!-- <button mat-raised-button (click)="toggleTable('pos')" class="viewDataBtn">
       {{ this.posDataTable.hideTable ? "Show Data" : "Hide Data" }}
-    </button>
+    </button> -->
   </div>
 
   <!-- Add prompt data -->
-  <div *ngIf="selectedContent == 'prompt'">
+  <div *ngIf="selectedPromptGenerator !== 'partOfSpeech'">
     <div class="posFields">
-      <!-- Select prompt type -->
-      <mat-form-field appearance="fill">
-        <mat-label>Prompt Generator</mat-label>
-        <mat-select [(ngModel)]="selectedPromptGenerator">
-          <mat-option value="exam">{{ ts.l.exam_prompts }}</mat-option>
-          <mat-option value="proverb">{{ ts.l.proverb_prompts }}</mat-option>
-          <mat-option value="lara">{{ ts.l.lara_prompts }}</mat-option>
-          <mat-option value="combination">{{
-            ts.l.combination_generator
-          }}</mat-option>
-          <mat-option value="general">{{ ts.l.general_prompts }}</mat-option>
-        </mat-select>
-      </mat-form-field>
       <!-- Choose dialect -->
       <mat-form-field appearance="fill" *ngIf="selectedPromptGenerator == 'proverb'" >
         <mat-label>{{ ts.l.choose_dialect }}</mat-label>
@@ -119,5 +110,5 @@
 
 <!-- Data Tables -->
 <!-- <app-prompt-data-table #promptDataTable [data]="promptDataSource" ></app-prompt-data-table> -->
-<app-prompt-data-table #promptDataTable ></app-prompt-data-table>
-<app-pos-data-table #posDataTable [data]="posDataSource"></app-pos-data-table>
+<app-prompt-data-table #promptDataTable [selectedPromptGenerator]="selectedPromptGenerator" ></app-prompt-data-table>
+<!-- <app-pos-data-table #posDataTable [data]="posDataSource"></app-pos-data-table> -->

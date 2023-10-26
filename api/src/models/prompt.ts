@@ -56,6 +56,10 @@ const LARAPromptSchema = new Schema({
     type: String,
     required: true,
   },
+  storyTitle: {
+    type: String,
+    required: true,
+  },
   lastUpdated: {
     type: Date,
   },
@@ -107,7 +111,7 @@ const POSPromptSchema = new Schema({
     type: Date,
   },
 }, {
-  collection: 'prompt.pos',
+  collection: 'prompt.partOfSpeech',
 });
 
 const promptSchema = new Schema({

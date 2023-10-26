@@ -14,7 +14,6 @@ import { firstValueFrom } from "rxjs";
   styleUrls: ["./add-content.component.scss"],
 })
 export class AddContentComponent implements OnInit {
-  selectedContent: string = "";
   selectedPOS: string = "";
   promptText: string = "";
   posInput: string = "";
@@ -72,7 +71,7 @@ export class AddContentComponent implements OnInit {
     }
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
     const body = {
-      type: this.selectedContent,
+      type: this.selectedPromptGenerator,
       partOfSpeechData: {
         partOfSpeech: this.selectedPOS,
       },
@@ -124,7 +123,7 @@ export class AddContentComponent implements OnInit {
 
     const headers = { Authorization: "Bearer " + this.auth.getToken() };
     const body = {
-      type: this.selectedContent,
+      type: this.selectedPromptGenerator,
       prompt: {
         topic: this.selectedPromptGenerator,
       },

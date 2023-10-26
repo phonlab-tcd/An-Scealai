@@ -1,13 +1,28 @@
 const express = require("express");
 const promptRoutes = express.Router();
 import models from '../models/prompt';
-const { GeneralPromptSchema, Prompt } = models;
+const { GeneralPromptSchema, ProverbPromptSchema, ExamPromptSchema, LARAPromptSchema, CombinationPromptSchema, POSPromptSchema, Prompt } = models;
 
 function getCollection(collectionName) {
   let selectedCollection;
   switch (collectionName) {
     case 'general':
       selectedCollection = GeneralPromptSchema;
+      break;
+    case 'proverb':
+      selectedCollection = ProverbPromptSchema;
+      break;
+    case 'exam':
+      selectedCollection = ExamPromptSchema;
+      break;
+    case 'lara':
+      selectedCollection = LARAPromptSchema;
+      break;
+    case 'combination':
+      selectedCollection = CombinationPromptSchema;
+      break;
+    case 'partOfSpeech':
+      selectedCollection = POSPromptSchema;
       break;
     case 'prompt':
       selectedCollection = Prompt;
