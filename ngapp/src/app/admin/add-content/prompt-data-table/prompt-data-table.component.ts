@@ -186,6 +186,16 @@ export class PromptDataTableComponent {
   }
 
   /**
+   * Remove new row added to table
+   * @param newRow New row added to table
+   */
+  cancelAddRow(newRow: PromptDataRow) {
+    if (Object.keys(newRow).length == 2)
+    this.dataSource.data = this.dataSource.data.filter(item => item !== newRow);
+    else newRow.isEdit = false;
+  }
+
+  /**
    * This function add multiple rows to the DB at once
    * Split textarea string into array of prompts with new line delimiter
    * Split each prompt into sections with semicolon delimiter

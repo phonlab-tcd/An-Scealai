@@ -69,9 +69,26 @@ p {
     padding-right: 5px;
   }
 
+  .multipleRowInputContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .multipleRowInputInstructions{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
   .multipleRowInput {
     width: 90%;
+    text-align: left;
   }
+
+
 
 .mat-mdc-checkbox.mat-accent {
     --mdc-checkbox-selected-checkmark-color: #fff;
