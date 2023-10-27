@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, throwError } from 'rxjs';
-import { PromptDataRow } from '../../admin/add-content/prompt-data-table/prompt-data-table.component';
+import { PromptDataRow } from 'app/core/models/prompt';
 import { map, catchError } from 'rxjs/operators';
 import config from "../../../abairconfig";
 

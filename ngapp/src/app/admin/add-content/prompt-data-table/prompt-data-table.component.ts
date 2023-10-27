@@ -1,100 +1,13 @@
-import { HttpClient } from "@angular/common/http";
 import { Component, ViewChild, Input } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { TranslationService } from "app/core/services/translation.service";
-import config from "../../../../abairconfig";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { PromptService } from "app/core/services/prompt.service";
-import {} from "app/core/models/prompt";
-import { AuthenticationService } from "app/core/services/authentication.service";
-
-// all possible values for prompt data
-export interface PromptDataRow {
-  _id?: string | null;
-  isSelected: boolean;
-  isEdit: boolean;
-  prompt?: string;
-  word?: string;
-  translation?: string;
-  level?: string;
-  dialect?: string;
-  storyTitle?: string;
-  type?: string;
-  partOfSpeech?: string;
-  lastUpdated?: Date;
-}
-
-// all possible table columns for prompt data, includes data type and specifications (order is important)
-const PromptDataColumns = [
-  {
-    key: "isSelected",
-    type: "isSelected",
-    label: "",
-  },
-  {
-    key: "prompt",
-    type: "text",
-    label: "Prompt Text",
-    required: true,
-  },
-  {
-    key: "word",
-    type: "text",
-    label: "Word",
-    required: false,
-  },
-  {
-    key: "translation",
-    type: "text",
-    label: "Translation",
-    required: true,
-  },
-  {
-    key: "level",
-    type: "text",
-    label: "Level",
-    required: false,
-  },
-  {
-    key: "dialect",
-    type: "text",
-    label: "Dialect",
-    required: false,
-  },
-  {
-    key: "storyTitle",
-    type: "text",
-    label: "Story Title",
-    required: false,
-  },
-  {
-    key: "type",
-    type: "text",
-    label: "Type",
-    required: false,
-  },
-  {
-    key: "partOfSpeech",
-    type: "text",
-    label: "Part of Speech",
-    required: false,
-  },
-  {
-    key: "lastUpdated",
-    type: "date",
-    label: "Last Updated",
-    required: true,
-  },
-  {
-    key: "isEdit",
-    type: "isEdit",
-    label: "",
-  },
-];
+import { PromptDataRow, PromptDataColumns } from "app/core/models/prompt";
 
 @Component({
   selector: "app-prompt-data-table",
@@ -112,8 +25,6 @@ export class PromptDataTableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private auth: AuthenticationService,
-    private http: HttpClient,
     private promptService: PromptService,
     public ts: TranslationService,
     private dialog: MatDialog
@@ -186,13 +97,14 @@ export class PromptDataTableComponent {
   }
 
   /**
-   * Remove new row added to table
+   * Remove new row added to table if no data filled out
    * @param newRow New row added to table
    */
   cancelAddRow(newRow: PromptDataRow) {
     if (Object.keys(newRow).length == 2)
-    this.dataSource.data = this.dataSource.data.filter(item => item !== newRow);
-    else newRow.isEdit = false;
+      this.dataSource.data = this.dataSource.data.filter(item => item !== newRow);
+    else 
+      newRow.isEdit = false;
   }
 
   /**
@@ -242,6 +154,7 @@ export class PromptDataTableComponent {
    */
   deleteSelectedRows() {
     const prompts = this.dataSource.data.filter( (p: PromptDataRow) => p.isSelected );
+    if (prompts.length === 0) { alert('Select the rows you want to delete'); return; }
     this.dialog.open(BasicDialogComponent, {
       data: {
         title: "Delete rows",
@@ -308,27 +221,4 @@ export class PromptDataTableComponent {
   isAnySelected(): boolean {
     return this.dataSource.data.some((item) => item.isSelected);
   }
-
-
-  // ngOnInit(): void {}
-
-  // ngOnChanges() {
-  //   if (this.data) {
-  //     this.data.paginator = this.paginator;
-  //     this.data.sort = this.sort;
-  //   }
-  // }
-
-  // /**
-  //  * Filter the rows in the table by the search text
-  //  * @param event user search text
-  //  */
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.data.filter = filterValue.trim().toLowerCase();
-
-  //   if (this.data.paginator) {
-  //     this.data.paginator.firstPage();
-  //   }
-  // }
 }

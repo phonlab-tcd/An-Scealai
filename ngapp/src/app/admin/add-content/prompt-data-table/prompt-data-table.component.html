@@ -1,44 +1,40 @@
-<div class="table-header">
-  <div>
-    <button class="button-remove-rows" mat-button (click)="deleteSelectedRows()" >
-      Delete Rows
-    </button>
-    <button class="button-add-row" mat-button (click)="addRow()">
-      Add Row
-    </button>
-    <button class="button-add-row" mat-button (click)="useMultipleRowInput = !useMultipleRowInput">
-      {{ useMultipleRowInput ? "Close" : "Add Multiple Rows" }}
-    </button>
-  </div>
+<h3>{{ selectedPromptGenerator | titlecase }} Prompts</h3>
+<div class="tableButtons">
+  <button class="button-add-row" mat-button (click)="addRow()">Add Row</button>
+  <button class="button-add-row" mat-button (click)="useMultipleRowInput = !useMultipleRowInput" >
+    {{ useMultipleRowInput ? "Close" : "Add Multiple Rows" }}
+  </button>
+  <button class="button-remove-rows" mat-button (click)="deleteSelectedRows()"> Delete Rows </button>
 </div>
 
 <!-- Text box for adding multiple rows at once-->
 <div *ngIf="useMultipleRowInput" class="multipleRowInputContainer">
-  <div class="multipleRowInputInstructions"> 
-    <div>Add multiple prompts at once by putting each prompt on a new line in the text box below. Click the 'Add rows' button to save all prompts.
-    Input must meet the following criteria:</div><br>
-    <ul style="text-align: left">
+  <div class="multipleRowInputInstructions">
+    <div>
+      Add multiple prompts at once by putting each prompt on a new line in the
+      text box below. Click the 'Add rows' button to save all prompts. Input
+      must meet the following criteria:
+    </div> <br />
+    <ul>
       <li>Each prompt is on its own line, press 'enter' to add a new prompt</li>
-      <li>All additional fields must be included for each prompt (e.x. dialect, level, etc.)</li>
+      <li> All additional fields must be included for each prompt (e.x. dialect, level, etc.) </li>
       <li>Separate the fields for each prompt using a semicolon ';'</li>
       <li>The fields must be in the correct order (see example below)</li>
     </ul>
-    <div [ngSwitch]="selectedPromptGenerator"> 
-      <div *ngSwitchCase="'general'">Example: <code>Prompt text</code> (no additional fields needed)</div>
-      <div *ngSwitchCase="'proverb'">Example: <code>Prompt text;Prompt translation;dialect</code> (munster/connaught/ulster)</div>
-      <div *ngSwitchCase="'exam'">Example: <code>Prompt text;level</code> (jc/ol/hl)</div>
-      <div *ngSwitchCase="'lara'">Example: <code>Prompt text;LARA story title</code></div>
-      <div *ngSwitchCase="'combination'">Example: <code>Prompt text;Prompt translation;type;level</code> (character/location/setting), (primary/secondary/tertiary)</div>
-      <div *ngSwitchCase="'partOfSpeech'">Example: <code>Word;Translation;Part of speech </code>(noun, verb, adjective, preposition, adverb, pronoun, article, conjunction)</div>
-    </div><br>
+    <div [ngSwitch]="selectedPromptGenerator">
+      <div *ngSwitchCase="'general'"> Example: <code>Prompt text</code> (no additional fields needed) </div>
+      <div *ngSwitchCase="'proverb'"> Example: <code>Prompt text;Prompt translation;dialect</code> (munster/connaught/ulster) </div>
+      <div *ngSwitchCase="'exam'"> Example: <code>Prompt text;level</code> (jc/ol/hl) </div>
+      <div *ngSwitchCase="'lara'"> Example: <code>Prompt text;LARA story title</code> </div>
+      <div *ngSwitchCase="'combination'"> Example: <code>Prompt text;Prompt translation;type;level</code> (character/location/setting), (primary/secondary/tertiary) </div>
+      <div *ngSwitchCase="'partOfSpeech'"> Example: <code>Word;Translation;Part of speech </code>(noun, verb, adjective, preposition, adverb, pronoun, article, conjunction) </div>
+    </div> <br />
   </div>
-  <mat-form-field appearance="fill" class="multipleRowInput" >
+  <mat-form-field appearance="fill" class="multipleRowInput">
     <mat-label>Prompt data rows</mat-label>
-    <textarea matInput [(ngModel)]="multipleRowData"></textarea>
-  </mat-form-field><br>
-  <button class="button-add-row" mat-button (click)="addMultipleRows()">
-    Add Rows
-  </button>
+    <textarea matInput [(ngModel)]="multipleRowData"></textarea></mat-form-field
+  ><br />
+  <button class="button-add-row" mat-button (click)="addMultipleRows()"> Add Rows </button>
 </div>
 
 <!-- Prompt Data table-->
@@ -67,38 +63,18 @@
           ></mat-checkbox>
         </ng-container>
         <div class="btn-edit" *ngSwitchCase="'isEdit'">
-          <button mat-button (click)="element.isEdit = !element.isEdit">
-            Edit
-          </button>
-          <button
-            mat-button
-            class="button-remove"
-            (click)="deleteRow(element._id)"
-          >
-            Delete
-          </button>
+          <button mat-button (click)="element.isEdit = !element.isEdit"> Edit </button>
+          <button mat-button (click)="deleteRow(element._id)">Delete</button>
         </div>
-        <span *ngSwitchCase="'date'">
-          {{ element[col.key] | date: 'mediumDate' }}
-        </span>
-        <span *ngSwitchDefault>
-          {{ element[col.key] }}
-        </span>
+        <span *ngSwitchCase="'date'"> {{ element[col.key] | date : "mediumDate" }} </span>
+        <span *ngSwitchDefault> {{ element[col.key] }} </span>
       </div>
       <!-- display data in edit mode -->
       <div [ngSwitch]="col.type" *ngIf="element.isEdit">
         <div *ngSwitchCase="'isSelected'"></div>
         <div class="btn-edit" *ngSwitchCase="'isEdit'">
-          <button mat-button (click)="cancelAddRow(element)">
-            Cancel
-          </button>
-          <button
-            mat-button
-            (click)="saveRow(element)"
-            [disabled]="disableSubmit(element._id)"
-          >
-            Save
-          </button>
+          <button mat-button (click)="cancelAddRow(element)">Cancel</button>
+          <button mat-button (click)="saveRow(element)" [disabled]="disableSubmit(element._id)" > Save </button>
         </div>
         <div *ngSwitchCase="'date'"></div>
         <mat-form-field class="form-input" *ngSwitchDefault>
