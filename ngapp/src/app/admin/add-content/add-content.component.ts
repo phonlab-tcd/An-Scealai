@@ -176,9 +176,9 @@ export class AddContentComponent implements OnInit {
    */
   toggleTable(type: string) {
     if (type == "pos") {
-      this.posDataTable.hideTable = !this.posDataTable.hideTable;
+      //this.posDataTable.hideTable = !this.posDataTable.hideTable;
     } else {
-      this.promptDataTable.hideTable = !this.promptDataTable.hideTable;
+     // this.promptDataTable.hideTable = !this.promptDataTable.hideTable;
     }
   }
 }

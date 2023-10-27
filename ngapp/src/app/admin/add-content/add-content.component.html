@@ -13,6 +13,8 @@
     </mat-select>
   </mat-form-field>
 
+  <app-prompt-data-table [hidden]="!selectedPromptGenerator" #promptDataTable [selectedPromptGenerator]="selectedPromptGenerator" ></app-prompt-data-table>
+
   <!-- Add part of speech data -->
   <div *ngIf="selectedPromptGenerator == 'partOfSpeech'">
     <div class="posFields">
@@ -100,15 +102,10 @@
       <div *ngIf="errorMessages.length > 0" class="errorText"> <div *ngFor="let message of errorMessages">{{ message }} </div></div>
       <button mat-raised-button (click)="addPromptContent()" class="viewDataBtn" > Add </button>
     </div>
-
-    <!-- Show prompt data-->
-    <button mat-raised-button (click)="toggleTable('prompt')" class="viewDataBtn" >
-      {{ this.promptDataTable.hideTable ? "Show Data" : "Hide Data" }}
-    </button>
   </div>
 </div>
 
 <!-- Data Tables -->
 <!-- <app-prompt-data-table #promptDataTable [data]="promptDataSource" ></app-prompt-data-table> -->
-<app-prompt-data-table #promptDataTable [selectedPromptGenerator]="selectedPromptGenerator" ></app-prompt-data-table>
+
 <!-- <app-pos-data-table #posDataTable [data]="posDataSource"></app-pos-data-table> -->

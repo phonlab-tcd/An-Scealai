@@ -41,12 +41,12 @@ function getCollection(collectionName) {
  */
 promptRoutes.route("/getPrompts/:type").get(async (req, res) => {
   const collection = getCollection(req.params.type);
-  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+  if (!collection) return res.status(404).json(`Invalid collection name: ${req.params.type}`);
 
   const prompts = await collection.find();
   if (prompts) return res.status(200).json(prompts);
 
-  return res.status(404).json({ message: "No prompts found" });
+  return res.status(404).json(`No prompts found for ${req.params.type}`);
 });
 
 /**
@@ -56,20 +56,31 @@ promptRoutes.route("/getPrompts/:type").get(async (req, res) => {
  */
 promptRoutes.route("/addPrompt/:type").post(async (req, res) => {
   const collection = getCollection(req.params.type);
-  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+  if (!collection) return res.status(404).json(`Invalid collection name: ${req.params.type}`);
   console.log(req.body);
 
-  const prompt = new collection({...req.body});
-
-  prompt.save()
-  .then(() => {
-    return res.json(prompt);
-  })
-  .catch((err) => {
-    console.log(err);
-    return res.status(400).send("unable to save to DB");
-  });
-
+  try {
+    delete req.body.isSelected;
+    delete req.body.isEdit;
+    console.log(req.body)
+      const existingPrompts = await collection.find(req.body); 
+      console.log(existingPrompts)
+  if (existingPrompts.length > 0) {
+    console.log("Prompt already exists")
+    return res.status(400).json(`Data already exists in the DB: ${existingPrompts}`);
+  }
+    const prompt = new collection({...req.body, lastUpdated: new Date()});
+  
+    prompt.save()
+    .then(() => {
+      return res.json(prompt);
+    })
+    .catch((err) => {
+      return res.status(400).json(`Unable to save to DB: ${err}`);
+    });
+  } catch (error) {
+    return res.status(500).json(`'Internal Server Error: ${error}`);
+  }
 });
 
 /**
@@ -79,7 +90,7 @@ promptRoutes.route("/addPrompt/:type").post(async (req, res) => {
  */
 promptRoutes.route("/updatePrompt/:type").patch(async (req, res) => {
   const collection = getCollection(req.params.type);
-  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+  if (!collection) return res.status(404).json(`Invalid collection name: ${req.params.type}`);
 
   collection.findOneAndUpdate(
     { _id: req.body._id },
@@ -88,8 +99,7 @@ promptRoutes.route("/updatePrompt/:type").patch(async (req, res) => {
     return res.json(updatedDocument);
   })
   .catch((err) => {
-    console.log(err);
-    return res.status(400).send("unable to update prompt");
+    return res.status(400).json(`Unable to update prompt: ${err}`);
   });
 });
 
@@ -100,7 +110,7 @@ promptRoutes.route("/updatePrompt/:type").patch(async (req, res) => {
  */
 promptRoutes.route("/deletePrompt/:type/:id").delete(async (req, res) => {
   const collection = getCollection(req.params.type);
-  if (!collection) return res.status(404).json({ message: "Invalid collection name" });
+  if (!collection) return res.status(404).json(`Invalid collection name: ${req.params.type}`);
 
   collection.findByIdAndRemove(req.params.id, (err) => {
     if (err) {

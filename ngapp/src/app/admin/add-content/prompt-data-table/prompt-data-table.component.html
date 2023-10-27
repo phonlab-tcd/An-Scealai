@@ -1,24 +1,37 @@
-<article class="table-header">
+<div class="table-header">
   <div>
-    <i>First Name is required | Must have a valid Email Address</i>
-  </div>
-  <div>
-    <button
-      class="button-remove-rows"
-      mat-button
-      (click)="removeSelectedRows()"
-    >
-      Remove Rows
+    <button class="button-remove-rows" mat-button (click)="deleteSelectedRows()" >
+      Delete Rows
     </button>
     <button class="button-add-row" mat-button (click)="addRow()">
       Add Row
     </button>
+    <button class="button-add-row" mat-button (click)="useMultipleRowInput = !useMultipleRowInput">
+      {{ useMultipleRowInput ? "Cancel" : "Add Multiple Rows" }}
+    </button>
   </div>
-</article>
+</div>
+
+<!-- Text box for adding multiple rows at once-->
+<div *ngIf="useMultipleRowInput">
+  Add multiple rows here
+  <div> 
+    Prompt texts can be added one at a time, or you can add several at once with each prompt on a new line (enter key after each one)
+  </div>
+  <mat-form-field appearance="fill" class="multipleRowInput" >
+    <mat-label>Prompt data rows</mat-label>
+    <textarea matInput [(ngModel)]="multipleRowData"></textarea>
+  </mat-form-field><br>
+  <button class="button-add-row" mat-button (click)="addMultipleRows()">
+    Add Rows
+  </button>
+</div>
+
+<!-- Prompt Data table-->
 <table mat-table [dataSource]="dataSource">
   <!-- one ng-container to describe each column, 'key' in schema determines what is displayed -->
   <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
-    <!-- header: either a checkbox or a textual label -->
+    <!-- header: ngSwitch determines either a checkbox or textual label -->
     <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
       <span *ngSwitchCase="'isSelected'">
         <mat-checkbox
@@ -29,7 +42,7 @@
       </span>
       <span *ngSwitchDefault>{{ col.label }}</span>
     </th>
-    <!-- row data: element is a row, row 'type' determines what is displayed -->
+    <!-- row data: 'element' is a row, row 'type' determines what is displayed -->
     <td mat-cell *matCellDef="let element">
       <!-- display data in view mode -->
       <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
@@ -46,7 +59,7 @@
           <button
             mat-button
             class="button-remove"
-            (click)="removeRow(element._id)"
+            (click)="deleteRow(element._id)"
           >
             Delete
           </button>
@@ -84,6 +97,7 @@
       </div>
     </td>
   </ng-container>
+  <!-- actual implementation of table headers and data rows -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

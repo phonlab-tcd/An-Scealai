@@ -20,7 +20,7 @@ const ProverbPromptSchema = new Schema({
   },
   translation: {
     type: String,
-    required: false,
+    required: true,
   },
   dialect: {
     type: String,
@@ -41,7 +41,7 @@ const ExamPromptSchema = new Schema({
   },
   level: {
     type: String,
-    enum: ["junior-cert", "ordinary-level", "higher-level"],
+    enum: ["jc", "ol", "hl"],
     required: true,
   },
   lastUpdated: {
