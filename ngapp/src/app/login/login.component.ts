@@ -8,8 +8,13 @@ import { ProfileService } from "app/core/services/profile.service";
 import { NotificationService } from "app/core/services/notification-service.service";
 import config from "abairconfig";
 import { ReplaySubject, takeUntil } from "rxjs";
+import { CommonModule } from "@angular/common";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule } from "@angular/forms";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatProgressSpinnerModule, FormsModule],
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
@@ -111,6 +116,7 @@ export class LoginComponent implements OnInit {
    * Attempt to login a user (verified or not)
    */
   login() {
+    console.log("Logging in")
     this.errorMsgKeys = [];
     this.isLoading = true;
     // check if user waiting to be verified has been verified

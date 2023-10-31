@@ -1,19 +1,37 @@
-.mat-slide-toggle-content {
+.mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-track-color: var(--scealai-green); // toggle slide track
+    --mdc-switch-selected-handle-color: white; // toggle circle color
+    --mdc-switch-selected-hover-track-color: var(--scealai-green);
+    --mdc-switch-selected-hover-handle-color: white;
+    --mdc-switch-selected-pressed-track-color: var(--scealai-green); // click down on track
+    --mdc-switch-selected-focus-track-color: var(--scealai-green); // when track actively switching
+    --mdc-switch-selected-focus-handle-color: white; // toggle circle when activated
+    --mdc-switch-selected-focus-state-layer-color: none; // ripple activated
+    --mdc-switch-selected-hover-state-layer-color: none; // hover over toggle circle (ripple)
+    --mdc-switch-selected-pressed-state-layer-color: none; // click down on toggle circle (ripple)
+    --mdc-switch-selected-pressed-handle-color: white; // click down on toggle circle
+    --mdc-switch-selected-icon-color: #fff; // check icon color
+    padding-right: 8px;
     font-family: "Open Sans" !important;
+    --mdc-switch-unselected-track-color: #00000061;
+    --mdc-switch-unselected-handle-color: white;
+    --mdc-switch-unselected-hover-track-color: #00000061;
+    --mdc-switch-unselected-hover-handle-color: white;
+    --mdc-switch-unselected-pressed-track-color: #00000061;
+    --mdc-switch-unselected-focus-track-color: #00000061;
+    --mdc-switch-unselected-focus-handle-color: white;
+    --mdc-switch-unselected-focus-state-layer-color: none;
+    --mdc-switch-unselected-hover-state-layer-color: none;
+    --mdc-switch-unselected-pressed-state-layer-color: none;
+    --mdc-switch-unselected-pressed-handle-color: white;
+    --mdc-switch-handle-surface-color: var(--mdc-theme-surface, #fff);
+    --mdc-switch-unselected-icon-color: #fff;
 }
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-    background-color: white !important;
-}
-.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: var(--scealai-green) !important;
-}
+
 .listenToggle .mat-ripple-element {
     background-color: var(--scealai-light-green) !important;
 }
 
-.mat-slide-toggle-label {
-    padding-right: 10px;
-}
 
 .ql-tooltip.synthesis-button.synth-button-word {
     border-bottom-right-radius: 10px;

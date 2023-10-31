@@ -38,23 +38,23 @@ export class AppComponent {
 
     console["originalError"] = console.error;
 
-    const logBackend = (async function() {
-      function validateError(e) {
-        if(!e) return "undefined";
-        if(e instanceof String || typeof e === "string") return e;
-        if("message" in e) return e.message;
-        try { return JSON.stringify(e); }
-        catch(e) { return "ERROR NOT SERIALIZABLE"}
-      }
-      try {
-        const errorSerial = validateError(arguments);
-        this.log.clientsideError(this.currentRoute, errorSerial)
-          .subscribe({error: console["originalError"]});
-      } catch(e) {
-        console["originalError"](e);
-      }
+    // const logBackend = (async function() {
+    //   function validateError(e) {
+    //     if(!e) return "undefined";
+    //     if(e instanceof String || typeof e === "string") return e;
+    //     if("message" in e) return e.message;
+    //     try { return JSON.stringify(e); }
+    //     catch(e) { return "ERROR NOT SERIALIZABLE"}
+    //   }
+    //   try {
+    //     const errorSerial = validateError(arguments);
+    //     this.log.clientsideError(this.currentRoute, errorSerial)
+    //       .subscribe({error: console["originalError"]});
+    //   } catch(e) {
+    //     console["originalError"](e);
+    //   }
 
-    }).bind(this);
+    // }).bind(this);
 
     // console.error = (async function () {
     //   try {

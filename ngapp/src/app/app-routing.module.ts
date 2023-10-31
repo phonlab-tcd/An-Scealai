@@ -4,37 +4,26 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'app/core/interceptors/auth.interceptor';
 
 import { LandingComponent } from './landing/landing.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from 'app/register/register.component';
-import { RegisterProfileComponent } from './profile/register-profile/register-profile.component';
-import { ProfileComponent } from './profile/profile/profile.component';
-import { MessagesComponent } from './messages/messages.component';
-import { CreateQuizComponent } from './chatbot/create-quiz/create-quiz.component';
-import { AboutTaidhginComponent } from './nav-bar/about-taidhgin/about-taidhgin.component';
-import { PromptsComponent } from './prompts/prompts.component';
-import { DictoglossComponent } from './dictogloss/dictogloss.component';
-import { ChatbotComponent } from './chatbot/chatbot.component';
 
 import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
 import { NotificationService } from 'app/core/services/notification-service.service';
 
-import { StatsDashboardComponent } from './stats-dashboard/stats-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
-  { path: 'login', component: LoginComponent},
-  { path: 'register/:role', component: RegisterComponent},
-  { path: 'register-profile', component: RegisterProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'taidhgin', component: ChatbotComponent },
-  { path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
-  { path: 'about-taidhgin', component: AboutTaidhginComponent },
-  { path: 'prompts/:type', component: PromptsComponent},
-  { path: 'dictogloss', component: DictoglossComponent, canActivate: [AuthGuardService], data :{ text:''} },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
-  { path: 'messages/:id', component: MessagesComponent, canActivate: [AuthGuardService]},
-  { path: 'stats-dashboard/:id', component: StatsDashboardComponent,},
+  { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent)},
+  { path: 'register/:role', loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent)},
+  { path: 'register-profile', loadComponent: () => import('./profile/register-profile/register-profile.component').then(m => m.RegisterProfileComponent), canActivate: [AuthGuardService]},
+  //{ path: 'taidhgin', component: ChatbotComponent },
+  //{ path: 'create-quiz', component: CreateQuizComponent, canActivate: [AuthGuardService] },
+  //{ path: 'about-taidhgin', component: AboutTaidhginComponent },
+  { path: 'prompts/:type', loadComponent: () => import('./prompts/prompts.component').then(m => m.PromptsComponent)},
+  { path: 'dictogloss', loadComponent: () => import('./dictogloss/dictogloss.component').then(m => m.DictoglossComponent), canActivate: [AuthGuardService], data :{ text:''} },
+  { path: 'profile', loadComponent: () => import('./profile/profile/profile.component').then(m => m.ProfileComponent), canActivate: [AuthGuardService]},
+  { path: 'messages/:id', loadComponent: () => import('./messages/messages.component').then(m => m.MessagesComponent), canActivate: [AuthGuardService]},
+  { path: 'stats-dashboard/:id', loadComponent: () => import('./stats-dashboard/stats-dashboard.component').then(m => m.StatsDashboardComponent)},
   {
     path: 'student',
     data: { expectedRole: 'STUDENT' },

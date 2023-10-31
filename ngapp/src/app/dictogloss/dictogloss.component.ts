@@ -11,11 +11,16 @@ import { RecordAudioService } from "app/core/services/record-audio.service";
 import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { firstValueFrom } from "rxjs";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
 import { Message } from "app/core/models/message";
+import { CommonModule } from "@angular/common";
+import { SynthItemModule } from "app/synth-item/synth-item.module";
+import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, SynthItemModule, SynthVoiceSelectModule, MatDialogModule],
   selector: "app-dictogloss",
   templateUrl: "./dictogloss.component.html",
   styleUrls: ["./dictogloss.component.scss"],
@@ -103,7 +108,8 @@ export class DictoglossComponent implements OnInit {
     }
     if (userDetails.role === "STUDENT") {
       this.studentId = userDetails._id;
-      let studentClassroom = ( await firstValueFrom( this.classroomService.getClassroomOfStudent(this.studentId) ) )
+      const classroom_cache = localStorage.getItem("classroom");
+      const studentClassroom = classroom_cache ? JSON.parse(classroom_cache) : await firstValueFrom( this.classroomService.getClassroomOfStudent(this.studentId) );
       if (studentClassroom) this.teacherId = studentClassroom.teacherId;
     }
     this.refreshVoice();

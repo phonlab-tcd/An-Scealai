@@ -1,8 +1,13 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { RegistrationTokenPayload } from 'app/core/services/authentication.service';
 import { TranslationService } from 'app/core/services/translation.service';
+import { WaitingForEmailVerificationComponent } from './waiting-for-email-verification';
+import { RegisterFormComponent } from './form.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, WaitingForEmailVerificationComponent, RegisterFormComponent],
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],

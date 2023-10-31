@@ -29,12 +29,20 @@ export class HomePageComponent implements OnInit, OnDestroy {
       return;
     }
     this.user = user;
-    //see if student is enrolled in a class (if not the case, hide message feature in html)
-    this.classroomService.getClassroomOfStudent(user._id).pipe(takeUntil(this.destroyed)).subscribe({
-      next: (res) => {
-        res === null ? (this.isEnrolled = false) : (this.isEnrolled = true);
-      },
-    });
+    const classroom = localStorage.getItem("classroom");
+    if (!classroom) {
+      //see if student is enrolled in a class (if not the case, hide message feature in html)
+      this.classroomService.getClassroomOfStudent(user._id).pipe(takeUntil(this.destroyed)).subscribe({
+        next: (res) => {
+          res === null ? (this.isEnrolled = false) : (this.isEnrolled = true);
+          localStorage.setItem("classroom", JSON.stringify(res));
+        },
+      });
+    }
+    else {
+      this.isEnrolled = true;
+    }
+
   }
 
   goToStats() {

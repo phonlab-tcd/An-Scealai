@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
@@ -14,6 +14,9 @@ import { ErrorTag } from "lib/grammar-engine/types";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import config from "app/../abairconfig";
+import { CommonModule } from "@angular/common";
+import { SynthItemModule } from "app/synth-item/synth-item.module";
+import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
 
 type TagForHighlight = {
   fromx: number;
@@ -21,6 +24,8 @@ type TagForHighlight = {
 };
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SynthItemModule, SynthVoiceSelectModule],
   selector: "app-part-of-speech",
   templateUrl: "./part-of-speech.component.html",
   styleUrls: ["./part-of-speech.component.scss"],

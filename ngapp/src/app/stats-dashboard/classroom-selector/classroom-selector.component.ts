@@ -6,9 +6,17 @@ import { UserService } from '../../core/services/user.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Classroom } from 'app/core/models/classroom';
 import { firstValueFrom } from 'rxjs';
-import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule],
+  providers: [ MatDatepickerModule],
   selector: 'app-classroom-selector',
   templateUrl: './classroom-selector.component.html',
   styleUrls: ['./classroom-selector.component.scss'],

@@ -19,7 +19,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FeedbackModule } from '../feedback/feedback.module';
+import { SpinnerModule } from 'app/spinner/spinner.module';
 
 @NgModule({
   declarations: [
@@ -42,8 +44,10 @@ import { FeedbackModule } from '../feedback/feedback.module';
     MatMenuModule,
     MatExpansionModule,
     MatDividerModule,
+    MatDialogModule,
     ReactiveFormsModule,
     FeedbackModule,
+    SpinnerModule,
   ]
 })
 export class TeacherModule { }

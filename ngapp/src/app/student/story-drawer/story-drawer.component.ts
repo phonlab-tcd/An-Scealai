@@ -122,6 +122,7 @@ export class StoryDrawerComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
       this.dialogRef = undefined;
+      console.log(res)
       if (res) {
         if (res[0]) {
           let dialect = "connemara";

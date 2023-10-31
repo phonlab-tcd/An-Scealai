@@ -12,11 +12,14 @@ import { ProfileService } from "app/core/services/profile.service";
 import { MessageService } from "app/core/services/message.service";
 import { UserService } from "app/core/services/user.service";
 import { RecordingService } from "app/core/services/recording.service";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
 import { firstValueFrom } from "rxjs";
+import { CommonModule } from "@angular/common";
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatDialogModule],
   selector: "app-account-settings",
   templateUrl: "./account-settings.component.html",
   styleUrls: ["./account-settings.component.scss"],
