@@ -4,6 +4,7 @@
   <button class="button-add-row" mat-button (click)="useMultipleRowInput = !useMultipleRowInput" >
     {{ useMultipleRowInput ? "Close" : "Add Multiple Rows" }}
   </button>
+  <button class="button-add-row" mat-button (click)="exporter.exportTable('csv')"> Download Data</button>
   <button class="button-remove-rows" mat-button (click)="deleteSelectedRows()"> Delete Rows </button>
 </div>
 
@@ -43,7 +44,7 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="Search columns" #input>
 </mat-form-field>
 <!-- Prompt Data table-->
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z3">
+<table mat-table matTableExporter [dataSource]="dataSource" matSort class="mat-elevation-z3" #exporter="matTableExporter">
   <!-- one ng-container to describe each column, 'key' in schema determines what is displayed -->
   <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
     <!-- header: ngSwitch determines either a checkbox or textual label -->

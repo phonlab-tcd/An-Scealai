@@ -34,7 +34,8 @@ import { HighlightDirective } from 'app/core/directives/highlight.directive';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatCheckboxModule,
     MatDialogModule,
     HttpClientModule,
+    MatTableExporterModule,
   ],
   providers: [
     MatPaginator,
