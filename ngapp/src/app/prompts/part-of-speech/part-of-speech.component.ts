@@ -5,7 +5,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, } from "@angular/forms";
 import { Router } from "@angular/router";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
-import { PromptDataRow, PartOfSpeechData } from "app/core/models/prompt";
+import { PromptDataRow } from "app/core/models/prompt";
 import { SynthItem } from "app/core/models/synth-item";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "lib/grammar-engine/types";
@@ -19,6 +19,12 @@ import { PromptService } from "app/core/services/prompt.service";
 type TagForHighlight = {
   fromx: number;
   tox: number;
+};
+
+type PartOfSpeechData = {
+  partOfSpeech: string;
+  word: string;
+  translation: string;
 };
 
 @Component({

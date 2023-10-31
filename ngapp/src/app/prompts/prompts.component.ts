@@ -11,6 +11,11 @@ import { CommonModule } from "@angular/common";
 import { PartOfSpeechComponent } from "./part-of-speech/part-of-speech.component";
 import { PromptService } from "app/core/services/prompt.service";
 
+type combinationDataStructure = {
+    word: string,
+    translation: string
+}
+
 @Component({
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PartOfSpeechComponent, MatDialogModule],
@@ -31,20 +36,23 @@ export class PromptsComponent implements OnInit {
   levelForm: FormGroup;
   combinationLevelForm: FormGroup
   dialectForm: FormGroup;
+  showTranslation: boolean = false;
 
   // variables for generating prompt
   prompt: string = '';
+  translation: string = '';
   currentPromptBank: PromptDataRow[] = [];
 
   // variables for generating combination prompts
-  chosenCharacter: string = "";
-  chosenLocation: string = "";
-  chosenTheme: string = "";
+  chosenCharacter: combinationDataStructure = {word: "", translation: ""};
+  chosenLocation: combinationDataStructure = {word: "", translation: ""};
+  chosenTheme: combinationDataStructure = {word: "", translation: ""};
+
   currentCombinationPromptBank: {
-    character: string[];
-    location: string[];
-    theme: string[];
-  } = {character: [], location: [], theme: []};
+    characters: combinationDataStructure[];
+    locations: combinationDataStructure[];
+    themes: combinationDataStructure[];
+  } = {characters: [], locations: [], themes: []};
 
   constructor(
     private storyService: StoryService,
@@ -77,7 +85,6 @@ export class PromptsComponent implements OnInit {
    * Get prompt data from the database based on specified prompt type
    */
     getPromptData() {
-      console.log(this.promptType)
       this.promptService.getPromptDataRows(this.promptType).subscribe({
         next: (data: any) => {
           if (data.length > 0) {
@@ -103,8 +110,7 @@ export class PromptsComponent implements OnInit {
         this.currentPromptBank = this.data.filter( (entry) => entry.dialect == this.dialectForm.controls["dialect"].value );
         const dialectPrompts = this.currentPromptBank[this.randomNumber(this.currentPromptBank.length)];
         this.prompt = dialectPrompts.prompt!
-        let translation = dialectPrompts.translation!
-        console.log(translation)
+        this.translation = dialectPrompts.translation!
         break;
       case "exam":
         this.currentPromptBank = this.data.filter( (entry) => entry.level == this.levelForm.controls["level"].value );
@@ -116,15 +122,15 @@ export class PromptsComponent implements OnInit {
         break;
       case "combination":
         let combinationPrompts = this.data.filter( (entry) => entry.level == this.combinationLevelForm.controls["combinationLevel"].value );
-        const characters: string[] = []
-        const locations: string[] = [];
-        const themes: string[] = [];
+        const characters: combinationDataStructure[] = []
+        const locations: combinationDataStructure[] = [];
+        const themes: combinationDataStructure[] = [];
         combinationPrompts.forEach((entry: PromptDataRow) => {
-          if (entry.type == "character") characters.push(entry.prompt!);
-          else if (entry.type == "location") locations.push(entry.prompt!);
-          else themes.push(entry.prompt!);
+          if (entry.type == "character") characters.push({word: entry.prompt!, translation: entry.translation!});
+          else if (entry.type == "location") locations.push({word: entry.prompt!, translation: entry.translation!});
+          else themes.push({word: entry.prompt!, translation: entry.translation!});
           });
-          this.currentCombinationPromptBank = { character: characters, location: locations, theme: themes, };
+          this.currentCombinationPromptBank = { characters: characters, locations: locations, themes: themes, };
           this.getRandomCombinationPrompt();
         break;
       default:
@@ -138,12 +144,12 @@ export class PromptsComponent implements OnInit {
    */
   getRandomCombinationPrompt() {
     this.chosenCharacter =
-      this.currentCombinationPromptBank.character[ this.randomNumber(this.currentCombinationPromptBank.character.length) ];
+      this.currentCombinationPromptBank.characters[ this.randomNumber(this.currentCombinationPromptBank.characters.length) ];
     this.chosenLocation =
-      this.currentCombinationPromptBank.location[ this.randomNumber(this.currentCombinationPromptBank.location.length) ];
+      this.currentCombinationPromptBank.locations[ this.randomNumber(this.currentCombinationPromptBank.locations.length) ];
     this.chosenTheme =
-      this.currentCombinationPromptBank.theme[ this.randomNumber(this.currentCombinationPromptBank.theme.length) ];
-    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenLocation + "\n" + "Téama: " + this.chosenTheme;
+      this.currentCombinationPromptBank.themes[ this.randomNumber(this.currentCombinationPromptBank.themes.length) ];
+    this.prompt = "Carachtar: " + this.chosenCharacter.word + "\n" + "Suíomh: " + this.chosenLocation.word + "\n" + "Téama: " + this.chosenTheme.word;
   }
 
   /**
@@ -153,15 +159,15 @@ export class PromptsComponent implements OnInit {
   changeCombinationPrompt(promptVariable: string) {
     if (promptVariable === "character") {
       this.chosenCharacter =
-        this.currentCombinationPromptBank.character[ this.randomNumber(this.currentCombinationPromptBank.character.length) ];
+        this.currentCombinationPromptBank.characters[ this.randomNumber(this.currentCombinationPromptBank.characters.length) ];
     } else if (promptVariable === "location") {
       this.chosenLocation =
-        this.currentCombinationPromptBank.location[ this.randomNumber(this.currentCombinationPromptBank.location.length) ];
+        this.currentCombinationPromptBank.locations[ this.randomNumber(this.currentCombinationPromptBank.locations.length) ];
     } else {
       this.chosenTheme =
-        this.currentCombinationPromptBank.theme[ this.randomNumber(this.currentCombinationPromptBank.theme.length) ];
+        this.currentCombinationPromptBank.themes[ this.randomNumber(this.currentCombinationPromptBank.themes.length) ];
     }
-    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenLocation + "\n" + "Téama: " + this.chosenTheme;
+    this.prompt = "Carachtar: " + this.chosenCharacter.word + "\n" + "Suíomh: " + this.chosenLocation.word + "\n" + "Téama: " + this.chosenTheme.word;
   }
 
   /**

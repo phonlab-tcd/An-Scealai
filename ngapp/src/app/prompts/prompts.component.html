@@ -67,6 +67,7 @@
       </div>
       <!--Display Prompt-->
       <div *ngIf="prompt.length > 0">
+        <div *ngIf="promptType == 'combination' || promptType == 'proverb'" (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? 'Hide translation': 'Show translation'}}</div>
         <!-- Story Prompt Options -->
         <div *ngIf="promptType == 'combination'">
           <div *ngFor="let lp of combinationLevelPreferences">
@@ -78,7 +79,7 @@
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="character">{{ chosenCharacter }}</i>
+              <i class="character">{{ chosenCharacter.word }} <span *ngIf="showTranslation">({{chosenCharacter.translation}})</span></i>
                <!-- location -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.location }}</p>
@@ -86,7 +87,7 @@
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="location">{{ chosenLocation }}</i>
+              <i class="location">{{ chosenLocation.word }} <span *ngIf="showTranslation">({{chosenLocation.translation}})</span></i>
                <!-- theme -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.theme }}</p>
@@ -94,12 +95,15 @@
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="theme">{{ chosenTheme }}</i>
+              <i class="theme">{{ chosenTheme.word }} <span *ngIf="showTranslation">({{chosenTheme.translation}})</span></i>
             </div>
           </div>
         </div>
         <!-- Generated Prompt -->
-        <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0"><i>{{ prompt }}</i></div>
+        <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0">
+          <i>{{ prompt }}</i>
+          <div *ngIf="showTranslation">({{translation}})</div>
+        </div>
         <!-- Create New Story Button-->
         <button *ngIf="auth.getUserDetails()?.role == 'STUDENT'" class="button" (click)="createNewStory()">
             {{ ts.l.start_my_story }}
