@@ -1,16 +1,15 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
-import { Prompt } from "app/core/models/prompt";
+import { PromptDataRow } from "app/core/models/prompt";
 import { AuthenticationService } from "app/core/services/authentication.service";
-import { FormGroup, FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormGroup, FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.component";
-import { HttpClient } from "@angular/common/http";
-import config from "abairconfig";
 import { CommonModule } from "@angular/common";
 import { PartOfSpeechComponent } from "./part-of-speech/part-of-speech.component";
+import { PromptService } from "app/core/services/prompt.service";
 
 @Component({
   standalone: true,
@@ -21,29 +20,31 @@ import { PartOfSpeechComponent } from "./part-of-speech/part-of-speech.component
   encapsulation: ViewEncapsulation.None,
 })
 export class PromptsComponent implements OnInit {
-  data: Prompt[] = [];
+  data: PromptDataRow[] = [];
   promptType: string;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   // options and forms for prompt preferences
   levelPreferences: string[] = ["jc", "lcol", "lchl"];
+  combinationLevelPreferences: string[] = ["primary", "secondary", "tertiary"]
   dialectPreferences: string[] = ["munster", "connacht", "ulster"];
   levelForm: FormGroup;
+  combinationLevelForm: FormGroup
   dialectForm: FormGroup;
 
   // variables for generating prompt
   prompt: string = '';
-  currentPromptBank: Prompt[] = [];
+  currentPromptBank: PromptDataRow[] = [];
 
   // variables for generating combination prompts
   chosenCharacter: string = "";
-  chosenSetting: string = "";
+  chosenLocation: string = "";
   chosenTheme: string = "";
   currentCombinationPromptBank: {
     character: string[];
-    setting: string[];
+    location: string[];
     theme: string[];
-  } = {character: [], setting: [], theme: []};
+  } = {character: [], location: [], theme: []};
 
   constructor(
     private storyService: StoryService,
@@ -53,11 +54,14 @@ export class PromptsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private http: HttpClient
+    private promptService: PromptService
   ) {
     this.promptType = this.route.snapshot.params["type"];
     this.levelForm = this.fb.group({
       level: ["jc"],
+    });
+    this.combinationLevelForm = this.fb.group({
+      combinationLevel: ["primary"],
     });
     this.dialectForm = this.fb.group({
       dialect: ["munster"],
@@ -68,22 +72,21 @@ export class PromptsComponent implements OnInit {
     this.getPromptData();
   }
 
+
   /**
-   * Get POS data from the database
-   * Create a dictionary of pos types and array of coresponding word objects
-   * e.x: {noun: [{1}, {2}, {3}, ...], verb: [{1}, {2}, {3}], ...}
+   * Get prompt data from the database based on specified prompt type
    */
-  getPromptData() {
-    const headers = { Authorization: "Bearer " + this.auth.getToken() };
-    this.http.get<Prompt[]>( config.baseurl + "prompt/getPromptDataByTopic/" + this.promptType, { headers } ).subscribe({
-      next: (data) => {
-        this.data = data;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
+    getPromptData() {
+      console.log(this.promptType)
+      this.promptService.getPromptDataRows(this.promptType).subscribe({
+        next: (data: any) => {
+          if (data.length > 0) {
+            this.data = data;
+          }
+        },
+        error: (err) => { alert(err.error); },
+      });
+    }
 
   /**
    * Filter the data to create a bank of prompts relfecting a chosen
@@ -92,69 +95,73 @@ export class PromptsComponent implements OnInit {
   async generatePromptBank() {
     this.currentPromptBank = [];
 
-    if (this.promptType == "combination") {
-      // create arrays for characters, settings, and themes for the selected level
-      let filteredData = this.data.filter( (entry: any) => entry.prompt.level == this.levelForm.controls["level"].value );
-      const characters: string[] = [];
-      const settings: string[] = [];
-      const themes: string[] = [];
-      filteredData.forEach((entry: any) => {
-        characters.push(entry.prompt.combinationData.character);
-        settings.push(entry.prompt.combinationData.setting);
-        themes.push(entry.prompt.combinationData.theme);
-      });
-      this.currentCombinationPromptBank = { character: characters, setting: settings, theme: themes, };
-      this.getRandomCombinationPrompt();
-    } else {
-      // get prompts for the selected level or dialect
-      if (this.promptType == "exam") {
-        this.currentPromptBank = this.data.filter( (entry) => entry.prompt.level == this.levelForm.controls["level"].value );
-      } else if (this.promptType == "proverb") {
-        this.currentPromptBank = this.data.filter( (entry) => entry.prompt.dialect == this.dialectForm.controls["dialect"].value );
-      } else {
-        this.currentPromptBank = this.data;
-      }
-      this.getRandomPrompt();
+    switch (this.promptType) {
+      case "general":
+        this.prompt = this.data[this.randomNumber(this.data.length)].prompt!;
+        break;
+      case "proverb":
+        this.currentPromptBank = this.data.filter( (entry) => entry.dialect == this.dialectForm.controls["dialect"].value );
+        const dialectPrompts = this.currentPromptBank[this.randomNumber(this.currentPromptBank.length)];
+        this.prompt = dialectPrompts.prompt!
+        let translation = dialectPrompts.translation!
+        console.log(translation)
+        break;
+      case "exam":
+        this.currentPromptBank = this.data.filter( (entry) => entry.level == this.levelForm.controls["level"].value );
+        const levelPrompts = this.currentPromptBank[this.randomNumber(this.currentPromptBank.length)];
+        this.prompt = levelPrompts.prompt!
+        break;
+      case "lara":
+        this.prompt = this.data[this.randomNumber(this.data.length)].prompt!;
+        break;
+      case "combination":
+        let combinationPrompts = this.data.filter( (entry) => entry.level == this.combinationLevelForm.controls["combinationLevel"].value );
+        const characters: string[] = []
+        const locations: string[] = [];
+        const themes: string[] = [];
+        combinationPrompts.forEach((entry: PromptDataRow) => {
+          if (entry.type == "character") characters.push(entry.prompt!);
+          else if (entry.type == "location") locations.push(entry.prompt!);
+          else themes.push(entry.prompt!);
+          });
+          this.currentCombinationPromptBank = { character: characters, location: locations, theme: themes, };
+          this.getRandomCombinationPrompt();
+        break;
+      default:
+        this.prompt = "Error: No prompts available"
+        break;
     }
   }
 
   /**
-   * Generate a random prompt from the prompt bank
-   */
-  getRandomPrompt() {
-    this.prompt =
-      this.data[this.randomNumber(this.currentPromptBank.length)]["prompt"][ "text" ];
-  }
-
-  /**
-   * Generate a combination prompt from the story prompt bank with a random character, setting, and theme
+   * Generate a combination prompt from the story prompt bank with a random character, location, and theme
    */
   getRandomCombinationPrompt() {
     this.chosenCharacter =
       this.currentCombinationPromptBank.character[ this.randomNumber(this.currentCombinationPromptBank.character.length) ];
-    this.chosenSetting =
-      this.currentCombinationPromptBank.setting[ this.randomNumber(this.currentCombinationPromptBank.setting.length) ];
+    this.chosenLocation =
+      this.currentCombinationPromptBank.location[ this.randomNumber(this.currentCombinationPromptBank.location.length) ];
     this.chosenTheme =
       this.currentCombinationPromptBank.theme[ this.randomNumber(this.currentCombinationPromptBank.theme.length) ];
-    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenSetting + "\n" + "Téama: " + this.chosenTheme;
+    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenLocation + "\n" + "Téama: " + this.chosenTheme;
   }
 
   /**
-   * Generate another random character, setting, or theme of a story prompt
-   * @param promptVariable either 'character', 'setting', or 'theme'
+   * Generate another random character, location, or theme of a story prompt
+   * @param promptVariable either 'character', 'location', or 'theme'
    */
   changeCombinationPrompt(promptVariable: string) {
     if (promptVariable === "character") {
       this.chosenCharacter =
         this.currentCombinationPromptBank.character[ this.randomNumber(this.currentCombinationPromptBank.character.length) ];
-    } else if (promptVariable === "setting") {
-      this.chosenSetting =
-        this.currentCombinationPromptBank.setting[ this.randomNumber(this.currentCombinationPromptBank.setting.length) ];
+    } else if (promptVariable === "location") {
+      this.chosenLocation =
+        this.currentCombinationPromptBank.location[ this.randomNumber(this.currentCombinationPromptBank.location.length) ];
     } else {
       this.chosenTheme =
         this.currentCombinationPromptBank.theme[ this.randomNumber(this.currentCombinationPromptBank.theme.length) ];
     }
-    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenSetting + "\n" + "Téama: " + this.chosenTheme;
+    this.prompt = "Carachtar: " + this.chosenCharacter + "\n" + "Suíomh: " + this.chosenLocation + "\n" + "Téama: " + this.chosenTheme;
   }
 
   /**

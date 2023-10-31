@@ -576,6 +576,9 @@ const translations = {
   secondary: {
     ga: 'Iar-bhunscoil',
     en: 'Secondary' },
+  tertiary: {
+    ga: 'Cúrsa 3ú leibhéal',
+    en: '3rd level' },
   third_level: {
     ga: 'Cúrsa 3ú leibhéal',
     en: '3rd level' },
@@ -2195,9 +2198,9 @@ const translations = {
   character: {
     ga: 'Carachtar',
     en: 'Character' },
-  setting: {
+  location: {
     ga: 'Suíomhanna',
-    en: 'Setting' },
+    en: 'Location' },
   theme: {
     ga: 'Téama',
     en: 'Theme' },

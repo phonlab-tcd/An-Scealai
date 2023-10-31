@@ -8,7 +8,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { PromptService } from "app/core/services/prompt.service";
 import { PromptDataRow, PromptDataColumns } from "app/core/models/prompt";
-import {Sort, MatSortModule} from '@angular/material/sort';
 
 @Component({
   selector: "app-prompt-data-table",
