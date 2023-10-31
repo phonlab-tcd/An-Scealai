@@ -30,7 +30,7 @@ export class PromptsComponent implements OnInit {
   dialogRef: MatDialogRef<unknown> | undefined;
 
   // options and forms for prompt preferences
-  levelPreferences: string[] = ["jc", "lcol", "lchl"];
+  levelPreferences: string[] = ["jc", "ol", "hl"];
   combinationLevelPreferences: string[] = ["primary", "secondary", "tertiary"]
   dialectPreferences: string[] = ["munster", "connacht", "ulster"];
   levelForm: FormGroup;
