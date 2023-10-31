@@ -28,7 +28,6 @@ import { UserComponent } from './user/user.component';
 import { AdminClassroomComponent } from './admin-classroom/admin-classroom.component';
 import { StoryComponent } from './story/story.component';
 import { StoryHistoryComponent } from './story-history/story-history.component';
-import { PosDataTableComponent } from './add-content/pos-data-table/pos-data-table.component';
 import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt-data-table.component';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -51,7 +50,6 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     AdminClassroomComponent,
     StoryComponent,
     StoryHistoryComponent,
-    PosDataTableComponent,
     PromptDataTableComponent,
     HighlightDirective
   ],

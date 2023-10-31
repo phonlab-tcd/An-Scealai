@@ -5,7 +5,7 @@ import { AuthenticationService } from "app/core/services/authentication.service"
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, } from "@angular/forms";
 import { Router } from "@angular/router";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
-import { PromptDataRow } from "app/core/models/prompt";
+import { PromptData } from "app/core/models/prompt";
 import { SynthItem } from "app/core/models/synth-item";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "lib/grammar-engine/types";
@@ -90,10 +90,10 @@ export class PartOfSpeechComponent implements OnInit {
    * e.x: {noun: [{1}, {2}, {3}, ...], verb: [{1}, {2}, {3}], ...}
    */
   getPOSData() {
-    this.promptService.getPromptDataRows("partOfSpeech").subscribe({
+    this.promptService.getPromptDatas("partOfSpeech").subscribe({
       next: (data: any) => {
         if (data.length > 0) {
-          data.forEach((entry: PromptDataRow) => {
+          data.forEach((entry: PromptData) => {
             if (!this.wordDatabase[entry.partOfSpeech!]) {
               this.wordDatabase[entry.partOfSpeech!] = []; // initialise key as empty array
             }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
-import { PromptDataRow } from "app/core/models/prompt";
+import { PromptData } from "app/core/models/prompt";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { FormGroup, FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -25,7 +25,7 @@ type combinationDataStructure = {
   encapsulation: ViewEncapsulation.None,
 })
 export class PromptsComponent implements OnInit {
-  data: PromptDataRow[] = [];
+  data: PromptData[] = [];
   promptType: string;
   dialogRef: MatDialogRef<unknown> | undefined;
 
@@ -41,7 +41,7 @@ export class PromptsComponent implements OnInit {
   // variables for generating prompt
   prompt: string = '';
   translation: string = '';
-  currentPromptBank: PromptDataRow[] = [];
+  currentPromptBank: PromptData[] = [];
 
   // variables for generating combination prompts
   chosenCharacter: combinationDataStructure = {word: "", translation: ""};
@@ -85,7 +85,7 @@ export class PromptsComponent implements OnInit {
    * Get prompt data from the database based on specified prompt type
    */
     getPromptData() {
-      this.promptService.getPromptDataRows(this.promptType).subscribe({
+      this.promptService.getPromptDatas(this.promptType).subscribe({
         next: (data: any) => {
           if (data.length > 0) {
             this.data = data;
@@ -125,7 +125,7 @@ export class PromptsComponent implements OnInit {
         const characters: combinationDataStructure[] = []
         const locations: combinationDataStructure[] = [];
         const themes: combinationDataStructure[] = [];
-        combinationPrompts.forEach((entry: PromptDataRow) => {
+        combinationPrompts.forEach((entry: PromptData) => {
           if (entry.type == "character") characters.push({word: entry.prompt!, translation: entry.translation!});
           else if (entry.type == "location") locations.push({word: entry.prompt!, translation: entry.translation!});
           else themes.push({word: entry.prompt!, translation: entry.translation!});

@@ -1,5 +1,5 @@
 // all possible values for prompt data
-export interface PromptDataRow {
+export interface PromptData {
   _id?: string | null;
   isSelected: boolean;
   isEdit: boolean;

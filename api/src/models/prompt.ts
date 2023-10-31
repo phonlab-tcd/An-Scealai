@@ -114,72 +114,6 @@ const POSPromptSchema = new Schema({
   collection: 'prompt.partOfSpeech',
 });
 
-const promptSchema = new Schema({
-  type: {
-    type: String,
-    required: true,
-  },
-  prompt: {
-    type: Object,
-    unique: true,
-    topic: {
-      type: String,
-      required: true,
-    },
-    level: {
-      type: String,
-      required: false,
-    },
-    dialect: {
-      type: String,
-      required: false,
-    },
-    text: {
-      type: String,
-      required: false,
-    },
-    combinationData: {
-      type: Object,
-      required: false,
-      character: {
-        type: String,
-        required: false,
-      },
-      setting: {
-        type: String,
-        required: false,
-      },
-      theme: {
-        type: String,
-        required: false,
-      },
-    },
-  },
-  partOfSpeechData: {
-    type: Object,
-    required: false,
-    index: true,
-    partOfSpeech: {
-      type: String,
-      required: false
-    },
-    word: {
-      type: String,
-      required: false,
-      unique: true,
-    },
-    translation: {
-      type: String,
-      required: false
-    },
-  },
-  lastUpdated: {
-    type: Date,
-  },
-},
-{
-  collection: 'promptData'
-});
 
 export default {
   GeneralPromptSchema: mongoose.model('GeneralPromptSchema', GeneralPromptSchema),
@@ -187,6 +121,5 @@ export default {
   ExamPromptSchema: mongoose.model('ExamPromptSchema', ExamPromptSchema),
   LARAPromptSchema: mongoose.model('LARAPromptSchema', LARAPromptSchema),
   CombinationPromptSchema: mongoose.model('CombinationPromptSchema', CombinationPromptSchema),
-  POSPromptSchema: mongoose.model('POSPromptSchema', POSPromptSchema),
-  Prompt: mongoose.model('Prompt', promptSchema)
+  POSPromptSchema: mongoose.model('POSPromptSchema', POSPromptSchema)
 };

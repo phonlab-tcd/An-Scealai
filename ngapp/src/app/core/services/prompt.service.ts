@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, throwError } from 'rxjs';
-import { PromptDataRow } from 'app/core/models/prompt';
+import { PromptData } from 'app/core/models/prompt';
 import { map, catchError } from 'rxjs/operators';
 import config from "../../../abairconfig";
 
@@ -14,30 +14,30 @@ export class PromptService {
 
   constructor(private http: HttpClient) { }
 
-  getPromptDataRows(type: string): Observable<PromptDataRow[]> {
+  getPromptDatas(type: string): Observable<PromptData[]> {
     return this.http
       .get(`${this.baseUrl}/getPrompts/${type}`)
-      .pipe<PromptDataRow[]>(map((data: any) => data));
+      .pipe<PromptData[]>(map((data: any) => data));
   }
 
-  updatePromptDataRow(PromptDataRow: PromptDataRow, type: string): Observable<PromptDataRow> {
-    return this.http.patch<PromptDataRow>(`${this.baseUrl}/updatePrompt/${type}`, PromptDataRow);
+  updatePromptData(PromptData: PromptData, type: string): Observable<PromptData> {
+    return this.http.patch<PromptData>(`${this.baseUrl}/updatePrompt/${type}`, PromptData);
   }
 
-  addPromptDataRow(PromptDataRow: PromptDataRow, type: string): Observable<PromptDataRow> {
-    return this.http.post<PromptDataRow>(`${this.baseUrl}/addPrompt/${type}`, PromptDataRow);
+  addPromptData(PromptData: PromptData, type: string): Observable<PromptData> {
+    return this.http.post<PromptData>(`${this.baseUrl}/addPrompt/${type}`, PromptData);
   }
 
-  deletePromptDataRow(id: string, type: string): Observable<PromptDataRow> {
-    return this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${type}/${id}`);
+  deletePromptData(id: string, type: string): Observable<PromptData> {
+    return this.http.delete<PromptData>(`${this.baseUrl}/deletePrompt/${type}/${id}`);
   }
 
-  deletePromptDataRows(PromptDataRows: PromptDataRow[], type: string): Observable<PromptDataRow[]> {
-    const deleteRequests = PromptDataRows.map((PromptDataRow) =>
-    this.http.delete<PromptDataRow>(`${this.baseUrl}/deletePrompt/${type}/${PromptDataRow._id}`).pipe(
+  deletePromptDatas(PromptDatas: PromptData[], type: string): Observable<PromptData[]> {
+    const deleteRequests = PromptDatas.map((PromptData) =>
+    this.http.delete<PromptData>(`${this.baseUrl}/deletePrompt/${type}/${PromptData._id}`).pipe(
       catchError((error) => {
         console.error('Delete request error: ', error);
-        return throwError(() => new Error(`Error deleting prompt: ${PromptDataRow} `));
+        return throwError(() => new Error(`Error deleting prompt: ${PromptData} `));
       })
     )
   );
