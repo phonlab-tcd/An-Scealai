@@ -24,7 +24,7 @@ const ProverbPromptSchema = new Schema({
   },
   dialect: {
     type: String,
-    enum: ["Munster", "Connaught", "Ulster"],
+    enum: ["munster", "connacht", "ulster"],
     required: true,
   },
   lastUpdated: {
@@ -74,7 +74,7 @@ const CombinationPromptSchema = new Schema({
   },
   translation: {
     type: String,
-    required: true,
+    required: false,
   },
   type: {
     type: String,

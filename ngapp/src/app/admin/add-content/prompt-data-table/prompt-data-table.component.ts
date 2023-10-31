@@ -8,6 +8,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { PromptService } from "app/core/services/prompt.service";
 import { PromptDataRow, PromptDataColumns } from "app/core/models/prompt";
+import {Sort, MatSortModule} from '@angular/material/sort';
 
 @Component({
   selector: "app-prompt-data-table",
@@ -23,6 +24,7 @@ export class PromptDataTableComponent {
   useMultipleRowInput: boolean = false;
   multipleRowData: string = "";
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private promptService: PromptService,
@@ -47,14 +49,21 @@ export class PromptDataTableComponent {
   getPromptData() {
     this.promptService.getPromptDataRows(this.selectedPromptGenerator).subscribe({
       next: (data: any) => {
-        this.dataSource.data = data;
-        Object.keys(this.dataSource.data[0]).forEach((key) => {
-          if (key != "_id" && !this.displayedColumns.includes(key)) {
-            this.displayedColumns.push(key); // set table columns to those that match the data
-          }
-        });
-        this.displayedColumns.push("isEdit"); // we want this to be the last column
-        this.dataSource.paginator = this.paginator;
+        if (data.length > 0) {
+          this.dataSource.data = data;
+          Object.keys(this.dataSource.data[0]).forEach((key) => {
+            if (key != "_id" && !this.displayedColumns.includes(key)) {
+              this.displayedColumns.push(key); // set table columns to those that match the data
+            }
+          });
+          this.displayedColumns.push("isEdit"); // we want this to be the last column
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }
+        else {
+          this.displayedColumns = PromptDataColumns.map((col) => col.key);
+          this.dataSource = new MatTableDataSource<PromptDataRow>();
+        }
       },
       error: (err) => { alert(err.error); },
     });
@@ -220,5 +229,14 @@ export class PromptDataTableComponent {
    */
   isAnySelected(): boolean {
     return this.dataSource.data.some((item) => item.isSelected);
+  }
+
+  /**
+   * Filter the table data from the search input
+   * @param event search bar input
+   */
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

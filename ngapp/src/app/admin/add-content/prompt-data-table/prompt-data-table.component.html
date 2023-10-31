@@ -37,12 +37,17 @@
   <button class="button-add-row" mat-button (click)="addMultipleRows()"> Add Rows </button>
 </div>
 
+<!-- Table search bar -->
+<mat-form-field appearance="fill" class="searchBar">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Search columns" #input>
+</mat-form-field>
 <!-- Prompt Data table-->
-<table mat-table [dataSource]="dataSource">
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z3">
   <!-- one ng-container to describe each column, 'key' in schema determines what is displayed -->
   <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
     <!-- header: ngSwitch determines either a checkbox or textual label -->
-    <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+    <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key" mat-sort-header sortActionDescription="Sort by name">
       <span *ngSwitchCase="'isSelected'">
         <mat-checkbox
           (change)="selectAll($event)"
@@ -94,4 +99,4 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users" ></mat-paginator>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" style="padding-bottom: 50px"></mat-paginator>
