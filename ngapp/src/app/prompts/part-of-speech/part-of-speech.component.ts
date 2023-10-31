@@ -2,30 +2,34 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
-import { Prompt, PartOfSpeechData } from "app/core/models/prompt";
+import { PromptData } from "app/core/models/prompt";
 import { SynthItem } from "app/core/models/synth-item";
-import { HttpClient } from "@angular/common/http";
 import { GrammarEngine } from "lib/grammar-engine/grammar-engine";
 import { ErrorTag } from "lib/grammar-engine/types";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "app/dialogs/basic-dialog/basic-dialog.component";
-import config from "app/../abairconfig";
 import { CommonModule } from "@angular/common";
 import { SynthItemModule } from "app/synth-item/synth-item.module";
 import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
+import { PromptService } from "app/core/services/prompt.service";
 
 type TagForHighlight = {
   fromx: number;
   tox: number;
 };
 
+type PartOfSpeechData = {
+  partOfSpeech: string;
+  word: string;
+  translation: string;
+};
+
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SynthItemModule, SynthVoiceSelectModule],
+  imports: [ CommonModule, FormsModule, ReactiveFormsModule, SynthItemModule, SynthVoiceSelectModule, ],
   selector: "app-part-of-speech",
   templateUrl: "./part-of-speech.component.html",
   styleUrls: ["./part-of-speech.component.scss"],
@@ -48,7 +52,7 @@ export class PartOfSpeechComponent implements OnInit {
   errorButtons: string[] = [];
   selectedVoice: Voice | undefined;
   showTranslation: boolean = false;
-  posInformation: {[key: string]: string;} = {
+  posInformation: { [key: string]: string } = {
     noun: "/assets/pdf/noun_information_ga.pdf",
     verb: "/assets/pdf/verb_information_ga.pdf",
     adjective: "/assets/pdf/adjective_information_ga.pdf",
@@ -66,8 +70,8 @@ export class PartOfSpeechComponent implements OnInit {
     private router: Router,
     public ts: TranslationService,
     private synth: SynthesisService,
-    private http: HttpClient,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private promptService: PromptService
   ) {
     this.newStoryForm = this.fb.group({
       title: ["", Validators.required],
@@ -76,7 +80,7 @@ export class PartOfSpeechComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPosData();
+    this.getPOSData();
     this.refreshSynthesis();
   }
 
@@ -85,23 +89,28 @@ export class PartOfSpeechComponent implements OnInit {
    * Create a dictionary of pos types and array of coresponding word objects
    * e.x: {noun: [{1}, {2}, {3}, ...], verb: [{1}, {2}, {3}], ...}
    */
-  getPosData() {
-    const headers = { Authorization: "Bearer " + this.auth.getToken() };
-    this.http.get<Prompt[]>(config.baseurl + "prompt/getData/partOfSpeech", { headers }).subscribe({
-        next: (data) => {
-          data.forEach((entry: Prompt) => {
-            if (!this.wordDatabase[entry.partOfSpeechData.partOfSpeech]) {
-              this.wordDatabase[entry.partOfSpeechData.partOfSpeech] = []; // initialise key as empty array
+  getPOSData() {
+    this.promptService.getPromptDatas("partOfSpeech").subscribe({
+      next: (data: any) => {
+        if (data.length > 0) {
+          data.forEach((entry: PromptData) => {
+            if (!this.wordDatabase[entry.partOfSpeech!]) {
+              this.wordDatabase[entry.partOfSpeech!] = []; // initialise key as empty array
             }
-            this.wordDatabase[entry.partOfSpeechData.partOfSpeech].push( entry.partOfSpeechData ); // push data to key
+            this.wordDatabase[entry.partOfSpeech!].push({
+              partOfSpeech: entry.partOfSpeech!,
+              word: entry.word!,
+              translation: entry.translation!,
+            }); // push data to key
           });
           this.wordTypes = Object.keys(this.wordDatabase); // create an array from the keys (the parts of speech)
-        },
-        error: (err) => {
-          console.log(err);
-          this.wordDatabase = {};
-        },
-      });
+        }
+      },
+      error: (err) => {
+        alert(err.error);
+        this.wordDatabase = {};
+      },
+    });
   }
 
   /**

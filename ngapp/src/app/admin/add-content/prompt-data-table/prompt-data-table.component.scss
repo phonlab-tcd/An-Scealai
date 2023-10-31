@@ -1,24 +1,71 @@
-table {
-    width: 100%;
-    text-align: left;
+
+h3 {
+  text-align: left;
+  padding-top: 20px;
+  text-decoration: underline;
 }
 
-td, th {
-    text-align: left !important;
-    vertical-align: middle !important;
+.tableButtons {
+  width: 100%;
+  margin: auto;
+  text-align: right;
+  margin-bottom: 10px;
 }
 
-.mat-sort-header-container {
-    justify-content: space-evenly !important;
+.button-add-row {
+  background: var(--scealai-green);
+  margin-right: 5px;
 }
 
-.example-container {
-    overflow-x: scroll;
-    max-width: 60px;
-    text-align: left !important;
-  }
+.button-remove-rows {
+  background: red;
+}
 
-.mat-mdc-form-field {
-    font-size: 14px;
-    width: 100%;
+.multipleRowInputContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.multipleRowInputInstructions{
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.multipleRowInput {
+  width: 90%;
+  text-align: left;
+}
+
+ul {
+  text-align: left;
+}
+
+.searchBar {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.btn-edit {
+  text-align: right;
+}
+
+::ng-deep .mat-form-field-infix {
+  width: 100% !important;
+}
+
+.form-input {
+  padding-right: 5px;
+}
+
+.mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-checkmark-color: #fff;
+  --mdc-checkbox-selected-focus-icon-color: var(--scealai-green);
+  --mdc-checkbox-selected-hover-icon-color: var(--scealai-green);
+  --mdc-checkbox-selected-icon-color: var(--scealai-green);
+  --mdc-checkbox-selected-pressed-icon-color: var(--scealai-green);
 }

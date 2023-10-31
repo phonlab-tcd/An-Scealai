@@ -1,35 +1,17 @@
-.headerTitle {
-    font-size: 16pt;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  
 .mainContainer {
     min-height: 50vh;
     max-height: 80vh;
     padding: 20px;
 }
 
-.posFields {
+.propmtSelectionContainer {
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
 }
 
-.errorText {
-    color: red;
-    padding: 10px;
-}
-
-.inputText {
-    width: 70%;
-}
-
-
-.viewDataBtn {
-    background-color: var(--scealai-green);
-    color: white;
-    float: left;
-    margin-left: 20px;
+.headerTitle {
+    font-size: 16pt;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

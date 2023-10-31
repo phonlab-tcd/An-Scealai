@@ -1,10 +1,10 @@
 <!-- Part Of Speech Prompt Component-->
-<div *ngIf="promptType == 'pos'">
+<div *ngIf="promptType == 'partOfSpeech'">
   <app-part-of-speech></app-part-of-speech>
 </div>
 
 <!--All Other Prompts-->
-<div *ngIf="promptType !== 'pos'">
+<div *ngIf="promptType !== 'partOfSpeech'">
   <div>
     <div class="container">
       <!-- Instructions popup -->
@@ -20,14 +20,27 @@
         <p *ngIf="promptType == 'combination'">{{ ts.l.click_to_generate_random_character_setting_theme }}</p>
         <p *ngIf="promptType == 'general'">{{ ts.l.press_button_to_generate_start_of_new_story }}</p>
       </div>
-      <!-- Choose Level Dropdown -->
-      <div *ngIf="promptType == 'exam' || promptType == 'combination'" class="button-div">
+      <!-- Choose Exam Level Dropdown -->
+      <div *ngIf="promptType == 'exam'" class="button-div">
         <form [formGroup]="levelForm">
           <div class="formGroup">
             <label class="formLabel">{{ ts.l.choose_level }}</label>
             <select formControlName="level" class="level-select" (ngModelChange)="prompt = ''">
               <option *ngFor="let lp of levelPreferences; let i = index" [ngValue]="lp">
                 {{ ts.l.level_preferences[i] }}
+              </option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <!-- Choose Combination Level Dropdown -->
+      <div *ngIf="promptType == 'combination'" class="button-div">
+        <form [formGroup]="combinationLevelForm">
+          <div class="formGroup">
+            <label class="formLabel">{{ ts.l.choose_level }}</label>
+            <select formControlName="combinationLevel" class="level-select" (ngModelChange)="prompt = ''">
+              <option *ngFor="let lp of combinationLevelPreferences; let i = index" [ngValue]="lp">
+                {{ this.ts.l[lp] }}
               </option>
             </select>
           </div>
@@ -54,10 +67,11 @@
       </div>
       <!--Display Prompt-->
       <div *ngIf="prompt.length > 0">
+        <div *ngIf="promptType == 'combination' || promptType == 'proverb'" (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? 'Hide translation': 'Show translation'}}</div>
         <!-- Story Prompt Options -->
         <div *ngIf="promptType == 'combination'">
-          <div *ngFor="let lp of levelPreferences">
-            <div *ngIf="levelForm.controls['level'].value === lp" class="story-prompt">
+          <div *ngFor="let lp of combinationLevelPreferences">
+            <div *ngIf="combinationLevelForm.controls['combinationLevel'].value === lp" class="story-prompt">
                 <!-- character -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.character }}</p>
@@ -65,15 +79,15 @@
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="character">{{ chosenCharacter }}</i>
-               <!-- setting -->
+              <i class="character">{{ chosenCharacter.word }} <span *ngIf="showTranslation">({{chosenCharacter.translation}})</span></i>
+               <!-- location -->
               <div class="story-prompt-box">
-                <p>{{ ts.l.setting }}</p>
-                <button class="button" (click)="changeCombinationPrompt('setting')">
+                <p>{{ ts.l.location }}</p>
+                <button class="button" (click)="changeCombinationPrompt('location')">
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="setting">{{ chosenSetting }}</i>
+              <i class="location">{{ chosenLocation.word }} <span *ngIf="showTranslation">({{chosenLocation.translation}})</span></i>
                <!-- theme -->
               <div class="story-prompt-box">
                 <p>{{ ts.l.theme }}</p>
@@ -81,12 +95,15 @@
                   {{ ts.l.change }}
                 </button>
               </div>
-              <i class="theme">{{ chosenTheme }}</i>
+              <i class="theme">{{ chosenTheme.word }} <span *ngIf="showTranslation">({{chosenTheme.translation}})</span></i>
             </div>
           </div>
         </div>
         <!-- Generated Prompt -->
-        <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0"><i>{{ prompt }}</i></div>
+        <div class="prompt" *ngIf="promptType !== 'combination' && prompt.length > 0">
+          <i>{{ prompt }}</i>
+          <div *ngIf="showTranslation">({{translation}})</div>
+        </div>
         <!-- Create New Story Button-->
         <button *ngIf="auth.getUserDetails()?.role == 'STUDENT'" class="button" (click)="createNewStory()">
             {{ ts.l.start_my_story }}

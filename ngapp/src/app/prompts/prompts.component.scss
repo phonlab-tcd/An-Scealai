@@ -82,7 +82,7 @@
     animation-duration: 3s;
 }
 
-.setting {
+.location {
     font-size: 24px;
     margin: 0px 8px 8px 0px;
     animation-name: slots;
@@ -101,6 +101,16 @@
     padding-bottom: 20px;
     margin-top: 24px;
     font-size: 24px;
+}
+
+.showTranslation {
+    font-size: small;
+    float: right;
+}
+
+.showTranslation:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 
