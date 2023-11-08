@@ -23,12 +23,12 @@ import { FindUserComponent } from './find-user/find-user.component';
 import { DatabaseStatsComponent } from './database-stats/database-stats.component';
 import { ProfileStatsComponent } from './profile-stats/profile-stats.component';
 import { FeatureStatsComponent  } from './feature-stats/feature-stats.component';
-import { AddContentComponent } from './add-content/add-content.component';
+import { AddPromptDataComponent } from './add-prompt-data/add-prompt-data.component';
 import { UserComponent } from './user/user.component';
 import { AdminClassroomComponent } from './admin-classroom/admin-classroom.component';
 import { StoryComponent } from './story/story.component';
 import { StoryHistoryComponent } from './story-history/story-history.component';
-import { PromptDataTableComponent } from './add-content/prompt-data-table/prompt-data-table.component';
+import { PromptDataTableComponent } from './add-prompt-data/prompt-data-table/prompt-data-table.component';
 import { HighlightDirective } from 'app/core/directives/highlight.directive';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -45,7 +45,7 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     DatabaseStatsComponent,
     ProfileStatsComponent,
     FeatureStatsComponent,
-    AddContentComponent,
+    AddPromptDataComponent,
     UserComponent,
     AdminClassroomComponent,
     StoryComponent,

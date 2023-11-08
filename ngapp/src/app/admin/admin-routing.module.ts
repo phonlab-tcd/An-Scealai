@@ -7,7 +7,7 @@ import { FindUserComponent } from './find-user/find-user.component';
 import { DatabaseStatsComponent } from './database-stats/database-stats.component';
 import { ProfileStatsComponent } from './profile-stats/profile-stats.component';
 import { FeatureStatsComponent  } from './feature-stats/feature-stats.component';
-import { AddContentComponent } from './add-content/add-content.component';
+import { AddPromptDataComponent } from './add-prompt-data/add-prompt-data.component';
 import { UserComponent } from './user/user.component';
 import { AdminClassroomComponent } from './admin-classroom/admin-classroom.component';
 import { StoryComponent } from './story/story.component';
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'database-stats', pathMatch: 'full', component: DatabaseStatsComponent },
   { path: 'profile-stats', pathMatch: 'full', component: ProfileStatsComponent },
   { path: 'feature-stats', pathMatch: 'full', component: FeatureStatsComponent },
-  { path: 'add-content', pathMatch: 'full', component: AddContentComponent },
+  { path: 'add-content', pathMatch: 'full', component: AddPromptDataComponent },
   { path: 'user/:id', pathMatch: 'full', component: UserComponent },
   { path: 'classroom/:id', pathMatch: 'full', component: AdminClassroomComponent },
   { path: 'story/:id', pathMatch: 'full', component: StoryComponent },

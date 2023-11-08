@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 
-import { AddContentComponent } from './add-content.component';
+import { AddPromptDataComponent } from './add-prompt-data.component';
 
 describe('AddContentComponent', () => {
   let component: AddContentComponent;
