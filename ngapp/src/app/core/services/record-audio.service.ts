@@ -111,6 +111,7 @@ export class RecordAudioService {
         const rec_req = {
           recogniseBlob: encodedAudio,
           developer: true,
+          method: "online2bin"
         };
         await fetch("https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise", {
           method: "POST",

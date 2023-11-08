@@ -159,7 +159,7 @@ export default class Buttons {
   quillEditor: Quill;
   synthSettings: Settings;
   playback = new synth.PlaybackHandle();
-  enabled = true;
+  enabled = localStorage.getItem('synthPreference') === 'true' ?? true;
   clickEventListener;
   mostRecent = {
     word: null,
@@ -207,6 +207,7 @@ export default class Buttons {
 
   toggle() {
     this.enabled = !this.enabled;
+    localStorage.setItem("synthPreference", this.enabled.toString());
     if(!this.enabled) {
       this.hide();
     }

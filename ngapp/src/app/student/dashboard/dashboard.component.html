@@ -89,7 +89,7 @@
     <mat-slide-toggle
       class="listenToggle"
       (click)="synthButtons?.toggle()"
-      checked="true"
+      [checked]="synthButtons?.enabled"
     >
     </mat-slide-toggle>
     <span (click)="toggleRightDrawer('synthesis')">
