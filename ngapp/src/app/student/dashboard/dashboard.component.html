@@ -37,8 +37,7 @@
     [ngClass]="{ disableDiv: isTranscribing }"
   >
     {{ ts.l.speak }}
-    <!-- Google icon, index.html-->
-    <span *ngIf="!isRecording" class="material-symbols-outlined optionsBtnIcon" >speech_to_text</span >
+    <i *ngIf="!isRecording" class="fas fa-microphone optionsBtnIcon"></i>
     <button *ngIf="isRecording && !isTranscribing" class="notRecordingBtn blink" >
       <i class="fas fa-stop-circle"></i>
     </button>
@@ -65,7 +64,7 @@
     (click)="dontToggle = true; goToRecording()"
   >
     {{ ts.l.recordings }}
-    <i class="fas fa-microphone optionsBtnIcon"></i>
+    <i class="fa-solid fa-headset optionsBtnIcon"></i>
   </div>
 
   <!-- FEEDBACK -->
@@ -174,8 +173,8 @@
     <app-synthesis-drawer
       *ngIf="selectedDrawer == 'synthesis'"
       (closeSynthesisEmitter)="toggleRightDrawer('synthesis')"
-      (selectedVoice)="this.synthSettings.voice= $event"
-      (selectedSpeed)="this.synthSettings.speed= $event"
+      (selectedVoice)="synthSettings.voice= $event"
+      (selectedSpeed)="synthSettings.speed= $event"
     ></app-synthesis-drawer>
     <!-- DICTIONARY -->
     <app-dictionary-drawer
