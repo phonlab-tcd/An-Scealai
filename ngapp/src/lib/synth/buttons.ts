@@ -7,47 +7,125 @@ import newTimeout from "lib/newTimeout";
 import synth from "lib/synth";
 import type Settings from "lib/synth/settings";
 import { z } from "zod";
-import { fromEvent } from 'rxjs';
-
 
 const QuillTooltip = Quill.import("ui/tooltip");
 
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON = 300;
 const SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF = 0;
 
-function synthesisUrl(input: string, voice: string) {
-  const outputType = "JSON";
-  const timing = "WORD";
-  const params = new URLSearchParams({input, voice, outputType, timing});
-  return `https://abair.ie/api2/synthesise?${params}`;
+const synth_cache: { [key: string]: object } = {};
+
+// data shape validation of synthesis api response
+const synthAPI2validator = z.object({
+  audioContent: z.string(),
+  timing: z.array(z.object({ word: z.string(), end: z.number() })),
+});
+
+/**
+ * Synthesise text, playback audio, and highlight text
+ * Called when the user clicks on one of the synthesis play buttons
+ * @param this buttons from Dashboard Component
+ * @param tooltipReference the parent tooltip object on to which this onclick is added
+ * @param text text to highlight
+ * @param startIndex index to start highlighting
+ */
+async function onclick( this: Buttons, tooltipReference: typeof QuillTooltip, text: string, startIndex: number ) {
+  const clickId = this.playback.newClick();
+  this.playback.clear();
+  Buttons.toggleLoadingSpinner(tooltipReference, "on");
+  const prevalid = await fetchSynthAudio( text, this.synthSettings.voice, this.synthSettings.speed );
+  if (!this.playback.isMostRecentClick(clickId)) return this.playback.clear();
+
+  const v = synthAPI2validator.safeParse(prevalid);
+  if (!v.success) throw v;
+
+  const res = v.data;
+
+  const tokens = res.timing.map((e) => e.word);
+  const locations = findLocationsInText(text, tokens, startIndex);
+  const audio = new Audio(`data:audio/mp3;base64,${v.data.audioContent}`);
+  const speed = this.synthSettings.speed;
+  audio.playbackRate = speed;
+  Buttons.toggleLoadingSpinner(tooltipReference, "off");
+  audio.play();
+
+  this.playback.audio = audio;
+
+  // start highlighting
+  for (let i = 0; i < res.timing.length; i++) {
+    const startTimeSeconds = i == 0 ? 0.0 : res.timing[i - 1].end;
+    const timing = res.timing[i];
+    const location = locations[i];
+    const myId = i;
+
+    const startms = startTimeSeconds * 1000;
+    const endms = timing.end * 1000;
+
+    const on = highlightTokenToggle_timeoutHandler.bind( this, true, location, myId );
+    const off = highlightTokenToggle_timeoutHandler.bind( this, false, location, myId );
+    this.playback.turnHighlightOnTimeout[myId] = newTimeout( startms / speed - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on );
+    this.playback.turnHighlightOffTimeout[myId] = newTimeout( endms / speed + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off );
+  }
 }
 
-const fetch_cache = {};
-
-async function fetch_cached(url: string) {
-  const cached = fetch_cache[url];
-  if(cached) {
-    return cached;
+/**
+ * Synthesise the text using the synthesis api
+ * @param textInput text to synthesise
+ * @param voice selected voice
+ * @param speed voice speed
+ * @returns api response (audio and timing info)
+ */
+async function fetchSynthAudio( textInput: string, voice: string, speed: number ) {
+  const cachedAudio = synth_cache[voice + textInput];
+  if (cachedAudio) {
+    return cachedAudio;
   }
-  const p = fetch(url).then(r=>r.json());
-  fetch_cache[url] = p;
+
+  const reqBody = {
+    synthinput: {
+      text: textInput,
+      normalise: true,
+    },
+    voiceparams: {
+      langaugeCode: "ga-IE",
+      name: voice,
+    },
+    audioconfig: {
+      audioEncoding: "LINEAR16",
+      speakingRate: speed,
+      pitch: 1,
+    },
+    outputType: "JSON",
+    timing: "WORD",
+  };
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(reqBody),
+  };
+
+  const p = fetch("https://abair.ie/api2/synthesise", options).then((r) => r.json() );
+  synth_cache[voice + textInput] = p;
   return p;
 }
 
 /**
- * Turns on or off the highlighting for sentence level synthesis, call in timeout 
+ * Turns on or off the highlighting for sentence level synthesis, call in timeout
  * @param this Dashboard component
  * @param turnEmphasisOn true for highlighting on, false for highlighting off
  * @param location start/end indices for highlighting
  * @param myId index of word in array of words to synthesise
  */
-function highlightTokenToggle_timeoutHandler(this: Buttons, turnEmphasisOn: boolean, location: LocationInText, myId: number) {
+function highlightTokenToggle_timeoutHandler( this: Buttons, turnEmphasisOn: boolean, location: LocationInText, myId: number ) {
   const start = location.startIndex;
   const length = location.endIndex - location.startIndex;
-  const props = { "synth-highlight-em": turnEmphasisOn};
-  this.quillEditor.formatText(start, length, props, 'api');
+  const props = { "synth-highlight-em": turnEmphasisOn };
+  this.quillEditor.formatText(start, length, props, "api");
   const timeoutHandles = this.playback.timeoutHandles(turnEmphasisOn);
-  if(timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
+  if (timeoutHandles[myId] instanceof Object) delete timeoutHandles[myId];
 }
 
 /**
@@ -66,70 +144,25 @@ function createSynthesisPlayButton(quillEditor: Quill, type: string) {
   return button;
 }
 
-const synthAPI2validator = z.object({
-  audioContent: z.string(),
-  timing: z.array(z.object({word: z.string(), end: z.number()})),
-});
-
 /**
- * Synthesise text, playback audio, and highlight text
- * @param this Dashboard component
- * @param tooltipReference the parent tooltip object on to which this onclick is added
- * @param text text to highlight
- * @param startIndex index to start highlighting
+ * Hide the synthesis buttons if the user clicks off the page
+ * @param this buttons from Dashboard Component
+ * @param e Click event
  */
-async function onclick(this: Buttons, tooltipReference: typeof QuillTooltip, text: string, startIndex: number) {
-  const clickId = this.playback.newClick();
-  this.playback.clear();
-  Buttons.toggleLoadingSpinner(tooltipReference, 'on');
-  const prevalid = await fetch_cached(synthesisUrl(text,this.synthSettings.voice));
-  if(!this.playback.isMostRecentClick(clickId)) return this.playback.clear();
-
-  const v = synthAPI2validator.safeParse(prevalid);
-  if(!v.success) throw v;
-
-  const res = v.data;
-
-  const tokens = res.timing.map(e=>e.word);
-  const locations = findLocationsInText(text, tokens, startIndex);
-  const audio = new Audio(`data:audio/mp3;base64,${v.data.audioContent}`);
-  const speed = this.synthSettings.speed;
-  audio.playbackRate = speed;
-  Buttons.toggleLoadingSpinner(tooltipReference, 'off');
-  audio.play();
-
-  this.playback.audio = audio;
-
-  for(let i = 0; i < res.timing.length; i++) {
-    const startTimeSeconds = i == 0 ? 0.0 : res.timing[i-1].end; 
-    const timing = res.timing[i];
-    const location = locations[i];
-    const myId = i;
-
-    const startms = startTimeSeconds * 1000;
-    const endms = timing.end * 1000;
-    
-    const on = highlightTokenToggle_timeoutHandler.bind(this, true, location, myId);
-    const off = highlightTokenToggle_timeoutHandler.bind(this, false, location, myId);
-    this.playback.turnHighlightOnTimeout[myId] = newTimeout((startms / speed) - SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_ON, on);
-    this.playback.turnHighlightOffTimeout[myId] = newTimeout((endms / speed)  + SYNTHESIS_HIGHLIGHTING_LAX_MS_TURN_OFF, off);
-  }
-}
-
 function hideOnClickAway(this: Buttons, e: MouseEvent) {
   const clickedNode = e.target instanceof Node;
-  if(!clickedNode) return;
+  if (!clickedNode) return;
 
   const clickedOnQuillEditor = this.quillEditor.root.contains(e.target);
-  if(clickedOnQuillEditor) return;
+  if (clickedOnQuillEditor) return;
 
   if (!e.target.parentNode) return;
 
   const clickedOnTooltip = e.target.parentNode === this.quillEditor.root.parentNode;
-  if(clickedOnTooltip) return;
+  if (clickedOnTooltip) return;
 
-  const clickedInsideTooltip =  e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
-  if(clickedInsideTooltip) return;
+  const clickedInsideTooltip = e.target.parentNode.parentNode === this.quillEditor.root.parentNode;
+  if (clickedInsideTooltip) return;
 
   // otherwise (clicked outside quill editor)
   this.hide();
@@ -142,24 +175,30 @@ function hideOnClickAway(this: Buttons, e: MouseEvent) {
  * @param isMouseIn true if hover on synth button, false if hover out
  * @param parentSpan start/end indices of text to be highlighted
  */
-function onMouseInOrOut(this: Buttons, isMouseIn: boolean, whichButton: "word" | "sent") {
+function onMouseInOrOut( this: Buttons, isMouseIn: boolean, whichButton: "word" | "sent" ) {
   const start = this.mostRecent[whichButton].startIndex;
   const length = this.mostRecent[whichButton].endIndex - start;
-  const props = { "synth-highlight": isMouseIn};
-  this.quillEditor.formatText(start, length, props, 'api');
+  const props = { "synth-highlight": isMouseIn };
+  this.quillEditor.formatText(start, length, props, "api");
 }
 
+/**
+ * Returns the hide() function if the user made text changes
+ * (i.e. if text changes are made by the Quill editor, it won't hide)
+ * @param f hide() fuction
+ * @returns hide() function
+ */
 function userTextChange(f: Function) {
-  return function(_a,_b,source) {
-    if(source === "user") return f(_a,_b,source);
-  }
+  return function (_a, _b, source) {
+    if (source === "user") return f(_a, _b, source);
+  };
 }
 
 export default class Buttons {
   quillEditor: Quill;
   synthSettings: Settings;
   playback = new synth.PlaybackHandle();
-  enabled = localStorage.getItem('synthPreference') === 'true' ?? true;
+  enabled = localStorage.getItem("synthPreference") === "true" ?? true;
   clickEventListener;
   mostRecent = {
     word: null,
@@ -178,28 +217,28 @@ export default class Buttons {
     this.wordTooltip = createSynthesisPlayButton(qlEditor, "word");
     this.sentTooltip = createSynthesisPlayButton(qlEditor, "sent");
     this.wordTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "word");
-    this.wordTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "word");
+    this.wordTooltip.root.onmouseout = onMouseInOrOut.bind(this, false, "word");
     this.sentTooltip.root.onmouseover = onMouseInOrOut.bind(this, true, "sent");
-    this.sentTooltip.root.onmouseout  = onMouseInOrOut.bind(this, false, "sent");
+    this.sentTooltip.root.onmouseout = onMouseInOrOut.bind(this, false, "sent");
     this.quillEditor.on("selection-change", this.show.bind(this));
-    this.quillEditor.on("text-change",userTextChange(this.hide.bind(this)));
-    this.clickEventListener = window.addEventListener('click', hideOnClickAway.bind(this));
+    this.quillEditor.on("text-change", userTextChange(this.hide.bind(this)));
+    this.clickEventListener = window.addEventListener("click", hideOnClickAway.bind(this));
   }
 
-  /** 
+  /**
    * Toggles the contents of a synth play button between the standard ▸ play button and a loading spinner.
    * @param tooltip a reference to the tooltip representing the synth button
    * @param mode 'on' to set as a spinner or 'off' to set as a play button
-  */
-  static toggleLoadingSpinner(tooltip: typeof QuillTooltip, mode: 'on' | 'off') {
-    if (mode === 'on') {
+   */
+  static toggleLoadingSpinner(tooltip: typeof QuillTooltip, mode: "on" | "off") {
+    if (mode === "on") {
       tooltip.root.innerHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`;
     } else {
       tooltip.root.innerHTML = "<span>▸<span>";
     }
   }
 
-  hide(){
+  hide() {
     this.wordTooltip.hide();
     this.sentTooltip.hide();
     this.playback.clear();
@@ -208,28 +247,27 @@ export default class Buttons {
   toggle() {
     this.enabled = !this.enabled;
     localStorage.setItem("synthPreference", this.enabled.toString());
-    if(!this.enabled) {
+    if (!this.enabled) {
       this.hide();
     }
   }
 
   showSentenceButtonAtIndex(location: number) {
-    if(!this.enabled) return;
+    if (!this.enabled) return;
     const tooltip = this.sentTooltip;
     tooltip.positionTopLeft(location);
     tooltip.show();
   }
 
   showWordButtonAtIndex(location: number) {
-    if(!this.enabled) return;
+    if (!this.enabled) return;
     const tooltip = this.wordTooltip;
     tooltip.positionBottomRight(location);
-    tooltip.show()
+    tooltip.show();
   }
 
   onResize() {
-    if(!this.mostRecentSelectionRange) return;
-
+    if (!this.mostRecentSelectionRange) return;
   }
 
   /**
@@ -238,8 +276,8 @@ export default class Buttons {
    * @param this Dashboard component
    * @param range range of selected text
    */
-  show(range){
-    if(!range) return;
+  show(range) {
+    if (!range) return;
 
     this.mostRecentSelectionRange = range;
 
@@ -254,10 +292,10 @@ export default class Buttons {
     this.mostRecent.sent = seekParentSentence(text, range.index);
     sentenceTooltip.root.onclick = onclick.bind(this, sentenceTooltip, this.mostRecent.sent.text, this.mostRecent.sent.startIndex);
 
-    if(this.mostRecent.word.text) this.showWordButtonAtIndex(this.mostRecent.word.endIndex);
+    if (this.mostRecent.word.text) this.showWordButtonAtIndex(this.mostRecent.word.endIndex);
     else wordTooltip.hide();
 
-    if(this.mostRecent.sent.text) this.showSentenceButtonAtIndex(this.mostRecent.sent.startIndex);
+    if (this.mostRecent.sent.text) this.showSentenceButtonAtIndex(this.mostRecent.sent.startIndex);
     else sentenceTooltip.hide();
   }
 }

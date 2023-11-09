@@ -14,8 +14,8 @@ export class SynthesisDrawerComponent implements OnInit {
   @Output() selectedSpeed = new EventEmitter<number>();
   @ViewChild("voiceSelect") voiceSelect: ElementRef<SynthVoiceSelectComponent>;
   audioLoaded: boolean = true;
-  audioSpeeds: number[] = [0.2, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2];
-  audioSelectionIndex: number = 3;
+  audioSpeeds: number[] = [0.5, 0.75, 1, 1.25, 1.5];
+  audioSelectionIndex: number = 2;
   playbackSpeed: number = this.audioSpeeds[this.audioSelectionIndex];
 
   constructor(public ts: TranslationService) {}
