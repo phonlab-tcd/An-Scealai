@@ -1,4 +1,8 @@
-mat-form-field {
-    float: right;
-    z-index: 5;
+.ngramChartContainer {
+    display: flex;
+    flex-direction: column;
+}
+  
+.ngramSelect {
+    align-self: flex-end;
 }
