@@ -26,10 +26,10 @@ export class SynthesisBankService {
 
   /**
    * Get the audio data for the given key
-   * @param key Url of api call to synthesis
+   * @param key id of synth api response (from synthItem)
    * @returns audio data if stored under key
    */
-  getAudioUrlOfSentence(key: string): string | null {
+  getAudioForSentence(key: string): string | null {
     return sessionStorage.getItem(key);
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Story } from "app/core/models/story";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { EngagementService } from "app/core/services/engagement.service";
 import { EventType } from "app/core/models/event";
 import { Observable, of } from "rxjs";
@@ -9,53 +9,49 @@ import config from "abairconfig";
 import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
 
 // variable defining the different options for API calls
-export const ApiOptions = {
-  api2: {
-    base_url: "https://www.abair.ie/api2/synthesise?",
-    audioEncoding: ["MP3", "LINEAR16", "OGG_OPUS"],
-    outputType: ["JSON", "HTML", "JSON_WITH_TIMING"],
-    voiceCode: ["ga_UL_anb_nemo", "ga_CO_snc_nemo", "ga_MU_nnc_nemo", "ga_MU_cmg_nnmnkwii", "ga_CO_pmc_nemo"],
-  },
-  nemo: {
-    base_url: "https://phoneticsrv3.lcs.tcd.ie/nemo/synthesise?",
-    audioEncoding: ["mp3", "wav"],
-    outputType: ["JSON", "HTML"],
-    voiceCode: [],
-  },
+const ApiOptions = {
+  base_url: "https://www.abair.ie/api2/synthesise",
+  audioEncoding: ["MP3", "LINEAR16", "OGG_OPUS", "wav"],
+  outputType: ["JSON", "HTML", "JSON_WITH_TIMING"],
+  voiceCode: [
+    "ga_UL_anb_nemo",
+    "ga_CO_snc_nemo",
+    "ga_MU_nnc_nemo",
+    "ga_MU_cmg_nnmnkwii",
+    "ga_CO_pmc_nemo",
+  ],
 } as const;
+
+// type defining the possible values of a voice code
+export type VoiceCode = (typeof ApiOptions.voiceCode)[number];
 
 // type defining all the properties of a voice
 type VoiceConfig = {
   readonly code: VoiceCode;
-  readonly api: 'api2' | 'nemo';
   readonly name: string;
   readonly gender: "male" | "female";
   readonly shortCode: "nnc" | "anb" | "snc" | "cmg" | "pmc";
   readonly dialect: "ulster" | "connacht" | "munster";
   readonly algorithm: "piper" | "nemo" | "dnn" | "hts" | "multidialect";
-  readonly note: string;
 };
-
-// type defining the possible values of a voice code
-export type VoiceCode = | (typeof ApiOptions.api2.voiceCode)[number] | (typeof ApiOptions.nemo.voiceCode)[number];
 
 // function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
 const asVoice = (x: readonly VoiceConfig[]) => x;
 
 // list of possible voice configurations for synthesis
 export const voices = asVoice([
-  { api: "api2", name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", note: "", },
-  { api: "api2", name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", note: "", },
-  { api: 'api2', name: 'Pádraig', gender: 'male', shortCode: 'pmc', code: 'ga_CO_pmc_nemo', dialect: 'connacht', algorithm: 'nemo', note: ""},
-  { api: "api2", name: "Neasa", gender: "female", shortCode: "nnc", code: "ga_MU_nnc_nemo", dialect: "munster", algorithm: "nemo", note: "", },
-  { api: 'api2', name: 'Colm', gender: 'male', shortCode: 'cmg', code: 'ga_MU_cmg_nnmnkwii', dialect: 'munster', algorithm: 'dnn', note: ""},
+  { name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
+  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+  { name: "Pádraig", gender: "male", shortCode: "pmc", code: "ga_CO_pmc_nemo", dialect: "connacht", algorithm: "nemo", },
+  { name: "Neasa", gender: "female", shortCode: "nnc", code: "ga_MU_nnc_nemo", dialect: "munster", algorithm: "nemo", },
+  { name: "Colm", gender: "male", shortCode: "cmg", code: "ga_MU_cmg_nnmnkwii", dialect: "munster", algorithm: "dnn", },
 ] as const);
 
 // type defining an entry in the VoiceConfig array
 export type Voice = (typeof voices)[number];
 
 // type defining the possible values of a voice audio encoding
-export type AudioEncoding = | (typeof ApiOptions.api2.audioEncoding)[number] | (typeof ApiOptions.nemo.audioEncoding)[number];
+export type AudioEncoding = (typeof ApiOptions.audioEncoding)[number];
 
 // type defining the different possible audio mime types
 type DataUriMimeType = "audio/mp3" | "audio/ogg" | "audio/x-aiff" | "audio/wav";
@@ -65,7 +61,6 @@ const audioEncodingToDataUriMimeType = new Map<AudioEncoding, DataUriMimeType>([
   ["LINEAR16", "audio/x-aiff"],
   ["MP3", "audio/mp3"],
   ["OGG_OPUS", "audio/ogg"],
-  ["mp3", "audio/mp3"],
   ["wav", "audio/wav"],
 ]);
 
@@ -98,71 +93,48 @@ export class SynthesisService {
     // Validation
     if (!textInput) throw new Error("story text input required");
     if (!voice) voice = voices[0];
-    if (!audioEncoding) audioEncoding = ApiOptions[voice.api].audioEncoding[0];
+    if (!audioEncoding) audioEncoding = ApiOptions.audioEncoding[0];
 
     // Get audio from cache if text already synthesised => TODO test
     if (useCache) {
-      const cachedAudio = this.synthBankService.getAudioUrlOfSentence(textInput);
+      const cachedAudio = this.synthBankService.getAudioForSentence( voice + textInput );
       if (cachedAudio) return of(cachedAudio);
     }
 
     const reqBody = {
-      "synthinput": {
-        "text": textInput,
-        "normalised": true
+      synthinput: {
+        text: textInput,
+        normalised: true,
       },
-      "voiceparams": {
-        "languageCode": "ga-IE",
-        "name": voice.code,
+      voiceparams: {
+        languageCode: "ga-IE",
+        name: voice.code,
       },
-      "audioconfig": {
-        "audioEncoding": "LINEAR16",
-        "speakingRate": 1,
-        "pitch": 1,
-      }
-    }
-  
+      audioconfig: {
+        audioEncoding: audioEncoding,
+        speakingRate: 1,
+        pitch: 1,
+      },
+    };
+
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
+        "Content-Type": "application/json",
+      }),
     };
-      
+
     // Otherwise send text to api
-    return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions).pipe(
-      // construct returned api audio url with given encoding preferences
-      map((data: { audioContent: string }) => this.prependAudioUrlPrefix(data.audioContent, audioEncoding!) ),
-      // store audio in cache
-      tap((data) => this.synthBankService.storeAudioUrlOfSentence(textInput, data))
-    );
-  }
-
-  /**
-   * Construct the API url for synthesing text given the voice config options
-   * @param input textual input
-   * @param voice voice as defined from entry in VoiceConfig
-   * @param audioEncoding audio encoding as defined in VoiceConfig
-   * @returns
-   */
-  constructApiUrl(
-    input: string,
-    voice: Voice = voices[0],
-    audioEncoding: AudioEncoding | undefined = undefined
-  ): string {
-    // get all possible options given the api type
-    const options = ApiOptions[voice.api];
-    const base_url = options.base_url;
-    if (!audioEncoding) audioEncoding = options.audioEncoding[0];
-
-    // construct params for api call
-    const fromObject = {
-      input,
-      voice: voice.code,
-      audioEncoding,
-      outputType: "JSON",
-    };
-    const query = new HttpParams({ fromObject }).toString();
-    return base_url + query;
+    return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions)
+      .pipe(
+        // construct returned api audio url with given encoding preferences
+        map((data: { audioContent: string }) =>
+          this.prependAudioUrlPrefix(data.audioContent, audioEncoding!)
+        ),
+        // store audio in cache
+        tap((data) =>
+          this.synthBankService.storeAudioUrlOfSentence(voice + textInput, data)
+        )
+      );
   }
 
   /**

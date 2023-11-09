@@ -50,7 +50,7 @@ export class SynthItemComponent {
    * Delete the synth item from cache and re-synthesise
    */
   public refresh() {
-    this.synth_bank.remove(this.synthItem.requestUrl);
+    this.synth_bank.remove(this.synthItem.id);
     this.synthItem = new SynthItem(this.synthItem.text, this.synthItem.voice, this.synth);
   }
 
