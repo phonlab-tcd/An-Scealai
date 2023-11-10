@@ -76,7 +76,8 @@ async function onclick( this: Buttons, tooltipReference: typeof QuillTooltip, te
  * @returns api response (audio and timing info)
  */
 async function fetchSynthAudio( textInput: string, voice: string, speed: number ) {
-  const cachedAudio = synth_cache[voice + textInput];
+  const cacheKey = createCacheKey(textInput, voice, speed);
+  const cachedAudio = synth_cache[cacheKey];
   if (cachedAudio) {
     return cachedAudio;
   }
@@ -108,8 +109,19 @@ async function fetchSynthAudio( textInput: string, voice: string, speed: number 
   };
 
   const p = fetch("https://abair.ie/api2/synthesise", options).then((r) => r.json() );
-  synth_cache[voice + textInput] = p;
+  synth_cache[cacheKey] = p;
   return p;
+}
+
+/**
+ * Create a unique id for each synth request to use as a key for cache
+ * @param textInput input story text
+ * @param voice selected voice
+ * @param speed selected speed
+ * @returns combined string from the three parameters
+ */
+function createCacheKey(textInput: string, voice: string, speed: number) {
+  return textInput + voice + speed;
 }
 
 /**
