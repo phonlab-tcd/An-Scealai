@@ -86,4 +86,8 @@ export class ClassroomService {
   return this.http.get(this.baseUrl + "getTotalClassrooms/allDB");
 }
 
+getAvgNumStudents() : Observable<any> {
+  return this.http.get(this.baseUrl + "/getAvgNumStudents/allDB");
+}
+
 }

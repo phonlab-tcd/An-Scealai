@@ -26,6 +26,5 @@ export default async function countAndStatus(req: Request, res: Response) {
     activeTeachers: activeTeachers,
     pendingTeachers: pendingTeachers,
     totalTeachers: totalTeachers,
-    admin: admin,
   });
 }

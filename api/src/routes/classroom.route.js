@@ -259,4 +259,17 @@ classroomRoutes.route('/getTotalClassrooms/allDB').get( async (req, res) => {
   return res.status(200).json(totalClassrooms);
 });
 
+/**
+ * Get total number of classrooms
+ * @param {Object} req
+ * @return {Number} Number of total classrooms
+ */
+classroomRoutes.route('/getAvgNumStudents/allDB').get( async (req, res) => {
+  const classroomsWithStudents = await Classroom.find({"studentIds": {$ne: []}}, {'studentIds': 1, '_id': 0})
+  const totals = classroomsWithStudents.map( (entry) => entry.studentIds.length)
+  const sum = totals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const average = sum / totals.length;
+  return res.status(200).json(average);
+});
+
 module.exports = classroomRoutes;
