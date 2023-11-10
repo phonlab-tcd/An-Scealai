@@ -21,7 +21,7 @@
             <div class="card">
               <h3 class="card-header">{{givenWordEntry.word}} <span *ngIf="showTranslation">({{givenWordEntry.translation}})</span></h3>
             </div>
-            <div (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? 'Hide translation': 'Show translation'}}</div>
+            <div (click)="showTranslation = !showTranslation" class="showTranslation"> {{showTranslation? ts.l.hide_translation: ts.l.show_translation}}</div>
           </div>
           <!--Confirm word choice-->
           <div *ngIf="givenWordEntry['word']" class="content"> 

@@ -144,14 +144,14 @@
           <div class="form-group" *ngIf="auth.getUserDetails().role === 'TEACHER'">
             <p class="formLabel">{{ts.l.school_type_where_you_teach}}: </p>
             <div class="checkbox-group">
-              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.primary" name="teacherPrimary"> {{ts.l.primary}} </div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.primary" name="teacherPrimary"> {{ts.l.primary_level}} </div>
               <div *ngIf="teacherSchoolTypes.primary" class="form-group">
                 <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
                 <select class="selectOptions" [(ngModel)]="teacherPrimaryType" name="teacherPrimaryType">
                   <option *ngFor="let s of schools; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
                 </select>
               </div>
-              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.secondary" name="teacherSecondary"> {{ts.l.secondary}} </div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolTypes.secondary" name="teacherSecondary"> {{ts.l.second_level}} </div>
               <div *ngIf="teacherSchoolTypes.secondary" class="form-group">
                 <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
                 <select class="selectOptions" [(ngModel)]="teacherSecondaryType" name="teacherSecondaryType">

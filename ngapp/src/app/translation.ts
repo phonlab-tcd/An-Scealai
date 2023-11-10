@@ -571,14 +571,26 @@ const translations = {
     ga: 'Ábhar staidéir',
     en: 'Studies' },
   primary: {
-    ga: 'Bunscoil',
+    ga: 'Bunleibhéal',
     en: 'Primary' },
   secondary: {
-    ga: 'Iar-bhunscoil',
+    ga: 'Meánleibhéal',
     en: 'Secondary' },
   tertiary: {
-    ga: 'Cúrsa 3ú leibhéal',
-    en: '3rd level' },
+    ga: 'Tríú leibhéal',
+    en: 'Third level' },
+  show_translation: {
+    ga: 'Leagan Béarla',
+    en: 'Show Translation' },
+  hide_translation: {
+    ga: 'Folaigh Béarla',
+    en: 'Hide Translation' },
+  primary_level: {
+    ga: 'Iar-bhunscoil',
+    en: 'Secondary' },
+  second_level: {
+    ga: 'Bunscoil',
+    en: 'Primary' },
   third_level: {
     ga: 'Cúrsa 3ú leibhéal',
     en: '3rd level' },
@@ -2199,7 +2211,7 @@ const translations = {
     ga: 'Carachtar',
     en: 'Character' },
   location: {
-    ga: 'Suíomhanna',
+    ga: 'Suíomh',
     en: 'Location' },
   theme: {
     ga: 'Téama',
