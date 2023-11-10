@@ -5,15 +5,18 @@
 
   <div class="buttonContainer">
     <div class="buttonRow">
-      <div class="adminBtnContainer" routerLink="teachers">
+      <!-- <div class="adminBtnContainer" routerLink="teachers">
         {{ ts.l.teachers }}
-      </div>
+      </div> -->
       <div class="adminBtnContainer" routerLink="find-user">
         {{ ts.l.find_user }}
       </div>
       <div class="adminBtnContainer">
         <a class="adminBtnContainer" style="text-decoration: none" href="https://analytics.google.com/analytics/web/?authuser=2#/report-home/a178889778w247370276p229672953" target="_blank" > Google Analytics </a>
       </div>
+      <a class="adminBtnContainer" href="/api/status" target="_blank">
+        Backend Monitor
+      </a>
     </div>
     <div class="buttonRow">
       <div class="adminBtnContainer" routerLink="database-stats">
@@ -28,9 +31,6 @@
       <div class="adminBtnContainer" routerLink="add-content">
         Cén Scéal Data
       </div>
-      <a class="adminBtnContainer" href="/api/status">
-        Backend Monitor
-      </a>
     </div>
   </div>
 

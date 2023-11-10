@@ -31,7 +31,7 @@
                 aria-describedby="search-text"
                 [ngModel]='searchText'
                 (ngModelChange)='searchModelChanged.next($event)' 
-                placeholder="Enter user to search"
+                placeholder="Enter user to search or click 'search' to show all users"
               >
               <button (click)="currentPage = 0; searchUsers();">Search</button>
             </div>
