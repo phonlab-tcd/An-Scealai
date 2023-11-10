@@ -14,7 +14,7 @@ export class SynthItem {
 
   refresh(useCache = true) {
     this.audioUrl = undefined;
-    this.id = this.voice + this.text;
+    this.id = this.synth.createCacheId(this.text, this.voice.code, 1);
     this.subscription = this.synth
       .synthesiseText(this.text, this.voice, useCache)
       .subscribe({

@@ -88,7 +88,8 @@ export class SynthesisService {
     textInput: string,
     voice: Voice | undefined = undefined,
     useCache = true,
-    audioEncoding: AudioEncoding | undefined = undefined
+    audioEncoding: AudioEncoding | undefined = undefined,
+    speed: number | undefined = 1
   ): Observable<any> {
     // Validation
     if (!textInput) throw new Error("story text input required");
@@ -96,8 +97,9 @@ export class SynthesisService {
     if (!audioEncoding) audioEncoding = ApiOptions.audioEncoding[0];
 
     // Get audio from cache if text already synthesised => TODO test
+    const cacheKey = this.createCacheId(textInput, voice.code, speed)
     if (useCache) {
-      const cachedAudio = this.synthBankService.getAudioForSentence( voice + textInput );
+      const cachedAudio = this.synthBankService.getAudioForSentence( cacheKey );
       if (cachedAudio) return of(cachedAudio);
     }
 
@@ -112,7 +114,7 @@ export class SynthesisService {
       },
       audioconfig: {
         audioEncoding: audioEncoding,
-        speakingRate: 1,
+        speakingRate: speed,
         pitch: 1,
       },
     };
@@ -132,9 +134,13 @@ export class SynthesisService {
         ),
         // store audio in cache
         tap((data) =>
-          this.synthBankService.storeAudioUrlOfSentence(voice + textInput, data)
+          this.synthBankService.storeAudioUrlOfSentence(cacheKey, data)
         )
       );
+  }
+
+  createCacheId(textInput: string, voice: string, speed: number ): string {
+    return this.synthBankService.createCacheKey( textInput, voice, speed );
   }
 
   /**

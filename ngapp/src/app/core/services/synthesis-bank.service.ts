@@ -9,6 +9,17 @@ export class SynthesisBankService {
   }
 
   /**
+   * Creates a unique string that serves as key/id for storing audio in cache
+   * @param textInput synthesised text
+   * @param voice selected voice
+   * @param speed selected speed
+   * @returns string combination of the three parameters
+   */
+  createCacheKey(textInput: string, voice: string, speed: number) {
+    return textInput + voice + speed;
+  }
+
+  /**
    * Store the given key and audio data into cache
    * @param key Url of api call to synthesis
    * @param data audio response from api call
