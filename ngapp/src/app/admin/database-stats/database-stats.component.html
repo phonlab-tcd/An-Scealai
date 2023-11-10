@@ -51,6 +51,15 @@
         </mat-card-content>
       </div>
     </mat-card>
+    <!-- County Chart-->
+    <mat-card>
+      <mat-card-header class="stats-card-header">
+        <mat-card-title> Map of Users </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas id="county-chart"></canvas>
+      </mat-card-content>
+    </mat-card>
     <!-- Story Stats -->
     <mat-card>
       <grid-spinner *ngIf="!storyStats"></grid-spinner>
@@ -197,7 +206,7 @@
       </div>
     </mat-card>
     <!-- Grammar Pie Chart-->
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header class="stats-card-header">
         <mat-card-title> Grammar Errors </mat-card-title>
       </mat-card-header>
@@ -220,15 +229,6 @@
           <canvas id="grammar-pie-chart" width="200" height="200"></canvas>
         </div>
       </mat-card-content>
-    </mat-card>
-    <!-- County Chart-->
-    <mat-card>
-      <mat-card-header class="stats-card-header">
-        <mat-card-title> Map of Users </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <canvas id="county-chart"></canvas>
-      </mat-card-content>
-    </mat-card>
+    </mat-card> -->
   </div>
 </div>

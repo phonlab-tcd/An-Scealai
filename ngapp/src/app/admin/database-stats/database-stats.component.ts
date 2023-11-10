@@ -79,13 +79,9 @@ export class DatabaseStatsComponent implements OnInit {
   async ngOnInit() {
     // get stats for users, stories, grammar errors, and classroom data
     this.userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
-    console.log("got user counts")
     this.storyStats = await firstValueFrom<StoryStats>(this.storyService.getStoryStats());
-    console.log("got story stats")
-    this.grammarErrorCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts`));
-    console.log("got grammar errors")
+    //this.grammarErrorCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts`));
     this.profileCountyCounts = await firstValueFrom(this.profileService.getCountyCounts());
-    console.log("got profile counties")
 
     this.totalClassrooms = await firstValueFrom(this.classroomService.getTotalClassrooms());
     this.avgNumStudentsInClass = await firstValueFrom(this.classroomService.getAvgNumStudents());
@@ -110,7 +106,7 @@ export class DatabaseStatsComponent implements OnInit {
 
     // make charts
     await this.makeUserCountGraph();
-    await this.makeGrammarGraph();
+    //await this.makeGrammarGraph();
     await this.makeCountyMap();
   }
 

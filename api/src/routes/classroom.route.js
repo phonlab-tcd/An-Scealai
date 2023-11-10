@@ -268,7 +268,7 @@ classroomRoutes.route('/getAvgNumStudents/allDB').get( async (req, res) => {
   const classroomsWithStudents = await Classroom.find({"studentIds": {$ne: []}}, {'studentIds': 1, '_id': 0})
   const totals = classroomsWithStudents.map( (entry) => entry.studentIds.length)
   const sum = totals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  const average = sum / totals.length;
+  const average = Math.round((sum / totals.length) * 100) / 100;
   return res.status(200).json(average);
 });
 
