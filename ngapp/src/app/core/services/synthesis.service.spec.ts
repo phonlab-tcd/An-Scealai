@@ -18,8 +18,4 @@ describe('SynthesisService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('should generate a url', ()=>{
-    expect(service.constructApiUrl('dia dhuit',undefined)).toMatch(/^https/);
-  });
 });
