@@ -45,4 +45,8 @@ export class FeedbackCommentService {
   getAudioFeedback(id: string) : Observable<any> {
     return this.http.get(this.baseUrl + "/getAudioFeedback/" + id, {responseType: "blob"});
   }
+
+  getFeedbackStats() : Observable<any> {
+    return this.http.get(this.baseUrl + "/getFeedbackStats");
+  }
 }

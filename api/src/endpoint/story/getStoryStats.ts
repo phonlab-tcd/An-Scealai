@@ -10,6 +10,7 @@ import { getWordCount } from "../nlp/getWordCount";
 async function getStoryStats(req, res) {
   const totalStories = await Story.countDocuments();
   const totalRecordings = await Story.where({'activeRecording': {$ne: null}}).countDocuments();
+  const createdWithPrompts = await Story.where({'createdWithPrompts': true}).countDocuments();
 
   const storyTextsResponse = await Story.find({'text': {$ne: null}},{'text': 1, '_id': 0})  // get text from all stories in the DB
   const storyTexts = storyTextsResponse.map( (item) => {return item.text}) // make an array of story texts from DB res
@@ -19,6 +20,7 @@ async function getStoryStats(req, res) {
   const onlyTextFeedback = await Story.where({$and: [{'feedback.text': {$ne: null}}, {'feedback.audioId': null}]}).countDocuments();
   const onlyAudioFeedback = await Story.where({$and: [{'feedback.audioId': {$ne: null}}, {'feedback.text': null}]}).countDocuments();
   const bothAudioAndText = await Story.find({$and: [{'feedback.text': {$ne: null}}, {'feedback.audioId': {$ne: null}}]}).countDocuments();
+  const hasComments = await Story.find({'feedback.hasComments': true}).countDocuments();
 
   const feedbackTextsResponse = await Story.find({'feedback.text': {$ne: null}},{'feedback.text': 1, '_id': 0})  // get feedback text from all stories in the DB
   const feedbackTexts = feedbackTextsResponse.map( (item) => {return item.feedback.text}) // make an array of feedback texts from DB res
@@ -35,6 +37,8 @@ async function getStoryStats(req, res) {
     bothAudioAndText: bothAudioAndText,
     totalFeedbackWords: wordCountResponseTeacher['totalWords'],
     avgFeedbackWordCount: wordCountResponseTeacher['avgWordCount'],
+    hasComments: hasComments,
+    createdWithPrompts: createdWithPrompts
   });
 }
 

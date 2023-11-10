@@ -11,8 +11,19 @@ import { COUNTY_NAMES } from './countyNames'
 import config from 'abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { TranslationService } from "app/core/services/translation.service";
+import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
 
-export interface StoryStats {
+type UserStats = {
+  total: number,
+  activeStudents: number,
+  pendingStudents: number,
+  totalStudents: number,
+  activeTeachers: number,
+  pendingTeachers: number,
+  totalTeachers: number,
+}
+
+type StoryStats = {
   totalStories: number,
   totalWords: number,
   avgWordCount: number,
@@ -23,6 +34,15 @@ export interface StoryStats {
   bothAudioAndText: number,
   totalFeedbackWords: number,
   avgFeedbackWordCount: number,
+  hasComments: number,
+  createdWithPrompts: boolean
+}
+
+type FeedbackStats = {
+  feedbackCommentsJustAudio: number,
+  feedbackCommentsJustText: number,
+  feedbackCommentsWithTextAndAudio: number,
+  totalFeedbackComments: number,
 }
 
 @Component({
@@ -35,56 +55,65 @@ export class DatabaseStatsComponent implements OnInit {
   pieChart: Chart;
   countyChart: ChoroplethChart;
   pieChartLegendItems: any[] = [];
-  userCounts: any;
+
+  userCounts: UserStats;
   storyStats: StoryStats;
+  feedbackStats: FeedbackStats;
   grammarErrorCounts: any;
   profileCountyCounts: any;
+
   totalClassrooms: number = 0;
+  avgNumStudentsInClass: number = 0;
   profileFilledPercentage: number = 0;
   studentsWithStoriesPercentage: number = 0;
   teachersWithClassroomsPercentage: number = 0;
   englishPercentage: number = 0;
   irishPercentage: number = 0;
+
   dataLoaded: boolean = false;
 
   constructor(private userService: UserService, private storyService: StoryService,
               private classroomService: ClassroomService, private profileService: ProfileService,
-              private http: HttpClient, public ts: TranslationService) {}
+              private http: HttpClient, public ts: TranslationService, private feedbackCommentService: FeedbackCommentService) {}
 
   async ngOnInit() {
     // get stats for users, stories, grammar errors, and classroom data
     this.userCounts = await firstValueFrom(this.userService.getUserCountAndStatus());
     this.storyStats = await firstValueFrom<StoryStats>(this.storyService.getStoryStats());
-    this.grammarErrorCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts`));
+    //this.grammarErrorCounts = await firstValueFrom(this.http.get(`${config.baseurl}gramadoir/getUserGrammarCounts`));
     this.profileCountyCounts = await firstValueFrom(this.profileService.getCountyCounts());
+
     this.totalClassrooms = await firstValueFrom(this.classroomService.getTotalClassrooms());
+    this.avgNumStudentsInClass = await firstValueFrom(this.classroomService.getAvgNumStudents());
     
     // get percentages of profile and story information
-    let numProfiles = await firstValueFrom(this.profileService.getNumOfProfiles());
+    const numProfiles = await firstValueFrom(this.profileService.getNumOfProfiles());
     this.profileFilledPercentage = numProfiles / this.userCounts.total;
     
-    let studentsWithStories = await firstValueFrom(this.userService.countUsersWithStories());
+    const studentsWithStories = await firstValueFrom(this.userService.countUsersWithStories());
     this.studentsWithStoriesPercentage = studentsWithStories / this.userCounts.totalStudents;
     
-    let teachersWithClassrooms = await firstValueFrom(this.userService.countTeachersWithClassrooms());
+    const teachersWithClassrooms = await firstValueFrom(this.userService.countTeachersWithClassrooms());
     this.teachersWithClassroomsPercentage = teachersWithClassrooms / this.userCounts.totalTeachers;
     
-    let languageCounts = await firstValueFrom(this.userService.getLanguageCount());
+    const languageCounts = await firstValueFrom(this.userService.getLanguageCount());
     this.englishPercentage = languageCounts.englishCount / this.userCounts.total;
     this.irishPercentage = languageCounts.irishCount / this.userCounts.total;
+
+    this.feedbackStats = await firstValueFrom(this.feedbackCommentService.getFeedbackStats());
     
     this.dataLoaded = true;
 
     // make charts
-    await this.makeUserGraph();
-    await this.makeGrammarGraph();
-    await this.getCountyMap();
+    await this.makeUserCountGraph();
+    //await this.makeGrammarGraph();
+    await this.makeCountyMap();
   }
 
   /* Create a bar chart of user types and number of active/pending users */
-  async makeUserGraph() {
-    let canvasElem = document.getElementById("user-counts") as HTMLCanvasElement;
-    let ctx = canvasElem.getContext("2d");
+  async makeUserCountGraph() {
+    const canvasElem = document.getElementById("user-counts") as HTMLCanvasElement;
+    const ctx = canvasElem.getContext("2d");
 
     const labels = ["Students", "Teachers"];
     const data = {
@@ -126,8 +155,8 @@ export class DatabaseStatsComponent implements OnInit {
 
   /* Make a pie chart of grammar error counts for the entire DB */
   async makeGrammarGraph() {
-    let canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
-    let ctx = canvasElem.getContext('2d');
+    const canvasElem = document.getElementById("grammar-pie-chart") as HTMLCanvasElement;
+    const ctx = canvasElem.getContext('2d');
     if (this.pieChart) { this.pieChart.destroy(); } 
     this.pieChart = new Chart(ctx, {
         type: 'pie',
@@ -154,7 +183,7 @@ export class DatabaseStatsComponent implements OnInit {
   }
 
   /* Create a map of Irish counties with the number of users from each county */
-  async getCountyMap() {
+  async makeCountyMap() {
     // get topo json data of Irish counties
     const irl = await fetch('https://raw.githubusercontent.com/gist/carsonfarmer/9791524/raw/b27ca0d78d46a84664fe7ef709eed4f7621f7a25/irish-counties.topojson').then((r) => r.json());
     const counties = ChartGeo.topojson.feature(irl, irl.objects.counties)['features'];
@@ -166,7 +195,7 @@ export class DatabaseStatsComponent implements OnInit {
     // the data for the chart is of the form: {feature: (json data), value: user count for given county}
     const mapData = counties.map((county) => ({ feature: county, value: this.profileCountyCounts[COUNTY_NAMES[county.id]] }))
 
-    let canvasElem = document.getElementById("county-chart") as HTMLCanvasElement;
+    const canvasElem = document.getElementById("county-chart") as HTMLCanvasElement;
     this.countyChart = new ChoroplethChart(canvasElem.getContext("2d"), {
       data: {
         labels: mapLabels,
