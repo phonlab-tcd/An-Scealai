@@ -5,7 +5,7 @@
       <i class="fas fa-arrow-left closeFeedbackButton"></i>
     </div>
     <div style="margin: auto">{{ story?.title }} <span *ngIf="story?.createdWithPrompts" class="madeWithPrompts">{{ts.l.made_using_prompts}}</span> <span>({{story?.author}})</span></div>
-    <button *ngIf="!feedbackSent" class="sendFeedbackButton" (click)="sendFeedback()" style="margin-left: auto" >
+    <button *ngIf="!feedbackSent" [disabled]="commentsList.length == 0" class="sendFeedbackButton" (click)="sendFeedback()" style="margin-left: auto" >
       {{ ts.l.send }} <i class="fas fa-paper-plane"></i>
     </button>
     <button *ngIf="feedbackSent" class="sendFeedbackButton" disabled style="margin-left: auto">

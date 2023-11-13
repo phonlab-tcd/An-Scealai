@@ -15,6 +15,7 @@ export class SynthVoiceSelectComponent implements OnInit{
 
   ngOnInit(){ this.selectVoice.emit(this.selected) }
 
+  // DEPRECATED
   color(gender: 'male'|'female'): string {
     return gender.startsWith('f') ? 'rgba(255, 191, 194)' : 'rgba(194, 218, 255)';
   }
