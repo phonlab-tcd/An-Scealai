@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class SynthesisBankService {
+export class SynthesisCacheService {
 
   constructor() {
   }
@@ -22,13 +22,13 @@ export class SynthesisBankService {
   /**
    * Store the given key and audio data into cache
    * @param key Url of api call to synthesis
-   * @param data audio response from api call
+   * @param data audio and timing info response from api call
    * @returns item saved in cache (or error)
    */
-  storeAudioUrlOfSentence(key: string, data: string) {
+  storeSynthesisResponse(key: string, data: Object) {
     if (!sessionStorage.getItem(key)) {
       try {
-        return sessionStorage.setItem(key, data);
+        return sessionStorage.setItem(key, JSON.stringify(data));
       } catch (e) {
         console.count('FAILED TO SET ITEM IN SESSION STORAGE');
       }
@@ -36,12 +36,13 @@ export class SynthesisBankService {
   }
 
   /**
-   * Get the audio data for the given key
+   * Get the audio and timing data for the given key
    * @param key id of synth api response (from synthItem)
    * @returns audio data if stored under key
    */
-  getAudioForSentence(key: string): string | null {
-    return sessionStorage.getItem(key);
+  getSynthesisResponseForSentence(key: string): string | null {
+    const audio = sessionStorage.getItem(key)
+    return audio? JSON.parse(audio) : null
   }
 
   /**

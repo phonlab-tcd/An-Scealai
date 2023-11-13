@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 export class SynthItem {
   audioUrl: string | undefined = undefined;
+  timing: {word: string, end: number, originalWord: string}[] | undefined = undefined;
   subscription: Subscription;
   id: string = "";
   exceptions: object[] = [];
@@ -18,7 +19,7 @@ export class SynthItem {
     this.subscription = this.synth
       .synthesiseText(this.text, this.voice, useCache)
       .subscribe({
-        next: audioUrl=> this.audioUrl = audioUrl,
+        next: data => {console.log(data); this.audioUrl = data.audioUrl; this.timing = data.timing},
         error: error=>   {console.error(error); this.exceptions += error}
       });
   }

@@ -6,7 +6,7 @@ import { EventType } from "app/core/models/event";
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import config from "abairconfig";
-import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
+import { SynthesisCacheService } from "app/core/services/synthesis-cache.service";
 
 // variable defining the different options for API calls
 const ApiOptions = {
@@ -71,7 +71,7 @@ export class SynthesisService {
   constructor(
     private http: HttpClient,
     private engagement: EngagementService,
-    private synthBankService: SynthesisBankService
+    private synthCacheService: SynthesisCacheService
   ) {}
 
   baseUrl = config.baseurl;
@@ -99,11 +99,11 @@ export class SynthesisService {
     // Get audio from cache if text already synthesised => TODO test
     const cacheKey = this.createCacheId(textInput, voice.code, speed)
     if (useCache) {
-      const cachedAudio = this.synthBankService.getAudioForSentence( cacheKey );
+      const cachedAudio = this.synthCacheService.getSynthesisResponseForSentence( cacheKey );
       if (cachedAudio) return of(cachedAudio);
     }
 
-    const reqBody = {
+    const reqBody: any = {
       synthinput: {
         text: textInput,
         normalised: true,
@@ -117,6 +117,7 @@ export class SynthesisService {
         speakingRate: speed,
         pitch: 1,
       },
+      timing: "WORD"
     };
 
     const httpOptions = {
@@ -129,18 +130,20 @@ export class SynthesisService {
     return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions)
       .pipe(
         // construct returned api audio url with given encoding preferences
-        map((data: { audioContent: string }) =>
-          this.prependAudioUrlPrefix(data.audioContent, audioEncoding!)
+        map((data: { audioContent: string, timing: {word: string, end: number, originalWord: string}[] }) => {
+          console.log(data)
+          return {audioUrl: this.prependAudioUrlPrefix(data.audioContent, audioEncoding!), timing: data.timing}
+        }
         ),
         // store audio in cache
         tap((data) =>
-          this.synthBankService.storeAudioUrlOfSentence(cacheKey, data)
+          this.synthCacheService.storeSynthesisResponse(cacheKey, data)
         )
       );
   }
 
   createCacheId(textInput: string, voice: string, speed: number ): string {
-    return this.synthBankService.createCacheKey( textInput, voice, speed );
+    return this.synthCacheService.createCacheKey( textInput, voice, speed );
   }
 
   /**

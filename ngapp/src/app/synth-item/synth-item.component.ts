@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { SynthesisService } from "app/core/services/synthesis.service";
-import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
+import { SynthesisCacheService } from "app/core/services/synthesis-cache.service";
 import { SynthItem } from 'app/core/models/synth-item';
 import { EngagementService } from 'app/core/services/engagement.service';
 
@@ -20,7 +20,7 @@ export class SynthItemComponent {
 
   constructor(
     private synth: SynthesisService,
-    private synth_bank: SynthesisBankService,
+    private synthCache: SynthesisCacheService,
     private engagement: EngagementService,
   ) { }
 
@@ -50,7 +50,7 @@ export class SynthItemComponent {
    * Delete the synth item from cache and re-synthesise
    */
   public refresh() {
-    this.synth_bank.remove(this.synthItem.id);
+    this.synthCache.remove(this.synthItem.id);
     this.synthItem = new SynthItem(this.synthItem.text, this.synthItem.voice, this.synth);
   }
 
