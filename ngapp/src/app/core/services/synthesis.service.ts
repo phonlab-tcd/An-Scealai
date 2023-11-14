@@ -3,7 +3,7 @@ import { Story } from "app/core/models/story";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { EngagementService } from "app/core/services/engagement.service";
 import { EventType } from "app/core/models/event";
-import { Observable, of } from "rxjs";
+import { Observable, firstValueFrom, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import config from "abairconfig";
 import { SynthesisCacheService } from "app/core/services/synthesis-cache.service";
@@ -131,7 +131,6 @@ export class SynthesisService {
       .pipe(
         // construct returned api audio url with given encoding preferences
         map((data: { audioContent: string, timing: {word: string, end: number, originalWord: string}[] }) => {
-          console.log(data)
           return {audioUrl: this.prependAudioUrlPrefix(data.audioContent, audioEncoding!), timing: data.timing}
         }
         ),
@@ -153,7 +152,6 @@ export class SynthesisService {
    * @returns constructed audio url
    */
   prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding) {
-    console.log(base64AudioData.slice(1000, 1100));
     return ( "data:" + audioEncodingToDataUriMimeType.get(encoding) + ";base64," + base64AudioData );
   }
 
@@ -170,49 +168,93 @@ export class SynthesisService {
   async synthesiseStory(
     storyObject: Story
   ): Promise<[Paragraph[], Sentence[]]> {
-    const synthesisResponse = (await this.http
-      .post(this.baseUrl + "story/synthesiseObject/", { story: storyObject })
-      .toPromise()) as SynthesisResponse;
+    // const synthesisResponse = (await this.http
+    //   .post(this.baseUrl + "story/synthesiseObject/", { story: storyObject })
+    //   .toPromise()) as SynthesisResponse;
+
+
+    const paragraphsTest = storyObject.text.split(/\n\s*\n/);
 
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];
-    synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
+
+    let startTime = 0;
+    let paragraphDuration = 0;
+    
+
+    for (let paragraphEntry of paragraphsTest) {
       const paragraphSentences: Sentence[] = [];
-      for (const sentenceHtml of sentenceHtmlArray) {
-        // sentenceSpan contains a span child for each word in the sentence
-        const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
-        const startTime = +sentenceSpan.children[0].getAttribute("data-begin")!;
-        const lastSentenceChild =
-          sentenceSpan.children[sentenceSpan.childElementCount - 1];
-        const duration =
-          +lastSentenceChild.getAttribute("data-begin")! +
-          +lastSentenceChild.getAttribute("data-dur")! -
-          startTime;
-        const audio = new Audio(synthesisResponse.audio[i]);
-
-        let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
-        spans.forEach((span) => span.classList.add("highlightable"));
-
-        const sentence = new Sentence(audio, spans, startTime, duration);
+      paragraphEntry = paragraphEntry.trim()
+      const parsedSentences = paragraphEntry.split(/[\.\!\?\;\:\n]\s+/);
+      let sentenceDuration = 0;
+      
+      let paragraphAudioUrls = [];
+      for (let sentenceEntry of parsedSentences) {
+        const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry));
+        startTime = 0;
+        const wordSpans = synthesisedSentence.timing.map((entry: any) => {
+          const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
+          startTime = entry.end;
+          sentenceDuration = sentenceDuration + entry.end;
+          paragraphDuration = paragraphDuration + sentenceDuration;
+          return span;
+        });
+        //const sentenceSpan = this.wordSpanToSentenceSpan(wordSpans) as HTMLSpanElement;
+        const audio = new Audio(synthesisedSentence.audioUrl);
+        const sentence = new Sentence(audio, wordSpans, 0, sentenceDuration);
         sentences.push(sentence);
         paragraphSentences.push(sentence);
+        paragraphAudioUrls.push(synthesisedSentence.audioUrl);
       }
-      const audio = new Audio(synthesisResponse.audio[i]);
-      const spans = paragraphSentences.reduce(
-        (acc, sentence) => acc.concat(sentence.spans),
-        []
-      );
-      const lastParagraphSentence =
-        paragraphSentences[paragraphSentences.length - 1];
-      const duration =
-        lastParagraphSentence.startTime + lastParagraphSentence.duration;
-      const paragraph = new Paragraph(audio, spans, duration);
+
+      const combinedBlobUrl = await this.combineAudioSources(paragraphAudioUrls);
+      const audio = new Audio(combinedBlobUrl);
+      const spans = paragraphSentences.reduce( (acc, sentence) => acc.concat(sentence.spans), [] );
+      const paragraph = new Paragraph(audio, spans, paragraphDuration);
       paragraphs.push(paragraph);
-    });
-    this.engagement.addEventForLoggedInUser(
-      EventType["SYNTHESISE-STORY"],
-      storyObject
-    );
+    }
+
+    console.log(sentences)
+    console.log(paragraphs);
+
+
+    // synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
+    //   const paragraphSentences: Sentence[] = [];
+    //   for (const sentenceHtml of sentenceHtmlArray) {
+    //     // sentenceSpan contains a span child for each word in the sentence
+    //     const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
+    //     const startTime = +sentenceSpan.children[0].getAttribute("data-begin")!;
+    //     const lastSentenceChild =
+    //       sentenceSpan.children[sentenceSpan.childElementCount - 1];
+    //     const duration =
+    //       +lastSentenceChild.getAttribute("data-begin")! +
+    //       +lastSentenceChild.getAttribute("data-dur")! -
+    //       startTime;
+    //     const audio = new Audio(synthesisResponse.audio[i]);
+
+    //     let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
+    //     spans.forEach((span) => span.classList.add("highlightable"));
+
+    //     const sentence = new Sentence(audio, spans, startTime, duration);
+    //     sentences.push(sentence);
+    //     paragraphSentences.push(sentence);
+    //   }
+    //   const audio = new Audio(synthesisResponse.audio[i]);
+    //   const spans = paragraphSentences.reduce(
+    //     (acc, sentence) => acc.concat(sentence.spans),
+    //     []
+    //   );
+    //   const lastParagraphSentence =
+    //     paragraphSentences[paragraphSentences.length - 1];
+    //   const duration =
+    //     lastParagraphSentence.startTime + lastParagraphSentence.duration;
+    //   const paragraph = new Paragraph(audio, spans, duration);
+    //   paragraphs.push(paragraph);
+    // });
+    // this.engagement.addEventForLoggedInUser(
+    //   EventType["SYNTHESISE-STORY"],
+    //   storyObject
+    // );
     return [paragraphs, sentences];
   }
 
@@ -223,8 +265,36 @@ export class SynthesisService {
    */
   textToElem(htmlString: string): Node {
     var div = document.createElement("div");
-    div.innerHTML = htmlString.trim();
+    div.innerHTML = htmlString;
     return div.firstChild!;
+  }
+
+  wordToSpan(word: string, startTime: number, duration: number): Node {
+    const span = document.createElement("span");
+    span.textContent = word.trim();
+    span.setAttribute("data-begin", startTime.toString());
+    span.setAttribute("data-dur", duration.toString());
+    span.classList.add("highlightable");
+    return span;
+  }
+  
+  wordSpanToSentenceSpan(wordSpans: Node[]) {
+    const divElement = document.createElement('div');
+    wordSpans.forEach(span => {
+      divElement.appendChild(span);
+    });
+    return divElement;
+  }
+
+  async combineAudioSources(audioUrls: string[]) {
+    const proms = audioUrls.map((uri) =>
+      fetch(uri).then((r) => r.blob())
+    );
+
+    const blobs = await Promise.all(proms);
+    const blob = new Blob(blobs, { type: 'mp3' });
+    const blobUrl = URL.createObjectURL(blob);
+    return blobUrl;
   }
 }
 
@@ -284,6 +354,7 @@ export abstract class Section {
   highlight() {
     let previousSpan: HTMLSpanElement;
     for (const s of this.spans) {
+      console.log(s);
       // Each span will be highlighted halfway through its playback.
       // Each span is un-highlighted when the next span in the sequence
       //  is highlighted.
@@ -309,6 +380,7 @@ export abstract class Section {
     for (const s of this.spans) {
       s.classList.remove("highlight");
       s.classList.remove("noHighlight");
+      console.log("REMOVE HIGHLIGHT: ", s)
     }
     this.highlightTimeouts.forEach((t) => clearTimeout(t));
   }
