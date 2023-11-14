@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { RecordingService } from "../../core/services/recording.service";
@@ -21,7 +21,7 @@ declare var MediaRecorder: any;
   templateUrl: "./recording.component.html",
   styleUrls: ["./recording.component.scss"],
 })
-export class RecordingComponent implements OnInit {
+export class RecordingComponent implements OnInit, OnDestroy {
   constructor(
     private storyService: StoryService,
     public ts: TranslationService,
@@ -191,51 +191,12 @@ export class RecordingComponent implements OnInit {
    * @param story story text to synthesise
    */
   async loadSynthesis(story: Story) {
-    // this.testing = await firstValueFrom(this.synthesis.synthesiseText(story.text))
-    // this.audioFinishedLoading = true;
-    // console.log(this.testing);
-    // this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
-    //   this.paragraphs = paragraphs;
-    //   this.sentences = sentences;
-    //   this.chosenSections = this.paragraphs;
-    //   this.audioFinishedLoading = true;
-    // });
-
-    //test = [ [ {"sen", audio}, {"sen", audio}, {"sen", audio}], [ {"sen", audio}, {"sen", audio}, {"sen", audio}] ]
-
-    this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
+    this.synthesis.synthesiseStoryText(story.text).then(([paragraphs, sentences]) => {
       this.paragraphs = paragraphs;
       this.sentences = sentences;
       this.chosenSections = this.paragraphs;
       this.audioFinishedLoading = true;
     });
-
-
-  }
-
-  @ViewChild('audioPlayer') audioPlayer: ElementRef;
-  currentTime = 0;
-  highlightIndex: number = -1;
-  
-  playTest() {
-    const audio = this.audioPlayer.nativeElement;
-    console.log(audio)
-    audio.src = this.testing.audioUrl;
-   
-    audio.currentTime = 0;
-    audio.play();
-
-    audio.addEventListener('timeupdate', () => {
-      const currentTime = audio.currentTime;
-
-      for (let i = 0; i < this.testing.timing.length; i++) {
-        if (currentTime < this.testing.timing[i].end) {
-          this.highlightIndex = i;
-          break;
-        }
-      }
-    });
-
   }
 
   //--- Audio Control ---//
@@ -499,12 +460,12 @@ export class RecordingComponent implements OnInit {
 
   playSection(section: Section) {
     section.play();
-    section.highlight();
+    //section.highlight();
   }
 
   stopSection(section: Section) {
     section.stop();
-    section.removeHighlight();
+    //section.removeHighlight();
   }
 
   goToDashboard() {
@@ -533,5 +494,10 @@ export class RecordingComponent implements OnInit {
         }
         else this.goToDashboard();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.paragraphs.forEach(paragraph => paragraph.dispose());
+    this.sentences.forEach(sentence => sentence.dispose());
   }
 }

@@ -156,24 +156,19 @@ export class SynthesisService {
   }
 
   /**
-   * Gets synthesis data for storyObject from
-   * the backend, which comes in the form of HTML data.
-   * Then parses that HTML data to populate Paragraph
-   * and Sentence objects.
-   *
-   * @param storyObject - Story to be synthesised
-   * @returns - Paragraph and Sentence objects containing data for
-   * synthesis of input story.
+   * Synthesise a story at the sentence level
+   * Convert the data into into <span> elements at the word level
+   * Group the spans into sentences and paragraphs
+   * @param storyText - Story text to be synthesised
+   * @returns - Paragraph and Sentence objects containing HTML spans for
+   * text, audio, and audio duration data
    */
-  async synthesiseStory(
-    storyObject: Story
+  async synthesiseStoryText(
+    storyText: string
   ): Promise<[Paragraph[], Sentence[]]> {
-    // const synthesisResponse = (await this.http
-    //   .post(this.baseUrl + "story/synthesiseObject/", { story: storyObject })
-    //   .toPromise()) as SynthesisResponse;
 
-
-    const paragraphsTest = storyObject.text.split(/\n\s*\n/);
+    // split the story into paragraphs
+    const storyParagraphs = storyText.split(/\n\s*\n/);
 
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];
@@ -181,17 +176,19 @@ export class SynthesisService {
     let startTime = 0;
     let paragraphDuration = 0;
     
-
-    for (let paragraphEntry of paragraphsTest) {
+    for (let paragraphEntry of storyParagraphs) {
       const paragraphSentences: Sentence[] = [];
-      paragraphEntry = paragraphEntry.trim()
-      const parsedSentences = paragraphEntry.split(/[\.\!\?\;\:\n]\s+/);
+      paragraphEntry = paragraphEntry.trim();
+      // split the paragraph into sentences
+      const storySentences = paragraphEntry.split(/[\.\!\?\;\:\n]\s+/);
       let sentenceDuration = 0;
-      
       let paragraphAudioUrls = [];
-      for (let sentenceEntry of parsedSentences) {
+
+      for (let sentenceEntry of storySentences) {
+        // synthesise the sentence text
         const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry));
         startTime = 0;
+        // create spans for each word in the synthesis response
         const wordSpans = synthesisedSentence.timing.map((entry: any) => {
           const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
           startTime = entry.end;
@@ -199,7 +196,7 @@ export class SynthesisService {
           paragraphDuration = paragraphDuration + sentenceDuration;
           return span;
         });
-        //const sentenceSpan = this.wordSpanToSentenceSpan(wordSpans) as HTMLSpanElement;
+        // create a new Sentence object with the parsed data
         const audio = new Audio(synthesisedSentence.audioUrl);
         const sentence = new Sentence(audio, wordSpans, 0, sentenceDuration);
         sentences.push(sentence);
@@ -207,59 +204,20 @@ export class SynthesisService {
         paragraphAudioUrls.push(synthesisedSentence.audioUrl);
       }
 
+      // combine sentence audio urls to creat a paragraph level audio url
       const combinedBlobUrl = await this.combineAudioSources(paragraphAudioUrls);
       const audio = new Audio(combinedBlobUrl);
-      const spans = paragraphSentences.reduce( (acc, sentence) => acc.concat(sentence.spans), [] );
+
+      // combine sentence spans to form a paragraph
+      const spans: HTMLSpanElement[] = paragraphSentences.reduce( (acc, sentence) => acc.concat(sentence.spans), [] );
       const paragraph = new Paragraph(audio, spans, paragraphDuration);
       paragraphs.push(paragraph);
     }
-
-    console.log(sentences)
-    console.log(paragraphs);
-
-
-    // synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
-    //   const paragraphSentences: Sentence[] = [];
-    //   for (const sentenceHtml of sentenceHtmlArray) {
-    //     // sentenceSpan contains a span child for each word in the sentence
-    //     const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
-    //     const startTime = +sentenceSpan.children[0].getAttribute("data-begin")!;
-    //     const lastSentenceChild =
-    //       sentenceSpan.children[sentenceSpan.childElementCount - 1];
-    //     const duration =
-    //       +lastSentenceChild.getAttribute("data-begin")! +
-    //       +lastSentenceChild.getAttribute("data-dur")! -
-    //       startTime;
-    //     const audio = new Audio(synthesisResponse.audio[i]);
-
-    //     let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
-    //     spans.forEach((span) => span.classList.add("highlightable"));
-
-    //     const sentence = new Sentence(audio, spans, startTime, duration);
-    //     sentences.push(sentence);
-    //     paragraphSentences.push(sentence);
-    //   }
-    //   const audio = new Audio(synthesisResponse.audio[i]);
-    //   const spans = paragraphSentences.reduce(
-    //     (acc, sentence) => acc.concat(sentence.spans),
-    //     []
-    //   );
-    //   const lastParagraphSentence =
-    //     paragraphSentences[paragraphSentences.length - 1];
-    //   const duration =
-    //     lastParagraphSentence.startTime + lastParagraphSentence.duration;
-    //   const paragraph = new Paragraph(audio, spans, duration);
-    //   paragraphs.push(paragraph);
-    // });
-    // this.engagement.addEventForLoggedInUser(
-    //   EventType["SYNTHESISE-STORY"],
-    //   storyObject
-    // );
     return [paragraphs, sentences];
   }
 
   /**
-   * Converts a string of HTML code into a DOM Node object.
+   * DEPRECATED => Converts a string of HTML code into a DOM Node object.
    * @param htmlString - String representation of a HTML object
    * @returns - A DOM Node representing htmlString
    */
@@ -269,6 +227,13 @@ export class SynthesisService {
     return div.firstChild!;
   }
 
+  /**
+   * Creates a span element for the given word, using synthesised timing info
+   * @param word word from a given sentence
+   * @param startTime timing of when word is spoken in synthesised sentence 
+   * @param duration duration of the spoken word in the audio
+   * @returns span with meta data stored as attributes
+   */
   wordToSpan(word: string, startTime: number, duration: number): Node {
     const span = document.createElement("span");
     span.textContent = word.trim();
@@ -278,6 +243,11 @@ export class SynthesisService {
     return span;
   }
   
+  /**
+   * Creates a div with all the word spans of a given sentence
+   * @param wordSpans array of spans for each synthesised word
+   * @returns a div containing all the span elements
+   */
   wordSpanToSentenceSpan(wordSpans: Node[]) {
     const divElement = document.createElement('div');
     wordSpans.forEach(span => {
@@ -286,6 +256,11 @@ export class SynthesisService {
     return divElement;
   }
 
+  /**
+   * Combines the audio urls of sentences to create one audio url at the paragraph level
+   * @param audioUrls audio urls of all the sentences in a given paragraph
+   * @returns A new audio url of combined sentence audio
+   */
   async combineAudioSources(audioUrls: string[]) {
     const proms = audioUrls.map((uri) =>
       fetch(uri).then((r) => r.blob())
@@ -293,8 +268,7 @@ export class SynthesisService {
 
     const blobs = await Promise.all(proms);
     const blob = new Blob(blobs, { type: 'mp3' });
-    const blobUrl = URL.createObjectURL(blob);
-    return blobUrl;
+    return URL.createObjectURL(blob);
   }
 }
 
@@ -322,6 +296,9 @@ export abstract class Section {
     duration: number
   ) {
     this.audio = audio;
+    this.audio.addEventListener('ended', () => {
+      this.stop();
+    });
     this.spans = spans;
     this.startTime = startTime;
     this.duration = duration;
@@ -333,9 +310,9 @@ export abstract class Section {
   play() {
     this.audio.currentTime = this.startTime;
     this.audio.play();
-    this.pauseTimeout = setTimeout(() => {
-      this.stop();
-    }, this.duration * 1000);
+    // this.pauseTimeout = setTimeout(() => {
+    //   this.stop();
+    // }, this.duration * 1000);
   }
 
   /**
@@ -348,6 +325,8 @@ export abstract class Section {
   }
 
   /**
+   * TODO => This does not work at the paragraph level because
+   * Each sentence in the paragraphs has a '0' start time
    * Highlight each word in this section in time with
    * its synthesis audio.
    */
@@ -383,6 +362,13 @@ export abstract class Section {
       console.log("REMOVE HIGHLIGHT: ", s)
     }
     this.highlightTimeouts.forEach((t) => clearTimeout(t));
+  }
+
+  /** Unsubscribe the event listeners */
+  dispose() {
+    this.audio.removeEventListener('ended', () => {
+      this.stop();
+    });
   }
 }
 
