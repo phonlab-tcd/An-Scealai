@@ -68,6 +68,7 @@ $corner-button-width: 10rem;
 .recordingBookHeader {
   display: flex;
   justify-content: space-between;
+  padding-top: 20px;
 }
 
 .myStoriesBtn {
@@ -139,6 +140,10 @@ $corner-button-width: 10rem;
   -webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
   -moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
   box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.22);
+}
+
+.wordSpan {
+  padding-right: 4px;
 }
 
 .playAudioBtn {
@@ -218,6 +223,12 @@ $corner-button-width: 10rem;
 
 .trashBtn:hover {
   background-color: rgb(119, 5, 5);
+}
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .footerText {

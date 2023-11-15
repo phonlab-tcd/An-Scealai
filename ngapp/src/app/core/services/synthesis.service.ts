@@ -3,10 +3,10 @@ import { Story } from "app/core/models/story";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { EngagementService } from "app/core/services/engagement.service";
 import { EventType } from "app/core/models/event";
-import { Observable, of } from "rxjs";
+import { Observable, firstValueFrom, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import config from "abairconfig";
-import { SynthesisBankService } from "app/core/services/synthesis-bank.service";
+import { SynthesisCacheService } from "app/core/services/synthesis-cache.service";
 
 // variable defining the different options for API calls
 const ApiOptions = {
@@ -16,6 +16,7 @@ const ApiOptions = {
   voiceCode: [
     "ga_UL_anb_nemo",
     "ga_CO_snc_nemo",
+    "ga_CO_snc_piper",
     "ga_MU_nnc_nemo",
     "ga_MU_cmg_nnmnkwii",
     "ga_CO_pmc_nemo",
@@ -71,7 +72,7 @@ export class SynthesisService {
   constructor(
     private http: HttpClient,
     private engagement: EngagementService,
-    private synthBankService: SynthesisBankService
+    private synthCacheService: SynthesisCacheService
   ) {}
 
   baseUrl = config.baseurl;
@@ -99,11 +100,11 @@ export class SynthesisService {
     // Get audio from cache if text already synthesised => TODO test
     const cacheKey = this.createCacheId(textInput, voice.code, speed)
     if (useCache) {
-      const cachedAudio = this.synthBankService.getAudioForSentence( cacheKey );
+      const cachedAudio = this.synthCacheService.getSynthesisResponseForSentence( cacheKey );
       if (cachedAudio) return of(cachedAudio);
     }
 
-    const reqBody = {
+    const reqBody: any = {
       synthinput: {
         text: textInput,
         normalised: true,
@@ -117,6 +118,7 @@ export class SynthesisService {
         speakingRate: speed,
         pitch: 1,
       },
+      timing: "WORD"
     };
 
     const httpOptions = {
@@ -129,18 +131,19 @@ export class SynthesisService {
     return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions)
       .pipe(
         // construct returned api audio url with given encoding preferences
-        map((data: { audioContent: string }) =>
-          this.prependAudioUrlPrefix(data.audioContent, audioEncoding!)
+        map((data: { audioContent: string, timing: {word: string, end: number, originalWord: string}[] }) => {
+          return {audioUrl: this.prependAudioUrlPrefix(data.audioContent, audioEncoding!), timing: data.timing}
+        }
         ),
         // store audio in cache
         tap((data) =>
-          this.synthBankService.storeAudioUrlOfSentence(cacheKey, data)
+          this.synthCacheService.storeSynthesisResponse(cacheKey, data)
         )
       );
   }
 
   createCacheId(textInput: string, voice: string, speed: number ): string {
-    return this.synthBankService.createCacheKey( textInput, voice, speed );
+    return this.synthCacheService.createCacheKey( textInput, voice, speed );
   }
 
   /**
@@ -150,78 +153,129 @@ export class SynthesisService {
    * @returns constructed audio url
    */
   prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding) {
-    console.log(base64AudioData.slice(1000, 1100));
     return ( "data:" + audioEncodingToDataUriMimeType.get(encoding) + ";base64," + base64AudioData );
   }
 
   /**
-   * Gets synthesis data for storyObject from
-   * the backend, which comes in the form of HTML data.
-   * Then parses that HTML data to populate Paragraph
-   * and Sentence objects.
-   *
-   * @param storyObject - Story to be synthesised
-   * @returns - Paragraph and Sentence objects containing data for
-   * synthesis of input story.
+   * Synthesise a story at the sentence level
+   * Convert the data into into <span> elements at the word level
+   * Group the spans into sentences and paragraphs
+   * @param storyText - Story text to be synthesised
+   * @returns - Paragraph and Sentence objects containing HTML spans for
+   * text, audio, and audio duration data
    */
-  async synthesiseStory(
-    storyObject: Story
+  async synthesiseStoryText(
+    storyText: string,
+    voice: Voice | undefined = undefined,
   ): Promise<[Paragraph[], Sentence[]]> {
-    const synthesisResponse = (await this.http
-      .post(this.baseUrl + "story/synthesiseObject/", { story: storyObject })
-      .toPromise()) as SynthesisResponse;
+
+    // split the story into paragraphs
+    const storyParagraphs = storyText.split(/\n\s*\n/);
 
     const sentences: Sentence[] = [];
     const paragraphs: Paragraph[] = [];
-    synthesisResponse.html.forEach((sentenceHtmlArray, i) => {
+
+    let startTime = 0;
+    let paragraphDuration = 0;
+    
+    for (let paragraphEntry of storyParagraphs) {
       const paragraphSentences: Sentence[] = [];
-      for (const sentenceHtml of sentenceHtmlArray) {
-        // sentenceSpan contains a span child for each word in the sentence
-        const sentenceSpan = this.textToElem(sentenceHtml) as HTMLSpanElement;
-        const startTime = +sentenceSpan.children[0].getAttribute("data-begin")!;
-        const lastSentenceChild =
-          sentenceSpan.children[sentenceSpan.childElementCount - 1];
-        const duration =
-          +lastSentenceChild.getAttribute("data-begin")! +
-          +lastSentenceChild.getAttribute("data-dur")! -
-          startTime;
-        const audio = new Audio(synthesisResponse.audio[i]);
+      paragraphEntry = paragraphEntry.trim();
+      // split the paragraph into sentences
+      const storySentences = paragraphEntry.split(/(?<=[.\!?\;\:\n])\s+/);
+      let sentenceDuration = 0;
+      let paragraphAudioUrls = [];
 
-        let spans = Array.from(sentenceSpan.children) as HTMLSpanElement[];
-        spans.forEach((span) => span.classList.add("highlightable"));
-
-        const sentence = new Sentence(audio, spans, startTime, duration);
-        sentences.push(sentence);
-        paragraphSentences.push(sentence);
+      for (let sentenceEntry of storySentences) {
+        // synthesise the sentence text
+        try {
+          const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry, voice));
+          startTime = 0;
+          // create spans for each word in the synthesis response
+          const wordSpans = synthesisedSentence.timing.map((entry: any) => {
+            const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
+            startTime = entry.end;
+            sentenceDuration = sentenceDuration + entry.end;
+            paragraphDuration = paragraphDuration + sentenceDuration;
+            return span;
+          });
+          // create a new Sentence object with the parsed data
+          const audio = new Audio(synthesisedSentence.audioUrl);
+          const sentence = new Sentence(audio, wordSpans, 0, sentenceDuration);
+          sentences.push(sentence);
+          paragraphSentences.push(sentence);
+          paragraphAudioUrls.push(synthesisedSentence.audioUrl);
+        } catch (error) {
+          console.error(`Error processing sentence: ${sentenceEntry}`, error);
+          continue;
+        }
       }
-      const audio = new Audio(synthesisResponse.audio[i]);
-      const spans = paragraphSentences.reduce(
-        (acc, sentence) => acc.concat(sentence.spans),
-        []
-      );
-      const lastParagraphSentence =
-        paragraphSentences[paragraphSentences.length - 1];
-      const duration =
-        lastParagraphSentence.startTime + lastParagraphSentence.duration;
-      const paragraph = new Paragraph(audio, spans, duration);
+
+      // combine sentence audio urls to creat a paragraph level audio url
+      const combinedBlobUrl = await this.combineAudioSources(paragraphAudioUrls);
+      const audio = new Audio(combinedBlobUrl);
+
+      // combine sentence spans to form a paragraph
+      const spans: HTMLSpanElement[] = paragraphSentences.reduce( (acc, sentence) => acc.concat(sentence.spans), [] );
+      const paragraph = new Paragraph(audio, spans, paragraphDuration);
       paragraphs.push(paragraph);
-    });
-    this.engagement.addEventForLoggedInUser(
-      EventType["SYNTHESISE-STORY"],
-      storyObject
-    );
+    }
     return [paragraphs, sentences];
   }
 
   /**
-   * Converts a string of HTML code into a DOM Node object.
+   * DEPRECATED => Converts a string of HTML code into a DOM Node object.
    * @param htmlString - String representation of a HTML object
    * @returns - A DOM Node representing htmlString
    */
   textToElem(htmlString: string): Node {
     var div = document.createElement("div");
-    div.innerHTML = htmlString.trim();
+    div.innerHTML = htmlString;
     return div.firstChild!;
+  }
+
+  /**
+   * Creates a span element for the given word, using synthesised timing info
+   * @param word word from a given sentence
+   * @param startTime timing of when word is spoken in synthesised sentence 
+   * @param duration duration of the spoken word in the audio
+   * @returns span with meta data stored as attributes
+   */
+  wordToSpan(word: string, startTime: number, duration: number): Node {
+    const span = document.createElement("span");
+    span.textContent = word.trim();
+    span.setAttribute("data-begin", startTime.toString());
+    span.setAttribute("data-dur", duration.toString());
+    span.classList.add("highlightable");
+    return span;
+  }
+  
+  /**
+   * Creates a div with all the word spans of a given sentence
+   * @param wordSpans array of spans for each synthesised word
+   * @returns a div containing all the span elements
+   */
+  wordSpanToSentenceSpan(wordSpans: Node[]) {
+    const divElement = document.createElement('div');
+    wordSpans.forEach(span => {
+      divElement.appendChild(span);
+    });
+    return divElement;
+  }
+
+  /**
+   * Combines the audio urls of sentences to create one audio url at the paragraph level
+   * @param audioUrls audio urls of all the sentences in a given paragraph
+   * @returns A new audio url of combined sentence audio
+   */
+  async combineAudioSources(audioUrls: string[]) {
+    const proms = audioUrls.map((uri) =>
+      fetch(uri).then((r) => r.blob())
+    );
+
+    const blobs = await Promise.all(proms);
+    const blob = new Blob(blobs, { type: 'mp3' });
+    return URL.createObjectURL(blob);
   }
 }
 
@@ -249,6 +303,9 @@ export abstract class Section {
     duration: number
   ) {
     this.audio = audio;
+    this.audio.addEventListener('ended', () => {
+      this.stop();
+    });
     this.spans = spans;
     this.startTime = startTime;
     this.duration = duration;
@@ -260,9 +317,9 @@ export abstract class Section {
   play() {
     this.audio.currentTime = this.startTime;
     this.audio.play();
-    this.pauseTimeout = setTimeout(() => {
-      this.stop();
-    }, this.duration * 1000);
+    // this.pauseTimeout = setTimeout(() => {
+    //   this.stop();
+    // }, this.duration * 1000);
   }
 
   /**
@@ -275,12 +332,15 @@ export abstract class Section {
   }
 
   /**
+   * TODO => This does not work at the paragraph level because
+   * Each sentence in the paragraphs has a '0' start time
    * Highlight each word in this section in time with
    * its synthesis audio.
    */
   highlight() {
     let previousSpan: HTMLSpanElement;
     for (const s of this.spans) {
+      console.log(s);
       // Each span will be highlighted halfway through its playback.
       // Each span is un-highlighted when the next span in the sequence
       //  is highlighted.
@@ -306,8 +366,17 @@ export abstract class Section {
     for (const s of this.spans) {
       s.classList.remove("highlight");
       s.classList.remove("noHighlight");
+      console.log("REMOVE HIGHLIGHT: ", s)
     }
     this.highlightTimeouts.forEach((t) => clearTimeout(t));
+  }
+
+  /** Unsubscribe the event listeners */
+  dispose() {
+    if (!this.audio.paused) this.stop();
+    this.audio.removeEventListener('ended', () => {
+      this.stop();
+    });
   }
 }
 

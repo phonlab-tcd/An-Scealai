@@ -552,7 +552,9 @@ function synthesiseStory(story) {
             }
             paragraphs.push(sentences);
           }
-          resolve({ html: paragraphs, audio: urls });
+          // html: 2D array of strings [["sen 1", "sen 2", "sen 3"], ["sen 1", "sen 2", "sen 3"], [...], ...]
+          // audio: array of audio urls, one for each item in the inner arrays of the html array
+          resolve({ html: paragraphs, audio: urls }); 
         } else {
           reject();
         }

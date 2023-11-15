@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { RecordingService } from "../../core/services/recording.service";
@@ -6,22 +6,21 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Story } from "../../core/models/story";
 import { Recording } from "../../core/models/recording";
-import { SynthesisService, Paragraph, Sentence, Section, } from "app/core/services/synthesis.service";
+import { SynthesisService, Voice, Paragraph, Sentence, Section, } from "app/core/services/synthesis.service";
 import { EventType } from "../../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { firstValueFrom } from "rxjs";
 import { requestMediaPermissions } from 'mic-check';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-
-declare var MediaRecorder: any;
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: "app-recording",
   templateUrl: "./recording.component.html",
   styleUrls: ["./recording.component.scss"],
 })
-export class RecordingComponent implements OnInit {
+export class RecordingComponent implements OnInit, OnDestroy {
   constructor(
     private storyService: StoryService,
     public ts: TranslationService,
@@ -31,7 +30,8 @@ export class RecordingComponent implements OnInit {
     private recordingService: RecordingService,
     private synthesis: SynthesisService,
     private engagement: EngagementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   // Synthesis variables
@@ -65,6 +65,7 @@ export class RecordingComponent implements OnInit {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
+  synthesisFinishedLoading: boolean = false;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   // ASR variables
@@ -188,13 +189,13 @@ export class RecordingComponent implements OnInit {
    * Synthesie the story text of the given recording object
    * @param story story text to synthesise
    */
-  loadSynthesis(story: Story) {
-    this.synthesis.synthesiseStory(story).then(([paragraphs, sentences]) => {
-      this.paragraphs = paragraphs;
-      this.sentences = sentences;
-      this.chosenSections = this.paragraphs;
-      this.audioFinishedLoading = true;
-    });
+  async loadSynthesis(story: Story, voice?: Voice) {
+    this.synthesisFinishedLoading = false;
+    [this.paragraphs, this.sentences] = await this.synthesis.synthesiseStoryText(story.text, voice);
+    this.chosenSections = this.paragraphs;
+    this.audioFinishedLoading = true;
+    this.synthesisFinishedLoading = true;
+    this.cdr.detectChanges();
   }
 
   //--- Audio Control ---//
@@ -458,12 +459,12 @@ export class RecordingComponent implements OnInit {
 
   playSection(section: Section) {
     section.play();
-    section.highlight();
+    //section.highlight();
   }
 
   stopSection(section: Section) {
     section.stop();
-    section.removeHighlight();
+    //section.removeHighlight();
   }
 
   goToDashboard() {
@@ -492,5 +493,10 @@ export class RecordingComponent implements OnInit {
         }
         else this.goToDashboard();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.paragraphs.forEach(paragraph => paragraph.dispose());
+    this.sentences.forEach(sentence => sentence.dispose());
   }
 }
