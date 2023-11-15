@@ -58,7 +58,7 @@
             <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer" >
               <div class="textCard">
                 <div>
-                  <span *ngFor="let span of section.spans" [innerHTML]="span.outerHTML | safeHtml" ></span>
+                  <span *ngFor="let span of section.spans" class="wordSpan" [innerHTML]="span.outerHTML | safeHtml" ></span>
                    <!-- play / pause synthesiser -->
                   <button *ngIf="!section.audio.paused" (click)="stopSection(section)" class="playAudioBtn" >
                     <i class="fas fa-pause"></i>

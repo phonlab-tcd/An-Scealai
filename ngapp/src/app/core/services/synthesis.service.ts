@@ -180,7 +180,7 @@ export class SynthesisService {
       const paragraphSentences: Sentence[] = [];
       paragraphEntry = paragraphEntry.trim();
       // split the paragraph into sentences
-      const storySentences = paragraphEntry.split(/[\.\!\?\;\:\n]\s+/);
+      const storySentences = paragraphEntry.split(/(?<=[.\!?\;\:\n])\s+/);
       let sentenceDuration = 0;
       let paragraphAudioUrls = [];
 
