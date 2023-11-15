@@ -16,6 +16,7 @@ const ApiOptions = {
   voiceCode: [
     "ga_UL_anb_nemo",
     "ga_CO_snc_nemo",
+    "ga_CO_snc_piper",
     "ga_MU_nnc_nemo",
     "ga_MU_cmg_nnmnkwii",
     "ga_CO_pmc_nemo",
@@ -40,7 +41,7 @@ const asVoice = (x: readonly VoiceConfig[]) => x;
 
 // list of possible voice configurations for synthesis
 export const voices = asVoice([
-  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_piper", dialect: "connacht", algorithm: "piper", },
   { name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
   { name: "Pádraig", gender: "male", shortCode: "pmc", code: "ga_CO_pmc_nemo", dialect: "connacht", algorithm: "nemo", },
   { name: "Neasa", gender: "female", shortCode: "nnc", code: "ga_MU_nnc_nemo", dialect: "munster", algorithm: "nemo", },
