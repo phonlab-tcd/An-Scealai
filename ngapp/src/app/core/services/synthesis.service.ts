@@ -41,7 +41,7 @@ const asVoice = (x: readonly VoiceConfig[]) => x;
 
 // list of possible voice configurations for synthesis
 export const voices = asVoice([
-  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_piper", dialect: "connacht", algorithm: "piper", },
+  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
   { name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
   { name: "Pádraig", gender: "male", shortCode: "pmc", code: "ga_CO_pmc_nemo", dialect: "connacht", algorithm: "nemo", },
   { name: "Neasa", gender: "female", shortCode: "nnc", code: "ga_MU_nnc_nemo", dialect: "munster", algorithm: "nemo", },
@@ -165,7 +165,8 @@ export class SynthesisService {
    * text, audio, and audio duration data
    */
   async synthesiseStoryText(
-    storyText: string
+    storyText: string,
+    voice: Voice | undefined = undefined,
   ): Promise<[Paragraph[], Sentence[]]> {
 
     // split the story into paragraphs
@@ -187,22 +188,27 @@ export class SynthesisService {
 
       for (let sentenceEntry of storySentences) {
         // synthesise the sentence text
-        const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry));
-        startTime = 0;
-        // create spans for each word in the synthesis response
-        const wordSpans = synthesisedSentence.timing.map((entry: any) => {
-          const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
-          startTime = entry.end;
-          sentenceDuration = sentenceDuration + entry.end;
-          paragraphDuration = paragraphDuration + sentenceDuration;
-          return span;
-        });
-        // create a new Sentence object with the parsed data
-        const audio = new Audio(synthesisedSentence.audioUrl);
-        const sentence = new Sentence(audio, wordSpans, 0, sentenceDuration);
-        sentences.push(sentence);
-        paragraphSentences.push(sentence);
-        paragraphAudioUrls.push(synthesisedSentence.audioUrl);
+        try {
+          const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry, voice));
+          startTime = 0;
+          // create spans for each word in the synthesis response
+          const wordSpans = synthesisedSentence.timing.map((entry: any) => {
+            const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
+            startTime = entry.end;
+            sentenceDuration = sentenceDuration + entry.end;
+            paragraphDuration = paragraphDuration + sentenceDuration;
+            return span;
+          });
+          // create a new Sentence object with the parsed data
+          const audio = new Audio(synthesisedSentence.audioUrl);
+          const sentence = new Sentence(audio, wordSpans, 0, sentenceDuration);
+          sentences.push(sentence);
+          paragraphSentences.push(sentence);
+          paragraphAudioUrls.push(synthesisedSentence.audioUrl);
+        } catch (error) {
+          console.error(`Error processing sentence: ${sentenceEntry}`, error);
+          continue;
+        }
       }
 
       // combine sentence audio urls to creat a paragraph level audio url
@@ -367,6 +373,7 @@ export abstract class Section {
 
   /** Unsubscribe the event listeners */
   dispose() {
+    if (!this.audio.paused) this.stop();
     this.audio.removeEventListener('ended', () => {
       this.stop();
     });

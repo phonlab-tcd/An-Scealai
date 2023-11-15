@@ -6,15 +6,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Story } from "../../core/models/story";
 import { Recording } from "../../core/models/recording";
-import { SynthesisService, Paragraph, Sentence, Section, } from "app/core/services/synthesis.service";
+import { SynthesisService, Voice, Paragraph, Sentence, Section, } from "app/core/services/synthesis.service";
 import { EventType } from "../../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { firstValueFrom } from "rxjs";
 import { requestMediaPermissions } from 'mic-check';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-
-declare var MediaRecorder: any;
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: "app-recording",
@@ -31,7 +30,8 @@ export class RecordingComponent implements OnInit, OnDestroy {
     private recordingService: RecordingService,
     private synthesis: SynthesisService,
     private engagement: EngagementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   // Synthesis variables
@@ -39,8 +39,6 @@ export class RecordingComponent implements OnInit, OnDestroy {
   paragraphs: Paragraph[] = [];
   sentences: Sentence[] = [];
   chosenSections: Section[] = [];
-
-  testing: any;
 
   // NOTE: 'section' variables are pointers to corresponding variables
   // for chosen section type (paragraph / sentence)
@@ -67,6 +65,7 @@ export class RecordingComponent implements OnInit, OnDestroy {
   // UI variables
   recordingSaved: boolean = true;
   audioFinishedLoading: boolean = false;
+  synthesisFinishedLoading: boolean = false;
   dialogRef: MatDialogRef<unknown> | undefined;
 
   // ASR variables
@@ -190,13 +189,13 @@ export class RecordingComponent implements OnInit, OnDestroy {
    * Synthesie the story text of the given recording object
    * @param story story text to synthesise
    */
-  async loadSynthesis(story: Story) {
-    this.synthesis.synthesiseStoryText(story.text).then(([paragraphs, sentences]) => {
-      this.paragraphs = paragraphs;
-      this.sentences = sentences;
-      this.chosenSections = this.paragraphs;
-      this.audioFinishedLoading = true;
-    });
+  async loadSynthesis(story: Story, voice?: Voice) {
+    this.synthesisFinishedLoading = false;
+    [this.paragraphs, this.sentences] = await this.synthesis.synthesiseStoryText(story.text, voice);
+    this.chosenSections = this.paragraphs;
+    this.audioFinishedLoading = true;
+    this.synthesisFinishedLoading = true;
+    this.cdr.detectChanges();
   }
 
   //--- Audio Control ---//

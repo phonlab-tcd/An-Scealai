@@ -48,12 +48,12 @@
         <!-- Story container -->
         <div class="textContainerSynth">
           <!-- Loading screen -->
-          <div *ngIf="!audioFinishedLoading" class="loaderContainer" >
+          <div *ngIf="!audioFinishedLoading || !synthesisFinishedLoading" class="loaderContainer" >
             <b>{{ ts.l.synthesising }}</b>
             <grid-spinner></grid-spinner>
           </div>
           <!-- When synthesis finished loading -->
-          <div *ngIf="audioFinishedLoading">
+          <div *ngIf="audioFinishedLoading && synthesisFinishedLoading">
             <!-- loop through each section of text -->
             <div *ngFor="let section of chosenSections; index as index" class="paragraphContainer" >
               <div class="textCard">
@@ -100,22 +100,15 @@
             <div class="footerText">
               {{ ts.l.listen_by }}
             </div>
-            <div *ngIf="isParagraphMode()">
-              <button class="changeSplitBtn selectedBtn">
+            <div>
+              <button class="changeSplitBtn " [class.selectedBtn]="isParagraphMode()" (click)="changeSections(paragraphs)">
                 {{ ts.l.paragraph }}
               </button>
-              <button class="changeSplitBtn" (click)="changeSections(sentences)" >
+              <button class="changeSplitBtn" [class.selectedBtn]="isSentenceMode()" (click)="changeSections(sentences)" >
                 {{ ts.l.sentence }}
               </button>
             </div>
-            <div *ngIf="isSentenceMode()">
-              <button class="changeSplitBtn" (click)="changeSections(paragraphs)" >
-                {{ ts.l.paragraph }}
-              </button>
-              <button class="changeSplitBtn selectedBtn">
-                {{ ts.l.sentence }}
-              </button>
-            </div>
+            <synth-voice-select (selectVoice)="loadSynthesis(story, $event)" style="padding-left: 20px;"></synth-voice-select>
             <button class="changeSplitBtn" *ngIf="!currentRecording?.archived && currentRecording?.storyData?.text != story.text" style="margin-left: auto" (click)="archiveRecording()" >
               {{ ts.l.archive_recording }}
             </button>
