@@ -11,6 +11,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { firstValueFrom } from "rxjs";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BasicDialogComponent } from '../../dialogs/basic-dialog/basic-dialog.component';
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event";
 
 @Component({
   selector: "app-teacher-dictogloss",
@@ -28,6 +30,7 @@ export class TeacherDictoglossComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private dialog: MatDialog,
+    private engagement: EngagementService
   ) {
     this.newDictogloss = this.fb.group({
       passage: ["", Validators.required],
@@ -61,10 +64,7 @@ export class TeacherDictoglossComponent implements OnInit {
       this.sendTo.length > 0 &&
       this.newDictogloss.controls["passage"].value !== ""
     ) {
-      let passage = this.newDictogloss.get("passage").value;
-
-      console.log(passage);
-      console.log(this.sendTo);
+      const passage = this.newDictogloss.get("passage").value;
 
       const user = this.auth.getUserDetails();
       if (!user) {
@@ -72,7 +72,9 @@ export class TeacherDictoglossComponent implements OnInit {
         return;
       }
 
-      let message = {
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTOGLOSS'], {text: passage, role: user.role});
+
+      const message = {
         subject: "Dictogloss",
         date: new Date(),
         senderId: user._id, //Teacher ID

@@ -31,13 +31,13 @@ export class StoryHistoryComponent implements OnInit {
   ngOnInit() {
     this.getParams().then(params => {
       let id = params['id'].toString();
-      this.engagement.getEventsForStory(id).subscribe((res: Event[]) => {
+      this.engagement.getEventsForStoryObject(id).subscribe((res: Event[]) => {
         this.events = res;
         let prevStory:any;
         this.events.forEach((e) => {
           let entry : Entry = new Entry();
           entry.event = e;
-          let s:any = e.storyData
+          let s:any = e.data
           entry.textHighlighted = s.text;
           entry.textNotHighlighted = s.text;
           if(prevStory) {

@@ -233,7 +233,7 @@ export class DashboardComponent implements OnInit {
       if (selectedDrawer == 'feedback') {
         this.storyService.viewFeedback(this.story._id).subscribe(() => {
           this.story.feedback.seenByStudent = true;
-          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
           this.notificationService.getStudentNotifications();
         });
       }
@@ -379,7 +379,7 @@ export class DashboardComponent implements OnInit {
       lastUpdated: finishedWritingTime,
     };
 
-    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], this.story );
+    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], {storyObject: this.story} );
 
     // Save story to the DB
     try {

@@ -7,6 +7,8 @@ import { NotificationService } from "app/core/services/notification-service.serv
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { Classroom } from "app/core/models/classroom";
+import { EventType } from "app/core/models/event";
+import { EngagementService } from "app/core/services/engagement.service";
 
 @Component({
   selector: "app-classroom-drawer",
@@ -27,7 +29,8 @@ export class ClassroomDrawerComponent implements OnInit {
     private auth: AuthenticationService,
     private classroomService: ClassroomService,
     public notificationService: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private engagement: EngagementService
   ) {}
 
   /**
@@ -173,7 +176,7 @@ export class ClassroomDrawerComponent implements OnInit {
 
     // delete the classroom
     this.classroomService.deleteClassroom(id).subscribe((_) => {
-      // this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, }); TODO: Add delete class event
+      this.engagement.addEventForLoggedInUser(EventType["DELETE-CLASSROOM"], { classroomId: id });
 
       // reset the classroom list to empty if list contains only one classroom
       // If we have 2+ classrooms, delete the classroom for deletion, and set the new current classroom to the first in the list

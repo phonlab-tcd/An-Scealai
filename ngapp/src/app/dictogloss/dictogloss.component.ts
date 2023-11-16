@@ -17,6 +17,8 @@ import { Message } from "app/core/models/message";
 import { CommonModule } from "@angular/common";
 import { SynthItemModule } from "app/synth-item/synth-item.module";
 import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event";
 
 @Component({
   standalone: true,
@@ -78,6 +80,7 @@ export class DictoglossComponent implements OnInit {
     protected sanitizer: DomSanitizer,
     private recordAudioService: RecordAudioService,
     private dialog: MatDialog,
+    private engagement: EngagementService
   ) {
     // see if dictogloss is generated from messages
     try {
@@ -172,6 +175,7 @@ export class DictoglossComponent implements OnInit {
       let selector = document.getElementById("textSelector") as HTMLInputElement;
       this.texts = selector.value;
       selector.value = "";
+      this.engagement.addEventForLoggedInUser(EventType['USE-DICTOGLOSS'], {text: this.texts, role: this.auth.getUserDetails()!.role});
     }
 
     if (this.texts != "") {

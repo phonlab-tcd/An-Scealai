@@ -15,6 +15,8 @@ import { CommonModule } from "@angular/common";
 import { SynthItemModule } from "app/synth-item/synth-item.module";
 import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
 import { PromptService } from "app/core/services/prompt.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event";
 
 type TagForHighlight = {
   fromx: number;
@@ -71,7 +73,8 @@ export class PartOfSpeechComponent implements OnInit {
     public ts: TranslationService,
     private synth: SynthesisService,
     private dialog: MatDialog,
-    private promptService: PromptService
+    private promptService: PromptService,
+    private engagement: EngagementService
   ) {
     this.newStoryForm = this.fb.group({
       title: ["", Validators.required],
@@ -164,6 +167,7 @@ export class PartOfSpeechComponent implements OnInit {
       )
       .subscribe({
         next: () => {
+          this.engagement.addEventForLoggedInUser(EventType['USE-GENERATOR'], {promptType: "partOfSpeech", prompt: this.constructedPrompt});
           this.router.navigateByUrl("/student/dashboard");
         },
         error: () => {

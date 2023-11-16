@@ -1,14 +1,11 @@
 import { Serializable } from './serializable';
 
 export class Event extends Serializable {
-    '_id': string;
+    _id: string;
+    ownerId: string;
     type: EventType;
     data: object;
-    userId: string;
-    storyData: object;
     date: Date;
-    statsData: Object;
-    dictionaryLookup: string;
 }
 
 export class MouseOverGrammarSuggestionEvent extends Event {
@@ -30,5 +27,8 @@ export enum EventType {
     'RECORD-STORY' = 'RECORD-STORY',
     'USE-DICTIONARY' = 'USE-DICTIONARY',
     'PROFILE-STATS' = 'PROFILE-STATS',
-    'FEATURE-STATS' = 'FEATURE-STATS'
+    'FEATURE-STATS' = 'FEATURE-STATS',
+    'USE-GENERATOR' = 'USE-GENERATOR',
+    'DELETE-CLASSROOM' = 'DELETE-CLASSROOM',
+    'USE-DICTOGLOSS' = 'USE-DICTOGLOSS',
 }

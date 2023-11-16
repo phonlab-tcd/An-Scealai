@@ -59,7 +59,7 @@ export class FeedbackDrawerComponent implements OnInit {
 
     // add event log to DB and update notifications
     this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+      this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
       this.notificationService.getStudentNotifications();
     });
   }

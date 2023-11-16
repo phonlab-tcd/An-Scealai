@@ -248,7 +248,7 @@ export class RecordingComponent implements OnInit, OnDestroy {
   recordAudio(index: number) {
     this.engagement.addEventForLoggedInUser(
       EventType["RECORD-STORY"],
-      this.story
+      {storyObject: this.story}
     );
 
     let media = {

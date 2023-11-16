@@ -193,7 +193,7 @@ export class StoryDrawerComponent implements OnInit {
 
     // delete the story
     this.storyService.deleteStory(id).subscribe((_) => {
-      this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { _id: id, });
+      this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { storyId: id });
 
       // reset the story list to empty if list contains only one story
       // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list

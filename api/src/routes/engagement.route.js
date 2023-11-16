@@ -29,7 +29,7 @@ engagementRoutes
  * @param {Object} req body: Event object
  * @return {Object} Success or error message
  */
-engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
+engagementRoutes.route('/addEventForLoggedInUser/:id').post((req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) {
       const stackTrace = {};
@@ -44,11 +44,9 @@ engagementRoutes.route('/addEventForUser/:id').post((req, res) => {
     if (user) {
       if (req.body.event) {
         const event = new Event();
+        event.data = req.body.event.data;
         event.type = req.body.event.type;
-        event.storyData = req.body.event.storyData; // may be null
-        event.dictionaryLookup = req.body.event.dictionaryLookup; // may be null
-        event.userId = user._id;
-        event.date = new Date();
+        event.owner = user._id;
         event.save().then(() => {
           return res.status(200).json('Event added succesfully');
         });
@@ -130,7 +128,7 @@ engagementRoutes.route('/getPreviousAnalysisData/:type').get((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route('/eventsForStory/:id').get((req, res) => {
-  Event.find({'storyData._id': req.params.id}, (err, events) => {
+  Event.find({'data.storyObject._id': req.params.id}, (err, events) => {
     if (err) {
       res.json(err);
     }

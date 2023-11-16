@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const Event = new mongoose.Schema({
-  date: Date,
   type: {
     type: String,
     enum: [
@@ -20,14 +19,16 @@ const Event = new mongoose.Schema({
       'USE-DICTIONARY',
       'PROFILE-STATS',
       'FEATURE-STATS',
+      'DELETE-CLASSROOM',
+      'USE-PROMPT-GENERATOR',
+      'USE-DICTOGLOSS'
     ],
   },
-  storyData: Object,
-  userId: String,
-  statsData: Object,
-  dictionaryLookup: String,
+  data: Object,
+  owner: mongoose.Types.ObjectId,
 }, {
   collection: 'engagement',
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Event', Event);
