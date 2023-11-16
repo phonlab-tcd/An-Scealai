@@ -6,10 +6,8 @@ const Event = new mongoose.Schema({
     enum: [
       'CREATE-STORY',
       'DELETE-STORY',
-      'SAVE-STORY',
       'SYNTHESISE-STORY',
       'GRAMMAR-CHECK-STORY',
-      'MOUSE-OVER-GRAMMAR-SUGGESTION',
       'REGISTER',
       'LOGIN',
       'LOGOUT',
@@ -25,7 +23,7 @@ const Event = new mongoose.Schema({
     ],
   },
   data: Object,
-  owner: mongoose.Types.ObjectId,
+  ownerId: mongoose.Types.ObjectId,
 }, {
   collection: 'engagement',
   timestamps: true,

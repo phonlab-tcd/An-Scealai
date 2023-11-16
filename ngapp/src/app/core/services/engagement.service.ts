@@ -7,6 +7,7 @@ import { SynthItem } from 'app/core/models/synth-item';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { HighlightTag } from 'lib/quill-highlight/quill-highlight';
 import config from 'abairconfig';
+import { Story } from '../models/story';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,14 @@ export class EngagementService {
     };
     this.http.post(this.baseUrl + 'addEvent/playSynthesis', info).subscribe();
   };
+
+  saveStoryEvent(storyObject: Story) {
+    const reqBody = {
+      ownerId: this.auth.getUserDetails()?._id,
+      storyObject: storyObject
+    }
+    this.http.post(this.baseUrl + 'addEvent/saveStory', reqBody).subscribe();
+  };
   
   addAnalysisEvent(type: EventType, stats: Object){
     const user = this.auth.getUserDetails();
@@ -72,7 +81,6 @@ export class EngagementService {
     }
     const event: MouseOverGrammarSuggestionEvent =
       new MouseOverGrammarSuggestionEvent();
-    event.type = EventType['MOUSE-OVER-GRAMMAR-SUGGESTION'];
     event.grammarSuggestionData = tags;
     // for (const key of Object.getOwnPropertyNames(tag)) {
     //   if ( key !== 'tooltip'){
@@ -80,11 +88,7 @@ export class EngagementService {
     //   }
     // }
     event.ownerId = user._id;
-    this.http
-        .post(
-            this.baseUrl + 'addEventForUser/' + event.ownerId,
-            { event: event.fromJSON(event) })
-        .subscribe();
+    this.http.post( this.baseUrl + '/addEvent/mouseOverGrammarError', { event: event.fromJSON(event) }).subscribe();
 
   }
 

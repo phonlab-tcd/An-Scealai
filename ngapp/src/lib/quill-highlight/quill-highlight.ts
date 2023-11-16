@@ -172,7 +172,6 @@ export class QuillHighlighter {
 
     this.quillEditor.formatText(span.fromX, span.toX - span.fromX, { "highlight-tag": true, "id": id }, 'api');
     const tagElements = this.editorElement.querySelectorAll(`[id="${id}"]`);
-    console.log(tagElements);
 
     tagElements.forEach(function (tagElement) {
       tagElement.removeAttribute("left-edge");
@@ -275,6 +274,7 @@ export class QuillHighlighter {
 
   // Set styling and contents for tooltip
   private mouseOverTagElem(tags: HighlightTag[], span: { fromX: number, toX: number }) {
+    console.log(tags)
     // tagElement.setAttribute('data-selected', '');
 
     // for some reason bounds aren't calculated correctly until someone scrolls
@@ -304,7 +304,7 @@ export class QuillHighlighter {
           
         // TODO: implement observable which emits interesting events (e.g. how long someone hovered on a message)
         // TODO: reenable engagement service
-        // this.engagement.mouseOverGrammarSuggestionEvent(tag);
+        this.engagement.mouseOverGrammarSuggestionEvent(tags);
       }
       
     private makeTooltipContents(data: HighlightTag[]): string {

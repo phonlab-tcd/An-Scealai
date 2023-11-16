@@ -379,7 +379,7 @@ export class DashboardComponent implements OnInit {
       lastUpdated: finishedWritingTime,
     };
 
-    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], {storyObject: this.story} );
+    this.engagement.saveStoryEvent(this.story);
 
     // Save story to the DB
     try {

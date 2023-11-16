@@ -15,10 +15,8 @@ export class MouseOverGrammarSuggestionEvent extends Event {
 export enum EventType {
     'CREATE-STORY' = 'CREATE-STORY',
     'DELETE-STORY' = 'DELETE-STORY',
-    'SAVE-STORY' = 'SAVE-STORY',
     'SYNTHESISE-STORY' = 'SYNTHESISE-STORY',
     'GRAMMAR-CHECK-STORY' = 'GRAMMAR-CHECK-STORY',
-    'MOUSE-OVER-GRAMMAR-SUGGESTION' = 'MOUSE-OVER-GRAMMAR-SUGGESTION',
     'REGISTER' = 'REGISTER',
     'LOGIN' = 'LOGIN',
     'LOGOUT' = 'LOGOUT',
