@@ -304,7 +304,7 @@ export class QuillHighlighter {
           
         // TODO: implement observable which emits interesting events (e.g. how long someone hovered on a message)
         // TODO: reenable engagement service
-        this.engagement.mouseOverGrammarSuggestionEvent(tags);
+        this.engagement.addMouseOverGrammarSuggestionEvent(tags);
       }
       
     private makeTooltipContents(data: HighlightTag[]): string {

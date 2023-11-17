@@ -32,7 +32,7 @@ export class SynthItemComponent {
     if(this.audioElement.nativeElement) {
       this.audioElement.nativeElement.play()
     }
-    this.engagement.playSynthesis(this.synthItem, this.storyId);
+    this.engagement.addPlaySynthesisEvent(this.synthItem, this.storyId);
   }
 
   /**

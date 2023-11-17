@@ -12,8 +12,8 @@ describe('recordingUtil.file(_id)',()=>{
   it('gets file doc with valid id', async ()=>{
     const uploadId = await recordingUtil
     // @ts-ignore
-      .upload(Buffer.from('hello'),'filename');
-    const f = await recordingUtil.file(uploadId);
+      .upload(Buffer.from('hello'),'filename', {}, 'voiceRecording');
+    const f = await recordingUtil.file(uploadId, 'voiceRecording');
     // @ts-ignore
     expect(f._id.toString()).toBe(uploadId.toString());
   });

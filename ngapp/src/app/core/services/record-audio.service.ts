@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { StoryService } from 'app/core/services/story.service';
 import { MessageService } from 'app/core/services/message.service';
+import { EngagementService } from './engagement.service';
+import { EventType } from 'app/core/models/event';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ export class RecordAudioService {
 
   constructor(protected sanitizer: DomSanitizer,
               private storyService: StoryService,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private engagement: EngagementService) { }
 
   audioSource : SafeUrl;
   recorder;
@@ -97,16 +100,16 @@ export class RecordAudioService {
     });
   }
   
-  async getAudioTranscription() {
+  async getAudioTranscription(): Promise<string | null> {
     await new Promise(resolve => setTimeout(resolve,500));   // chunks needs some time to fully load?
     const blob = new Blob(this.chunks, {type: 'audio/mp3'});
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     
-    let transcription: string = await new Promise(resolve => {
+    const transcription: string | null = await new Promise(resolve => {
       /* stop recording stream and convert audio to base64 to send to ASR */
       reader.onloadend = async function () {
-        let encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
+        const encodedAudio = (<string>reader.result).split(";base64,")[1];   // convert audio to base64
         // send audio to ASR
         const rec_req = {
           recogniseBlob: encodedAudio,
@@ -124,11 +127,12 @@ export class RecordAudioService {
           .then((response) => response.json())
           .then((data) => {
           let transcript = data["transcriptions"][0]["utterance"];
+          if (transcript === "\n") transcript = null;
           resolve(transcript);
         });
       }
-      
     });
-    return transcription;
+    if (transcription) this.engagement.addSpeakStoryEvent(transcription, blob);
+    return transcription
   }
 }

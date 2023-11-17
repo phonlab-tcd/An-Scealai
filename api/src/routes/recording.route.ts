@@ -12,6 +12,8 @@ const storage = multer.memoryStorage();
 const limits = { fields: 1, fileSize: 6000000, files: 1, parts: 2 };
 const upload = multer({ storage, limits });
 
+const COLLECTION_NAME = "voiceRecording";
+
 /**
  * Create a new voice recording
  * @param {Object} req body: Voice Recording object
@@ -123,7 +125,7 @@ async function postSaveAudio(req, res) {
   if (!req.file || !req.file.buffer) return res.status(400).json("no file");
 
   const [uploadErr, fileId] = await recordingUtil
-    .upload(req.file.buffer, filename, metadata)
+    .upload(req.file.buffer, filename, metadata, COLLECTION_NAME)
     .then( (id) => [null, id], (e) => [e] );
 
   if (uploadErr) {
@@ -157,7 +159,7 @@ recordingRoutes.route("/audio/:id").get((req, res) => {
   res.set("content-type", "audio/mp3");
   res.set("accept-ranges", "bytes");
   // get collection name for audio files
-  let bucket = recordingUtil.bucket();
+  let bucket = recordingUtil.bucket(COLLECTION_NAME);
 
   // create a new stream of file data using the bucket name
   let downloadStream = bucket.openDownloadStream(audioId);
@@ -246,7 +248,7 @@ recordingRoutes.route("/deleteStoryRecordingAudio/:id").get((req, res) => {
       return res.status(404).json({ message: "Voice Recording does not exist" });
     }
 
-    let bucket = recordingUtil.bucket();
+    let bucket = recordingUtil.bucket(COLLECTION_NAME);
 
     recordings.forEach((recording) => {
       recording.paragraphAudioIds.forEach((paragraphAudioId) => {

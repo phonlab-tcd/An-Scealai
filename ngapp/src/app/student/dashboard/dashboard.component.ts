@@ -379,7 +379,7 @@ export class DashboardComponent implements OnInit {
       lastUpdated: finishedWritingTime,
     };
 
-    this.engagement.saveStoryEvent(this.story);
+    this.engagement.addSaveStoryEvent(this.story);
 
     // Save story to the DB
     try {
@@ -509,7 +509,7 @@ export class DashboardComponent implements OnInit {
     if (this.isRecording) {
       this.isTranscribing = true;
       this.recordAudioService.stopRecording();
-      let transcription = await this.recordAudioService.getAudioTranscription();
+      const transcription = await this.recordAudioService.getAudioTranscription();
       this.isTranscribing = false;
       if (transcription) {
         // get cursor position for inserting the transcription
