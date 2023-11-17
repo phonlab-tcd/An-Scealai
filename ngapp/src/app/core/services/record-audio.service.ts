@@ -127,7 +127,8 @@ export class RecordAudioService {
           .then((response) => response.json())
           .then((data) => {
           let transcript = data["transcriptions"][0]["utterance"];
-          if (transcript === "\n") transcript = null;
+          const containsNaturalLanguage = /[a-zA-Z]/.test(transcript)
+          if (!containsNaturalLanguage ) transcript = null; // string may just contain \n and \r
           resolve(transcript);
         });
       }

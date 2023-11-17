@@ -526,6 +526,7 @@ export class DashboardComponent implements OnInit {
         //this.textUpdated.next();
         this.debounceSaveStory();
       }
+      else alert("No audio detected");
     } else {
       this.recordAudioService.recordAudio();
     }
