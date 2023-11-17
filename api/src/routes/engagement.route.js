@@ -110,7 +110,7 @@ engagementRoutes.route("/addEventForLoggedInUser/:id").post((req, res) => {
         const event = new Event();
         event.data = req.body.event.data;
         event.type = req.body.event.type;
-        event.owner = user._id;
+        event.ownerId = user._id;
         event.save().then(() => {
           return res.status(200).json("Event added succesfully");
         });

@@ -62,12 +62,12 @@ export class UserComponent implements OnInit {
           this.eventDates.push([res[0]]);
           events.forEach((e) => {
             if(events.indexOf(e) > 0) {
-              let date : Date = new Date(e.date);
+              let date : Date = new Date(e.updatedAt);
               // apologies to whoever tries to read this code.
               // Basically I've got an array of arrays of events.
               // Each event in the array found at a given index shares the same rounded date.
               // This is how I group the events that happened on the same day.
-              if(this.roundDate(new Date(this.eventDates[this.eventDates.length-1][0].date)).toString() === this.roundDate(date).toString()) {
+              if(this.roundDate(new Date(this.eventDates[this.eventDates.length-1][0].updatedAt)).toString() === this.roundDate(date).toString()) {
                 this.eventDates[this.eventDates.length-1].push(e);
               } else {
                 this.eventDates.push([e]);
@@ -122,7 +122,7 @@ export class UserComponent implements OnInit {
   }
 
   getFormattedDateOfInitialElementFor(eventArray: Event[]) : string {
-    return this.formatDate(new Date(eventArray[0].date));
+    return this.formatDate(new Date(eventArray[0].updatedAt));
   }
 
   eventIsSelected(event) : boolean {

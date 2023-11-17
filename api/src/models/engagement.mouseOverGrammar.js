@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const MouseOverGrammarErrorEvent = new mongoose.Schema(
   {
-    grammarSuggestionData: Object,
     ownerId: mongoose.Types.ObjectId,
+    grammarSuggestionData: Object,
   },
   {
     collection: "engagement.mouseOverGrammarError",

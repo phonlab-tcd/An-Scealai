@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Event, EventType, MouseOverGrammarSuggestionEvent, } from "app/core/models/event";
+import { Event, EventType, MouseOverGrammarSuggestionEvent, SaveStoryEvent, PlaySynthesisEvent } from "app/core/models/event";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { SynthItem } from "app/core/models/synth-item";
@@ -45,14 +45,14 @@ export class EngagementService {
    * @param storyId story id
    */
   addPlaySynthesisEvent(si: SynthItem, storyId: string) {
-    const reqBody = {
-      date: Date(),
-      voice: si.voice,
-      text: si.text,
-      user: this.auth.getUserDetails(),
-      storyId: storyId,
-    };
-    this.http.post(this.baseUrl + "addEvent/playSynthesis", reqBody).subscribe();
+    const user = this.auth.getUserDetails();
+    if (!user || !this.auth.isLoggedIn()) return;
+    const event: PlaySynthesisEvent = new PlaySynthesisEvent();
+    event.voice = si.voice;
+    event.text = si.text;
+    event.storyId = storyId;
+    event.ownerId = user._id;
+    this.http.post(this.baseUrl + "addEvent/playSynthesis", event).subscribe();
   }
 
   /**
@@ -90,18 +90,18 @@ export class EngagementService {
     this.http.post(this.baseUrl + "/addEvent/mouseOverGrammarError", { event: event.fromJSON(event), }).subscribe();
   }
 
-    /**
+  /**
    * Add a 'Speak Story' event log to the DB
    * @param ASRdata audio blob and ASR transcript
    */
-    addSpeakStoryEvent(transcript: string, audioBlob: Blob) {
-      const user = this.auth.getUserDetails();
-      if (!user || !this.auth.isLoggedIn()) return;
-      const formData = new FormData();
-      formData.append('audio', audioBlob);
-      formData.append('transcription', transcript);
-      this.http.post(this.baseUrl + "addEvent/speakStory", formData).subscribe();
-    }
+  addSpeakStoryEvent(transcript: string, audioBlob: Blob) {
+    const user = this.auth.getUserDetails();
+    if (!user || !this.auth.isLoggedIn()) return;
+    const formData = new FormData();
+    formData.append('audio', audioBlob);
+    formData.append('transcription', transcript);
+    this.http.post(this.baseUrl + "addEvent/speakStory", formData).subscribe();
+  }
 
   /**
    * Get all the dictionary word lookups for a given user

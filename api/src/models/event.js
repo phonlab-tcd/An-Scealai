@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Event = new mongoose.Schema({
   type: {
+    ownerId: mongoose.Types.ObjectId,
     type: String,
     enum: [
       'CREATE-STORY',
@@ -23,7 +24,6 @@ const Event = new mongoose.Schema({
     ],
   },
   data: Object,
-  ownerId: mongoose.Types.ObjectId,
 }, {
   collection: 'engagement',
   timestamps: true,

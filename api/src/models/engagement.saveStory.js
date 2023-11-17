@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const SaveStoryEvent = new mongoose.Schema({
-  storyObject: Object,
   ownerId: mongoose.Types.ObjectId,
+  storyObject: Object,
 }, {
   collection: 'engagement.saveStory',
   timestamps: true,

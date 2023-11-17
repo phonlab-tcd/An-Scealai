@@ -116,7 +116,6 @@ export class LoginComponent implements OnInit {
    * Attempt to login a user (verified or not)
    */
   login() {
-    console.log("Logging in")
     this.errorMsgKeys = [];
     this.isLoading = true;
     // check if user waiting to be verified has been verified
@@ -148,7 +147,6 @@ export class LoginComponent implements OnInit {
     // log in a user if they have been verified already (i.e. returning users)
     this.auth.login(this.credentials).pipe(takeUntil(this.destroyed)).subscribe({
       next: () => {
-        console.log("User logged in")
         this.engagement.addEventForLoggedInUser(EventType.LOGIN);
         const user = this.auth.getUserDetails();
         if (user) this.routeUser(user._id, user);

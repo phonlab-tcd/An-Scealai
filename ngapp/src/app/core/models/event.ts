@@ -3,13 +3,23 @@ import { Serializable } from './serializable';
 export class Event extends Serializable {
     _id: string;
     ownerId: string;
-    type: EventType;
-    data: object;
-    date: Date;
+    type?: EventType;
+    data?: object;
+    updatedAt: Date;
 }
 
 export class MouseOverGrammarSuggestionEvent extends Event {
   grammarSuggestionData: any;
+}
+
+export class PlaySynthesisEvent extends Event {
+  voice: Object;
+  text: string;
+  storyId?: string;
+}
+
+export class SaveStoryEvent extends Event {
+  storyObject: Object;
 }
 
 export enum EventType {
@@ -26,7 +36,7 @@ export enum EventType {
     'USE-DICTIONARY' = 'USE-DICTIONARY',
     'PROFILE-STATS' = 'PROFILE-STATS',
     'FEATURE-STATS' = 'FEATURE-STATS',
-    'USE-GENERATOR' = 'USE-GENERATOR',
+    'USE-PROMPT-GENERATOR' = 'USE-PROMPT-GENERATOR',
     'DELETE-CLASSROOM' = 'DELETE-CLASSROOM',
     'USE-DICTOGLOSS' = 'USE-DICTOGLOSS',
 }
