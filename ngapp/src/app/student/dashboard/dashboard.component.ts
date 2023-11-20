@@ -32,6 +32,7 @@ import { NotificationService } from "app/core/services/notification-service.serv
 import synth from "lib/synth";
 import Buttons from "lib/synth/buttons";
 import "lib/quill-tooltip-shim";
+import { SynthesisService } from "app/core/services/synthesis.service";
 
 Quill.register("modules/imageCompress", ImageCompress);
 Quill.register("modules/spellcheck", true);
@@ -133,6 +134,7 @@ export class DashboardComponent implements OnInit {
     public http: HttpClient,
     private router: Router,
     private notificationService: NotificationService,
+    private synthService: SynthesisService
   ) {
     this.setUpGrammarChecking();
   }
@@ -264,6 +266,8 @@ export class DashboardComponent implements OnInit {
     this.updatedTitle = this.story.title;
     this.getWordCount(this.story.text);
     this.textUpdated.next(story.text);
+    const voice = this.synthService.getVoiceForDialect(this.story.dialect);
+    this.synthSettings.voice = voice;
   }
 
   /*

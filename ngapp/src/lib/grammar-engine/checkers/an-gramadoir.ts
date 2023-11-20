@@ -69,9 +69,7 @@ async function check(input: string, authToken?: string): Promise<ErrorTag[]>{
 
   // Use the TS Grammar Checker if it was imported successfully
   if (grammarCheckerImportedSuccessfully) {
-    console.log("Using TS Grammar checker")
     try {
-      console.log("Getting errors from an gramadoir for sentence...")
       errors = await grammarCheckerGramadoirTS.check(input);
     }
     catch (error) {

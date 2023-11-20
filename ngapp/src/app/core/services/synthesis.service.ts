@@ -157,6 +157,23 @@ export class SynthesisService {
   }
 
   /**
+   * Get a default voice for a given dialect
+   * @param dialect dialect of story
+   * @returns voice code
+   */
+  getVoiceForDialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.voiceCode[number] {
+    console.log(dialect);
+    switch (dialect) {
+      case 'donegal':
+        return 'ga_UL_anb_nemo';
+      case 'kerry':
+        return 'ga_MU_nnc_nemo';
+      default: // connemara
+        return 'ga_CO_snc_nemo';
+    }
+  }
+
+  /**
    * Synthesise a story at the sentence level
    * Convert the data into into <span> elements at the word level
    * Group the spans into sentences and paragraphs
@@ -456,21 +473,6 @@ interface SynthesisResponse {
       'snc.nemo',
       'pmg.nemo',
       'nnc.nemo'
- */
-
-/**
- * Depricated function -> voice code from dialect
- * 
- * // api2_voice_from_dialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.api2.voiceCode[number] {
-  //   switch (dialect) {
-  //     case 'connemara':
-  //       return 'ga_CO_pmg_nemo';
-  //     case 'kerry':
-  //       return 'ga_MU_nnc_nemo';
-  //     default: // donegal
-  //       return 'ga_UL_anb_nemo';
-  //   }
-  // }
  */
 
 /**
