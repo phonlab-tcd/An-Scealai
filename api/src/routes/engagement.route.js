@@ -27,7 +27,7 @@ engagementRoutes.route("/addEvent/:id").post((req, res) => {
       const stackTrace = {};
       Error.captureStackTrace(stackTrace);
       logger.error({
-        endpoint: "/engagement/addEventForUser/:id",
+        endpoint: "/engagement/addEvent/:id",
         "error.message": err.message,
         stackTrace: stackTrace,
       });
@@ -56,7 +56,7 @@ engagementRoutes.route("/addEvent/:id").post((req, res) => {
  * @param {Object} req body: PlaySynthesis object (see models/engagement.playSynthesis)
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/addEvent/playSynthesis").post(async (req, res, next) => {
+engagementRoutes.route("/addPlaySynthesisEvent").post(async (req, res, next) => {
     const itWas = await PlaySynthesis.create(req.body).then(
       (ok) => ({ ok }),
       (anError) => ({ anError })
@@ -70,7 +70,8 @@ engagementRoutes.route("/addEvent/playSynthesis").post(async (req, res, next) =>
  * @param {Object} req body: Save story event object
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/addEvent/saveStory").post(async (req, res, next) => {
+engagementRoutes.route("/addSaveStoryEvent").post(async (req, res, next) => {
+  console.log(req.body)
   const itWas = await SaveStoryEvent.create(req.body).then(
     (ok) => ({ ok }),
     (anError) => ({ anError })
@@ -84,8 +85,8 @@ engagementRoutes.route("/addEvent/saveStory").post(async (req, res, next) => {
  * @param {Object} req body: grammar error tags
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/addEvent/mouseOverGrammarError").post(async (req, res, next) => {
-    const itWas = await MouseOverGrammarErrorEvent.create(req.body.event).then(
+engagementRoutes.route("/addMouseOverGrammarErrorEvent").post(async (req, res, next) => {
+    const itWas = await MouseOverGrammarErrorEvent.create(req.body).then(
       (ok) => ({ ok }),
       (anError) => ({ anError })
     );
@@ -99,7 +100,7 @@ engagementRoutes.route("/addEvent/mouseOverGrammarError").post(async (req, res, 
  * @param {Object} req body: audio blob and ASR transcription
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/addEvent/speakStory").post(upload.single("audio"), postSaveAudio);
+engagementRoutes.route("/addSpeakStoryEvent").post(upload.single("audio"), postSaveAudio);
 
 async function postSaveAudio(req, res) {
   const filename = "asr-rec-" + "-" + random.string();

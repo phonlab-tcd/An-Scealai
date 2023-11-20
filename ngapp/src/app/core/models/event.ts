@@ -8,8 +8,8 @@ export class Event extends Serializable {
     updatedAt: Date;
 }
 
-export class MouseOverGrammarSuggestionEvent extends Event {
-  grammarSuggestionData: any;
+export class MouseOverGrammarErrorEvent extends Event {
+  grammarSuggestionData: Object;
 }
 
 export class PlaySynthesisEvent extends Event {

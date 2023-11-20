@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Event, EventType, MouseOverGrammarSuggestionEvent, SaveStoryEvent, PlaySynthesisEvent } from "app/core/models/event";
+import { Event, EventType, MouseOverGrammarErrorEvent, SaveStoryEvent, PlaySynthesisEvent } from "app/core/models/event";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AuthenticationService } from "app/core/services/authentication.service";
@@ -51,7 +51,7 @@ export class EngagementService {
     event.text = text;
     event.speed = speed;
     event.ownerId = user._id;
-    this.http.post(this.baseUrl + "addEvent/playSynthesis", event).subscribe();
+    this.http.post(this.baseUrl + "addPlaySynthesisEvent", event).subscribe();
   }
 
   /**
@@ -64,28 +64,23 @@ export class EngagementService {
     const event: SaveStoryEvent = new SaveStoryEvent();
     event.ownerId = user._id;
     event.storyObject = storyObject;
-    this.http.post(this.baseUrl + "addEvent/saveStory", event).subscribe();
+    this.http.post(this.baseUrl + "addSaveStoryEvent", event).subscribe();
   }
 
   /**
    * Add a 'Mouse over grammar error' event log to the DB
    * @param tags grammar error tags
    */
-  addMouseOverGrammarSuggestionEvent(tags: HighlightTag[]) {
+  addMouseOverGrammarErrorEvent(tags: HighlightTag[]) {
     const user = this.auth.getUserDetails();
     if (!this.auth.isLoggedIn() || !user) {
       throw new Error("Cannot add event if user is not logged in");
     }
-    const event: MouseOverGrammarSuggestionEvent =
-      new MouseOverGrammarSuggestionEvent();
+    const event: MouseOverGrammarErrorEvent = new MouseOverGrammarErrorEvent();
     event.grammarSuggestionData = tags;
-    // for (const key of Object.getOwnPropertyNames(tag)) {
-    //   if ( key !== 'tooltip'){
-    //     event.grammarSuggestionData[key] = tags;
-    //   }
-    // }
     event.ownerId = user._id;
-    this.http.post(this.baseUrl + "/addEvent/mouseOverGrammarError", { event: event.fromJSON(event) }).subscribe();
+    console.log(event)
+    this.http.post(this.baseUrl + "addMouseOverGrammarErrorEvent", {}).subscribe({next: (res) => console.log(res), error: (err) => console.log(err)});
   }
 
   /**
@@ -98,7 +93,7 @@ export class EngagementService {
     const formData = new FormData();
     formData.append('audio', audioBlob);
     formData.append('transcription', transcript);
-    this.http.post(this.baseUrl + "addEvent/speakStory", formData).subscribe();
+    this.http.post(this.baseUrl + "addSpeakStoryEvent", formData).subscribe();
   }
 
   /**
