@@ -21,7 +21,7 @@ export class EngagementService {
    * @param data any optional event data
    */
   addEvent(type: EventType, data?: object) {
-    this.addEventObservable(type, data).subscribe({ next: () => {}, error: (err) => console.log(err), });
+    this.addEventObservable(type, data).subscribe();
   }
 
   addEventObservable(type: EventType, data?: object): Observable<any> {
@@ -79,8 +79,7 @@ export class EngagementService {
     const event: MouseOverGrammarErrorEvent = new MouseOverGrammarErrorEvent();
     event.grammarSuggestionData = tags;
     event.ownerId = user._id;
-    console.log(event)
-    this.http.post(this.baseUrl + "addMouseOverGrammarErrorEvent", {}).subscribe({next: (res) => console.log(res), error: (err) => console.log(err)});
+    this.http.post(this.baseUrl + "addMouseOverGrammarErrorEvent", event).subscribe();
   }
 
   /**

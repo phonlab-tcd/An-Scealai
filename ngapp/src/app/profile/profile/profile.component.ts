@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit {
    * Logout the user
    */
   logout() {
-    this.engagement.addEvent(EventType.LOGOUT);
+    this.engagement.addEvent(EventType["LOGOUT"]);
     this.auth.logout();
   }
 }

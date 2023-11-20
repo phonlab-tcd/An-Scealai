@@ -71,7 +71,6 @@ engagementRoutes.route("/addPlaySynthesisEvent").post(async (req, res, next) => 
  * @return {Object} Success or error message
  */
 engagementRoutes.route("/addSaveStoryEvent").post(async (req, res, next) => {
-  console.log(req.body)
   const itWas = await SaveStoryEvent.create(req.body).then(
     (ok) => ({ ok }),
     (anError) => ({ anError })
@@ -90,7 +89,6 @@ engagementRoutes.route("/addMouseOverGrammarErrorEvent").post(async (req, res, n
       (ok) => ({ ok }),
       (anError) => ({ anError })
     );
-    console.log(itWas);
     if (itWas.anError) return next(itWas.anError);
     return res.json(itWas.ok);
   });

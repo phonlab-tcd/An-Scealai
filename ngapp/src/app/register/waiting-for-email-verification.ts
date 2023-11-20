@@ -34,18 +34,18 @@ export class WaitingForEmailVerificationComponent {
    * @param credentials token payload sent from form.component
    */
   login(credentials: RegistrationTokenPayload) {
-    this.auth.login(credentials).subscribe(
-      (_ok) => {
-        this.engagement.addEvent(EventType.REGISTER);
+    this.auth.login(credentials).subscribe({
+      next: (_ok) => {
+        this.engagement.addEvent(EventType["REGISTER"]);
         this.ts.setLanguage(this.ts.l.iso_code);
         this.router.navigateByUrl("register-profile");
       },
-      (err) => {
+      error: (err) => {
         console.error(err);
         console.log(err.error);
         this.errorKeys = err.error.messageKeys;
         this.cd.detectChanges();
       }
-    );
+    });
   }
 }
