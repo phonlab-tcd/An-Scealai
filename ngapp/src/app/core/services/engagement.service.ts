@@ -21,21 +21,15 @@ export class EngagementService {
    * @param data any optional event data
    */
   addEvent(type: EventType, data?: object) {
-    this.addEventObservable(type, data).subscribe();
-  }
-
-  addEventObservable(type: EventType, data?: object): Observable<any> {
     const user = this.auth.getUserDetails();
-
     if (!this.auth.isLoggedIn() || !user) {
       throw new Error("Cannot add event if user is not logged in");
     }
-
     const event: Event = new Event();
     event.type = type;
     if (data) event.data = data;
 
-    return this.http.post( this.baseUrl + "addEvent/" + user._id, { event } );
+    return this.http.post( this.baseUrl + "addEvent/" + user._id, { event } ).subscribe();
   }
 
   /**
@@ -95,21 +89,17 @@ export class EngagementService {
     this.http.post(this.baseUrl + "addSpeakStoryEvent", formData).subscribe();
   }
 
+    ///////////////////////////////////// Stats for Admin page and Stats Dashboard ////////////////////////////////
+
   /**
    * Get all the dictionary word lookups for a given user
    * @param id user id
    * @param startDate optional date range start date
    * @param endDate optional date range end date
    */
-  getDictionaryLookups(
-    id: string,
-    startDate: string,
-    endDate: string
-  ): Observable<any> {
+  getDictionaryLookups( id: string, startDate: string, endDate: string ): Observable<any> {
     return this.http.post(this.baseUrl + "dictionaryLookups/" + id, { startDate: startDate, endDate: endDate, });
   }
-
-  ///////////////////////////////////// Stats for Admin page ////////////////////////////////
 
   /**
    * Get admin stats summary event from the DB

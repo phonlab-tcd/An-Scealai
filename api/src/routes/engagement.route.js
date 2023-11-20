@@ -13,7 +13,7 @@ const Event = require("../models/event");
 const User = require("../models/user");
 const PlaySynthesis = require("../models/engagement.playSynthesis");
 const SaveStoryEvent = require("../models/engagement.saveStory");
-const MouseOverGrammarErrorEvent = require("../models/engagement.mouseOverGrammar");
+const MouseOverGrammarErrorEvent = require("../models/engagement.mouseOverGrammarError");
 
 /**
  * Add an event object to the DB for a given user
