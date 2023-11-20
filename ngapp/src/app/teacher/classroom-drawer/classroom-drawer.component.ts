@@ -176,7 +176,7 @@ export class ClassroomDrawerComponent implements OnInit {
 
     // delete the classroom
     this.classroomService.deleteClassroom(id).subscribe((_) => {
-      this.engagement.addEventForLoggedInUser(EventType["DELETE-CLASSROOM"], { classroomId: id });
+      this.engagement.addEvent(EventType["DELETE-CLASSROOM"], { classroomId: id });
 
       // reset the classroom list to empty if list contains only one classroom
       // If we have 2+ classrooms, delete the classroom for deletion, and set the new current classroom to the first in the list

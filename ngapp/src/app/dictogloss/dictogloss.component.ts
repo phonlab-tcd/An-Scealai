@@ -175,7 +175,7 @@ export class DictoglossComponent implements OnInit {
       let selector = document.getElementById("textSelector") as HTMLInputElement;
       this.texts = selector.value;
       selector.value = "";
-      this.engagement.addEventForLoggedInUser(EventType['USE-DICTOGLOSS'], {text: this.texts, role: this.auth.getUserDetails()!.role});
+      this.engagement.addEvent(EventType['USE-DICTOGLOSS'], {text: this.texts, role: this.auth.getUserDetails()!.role});
     }
 
     if (this.texts != "") {

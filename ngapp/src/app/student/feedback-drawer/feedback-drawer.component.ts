@@ -47,28 +47,28 @@ export class FeedbackDrawerComponent implements OnInit {
    * Update feedback notifications
    * Add logged event for viewed feedback
    */
-  getFeedback() {
-    if (this.story.feedback.audioId) {
-      this.getFeedbackAudio();
-    }
+  // getFeedback() {
+  //   if (this.story.feedback.audioId) {
+  //     this.getFeedbackAudio();
+  //   }
 
-    // set feedback status to seen by student
-    if (this.story.feedback.text !== "") {
-      this.story.feedback.seenByStudent = true;
-    }
+  //   // set feedback status to seen by student
+  //   if (this.story.feedback.text !== "") {
+  //     this.story.feedback.seenByStudent = true;
+  //   }
 
-    // add event log to DB and update notifications
-    this.storyService.viewFeedback(this.story._id).subscribe(() => {
-      this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
-      this.notificationService.getStudentNotifications();
-    });
-  }
+  //   // add event log to DB and update notifications
+  //   this.storyService.viewFeedback(this.story._id).subscribe(() => {
+  //     this.engagement.addEvent( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
+  //     this.notificationService.getStudentNotifications();
+  //   });
+  // }
 
-  /* Set the url for the audio source feedback */
-  getFeedbackAudio() {
-    this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
-      this.audioSource = this.sanitizer.bypassSecurityTrustUrl( URL.createObjectURL(res) );
-      console.log(this.audioSource);
-    });
-  }
+  // /* Set the url for the audio source feedback */
+  // getFeedbackAudio() {
+  //   this.storyService.getFeedbackAudio(this.story._id).subscribe((res) => {
+  //     this.audioSource = this.sanitizer.bypassSecurityTrustUrl( URL.createObjectURL(res) );
+  //     console.log(this.audioSource);
+  //   });
+  // }
 }

@@ -84,7 +84,6 @@ export class RegisterFormComponent implements OnInit {
    * Register a user and emit user details back to parent component
    */
   register() {
-    console.log("REGISTER");
     if (!this.checkDetails()) return;
     this.credentials.language = this.ts.inIrish() ? "ga" : "en";
     this.auth.register(this.credentials).subscribe(

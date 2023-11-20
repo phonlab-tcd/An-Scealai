@@ -21,7 +21,7 @@ export class EngagementService {
    * @param type event type
    * @param data any optional event data
    */
-  addEventForLoggedInUser(type: EventType, data?: object) {
+  addEvent(type: EventType, data?: object) {
     this.addEventObservable(type, data).subscribe({ next: () => {}, error: (err) => console.log(err), });
   }
 
@@ -36,7 +36,7 @@ export class EngagementService {
     event.type = type;
     if (data) event.data = data;
 
-    return this.http.post( this.baseUrl + "addEventForLoggedInUser/" + user._id, { event } );
+    return this.http.post( this.baseUrl + "addEvent/" + user._id, { event } );
   }
 
   /**

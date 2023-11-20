@@ -93,7 +93,7 @@ async function postSaveAudio(req, res) {
  * @param {Object} req body: Event object
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/addEventForLoggedInUser/:id").post((req, res) => {
+engagementRoutes.route("/addEvent/:id").post((req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) {
       const stackTrace = {};

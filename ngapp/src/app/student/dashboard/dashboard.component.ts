@@ -233,7 +233,7 @@ export class DashboardComponent implements OnInit {
       if (selectedDrawer == 'feedback') {
         this.storyService.viewFeedback(this.story._id).subscribe(() => {
           this.story.feedback.seenByStudent = true;
-          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
+          this.engagement.addEvent( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
           this.notificationService.getStudentNotifications();
         });
       }
@@ -247,6 +247,7 @@ export class DashboardComponent implements OnInit {
       this.showErrorTags = true;
       this.runGrammarCheck();
       this.toggleGrammarTags();
+      this.engagement.addEvent( EventType["USE-GRAMMAR-CHECKER"] );
     } else {
       this.showErrorTags = false;
       this.toggleGrammarTags();

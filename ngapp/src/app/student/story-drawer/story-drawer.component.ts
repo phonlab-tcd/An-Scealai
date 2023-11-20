@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { TranslationService } from "app/core/services/translation.service";
 import { AuthenticationService } from "app/core/services/authentication.service";
@@ -193,7 +193,7 @@ export class StoryDrawerComponent implements OnInit {
 
     // delete the story
     this.storyService.deleteStory(id).subscribe((_) => {
-      this.engagement.addEventForLoggedInUser(EventType["DELETE-STORY"], { storyId: id });
+      this.engagement.addEvent(EventType["DELETE-STORY"], { storyId: id });
 
       // reset the story list to empty if list contains only one story
       // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list

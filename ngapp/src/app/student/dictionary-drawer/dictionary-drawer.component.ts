@@ -52,7 +52,7 @@ export class DictionaryDrawerComponent implements OnInit {
           `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
           resultsContainer.outerHTML;
   
-        this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], {dictionaryLookup: this.wordLookedUp});
+        this.engagement.addEvent(EventType['USE-DICTIONARY'], {dictionaryLookup: this.wordLookedUp});
       }
       else {
         alert(this.ts.l.enter_a_word_to_lookup);

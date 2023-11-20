@@ -72,7 +72,7 @@ export class TeacherDictoglossComponent implements OnInit {
         return;
       }
 
-      this.engagement.addEventForLoggedInUser(EventType['USE-DICTOGLOSS'], {text: passage, role: user.role});
+      this.engagement.addEvent(EventType['USE-DICTOGLOSS'], {text: passage, role: user.role});
 
       const message = {
         subject: "Dictogloss",
