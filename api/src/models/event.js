@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const Event = new mongoose.Schema({
+  ownerId: mongoose.Types.ObjectId,
   type: {
-    ownerId: mongoose.Types.ObjectId,
     type: String,
     enum: [
       'REGISTER',
@@ -21,8 +21,12 @@ const Event = new mongoose.Schema({
       'PROFILE-STATS',
       'FEATURE-STATS',
     ],
+    required: true
   },
-  data: Object,
+  data: {
+    type: Object,
+    required: false
+  },
 }, {
   collection: 'engagement',
   timestamps: true,

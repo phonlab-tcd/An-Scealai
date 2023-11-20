@@ -1,9 +1,9 @@
 import { describe , it, expect } from "@jest/globals";
 import * as recordingUtil from "./recordingUtils";
 
-describe('voiceRecording.filesCollection()',()=>{
+describe('voiceRecording.filesCollection(voiceRecording)',()=>{
   it('returns a string ending in .files',()=>{
-    const col = recordingUtil.filesCollection();
+    const col = recordingUtil.filesCollection("voiceRecording");
     expect(col.endsWith('.files')).toBe(true);;
   });
 });

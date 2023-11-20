@@ -25,7 +25,7 @@
   <div class="datePicker" *ngIf="!selectDateRange">
     <div *ngIf="previousFeatures">
       <div *ngFor="let feature of previousFeatures" style="padding:10px">
-        <div class="submitButton" (click)="displayLog(feature.statsData);"> {{feature.date | date : 'd/M/yy, h:mm a'}} </div>
+        <div class="submitButton" (click)="displayLog(feature.data);"> {{feature.updatedAt | date : 'd/M/yy, h:mm a'}} </div>
       </div>
     </div>
     <br>

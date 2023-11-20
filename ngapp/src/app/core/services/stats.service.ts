@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from 'app/core/services/authentication.service';
 import config from 'abairconfig';
 
 @Injectable({
@@ -11,7 +10,7 @@ export class StatsService {
 
   baseUrl:string = config.baseurl + 'stats/';
 
-  constructor(private http: HttpClient, private auth: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
   
 // *********************** Admin stats ************************************  
   getProfileDataByDate(startDate: string, endDate: string): Observable<any> {

@@ -4,7 +4,7 @@ export class Event extends Serializable {
     _id: string;
     ownerId: string;
     type?: EventType;
-    data?: object;
+    data?: Object;
     updatedAt: Date;
 }
 

@@ -9,14 +9,19 @@ export function bucket(collectionName: string) {
   return new mongodb.GridFSBucket(db,{bucketName});
 }
 
-export function filesCollection() {
+export function filesCollection(collectionName: string) {
   // @ts-ignore
-  return bucket().s._filesCollection.collectionName;
+  return bucket(collectionName).s._filesCollection.collectionName;
 }
 
 export async function file(_id, collectionName) {
   const a = await bucket(collectionName).find({ "_id": _id }).toArray();
   return a[0];
+}
+
+export async function countDocuments(conditions: Object, collectionName: string) {
+  const docs = await bucket(collectionName).find(conditions).toArray();
+  return docs.length;
 }
 
 // TODO: why double await here? (neimhin 21/July/23)

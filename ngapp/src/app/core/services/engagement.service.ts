@@ -61,11 +61,10 @@ export class EngagementService {
   addSaveStoryEvent(storyObject: Story) {
     const user = this.auth.getUserDetails();
     if (!user || !this.auth.isLoggedIn()) return;
-    const reqBody = {
-      ownerId: user._id,
-      storyObject: storyObject,
-    };
-    this.http.post(this.baseUrl + "addEvent/saveStory", reqBody).subscribe();
+    const event: SaveStoryEvent = new SaveStoryEvent();
+    event.ownerId = user._id;
+    event.storyObject = storyObject;
+    this.http.post(this.baseUrl + "addEvent/saveStory", event).subscribe();
   }
 
   /**
@@ -86,7 +85,7 @@ export class EngagementService {
     //   }
     // }
     event.ownerId = user._id;
-    this.http.post(this.baseUrl + "/addEvent/mouseOverGrammarError", { event: event.fromJSON(event), }).subscribe();
+    this.http.post(this.baseUrl + "/addEvent/mouseOverGrammarError", { event: event.fromJSON(event) }).subscribe();
   }
 
   /**
@@ -117,21 +116,6 @@ export class EngagementService {
   }
 
   ///////////////////////////////////// Stats for Admin page ////////////////////////////////
-
-  /**
-   * Save an admin-generated stats object to the DB
-   * @param type event stats type
-   * @param stats stats summary generated on the admin page
-   */
-  addAnalysisEvent(type: EventType, stats: Object) {
-    const user = this.auth.getUserDetails();
-    if (!user || !this.auth.isLoggedIn()) return;
-    let event: Event = new Event();
-    event.type = type;
-    event.data = stats;
-    event.ownerId = user._id;
-    return this.http.post(this.baseUrl + "addAnalysisEvent/", { event: event }).subscribe();
-  }
 
   /**
    * Get admin stats summary event from the DB

@@ -16,6 +16,42 @@ const SaveStoryEvent = require("../models/engagement.saveStory");
 const MouseOverGrammarErrorEvent = require("../models/engagement.mouseOverGrammar");
 
 /**
+ * Add an event object to the DB for a given user
+ * @param {Object} req params: User ID
+ * @param {Object} req body: Event object
+ * @return {Object} Success or error message
+ */
+engagementRoutes.route("/addEvent/:id").post((req, res) => {
+  User.findById(req.params.id, (err, user) => {
+    if (err) {
+      const stackTrace = {};
+      Error.captureStackTrace(stackTrace);
+      logger.error({
+        endpoint: "/engagement/addEventForUser/:id",
+        "error.message": err.message,
+        stackTrace: stackTrace,
+      });
+      return res.json(err);
+    }
+    if (user) {
+      if (req.body.event) {
+        const event = new Event();
+        event.data = req.body.event.data;
+        event.type = req.body.event.type;
+        event.ownerId = user._id;
+        event.save().then(() => {
+          return res.status(200).json("Event added succesfully");
+        });
+      } else {
+        return res.status(400).json("Bad request, must include event object in request body");
+      }
+    } else {
+      res.status(404).json("User does not exist");
+    }
+  });
+});
+
+/**
  * Create a new PlaySynthesis event
  * @param {Object} req body: PlaySynthesis object (see models/engagement.playSynthesis)
  * @return {Object} Success or error message
@@ -88,42 +124,6 @@ async function postSaveAudio(req, res) {
 }
 
 /**
- * Add an event object to the DB for a given user
- * @param {Object} req params: User ID
- * @param {Object} req body: Event object
- * @return {Object} Success or error message
- */
-engagementRoutes.route("/addEvent/:id").post((req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      const stackTrace = {};
-      Error.captureStackTrace(stackTrace);
-      logger.error({
-        endpoint: "/engagement/addEventForUser/:id",
-        "error.message": err.message,
-        stackTrace: stackTrace,
-      });
-      return res.json(err);
-    }
-    if (user) {
-      if (req.body.event) {
-        const event = new Event();
-        event.data = req.body.event.data;
-        event.type = req.body.event.type;
-        event.ownerId = user._id;
-        event.save().then(() => {
-          return res.status(200).json("Event added succesfully");
-        });
-      } else {
-        return res.status(400).json("Bad request, must include event object in request body");
-      }
-    } else {
-      res.status(404).json("User does not exist");
-    }
-  });
-});
-
-/**
  * Get all events for a given user
  * @param {Object} req params: User ID
  * @return {Object} List of events
@@ -142,42 +142,16 @@ engagementRoutes.route("/eventsForUser/:id").get((req, res) => {
 });
 
 /**
- * Add an admin stats analysis event object to the DB (profile/feature stats)
- * @param {Object} req body: Event object
- * @return {Object} Success or error message
- */
-engagementRoutes.route("/addAnalysisEvent").post((req, res) => {
-  const event = new Event();
-  event.type = req.body.event.type;
-  event.statsData = req.body.event.statsData;
-  event.ownerId = req.body.event.ownerId;
-  event.date = new Date();
-
-  event.save().then((event) => {
-      return res.status(200).json({ event: "event added successfully", id: event._id });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(400).send("unable to save event to DB");
-    });
-});
-
-/**
  * Add all events of a given type
  * @param {Object} req params: Event type
  * @return {Object} Success or error message
  */
-engagementRoutes.route("/getPreviousAnalysisData/:type").get((req, res) => {
-  Event.find({ type: req.params.type }, (err, events) => {
-    if (err) {
-      return res.json(err);
-    }
-    if (events) {
-      return res.status(200).json(events);
-    } else {
-      return res.status(404).json("DB does not have any event stats data.");
-    }
-  });
+engagementRoutes.route("/getPreviousAnalysisData/:type").get(async (req, res) => {
+  const events = await Event.find({ type: req.params.type }).sort({"createdAt":-1});
+  if (!events) {
+    return res.status(404).json("DB does not have any event stats data.");
+  }
+  return res.status(200).json(events);
 });
 
 /**

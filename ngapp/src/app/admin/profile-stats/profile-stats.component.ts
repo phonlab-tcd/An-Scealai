@@ -228,7 +228,7 @@ export class ProfileStatsComponent implements OnInit {
             });
             dataToLog[field] = fieldValues;
           });
-          this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], dataToLog);
+          this.engagement.addEvent(EventType["PROFILE-STATS"], {data: dataToLog});
           this.setDataToDisplay(dataToLog);
           this.ngOnInit();
           resolve();
@@ -239,7 +239,7 @@ export class ProfileStatsComponent implements OnInit {
     // Previous log does not exist, create one from all data
     else {
       await this.getProfileData();
-      this.engagement.addAnalysisEvent(EventType["PROFILE-STATS"], this.dataToDisplay);
+      this.engagement.addEvent(EventType["PROFILE-STATS"], {data: this.dataToDisplay});
     }
     this.dataLoaded = true;
   }
