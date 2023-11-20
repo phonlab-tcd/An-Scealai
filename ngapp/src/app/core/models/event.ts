@@ -15,7 +15,7 @@ export class MouseOverGrammarSuggestionEvent extends Event {
 export class PlaySynthesisEvent extends Event {
   voice: Object;
   text: string;
-  storyId?: string;
+  speed: number;
 }
 
 export class SaveStoryEvent extends Event {

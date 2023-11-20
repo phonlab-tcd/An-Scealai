@@ -298,7 +298,7 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
-    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
+    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings, this.engagement);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();

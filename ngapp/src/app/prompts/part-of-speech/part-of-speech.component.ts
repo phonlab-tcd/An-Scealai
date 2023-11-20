@@ -167,7 +167,7 @@ export class PartOfSpeechComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.engagement.addEvent(EventType['USE-GENERATOR'], {promptType: "partOfSpeech", prompt: this.constructedPrompt});
+          this.engagement.addEvent(EventType['USE-PROMPT-GENERATOR'], {promptType: "partOfSpeech", prompt: this.constructedPrompt});
           this.router.navigateByUrl("/student/dashboard");
         },
         error: () => {

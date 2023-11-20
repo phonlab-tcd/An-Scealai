@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const PlaySynthesis = new mongoose.Schema({
   ownerId: mongoose.Types.ObjectId,
-  storyId: mongoose.Types.ObjectId,
-  voice: Object,
+  voice: String,
   text: String,
+  speed: Number
 }, {
   collection: 'engagement.playSynthesis',
   timestamps: true,

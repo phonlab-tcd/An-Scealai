@@ -129,7 +129,7 @@ engagementRoutes.route("/addEvent/:id").post((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route("/eventsForUser/:id").get((req, res) => {
-  Event.find({ userId: req.params.id }, (err, events) => {
+  Event.find({ ownerId: req.params.id }, (err, events) => {
     if (err) {
       res.json(err);
     }
@@ -150,7 +150,7 @@ engagementRoutes.route("/addAnalysisEvent").post((req, res) => {
   const event = new Event();
   event.type = req.body.event.type;
   event.statsData = req.body.event.statsData;
-  event.userId = req.body.event.userId;
+  event.ownerId = req.body.event.ownerId;
   event.date = new Date();
 
   event.save().then((event) => {
@@ -206,7 +206,7 @@ engagementRoutes.route("/eventsForStory/:id").get((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route("/dictionaryLookups/:id").post((req, res) => {
-  const conditions = { userId: req.params.id, type: "USE-DICTIONARY" };
+  const conditions = { ownerId: req.params.id, type: "USE-DICTIONARY" };
   if (req.body.startDate !== "" && req.body.endDate !== "") {
     conditions["date"] = {
       $gte: req.body.startDate,
