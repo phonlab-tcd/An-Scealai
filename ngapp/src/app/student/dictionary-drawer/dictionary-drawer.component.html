@@ -29,7 +29,8 @@
       autofocus
     />
     <button class="searchDictionaryBtn" (click)="lookupWord()">
-      <i class="fa fa-search" aria-hidden="true"></i>
+      <i *ngIf="!dictResponseLoading" class="fa fa-search" aria-hidden="true"></i>
+      <mat-progress-spinner mode="indeterminate" *ngIf="dictResponseLoading" diameter="20"></mat-progress-spinner>
     </button>
   </div>
 
