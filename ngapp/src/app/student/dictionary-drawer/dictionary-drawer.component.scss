@@ -58,6 +58,7 @@
     font-size: 12pt;
     margin: 0px;
     border-radius: 5px 5px 5px 5px;
+    max-width: 28px;
 }
 
 .searchDictionaryBtn:hover {
@@ -74,4 +75,8 @@
 .externalLinks {
     text-align: left;
     padding-top: 20px;
+}
+
+:host ::ng-deep .mat-mdc-progress-spinner circle, .mat-mdc-progress-spinner circle {   
+    stroke: white;
 }

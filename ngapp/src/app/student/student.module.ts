@@ -25,6 +25,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -60,6 +61,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     MatCardModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     SynthItemModule,
     SynthVoiceSelectModule,
     FeedbackModule,

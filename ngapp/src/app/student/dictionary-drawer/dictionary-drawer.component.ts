@@ -20,6 +20,7 @@ export class DictionaryDrawerComponent implements OnInit {
       `data:text/html;charset=utf-8,` +
       this.ts.l.search_for_words_in_dictionary
     );
+    dictResponseLoading: boolean = false;
     @Output() closeDictionaryEmitter = new EventEmitter();
 
   constructor(public ts: TranslationService, protected sanitizer: DomSanitizer, private http: HttpClient, private engagement: EngagementService,) { }
@@ -30,6 +31,7 @@ export class DictionaryDrawerComponent implements OnInit {
     /* Set html for dictionary iframe and log looked-up word to DB */
     async lookupWord() {
       if(this.wordLookedUp) {
+        this.dictResponseLoading = true;
         const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
         const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
         const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
@@ -53,6 +55,7 @@ export class DictionaryDrawerComponent implements OnInit {
           resultsContainer.outerHTML;
   
         this.engagement.addEvent(EventType['USE-DICTIONARY'], {dictionaryLookup: this.wordLookedUp});
+        this.dictResponseLoading = false;
       }
       else {
         alert(this.ts.l.enter_a_word_to_lookup);

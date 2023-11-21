@@ -5,7 +5,7 @@ export class Story extends Serializable {
     title: string;
     date: Date;
     lastUpdated: Date;
-    dialect: string;
+    dialect: 'connemara' | 'kerry' | 'donegal';
     text: string;
     htmlText: string;
     author: string;

@@ -150,7 +150,6 @@ storyRoutes.route("/update/:id").post((req, res) => {
     if (req.body.title) {
       story.title = req.body.title;
     }
-    if (story.studentId) story.owner = story.studentId;
     story.save().then(
       (ok) => res.json("Update complete"),
       (err) => res.status(400).json(err)

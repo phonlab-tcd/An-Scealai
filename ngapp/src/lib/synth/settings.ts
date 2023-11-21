@@ -1,4 +1,4 @@
 export default class Settings {
-  voice = "ga_UL_anb_nemo";
+  voice = "ga_CO_snc_nemo";
   speed = 1;
 }
