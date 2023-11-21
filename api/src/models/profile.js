@@ -20,7 +20,7 @@ let Profile = new Schema({
     usaOption: String,
     otherCountryOfStudy: String,
     otherPostgradStudies: String,
-    immersionCourse: String,
+    inImmersionCourse: String,
     teacherPrimaryType: String,
     teacherSecondaryType: String,
     teacherSchoolTypes: {
@@ -37,8 +37,8 @@ let Profile = new Schema({
     fatherNativeTongue: String,
     motherNativeTongue: String,
     otherLanguageProficiency: String,
-    speakingFrequency : String,
-    speakWith : String,
+    howOftenSpeakIrish : String,
+    whoSpeakWith : String,
     irishMedia : {
         rnag : Boolean,
         tg4 : Boolean,
