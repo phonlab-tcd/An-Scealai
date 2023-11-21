@@ -21,6 +21,6 @@ module.exports = async (req, res, next) => {
   if (!story) return no();
   // owner is of type ObjectId, and req.user._id is of type string, so the second half
   // of this statement was never read => added the toString()
-  if (story.studentId === req.user._id || story.owner.toString() === req.user._id) return yes();
+  if (story.owner.toString() === req.user._id) return yes();
   return no();
 };

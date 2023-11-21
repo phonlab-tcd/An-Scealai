@@ -162,7 +162,6 @@ export class SynthesisService {
    * @returns voice code
    */
   getVoiceForDialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.voiceCode[number] {
-    console.log(dialect);
     switch (dialect) {
       case 'donegal':
         return 'ga_UL_anb_nemo';
