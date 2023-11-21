@@ -45,40 +45,39 @@ export class RegisterProfileComponent implements OnInit {
     public ts: TranslationService
   ) {}
 
-  showError: boolean = false;
   userDetails: UserDetails | null = null;
 
-  genders = GENDERS;
-  gender: (typeof GENDERS)[number] = this.genders[0];
+  genderOptions = GENDERS;
+  gender: (typeof GENDERS)[number] = this.genderOptions[0];
 
-  ages = AGES;
-  age: (typeof AGES)[number] = this.ages[0];
+  ageOptions = AGES;
+  age: (typeof AGES)[number] = this.ageOptions[0];
 
-  counties = COUNTIES;
-  county: (typeof COUNTIES)[number] = this.counties[0];
+  countyOptions = COUNTIES;
+  county: (typeof COUNTIES)[number] = this.countyOptions[0];
 
   notFromIreland: boolean = false;
   country: string = "";
 
-  schools = SCHOOL_TYPES;
-  studentSchoolType: (typeof SCHOOL_TYPES)[number] = this.schools[0];
+  schoolTypeOptions = SCHOOL_TYPES;
+  studentSchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
 
-  studentSchoolLevels = STUDENT_SCHOOL_LEVELS;
-  studentSchoolLevel: (typeof STUDENT_SCHOOL_LEVELS)[number] = this.studentSchoolLevels[0];
+  studentSchoolLevelOptions = STUDENT_SCHOOL_LEVELS;
+  studentSchoolLevel: (typeof STUDENT_SCHOOL_LEVELS)[number] = this.studentSchoolLevelOptions[0];
 
-  primaryYears = PRIMARY_YEARS;
-  primaryYear: (typeof PRIMARY_YEARS)[number] = this.primaryYears[0];
+  primaryYearOptions = PRIMARY_YEARS;
+  primaryYear: (typeof PRIMARY_YEARS)[number] = this.primaryYearOptions[0];
 
-  secondaryYears = SECONDARY_YEARS;
-  secondaryYear: (typeof SECONDARY_YEARS)[number] = this.secondaryYears[0];
+  secondaryYearOptions = SECONDARY_YEARS;
+  secondaryYear: (typeof SECONDARY_YEARS)[number] = this.secondaryYearOptions[0];
 
   thirdLevelOptions = THIRD_LEVEL_STUDIES;
   thirdLevelOption: (typeof THIRD_LEVEL_STUDIES)[number] = this.thirdLevelOptions[0];
 
-  thirdLevelYears = THIRD_LEVEL_YEARS;
-  thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYears[0];
+  thirdLevelYearOptions = THIRD_LEVEL_YEARS;
+  thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYearOptions[0];
 
-  postGradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYears[0];
+  postGradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
 
   usaIrishStudiesOptions = USA_IRISH_STUDIES;
   usaIrishStudies: (typeof USA_IRISH_STUDIES)[number] = USA_IRISH_STUDIES[0];
@@ -90,26 +89,22 @@ export class RegisterProfileComponent implements OnInit {
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number] = this.immersionOptions[0];
 
   teacherSchoolLevels = TEACHER_SCHOOL_LEVELS;
-  teacherPrimaryType: (typeof SCHOOL_TYPES)[number] = this.schools[0];
-  teacherSecondaryType: (typeof SCHOOL_TYPES)[number] = this.schools[0];
+  teacherPrimaryType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
+  teacherSecondaryType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
 
-  nativeSpeakerStatuses = NATIVE_SPEAKER_STATUS;
-  nativeSpeakerStatus: (typeof NATIVE_SPEAKER_STATUS)[number] = this.nativeSpeakerStatuses[0];
+  nativeSpeakerStatusOptions = NATIVE_SPEAKER_STATUS;
+  nativeSpeakerStatus: (typeof NATIVE_SPEAKER_STATUS)[number] = this.nativeSpeakerStatusOptions[0];
 
-  dialectPreferences = DIALECTS;
-  dialectPreference: (typeof DIALECTS)[number] = this.dialectPreferences[0];
+  dialectPreferenceOptions = DIALECTS;
+  dialectPreference: (typeof DIALECTS)[number] = this.dialectPreferenceOptions[0];
 
-  spokenComprehensionLevels = COMPREHENSION_LEVELS;
-  spokenComprehensionLevel: (typeof COMPREHENSION_LEVELS)[number] = this.spokenComprehensionLevels[0];
+  spokenComprehensionLevelOptions = COMPREHENSION_LEVELS;
+  spokenComprehensionLevel: (typeof COMPREHENSION_LEVELS)[number] = this.spokenComprehensionLevelOptions[0];
 
   yearsOfIrish: number | null = null;
-
   otherLanguages: string = "";
-
   fatherNativeTongue: string = "";
-
   motherNativeTongue: string = "";
-
   otherLanguageProficiency: string = "";
 
   howOftenOptions = HOW_OFTEN;
@@ -119,34 +114,26 @@ export class RegisterProfileComponent implements OnInit {
   whoSpeakWith: (typeof WHO_SPEAK_WITH)[number] = this.speakWithOptions[0];
 
   irishMedia = IRISH_MEDIA_OPTIONS;
+  irishReading = IRISH_READING_OPTIONS;
+  irishWriting = IRISH_WRITING_OPTIONS;
 
   howOftenMedia: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
   howOftenReading: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
   howOftenWriting: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
 
-  irishMediaChecked(): boolean {
-    return Object.values(this.irishMedia).some(value => value);
-  }
+  synthOpinions = SYNTH_OPINION;
+  synthOpinion: (typeof SYNTH_OPINION)[number] = this.synthOpinions[0];
 
-  irishReading = IRISH_READING_OPTIONS;
 
-  irishReadingChecked(): boolean {
-    return Object.values(this.irishReading).some(value => value);
-  }
-
-  irishWriting = IRISH_WRITING_OPTIONS;
-
-  irishWritingChecked(): boolean {
-    return Object.values(this.irishWriting).some(value => value);
-  }
-
+  /**
+   * See if the user has checked any of the boxes for either Irish
+   * Media, Reading, or Writing
+   * @param objectOfItems keys are items and values are true/false
+   * @returns true if at least one item is true, otherwise false
+   */
   anyItemsChecked(objectOfItems: typeof IRISH_MEDIA_OPTIONS | typeof IRISH_WRITING_OPTIONS | typeof IRISH_READING_OPTIONS) {
     return Object.values(objectOfItems).some(item => item);
   }
-
-
-  synthOpinions = SYNTH_OPINION;
-  synthOpinion: (typeof SYNTH_OPINION)[number] = this.synthOpinions[0];
 
   /**
    * Get any previous profile information already saved for the user
@@ -254,8 +241,6 @@ export class RegisterProfileComponent implements OnInit {
       howOftenWriting: this.howOftenWriting,
       synthOpinion: this.synthOpinion,
     };
-
-    console.log(newProfile.inImmersionCourse)
 
     // save profile and route user to homepage
     this.profileService.create(newProfile).subscribe({
