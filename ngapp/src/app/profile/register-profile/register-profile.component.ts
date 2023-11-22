@@ -89,8 +89,8 @@ export class RegisterProfileComponent implements OnInit {
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number] = this.immersionOptions[0];
 
   teacherSchoolLevels = TEACHER_SCHOOL_LEVELS;
-  teacherPrimaryType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
-  teacherSecondaryType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
+  teacherPrimarySchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
+  teacherSecondarySchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
 
   nativeSpeakerStatusOptions = NATIVE_SPEAKER_STATUS;
   nativeSpeakerStatus: (typeof NATIVE_SPEAKER_STATUS)[number] = this.nativeSpeakerStatusOptions[0];
@@ -164,9 +164,9 @@ export class RegisterProfileComponent implements OnInit {
         this.otherCountryOfStudy = p.otherCountryOfStudy;
         this.inImmersionCourse = p.inImmersionCourse;
 
-        this.teacherPrimaryType = p.teacherPrimarySchoolType ?? this.teacherPrimaryType;
-        this.teacherSecondaryType =
-          p.teacherSecondarySchoolType ?? this.teacherSecondaryType;
+        this.teacherPrimarySchoolType = p.teacherPrimarySchoolType ?? this.teacherPrimarySchoolType;
+        this.teacherSecondarySchoolType =
+          p.teacherSecondarySchoolType ?? this.teacherSecondarySchoolType;
         this.teacherSchoolLevels =
           p.teacherSchoolLevels ?? this.teacherSchoolLevels;
 
@@ -221,8 +221,8 @@ export class RegisterProfileComponent implements OnInit {
       postGradYear: this.postGradYear,
       inImmersionCourse: this.inImmersionCourse,
       teacherSchoolLevels: this.teacherSchoolLevels,
-      teacherPrimarySchoolType: this.teacherPrimaryType,
-      teacherSecondarySchoolType: this.teacherSecondaryType,
+      teacherPrimarySchoolType: this.teacherPrimarySchoolType,
+      teacherSecondarySchoolType: this.teacherSecondarySchoolType,
       nativeSpeakerStatus: this.nativeSpeakerStatus,
       dialectPreference: this.dialectPreference,
       spokenComprehensionLevel: this.spokenComprehensionLevel,

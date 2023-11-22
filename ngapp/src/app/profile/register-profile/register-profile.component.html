@@ -147,14 +147,14 @@
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolLevels.primary" name="teacherPrimary"> {{ts.l.primary_level}} </div>
               <div *ngIf="teacherSchoolLevels.primary" class="form-group">
                 <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
-                <select class="selectOptions" [(ngModel)]="teacherPrimaryType" name="teacherPrimaryType">
+                <select class="selectOptions" [(ngModel)]="teacherPrimarySchoolType" name="teacherPrimaryType">
                   <option *ngFor="let s of schoolTypeOptions; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
                 </select>
               </div>
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolLevels.secondary" name="teacherSecondary"> {{ts.l.second_level}} </div>
               <div *ngIf="teacherSchoolLevels.secondary" class="form-group">
                 <p class="formLabel">{{ts.l.type_of_school_teacher}}</p>
-                <select class="selectOptions" [(ngModel)]="teacherSecondaryType" name="teacherSecondaryType">
+                <select class="selectOptions" [(ngModel)]="teacherSecondarySchoolType" name="teacherSecondarySchoolType">
                   <option *ngFor="let s of schoolTypeOptions; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
                 </select>
               </div>

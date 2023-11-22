@@ -21,8 +21,8 @@ let Profile = new Schema({
     otherCountryOfStudy: String,
     otherPostgradStudies: String,
     inImmersionCourse: String,
-    teacherPrimaryType: String,
-    teacherSecondaryType: String,
+    teacherPrimarySchoolType: String,
+    teacherSecondarySchoolType: String,
     teacherSchoolTypes: {
       primary: Boolean,
       secondary: Boolean,
