@@ -1,34 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { ProfileService } from "app/core/services/profile.service";
-import { AuthenticationService, UserDetails } from "app/core/services/authentication.service";
+import { AuthenticationService, UserDetails, } from "app/core/services/authentication.service";
 import { Router } from "@angular/router";
 import { TranslationService } from "app/core/services/translation.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import {
-  Profile,
-  AGES,
-  GENDERS,
-  COUNTIES,
-  SCHOOL_TYPES,
-  STUDENT_SCHOOL_LEVELS,
-  PRIMARY_YEARS,
-  SECONDARY_YEARS,
-  THIRD_LEVEL_STUDIES,
-  THIRD_LEVEL_YEARS,
-  USA_IRISH_STUDIES,
-  IMMERSION_OPTIONS,
-  TEACHER_SCHOOL_LEVELS,
-  NATIVE_SPEAKER_STATUS,
-  DIALECTS,
-  COMPREHENSION_LEVELS,
-  HOW_OFTEN,
-  WHO_SPEAK_WITH,
-  IRISH_MEDIA_OPTIONS,
-  IRISH_READING_OPTIONS,
-  IRISH_WRITING_OPTIONS,
-  SYNTH_OPINION,
-} from "app/core/models/profile";
+import { Profile, AGES, GENDERS, COUNTIES, SCHOOL_TYPES, STUDENT_SCHOOL_LEVELS, PRIMARY_YEARS,
+   SECONDARY_YEARS, THIRD_LEVEL_STUDIES, THIRD_LEVEL_YEARS, USA_IRISH_STUDIES, IMMERSION_OPTIONS,
+    TEACHER_SCHOOL_LEVELS, NATIVE_SPEAKER_STATUS, DIALECTS, COMPREHENSION_LEVELS, HOW_OFTEN,
+     WHO_SPEAK_WITH, IRISH_MEDIA_OPTIONS, IRISH_READING_OPTIONS, IRISH_WRITING_OPTIONS, SYNTH_OPINION, } from "app/core/models/profile";
 
 @Component({
   standalone: true,
@@ -77,7 +57,10 @@ export class RegisterProfileComponent implements OnInit {
   thirdLevelYearOptions = THIRD_LEVEL_YEARS;
   thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYearOptions[0];
 
-  postGradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
+  postGradYear:
+    | (typeof THIRD_LEVEL_YEARS)[0]
+    | (typeof THIRD_LEVEL_YEARS)[1]
+    | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
 
   usaIrishStudiesOptions = USA_IRISH_STUDIES;
   usaIrishStudies: (typeof USA_IRISH_STUDIES)[number] = USA_IRISH_STUDIES[0];
@@ -124,15 +107,14 @@ export class RegisterProfileComponent implements OnInit {
   synthOpinions = SYNTH_OPINION;
   synthOpinion: (typeof SYNTH_OPINION)[number] = this.synthOpinions[0];
 
-
   /**
    * See if the user has checked any of the boxes for either Irish
    * Media, Reading, or Writing
    * @param objectOfItems keys are items and values are true/false
    * @returns true if at least one item is true, otherwise false
    */
-  anyItemsChecked(objectOfItems: typeof IRISH_MEDIA_OPTIONS | typeof IRISH_WRITING_OPTIONS | typeof IRISH_READING_OPTIONS) {
-    return Object.values(objectOfItems).some(item => item);
+  anyItemsChecked( objectOfItems: | typeof IRISH_MEDIA_OPTIONS | typeof IRISH_WRITING_OPTIONS | typeof IRISH_READING_OPTIONS ) {
+    return Object.values(objectOfItems).some((item) => item);
   }
 
   /**
@@ -165,10 +147,8 @@ export class RegisterProfileComponent implements OnInit {
         this.inImmersionCourse = p.inImmersionCourse;
 
         this.teacherPrimarySchoolType = p.teacherPrimarySchoolType ?? this.teacherPrimarySchoolType;
-        this.teacherSecondarySchoolType =
-          p.teacherSecondarySchoolType ?? this.teacherSecondarySchoolType;
-        this.teacherSchoolLevels =
-          p.teacherSchoolLevels ?? this.teacherSchoolLevels;
+        this.teacherSecondarySchoolType = p.teacherSecondarySchoolType ?? this.teacherSecondarySchoolType;
+        this.teacherSchoolLevels = p.teacherSchoolLevels ?? this.teacherSchoolLevels;
 
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
