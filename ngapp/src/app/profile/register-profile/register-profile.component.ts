@@ -57,7 +57,7 @@ export class RegisterProfileComponent implements OnInit {
   thirdLevelYearOptions = THIRD_LEVEL_YEARS;
   thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYearOptions[0];
 
-  postGradYear:
+  postgradYear:
     | (typeof THIRD_LEVEL_YEARS)[0]
     | (typeof THIRD_LEVEL_YEARS)[1]
     | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
@@ -66,7 +66,7 @@ export class RegisterProfileComponent implements OnInit {
   usaIrishStudies: (typeof USA_IRISH_STUDIES)[number] = USA_IRISH_STUDIES[0];
 
   otherCountryOfStudy: string = "";
-  otherPostGradStudies: string = "";
+  otherPostgradStudies: string = "";
 
   immersionOptions = IMMERSION_OPTIONS;
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number] = this.immersionOptions[0];
@@ -140,8 +140,8 @@ export class RegisterProfileComponent implements OnInit {
         this.secondaryYear = p.secondaryYear;
         this.thirdLevelOption = p.thirdLevelStudies;
         this.thirdLevelYear = p.thirdLevelYear;
-        this.postGradYear = p.postGradYear;
-        this.otherPostGradStudies = p.otherPostGradStudies;
+        this.postgradYear = p.postgradYear;
+        this.otherPostgradStudies = p.otherPostgradStudies;
         this.usaIrishStudies = p.usaIrishStudies;
         this.otherCountryOfStudy = p.otherCountryOfStudy;
         this.inImmersionCourse = p.inImmersionCourse;
@@ -197,8 +197,8 @@ export class RegisterProfileComponent implements OnInit {
       thirdLevelYear: this.thirdLevelYear,
       usaIrishStudies: this.usaIrishStudies,
       otherCountryOfStudy: this.otherCountryOfStudy,
-      otherPostGradStudies: this.otherPostGradStudies,
-      postGradYear: this.postGradYear,
+      otherPostgradStudies: this.otherPostgradStudies,
+      postgradYear: this.postgradYear,
       inImmersionCourse: this.inImmersionCourse,
       teacherSchoolLevels: this.teacherSchoolLevels,
       teacherPrimarySchoolType: this.teacherPrimarySchoolType,

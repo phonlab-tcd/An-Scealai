@@ -2,33 +2,34 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Profile = new Schema({
-    userId : String,
-    owner: { type: mongoose.Types.ObjectId, ref: 'User' },
+    ownerId: { type: mongoose.Types.ObjectId, ref: 'User' },
     gender : String,
     age : String,
     county : String,
     notFromIreland : Boolean,
     country : String,
+    
     studentSchoolType: String,
     studentSchoolLevel: String,
     primaryYear: String,
     secondaryYear: String,
-    thirdLevelOption: String,
+    thirdLevelStudies: String,
     thirdLevelYear: String,
-    postgradYear: String,
-    otherStudies: String,
-    usaOption: String,
+    usaIrishStudies: String,
     otherCountryOfStudy: String,
-    otherPostgradStudies: String,
+    otherPostGradStudies: String,
+    postgradYear: String,
     inImmersionCourse: String,
-    teacherPrimarySchoolType: String,
-    teacherSecondarySchoolType: String,
+
     teacherSchoolTypes: {
       primary: Boolean,
       secondary: Boolean,
       thirdLevel : Boolean,
       gaeltacht : Boolean
     },
+    teacherPrimarySchoolType: String,
+    teacherSecondarySchoolType: String,
+
     nativeSpeakerStatus : String,
     dialectPreference : String,
     spokenComprehensionLevel : String,
@@ -39,6 +40,7 @@ let Profile = new Schema({
     otherLanguageProficiency: String,
     howOftenSpeakIrish : String,
     whoSpeakWith : String,
+
     irishMedia : {
         rnag : Boolean,
         tg4 : Boolean,
@@ -67,7 +69,8 @@ let Profile = new Schema({
     howOftenWriting : String,
     synthOpinion : String,
 }, {
-    collection: 'profile'
+    collection: 'profile',
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Profile', Profile);

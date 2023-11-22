@@ -17,8 +17,8 @@ export interface Profile {
   thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number];
   usaIrishStudies: (typeof USA_IRISH_STUDIES)[number];
   otherCountryOfStudy: string;
-  otherPostGradStudies: string;
-  postGradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4];
+  otherPostgradStudies: string;
+  postgradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4];
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number];
 
   teacherSchoolLevels: typeof TEACHER_SCHOOL_LEVELS;
