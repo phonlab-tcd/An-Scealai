@@ -32,29 +32,37 @@ export class DictionaryDrawerComponent implements OnInit {
     async lookupWord() {
       if(this.wordLookedUp) {
         this.dictResponseLoading = true;
-        const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
-        const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
-        const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
-        
-        // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
-        const exampleLinks = teanglannDoc.querySelectorAll('a');
-        exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
-        `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
-  
-        const moreExamplesLink = teanglannDoc.querySelector('.moar');
-        moreExamplesLink?.remove(); // this requires teanglann javascript to work, so can just remove.
-        
-        const resultsContainer = teanglannDoc.querySelector('.listings') as HTMLDivElement;
-        resultsContainer.style.cssText += 'margin-right: 0px; padding: 10px;';
-  
-        const frameObj = document.getElementById('dictiframe') as HTMLIFrameElement;
-        frameObj.src = 
-          "data:text/html;charset=utf-8," +
-          `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/template.css">` +
-          `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
-          resultsContainer.outerHTML;
-  
-        this.engagement.addEventForLoggedInUser(EventType['USE-DICTIONARY'], null, this.wordLookedUp);
+        try {
+          const teanglannRequest = this.http.post(config.baseurl + 'proxy/', {url: `https://www.teanglann.ie/en/fgb/${this.wordLookedUp}`});
+          const teanglannHtml = await firstValueFrom(teanglannRequest) as string;
+          const teanglannDoc = new DOMParser().parseFromString(teanglannHtml, 'text/html');
+          
+          // The links by default will point to localhost/en/fgb/<...> instead of teanglann/en/fgb/<...>
+          const exampleLinks = teanglannDoc.querySelectorAll('a');
+          exampleLinks.forEach((link: HTMLAnchorElement) => link.href =
+          `https://www.teanglann.ie${link.href.slice(link.href.lastIndexOf('/en/'))}`);
+    
+          const moreExamplesLink = teanglannDoc.querySelector('.moar');
+          moreExamplesLink?.remove(); // this requires teanglann javascript to work, so can just remove.
+          
+          const resultsContainer = teanglannDoc.querySelector('.listings') as HTMLDivElement;
+          resultsContainer.style.cssText += 'margin-right: 0px; padding: 10px;';
+    
+          const frameObj = document.getElementById('dictiframe') as HTMLIFrameElement;
+          frameObj.src = 
+            "data:text/html;charset=utf-8," +
+            `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/template.css">` +
+            `<link type="text/css" rel="stylesheet" href="https://www.teanglann.ie/furniture/fgb.css">` +
+            resultsContainer.outerHTML;
+    
+          this.engagement.addEvent(EventType['USE-DICTIONARY'], {dictionaryLookup: this.wordLookedUp});
+        } catch(error) {
+          console.error(error);
+          this.defaultDictIframeText = this.sanitizer.bypassSecurityTrustResourceUrl(
+            `data:text/html;charset=utf-8,` +
+            "Teanglann is not responding"
+          );
+        }
         this.dictResponseLoading = false;
       }
       else {

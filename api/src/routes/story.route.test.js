@@ -154,7 +154,7 @@ describe("story routes", () => {
     let storyId;
     beforeAll(async ()=> {
       const res = await Promise.all([
-        recordingUtil.upload(Buffer.from('hello'),'filename',{}),
+        recordingUtil.upload(Buffer.from('hello'),'filename',{}, "voiceRecording"),
         Story.create({}),
       ]);
       activeRecording=res[0];

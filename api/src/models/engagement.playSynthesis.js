@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const props = {
-  date: Date,
-  voice: Object,
+const PlaySynthesis = new mongoose.Schema({
+  ownerId: mongoose.Types.ObjectId,
+  voice: String,
   text: String,
-  user: Object,
-  storyId: mongoose.Types.ObjectId,
-};
-const collection = 'engagement.playSynthesis';
-const PlaySynthesis = new mongoose.Schema(props, {collection: collection});
+  speed: Number
+}, {
+  collection: 'engagement.playSynthesis',
+  timestamps: true,
+});
 
-module.exports = mongoose.model(collection, PlaySynthesis);
+module.exports = mongoose.model('PlaySynthesis', PlaySynthesis);

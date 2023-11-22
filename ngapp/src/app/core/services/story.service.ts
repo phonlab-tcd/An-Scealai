@@ -39,7 +39,8 @@ export class StoryService {
       lastUpdated: new Date(),
       activeRecording: null
     };
-    this.engagement.addEventForLoggedInUser(EventType['CREATE-STORY'], storyObj);
+    console.log(storyObj);
+    this.engagement.addEvent(EventType['CREATE-STORY'], {storyObject: storyObj});
     return this.http.post<{id: string}>(this.baseUrl + 'create', storyObj);
   }
 

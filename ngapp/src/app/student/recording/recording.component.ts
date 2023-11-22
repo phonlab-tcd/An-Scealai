@@ -246,9 +246,9 @@ export class RecordingComponent implements OnInit, OnDestroy {
    * or sentenceChunks
    */
   recordAudio(index: number) {
-    this.engagement.addEventForLoggedInUser(
+    this.engagement.addEvent(
       EventType["RECORD-STORY"],
-      this.story
+      {storyId: this.story._id}
     );
 
     let media = {
