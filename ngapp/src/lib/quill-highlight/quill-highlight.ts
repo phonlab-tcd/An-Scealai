@@ -274,7 +274,6 @@ export class QuillHighlighter {
 
   // Set styling and contents for tooltip
   private mouseOverTagElem(tags: HighlightTag[], span: { fromX: number, toX: number }) {
-    console.log(tags)
     // tagElement.setAttribute('data-selected', '');
 
     // for some reason bounds aren't calculated correctly until someone scrolls

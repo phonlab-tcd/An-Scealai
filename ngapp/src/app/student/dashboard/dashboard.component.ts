@@ -263,10 +263,16 @@ export class DashboardComponent implements OnInit {
   setCurrentStory(story: Story) {
     this.story = story;
     if (!this.story) return;
+
+    // set story settings
     this.storySaved = true;
     this.updatedTitle = this.story.title;
     this.getWordCount(this.story.text);
     this.textUpdated.next(story.text);
+    localStorage.setItem("currentStoryId", this.story._id);
+
+    
+    // set synth settigs
     const voice = this.synthService.getVoiceForDialect(this.story.dialect);
     this.synthSettings.voice = voice;
   }
