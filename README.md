@@ -2,7 +2,7 @@
 
 # An Scéalaí
 
-https://abair.ie/scealai/
+[https://abair.ie/scealai](https://scealai.abair.ie/#/landing)
 
 ### What is An Scéalaí?
 ###### *Taken from our User Guide*
