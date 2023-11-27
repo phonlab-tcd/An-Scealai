@@ -69,7 +69,7 @@
 
   <!-- FEEDBACK -->
   <div
-    *ngIf="hasFeedback"
+    *ngIf="hasFeedback; else requestFeedback"
     class="optionsBtn optionsPopupBtn"
     [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'feedback'"
     (click)="dontToggle = true; toggleRightDrawer('feedback')"
@@ -78,6 +78,9 @@
     <i class="fas fa-comment-dots optionsBtnIcon"></i>
     <span class="notificationBtn" *ngIf="hasFeedback && !story.feedback.seenByStudent">1</span>
   </div>
+  <ng-template #requestFeedback>
+    Request Feedback
+  </ng-template>
 
   <!-- INLINE SYNTHESIS -->
   <div
