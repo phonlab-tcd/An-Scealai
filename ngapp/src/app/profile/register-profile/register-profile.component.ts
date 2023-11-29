@@ -6,7 +6,7 @@ import { TranslationService } from "app/core/services/translation.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Profile, AGES, GENDERS, COUNTIES, SCHOOL_TYPES, STUDENT_SCHOOL_LEVELS, PRIMARY_YEARS,
-   SECONDARY_YEARS, THIRD_LEVEL_STUDIES, THIRD_LEVEL_YEARS, USA_IRISH_STUDIES, IMMERSION_OPTIONS,
+   SECONDARY_YEARS, THIRD_LEVEL_YEARS, IMMERSION_OPTIONS,
     TEACHER_SCHOOL_LEVELS, NATIVE_SPEAKER_STATUS, DIALECTS, COMPREHENSION_LEVELS, HOW_OFTEN,
      WHO_SPEAK_WITH, IRISH_MEDIA_OPTIONS, IRISH_READING_OPTIONS, IRISH_WRITING_OPTIONS, SYNTH_OPINION, } from "app/core/models/profile";
 
@@ -51,9 +51,6 @@ export class RegisterProfileComponent implements OnInit {
   secondaryYearOptions = SECONDARY_YEARS;
   secondaryYear: (typeof SECONDARY_YEARS)[number] = this.secondaryYearOptions[0];
 
-  thirdLevelOptions = THIRD_LEVEL_STUDIES;
-  thirdLevelOption: (typeof THIRD_LEVEL_STUDIES)[number] = this.thirdLevelOptions[0];
-
   thirdLevelYearOptions = THIRD_LEVEL_YEARS;
   thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYearOptions[0];
 
@@ -62,11 +59,9 @@ export class RegisterProfileComponent implements OnInit {
     | (typeof THIRD_LEVEL_YEARS)[1]
     | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
 
-  usaIrishStudiesOptions = USA_IRISH_STUDIES;
-  usaIrishStudies: (typeof USA_IRISH_STUDIES)[number] = USA_IRISH_STUDIES[0];
+  otherStudies: string = "";
 
-  otherCountryOfStudy: string = "";
-  otherPostgradStudies: string = "";
+  teachingSubjects: string = "";
 
   immersionOptions = IMMERSION_OPTIONS;
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number] = this.immersionOptions[0];
@@ -127,7 +122,6 @@ export class RegisterProfileComponent implements OnInit {
     this.profileService.getForUser(this.userDetails._id).subscribe({
       next: (res) => {
         const p: Profile = res.profile;
-        console.log(p);
         this.gender = p.gender;
         this.age = p.age;
         this.county = p.county;
@@ -138,17 +132,15 @@ export class RegisterProfileComponent implements OnInit {
         this.studentSchoolLevel = p.studentSchoolLevel;
         this.primaryYear = p.primaryYear;
         this.secondaryYear = p.secondaryYear;
-        this.thirdLevelOption = p.thirdLevelStudies;
         this.thirdLevelYear = p.thirdLevelYear;
         this.postgradYear = p.postgradYear;
-        this.otherPostgradStudies = p.otherPostgradStudies;
-        this.usaIrishStudies = p.usaIrishStudies;
-        this.otherCountryOfStudy = p.otherCountryOfStudy;
+        this.otherStudies = p.otherStudies;
         this.inImmersionCourse = p.inImmersionCourse;
 
         this.teacherPrimarySchoolType = p.teacherPrimarySchoolType ?? this.teacherPrimarySchoolType;
         this.teacherSecondarySchoolType = p.teacherSecondarySchoolType ?? this.teacherSecondarySchoolType;
         this.teacherSchoolLevels = p.teacherSchoolLevels ?? this.teacherSchoolLevels;
+        this.teachingSubjects = p.teachingSubjects ?? this.teachingSubjects;
 
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
@@ -186,22 +178,20 @@ export class RegisterProfileComponent implements OnInit {
       ownerId: userDetails._id,
       gender: this.gender,
       age: this.age,
-      county: this.county,
-      notFromIreland: false,
-      country: this.country,
+      county: this.notFromIreland? "" : this.county,
+      notFromIreland: this.notFromIreland,
+      country: this.notFromIreland ? this.country : "",
       studentSchoolType: this.studentSchoolType,
       studentSchoolLevel: this.studentSchoolLevel,
       primaryYear: this.primaryYear,
       secondaryYear: this.secondaryYear,
-      thirdLevelStudies: this.thirdLevelOption,
       thirdLevelYear: this.thirdLevelYear,
-      usaIrishStudies: this.usaIrishStudies,
-      otherCountryOfStudy: this.otherCountryOfStudy,
-      otherPostgradStudies: this.otherPostgradStudies,
       postgradYear: this.postgradYear,
+      otherStudies: this.otherStudies,
       inImmersionCourse: this.inImmersionCourse,
       teacherSchoolLevels: this.teacherSchoolLevels,
       teacherPrimarySchoolType: this.teacherPrimarySchoolType,
+      teachingSubjects: this.teachingSubjects,
       teacherSecondarySchoolType: this.teacherSecondarySchoolType,
       nativeSpeakerStatus: this.nativeSpeakerStatus,
       dialectPreference: this.dialectPreference,

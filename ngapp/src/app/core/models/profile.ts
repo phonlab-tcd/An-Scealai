@@ -13,17 +13,15 @@ export interface Profile {
   studentSchoolLevel: (typeof STUDENT_SCHOOL_LEVELS)[number];
   primaryYear: (typeof PRIMARY_YEARS)[number];
   secondaryYear: (typeof SECONDARY_YEARS)[number];
-  thirdLevelStudies: (typeof THIRD_LEVEL_STUDIES)[number];
   thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number];
-  usaIrishStudies: (typeof USA_IRISH_STUDIES)[number];
-  otherCountryOfStudy: string;
-  otherPostgradStudies: string;
+  otherStudies: string;
   postgradYear: | (typeof THIRD_LEVEL_YEARS)[0] | (typeof THIRD_LEVEL_YEARS)[1] | (typeof THIRD_LEVEL_YEARS)[4];
   inImmersionCourse: (typeof IMMERSION_OPTIONS)[number];
 
   teacherSchoolLevels: typeof TEACHER_SCHOOL_LEVELS;
   teacherPrimarySchoolType: (typeof SCHOOL_TYPES)[number];
   teacherSecondarySchoolType: (typeof SCHOOL_TYPES)[number];
+  teachingSubjects: string;
 
   nativeSpeakerStatus: (typeof NATIVE_SPEAKER_STATUS)[number];
   dialectPreference: (typeof DIALECTS)[number];
@@ -47,9 +45,10 @@ export interface Profile {
 
 export const AGES = [
   "",
-  "6-9",
-  "10-19",
-  "20-29",
+  "10-14",
+  "15-19",
+  "20-24",
+  "25-29",
   "30-39",
   "40-49",
   "50-59",
@@ -68,40 +67,39 @@ export const GENDERS = [
 
 export const COUNTIES = [
   "",
-  "Baile Átha Cliath",
-  "Contae Átha Cliath",
-  "Contae an Chabháin",
-  "Contae Cheatharlach",
-  "Contae Chiarraí",
-  "Contae Chill Chainnigh",
-  "Contae Chill Dara",
-  "Contae Chill Mhantáin",
-  "Contae an Chláir",
-  "Contae Chorcaí",
-  "Contae Dhún na nGall",
-  "Contae na Gaillimhe",
-  "Contae na hIarmhí",
-  "Contae Laoise",
-  "Contae Liatroma",
-  "Contae Loch Garman",
-  "Contae an Longfoirt",
-  "Contae Lú",
-  "Contae Luimnigh",
-  "Contae Mhaigh Eo",
-  "Contae na Mí",
-  "Contae Mhuineacháin",
-  "Contae Phort Láirge",
-  "Contae Ros Comáin",
-  "Contae Shligigh",
-  "Contae Thiobraid Árann",
-  "Contae Uíbh Fhailí",
-  "Béal Feirste",
-  "Contae Aontroma",
-  "Contae Ard Mhacha",
-  "Contae Dhoire",
-  "Contae an Dúin",
-  "Contae Thír Eoghain",
-  "Contae Fhear Manach",
+  "Dublin",
+  "Cavan",
+  "Carlow",
+  "Kerry",
+  "Kilkenny",
+  "Kildare",
+  "Wicklow",
+  "Clare",
+  "Cork",
+  "Donegal",
+  "Galway",
+  "Westmeath",
+  "Laois",
+  "Leitrim",
+  "Wexford",
+  "Longford",
+  "Louth",
+  "Limerick",
+  "Mayo",
+  "Meath",
+  "Monaghan",
+  "Waterford",
+  "Roscommon",
+  "Sligo",
+  "Tipperary",
+  "Offaly",
+  "Belfast",
+  "Antrim",
+  "Armagh",
+  "Derry",
+  "Down",
+  "Tyrone",
+  "Fermanagh"
 ] as const;
 
 export const SCHOOL_TYPES = [
@@ -117,9 +115,10 @@ export const STUDENT_SCHOOL_LEVELS = [
   "I am a primary school pupil",
   "I am a secondary school pupil",
   "I am a 3rd level student in Ireland",
-  "I am studying Irish in the USA",
-  "I am studying Irish outside of Ireland or USA",
   "I am a postgraduate student",
+  "I'm enrolled in an Irish class in the USA",
+  "I'm enrolled in an Irish class outside of Ireland",
+  "I'm learning Irish independently"
 ] as const;
 
 export const PRIMARY_YEARS = [
@@ -142,15 +141,6 @@ export const SECONDARY_YEARS = [
   "I am in 6th year",
 ] as const;
 
-export const THIRD_LEVEL_STUDIES = [
-  "",
-  "I am studying Irish",
-  "I am studying Education Primary (with Irish as a major component)",
-  "I am studying Education Primary (with Irish as a minor component)",
-  "I am studying Education as a Postgraduate student",
-  "Other",
-] as const;
-
 export const THIRD_LEVEL_YEARS = [
   "",
   "I am in 1st year",
@@ -158,12 +148,6 @@ export const THIRD_LEVEL_YEARS = [
   "I am in 3rd year of a 4 year course",
   "I am in final year",
   "Other",
-] as const;
-
-export const USA_IRISH_STUDIES = [
-  "",
-  "I am taking an Irish class at a University",
-  "I am not enrolled in an Irish language class at a University",
 ] as const;
 
 interface TeacherSchoolLevels {
@@ -186,15 +170,14 @@ export const NATIVE_SPEAKER_STATUS = [
   "",
   "Yes",
   "No",
-  "Bilingual (native)",
-  "Bilingual (other)",
+  "Bilingual",
 ] as const;
 
 export const DIALECTS = [
   "",
-  "Gaeilge Uladh",
-  "Gaeilge Chonnact",
-  "Gaolainn na Mumhan",
+  "Ulster",
+  "Connaught",
+  "Munster",
   "Other",
 ] as const;
 
@@ -221,6 +204,9 @@ interface IrishMediaOptions {
   rnalife: boolean;
   radioRiRa: boolean;
   socialMedia: boolean;
+  cula4: boolean;
+  podcasts: boolean;
+  rte: boolean;
 }
 
 export const IRISH_MEDIA_OPTIONS: IrishMediaOptions = {
@@ -230,6 +216,9 @@ export const IRISH_MEDIA_OPTIONS: IrishMediaOptions = {
   rnalife: false,
   radioRiRa: false,
   socialMedia: false,
+  cula4: false,
+  podcasts: false,
+  rte: false
 };
 
 interface IrishReadingOptions {

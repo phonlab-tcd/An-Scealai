@@ -13,11 +13,6 @@
           {{ts.l.personal_info}}
         </div>
         <div class="group-set-body">
-          <!-- Select email -->
-          <!--<div class="form-group">
-            <p class="formLabel">{{ts.l.email}}</p>
-            <input type="email" class="form-control inputField" id="email" [(ngModel)]="email" name="email" required email #emailReference>
-          </div>-->
           <!-- Select gender -->
           <div class="form-group">
             <p class="formLabel">{{ts.l.gender}}</p>
@@ -36,7 +31,7 @@
           <div *ngIf="!notFromIreland" class="form-group">
             <p class="formLabel">{{ts.l.county}}</p>
             <select name="county" id="county_ireland" class="selectOptions" [(ngModel)]="county" name="county">
-              <option *ngFor="let c of countyOptions" [ngValue]="c">{{c}}</option>
+              <option *ngFor="let c of countyOptions; ; let i=index" [ngValue]="c">{{ts.l.counties[i]}}</option>
             </select>
           </div>
             <!-- Check box for not from Ireland -->
@@ -52,8 +47,8 @@
             <input type="text" class="form-control inputField" [(ngModel)]="country" name="country">
           </div>
           
-          
-          <!-- Current Studies -->
+
+          <!-- Student - Current Studies -->
           <div class="form-group" *ngIf="userDetails.role === 'STUDENT'">
             <p class="formLabel"> {{ts.l.current_studies}}:</p>
             <select class="selectOptions" [(ngModel)]="studentSchoolLevel" name="studentSchoolLevel" required>
@@ -62,7 +57,7 @@
           </div>
           <!-- Primary -->
           <div *ngIf="studentSchoolLevel === studentSchoolLevelOptions[1]" class="form-group">
-            <p class="formLabel">{{ts.l.what_year_are_you_in}}</p>
+            <p class="formLabel">{{ts.l.what_class_are_you_in}}</p>
             <select class="selectOptions" [(ngModel)]="primaryYear" name="primaryYear">
               <option *ngFor="let year of primaryYearOptions; let i=index" [ngValue]="year">{{ts.l.primary_years_list[i]}}</option>
             </select>
@@ -80,6 +75,7 @@
               <option *ngFor="let year of secondaryYearOptions; let i=index" [ngValue]="year">{{ts.l.secondary_years_list[i]}}</option>
             </select>
             <br>
+            <!-- Type of school -->
             <p *ngIf="userDetails.role === 'STUDENT'" class="formLabel">{{ts.l.type_of_school}}</p>
             <select class="selectOptions" [(ngModel)]="studentSchoolType" name="studentSchoolType">
               <option *ngFor="let s of schoolTypeOptions; let i=index" [ngValue]="s">{{ts.l.schools_list[i]}}</option>
@@ -87,52 +83,17 @@
           </div>
           <!-- Third level -->
           <div *ngIf="studentSchoolLevel === studentSchoolLevelOptions[3]" class="form-group">
-            <p class="formLabel"> {{ts.l.what_are_you_studying}} </p>
-            <select class="selectOptions" [(ngModel)]="thirdLevelOption" name="thirdLevelOption">
-              <option *ngFor="let choice of thirdLevelOptions; let i=index" [ngValue]="choice">{{ts.l.third_level_options_list[i]}}</option>
-            </select>
-          </div>
-          <div *ngIf="thirdLevelOption === thirdLevelOptions[1]" class="form-group">
             <p class="formLabel"> {{ts.l.what_year_are_you_in}} </p>
             <select class="selectOptions" [(ngModel)]="thirdLevelYear" name="thirdLevelYear">
               <option *ngFor="let year of thirdLevelYearOptions; let i=index" [ngValue]="year">{{ts.l.third_level_years_list[i]}}</option>
             </select>
           </div>
-          <div *ngIf="thirdLevelOption === thirdLevelOptions[2] || thirdLevelOption === thirdLevelOptions[3]" class="form-group">
-            <p class="formLabel"> {{ts.l.what_year_are_you_in}} </p>
-            <select class="selectOptions" [(ngModel)]="thirdLevelYear" name="thirdLevelYear">
-              <option *ngFor="let year of thirdLevelYearOptions; let i=index" [ngValue]="year">{{ts.l.third_level_years_list_short[i]}}</option>
-            </select>
+          <!-- Other studies -->
+          <div *ngIf="userDetails.role === 'STUDENT' && studentSchoolLevel !== studentSchoolLevelOptions[1] && studentSchoolLevel !== studentSchoolLevelOptions[2]" class="form-group">
+            <p class="formLabel"> {{ts.l.what_are_you_studying}}:  </p>
+            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherStudies" name="otherStudies">
           </div>
-          <div *ngIf="thirdLevelOption === thirdLevelOptions[4]" class="form-group">
-            <p class="formLabel"> {{ts.l.what_year_are_you_in}} </p>
-            <select class="selectOptions" [(ngModel)]="postGradYear" name="postgradYear">
-              <option [ngValue]="thirdLevelYearOptions[0]">{{ts.l.third_level_years_list[0]}}</option>
-              <option [ngValue]="thirdLevelYearOptions[1]">{{ts.l.third_level_years_list[1]}}</option>
-              <option [ngValue]="thirdLevelYearOptions[4]">{{ts.l.third_level_years_list[4]}}</option>
-            </select>
-          </div>
-          <div *ngIf="thirdLevelOption === thirdLevelOptions[5]" class="form-group">
-            <p class="formLabel"> {{ts.l.please_specify}}: </p>
-            <input class="form-control inputField" id="other" [(ngModel)]="otherPostgradStudies" name="otherStudies">
-          </div>
-          <!-- Studying in the USA -->
-          <div *ngIf="studentSchoolLevel === studentSchoolLevelOptions[4]" class="form-group">
-            <p class="formLabel"> {{ts.l.what_are_you_studying}} </p>
-            <select class="selectOptions" [(ngModel)]="usaIrishStudies" name="usaOption">
-              <option *ngFor="let choice of usaIrishStudiesOptions; let i=index" [ngValue]="choice">{{ts.l.usa_options_list[i]}}</option>
-            </select>
-          </div>
-          <!-- Studying outside USA or Ireland -->
-          <div *ngIf="studentSchoolLevel === studentSchoolLevelOptions[5]" class="form-group">
-            <p class="formLabel"> {{ts.l.specify_where}}:  </p>
-            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherCountryOfStudy" name="otherCountryOfStudy">
-          </div>
-          <!-- Postgrad student -->
-          <div *ngIf="studentSchoolLevel === studentSchoolLevelOptions[6]" class="form-group">
-            <p class="formLabel"> {{ts.l.studies}}:  </p>
-            <input class="form-control inputField" id="otherCountry" [(ngModel)]="otherPostGradStudies" name="otherPostgradStudies">
-          </div>
+          <!-- Immersion Course -->
           <div class="form-group" *ngIf="userDetails.role === 'STUDENT'" >
             <p class="formLabel">{{ts.l.attending_gaeltacht_immersion_course}}</p>
             <select class="selectOptions" [(ngModel)]="inImmersionCourse" name="immersionCourse" required>
@@ -140,7 +101,7 @@
             </select>
           </div>
           
-          <!-- Check box for teacher schools -->
+          <!-- Teacher - Schools -->
           <div class="form-group" *ngIf="userDetails.role === 'TEACHER'">
             <p class="formLabel">{{ts.l.school_type_where_you_teach}}: </p>
             <div class="checkbox-group">
@@ -162,11 +123,11 @@
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="teacherSchoolLevels.gaeltacht" name="teacherGaeltacht"> {{ts.l.gaeltacht_immersion_course}} </div>
             </div>
           </div>
-          <!-- School name TEACHER-->
-        <!--<div *ngIf="auth.getUserDetails().role === 'TEACHER'" class="form-group">
-            <p class="formLabel">{{ts.l.school_name}}</p>
-            <input type="text" class="fform-control inputField" id="school-name" [(ngModel)]="teacherSchoolName" placeholder={{teacherSchoolName}} name="teacherSchoolName" >
-          </div>-->
+          <!-- What subjects -->
+          <div *ngIf="userDetails.role === 'TEACHER'" class="form-group">
+            <p class="formLabel"> {{ts.l.what_subjects_do_you_teach}}  </p>
+            <input class="form-control inputField" id="otherCountry" [(ngModel)]="teachingSubjects" name="otherStudies">
+          </div>
         </div>
       </div>
       
@@ -190,8 +151,8 @@
               <option *ngFor="let dp of dialectPreferenceOptions; let i=index" [ngValue]="dp">{{ts.l.dialect_preference_list[i]}}</option>
             </select>
           </div>
-          <!-- Select aural comprehension STUDENT/ADMIN -->
-          <div class="form-group" *ngIf="userDetails.role !== 'TEACHER'">
+          <!-- Select aural comprehension -->
+          <div class="form-group">
             <p class="formLabel">{{ts.l.how_well_understand_spoken}}</p>
             <select class="selectOptions" [(ngModel)]="spokenComprehensionLevel" name="spokenComprehensionLevel" required>
               <option *ngFor="let scl of spokenComprehensionLevelOptions; let i=index" [ngValue]="scl">{{ts.l.spoken_comprehension_level_list[i]}}</option>
@@ -212,7 +173,7 @@
             <p class="formLabel">{{ts.l.mother_native_tongue}}: </p>
             <input type="text" class="form-control inputField" id="mother" [(ngModel)]="motherNativeTongue" name="motherNativeTongue">
           </div>
-          <!-- Years of Irish STUDENT/ADMIN -->
+          <!-- Years of Irish -->
           <div class="form-group">
             <p class="formLabel"> {{ts.l.years_of_irish_school}}</p>
             <input class="form-control inputFieldYears" id="yearsOfIrish" type="number" name="yearsOfIrish" min="0" [(ngModel)]="yearsOfIrish" required>
@@ -255,6 +216,9 @@
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.rnalife" name="rnalife"> Raidió na Life</div>
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.radioRiRa" name="radioRiRa"> Raidió Rí-Rá</div>
               <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.socialMedia" name="socialMedia"> {{ts.l.social_media}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.cula4" name="cula4"> Cúla 4 </div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.podcasts" name="podcasts"> {{ts.l.podcasts}}</div>
+              <div class="checkbox-line"><input type="checkbox" [(ngModel)]="irishMedia.rte" name="rte"> RTE </div>
             </div>
           </div>
           <!-- Select how often use Irish media -->

@@ -13,11 +13,8 @@ let Profile = new Schema({
     studentSchoolLevel: String,
     primaryYear: String,
     secondaryYear: String,
-    thirdLevelStudies: String,
     thirdLevelYear: String,
-    usaIrishStudies: String,
-    otherCountryOfStudy: String,
-    otherPostGradStudies: String,
+    otherStudies: String,
     postgradYear: String,
     inImmersionCourse: String,
 
@@ -29,6 +26,7 @@ let Profile = new Schema({
     },
     teacherPrimarySchoolType: String,
     teacherSecondarySchoolType: String,
+    teachingSubjects: String,
 
     nativeSpeakerStatus : String,
     dialectPreference : String,
@@ -48,6 +46,9 @@ let Profile = new Schema({
         rnalife : Boolean,
         radioRiRa : Boolean,
         socialMedia : Boolean,
+        cula4: Boolean,
+        podcasts: Boolean,
+        rte: Boolean,
     },
     irishReading : {
         newspapers : Boolean,
