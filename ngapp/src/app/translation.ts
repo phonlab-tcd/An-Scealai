@@ -499,15 +499,6 @@ const translations = {
       'Gaeltacht school',
       'I did not attend school in Ireland'
     ] },
-  // english_school: {
-  //   ga: 'Scoil Bhéarla',
-  //   en: 'English school' },
-  // gaelscoil: {
-  //   ga: 'Gaelscoil',
-  //   en: 'Gaelscoil' },
-  // gaeltacht_school: {
-  //   ga: 'Scoil Gaeltachta',
-  //   en: 'Gaeltacht school' },
   student_school_level_list: {
     ga: [
       '',
@@ -585,21 +576,12 @@ const translations = {
       'I am in 3rd year of a 4 year course',
       'I am in final year'
     ] },
-  // please_specify: {
-  //   ga: 'Luaigh',
-  //   en: 'Please specify' },
-  // specify_where: {
-  //   ga: 'Luaigh an áit',
-  //   en: 'Specify where' },
   attending_gaeltacht_immersion_course: {
     ga: 'Táim ag freastal ar chúrsa Gaeltachta faoi láthair',
     en: 'I am currently attending a Gaeltacht immersion course' },
   immersion_list: {
     ga: [ '', 'Tá', 'Níl' ],
     en: [ '', 'Yes', 'No' ] },
-  // studies: {
-  //   ga: 'Ábhar staidéir',
-  //   en: 'Studies' },
   primary: {
     ga: 'Bunleibhéal',
     en: 'Primary' },
@@ -639,9 +621,6 @@ const translations = {
   no: {
     ga: 'Ní hea',
     en: 'No' },
-  // bilingual_native: {
-  //   ga: 'Dátheangach (cainteoir dúchais)',
-  //   en: 'Bilingual (native)' },
   native_speaker_status_list: {
     ga: [
       '',
