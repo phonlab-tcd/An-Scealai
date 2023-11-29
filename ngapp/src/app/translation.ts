@@ -2447,6 +2447,9 @@ const translations = {
     ga: 'Tá an-áthas orainn an t-aitheantas seo a bheith faighte againn don dul chun cinn atá déanta go dtí seo leis <i>An Scéalaí</i>.',
     en: 'A massive congratulations to everyone involved in bringing this project to its current level of development.'
   },
+  posters: {
+    ga: 'Póstaeir',
+    en: 'Posters' },
   settings: {
     ga: 'Socruithe',
     en: 'Settings' },

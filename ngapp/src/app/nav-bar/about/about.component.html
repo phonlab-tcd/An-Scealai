@@ -34,9 +34,35 @@
         </div>
       </mat-card-content>
     </mat-card><br><br>
-    
+    <!-- Papers -->
     <div class="paperHeader"> {{ts.l.academic_papers}} </div>
     <mat-accordion multi>
+      <mat-expansion-panel >
+        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+          <mat-panel-title>
+              <div><b> The teacher-in-the-loop: collaboration with the teaching community in the development of an iCALL platform for Irish </b></div>
+          </mat-panel-title>
+          <mat-panel-description>
+            2023 - Madeleine Comtois, Neasa Ní Chiaráin
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div class="paperDescription">This paper explores the teacher functionality within An Scéalaí, an iCALL platform being developed for Irish. Aiming to foster Irish language learning, the design and development of An Scéalaí has from the outset employed a cooperative approach with educators to optimise its responsiveness to user needs. There is a particular emphasis on corrective feedback at this current stage of development as we posit that administering constructive corrective feedback to learners will be the cornerstone of its pedagogical effectiveness and user satisfaction. The efficacy of iCALL platforms in promoting endangered languages, such as Irish, is contingent upon the active involvement of the associated language community. This work presents the findings of a recent questionnaire conducted as part of the ongoing initiative to engage educators and developers in a collective effort towards language revitalisation. We sought to gain an overview of teachers' experiences teaching Irish and their impressions of the An Scéalaí platform, introducing new functionality they would not have previously encountered. The results give us insights into the current situation of technology use in classrooms (post-Covid). It reinforces the importance of having the teacher-in-the-loop at every stage of iCALL development to ensure useful applications are built for the wider teacher community. </div>
+          <br>
+          <a href="assets/pdf/EuroCALL_2023.pdf" class="fileDownloadBtn" target="_blank">{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+      </mat-expansion-panel>
+      <mat-expansion-panel >
+        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+          <mat-panel-title>
+              <div><b> An Bat Mírialta: Stateful Development of an Irregular Verb Bot for Irish </b></div>
+          </mat-panel-title>
+          <mat-panel-description>
+            2023 - John Sloan, Neasa Ní Chiaráin
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <div class="paperDescription">This paper outlines a system description and small-scale us- ability study of An Bat Mírialta - ('The Irregular Verb Bot')- a newly developed educational application embedded within the Irish intelligent-Computer Assisted Language Learning (iCALL) platform An Scéalaí (www.abair.ie/scealai). An Bat Mírialta is being developed to aid learners in their mastery of the 11 irregular verbs of Irish. The work is presented in the context of a novel conceptual framework for CALL artefact design, implementation and evaluation - LeTAT. Challenges and concerns faced in developing an educational technology for a low-resource, endangered language are also described.</div>
+          <br>
+          <a href="assets/pdf/Bat_Mirialta_SLaTE_2023.pdf" class="fileDownloadBtn" target="_blank">{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+      </mat-expansion-panel>
       <mat-expansion-panel >
         <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
           <mat-panel-title>
@@ -79,5 +105,36 @@
       </mat-expansion-panel>
     </mat-accordion>
     <br><br>
+    <!-- Posters -->
+    <div class="paperHeader"> {{ts.l.posters}} </div>
+    <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+        <mat-panel-title>
+            <div><b> An Scéalaí - the intelligent-CALL platform </b></div>
+        </mat-panel-title>
+        <mat-panel-description>
+          2023 - Neasa Ní Chiaráin, Madeleine Comtois, Harald Berthelsen, John Sloan, Neimhin Robinson Gunning, Oisín Nolan
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <br><br>
+        <a href="assets/pdf/UK_Speech_Scealai_Poster.pdf" class="fileDownloadBtn" target="_blank">{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+        <mat-panel-title>
+            <div><b> An Bat Mírialta - The Irregular Verb Bot </b></div>
+        </mat-panel-title>
+        <mat-panel-description>
+          2023 - Neasa Ní Chiaráin, John Sloan, Madeleine Comtois, Harald Berthelsen, Neimhin Robinson Gunning, Oisín Nolan, Oscar Maharg Bravo
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <br><br>
+        <a href="assets/pdf/UK_Speech_Bat_Mirialta_Poster.pdf" class="fileDownloadBtn" target="_blank">{{ts.l.download}} PDF <i class="fas fa-download"></i></a>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <br>
+  <img src="assets/img/ACL_group_photo.png" alt="ACL poster group photo" class="ELLCertificate" style="width:40%" >
+  <br><br>
   </div>
 </div>
