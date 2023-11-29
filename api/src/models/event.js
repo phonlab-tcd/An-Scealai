@@ -1,33 +1,35 @@
 const mongoose = require('mongoose');
 
 const Event = new mongoose.Schema({
-  date: Date,
+  ownerId: mongoose.Types.ObjectId,
   type: {
     type: String,
     enum: [
-      'CREATE-STORY',
-      'DELETE-STORY',
-      'SAVE-STORY',
-      'SYNTHESISE-STORY',
-      'GRAMMAR-CHECK-STORY',
-      'MOUSE-OVER-GRAMMAR-SUGGESTION',
       'REGISTER',
       'LOGIN',
       'LOGOUT',
+      'CREATE-STORY',
+      'DELETE-STORY',
       'VIEW-FEEDBACK',
-      'CREATE-MESSAGE',
-      'RECORD-STORY',
       'USE-DICTIONARY',
+      'USE-GRAMMAR-CHECKER',
+      'RECORD-STORY',
+      'CREATE-MESSAGE',
+      'USE-PROMPT-GENERATOR',
+      'USE-DICTOGLOSS',
+      'DELETE-CLASSROOM',
       'PROFILE-STATS',
       'FEATURE-STATS',
     ],
+    required: true
   },
-  storyData: Object,
-  userId: String,
-  statsData: Object,
-  dictionaryLookup: String,
+  data: {
+    type: Object,
+    required: false
+  },
 }, {
   collection: 'engagement',
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Event', Event);

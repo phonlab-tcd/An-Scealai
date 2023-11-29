@@ -7,6 +7,7 @@ import newTimeout from "lib/newTimeout";
 import synth from "lib/synth";
 import type Settings from "lib/synth/settings";
 import { z } from "zod";
+import { EngagementService } from "app/core/services/engagement.service";
 
 const QuillTooltip = Quill.import("ui/tooltip");
 
@@ -40,6 +41,7 @@ async function onclick( this: Buttons, tooltipReference: typeof QuillTooltip, te
   if (!v.success) throw v;
 
   const res = v.data;
+  this.addPlaySynthesisEvent(text);
 
   const tokens = res.timing.map((e) => e.word);
   const locations = findLocationsInText(text, tokens, startIndex);
@@ -209,6 +211,7 @@ function userTextChange(f: Function) {
 export default class Buttons {
   quillEditor: Quill;
   synthSettings: Settings;
+  engagement: EngagementService;
   playback = new synth.PlaybackHandle();
   enabled = localStorage.getItem("synthPreference") === "true" ?? true;
   clickEventListener;
@@ -220,9 +223,10 @@ export default class Buttons {
   public wordTooltip: typeof QuillTooltip;
   public sentTooltip: typeof QuillTooltip;
 
-  constructor(qlEditor: Quill, synthSettings: Settings) {
+  constructor(qlEditor: Quill, synthSettings: Settings, engagement: EngagementService) {
     this.quillEditor = qlEditor;
     this.synthSettings = synthSettings;
+    this.engagement = engagement;
 
     // TODO instead of hiding should just update position
     new ResizeObserver(this.hide.bind(this)).observe(this.quillEditor.root.parentElement);
@@ -248,6 +252,10 @@ export default class Buttons {
     } else {
       tooltip.root.innerHTML = "<span>▸<span>";
     }
+  }
+
+  addPlaySynthesisEvent(text: string) {
+    this.engagement.addPlaySynthesisEvent(this.synthSettings.voice, text, this.synthSettings.speed)
   }
 
   hide() {

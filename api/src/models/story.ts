@@ -72,6 +72,7 @@ const Story = new Schema(
     },
     {
       collection: 'story',
+      timestamps: true
     },
 );
 

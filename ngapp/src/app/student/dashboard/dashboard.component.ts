@@ -235,7 +235,7 @@ export class DashboardComponent implements OnInit {
       if (selectedDrawer == 'feedback') {
         this.storyService.viewFeedback(this.story._id).subscribe(() => {
           this.story.feedback.seenByStudent = true;
-          this.engagement.addEventForLoggedInUser( EventType["VIEW-FEEDBACK"], this.story );
+          this.engagement.addEvent( EventType["VIEW-FEEDBACK"], {storyObject: this.story} );
           this.notificationService.getStudentNotifications();
         });
       }
@@ -249,6 +249,7 @@ export class DashboardComponent implements OnInit {
       this.showErrorTags = true;
       this.runGrammarCheck();
       this.toggleGrammarTags();
+      this.engagement.addEvent( EventType["USE-GRAMMAR-CHECKER"] );
     } else {
       this.showErrorTags = false;
       this.toggleGrammarTags();
@@ -301,7 +302,7 @@ export class DashboardComponent implements OnInit {
     q["history"].options.userOnly = true; // prevent ctrl z from deleting text
     this.quillEditor = q;
 
-    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings);
+    this.synthButtons = new synth.Buttons(this.quillEditor, this.synthSettings, this.engagement);
 
     this.quillEditor.root.setAttribute("spellcheck", "false");
     q.focus();
@@ -383,7 +384,7 @@ export class DashboardComponent implements OnInit {
       lastUpdated: finishedWritingTime,
     };
 
-    this.engagement.addEventForLoggedInUser( EventType["SAVE-STORY"], this.story );
+    this.engagement.addSaveStoryEvent(this.story);
 
     // Save story to the DB
     try {
@@ -513,7 +514,7 @@ export class DashboardComponent implements OnInit {
     if (this.isRecording) {
       this.isTranscribing = true;
       this.recordAudioService.stopRecording();
-      let transcription = await this.recordAudioService.getAudioTranscription();
+      const transcription = await this.recordAudioService.getAudioTranscription();
       this.isTranscribing = false;
       if (transcription) {
         // get cursor position for inserting the transcription
@@ -530,6 +531,7 @@ export class DashboardComponent implements OnInit {
         //this.textUpdated.next();
         this.debounceSaveStory();
       }
+      else alert("No audio detected");
     } else {
       this.recordAudioService.recordAudio();
     }

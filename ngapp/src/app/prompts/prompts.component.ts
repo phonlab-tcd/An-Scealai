@@ -10,6 +10,8 @@ import { BasicDialogComponent } from "../dialogs/basic-dialog/basic-dialog.compo
 import { CommonModule } from "@angular/common";
 import { PartOfSpeechComponent } from "./part-of-speech/part-of-speech.component";
 import { PromptService } from "app/core/services/prompt.service";
+import { EngagementService } from "app/core/services/engagement.service";
+import { EventType } from "app/core/models/event"
 
 type combinationDataStructure = {
     word: string,
@@ -62,7 +64,8 @@ export class PromptsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private promptService: PromptService
+    private promptService: PromptService,
+    private engagement: EngagementService
   ) {
     this.promptType = this.route.snapshot.params["type"];
     this.levelForm = this.fb.group({
@@ -215,6 +218,7 @@ export class PromptsComponent implements OnInit {
           .saveStory( user._id, res[0], new Date(), dialect, this.prompt, user.username, true )
           .subscribe({
             next: () => {
+              this.engagement.addEvent(EventType['USE-PROMPT-GENERATOR'], {promptType: this.promptType, prompt: this.prompt});
               this.router.navigateByUrl("/student/dashboard");
             },
             error: () => {
