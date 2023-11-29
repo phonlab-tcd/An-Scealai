@@ -1,383 +1,158 @@
-import { Component, OnInit } from '@angular/core';
-import { ProfileService } from 'app/core/services/profile.service';
-import { AuthenticationService } from 'app/core/services/authentication.service'
-import { Router } from '@angular/router';
-import { TranslationService } from 'app/core/services/translation.service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { ProfileService } from "app/core/services/profile.service";
+import { AuthenticationService, UserDetails, } from "app/core/services/authentication.service";
+import { Router } from "@angular/router";
+import { TranslationService } from "app/core/services/translation.service";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Profile, AGES, GENDERS, COUNTIES, SCHOOL_TYPES, STUDENT_SCHOOL_LEVELS, PRIMARY_YEARS,
+   SECONDARY_YEARS, THIRD_LEVEL_YEARS, IMMERSION_OPTIONS,
+    TEACHER_SCHOOL_LEVELS, NATIVE_SPEAKER_STATUS, DIALECTS, COMPREHENSION_LEVELS, HOW_OFTEN,
+     WHO_SPEAK_WITH, IRISH_MEDIA_OPTIONS, IRISH_READING_OPTIONS, IRISH_WRITING_OPTIONS, SYNTH_OPINION, } from "app/core/models/profile";
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
-  selector: 'app-register-profile',
-  templateUrl: './register-profile.component.html',
-  styleUrls: ['./register-profile.component.scss']
+  selector: "app-register-profile",
+  templateUrl: "./register-profile.component.html",
+  styleUrls: ["./register-profile.component.scss"],
 })
 export class RegisterProfileComponent implements OnInit {
+  constructor(
+    private profileService: ProfileService,
+    public auth: AuthenticationService,
+    private router: Router,
+    public ts: TranslationService
+  ) {}
 
-  constructor(private profileService : ProfileService,
-              public auth : AuthenticationService,
-              private router : Router,
-              public ts : TranslationService) { }
+  userDetails: UserDetails | null = null;
 
-  //input : string;
-  showError : boolean = false;
+  genderOptions = GENDERS;
+  gender: (typeof GENDERS)[number] = this.genderOptions[0];
 
-  genders : string[] = [
-    "",
-    "Male",
-    "Female",
-    "Non-binary",
-    "Prefer not to say"
-  ];
+  ageOptions = AGES;
+  age: (typeof AGES)[number] = this.ageOptions[0];
 
-  gender : string = this.genders[0];
+  countyOptions = COUNTIES;
+  county: (typeof COUNTIES)[number] = this.countyOptions[0];
 
-  ages : string[] = [
-    "",
-    "6-9",
-    "10-19",
-    "20-29",
-    "30-39",
-    "40-49",
-    "50-59",
-    "60-69",
-    "70-79",
-    "80+",
-  ];
+  notFromIreland: boolean = false;
+  country: string = "";
 
-  age : string = this.ages[0];
+  schoolTypeOptions = SCHOOL_TYPES;
+  studentSchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
 
-  counties : string[] = [
-    "",
-    "Baile Átha Cliath",
-    "Contae Átha Cliath",
-    "Contae an Chabháin",
-    "Contae Cheatharlach",
-    "Contae Chiarraí­",
-    "Contae Chill Chainnigh",
-    "Contae Chill Dara",
-    "Contae Chill Mhantáin",
-    "Contae an Chláir",
-    "Contae Chorcaí­",
-    "Contae Dhún na nGall",
-    "Contae na Gaillimhe",
-    "Contae na hIarmhí­",
-    "Contae Laoise",
-    "Contae Liatroma",
-    "Contae Loch Garman",
-    "Contae an Longfoirt",
-    "Contae Lú",
-    "Contae Luimnigh",
-    "Contae Mhaigh Eo",
-    "Contae na Mí­",
-    "Contae Mhuineacháin",
-    "Contae Phort Láirge",
-    "Contae Ros Comáin",
-    "Contae Shligigh",
-    "Contae Thiobraid Árann",
-    "Contae Uí­bh Fhailí­",
-    "Béal Feirste",
-    "Contae Aontroma",
-    "Contae Ard Mhacha",
-    "Contae Dhoire",
-    "Contae an Dúin",
-    "Contae Thír Eoghain",
-    "Contae Fhear Manach",
-  ];
+  studentSchoolLevelOptions = STUDENT_SCHOOL_LEVELS;
+  studentSchoolLevel: (typeof STUDENT_SCHOOL_LEVELS)[number] = this.studentSchoolLevelOptions[0];
 
-  county : string = this.counties[0];
+  primaryYearOptions = PRIMARY_YEARS;
+  primaryYear: (typeof PRIMARY_YEARS)[number] = this.primaryYearOptions[0];
 
-  notFromIreland : boolean = false;
+  secondaryYearOptions = SECONDARY_YEARS;
+  secondaryYear: (typeof SECONDARY_YEARS)[number] = this.secondaryYearOptions[0];
 
-  country : string = "";
+  thirdLevelYearOptions = THIRD_LEVEL_YEARS;
+  thirdLevelYear: (typeof THIRD_LEVEL_YEARS)[number] = this.thirdLevelYearOptions[0];
 
-  schools : string[] = [
-    "",
-    "English school",
-    "Gaelscoil",
-    "Gaeltacht school",
-    "I did not attend school in Ireland"
-  ];
-  
-  studentSchoolType: string = this.schools[0];
-  
-  
-  studentSchoolLevels: string[] = [
-    "",
-    "I am a primary school pupil",
-    "I am a secondary school pupil",
-    "I am a 3rd level student in Ireland",
-    "I am studying Irish in the USA",
-    "I am studying Irish outside of Ireland or USA",
-    "I am a postgraduate student"
-  ];
-  
-  studentSchoolLevel: string = "";
-  
-  primaryYears: string[] = [
-    "",
-    "I am in 1st class",
-    "I am in 2nd class",
-    "I am in 3rd class",
-    "I am in 4th class",
-    "I am in 5th class",
-    "I am in 6th class"
-  ];
-  
-  primaryYear: string = "";
-  
-  secondaryYears: string[] = [
-    "",
-    "I am in 1st year",
-    "I am in 2nd year",
-    "I am in 3rd year",
-    "I am in 4th year",
-    "I am in 5th year",
-    "I am in 6th year",
-  ];
-  
-  secondaryYear: string = "";
-  
-  thirdLevelOptions: string[] = [
-    "",
-    "I am studying Irish",
-    "I am studying Education Primary (with Irish as a major component)",
-    "I am studying Education Primary (with Irish as a minor component)",
-    "I am studying Education as a Postgraduate student",
-    "Other"
-  ];
-  
-  thirdLevelOption: string = "";
-  
-  thirdLevelYearsShort: string[] = [
-    "",
-    "I am in 1st year",
-    "I am in 2nd year",
-    "I am in 3rd year of a 4 year course",
-    "I am in final year"
-  ];
-  
-  thirdLevelYears: string[] = [
-    "",
-    "I am in 1st year",
-    "I am in 2nd year",
-    "I am in 3rd year",
-    "I am in final year"
-  ]
-  
-  thirdLevelYear: string = "";
-  
-  postgradYear: string = "";
-  
+  postgradYear:
+    | (typeof THIRD_LEVEL_YEARS)[0]
+    | (typeof THIRD_LEVEL_YEARS)[1]
+    | (typeof THIRD_LEVEL_YEARS)[4] = this.thirdLevelYearOptions[0];
+
   otherStudies: string = "";
-  
-  usaOptions: string[] = [
-    "",
-    "I am taking an Irish class at a University",
-    "I am not enrolled in an Irish language class at a University"
-  ];
-  
-  
-  usaOption: string = "";
-  
-  otherCountryOfStudy: string = "";
-  
-  otherPostgradStudies: string = "";
-  
-  immersionOptions: string[] = [
-    "",
-    "Yes",
-    "No"
-  ]
-  
-  immersionCourse: String = this.immersionOptions[0];
-  
-  teacherSchoolTypes = {
-    primary: false,
-    secondary: false,
-    thirdLevel : false,
-    gaeltacht : false
-  };
-  
-  teacherPrimaryType: string = "";
-  teacherSecondaryType: string = "";
 
-  nativeSpeakerStatuses : string[] = [
-    "",
-    "Yes",
-    "No",
-    "Bilingual (native)",
-    "Bilingual (other)"
-  ];
+  teachingSubjects: string = "";
 
-  nativeSpeakerStatus : string = this.nativeSpeakerStatuses[0];
+  immersionOptions = IMMERSION_OPTIONS;
+  inImmersionCourse: (typeof IMMERSION_OPTIONS)[number] = this.immersionOptions[0];
 
-  dialectPreferences : string[] = [
-    "",
-    "Gaeilge Uladh",
-    "Gaeilge Chonnact",
-    "Gaolainn na Mumhan",
-    "Other"
-  ];
+  teacherSchoolLevels = TEACHER_SCHOOL_LEVELS;
+  teacherPrimarySchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
+  teacherSecondarySchoolType: (typeof SCHOOL_TYPES)[number] = this.schoolTypeOptions[0];
 
-  dialectPreference : string = this.dialectPreferences[0];
+  nativeSpeakerStatusOptions = NATIVE_SPEAKER_STATUS;
+  nativeSpeakerStatus: (typeof NATIVE_SPEAKER_STATUS)[number] = this.nativeSpeakerStatusOptions[0];
 
-  spokenComprehensionLevels : string[] = [
-    "",
-    "A few words when spoken slowly",
-    "A few simple phrases when spoken slowly",
-    "Parts of the conversation",
-    "Most of the conversation when spoken clearly",
-    "Almost everything when spoken at a normal pace"
-  ];
+  dialectPreferenceOptions = DIALECTS;
+  dialectPreference: (typeof DIALECTS)[number] = this.dialectPreferenceOptions[0];
 
-  spokenComprehensionLevel : string = this.spokenComprehensionLevels[0];
+  spokenComprehensionLevelOptions = COMPREHENSION_LEVELS;
+  spokenComprehensionLevel: (typeof COMPREHENSION_LEVELS)[number] = this.spokenComprehensionLevelOptions[0];
 
   yearsOfIrish: number | null = null;
-  
   otherLanguages: string = "";
-  
   fatherNativeTongue: string = "";
-  
   motherNativeTongue: string = "";
-  
   otherLanguageProficiency: string = "";
 
-  howOftenOptions : string[] = [
-    "",
-    "Every day",
-    "Every week but not every day",
-    "A few times a month",
-    "Hardly ever",
-  ];
+  howOftenOptions = HOW_OFTEN;
+  howOftenSpeakIrish: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
 
-  speakingFrequency : string = this.howOftenOptions[0];
+  speakWithOptions = WHO_SPEAK_WITH;
+  whoSpeakWith: (typeof WHO_SPEAK_WITH)[number] = this.speakWithOptions[0];
 
-  speakWithOptions : string[] = [
-    "",
-    "Learners and native speakers",
-    "Native speakers",
-    "Learners",
-  ];
+  irishMedia = IRISH_MEDIA_OPTIONS;
+  irishReading = IRISH_READING_OPTIONS;
+  irishWriting = IRISH_WRITING_OPTIONS;
 
-  speakWith : string = this.speakWithOptions[0];
+  howOftenMedia: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
+  howOftenReading: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
+  howOftenWriting: (typeof HOW_OFTEN)[number] = this.howOftenOptions[0];
 
-  irishMedia = {
-    rnag : false,
-    tg4 : false,
-    bbcUladh : false,
-    rnalife : false,
-    radioRiRa : false,
-    socialMedia : false
-  };
+  synthOpinions = SYNTH_OPINION;
+  synthOpinion: (typeof SYNTH_OPINION)[number] = this.synthOpinions[0];
 
-  howOftenMedia : string = this.howOftenOptions[0];
-
-  howOftenReading : string = this.howOftenOptions[0];
-
-  howOftenWriting : string = this.howOftenOptions[0];
-
-  irishMediaChecked() : boolean {
-    return (this.irishMedia.bbcUladh
-      || this.irishMedia.radioRiRa
-      || this.irishMedia.rnag
-      || this.irishMedia.rnalife
-      || this.irishMedia.socialMedia
-      || this.irishMedia.tg4);
+  /**
+   * See if the user has checked any of the boxes for either Irish
+   * Media, Reading, or Writing
+   * @param objectOfItems keys are items and values are true/false
+   * @returns true if at least one item is true, otherwise false
+   */
+  anyItemsChecked( objectOfItems: | typeof IRISH_MEDIA_OPTIONS | typeof IRISH_WRITING_OPTIONS | typeof IRISH_READING_OPTIONS ) {
+    return Object.values(objectOfItems).some((item) => item);
   }
-
-  irishReading = {
-    newspapers : false,
-    socialMedia : false,
-    books : false,
-  };
-
-  irishReadingChecked() : boolean {
-    return (this.irishReading.newspapers
-      || this.irishReading.books
-      || this.irishReading.socialMedia);
-  }
-
-  irishWriting = {
-    email : false,
-    socialMedia : false,
-    blog : false,
-    teachingMaterial : false,
-    articles : false,
-    shortStories : false,
-    books : false,
-    poetry : false,
-  }
-
-  irishWritingChecked() : boolean {
-    return (
-      this.irishWriting.articles
-      || this.irishWriting.blog
-      || this.irishWriting.books
-      || this.irishWriting.email
-      || this.irishWriting.poetry
-      || this.irishWriting.shortStories
-      || this.irishWriting.socialMedia
-      || this.irishWriting.teachingMaterial
-    );
-  }
-
-  synthOpinions : string[] = [
-    "",
-    "I don't like them",
-    "They're okay, but I prefer a human voice",
-    "I don't care if it is a computer or person",
-    "Sometimes synthetic voices just fit",
-    "Sometimes synthetic voices are better suited",
-  ];
-
-  synthOpinion : string = this.synthOpinions[0];
 
   /**
    * Get any previous profile information already saved for the user
    */
   ngOnInit() {
-    const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
+    this.userDetails = this.auth.getUserDetails();
+    if (!this.userDetails) return;
 
-    this.profileService.getForUser(userDetails._id).subscribe({
+    this.profileService.getForUser(this.userDetails._id).subscribe({
       next: (res) => {
-        let p = res.profile;
+        const p: Profile = res.profile;
         this.gender = p.gender;
         this.age = p.age;
         this.county = p.county;
         this.notFromIreland = p.notFromIreland;
         this.country = p.country;
-        
-        this.studentSchoolType = p.studentSchoolType,
-        this.studentSchoolLevel = p.studentSchoolLevel,
-        this.primaryYear = p.primaryYear,
-        this.secondaryYear = p.secondaryYear,
-        this.thirdLevelOption = p.thirdLevelOption,
-        this.thirdLevelYear = p.thirdLevelYear,
-        this.postgradYear = p.postgradYear,
-        this.otherStudies = p.otherStudies,
-        this.usaOption = p.usaOption,
-        this.otherCountryOfStudy = p.otherCountryOfStudy,
-        this.otherPostgradStudies = p.otherPostgradStudies,
-        this.immersionCourse = p.immersionCourse,
-        
-        this.teacherPrimaryType = (p.teacherPrimaryType) ? p.teacherPrimaryType : this.teacherPrimaryType,
-        this.teacherSecondaryType = (p.teacherSecondaryType) ? p.teacherSecondaryType : this.teacherSecondaryType,
-        this.teacherSchoolTypes = (p.teacherSchoolTypes) ? p.teacherSchoolTypes: this.teacherSchoolTypes,
+
+        this.studentSchoolType = p.studentSchoolType;
+        this.studentSchoolLevel = p.studentSchoolLevel;
+        this.primaryYear = p.primaryYear;
+        this.secondaryYear = p.secondaryYear;
+        this.thirdLevelYear = p.thirdLevelYear;
+        this.postgradYear = p.postgradYear;
+        this.otherStudies = p.otherStudies;
+        this.inImmersionCourse = p.inImmersionCourse;
+
+        this.teacherPrimarySchoolType = p.teacherPrimarySchoolType ?? this.teacherPrimarySchoolType;
+        this.teacherSecondarySchoolType = p.teacherSecondarySchoolType ?? this.teacherSecondarySchoolType;
+        this.teacherSchoolLevels = p.teacherSchoolLevels ?? this.teacherSchoolLevels;
+        this.teachingSubjects = p.teachingSubjects ?? this.teachingSubjects;
 
         this.nativeSpeakerStatus = p.nativeSpeakerStatus;
         this.dialectPreference = p.dialectPreference;
         this.spokenComprehensionLevel = p.spokenComprehensionLevel;
-        this.yearsOfIrish = p.yearsOfIrish,
-        this.otherLanguages = p.otherLanguages,
-        this.fatherNativeTongue = p.fatherNativeTongue,
-        this.motherNativeTongue = p.motherNativeTongue,
-        this.otherLanguageProficiency = p.otherLanguageProficiency,
-        
-        this.speakingFrequency = p.speakingFrequency;
-        this.speakWith = p.speakWith;
+        this.yearsOfIrish = p.yearsOfIrish;
+        (this.otherLanguages = p.otherLanguages),
+          (this.fatherNativeTongue = p.fatherNativeTongue);
+        this.motherNativeTongue = p.motherNativeTongue;
+        this.otherLanguageProficiency = p.otherLanguageProficiency;
+
+        this.howOftenSpeakIrish = p.howOftenSpeakIrish;
+        this.whoSpeakWith = p.whoSpeakWith;
         this.irishMedia = p.irishMedia;
         this.irishReading = p.irishReading;
         this.irishWriting = p.irishWriting;
@@ -386,9 +161,10 @@ export class RegisterProfileComponent implements OnInit {
         this.howOftenWriting = p.howOftenWriting;
         this.synthOpinion = p.synthOpinion;
       },
-      error: () => {console.log('no profile')}
-   });
-    
+      error: () => {
+        console.log("no profile");
+      },
+    });
   }
 
   /**
@@ -398,61 +174,57 @@ export class RegisterProfileComponent implements OnInit {
     const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;
 
-    let profile = {
-      userId : userDetails._id,
-      gender : this.gender,
-      age : this.age,
-      county : (!this.notFromIreland) ? this.county : null,
-      notFromIreland : this.notFromIreland,
-      country : (this.notFromIreland) ? this.country : "Ireland",
-      
+    const newProfile: Profile = {
+      ownerId: userDetails._id,
+      gender: this.gender,
+      age: this.age,
+      county: this.notFromIreland? "" : this.county,
+      notFromIreland: this.notFromIreland,
+      country: this.notFromIreland ? this.country : "",
       studentSchoolType: this.studentSchoolType,
       studentSchoolLevel: this.studentSchoolLevel,
-      primaryYear: (this.primaryYear) ? this.primaryYear : null,
-      secondaryYear: (this.secondaryYear) ? this.secondaryYear : null,
-      thirdLevelOption: (this.thirdLevelOption) ? this.thirdLevelOption : null,
-      thirdLevelYear: (this.thirdLevelYear) ? this.thirdLevelYear : null,
-      postgradYear: (this.postgradYear) ? this.postgradYear : null,
-      otherStudies: (this.otherStudies) ? this.otherStudies : null,
-      usaOption: (this.usaOption) ? this.usaOption : null, 
-      otherCountryOfStudy: (this.otherCountryOfStudy) ? this.otherCountryOfStudy : null, 
-      otherPostgradStudies: (this.otherPostgradStudies) ? this.otherPostgradStudies : null, 
-      immersionCourse: this.immersionCourse,
-      
-      teacherPrimaryType: (this.teacherPrimaryType) ? this.teacherPrimaryType : null,
-      teacherSecondaryType: (this.teacherSecondaryType) ? this.teacherSecondaryType : null,
-      teacherSchoolTypes: this.teacherSchoolTypes,
-      
-      nativeSpeakerStatus : this.nativeSpeakerStatus,
-      dialectPreference : this.dialectPreference,
-      spokenComprehensionLevel : this.spokenComprehensionLevel,
-      yearsOfIrish: (this.yearsOfIrish != null) ? this.yearsOfIrish : null, 
-      otherLanguages: (this.otherLanguages) ? this.otherLanguages : null,
-      fatherNativeTongue: (this.fatherNativeTongue) ? this.fatherNativeTongue : null,
+      primaryYear: this.primaryYear,
+      secondaryYear: this.secondaryYear,
+      thirdLevelYear: this.thirdLevelYear,
+      postgradYear: this.postgradYear,
+      otherStudies: this.otherStudies,
+      inImmersionCourse: this.inImmersionCourse,
+      teacherSchoolLevels: this.teacherSchoolLevels,
+      teacherPrimarySchoolType: this.teacherPrimarySchoolType,
+      teachingSubjects: this.teachingSubjects,
+      teacherSecondarySchoolType: this.teacherSecondarySchoolType,
+      nativeSpeakerStatus: this.nativeSpeakerStatus,
+      dialectPreference: this.dialectPreference,
+      spokenComprehensionLevel: this.spokenComprehensionLevel,
+      yearsOfIrish: this.yearsOfIrish,
+      otherLanguages: this.otherLanguages,
+      fatherNativeTongue: this.fatherNativeTongue,
       motherNativeTongue: this.motherNativeTongue,
-      otherLanguageProficiency : this.otherLanguageProficiency,
-      speakingFrequency : this.speakingFrequency,
-      speakWith : this.speakWith,
-      irishMedia : this.irishMedia,
-      irishReading : this.irishReading,
-      irishWriting : this.irishWriting,
-      howOftenMedia : this.howOftenMedia,
-      howOftenReading : this.howOftenReading,
-      howOftenWriting : this.howOftenWriting,
-      synthOpinion : this.synthOpinion,
+      otherLanguageProficiency: this.otherLanguageProficiency,
+      howOftenSpeakIrish: this.howOftenSpeakIrish,
+      whoSpeakWith: this.whoSpeakWith,
+      irishMedia: this.irishMedia,
+      irishReading: this.irishReading,
+      irishWriting: this.irishWriting,
+      howOftenMedia: this.howOftenMedia,
+      howOftenReading: this.howOftenReading,
+      howOftenWriting: this.howOftenWriting,
+      synthOpinion: this.synthOpinion,
     };
 
     // save profile and route user to homepage
-    this.profileService.create(profile).subscribe({
+    this.profileService.create(newProfile).subscribe({
       next: () => {},
-      error: (error) => { console.error(error); },
+      error: (error) => {
+        console.error(error);
+      },
       complete: () => {
-        if(userDetails.role === 'STUDENT') {
-          this.router.navigateByUrl('/student');
-        } else if(userDetails.role === 'TEACHER') {
-          this.router.navigateByUrl('/teacher');
+        if (userDetails.role === "STUDENT") {
+          this.router.navigateByUrl("/student");
+        } else if (userDetails.role === "TEACHER") {
+          this.router.navigateByUrl("/teacher");
         }
-      }
+      },
     });
   }
 }

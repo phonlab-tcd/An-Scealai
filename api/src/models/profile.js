@@ -2,33 +2,32 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Profile = new Schema({
-    userId : String,
-    owner: { type: mongoose.Types.ObjectId, ref: 'User' },
+    ownerId: { type: mongoose.Types.ObjectId, ref: 'User' },
     gender : String,
     age : String,
     county : String,
     notFromIreland : Boolean,
     country : String,
+    
     studentSchoolType: String,
     studentSchoolLevel: String,
     primaryYear: String,
     secondaryYear: String,
-    thirdLevelOption: String,
     thirdLevelYear: String,
-    postgradYear: String,
     otherStudies: String,
-    usaOption: String,
-    otherCountryOfStudy: String,
-    otherPostgradStudies: String,
-    immersionCourse: String,
-    teacherPrimaryType: String,
-    teacherSecondaryType: String,
+    postgradYear: String,
+    inImmersionCourse: String,
+
     teacherSchoolTypes: {
       primary: Boolean,
       secondary: Boolean,
       thirdLevel : Boolean,
       gaeltacht : Boolean
     },
+    teacherPrimarySchoolType: String,
+    teacherSecondarySchoolType: String,
+    teachingSubjects: String,
+
     nativeSpeakerStatus : String,
     dialectPreference : String,
     spokenComprehensionLevel : String,
@@ -37,8 +36,9 @@ let Profile = new Schema({
     fatherNativeTongue: String,
     motherNativeTongue: String,
     otherLanguageProficiency: String,
-    speakingFrequency : String,
-    speakWith : String,
+    howOftenSpeakIrish : String,
+    whoSpeakWith : String,
+
     irishMedia : {
         rnag : Boolean,
         tg4 : Boolean,
@@ -46,6 +46,9 @@ let Profile = new Schema({
         rnalife : Boolean,
         radioRiRa : Boolean,
         socialMedia : Boolean,
+        cula4: Boolean,
+        podcasts: Boolean,
+        rte: Boolean,
     },
     irishReading : {
         newspapers : Boolean,
@@ -67,7 +70,8 @@ let Profile = new Schema({
     howOftenWriting : String,
     synthOpinion : String,
 }, {
-    collection: 'profile'
+    collection: 'profile',
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Profile', Profile);

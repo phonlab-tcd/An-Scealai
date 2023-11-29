@@ -398,6 +398,80 @@ const translations = {
   county: {
     ga: 'Contae',
     en: 'County' },
+  counties: {
+    ga: [
+      "",
+      'Baile Átha Cliath',
+      'Contae an Chabháin',
+      'Contae Cheatharlach',
+      'Contae Chiarraí',
+      'Contae Chill Chainnigh',
+      'Contae Chill Dara',
+      'Contae Chill Mhantáin',
+      'Contae an Chláir',
+      'Contae Chorcaí',
+      'Contae Dhún na nGall',
+      'Contae na Gaillimhe',
+      'Contae na hIarmhí',
+      'Contae Laoise',
+      'Contae Liatroma',
+      'Contae Loch Garman',
+      'Contae an Longfoirt',
+      'Contae Lú',
+      'Contae Luimnigh',
+      'Contae Mhaigh Eo',
+      'Contae na Mí',
+      'Contae Mhuineacháin',
+      'Contae Phort Láirge',
+      'Contae Ros Comáin',
+      'Contae Shligigh',
+      'Contae Thiobraid Árann',
+      'Contae Uíbh Fhailí',
+      'Béal Feirste',
+      'Contae Aontroma',
+      'Contae Ard Mhacha',
+      'Contae Dhoire',
+      'Contae an Dúin',
+      'Contae Thír Eoghain',
+      'Contae Fhear Manach'
+    ],
+    en: [
+      "",
+      'Dublin',
+      'Cavan',
+      'Carlow',
+      'Kerry',
+      'Kilkenny',
+      'Kildare',
+      'Wicklow',
+      'Clare',
+      'Cork',
+      'Donegal',
+      'Galway',
+      'Westmeath',
+      'Laois',
+      'Leitrim',
+      'Wexford',
+      'Longford',
+      'Louth',
+      'Limerick',
+      'Mayo',
+      'Meath',
+      'Monaghan',
+      'Waterford',
+      'Roscommon',
+      'Sligo',
+      'Tipperary',
+      'Offaly',
+      'Belfast',
+      'Antrim',
+      'Armagh',
+      'Derry',
+      'Down',
+      'Tyrone',
+      'Fermanagh'
+    ]
+  },
   not_from_ireland: {
     ga: 'Ní as Poblacht na hÉireann ná as Tuaisceart Éireann mé',
     en: "I'm not from the Republic of Ireland or Northern Ireland" },
@@ -425,36 +499,26 @@ const translations = {
       'Gaeltacht school',
       'I did not attend school in Ireland'
     ] },
-  english_school: {
-    ga: 'Scoil Bhéarla',
-    en: 'English school' },
-  gaelscoil: {
-    ga: 'Gaelscoil',
-    en: 'Gaelscoil' },
-  gaeltacht_school: {
-    ga: 'Scoil Gaeltachta',
-    en: 'Gaeltacht school' },
-  school_not_in_ireland: {
-    ga: 'Ní fhreastail mé ar scoil in Éirinn',
-    en: 'I did not attend school in Ireland' },
   student_school_level_list: {
     ga: [
       '',
       'Is dalta bunscoile mé',
       'Is dalta iar-bhunscoile mé',
       'Is mac léinn tríú leibhéal mé in Éirinn',
-      'Táim ag déanamh staidéar ar an nGaeilge i Stáit Aontaithe Mheirceá',
-      'Táim ag déanamh staidéir ar an nGaeilge taobh amuigh d’Éirinn agus de Stáit Aontaithe Mheirceá',
-      'Is mac léinn iarchéime mé'
+      'Is mac léinn iarchéime mé',
+      'Táim cláraithe i rang Gaeilge sna Stáit Aontaithe',
+      'Táim cláraithe i rang Gaeilge taobh amuigh d\'Éire / SAM',
+      'Tá Gaeilge á foghlaim agam liom féin, ar bhonn neamhspleách'
     ],
     en: [
       '',
       'I am a primary school pupil',
       'I am a secondary school pupil',
       'I am a 3rd level student in Ireland',
-      'I am studying Irish in the USA',
-      'I am studying Irish outside of Ireland or USA',
-      'I am a postgraduate student'
+      'I am a postgraduate student',
+      'I am enrolled in an Irish class in the USA',
+      'I am enrolled in an Irish class outside of Ireland / USA',
+      'I am learning Irish independently'
     ] },
   primary_years_list: {
     ga: [
@@ -497,23 +561,6 @@ const translations = {
   what_are_you_studying: {
     ga: 'Cad é do phríomh-ábhar staidéir?',
     en: 'What are you studying?' },
-  third_level_options_list: {
-    ga: [
-      '',
-      'Tá céim sa Ghaeilge ar siúl agam',
-      'Táim ag gabháil de chéim san Oideachas agus an Ghaeilge mar mhór-ábhar agam',
-      'Táim ag gabháil de chéim san Oideachas agus an Ghaeilge mar mhion-ábhar agam',
-      'Tá ag gabháil de chéim san Oideachas mar iar-chéimí',
-      'Eile'
-    ],
-    en: [
-      '',
-      'I am studying Irish',
-      'I am studying Education Primary (with Irish as a major component)',
-      'I am studying Education Primary (with Irish as a minor component)',
-      'I am studying Education as a Postgraduate student',
-      'Other'
-    ] },
   third_level_years_list: {
     ga: [
       '',
@@ -529,47 +576,12 @@ const translations = {
       'I am in 3rd year of a 4 year course',
       'I am in final year'
     ] },
-  third_level_years_list_short: {
-    ga: [
-      '',
-      'Táim sa chéad bhliain',
-      'Táim sa dara bliain',
-      'Táim sa tríú bliain',
-      'Táim sa bhliain dheireanach den chéim'
-    ],
-    en: [
-      '',
-      'I am in 1st year',
-      'I am in 2nd year',
-      'I am in 3rd year',
-      'I am in final year'
-    ] },
-  usa_options_list: {
-    ga: [
-      '',
-      'Déanaim rang Gaeilge san Ollscoil',
-      'Níl mé cláraithe do ranganna Gaeilge in aon Ollscoil'
-    ],
-    en: [
-      '',
-      'I am taking an Irish class at a University',
-      'I am not enrolled in an Irish language class at a University'
-    ] },
-  please_specify: {
-    ga: 'Luaigh',
-    en: 'Please specify' },
-  specify_where: {
-    ga: 'Luaigh an áit',
-    en: 'Specify where' },
   attending_gaeltacht_immersion_course: {
     ga: 'Táim ag freastal ar chúrsa Gaeltachta faoi láthair',
     en: 'I am currently attending a Gaeltacht immersion course' },
   immersion_list: {
     ga: [ '', 'Tá', 'Níl' ],
     en: [ '', 'Yes', 'No' ] },
-  studies: {
-    ga: 'Ábhar staidéir',
-    en: 'Studies' },
   primary: {
     ga: 'Bunleibhéal',
     en: 'Primary' },
@@ -600,27 +612,23 @@ const translations = {
   school_type_where_you_teach: {
     ga: 'An áit ina bhfuil tú ag múineadh',
     en: 'School type where you teach' },
+  what_subjects_do_you_teach: {
+    ga: 'Cé na hábhair a mhúineann tú ar scoil?',
+    en: 'What subjects do you teach?' },
   yes: {
     ga: 'Sea',
     en: 'Yes' },
   no: {
     ga: 'Ní hea',
     en: 'No' },
-  bilingual_native: {
-    ga: 'Dátheangach (cainteoir dúchais)',
-    en: 'Bilingual (native)' },
-  bilingual_other: {
-    ga: 'Dátheangach (eile)',
-    en: 'Bilingual (other)' },
   native_speaker_status_list: {
     ga: [
       '',
       'Sea',
       'Ní hea',
-      'Dátheangach (cainteoir dúchais)',
-      'Dátheangach (eile)'
+      'Dátheangach',
     ],
-    en: [ '', 'Yes', 'No', 'Bilingual (native)', 'Bilingual (other)' ] },
+    en: [ '', 'Yes', 'No', 'Bilingual'] },
   dialect_preference_list: {
     ga: [
       '',
@@ -631,20 +639,11 @@ const translations = {
     ],
     en: [
       '',
-      'Gaeilge Uladh',
-      'Gaeilge Chonnacht',
-      'Gaolainn na Mumhan',
+      'Ulster',
+      'Connaught',
+      'Munster',
       'Other'
     ] },
-  gaeilge_uladh: {
-    ga: 'Gaeilge Uladh',
-    en: 'Gaeilge Uladh' },
-  gaeilge_chonnacht: {
-    ga: 'Gaeilge Chonnacht',
-    en: 'Gaeilge Chonnacht' },
-  gaolainn_na_mumhan: {
-    ga: 'Gaolainn na Mumhan',
-    en: 'Gaolainn na Mumhan' },
   other: {
     ga: 'Eile',
     en: 'Other' },
@@ -736,7 +735,7 @@ const translations = {
     ga: 'Déan liosta de na teangacha a úsáideann do theaghlach/gnáth-ráta úsáide atá ag gach ceann',
     en: 'List languages spoken at home/average use of each' },
   father_native_tongue: {
-    ga: 'Teanga dhúchas d’athar',
+    ga: 'Teanga dhúchas d\'athar',
     en: "Father's native tongue" },
   mother_native_tongue: {
     ga: 'Teanga dhúchas do mháthar',
@@ -782,15 +781,15 @@ const translations = {
   social_media: {
     ga: 'Meáin shoisialta',
     en: 'Social Media' },
+  podcasts: {
+    ga: 'Podcasts',
+    en: 'Podcasts' },
   native_speaker: {
     ga: 'Cainteoir dúchais',
     en: 'Irish Native Speaker' },
   how_well_understand_spoken: {
     ga: 'Cén tuiscint atá agat ar Ghaeilge labhartha?',
     en: 'How well do you understand spoken Irish?' },
-  whats_cefr_level: {
-    ga: 'Cén léibhéal CEFR atá agat?',
-    en: "What's your CEFR level?" },
   how_often_speak: {
     ga: 'Cé chomh minic a labhraíonn tú Gaeilge?',
     en: 'How often do you speak Irish?' },
@@ -808,10 +807,10 @@ const translations = {
     en: 'Do you write in Irish?' },
   synthetic_voices_info: {
     ga: 'Tá guthanna sintéiseacha an-choitianta sa lá atá inniú ann. Cloistear san ardaitheoir, ag an aerfort nó in óstáin iad, agus baineann comhlachtaí móra úsáid astu chun glaonna gutháin a fhreagairt go minic.',
-    en: 'Synthetic voices are very common nowadays. You can hear them in elevators, at the airport, in hotels, and big companies often use them to answers phone calls.' },
+    en: 'Synthetic (computer-generated) voices are very common today.' },
   synthetic_voices_opinion: {
     ga: 'Céard í do thuairim faoi ghuthanna sintéiseacha?',
-    en: "What's your opinion of synthetic voices?" },
+    en: "What is your opinion on synthetic voices?" },
   newspapers: {
     ga: 'Páipéir nuachta',
     en: 'Newspapers' },
@@ -1848,7 +1847,10 @@ const translations = {
     en: 'I am currently attending secondary school.' },
   what_year_are_you_in: {
     ga: 'Cén bhliain ina bhfuil tú?',
-    en: 'What school year are you in?' },
+    en: 'Which year?' },
+  what_class_are_you_in: {
+    ga: 'Cén rang ina bhfuil tú?',
+    en: 'Which class?' },
   listen_by: {
     ga: 'Éist leis',
     en: 'Listen by' },

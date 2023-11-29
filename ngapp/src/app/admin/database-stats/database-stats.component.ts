@@ -7,8 +7,6 @@ import { ProfileService } from "app/core/services/profile.service";
 import { Chart } from 'chart.js/auto';
 import { ChoroplethChart } from 'chartjs-chart-geo';
 import * as ChartGeo from 'chartjs-chart-geo'
-import { COUNTY_NAMES } from './countyNames'
-import config from 'abairconfig';
 import { HttpClient } from '@angular/common/http';
 import { TranslationService } from "app/core/services/translation.service";
 import { FeedbackCommentService } from "app/core/services/feedback-comment.service";
@@ -190,10 +188,12 @@ export class DatabaseStatsComponent implements OnInit {
     // label for each county on map generated from the county name in json data (stored as 'id')
     const mapLabels = counties.map((county) => county.id);
 
+    console.log(this.profileCountyCounts)
     // county name from profile data has to match the name in json data for value to be displayed correctly on the map
     // e.g. profile data -> json data: 'Contae Átha Cliath' -> 'Dublin'
     // the data for the chart is of the form: {feature: (json data), value: user count for given county}
-    const mapData = counties.map((county) => ({ feature: county, value: this.profileCountyCounts[COUNTY_NAMES[county.id]] }))
+
+    const mapData = counties.map((county) => ({ feature: county, value: this.profileCountyCounts[county.id] }))
 
     const canvasElem = document.getElementById("county-chart") as HTMLCanvasElement;
     this.countyChart = new ChoroplethChart(canvasElem.getContext("2d"), {

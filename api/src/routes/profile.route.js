@@ -13,7 +13,7 @@ const Profile = require('../models/profile');
  */
 profileRoutes.route('/create').post((req, res) => {
   req.body.owner = new ObjectId(req.user._id);
-  Profile.updateOne({userId: req.user._id}, req.body, {upsert: true})
+  Profile.updateOne({ownerId: req.user._id}, req.body, {upsert: true})
       .then( (upsertDetails)=>res.status(200).send(upsertDetails),
           (err) =>res.status(400).send(err));
 });
@@ -54,7 +54,7 @@ profileRoutes.route('/get/:id').get((req, res) => {
  * @return {Object} Profile object
  */
 profileRoutes.route('/getForUser/:id').get((req, res) => {
-  Profile.findOne({'userId': req.user._id})
+  Profile.findOne({'ownerId': req.user._id})
       .then(
           (profile) => res.status(profile ? 200 : 404).json({profile}),
           (err) => res.status(404).send('An error occurred while trying to find this profile'),
@@ -67,7 +67,7 @@ profileRoutes.route('/getForUser/:id').get((req, res) => {
  * @return {Object} Success or error message
  */
 profileRoutes.route('/deleteProfile/:id').get(function(req, res) {
-  Profile.findOneAndRemove({'userId': req.user._id}, function(err, profile) {
+  Profile.findOneAndRemove({'ownerId': req.user._id}, function(err, profile) {
     if (err) {
       return res.status(500).json(err);
     } else return res.json('Successfully removed profile');
@@ -87,7 +87,6 @@ profileRoutes.route('/getCountyCounts').get(async (req, res) => {
   for (const entry of profiles) {
     if (entry.county) {
       let county = entry.county;
-      if (entry.county == 'Baile Átha Cliath') county = 'Contae Átha Cliath'; // can only use one 'Dublin' for map on admin dashboard
       if (!countyTotals[county]) countyTotals[county] = 0;
       countyTotals[county] += 1;
     }
