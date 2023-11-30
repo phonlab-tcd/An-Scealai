@@ -507,7 +507,7 @@ const translations = {
       'Is mac léinn tríú leibhéal mé in Éirinn',
       'Is mac léinn iarchéime mé',
       'Táim cláraithe i rang Gaeilge sna Stáit Aontaithe',
-      'Táim cláraithe i rang Gaeilge taobh amuigh d\'Éire / SAM',
+      'Táim cláraithe i rang Gaeilge taobh amuigh d\'Éire/SAM',
       'Tá Gaeilge á foghlaim agam liom féin, ar bhonn neamhspleách'
     ],
     en: [
@@ -517,7 +517,7 @@ const translations = {
       'I am a 3rd level student in Ireland',
       'I am a postgraduate student',
       'I am enrolled in an Irish class in the USA',
-      'I am enrolled in an Irish class outside of Ireland / USA',
+      'I am enrolled in an Irish class outside of Ireland/USA',
       'I am learning Irish independently'
     ] },
   primary_years_list: {

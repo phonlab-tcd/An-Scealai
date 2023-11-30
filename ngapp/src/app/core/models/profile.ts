@@ -116,9 +116,9 @@ export const STUDENT_SCHOOL_LEVELS = [
   "I am a secondary school pupil",
   "I am a 3rd level student in Ireland",
   "I am a postgraduate student",
-  "I'm enrolled in an Irish class in the USA",
-  "I'm enrolled in an Irish class outside of Ireland",
-  "I'm learning Irish independently"
+  "I am enrolled in an Irish class in the USA",
+  "I am enrolled in an Irish class outside of Ireland/USA",
+  "I am learning Irish independently"
 ] as const;
 
 export const PRIMARY_YEARS = [
