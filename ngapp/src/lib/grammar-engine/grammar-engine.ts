@@ -245,7 +245,7 @@ export class GrammarEngine {
       if (!toCount) console.log("ISSUE GETTING NEW ERROR COUNTS: ", toCount)
       const counts = countErrorTypes(toCount);
       const body = {countsByType: counts};
-      this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
+      if (body.countsByType != null) this.http.post<any>(config.baseurl + 'gramadoir/userGrammarCounts/', body).subscribe();
       
       this.previousErrorTags = newTags;
     }
