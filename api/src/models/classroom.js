@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Classroom = new Schema({
-  teacherId: String,
+  teacherId: mongoose.Types.ObjectId,
   title: String,
   date: Date,
   studentIds: [String],
