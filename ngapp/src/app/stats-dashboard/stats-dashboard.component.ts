@@ -123,7 +123,6 @@ export class StatsDashboardComponent implements OnInit {
 
     // get dictionary lookups
     this.dictionaryLookups = await this.getDictionaryLookups(studentIds, startDate, endDate);
-    //this.dictionaryLookups = await this.getDictionaryLookups( ["12345", "5eecb2edb3d14b78e1c74e9c"], startDate, endDate );
 
     // get grammar error time data
     this.grammarErrorTimeCounts = await this.getGrammarErrorTimeSeries(studentIds, startDate, endDate );
@@ -243,6 +242,7 @@ export class StatsDashboardComponent implements OnInit {
         }
       })
     );
+    console.log(data);
     return data;
   }
 

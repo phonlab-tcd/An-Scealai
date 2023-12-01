@@ -179,7 +179,7 @@ engagementRoutes.route("/eventsForStory/:id").get((req, res) => {
  * @return {Object} List of events
  */
 engagementRoutes.route("/dictionaryLookups/:id").post((req, res) => {
-  const conditions = { ownerId: req.params.id, type: "USE-DICTIONARY" };
+  const conditions = { ownerId: req.params.id, type: "USE-DICTIONARY", "data.dictionaryLookup": {$ne: null} };
   if (req.body.startDate !== "" && req.body.endDate !== "") {
     conditions["date"] = {
       $gte: req.body.startDate,
@@ -191,18 +191,14 @@ engagementRoutes.route("/dictionaryLookups/:id").post((req, res) => {
       return res.json(err);
     }
     if (events) {
-      const filtered = events.filter(function (el) {
-        return el.dictionaryLookup && el.dictionaryLookup != null;
-      });
-      // sort descending chronologically
-      filtered.sort(function (a, b) {
-        const keyA = new Date(a.date);
-        const keyB = new Date(b.date);
+      const reversedEvents = events.sort(function (a, b) {
+        const keyA = new Date(a.createdAt);
+        const keyB = new Date(b.createdAt);
         if (keyA < keyB) return 1;
         if (keyA > keyB) return -1;
         return 0;
       });
-      return res.status(200).json(filtered);
+      return res.status(200).json(reversedEvents);
     } else {
       return res.status(404).json("User does not have any dictionary lookups.");
     }

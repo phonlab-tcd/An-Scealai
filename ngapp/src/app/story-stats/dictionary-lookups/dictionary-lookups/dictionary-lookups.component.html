@@ -30,8 +30,8 @@
         <div *ngFor="let entry of student.value" style="padding-top: 5px;">
           <mat-card appearance="outlined">
             <mat-card-content class="cardContent">
-              <div> <b>{{entry.dictionaryLookup}}</b> </div>
-              <div> {{entry.date | date : 'd/M/yy'}} </div>
+              <div> <b>{{entry.data.dictionaryLookup}}</b> </div>
+              <div> {{entry.createdAt | date : 'd/M/yy'}} </div>
             </mat-card-content>
           </mat-card>
         </div>
