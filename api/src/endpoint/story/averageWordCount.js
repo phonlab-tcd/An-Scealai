@@ -16,7 +16,7 @@ const STOP_WORDS = ['.', ',', '?', '!', '\n', ';', '-', ':', '\"', '\''];
 module.exports = async (req, res) => {
   const conditions = {'owner': req.params.studentId};
   if (req.body.startDate !== '' && req.body.endDate !== '') {
-    conditions['lastUpdated'] = {
+    conditions['updatedAt'] = {
       '$gte': req.body.startDate,
       '$lte': req.body.endDate,
     };

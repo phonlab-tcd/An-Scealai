@@ -29,7 +29,7 @@
         </div>
         <!-- date and menu icon-->
         <div class="contentsDate">
-          {{ story.lastUpdated | date : "d/M/yy" }}
+          {{ story.updatedAt | date : "d/M/yy" }}
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story" >
             <mat-icon>more_vert</mat-icon>
           </button>

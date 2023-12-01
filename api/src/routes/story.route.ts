@@ -141,9 +141,6 @@ storyRoutes.route("/update/:id").post((req, res) => {
     story.text = req.body.text ?? "";
     story.htmlText = req.body.htmlText ?? "";
 
-    if (req.body.lastUpdated) {
-      story.lastUpdated = req.body.lastUpdated;
-    }
     if (req.body.dialect) {
       story.dialect = req.body.dialect;
     }

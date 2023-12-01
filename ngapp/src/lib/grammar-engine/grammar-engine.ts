@@ -225,7 +225,7 @@ export class GrammarEngine {
       
       // log error counts to the DB
       this.countNewErrors(allErrorTags.flat());
-      this.saveErrorsWithSentences();
+      //this.saveErrorsWithSentences();
 
       return allErrorTags;
     }

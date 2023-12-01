@@ -50,7 +50,6 @@ export class StoryDrawerComponent implements OnInit {
     ).map((storyData) => new Story().fromJSON(storyData));
 
     if (this.stories.length > 0) {
-      this.stories.sort((a, b) => (a.date > b.date ? -1 : 1));
       this.lastClickedStoryId = this.stories[0]._id;
       // delay seting the currently selected story until the next tick of the event loop
       setTimeout(() => {

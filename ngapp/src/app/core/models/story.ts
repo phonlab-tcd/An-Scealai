@@ -4,8 +4,6 @@ export class Story extends Serializable {
     _id: string;
     onwer: string;
     title: string;
-    date: Date;
-    lastUpdated: Date;
     dialect: 'connemara' | 'kerry' | 'donegal';
     text: string;
     htmlText: string;
@@ -19,6 +17,8 @@ export class Story extends Serializable {
     };
     activeRecording: string;
     createdWithPrompts: boolean = false;
+    createdAt?: Date;
+    updatedAt?: Date;
 
     constructor() {super()}
 }

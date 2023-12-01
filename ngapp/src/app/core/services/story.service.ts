@@ -29,13 +29,11 @@ export class StoryService {
   saveStory(title: string, date: Date, dialect: string, text: string, author: string, createdWithPrompts: boolean) {
     const storyObj = {
       title: title,
-      date: date,
       dialect: dialect,
       text: text,
       htmlText: text,
       author: author,
       createdWithPrompts: createdWithPrompts,
-      lastUpdated: new Date(),
       activeRecording: null
     };
     console.log(storyObj);
