@@ -1,5 +1,4 @@
 import User from "../../models/user";
-import Story from "../../models/story";
 import { Request, Response } from "express";
 
 
@@ -10,20 +9,34 @@ import { Request, Response } from "express";
 * @return {Promise} Number of students who have at least one story
 */
 export default async function countUsersWithStories(req: Request, res: Response) {
-  const users = await User.find({'role': 'STUDENT'}, {'username': 1, '_id': 0});
-  const owners = users.map(u => u._id);
+  try {
+    let totalUsersWithAStory = 0;
+    const result = await User.aggregate([
+      {
+        $lookup: {
+          from: 'story',
+          localField: '_id',
+          foreignField: 'owner',
+          as: 'stories'
+        }
+      },
+      {
+        $match: {
+          stories: { $exists: true, $ne: [] }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 }
+        }
+      }
+    ]);
 
-  let usersWithStories = 0;
-
-  // count the number of users that have written at least one story
-  // OUCH! that's a long for loop! (neimhin 12/07/23)
-  for (const owner of owners) {
-    const numOfStories = await Story.find({owner}).countDocuments();
-
-    if (numOfStories > 0) {
-      usersWithStories++;
-    }
+    totalUsersWithAStory = result.length > 0 ? result[0].count : 0;
+    return res.status(200).json(totalUsersWithAStory);
+  } catch (error: any) {
+    console.error('Error:', error.message);
+    return res.status(500).json('Error calculating the number of students who have at least one story');
   }
-
-  return res.status(200).json(usersWithStories);
 }
