@@ -157,7 +157,6 @@ export class PartOfSpeechComponent implements OnInit {
     }
     this.storyService
       .saveStory(
-        user._id,
         this.newStoryForm.controls["title"].value,
         new Date(),
         this.newStoryForm.controls["dialect"].value,

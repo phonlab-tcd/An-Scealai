@@ -92,7 +92,6 @@ export class AccountSettingsComponent implements OnInit {
    */
   listenForClassroomCodeInput() {
     this.codeInput.valueChanges.subscribe((code) => {
-      console.log(code)
       if (code.length > 0) {
         this.classroomService.getClassroomFromCode(code).subscribe((res) => {
           if (res.found) {

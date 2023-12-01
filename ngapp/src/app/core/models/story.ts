@@ -2,6 +2,7 @@ import { Serializable } from "./serializable";
 
 export class Story extends Serializable {
     _id: string;
+    onwer: string;
     title: string;
     date: Date;
     lastUpdated: Date;
@@ -9,7 +10,6 @@ export class Story extends Serializable {
     text: string;
     htmlText: string;
     author: string;
-    studentId: string;
     feedback: {
         seenByStudent: boolean;
         text: string; // DEPRECATED

@@ -26,7 +26,7 @@ export class StoryService {
   baseUrl: string = config.baseurl + 'story/';
   storiesLoaded: boolean = false;
 
-  saveStory(studentId: string, title: string, date: Date, dialect: string, text: string, author: string, createdWithPrompts: boolean) {
+  saveStory(title: string, date: Date, dialect: string, text: string, author: string, createdWithPrompts: boolean) {
     const storyObj = {
       title: title,
       date: date,
@@ -35,7 +35,6 @@ export class StoryService {
       htmlText: text,
       author: author,
       createdWithPrompts: createdWithPrompts,
-      studentId: studentId,
       lastUpdated: new Date(),
       activeRecording: null
     };

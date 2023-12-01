@@ -31,10 +31,6 @@ const Story = new Schema(
       // DEPRECATED
         type: String,
       },
-      studentId: {
-      // DEPRECATED
-        type: String,
-      },
       feedback: {
         // DEPRECATED
         text: {

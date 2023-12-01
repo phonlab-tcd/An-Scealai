@@ -134,7 +134,7 @@ export class StoryDrawerComponent implements OnInit {
             return;
           }
           this.storyService
-            .saveStory( user._id, res[0], new Date(), dialect, "", user.username, false )
+            .saveStory(res[0], new Date(), dialect, "", user.username, false )
             .subscribe({
               next: () => {
                 this.getStories();

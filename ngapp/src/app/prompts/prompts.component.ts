@@ -215,7 +215,7 @@ export class PromptsComponent implements OnInit {
           if (res[1] == this.ts.l.munster) dialect = "kerry";
           if (res[1] == this.ts.l.ulster) dialect = "donegal";
           this.storyService
-          .saveStory( user._id, res[0], new Date(), dialect, this.prompt, user.username, true )
+          .saveStory(res[0], new Date(), dialect, this.prompt, user.username, true )
           .subscribe({
             next: () => {
               this.engagement.addEvent(EventType['USE-PROMPT-GENERATOR'], {promptType: this.promptType, prompt: this.prompt});
