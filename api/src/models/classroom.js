@@ -10,6 +10,7 @@ const Classroom = new Schema({
   grammarCheckers: [String],
 }, {
   collection: 'classroom',
+  timestamps: true
 });
 
 module.exports = mongoose.model('Classroom', Classroom);

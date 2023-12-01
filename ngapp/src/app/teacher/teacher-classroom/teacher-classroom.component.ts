@@ -53,7 +53,7 @@ export class TeacherClassroomComponent implements OnInit {
       this.userService.getUserById(id).subscribe({
         next: async student => {
           this.students.push(student);
-          let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.date?.toString()));
+          let storyCount = await firstValueFrom(this.storyService.getNumberOfStories(student._id, this.classroom?.createdAt?.toString()));
           this.numOfStories.set(student.username, storyCount);
         },
         error: () => {console.log(id + " does not exist")}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { ClassroomService } from "app/core/services/classroom.service";
-import { UntypedFormControl } from "@angular/forms";
+import { ReactiveFormsModule, UntypedFormControl } from "@angular/forms";
 import { Classroom } from "app/core/models/classroom";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
@@ -19,7 +19,7 @@ import { CommonModule } from "@angular/common";
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatDialogModule],
+  imports: [CommonModule, MatDialogModule, ReactiveFormsModule],
   selector: "app-account-settings",
   templateUrl: "./account-settings.component.html",
   styleUrls: ["./account-settings.component.scss"],
@@ -92,6 +92,7 @@ export class AccountSettingsComponent implements OnInit {
    */
   listenForClassroomCodeInput() {
     this.codeInput.valueChanges.subscribe((code) => {
+      console.log(code)
       if (code.length > 0) {
         this.classroomService.getClassroomFromCode(code).subscribe((res) => {
           if (res.found) {

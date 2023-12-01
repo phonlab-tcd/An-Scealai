@@ -56,7 +56,7 @@ export class ClassroomDrawerComponent implements OnInit {
     this.classrooms = await firstValueFrom( this.classroomService.getClassroomsForTeacher(teacherId) );
 
     if (this.classrooms.length > 0) {
-      this.classrooms.sort((a, b) => (a.date > b.date ? -1 : 1));
+      this.classrooms.sort((a, b) => (a.createdAt! > b.createdAt! ? -1 : 1));
       this.lastClickedClassroomId = this.classrooms[0]._id;
       // delay seting the currently selected classroom until the next tick of the event loop
       setTimeout(() => {
@@ -113,7 +113,7 @@ export class ClassroomDrawerComponent implements OnInit {
 
         newClassroom.title = res[0];
         newClassroom.teacherId = userDetails._id;
-        newClassroom.date = new Date();
+        //newClassroom.date = new Date();
 
         let codes = await firstValueFrom(this.classroomService.getAllCodes());
         let newCode: string = this.getUniqueCode(codes);

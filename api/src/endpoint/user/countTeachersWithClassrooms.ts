@@ -1,5 +1,4 @@
 import User from "../../models/user";
-import Classroom from "../../models/classroom";
 import { Request, Response } from "express";
 
 /**
@@ -32,7 +31,6 @@ export default async function countTeachersWithClassrooms(req: Request, res: Res
         }
       }
     ]);
-    console.log(result);
     totalTeachersWithAClassroom = result.length > 0 ? result[0].count : 0;
     return res.status(200).json(totalTeachersWithAClassroom);
   } catch (error: any) {

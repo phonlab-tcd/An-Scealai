@@ -2,7 +2,8 @@ export class Classroom {
     _id: string;
     studentIds: string[];
     teacherId: string;
-    date: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     title: string;
     code: string;
     grammarCheckers: string[];
