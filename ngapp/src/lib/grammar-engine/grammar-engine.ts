@@ -124,7 +124,7 @@ export class GrammarEngine {
     private grammarCheckers: GrammarChecker[];
     private http: HttpClient;
     private auth: AuthenticationService;
-    private previousErrorTags: Object[];
+    private previousErrorTags: Object[] = [];
     private errorsWithSentences = [];
 
     public errorStoreForLatestCheck: ErrorsByTypeForCurrentCheck;
@@ -212,11 +212,11 @@ export class GrammarEngine {
               .sort(([e1,s1,i1],[e2,s2,i2])=>i1-i2)
               .map(([errors, sentence]) => ({errors, sentence})),
               */
+             if (errorTags.length > 0) {
               this.errorsWithSentences[i] ? this.errorsWithSentences[i] = 
                       [this.errorsWithSentences[i][0].concat(errorTags), s, i] :
                       this.errorsWithSentences[i] = [errorTags, s, i];
-
-              //console.log("Concatenating error tags")
+             }
               
               return offsetErrorTags;
           }))
@@ -224,7 +224,8 @@ export class GrammarEngine {
       subj.complete();
       
       // log error counts to the DB
-      //this.countNewErrors(allErrorTags.flat());
+      this.countNewErrors(allErrorTags.flat());
+      this.saveErrorsWithSentences();
 
       return allErrorTags;
     }
@@ -254,7 +255,8 @@ export class GrammarEngine {
     * Save an array containing sentences, associated errors, and indexes to the DB
     * @param storyId - id of story being checked for grammar
     */
-    async saveErrorsWithSentences(storyId: string) {
+    async saveErrorsWithSentences() {
+      const storyId: string = localStorage.getItem("currentStoryId")!;
       if(!this.errorsWithSentences || !storyId) {
         return;
       }
