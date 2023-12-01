@@ -573,4 +573,8 @@ export class DictoglossComponent implements OnInit {
         this.dialogRef = undefined;
     });
   }
+
+  goToStories() {
+    this.router.navigateByUrl('/student/dashboard');
+  }
 }

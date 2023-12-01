@@ -110,8 +110,8 @@
         <ng-template  #correct>
             <i><h2 class="victory">{{ts.l.you_filled_in_all_blanks}}</h2></i>
             <b *ngIf="playWithTimer === true"><h2>{{ts.l.you_finished_in}}{{displayTime(totalTime)}}</h2></b>
-            <button class="button victory-button" (click)="hasText = false;showInputBox = true">{{ts.l.new_dictogloss}}</button>
-            <button class="button victory-button" routerLink="/landing" (click)="resetDictogloss()">{{ts.l.go_to_my_stories}}</button>
+            <button class="button victory-button" (click)="resetDictogloss()">{{ts.l.new_dictogloss}}</button>
+            <button class="button victory-button" (click)="goToStories()">{{ts.l.go_to_my_stories}}</button>
         </ng-template>
     </div>
 </div>
