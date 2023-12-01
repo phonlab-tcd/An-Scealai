@@ -387,7 +387,6 @@ export class DashboardComponent implements OnInit {
       dialect: this.story.dialect,
       text: this.story.text,
       htmlText: unhighlightedHtmlText,
-      lastUpdated: finishedWritingTime,
     };
 
     this.engagement.addSaveStoryEvent(this.story);

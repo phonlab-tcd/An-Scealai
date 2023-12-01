@@ -10,7 +10,7 @@ const handler =  async (req, res) => {
     throw new API404Error(`User with id ${req.params.id} not found.`);
   }
   
-  const stories = await Story.find({'owner': req.params.id});
+  const stories = await Story.find({'owner': req.params.id}).sort({$natural:-1});
 
   if (!stories) {
     throw new API404Error(`No stories written by user with id ${req.params.id} were found.`);

@@ -50,7 +50,7 @@ export class StudentListComponent implements OnInit {
           next: async (student) => {
             this.students.push(student);
             const stories = await firstValueFrom( this.storyService.getStoriesForClassroom( student._id, this.classroom.createdAt?.toString() ) );
-            stories.sort((a: Story, b: Story) => (a.lastUpdated > b.lastUpdated ? -1 : 1));
+            stories.sort((a: Story, b: Story) => (a.updatedAt > b.updatedAt ? -1 : 1));
             if (stories) {
               this.studentStories[student.username] = stories;
             } else {

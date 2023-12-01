@@ -29,7 +29,7 @@
         <mat-divider></mat-divider>
         <div class="storyEntry" (click)="setStoryForFeedback(story); rightDrawer.open()" [attr.id]="story._id" >
           <div style="flex: 2">{{ story.title }}</div>
-          <div style="flex: 2">{{ story.lastUpdated | date : "d/M/yy" }}</div>
+          <div style="flex: 2">{{ story.updatedAt | date : "d/M/yy" }}</div>
           <div style="flex: 1"> <i *ngIf="hasFeedback(story)" class="fas fa-check"></i> </div>
         </div>
       </div>
