@@ -77,7 +77,7 @@ export class PromptDataTableComponent {
       this.promptService.addPromptData(row, this.selectedPromptGenerator).subscribe({
         next: (newPrompt: PromptData) => {
           row._id = newPrompt._id;
-          row.lastUpdated = newPrompt.lastUpdated;
+          row.updatedAt = newPrompt.updatedAt;
           row.isEdit = false;
           this.multipleRowData = "";
         },

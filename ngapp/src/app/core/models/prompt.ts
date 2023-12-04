@@ -11,7 +11,8 @@ export interface PromptData {
   storyTitle?: string;
   type?: string;
   partOfSpeech?: string;
-  lastUpdated?: Date;
+  updatedAt?: Date;
+  createdAt?: Date;
 }
 
 // all possible table columns for prompt data, includes data type and specifications (order is important)
@@ -70,9 +71,15 @@ export const PromptDataColumns = [
     required: false,
   },
   {
-    key: "lastUpdated",
+    key: "updatedAt",
     type: "date",
     label: "Last Updated",
+    required: true,
+  },
+  {
+    key: "createdAt",
+    type: "date",
+    label: "Date Uploaded",
     required: true,
   },
   {
