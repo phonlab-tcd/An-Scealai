@@ -11,6 +11,7 @@ const GeneralPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.general',
+  timestamps: true,
 });
 
 const ProverbPromptSchema = new Schema({
@@ -32,6 +33,7 @@ const ProverbPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.proverb',
+  timestamps: true,
 });
 
 const ExamPromptSchema = new Schema({
@@ -49,6 +51,7 @@ const ExamPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.exam',
+  timestamps: true,
 });
 
 const LARAPromptSchema = new Schema({
@@ -65,6 +68,7 @@ const LARAPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.lara',
+  timestamps: true,
 });
 
 const CombinationPromptSchema = new Schema({
@@ -91,6 +95,7 @@ const CombinationPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.combination',
+  timestamps: true,
 });
 
 const POSPromptSchema = new Schema({
@@ -112,6 +117,7 @@ const POSPromptSchema = new Schema({
   },
 }, {
   collection: 'prompt.partOfSpeech',
+  timestamps: true,
 });
 
 
