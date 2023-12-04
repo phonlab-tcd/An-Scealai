@@ -67,11 +67,11 @@ storyRoutes
   .route("/getStoriesForClassroom/:owner/:date")
   .get(function (req, res) {
     const conditions = { owner: req.params.owner };
-    if (req.params.date != "empty") {
-      conditions["date"] = {
-        $gte: req.params.date,
-      };
-    }
+    // if (req.params.date != "empty") {
+    //   conditions["date"] = {
+    //     $gte: req.params.date,
+    //   };
+    // }
     Story.find(conditions, function (err, stories) {
       if (err) {
         console.log(err);
