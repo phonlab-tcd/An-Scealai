@@ -1584,6 +1584,9 @@ const translations = {
   other_stories: {
     ga: 'Scéalta Eile',
     en: 'Other Stories' },
+  aesop_fables: {
+    ga: 'Fabhalscéalta Aesop',
+    en: 'Aesop\'s Fables' },
   chonamara: {
     ga: 'Guth Chonamara',
     en: 'Voice of Chonamara' },
