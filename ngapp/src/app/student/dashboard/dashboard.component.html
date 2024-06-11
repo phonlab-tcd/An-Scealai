@@ -204,6 +204,7 @@
     ></app-grammar-error-drawer>
     <app-bat-mirialta-drawer
         *ngIf="selectedDrawer == 'bat-mirialta'"
+        (closeEmitter)="toggleRightDrawer('bat-mirialta')"
         >
     </app-bat-mirialta-drawer>
   </mat-drawer>
