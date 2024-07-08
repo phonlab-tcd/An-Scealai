@@ -107,6 +107,17 @@
     <i class="fas fa-spell-check optionsBtnIcon"></i>
   </div>
 
+  <!-- BAT MIRIALTA -->
+  <div
+    class="optionsBtn optionsPopupBtn"
+    [class.optionsBtnClicked]="rightDrawerOpened && selectedDrawer == 'bat-mirialta'"
+    (click)="dontToggle = true; toggleRightDrawer('bat-mirialta')"
+  >
+    {{ ts.l.batmirialta}}
+    An Bat Mírialta
+    <i class="fas fa-spell-check optionsBtnIcon"></i>
+  </div>
+
   <!-- DICTIONARY -->
   <div
     class="optionsBtn optionsPopupBtn"
@@ -191,5 +202,10 @@
       [checkBoxes]="checkBoxes"
       (closeGrammarEmitter)="toggleRightDrawer('grammar')"
     ></app-grammar-error-drawer>
+    <app-bat-mirialta-drawer
+        *ngIf="selectedDrawer == 'bat-mirialta'"
+        (closeEmitter)="toggleRightDrawer('bat-mirialta')"
+        >
+    </app-bat-mirialta-drawer>
   </mat-drawer>
 </mat-drawer-container>

@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit {
   dontToggle = false;
   @ViewChild("rightDrawer") rightDrawer: MatDrawer;
   rightDrawerOpened: boolean = false;
-  selectedDrawer: "grammar" | "dictionary" | "feedback" | "synthesis" = "grammar";
+  selectedDrawer: "grammar" | "dictionary" | "feedback" | "synthesis" | "bat-mirialta" = "grammar";
 
   // WORD COUNT
   words: string[] = [];

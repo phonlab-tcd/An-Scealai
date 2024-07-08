@@ -8,6 +8,7 @@ import { StoryDrawerComponent } from './story-drawer/story-drawer.component';
 import { DictionaryDrawerComponent } from './dictionary-drawer/dictionary-drawer.component';
 import { GrammarErrorDrawerComponent } from './grammar-error-drawer/grammar-error-drawer.component';
 import { FeedbackDrawerComponent } from './feedback-drawer/feedback-drawer.component';
+import { BatMirialtaDrawerComponent } from './bat-mirialta-drawer/bat-mirialta-drawer.component';
 import { SynthesisDrawerComponent } from './synthesis-drawer/synthesis-drawer.component';
 import { HomePageComponent } from './home-page/home-page.component';
 
@@ -45,6 +46,7 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     DictionaryDrawerComponent,
     GrammarErrorDrawerComponent,
     FeedbackDrawerComponent,
+    BatMirialtaDrawerComponent,
     SynthesisDrawerComponent,
     HomePageComponent
   ],
