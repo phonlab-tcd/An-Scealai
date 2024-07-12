@@ -9,6 +9,7 @@ import { SponsorsComponent } from './sponsors/sponsors.component';
 import { TeamComponent } from './team/team.component';
 import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.component';
 import { ResourcesComponent } from './resources/resources.component';
+import { DigitalReaderComponent } from './digital-reader/digital-reader.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { FiosComponent } from './fios/fios.component';
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},
+  { path: 'digital-reader', component: DigitalReaderComponent},
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
   { path: 'user-guides', component: UserGuidesComponent},

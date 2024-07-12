@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="header">
+    {{ ts.l.digital_reader }}
+  </div>
+  <div class="aboutContent">
+    <p style="text-align: center;">This is where the stories will be displayed/can be generated (I think)</p>
+    <p style="text-align: center;">List of stories in the db :</p>
+    <p style="text-align: center;">(will be filtered based in public/private/who created it)</p>
+  </div>
+  <div style="display: flex;">
+    <div style="margin: 0 auto; width: 50%;">
+      <table>
+        <tr style="margin: 0 auto; width: 25%;text-align: center;">
+          <th>Story ID</th>
+          <th>Story name</th>
+        </tr>
+        <!--<tr *ngFor="let row of tableData" style="margin: 0 auto; width: 25%;text-align: center;">
+          <td style="margin: 0 auto; width: 25%;">{{ row.id }}</td>
+          <td style="margin: 0 auto; width: 25%;">{{ row.name }}</td>
+        </tr>-->
+      </table>
+    </div>
+
+    
+    <!--<app-story-drawer></app-story-drawer>-->
+
+    <!--Create story interaction-->
+    <div style="margin: auto; width: 33%;">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header [collapsedHeight]="'50px'" [expandedHeight]="'50px'">
+          <mat-panel-description class="panelDescription">
+            Create a new story
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+          <!--<span class="panelContent">
+            <span> rud ar bith </span>
+          </span>-->
+        <mat-action-row class="storyCreationActionRow">
+          <!--<div class=>-->
+            <div class="viewStory dialectChoice" style="font-weight:bold;">Select the dialect voices to synthesise:</div> <br>
+            <div class="dialectContainer">
+              <mat-checkbox><div class="viewStoryBtn">{{ts.l.munster}}</div></mat-checkbox>
+              <mat-checkbox><div class="viewStoryBtn">{{ts.l.connacht}}</div></mat-checkbox>
+              <mat-checkbox><div class="viewStoryBtn">{{ts.l.ulster}}</div></mat-checkbox>
+            </div> <br>
+          <!--</div>-->
+          <div class="file-upload">
+            <label for="file">Choose your folder containing the .html file</label>
+            <input type="file" id="file" (change)="processUploadedFile($event.target.files)">
+          </div> <br>
+          <div>
+            <button class="viewStoryBtn"
+            (click)="getHtmlDoc()"
+            [disabled]="!this.htmlFolder"
+            >*Test* Unzip the file</button> <br> <br>
+            <div class="viewStoryBtn">Create</div>
+          </div>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </div>
+  </div>
+</div>
+
+<!-- Footer containing logos -->
+<div class="footerLARA">
+  <div class="footerLogos">
+    <div class="copyright"> {{ts.l.published_courtesy_of}} </div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_an_gum.png"></div>
+    <div class="logoPadding"><img class="logoImg" src="assets/img/logo_foras_na_gaeilge.png"></div>
+  </div>
+</div>
