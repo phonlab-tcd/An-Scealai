@@ -7,12 +7,16 @@ import { User } from "app/core/models/user";
 import { UserService } from "app/core/services/user.service";
 //import { createClient } from "@supabase/supabase-js"
 //import { Story } from "app/core/models/story";
+import { DigitalReaderStory } from "app/core/models/drStory";
 
 import { HttpClient } from "@angular/common/http";
 //import { GrammarEngine } from 'lib/grammar-engine/grammar-engine';
 //import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
 //import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-engine/types";
 import { DigitalReaderStoryService } from "app/core/services/dr-story.service"
+
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 
 @Component({
   selector: 'app-digital-reader',
@@ -24,13 +28,16 @@ export class DigitalReaderComponent implements OnInit {
   user: User;
   tableData: Array<Object>;
   htmlFolder: File | null = null;
+  drStory: DigitalReaderStory;
+  dialogRef: MatDialogRef<unknown>;
 
   constructor(
     public ts : TranslationService,
     public auth: AuthenticationService,
     public userService: UserService,
     public drStoryService: DigitalReaderStoryService,
-    public http: HttpClient) {
+    public http: HttpClient,
+    private dialog: MatDialog) {
 
     }
 
@@ -94,7 +101,102 @@ export class DigitalReaderComponent implements OnInit {
       })*/
 
   }
-  
+
+  createNewStory() {
+    console.log('creating dr-story...')
+    //this.isFirstStory.emit(this.stories.length == 0);
+    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+      data: {
+        title: this.ts.l.story_details,
+        type: "select",
+        data: [
+          this.ts.l.enter_title,
+          [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster],
+          [this.ts.l.title, this.ts.l.dialect],
+        ],
+        confirmText: this.ts.l.save_details,
+        cancelText: this.ts.l.cancel,
+      },
+      width: "50vh",
+    });
+
+    this.dialogRef.afterClosed().subscribe(async (res: any) => {
+      this.dialogRef = undefined;
+      console.log(res)
+      if (res) {
+        if (res[0]) {
+          let dialect = "connemara";
+          if (res[1] == this.ts.l.munster) dialect = "kerry";
+          if (res[1] == this.ts.l.ulster) dialect = "donegal";
+          const user = this.auth.getUserDetails();
+          console.log(user)
+          if (!user) {
+            console.log("Can't save story, current user is null");
+            return;
+          }
+          this.drStoryService
+            .saveDRStory(res[0], new Date(), [dialect], "") // [dialect] only for testing - single dialect for now
+            /*.subscribe({
+              next: () => {
+                //this.getStories();
+                alert("Digital Reader Story created successfully");
+              },
+              error: () => {
+                alert("Not able to create a new story");
+              },
+            });*/
+            
+            alert("Attempted to create DR Story");
+        } else {
+          alert(this.ts.l.title_required);
+        }
+      }
+    });
+  }
+
+  /*async saveStory(debounceId: number | "modal", finishedWritingTime: Date) {
+    const saveAttempt = new Date();
+    this.mostRecentAttemptToSaveStory = saveAttempt;
+
+    if (!this.drStory._id) {
+      return window.alert("Cannot save story. The id is not known");
+    }
+
+    // get story html text without highlighting markup
+    //const unhighlightedHtmlText = this.stripGramadoirAttributesFromHtml( clone(this.story.htmlText) );
+
+    const updateData = {
+      title: this.drStory.title,
+      dialect: this.drStory.dialect,
+      content: this.drStory.content,
+      //htmlText: unhighlightedHtmlText,
+    };
+
+    //this.engagement.addSaveStoryEvent(this.story);
+
+    // Save story to the DB
+    try {
+      await firstValueFrom( this.drStoryService.updateStory(updateData, this.drStory._id) );
+      if (debounceId === this.saveStoryDebounceId) {
+        this.storySaved = true;
+      } else if (debounceId === "modal") {
+        this.storySaved = true;
+      }
+    } catch (error) {
+      window.alert("Error while trying to save story: " + (error as Error).message);
+      throw error;
+    }
+    // Set story status to saved if dates match
+    try {
+      if (saveAttempt === this.mostRecentAttemptToSaveStory) {
+        this.storySaved = true;
+      }
+    } catch (error) {
+      window.alert("Error setting storySaved to true: " + (error as Error).message);
+      throw error;
+    }
+    return;
+  }*/
 
   async supabaseLogin(supabase) {
     const { data, error } = await supabase.auth.signInWithPassword({

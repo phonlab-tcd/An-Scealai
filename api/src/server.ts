@@ -39,6 +39,7 @@ const synthesisRoute = require('./routes/synthesis.route');
 const nlpRoute = require('./routes/nlp.route');
 import feedbackCommentRoute from './routes/feedbackComment.route';
 const digitalReaderRoute = require("./routes/digitalReader.route");
+const digitalReaderStoryRoute = require("./routes/drStory.route");
 
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
@@ -124,6 +125,7 @@ app.use('/recordings', recordingRoute);
 app.use('/nlp', nlpRoute);
 app.use('/feedbackComment', feedbackCommentRoute);
 app.use('/digitalReader', digitalReaderRoute);
+app.use('/drStory', digitalReaderStoryRoute);
 
 app.use('/proxy', expressQueue({activeLimit: 2, queuedLimit: -1}), async (req,res,next)=>{
   function allowUrl(url) {

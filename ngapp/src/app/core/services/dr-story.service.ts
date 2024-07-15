@@ -24,7 +24,7 @@ export class DigitalReaderStoryService {
     private ts: TranslationService,
   ) { }
 
-  baseUrl: string = config.baseurl //+ 'nlp/';
+  baseUrl: string = config.baseurl
   segmentableTags: string = 'p, h1, h2, h3, h4, h5, h6, li, title, th, td'
 
   async tokenizeSentence(input: string) {
@@ -77,6 +77,21 @@ export class DigitalReaderStoryService {
       this.http.post<string>(this.baseUrl + 'digitalReader/unzip', {body: 'test!\nrud eile\nrud eile'})
     )
     return out
+  }
+
+  async saveDRStory(title: string, date: Date, dialects: Array<string>, content: Object) {
+    const drstoryObj = {
+      title: title,
+      dialects: dialects,
+      //text: text,
+      content: content,
+      //author: author,
+      //createdWithPrompts: createdWithPrompts,
+      //activeRecording: null
+    };
+    console.log(drstoryObj);
+    //this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drstoryObj});
+    return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drstoryObj);
   }
 
   /*
