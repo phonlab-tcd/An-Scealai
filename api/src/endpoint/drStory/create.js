@@ -8,6 +8,7 @@ const {API500Error} = require('../../utils/APIError');
  * @return {Promise} id: the id of the created story
  */
 module.exports = async (req, res) => {
+  //res.json({text : 'anything at all'})
   const drStory = await DigitalReaderStory.create({...req.body, owner: req.user._id});
   if (!drStory) {
     throw new API500Error('Unable to save story to DB.');

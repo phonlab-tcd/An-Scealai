@@ -45,13 +45,13 @@
             </div> <br>
           <!--</div>-->
           <div class="file-upload">
-            <label for="file">Choose your folder containing the .html file</label>
+            <label for="file">Choose .docx file to upload</label>
             <input type="file" id="file" (change)="processUploadedFile($event.target.files)">
           </div> <br>
           <div>
             <button class="viewStoryBtn"
             (click)="getHtmlDoc()"
-            [disabled]="!this.htmlFolder"
+            [disabled]="!this.htmlFile"
             >*Test* Unzip the file</button> <br> <br>
             <div class="viewStoryBtn" (click)="createNewStory()">Create</div>
           </div>

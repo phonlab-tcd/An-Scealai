@@ -20,6 +20,7 @@ const Event = new mongoose.Schema({
       'DELETE-CLASSROOM',
       'PROFILE-STATS',
       'FEATURE-STATS',
+      'CREATE-DR-STORY',
     ],
     required: true
   },

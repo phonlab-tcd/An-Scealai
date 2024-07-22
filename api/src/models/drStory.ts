@@ -17,16 +17,21 @@ const DigitalReaderStory = new Schema(
       dialects: {
         type: Array, // possibility for multiple dialects
       },
-      content :
+      story :
         {
-          type: RecursiveHtmlElem,
+          content: {
+            type : RecursiveHtmlElem,
+          },
           sentences : {
-            type: Schema.Types.Mixed // obj of key-value pairs
+            type: Schema.Types.Mixed, // obj of key-value pairs
           },
           words : {
-            type: Schema.Types.Mixed // obj of key-value pairs
+            type: Schema.Types.Mixed, // obj of key-value pairs
           }
         }, // body element
+        public: {
+          type: Boolean
+        }
     },
     {
       collection: 'drStory',

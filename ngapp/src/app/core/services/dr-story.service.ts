@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 //import { DigitalReaderStory } from 'app/core/models/dr-story';
 import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
@@ -72,26 +73,36 @@ export class DigitalReaderStoryService {
     return segmentedSentences
   }
 
-  async testChildProcess() {
+  async testChildProcess(req: File) {
+    /*const reqObj = {
+      body: req,
+      headers: new HttpHeaders(formData.getHeaders())
+    }*/
+    console.log(req)
+    const formData = new FormData();
+    formData.append('docx', req)
     const out = await firstValueFrom(
-      this.http.post<string>(this.baseUrl + 'digitalReader/unzip', {body: 'test!\nrud eile\nrud eile'})
+      //this.http.post<string>(this.baseUrl + 'digitalReader/unzip', {body: 'test!\nrud eile\nrud eile'})
+      this.http.post<FormData>(this.baseUrl + 'digitalReader/docx2html', formData)
+      //this.http.post<{yourInput: Object}>(this.baseUrl + 'digitalReader/docx2html', {body: 'test!\nrud eile\nrud eile'})
     )
     return out
   }
 
-  async saveDRStory(title: string, date: Date, dialects: Array<string>, content: Object) {
-    const drstoryObj = {
+  saveDRStory(title: string, dialects: Array<string>, story: Object, isPublic: Boolean) {
+    const drStoryObj = {
       title: title,
       dialects: dialects,
       //text: text,
-      content: content,
+      story: story,
+      public: isPublic,
       //author: author,
       //createdWithPrompts: createdWithPrompts,
       //activeRecording: null
     };
-    console.log(drstoryObj);
-    //this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drstoryObj});
-    return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drstoryObj);
+    console.log(drStoryObj);
+    this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drStoryObj});
+    return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drStoryObj);
   }
 
   /*
