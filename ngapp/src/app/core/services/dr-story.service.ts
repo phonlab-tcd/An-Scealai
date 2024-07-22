@@ -73,20 +73,33 @@ export class DigitalReaderStoryService {
     return segmentedSentences
   }
 
-  async testChildProcess(req: File) {
-    /*const reqObj = {
-      body: req,
-      headers: new HttpHeaders(formData.getHeaders())
-    }*/
+
+  // TODO : maybe factor out below function into multiple functions
+  async processUploadedFile(req: File) {
+    
     console.log(req)
     const formData = new FormData();
     formData.append('docx', req)
-    const out = await firstValueFrom(
-      //this.http.post<string>(this.baseUrl + 'digitalReader/unzip', {body: 'test!\nrud eile\nrud eile'})
-      this.http.post<FormData>(this.baseUrl + 'digitalReader/docx2html', formData)
-      //this.http.post<{yourInput: Object}>(this.baseUrl + 'digitalReader/docx2html', {body: 'test!\nrud eile\nrud eile'})
+    const convertedHtml = await firstValueFrom(
+      this.http.post<string>(this.baseUrl + 'digitalReader/docx2html', formData)
     )
-    return out
+
+    // TODO : add html sanitisation !!
+
+    // TODO : add a call to sentence segmenter
+    // - reformat sentence segmenter output (e.g [{text: 'xyz1'}, {text: 'xyz2'}])
+    const sentences:Array<Object> = []
+
+    // TODO : add a call to POS tagger
+    // - reformat sentence segmenter output (e.g [{text: 'xyz1', pos: {lemma:null, tags:null}}, {text: 'xyz2', ...}])
+    const words:Array<Object> = []
+
+    const segmentedHtml = await firstValueFrom(
+      this.http.post<string>(this.baseUrl + 'digitalReader/segment-html', 
+        {text: convertedHtml, sentences: sentences, words: words} // only for testing
+      )
+    )
+    return segmentedHtml
   }
 
   saveDRStory(title: string, dialects: Array<string>, story: Object, isPublic: Boolean) {
