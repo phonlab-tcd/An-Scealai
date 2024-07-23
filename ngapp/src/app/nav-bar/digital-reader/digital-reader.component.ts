@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TranslationService } from 'app/core/services/translation.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 
@@ -25,11 +25,13 @@ import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.co
 })
 export class DigitalReaderComponent implements OnInit {
 
+  drStories: DigitalReaderStory[] = []
   user: User;
   tableData: Array<Object>;
-  htmlFolder: File | null = null;
+  htmlFile: File | null = null;
   drStory: DigitalReaderStory;
   dialogRef: MatDialogRef<unknown>;
+  @Output() isFirstDrStory = new EventEmitter<boolean>();
 
   constructor(
     public ts : TranslationService,
@@ -74,9 +76,9 @@ export class DigitalReaderComponent implements OnInit {
 
     //this.drStoryService.testChildProcess();
 
-    const segmentedSentences = await this.drStoryService.segmentText(document)
+    /*const segmentedSentences = await this.drStoryService.segmentText(document)
 
-    console.log(segmentedSentences)
+    console.log(segmentedSentences)*/
 
     //console.log(this.drStoryService.testChildProcess());
 
@@ -104,7 +106,7 @@ export class DigitalReaderComponent implements OnInit {
 
   createNewStory() {
     console.log('creating dr-story...')
-    //this.isFirstStory.emit(this.stories.length == 0);
+    this.isFirstDrStory.emit(this.drStories.length == 0);
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.story_details,
@@ -134,17 +136,19 @@ export class DigitalReaderComponent implements OnInit {
             console.log("Can't save story, current user is null");
             return;
           }
-          this.drStoryService
-            .saveDRStory(res[0], new Date(), [dialect], "") // [dialect] only for testing - single dialect for now
-            /*.subscribe({
+
+          const story = {}
+
+          this.drStoryService // maybe import RecursiveHtmlElem (?)
+            .saveDRStory(res[0], [dialect], story, true) // [dialect] only for testing - single dialect for now
+            .subscribe({
               next: () => {
-                //this.getStories();
-                alert("Digital Reader Story created successfully");
+                console.log('a response was received')
               },
               error: () => {
                 alert("Not able to create a new story");
               },
-            });*/
+            });
             
             alert("Attempted to create DR Story");
         } else {
@@ -214,11 +218,16 @@ export class DigitalReaderComponent implements OnInit {
 
   processUploadedFile(files: FileList) {
     // in the future could make it so that the file is not removed if the dialog is simply opened again
-    this.htmlFolder = files.item(0)
-    console.log(this.htmlFolder)
+    this.htmlFile = files.item(0)
+    console.log(this.htmlFile)
   }
 
-  getHtmlDoc() {
+  async getHtmlDoc() {
+
+    //only for testing
+    if (this.htmlFile) {
+        const test = await this.drStoryService.processUploadedFile(this.htmlFile)
+    }
 
   }
 

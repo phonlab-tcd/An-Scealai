@@ -1,5 +1,5 @@
 //import segmentBody from 'html-segmenter'
-const segmentBody = require('html-segmenter')
+const segmentBody = require('@phonlab-tcd/node-html-segmenter')
 
 const makeEndpoints = require('../utils/makeEndpoints');
 

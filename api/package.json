@@ -38,6 +38,7 @@
   "dependencies": {
     "@aws-sdk/client-ses": "^3.363.0",
     "@google-cloud/speech": "^4.8.0",
+    "@phonlab-tcd/node-html-segmenter": "^0.0.1",
     "@types/multer": "^1.4.7",
     "axios": "0.26.0",
     "body-parser": "^1.19.0",
@@ -58,7 +59,6 @@
     "formidable": "^1.2.1",
     "generate-password": "^1.6.0",
     "handlebars": "^4.7.7",
-    "html-segmenter": "file:bin/local-packages/html-segmenter",
     "json5": "^2.2.3",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
