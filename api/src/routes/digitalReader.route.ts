@@ -6,21 +6,22 @@ const makeEndpoints = require('../utils/makeEndpoints');
 const nodePandoc = require('node-pandoc-promise');
 
 const express = require('express');
-var multer = require('multer');
-var path = require('path')
+const multer = require('multer');
+const path = require('path');
+
+const fs = require('node:fs');
 
 const multerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/temp/uploads/')
   },
   filename: function (req, file, cb) {
-    //const nameLessExt = file.fieldname + '_uploaded_'
     const ext = path.extname(file.originalname)
     cb(null, 'upload_' + Date.now() + ext)
   }
 })
 
-var upload = multer({
+const upload = multer({
   storage: multerStorage
 });
 
@@ -28,33 +29,28 @@ const digitalReaderRoute = express.Router();
 
 //digitalReaderRoute.route('/docx2html').post(require('../endpoint/digitalReader/docx2html'))
 
-//TODO : Refactor all this into a service (?), return the converted html file and return it to be used in a separate segmentation call.
+
+//TODO : Factor some of this functionality out into services and individual endpoint files (?)
+
+
 digitalReaderRoute.route('/docx2html').post(upload.single("docx"), async function (req, res) {
 
-  //console.log(req.file);
-
   const pathToFile = req.file.path;
-  //console.log(pathToFile)
 
-  //const pandocArgs = '-f docx -t html5 --standalone --embed-resources --wrap=none --no-highlight';
   const pandocArgs = ['-f', 'docx', '-t', 'html5', '--standalone', '--embed-resources', '--wrap=none', '--no-highlight'];
 
   const htmlOutput = await nodePandoc(pathToFile, pandocArgs);
-  //console.log(htmlOutput)
-
-  /*// call to sentence segmentation API
-  const segmentedSentences = [] //[{text: 'Test Document'}]
-
-  // call to POS tagger
-  const segmentedWords = [] //[{text: 'Test', pos:{}}, {text: 'Document',pos:{}}]
-
-  const segmentedHtml = segmentBody(htmlOutput, segmentedSentences, segmentedWords)
-  console.log(segmentedHtml)*/
   
-  //res.json(segmentedHtml)
   res.json(htmlOutput)
 
-  //TODO : add removal of temporary file / remove storing of file altogether if possible
+  fs.unlink(pathToFile, function (err) {
+    if (err) {
+      console.error('Problem removing docx file from file system')
+      console.error(err)
+    } else {
+      console.log('Successfully removed tmp docx file from file system')
+    }
+  })
 })
 
 digitalReaderRoute.route('/segment-html').post(/*upload.single("docx"), */async function (req, res) {
