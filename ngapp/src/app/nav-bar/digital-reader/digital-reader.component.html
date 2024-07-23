@@ -50,10 +50,13 @@
           </div> <br>
           <div>
             <button class="viewStoryBtn"
-            (click)="getHtmlDoc()"
-            [disabled]="!this.htmlFile"
-            >*Test* Unzip the file</button> <br> <br>
-            <div class="viewStoryBtn" (click)="createNewStory()">Create</div>
+            (click)="convertDocxToHTML()"
+            [disabled]="!this.docxFile"
+            >*Test* Convert the docx to html</button> <br> <br>
+            <button class="viewStoryBtn"
+            (click)="createNewStory()"
+            [disabled]="!this.convertedHTMLDoc"
+            >*Test* Create Story</button>
           </div>
         </mat-action-row>
       </mat-expansion-panel>

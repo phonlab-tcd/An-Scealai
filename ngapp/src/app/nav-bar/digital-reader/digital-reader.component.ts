@@ -18,6 +18,8 @@ import { DigitalReaderStoryService } from "app/core/services/dr-story.service"
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 
+import { constructJSON } from '@phonlab-tcd/html2json';
+
 @Component({
   selector: 'app-digital-reader',
   templateUrl: './digital-reader.component.html',
@@ -28,7 +30,8 @@ export class DigitalReaderComponent implements OnInit {
   drStories: DigitalReaderStory[] = []
   user: User;
   tableData: Array<Object>;
-  htmlFile: File | null = null;
+  docxFile: File | null = null;
+  convertedHTMLDoc: Document | null = null;
   drStory: DigitalReaderStory;
   dialogRef: MatDialogRef<unknown>;
   @Output() isFirstDrStory = new EventEmitter<boolean>();
@@ -136,21 +139,23 @@ export class DigitalReaderComponent implements OnInit {
             console.log("Can't save story, current user is null");
             return;
           }
+          
+          if (this.convertedHTMLDoc) {
+            const story = constructJSON(this.convertedHTMLDoc.body)
 
-          const story = {}
+            console.log(story)
 
-          this.drStoryService // maybe import RecursiveHtmlElem (?)
-            .saveDRStory(res[0], [dialect], story, true) // [dialect] only for testing - single dialect for now
-            .subscribe({
-              next: () => {
-                console.log('a response was received')
-              },
-              error: () => {
-                alert("Not able to create a new story");
-              },
-            });
-            
-            alert("Attempted to create DR Story");
+            this.drStoryService // maybe import RecursiveHtmlElem (?)
+                .saveDRStory(res[0], [dialect], story, true) // [dialect] only for testing - single dialect for now
+                .subscribe({
+                next: () => {
+                    console.log('a response was received')
+                },
+                error: () => {
+                    alert("Not able to create a new story");
+                },
+                });
+          }
         } else {
           alert(this.ts.l.title_required);
         }
@@ -218,15 +223,21 @@ export class DigitalReaderComponent implements OnInit {
 
   processUploadedFile(files: FileList) {
     // in the future could make it so that the file is not removed if the dialog is simply opened again
-    this.htmlFile = files.item(0)
-    console.log(this.htmlFile)
+    this.docxFile = files.item(0)
+    console.log(this.docxFile)
   }
 
-  async getHtmlDoc() {
+  async convertDocxToHTML() {
 
     //only for testing
-    if (this.htmlFile) {
-        const test = await this.drStoryService.processUploadedFile(this.htmlFile)
+    if (this.docxFile) {
+        this.convertedHTMLDoc = await this.drStoryService.processUploadedFile(this.docxFile)
+
+        if (this.convertedHTMLDoc instanceof Document) {
+            console.log('file converted successfully!')
+        } else {
+            alert('could not convert docx file')
+        }
     }
 
   }

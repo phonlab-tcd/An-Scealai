@@ -11,8 +11,6 @@ import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
 import { firstValueFrom, tap } from 'rxjs';
 
-import { constructJSON } from '@phonlab-tcd/html2json';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -134,13 +132,13 @@ export class DigitalReaderStoryService {
 
     // for testing
     const parsedSegmentedDoc = htmlParser.parseFromString(segmentedHtml, 'text/html')
-    console.log(parsedSegmentedDoc)
+    /*console.log(parsedSegmentedDoc)
 
     document.body.innerHTML = parsedSegmentedDoc.body.innerHTML
 
-    console.log(constructJSON(parsedSegmentedDoc.body))
+    console.log(constructJSON(parsedSegmentedDoc.body))*/
 
-    return segmentedHtml
+    return parsedSegmentedDoc
   }
 
   saveDRStory(title: string, dialects: Array<string>, story: Object, isPublic: Boolean) {

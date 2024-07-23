@@ -16,7 +16,8 @@ const RecursiveHtmlElem = new Schema({
 
 RecursiveHtmlElem.add({
   '>' : {
-    type: [RecursiveHtmlElem],
+    //type: [RecursiveHtmlElem],
+    type: [Schema.Types.Mixed], // only for testing - allows insertion of strings as direct children
     default: undefined
   }
 })
