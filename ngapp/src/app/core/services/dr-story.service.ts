@@ -77,6 +77,27 @@ export class DigitalReaderStoryService {
     return reformattedSentences
   }
 
+  tagSentence(sentence:string):Observable<any> {
+    return this.http.get<any>(`https://api.abair.ie/v3/POSTagger/tag?text=${sentence}`)
+  }
+
+  async tagSentences(sentences:Array<string>) {
+    const taggedWords:Array<Object> = []
+    for (let sentenceText of sentences) {
+      const taggedSentence = await firstValueFrom(this.tagSentence(sentenceText))
+      for (let taggedWord of taggedSentence) {
+        const taggedWordObj = {
+          text: taggedWord['word'],
+          pos: {
+            lemma: taggedWord['lemma'],
+            tags: taggedWord['tags']
+          }
+        }
+        taggedWords.push(taggedWordObj)
+      }
+    }
+    return taggedWords
+  }
 
   // TODO : maybe factor out below function into multiple functions
   async processUploadedFile(req: File) {
@@ -94,20 +115,20 @@ export class DigitalReaderStoryService {
     // parse the stringified html as a html document
     const htmlParser = new DOMParser();
     const parsedDoc = htmlParser.parseFromString(convertedHtml, 'text/html')
+    console.log(parsedDoc)
 
     // extract text chunks from html elements to send to sentence segmenter
-    const sentenceChunks = await this.segmentText(parsedDoc)
+    const sentenceTextChunks = await this.segmentText(parsedDoc)
+    console.log(sentenceTextChunks)
 
     // reformat sentence segmenter output for use with the segmentation API
-    const sentences:Array<Object> = this.reformatExtractedSentences(sentenceChunks)
+    const sentences:Array<Object> = this.reformatExtractedSentences(sentenceTextChunks)
 
-    // TODO : add a call to POS tagger (add a POS endpoint)
-    // - reformat sentence segmenter output (e.g [{text: 'xyz1', pos: {lemma:null, tags:null}}, {text: 'xyz2', ...}])
-    const words:Array<Object> = []
+    const words:Array<Object> = await this.tagSentences(sentenceTextChunks)
 
     const segmentedHtml = await firstValueFrom(
       this.http.post<string>(this.baseUrl + 'digitalReader/segment-html', 
-        {text: convertedHtml, sentences: sentences, words: words} // only for testing
+        {text: convertedHtml, sentences: sentences, words: words}
       )
     )
 
