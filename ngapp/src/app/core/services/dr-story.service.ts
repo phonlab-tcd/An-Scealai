@@ -12,6 +12,7 @@ import config from 'abairconfig';
 import { firstValueFrom, tap } from 'rxjs';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +27,7 @@ export class DigitalReaderStoryService {
   ) { }
 
   baseUrl: string = config.baseurl
-  segmentableTags: string = 'p, h1, h2, h3, h4, h5, h6, li, title, th, td'
+  segmentableTags: string = 'p, h1, h2, h3, h4, h5, h6, li, th, td'
 
   async tokenizeSentence(input: string) {
     const sentences = await firstValueFrom(
@@ -35,14 +36,6 @@ export class DigitalReaderStoryService {
     return sentences
   }
 
-  /*async testChildProcess() {
-    const out = await firstValueFrom(
-      this.http.post<{id: string}>(this.baseUrl + 'digitalReader/convert', {text: 'test!\nrud eile\nrud eile'})
-    )
-    return out
-  }*/
-
-  //may need to parse from a string rather than a document
   extractText(inputHtml: Document) {
     const textTags = inputHtml.querySelectorAll(this.segmentableTags)
 
@@ -60,37 +53,55 @@ export class DigitalReaderStoryService {
 
     const segmentedSentences = []
     for (let chunk of chunkedText) {
-      const segmentedChunkSentences = await this.tokenizeSentence(chunk)
-      //console.log('test')
-      //console.log(segmentedChunkSentences)
+      if (chunk!='') {
+        const segmentedChunkSentences = await this.tokenizeSentence(chunk)
 
-      for (let i = 0; i < segmentedChunkSentences.length; i++) {
-        const segmentedChunkSentence = segmentedChunkSentences[i];
-        segmentedSentences.push(segmentedChunkSentence)
+        for (let i = 0; i < segmentedChunkSentences.length; i++) {
+          const segmentedChunkSentence = segmentedChunkSentences[i];
+          segmentedSentences.push(segmentedChunkSentence)
+        }
+
       }
     }
 
     return segmentedSentences
   }
 
+  reformatExtractedSentences(sentences:Array<string>) {
+    const reformattedSentences:Array<Object> = []
+    for (let sentenceText of sentences) {
+      reformattedSentences.push({
+        text: sentenceText
+      })
+    }
+    return reformattedSentences
+  }
+
 
   // TODO : maybe factor out below function into multiple functions
   async processUploadedFile(req: File) {
     
-    console.log(req)
+    // convert the uploaded file to html
     const formData = new FormData();
-    formData.append('docx', req)
+    formData.append('docx', req);
     const convertedHtml = await firstValueFrom(
       this.http.post<string>(this.baseUrl + 'digitalReader/docx2html', formData)
-    )
+    );
 
-    // TODO : add html sanitisation !!
+    // TODO : add html sanitisation !!*******
+    // *CODE GOES HERE*
 
-    // TODO : add a call to sentence segmenter
-    // - reformat sentence segmenter output (e.g [{text: 'xyz1'}, {text: 'xyz2'}])
-    const sentences:Array<Object> = []
+    // parse the stringified html as a html document
+    const htmlParser = new DOMParser();
+    const parsedDoc = htmlParser.parseFromString(convertedHtml, 'text/html')
 
-    // TODO : add a call to POS tagger
+    // extract text chunks from html elements to send to sentence segmenter
+    const sentenceChunks = await this.segmentText(parsedDoc)
+
+    // reformat sentence segmenter output for use with the segmentation API
+    const sentences:Array<Object> = this.reformatExtractedSentences(sentenceChunks)
+
+    // TODO : add a call to POS tagger (add a POS endpoint)
     // - reformat sentence segmenter output (e.g [{text: 'xyz1', pos: {lemma:null, tags:null}}, {text: 'xyz2', ...}])
     const words:Array<Object> = []
 
@@ -99,6 +110,11 @@ export class DigitalReaderStoryService {
         {text: convertedHtml, sentences: sentences, words: words} // only for testing
       )
     )
+
+    // for testing
+    const parsedSegmentedDoc = htmlParser.parseFromString(segmentedHtml, 'text/html')
+    console.log(parsedSegmentedDoc)
+
     return segmentedHtml
   }
 

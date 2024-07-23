@@ -35,6 +35,8 @@ const digitalReaderRoute = express.Router();
 
 digitalReaderRoute.route('/docx2html').post(upload.single("docx"), async function (req, res) {
 
+  console.log('Uploaded tmp docx file to file system')
+
   const pathToFile = req.file.path;
 
   const pandocArgs = ['-f', 'docx', '-t', 'html5', '--standalone', '--embed-resources', '--wrap=none', '--no-highlight'];
