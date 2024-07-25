@@ -48,6 +48,7 @@
       <a
       *ngIf="auth.isLoggedIn() && (auth.getUserDetails()?.role === 'TEACHER' || auth.getUserDetails()?.role === 'ADMIN')"
       mat-menu-item class="dropdownMenuItem" routerLink="/dr-story-create">{{ ts.l.dr_story_create }}</a>
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/dr-library">{{ ts.l.digital_reader_library }}</a> <!--routerLink="/dr-story-create"-->
     </mat-menu>
 
     <!-- Cen Scéal dropdown menu-->

@@ -10,6 +10,7 @@ import { TeamComponent } from './team/team.component';
 import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { DigitalReaderComponent } from './digital-reader/digital-reader.component';
+import { DigitalReaderLibraryComponent } from './digital-reader-library/digital-reader-library.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { FiosComponent } from './fios/fios.component';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
@@ -32,6 +33,7 @@ const routes: Routes = [
     canActivate: [RoleGuardService],
     component: DigitalReaderComponent
   },
+  { path: 'dr-library', component: DigitalReaderLibraryComponent },
 ];
 
 @NgModule({

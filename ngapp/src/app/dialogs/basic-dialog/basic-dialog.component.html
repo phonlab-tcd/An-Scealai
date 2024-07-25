@@ -53,7 +53,10 @@
       {{ data.data[2][1] }}:
       <div class="dialectContainer">
         <mat-checkbox *ngFor="let opt of data.data[1]" [(ngModel)]="textInputs[opt.ind]"><div class="viewStoryBtn" >{{ opt.dialect }}</div></mat-checkbox>
-      </div>
+      </div> <br>
+      {{ data.data[2][2] }}:
+      <mat-checkbox [(ngModel)]="textInputs[data.data[1].length+1]"></mat-checkbox>
+      <!-- Have to find another way to represent this - probably better off just creating new dialog -->
     </div>
     <!-- PDF -->
     <pdf-viewer *ngIf="data?.type == 'PDF'" [src]="data.data" [render-text]="true" [original-size]="false" style="width: 100%; height: 600px" ></pdf-viewer>

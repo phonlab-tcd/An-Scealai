@@ -1,0 +1,25 @@
+<div class="dialogContainer">
+  <div *ngIf="data?.title" class="header">
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+  </div>
+
+  <div *ngIf="data?.message" mat-dialog-content [innerHTML]="data.message" ></div>
+
+  <!-- create-dr-story -->
+  <div *ngIf="data?.type == 'create-dr-story'">
+    {{ data.data[2][0] }}:
+    <input type="text" class="titleInput" placeholder="{{ data.data[0] }}" name="title" [(ngModel)]="inputs.title" /><br /><br />
+    {{ data.data[2][1] }}:
+    <div class="dialectContainer">
+      <mat-checkbox *ngFor="let dialect of data.data[1]" [(ngModel)]="inputs.dialects[dialectMapping[dialect]]"><div class="viewStoryBtn" >{{ dialect }}</div></mat-checkbox>
+    </div> <br>
+    {{ data.data[2][2] }}:
+    <mat-checkbox [(ngModel)]="inputs.public"></mat-checkbox>
+  </div>
+  
+  <div mat-dialog-actions [align]="'center'">
+    <button class="modalBtn deleteRedBtn" [mat-dialog-close]="" *ngIf="data.cancelText" > {{ data.cancelText }} </button>
+    <button class="modalBtn confirmBtnGreen" [mat-dialog-close]="inputs" *ngIf="data.confirmText" > {{ data.confirmText }} </button>
+  </div>
+
+</div>

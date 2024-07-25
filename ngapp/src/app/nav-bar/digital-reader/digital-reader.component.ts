@@ -16,9 +16,11 @@ import { HttpClient } from "@angular/common/http";
 import { DigitalReaderStoryService } from "app/core/services/dr-story.service"
 
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
+//import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
+import { DigitalReaderStoryCreationDialogComponent } from "../../dialogs/dr-story-creation-dialog/dr-story-creation-dialog.component";
 
 import { constructJSON } from '@phonlab-tcd/html2json';
+import { objectUtil } from 'zod';
 
 @Component({
   selector: 'app-digital-reader',
@@ -32,8 +34,12 @@ export class DigitalReaderComponent implements OnInit {
   tableData: Array<Object>;
   docxFile: File | null = null;
   convertedHTMLDoc: Document | null = null;
-  drStory: DigitalReaderStory;
+  //drStory: DigitalReaderStory;
   dialogRef: MatDialogRef<unknown>;
+
+  dialectOptions:Array<string>
+  storyState:string = '';
+
   @Output() isFirstDrStory = new EventEmitter<boolean>();
 
   constructor(
@@ -43,7 +49,7 @@ export class DigitalReaderComponent implements OnInit {
     public drStoryService: DigitalReaderStoryService,
     public http: HttpClient,
     private dialog: MatDialog) {
-
+        this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
     }
 
   async ngOnInit() {
@@ -75,17 +81,18 @@ export class DigitalReaderComponent implements OnInit {
   }
 
   async createNewStory() {
+    this.storyState = ''
 
     console.log('creating dr-story...')
     this.isFirstDrStory.emit(this.drStories.length == 0);
-    this.dialogRef = this.dialog.open(BasicDialogComponent, {
+    this.dialogRef = this.dialog.open(DigitalReaderStoryCreationDialogComponent, {
       data: {
         title: this.ts.l.story_details,
         type: "create-dr-story",
         data: [
           this.ts.l.enter_title,
-          [{dialect: this.ts.l.connacht, ind: 1}, {dialect: this.ts.l.munster, ind: 2}, {dialect: this.ts.l.ulster, ind: 3}],
-          [this.ts.l.title, this.ts.l.dialects],
+          this.dialectOptions,
+          [this.ts.l.title, this.ts.l.dialects, this.ts.l.make_public],
         ],
         confirmText: this.ts.l.save_details,
         cancelText: this.ts.l.cancel,
@@ -93,25 +100,44 @@ export class DigitalReaderComponent implements OnInit {
       width: "50vh",
     });
 
+    console.log(this.dialogRef)
+
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
 
       this.dialogRef = undefined;
       console.log(res)
       if (res) {
         
-        if (res[0]) {
+        if (res.title) {
             console.log(res)
-          if (res.length>1) {
+            
+          let dialects:Array<string> = [];
+          console.log(res.dialects)
+          for (const key in res.dialects) {
+            console.log(key)
+            console.log(res.dialects[key])
+            if (res.dialects[key] === true)
+                
+                dialects.push(key)
+          }
+
+          console.log(Array.isArray(dialects) && dialects.length!==0)
+          console.log(dialects)
+          console.log(Array.isArray(dialects))
+          console.log(dialects.length)
+          if (Array.isArray(dialects) && dialects.length!==0) {
+
+            this.storyState = 'processing'
+            console.log(this.storyState=='processing')
+            console.log(this.storyState==='processing')
+
             await this.convertDocxToHTML()
 
-            let dialect = ["connemara"];
-            if (!res[1]) dialect = []
-            if (res[2]) dialect.push("kerry");
-            if (res[3]) dialect.push("donegal");
             const user = this.auth.getUserDetails();
             console.log(user)
             if (!user) {
                 console.log("Can't save story, current user is null");
+                this.storyState = ''
                 return;
             }
             
@@ -120,22 +146,26 @@ export class DigitalReaderComponent implements OnInit {
 
                 console.log(story)
 
-                this.drStoryService // maybe import RecursiveHtmlElem (?)
-                    .saveDRStory(res[0], dialect, story, true) // [dialect] only for testing - single dialect for now
+                this.drStoryService
+                    .saveDRStory(res.title, dialects, story, res.public)
                     .subscribe({
                     next: () => {
                         console.log('a response was received')
+                        this.storyState = 'processed'
                     },
                     error: () => {
                         alert("Not able to create a new story");
+                        this.storyState = ''
                     },
                     });
                 }
           } else {
             alert(this.ts.l.dialect_required)
+            this.storyState = ''
           }
         } else {
           alert(this.ts.l.title_required);
+          this.storyState = ''
         }
       }
     });

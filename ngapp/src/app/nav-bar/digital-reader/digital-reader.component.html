@@ -20,27 +20,46 @@
     <!--<app-story-drawer></app-story-drawer>-->
 
     <!--Upload docx interaction-->
-    <div style="margin: auto; width: 30%; display: flex;">
-      <div style="margin: auto; width: 50%;">
+    <div style="margin: auto; width: 40%; display: flex;">
+      <div style="width: 35%; margin: auto 0 auto 0;">
+        <input type="file" id="file"
+        (change)="processUploadedFile($event.target.files)"
+        [disabled]="storyState=='processing'">
         <label for="file" class="viewStoryBtn"> Upload a .docx file </label>
-        <input type="file" id="file" (change)="processUploadedFile($event.target.files)"> <br>
       </div>
 
-      <div style="margin: auto; width: 50%;">
-        <div *ngIf="this.docxFile">
+      <!--<div style="margin: auto; width: 50%;">-->
+        <div *ngIf="this.docxFile" style="margin: auto; width: 65%; padding:0 10%;">
           <div>File uploaded : </div>
           <div>{{ this.docxFile.name }}</div>
         </div>
-      </div>
+      <!--</div>-->
     </div>
 
     <!--Process docx interaction-->
-    <div style="margin: auto; width: 70%; display: flex;">
-      <div style="margin: auto; width: 100%;">
+    <div style="margin: auto; width: 60%; display: flex;">
+      <div style="width: 50%; margin: auto 0 auto 0;">
         <button class="viewStoryBtn"
         (click)="createNewStory()"
-        [disabled]="!this.docxFile"
+        [disabled]="!this.docxFile || storyState=='processing'"
         >Create Digital Reader story from uploaded file</button>
+      </div>
+
+      <!-- Processing ICON  -->
+      <div *ngIf="storyState=='processing' || storyState=='processed'" class="processIcon" style="margin: auto; width: 50%; padding:0 10%;">
+        <div *ngIf="storyState=='processed'" class="processedIcon">
+          {{ ts.l.uploaded }} <i class="fas fa-check"></i> <br><br>
+          <div>
+            View story in story viewer [Unimplemented]
+          </div> <br>
+          <div>
+            Go to story library [Unimplemented]
+          </div> <br>
+        </div>
+        <div *ngIf="storyState=='processing'" class="processedIcon">
+          {{ ts.l.processing }}
+          <i class="fas fa-save"> </i>
+        </div>
       </div>
     </div>
 

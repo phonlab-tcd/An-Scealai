@@ -102,8 +102,8 @@ const translations = {
     ga: 'Scéalta',
     en: 'Irish Stories' },
   dr_story_create: {
-    ga: 'Cruthaigh scéal léitheora digitigh',
-    en: 'Create a digital reader story' },
+    ga: 'Cruthaigh Scéal don Léitheoir Digiteach',
+    en: 'Create a digital Reader Story' },
   digital_reader: {
     ga: 'Léitheoir Scéalta Digiteacha',
     en: 'Digital Story Reader' },
@@ -209,6 +209,15 @@ const translations = {
   create: {
     ga: 'Cruthaigh',
     en: 'Create' },
+  make_public: {
+    ga: 'Foilsigh an scéal i leabharlann scéalta poiblí An Scéalaí ?',
+    en: 'Publish this story in the public An Scéalaí story library ?' },
+  uploaded: {
+    ga: 'Uaslódálaithe',
+    en: 'Uploaded' },
+  processing: {
+    ga: 'Á phróiseáil',
+    en: 'Processing' },
   contents: {
     ga: 'Clár Scéalta',
     en: 'Contents' },
@@ -1578,6 +1587,9 @@ const translations = {
   story_bank_growing: {
     ga: 'Tá an banc scéalta ag fás. Cruthaigh cuntas le An Scéalaí le teacht ar tuilleadh scéalta',
     en: 'The story bank is growing. Create an account with An Scéalaí to find out more stories' },
+  digital_reader_library: {
+    ga: 'Leabharlann an Léitheora Digitigh',
+    en: 'Digital Reader Story Library' },
   higher_level: {
     ga: 'Ardleibhéal',
     en: 'Higher Level' },
