@@ -26,20 +26,20 @@ const routes: Routes = [
   { path: 'stats-dashboard/:id', loadComponent: () => import('./stats-dashboard/stats-dashboard.component').then(m => m.StatsDashboardComponent)},
   {
     path: 'student',
-    data: { expectedRole: 'STUDENT' },
+    data: { expectedRoles: ['STUDENT'] },
     canActivate: [RoleGuardService],
     loadChildren: () => import('./student/student.module').then(m=>m.StudentModule)
   },
   {
     path: 'teacher',
-    data: { expectedRole: 'TEACHER' },
+    data: { expectedRoles: ['TEACHER'] },
     canActivate: [RoleGuardService],
     loadChildren: () => import('./teacher/teacher.module').then(m=>m.TeacherModule)
   },
   {
     path: 'admin',
     canActivate: [RoleGuardService],
-    data: { expectedRole: 'ADMIN' },
+    data: { expectedRoles: ['ADMIN'] },
     loadChildren: () => import('./admin/admin.module').then(m=>m.AdminModule)
   },
 ];

@@ -45,7 +45,9 @@
     <mat-menu #LARA="matMenu">
       <a mat-menu-item class="dropdownMenuItem" routerLink="/about-lara"> {{ ts.l.what_is_LARA }}</a >
       <a mat-menu-item class="dropdownMenuItem" routerLink="/resources">{{ ts.l.irish_stories }}</a>
-      <a mat-menu-item class="dropdownMenuItem" routerLink="/digital-reader">{{ ts.l.digital_reader }}</a>
+      <a
+      *ngIf="auth.isLoggedIn() && (auth.getUserDetails()?.role === 'TEACHER' || auth.getUserDetails()?.role === 'ADMIN')"
+      mat-menu-item class="dropdownMenuItem" routerLink="/dr-story-create">{{ ts.l.dr_story_create }}</a>
     </mat-menu>
 
     <!-- Cen Scéal dropdown menu-->

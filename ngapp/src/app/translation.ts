@@ -101,6 +101,9 @@ const translations = {
   irish_stories: {
     ga: 'Scéalta',
     en: 'Irish Stories' },
+  dr_story_create: {
+    ga: 'Cruthaigh scéal léitheora digitigh',
+    en: 'Create a digital reader story' },
   digital_reader: {
     ga: 'Léitheoir Scéalta Digiteacha',
     en: 'Digital Story Reader' },

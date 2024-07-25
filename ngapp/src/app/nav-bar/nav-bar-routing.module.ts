@@ -12,6 +12,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { DigitalReaderComponent } from './digital-reader/digital-reader.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { FiosComponent } from './fios/fios.component';
+import { RoleGuardService } from 'app/core/services/role-guard.service';
 
 const routes: Routes = [
   { path: 'about', component: AboutComponent},
@@ -19,12 +20,18 @@ const routes: Routes = [
   { path: 'about-lara', component: AboutLaraComponent },
   { path: 'technology', component: TechnologyComponent},
   { path: 'resources', component: ResourcesComponent},
-  { path: 'digital-reader', component: DigitalReaderComponent},
+  //{ path: 'digital-reader', component: DigitalReaderComponent},
   { path: 'team', component: TeamComponent},
   { path: 'sponsors', component: SponsorsComponent},
   { path: 'user-guides', component: UserGuidesComponent},
   { path: 'report-an-issue', component: ReportAnIssueComponent},
   { path: 'about-taidhgin', component: AboutTaidhginComponent },
+  {
+    path: 'dr-story-create',
+    data: { expectedRoles: ['TEACHER', 'ADMIN'] },
+    canActivate: [RoleGuardService],
+    component: DigitalReaderComponent
+  },
 ];
 
 @NgModule({

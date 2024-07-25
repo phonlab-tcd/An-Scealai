@@ -11,7 +11,7 @@ export class RoleGuardService implements CanActivate {
   constructor(public auth: AuthenticationService, public router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-      const expectedRole = route.data['expectedRole'];
+      const expectedRoles = route.data['expectedRoles'];
       const token = localStorage.getItem('scealai-token');
 
       if (!token) {
@@ -21,7 +21,8 @@ export class RoleGuardService implements CanActivate {
 
       const tokenPayload = decode(token);
 
-      if (!this.auth.isLoggedIn() || tokenPayload.role !== expectedRole) {
+      //if (!this.auth.isLoggedIn() || tokenPayload.role !== expectedRole) {
+      if (!this.auth.isLoggedIn() || !expectedRoles.includes(tokenPayload.role)) {
         this.router.navigateByUrl('/landing');
         return false;
       }
