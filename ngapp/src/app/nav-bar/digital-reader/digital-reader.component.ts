@@ -57,67 +57,35 @@ export class DigitalReaderComponent implements OnInit {
     console.log(this.user)
     console.log(this)
 
-    /*const supabaseUrl = "https://pdntukcptgktuzpynlsv.supabase.co"
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbnR1a2NwdGdrdHV6cHlubHN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjIwMzA4ODAsImV4cCI6MTk3NzYwNjg4MH0.YrMhL9v3722XQUjpVlkj98waPI6c6xJ57zdmk7HUu0c"
+  }
 
-    const supabase = createClient(supabaseUrl, supabaseKey)
+  async convertDocxToHTML() {
 
-    await this.supabaseLogin(supabase)
+    //only for testing
+    if (this.docxFile) {
+        this.convertedHTMLDoc = await this.drStoryService.processUploadedFile(this.docxFile)
 
-    const response = await this.testQueryDB(supabase)
-
-    console.log(response)
-
-    this.tableData = response //for testing*/
-
-    //this.getStory()
-
-    const testInput = "scéal sách fada. Scéal le neart abairt. Scéal le carachtair escapable mar ' seo. scéal le \" seo chomh maith."
-    console.log(testInput)
-
-    this.drStoryService.tokenizeSentence(testInput);
-
-    //this.drStoryService.testChildProcess();
-
-    /*const segmentedSentences = await this.drStoryService.segmentText(document)
-
-    console.log(segmentedSentences)*/
-
-    //console.log(this.drStoryService.testChildProcess());
-
-
-
-    // check text for grammar errors
-      /*this.grammarEngine.check$(testInput).subscribe({
-        next: (tag: ErrorTag) => {
-          // show error highlighting if button on
-          if (this.showErrorTags) {
-            this.quillHighlighter.addTag(tag);
-          }
-        },
-        error: function (err) {console.error("ERROR GETTING THE 'CHECK()' RES: ", err)},
-        complete: () => {
-          //if (!this.quillHighlighter) return;
-
-          //save any grammar errors with associated sentences to DB
-          //this.grammarEngine.saveErrorsWithSentences(this.story._id).then(console.log, console.error);
-          //this.grammarLoaded = true;
-        },
-      })*/
+        if (this.convertedHTMLDoc instanceof Document) {
+            console.log('file converted successfully!')
+        } else {
+            alert('could not convert docx file')
+        }
+    }
 
   }
 
-  createNewStory() {
+  async createNewStory() {
+
     console.log('creating dr-story...')
     this.isFirstDrStory.emit(this.drStories.length == 0);
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.story_details,
-        type: "select",
+        type: "create-dr-story",
         data: [
           this.ts.l.enter_title,
-          [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster],
-          [this.ts.l.title, this.ts.l.dialect],
+          [{dialect: this.ts.l.connacht, ind: 1}, {dialect: this.ts.l.munster, ind: 2}, {dialect: this.ts.l.ulster, ind: 3}],
+          [this.ts.l.title, this.ts.l.dialects],
         ],
         confirmText: this.ts.l.save_details,
         cancelText: this.ts.l.cancel,
@@ -126,35 +94,45 @@ export class DigitalReaderComponent implements OnInit {
     });
 
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
+
       this.dialogRef = undefined;
       console.log(res)
       if (res) {
+        
         if (res[0]) {
-          let dialect = "connemara";
-          if (res[1] == this.ts.l.munster) dialect = "kerry";
-          if (res[1] == this.ts.l.ulster) dialect = "donegal";
-          const user = this.auth.getUserDetails();
-          console.log(user)
-          if (!user) {
-            console.log("Can't save story, current user is null");
-            return;
-          }
-          
-          if (this.convertedHTMLDoc) {
-            const story = constructJSON(this.convertedHTMLDoc.body)
+            console.log(res)
+          if (res.length>1) {
+            await this.convertDocxToHTML()
 
-            console.log(story)
+            let dialect = ["connemara"];
+            if (!res[1]) dialect = []
+            if (res[2]) dialect.push("kerry");
+            if (res[3]) dialect.push("donegal");
+            const user = this.auth.getUserDetails();
+            console.log(user)
+            if (!user) {
+                console.log("Can't save story, current user is null");
+                return;
+            }
+            
+            if (this.convertedHTMLDoc) {
+                const story = constructJSON(this.convertedHTMLDoc.body)
 
-            this.drStoryService // maybe import RecursiveHtmlElem (?)
-                .saveDRStory(res[0], [dialect], story, true) // [dialect] only for testing - single dialect for now
-                .subscribe({
-                next: () => {
-                    console.log('a response was received')
-                },
-                error: () => {
-                    alert("Not able to create a new story");
-                },
-                });
+                console.log(story)
+
+                this.drStoryService // maybe import RecursiveHtmlElem (?)
+                    .saveDRStory(res[0], dialect, story, true) // [dialect] only for testing - single dialect for now
+                    .subscribe({
+                    next: () => {
+                        console.log('a response was received')
+                    },
+                    error: () => {
+                        alert("Not able to create a new story");
+                    },
+                    });
+                }
+          } else {
+            alert(this.ts.l.dialect_required)
           }
         } else {
           alert(this.ts.l.title_required);
@@ -225,21 +203,6 @@ export class DigitalReaderComponent implements OnInit {
     // in the future could make it so that the file is not removed if the dialog is simply opened again
     this.docxFile = files.item(0)
     console.log(this.docxFile)
-  }
-
-  async convertDocxToHTML() {
-
-    //only for testing
-    if (this.docxFile) {
-        this.convertedHTMLDoc = await this.drStoryService.processUploadedFile(this.docxFile)
-
-        if (this.convertedHTMLDoc instanceof Document) {
-            console.log('file converted successfully!')
-        } else {
-            alert('could not convert docx file')
-        }
-    }
-
   }
 
 }

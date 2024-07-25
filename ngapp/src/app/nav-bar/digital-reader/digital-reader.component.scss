@@ -132,6 +132,17 @@ button:disabled {
   background-color: #3e8e41;
 }
 
+input[type="file"] {
+  display: none;
+}
+
+/*.file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  
+}*/
+
 .footerLARA {
     display: flex;
     flex-direction: column;

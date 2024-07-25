@@ -194,6 +194,9 @@ const translations = {
   dialect: {
     ga: 'Canúint',
     en: 'Dialect' },
+  dialects: {
+    ga: 'Canúintí',
+    en: 'Dialects' },
   munster: {
     ga: 'Mumha',
     en: 'Munster' },
@@ -904,6 +907,9 @@ const translations = {
   title_required: {
     ga: 'Gá le teideal',
     en: 'Title is required' },
+  dialect_required: {
+    ga: 'Gá le (ar a laghad) caúint amháin',
+    en: '(At least) one dialect is required' },
   story_details: {
     ga: 'Sonraí an scéil',
     en: 'Story Details' },

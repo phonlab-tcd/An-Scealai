@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 export interface DialogData {
   title: string;
   message: string;
@@ -19,7 +21,7 @@ export interface DialogData {
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, ClipboardModule, MatDialogModule, PdfViewerModule],
+  imports: [CommonModule, FormsModule, ClipboardModule, MatDialogModule, PdfViewerModule, MatCheckboxModule],
   selector: 'app-basic-dialog',
   templateUrl: './basic-dialog.component.html',
   styleUrls: ['./basic-dialog.component.scss']

@@ -2,53 +2,78 @@
   <div class="header">
     {{ ts.l.digital_reader }}
   </div>
-  <div class="aboutContent">
+  <!--<div class="aboutContent">
     <p style="text-align: center;">This is where the stories will be displayed/can be generated (I think)</p>
     <p style="text-align: center;">List of stories in the db :</p>
     <p style="text-align: center;">(will be filtered based in public/private/who created it)</p>
-  </div>
+  </div>-->
   <div style="display: flex;">
-    <div style="margin: 0 auto; width: 50%;">
+    <!--<div style="margin: 0 auto; width: 50%;">
       <table>
         <tr style="margin: 0 auto; width: 25%;text-align: center;">
           <th>Story ID</th>
           <th>Story name</th>
         </tr>
-        <!--<tr *ngFor="let row of tableData" style="margin: 0 auto; width: 25%;text-align: center;">
-          <td style="margin: 0 auto; width: 25%;">{{ row.id }}</td>
-          <td style="margin: 0 auto; width: 25%;">{{ row.name }}</td>
-        </tr>-->
       </table>
-    </div>
-
+    </div>-->
     
     <!--<app-story-drawer></app-story-drawer>-->
 
+    <!--Upload docx interaction-->
+    <div style="margin: auto; width: 30%; display: flex;">
+      <div style="margin: auto; width: 50%;">
+        <label for="file" class="viewStoryBtn"> Upload a .docx file </label>
+        <input type="file" id="file" (change)="processUploadedFile($event.target.files)"> <br>
+      </div>
+
+      <div style="margin: auto; width: 50%;">
+        <div *ngIf="this.docxFile">
+          <div>File uploaded : </div>
+          <div>{{ this.docxFile.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!--Process docx interaction-->
+    <div style="margin: auto; width: 70%; display: flex;">
+      <div style="margin: auto; width: 100%;">
+        <button class="viewStoryBtn"
+        (click)="createNewStory()"
+        [disabled]="!this.docxFile"
+        >Create Digital Reader story from uploaded file</button>
+      </div>
+    </div>
+
     <!--Create story interaction-->
-    <div style="margin: auto; width: 33%;">
-      <mat-expansion-panel>
+    <!--<div style="margin: auto; width: 33%;">
+      <button class="viewStoryBtn"
+      (click)="createNewStory()"
+      [disabled]="!this.convertedHTMLDoc"
+      >*Test* Create Story</button>-->
+      
+      <!--<div class="viewStoryBtn">
+        Create a new story
+      </div>-->
+      <!--<mat-expansion-panel>
         <mat-expansion-panel-header [collapsedHeight]="'50px'" [expandedHeight]="'50px'">
           <mat-panel-description class="panelDescription">
             Create a new story
           </mat-panel-description>
-        </mat-expansion-panel-header>
+        </mat-expansion-panel-header>-->
           <!--<span class="panelContent">
             <span> rud ar bith </span>
           </span>-->
-        <mat-action-row class="storyCreationActionRow">
+        <!--<mat-action-row class="storyCreationActionRow">-->
           <!--<div class=>-->
-            <div class="viewStory dialectChoice" style="font-weight:bold;">Select the dialect voices to synthesise:</div> <br>
+            <!--<div class="viewStory dialectChoice" style="font-weight:bold;">Select the dialect voices to synthesise:</div> <br>
             <div class="dialectContainer">
               <mat-checkbox><div class="viewStoryBtn">{{ts.l.munster}}</div></mat-checkbox>
               <mat-checkbox><div class="viewStoryBtn">{{ts.l.connacht}}</div></mat-checkbox>
               <mat-checkbox><div class="viewStoryBtn">{{ts.l.ulster}}</div></mat-checkbox>
-            </div> <br>
+            </div> <br>-->
           <!--</div>-->
-          <div class="file-upload">
-            <label for="file">Choose .docx file to upload</label>
-            <input type="file" id="file" (change)="processUploadedFile($event.target.files)">
-          </div> <br>
-          <div>
+          
+          <!--<div>
             <button class="viewStoryBtn"
             (click)="convertDocxToHTML()"
             [disabled]="!this.docxFile"
@@ -57,10 +82,10 @@
             (click)="createNewStory()"
             [disabled]="!this.convertedHTMLDoc"
             >*Test* Create Story</button>
-          </div>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </div>
+          </div>-->
+        <!--</mat-action-row>
+      </mat-expansion-panel>-->
+    <!--</div>-->
   </div>
 </div>
 

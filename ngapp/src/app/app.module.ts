@@ -30,7 +30,7 @@ import { NavBarModule } from './nav-bar/nav-bar.module';
         NavBarModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatDialogModule // needed for route guards
+        MatDialogModule, // needed for route guards
     ],
     providers: [
         StoryService,

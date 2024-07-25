@@ -42,3 +42,32 @@ h2 {
     padding-left: 4px;
     width: 80%;
 }
+
+/*.dialectChoice {
+  margin: auto;
+  width: inherit;
+  text-align: center;
+}*/
+
+.dialectContainer {
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right:auto;
+  margin-left: 0;
+  width:inherit;
+  gap: 1rem;
+}
+
+/*.viewStory {
+  padding-right: 10px;
+}*/
+
+.viewStoryBtn {
+    padding: 7px;
+    background-color: var(--scealai-green);
+    color: white;
+    border-radius: 4px;
+    text-decoration:none;
+    text-align: center;
+}
