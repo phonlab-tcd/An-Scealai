@@ -1,0 +1,53 @@
+<div class="body">
+  <div *ngIf="storyList.length > 0">
+    <div class="myStories">{{ title }}</div>
+    <!-- search bar -->
+    <div class="form-group">
+      <input
+        type="text"
+        class="form-control searchBox"
+        id="search-text"
+        aria-describedby="search-text"
+        [(ngModel)]="searchText"
+        placeholder="{{ ts.l.search_story_title_or_content }}"
+      />
+    </div>
+  </div>
+  <!-- list of stories -->
+  <div class="storyList">
+    <div *ngFor="let story of storyList | appFilter : searchText; let i = index" (click)="openStory(story)" style="display: flex;">
+      <!-- story entry-->
+      <div class="contentSection" [attr.id]="story._id">
+        <!-- date and menu icon-->
+        <div class="contentsDate">
+          {{ story.updatedAt | date : "d/M/yy" }}
+          
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story" >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item >
+              <mat-icon>delete</mat-icon>
+              <span>{{ ts.l.delete }}</span>
+            </button>
+            <button mat-menu-item >
+              <mat-icon>create</mat-icon>
+              <span>{{ ts.l.rename }}</span>
+            </button>
+          </mat-menu>
+        </div>
+        <!-- title container-->
+        <div class="titleContainer">
+          <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)" (keydown.enter)="saveStoryTitle(i, story)" >
+            {{ story?.title }}
+          </div>
+        </div>
+        
+      </div>
+      <mat-divider [vertical]="true" [inline]="true" style="height:85%;"></mat-divider>
+    </div>
+  </div>
+  <!--<button mat-fab class="newStoryButton" (click)="createNewStory()">
+    <mat-icon>add</mat-icon>
+  </button>-->
+</div>

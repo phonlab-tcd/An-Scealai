@@ -50,6 +50,9 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     SynthesisDrawerComponent,
     HomePageComponent
   ],
+  exports: [
+    FilterPipe
+  ],
   imports: [
     CommonModule,
     StudentRoutingModule,

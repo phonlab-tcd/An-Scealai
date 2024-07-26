@@ -1,14 +1,86 @@
 <div class="container">
-  <div class="header">
+  <!--<div class="header">
     Newly created tab!
-  </div>
+  </div>-->
   <!--<div class="aboutContent">
     <p style="text-align: center;">This is where the stories will be displayed/can be generated (I think)</p>
     <p style="text-align: center;">List of stories in the db :</p>
     <p style="text-align: center;">(will be filtered based in public/private/who created it)</p>
   </div>-->
-  <div style="display: flex;">
+  <div style="width:100%">
     
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+      <mat-tab [label]="ts.l.verified_dr_stories">
+        <!--this section should probably be generated from the mongodb where the stories are stored, rather than hardcoded-->
+        <!--<br>-->
+        <div>
+          <app-dr-story-drawer
+          [storyList]="anScealaiVerifiedDRStories"
+          [title]="'[Potentially LC stories]'"
+          />
+        </div> <br>
+        <div>
+          <app-dr-story-drawer
+          [storyList]="anScealaiVerifiedDRStories"
+          [title]="'[Aesóp]'"
+          />
+        </div> <br>
+        <div>
+          <app-dr-story-drawer
+          [storyList]="anScealaiVerifiedDRStories"
+          [title]="'[Etc.]'"
+          />
+        </div>
+      </mat-tab>
+      <mat-tab [label]="ts.l.public_dr_stories">
+        <!--<br>--><!--This break was causing a scrollbar to appear-->
+        <app-dr-story-drawer
+        [storyList]="publicDRStories"
+        [title]="ts.l.public_dr_stories"
+        /></mat-tab>
+      <mat-tab [label]="ts.l.my_stories" *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'">
+        <!--<br>-->
+        <app-dr-story-drawer 
+        [storyList]="currUsersDRStories"
+        [title]="ts.l.my_stories"
+        />
+      </mat-tab>
+    </mat-tab-group>
+    <!--<div style="width:100%">
+      <table style="margin:0 auto">
+        <tr style="margin:auto">
+          <th>Verified</th>
+          <th>Public</th>
+          <th *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'">Your stories</th>
+        </tr>
+        <tr style="margin:0 auto; vertical-align:top">
+          <td style="margin:0 auto">
+            <table style="margin:0 auto">
+            <th >Title</th>
+            <tr *ngFor="let story of anScealaiVerifiedDRStories">
+              <td>{{ story.title }}</td>
+            </tr>
+            </table>
+          </td>
+          <td style="margin:0 auto; vertical-align:top">
+            <table style="margin:0 auto">
+              <th >Title</th>
+              <tr *ngFor="let story of publicDRStories">
+                <td>{{ story.title }}</td>
+              </tr>
+            </table>
+          </td>
+          <td *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'" style="margin:0 auto; vertical-align:top">
+            <table style="margin:0 auto">
+              <th >Title</th>
+              <tr *ngFor="let story of currUsersDRStories">
+                <td>{{ story.title }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>-->
   </div>
 </div>
 

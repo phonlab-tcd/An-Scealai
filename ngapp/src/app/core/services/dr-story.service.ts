@@ -11,6 +11,8 @@ import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
 import { firstValueFrom, tap } from 'rxjs';
 
+import { DigitalReaderStory } from 'app/core/models/drStory';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -155,6 +157,33 @@ export class DigitalReaderStoryService {
     console.log(drStoryObj);
     this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drStoryObj});
     return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drStoryObj);
+  }
+
+  getDRStoriesByOwner(owner: string) : Observable<DigitalReaderStory[]>  {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/owner/' + owner);
+  }
+
+  getDRStoriesForLoggedInUser(): Observable<DigitalReaderStory[]> {
+    const userDetails = this.auth.getUserDetails();
+    if(!userDetails) {
+      return new Observable(subscriber=>{
+        subscriber.next([]);
+        subscriber.complete();
+      });
+    }
+    return this.getDRStoriesByOwner(userDetails._id);
+  }
+
+  // get all of the Digital Reader stories that have been signed off by An Scéalaí
+  // this amounts to all stories that were created by admins
+  // TODO: Implement
+  getAllAnScealaiVerifiedDRStories(): Observable<DigitalReaderStory[]> {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/verified');
+  }
+
+  // get all of the publicly available Digital Reader stories
+  getAllPublicDRStories(): Observable<DigitalReaderStory[]> {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/public');
   }
 
   /*

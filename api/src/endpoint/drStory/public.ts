@@ -1,19 +1,19 @@
 const DigitalReaderStory = require('../../models/drStory');
-const User = require('../../models/user');
+//const User = require('../../models/user');
 const mongoose = require('mongoose');
 const {API404Error} = require('../../utils/APIError');
 
 // get stories by owner (user) ID
 const handler =  async (req, res) => {
-  const user = await User.findOne({'_id': req.params.id});
+  /*const user = await User.findOne({'_id': req.params.id});
   if (!user) {
     throw new API404Error(`User with id ${req.params.id} not found.`);
-  }
+  }*/
   
-  const digitalReaderStories = await DigitalReaderStory.find({'owner': req.params.id}).sort({$natural:-1});
+  const digitalReaderStories = await DigitalReaderStory.find({'public': 'true'}).sort({$natural:-1});
 
   if (!digitalReaderStories) {
-    throw new API404Error(`No stories written by user with id ${req.params.id} were found.`);
+    throw new API404Error(`No publicly available Digital Reader stories were found.`);
   }
   return res.status(200).json(digitalReaderStories);
 };

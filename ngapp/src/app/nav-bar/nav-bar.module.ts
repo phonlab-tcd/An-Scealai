@@ -5,7 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 
-import { MatCheckboxModule } from '@angular/material/checkbox'; // added by David 04/07/2024
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { NavBarRoutingModule } from './nav-bar-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -23,6 +26,8 @@ import { TeamComponent } from './team/team.component';
 import { ReportAnIssueComponent } from './report-an-issue/report-an-issue.component';
 import { ResourcesComponent } from './resources/resources.component';
 import { DigitalReaderComponent } from './digital-reader/digital-reader.component';
+import { DigitalReaderLibraryComponent } from './digital-reader-library/digital-reader-library.component';
+import { DigitalReaderStoryDrawerComponent } from './dr-story-drawer/dr-story-drawer.component';
 import { AboutTaidhginComponent } from './about-taidhgin/about-taidhgin.component';
 import { FiosComponent } from './fios/fios.component';
 
@@ -38,6 +43,8 @@ import { FiosComponent } from './fios/fios.component';
     ReportAnIssueComponent,
     ResourcesComponent,
     DigitalReaderComponent,
+    DigitalReaderLibraryComponent,
+    DigitalReaderStoryDrawerComponent,
     AboutTaidhginComponent,
     FiosComponent
   ],
@@ -52,7 +59,10 @@ import { FiosComponent } from './fios/fios.component';
     MatMenuModule,
     MatIconModule,
     MatCheckboxModule, // added by David 04/07/2024
-    StudentModule // added by David 05/07/2024
+    StudentModule, // added by David 05/07/2024
+    MatTabsModule,
+    MatButtonModule,
+    MatDividerModule
   ]
 })
 export class NavBarModule { }

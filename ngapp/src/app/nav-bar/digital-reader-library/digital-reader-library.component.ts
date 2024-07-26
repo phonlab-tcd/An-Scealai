@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TranslationService } from 'app/core/services/translation.service';
-import { AuthenticationService } from 'app/core/services/authentication.service';
+import { AuthenticationService, UserDetails } from 'app/core/services/authentication.service';
 
 import { firstValueFrom } from "rxjs";
 import { User } from "app/core/models/user";
@@ -26,19 +26,31 @@ import { objectUtil } from 'zod';
 })
 export class DigitalReaderLibraryComponent implements OnInit {
 
-  @Output() isFirstDrStory = new EventEmitter<boolean>();
+  public anScealaiVerifiedDRStories:DigitalReaderStory[] = []
+  public publicDRStories:DigitalReaderStory[] = []
+  public currUsersDRStories:DigitalReaderStory[] = []
+
+  public userDetails:any;
 
   constructor(
     public ts : TranslationService,
     public auth: AuthenticationService,
     public userService: UserService,
     public drStoryService: DigitalReaderStoryService,
-    public http: HttpClient,
-    private dialog: MatDialog) {}
+    public http: HttpClient) {}
 
   async ngOnInit() {
-    
+    this.userDetails = this.auth.getUserDetails()
 
+    this.anScealaiVerifiedDRStories = await firstValueFrom(this.drStoryService.getAllAnScealaiVerifiedDRStories())
+    console.log(this.anScealaiVerifiedDRStories)
+
+    this.publicDRStories = await firstValueFrom(this.drStoryService.getAllPublicDRStories())
+    console.log(this.publicDRStories)
+
+    this.currUsersDRStories = await firstValueFrom(this.drStoryService.getDRStoriesForLoggedInUser())
+    console.log(this.currUsersDRStories)
+    
   }
 
 }

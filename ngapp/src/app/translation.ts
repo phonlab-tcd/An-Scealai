@@ -218,6 +218,12 @@ const translations = {
   processing: {
     ga: 'Á phróiseáil',
     en: 'Processing' },
+  verified_dr_stories: {
+    ga: 'Scéalta Bailí',
+    en: 'Verified Stories' },
+  public_dr_stories: {
+    ga: 'Scéalta an Phobail',
+    en: 'Community Stories' },
   contents: {
     ga: 'Clár Scéalta',
     en: 'Contents' },

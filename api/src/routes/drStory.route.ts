@@ -21,10 +21,12 @@ let storyRoutes;
 (() => {
   // ENDPOINT HANDLERS
   // GET
-  /*const withId = require("../endpoint/story/withId");
+  //const withId = require("../endpoint/story/withId");
   
-  const ownerId = require("../endpoint/story/ownerId");
-  const author = require("../endpoint/story/author");
+  const ownerId = require("../endpoint/drStory/ownerId");
+  const allPublic = require("../endpoint/drStory/public");
+  const verified = require("../endpoint/drStory/verified");
+  /*const author = require("../endpoint/story/author");
   const feedbackAudio = require("../endpoint/story/feedbackAudio");
   const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
   const getStoryStats = require("../endpoint/story/getStoryStats");*/
@@ -38,10 +40,12 @@ let storyRoutes;
 
   storyRoutes = makeEndpoints({
     get: {
-      /*"/withId/:id": withId,
+      //"/withId/:id": withId,
       // '/myStudentsStory/:id': myStudentsStory,
       "/owner/:id": ownerId,
-      "/:author": author,
+      "/public": allPublic,
+      "/verified": verified,
+      /*"/:author": author,
       "/feedbackAudio/:id": feedbackAudio,
       "/countGrammarErrors/:id": countGrammarErrors,
       "/getStoryStats/allDB": getStoryStats,*/
