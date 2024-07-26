@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { User } from 'app/core/models/user';
 import { Story } from 'app/core/models/story';
+import { DigitalReaderStory } from 'app/core/models/drStory';
 
 /*
 * Pipe created to filter out usernames from the list of users in the find-user component
@@ -30,8 +31,10 @@ export class FilterPipe implements PipeTransform {
         return it.username.toLocaleLowerCase().includes(searchText);
       if (it instanceof Story)
         return it.title.toLocaleLowerCase().includes(searchText) || it.text.toLocaleLowerCase().includes(searchText);
+      if (it instanceof DigitalReaderStory)
+        return it.title.toLocaleLowerCase().includes(searchText) /*|| it.text.toLocaleLowerCase().includes(searchText)*/;
     });
   }
 }
 
-type PipeInput = User | Story;
+type PipeInput = User | Story | DigitalReaderStory;

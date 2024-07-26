@@ -15,31 +15,44 @@
   </div>
   <!-- list of stories -->
   <div class="storyList">
+    <!--appFilter below not working correctly here-->
     <div *ngFor="let story of storyList | appFilter : searchText; let i = index" (click)="openStory(story)" style="display: flex;">
       <!-- story entry-->
       <div class="contentSection" [attr.id]="story._id">
         <!-- date and menu icon-->
-        <div class="contentsDate">
-          {{ story.updatedAt | date : "d/M/yy" }}
-          
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story" >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item >
-              <mat-icon>delete</mat-icon>
-              <span>{{ ts.l.delete }}</span>
+        <div class="contentsDateContainer">
+          <div class="contentsDate">
+            {{ story.updatedAt | date : "d/M/yy" }}
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story" >
+              <mat-icon>more_vert</mat-icon>
             </button>
-            <button mat-menu-item >
-              <mat-icon>create</mat-icon>
-              <span>{{ ts.l.rename }}</span>
-            </button>
-          </mat-menu>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item >
+                <mat-icon>delete</mat-icon>
+                <span>{{ ts.l.delete }}</span>
+              </button>
+              <button mat-menu-item >
+                <mat-icon>create</mat-icon>
+                <span>{{ ts.l.rename }}</span>
+              </button>
+            </mat-menu>
+          </div>
         </div>
+
+        <div class="imgContainer">
+          <img src="assets/img/logo-S.png" class="storyImg" alt="image">
+        </div>
+
         <!-- title container-->
         <div class="titleContainer">
-          <div class="contentsTitle" [attr.id]="i" (blur)="saveStoryTitle(i, story)" (keydown.enter)="saveStoryTitle(i, story)" >
+          <div class="contentsTitle"
+          [attr.id]="i"
+          (blur)="saveStoryTitle(i, story)"
+          (keydown.enter)="saveStoryTitle(i, story)"
+          [attr.aria-label]="story?.title"
+          [title]="story?.title">
             {{ story?.title }}
+          
           </div>
         </div>
         

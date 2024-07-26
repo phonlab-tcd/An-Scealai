@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormsModule } from '@angular/forms';
 
 import { NavBarRoutingModule } from './nav-bar-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -62,7 +63,8 @@ import { FiosComponent } from './fios/fios.component';
     StudentModule, // added by David 05/07/2024
     MatTabsModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    FormsModule
   ]
 })
 export class NavBarModule { }

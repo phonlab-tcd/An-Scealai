@@ -32,6 +32,7 @@
 .contentSection {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
 
     padding: 5px;
     margin: 10px;
@@ -50,8 +51,7 @@
 .titleContainer {
     height: 15%;
     width: inherit;
-    position: absolute;
-    bottom: 20px;
+    position: relative;
 }
 
 .contentsTitle {
@@ -69,13 +69,21 @@
     height: 100%;
 
     padding: 10px;
-    
+
+    position:absolute;
+    bottom: 10px;
     //color: var(--dark-text);
     font-weight: bolder;
 }
 
 .contentsTitle:hover {
     cursor: pointer;
+}
+
+.contentsDateContainer {
+    position: relative;
+    width:  inherit;
+    height: 15%
 }
 
 .contentsDate {
@@ -85,6 +93,19 @@
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.imgContainer {
+    width: auto;
+    height: 200px;
+}
+
+.storyImg {
+    width: inherit;
+    height: inherit;
+    //width: 180px;
+    //height: 200px;
+    //padding: 5px;
 }
 
 .newStoryButton {
