@@ -11,6 +11,8 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { DigitalReaderStory } from "app/core/models/drStory";
 
+//import { UserService } from "app/core/services/user.service";
+
 @Component({
   selector: "app-dr-story-drawer",
   templateUrl: "./dr-story-drawer.component.html",
@@ -21,6 +23,9 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
   lastClickedStoryId: string = "";
   searchText: string = ""; // used to filter stories in search bar
+
+  user;
+
   @Output() drStoryEmitter = new EventEmitter<DigitalReaderStory>();
   @Output() hasFeedback = new EventEmitter<boolean>();
   @Output() titleUpdated = new EventEmitter<string>();
@@ -34,14 +39,15 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
     public ts: TranslationService,
     private auth: AuthenticationService,
     private drStoryService: DigitalReaderStoryService,
+    //private userService: UserService,
     private engagement: EngagementService,
     private recordingService: RecordingService,
     private feedbackCommentService: FeedbackCommentService,
     private dialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.getStories();
+  async ngOnInit() {
+    //this.getStories();
   }
 
   /**

@@ -9,11 +9,16 @@
   <div *ngIf="data?.type == 'create-dr-story'">
     {{ data.data[2][0] }}:
     <input type="text" class="titleInput" placeholder="{{ data.data[0] }}" name="title" [(ngModel)]="inputs.title" /><br /><br />
-    {{ data.data[2][1] }}:
-    <div class="dialectContainer">
-      <mat-checkbox *ngFor="let dialect of data.data[1]" [(ngModel)]="inputs.dialects[dialectMapping[dialect]]"><div class="viewStoryBtn" >{{ dialect }}</div></mat-checkbox>
+    <div *ngIf="data.userRole=='ADMIN'">
+      {{ data.data[2][1] }}:
+      <br>
+      <br>
+      <div class="dialectContainer">
+        <!--<mat-checkbox *ngFor="let dialect of data.data[1]" [(ngModel)]="inputs.dialects[dialectMapping[dialect]]"><div class="viewStoryBtn" >{{ dialect }}</div></mat-checkbox>-->
+        <mat-checkbox *ngFor="let collection of data.data[1]" [(ngModel)]="inputs.collections[collection]"><div class="viewStoryBtn" >{{ collection }}</div></mat-checkbox>
+      </div>
     </div> <br>
-    {{ data.data[2][2] }}:
+    {{ data.data[2][2] }}: 
     <mat-checkbox [(ngModel)]="inputs.public"></mat-checkbox>
   </div>
   

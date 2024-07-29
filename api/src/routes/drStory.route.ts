@@ -26,6 +26,7 @@ let storyRoutes;
   const ownerId = require("../endpoint/drStory/ownerId");
   const allPublic = require("../endpoint/drStory/public");
   const verified = require("../endpoint/drStory/verified");
+  const verifiedCollection = require("../endpoint/drStory/verifiedCollection");
   /*const author = require("../endpoint/story/author");
   const feedbackAudio = require("../endpoint/story/feedbackAudio");
   const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
@@ -45,6 +46,7 @@ let storyRoutes;
       "/owner/:id": ownerId,
       "/public": allPublic,
       "/verified": verified,
+      "/verified/:collectionName": verifiedCollection,
       /*"/:author": author,
       "/feedbackAudio/:id": feedbackAudio,
       "/countGrammarErrors/:id": countGrammarErrors,

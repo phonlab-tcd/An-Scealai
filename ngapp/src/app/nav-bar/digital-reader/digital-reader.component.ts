@@ -22,6 +22,8 @@ import { DigitalReaderStoryCreationDialogComponent } from "../../dialogs/dr-stor
 import { constructJSON } from '@phonlab-tcd/html2json';
 import { objectUtil } from 'zod';
 
+import config from '../anScealaiStoryCollectionsConf'
+
 @Component({
   selector: 'app-digital-reader',
   templateUrl: './digital-reader.component.html',
@@ -38,6 +40,8 @@ export class DigitalReaderComponent implements OnInit {
   dialogRef: MatDialogRef<unknown>;
 
   dialectOptions:Array<string>
+  adminCollectionOptions:Array<string> = []
+  defaultCollectionSelections:Object = {};
   storyState:string = '';
 
   @Output() isFirstDrStory = new EventEmitter<boolean>();
@@ -50,6 +54,27 @@ export class DigitalReaderComponent implements OnInit {
     public http: HttpClient,
     private dialog: MatDialog) {
         this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
+        //console.log(adminStoryCollectionOpts)
+        
+        console.log(this.ts.l)
+        console.log(this.ts.l.adminStoryCollectionOpts)
+        /*for (let option in this.ts.l.adminStoryCollectionOpts) {
+          this.adminCollectionOptions.push(option);
+          this.defaultCollectionSelections[option] = false;
+        }*/
+
+        for (let option of config.adminStoryCollectionOpts) {
+          //if (this.ts.l[option]) {
+          this.adminCollectionOptions.push(option)
+          //}
+          this.defaultCollectionSelections[option] = false;
+        }
+        /*this.adminCollectionOptions = [
+          this.ts.l.leaving_cert_stories,
+          this.ts.l.aesop_fables,
+          this.ts.l.other_stories,
+          this.ts.l.simple_versions_old_stories
+        ]*/
     }
 
   async ngOnInit() {
@@ -91,13 +116,16 @@ export class DigitalReaderComponent implements OnInit {
         type: "create-dr-story",
         data: [
           this.ts.l.enter_title,
-          this.dialectOptions,
-          [this.ts.l.title, this.ts.l.dialects, this.ts.l.make_public],
+          //this.dialectOptions,
+          this.adminCollectionOptions,
+          [this.ts.l.title, this.ts.l.collections_default, this.ts.l.make_public],
         ],
+        collections: this.defaultCollectionSelections,
+        userRole: this.user.role,
         confirmText: this.ts.l.save_details,
         cancelText: this.ts.l.cancel,
       },
-      width: "50vh",
+      width: "80vh",
     });
 
     console.log(this.dialogRef)
@@ -111,7 +139,7 @@ export class DigitalReaderComponent implements OnInit {
         if (res.title) {
             console.log(res)
             
-          let dialects:Array<string> = [];
+          /*let dialects:Array<string> = [];
           console.log(res.dialects)
           for (const key in res.dialects) {
             console.log(key)
@@ -119,50 +147,64 @@ export class DigitalReaderComponent implements OnInit {
             if (res.dialects[key] === true)
                 
                 dialects.push(key)
-          }
+          }*/
 
-          console.log(Array.isArray(dialects) && dialects.length!==0)
+          /*console.log(Array.isArray(dialects) && dialects.length!==0)
           console.log(dialects)
           console.log(Array.isArray(dialects))
-          console.log(dialects.length)
-          if (Array.isArray(dialects) && dialects.length!==0) {
-
-            this.storyState = 'processing'
-            console.log(this.storyState=='processing')
-            console.log(this.storyState==='processing')
-
-            await this.convertDocxToHTML()
-
-            const user = this.auth.getUserDetails();
-            console.log(user)
-            if (!user) {
-                console.log("Can't save story, current user is null");
-                this.storyState = ''
-                return;
+          console.log(dialects.length)*/
+          let collections = []
+          for (let key in res.collections) {
+            if (res.collections[key] === true) {
+              collections.push(key)
             }
-            
-            if (this.convertedHTMLDoc) {
-                const story = constructJSON(this.convertedHTMLDoc.body)
-
-                console.log(story)
-
-                this.drStoryService
-                    .saveDRStory(res.title, dialects, story, res.public)
-                    .subscribe({
-                    next: () => {
-                        console.log('a response was received')
-                        this.storyState = 'processed'
-                    },
-                    error: () => {
-                        alert("Not able to create a new story");
-                        this.storyState = ''
-                    },
-                    });
-                }
-          } else {
-            alert(this.ts.l.dialect_required)
-            this.storyState = ''
           }
+
+          const user = this.auth.getUserDetails();
+          console.log(user)
+          
+          if (Array.isArray(collections) && collections.length===0 && user && user.role=='ADMIN')
+            collections = ['other_stories']
+
+          //if (Array.isArray(dialects) && dialects.length!==0) {
+
+          this.storyState = 'processing'
+          console.log(this.storyState=='processing')
+          console.log(this.storyState==='processing')
+
+          await this.convertDocxToHTML()
+
+          
+          console.log(user)
+          if (!user) {
+              console.log("Can't save story, current user is null");
+              this.storyState = ''
+              return;
+          }
+          
+          if (this.convertedHTMLDoc) {
+              const story = constructJSON(this.convertedHTMLDoc.body)
+
+              console.log(story)
+
+              this.drStoryService
+                  //.saveDRStory(res.title, dialects, story, res.public)
+                  .saveDRStory(res.title, collections, story, res.public)
+                  .subscribe({
+                  next: () => {
+                      console.log('a response was received')
+                      this.storyState = 'processed'
+                  },
+                  error: () => {
+                      alert("Not able to create a new story");
+                      this.storyState = ''
+                  },
+                  });
+              }
+          /*} else {
+            //alert(this.ts.l.dialect_required)
+            this.storyState = ''
+          }*/
         } else {
           alert(this.ts.l.title_required);
           this.storyState = ''

@@ -13,23 +13,31 @@
       <mat-tab [label]="ts.l.verified_dr_stories">
         <!--this section should probably be generated from the mongodb where the stories are stored, rather than hardcoded-->
         <!--<br>-->
-        <div>
-          <app-dr-story-drawer
-          [storyList]="anScealaiVerifiedDRStories"
-          [title]="'[Potentially LC stories]'"
-          />
-        </div> <br>
-        <div>
-          <app-dr-story-drawer
-          [storyList]="anScealaiVerifiedDRStories"
-          [title]="'[Aesóp]'"
-          />
-        </div> <br>
-        <div>
-          <app-dr-story-drawer
-          [storyList]="anScealaiVerifiedDRStories"
-          [title]="'[Etc.]'"
-          />
+        <div *ngFor="let collection of collections">
+          <div>
+            <app-dr-story-drawer
+            [storyList]="collection.content"
+            [title]="ts.l[collection.name]"
+            />
+          </div> <br>
+          <!--<div>
+            <app-dr-story-drawer
+            [storyList]="anScealaiVerifiedDRStories"
+            [title]="'[Potentially LC stories]'"
+            />
+          </div> <br>
+          <div>
+            <app-dr-story-drawer
+            [storyList]="anScealaiVerifiedDRStories"
+            [title]="'[Aesóp]'"
+            />
+          </div> <br>
+          <div>
+            <app-dr-story-drawer
+            [storyList]="anScealaiVerifiedDRStories"
+            [title]="'[Etc.]'"
+            />
+          </div>-->
         </div>
       </mat-tab>
       <mat-tab [label]="ts.l.public_dr_stories">

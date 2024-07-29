@@ -9,12 +9,15 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { firstValueFrom } from 'rxjs';
 
 export interface DialogData {
   title: string;
   message: string;
   data: any;
   type: string;
+  collections: Object;
+  userRole: string;
   confirmText: string;
   cancelText: string;
 }
@@ -28,32 +31,34 @@ export interface DialogData {
 })
 export class DigitalReaderStoryCreationDialogComponent {
   public dialectMapping: Object;
+  public collectionOptions: Array<string>;
   public inputs: Object;
-  //public dialects: [] = [];
-  pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
+  
+  //pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
   copyIconClicked: boolean = false;
   
   constructor(@Inject(MAT_DIALOG_DATA) 
               public data: DialogData,
               public ts: TranslationService,
-              public auth: AuthenticationService,
+              public auth: AuthenticationService
               ) {
-                this.dialectMapping = {
+                /*this.dialectMapping = {
                   Connacht: 'connemara',
                   Connachta: 'connemara',
                   Munster: 'kerry',
                   Mumha: 'kerry',
                   Ulster: 'donegal',
                   Ulaidh: 'donegal',
-                }
+                }*/
 
                 this.inputs = {
                   title: '',
-                  dialects: {
+                  /*dialects: {
                     connemara: false,
                     kerry: false,
                     donegal: false
-                  },
+                  },*/
+                  collections: this.data.collections,
                   public: false
                 }
               }

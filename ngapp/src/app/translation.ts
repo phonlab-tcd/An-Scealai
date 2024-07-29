@@ -209,6 +209,27 @@ const translations = {
   create: {
     ga: 'Cruthaigh',
     en: 'Create' },
+  collections_default: {
+    ga: 'Cnuasaigh (is é "other_stories" an réamhshocrú)',
+    en: 'Collections (default: "other_stories")' },
+  /*adminStoryCollectionOpts: {
+    leaving_cert_stories: {
+      ga: 'Prós Comónta Ainmnithe don Ardteistiméireacht',
+      en: 'Leaving Certificate Common Prose'
+    },
+    aesop_fables: {
+      ga: 'Fabhalscéalta Aesop',
+      en: 'Aesop\'s Fables'
+    },
+    simple_versions_old_stories: {
+      ga: 'Leaganacha simplí de sheanscéalta',
+      en: 'Simple versions of old stories'
+    },
+    other_stories: {
+      ga: 'Scéalta Eile',
+      en: 'Other Stories'
+    }
+  },*/
   make_public: {
     ga: 'Foilsigh an scéal i leabharlann scéalta poiblí An Scéalaí ?',
     en: 'Publish this story in the public An Scéalaí story library ?' },

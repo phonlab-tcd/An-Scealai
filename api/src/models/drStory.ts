@@ -14,7 +14,8 @@ const DigitalReaderStory = new Schema(
       title: {
         type: String,
       },
-      dialects: {
+      //dialects: {
+      collections: {
         type: Array, // possibility for multiple dialects
       },
       story :

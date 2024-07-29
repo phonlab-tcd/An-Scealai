@@ -143,10 +143,10 @@ export class DigitalReaderStoryService {
     return parsedSegmentedDoc
   }
 
-  saveDRStory(title: string, dialects: Array<string>, story: Object, isPublic: Boolean) {
+  saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, story: Object, isPublic: Boolean) {
     const drStoryObj = {
       title: title,
-      dialects: dialects,
+      collections: collections,
       //text: text,
       story: story,
       public: isPublic,
@@ -176,9 +176,12 @@ export class DigitalReaderStoryService {
 
   // get all of the Digital Reader stories that have been signed off by An Scéalaí
   // this amounts to all stories that were created by admins
-  // TODO: Implement
   getAllAnScealaiVerifiedDRStories(): Observable<DigitalReaderStory[]> {
     return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/verified');
+  }
+
+  getAnScealaiVerifiedCollection(collectionName:string): Observable<DigitalReaderStory[]> {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/verified/' + collectionName);
   }
 
   // get all of the publicly available Digital Reader stories
