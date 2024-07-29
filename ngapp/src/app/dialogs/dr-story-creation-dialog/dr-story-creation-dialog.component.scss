@@ -65,11 +65,25 @@ h2 {
   padding-right: 10px;
 }*/
 
-.viewStoryBtn {
+.selectionBtn {
     padding: 7px;
     background-color: var(--scealai-green);
     color: white;
     border-radius: 4px;
     text-decoration:none;
-    text-align: center;
+    text-align: center;   
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.selectionBtn:hover {
+  cursor: pointer;
+}
+
+.singleLineText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

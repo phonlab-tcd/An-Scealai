@@ -16,12 +16,14 @@ const handler =  async (req, res) => {
     {$project: {
       title: 1,
       ownerDoc: {$first: '$ownerDocArr'},
-      collections: 1
+      collections: 1,
+      thumbnail: 1,
     }},
     {$project: {
       title: 1,
       ownerRole: '$ownerDoc.role',
-      collections: 1
+      collections: 1,
+      thumbnail: 1,
     }},
     {$match: {
       ownerRole: "ADMIN"

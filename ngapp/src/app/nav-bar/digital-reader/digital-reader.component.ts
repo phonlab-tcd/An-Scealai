@@ -92,14 +92,14 @@ export class DigitalReaderComponent implements OnInit {
 
   async convertDocxToHTML() {
 
-    //only for testing
     if (this.docxFile) {
         this.convertedHTMLDoc = await this.drStoryService.processUploadedFile(this.docxFile)
 
         if (this.convertedHTMLDoc instanceof Document) {
             console.log('file converted successfully!')
         } else {
-            alert('could not convert docx file')
+            this.docxFile = null
+            this.storyState = ''
         }
     }
 
@@ -118,7 +118,7 @@ export class DigitalReaderComponent implements OnInit {
           this.ts.l.enter_title,
           //this.dialectOptions,
           this.adminCollectionOptions,
-          [this.ts.l.title, this.ts.l.collections_default, this.ts.l.make_public],
+          [this.ts.l.title, this.ts.l.collections_default, this.ts.l.thumbnail, this.ts.l.make_public],
         ],
         collections: this.defaultCollectionSelections,
         userRole: this.user.role,
@@ -129,6 +129,7 @@ export class DigitalReaderComponent implements OnInit {
     });
 
     console.log(this.dialogRef)
+    console.log(this.user.role)
 
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
 
@@ -166,6 +167,9 @@ export class DigitalReaderComponent implements OnInit {
           if (Array.isArray(collections) && collections.length===0 && user && user.role=='ADMIN')
             collections = ['other_stories']
 
+          let thumbnail = ''
+          if (res.thumbnail) thumbnail = res.thumbnail
+
           //if (Array.isArray(dialects) && dialects.length!==0) {
 
           this.storyState = 'processing'
@@ -189,7 +193,7 @@ export class DigitalReaderComponent implements OnInit {
 
               this.drStoryService
                   //.saveDRStory(res.title, dialects, story, res.public)
-                  .saveDRStory(res.title, collections, story, res.public)
+                  .saveDRStory(res.title, collections, thumbnail, story, res.public)
                   .subscribe({
                   next: () => {
                       console.log('a response was received')

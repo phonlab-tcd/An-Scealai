@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 //import { DigitalReaderStory } from 'app/core/models/dr-story';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/core/services/authentication.service';
@@ -9,7 +9,7 @@ import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
 import config from 'abairconfig';
-import { firstValueFrom, tap } from 'rxjs';
+import { firstValueFrom, tap, catchError } from 'rxjs';
 
 import { DigitalReaderStory } from 'app/core/models/drStory';
 
@@ -105,9 +105,18 @@ export class DigitalReaderStoryService {
     // convert the uploaded file to html
     const formData = new FormData();
     formData.append('docx', req);
+
+    //try {
     const convertedHtml = await firstValueFrom(
       this.http.post<string>(this.baseUrl + 'digitalReader/docx2html', formData)
-    );
+    ).catch((err: HttpErrorResponse) => {
+      alert(err.error)
+      alert(err)
+      //throw new Error()
+      return null;
+    });
+    
+    if (!convertedHtml) return null
 
     // TODO : add html sanitisation !!*******
     // *CODE GOES HERE*
@@ -141,12 +150,17 @@ export class DigitalReaderStoryService {
     console.log(constructJSON(parsedSegmentedDoc.body))*/
 
     return parsedSegmentedDoc
+
+    /*} catch (error) {
+      alert(error.message)
+    }*/
   }
 
-  saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, story: Object, isPublic: Boolean) {
+  saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, thumbnail:string, story: Object, isPublic: Boolean) {
     const drStoryObj = {
       title: title,
       collections: collections,
+      thumbnail: thumbnail,
       //text: text,
       story: story,
       public: isPublic,
@@ -154,7 +168,8 @@ export class DigitalReaderStoryService {
       //createdWithPrompts: createdWithPrompts,
       //activeRecording: null
     };
-    console.log(drStoryObj);
+    console.log('here!')
+    console.log(drStoryObj.thumbnail);
     this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drStoryObj});
     return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drStoryObj);
   }

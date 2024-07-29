@@ -212,6 +212,12 @@ const translations = {
   collections_default: {
     ga: 'Cnuasaigh (is é "other_stories" an réamhshocrú)',
     en: 'Collections (default: "other_stories")' },
+  thumbnail: {
+    ga: 'mioníomhá',
+    en: 'thumbnail' },
+  must_be_image: {
+    ga: 'Caithfidh an comhad bheith ina íomhá (.png, .jpg, .jpeg)',
+    en: 'Uploaded file must be an image (.png, .jpg, .jpeg)'},
   /*adminStoryCollectionOpts: {
     leaving_cert_stories: {
       ga: 'Prós Comónta Ainmnithe don Ardteistiméireacht',

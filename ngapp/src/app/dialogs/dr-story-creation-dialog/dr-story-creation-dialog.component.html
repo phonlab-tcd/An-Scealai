@@ -15,10 +15,19 @@
       <br>
       <div class="dialectContainer">
         <!--<mat-checkbox *ngFor="let dialect of data.data[1]" [(ngModel)]="inputs.dialects[dialectMapping[dialect]]"><div class="viewStoryBtn" >{{ dialect }}</div></mat-checkbox>-->
-        <mat-checkbox *ngFor="let collection of data.data[1]" [(ngModel)]="inputs.collections[collection]"><div class="viewStoryBtn" >{{ collection }}</div></mat-checkbox>
+        <mat-checkbox *ngFor="let collection of data.data[1]" [(ngModel)]="inputs.collections[collection]"><div class="selectionBtn" >{{ collection }}</div></mat-checkbox>
       </div>
     </div> <br>
-    {{ data.data[2][2] }}: 
+    
+    {{ data.data[2][2] }}: <br>
+    <div>
+      <!--[(ngModel)]="inputs.thumbnail"-->
+      <input type="file" id="thumbnail"
+      (change)="processThumbnail($event.target.files)">
+      <label for="thumbnail" class="selectionBtn"> (Optional) Upload a .png file </label>
+      <div *ngIf="this.thumbnail" class="singleLineText"> {{ this.thumbnail.name }}</div>
+    </div> <br>
+    {{ data.data[2][3] }}: 
     <mat-checkbox [(ngModel)]="inputs.public"></mat-checkbox>
   </div>
   

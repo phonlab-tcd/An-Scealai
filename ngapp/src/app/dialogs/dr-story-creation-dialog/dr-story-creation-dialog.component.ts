@@ -33,6 +33,7 @@ export class DigitalReaderStoryCreationDialogComponent {
   public dialectMapping: Object;
   public collectionOptions: Array<string>;
   public inputs: Object;
+  public thumbnail: File | null = null;
   
   //pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
   copyIconClicked: boolean = false;
@@ -59,8 +60,34 @@ export class DigitalReaderStoryCreationDialogComponent {
                     donegal: false
                   },*/
                   collections: this.data.collections,
+                  thumbnail: '',
                   public: false
                 }
               }
+  
+  processThumbnail(files: FileList) {
+    if (files.length>0) {
+      const tmp = files[0]
+      console.log(tmp)
+      if (tmp.type.startsWith("image/")) {
+
+        this.thumbnail = tmp;
+
+        console.log(this.thumbnail);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          //img.src = e.target.result;
+          //console.log(e.target?.result)
+          this.inputs['thumbnail'] = e.target?.result
+        };
+        reader.readAsDataURL(tmp);
+      } else {
+        alert(this.ts.l.must_be_image)
+      }
+    } else {
+      this.thumbnail = null;
+    }
+  }
 }
 

@@ -41,7 +41,9 @@
         </div>
 
         <div class="imgContainer">
-          <img src="assets/img/logo-S.png" class="storyImg" alt="image">
+          <!--<img src="assets/img/logo-S.png" class="storyImg" alt="image">-->
+          <!--<img [src]="story.thumbnail==''? 'assets/img/logo-S.png' : story.thumbnail" class="storyImg" alt="image">-->
+          <img [src]="story.thumbnail==''?'assets/img/logo-S.png':story.thumbnail" class="storyImg" alt="image">
         </div>
 
         <!-- title container-->
