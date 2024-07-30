@@ -9,6 +9,8 @@ import { AuthGuardService } from 'app/core/services/auth-guard.service';
 import { RoleGuardService } from 'app/core/services/role-guard.service';
 import { NotificationService } from 'app/core/services/notification-service.service';
 
+//TODO : remove below line and create dr-story-viewer module
+import('./dr-story-viewer/dr-story-builder/dr-story-builder.component')
 
 const routes: Routes = [
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
@@ -24,6 +26,7 @@ const routes: Routes = [
   { path: 'profile', loadComponent: () => import('./profile/profile/profile.component').then(m => m.ProfileComponent), canActivate: [AuthGuardService]},
   { path: 'messages/:id', loadComponent: () => import('./messages/messages.component').then(m => m.MessagesComponent), canActivate: [AuthGuardService]},
   { path: 'stats-dashboard/:id', loadComponent: () => import('./stats-dashboard/stats-dashboard.component').then(m => m.StatsDashboardComponent)},
+  { path: 'dr-story-viewer', loadComponent: () => import('./dr-story-viewer/dr-story-viewer/dr-story-viewer.component').then(m => m.DigitalReaderStoryViewerComponent)},
   {
     path: 'student',
     data: { expectedRoles: ['STUDENT'] },

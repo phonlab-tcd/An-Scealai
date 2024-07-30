@@ -187,6 +187,7 @@ export class DigitalReaderComponent implements OnInit {
           }
           
           if (this.convertedHTMLDoc) {
+              //console.log(this.convertedHTMLDoc)
               const story = constructJSON(this.convertedHTMLDoc.body)
 
               console.log(story)

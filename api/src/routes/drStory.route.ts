@@ -27,6 +27,7 @@ let storyRoutes;
   const allPublic = require("../endpoint/drStory/public");
   const verified = require("../endpoint/drStory/verified");
   const verifiedCollection = require("../endpoint/drStory/verifiedCollection");
+  const publicOrOwnedStoryId = require("../endpoint/drStory/publicOrOwnedStoryId");
   /*const author = require("../endpoint/story/author");
   const feedbackAudio = require("../endpoint/story/feedbackAudio");
   const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
@@ -45,6 +46,7 @@ let storyRoutes;
       // '/myStudentsStory/:id': myStudentsStory,
       "/owner/:id": ownerId,
       "/public": allPublic,
+      "/publicOrOwned/:id": publicOrOwnedStoryId,
       "/verified": verified,
       "/verified/:collectionName": verifiedCollection,
       /*"/:author": author,

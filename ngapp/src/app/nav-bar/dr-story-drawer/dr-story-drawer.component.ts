@@ -10,6 +10,7 @@ import { EventType } from "../../core/models/event";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
 import { DigitalReaderStory } from "app/core/models/drStory";
+import { Router } from "@angular/router";
 
 //import { UserService } from "app/core/services/user.service";
 
@@ -39,6 +40,7 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
     public ts: TranslationService,
     private auth: AuthenticationService,
     private drStoryService: DigitalReaderStoryService,
+    private router: Router,
     //private userService: UserService,
     private engagement: EngagementService,
     private recordingService: RecordingService,
@@ -75,7 +77,9 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
    * @param story Selected story from HTML
    */
   //setStory(story: DigitalReaderStory){}
-  openStory(story: DigitalReaderStory){}
+  openStory(story: DigitalReaderStory){
+    this.router.navigateByUrl('dr-story-viewer?storyId=' + story._id)
+  }
   /*setStory(story: Story) {
     if (story.htmlText == null) {
       story.htmlText = story.text;

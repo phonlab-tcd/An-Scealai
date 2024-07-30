@@ -1,0 +1,13 @@
+
+<!--<div class="container">
+</div>-->
+<span>
+    {{ content.nodeName }}
+    <span
+    *ngFor="let child of content.childNodes"
+    >
+        <app-dr-story-builder
+        [type]="'body'"
+        [content]="child"></app-dr-story-builder>
+    </span>
+</span>

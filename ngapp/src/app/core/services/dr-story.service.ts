@@ -111,7 +111,7 @@ export class DigitalReaderStoryService {
       this.http.post<string>(this.baseUrl + 'digitalReader/docx2html', formData)
     ).catch((err: HttpErrorResponse) => {
       alert(err.error)
-      alert(err)
+      //alert(err)
       //throw new Error()
       return null;
     });
@@ -202,6 +202,10 @@ export class DigitalReaderStoryService {
   // get all of the publicly available Digital Reader stories
   getAllPublicDRStories(): Observable<DigitalReaderStory[]> {
     return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/public');
+  }
+
+  getPublicDRStoryById(id: string): Observable<DigitalReaderStory[]> {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/publicOrOwned/' + id);
   }
 
   /*

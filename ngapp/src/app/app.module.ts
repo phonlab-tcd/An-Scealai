@@ -20,7 +20,7 @@ import { NavBarModule } from './nav-bar/nav-bar.module';
 
 @NgModule({
     declarations: [
-        AppComponent,
+        AppComponent
     ],
     imports: [
         BrowserModule,
