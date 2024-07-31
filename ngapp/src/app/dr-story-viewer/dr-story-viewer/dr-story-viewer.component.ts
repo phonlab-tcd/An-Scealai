@@ -71,7 +71,7 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
 
   storyId: string = '';
   storyObj: Object = {};
-  story: Document;
+  story: Element;
 
   // user variables
   studentId: string = "";
@@ -130,6 +130,9 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
 
     this.story = constructHTML(this.storyObj['story'])
     console.log(this.story)
+
+
+    console.log(this.story.querySelector('body'))
 
     /*const userDetails = this.auth.getUserDetails();
     if (!userDetails) return;

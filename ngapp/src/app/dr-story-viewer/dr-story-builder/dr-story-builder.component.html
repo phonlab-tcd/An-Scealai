@@ -1,13 +1,61 @@
 
-<!--<div class="container">
-</div>-->
-<span>
-    {{ content.nodeName }}
-    <span
+<div class="container">
+    <div class="storyContainer"
+    [innerHTML]="forceTrustedHTML"> 
+    </div>
+</div>
+
+<!--<span style="max-width: 500px;">
+    <ng-container
     *ngFor="let child of content.childNodes"
     >
-        <app-dr-story-builder
-        [type]="'body'"
-        [content]="child"></app-dr-story-builder>
-    </span>
-</span>
+        <ng-container
+        [ngSwitch]="child.nodeName"
+        >
+            <ng-container
+            *ngSwitchCase="'#text'"
+            >
+                {{child.textContent.trim()}}
+            </ng-container>
+            <ng-container
+            *ngSwitchCase="'IMG'"
+            >
+                <img [src]="child.getAttribute('src')">
+            </ng-container>
+            <ng-container
+            *ngSwitchCase="'P'"
+            >
+                <p>
+                    <app-dr-story-builder
+                    [type]="'body'"
+                    [content]="child">
+                    </app-dr-story-builder>
+                </p>
+            </ng-container>
+            <ng-container
+            *ngSwitchCase="'H1'"
+            >
+                <h1>
+                    <app-dr-story-builder
+                    [type]="'body'"
+                    [content]="child">
+                    </app-dr-story-builder>
+                </h1>
+            </ng-container>
+            <ng-container
+            *ngSwitchCase="'SPAN'"
+            >
+                <span>
+                    <app-dr-story-builder
+                    [type]="'body'"
+                    [content]="child">
+                    </app-dr-story-builder>
+                </span>
+            </ng-container>
+            <ng-container
+            *ngSwitchDefault
+            >
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</span>-->
