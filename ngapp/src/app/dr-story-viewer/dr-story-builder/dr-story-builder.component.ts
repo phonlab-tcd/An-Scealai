@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Input, HostListener } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
@@ -23,6 +23,8 @@ import { EventType } from "app/core/models/event";*/
 
 //import { constructHTML } from '@phonlab-tcd/json2html';
 import { ViewEncapsulation } from '@angular/core';
+import { DigitalReaderStoryService } from "app/core/services/dr-story.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
   standalone: true,
@@ -43,6 +45,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   @Input() tags:string
 
   public forceTrustedHTML:SafeHtml;
+  private wasInside = false;
 
   constructor(
     
@@ -52,12 +55,69 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
+    private drStoryService: DigitalReaderStoryService,
   ) {
     
   }
 
   async ngOnInit() {
     this.forceTrustedHTML = this.sanitizer.bypassSecurityTrustHtml(this.content.innerHTML)
+  }
+
+
+  /*@HostListener('click')
+  clickInside() {
+    //this.text = "clicked inside";
+    console.log('inside')
+    this.wasInside = true;
+  }*/
+  checkForSegmentParent(node:Element) {
+    if (node.classList.contains('sentence') || node.classList.contains('word'))
+      return node;
+    let tmp = node;
+    while (tmp.parentElement) {
+      tmp = tmp.parentElement
+      if (tmp.classList.contains('sentence') || tmp.classList.contains('word'))
+        return tmp;
+    }
+    return null;
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  async checkSegmentClicked(targetElem:Element) {
+    //console.log(event)
+    const segment = this.checkForSegmentParent(targetElem)
+    if (segment && segment.classList.contains('word')) {
+      console.log(segment)
+      const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
+        this.drStoryService.getMatchingWords(segment.getAttribute('lemma'), segment.getAttribute('tags'))
+      )
+      //console.log()
+      const sentencesWithMatchingWords = []
+      for (let storyGroup of storySentencesWithMatchingWords) {
+        console.log(storyGroup)
+        for (let sentence of storyGroup.sentences) {
+          sentencesWithMatchingWords.push(sentence)
+        }
+      }
+      console.log(sentencesWithMatchingWords)
+      const audioObj = await firstValueFrom(this.synth.synthesiseText(
+        segment.textContent,
+        { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+        true,
+        'MP3',
+        1))
+      const tmp = document.createElement('audio');
+      console.log(audioObj);
+      tmp.src = audioObj.audioUrl;
+      tmp.play();
+      tmp.remove();
+    }
+    /*if (!this.wasInside) {
+      //this.text = "clicked outside";
+      console.log('out')
+    }
+    this.wasInside = false;*/
   }
 
 }

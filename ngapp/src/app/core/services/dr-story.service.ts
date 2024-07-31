@@ -208,6 +208,10 @@ export class DigitalReaderStoryService {
     return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/publicOrOwned/' + id);
   }
 
+  getMatchingWords(lemma: string | null, tags: string | null): Observable<any[]> {
+    return this.http.post<any[]>(this.baseUrl + 'drStory/getMatchingWords/', {lemma:lemma, tags:tags});
+  }
+
   /*
   createDRStory(title: string, date: Date, dialects: Array<string>, htmlText: string, author: string) {
     const drstoryObj = {

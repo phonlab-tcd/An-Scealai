@@ -1,3 +1,5 @@
+import getMatchingWords from "../endpoint/drStory/getMatchingWords";
+
 // @ts-nocheck
 const multer = require('multer');
 const {Readable} = require('stream');
@@ -28,6 +30,7 @@ let storyRoutes;
   const verified = require("../endpoint/drStory/verified");
   const verifiedCollection = require("../endpoint/drStory/verifiedCollection");
   const publicOrOwnedStoryId = require("../endpoint/drStory/publicOrOwnedStoryId");
+  const getMatchingWords = require("../endpoint/drStory/getMatchingWords");
   /*const author = require("../endpoint/story/author");
   const feedbackAudio = require("../endpoint/story/feedbackAudio");
   const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
@@ -56,6 +59,7 @@ let storyRoutes;
     },
     post: {
       "/create": create,
+      "/getMatchingWords": getMatchingWords,
       //"/viewFeedback/:id": viewFeedback,
       //"/updateStoryAndCheckGrammar": updateStoryAndCheckGrammar,
       /*"/averageWordCount/:studentId": averageWordCount,
