@@ -11,6 +11,7 @@ import { SynthesisCacheService } from "app/core/services/synthesis-cache.service
 // variable defining the different options for API calls
 const ApiOptions = {
   base_url: "https://www.abair.ie/api2/synthesise",
+  //base_url: "https://api.abair.ie/v3/synthesis", // updated synthesis url - does not work with timings
   audioEncoding: ["MP3", "LINEAR16", "OGG_OPUS", "wav"],
   outputType: ["JSON", "HTML", "JSON_WITH_TIMING"],
   voiceCode: [
@@ -129,6 +130,7 @@ export class SynthesisService {
 
     // Otherwise send text to api
     return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions)
+    //return this.http.post<any>(ApiOptions.base_url, reqBody, httpOptions)
       .pipe(
         // construct returned api audio url with given encoding preferences
         map((data: { audioContent: string, timing: {word: string, end: number, originalWord: string}[] }) => {

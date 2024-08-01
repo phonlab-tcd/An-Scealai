@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, importProvidersFrom } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
 import { SynthesisService, Voice } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
@@ -24,11 +24,16 @@ import { EventType } from "app/core/models/event";*/
 //import { constructHTML } from '@phonlab-tcd/json2html';
 import { ViewEncapsulation } from '@angular/core';
 import { DigitalReaderStoryService } from "app/core/services/dr-story.service";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
+import { QuillModule } from "ngx-quill";
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  //providers: [importProvidersFrom(QuillModule.forRoot())],
+  imports: [
+    CommonModule,
+    QuillModule
+  ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
   styleUrls: ["./dr-story-builder.component.scss"], // Digital Reader Story Styling
@@ -45,7 +50,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   @Input() tags:string
 
   public forceTrustedHTML:SafeHtml;
-  private wasInside = false;
 
   constructor(
     
@@ -61,16 +65,61 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+    //this.audioCreationTest()
+    /*console.log(this.content.textContent)
+    const audioObservable = firstValueFrom(this.synth.synthesiseText(
+      this.content.textContent,
+      { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+      false,
+      'MP3',
+      1)
+    ).then( (data) => {
+      console.log(data)
+    })*/
+
     this.forceTrustedHTML = this.sanitizer.bypassSecurityTrustHtml(this.content.innerHTML)
   }
 
+  // TODO : relocate to the story creation page
+  synthRequest(text: string) {
+    const audioObservable = firstValueFrom(this.synth.synthesiseText(
+      text,
+      { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+      false,
+      'MP3',
+      1)
+    ).then( (data) => {
+      console.log(data)
+      return data
+    })
+    console.log('request sent')
+  }
 
-  /*@HostListener('click')
-  clickInside() {
-    //this.text = "clicked inside";
-    console.log('inside')
-    this.wasInside = true;
-  }*/
+  // TODO : relocate to the story creation page
+  audioCreationTest() {
+    let synthesisableSegments = this.content.querySelectorAll('.sentence')
+
+    let tmp = Array.from(synthesisableSegments)
+    
+    const listOfAudios:any[] = []
+
+    let i = 0;
+    for (let j=20;j<tmp.length;j+=20) {
+      for (let k=i;k<j;k++) {
+        const seg = tmp[k].textContent
+
+        listOfAudios.push(this.synthRequest(seg))
+      }
+      i = j
+    }
+    for (let k=i;k<tmp.length;k++) {
+      const seg = tmp[k].textContent
+      
+      listOfAudios.push(this.synthRequest(seg))
+    }
+  }
+
   checkForSegmentParent(node:Element) {
     if (node.classList.contains('sentence') || node.classList.contains('word'))
       return node;
@@ -83,7 +132,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return null;
   }
 
-  @HostListener('document:click', ['$event.target'])
+  //@HostListener('document:click', ['$event.target'])
+  @HostListener('click', ['$event.target'])
   async checkSegmentClicked(targetElem:Element) {
     //console.log(event)
     const segment = this.checkForSegmentParent(targetElem)
