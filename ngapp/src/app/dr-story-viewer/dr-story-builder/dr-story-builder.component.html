@@ -1,22 +1,17 @@
 
-<!--<div class="container">
+<div class="container">
     <div class="storyContainer"
     [innerHTML]="forceTrustedHTML"> 
     </div>
-</div>-->
+</div>
 
-<div class="ql-container" #quillHeightSpan>
-    <!-- STORY DRAWER BUTTON-->
-    <!-- QUILL EDITOR AND TOOLBAR-->
-     <!--[(ngModel)]="forceTrustedHTML"-->
-    <quill-editor
-      placeholder=""
-      [preserveWhitespace]="true"
-      [debounceTime]="1500"
-      [(ngModel)]="content.innerHTML"
-    ></quill-editor>
-    <!--[(ngModel)]="forceTrustedHTML"-->
-  </div>
+<!--<div class="ql-container" #quillHeightSpan>
+    <quill-view
+    
+    [content]="content.innerHTML">
+
+    </quill-view>
+</div>-->
 
 <!--<span style="max-width: 500px;">
     <ng-container

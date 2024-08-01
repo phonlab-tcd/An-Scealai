@@ -128,30 +128,29 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
       return
     }
 
-    this.story = constructHTML(this.storyObj['story'])
+    const rawStory = constructHTML(this.storyObj['story'])
+
+    this.story = this.removeEmptyTags(rawStory)
     console.log(this.story)
 
 
     console.log(this.story.querySelector('body'))
+    
+  }
 
-    /*const userDetails = this.auth.getUserDetails();
-    if (!userDetails) return;
-
-    if (userDetails.role === "TEACHER") {
-      this.teacherId = userDetails._id;
-    }
-    if (userDetails.role === "STUDENT") {
-      this.studentId = userDetails._id;
-      const classroom_cache = localStorage.getItem("classroom");
-      const studentClassroom = classroom_cache ? JSON.parse(classroom_cache) : await firstValueFrom( this.classroomService.getClassroomOfStudent(this.studentId) );
-      if (studentClassroom) this.teacherId = studentClassroom.teacherId;
-    }
-    this.refreshVoice();*/
-
-    // create a dictogloss from the text sent by teacher
-    //if (this.texts) {
-      //this.loadDictogloss();
-    //}
+  removeEmptyTags(root: Element) {
+    const descendants = root.querySelectorAll('*')
+    descendants.forEach((descendant) => {
+      if (descendant.textContent==='') {
+        descendant.remove()
+      }
+    })
+    /*for (let descendant of descendants) {
+      if (descendant.textContent==='') {
+        descendant.remove()
+      }
+    }*/
+    return root;
   }
 
   goToDRStoryLibrary(alertMessage?:string) {
