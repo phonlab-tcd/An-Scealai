@@ -42,10 +42,14 @@
     font-size: 2.4em;
 }
 
-.storyContainer .word:hover {
-    background-color: var(--scealai-light-green);
-}
+/*.storyContainer .word:hover {
+    //background-color: var(--scealai-green);
+}*/
 
 .storyContainer .sentence:hover {
     background-color: var(--scealai-cream);
+}
+
+.currentWord {
+    background-color: var(--scealai-light-green);
 }
