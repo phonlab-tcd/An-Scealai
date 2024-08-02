@@ -193,10 +193,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
    const timings = sentAudioObj.timing;
    const timingsArr = []
 
-   console.log(timings.length)
+   /*console.log(timings.length)
    console.log(childWordSpans.length)
    console.log(timings)
-   console.log(childWordSpans)
+   console.log(childWordSpans)*/
+
+   //const reSyncOffset = .03
+   let reSyncBuffer = 0;
 
    for (let i=wordInd; i<numTimings; i++) {
       //const childWord = childWordSpans.item(i)
@@ -206,11 +209,19 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       if (i!=0 || wordInd!=0) { // if it is not the first word of the sentence
         start = timings[i-1].end
       }
+
+      const length = end-start;
+      reSyncBuffer+=length*.1;
+
       timing['start'] = start;
-      timing['end'] = end;
+      //timing['end'] = Math.max(start+.000005, end-reSyncBuffer); // testing
+      //timing['end'] = start-reSyncBuffer; // testing
+      timing['end'] = end; // testing
+      // there may be something wrong with the timing alignment in the actual array - may have fixed it also
       timingsArr.push(timing)
    }
 
+    console.log(timingsArr)
     return timingsArr;
 
   }
@@ -378,11 +389,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
   async getCurrentAudioObject() {
-    let audioObj = this.listOfAudios[this.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')];
+    const sentId = this.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')
+    let audioObj = this.listOfAudios[sentId];
 
-    // if the audio has not yet been created
+    // if the audio has not yet been created, synthesise it and add it to the list.
     if (!audioObj) {
       audioObj = await this.synthRequest(this.currentSentence?.textContent);
+      this.listOfAudios[sentId] = audioObj;
     }
 
     return audioObj;
@@ -390,13 +403,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   async playFromCurrentWord(audioSrc:string, continuous=false) {
     
-    const timing = this.timings.shift()
-    //const timing = this.timings[0]
+    //const timing = this.timings.shift()
+    const timing = this.timings[0]
 
     if (timing) {
 
-      const buffer = .05;
-      const start = Math.max(timing.start-buffer, 0);
+      //const buffer = .05;
+      //const start = Math.max(timing.start-buffer, 0);
+      const start = timing.start
       
       const audio = document.createElement('audio')
       this.audio = audio;
@@ -413,8 +427,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       this.audio.onended = async (event) => {
 
         this.updateCurrentWord(null)
-        console.log(this.currentWord)
-        // delete the current audio element + listener
+
+        // TODO: delete the current audio element + listener (if needed (?))
 
         if (continuous) {
           let nextSent = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
@@ -447,6 +461,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   }
 
+  // needs complete refactoring - the outer if statement can probably be done away with
+  // different functions can be used for playing a sentence etc.
   async play() {
     console.log(this.currentWord)
     console.log(this.currentSentence)
