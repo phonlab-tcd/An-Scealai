@@ -115,10 +115,10 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   disconnectedFromPreviousWord(word:Node) {
 
     const prevSibling = word.previousSibling;
-    console.log(prevSibling?.textContent)
+    /*console.log(prevSibling?.textContent)
     console.log(prevSibling?.textContent?.charAt(prevSibling?.textContent.length-1))
     console.log(prevSibling?.textContent?.charAt(-1)==' ')
-    console.log(prevSibling?.textContent?.charAt(-1)===' ')
+    console.log(prevSibling?.textContent?.charAt(-1)===' ')*/
     if (prevSibling) {
       if (prevSibling.textContent?.charAt(prevSibling?.textContent.length-1)===' ') {
         return true
@@ -211,12 +211,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       }
 
       const length = end-start;
-      reSyncBuffer+=length*.1;
+      //reSyncBuffer+=length*.1;
+      reSyncBuffer+=length*.066;
 
       timing['start'] = start;
       //timing['end'] = Math.max(start+.000005, end-reSyncBuffer); // testing
       //timing['end'] = start-reSyncBuffer; // testing
       timing['end'] = end; // testing
+      timing['end'] = end-reSyncBuffer; // testing
       // there may be something wrong with the timing alignment in the actual array - may have fixed it also
       timingsArr.push(timing)
    }
