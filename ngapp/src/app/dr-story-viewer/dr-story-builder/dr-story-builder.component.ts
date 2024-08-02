@@ -333,48 +333,19 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
 
-  playWord(audioSrc:string, timings:any){
+  /*playWord(audioSrc:string, timings:any){
     const buffer = .05;
     const start = Math.max(timings.start-buffer, 0);
     const end = timings.end;
 
     //const audio = document.createElement('audio')
     //if (audioSrc!= this.audio.src) this.audio.src = audioSrc
-    /*this.audio.src = audioSrc
-    
-    this.audio.currentTime = start
-    this.audio.play();
-    setInterval( function(audioElement){
-      audioElement.pause()
-    }, (end-timings.start)*1000, this.audio);*/
     const audio = document.createElement('audio')
     audio.src = audioSrc
     
     
     audio.currentTime = start
     audio.play();
-  }
-
-  /*highlightPlayingWord() {
-    setInterval( function(){
-      audio.pause()
-    }, (end-timings.start)*1000);
-  }*/
-
-  /*updateCurrentWord(currentWordEnd:number) {
-    setInterval( () => {
-      this.currentWord = this.checkForNextSiblingWord(this.currentWord);
-      if (this.currentWord) {
-        const nextTimings = this.getWordTiming()
-      } else { // maybe move on to next sentence ? this function should probably be relocated
-      }
-    }, currentWordEnd);
-  }*/
-
-  /*toggleHighlight(word:Element) {
-    if (word.classList.contains('currentWord')) {
-      word.classList.
-    }
   }*/
 
   setCurrentWord() {
@@ -391,29 +362,33 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     
   }
 
-  /*seekNextWord(newWord:Element|null) {
-    console.log(this.timings.length)
+  seekNextWord() {
     if (this.timings.length>0) {
-      //if (this.audio.currentTime>this.timings[0].end) {
-      //const timing = this.timings.shift();
-      //const timing = this.timings.shift();
-      //console.log(timing) 
-      
-      setTimeout(() => {
-          
-          console.log(this.timings)
-          this.timings.shift();
-
-          const nextWord = this.checkForNextSiblingSeg(this.currentWord, 'word')
-          this.updateCurrentWord(nextWord)
-          console.log(this.currentWord)
-          if (this.currentWord) this.seekNextWord(this.currentWord);
-          //}
-      }, (this.timings[0].end-this.timings[0].start)*1000)
+      if (this.audio.currentTime>this.timings[0].end) {
+        this.timings.shift();
+        const nextWord = this.getNextDisconnectedWord(this.currentWord)
+        this.updateCurrentWord(nextWord)
+        console.log(this.currentWord)
+      }
     }
-  }*/
+  }
 
-  playFromCurrentWord(audioSrc:string, continuous=false) {
+  parseSegId(id:string, _class:string) {
+    return parseInt(id.replace(_class, ''));
+  }
+
+  async getCurrentAudioObject() {
+    let audioObj = this.listOfAudios[this.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')];
+
+    // if the audio has not yet been created
+    if (!audioObj) {
+      audioObj = await this.synthRequest(this.currentSentence?.textContent);
+    }
+
+    return audioObj;
+  }
+
+  async playFromCurrentWord(audioSrc:string, continuous=false) {
     
     const timing = this.timings.shift()
     //const timing = this.timings[0]
@@ -427,25 +402,15 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       this.audio = audio;
       this.audio.src = audioSrc
 
-      this.audio.ontimeupdate = (event) => { // updateCurrentWord
-        console.log(this.timings)
-        if (this.timings.length>0) {
-          if (this.audio.currentTime>this.timings[0].end) {
-            this.timings.shift();
-            //const nextWord = this.checkForNextSiblingSeg(this.currentWord, 'word')
-            const nextWord = this.getNextDisconnectedWord(this.currentWord)
-            this.updateCurrentWord(nextWord)
-            console.log(this.currentWord)
-          }
-        }
-      };
+      this.audio.ontimeupdate = () => {
+        this.seekNextWord()
+      }
 
       console.log(this.timings)
 
-      
-      //this.seekNextWord(this.currentWord)
+      //this.seekNextWord()
 
-      this.audio.onended = (event) => {
+      this.audio.onended = async (event) => {
 
         this.updateCurrentWord(null)
         console.log(this.currentWord)
@@ -463,11 +428,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
             if (this.currentWord) {
               // TODO : factor out into function
-              const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
+              //const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
+              const sentAudioObj = await this.getCurrentAudioObject();
+              
               if (sentAudioObj) {
                 this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
                 this.setCurrentWord()
-                this.playFromCurrentWord(sentAudioObj.audioUrl, true)
+                await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
               }
             }
           }
@@ -480,16 +447,17 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   }
 
-  play() {
+  async play() {
     console.log(this.currentWord)
     console.log(this.currentSentence)
     if (this.currentWord) { // play from current word
-      const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
+      //const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
+      const sentAudioObj = await this.getCurrentAudioObject();
+
       this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
       console.log(this.timings)
       this.setCurrentWord()
-      this.playFromCurrentWord(sentAudioObj.audioUrl)
-      console.log('does it get tohere?')
+      await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
     } else if (this.currentSentence) { // play from sentence start
 
     } else { // play from beginning
@@ -499,13 +467,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       this.currentWord = this.currentSentence.querySelector('.word') // only for testing
       //
       
-      const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
+      const sentAudioObj = await this.getCurrentAudioObject();
+
       this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
       console.log(this.timings)
 
       this.setCurrentWord()
       
-      this.playFromCurrentWord(sentAudioObj.audioUrl, true)
+      await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
     }
   }
 
