@@ -50,6 +50,11 @@
     background-color: var(--scealai-cream);
 }
 
+.word {
+    scroll-margin: 100px; // so it is not covered by the toolbar
+    transition: background-color .3s;
+}
+
 .currentWord {
     background-color: var(--scealai-light-green);
 }
@@ -64,4 +69,42 @@
     background-color: var(--scealai-green);
     max-width: 60%;
     margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    //align-items: center;
 }
+
+.Toolbar > button {
+    border: none;
+    background-color: white;
+    color: var(--scealai-green);
+    vertical-align: middle;
+
+    width: 70px;
+    height: 40px;
+
+    margin-right: 5px;
+    margin-left: 5px;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 5px;
+}
+
+.play {
+    font-size: 40px;
+}
+
+.pause {
+    font-size: 20px;
+}
+
+/*html {
+    scroll-behavior: smooth;
+}*/

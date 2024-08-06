@@ -130,11 +130,11 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
 
     const rawStory = constructHTML(this.storyObj['story'])
 
-    this.story = this.removeEmptyTags(rawStory)
+    //this.story = this.removeEmptyTags(rawStory) // this also removes all <img> tags!!!
+    this.story = rawStory
     console.log(this.story)
 
-
-    console.log(this.story.querySelector('body'))
+    //console.log(this.story.querySelector('body'))
     
   }
 
