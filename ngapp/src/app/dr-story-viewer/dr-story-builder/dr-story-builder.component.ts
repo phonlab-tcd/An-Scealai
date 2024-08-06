@@ -55,6 +55,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public listOfAudios:any[] = []
   public audio:HTMLAudioElement;
   public timings:any[] = []
+  public voiceSpeed = 1;
+  //public speakerBaseSpeed = 6; // testing for Áine
+  public speakerAlignmentConstant = .03; // testing for Áine
 
   // below boolean is needed to meaningfully distinguish audio.ended and audio.paused
   public audioPaused:Boolean = false;
@@ -178,59 +181,50 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     console.log(numTimings)
     console.log(wordInd)
     
-    //let timings = {};
+    const timings = sentAudioObj.timing;
+    const tmp = [];
+    const timingsArr = []
 
-    /*for (let i=0;i<childWordSpans.length;i++) {
-      const childWord = childWordSpans.item(i)
-      if (word === childWord) {
+    console.log(timings)
+
+    //const reSyncOffset = .03
+    let reSyncBuffer = 0;
+
+    //for (let i=wordInd; i<timings.length; i++) {
+      for (let i=0; i<timings.length; i++) {
+        //const childWord = childWordSpans.item(i)
+        const timing = {};
         let start = 0 // if it is the first word
-        const end = sentAudioObj.timing[i].end
-        if (i!=0) {
-          start = sentAudioObj.timing[i-1].end
+        const end = timings[i].end
+        //if (i!=0 || wordInd!=0) { // if it is not the first word of the sentence
+        //if (i!=0 && i>wordInd) { // if it is not the first word of the sentence
+        if (i>0) {
+          //start = timings[i-1].end
+          //console.log(timingsArr.length, timingsArr[i-1]);
+          //start = timings[i-1].end;
+          start = tmp[i-1].end;
         }
-        timings['start'] = start;
-        timings['end'] = end;
-        return timings;
-      }
-    }*/
-   const timings = sentAudioObj.timing;
-   const timingsArr = []
 
-   console.log(timings)
+        const length = end-start;
+        //reSyncBuffer+=length*.1;
 
-   //const reSyncOffset = .03
-   let reSyncBuffer = 0;
+        timing['start'] = start;
+        timing['end'] = end-reSyncBuffer; // testing
+        //timing['end'] = end; // testing
 
-   //for (let i=wordInd; i<timings.length; i++) {
-    for (let i=0; i<timings.length; i++) {
-      //const childWord = childWordSpans.item(i)
-      const timing = {};
-      let start = 0 // if it is the first word
-      const end = timings[i].end
-      //if (i!=0 || wordInd!=0) { // if it is not the first word of the sentence
-      //if (i!=0 && i>wordInd) { // if it is not the first word of the sentence
-      if (i>0) {
-        //start = timings[i-1].end
-        //console.log(timingsArr.length, timingsArr[i-1]);
-        start = timings[i-1].end;
-        //start = timingsArr[i-1].end;
-      }
+        // there may be something wrong with the timing alignment in the actual array - may have fixed it also
+        //if (i>=wordInd)
+        tmp.push(timing)
 
-      const length = end-start;
-      //reSyncBuffer+=length*.1;
+        //reSyncBuffer+=length*.09; // should not apply to the first word
+        //const modifier = .033*(1 + (1-this.voiceSpeed))*(this.speakerBaseSpeed); // should not apply to the first word
+        //console.log(modifier)
+        //reSyncBuffer+=length*Math.min(modifier, .9);
+        reSyncBuffer+=length*this.speakerAlignmentConstant;
+    }
 
-      timing['start'] = start;
-      timing['end'] = end-reSyncBuffer; // testing
-
-      // there may be something wrong with the timing alignment in the actual array - may have fixed it also
-      if (i>=wordInd)
-        timingsArr.push(timing)
-
-      reSyncBuffer+=length*.09; // should not apply to the first word
-   }
-
-    console.log(timingsArr)
-    return timingsArr;
+    console.log(tmp)
+    return tmp.slice(wordInd, timings.length);
 
   }
 
@@ -238,10 +232,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   synthRequest(text: string) {
     const audioObservable = firstValueFrom(this.synth.synthesiseText(
       text,
-      { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
+      //{ name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
+      { name: "Síbéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
       false,
       'MP3',
-      1)
+      this.voiceSpeed)
     )
     console.log('request sent');
     return audioObservable
@@ -333,6 +328,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       }
       console.log(sentencesWithMatchingWords)
 
+      this.pause();
       //only for testing
       this.playWord();
 
@@ -370,12 +366,17 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
   seekNextWord() {
-    if (this.timings.length>0) {
+    if (this.timings.length>0 && !this.audioPaused) {
       if (this.audio.currentTime>this.timings[0].end) {
         this.timings.shift();
         const nextWord = this.getNextDisconnectedWord(this.currentWord)
-        this.updateCurrentWord(nextWord)
-        console.log(this.currentWord)
+        // this.audioPaused is repeated in an attempt to mitigate any issues regarding asynchronisation
+        if (!this.audioPaused) {
+          this.updateCurrentWord(nextWord)
+          setTimeout(
+            () => this.seekNextWord() // added in the case of a very fast speaker (e.g Áine)
+          , 60)//30)
+        }
       }
     }
   }
@@ -466,7 +467,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   async playWord() {
     if (this.currentWord) {
-      if (this.currentSentence) {
+      const audioObj = await this.synthRequest(this.currentWord.textContent);
+
+      const audio = document.createElement('audio')
+      audio.src = audioObj.audioUrl;
+      audio.play();
+      /*if (this.currentSentence) {
         const childWordSpans = this.currentSentence.querySelectorAll('.word');
         //const wordInd = this.getWordPositionIndex(this.currentWord, childWordSpans);
 
@@ -482,23 +488,26 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const audio = document.createElement('audio')
         audio.src = sentAudioObj.audioUrl;
 
-        const buffer = (timing.end-timing.start)*0.01;
+        //const buffer = (timing.end-timing.start)*0.01;
+        const buffer = 0;
 
         const start = Math.max(timing.start-buffer, 0);
         //const end = Math.min(timing.end+buffer, (audio.duration-start));
         const end = timing.end+buffer;
+
         console.log(timing.start, timing.end)
         console.log(start, end)
 
-        audio.currentTime = timing.start;
+        audio.currentTime = start;
         audio.play();
 
         setTimeout(() => {
           audio.pause();
           console.log('pause!')
         }, (end-start)*1000);
-      }
-    }
+      }*/
+
+    } 
   }
 
   // placeholder
