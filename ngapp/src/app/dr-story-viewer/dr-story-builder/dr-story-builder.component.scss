@@ -53,3 +53,15 @@
 .currentWord {
     background-color: var(--scealai-light-green);
 }
+
+// there is a visual bug where the toolbar is not quite stuck to the top of the screen
+.Toolbar {
+    position: sticky;
+    top: 0;
+    /*padding: 0;
+    margin: 0;
+    width: 100%;*/
+    background-color: var(--scealai-green);
+    max-width: 60%;
+    margin: auto;
+}
