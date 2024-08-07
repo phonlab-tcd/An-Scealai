@@ -3,8 +3,10 @@
     <!--<button
     (click)="play()"
     >prevSent</button>-->
+    <!--audioPlaying boolean not fully working yet-->
     <button
     class="play"
+    [ngClass]="{'playing': audioPlaying===true}"
     (click)="playStory()"
     >▸</button>
     <button
@@ -14,6 +16,48 @@
     <!--<button
     (click)="play()"
     >nextSent</button>-->
+
+    <div class="voiceSelection">
+        <button
+        mat-flat-button
+        [matMenuTriggerFor]="dialects"
+        aria-label="Dialect choice menu">
+            <mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>
+        </button>
+        <mat-menu #dialects="matMenu">
+            <button mat-menu-item
+            [matMenuTriggerFor]="gender"
+            [matMenuTriggerData]="{dialect : 'Connacht'}"
+            (menuOpened)="dialectMenuOpened('Connacht')">
+                <span>{{ts.l.connacht}}</span>
+            </button>
+            <button mat-menu-item
+            [matMenuTriggerFor]="gender"
+            [matMenuTriggerData]="{dialect : 'Ulster'}"
+            (menuOpened)="dialectMenuOpened('Ulster')">
+                <span>{{ts.l.ulster}}</span>
+            </button>
+            <button mat-menu-item
+            [matMenuTriggerFor]="gender"
+            [matMenuTriggerData]="{dialect : 'Munster'}"
+            (menuOpened)="dialectMenuOpened('Munster')">
+                <span>{{ts.l.munster}}</span>
+            </button>
+        </mat-menu>
+        <mat-menu #gender="matMenu" aria-label="Gender choice menu">
+            <ng-template matMenuContent let-dialect="dialect">
+                <button mat-menu-item
+                (click)="speakerSelected(dialect, 'm')">
+                    {{ ts.l.male }}
+                </button>
+                <button mat-menu-item
+                (click)="speakerSelected(dialect, 'f')">
+                    {{ ts.l.female }}
+                </button>
+            </ng-template>
+        </mat-menu>
+        
+    </div>
 </div> <br>
 
 <div class="container">

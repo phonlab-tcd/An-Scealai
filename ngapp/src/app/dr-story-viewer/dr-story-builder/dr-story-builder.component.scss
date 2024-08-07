@@ -10,6 +10,7 @@
     //padding-left: 20px;
     //padding-right: 20px;
     padding: 40px;
+    margin: 0 auto;
 }
 
 .storyContainer > * {
@@ -57,25 +58,25 @@
 
 .currentWord {
     background-color: var(--scealai-light-green);
+    transition: background-color .1s;
 }
 
 // there is a visual bug where the toolbar is not quite stuck to the top of the screen
 .Toolbar {
     position: sticky;
     top: 0;
-    /*padding: 0;
-    margin: 0;
-    width: 100%;*/
+    
     background-color: var(--scealai-green);
     max-width: 60%;
     margin: auto;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    //align-items: center;
+    
+    margin: 0 auto;
 }
 
-.Toolbar > button {
+.Toolbar > * {
     border: none;
     background-color: white;
     color: var(--scealai-green);
@@ -101,8 +102,24 @@
     font-size: 40px;
 }
 
+button.playing {
+    background-color: var(--scealai-cream);
+}
+
 .pause {
     font-size: 20px;
+}
+
+.voiceSelection {
+    display: flex;
+    flex-direction: row;
+    //right: 0;
+}
+
+.voiceSelection mat-form-field {
+    //margin: auto auto;
+    max-width: 150px;
+    //max-width: min-content;
 }
 
 /*html {

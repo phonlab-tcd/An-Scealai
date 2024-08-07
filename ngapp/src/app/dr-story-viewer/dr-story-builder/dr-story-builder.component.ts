@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, importProvidersFrom } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
-import { SynthesisService, Voice } from "app/core/services/synthesis.service";
+import { SynthesisService, Voice, voices } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
 import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { ActivatedRoute, ChildActivationEnd, Router } from "@angular/router";
@@ -26,18 +26,34 @@ import { ViewEncapsulation } from '@angular/core';
 import { DigitalReaderStoryService } from "app/core/services/dr-story.service";
 import { firstValueFrom, Observable } from "rxjs";
 import { QuillModule } from "ngx-quill";
+import { MatSelectModule } from "@angular/material/select";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+
+const dialectToVoiceIndex = new Map<string, number>([
+  ["Connacht f", 0],
+  ["Ulster f", 1],
+  ["Connacht m", 2],
+  ["Munster f", 3],
+  ["Munster m", 4],
+]);
 
 @Component({
   standalone: true,
   //providers: [importProvidersFrom(QuillModule.forRoot())],
   imports: [
     CommonModule,
-    QuillModule
+    QuillModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
   ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
   styleUrls: ["./dr-story-builder.component.scss"], // Digital Reader Story Styling
-  encapsulation: ViewEncapsulation.None // Without this line, non-angular html can not be targetted for styling
+  encapsulation: ViewEncapsulation.None // Without this line, non-angular html cannot be targetted for styling
 })
 export class DigitalReaderStoryBuilderComponent implements OnInit {
   
@@ -52,7 +68,15 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public forceTrustedHTML:SafeHtml;
   public currentSentence:Element | null = null;
   public currentWord:Element | null = null;
-  public listOfAudios:any[] = []
+
+  public listOfAudios:any = [ // 5 sub-arrays, 1 for each voice option
+    [],
+    [],
+    [],
+    [],
+    []
+  ]
+
   public audio:HTMLAudioElement;
   public timings:any[] = []
   public voiceSpeed = 1;
@@ -61,6 +85,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   // below boolean is needed to meaningfully distinguish audio.ended and audio.paused
   public audioPaused:Boolean = false;
+
+  public audioPlaying:Boolean = false;
+
+  //public voiceDialect:string | null = 'Connacht';
+  //public voiceGender:string | null = 'f';
+  public voiceIndex:number = 0; // defaults to Sibéal nemo
 
   constructor(
     
@@ -78,33 +108,26 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
   async ngOnInit() {
-    //this.audioCreationTest()
-    /*console.log(this.content.textContent)
-    const audioObservable = firstValueFrom(this.synth.synthesiseText(
-      this.content.textContent,
-      { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
-      false,
-      'MP3',
-      1)
-    ).then( (data) => {
-      console.log(data)
-    })*/
 
     this.forceTrustedHTML = this.sanitizer.bypassSecurityTrustHtml(this.content.innerHTML)
-    console.log(this.content)
 
     // only for testing
     const firstSentSpans = this.content?.querySelectorAll('.sentence')
     for (let i=0;i<3;i++) {
       const sent = firstSentSpans.item(i)
-      this.synthRequest(sent?.textContent).then( (data) => {
+      this.synthRequest(sent?.textContent, voices[this.voiceIndex]).then( (data) => {
         console.log(data)
-        this.listOfAudios[i] = data // only for testing
+        this.listOfAudios[this.voiceIndex][i] = data // only for testing
         console.log(this.listOfAudios)
-        //return data
       })
     }
+
+    console.log(dialectToVoiceIndex.get('Connacht f'));
     
+  }
+
+  speakerSelected(dialect:string, gender:string) {
+    console.log(dialect, gender);
   }
 
   getWordPositionIndex(word:Element, childWordSpans:NodeList) {
@@ -173,67 +196,47 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     const childWordSpans = sentenceSpan.querySelectorAll('.word');
 
-    //const childWordSpans = sentenceSpan.querySelectorAll('.word')
     const wordInd = this.getWordPositionIndex(word, childWordSpans)
 
     // for testing as ASR seems to split only on spaces.
-    const sentenceText:string = this.recreateSentenceFromWord(childWordSpans.item(wordInd))
-    const numTimings = sentenceText.split(' ').length
-    console.log(numTimings)
-    console.log(wordInd)
+    //const sentenceText:string = this.recreateSentenceFromWord(childWordSpans.item(wordInd))
+    //const numTimings = sentenceText.split(' ').length
+    //console.log(numTimings)
     
     const timings = sentAudioObj.timing;
-    const tmp = [];
     const timingsArr = []
 
-    console.log(timings)
-
-    //const reSyncOffset = .03
     let reSyncBuffer = 0;
 
-    //for (let i=wordInd; i<timings.length; i++) {
-      for (let i=0; i<timings.length; i++) {
-        //const childWord = childWordSpans.item(i)
-        const timing = {};
-        let start = 0 // if it is the first word
-        const end = timings[i].end
-        //if (i!=0 || wordInd!=0) { // if it is not the first word of the sentence
-        //if (i!=0 && i>wordInd) { // if it is not the first word of the sentence
-        if (i>0) {
-          //start = timings[i-1].end
-          //console.log(timingsArr.length, timingsArr[i-1]);
-          //start = timings[i-1].end;
-          start = tmp[i-1].end;
-        }
+    for (let i=0; i<timings.length; i++) {
+      
+      const timing = {};
+      let start = 0 // if it is the first word
+      const end = timings[i].end
+      
+      if (i>0) {
+        start = timingsArr[i-1].end;
+      }
 
-        const length = end-start;
-        //reSyncBuffer+=length*.1;
+      const length = end-start;
 
-        timing['start'] = start;
-        timing['end'] = end-reSyncBuffer; // testing
-        //timing['end'] = end; // testing
+      timing['start'] = start;
+      timing['end'] = end-reSyncBuffer;
 
-        // there may be something wrong with the timing alignment in the actual array - may have fixed it also
-        //if (i>=wordInd)
-        tmp.push(timing)
-
-        //reSyncBuffer+=length*.09; // should not apply to the first word
-        //const modifier = .033*(1 + (1-this.voiceSpeed))*(this.speakerBaseSpeed); // should not apply to the first word
-        //console.log(modifier)
-        //reSyncBuffer+=length*Math.min(modifier, .9);
-        reSyncBuffer+=length*this.speakerAlignmentConstant;
+      timingsArr.push(timing)
+      reSyncBuffer+=length*this.speakerAlignmentConstant;
     }
 
-    console.log(tmp)
-    return tmp.slice(wordInd, timings.length);
+    return timingsArr.slice(wordInd, timings.length);
 
   }
 
   // TODO : relocate to the story creation page
-  synthRequest(text: string) {
+  synthRequest(text: string, speaker:Voice) {
     const audioObservable = firstValueFrom(this.synth.synthesiseText(
       text,
-      { name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
+      speaker,
+      //{ name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
       //{ name: "Síbéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
       false,
       'MP3',
@@ -254,14 +257,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       for (let k=i;k<j;k++) {
         const seg = tmp[k].textContent
 
-        this.listOfAudios[k] = (this.synthRequest(seg))
+        //this.listOfAudios[k] = (this.synthRequest(seg))
       }
       i = j
     }
     for (let k=i;k<tmp.length;k++) {
       const seg = tmp[k].textContent
       
-      this.listOfAudios[k] = (this.synthRequest(seg))
+      //this.listOfAudios[k] = (this.synthRequest(seg))
     }
   }
 
@@ -408,12 +411,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   async getCurrentAudioObject() {
     const sentId = this.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')
-    let audioObj = this.listOfAudios[sentId];
+    let audioObj = this.listOfAudios[this.voiceIndex][sentId];
 
     // if the audio has not yet been created, synthesise it and add it to the list.
     if (!audioObj) {
-      audioObj = await this.synthRequest(this.currentSentence?.textContent);
-      this.listOfAudios[sentId] = audioObj;
+      audioObj = await this.synthRequest(this.currentSentence?.textContent, voices[this.voiceIndex]);
+      this.listOfAudios[this.voiceIndex][sentId] = audioObj;
     }
 
     return audioObj;
@@ -423,6 +426,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     if (this.audio) this.pause(); // to avoid multiple audio instances at the same time
     this.audioPaused = false;
+    this.audioPlaying = true;
     
     //const timing = this.timings.shift()
     const timing = this.timings[0]
@@ -493,7 +497,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   async playWord() {
     if (this.currentWord) {
-      const audioObj = await this.synthRequest(this.currentWord.textContent);
+      const audioObj = await this.synthRequest(this.currentWord.textContent, voices[this.voiceIndex]);
 
       const audio = document.createElement('audio')
       audio.src = audioObj.audioUrl;
@@ -586,6 +590,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   pause() {
     this.audio.pause()
     this.audioPaused = true;
+    this.audioPlaying = false;
   }
 
 }
