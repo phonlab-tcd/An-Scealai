@@ -27,31 +27,30 @@
         <mat-menu #dialects="matMenu">
             <button mat-menu-item
             [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Connacht'}"
-            (menuOpened)="dialectMenuOpened('Connacht')">
+            [matMenuTriggerData]="{dialect : 'Connacht'}">
                 <span>{{ts.l.connacht}}</span>
             </button>
             <button mat-menu-item
             [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Ulster'}"
-            (menuOpened)="dialectMenuOpened('Ulster')">
+            [matMenuTriggerData]="{dialect : 'Ulster'}">
                 <span>{{ts.l.ulster}}</span>
             </button>
             <button mat-menu-item
             [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Munster'}"
-            (menuOpened)="dialectMenuOpened('Munster')">
+            [matMenuTriggerData]="{dialect : 'Munster'}">
                 <span>{{ts.l.munster}}</span>
             </button>
         </mat-menu>
         <mat-menu #gender="matMenu" aria-label="Gender choice menu">
             <ng-template matMenuContent let-dialect="dialect">
                 <button mat-menu-item
-                (click)="speakerSelected(dialect, 'm')">
+                (click)="speakerSelected(dialect, 'm')"
+                [disabled]="!speakerExists(dialect, 'm')">
                     {{ ts.l.male }}
                 </button>
                 <button mat-menu-item
-                (click)="speakerSelected(dialect, 'f')">
+                (click)="speakerSelected(dialect, 'f')"
+                [disabled]="!speakerExists(dialect, 'f')">
                     {{ ts.l.female }}
                 </button>
             </ng-template>

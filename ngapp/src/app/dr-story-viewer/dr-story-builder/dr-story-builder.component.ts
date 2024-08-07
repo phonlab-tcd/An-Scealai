@@ -36,7 +36,7 @@ const dialectToVoiceIndex = new Map<string, number>([
   ["Ulster f", 1],
   ["Connacht m", 2],
   ["Munster f", 3],
-  ["Munster m", 4],
+  //["Munster m", 4], // there is a problem with the male Munster voice (Colm)
 ]);
 
 @Component({
@@ -69,13 +69,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public currentSentence:Element | null = null;
   public currentWord:Element | null = null;
 
-  public listOfAudios:any = [ // 5 sub-arrays, 1 for each voice option
-    [],
-    [],
-    [],
-    [],
-    []
-  ]
+  public listOfAudios:any = []
 
   public audio:HTMLAudioElement;
   public timings:any[] = []
@@ -101,15 +95,18 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
     private drStoryService: DigitalReaderStoryService,
-  ) {
-    
-    //this.audio = document.createElement('audio')
-
-  }
+  ) {}
 
   async ngOnInit() {
 
     this.forceTrustedHTML = this.sanitizer.bypassSecurityTrustHtml(this.content.innerHTML)
+
+    console.log(dialectToVoiceIndex)
+    for (let entry of dialectToVoiceIndex.entries()) {
+      //const key = entry[0];
+      const voiceIndex = entry[1];
+      this.listOfAudios[voiceIndex] = [];
+    }
 
     // only for testing
     const firstSentSpans = this.content?.querySelectorAll('.sentence')
@@ -126,8 +123,20 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     
   }
 
+  speakerExists(dialect:string, gender:string) {
+    const speaker:string = dialect + ' ' + gender;
+    return dialectToVoiceIndex.get(speaker) !== undefined;
+  }
+
   speakerSelected(dialect:string, gender:string) {
-    console.log(dialect, gender);
+    const speaker:string = dialect + ' ' + gender;
+    const voiceIndex:number|undefined = dialectToVoiceIndex.get(speaker);
+    if (voiceIndex!==undefined) {
+      this.voiceIndex = voiceIndex;
+    }
+    if (this.audioPlaying) {
+      this.playFromCurrentWord();
+    }
   }
 
   getWordPositionIndex(word:Element, childWordSpans:NodeList) {
@@ -472,9 +481,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
                 const sentAudioObj = await this.getCurrentAudioObject();
                 
                 
-                console.log(this.audio)
+                /*console.log(this.audio)
                 console.log(this.audio.paused)
-                console.log(this.audio.ended)
+                console.log(this.audio.ended)*/
                 //if (sentAudioObj && (this.audio && (!this.audio.paused || this.audio.ended))) {
                 if (sentAudioObj && !this.audioPaused) {
                   this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
