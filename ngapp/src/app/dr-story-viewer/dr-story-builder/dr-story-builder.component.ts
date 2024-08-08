@@ -59,13 +59,15 @@ const dialectToVoiceIndex = new Map<string, number>([
 })
 export class DigitalReaderStoryBuilderComponent implements OnInit {
   
-  @Input() type=''
-  @Input() content:Element
+  /*@Input() type=''
   @Input() class:string
   @Input() id:string
   @Input() src:string
   @Input() lemma:string
-  @Input() tags:string
+  @Input() tags:string*/
+
+  @Input() content:Element
+  @Input() storyId:string
 
   public forceTrustedHTML:SafeHtml;
   public currentSentence:Element | null = null;
@@ -114,17 +116,47 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     // only for testing
     const firstSentSpans = this.content?.querySelectorAll('.sentence')
-    for (let i=0;i<3;i++) {
+    /*for (let i=0;i<3;i++) {
       const sent = firstSentSpans.item(i)
       this.synthRequest(sent?.textContent, this.speaker).then( (data) => {
         console.log(data)
         this.listOfAudios[this.voiceIndex][i] = data // only for testing
         console.log(this.listOfAudios)
       })
-    }
+    }*/
 
-    console.log(dialectToVoiceIndex.get('Connacht f'));
+    const allGeneratedAudio = await firstValueFrom(this.drStoryService.getSynthAudio(this.storyId));
+    console.log(allGeneratedAudio);
+
+    console.log(this.listOfAudios);
+    this.sortGeneratedAudio(allGeneratedAudio, firstSentSpans);
+    console.log(this.listOfAudios);
     
+  }
+
+  sortGeneratedAudio(audioArr:Array<any>, sentenceSpans:NodeList) {
+    //let tmpSortedAudio:[][] = [];
+    for (let voiceIndex=0;voiceIndex<voices.length;voiceIndex++) {
+      const voice = voices[voiceIndex];
+      const speakerAudioWithPotentialGaps:Array<any> = audioArr.filter( (elem) => {
+        //console.log(elem, voice.code)
+        return elem.voice === voice.code;
+      });
+      console.log(speakerAudioWithPotentialGaps);
+      for (let j=0;j<sentenceSpans.length;j++) {
+        const sentenceSpan = sentenceSpans.item(j) as Element;
+        //console.log(sentenceSpan)
+        const sentId = this.drStoryService.parseSegId(sentenceSpan.getAttribute('id'), 'sentence');
+        const matchingAudioObj = speakerAudioWithPotentialGaps.find( (elem) => {
+          /*console.log(elem.sentId, sentId)
+          console.log(elem);*/
+          return elem.sentenceId === sentId;
+        });
+        if (matchingAudioObj) {
+          this.listOfAudios[voiceIndex][sentId] = {audioUrl:matchingAudioObj.audioUrl, timing:matchingAudioObj.timing};
+        }
+      }
+    }
   }
 
   speakerExists(dialect:string, gender:string) {
@@ -261,8 +293,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return audioObservable
   }
 
-  // TODO : relocate to the story creation page
-  audioCreationTest() {
+  /*audioCreationTest() {
     let synthesisableSegments = this.content.querySelectorAll('.sentence')
 
     let tmp = Array.from(synthesisableSegments)
@@ -281,7 +312,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       
       //this.listOfAudios[k] = (this.synthRequest(seg))
     }
-  }
+  }*/
 
   checkForSegmentParent(node:Element) {
     if (node.classList.contains('sentence') || node.classList.contains('word'))
@@ -425,7 +456,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     const sentId = this.drStoryService.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')
     let audioObj = this.listOfAudios[this.voiceIndex][sentId];
 
-    // if the audio has not yet been created, synthesise it and add it to the list.
+    // if the audio was not ready when the story was loaded, check if it is ready now.
+    /* TODO : implement fetching specific speaker-sentences from db in dr-story-service
+    if (!audioObj) {
+      let audioObj = this.drStoryService.someFnName(this.drStoryId, senId, this.speaker);
+    }*/
+
+    // if the audio has not yet been created and, synthesise it and add it to the list.
     if (!audioObj) {
       audioObj = await this.synthRequest(this.currentSentence?.textContent, this.speaker);
       this.listOfAudios[this.voiceIndex][sentId] = audioObj;

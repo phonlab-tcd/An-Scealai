@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
-import { SynthesisService, Voice } from "app/core/services/synthesis.service";
+import { SynthesisService, Voice, voices } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
 import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis-player.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -138,20 +138,15 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
     
   }
 
-  removeEmptyTags(root: Element) {
+  /*removeEmptyTags(root: Element) {
     const descendants = root.querySelectorAll('*')
     descendants.forEach((descendant) => {
       if (descendant.textContent==='') {
         descendant.remove()
       }
     })
-    /*for (let descendant of descendants) {
-      if (descendant.textContent==='') {
-        descendant.remove()
-      }
-    }*/
     return root;
-  }
+  }*/
 
   goToDRStoryLibrary(alertMessage?:string) {
     this.router.navigateByUrl('dr-library')

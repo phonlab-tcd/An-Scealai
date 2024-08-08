@@ -38,7 +38,7 @@ const handler =  async (req, res) => {
       //console.log(audioUrl);
       //if (audioUrl) {
         audio = await DigitalReaderSentenceAudio.create({
-          drStoryId: req.body.storyId,
+          drStoryId: req.body.drStoryId,
           sentenceId: req.body.sentId,
           voice: req.body.voice,
           audioUrl: req.body.audioUrl,

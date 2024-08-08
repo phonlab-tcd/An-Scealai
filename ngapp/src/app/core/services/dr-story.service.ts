@@ -233,8 +233,8 @@ export class DigitalReaderStoryService {
     return idObj;
   }
 
-  getSynthAudio() {
-      
+  getSynthAudio(drStoryId:string) {
+    return this.http.get<DigitalReaderStory[]>(this.baseUrl + 'drStory/allAudio/' + drStoryId);
   }
 
   getDRStoriesByOwner(owner: string) : Observable<DigitalReaderStory[]>  {

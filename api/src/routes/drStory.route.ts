@@ -26,6 +26,7 @@ let storyRoutes;
   //const withId = require("../endpoint/story/withId");
   
   const ownerId = require("../endpoint/drStory/ownerId");
+  const allAudioDrStoryId = require("../endpoint/drStory/allAudioDrStoryId");
   const allPublic = require("../endpoint/drStory/public");
   const verified = require("../endpoint/drStory/verified");
   const verifiedCollection = require("../endpoint/drStory/verifiedCollection");
@@ -49,6 +50,7 @@ let storyRoutes;
       //"/withId/:id": withId,
       // '/myStudentsStory/:id': myStudentsStory,
       "/owner/:id": ownerId,
+      "/allAudio/:drStoryId": allAudioDrStoryId,
       "/public": allPublic,
       "/publicOrOwned/:id": publicOrOwnedStoryId,
       "/verified": verified,
@@ -69,6 +71,29 @@ let storyRoutes;
     },
   });
 })();
+
+const test = require("../endpoint/drStory/queueTest");
+
+function queue(testFn:Function):Function {
+  let queue:Promise<any> = Promise.resolve();
+
+  return function(...args) {
+    queue = queue.then(() => {
+      return test(...args);
+    });
+    return queue;
+  } 
+}
+
+const queuedFn = queue(test);
+
+storyRoutes
+.route('/testQueue')
+.post(
+  (req, res) => {
+    queuedFn(req.body).then( (data) => {console.log(data)} )
+  }
+)
 
 /**
  * Get stories for a given user (owner) with optional classroom creation date filter
