@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TranslationService } from 'app/core/services/translation.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, from } from "rxjs";
 import { User } from "app/core/models/user";
 import { UserService } from "app/core/services/user.service";
 //import { createClient } from "@supabase/supabase-js"
@@ -23,6 +23,7 @@ import { constructJSON } from '@phonlab-tcd/html2json';
 import { objectUtil } from 'zod';
 
 import config from '../anScealaiStoryCollectionsConf'
+import { SynthesisService, Voice, voices } from 'app/core/services/synthesis.service';
 
 @Component({
   selector: 'app-digital-reader',
@@ -52,7 +53,8 @@ export class DigitalReaderComponent implements OnInit {
     public userService: UserService,
     public drStoryService: DigitalReaderStoryService,
     public http: HttpClient,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private synth: SynthesisService,) {
         this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
         //console.log(adminStoryCollectionOpts)
         
@@ -103,6 +105,34 @@ export class DigitalReaderComponent implements OnInit {
         }
     }
 
+  }
+
+  async synthesiseStory(htmlBody:Document, storyId:string) {
+
+    //const parser = new DOMParser;
+
+    //const html = parser.parseFromString(htmlString, 'text/html');
+    //const html = this.convertedHTMLDoc?.body;
+
+    const firstSentSpans = htmlBody?.querySelectorAll('.sentence')
+    for (let i=0;i<firstSentSpans.length;i++) {
+      const sent = firstSentSpans.item(i)
+      const sentId:number = this.drStoryService.parseSegId(sent.getAttribute('id'), 'sentence');
+      console.log(sentId, sent.getAttribute('id'))
+
+      const sentText:string = sent.textContent;
+      for (let voice of voices) {
+        const audioPromise:Promise<any> = firstValueFrom(this.synth.synthesiseText(sentText, voice, false, undefined, 1));
+
+        const audioObservable = from(audioPromise);
+
+        //this.drStoryService.storeSynthAudio(storyId, sentId, audioPromise, voice.code)
+        this.drStoryService.storeSynthAudio(storyId, sentId, audioObservable, voice.code)
+        /*.subscribe({
+        next(response) {console.log(response.id)}
+      });*/
+      }
+    }
   }
 
   async createNewStory() {
@@ -196,9 +226,10 @@ export class DigitalReaderComponent implements OnInit {
                   //.saveDRStory(res.title, dialects, story, res.public)
                   .saveDRStory(res.title, collections, thumbnail, story, res.public)
                   .subscribe({
-                  next: () => {
+                  next: (response) => {
                       console.log('a response was received')
                       this.storyState = 'processed'
+                      this.synthesiseStory(this.convertedHTMLDoc, response.id);
                   },
                   error: () => {
                       alert("Not able to create a new story");

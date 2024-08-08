@@ -1,129 +1,100 @@
 
-<div class="Toolbar">
-    <!--<button
-    (click)="play()"
-    >prevSent</button>-->
-    <!--audioPlaying boolean not fully working yet-->
-    <button
-    class="play"
-    [ngClass]="{'playing': audioPlaying===true}"
-    (click)="playStory()"
-    >▸</button>
-    <button
-    class="pause"
-    (click)="pause()"
-    >❚❚</button>
-    <!--<button
-    (click)="play()"
-    >nextSent</button>-->
+<div class="fullPage">
 
-    <div class="voiceSelection">
-        <button
-        mat-flat-button
-        [matMenuTriggerFor]="dialects"
-        aria-label="Dialect choice menu">
-            <mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>
-        </button>
-        <mat-menu #dialects="matMenu">
-            <button mat-menu-item
-            [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Connacht'}">
-                <span>{{ts.l.connacht}}</span>
+    <!--<mat-sidenav-container>
+        <mat-sidenav>Start</mat-sidenav>
+        <mat-sidenav position="end">End</mat-sidenav>
+        <section>Main</section>
+    </mat-sidenav-container>-->
+
+    <div class="Toolbar">
+        <div class="playbackControls">
+            <!--<button
+            (click)="play()"
+            >prevSent</button>-->
+            <!--audioPlaying boolean not fully working yet-->
+            <button
+            class="pause"
+            [ngClass]="{'paused': audioPaused===true}"
+            (click)="pause()"
+            >❚❚</button>
+            <button
+            class="play"
+            [ngClass]="{'playing': audioPlaying===true}"
+            (click)="playStory()"
+            >▸</button>
+            <!--<button
+            (click)="play()"
+            >nextSent</button>-->
+        </div>
+
+        <div class="voiceSelection">
+            <button
+            mat-button
+            [matMenuTriggerFor]="dialects"
+            aria-label="Dialect choice menu">
+                <!--<mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>-->
+                <mat-icon>arrow_drop_down</mat-icon>
+                <!--<span>{{ ts.l.dialect }}</span>-->
+                {{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender][0] + ')' }}
+                <!--<span>{{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender] + ')' }}</span>-->
             </button>
-            <button mat-menu-item
-            [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Ulster'}">
-                <span>{{ts.l.ulster}}</span>
-            </button>
-            <button mat-menu-item
-            [matMenuTriggerFor]="gender"
-            [matMenuTriggerData]="{dialect : 'Munster'}">
-                <span>{{ts.l.munster}}</span>
-            </button>
-        </mat-menu>
-        <mat-menu #gender="matMenu" aria-label="Gender choice menu">
-            <ng-template matMenuContent let-dialect="dialect">
+            <mat-menu #dialects="matMenu">
                 <button mat-menu-item
-                (click)="speakerSelected(dialect, 'm')"
-                [disabled]="!speakerExists(dialect, 'm')">
-                    {{ ts.l.male }}
+                [matMenuTriggerFor]="gender"
+                [matMenuTriggerData]="{dialect : 'Connacht'}">
+                    <span>{{ts.l.connacht}}</span>
                 </button>
                 <button mat-menu-item
-                (click)="speakerSelected(dialect, 'f')"
-                [disabled]="!speakerExists(dialect, 'f')">
-                    {{ ts.l.female }}
+                [matMenuTriggerFor]="gender"
+                [matMenuTriggerData]="{dialect : 'Ulster'}">
+                    <span>{{ts.l.ulster}}</span>
                 </button>
-            </ng-template>
-        </mat-menu>
-        
-    </div>
-</div> <br>
+                <button mat-menu-item
+                [matMenuTriggerFor]="gender"
+                [matMenuTriggerData]="{dialect : 'Munster'}">
+                    <span>{{ts.l.munster}}</span>
+                </button>
+            </mat-menu>
+            <mat-menu #gender="matMenu" aria-label="Gender choice menu">
+                <ng-template matMenuContent let-dialect="dialect">
+                    <button mat-menu-item
+                    (click)="speakerSelected(dialect, 'm')"
+                    [disabled]="!speakerExists(dialect, 'm')">
+                        {{ ts.l.male }}
+                    </button>
+                    <button mat-menu-item
+                    (click)="speakerSelected(dialect, 'f')"
+                    [disabled]="!speakerExists(dialect, 'f')">
+                        {{ ts.l.female }}
+                    </button>
+                </ng-template>
+            </mat-menu>
+            
+        </div>
+    </div> <br>
 
-<div class="container">
-    <div class="storyContainer"
-    [innerHTML]="forceTrustedHTML"> 
+    <!--<mat-drawer-container class="example-container" autosize>-->
+        <!--<mat-drawer #leftSideNav class="left-sidenav" mode="side">
+          <p>Auto-resizing sidenav</p>
+        </mat-drawer>
+      
+        <div class="example-sidenav-content">
+          <button type="button" mat-button (click)="leftSideNav.toggle();rightSideNav.toggle()">
+            Toggle sidenav
+          </button>
+        </div>-->
+
+    <div class="container">
+        <div class="storyContainer"
+        [innerHTML]="forceTrustedHTML"> 
+        </div>
     </div>
+
+    <!--<mat-drawer #rightSideNav class="right-sidenav" mode="side" position="end">
+        <p>Auto-resizing sidenav</p>
+    </mat-drawer>-->
+
+    <!--</mat-drawer-container>-->
+
 </div>
-
-<!--<div class="ql-container" #quillHeightSpan>
-    <quill-view
-    
-    [content]="content.innerHTML">
-
-    </quill-view>
-</div>-->
-
-<!--<span style="max-width: 500px;">
-    <ng-container
-    *ngFor="let child of content.childNodes"
-    >
-        <ng-container
-        [ngSwitch]="child.nodeName"
-        >
-            <ng-container
-            *ngSwitchCase="'#text'"
-            >
-                {{child.textContent.trim()}}
-            </ng-container>
-            <ng-container
-            *ngSwitchCase="'IMG'"
-            >
-                <img [src]="child.getAttribute('src')">
-            </ng-container>
-            <ng-container
-            *ngSwitchCase="'P'"
-            >
-                <p>
-                    <app-dr-story-builder
-                    [type]="'body'"
-                    [content]="child">
-                    </app-dr-story-builder>
-                </p>
-            </ng-container>
-            <ng-container
-            *ngSwitchCase="'H1'"
-            >
-                <h1>
-                    <app-dr-story-builder
-                    [type]="'body'"
-                    [content]="child">
-                    </app-dr-story-builder>
-                </h1>
-            </ng-container>
-            <ng-container
-            *ngSwitchCase="'SPAN'"
-            >
-                <span>
-                    <app-dr-story-builder
-                    [type]="'body'"
-                    [content]="child">
-                    </app-dr-story-builder>
-                </span>
-            </ng-container>
-            <ng-container
-            *ngSwitchDefault
-            >
-            </ng-container>
-        </ng-container>
-    </ng-container>
-</span>-->

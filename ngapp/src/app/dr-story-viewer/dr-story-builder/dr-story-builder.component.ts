@@ -30,6 +30,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
@@ -48,7 +49,8 @@ const dialectToVoiceIndex = new Map<string, number>([
     MatSelectModule,
     MatMenuModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSidenavModule
   ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
@@ -75,16 +77,18 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public timings:any[] = []
   public voiceSpeed = 1;
   //public speakerBaseSpeed = 6; // testing for Áine
-  public speakerAlignmentConstant = .03; // testing for Áine
+  public speakerAlignmentConstant = .03; // testing resync of audio
 
   // below boolean is needed to meaningfully distinguish audio.ended and audio.paused
   public audioPaused:Boolean = false;
 
   public audioPlaying:Boolean = false;
+  public playContinuously:Boolean = false;
 
   //public voiceDialect:string | null = 'Connacht';
   //public voiceGender:string | null = 'f';
-  public voiceIndex:number = 0; // defaults to Sibéal nemo
+  public voiceIndex:number = 0; 
+  public speaker = voices[this.voiceIndex]; // defaults to Sibéal nemo
 
   constructor(
     
@@ -112,7 +116,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     const firstSentSpans = this.content?.querySelectorAll('.sentence')
     for (let i=0;i<3;i++) {
       const sent = firstSentSpans.item(i)
-      this.synthRequest(sent?.textContent, voices[this.voiceIndex]).then( (data) => {
+      this.synthRequest(sent?.textContent, this.speaker).then( (data) => {
         console.log(data)
         this.listOfAudios[this.voiceIndex][i] = data // only for testing
         console.log(this.listOfAudios)
@@ -133,6 +137,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     const voiceIndex:number|undefined = dialectToVoiceIndex.get(speaker);
     if (voiceIndex!==undefined) {
       this.voiceIndex = voiceIndex;
+      this.speaker = voices[this.voiceIndex];
     }
     if (this.audioPlaying) {
       this.playFromCurrentWord();
@@ -208,6 +213,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     const wordInd = this.getWordPositionIndex(word, childWordSpans)
 
     // for testing as ASR seems to split only on spaces.
+    // **actual logic needed to be at the span Element level - see: disconnectedFromPreviousWord()
     //const sentenceText:string = this.recreateSentenceFromWord(childWordSpans.item(wordInd))
     //const numTimings = sentenceText.split(' ').length
     //console.log(numTimings)
@@ -385,8 +391,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           setTimeout( () => { // to keep a trail of word highlights for a short time
             prevWord.classList.remove('currentWord')
             console.log(prevWord?.textContent, 'highlight removed')
-          }
-          , delay)
+          }, delay)
         } else {
           this.currentWord.classList.remove('currentWord')
         }
@@ -406,107 +411,115 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         // this.audioPaused is repeated in an attempt to mitigate any issues regarding asynchronisation
         if (!this.audioPaused) {
           this.updateCurrentWord(nextWord, 200)
-          setTimeout(
-            () => this.seekNextWord() // added in the case of a very fast speaker (e.g Áine)
-          , 60)//30)
+          setTimeout(() => this.seekNextWord(), 60) // added in the case of a very fast speaker (e.g Áine)
         }
       }
     }
   }
 
-  parseSegId(id:string, _class:string) {
+  /*parseSegId(id:string, _class:string) {
     return parseInt(id.replace(_class, ''));
-  }
+  }*/
 
   async getCurrentAudioObject() {
-    const sentId = this.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')
+    const sentId = this.drStoryService.parseSegId(this.currentSentence.getAttribute('id'), 'sentence')
     let audioObj = this.listOfAudios[this.voiceIndex][sentId];
 
     // if the audio has not yet been created, synthesise it and add it to the list.
     if (!audioObj) {
-      audioObj = await this.synthRequest(this.currentSentence?.textContent, voices[this.voiceIndex]);
+      audioObj = await this.synthRequest(this.currentSentence?.textContent, this.speaker);
       this.listOfAudios[this.voiceIndex][sentId] = audioObj;
     }
 
     return audioObj;
   }
 
-  async playFromCurrentWord(audioSrc:string, continuous=false) {
+  async playFromCurrentWord() {
 
     if (this.audio) this.pause(); // to avoid multiple audio instances at the same time
+    // clear/destroy current audio obj (?)
+
     this.audioPaused = false;
-    this.audioPlaying = true;
-    
-    //const timing = this.timings.shift()
-    const timing = this.timings[0]
 
-    if (timing) {
+    const sentAudioObj = await this.getCurrentAudioObject();
 
-      //const buffer = .05;
-      //const start = Math.max(timing.start-buffer, 0);
-      const start = timing.start
+    if (sentAudioObj) {
+
+      this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
       
-      const audio = document.createElement('audio')
-      this.audio = audio;
-      this.audio.src = audioSrc
+      //const timing = this.timings.shift()
+      const timing = this.timings[0]
 
-      this.audio.ontimeupdate = () => {
-        this.seekNextWord()
-      }
+      if (timing) {
 
-      console.log(this.timings)
+        //const buffer = .05;
+        //const start = Math.max(timing.start-buffer, 0);
+        if (this.audioPaused) return;
 
-      //this.seekNextWord()
+        const start = timing.start
+        
+        const audio = document.createElement('audio')
+        this.audio = audio;
+        this.audio.src = sentAudioObj.audioUrl
 
-      this.audio.onended = async (event) => {
+        this.audio.ontimeupdate = () => {
+          this.seekNextWord()
+        }
 
-        setTimeout( async () => {
+        console.log(this.timings)
 
-          // TODO: delete the current audio element + listener (if needed (?))
+        //this.seekNextWord()
 
-          if (continuous) {
-            let nextSent = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
-            console.log(nextSent)
-            // if this section does not contain anymore sentences
-            if (!nextSent)
-              nextSent = this.checkForNextSentence(this.currentSentence);
-            if (nextSent) {
-              this.currentSentence = nextSent;
-              const firstWord = nextSent.querySelector('.word') // TODO : maybe factor out to function
-              this.updateCurrentWord(firstWord);
+        this.audio.onended = async (event) => {
 
-              if (this.currentWord) {
-                // TODO : factor out into function
-                //const sentAudioObj = this.listOfAudios[parseInt(this.currentWord.getAttribute('sentid'))]
-                const sentAudioObj = await this.getCurrentAudioObject();
-                
-                
-                /*console.log(this.audio)
-                console.log(this.audio.paused)
-                console.log(this.audio.ended)*/
-                //if (sentAudioObj && (this.audio && (!this.audio.paused || this.audio.ended))) {
-                if (sentAudioObj && !this.audioPaused) {
-                  this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
-                  //this.setCurrentWord()
-                  await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
+          this.audioPlaying = false;
+          setTimeout( async () => {
+
+            // TODO: delete the current audio element + listener (if needed (?))
+
+            if (this.playContinuously) {
+              let nextSent = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
+              console.log(nextSent)
+              // if this section does not contain anymore sentences
+              if (!nextSent)
+                nextSent = this.checkForNextSentence(this.currentSentence);
+              if (nextSent) {
+                this.currentSentence = nextSent;
+                const firstWord = nextSent.querySelector('.word') // TODO : maybe factor out to function
+                this.updateCurrentWord(firstWord);
+
+                if (this.currentWord) {
+                  // TODO : factor out into function
+                  
+                  //const sentAudioObj = await this.getCurrentAudioObject();
+                  
+                  //if (!this.audioPaused) {
+                  if (!this.audioPaused && !this.audioPlaying) {
+                    //this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
+                    //this.setCurrentWord()
+                    await this.playFromCurrentWord()
+                  }
                 }
               }
+            } else {
+              this.updateCurrentWord(null)
             }
-          } else {
-            this.updateCurrentWord(null)
-          }
-      }, 400) // keep final word highlighted for a bit longer
-      }
+        }, 400) // keep final word highlighted for a bit longer
+        }
 
-      this.audio.currentTime = start
-      this.audio.play();
+        this.audio.currentTime = start
+        this.audio.play();
+        this.audioPlaying = true;
+      }
     }
 
   }
 
   async playWord() {
+    this.playContinuously = false; // may not be necessary
+
     if (this.currentWord) {
-      const audioObj = await this.synthRequest(this.currentWord.textContent, voices[this.voiceIndex]);
+      const audioObj = await this.synthRequest(this.currentWord.textContent, this.speaker);
 
       const audio = document.createElement('audio')
       audio.src = audioObj.audioUrl;
@@ -557,8 +570,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   // needs complete refactoring - the outer if statement can probably be done away with
   // different functions can be used for playing a sentence etc.
   async playStory() {
-    console.log(this.currentWord)
-    console.log(this.currentSentence)
+
+    this.playContinuously = true;
     if (!this.currentWord) {
       // below 2 lines really need to be refactored - should create a reference to the story root node
       // this.content is not enough as it does not reference the actual rendered elements
@@ -566,13 +579,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       this.currentWord = this.currentSentence.querySelector('.word') // only for testing
       //
     }
-    const sentAudioObj = await this.getCurrentAudioObject();
-    console.log(sentAudioObj)
+    //const sentAudioObj = await this.getCurrentAudioObject();
+    //console.log(sentAudioObj)
 
-    this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
+    //this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
     console.log(this.timings)
     this.setCurrentWord()
-    await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
+    //await this.playFromCurrentWord(sentAudioObj.audioUrl, true)
+    await this.playFromCurrentWord()
   }
 
   /*async playNextSent() {

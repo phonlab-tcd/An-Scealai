@@ -38,6 +38,7 @@ let storyRoutes;
 
   // POST
   const create = require("../endpoint/drStory/create");
+  const storeSynthAudio = require("../endpoint/drStory/storeSynthAudio");
   /*const viewFeedback = require("../endpoint/story/viewFeedback");
   const updateStoryAndCheckGrammar = require("../endpoint/story/updateStoryAndCheckGrammar");
   const averageWordCount = require("../endpoint/story/averageWordCount");
@@ -60,6 +61,7 @@ let storyRoutes;
     post: {
       "/create": create,
       "/getMatchingWords": getMatchingWords,
+      "/storeSynthAudio": storeSynthAudio,
       //"/viewFeedback/:id": viewFeedback,
       //"/updateStoryAndCheckGrammar": updateStoryAndCheckGrammar,
       /*"/averageWordCount/:studentId": averageWordCount,
@@ -74,7 +76,7 @@ let storyRoutes;
  * @param {Object} req params: Date classroom created
  * @return {Object} List of stories
  */
-storyRoutes
+/*storyRoutes
   .route("/getStoriesForClassroom/:owner/:date")
   .get(function (req, res) {
     const conditions = { owner: req.params.owner };
@@ -91,7 +93,7 @@ storyRoutes
         res.json(stories);
       }
     });
-  });
+  });*/
 
 /**
  * Get total number of stories for a given user (owner) with optional classroom creation date filter
@@ -99,7 +101,7 @@ storyRoutes
  * @param {Object} req params: Date classroom created
  * @return {Object} List of stories
  */
-storyRoutes.route("/getNumberOfStories/:owner/:date").get(function (req, res) {
+/*storyRoutes.route("/getNumberOfStories/:owner/:date").get(function (req, res) {
   const conditions = { owner: req.params.owner };
   if (req.params.date != "empty") {
     conditions["date"] = {
@@ -114,14 +116,14 @@ storyRoutes.route("/getNumberOfStories/:owner/:date").get(function (req, res) {
       res.json(count);
     }
   });
-});
+});*/
 
 /**
  * Get a story by ID
  * @param {Object} req params: Story ID
  * @return {Object} Story object
  */
-storyRoutes.route("/viewStory/:id").get(function (req, res) {
+/*storyRoutes.route("/viewStory/:id").get(function (req, res) {
   Story.find({ _id: req.params.id }, (err, story) => {
     if (err) {
       console.log(err);
@@ -130,7 +132,7 @@ storyRoutes.route("/viewStory/:id").get(function (req, res) {
       res.json(story);
     }
   });
-});
+});*/
 
 /**
  * Update story information
@@ -138,7 +140,7 @@ storyRoutes.route("/viewStory/:id").get(function (req, res) {
  * @param {Object} req body: new story data
  * @return {Object} Success or error message
  */
-storyRoutes.route("/update/:id").post((req, res) => {
+/*storyRoutes.route("/update/:id").post((req, res) => {
   Story.findById(req.params.id, function (err, story) {
     if (err) {
       console.log(err);
@@ -163,7 +165,7 @@ storyRoutes.route("/update/:id").post((req, res) => {
       (err) => res.status(400).json(err)
     );
   });
-});
+});*/
 
 /**
  * Update story title
@@ -171,7 +173,7 @@ storyRoutes.route("/update/:id").post((req, res) => {
  * @param {Object} req body: new story title
  * @return {Object} Success or error message
  */
-storyRoutes.route("/updateTitle/:id").post((req, res) => {
+/*storyRoutes.route("/updateTitle/:id").post((req, res) => {
   Story.findById(req.params.id, function (err, story) {
     if (err) {
       console.log(err);
@@ -189,7 +191,7 @@ storyRoutes.route("/updateTitle/:id").post((req, res) => {
       (err) => res.status(400).json(err)
     );
   });
-});
+});*/
 
 /**
  * Delete a story by ID

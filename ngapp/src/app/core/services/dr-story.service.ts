@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { EngagementService } from 'app/core/services/engagement.service';
 import { EventType } from 'app/core/models/event';
 import { TranslationService } from 'app/core/services/translation.service';
@@ -65,6 +65,10 @@ export class DigitalReaderStoryService {
     }
 
     return segmentedSentences
+  }
+
+  parseSegId(id:string, _class:string) {
+    return parseInt(id.replace(_class, ''));
   }
 
   reformatExtractedSentences(sentences:Array<string>) {
@@ -161,17 +165,76 @@ export class DigitalReaderStoryService {
       title: title,
       collections: collections,
       thumbnail: thumbnail,
-      //text: text,
       story: story,
       public: isPublic,
-      //author: author,
-      //createdWithPrompts: createdWithPrompts,
-      //activeRecording: null
     };
     console.log('here!')
     console.log(drStoryObj.thumbnail);
     this.engagement.addEvent(EventType['CREATE-DR-STORY'], {storyObject: drStoryObj});
     return this.http.post<{id: string}>(this.baseUrl + 'drStory/create', drStoryObj);
+  }
+
+  storeSynthAudio(drStoryId: string, sentId: number, /*audioPromise:Promise<any>*/audioObservable:Observable<any>, voiceCode:string) {
+    
+    let idObj:Observable<{id:string}> = of();
+
+    audioObservable.subscribe(
+      response => {
+        console.log(response)
+
+        const drSentenceAudioObj = {
+          drStoryId: drStoryId,
+          sentId: sentId,
+          voice: voiceCode,
+          audioUrl: response.audioUrl,
+          audioTiming: response.timing
+        }
+
+        console.log(drSentenceAudioObj)
+
+        idObj = this.http.post<{id: string}>(this.baseUrl + 'drStory/storeSynthAudio', drSentenceAudioObj)
+
+        console.log(idObj)
+
+        idObj.subscribe(
+          (data) => {console.log(data)}
+        )
+      }
+    )
+
+    /*audioObservable.subscribe(
+      response => {
+        const drSentenceAudioObj = {
+          drStoryId: drStoryId,
+          sentId: sentId,
+          voice: voiceCode,
+          audioUrl: response.audioUrl,
+          timing: response.timing
+        };
+        idObj = this.http.post<{id: string}>(this.baseUrl + 'drStory/storeSynthAudio', drSentenceAudioObj)
+      }
+    )*/
+
+    /*console.log(audioPromise);
+    audioPromise.then(
+      (response) => {
+        console.log('gets to here!')
+        const drSentenceAudioObj = {
+          drStoryId: drStoryId,
+          sentId: sentId,
+          voice: voiceCode,
+          audioUrl: response.audioUrl,
+          timing: response.timing
+        };
+        idObj = this.http.post<{id: string}>(this.baseUrl + 'drStory/storeSynthAudio', drSentenceAudioObj)
+      }
+    )*/
+
+    return idObj;
+  }
+
+  getSynthAudio() {
+      
   }
 
   getDRStoriesByOwner(owner: string) : Observable<DigitalReaderStory[]>  {
