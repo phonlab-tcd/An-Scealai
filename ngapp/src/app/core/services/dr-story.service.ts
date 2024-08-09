@@ -12,6 +12,7 @@ import config from 'abairconfig';
 import { firstValueFrom, tap, catchError } from 'rxjs';
 
 import { DigitalReaderStory } from 'app/core/models/drStory';
+import { AudioEncoding } from './synthesis.service';
 
 @Injectable({
   providedIn: 'root'
@@ -273,6 +274,38 @@ export class DigitalReaderStoryService {
 
   getMatchingWords(lemma: string | null, tags: string | null): Observable<any[]> {
     return this.http.post<any[]>(this.baseUrl + 'drStory/getMatchingWords/', {lemma:lemma, tags:tags});
+  }
+
+  getSentenceAudio(drStoryId:string, sentId:number, voiceCode:string) {
+
+    const reqBody = {
+      drStoryId: drStoryId,
+      sentId: sentId,
+      voice: voiceCode
+    }
+
+    return this.http.post<any[]>(this.baseUrl + 'drStory/sentenceAudio', reqBody);
+  }
+
+  runTestQueue(
+    textInput: string,
+    voiceCode:string,
+    audioEncoding:AudioEncoding,
+    speed:number,
+    drStoryId:string,
+    sentenceId:number) {
+  //runTestQueue(input: string) {
+
+    return this.http.post<Array<string>>(this.baseUrl + 'drStory/testQueue', /*{text:input}*/
+      {
+        textInput: textInput,
+        voiceCode: voiceCode,
+        audioEncoding: audioEncoding,
+        speed: speed,
+        drStoryId: drStoryId,
+        sentenceId: sentenceId
+      }
+    );
   }
 
   /*

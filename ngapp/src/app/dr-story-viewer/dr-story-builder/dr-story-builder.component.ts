@@ -131,8 +131,24 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     console.log(this.listOfAudios);
     this.sortGeneratedAudio(allGeneratedAudio, firstSentSpans);
     console.log(this.listOfAudios);
+
+    /*for (let i=0;i<30;i++) {
+      const testQueue = firstValueFrom(this.drStoryService.runTestQueue(`${i}`,
+        'ga_UL_anb_nemo',
+        'MP3',
+        1,
+        this.storyId,
+        0));
+      //console.log(testQueue);
+    }*/
+    
+    //console.log(testQueue);
     
   }
+
+  /*startSentenceSynthBatching() {
+
+  }*/
 
   sortGeneratedAudio(audioArr:Array<any>, sentenceSpans:NodeList) {
     //let tmpSortedAudio:[][] = [];
@@ -148,12 +164,19 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         //console.log(sentenceSpan)
         const sentId = this.drStoryService.parseSegId(sentenceSpan.getAttribute('id'), 'sentence');
         const matchingAudioObj = speakerAudioWithPotentialGaps.find( (elem) => {
-          /*console.log(elem.sentId, sentId)
-          console.log(elem);*/
           return elem.sentenceId === sentId;
         });
         if (matchingAudioObj) {
           this.listOfAudios[voiceIndex][sentId] = {audioUrl:matchingAudioObj.audioUrl, timing:matchingAudioObj.timing};
+        } else { // if the audio has not yet been generated - start generating it.
+          console.log(sentenceSpan.textContent, this.speaker.code, this.storyId);
+          firstValueFrom(this.drStoryService.runTestQueue(
+            sentenceSpan.textContent,
+            this.speaker.code, // needs to be for every speaker!
+            'MP3',
+            1,
+            this.storyId,
+            sentId));
         }
       }
     }
@@ -457,10 +480,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     let audioObj = this.listOfAudios[this.voiceIndex][sentId];
 
     // if the audio was not ready when the story was loaded, check if it is ready now.
-    /* TODO : implement fetching specific speaker-sentences from db in dr-story-service
+    /* TODO : implement fetching specific speaker-sentences from db in dr-story-service */
     if (!audioObj) {
-      let audioObj = this.drStoryService.someFnName(this.drStoryId, senId, this.speaker);
-    }*/
+      audioObj = await firstValueFrom(this.drStoryService.getSentenceAudio(this.storyId, sentId, this.speaker.code));
+    }
+    console.log(audioObj)
 
     // if the audio has not yet been created and, synthesise it and add it to the list.
     if (!audioObj) {

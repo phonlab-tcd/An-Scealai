@@ -40,6 +40,7 @@ let storyRoutes;
   // POST
   const create = require("../endpoint/drStory/create");
   const storeSynthAudio = require("../endpoint/drStory/storeSynthAudio");
+  const sentenceAudio = require("../endpoint/drStory/sentenceAudio");
   /*const viewFeedback = require("../endpoint/story/viewFeedback");
   const updateStoryAndCheckGrammar = require("../endpoint/story/updateStoryAndCheckGrammar");
   const averageWordCount = require("../endpoint/story/averageWordCount");
@@ -64,6 +65,7 @@ let storyRoutes;
       "/create": create,
       "/getMatchingWords": getMatchingWords,
       "/storeSynthAudio": storeSynthAudio,
+      "/sentenceAudio": sentenceAudio,
       //"/viewFeedback/:id": viewFeedback,
       //"/updateStoryAndCheckGrammar": updateStoryAndCheckGrammar,
       /*"/averageWordCount/:studentId": averageWordCount,
@@ -72,26 +74,61 @@ let storyRoutes;
   });
 })();
 
-const test = require("../endpoint/drStory/queueTest");
 
-function queue(testFn:Function):Function {
+//let testQueue:Promise<any> = Promise.resolve(0);
+
+/*function nextQueue(someFn, req) {
+  testQueue = someFn(req);
+}*/
+
+const synthesiseAndStoreSent:Function = require("../endpoint/drStory/synthesiseAndStoreSent");
+
+// reference: https://stackoverflow.com/questions/36083121/expressjs-backend-put-requests-into-a-queue
+// solution to queuing system found in above post
+// the order does not always match up but order is not particularly important
+function queue(testFn:Function) {
   let queue:Promise<any> = Promise.resolve();
 
-  return function(...args) {
+  return function(req) {
     queue = queue.then(() => {
-      return test(...args);
+      return testFn(req);
     });
     return queue;
   } 
 }
 
-const queuedFn = queue(test);
+const queuedFn = queue(synthesiseAndStoreSent);
+
+queuedFn('{textInput}').then((data) => {console.log(data)})
+
+/*testQueue.then(() => {
+  console.log('something!')
+  testQueue = testFn('req');
+});*/
 
 storyRoutes
 .route('/testQueue')
-.post(
+.post( /*(req, res) => {
+  testQueue.then((data) => {
+    // function logic e.g storing to db etc.
+    //console.log(req.body.text, data)
+    console.log(req.body.textInput, data)
+    //console.log(data)
+    testQueue = synthesiseAndStoreSent(req); // currently does not work properly
+    res.json(200);
+    //nextQueue(testFn, req);
+  });
+}*/
   (req, res) => {
-    queuedFn(req.body).then( (data) => {console.log(data)} )
+    console.log(req.body.textInput)
+    queuedFn(req).then( (data) => {
+      console.log(data)
+      //console.log(data)
+      //res.json(200);
+    })
+    //res.status(102).json(); // dummy response sent to client to free up clientside "space" for other API calls
+    res.json(102); // should return a status of 102
+    //res.status(102).json(1);
   }
 )
 
