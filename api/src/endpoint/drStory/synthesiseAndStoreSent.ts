@@ -1,4 +1,5 @@
 const DigitalReaderSentenceAudio = require('../../models/drSentenceAudio');
+const DigitalReaderStory = require('../../models/drStory');
 const {API500Error} = require('../../utils/APIError');
 const axios = require('axios');
 
@@ -32,25 +33,35 @@ async function synthesiseAndStoreSent (req:any) {
           });
           console.log(story)
           if (!(Array.isArray(story) && story.length!==0)) {
+
+            // make a call to the synthesis API
             console.log('storing!')
             const audioObj = await http.post('/synthesise', 
               reqBody
-            );
-            console.log(audioObj);
-            const storedSent = await DigitalReaderSentenceAudio.create({
-              drStoryId: req.body.drStoryId,
-              sentenceId: req.body.sentenceId,
-              voice: req.body.voiceCode,
-              // currently only supports mp3 files
-              audioUrl: `data:audio/mp3;base64,` + audioObj.data.audioContent, // audioContent goes to audioUrl for compatibility with synthesis service
-              timing: audioObj.data.timing
+            )
+            .catch( (err) => {
+              //console.log(err);
+              resolve('error synthesising the audio')
+              return;
             });
+
+            console.log(audioObj);
+            if (audioObj) {
+            
+              const storedSent = await DigitalReaderSentenceAudio.create({
+                drStoryId: req.body.drStoryId,
+                sentenceId: req.body.sentenceId,
+                voice: req.body.voiceCode,
+                // currently only supports mp3 files
+                audioUrl: `data:audio/mp3;base64,` + audioObj.data.audioContent, // audioContent goes to audioUrl for compatibility with synthesis service
+                timing: audioObj.data.timing
+              });
+              resolve('Response: ' + storedSent)
+              return;
+
+            }
           }
-          resolve('Response: ' + req.body.textInput)
-          //console.log(audioObj)
-          
-          
-          //resolve(0);
+          resolve('error storing the audio')
     })
   }
 
@@ -71,78 +82,29 @@ async function synthesiseAndStoreSent (req:any) {
 
   let reqBody: any;
 
-  // check that the sent does not already exist in the db
-  /*if (!DigitalReaderSentenceAudio.find({
-    drStoryId: req.body.drStoryId,
-    sentenceId: req.body.sentenceId,
-    voice: req.body.voiceCode
-  })) {*/
+  // check that the story still exists (hasn't been deleted)
+  const drStory = DigitalReaderStory.find({drStoryId: req.body.drStoryId});
+  if (!drStory) return no();
 
-    // make a call to the synthesis API
-    reqBody = {
-      synthinput: {
-        text: req.body.textInput,
-        normalised: true,
-      },
-      voiceparams: {
-        languageCode: "ga-IE",
-        name: req.body.voiceCode,
-      },
-      audioconfig: {
-        audioEncoding: req.body.audioEncoding,
-        speakingRate: req.body.speed,
-        pitch: 1,
-      },
-      timing: "WORD"
-    };
-
-    //const tmp = axios.post('/synthesise', reqBody)
-    //console.log(tmp)
-
-    //setTimeout(()=>console.log('event over!'), 500);
-    /*const audioObj = await http.post('/synthesise', 
-      reqBody,
-      {headers: {
-        "Content-Type": "application/json",
-      }}
-    );
-
-    console.log(audioObj)*/
-
-    /*{headers: {
-      "Content-Type": "application/json",
-  }}*/
-
-    
-
-    //console.log(audioObj)
-
-    // TODO : store the result in the DB.
-    /*if (audioObj) {
-      const storedSent = await DigitalReaderSentenceAudio.create({
-        drStoryId: req.body.drStoryId,
-        sentenceId: req.body.sentId,
-        voice: req.body.voice.code,
-        audioUrl: audioObj.audioUrl,
-        timing: audioObj.timing
-      });
-
-      if (!storedSent) {
-        return no();
-      }
-    }*/
-  //}
+  // prepare the body of the call to the synthesis API
+  reqBody = {
+    synthinput: {
+      text: req.body.textInput,
+      normalised: true,
+    },
+    voiceparams: {
+      languageCode: "ga-IE",
+      name: req.body.voiceCode,
+    },
+    audioconfig: {
+      audioEncoding: req.body.audioEncoding,
+      speakingRate: req.body.speed,
+      pitch: 1,
+    },
+    timing: "WORD"
+  };
 
   return yes();
-
-  /*return new Promise(
-    (resolve, reject) => {
-      
-      setTimeout( () =>
-        resolve('test resolution!'), 1000
-      )
-      // above should be changed to an await of the a call to the synth api
-  })*/
 }
 
 export = synthesiseAndStoreSent;

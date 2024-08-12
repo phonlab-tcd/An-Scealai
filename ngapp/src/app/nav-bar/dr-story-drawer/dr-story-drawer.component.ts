@@ -25,7 +25,7 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
   lastClickedStoryId: string = "";
   searchText: string = ""; // used to filter stories in search bar
 
-  user;
+  //user;
 
   @Output() drStoryEmitter = new EventEmitter<DigitalReaderStory>();
   @Output() hasFeedback = new EventEmitter<boolean>();
@@ -35,6 +35,7 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
 
   @Input() title = '';
   @Input() storyList = [];
+  @Input() user:any;
 
   constructor(
     public ts: TranslationService,

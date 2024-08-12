@@ -280,11 +280,16 @@ export class DigitalReaderStoryService {
 
     const reqBody = {
       drStoryId: drStoryId,
-      sentId: sentId,
+      sentenceId: sentId,
       voice: voiceCode
     }
 
     return this.http.post<any[]>(this.baseUrl + 'drStory/sentenceAudio', reqBody);
+  }
+
+  deleteDRStory(drStoryId:string) {
+
+    return this.http.get<any[]>(this.baseUrl + 'drStory/sentenceAudio' + drStoryId);
   }
 
   runTestQueue(

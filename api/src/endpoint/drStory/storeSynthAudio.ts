@@ -1,8 +1,10 @@
+/* Deprecated */
+
 import { API500Error } from "../../utils/APIError";
 
 const DigitalReaderSentenceAudio = require('../../models/drSentenceAudio');
-//const User = require('../../models/user');
-const mongoose = require('mongoose');
+const DigitalReaderStory = require('../../models/drStory');
+
 const {API404Error} = require('../../utils/APIError');
 
 const handler =  async (req, res) => {
@@ -24,33 +26,24 @@ const handler =  async (req, res) => {
   if (!req.body.voice) return no(501, 'no voice code parameter provided');
 
   // check that the current user owns the provided story (or is an admin) (?)
+
+  // check that the story still exists (hasn't been deleted)
+  const drStory = DigitalReaderStory.find({drStoryId: req.body.drStoryId});
+  if (!drStory) return no();
   
   let audio;
-
-  //const audioPromise:Promise<any> = req.body.audioPromise;
-  //console.log(audioPromise);
-
-  //audioPromise.then(
-    //async (response:any) => {
-      //console.log(response);
-      //const audioUrl = response.audioContent;
-      //const timing = response.timing;
-      //console.log(audioUrl);
-      //if (audioUrl) {
-        audio = await DigitalReaderSentenceAudio.create({
-          drStoryId: req.body.drStoryId,
-          sentenceId: req.body.sentId,
-          voice: req.body.voice,
-          audioUrl: req.body.audioUrl,
-          timing: req.body.audioTiming,
-        });
-        if (!audio) {
-          throw new API500Error('Unable to save audio file to DB. It may be too large');
-        }
-        yes();
-      //}
-    //}
-  //);
+  
+  audio = await DigitalReaderSentenceAudio.create({
+    drStoryId: req.body.drStoryId,
+    sentenceId: req.body.sentId,
+    voice: req.body.voice,
+    audioUrl: req.body.audioUrl,
+    timing: req.body.audioTiming,
+  });
+  if (!audio) {
+    throw new API500Error('Unable to save audio file to DB. It may be too large');
+  }
+  yes();
 
   return no();
 

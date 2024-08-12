@@ -17,14 +17,16 @@
   <!-- list of stories -->
   <div class="storyList">
     <!--appFilter below not working correctly here-->
-    <div *ngFor="let story of storyList | appFilter : searchText; let i = index" (click)="openStory(story)" style="display: flex;">
+    <div *ngFor="let story of storyList | appFilter : searchText; let i = index" style="display: flex;">
       <!-- story entry-->
       <div class="contentSection" [attr.id]="story._id">
         <!-- date and menu icon-->
         <div class="contentsDateContainer">
           <div class="contentsDate">
-            {{ story.updatedAt | date : "d/M/yy" }}
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story" >
+            <!--{{ story.updatedAt | date : "d/M/yy" }}-->
+            
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story"
+            *ngIf="story.owner===user._id">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
@@ -39,25 +41,25 @@
             </mat-menu>
           </div>
         </div>
-
-        <div class="imgContainer">
-          <!--<img src="assets/img/logo-S.png" class="storyImg" alt="image">-->
-          <!--<img [src]="story.thumbnail==''? 'assets/img/logo-S.png' : story.thumbnail" class="storyImg" alt="image">-->
-          <img [src]="story.thumbnail==''?'assets/img/logo-S.png':story.thumbnail" class="storyImg" alt="image">
-        </div>
-
-        <!-- title container-->
-        <div class="titleContainer">
-          <div class="contentsTitle"
-          [attr.id]="i"
-          (blur)="saveStoryTitle(i, story)"
-          (keydown.enter)="saveStoryTitle(i, story)"
-          [attr.aria-label]="story?.title"
-          [title]="story?.title">
-            {{ story?.title }}
-          
+          <div class="imgContainer" (click)="openStory(story)">
+            <!--<img src="assets/img/logo-S.png" class="storyImg" alt="image">-->
+            <!--<img [src]="story.thumbnail==''? 'assets/img/logo-S.png' : story.thumbnail" class="storyImg" alt="image">-->
+            <img [src]="story.thumbnail==''?'assets/img/logo-S.png':story.thumbnail" class="storyImg" alt="image">
           </div>
-        </div>
+
+          <!-- title container-->
+          <div class="titleContainer" (click)="openStory(story)">
+            <div class="contentsTitle"
+            [attr.id]="i"
+            (blur)="saveStoryTitle(i, story)"
+            (keydown.enter)="saveStoryTitle(i, story)"
+            [attr.aria-label]="story?.title"
+            [title]="story?.title">
+              {{ story?.title }}
+            
+            </div>
+          </div>
+        
         
       </div>
       <mat-divider [vertical]="true" [inline]="true" style="height:85%;"></mat-divider>

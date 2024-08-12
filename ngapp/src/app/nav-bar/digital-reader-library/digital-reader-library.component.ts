@@ -45,6 +45,7 @@ export class DigitalReaderLibraryComponent implements OnInit {
 
   async ngOnInit() {
     this.userDetails = this.auth.getUserDetails()
+    console.log(this.userDetails)
 
     for (let collectionName of config.adminStoryCollectionOpts) {
       const collectionContent = await firstValueFrom(this.drStoryService.getAnScealaiVerifiedCollection(collectionName))

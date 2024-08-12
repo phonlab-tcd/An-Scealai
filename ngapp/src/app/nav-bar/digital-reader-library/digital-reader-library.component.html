@@ -18,6 +18,7 @@
             <app-dr-story-drawer
             [storyList]="collection.content"
             [title]="ts.l[collection.name]"
+            [user]="userDetails"
             />
           </div> <br>
           <!--<div>
@@ -45,12 +46,14 @@
         <app-dr-story-drawer
         [storyList]="publicDRStories"
         [title]="ts.l.public_dr_stories"
+        [user]="userDetails"
         /></mat-tab>
       <mat-tab [label]="ts.l.my_stories" *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'">
         <!--<br>-->
         <app-dr-story-drawer 
         [storyList]="currUsersDRStories"
         [title]="ts.l.my_stories"
+        [user]="userDetails"
         />
       </mat-tab>
     </mat-tab-group>

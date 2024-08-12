@@ -3,13 +3,13 @@ const {API500Error} = require('../../utils/APIError');
 const axios = require('axios');
 
 
-const http = axios.create({
+/*const http = axios.create({
   baseURL: "https://abair.ie/api2",
   headers: {
     "Content-Type": "application/json",
     //"Access-Control-Allow-Origin": "*"
   }
-});
+});*/
 
 /**
  * Creates a new story document on the DB.
@@ -24,14 +24,14 @@ async function synthesiseAndStoreSent (req, res) {
     res.json(undefined);
   }
   function yes() {
-    res.json(sentAudioObj);
+    res.json(sentAudioObjs[0]);
   }
 
   // make sure all necessary body params are present
   if (req.body===undefined) return no();
 
   if (req.body.drStoryId===undefined) return no();
-  if (req.body.voiceCode===undefined) return no();
+  if (req.body.voice===undefined) return no();
   if (req.body.sentenceId===undefined) return no();
 
   /*const sentAudioObj = DigitalReaderSentenceAudio.find({
@@ -39,8 +39,8 @@ async function synthesiseAndStoreSent (req, res) {
     sentenceId: req.body.sentenceId,
     voice: req.body.voiceCode
   })*/
-  const sentAudioObj = await DigitalReaderSentenceAudio.find(req.body);
-  if (!sentAudioObj) return no();
+  let sentAudioObjs:Array<any> = await DigitalReaderSentenceAudio.find(req.body);
+  if (!sentAudioObjs) return no();
 
   return yes();
 

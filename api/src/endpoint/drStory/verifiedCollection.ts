@@ -19,6 +19,7 @@ const handler =  async (req, res) => {
       collections: 1,
       thumbnail: 1,
       public: 1,
+      owner: 1,
     }},
     {$project: {
       title: 1,
@@ -26,6 +27,7 @@ const handler =  async (req, res) => {
       collections: 1,
       thumbnail: 1,
       public: 1,
+      owner: 1,
     }},
     {$match: {
       ownerRole: "ADMIN"

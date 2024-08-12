@@ -87,10 +87,10 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public audioPlaying:Boolean = false;
   public playContinuously:Boolean = false;
 
-  //public voiceDialect:string | null = 'Connacht';
-  //public voiceGender:string | null = 'f';
+  public functioningVoices = voices.slice(0, 4) // excluding Colm (male munster).
+  
   public voiceIndex:number = 0; 
-  public speaker = voices[this.voiceIndex]; // defaults to Sibéal nemo
+  public speaker = this.functioningVoices[this.voiceIndex]; // defaults to Sibéal nemo
 
   constructor(
     
@@ -152,8 +152,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   sortGeneratedAudio(audioArr:Array<any>, sentenceSpans:NodeList) {
     //let tmpSortedAudio:[][] = [];
-    for (let voiceIndex=0;voiceIndex<voices.length;voiceIndex++) {
-      const voice = voices[voiceIndex];
+    for (let voiceIndex=0;voiceIndex<this.functioningVoices.length;voiceIndex++) {
+      const voice = this.functioningVoices[voiceIndex];
       const speakerAudioWithPotentialGaps:Array<any> = audioArr.filter( (elem) => {
         //console.log(elem, voice.code)
         return elem.voice === voice.code;
@@ -172,7 +172,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           console.log(sentenceSpan.textContent, this.speaker.code, this.storyId);
           firstValueFrom(this.drStoryService.runTestQueue(
             sentenceSpan.textContent,
-            this.speaker.code, // needs to be for every speaker!
+            voice.code, // needs to be for every speaker!
             'MP3',
             1,
             this.storyId,
@@ -192,7 +192,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     const voiceIndex:number|undefined = dialectToVoiceIndex.get(speaker);
     if (voiceIndex!==undefined) {
       this.voiceIndex = voiceIndex;
-      this.speaker = voices[this.voiceIndex];
+      this.speaker = this.functioningVoices[this.voiceIndex];
     }
     if (this.audioPlaying) {
       this.playFromCurrentWord();

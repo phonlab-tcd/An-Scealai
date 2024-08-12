@@ -32,6 +32,7 @@ let storyRoutes;
   const verifiedCollection = require("../endpoint/drStory/verifiedCollection");
   const publicOrOwnedStoryId = require("../endpoint/drStory/publicOrOwnedStoryId");
   const getMatchingWords = require("../endpoint/drStory/getMatchingWords");
+  const _delete = require("../endpoint/drStory/delete");
   /*const author = require("../endpoint/story/author");
   const feedbackAudio = require("../endpoint/story/feedbackAudio");
   const countGrammarErrors = require("../endpoint/story/countGrammarErrors");
@@ -56,6 +57,7 @@ let storyRoutes;
       "/publicOrOwned/:id": publicOrOwnedStoryId,
       "/verified": verified,
       "/verified/:collectionName": verifiedCollection,
+      "/delete/:drStoryId": _delete
       /*"/:author": author,
       "/feedbackAudio/:id": feedbackAudio,
       "/countGrammarErrors/:id": countGrammarErrors,
