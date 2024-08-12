@@ -19,18 +19,18 @@
     <!--appFilter below not working correctly here-->
     <div *ngFor="let story of storyList | appFilter : searchText; let i = index" style="display: flex;">
       <!-- story entry-->
-      <div class="contentSection" [attr.id]="story._id">
+      <div class="contentSection" [attr.id]="story._id" (click)="openStory(story, $event)">
         <!-- date and menu icon-->
         <div class="contentsDateContainer">
           <div class="contentsDate">
             <!--{{ story.updatedAt | date : "d/M/yy" }}-->
             
             <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options to delete or rename your story"
-            *ngIf="story.owner===user._id">
+            *ngIf="story.owner===user._id" (click)="$event.stopPropagation()">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item >
+              <button mat-menu-item (click)="openDeleteStoryDialog(story._id)">
                 <mat-icon>delete</mat-icon>
                 <span>{{ ts.l.delete }}</span>
               </button>
@@ -41,14 +41,14 @@
             </mat-menu>
           </div>
         </div>
-          <div class="imgContainer" (click)="openStory(story)">
+          <div class="imgContainer">
             <!--<img src="assets/img/logo-S.png" class="storyImg" alt="image">-->
             <!--<img [src]="story.thumbnail==''? 'assets/img/logo-S.png' : story.thumbnail" class="storyImg" alt="image">-->
             <img [src]="story.thumbnail==''?'assets/img/logo-S.png':story.thumbnail" class="storyImg" alt="image">
           </div>
 
           <!-- title container-->
-          <div class="titleContainer" (click)="openStory(story)">
+          <div class="titleContainer">
             <div class="contentsTitle"
             [attr.id]="i"
             (blur)="saveStoryTitle(i, story)"

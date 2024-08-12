@@ -3,6 +3,7 @@ const DigitalReaderStory = require('../../models/drStory');
 const {API500Error} = require('../../utils/APIError');
 const axios = require('axios');
 
+const mongoose = require('mongoose');
 
 const http = axios.create({
   baseURL: "https://abair.ie/api2",
@@ -32,7 +33,7 @@ async function synthesiseAndStoreSent (req:any) {
             voice: req.body.voiceCode
           });
           console.log(story)
-          if (!(Array.isArray(story) && story.length!==0)) {
+          if (!(Array.isArray(story) && story.length!==0) && drStory) {
 
             // make a call to the synthesis API
             console.log('storing!')
@@ -83,7 +84,9 @@ async function synthesiseAndStoreSent (req:any) {
   let reqBody: any;
 
   // check that the story still exists (hasn't been deleted)
-  const drStory = DigitalReaderStory.find({drStoryId: req.body.drStoryId});
+  //const drStory = await DigitalReaderStory.findOne({drStoryId: req.body.drStoryId});
+  const drStory = await DigitalReaderStory.findById(new mongoose.mongo.ObjectId(req.body.drStoryId))
+  console.log(drStory)
   if (!drStory) return no();
 
   // prepare the body of the call to the synthesis API

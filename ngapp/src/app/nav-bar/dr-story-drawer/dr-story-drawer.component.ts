@@ -81,6 +81,7 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
   openStory(story: DigitalReaderStory){
     this.router.navigateByUrl('dr-story-viewer?storyId=' + story._id)
   }
+
   /*setStory(story: Story) {
     if (story.htmlText == null) {
       story.htmlText = story.text;
@@ -171,7 +172,8 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
    * Call the function to delete the story if the user clicks 'yes'
    * @param id story id to be deleted
    */
-  /*openDeleteStoryDialog(id: string) {
+  openDeleteStoryDialog(id: string) {
+    console.log('gets to here!')
     this.dialogRef = this.dialog.open(BasicDialogComponent, {
       data: {
         title: this.ts.l.delete_story,
@@ -188,7 +190,7 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
         this.deleteStory(id);
       }
     });
-  }*/
+  }
 
   /**
    * Delete the given story and any associated recordings
@@ -196,27 +198,27 @@ export class DigitalReaderStoryDrawerComponent implements OnInit {
    * if the last story in the list was deleted
    * @param id story id to be deleted
    */
-  /*deleteStory(id: string) {
+  deleteStory(id: string) {
     // remove any associated recordings
-    this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
-    this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
+    //this.recordingService.deleteStoryRecordingAudio(id).subscribe((_) => {});
+    //this.recordingService.deleteStoryRecording(id).subscribe((_) => {});
 
     // remove any associated feedback comments
-    this.feedbackCommentService.deleteFeedbackCommentsForStory(id).subscribe((_) => {});
+    //this.feedbackCommentService.deleteFeedbackCommentsForStory(id).subscribe((_) => {});
 
     // get index of story to be deleted within story list
-    const storyIndex = this.stories.findIndex((story) => story._id === id);
+    //const storyIndex = this.stories.findIndex((story) => story._id === id);
 
     // delete the story
-    this.storyService.deleteStory(id).subscribe((_) => {
-      this.engagement.addEvent(EventType["DELETE-STORY"], { storyId: id });
+    this.drStoryService.deleteDRStory(id).subscribe((_) => {
+      //this.engagement.addEvent(EventType["DELETE-STORY"], { storyId: id });
 
       // reset the story list to empty if list contains only one story
       // If we have 2+ stories, delete the story for deletion, and set the new current story to the first in the list
-      this.stories.splice(storyIndex, 1);
-      this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit();
+      //this.stories.splice(storyIndex, 1);
+      //this.stories.length ? this.setStory(this.stories[0]) : this.storyEmitter.emit();
     });
-  }*/
+  }
 
   /**
    * Make the div containing the story title editable so the student can

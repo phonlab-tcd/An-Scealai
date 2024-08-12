@@ -289,7 +289,7 @@ export class DigitalReaderStoryService {
 
   deleteDRStory(drStoryId:string) {
 
-    return this.http.get<any[]>(this.baseUrl + 'drStory/sentenceAudio' + drStoryId);
+    return this.http.get<any[]>(this.baseUrl + 'drStory/delete/' + drStoryId);
   }
 
   runTestQueue(

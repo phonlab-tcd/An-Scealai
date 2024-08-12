@@ -31,6 +31,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
@@ -50,7 +51,8 @@ const dialectToVoiceIndex = new Map<string, number>([
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatSnackBarModule
   ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
@@ -92,6 +94,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public voiceIndex:number = 0; 
   public speaker = this.functioningVoices[this.voiceIndex]; // defaults to Sibéal nemo
 
+
   constructor(
     
     private auth: AuthenticationService,
@@ -101,6 +104,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
     private drStoryService: DigitalReaderStoryService,
+    public snackbar:MatSnackBar
   ) {}
 
   async ngOnInit() {
@@ -116,14 +120,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     // only for testing
     const firstSentSpans = this.content?.querySelectorAll('.sentence')
-    /*for (let i=0;i<3;i++) {
-      const sent = firstSentSpans.item(i)
-      this.synthRequest(sent?.textContent, this.speaker).then( (data) => {
-        console.log(data)
-        this.listOfAudios[this.voiceIndex][i] = data // only for testing
-        console.log(this.listOfAudios)
-      })
-    }*/
 
     const allGeneratedAudio = await firstValueFrom(this.drStoryService.getSynthAudio(this.storyId));
     console.log(allGeneratedAudio);
@@ -132,17 +128,39 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     this.sortGeneratedAudio(allGeneratedAudio, firstSentSpans);
     console.log(this.listOfAudios);
 
-    /*for (let i=0;i<30;i++) {
-      const testQueue = firstValueFrom(this.drStoryService.runTestQueue(`${i}`,
-        'ga_UL_anb_nemo',
-        'MP3',
-        1,
-        this.storyId,
-        0));
-      //console.log(testQueue);
-    }*/
-    
-    //console.log(testQueue);
+    let allAudioSynthesised = true;
+    const numSentences = firstSentSpans.length;
+    for (let entry of dialectToVoiceIndex.entries()) { // check if all sentences have been synthesised
+      const voiceIndex = entry[1];
+      if (this.listOfAudios[voiceIndex].length !== numSentences) {
+        allAudioSynthesised = false;
+      }
+    }
+    if (!allAudioSynthesised) {
+      const dialectToVoiceIndexArr = Array.from(dialectToVoiceIndex.entries());
+      if (dialectToVoiceIndexArr.length>1) {
+        const firstVoiceIndex = dialectToVoiceIndexArr[0][1];
+        const numSynthesisedSents = this.listOfAudios[firstVoiceIndex].length;
+        // check if all speakers have the same no. of sentences synthesised,
+        // in which case there is a problem with synthesising one or more sentences
+        if (dialectToVoiceIndexArr.every( (entry) => {
+          const voiceIndex = entry[1];
+          if (this.listOfAudios[voiceIndex].length!==numSynthesisedSents) return false;
+          else return true;
+        } )) {
+          this.snackbar.open(this.ts.l.problem_with_synth, this.ts.l.okay, {duration: 4000});
+        } else {
+          this.snackbar.open(this.ts.l.synth_in_progress, this.ts.l.okay, {duration: 4000});
+        }
+      } else {
+        this.snackbar.open(this.ts.l.synth_in_progress, this.ts.l.okay, {duration: 4000});
+      }
+      /*if ((...(dialectToVoiceIndex.entries())).every())
+      for (let entry of dialectToVoiceIndex.entries()) {
+        const voiceIndex = entry[1];
+      }*/
+        
+    }
     
   }
 

@@ -245,6 +245,15 @@ const translations = {
   processing: {
     ga: 'Á phróiseáil',
     en: 'Processing' },
+  synth_in_progress: {
+    ga: 'Tá fuaimeanna an scéil seo fós á sintéisiú',
+    en: 'The audio of this story is still being synthesised' },
+  problem_with_synth: {
+    ga: 'Níor fhéadadh ar a laghad abairt amháin a shintéisiú',
+    en: 'There were issues synthesising one or more sentences' },
+  okay: {
+    ga: 'Ceart go leor',
+    en: 'Okay' },
   verified_dr_stories: {
     ga: 'Scéalta Bailí',
     en: 'Verified Stories' },
