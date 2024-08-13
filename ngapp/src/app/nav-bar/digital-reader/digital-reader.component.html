@@ -41,12 +41,12 @@
       <div style="width: 50%; margin: auto 0 auto 0;">
         <button class="viewStoryBtn"
         (click)="createNewStory()"
-        [disabled]="!this.docxFile || storyState=='processing'"
+        [disabled]="!this.docxFile || storyState=='processing' || storyState=='converting'"
         >Create Digital Reader story from uploaded file</button>
       </div>
 
       <!-- Processing ICON  -->
-      <div *ngIf="storyState=='processing' || storyState=='processed'" class="processIcon" style="margin: auto; width: 50%; padding:0 10%;">
+      <div *ngIf="storyState!=''" class="processIcon" style="margin: auto; width: 50%; padding:0 10%;">
         <div *ngIf="storyState=='processed'" class="processedIcon">
           {{ ts.l.uploaded }} <i class="fas fa-check"></i> <br><br>
           <div>
@@ -59,6 +59,14 @@
         <div *ngIf="storyState=='processing'" class="processedIcon">
           {{ ts.l.processing }}
           <i class="fas fa-save"> </i>
+        </div>
+        <div *ngIf="storyState=='converting'" class="processedIcon">
+          converting
+          <i class="fas fa-save"> </i>
+        </div>
+        <div *ngIf="storyState=='converted'" class="processedIcon">
+          converted
+          <i class="fas fa-check"></i>
         </div>
       </div>
     </div>
@@ -108,12 +116,20 @@
   </div>
 </div>
 
-<div *ngIf="drStoryService.segmentedSentences" class="sentContainer">
+<div *ngIf="drStoryService.segmentedSentences">
+  <div><span>{{ this.ts.l.confirm_sentences }} </span><button
+    (click)="confirmSentencesAndStoreStory()"
+    class="acceptSentencesBtn"
+    [disabled]="storyState==='processing'">{{ this.ts.l.confirmation }}</button></div><!--<br>-->
+  <hr>
+  <div class="sentContainer">
     <div
     *ngFor="let sent of drStoryService.segmentedSentences; index as i"
-    [attr.sentNumber]="i">
-      <button class="sentenceMerger">merge</button><br>
-      <b>{{ i }}  </b><span
+    [attr.sentNumber]="i+1">
+      <button class="sentenceMerger" tabindex="-1"
+      (click)="mergeSentences($event.target)">▲ merge ▼</button><br>
+      <!--<span [hidden]="(sent.text.match('/\./g') || []).length < 2" >test highlighting</span>-->
+      <b>{{ i+1 }}  </b><span
       class="sentencePreview"
       
       contenteditable="plaintext-only"
@@ -122,20 +138,9 @@
       spellcheck="false"
       
       >{{sent.text}}</span>
-      <!--[id]="'sentence' + i"-->
+    </div>
   </div>
-
-    <!--[style]="'height =' + this.scrollHeight + 'px'"-->
-    <!--[ngStyle]="{'height': this.scrollHeight + 'px'}"-->
-    <!--[style.height]="'100px'"-->
-
-    <!--<textarea
-    [style.height]="drStoryService.segmentedSentences ? this.scrollHeight + 'px' : '0px'"
-    class="sentencePreview"
-    *ngFor="let sent of drStoryService.segmentedSentences; index as i"
-    (beforeinput)="test($event)"
-    (input)="test2($event.target)"
-    [id]="'sentence' + i">{{sent.text}}</textarea>-->
+  <br>
 </div>
 
 <!-- Footer containing logos -->

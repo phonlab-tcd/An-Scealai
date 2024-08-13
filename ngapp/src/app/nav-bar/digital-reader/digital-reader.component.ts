@@ -39,6 +39,8 @@ export class DigitalReaderComponent implements OnInit {
   tableData: Array<Object>;
   docxFile: File | null = null;
   convertedHTMLDoc: Document | null = null;
+  segmentedHTMLDoc: Document | null = null;
+  storyOptions:any = {};
   //drStory: DigitalReaderStory;
   dialogRef: MatDialogRef<unknown>;
 
@@ -122,17 +124,21 @@ export class DigitalReaderComponent implements OnInit {
           const mergeButton = document.createElement('button');
           mergeButton.className="sentenceMerger"
           mergeButton.textContent="merge" // TODO : change to use translation service
+          mergeButton.tabIndex = -1;
+          mergeButton.addEventListener('click', (event) => {
+            this.mergeSentences(event.target as Element);
+          })
 
           const newNumberEl = document.createElement('b');
           const sentNumber = localContainer.getAttribute('sentNumber');
           newNumberEl.textContent = sentNumber + ' ';
 
+          // create new editable element containing the segment before the break
           const newSentencePreview = document.createElement('span');
           newSentencePreview.textContent = textPreSplit;
           newSentencePreview.className = 'sentencePreview';
           newSentencePreview.contentEditable = "plaintext-only"
           newSentencePreview.spellcheck = false;
-          //newSentencePreview.onbeforeinput = this.splitSentence;
 
           newSentencePreview.addEventListener('beforeinput', (event) => {
             this.splitSentence(event);
@@ -144,29 +150,34 @@ export class DigitalReaderComponent implements OnInit {
           newSentenceContainer.append(newNumberEl);
           newSentenceContainer.append(newSentencePreview);
           
-          //parentContainer.insertBefore(newSentencePreview, target);
           parentContainer.insertBefore(newSentenceContainer, localContainer);
 
-          console.log(localContainer);
-          console.log(sentNumber);
-          console.log(parseInt(sentNumber));
           this.updateSentenceNumbers(localContainer, parseInt(sentNumber)+1);
-
-          // below was its own function, however was getting some weird errors
-          /*let tmp = localContainer;
-          let number = parseInt(sentNumber)+1;
-          while (tmp) {
-            tmp.setAttribute('sentNumber', number.toString());
-            (tmp.firstChild as Element).textContent = number.toString() + ' ' // setting the number element
-            number++;
-            tmp = tmp.nextElementSibling;
-          }*/
 
         }
       } else {
         console.log('disallowed!')
         event.preventDefault();
       }
+    }
+
+    mergeSentences(target:Element) {
+      const localContainer:Element = target.parentElement;
+      const currentSentence:Element = localContainer?.querySelector('.sentencePreview');
+
+      const previousLocalContainer:Element = localContainer?.previousElementSibling;
+
+      if (previousLocalContainer) {
+        const previousSentence:Element = previousLocalContainer.querySelector('.sentencePreview');
+        const sentNumber = previousLocalContainer.getAttribute('sentNumber');
+        console.log(sentNumber);
+
+        console.log(previousSentence?.textContent + currentSentence?.textContent);
+        localContainer.remove();
+        previousSentence.textContent = previousSentence?.textContent + currentSentence?.textContent;
+
+        this.updateSentenceNumbers(previousLocalContainer, parseInt(sentNumber));
+      } 
     }
 
     /*test2(target:HTMLInputElement) {
@@ -190,7 +201,7 @@ export class DigitalReaderComponent implements OnInit {
   async convertDocxToHTML() {
 
     if (this.docxFile) {
-        this.convertedHTMLDoc = await this.drStoryService.processUploadedFile(this.docxFile)
+        this.convertedHTMLDoc = await this.drStoryService.processUploadedFileAndExtractSents(this.docxFile)
 
         if (this.convertedHTMLDoc instanceof Document) {
             console.log('file converted successfully!')
@@ -284,12 +295,13 @@ export class DigitalReaderComponent implements OnInit {
 
           //if (Array.isArray(dialects) && dialects.length!==0) {
 
-          this.storyState = 'processing'
-          console.log(this.storyState=='processing')
-          console.log(this.storyState==='processing')
+          this.storyState = 'converting'
+          //console.log(this.storyState=='processing')
+          //console.log(this.storyState==='processing')
 
           await this.convertDocxToHTML()
 
+          this.storyState = 'converted'
           
           console.log(user)
           if (!user) {
@@ -297,6 +309,23 @@ export class DigitalReaderComponent implements OnInit {
               this.storyState = ''
               return;
           }
+
+          // save the response object here
+          /*return {
+            title: res.title,
+            collections: collections,
+            thumbnail: thumbnail,
+            //story: story,
+            public: res.public
+          }*/
+          this.storyOptions = {
+            title: res.title,
+            collections: collections,
+            thumbnail: thumbnail,
+            //story: story,
+            public: res.public
+          }
+
           /* Temporarily commented out for testing
           if (this.convertedHTMLDoc) {
               //console.log(this.convertedHTMLDoc)
@@ -329,6 +358,51 @@ export class DigitalReaderComponent implements OnInit {
         }
       }
     });
+  }
+
+  async confirmSentencesAndStoreStory() {
+
+    console.log('gets to here!')
+
+    const sentencePreviewContainer = document.querySelector('.sentContainer');
+    const sentencePreviewSpans = sentencePreviewContainer?.querySelectorAll('.sentencePreview');
+
+    this.storyState = 'processing'
+
+    this.drStoryService.segmentedSentences = Array.from(
+      sentencePreviewSpans as NodeListOf<Element>).map((elem) => {
+        return {text: elem.textContent?.trim()};
+    });
+
+    console.log(this.drStoryService.segmentedSentences)
+
+    // TODO : execute segmentation with modified sentences
+    this.segmentedHTMLDoc = await this.drStoryService.getUploadedFileWords();
+
+    console.log(this.segmentedHTMLDoc)
+    console.log(this.storyOptions)
+
+    if (this.segmentedHTMLDoc && this.storyOptions) {
+      //console.log(this.convertedHTMLDoc)
+      const story = constructJSON(this.segmentedHTMLDoc.body)
+
+      console.log(story)
+
+      this.drStoryService
+          //.saveDRStory(res.title, dialects, story, res.public)
+          .saveDRStory(this.storyOptions.title, this.storyOptions.collections, this.storyOptions.thumbnail, story, this.storyOptions.public)
+          .subscribe({
+          next: (response) => {
+              console.log('a response was received')
+              this.storyState = 'processed'
+              this.synthesiseStory(this.segmentedHTMLDoc, response.id);
+          },
+          error: () => {
+              alert("Not able to create a new story");
+              this.storyState = ''
+          },
+          });
+    }
   }
 
   /*async saveStory(debounceId: number | "modal", finishedWritingTime: Date) {

@@ -245,6 +245,12 @@ const translations = {
   processing: {
     ga: 'Á phróiseáil',
     en: 'Processing' },
+  confirm_sentences: {
+    ga: 'Ar dheimhnigh tú na habairtí atá thíos ?',
+    en: 'Have you confirmed the below sentences?' },
+  confirmation: {
+    ga: 'Dheimhnigh',
+    en: 'I have' },
   synth_in_progress: {
     ga: 'Tá fuaimeanna an scéil seo fós á sintéisiú',
     en: 'The audio of this story is still being synthesised' },

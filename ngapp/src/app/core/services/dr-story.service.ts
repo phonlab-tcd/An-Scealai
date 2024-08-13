@@ -20,6 +20,8 @@ import { AudioEncoding } from './synthesis.service';
 export class DigitalReaderStoryService {
 
   public segmentedSentences:Array<Object>;
+  public convertedHtml:string;
+  public htmlParser = new DOMParser();
 
   constructor(
     private http: HttpClient,
@@ -107,7 +109,7 @@ export class DigitalReaderStoryService {
   }
 
   // TODO : maybe factor out below function into multiple functions
-  async processUploadedFile(req: File) {
+  async processUploadedFileAndExtractSents(req: File) {
     
     // convert the uploaded file to html
     const formData = new FormData();
@@ -124,13 +126,13 @@ export class DigitalReaderStoryService {
     });
     
     if (!convertedHtml) return null
+    this.convertedHtml = convertedHtml;
 
     // TODO : add html sanitisation !!*******
     // *CODE GOES HERE*
 
     // parse the stringified html as a html document
-    const htmlParser = new DOMParser();
-    const parsedDoc = htmlParser.parseFromString(convertedHtml, 'text/html')
+    const parsedDoc = this.htmlParser.parseFromString(convertedHtml, 'text/html')
     console.log(parsedDoc)
 
     // extract text chunks from html elements to send to sentence segmenter
@@ -141,7 +143,10 @@ export class DigitalReaderStoryService {
     const sentences:Array<Object> = this.reformatExtractedSentences(sentenceTextChunks)
     this.segmentedSentences = sentences;
 
-    const words:Array<Object> = await this.tagSentences(sentenceTextChunks)
+    // potentially return the parsedDoc here
+    return parsedDoc;
+
+    /*const words:Array<Object> = await this.tagSentences(sentenceTextChunks)
 
     const segmentedHtml = await firstValueFrom(
       this.http.post<string>(this.baseUrl + 'digitalReader/segment-html', 
@@ -150,18 +155,30 @@ export class DigitalReaderStoryService {
     )
 
     // for testing
-    const parsedSegmentedDoc = htmlParser.parseFromString(segmentedHtml, 'text/html')
-    /*console.log(parsedSegmentedDoc)
+    const parsedSegmentedDoc = this.htmlParser.parseFromString(segmentedHtml, 'text/html')
 
-    document.body.innerHTML = parsedSegmentedDoc.body.innerHTML
+    return parsedSegmentedDoc*/
+  }
 
-    console.log(constructJSON(parsedSegmentedDoc.body))*/
+  async getUploadedFileWords() {
+    if (this.segmentedSentences && this.convertedHtml) {
+      const words:Array<Object> = await this.tagSentences(this.segmentedSentences.map((elem:any) => {
+        return elem.text;
+      }))
 
-    return parsedSegmentedDoc
+      const segmentedHtml = await firstValueFrom(
+        this.http.post<string>(this.baseUrl + 'digitalReader/segment-html', 
+          {text: this.convertedHtml, sentences: this.segmentedSentences, words: words}
+        )
+      )
 
-    /*} catch (error) {
-      alert(error.message)
-    }*/
+      // for testing
+      const parsedSegmentedDoc = this.htmlParser.parseFromString(segmentedHtml, 'text/html')
+
+      return parsedSegmentedDoc
+
+    }
+    return null;
   }
 
   saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, thumbnail:string, story: Object, isPublic: Boolean) {

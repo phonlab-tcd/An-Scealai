@@ -151,7 +151,7 @@ input[type="file"] {
   width: 70%;
   display:flex;
   flex-direction: column;
-  height: 300px;
+  height: 250px;
   overflow-y: scroll;
   text-align: left;
 }
@@ -161,9 +161,9 @@ input[type="file"] {
   min-height: fit-content;
 }*/
 
-/*.sentencePreview:hover {
-  background-color: var(--scealai-light-green);
-}*/
+.sentencePreview:hover {
+  background-color: var(--scealai-cream-2);
+}
 
 .sentencePreview:focus {
   background-color: var(--scealai-cream);
@@ -172,6 +172,15 @@ input[type="file"] {
 
 .sentenceMerger:hover {
   background-color: var(--scealai-light-green);
+}
+
+.acceptSentencesBtn {
+  background-color: var(--scealai-green);
+  color: white;
+}
+
+.acceptSentencesBtn:hover {
+  background-color: var(--scealai-dark-green);
 }
 
 /*.sentContainer > input[type="text"] {
