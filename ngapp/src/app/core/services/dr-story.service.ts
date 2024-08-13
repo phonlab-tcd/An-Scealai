@@ -19,6 +19,8 @@ import { AudioEncoding } from './synthesis.service';
 })
 export class DigitalReaderStoryService {
 
+  public segmentedSentences:Array<Object>;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -137,6 +139,7 @@ export class DigitalReaderStoryService {
 
     // reformat sentence segmenter output for use with the segmentation API
     const sentences:Array<Object> = this.reformatExtractedSentences(sentenceTextChunks)
+    this.segmentedSentences = sentences;
 
     const words:Array<Object> = await this.tagSentences(sentenceTextChunks)
 

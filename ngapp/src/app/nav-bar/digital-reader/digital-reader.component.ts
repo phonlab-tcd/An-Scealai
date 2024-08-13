@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
+import { CdkTextareaAutosize}  from '@angular/cdk/text-field';
 import { TranslationService } from 'app/core/services/translation.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 
-import { firstValueFrom, from } from "rxjs";
+import { firstValueFrom, from, take } from "rxjs";
 import { User } from "app/core/models/user";
 import { UserService } from "app/core/services/user.service";
 //import { createClient } from "@supabase/supabase-js"
@@ -28,7 +29,8 @@ import { SynthesisService, Voice, voices } from 'app/core/services/synthesis.ser
 @Component({
   selector: 'app-digital-reader',
   templateUrl: './digital-reader.component.html',
-  styleUrls: ['./digital-reader.component.scss']
+  styleUrls: ['./digital-reader.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DigitalReaderComponent implements OnInit {
 
@@ -54,7 +56,8 @@ export class DigitalReaderComponent implements OnInit {
     public drStoryService: DigitalReaderStoryService,
     public http: HttpClient,
     private dialog: MatDialog,
-    private synth: SynthesisService,) {
+    private synth: SynthesisService,
+    private _ngZone: NgZone,) {
         this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
         //console.log(adminStoryCollectionOpts)
         
@@ -78,6 +81,98 @@ export class DigitalReaderComponent implements OnInit {
           this.ts.l.simple_versions_old_stories
         ]*/
     }
+
+    updateSentenceNumbers(targetContainer:Element, startNumber:number) {
+      let tmp = targetContainer;
+      let number = startNumber;
+      while (tmp) {
+        tmp.setAttribute('sentNumber', number.toString());
+        (tmp.querySelector('b') as Element).textContent = number.toString() + ' ' // setting the number element
+        number++;
+        tmp = tmp.nextElementSibling;
+      }
+    }
+
+    test() {
+      console.log('input event fires anyway!')
+    }
+  
+    splitSentence(event:InputEvent) {
+      console.log(event)
+      const target:HTMLInputElement = event.target as HTMLInputElement;
+
+      if (event.inputType==="insertLineBreak") {
+        event.preventDefault();
+        const breakIndex:number = getSelection()?.anchorOffset;
+        const fullTextContent:string = target.textContent;
+        if (breakIndex > 0 && breakIndex < fullTextContent.length) {
+          const textPreSplit:string = fullTextContent?.slice(0, breakIndex);
+          const textPostSplit:string = fullTextContent?.slice(breakIndex, fullTextContent.length);
+
+          console.log(textPreSplit);
+          console.log(textPostSplit);
+
+          const localContainer = target.parentElement as Element;
+          const parentContainer = localContainer.parentElement as Element;
+
+          target.textContent = textPostSplit;
+
+          const newSentenceContainer = document.createElement('div');
+
+          const mergeButton = document.createElement('button');
+          mergeButton.className="sentenceMerger"
+          mergeButton.textContent="merge" // TODO : change to use translation service
+
+          const newNumberEl = document.createElement('b');
+          const sentNumber = localContainer.getAttribute('sentNumber');
+          newNumberEl.textContent = sentNumber + ' ';
+
+          const newSentencePreview = document.createElement('span');
+          newSentencePreview.textContent = textPreSplit;
+          newSentencePreview.className = 'sentencePreview';
+          newSentencePreview.contentEditable = "plaintext-only"
+          newSentencePreview.spellcheck = false;
+          //newSentencePreview.onbeforeinput = this.splitSentence;
+
+          newSentencePreview.addEventListener('beforeinput', (event) => {
+            this.splitSentence(event);
+          })
+
+          newSentenceContainer.setAttribute('sentNumber', sentNumber.toString())
+          newSentenceContainer.append(mergeButton);
+          newSentenceContainer.append(document.createElement('br'))
+          newSentenceContainer.append(newNumberEl);
+          newSentenceContainer.append(newSentencePreview);
+          
+          //parentContainer.insertBefore(newSentencePreview, target);
+          parentContainer.insertBefore(newSentenceContainer, localContainer);
+
+          console.log(localContainer);
+          console.log(sentNumber);
+          console.log(parseInt(sentNumber));
+          this.updateSentenceNumbers(localContainer, parseInt(sentNumber)+1);
+
+          // below was its own function, however was getting some weird errors
+          /*let tmp = localContainer;
+          let number = parseInt(sentNumber)+1;
+          while (tmp) {
+            tmp.setAttribute('sentNumber', number.toString());
+            (tmp.firstChild as Element).textContent = number.toString() + ' ' // setting the number element
+            number++;
+            tmp = tmp.nextElementSibling;
+          }*/
+
+        }
+      } else {
+        console.log('disallowed!')
+        event.preventDefault();
+      }
+    }
+
+    /*test2(target:HTMLInputElement) {
+      //(input)="this.style.height = ''; this.style.height = this.scrollHeight +'px'; console.log(this.style)"
+      target.style.height = target.scrollHeight +'px';
+    }*/
 
   async ngOnInit() {
     const user = this.auth.getUserDetails();
@@ -107,6 +202,7 @@ export class DigitalReaderComponent implements OnInit {
 
   }
 
+  // TODO : Migrate to use queuing API
   async synthesiseStory(htmlBody:Document, storyId:string) {
 
     //const parser = new DOMParser;
@@ -168,22 +264,8 @@ export class DigitalReaderComponent implements OnInit {
       if (res) {
         
         if (res.title) {
-            console.log(res)
-            
-          /*let dialects:Array<string> = [];
-          console.log(res.dialects)
-          for (const key in res.dialects) {
-            console.log(key)
-            console.log(res.dialects[key])
-            if (res.dialects[key] === true)
-                
-                dialects.push(key)
-          }*/
-
-          /*console.log(Array.isArray(dialects) && dialects.length!==0)
-          console.log(dialects)
-          console.log(Array.isArray(dialects))
-          console.log(dialects.length)*/
+          console.log(res)
+          
           let collections = []
           for (let key in res.collections) {
             if (res.collections[key] === true) {
@@ -215,7 +297,7 @@ export class DigitalReaderComponent implements OnInit {
               this.storyState = ''
               return;
           }
-          
+          /* Temporarily commented out for testing
           if (this.convertedHTMLDoc) {
               //console.log(this.convertedHTMLDoc)
               const story = constructJSON(this.convertedHTMLDoc.body)
@@ -236,11 +318,11 @@ export class DigitalReaderComponent implements OnInit {
                       this.storyState = ''
                   },
                   });
-              }
-          /*} else {
+            }*/
+          //} else {
             //alert(this.ts.l.dialect_required)
-            this.storyState = ''
-          }*/
+            //this.storyState = ''
+          //}
         } else {
           alert(this.ts.l.title_required);
           this.storyState = ''

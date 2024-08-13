@@ -10,6 +10,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { NavBarRoutingModule } from './nav-bar-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -64,7 +66,9 @@ import { FiosComponent } from './fios/fios.component';
     MatTabsModule,
     MatButtonModule,
     MatDividerModule,
-    FormsModule
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule
   ]
 })
 export class NavBarModule { }

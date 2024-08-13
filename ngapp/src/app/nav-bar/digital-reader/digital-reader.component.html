@@ -108,6 +108,36 @@
   </div>
 </div>
 
+<div *ngIf="drStoryService.segmentedSentences" class="sentContainer">
+    <div
+    *ngFor="let sent of drStoryService.segmentedSentences; index as i"
+    [attr.sentNumber]="i">
+      <button class="sentenceMerger">merge</button><br>
+      <b>{{ i }}  </b><span
+      class="sentencePreview"
+      
+      contenteditable="plaintext-only"
+      (beforeinput)="splitSentence($event)"
+      (input)="test()"
+      spellcheck="false"
+      
+      >{{sent.text}}</span>
+      <!--[id]="'sentence' + i"-->
+  </div>
+
+    <!--[style]="'height =' + this.scrollHeight + 'px'"-->
+    <!--[ngStyle]="{'height': this.scrollHeight + 'px'}"-->
+    <!--[style.height]="'100px'"-->
+
+    <!--<textarea
+    [style.height]="drStoryService.segmentedSentences ? this.scrollHeight + 'px' : '0px'"
+    class="sentencePreview"
+    *ngFor="let sent of drStoryService.segmentedSentences; index as i"
+    (beforeinput)="test($event)"
+    (input)="test2($event.target)"
+    [id]="'sentence' + i">{{sent.text}}</textarea>-->
+</div>
+
 <!-- Footer containing logos -->
 <div class="footerLARA">
   <div class="footerLogos">

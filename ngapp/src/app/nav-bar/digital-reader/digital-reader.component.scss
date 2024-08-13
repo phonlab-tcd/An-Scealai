@@ -146,6 +146,38 @@ input[type="file"] {
   
 }*/
 
+.sentContainer {
+  margin:auto;
+  width: 70%;
+  display:flex;
+  flex-direction: column;
+  height: 300px;
+  overflow-y: scroll;
+  text-align: left;
+}
+
+/*.sentencePreview {
+  //min-height: 20px;
+  min-height: fit-content;
+}*/
+
+/*.sentencePreview:hover {
+  background-color: var(--scealai-light-green);
+}*/
+
+.sentencePreview:focus {
+  background-color: var(--scealai-cream);
+  outline: none
+}
+
+.sentenceMerger:hover {
+  background-color: var(--scealai-light-green);
+}
+
+/*.sentContainer > input[type="text"] {
+  width:100%;
+}*/
+
 .footerLARA {
     display: flex;
     flex-direction: column;
