@@ -33,6 +33,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
+import tippy from 'tippy.js';
+
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
   ["Ulster f", 1],
@@ -94,6 +96,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   public voiceIndex:number = 0; 
   public speaker = this.functioningVoices[this.voiceIndex]; // defaults to Sibéal nemo
 
+  public clickTimeoutRef:NodeJS.Timeout | undefined = undefined;
 
   constructor(
     
@@ -143,8 +146,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const numSynthesisedSents = this.listOfAudios[firstVoiceIndex].length;
         // check if all speakers have the same no. of sentences synthesised,
         // in which case there is a problem with synthesising one or more sentences
+        console.log(dialectToVoiceIndexArr);
         if (dialectToVoiceIndexArr.every( (entry) => {
           const voiceIndex = entry[1];
+          console.log(voiceIndex);
+          console.log(this.listOfAudios[voiceIndex].length);
           if (this.listOfAudios[voiceIndex].length!==numSynthesisedSents) return false;
           else return true;
         } )) {
@@ -161,6 +167,23 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       }*/
         
     }
+
+    tippy('.word', {
+      role: 'lemma and tags tooltip',
+      allowHTML: true,
+      content(reference) {
+        const lemma = reference.getAttribute('lemma');
+        const tags = reference.getAttribute('tags');
+        return `<div class="tooltipContent"><p>Lemma: ${lemma}</p><p>Tags: ${tags}</p></div>`;
+      },
+      delay: [200, 50], // delay before it shows/hides
+      interactive: true,
+      duration: [400, 100], // show/hide transition duration
+      //arrow: false,
+      theme: 'material',
+      offset: [0,5],
+      hideOnClick: false,
+    })
     
   }
 
@@ -238,6 +261,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     const prevSibling = word.previousSibling;
     if (prevSibling) {
+      console.log(prevSibling, prevSibling.textContent)
       if (prevSibling.textContent?.charAt(prevSibling?.textContent.length-1)===' ') {
         return true
       } else {
@@ -258,6 +282,21 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       if (this.disconnectedFromPreviousWord(tmp))
         return tmp;
       tmp = this.checkForNextSiblingSeg(tmp, 'word')
+    }
+
+    return null;
+
+  }
+
+  getPreviousDisconnectedWord(word:Element) {
+
+    let tmp = this.checkForPreviousSiblingSeg(word, 'word')//word.nextElementSibling;
+
+    while (tmp) {
+      console.log(tmp)
+      if (this.disconnectedFromPreviousWord(tmp))
+        return tmp;
+      tmp = this.checkForPreviousSiblingSeg(tmp, 'word')
     }
 
     return null;
@@ -334,27 +373,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return audioObservable
   }
 
-  /*audioCreationTest() {
-    let synthesisableSegments = this.content.querySelectorAll('.sentence')
-
-    let tmp = Array.from(synthesisableSegments)
-
-    let i = 0;
-    for (let j=20;j<tmp.length;j+=20) {
-      for (let k=i;k<j;k++) {
-        const seg = tmp[k].textContent
-
-        //this.listOfAudios[k] = (this.synthRequest(seg))
-      }
-      i = j
-    }
-    for (let k=i;k<tmp.length;k++) {
-      const seg = tmp[k].textContent
-      
-      //this.listOfAudios[k] = (this.synthRequest(seg))
-    }
-  }*/
-
   checkForSegmentParent(node:Element) {
     if (node.classList.contains('sentence') || node.classList.contains('word'))
       return node;
@@ -380,6 +398,19 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return null;
   }
 
+  checkForPreviousSiblingSeg(elem:Element, segType:string) {
+    if (elem) {
+      let tmp = elem.previousElementSibling;
+      while (tmp) {
+        //console.log(tmp)
+        if (tmp.classList.contains(segType))
+          return tmp
+        tmp = tmp.previousElementSibling
+      }
+    }
+    return null;
+  }
+
   checkForNextSentence(sentSpan:Element) {
     const parentElem = sentSpan.parentElement
     let adjascentSection = parentElem.nextElementSibling
@@ -397,37 +428,254 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return null;
   }
 
-  //@HostListener('document:click', ['$event.target'])
-  @HostListener('click', ['$event.target'])
-  async checkSegmentClicked(targetElem:Element) {
-    //console.log(event)
-    const segment = this.checkForSegmentParent(targetElem)
-    if (segment && segment.classList.contains('word')) {
-      this.updateCurrentWord(segment)
-      //this.currentWord = segment;
-      this.currentSentence = this.checkForSegmentParent(this.currentWord.parentElement)
-      const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
-        this.drStoryService.getMatchingWords(segment.getAttribute('lemma'), segment.getAttribute('tags'))
-      )
-      //console.log()
-      const sentencesWithMatchingWords = []
-      for (let storyGroup of storySentencesWithMatchingWords) {
-        console.log(storyGroup)
-        for (let sentence of storyGroup.sentences) {
-          sentencesWithMatchingWords.push(sentence)
+  checkForPreviousSentence(sentSpan:Element) {
+    const parentElem = sentSpan.parentElement
+    let adjascentSection = parentElem.previousElementSibling
+    console.log(adjascentSection)
+    while (adjascentSection) {
+      const sentences = Array.from(adjascentSection.querySelectorAll('.sentence')); // TODO : maybe factor out into function
+      const firstSent = sentences[sentences.length-1]
+      console.log(firstSent)
+      //const nextSent = this.checkForNextSiblingSeg(firstSent, 'sentence')
+      //console.log(nextSent)
+      if (firstSent)
+        return firstSent
+
+      adjascentSection = adjascentSection.previousElementSibling 
+    }
+    return null;
+  }
+
+  playIndividualSentence(wordInSentence:Element) {
+    this.currentSentence = this.checkForSegmentParent(wordInSentence.parentElement);
+    const firstWordChild = this.currentSentence?.querySelector('.word');
+
+    this.updateCurrentWord(firstWordChild);
+
+    this.playContinuously=false;
+    this.playFromCurrentWord();
+  }
+
+  playWordOnSeekStop() {
+    // not convinced whether it should play automatically
+    clearTimeout(this.clickTimeoutRef);
+    this.pause(); // doesn't seem to stop audio from playing
+
+    this.clickTimeoutRef = setTimeout( async () => {
+      const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
+      this.clickTimeoutRef = setTimeout( async () => {
+        const audioObj = await audioObjPromise;
+        if (!this.audioPlaying) // auto-played audio is a lower priority than other audio
+          this.playAudioObj(audioObj)
+      }, 100) // start synthesising as it is likely the user is trying to play this word
+    }, 400) // wait to start synthesising if the user is unlikely to stop on this word
+    //
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  overrideKeypresses(event:KeyboardEvent) {
+    console.log(event);
+    if ((event.type === 'keydown' && (['Space', 'ArrowRight', 'ArrowLeft', 'Enter'].includes(event.code)))) {
+      event.preventDefault();
+      if (event.code==='Space') {
+        
+        if (this.audioPlaying) {
+          this.pause();
+        } else if (this.audioPaused || this.currentWord!==null) {
+          console.log(this.currentWord)
+          this.playStory();
+        }
+      } else if (event.code==='ArrowRight') {
+
+        this.pause();
+        if (!event.ctrlKey) {
+          console.log('seek right word')
+          if (this.currentWord) {
+            let nextWord:Element | null | undefined = this.getNextDisconnectedWord(this.currentWord);
+            let parentSentence:Element | null = this.checkForSegmentParent(this.currentWord.parentElement);
+
+            if (!nextWord) {
+              
+              if (!parentSentence) return
+              
+              let nextSent = this.checkForNextSiblingSeg(parentSentence, 'sentence');
+
+              if (!nextSent) {
+                nextSent = this.checkForNextSentence(parentSentence);
+              }
+
+              if (nextSent) {
+                nextWord = nextSent?.querySelector('.word');
+                parentSentence = nextSent;
+              }
+              
+            }
+            if (nextWord) {
+              this.updateCurrentWord(nextWord);
+              this.currentSentence = parentSentence;
+              
+              this.playWordOnSeekStop();
+            }
+          }
+        } else {
+          if (this.currentSentence) {
+            //let parentSentence:Element | null = this.checkForSegmentParent(this.currentWord.parentElement);
+            let nextSentence:Element | null = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
+
+            if (!nextSentence)
+              nextSentence = this.checkForNextSentence(this.currentSentence);
+            
+            if (nextSentence) {
+              this.currentSentence = nextSentence;
+              const firstWordChild = this.currentSentence?.querySelector('.word');
+
+              this.updateCurrentWord(firstWordChild);
+
+              this.playWordOnSeekStop();
+            }
+          } else {
+            // TODO : go to first sentence of story
+          }
+        }
+      } else if (event.code==='ArrowLeft') {
+
+        this.pause();
+        if (!event.ctrlKey) {
+          console.log('seek left word')
+          if (this.currentWord) {
+            let previousWord:Element | null | undefined = this.getPreviousDisconnectedWord(this.currentWord);
+            let parentSentence:Element | null = this.checkForSegmentParent(this.currentWord.parentElement);
+
+            if (!previousWord) {
+              
+              if (!parentSentence) return
+              
+              let previousSent = this.checkForPreviousSiblingSeg(parentSentence, 'sentence');
+
+              if (!previousSent) {
+                previousSent = this.checkForPreviousSentence(parentSentence);
+              }
+
+              if (previousSent) {
+                const previousSentWords = Array.from(previousSent?.querySelectorAll('.word'));
+                previousWord = previousSentWords[previousSentWords.length-1];
+                if (!this.disconnectedFromPreviousWord(previousWord) && previousSentWords.length>1)
+                  previousWord = this.getPreviousDisconnectedWord(previousWord);
+                parentSentence = previousSent;
+              }
+              
+            }
+            if (previousWord) {
+              this.updateCurrentWord(previousWord);
+              this.currentSentence = parentSentence;
+              
+              this.playWordOnSeekStop();
+            }
+          }
+        } else {
+          if (this.currentSentence) {
+            let previousSent:Element | null = this.checkForPreviousSiblingSeg(this.currentSentence, 'sentence');
+            let previousWord;
+
+            if (!previousSent)
+              previousSent = this.checkForPreviousSentence(this.currentSentence);
+            
+            if (previousSent) {
+              this.currentSentence = previousSent;
+              previousWord = this.currentSentence?.querySelector('.word');
+            }
+
+            if (previousWord) {
+              this.updateCurrentWord(previousWord);
+              this.playWordOnSeekStop();
+            }
+            
+          }
+          /*if (this.currentSentence) {
+            //let parentSentence:Element | null = this.checkForSegmentParent(this.currentWord.parentElement);
+            let nextSentence:Element | null = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
+
+            if (!nextSentence)
+              nextSentence = this.checkForNextSentence(this.currentSentence);
+            
+            if (nextSentence) {
+              this.currentSentence = nextSentence;
+              const firstWordChild = this.currentSentence?.querySelector('.word');
+
+              this.updateCurrentWord(firstWordChild);
+
+              this.playWordOnSeekStop();
+            }
+          }*/
+        }
+      } else if (event.code==='Enter') {
+        if (this.currentWord) {
+          console.log(event.ctrlKey)
+          if (event.ctrlKey)
+            this.playIndividualSentence(this.currentWord);
+            //this.playFromCurrentWord();
+          else {
+            this.pause();
+            this.playWord();
+          }
         }
       }
-      console.log(sentencesWithMatchingWords)
+    }
+  }
+
+  @HostListener('click', ['$event'])
+  async checkSegmentClicked(event:PointerEvent) {
+
+    console.log(event);
+
+    const targetElem:Element = event.target as Element;
+    
+    const segment = this.checkForSegmentParent(targetElem)
+
+    if (segment && segment.classList.contains('word')) {
+
+      clearTimeout(this.clickTimeoutRef);
 
       this.pause();
-      //only for testing
-      this.playWord();
-    }/* else if (segment && segment.classList.contains('sentence')) {
-      this.currentWord = null;
-    }*/
 
-    console.log(this.currentWord)
-    console.log(this.currentSentence)
+      if (event.detail==2) { // double click
+        console.log('double click!')
+        this.playIndividualSentence(segment);
+      } else {
+        this.updateCurrentWord(segment)
+        this.currentSentence = this.checkForSegmentParent(this.currentWord.parentElement);
+
+        // audio starts generating here to avoid further delays with fetching the audio
+        const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
+
+        this.clickTimeoutRef = setTimeout( async () => {
+            
+            const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
+              this.drStoryService.getMatchingWords(segment.getAttribute('lemma'), segment.getAttribute('tags'))
+            );
+            
+            const sentencesWithMatchingWords = []
+            for (let storyGroup of storySentencesWithMatchingWords) {
+              console.log(storyGroup)
+              for (let sentence of storyGroup.sentences) {
+                sentencesWithMatchingWords.push(sentence)
+              }
+            }
+            console.log(sentencesWithMatchingWords)
+
+            
+
+            const audioObj = await audioObjPromise;
+            this.playAudioObj(audioObj);
+            //this.playWord();
+
+          console.log(this.currentWord)
+          console.log(this.currentSentence)
+        }, 300); // 300ms is the delay before running the click function
+      }
+    }
+
+    
   }
 
   jumpToCurrentWord() {
@@ -437,8 +685,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       const dimensions = this.currentWord?.getBoundingClientRect()
       if (dimensions) {
         if (
-          dimensions.top > window.innerHeight ||
-          dimensions.bottom - topScreenOffset < 0
+          dimensions.bottom > window.innerHeight ||
+          dimensions.top - topScreenOffset < 0
           //&& document.activeElement!==this.currentWord
         ) {
           this.currentWord?.scrollIntoView({ behavior: "smooth"});
@@ -516,6 +764,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   async playFromCurrentWord() {
 
     if (this.audio) this.pause(); // to avoid multiple audio instances at the same time
+    clearTimeout(this.clickTimeoutRef);
     // clear/destroy current audio obj (?)
 
     this.audioPaused = false;
@@ -556,29 +805,26 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
             // TODO: delete the current audio element + listener (if needed (?))
 
-            if (this.playContinuously) {
-              let nextSent = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
+            let nextSent = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
+            if (!nextSent)
+              nextSent = this.checkForNextSentence(this.currentSentence);
+            if (nextSent) {
+              this.currentSentence = nextSent;
+              const firstWord = nextSent.querySelector('.word') // TODO : maybe factor out to function
+              this.updateCurrentWord(firstWord);
+              if (this.playContinuously) {
+              
               console.log(nextSent)
               // if this section does not contain anymore sentences
-              if (!nextSent)
-                nextSent = this.checkForNextSentence(this.currentSentence);
-              if (nextSent) {
-                this.currentSentence = nextSent;
-                const firstWord = nextSent.querySelector('.word') // TODO : maybe factor out to function
-                this.updateCurrentWord(firstWord);
+              
 
                 if (this.currentWord) {
-                  // TODO : factor out into function
-                  
-                  //const sentAudioObj = await this.getCurrentAudioObject();
-                  
-                  //if (!this.audioPaused) {
                   if (!this.audioPaused && !this.audioPlaying) {
-                    //this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
-                    //this.setCurrentWord()
                     await this.playFromCurrentWord()
                   }
                 }
+              } else {
+                //this.audioPaused = true;
               }
             } else {
               this.updateCurrentWord(null)
@@ -594,49 +840,22 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   }
 
+  playAudioObj(audioObj:any) {
+    this.pause();
+    const audio = document.createElement('audio')
+    audio.src = audioObj.audioUrl;
+    this.audio = audio;
+    this.audio.play();
+    //audio.remove();
+  }
+
   async playWord() {
     this.playContinuously = false; // may not be necessary
 
     if (this.currentWord) {
       const audioObj = await this.synthRequest(this.currentWord.textContent, this.speaker);
 
-      const audio = document.createElement('audio')
-      audio.src = audioObj.audioUrl;
-      audio.play();
-      /*if (this.currentSentence) {
-        const childWordSpans = this.currentSentence.querySelectorAll('.word');
-        //const wordInd = this.getWordPositionIndex(this.currentWord, childWordSpans);
-
-        const sentAudioObj = await this.getCurrentAudioObject();
-
-        this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj);
-        //console.log(wordInd);
-        console.log(this.timings);
-
-        const timing = this.timings[0];
-
-        // word audio object is independant from main audio object
-        const audio = document.createElement('audio')
-        audio.src = sentAudioObj.audioUrl;
-
-        //const buffer = (timing.end-timing.start)*0.01;
-        const buffer = 0;
-
-        const start = Math.max(timing.start-buffer, 0);
-        //const end = Math.min(timing.end+buffer, (audio.duration-start));
-        const end = timing.end+buffer;
-
-        console.log(timing.start, timing.end)
-        console.log(start, end)
-
-        audio.currentTime = start;
-        audio.play();
-
-        setTimeout(() => {
-          audio.pause();
-          console.log('pause!')
-        }, (end-start)*1000);
-      }*/
+      this.playAudioObj(audioObj);
 
     } 
   }
@@ -650,7 +869,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   // different functions can be used for playing a sentence etc.
   async playStory() {
 
-    this.playContinuously = true;
+    if (!this.audioPaused) // if an individual sentence is being played, rather than the whole story
+      this.playContinuously = true;
+    
     if (!this.currentWord) {
       // below 2 lines really need to be refactored - should create a reference to the story root node
       // this.content is not enough as it does not reference the actual rendered elements
@@ -690,9 +911,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }*/
 
   pause() {
-    this.audio.pause()
-    this.audioPaused = true;
-    this.audioPlaying = false;
+    if (this.audio) {
+      this.audio.pause()
+      this.audioPaused = true;
+      this.audioPlaying = false;
+    }
   }
 
 }

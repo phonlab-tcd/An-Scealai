@@ -1,3 +1,6 @@
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/themes/material.css';
+
 .container {
     max-width: 60%;
     padding-bottom: 20px;
@@ -49,8 +52,14 @@
     //background-color: var(--scealai-green);
 }*/
 
+//$highlight-color: var(--scealai-cream);
+
 .storyContainer .sentence:hover {
-    background-color: var(--scealai-cream);
+    
+    //background-color:rgba($highlight-color, .6);
+
+    //background-color: var(--scealai-light-blue-hover);
+    background-color: var(--scealai-cream-2);
 }
 
 .word {
@@ -58,7 +67,15 @@
     transition: background-color .3s;
 }
 
-.currentWord {
+.word:hover {
+    background-color: var(--scealai-cream);
+}
+
+.storyContainer *::selection { // make story text un-selectable for ease of playing words/sentences
+	background:transparent;
+}
+
+.word.currentWord {
     background-color: var(--scealai-light-green);
     transition: background-color .1s;
 }
@@ -202,6 +219,16 @@
     //display: flex;
     //flex-direction: row;
     //right: 0;
+}
+
+.tooltipContent {
+    text-align:left;
+    margin: 0;
+}
+
+.tooltipContent * {
+    //text-align:left;
+    margin: 0;
 }
 
 /*.voiceSelection mat-form-field {

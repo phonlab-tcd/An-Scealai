@@ -55,6 +55,7 @@
     "quill-image-compress": "^1.2.29",
     "rxjs": "^7.5.6",
     "three": "^0.137.1",
+    "tippy.js": "^6.3.7",
     "tslib": "^2.0.0",
     "ua-parser-js": "^1.0.33",
     "zod": "^3.21.4",
