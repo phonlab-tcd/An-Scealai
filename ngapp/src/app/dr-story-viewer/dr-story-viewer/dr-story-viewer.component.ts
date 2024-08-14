@@ -32,26 +32,6 @@ import { DigitalReaderStoryBuilderComponent } from "../dr-story-builder/dr-story
   styleUrls: ["./dr-story-viewer.component.scss"],
 })
 export class DigitalReaderStoryViewerComponent implements OnInit {
-  // dictogloss variables
-  generatedFromMessages: boolean;
-  texts: string = "";
-  wrongWordsDiv: string = "";
-  words: string[] = [];
-  shownWords: string[] = [];
-  wrongWords: string[] = [];
-  wordsPunc: string[] = [];
-  wordsPuncLower: string[] = [];
-  sentences: string[] = [];
-  hasText: boolean = false;
-  guess: string = "";
-  regex: any = /[^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+/;
-  regexg: any = /([^a-zA-Z0-9áÁóÓúÚíÍéÉ:]+)/g;
-  gameInProgress: boolean = false;
-  showInputBox: boolean = true;
-  allGuessed: boolean = false;
-  guessCheck: boolean = false;
-  wrongCount: number = 0;
-  rightCount: number = 0;
 
   // game options
   playWithTimer = false;
@@ -77,6 +57,8 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
   studentId: string = "";
   teacherId: string = "";
 
+  startingWordId:string | null = null;
+
   constructor(
     private messageService: MessageService,
     private classroomService: ClassroomService,
@@ -98,6 +80,10 @@ export class DigitalReaderStoryViewerComponent implements OnInit {
       this.storyId = storyId
       console.log(storyId)
       console.log(this.storyId)
+
+      const startingWordId = this.router.getCurrentNavigation()?.initialUrl.queryParams['startingWordId']
+      console.log(startingWordId)
+      if (startingWordId) this.startingWordId = startingWordId;
     } else {
       console.log('No story id provided')
       this.goToDRStoryLibrary('Please select a story from the library') //TODO : Add translation to ts

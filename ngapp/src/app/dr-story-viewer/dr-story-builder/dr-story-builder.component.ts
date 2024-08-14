@@ -54,7 +54,7 @@ const dialectToVoiceIndex = new Map<string, number>([
     MatIconModule,
     MatButtonModule,
     MatSidenavModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
@@ -72,6 +72,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   @Input() content:Element
   @Input() storyId:string
+  @Input() startingWordId:string | null
 
   public forceTrustedHTML:SafeHtml;
   public currentSentence:Element | null = null;
@@ -160,6 +161,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         }
       } else {
         this.snackbar.open(this.ts.l.synth_in_progress, this.ts.l.okay, {duration: 4000});
+      }
+
+      if (this.startingWordId) {
+        const startingWord = document.querySelector(`#word${this.startingWordId}`);
+        if (startingWord) {
+          this.updateCurrentWord(startingWord);
+          this.jumpToCurrentWord();
+        }
       }
       /*if ((...(dialectToVoiceIndex.entries())).every())
       for (let entry of dialectToVoiceIndex.entries()) {

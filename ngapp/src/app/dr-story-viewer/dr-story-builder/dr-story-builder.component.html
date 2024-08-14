@@ -17,11 +17,15 @@
             class="pause"
             [ngClass]="{'paused': audioPaused===true}"
             (click)="pause()"
+            [attr.aria-label]="'pause button'"
+            [attr.title]="'pause'"
             >❚❚</button>
             <button
             class="play"
             [ngClass]="{'playing': audioPlaying===true}"
             (click)="playStory()"
+            [attr.aria-label]="'play button'"
+            [attr.title]="'play the full story'"
             >▸</button>
             <!--<button
             (click)="play()"
@@ -32,7 +36,8 @@
             <button
             mat-button
             [matMenuTriggerFor]="dialects"
-            aria-label="Dialect choice menu">
+            aria-label="Dialect selection menu"
+            [attr.title]="'Dialect selection menu'">
                 <!--<mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>-->
                 <mat-icon>arrow_drop_down</mat-icon>
                 <!--<span>{{ ts.l.dialect }}</span>-->
