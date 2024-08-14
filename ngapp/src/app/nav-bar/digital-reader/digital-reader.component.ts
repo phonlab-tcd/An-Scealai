@@ -24,7 +24,8 @@ import { constructJSON } from '@phonlab-tcd/html2json';
 import { objectUtil } from 'zod';
 
 import config from '../anScealaiStoryCollectionsConf'
-import { SynthesisService, Voice, voices } from 'app/core/services/synthesis.service';
+import { SynthesisService, Voice, functioningVoices } from 'app/core/services/synthesis.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-digital-reader',
@@ -44,12 +45,12 @@ export class DigitalReaderComponent implements OnInit {
   //drStory: DigitalReaderStory;
   dialogRef: MatDialogRef<unknown>;
 
-  dialectOptions:Array<string>
+  //dialectOptions:Array<string>
   adminCollectionOptions:Array<string> = []
-  defaultCollectionSelections:Object = {};
+  defaultCollectionSelections:any = {};
   storyState:string = '';
 
-  @Output() isFirstDrStory = new EventEmitter<boolean>();
+  //@Output() isFirstDrStory = new EventEmitter<boolean>();
 
   constructor(
     public ts : TranslationService,
@@ -59,16 +60,11 @@ export class DigitalReaderComponent implements OnInit {
     public http: HttpClient,
     private dialog: MatDialog,
     private synth: SynthesisService,
-    private _ngZone: NgZone,) {
-        this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
-        //console.log(adminStoryCollectionOpts)
+    private snackbar: MatSnackBar,) {
+        //this.dialectOptions = [this.ts.l.connacht, this.ts.l.munster, this.ts.l.ulster]
         
         console.log(this.ts.l)
         console.log(this.ts.l.adminStoryCollectionOpts)
-        /*for (let option in this.ts.l.adminStoryCollectionOpts) {
-          this.adminCollectionOptions.push(option);
-          this.defaultCollectionSelections[option] = false;
-        }*/
 
         for (let option of config.adminStoryCollectionOpts) {
           //if (this.ts.l[option]) {
@@ -76,114 +72,8 @@ export class DigitalReaderComponent implements OnInit {
           //}
           this.defaultCollectionSelections[option] = false;
         }
-        /*this.adminCollectionOptions = [
-          this.ts.l.leaving_cert_stories,
-          this.ts.l.aesop_fables,
-          this.ts.l.other_stories,
-          this.ts.l.simple_versions_old_stories
-        ]*/
+        
     }
-
-    updateSentenceNumbers(targetContainer:Element, startNumber:number) {
-      let tmp = targetContainer;
-      let number = startNumber;
-      while (tmp) {
-        tmp.setAttribute('sentNumber', number.toString());
-        (tmp.querySelector('b') as Element).textContent = number.toString() + ' ' // setting the number element
-        number++;
-        tmp = tmp.nextElementSibling;
-      }
-    }
-
-    test() {
-      console.log('input event fires anyway!')
-    }
-  
-    splitSentence(event:InputEvent) {
-      console.log(event)
-      const target:HTMLInputElement = event.target as HTMLInputElement;
-
-      if (event.inputType==="insertLineBreak") {
-        event.preventDefault();
-        const breakIndex:number = getSelection()?.anchorOffset;
-        const fullTextContent:string = target.textContent;
-        if (breakIndex > 0 && breakIndex < fullTextContent.length) {
-          const textPreSplit:string = fullTextContent?.slice(0, breakIndex);
-          const textPostSplit:string = fullTextContent?.slice(breakIndex, fullTextContent.length);
-
-          console.log(textPreSplit);
-          console.log(textPostSplit);
-
-          const localContainer = target.parentElement as Element;
-          const parentContainer = localContainer.parentElement as Element;
-
-          target.textContent = textPostSplit;
-
-          const newSentenceContainer = document.createElement('div');
-
-          const mergeButton = document.createElement('button');
-          mergeButton.className="sentenceMerger"
-          mergeButton.textContent="merge" // TODO : change to use translation service
-          mergeButton.tabIndex = -1;
-          mergeButton.addEventListener('click', (event) => {
-            this.mergeSentences(event.target as Element);
-          })
-
-          const newNumberEl = document.createElement('b');
-          const sentNumber = localContainer.getAttribute('sentNumber');
-          newNumberEl.textContent = sentNumber + ' ';
-
-          // create new editable element containing the segment before the break
-          const newSentencePreview = document.createElement('span');
-          newSentencePreview.textContent = textPreSplit;
-          newSentencePreview.className = 'sentencePreview';
-          newSentencePreview.contentEditable = "plaintext-only"
-          newSentencePreview.spellcheck = false;
-
-          newSentencePreview.addEventListener('beforeinput', (event) => {
-            this.splitSentence(event);
-          })
-
-          newSentenceContainer.setAttribute('sentNumber', sentNumber.toString())
-          newSentenceContainer.append(mergeButton);
-          newSentenceContainer.append(document.createElement('br'))
-          newSentenceContainer.append(newNumberEl);
-          newSentenceContainer.append(newSentencePreview);
-          
-          parentContainer.insertBefore(newSentenceContainer, localContainer);
-
-          this.updateSentenceNumbers(localContainer, parseInt(sentNumber)+1);
-
-        }
-      } else {
-        console.log('disallowed!')
-        event.preventDefault();
-      }
-    }
-
-    mergeSentences(target:Element) {
-      const localContainer:Element = target.parentElement;
-      const currentSentence:Element = localContainer?.querySelector('.sentencePreview');
-
-      const previousLocalContainer:Element = localContainer?.previousElementSibling;
-
-      if (previousLocalContainer) {
-        const previousSentence:Element = previousLocalContainer.querySelector('.sentencePreview');
-        const sentNumber = previousLocalContainer.getAttribute('sentNumber');
-        console.log(sentNumber);
-
-        console.log(previousSentence?.textContent + currentSentence?.textContent);
-        localContainer.remove();
-        previousSentence.textContent = previousSentence?.textContent + currentSentence?.textContent;
-
-        this.updateSentenceNumbers(previousLocalContainer, parseInt(sentNumber));
-      } 
-    }
-
-    /*test2(target:HTMLInputElement) {
-      //(input)="this.style.height = ''; this.style.height = this.scrollHeight +'px'; console.log(this.style)"
-      target.style.height = target.scrollHeight +'px';
-    }*/
 
   async ngOnInit() {
     const user = this.auth.getUserDetails();
@@ -196,6 +86,121 @@ export class DigitalReaderComponent implements OnInit {
     console.log(this.user)
     console.log(this)
 
+  }
+
+  updateSentenceNumbers(targetContainer:Element, startNumber:number) {
+    let tmp = targetContainer;
+    let number = startNumber;
+    while (tmp) {
+      tmp.setAttribute('sentNumber', number.toString());
+      (tmp.querySelector('b') as Element).textContent = number.toString() + ' ' // setting the number element
+      number++;
+      tmp = tmp.nextElementSibling;
+    }
+  }
+
+  /*test() {
+    console.log('input event fires anyway!')
+  }*/
+
+  createMergeButton() {
+    const mergeButton = document.createElement('button');
+    mergeButton.className="sentenceMerger";
+    mergeButton.textContent="▲ merge ▼"; // TODO : change to use translation service
+    mergeButton.tabIndex = -1;
+    mergeButton.addEventListener('click', (event) => {
+      this.mergeSentences(event.target as Element);
+    })
+    return mergeButton;
+  }
+
+  createNumberEl(sentNumber:string) {
+    const newNumberEl = document.createElement('b');
+    //const sentNumber = localContainer.getAttribute('sentNumber');
+    newNumberEl.textContent = sentNumber + ' ';
+    return newNumberEl
+  }
+
+  createSentencePreview(textContent:string) {
+    const newSentencePreview = document.createElement('span');
+    newSentencePreview.textContent = textContent;
+    newSentencePreview.className = 'sentencePreview';
+    newSentencePreview.contentEditable = "plaintext-only"
+    newSentencePreview.spellcheck = false;
+
+    newSentencePreview.addEventListener('beforeinput', (event) => {
+      this.splitSentence(event);
+    })
+
+    return newSentencePreview;
+  }
+
+  createSentencePreviewContainer(mergeButton:Element, newNumberEl:Element, newSentencePreview:Element, sentNumber:string) {
+    const newSentenceContainer = document.createElement('div');
+    newSentenceContainer.setAttribute('sentNumber', sentNumber)
+    newSentenceContainer.append(mergeButton);
+    newSentenceContainer.append(document.createElement('br'))
+    newSentenceContainer.append(newNumberEl);
+    newSentenceContainer.append(newSentencePreview);
+    return newSentenceContainer;
+  } 
+
+  splitSentence(event:InputEvent) {
+    
+    const target:Element = event.target as Element;
+
+    if (event.inputType==="insertLineBreak") {
+      event.preventDefault();
+      const breakIndex:number = getSelection()?.anchorOffset as number;
+      const fullTextContent:string = target.textContent;
+      if (breakIndex > 0 && breakIndex < fullTextContent.length) {
+        const textPreSplit:string = fullTextContent?.slice(0, breakIndex);
+        const textPostSplit:string = fullTextContent?.slice(breakIndex, fullTextContent.length);
+
+        console.log(textPreSplit);
+        console.log(textPostSplit);
+
+        const localContainer = target.parentElement as Element;
+        const parentContainer = localContainer.parentElement as Element;
+
+        target.textContent = textPostSplit;
+
+        const mergeButton = this.createMergeButton();
+
+        const sentNumber:string = localContainer.getAttribute('sentNumber') as string;
+        const newNumberEl = this.createNumberEl(sentNumber);
+
+        // create new editable element containing the segment before the break
+        const newSentencePreview = this.createSentencePreview(textPreSplit)
+
+        const newSentenceContainer = this.createSentencePreviewContainer(mergeButton, newNumberEl, newSentencePreview, sentNumber);
+        
+        parentContainer.insertBefore(newSentenceContainer, localContainer);
+
+        this.updateSentenceNumbers(localContainer, parseInt(sentNumber)+1);
+
+      }
+    } else {
+      console.log('only return is allowed!')
+      event.preventDefault();
+    }
+  }
+
+  mergeSentences(target:Element) {
+    const localContainer:Element = target.parentElement as Element;
+    const currentSentence:Element = localContainer?.querySelector('.sentencePreview') as Element;
+
+    const previousLocalContainer:Element = localContainer?.previousElementSibling as Element;
+
+    if (previousLocalContainer) {
+      const previousSentence:Element = previousLocalContainer.querySelector('.sentencePreview') as Element;
+      const sentNumber:string = previousLocalContainer.getAttribute('sentNumber') as string;
+
+      localContainer.remove();
+      previousSentence.textContent = (previousSentence?.textContent as string) + (currentSentence?.textContent as string);
+
+      this.updateSentenceNumbers(previousLocalContainer, parseInt(sentNumber));
+    } 
   }
 
   async convertDocxToHTML() {
@@ -213,8 +218,29 @@ export class DigitalReaderComponent implements OnInit {
 
   }
 
+  synthesiseStory(storyId:string, sentenceSpans:NodeListOf<Element>) {
+    
+    for (let voice of functioningVoices) {
+      
+      for (let j=0;j<sentenceSpans.length;j++) {
+        const sentenceSpan = sentenceSpans.item(j) as Element;
+        
+        const sentId = this.drStoryService.parseSegId(sentenceSpan.id, 'sentence');
+        
+        firstValueFrom(this.drStoryService.runTestQueue(
+          sentenceSpan.textContent,
+          voice.code,
+          'MP3',
+          1,
+          storyId,
+          sentId)
+        );
+      }
+    }
+  }
+
   // TODO : Migrate to use queuing API
-  async synthesiseStory(htmlBody:Document, storyId:string) {
+  /*async synthesiseStory(htmlBody:Document, storyId:string) {
 
     //const parser = new DOMParser;
 
@@ -235,18 +261,15 @@ export class DigitalReaderComponent implements OnInit {
 
         //this.drStoryService.storeSynthAudio(storyId, sentId, audioPromise, voice.code)
         this.drStoryService.storeSynthAudio(storyId, sentId, audioObservable, voice.code)
-        /*.subscribe({
-        next(response) {console.log(response.id)}
-      });*/
       }
     }
-  }
+  }*/
 
   async createNewStory() {
     this.storyState = ''
 
     console.log('creating dr-story...')
-    this.isFirstDrStory.emit(this.drStories.length == 0);
+    //this.isFirstDrStory.emit(this.drStories.length == 0);
     this.dialogRef = this.dialog.open(DigitalReaderStoryCreationDialogComponent, {
       data: {
         title: this.ts.l.story_details,
@@ -265,8 +288,8 @@ export class DigitalReaderComponent implements OnInit {
       width: "80vh",
     });
 
-    console.log(this.dialogRef)
-    console.log(this.user.role)
+    //console.log(this.dialogRef)
+    //console.log(this.user.role)
 
     this.dialogRef.afterClosed().subscribe(async (res: any) => {
 
@@ -310,14 +333,6 @@ export class DigitalReaderComponent implements OnInit {
               return;
           }
 
-          // save the response object here
-          /*return {
-            title: res.title,
-            collections: collections,
-            thumbnail: thumbnail,
-            //story: story,
-            public: res.public
-          }*/
           this.storyOptions = {
             title: res.title,
             collections: collections,
@@ -325,6 +340,8 @@ export class DigitalReaderComponent implements OnInit {
             //story: story,
             public: res.public
           }
+
+          this.snackbar.open(this.ts.l.enter_to_split_message, this.ts.l.okay, {duration: 6000});
 
           /* Temporarily commented out for testing
           if (this.convertedHTMLDoc) {
@@ -395,7 +412,8 @@ export class DigitalReaderComponent implements OnInit {
           next: (response) => {
               console.log('a response was received')
               this.storyState = 'processed'
-              this.synthesiseStory(this.segmentedHTMLDoc, response.id);
+              //this.synthesiseStory(this.segmentedHTMLDoc, response.id);
+              this.synthesiseStory(response.id, this.segmentedHTMLDoc?.querySelectorAll('.sentence'));
           },
           error: () => {
               alert("Not able to create a new story");

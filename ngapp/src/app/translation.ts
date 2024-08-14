@@ -245,6 +245,9 @@ const translations = {
   processing: {
     ga: 'Á phróiseáil',
     en: 'Processing' },
+  enter_to_split_message: {
+    ga: "Brúigh ENTER laistigh d'abairt chun é a scoilteadh ina dhá",
+    en: 'Press ENTER within a sentence to split it in two' },
   confirm_sentences: {
     ga: 'Ar dheimhnigh tú na habairtí atá thíos ?',
     en: 'Have you confirmed the below sentences?' },

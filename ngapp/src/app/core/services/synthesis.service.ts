@@ -49,6 +49,9 @@ export const voices = asVoice([
   { name: "Colm", gender: "male", shortCode: "cmg", code: "ga_MU_cmg_nnmnkwii", dialect: "munster", algorithm: "dnn", },
 ] as const);
 
+// subset of voices that are confirmed to be working
+export const functioningVoices = voices.slice(0,3);
+
 // type defining an entry in the VoiceConfig array
 export type Voice = (typeof voices)[number];
 
