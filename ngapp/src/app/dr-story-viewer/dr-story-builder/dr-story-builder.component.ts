@@ -62,13 +62,6 @@ const dialectToVoiceIndex = new Map<string, number>([
   encapsulation: ViewEncapsulation.None // Without this line, non-angular html cannot be targetted for styling
 })
 export class DigitalReaderStoryBuilderComponent implements OnInit {
-  
-  /*@Input() type=''
-  @Input() class:string
-  @Input() id:string
-  @Input() src:string
-  @Input() lemma:string
-  @Input() tags:string*/
 
   @Input() content:Element
   @Input() storyId:string
@@ -180,10 +173,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     tippy('.word', {
       role: 'lemma and tags tooltip',
       allowHTML: true,
-      content(reference) {
+      content: (reference) => {
         const lemma = reference.getAttribute('lemma');
-        const tags = reference.getAttribute('tags');
-        return `<div class="tooltipContent"><p>Lemma: ${lemma}</p><p>Tags: ${tags}</p></div>`;
+        const tags:string = reference.getAttribute('tags');
+        const parsedTags = this.drStoryService.parseGrammarTags(tags);
+        return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
       },
       delay: [200, 50], // delay before it shows/hides
       interactive: true,
@@ -195,10 +189,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     })
     
   }
-
-  /*startSentenceSynthBatching() {
-
-  }*/
 
   sortGeneratedAudio(audioArr:Array<any>, sentenceSpans:NodeList) {
     //let tmpSortedAudio:[][] = [];

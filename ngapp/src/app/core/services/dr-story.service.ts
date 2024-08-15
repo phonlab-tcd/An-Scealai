@@ -181,6 +181,441 @@ export class DigitalReaderStoryService {
     return null;
   }
 
+  parseNumber(tagsArr:string[]) {
+    let outputNumber = '';
+    let number = tagsArr.shift();
+
+    if (number == 'Sg') outputNumber += ' (sg.)';
+    else if (number == 'Pl') outputNumber += ' (pl.)';
+    else if (number == 'Weak') {
+      outputNumber += ' (weak';
+      number = tagsArr.shift();
+      if (number == 'Pl') outputNumber += ' pl.)';
+      else if (number == 'Sg') outputNumber += ' sg.)';
+      else outputNumber += ` ${number})`;
+    }
+    else outputNumber += ` (${number})`;
+
+    return outputNumber;
+  }
+
+  parseMutation(tagsArr:string[]) {
+    let outputMutation = '';
+    const mutation:string = tagsArr.shift() as string;
+
+    if (mutation == 'Len') outputMutation += ' (séimhithe)';
+    else if (mutation == 'Ecl') outputMutation += ' (uraithe)';
+    else if (mutation == 'DefArt' || mutation == 'Def') outputMutation += ' (def.)';
+    else if (mutation == 'Art') outputMutation += ' (art.)';
+    else if (mutation == 'Simp') outputMutation += ' (simple)';
+    else outputMutation += ` (${mutation})`;
+
+    return outputMutation;
+  }
+
+  parseCase(tagsArr:string[]) {
+    let outputCase = '';
+    const wordCase = tagsArr.shift();
+
+    if (wordCase == 'Com') outputCase += ' (com.)';
+    else if (wordCase == 'Gen') outputCase += ' (gen.)';
+    else tagsArr.unshift(wordCase); // sometimes the wrong attribute may be being parsed
+
+    return outputCase;
+  }
+
+  parseGender(tagsArr:string[]) {
+    let outputGender = '';
+    const gender = tagsArr.shift();
+
+    if (gender == 'Masc') outputGender += ' (m)';
+    else if (gender == 'Fem') outputGender += ' (f)';
+    else outputGender += ` (${gender})`;
+
+    return outputGender;
+  }
+
+  parseTense(tagsArr:string[]) {
+    let outputTense = '';
+    const tense:string = tagsArr.shift();
+
+    if (tense === 'Cond') outputTense += ' (conditional)';
+    else if (tense === 'Pres') outputTense += ' (present)';
+    else if (tense === 'Past') outputTense += ' (past)';
+    else if (tense === 'Cop') outputTense += ' (copula)';
+    else outputTense += ` (${tense})`;
+
+    return outputTense;
+  }
+
+  parseAdjForm(tagsArr:string[]) {
+    let outputForm = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Base') outputForm += ' (base)';
+    else if (form === 'Comp') outputForm += ' (comparative)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputForm;
+  }
+
+  parseClauseType(tagsArr:string[]) {
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Subord') outputType += ' (subordinate)';
+    else if (form === 'Coord') outputType += ' (coordinate)';
+    else if (form === 'Dep') outputType += ' (dependant)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parseNumberType(tagsArr:string[]) {
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Ord') outputType += ' (ordinal)';
+    else if (form === 'Card') outputType += ' (cardinal)';
+    else if (form === 'Pers') outputType += ' (personal)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parsePronounType(tagsArr:string[]) { // prepositional etc.
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Pers') outputType += ' (personal)';
+    else if (form === 'Prep') outputType += ' (prep.)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parseVerbTransitivity(tagsArr:string[]) { // prepositional etc.
+    let outputTransitivity = '';
+    const transitivity:string = tagsArr.shift();
+
+    if (transitivity == 'VTI') outputTransitivity += ' (trans./intrans.)';
+    else if (transitivity == 'VI') outputTransitivity += ' (intransitive)';
+    else if (transitivity == 'VT') outputTransitivity += ' (transitive)';
+    //else if (transitivity == 'VD') outputTransitivity += ' (transitive)';
+    //else if (transitivity == 'VF') outputTransitivity += ' (transitive)';
+
+    return outputTransitivity;
+  }
+
+  parseVerbAutonomy(tagsArr:string[]) { // prepositional etc.
+    let outputAutonomy = '';
+    const autonomy:string = tagsArr.shift();
+
+    if (autonomy == 'Auto') outputAutonomy += ' (autonomous)';
+    else tagsArr.unshift(autonomy);
+
+    return outputAutonomy;
+  }
+
+  parseRole(tagsArr:string[]) { // prepositional etc.
+    let outputRole = '';
+    const role:string = tagsArr.shift();
+
+    if (role == 'Sbj') outputRole += ' (subj.)';
+    else if (role == 'Obj') outputRole += ' (obj.)';
+    else tagsArr.unshift(role);
+
+    return outputRole;
+  }
+
+  parseVerbType(tagsArr:string[]) {
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'PresInd') outputType += ' (pres.)';
+    else if (form === 'PastInd') outputType += ' (past)';
+    else if (form === 'PastIndDep') outputType += ' (past dep.)';
+    else if (form === 'PastImp') outputType += ' (past imperf.)';
+    else if (form === 'FutInd') outputType += ' (future)';
+    else if (form === 'Cond') outputType += ' (cond.)';
+    else if (form === 'PresSubj') outputType += ' (pres. subj.)';
+    else if (form === 'PastSubj') outputType += ' (past subj.)';
+    else if (form === 'Imper') outputType += ' (imperative)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parseVerbalType(tagsArr:string[]) {
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Noun') outputType += ' Noun';
+    else if (form === 'Adj') outputType += ' Adjective';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parseParticleType(tagsArr:string[]) {
+    let outputType = '';
+    const form:string = tagsArr.shift();
+
+    if (form === 'Vb') outputType += ' (verbal)';
+    else if (form === 'Inf') outputType += ' (infinitive)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parsePerson(tagsArr:string[]) {
+    let outputPerson = '';
+    const form:string = tagsArr.shift();
+
+    if (form === '1P') outputPerson += ' (1st pers.)';
+    else if (form === '2P') outputPerson += ' (2nd pers.)';
+    else if (form === '3P') outputPerson += ' (3rd pers.)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputPerson;
+  }
+
+  parseParticleRelativity(tagsArr:string[]) {
+    let outputType = '';
+    let form:string = tagsArr.shift();
+
+    if (form === 'Rel') {
+      outputType += ' (rel.';
+      form = tagsArr.shift();
+      if (form === 'Direct') outputType += ' direct)';
+      else if (form === 'Indirect') outputType += ' indirect)';
+      else if (form === 'Subj') outputType += ' subjunctive)';
+      else outputType += ')';
+    }
+    else if (form === 'Direct') outputType += ' (direct)';
+    else if (form === 'Indirect') outputType += ' (indirect)';
+    else if (form === 'Subj') outputType += ' (subjunctive)';
+    else if (form === 'Cmpl') outputType += ' (complementiser)';
+    else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parseDeterminerType(tagsArr:string[]) {
+    let outputType = '';
+    const type:string = tagsArr.shift();
+
+    if (type === 'Dem') outputType += ' (demonstrative)';
+    else if (type === 'Poss') outputType += ' (possessive)';
+    else if (type === 'Qty') {
+      const type:string = tagsArr.shift();
+      if (type === 'Idf') outputType += ' (indef. quantifier)';
+      else if (type === 'Def') outputType += ' (def. quantifier)';
+    }
+    else if (type === 'Idf') outputType += ' (indef. quantifier)';
+    else if (type === 'Def') outputType += ' (def. quantifier)';
+    else tagsArr.unshift(type); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+
+  }
+
+  parseNeg(tagsArr:string[]) {
+    let outputType = '';
+    const neg:string = tagsArr.shift();
+
+    if (neg === 'Neg') outputType += ' (neg.)';
+    else tagsArr.unshift(neg);
+
+    return outputType
+  }
+
+  parseGrammarTags(tags:string) {
+    if (tags === '') return '?';
+
+    let tagsArr = tags.split(' ');
+    let isGuess = false;
+    let isProperNoun = false;
+    let isSubstantive = false;
+    let outputString = '';
+    /*let parsedTags:any = {
+      gender: null,
+      number: null,
+      category: null,
+    };*/
+
+    let wordClass = tagsArr.shift();
+    if (wordClass === 'Guess') {
+      isGuess = true;
+      wordClass = tagsArr.shift();
+    }
+    if (wordClass === 'Prop') {
+      isProperNoun = true;
+      wordClass = tagsArr.shift();
+    }
+    if (wordClass === 'Subst') {
+      outputString += 'Substantive ';
+      isSubstantive = true;
+      wordClass = tagsArr.shift();
+    }
+
+    if (wordClass === 'Noun') {
+
+      if (isProperNoun)
+        outputString += 'Proper ';
+
+      outputString += 'Noun';
+
+      // maybe refactor to reduce the number of brackets
+
+      if (!isSubstantive) {
+        outputString += this.parseGender(tagsArr);
+        outputString += this.parseCase(tagsArr);
+        if (tagsArr.length>0) outputString += this.parseNumber(tagsArr);
+      } else {
+        outputString += this.parseNumber(tagsArr);
+        const potentialPartitive:string = tagsArr.shift();
+        if (potentialPartitive == 'Part') {
+          outputString += ' (particle)';
+          outputString += this.parseAdjForm(tagsArr);
+        }
+        else tagsArr.unshift(potentialPartitive);
+      }
+
+      if (tagsArr.length>0) {
+        outputString += this.parseMutation(tagsArr);
+      }
+
+    } else if (wordClass === 'Part') {
+
+      outputString += 'Particle';
+      outputString += this.parseParticleType(tagsArr);
+      if (tagsArr.length > 0)outputString += this.parseNeg(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseParticleRelativity(tagsArr);
+      if (tagsArr.length > 0) {
+        const pronominalOrTense = tagsArr.shift();
+        if (pronominalOrTense === 'Pro') outputString += ' (pronominal)';
+        else {
+          tagsArr.unshift(pronominalOrTense);
+          outputString += this.parseNeg(tagsArr);
+          outputString += this.parseTense(tagsArr);
+          //outputString += this.parseParticleRelativity(tagsArr);
+        }
+        //outputString += this.parseTense(tagsArr);
+      }
+
+    } else if (wordClass === 'Adj') {
+
+      outputString += 'Adjective';
+
+      outputString += this.parseAdjForm(tagsArr);
+
+      if (tagsArr.length>0) {
+        outputString += this.parseMutation(tagsArr);
+      }
+
+    } else if (wordClass === 'Verb') {
+
+      outputString += wordClass;
+      outputString += this.parseVerbTransitivity(tagsArr);
+      outputString += this.parseVerbType(tagsArr);
+      outputString += this.parseVerbAutonomy(tagsArr);
+      //if (tagsArr.length > 0) outputString += this.parseRole(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseMutation(tagsArr);
+
+    } else if (wordClass === 'Adv') {
+
+      outputString += 'Adverb';
+
+    }else if (wordClass === 'Pron') {
+
+      outputString += 'Pronoun';
+      outputString += this.parsePronounType(tagsArr);
+      outputString += this.parsePerson(tagsArr);
+      outputString += this.parseNumber(tagsArr);
+      outputString += this.parseGender(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseRole(tagsArr);
+
+    } else if (wordClass === 'Verbal') {
+
+      outputString += wordClass;
+      outputString += this.parseVerbalType(tagsArr);
+      outputString += this.parseVerbTransitivity(tagsArr);
+      if (tagsArr.length>0) outputString += this.parseMutation(tagsArr);
+
+    } else if (wordClass === 'Det') {
+
+      outputString += 'Determiner';
+
+      outputString += this.parseDeterminerType(tagsArr);
+      if (tagsArr.length > 0) this.parsePerson(tagsArr);
+      if (tagsArr.length > 0) this.parseNumber(tagsArr);
+      if (tagsArr.length > 0) this.parseGender(tagsArr);
+
+    } else if (wordClass === 'Num') {
+
+      outputString += 'Number';
+
+      outputString += this.parseNumberType(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseMutation(tagsArr);
+
+    } else if (wordClass === 'Prep') {
+
+      outputString += 'Preposition';
+      outputString += this.parseMutation(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseNumber(tagsArr);
+
+    } else if (wordClass === 'Punct') {
+
+      outputString += 'Punctuation';
+
+    } else if (wordClass === 'Cop') {
+
+      outputString += 'Copula';
+      outputString += this.parseTense(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseClauseType(tagsArr);
+
+    } else if (wordClass === 'Conj') {
+      outputString += 'Conjunction';
+
+      outputString += this.parseClauseType(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseTense(tagsArr);
+
+    } else if (wordClass === 'Art') {
+
+      outputString += 'Article';
+      outputString += this.parseCase(tagsArr);
+      outputString += this.parseNumber(tagsArr);
+      outputString += this.parseMutation(tagsArr); // definite
+      if (tagsArr.length>0) outputString += this.parseGender(tagsArr);
+
+    } else if (wordClass === 'Itj') {
+
+      outputString += 'Interjection';
+
+    }else if (wordClass === 'Foreign') {
+
+      outputString += wordClass;
+
+    }
+
+    // failsafe so as not to lose any info
+    if (tagsArr) {
+      if (outputString == '') {
+        outputString += wordClass;
+      }
+      for (let i=0; i<tagsArr.length; i++) {
+        const tag = tagsArr[i];
+        if (i!=0 || outputString !== '') outputString += ' '
+        outputString += tag;
+      }
+    }
+
+    if (isGuess) outputString += ' ?';
+    
+    return outputString;
+  }
+
   saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, thumbnail:string, story: Object, isPublic: Boolean) {
     const drStoryObj = {
       title: title,
