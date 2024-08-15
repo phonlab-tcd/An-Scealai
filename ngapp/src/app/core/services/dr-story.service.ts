@@ -230,7 +230,7 @@ export class DigitalReaderStoryService {
 
     if (gender == 'Masc') outputGender += ' (m)';
     else if (gender == 'Fem') outputGender += ' (f)';
-    else outputGender += ` (${gender})`;
+    else tagsArr.unshift()
 
     return outputGender;
   }
@@ -301,10 +301,16 @@ export class DigitalReaderStoryService {
     if (transitivity == 'VTI') outputTransitivity += ' (trans./intrans.)';
     else if (transitivity == 'VI') outputTransitivity += ' (intransitive)';
     else if (transitivity == 'VT') outputTransitivity += ' (transitive)';
+    else tagsArr.unshift();
     //else if (transitivity == 'VD') outputTransitivity += ' (transitive)';
     //else if (transitivity == 'VF') outputTransitivity += ' (transitive)';
 
     return outputTransitivity;
+  }
+
+  removeExtraVerbInfo(tagsArr:string[]) {
+    const transitivity:string = tagsArr.shift();
+    if (transitivity != 'VD' && transitivity != 'VF' && transitivity != 'Vow') tagsArr.unshift(transitivity);
   }
 
   parseVerbAutonomy(tagsArr:string[]) { // prepositional etc.
@@ -384,6 +390,19 @@ export class DigitalReaderStoryService {
     let outputType = '';
     let form:string = tagsArr.shift();
 
+    /*
+    +Part particle
+    +Ad adverbial, e.g. go holc ‘ badly’
+    +Nm numeral, e.g. a haon ‘one’
+    +Comp comparative degree, e.g. níos fearr ‘better’
+    +Pat patronym, e.g. Ó Beirn, Ní Bheirn, Uí Bheirn
+    +Voc vocative particle, e.g. a Mháire ‘Mary!’
+    +Deg degree particle, e.g. a géire a labhair sé
+    'how sharply he spoke'
+    +Cp copular particle
+
+    */
+
     if (form === 'Rel') {
       outputType += ' (rel.';
       form = tagsArr.shift();
@@ -396,6 +415,13 @@ export class DigitalReaderStoryService {
     else if (form === 'Indirect') outputType += ' (indirect)';
     else if (form === 'Subj') outputType += ' (subjunctive)';
     else if (form === 'Cmpl') outputType += ' (complementiser)';
+    else if (form === 'Ad') outputType += ' (adverbial)';
+    else if (form === 'Nm') outputType += ' (numeral)';
+    else if (form === 'Comp') outputType += ' (comparative)';
+    else if (form === 'Pat') outputType += ' (patrononmical)';
+    else if (form === 'Voc') outputType += ' (vocative)';
+    else if (form === 'Deg') outputType += ' (degree)';
+    else if (form === 'Cp') outputType += ' (copular)';
     else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
 
     return outputType;
@@ -426,6 +452,25 @@ export class DigitalReaderStoryService {
 
     if (neg === 'Neg') outputType += ' (neg.)';
     else tagsArr.unshift(neg);
+
+    return outputType
+  }
+
+  parseAdverbType(tagsArr:string[]) {
+    let outputType = '';
+    const type:string = tagsArr.shift();
+
+    if (type === 'Gn') outputType += ' (general)';
+    else if (type === 'Its') outputType += ' (intensifier)';
+    else if (type === 'Dir') outputType += ' (directional)';
+    else if (type === 'Q') outputType += ' (interrogative)';
+    else if (type === 'Loc') outputType += ' (locative)';
+    else if (type === 'Temp') outputType += ' (temporal)';
+    else if (type === 'NegQ') outputType += ' (neg. interrogative)';
+    else if (type === 'Rel') outputType += ' (relative)';
+    else if (type === 'RelInd') outputType += ' (rel. indir.)';
+    else if (type === 'Pro') outputType += ' (pronominal)';
+    else tagsArr.unshift(type);
 
     return outputType
   }
@@ -473,13 +518,17 @@ export class DigitalReaderStoryService {
         outputString += this.parseCase(tagsArr);
         if (tagsArr.length>0) outputString += this.parseNumber(tagsArr);
       } else {
+        
         outputString += this.parseNumber(tagsArr);
-        const potentialPartitive:string = tagsArr.shift();
-        if (potentialPartitive == 'Part') {
-          outputString += ' (particle)';
-          outputString += this.parseAdjForm(tagsArr);
+        if (tagsArr.length>0) {
+          const potentialPartitive:string = tagsArr.shift();
+          if (potentialPartitive == 'Part') {
+            outputString += ' (particle)';
+          }
+          else tagsArr.unshift(potentialPartitive);
         }
-        else tagsArr.unshift(potentialPartitive);
+        
+        if (tagsArr.length>0) outputString += this.parseAdjForm(tagsArr);
       }
 
       if (tagsArr.length>0) {
@@ -518,6 +567,7 @@ export class DigitalReaderStoryService {
 
       outputString += wordClass;
       outputString += this.parseVerbTransitivity(tagsArr);
+      this.removeExtraVerbInfo(tagsArr);
       outputString += this.parseVerbType(tagsArr);
       outputString += this.parseVerbAutonomy(tagsArr);
       //if (tagsArr.length > 0) outputString += this.parseRole(tagsArr);
@@ -526,6 +576,7 @@ export class DigitalReaderStoryService {
     } else if (wordClass === 'Adv') {
 
       outputString += 'Adverb';
+      outputString += this.parseAdverbType(tagsArr);
 
     }else if (wordClass === 'Pron') {
 
@@ -548,9 +599,10 @@ export class DigitalReaderStoryService {
       outputString += 'Determiner';
 
       outputString += this.parseDeterminerType(tagsArr);
-      if (tagsArr.length > 0) this.parsePerson(tagsArr);
-      if (tagsArr.length > 0) this.parseNumber(tagsArr);
-      if (tagsArr.length > 0) this.parseGender(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parsePerson(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseNumber(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseGender(tagsArr);
+      
 
     } else if (wordClass === 'Num') {
 
@@ -568,12 +620,15 @@ export class DigitalReaderStoryService {
     } else if (wordClass === 'Punct') {
 
       outputString += 'Punctuation';
+      tagsArr = []; // extra punctuation information is not necessary
 
     } else if (wordClass === 'Cop') {
 
       outputString += 'Copula';
       outputString += this.parseTense(tagsArr);
       if (tagsArr.length > 0) outputString += this.parseClauseType(tagsArr);
+      if (tagsArr.length > 0) this.removeExtraVerbInfo(tagsArr);
+      if (tagsArr.length > 0) outputString += this.parseAdverbType(tagsArr);
 
     } else if (wordClass === 'Conj') {
       outputString += 'Conjunction';
