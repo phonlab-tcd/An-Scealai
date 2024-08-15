@@ -178,9 +178,10 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const tags:string = reference.getAttribute('tags');
         const parsedTags:any = this.drStoryService.parseGrammarTags(tags);
         //return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
-        return `<div class="tooltipContent"><div><p>Base form: ${lemma}</p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
+        return `<div class="tooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
       },
-      delay: [200, 50], // delay before it shows/hides
+      //delay: [200, 50],
+      delay: [300, 50], // delay before it shows/hides
       interactive: true,
       duration: [400, 100], // show/hide transition duration
       //arrow: false,
@@ -463,7 +464,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     this.clickTimeoutRef = setTimeout( async () => {
       const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
+
       this.currentWord?.dispatchEvent(new Event('mouseenter'));
+      setTimeout( (tooltipAnchor) => {
+        console.log(tooltipAnchor)
+        tooltipAnchor.dispatchEvent(new Event('blur'));
+      }, 3500, this.currentWord); // automatically rehide tooltip after 5 seconds
+
       this.clickTimeoutRef = setTimeout( async () => {
         const audioObj = await audioObjPromise;
         if (!this.audioPlaying) // auto-played audio is a lower priority than other audio
@@ -472,6 +479,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }, 400) // wait to start synthesising if the user is unlikely to stop on this word
     //
   }
+
+  /*@HostListener('document:mouseenter', ['$event'])
+  overrideHover(event:MouseEvent) {
+    console.log(event);
+  }*/
 
   @HostListener('document:keydown', ['$event'])
   overrideKeypresses(event:KeyboardEvent) {
