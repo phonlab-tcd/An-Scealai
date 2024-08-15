@@ -176,8 +176,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       content: (reference) => {
         const lemma = reference.getAttribute('lemma');
         const tags:string = reference.getAttribute('tags');
-        const parsedTags = this.drStoryService.parseGrammarTags(tags);
-        return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
+        const parsedTags:any = this.drStoryService.parseGrammarTags(tags);
+        //return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
+        return `<div class="tooltipContent"><div><p>Base form: ${lemma}</p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
       },
       delay: [200, 50], // delay before it shows/hides
       interactive: true,
@@ -462,6 +463,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
     this.clickTimeoutRef = setTimeout( async () => {
       const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
+      this.currentWord?.dispatchEvent(new Event('mouseenter'));
       this.clickTimeoutRef = setTimeout( async () => {
         const audioObj = await audioObjPromise;
         if (!this.audioPlaying) // auto-played audio is a lower priority than other audio
@@ -484,7 +486,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           console.log(this.currentWord)
           this.playStory();
         }
-      } else if (event.code==='ArrowRight') {
+      } if (['ArrowRight', 'ArrowLeft', 'Enter'].includes(event.code)) {
+        
+        // should also call this event when another word gets hovered
+        this.currentWord?.dispatchEvent(new Event('blur'));
+
+        if (event.code==='ArrowRight') {
 
         this.pause();
         if (!event.ctrlKey) {
@@ -590,22 +597,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
             }
             
           }
-          /*if (this.currentSentence) {
-            //let parentSentence:Element | null = this.checkForSegmentParent(this.currentWord.parentElement);
-            let nextSentence:Element | null = this.checkForNextSiblingSeg(this.currentSentence, 'sentence');
-
-            if (!nextSentence)
-              nextSentence = this.checkForNextSentence(this.currentSentence);
-            
-            if (nextSentence) {
-              this.currentSentence = nextSentence;
-              const firstWordChild = this.currentSentence?.querySelector('.word');
-
-              this.updateCurrentWord(firstWordChild);
-
-              this.playWordOnSeekStop();
-            }
-          }*/
         }
       } else if (event.code==='Enter') {
         if (this.currentWord) {
@@ -619,6 +610,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           }
         }
       }
+      } 
     }
   }
 

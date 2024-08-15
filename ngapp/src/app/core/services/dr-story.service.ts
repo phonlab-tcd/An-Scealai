@@ -390,19 +390,6 @@ export class DigitalReaderStoryService {
     let outputType = '';
     let form:string = tagsArr.shift();
 
-    /*
-    +Part particle
-    +Ad adverbial, e.g. go holc ‘ badly’
-    +Nm numeral, e.g. a haon ‘one’
-    +Comp comparative degree, e.g. níos fearr ‘better’
-    +Pat patronym, e.g. Ó Beirn, Ní Bheirn, Uí Bheirn
-    +Voc vocative particle, e.g. a Mháire ‘Mary!’
-    +Deg degree particle, e.g. a géire a labhair sé
-    'how sharply he spoke'
-    +Cp copular particle
-
-    */
-
     if (form === 'Rel') {
       outputType += ', rel.';
       form = tagsArr.shift();
@@ -476,18 +463,13 @@ export class DigitalReaderStoryService {
   }
 
   parseGrammarTags(tags:string) {
-    if (tags === '') return '?';
+    if (tags === '') return {class: '?', attrs: ''};
 
     let tagsArr = tags.split(' ');
     let isGuess = false;
     let isProperNoun = false;
     let isSubstantive = false;
-    let outputString = '';
-    /*let parsedTags:any = {
-      gender: null,
-      number: null,
-      category: null,
-    };*/
+    let outputClass = '';
 
     let wordClass = tagsArr.shift();
     if (wordClass === 'Guess') {
@@ -499,7 +481,7 @@ export class DigitalReaderStoryService {
       wordClass = tagsArr.shift();
     }
     if (wordClass === 'Subst') {
-      outputString += 'Substantive ';
+      //outputClass += 'Substantive ';
       isSubstantive = true;
       wordClass = tagsArr.shift();
     }
@@ -509,11 +491,12 @@ export class DigitalReaderStoryService {
     if (wordClass === 'Noun') {
 
       if (isProperNoun)
-        outputString += 'Proper ';
+        outputClass += 'Proper ';
 
-      outputString += 'Noun';
-
-      // maybe refactor to reduce the number of brackets
+      if (isSubstantive)
+        outputClass += 'Noun-like';
+      else
+        outputClass += 'Noun';
 
       if (!isSubstantive) {
         attributes += this.parseGender(tagsArr);
@@ -539,7 +522,7 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Part') {
 
-      outputString += 'Particle';
+      outputClass += 'Particle';
       attributes += this.parseParticleType(tagsArr);
       if (tagsArr.length > 0)attributes += this.parseNeg(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseParticleRelativity(tagsArr);
@@ -550,14 +533,12 @@ export class DigitalReaderStoryService {
           tagsArr.unshift(pronominalOrTense);
           attributes += this.parseNeg(tagsArr);
           attributes += this.parseTense(tagsArr);
-          //outputString += this.parseParticleRelativity(tagsArr);
         }
-        //outputString += this.parseTense(tagsArr);
       }
 
     } else if (wordClass === 'Adj') {
 
-      outputString += 'Adjective';
+      outputClass += 'Adjective';
 
       attributes += this.parseAdjForm(tagsArr);
 
@@ -567,7 +548,7 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Verb') {
 
-      outputString += wordClass;
+      outputClass += wordClass;
       attributes += this.parseVerbTransitivity(tagsArr);
       this.removeExtraVerbInfo(tagsArr);
       attributes += this.parseVerbType(tagsArr);
@@ -577,12 +558,12 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Adv') {
 
-      outputString += 'Adverb';
+      outputClass += 'Adverb';
       attributes += this.parseAdverbType(tagsArr);
 
     }else if (wordClass === 'Pron') {
 
-      outputString += 'Pronoun';
+      outputClass += 'Pronoun';
       attributes += this.parsePronounType(tagsArr);
       attributes += this.parsePerson(tagsArr);
       attributes += this.parseNumber(tagsArr);
@@ -591,14 +572,14 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Verbal') {
 
-      outputString += wordClass;
+      outputClass += wordClass;
       attributes += this.parseVerbalType(tagsArr);
       attributes += this.parseVerbTransitivity(tagsArr);
       if (tagsArr.length>0) attributes += this.parseMutation(tagsArr);
 
     } else if (wordClass === 'Det') {
 
-      outputString += 'Determiner';
+      outputClass += 'Determiner';
 
       attributes += this.parseDeterminerType(tagsArr);
       if (tagsArr.length > 0) attributes += this.parsePerson(tagsArr);
@@ -608,39 +589,39 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Num') {
 
-      outputString += 'Number';
+      outputClass += 'Number';
 
       attributes += this.parseNumberType(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseMutation(tagsArr);
 
     } else if (wordClass === 'Prep') {
 
-      outputString += 'Preposition';
+      outputClass += 'Preposition';
       attributes += this.parseMutation(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseNumber(tagsArr);
 
     } else if (wordClass === 'Punct') {
 
-      outputString += 'Punctuation';
+      outputClass += 'Punctuation';
       tagsArr = []; // extra punctuation information is not necessary
 
     } else if (wordClass === 'Cop') {
 
-      outputString += 'Copula';
+      outputClass += 'Copula';
       attributes += this.parseTense(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseClauseType(tagsArr);
       if (tagsArr.length > 0) this.removeExtraVerbInfo(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseAdverbType(tagsArr);
 
     } else if (wordClass === 'Conj') {
-      outputString += 'Conjunction';
+      outputClass += 'Conjunction';
 
       attributes += this.parseClauseType(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseTense(tagsArr);
 
     } else if (wordClass === 'Art') {
 
-      outputString += 'Article';
+      outputClass += 'Article';
       attributes += this.parseCase(tagsArr);
       attributes += this.parseNumber(tagsArr);
       attributes += this.parseMutation(tagsArr); // definite
@@ -648,31 +629,32 @@ export class DigitalReaderStoryService {
 
     } else if (wordClass === 'Itj') {
 
-      outputString += 'Interjection';
+      outputClass += 'Interjection';
 
     }else if (wordClass === 'Foreign') {
 
-      outputString += wordClass;
+      outputClass += wordClass;
 
     }
 
     // failsafe so as not to lose any info
     if (tagsArr) {
-      if (outputString == '') {
-        outputString += wordClass;
+      if (attributes == '') {
+        attributes += wordClass;
       }
       for (let i=0; i<tagsArr.length; i++) {
         const tag = tagsArr[i];
-        if (i!=0 || outputString !== '') outputString += ', '
-        outputString += tag;
+        if (i!=0 || attributes !== '') attributes += ', '
+        attributes += tag;
       }
     }
 
-    if (attributes!='') outputString += ' (' + attributes.slice(2,attributes.length) + ')';
+    if (attributes!='') attributes = '(' + attributes.slice(2,attributes.length) + ')';
 
-    if (isGuess) outputString += ' ?';
+    if (isGuess) attributes += ' ?';
     
-    return outputString;
+    //return outputClass + ' ' + attributes;
+    return {class: outputClass, attrs: attributes};
   }
 
   saveDRStory(title: string, /*dialects: Array<string>*/collections: Array<string>, thumbnail:string, story: Object, isPublic: Boolean) {
