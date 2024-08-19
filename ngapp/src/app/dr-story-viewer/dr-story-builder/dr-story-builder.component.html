@@ -1,105 +1,110 @@
 
-<div class="fullPage">
-
-    <!--<mat-sidenav-container>
-        <mat-sidenav>Start</mat-sidenav>
-        <mat-sidenav position="end">End</mat-sidenav>
-        <section>Main</section>
-    </mat-sidenav-container>-->
-
-    <div class="Toolbar">
-        <div class="playbackControls">
-            <!--<button
-            (click)="play()"
-            >prevSent</button>-->
-            <!--audioPlaying boolean not fully working yet-->
-            <button
-            class="pause"
-            [ngClass]="{'paused': audioPaused===true}"
-            (click)="pause()"
-            [attr.aria-label]="'pause button'"
-            [attr.title]="'pause'"
-            >❚❚</button>
-            <button
-            class="play"
-            [ngClass]="{'playing': audioPlaying===true}"
-            (click)="playStory()"
-            [attr.aria-label]="'play button'"
-            [attr.title]="'play the full story'"
-            >▸</button>
-            <!--<button
-            (click)="play()"
-            >nextSent</button>-->
-        </div>
-
-        <div class="voiceSelection">
-            <button
-            mat-button
-            [matMenuTriggerFor]="dialects"
-            aria-label="Dialect selection menu"
-            [attr.title]="'Dialect selection menu'">
-                <!--<mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>-->
-                <mat-icon>arrow_drop_down</mat-icon>
-                <!--<span>{{ ts.l.dialect }}</span>-->
-                {{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender][0] + ')' }}
-                <!--<span>{{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender] + ')' }}</span>-->
-            </button>
-            <mat-menu #dialects="matMenu">
-                <button mat-menu-item
-                [matMenuTriggerFor]="gender"
-                [matMenuTriggerData]="{dialect : 'Connacht'}">
-                    <span>{{ts.l.connacht}}</span>
-                </button>
-                <button mat-menu-item
-                [matMenuTriggerFor]="gender"
-                [matMenuTriggerData]="{dialect : 'Ulster'}">
-                    <span>{{ts.l.ulster}}</span>
-                </button>
-                <button mat-menu-item
-                [matMenuTriggerFor]="gender"
-                [matMenuTriggerData]="{dialect : 'Munster'}">
-                    <span>{{ts.l.munster}}</span>
-                </button>
-            </mat-menu>
-            <mat-menu #gender="matMenu" aria-label="Gender choice menu">
-                <ng-template matMenuContent let-dialect="dialect">
-                    <button mat-menu-item
-                    (click)="speakerSelected(dialect, 'm')"
-                    [disabled]="!speakerExists(dialect, 'm')">
-                        {{ ts.l.male }}
-                    </button>
-                    <button mat-menu-item
-                    (click)="speakerSelected(dialect, 'f')"
-                    [disabled]="!speakerExists(dialect, 'f')">
-                        {{ ts.l.female }}
-                    </button>
-                </ng-template>
-            </mat-menu>
-            
-        </div>
-    </div> <br>
-
-    <!--<mat-drawer-container class="example-container" autosize>-->
-        <!--<mat-drawer #leftSideNav class="left-sidenav" mode="side">
-          <p>Auto-resizing sidenav</p>
-        </mat-drawer>
-      
-        <div class="example-sidenav-content">
-          <button type="button" mat-button (click)="leftSideNav.toggle();rightSideNav.toggle()">
-            Toggle sidenav
-          </button>
-        </div>-->
-
-    <div class="container">
-        <div class="storyContainer"
-        [innerHTML]="forceTrustedHTML"> 
-        </div>
+<div class="interactableArea">
+    <div class="sideBar">
+        <div>test! test!</div>
     </div>
+    <div class="mainPage">
 
-    <!--<mat-drawer #rightSideNav class="right-sidenav" mode="side" position="end">
-        <p>Auto-resizing sidenav</p>
-    </mat-drawer>-->
+        <!--<mat-sidenav-container>
+            <mat-sidenav>Start</mat-sidenav>
+            <mat-sidenav position="end">End</mat-sidenav>
+            <section>Main</section>
+        </mat-sidenav-container>-->
 
-    <!--</mat-drawer-container>-->
+        <div class="Toolbar">
+            <div class="playbackControls">
+                <!--<button
+                (click)="play()"
+                >prevSent</button>-->
+                <!--audioPlaying boolean not fully working yet-->
+                <button
+                class="pause"
+                [ngClass]="{'paused': audioPaused===true}"
+                (click)="pause()"
+                [attr.aria-label]="'pause button'"
+                [attr.title]="'pause'"
+                >❚❚</button>
+                <button
+                class="play"
+                [ngClass]="{'playing': audioPlaying===true}"
+                (click)="playStory()"
+                [attr.aria-label]="'play button'"
+                [attr.title]="'play the full story'"
+                >▸</button>
+                <!--<button
+                (click)="play()"
+                >nextSent</button>-->
+            </div>
 
+            <div class="voiceSelection">
+                <button
+                mat-button
+                [matMenuTriggerFor]="dialects"
+                aria-label="Dialect selection menu"
+                [attr.title]="'Dialect selection menu'">
+                    <!--<mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>-->
+                    <mat-icon>arrow_drop_down</mat-icon>
+                    <!--<span>{{ ts.l.dialect }}</span>-->
+                    {{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender][0] + ')' }}
+                    <!--<span>{{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender] + ')' }}</span>-->
+                </button>
+                <mat-menu #dialects="matMenu">
+                    <button mat-menu-item
+                    [matMenuTriggerFor]="gender"
+                    [matMenuTriggerData]="{dialect : 'Connacht'}">
+                        <span>{{ts.l.connacht}}</span>
+                    </button>
+                    <button mat-menu-item
+                    [matMenuTriggerFor]="gender"
+                    [matMenuTriggerData]="{dialect : 'Ulster'}">
+                        <span>{{ts.l.ulster}}</span>
+                    </button>
+                    <button mat-menu-item
+                    [matMenuTriggerFor]="gender"
+                    [matMenuTriggerData]="{dialect : 'Munster'}">
+                        <span>{{ts.l.munster}}</span>
+                    </button>
+                </mat-menu>
+                <mat-menu #gender="matMenu" aria-label="Gender choice menu">
+                    <ng-template matMenuContent let-dialect="dialect">
+                        <button mat-menu-item
+                        (click)="speakerSelected(dialect, 'm')"
+                        [disabled]="!speakerExists(dialect, 'm')">
+                            {{ ts.l.male }}
+                        </button>
+                        <button mat-menu-item
+                        (click)="speakerSelected(dialect, 'f')"
+                        [disabled]="!speakerExists(dialect, 'f')">
+                            {{ ts.l.female }}
+                        </button>
+                    </ng-template>
+                </mat-menu>
+                
+            </div>
+        </div> <br>
+
+        <!--<mat-drawer-container class="example-container" autosize>-->
+            <!--<mat-drawer #leftSideNav class="left-sidenav" mode="side">
+            <p>Auto-resizing sidenav</p>
+            </mat-drawer>
+        
+            <div class="example-sidenav-content">
+            <button type="button" mat-button (click)="leftSideNav.toggle();rightSideNav.toggle()">
+                Toggle sidenav
+            </button>
+            </div>-->
+
+        <div class="container">
+            <div class="storyContainer"
+            [innerHTML]="forceTrustedHTML"> 
+            </div>
+        </div>
+
+        <!--<mat-drawer #rightSideNav class="right-sidenav" mode="side" position="end">
+            <p>Auto-resizing sidenav</p>
+        </mat-drawer>-->
+
+        <!--</mat-drawer-container>-->
+
+    </div>
 </div>

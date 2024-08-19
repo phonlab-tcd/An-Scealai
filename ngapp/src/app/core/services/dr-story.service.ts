@@ -194,7 +194,8 @@ export class DigitalReaderStoryService {
       else if (number == 'Sg') outputNumber += ', sg.';
       else outputNumber += `, ${number}`;
     }
-    else outputNumber += `, ${number}`;
+    else tagsArr.push(number);
+    //else outputNumber += `, ${number}`;
 
     return outputNumber;
   }
@@ -336,7 +337,7 @@ export class DigitalReaderStoryService {
 
   parseVerbType(tagsArr:string[]) {
     let outputType = '';
-    const form:string = tagsArr.shift();
+    let form:string = tagsArr.shift();
 
     if (form === 'PresInd') outputType += ', pres.';
     else if (form === 'PastInd') outputType += ', past';
@@ -348,6 +349,12 @@ export class DigitalReaderStoryService {
     else if (form === 'PastSubj') outputType += ', past subj.';
     else if (form === 'Imper') outputType += ', imperative';
     else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    form = tagsArr.shift();
+    if (form === 'Dep')
+      outputType += ' dep.';
+    else
+      tagsArr.unshift(form);
 
     return outputType;
   }
@@ -554,6 +561,8 @@ export class DigitalReaderStoryService {
       attributes += this.parseVerbType(tagsArr);
       attributes += this.parseVerbAutonomy(tagsArr);
       //if (tagsArr.length > 0) outputString += this.parseRole(tagsArr);
+      if (tagsArr.length > 0) attributes += this.parsePerson(tagsArr);
+      if (tagsArr.length > 0) attributes += this.parseNumber(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseMutation(tagsArr);
 
     } else if (wordClass === 'Adv') {

@@ -6,15 +6,7 @@ import { SynthesisPlayerComponent } from "app/student/synthesis-player/synthesis
 import { ActivatedRoute, ChildActivationEnd, Router } from "@angular/router";
 import { AuthenticationService } from "app/core/services/authentication.service";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
-/*import { ClassroomService } from "app/core/services/classroom.service";
-import { MessageService } from "app/core/services/message.service";
-import { RecordAudioService } from "app/core/services/record-audio.service";
-import { DigitalReaderStoryService } from "app/core/services/dr-story.service";
-import { SynthVoiceSelectComponent } from "app/synth-voice-select/synth-voice-select.component";
-import { firstValueFrom } from "rxjs";
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { BasicDialogComponent } from '../dialogs/basic-dialog/basic-dialog.component';
-import { Message } from "app/core/models/message";*/
+
 import { CommonModule } from "@angular/common";
 /*import { SynthItemModule } from "app/synth-item/synth-item.module";
 import { SynthVoiceSelectModule } from "app/synth-voice-select/synth-voice-select.module";
@@ -33,7 +25,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
-import tippy from 'tippy.js';
+import tippy, { hideAll } from 'tippy.js';
 
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
@@ -92,6 +84,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   public clickTimeoutRef:NodeJS.Timeout | undefined = undefined;
 
+  public pageContent:Element;
+  public sideBar:Element;
+
   constructor(
     
     private auth: AuthenticationService,
@@ -107,6 +102,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   async ngOnInit() {
 
     this.forceTrustedHTML = this.sanitizer.bypassSecurityTrustHtml(this.content.innerHTML)
+
+    this.pageContent = document.querySelector('.mainPage') as Element;
+    this.sideBar = document.querySelector('.sideBar') as Element;
 
     console.log(dialectToVoiceIndex)
     for (let entry of dialectToVoiceIndex.entries()) {
@@ -386,6 +384,18 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     return null;
   }
 
+  checkForTooltipParent(node:Element) {
+    if (node.classList.contains('tooltipContent'))
+      return node;
+    let tmp = node;
+    while (tmp.parentElement) {
+      tmp = tmp.parentElement
+      if (tmp.classList.contains('tooltipContent'))
+        return tmp;
+    }
+    return null;
+  }
+
   checkForNextSiblingSeg(elem:Element, segType:string) {
     if (elem) {
       let tmp = elem.nextElementSibling;
@@ -465,10 +475,14 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     this.clickTimeoutRef = setTimeout( async () => {
       const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
 
-      this.currentWord?.dispatchEvent(new Event('mouseenter'));
+      //this.currentWord?.dispatchEvent(new Event('mouseenter'));
+      //hideAll();
+      (this.currentWord as any)._tippy.show();
+
       setTimeout( (tooltipAnchor) => {
         console.log(tooltipAnchor)
-        tooltipAnchor.dispatchEvent(new Event('blur'));
+        //tooltipAnchor.dispatchEvent(new Event('blur'));
+        tooltipAnchor._tippy.hide();
       }, 3500, this.currentWord); // automatically rehide tooltip after 5 seconds
 
       this.clickTimeoutRef = setTimeout( async () => {
@@ -501,7 +515,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       } if (['ArrowRight', 'ArrowLeft', 'Enter'].includes(event.code)) {
         
         // should also call this event when another word gets hovered
-        this.currentWord?.dispatchEvent(new Event('blur'));
+        //this.currentWord?.dispatchEvent(new Event('blur'));
+        //hideAll();
+        (this.currentWord as any)._tippy.hide();
 
         if (event.code==='ArrowRight') {
 
@@ -676,7 +692,16 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           console.log(this.currentSentence)
         }, 300); // 300ms is the delay before running the click function
       }
-    }
+    } else {
+      //this.closeSidenav(); // only for testing!
+      hideAll();
+      const tooltip = this.checkForTooltipParent(targetElem);
+      if (tooltip) {
+        this.openSidenav();
+      } else {
+        this.closeSidenav(); // for testing
+      }
+    } 
 
     
   }
@@ -892,33 +917,23 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     await this.playFromCurrentWord()
   }
 
-  /*async playNextSent() {
-    if (this.currentSentence) {
-      const nextSent = this.checkForNextSentence(this.currentSentence);
-      this.currentSentence = nextSent;
-    } else {
-      this.currentSentence = document.querySelector('.storyContainer').querySelector('.sentence') // only for testing
-    }
-
-    if (this.currentSentence) {
-      
-      const firstWord = this.currentSentence.querySelector('.word'); // only for testing
-
-      const sentAudioObj = await this.getCurrentAudioObject();
-      if (sentAudioObj && !this.audioPaused) {
-        this.timings = this.getWordTimings(this.currentWord, this.currentSentence, sentAudioObj)
-        this.updateCurrentWord(firstWord)
-        await this.playFromCurrentWord(sentAudioObj.audioUrl, false)
-      }
-    }
-  }*/
-
   pause() {
     if (this.audio) {
       this.audio.pause()
       this.audioPaused = true;
       this.audioPlaying = false;
     }
+  }
+
+  openSidenav() {
+    this.pageContent.classList.add('pushedContent');
+    this.sideBar.classList.add('shownSideBar')
+    console.log(this.sideBar);
+  }
+
+  closeSidenav() {
+    this.pageContent.classList.remove('pushedContent');
+    this.sideBar.classList.remove('shownSideBar')
   }
 
 }

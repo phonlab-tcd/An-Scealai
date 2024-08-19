@@ -2,7 +2,8 @@
 @import 'tippy.js/themes/material.css';
 
 .container {
-    max-width: 60%;
+    //max-width: 60%;
+    max-width: 45em;
     padding-bottom: 20px;
     animation-duration: 1s;
     animation-name: fadeIn;
@@ -88,15 +89,14 @@
     padding: 10px 5px;
     
     background-color: var(--scealai-green);
-    max-width: 60%;
+    //max-width: 60%;
+    max-width: 45em;
     
     display: flex;
     flex-direction: row;
     
     vertical-align: middle;
     margin: auto;
-    //align-items: center;
-    //justify-content: center;
 
     border-radius: 4px;
 
@@ -231,12 +231,90 @@
     margin: 0;
 }
 
-/*.voiceSelection mat-form-field {
-    //margin: auto auto;
-    max-width: 150px;
-    //max-width: min-content;
+
+
+
+
+.pushedContent {
+    margin-left: 300px;
+    transition: margin-left .25s;
+    transition-timing-function: ease-in;
+}
+
+.mainPage {
+    transition: margin-left .25s;
+}
+
+.sideBar {
+    //position: absolute;
+    position: fixed;
+    //display: none;
+    visibility: hidden;
+    background-color: burlywood;  
+    left: 0px;
+    width: 0px;
+    height: 100%;
+    transition: width .25s, visibility .10s;
+}
+
+.shownSideBar {
+    //display: block;
+    visibility: visible;
+    width: 30%;
+    transition: width .25s;
+    //transition-timing-function: ease-in;
+    //width: 300px;
+}
+
+/*.sideBar {
+    display: none;
+    width: 0;
+    //transition: width .25s, display .25s;
+    //transition: width .25s;
+    //align-items: left;
+    //margin-right: 0;
+    background: none;
+
+    border-radius: 4px;
+}
+
+.shownSideBar {
+    //width: 500px;
+    background-color: burlywood;
+    width: 30%;
+    //width: 500px;
+    //margin-left: 0;
+    //width: 20%;
+    display: block;
+    //transition: width .25s, display .25s;
+    transition: width .25s, display .25s;
+    transition-timing-function: ease-in;
 }*/
 
-/*html {
-    scroll-behavior: smooth;
+/*.sideBar {
+    //display: none;
+    width: 0;
+    //transition: width .25s, display .25s;
+    transition: width .25s;
+    align-items: left;
+
+    border-radius: 4px;
+}
+
+.shownSideBar {
+    //width: 500px;
+    background-color: burlywood;
+    width: 100;
+    margin-left: 0;
+    width: 20%;
+    //display: block;
+    //transition: width .25s, display .25s;
+    transition: width .25s;
+    transition-timing-function: ease-in;
 }*/
+
+.interactableArea {
+    display: flex;
+    justify-content: space-evenly;
+    //justify-content: space-between;
+}
