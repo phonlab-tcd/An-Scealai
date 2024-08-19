@@ -270,19 +270,25 @@
     //display: none;
     visibility: hidden;
     width: 0;
-    background-color: burlywood;
+    background-color: var(--scealai-cream);//rgb(250, 250, 250);
+    position: sticky;
+    top: 0;
+    //height: 100%;
+    //height: 50%;
+    //height: fit-content;
+    height: 80vh;
     //transition: width .25s, display .25s;
     //transition: width .25s;
     //align-items: left;
     //margin-right: 0;
 
     border-radius: 4px;
-    transition: width .25s, visibility .20s;
+    transition: width .25s, visibility .15s;
+    overflow-y: auto;
 }
 
 .shownSideBar {
     //width: 500px;
-    
     width: 30%;
     //width: 500px;
     //margin-left: 0;

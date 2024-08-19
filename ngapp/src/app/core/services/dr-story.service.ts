@@ -207,9 +207,9 @@ export class DigitalReaderStoryService {
     if (mutation == 'Len') outputMutation += ', séimhithe';
     else if (mutation == 'Ecl') outputMutation += ', uraithe';
     else if (mutation == 'DefArt' || mutation == 'Def') outputMutation += ', def.';
-    else if (mutation == 'Art') outputMutation += ', article.';
-    else if (mutation == 'Simp') outputMutation += ', simple';
-    else outputMutation += ` (${mutation})`;
+    else if (mutation == 'Art') outputMutation += ', article';
+    else tagsArr.push(mutation);
+    //else outputMutation += ` (${mutation})`;
 
     return outputMutation;
   }
@@ -231,7 +231,7 @@ export class DigitalReaderStoryService {
 
     if (gender == 'Masc') outputGender += ', m';
     else if (gender == 'Fem') outputGender += ', f';
-    else tagsArr.unshift()
+    else tagsArr.unshift(gender);
 
     return outputGender;
   }
@@ -291,6 +291,24 @@ export class DigitalReaderStoryService {
     if (form === 'Pers') outputType += ', personal';
     else if (form === 'Prep') outputType += ', prep.';
     else tagsArr.unshift(form); // sometimes the wrong attribute may be being parsed
+
+    return outputType;
+  }
+
+  parsePrepositionType(tagsArr:string[]) { // prepositional etc.
+    let outputType = '';
+    const type:string = tagsArr.shift();
+
+    if (type === 'Poss') outputType += ', possesive';
+    else if (type === 'Cmpd') outputType += ', compound';
+    else if (type === 'Simp') outputType += ', simple';
+    else if (type === 'Emph') outputType += ', emphatic pronoun';
+    else if (type === 'Rel') outputType += ', relative';
+    else if (type === 'Obj') outputType += ', object';
+    else if (type === 'Deg') outputType += ', degree';
+    else if (type == 'DefArt' || type == 'Def') outputType += ', def.';
+    else if (type == 'Art') outputType += ', article';
+    else tagsArr.unshift(type); // sometimes the wrong attribute may be being parsed
 
     return outputType;
   }
@@ -549,9 +567,10 @@ export class DigitalReaderStoryService {
 
       attributes += this.parseAdjForm(tagsArr);
 
-      if (tagsArr.length>0) {
-        attributes += this.parseMutation(tagsArr);
-      }
+      if (tagsArr.length>0) attributes += this.parseGender(tagsArr);
+      if (tagsArr.length>0) attributes += this.parseCase(tagsArr);
+      if (tagsArr.length>0) attributes += this.parseNumber(tagsArr);
+      if (tagsArr.length>0) attributes += this.parseMutation(tagsArr);
 
     } else if (wordClass === 'Verb') {
 
@@ -606,8 +625,13 @@ export class DigitalReaderStoryService {
     } else if (wordClass === 'Prep') {
 
       outputClass += 'Preposition';
-      attributes += this.parseMutation(tagsArr);
+      attributes += this.parsePrepositionType(tagsArr);
+      //if (tagsArr.length > 0) attributes += this.parseMutation(tagsArr); // Article etc.
+      if (tagsArr.length > 0) attributes += this.parsePerson(tagsArr);
       if (tagsArr.length > 0) attributes += this.parseNumber(tagsArr);
+      if (tagsArr.length > 0) attributes += this.parseGender(tagsArr);
+      if (tagsArr.length > 0) attributes += this.parseMutation(tagsArr);
+      
 
     } else if (wordClass === 'Punct') {
 

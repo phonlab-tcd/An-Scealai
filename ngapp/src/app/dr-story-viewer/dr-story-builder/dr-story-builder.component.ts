@@ -25,6 +25,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
+import { constructHTML } from '@phonlab-tcd/json2html';
+
 import tippy, { hideAll } from 'tippy.js';
 
 const dialectToVoiceIndex = new Map<string, number>([
@@ -86,6 +88,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   public pageContent:Element;
   public sideBar:Element;
+
+  public matchingWordSentenceObjs:any;
 
   constructor(
     
@@ -175,8 +179,10 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const lemma = reference.getAttribute('lemma');
         const tags:string = reference.getAttribute('tags');
         const parsedTags:any = this.drStoryService.parseGrammarTags(tags);
+        const anchorText = reference.textContent;
+        //const anchorLemma = reference.textContent;
         //return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
-        return `<div class="tooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
+        return `<div data-lemma="${lemma}" data-tags="${tags}" data-text="${anchorText}" class="tooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
       },
       //delay: [200, 50],
       delay: [300, 50], // delay before it shows/hides
@@ -668,21 +674,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const audioObjPromise = this.synthRequest(this.currentWord.textContent, this.speaker);
 
         this.clickTimeoutRef = setTimeout( async () => {
-            
-            const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
-              this.drStoryService.getMatchingWords(segment.getAttribute('lemma'), segment.getAttribute('tags'))
-            );
-            
-            const sentencesWithMatchingWords = []
-            for (let storyGroup of storySentencesWithMatchingWords) {
-              console.log(storyGroup)
-              for (let sentence of storyGroup.sentences) {
-                sentencesWithMatchingWords.push(sentence)
-              }
-            }
-            console.log(sentencesWithMatchingWords)
-
-            
 
             const audioObj = await audioObjPromise;
             this.playAudioObj(audioObj);
@@ -697,6 +688,39 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       hideAll();
       const tooltip = this.checkForTooltipParent(targetElem);
       if (tooltip) {
+        const lemma = tooltip.getAttribute('data-lemma');
+        const tags = tooltip.getAttribute('data-tags');
+        const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
+          //this.drStoryService.getMatchingWords(tooltip.reference.getAttribute('lemma'), segment.getAttribute('tags'))
+          this.drStoryService.getMatchingWords(lemma, tags)
+        );
+          
+        const sentencesWithMatchingWords = []
+        for (let storyGroup of storySentencesWithMatchingWords) {
+          console.log(storyGroup)
+          for (let sentenceObj of storyGroup.sentences) {
+            
+            //sentencesWithMatchingWords.push(constructHTML(sentenceObj))
+            const reformattedSentenceObj = {content: sentenceObj.sent, words: sentenceObj.words}
+            //console.log(convertedSentenceObj)
+            //console.log(constructHTML(convertedSentenceObj))
+            const reconstructedSentence = constructHTML(reformattedSentenceObj)
+
+            reconstructedSentence.querySelectorAll('.word').forEach( (word) => {
+              //console.log(word)
+              if (word.getAttribute('lemma')==lemma && word.getAttribute('tags')==tags) {
+                word.classList.add('currentWord');
+              }
+            })
+            
+            //sentencesWithMatchingWords.push(reconstructedSentence.textContent)
+            console.log(reconstructedSentence)
+            sentencesWithMatchingWords.push(reconstructedSentence)
+          }
+        }
+        console.log(sentencesWithMatchingWords)
+
+        this.matchingWordSentenceObjs = sentencesWithMatchingWords;
         this.openSidenav();
       } else {
         this.closeSidenav(); // for testing
@@ -928,6 +952,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   openSidenav() {
     this.pageContent.classList.add('pushedContent');
     this.sideBar.classList.add('shownSideBar')
+    this.sideBar.innerHTML = '';
+    for (let sentence of this.matchingWordSentenceObjs) {
+      this.sideBar.append(sentence);
+      this.sideBar.append(document.createElement('br'));
+      this.sideBar.append(document.createElement('br'));
+    }
     console.log(this.sideBar);
   }
 
