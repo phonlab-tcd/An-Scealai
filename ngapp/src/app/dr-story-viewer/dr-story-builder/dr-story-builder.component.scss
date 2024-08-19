@@ -236,7 +236,7 @@
 
 
 .pushedContent {
-    margin-left: 300px;
+    //margin-left: 300px;
     transition: margin-left .25s;
     transition-timing-function: ease-in;
 }
@@ -245,7 +245,7 @@
     transition: margin-left .25s;
 }
 
-.sideBar {
+/*.sideBar {
     //position: absolute;
     position: fixed;
     //display: none;
@@ -264,32 +264,35 @@
     transition: width .25s;
     //transition-timing-function: ease-in;
     //width: 300px;
-}
+}*/
 
-/*.sideBar {
-    display: none;
+.sideBar {
+    //display: none;
+    visibility: hidden;
     width: 0;
+    background-color: burlywood;
     //transition: width .25s, display .25s;
     //transition: width .25s;
     //align-items: left;
     //margin-right: 0;
-    background: none;
 
     border-radius: 4px;
+    transition: width .25s, visibility .20s;
 }
 
 .shownSideBar {
     //width: 500px;
-    background-color: burlywood;
+    
     width: 30%;
     //width: 500px;
     //margin-left: 0;
     //width: 20%;
-    display: block;
+    //display: block;
+    visibility: visible;
     //transition: width .25s, display .25s;
-    transition: width .25s, display .25s;
+    transition: width .25s, visibility .25s;
     transition-timing-function: ease-in;
-}*/
+}
 
 /*.sideBar {
     //display: none;
@@ -315,6 +318,8 @@
 
 .interactableArea {
     display: flex;
-    justify-content: space-evenly;
+    //justify-content: space-evenly;
+    //justify-content:space-between;
+    justify-content:center;
     //justify-content: space-between;
 }
