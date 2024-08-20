@@ -27,7 +27,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { constructHTML } from '@phonlab-tcd/json2html';
 
-import tippy, { hideAll } from 'tippy.js';
+import tippy, { hideAll, createSingleton } from 'tippy.js';
 
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
@@ -157,19 +157,19 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       } else {
         this.snackbar.open(this.ts.l.synth_in_progress, this.ts.l.okay, {duration: 4000});
       }
-
-      if (this.startingWordId) {
-        const startingWord = document.querySelector(`#word${this.startingWordId}`);
-        if (startingWord) {
-          this.updateCurrentWord(startingWord);
-          this.jumpToCurrentWord();
-        }
-      }
       /*if ((...(dialectToVoiceIndex.entries())).every())
       for (let entry of dialectToVoiceIndex.entries()) {
         const voiceIndex = entry[1];
       }*/
         
+    }
+
+    if (this.startingWordId) {
+      const startingWord = document.querySelector(`#word${this.startingWordId}`);
+      if (startingWord) {
+        this.updateCurrentWord(startingWord);
+        //this.jumpToCurrentWord();
+      }
     }
 
     tippy('.word', {
@@ -182,7 +182,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const anchorText = reference.textContent;
         //const anchorLemma = reference.textContent;
         //return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
-        return `<div data-lemma="${lemma}" data-tags="${tags}" data-text="${anchorText}" class="tooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
+        return `<div data-lemma="${lemma}" data-tags="${tags}" data-text="${anchorText}" class="grammarTooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
       },
       //delay: [200, 50],
       delay: [300, 50], // delay before it shows/hides
@@ -391,12 +391,12 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   }
 
   checkForTooltipParent(node:Element) {
-    if (node.classList.contains('tooltipContent'))
+    if (node.classList.contains('tippy-content'))
       return node;
     let tmp = node;
     while (tmp.parentElement) {
       tmp = tmp.parentElement
-      if (tmp.classList.contains('tooltipContent'))
+      if (tmp.classList.contains('tippy-content'))
         return tmp;
     }
     return null;
@@ -686,42 +686,61 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     } else {
       //this.closeSidenav(); // only for testing!
       hideAll();
-      const tooltip = this.checkForTooltipParent(targetElem);
+      const tooltipParent = this.checkForTooltipParent(targetElem);
+      const tooltip = tooltipParent?.firstElementChild;
       if (tooltip) {
-        const lemma = tooltip.getAttribute('data-lemma');
-        const tags = tooltip.getAttribute('data-tags');
-        const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
-          //this.drStoryService.getMatchingWords(tooltip.reference.getAttribute('lemma'), segment.getAttribute('tags'))
-          this.drStoryService.getMatchingWords(lemma, tags)
-        );
-          
-        const sentencesWithMatchingWords = []
-        for (let storyGroup of storySentencesWithMatchingWords) {
-          console.log(storyGroup)
-          for (let sentenceObj of storyGroup.sentences) {
+        if (tooltip.classList.contains('grammarTooltipContent')) {
+          const lemma = tooltip.getAttribute('data-lemma');
+          const tags = tooltip.getAttribute('data-tags');
+          const heading = tooltip.getAttribute('data-text');
+          const storySentencesWithMatchingWords:Array<any> = await firstValueFrom(
+            //this.drStoryService.getMatchingWords(tooltip.reference.getAttribute('lemma'), segment.getAttribute('tags'))
+            this.drStoryService.getMatchingWords(lemma, tags)
+          );
             
-            //sentencesWithMatchingWords.push(constructHTML(sentenceObj))
-            const reformattedSentenceObj = {content: sentenceObj.sent, words: sentenceObj.words}
-            //console.log(convertedSentenceObj)
-            //console.log(constructHTML(convertedSentenceObj))
-            const reconstructedSentence = constructHTML(reformattedSentenceObj)
+          const sentencesWithMatchingWords = []
+          for (let storyGroup of storySentencesWithMatchingWords) {
+            console.log(storyGroup)
+            for (let sentenceObj of storyGroup.sentences) {
+              
+              const reformattedSentenceObj = {content: sentenceObj.sent, words: sentenceObj.words}
+              console.log(reformattedSentenceObj);
+              
+              const reconstructedSentence = constructHTML(reformattedSentenceObj)
 
-            reconstructedSentence.querySelectorAll('.word').forEach( (word) => {
-              //console.log(word)
-              if (word.getAttribute('lemma')==lemma && word.getAttribute('tags')==tags) {
-                word.classList.add('currentWord');
-              }
-            })
-            
-            //sentencesWithMatchingWords.push(reconstructedSentence.textContent)
-            console.log(reconstructedSentence)
-            sentencesWithMatchingWords.push(reconstructedSentence)
+              reconstructedSentence.querySelectorAll('.word').forEach( (word:Element, index:number) => {
+                if (index==0) reconstructedSentence.setAttribute('firstWordId', this.drStoryService.parseSegId(word.id, 'word'));
+                word.removeAttribute('class'); // remove highlighting interactibility
+                word.removeAttribute('id'); //
+                if (word.getAttribute('lemma')==lemma && word.getAttribute('tags')==tags) {
+                  word.classList.add('currentWord');
+                }
+              })
+
+              reconstructedSentence.setAttribute('drStoryId', sentenceObj.obj_id);
+              reconstructedSentence.setAttribute('drStoryTitle', sentenceObj.title);
+              reconstructedSentence.classList.add('matchingWordSentence');
+              
+              console.log(reconstructedSentence)
+              sentencesWithMatchingWords.push(reconstructedSentence)
+            }
+          }
+          console.log(sentencesWithMatchingWords)
+
+          this.matchingWordSentenceObjs = sentencesWithMatchingWords;
+          //this.updateCurrentWord();
+          this.openSidenav(heading);
+        } else if (tooltip.classList.contains('storySwitchTooltip')) {
+          const drStoryId = tooltip.getAttribute('data-drStoryId');
+          const firstWordId = tooltip.getAttribute('data-firstWordId');
+          console.log(drStoryId);
+          if (drStoryId!=this.storyId)
+            this.router.navigateByUrl(`dr-story-viewer?storyId=${drStoryId}&startingWordId=${firstWordId}`);
+          else {
+            const wordToJumpTo = document.querySelector(`#word${firstWordId}`);
+            this.updateCurrentWord(wordToJumpTo);
           }
         }
-        console.log(sentencesWithMatchingWords)
-
-        this.matchingWordSentenceObjs = sentencesWithMatchingWords;
-        this.openSidenav();
       } else {
         this.closeSidenav(); // for testing
       }
@@ -930,6 +949,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       this.currentSentence = document.querySelector('.storyContainer').querySelector('.sentence') // only for testing
       this.currentWord = this.currentSentence.querySelector('.word') // only for testing
       //
+    } else if (!this.currentSentence) {
+      this.currentSentence = this.checkForSegmentParent(this.currentWord.parentElement as Element);
     }
     //const sentAudioObj = await this.getCurrentAudioObject();
     //console.log(sentAudioObj)
@@ -949,16 +970,47 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }
   }
 
-  openSidenav() {
+  openSidenav(headingText: string) {
     this.pageContent.classList.add('pushedContent');
     this.sideBar.classList.add('shownSideBar')
     this.sideBar.innerHTML = '';
-    for (let sentence of this.matchingWordSentenceObjs) {
-      this.sideBar.append(sentence);
-      this.sideBar.append(document.createElement('br'));
-      this.sideBar.append(document.createElement('br'));
-    }
+    //const heading = this.sideBar.querySelector('#sideBarHeading') as Element;
+    //const body = this.sideBar.querySelector('#sideBarBody') as Element;
+    const heading = document.createElement('h2');
+    heading.id = 'sideBarHeading'
+    const body = document.createElement('div');
+    body.id = 'sideBarBody'
     console.log(this.sideBar);
+    console.log(heading, body)
+    heading.innerHTML = headingText;
+    for (let sentence of this.matchingWordSentenceObjs) {
+      body.append(document.createElement('br'));
+      body.append(sentence);
+      body.append(document.createElement('br'));
+    }
+
+    console.log(document.querySelectorAll('.matchingWordSentence'));
+    
+    //const singleton = createSingleton(tippyInstances, {delay: 1000});
+
+    this.sideBar.append(document.createElement('br'));
+    this.sideBar.append(heading);
+    this.sideBar.append(document.createElement('hr'));
+    this.sideBar.append(body);
+    const tippyInstances = tippy('.matchingWordSentence', {
+      allowHTML: true,
+      content: (reference) => {
+        return `<div class="storySwitchTooltip" data-firstWordId="${reference.getAttribute('firstWordId')}" data-drStoryId="${reference.getAttribute('drStoryId')}">Title: ${reference.getAttribute('drStoryTitle')}</div><div>click to go to story</div>`;
+      },
+      delay: [300, 50], // delay before it shows/hides
+      interactive: true,
+      duration: [400, 100], // show/hide transition duration
+      theme: 'material',
+      //arrow: false,
+      offset: [0,5],
+      hideOnClick: false,
+    });
+    //const singleton = createSingleton(tippyInstances);
   }
 
   closeSidenav() {
