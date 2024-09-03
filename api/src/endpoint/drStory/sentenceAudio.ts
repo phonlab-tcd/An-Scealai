@@ -27,6 +27,8 @@ async function synthesiseAndStoreSent (req, res) {
     res.json(sentAudioObjs[0]);
   }
 
+
+  try {
   // make sure all necessary body params are present
   if (req.body===undefined) return no();
 
@@ -43,15 +45,9 @@ async function synthesiseAndStoreSent (req, res) {
   if (!sentAudioObjs) return no();
 
   return yes();
-
-  /*return new Promise(
-    (resolve, reject) => {
-      
-      setTimeout( () =>
-        resolve('test resolution!'), 1000
-      )
-      // above should be changed to an await of the a call to the synth api
-  })*/
+  } catch {
+    return no();
+  }
 }
 
 export = synthesiseAndStoreSent;

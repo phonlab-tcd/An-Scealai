@@ -86,6 +86,8 @@ export class DigitalReaderComponent implements OnInit {
     console.log(this.user)
     console.log(this)
 
+    this.drStoryService.init();
+
   }
 
   updateSentenceNumbers(targetContainer:Element, startNumber:number) {

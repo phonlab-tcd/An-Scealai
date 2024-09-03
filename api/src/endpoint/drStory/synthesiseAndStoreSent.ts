@@ -70,44 +70,48 @@ async function synthesiseAndStoreSent (req:any) {
     return Promise.resolve(1);
   }
 
-  // make sure all necessary body params are present
-  if (req.body===undefined) return no();
+  try {
+    // make sure all necessary body params are present
+    if (req.body===undefined) return no();
 
-  if (req.body.textInput===undefined) return no();
-  if (req.body.voiceCode===undefined) return no();
-  if (req.body.audioEncoding===undefined) return no();
-  if (req.body.speed===undefined) return no();
+    if (req.body.textInput===undefined) return no();
+    if (req.body.voiceCode===undefined) return no();
+    if (req.body.audioEncoding===undefined) return no();
+    if (req.body.speed===undefined) return no();
 
-  if (req.body.drStoryId===undefined) return no();
-  if (req.body.sentenceId===undefined) return no();
+    if (req.body.drStoryId===undefined) return no();
+    if (req.body.sentenceId===undefined) return no();
 
-  let reqBody: any;
+    let reqBody: any;
 
-  // check that the story still exists (hasn't been deleted)
-  //const drStory = await DigitalReaderStory.findOne({drStoryId: req.body.drStoryId});
-  const drStory = await DigitalReaderStory.findById(new mongoose.mongo.ObjectId(req.body.drStoryId))
-  console.log(drStory)
-  if (!drStory) return no();
+    // check that the story still exists (hasn't been deleted)
+    //const drStory = await DigitalReaderStory.findOne({drStoryId: req.body.drStoryId});
+    const drStory = await DigitalReaderStory.findById(new mongoose.mongo.ObjectId(req.body.drStoryId))
+    console.log(drStory)
+    if (!drStory) return no();
 
-  // prepare the body of the call to the synthesis API
-  reqBody = {
-    synthinput: {
-      text: req.body.textInput,
-      normalised: true,
-    },
-    voiceparams: {
-      languageCode: "ga-IE",
-      name: req.body.voiceCode,
-    },
-    audioconfig: {
-      audioEncoding: req.body.audioEncoding,
-      speakingRate: req.body.speed,
-      pitch: 1,
-    },
-    timing: "WORD"
-  };
+    // prepare the body of the call to the synthesis API
+    reqBody = {
+      synthinput: {
+        text: req.body.textInput,
+        normalised: true,
+      },
+      voiceparams: {
+        languageCode: "ga-IE",
+        name: req.body.voiceCode,
+      },
+      audioconfig: {
+        audioEncoding: req.body.audioEncoding,
+        speakingRate: req.body.speed,
+        pitch: 1,
+      },
+      timing: "WORD"
+    };
 
-  return yes();
+    return yes();
+  } catch {
+    return no();
+  }
 }
 
 export = synthesiseAndStoreSent;

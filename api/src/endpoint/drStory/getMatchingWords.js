@@ -23,115 +23,104 @@ module.exports = async (req, res) => {
     return res.status(200).json([]);
   }
 
-  const digitalReaderStories = await DigitalReaderStory.aggregate([
-    {$project: {
-      title: 1,
-      sentences: "$story.sentences",
-      words: "$story.words",
-      public: 1
-    }},
-    {$match: {
-      public: true
-    }},
-    {$project: {
-      title: 1,
-      sentences: 1,
-      words: 1,
-      sent_ids: {
-        $map: {
-          input: {
-            $filter: {
-              input: "$words",
-              as: "word",
-              cond: {
-                $and: [
-                  {
-                    $eq: ["$$word.attrs.lemma", req.body.lemma]
-                  },
-                  {
-                    $eq: ["$$word.attrs.tags", req.body.tags]
-                  },
-                ]
-              }
-            }
-          },
-          as: "word",
-          in: "$$word.attrs.sentid"
-        }
-      }
-    }},
-    {$project: {
-      title: 1,
-      sentences: {
-        $filter: {
-          input: "$sentences",
-          as: "sentence",
-          cond: {
-            $in: ["$$sentence.id", "$sent_ids"]
-          }
-        }
-      },
-      words: {
-        $filter: {
-          input: "$words",
-          as: "word",
-          cond: {
-            $in: ["$$word.attrs.sentid", "$sent_ids"]
-          }
-        }
-      }
-    }},
-    {$project: {
-      sentences: {
-        $map: {
-          input: "$sentences",
-          as: "sentence",
-          in: {
-            sent: "$$sentence",
-            words: {
+  try {
+    const digitalReaderStories = await DigitalReaderStory.aggregate([
+      {$project: {
+        title: 1,
+        sentences: "$story.sentences",
+        words: "$story.words",
+        public: 1
+      }},
+      {$match: {
+        public: true
+      }},
+      {$project: {
+        title: 1,
+        sentences: 1,
+        words: 1,
+        sent_ids: {
+          $map: {
+            input: {
               $filter: {
                 input: "$words",
                 as: "word",
                 cond: {
-                  $eq: [
-                    "$$word.attrs.sentid",
-                    "$$sentence.id"
+                  $and: [
+                    {
+                      $eq: ["$$word.attrs.lemma", req.body.lemma]
+                    },
+                    {
+                      $eq: ["$$word.attrs.tags", req.body.tags]
+                    },
                   ]
                 }
               }
             },
-            obj_id: "$_id",
-            title: "$title"
+            as: "word",
+            in: "$$word.attrs.sentid"
           }
         }
-      }
-    }},
-    {$match: { 
-      "sentences.0": {
-          "$exists": true 
-      }
-    }}
-  ])
+      }},
+      {$project: {
+        title: 1,
+        sentences: {
+          $filter: {
+            input: "$sentences",
+            as: "sentence",
+            cond: {
+              $in: ["$$sentence.id", "$sent_ids"]
+            }
+          }
+        },
+        words: {
+          $filter: {
+            input: "$words",
+            as: "word",
+            cond: {
+              $in: ["$$word.attrs.sentid", "$sent_ids"]
+            }
+          }
+        }
+      }},
+      {$project: {
+        sentences: {
+          $map: {
+            input: "$sentences",
+            as: "sentence",
+            in: {
+              sent: "$$sentence",
+              words: {
+                $filter: {
+                  input: "$words",
+                  as: "word",
+                  cond: {
+                    $eq: [
+                      "$$word.attrs.sentid",
+                      "$$sentence.id"
+                    ]
+                  }
+                }
+              },
+              obj_id: "$_id",
+              title: "$title"
+            }
+          }
+        }
+      }},
+      {$match: { 
+        "sentences.0": {
+            "$exists": true 
+        }
+      }}
+    ])
 
-  if (!digitalReaderStories) {
-    res.status(200).json([]);
-  } else {
-    res.status(200).json(digitalReaderStories);
+    if (!digitalReaderStories) {
+      res.status(200).json([]);
+    } else {
+      res.status(200).json(digitalReaderStories);
+    }
+  } catch {
+    return res.status(200).json([]);
   }
-  //return res.status(200).json(digitalReaderStories);
-
-  // in progress - will need aggregation pipeline
-
-  /*const stories = await Story.find(conditions);
-
-  if (!stories) {
-    throw new API404Error(`No stories written by user with 
-      id ${ownerId} were found.`);
-  }
-
-  if (stories.length > 0) {
-    res.status(200).json(stories);
-  } else {
-    res.status(200).json([]);
-  }*/
+  
 };

@@ -19,7 +19,7 @@ import { AudioEncoding } from './synthesis.service';
 })
 export class DigitalReaderStoryService {
 
-  public segmentedSentences:Array<Object>;
+  public segmentedSentences:Array<Object> | undefined;
   public convertedHtml:string;
   public htmlParser = new DOMParser();
 
@@ -33,6 +33,10 @@ export class DigitalReaderStoryService {
 
   baseUrl: string = config.baseurl
   segmentableTags: string = 'p, h1, h2, h3, h4, h5, h6, li, th, td'
+
+  init() {
+    this.segmentedSentences = undefined;
+  }
 
   async tokenizeSentence(input: string) {
     const sentences = await firstValueFrom(

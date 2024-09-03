@@ -101,36 +101,26 @@ function queue(testFn:Function) {
 
 const queuedFn = queue(synthesiseAndStoreSent);
 
-queuedFn('{textInput}').then((data) => {console.log(data)})
+//queuedFn('{textInput}').then((data) => {console.log(data)})
 
-/*testQueue.then(() => {
-  console.log('something!')
-  testQueue = testFn('req');
-});*/
 
 storyRoutes
 .route('/testQueue')
-.post( /*(req, res) => {
-  testQueue.then((data) => {
-    // function logic e.g storing to db etc.
-    //console.log(req.body.text, data)
-    console.log(req.body.textInput, data)
-    //console.log(data)
-    testQueue = synthesiseAndStoreSent(req); // currently does not work properly
-    res.json(200);
-    //nextQueue(testFn, req);
-  });
-}*/
+.post(
   (req, res) => {
-    console.log(req.body.textInput)
-    queuedFn(req).then( (data) => {
-      console.log(data)
-      //console.log(data)
-      //res.json(200);
-    })
-    //res.status(102).json(); // dummy response sent to client to free up clientside "space" for other API calls
-    res.json(102); // should return a status of 102
-    //res.status(102).json(1);
+    try {
+      console.log(req.body.textInput)
+      queuedFn(req).then( (data) => {
+        console.log(data)
+        //console.log(data)
+        //res.json(200);
+      })
+      //res.status(102).json(); // dummy response sent to client to free up clientside "space" for other API calls
+      res.json(102); // should return a status of 102
+      //res.status(102).json(1);
+    } catch {
+      res.json(400);
+    }
   }
 )
 

@@ -9,9 +9,13 @@ const {API500Error} = require('../../utils/APIError');
  */
 module.exports = async (req, res) => {
   //res.json({text : 'anything at all'})
-  const drStory = await DigitalReaderStory.create({...req.body, owner: req.user._id});
-  if (!drStory) {
-    throw new API500Error('Unable to save story to DB.');
+  try {
+    const drStory = await DigitalReaderStory.create({...req.body, owner: req.user._id});
+    if (!drStory) {
+      throw new API500Error('Unable to save story to DB.');
+    }
+    res.status(200).json({id: drStory._id});
+  } catch {
+    return res.status(200).json();
   }
-  res.status(200).json({id: drStory._id});
 };
