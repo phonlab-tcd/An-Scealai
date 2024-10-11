@@ -260,6 +260,15 @@ const translations = {
   problem_with_synth: {
     ga: 'Níor fhéadadh ar a laghad abairt amháin a shintéisiú',
     en: 'There were issues synthesising one or more sentences' },
+  grammatical_info: {
+    ga: 'Eolas Gramadach',
+    en: 'Grammatical Info.' },
+  dictionary_entry: {
+    ga: 'Iontráil Foclóra',
+    en: 'Dictionary Entry' },
+  sentence_translation: {
+    ga: 'Sentence Translation',
+    en: 'Aistriúchán Abairte' },
   okay: {
     ga: 'Ceart go leor',
     en: 'Okay' },

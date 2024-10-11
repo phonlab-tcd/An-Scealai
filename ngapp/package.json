@@ -17,7 +17,8 @@
     "cypress:run": "./node_modules/cypress/bin/cypress run",
     "start:neimhin": "ng serve --port 41000 --configuration=dev",
     "start:maddie": "ng serve --port 42000 --configuration=dev",
-    "start:oisin": "ng serve --port 43000 --configuration=dev"
+    "start:oisin": "ng serve --port 43000 --configuration=dev",
+    "start:david": "ng serve --port 44000 --configuration=dev"
   },
   "dependencies": {
     "@phonlab-tcd/gramadoir-ts": "^0.0.55",

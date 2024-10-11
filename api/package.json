@@ -13,7 +13,8 @@
     "build:watch": "tsc --watch",
     "start:neimhin": "DB=neimhin-dev PORT=41001 nodemon dist/server.js",
     "start:maddie": "DB=neimhin-dev PORT=42001 nodemon dist/server.js",
-    "start:oisin": "DB=neimhin-dev PORT=43001 nodemon dist/server.js"
+    "start:oisin": "DB=neimhin-dev PORT=43001 nodemon dist/server.js",
+    "start:david": "DB=neimhin-dev PORT=44001 nodemon dist/server.js"
   },
   "nodemonConfig": {
     "ext": "js, jsx, ts, tsx, json, mjs"
