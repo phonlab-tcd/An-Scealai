@@ -287,6 +287,11 @@ span.currentWord {
     //overflow-y: auto;
 }
 
+#sideBarContent {
+    top: 0;
+    height: 100%;
+}
+
 #sideBarHeading {
     font-style: italic;
     font-weight: bold;
@@ -300,7 +305,7 @@ span.currentWord {
     //position: sticky;
     //top: 0;
     
-    height: 80%;
+    height: 75%;
     //box-shadow: inset;
     box-shadow: 0px -25px 15px -15px rgba(0,0,0,0.15) inset,
                 0px 25px 15px -15px rgba(0,0,0,0.15) inset;
@@ -347,6 +352,12 @@ span.currentWord {
     transition: width .25s;
     transition-timing-function: ease-in;
 }*/
+
+#tabContainer {
+    display: flex;
+    flex-direction: row;
+    -ms-flex-align: center;
+}
 
 .interactableArea {
     display: flex;

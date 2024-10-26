@@ -91,6 +91,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   public matchingWordSentenceObjs:any;
 
+  public frequencyIndex:Array<any> = [];
+
   constructor(
     
     private auth: AuthenticationService,
@@ -157,6 +159,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       } else {
         this.snackbar.open(this.ts.l.synth_in_progress, this.ts.l.okay, {duration: 4000});
       }
+
       /*if ((...(dialectToVoiceIndex.entries())).every())
       for (let entry of dialectToVoiceIndex.entries()) {
         const voiceIndex = entry[1];
@@ -193,6 +196,67 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
       offset: [0,5],
       hideOnClick: false,
     })
+
+    const unparsedWordFrequencies = (await firstValueFrom(this.drStoryService.getStoryWordFreqs()))[0].words;
+    console.log(unparsedWordFrequencies);
+
+    const unsortedWordFrequencies:Array<any> = []
+    for (const wordFreq of unparsedWordFrequencies) {
+      //console.log(wordFreq);
+      const tag_lemma = wordFreq.tag_lemma.split('_', 2);
+      unsortedWordFrequencies.push({
+        tags: tag_lemma[0],
+        lemma: tag_lemma[1],
+        count: wordFreq.count
+      });
+    }
+    console.log(unsortedWordFrequencies);
+
+    const alphabeticallySortedWordFreqs:Array<any> = [];
+    const sortedWordFreqs:Array<any> = [];
+
+    //console.log(tmp);
+
+    // const allWordSpans = this.content?.querySelectorAll('.word');
+
+    // const allLemmaTagsCombo:Array<Array<string>> = [];
+    // for (let i=0;i<allWordSpans.length;i++) {
+    //   const wordSpan = allWordSpans.item(i);
+    //   const lemma = wordSpan.getAttribute('lemma') as string;
+    //   const tags = wordSpan.getAttribute('tags') as string;
+    //   if (!allLemmaTagsCombo.includes([lemma,tags])) {
+    //     allLemmaTagsCombo.push([lemma, tags])
+    //   }
+    // }
+    // console.log(allLemmaTagsCombo);
+
+    // for (let lemmaTagCombo of allLemmaTagsCombo) {
+    //   const allWordOccurrences:Array<any> = await firstValueFrom(
+    //     this.drStoryService.getMatchingWords(lemmaTagCombo[0], lemmaTagCombo[1])
+    //   );
+    //   const numOccurences = allWordOccurrences.length;
+    //   console.log(numOccurences);
+    //   console.log(allWordOccurrences);
+    //   this.frequencyIndex.push(
+    //     {
+    //       num: numOccurences,
+    //       lemma: lemmaTagCombo[0],
+    //       tags: lemmaTagCombo[1]
+    //     }
+    //   );
+      
+    // }
+
+    // for (let i=0;i<allWordSpans.length;i++) {
+    //   const wordSpan = allWordSpans.item(i);
+    // //for (let wordSpan of allWordSpans) {
+    //   const lemma = wordSpan.getAttribute('lemma');
+    //   const tags = wordSpan.getAttribute('tags');
+    //   const allWordOccurrences:Array<any> = await firstValueFrom(
+    //     this.drStoryService.getMatchingWords(lemma, tags)
+    //   );
+    //   console.log(allWordOccurrences);
+    // }
     
   }
 
@@ -742,7 +806,9 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
           }
         }
       } else {
-        this.closeSidenav(); // for testing
+        if (!this.sideBar.contains(targetElem)) {
+          this.closeSidenav(); // **unless the click is within the Sidenav
+        }
       }
     } 
 
@@ -972,8 +1038,11 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   openSidenav(headingText: string) {
     this.pageContent.classList.add('pushedContent');
-    this.sideBar.classList.add('shownSideBar')
-    this.sideBar.innerHTML = '';
+    this.sideBar.classList.add('shownSideBar');
+    //this.sideBar.innerHTML = '';
+    const sideBarContent:Element = (this.sideBar.querySelector('#sideBarContent') as Element);
+    sideBarContent.innerHTML = '';
+
     //const heading = this.sideBar.querySelector('#sideBarHeading') as Element;
     //const body = this.sideBar.querySelector('#sideBarBody') as Element;
     const heading = document.createElement('h2');
@@ -993,10 +1062,10 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     
     //const singleton = createSingleton(tippyInstances, {delay: 1000});
 
-    this.sideBar.append(document.createElement('br'));
-    this.sideBar.append(heading);
-    this.sideBar.append(document.createElement('hr'));
-    this.sideBar.append(body);
+    sideBarContent.append(document.createElement('br'));
+    sideBarContent.append(heading);
+    sideBarContent.append(document.createElement('hr'));
+    sideBarContent.append(body);
     const tippyInstances = tippy('.matchingWordSentence', {
       allowHTML: true,
       content: (reference) => {

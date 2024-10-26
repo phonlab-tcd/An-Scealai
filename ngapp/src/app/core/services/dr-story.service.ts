@@ -809,6 +809,10 @@ export class DigitalReaderStoryService {
     return this.http.post<any[]>(this.baseUrl + 'drStory/getMatchingWords/', {lemma:lemma, tags:tags});
   }
 
+  getStoryWordFreqs(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + 'drStory/getStoryWordFreqs/');
+  }
+
   getSentenceAudio(drStoryId:string, sentId:number, voiceCode:string) {
 
     const reqBody = {
