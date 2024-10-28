@@ -292,6 +292,21 @@ span.currentWord {
     height: 100%;
 }
 
+// #sideBarFreqContent {
+//     top: 0;
+//     overflow-y: auto;
+//     height: 75vh;
+// }
+
+.wordFreqsTableContainer {
+    top: 0;
+    overflow-y: auto;
+    height: 70vh;
+}
+
+
+
+
 #sideBarHeading {
     font-style: italic;
     font-weight: bold;
@@ -353,10 +368,20 @@ span.currentWord {
     transition-timing-function: ease-in;
 }*/
 
-#tabContainer {
+.tabContainer {
     display: flex;
     flex-direction: row;
-    -ms-flex-align: center;
+    justify-content: center;
+    justify-items: stretch;
+    //-ms-flex-align: center;
+}
+
+.tab {
+    flex: 1 1 0;
+}
+
+.tabSelected {
+    background-color: red;
 }
 
 .interactableArea {
@@ -366,3 +391,13 @@ span.currentWord {
     justify-content:center;
     //justify-content: space-between;
 }
+
+// td {
+//     overflow: hidden;
+//     white-space: nowrap;
+//     text-overflow: ellipsis;
+// }
+
+// tr {
+//     width: 100%;
+// }

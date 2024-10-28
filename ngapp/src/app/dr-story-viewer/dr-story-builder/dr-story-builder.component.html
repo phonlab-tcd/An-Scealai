@@ -1,21 +1,61 @@
 
 <div class="interactableArea">
     <div class="sideBar">
-        <div id="tabContainer">
-            <button class="tab">
+        <div class="tabContainer">
+            <button class="tab" (click)="openSidenav()" [ngClass]="{'tabSelected' : sideBarDisplayType=='grammar'}">
                 {{ ts.l.grammatical_info }}
             </button>
-            <button class="tab">
+            <button class="tab"
+            [ngClass]="{'tabSelected' : sideBarDisplayType=='translation'}">
                 {{ ts.l.dictionary_entry }}
             </button>
-            <button class="tab">
-                {{ ts.l.sentence_translation }}
+            <button class="tab"
+            (click)="setSideBarDisplayType('wordFreqs')"
+            [ngClass]="{'tabSelected' : sideBarDisplayType=='wordFreqs'}">
+                <!-- {{ ts.l.sentence_translation }} -->
+                Word Frequencies
             </button>
         </div>
-        <div id="sideBarContent">
+        <div *ngIf="sideBarDisplayType=='wordFreqs'" id="sideBarFreqContent">
+            <div class="tabContainer">
+                <button class="tab"
+                [ngClass]="{'tabSelected' : sideBarDisplaySort=='numerical'}"
+                (click)="sideBarWordFreqSort('numerical')">
+                    Numerical
+                </button>
+                <button class="tab"
+                [ngClass]="{'tabSelected' : sideBarDisplaySort=='alphabetical'}"
+                (click)="sideBarWordFreqSort('alphabetical')">
+                    Alphabetical
+                </button>
+            </div>
+            <div class="wordFreqsTableContainer">
+            <table>
+                <tr>
+                    <td><b>Lemma</b></td>
+                    <td><b>Tags</b></td>
+                    <td><b>Count</b></td>
+                </tr>
+                <tbody *ngIf="sideBarDisplaySort=='numerical'">
+                    <tr *ngFor="let word of sortedWordFreqs">
+                        <td> {{word.lemma}} </td>
+                        <td> {{word.tags}} </td>
+                        <td> {{word.count}} </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="sideBarDisplaySort=='alphabetical'">
+                    <tr *ngFor="let word of alphabeticallySortedWordFreqs">
+                        <td> {{word.lemma}} </td>
+                        <td> {{word.tags}} </td>
+                        <td> {{word.count}} </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
         </div>
-        <!--<div id="sideBarHeading"></div>
-        <div id="sideBarBody"></div>-->
+        <div id="sideBarContent"> <!--The word/sentences occurrences are generated in this location-->
+            
+        </div>
     </div>
     <div class="mainPage">
 

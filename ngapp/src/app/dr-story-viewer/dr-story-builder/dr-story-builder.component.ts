@@ -91,7 +91,15 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   public matchingWordSentenceObjs:any;
 
-  public frequencyIndex:Array<any> = [];
+  public alphabeticallySortedWordFreqs:Array<any> = [];
+  public sortedWordFreqs:Array<any> = [];
+
+  //public frequencyIndex:Array<any> = [];
+
+  public sideBarDisplayType:string = 'grammar';
+  public sideBarDisplaySort:string = 'numerical';
+
+  public grammarHeading:string = '';
 
   constructor(
     
@@ -212,8 +220,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }
     console.log(unsortedWordFrequencies);
 
-    const alphabeticallySortedWordFreqs:Array<any> = [];
-    const sortedWordFreqs:Array<any> = [];
+    this.alphabeticallySortedWordFreqs = unsortedWordFrequencies.slice();
+    this.alphabeticallySortedWordFreqs.sort((a, b) => a.lemma.localeCompare(b.lemma));
+    console.log(this.alphabeticallySortedWordFreqs);
+
+    this.sortedWordFreqs = unsortedWordFrequencies.slice();
+    this.sortedWordFreqs.sort((a, b) => b.count - a.count);
+    console.log(this.sortedWordFreqs);
 
     //console.log(tmp);
 
@@ -793,7 +806,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
           this.matchingWordSentenceObjs = sentencesWithMatchingWords;
           //this.updateCurrentWord();
-          this.openSidenav(heading);
+          this.grammarHeading = heading;
+          this.openSidenav();
         } else if (tooltip.classList.contains('storySwitchTooltip')) {
           const drStoryId = tooltip.getAttribute('data-drStoryId');
           const firstWordId = tooltip.getAttribute('data-firstWordId');
@@ -1036,22 +1050,24 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }
   }
 
-  openSidenav(headingText: string) {
+  //openSidenav(headingText: string) {
+  openSidenav() {
+    this.setSideBarDisplayType('grammar'); // added to account for word frequencies option
+
     this.pageContent.classList.add('pushedContent');
     this.sideBar.classList.add('shownSideBar');
     //this.sideBar.innerHTML = '';
     const sideBarContent:Element = (this.sideBar.querySelector('#sideBarContent') as Element);
     sideBarContent.innerHTML = '';
 
-    //const heading = this.sideBar.querySelector('#sideBarHeading') as Element;
-    //const body = this.sideBar.querySelector('#sideBarBody') as Element;
     const heading = document.createElement('h2');
     heading.id = 'sideBarHeading'
     const body = document.createElement('div');
     body.id = 'sideBarBody'
     console.log(this.sideBar);
     console.log(heading, body)
-    heading.innerHTML = headingText;
+    //heading.innerHTML = headingText;
+    heading.innerHTML = this.grammarHeading;
     for (let sentence of this.matchingWordSentenceObjs) {
       body.append(document.createElement('br'));
       body.append(sentence);
@@ -1085,6 +1101,18 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
   closeSidenav() {
     this.pageContent.classList.remove('pushedContent');
     this.sideBar.classList.remove('shownSideBar')
+  }
+
+  setSideBarDisplayType(type:string) {
+    this.sideBarDisplayType = type;
+    if (this.sideBarDisplayType=='wordFreqs') {
+      const sideBarContent:Element = (this.sideBar.querySelector('#sideBarContent') as Element);
+      sideBarContent.innerHTML = '';
+    }
+  }
+
+  sideBarWordFreqSort(type:string) {
+    this.sideBarDisplaySort = type;
   }
 
 }
