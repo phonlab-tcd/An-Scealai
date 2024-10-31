@@ -32,19 +32,19 @@
             <div class="wordFreqsTableContainer">
             <table>
                 <tr>
-                    <td><b>Lemma</b></td>
-                    <td><b>Tags</b></td>
-                    <td><b>Count</b></td>
+                    <th><b>Lemma</b></th>
+                    <th><b>Tags</b></th>
+                    <th><b>Count</b></th>
                 </tr>
                 <tbody *ngIf="sideBarDisplaySort=='numerical'">
-                    <tr *ngFor="let word of sortedWordFreqs">
+                    <tr *ngFor="let word of sortedWordFreqs" class="tableContentRow">
                         <td> {{word.lemma}} </td>
                         <td> {{word.tags}} </td>
                         <td> {{word.count}} </td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="sideBarDisplaySort=='alphabetical'">
-                    <tr *ngFor="let word of alphabeticallySortedWordFreqs">
+                    <tr *ngFor="let word of alphabeticallySortedWordFreqs" class="tableContentRow">
                         <td> {{word.lemma}} </td>
                         <td> {{word.tags}} </td>
                         <td> {{word.count}} </td>

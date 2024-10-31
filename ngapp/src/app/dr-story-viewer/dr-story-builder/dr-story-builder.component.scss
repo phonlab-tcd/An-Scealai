@@ -301,10 +301,10 @@ span.currentWord {
 .wordFreqsTableContainer {
     top: 0;
     overflow-y: auto;
-    height: 70vh;
+    height: 67vh;
 }
 
-
+tr.tableContentRow:hover {background-color: var(--scealai-cream-2);;}
 
 
 #sideBarHeading {
@@ -378,10 +378,18 @@ span.currentWord {
 
 .tab {
     flex: 1 1 0;
+    padding: 7px;
+    background-color: var(--scealai-green);
+    color: white;
+    //border-radius: 4px;
+    text-decoration:none;
+    text-align: center;
+    border: white;
+    border-style: solid;
 }
 
 .tabSelected {
-    background-color: red;
+    background-color: var(--scealai-med-green);
 }
 
 .interactableArea {

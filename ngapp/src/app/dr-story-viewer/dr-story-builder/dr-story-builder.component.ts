@@ -1050,7 +1050,6 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }
   }
 
-  //openSidenav(headingText: string) {
   openSidenav() {
     this.setSideBarDisplayType('grammar'); // added to account for word frequencies option
 
