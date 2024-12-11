@@ -24,7 +24,7 @@
       <!--[(ngModel)]="inputs.thumbnail"-->
       <input type="file" id="thumbnail"
       (change)="processThumbnail($event.target.files)">
-      <label for="thumbnail" class="selectionBtn"> (Optional) Upload a .png file </label>
+      <label for="thumbnail" class="selectionBtn">{{ this.ts.l.upload_png_file_optional }}</label>
       <div *ngIf="this.thumbnail" class="singleLineText"> {{ this.thumbnail.name }}</div>
     </div> <br>
     {{ data.data[2][3] }}: 

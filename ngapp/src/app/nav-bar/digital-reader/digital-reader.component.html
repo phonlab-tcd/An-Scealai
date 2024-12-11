@@ -25,12 +25,12 @@
         <input type="file" id="file"
         (change)="processUploadedFile($event.target.files)"
         [disabled]="storyState=='processing'">
-        <label for="file" class="viewStoryBtn"> Upload a .docx file </label>
+        <label for="file" class="viewStoryBtn">{{ this.ts.l.upload_docx_file }}</label>
       </div>
 
       <!--<div style="margin: auto; width: 50%;">-->
         <div *ngIf="this.docxFile" style="margin: auto; width: 65%; padding:0 10%;">
-          <div>File uploaded : </div>
+          <div>{{ this.ts.l.file_uploaded }} : </div>
           <div>{{ this.docxFile.name }}</div>
         </div>
       <!--</div>-->
@@ -42,7 +42,7 @@
         <button class="viewStoryBtn"
         (click)="createNewStory()"
         [disabled]="!this.docxFile || storyState=='processing' || storyState=='converting'"
-        >Create Digital Reader story from uploaded file</button>
+        >{{ this.ts.l.create_dr_story_from_docx }}</button>
       </div>
 
       <!-- Processing ICON  -->

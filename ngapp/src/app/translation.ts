@@ -102,10 +102,10 @@ const translations = {
     ga: 'Scéalta',
     en: 'Irish Stories' },
   dr_story_create: {
-    ga: 'Cruthaigh Scéal don Léitheoir Digiteach',
+    ga: 'Cruthaigh Scéal don Ríomhléitheoir Ardinteachta',
     en: 'Create a digital Reader Story' },
   digital_reader: {
-    ga: 'Léitheoir Scéalta Digiteacha',
+    ga: 'Ríomhléitheoir',
     en: 'Digital Story Reader' },
   what_is_LARA: {
     ga: 'Cad é LARA?',
@@ -213,11 +213,23 @@ const translations = {
     ga: 'Cnuasaigh (is é "other_stories" an réamhshocrú)',
     en: 'Collections (default: "other_stories")' },
   thumbnail: {
-    ga: 'mioníomhá',
-    en: 'thumbnail' },
+    ga: 'Mioníomhá',
+    en: 'Thumbnail' },
   must_be_image: {
     ga: 'Caithfidh an comhad bheith ina íomhá (.png, .jpg, .jpeg)',
     en: 'Uploaded file must be an image (.png, .jpg, .jpeg)'},
+  upload_docx_file: {
+    ga: 'Úaslód comhad .docx',
+    en: 'Upload a .docx file'},
+  upload_png_file_optional: {
+    ga: '(Roghnach) Úaslód comhad .png',
+    en: '(Optional) Upload a .docx file'},
+  create_dr_story_from_docx: {
+    ga: 'Cruthaigh scéal don Ríomhléitheoir ó do chomhad .docx féin',
+    en: 'Create Digital Reader story from uploaded file'},
+  file_uploaded: {
+    ga: 'Comhad uaslódáilte',
+    en: 'File uploaded'},
   /*adminStoryCollectionOpts: {
     leaving_cert_stories: {
       ga: 'Prós Comónta Ainmnithe don Ardteistiméireacht',
@@ -237,8 +249,8 @@ const translations = {
     }
   },*/
   make_public: {
-    ga: 'Foilsigh an scéal i leabharlann scéalta poiblí An Scéalaí ?',
-    en: 'Publish this story in the public An Scéalaí story library ?' },
+    ga: 'Foilsigh do scéal i leabharlann \'Scéalta Phobal An Scéalaí\' (poiblí)?',
+    en: 'Publish this story in the \'An Scéalaí Story\' library (public)?' },
   uploaded: {
     ga: 'Uaslódálaithe',
     en: 'Uploaded' },
@@ -1648,7 +1660,7 @@ const translations = {
     ga: 'Tá an banc scéalta ag fás. Cruthaigh cuntas le An Scéalaí le teacht ar tuilleadh scéalta',
     en: 'The story bank is growing. Create an account with An Scéalaí to find out more stories' },
   digital_reader_library: {
-    ga: 'Leabharlann an Léitheora Digitigh',
+    ga: 'Leabharlann an Ríomhléitheora',
     en: 'Digital Reader Story Library' },
   higher_level: {
     ga: 'Ardleibhéal',

@@ -36,6 +36,7 @@
       <a *ngIf="auth.isLoggedIn() && auth.getUserDetails()?.role === 'STUDENT'" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToStats(); toggleSmallMenu()" >{{ ts.l.statistics_dashboard }}</a >
       <a *ngIf="auth.isLoggedIn()  && auth.getUserDetails()?.role === 'STUDENT'" mat-menu-item class="dropdownMenuItem" target="_blank" rel="noopener noreferrer" (click)="goToMessages(); toggleSmallMenu()" >{{ ts.l.messages }}</a >
       <button mat-menu-item [matMenuTriggerFor]="LARA">LARA</button>
+      <button mat-menu-item [matMenuTriggerFor]="digitalReader"> {{ ts.l.digital_reader }} </button>
       <button *ngIf="auth.isLoggedIn()" mat-menu-item [matMenuTriggerFor]="cenSceal" > Cén Scéal </button>
       <a *ngIf="auth.isLoggedIn()" mat-menu-item class="dropdownMenuItem" routerLink="/dictogloss" rel="noopener noreferrer" (click)="toggleSmallMenu()" >{{ts.l.dictogloss}}</a >
       <a mat-menu-item class="dropdownMenuItem" href="https://bat-mirialta.detail-design-develop.com/applications/bat-mirialta/" target="_blank" rel="noopener noreferrer" (click)="toggleSmallMenu()" >An Bat Mírialta</a >
@@ -45,10 +46,15 @@
     <mat-menu #LARA="matMenu">
       <a mat-menu-item class="dropdownMenuItem" routerLink="/about-lara"> {{ ts.l.what_is_LARA }}</a >
       <a mat-menu-item class="dropdownMenuItem" routerLink="/resources">{{ ts.l.irish_stories }}</a>
+    </mat-menu>
+
+    <!-- Digital Reader dropdown menu-->
+    <mat-menu #digitalReader="matMenu">
+      <a mat-menu-item class="dropdownMenuItem" routerLink="/dr-library">{{ ts.l.digital_reader_library }}</a>
       <a
       *ngIf="auth.isLoggedIn() && (auth.getUserDetails()?.role === 'TEACHER' || auth.getUserDetails()?.role === 'ADMIN')"
-      mat-menu-item class="dropdownMenuItem" routerLink="/dr-story-create">{{ ts.l.dr_story_create }}</a>
-      <a mat-menu-item class="dropdownMenuItem" routerLink="/dr-library">{{ ts.l.digital_reader_library }}</a> <!--routerLink="/dr-story-create"-->
+      mat-menu-item class="dropdownMenuItem" routerLink="/dr-story-create">{{ ts.l.dr_story_create }}
+      </a>
     </mat-menu>
 
     <!-- Cen Scéal dropdown menu-->

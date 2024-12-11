@@ -287,7 +287,7 @@ export class DigitalReaderComponent implements OnInit {
         confirmText: this.ts.l.save_details,
         cancelText: this.ts.l.cancel,
       },
-      width: "80vh",
+      width: "90vh",
     });
 
     //console.log(this.dialogRef)
