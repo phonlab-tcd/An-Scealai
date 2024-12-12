@@ -343,6 +343,11 @@ span.currentWord {
     height: 67vh;
 }
 
+.dictionaryContainer {
+    top: 0;
+    height: 75vh;
+}
+
 tr.tableContentRow:hover {background-color: var(--scealai-cream-2);;}
 
 
@@ -359,7 +364,7 @@ tr.tableContentRow:hover {background-color: var(--scealai-cream-2);;}
     //position: sticky;
     //top: 0;
     
-    height: 75%;
+    height: 70%;
     //box-shadow: inset;
     box-shadow: 0px -25px 15px -15px rgba(0,0,0,0.15) inset,
                 0px 25px 15px -15px rgba(0,0,0,0.15) inset;

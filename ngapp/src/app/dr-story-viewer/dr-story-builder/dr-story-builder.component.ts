@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, importProvidersFrom } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, importProvidersFrom, ChangeDetectorRef } from "@angular/core";
 import { SynthItem } from "app/core/models/synth-item";
 import { SynthesisService, Voice, voices } from "app/core/services/synthesis.service";
 import { TranslationService } from "app/core/services/translation.service";
@@ -31,6 +31,8 @@ import tippy, { hideAll, createSingleton } from 'tippy.js';
 
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InstructionsDialogComponent } from "../../dialogs/instructions-dialog/instructions-dialog.component";
+import { StudentModule } from "app/student/student.module";
+import { DictionaryDrawerComponent } from "app/student/dictionary-drawer/dictionary-drawer.component";
 
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
@@ -52,6 +54,7 @@ const dialectToVoiceIndex = new Map<string, number>([
     MatButtonModule,
     MatSidenavModule,
     MatSnackBarModule,
+    StudentModule
   ],
   selector: "app-dr-story-builder",
   templateUrl: "./dr-story-builder.component.html",
@@ -59,6 +62,8 @@ const dialectToVoiceIndex = new Map<string, number>([
   encapsulation: ViewEncapsulation.None // Without this line, non-angular html cannot be targetted for styling
 })
 export class DigitalReaderStoryBuilderComponent implements OnInit {
+
+  @ViewChild('dictionary', { static: false }) dictionary!: DictionaryDrawerComponent;
 
   @Input() content:Element
   @Input() storyId:string
@@ -117,6 +122,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     private drStoryService: DigitalReaderStoryService,
     public snackbar:MatSnackBar,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -1110,10 +1116,18 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   setSideBarDisplayType(type:string) {
     this.sideBarDisplayType = type;
-    if (this.sideBarDisplayType=='wordFreqs') {
+    if (this.sideBarDisplayType!='grammar') {
       const sideBarContent:Element = (this.sideBar.querySelector('#sideBarContent') as Element);
       sideBarContent.innerHTML = '';
+      if (this.sideBarDisplayType=='dictionary') {
+        this.cdr.detectChanges();
+        console.log('here')
+        console.log(this.dictionary)
+        this.dictionary.wordLookedUp = this.grammarHeading;
+        this.dictionary.lookupWord();
+      }
     }
+    
   }
 
   sideBarWordFreqSort(type:string) {

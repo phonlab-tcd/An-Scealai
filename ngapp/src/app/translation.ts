@@ -1780,6 +1780,9 @@ const translations = {
   simple_versions_old_stories: {
     ga: 'Leaganacha simplí de sheanscéalta',
     en: 'Simple versions of old stories' },
+  funded_by: {
+    ga: 'Maoinithe ag',
+    en: 'Funded by' },
   published_courtesy_of: {
     ga: 'Foilsithe anseo le caoinchead ó',
     en: 'Published with the courtesy of' },

@@ -6,7 +6,8 @@
                 {{ ts.l.grammatical_info }}
             </button>
             <button class="tab"
-            [ngClass]="{'tabSelected' : sideBarDisplayType=='translation'}">
+            (click)="setSideBarDisplayType('dictionary')"
+            [ngClass]="{'tabSelected' : sideBarDisplayType=='dictionary'}">
                 {{ ts.l.dictionary_entry }}
             </button>
             <button class="tab"
@@ -15,6 +16,14 @@
                 <!-- {{ ts.l.sentence_translation }} -->
                 {{ ts.l.word_frequencies }}
             </button>
+        </div>
+        <div *ngIf="sideBarDisplayType == 'dictionary'">
+            <div class="dictionaryContainer">
+                <app-dictionary-drawer
+                #dictionary
+                (closeDictionaryEmitter)="this.closeSidenav()"
+                ></app-dictionary-drawer>
+            </div>
         </div>
         <div *ngIf="sideBarDisplayType=='wordFreqs'" id="sideBarFreqContent">
             <div class="tabContainer">

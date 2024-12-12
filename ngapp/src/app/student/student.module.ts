@@ -51,7 +51,8 @@ import { SafeHtmlPipe } from 'app/core/pipes/safe-html.pipe';
     HomePageComponent
   ],
   exports: [
-    FilterPipe
+    FilterPipe,
+    DictionaryDrawerComponent
   ],
   imports: [
     CommonModule,
