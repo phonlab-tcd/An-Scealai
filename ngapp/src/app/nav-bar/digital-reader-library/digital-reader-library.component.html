@@ -10,9 +10,20 @@
   <div style="width:100%">
     
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-      <mat-tab [label]="ts.l.verified_dr_stories">
+      <mat-tab> <!--[label]="ts.l.verified_dr_stories"-->
         <!--this section should probably be generated from the mongodb where the stories are stored, rather than hardcoded-->
         <!--<br>-->
+
+        <ng-template mat-tab-label>
+          <label
+          #tooltip="matTooltip"
+          [matTooltip]="this.ts.l.verified_dr_stories_description"> 
+              {{ ts.l.verified_dr_stories }}
+          </label>
+       </ng-template>
+
+        <!--<h4><i>Scéalta iad seo atá uaslódáilte ag foireann An Scéalaí</i></h4>-->
+
         <div *ngFor="let collection of collections">
           <div>
             <app-dr-story-drawer
@@ -41,15 +52,33 @@
           </div>-->
         </div>
       </mat-tab>
-      <mat-tab [label]="ts.l.public_dr_stories">
+      <mat-tab> <!--[label]="ts.l.public_dr_stories"-->
+
+        <ng-template mat-tab-label>
+          <label
+          #tooltip="matTooltip"
+          [matTooltip]="this.ts.l.public_dr_stories_description"> 
+              {{ ts.l.public_dr_stories }}
+          </label>
+       </ng-template>
+        <!--<h4><i>Rud eicínt eile</i></h4>-->
         <!--<br>--><!--This break was causing a scrollbar to appear-->
         <app-dr-story-drawer
         [storyList]="publicDRStories"
         [title]="ts.l.public_dr_stories"
         [user]="userDetails"
         /></mat-tab>
-      <mat-tab [label]="ts.l.my_stories" *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'">
+      <mat-tab *ngIf="userDetails.role=='ADMIN' || userDetails.role=='TEACHER'"> <!--[label]="ts.l.my_stories"-->
         <!--<br>-->
+
+        <ng-template mat-tab-label>
+          <label
+          #tooltip="matTooltip"
+          [matTooltip]="this.ts.l.my_stories_description">
+              {{ ts.l.my_stories }}
+          </label>
+       </ng-template>
+
         <app-dr-story-drawer 
         [storyList]="currUsersDRStories"
         [title]="ts.l.my_stories"

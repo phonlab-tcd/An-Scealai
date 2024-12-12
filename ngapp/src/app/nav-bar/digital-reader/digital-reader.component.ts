@@ -50,6 +50,8 @@ export class DigitalReaderComponent implements OnInit {
   defaultCollectionSelections:any = {};
   storyState:string = '';
 
+  createdStoryId:string = '';
+
   //@Output() isFirstDrStory = new EventEmitter<boolean>();
 
   constructor(
@@ -108,7 +110,7 @@ export class DigitalReaderComponent implements OnInit {
   createMergeButton() {
     const mergeButton = document.createElement('button');
     mergeButton.className="sentenceMerger";
-    mergeButton.textContent="▲ merge ▼"; // TODO : change to use translation service
+    mergeButton.textContent=`▲ ${this.ts.l.merge} ▼`; // TODO : change to use translation service
     mergeButton.tabIndex = -1;
     mergeButton.addEventListener('click', (event) => {
       this.mergeSentences(event.target as Element);
@@ -343,7 +345,8 @@ export class DigitalReaderComponent implements OnInit {
             public: res.public
           }
 
-          this.snackbar.open(this.ts.l.enter_to_split_message, this.ts.l.okay, {duration: 6000});
+          //this.snackbar.open(this.ts.l.enter_to_split_message, this.ts.l.okay, {duration: 6000});
+          this.snackbar.open(this.ts.l.split_and_merge_instructions, this.ts.l.okay, {duration: 16000});
 
           /* Temporarily commented out for testing
           if (this.convertedHTMLDoc) {
@@ -414,6 +417,7 @@ export class DigitalReaderComponent implements OnInit {
           next: (response) => {
               console.log('a response was received')
               this.storyState = 'processed'
+              this.createdStoryId = response.id;
               //this.synthesiseStory(this.segmentedHTMLDoc, response.id);
               this.synthesiseStory(response.id, this.segmentedHTMLDoc?.querySelectorAll('.sentence'));
           },

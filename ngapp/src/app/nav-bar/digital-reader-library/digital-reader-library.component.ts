@@ -13,7 +13,7 @@ import { HttpClient } from "@angular/common/http";
 //import { GrammarEngine } from 'lib/grammar-engine/grammar-engine';
 //import { anGramadoir } from "lib/grammar-engine/checkers/an-gramadoir";
 //import { CHECKBOXES, ERROR_TYPES, ErrorTag, GrammarChecker } from "lib/grammar-engine/types";
-import { DigitalReaderStoryService } from "app/core/services/dr-story.service"
+import { DigitalReaderStoryService } from "app/core/services/dr-story.service";
 
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 

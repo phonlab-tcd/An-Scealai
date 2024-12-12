@@ -13,7 +13,7 @@
             (click)="setSideBarDisplayType('wordFreqs')"
             [ngClass]="{'tabSelected' : sideBarDisplayType=='wordFreqs'}">
                 <!-- {{ ts.l.sentence_translation }} -->
-                Word Frequencies
+                {{ ts.l.word_frequencies }}
             </button>
         </div>
         <div *ngIf="sideBarDisplayType=='wordFreqs'" id="sideBarFreqContent">
@@ -21,20 +21,20 @@
                 <button class="tab"
                 [ngClass]="{'tabSelected' : sideBarDisplaySort=='numerical'}"
                 (click)="sideBarWordFreqSort('numerical')">
-                    Numerical
+                    {{ ts.l.numerical }}
                 </button>
                 <button class="tab"
                 [ngClass]="{'tabSelected' : sideBarDisplaySort=='alphabetical'}"
                 (click)="sideBarWordFreqSort('alphabetical')">
-                    Alphabetical
+                    {{ ts.l.alphabetical }}
                 </button>
             </div>
             <div class="wordFreqsTableContainer">
             <table>
                 <tr>
-                    <th><b>Lemma</b></th>
-                    <th><b>Tags</b></th>
-                    <th><b>Count</b></th>
+                    <th><b>{{ ts.l.lemma }}</b></th>
+                    <th><b>{{ ts.l.tags }}</b></th>
+                    <th><b>{{ ts.l.count }}</b></th>
                 </tr>
                 <tbody *ngIf="sideBarDisplaySort=='numerical'">
                     <tr *ngFor="let word of sortedWordFreqs" class="tableContentRow">
@@ -99,7 +99,7 @@
                     <!--<mat-icon>arrow_drop_down</mat-icon><span>{{ ts.l.dialect }}</span>-->
                     <mat-icon>arrow_drop_down</mat-icon>
                     <!--<span>{{ ts.l.dialect }}</span>-->
-                    {{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender][0] + ')' }}
+                    {{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender + '_shortened'] + ')' }}
                     <!--<span>{{ ts.l[speaker.dialect] + ' ' + '(' + ts.l[speaker.gender] + ')' }}</span>-->
                 </button>
                 <mat-menu #dialects="matMenu">

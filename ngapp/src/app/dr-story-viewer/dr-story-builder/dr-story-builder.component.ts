@@ -193,7 +193,7 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
         const anchorText = reference.textContent;
         //const anchorLemma = reference.textContent;
         //return `<div class="tooltipContent"><div><p>Base word: ${lemma}</p><p>test: ${tags}</p><p>Info: ${parsedTags}</p></div></div>`;
-        return `<div data-lemma="${lemma}" data-tags="${tags}" data-text="${anchorText}" class="grammarTooltipContent"><div><p>Base form: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
+        return `<div data-lemma="${lemma}" data-tags="${tags}" data-text="${anchorText}" class="grammarTooltipContent"><div><p>${this.ts.l.lemma}: <b>${lemma}</b></p><p>${parsedTags.class} <i>${parsedTags.attrs}</i></p></div></div>`;
       },
       //delay: [200, 50],
       delay: [300, 50], // delay before it shows/hides

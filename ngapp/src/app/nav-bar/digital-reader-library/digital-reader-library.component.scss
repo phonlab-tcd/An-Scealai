@@ -175,6 +175,10 @@ app-dr-story-drawer {
     height: 40px;
 }
 
+.mat-tooltip  {
+  white-space: pre-line !important;
+}
+
 @media only screen and (max-width: 700px) {
     .container {
         width: 95%;

@@ -173,6 +173,9 @@ const translations = {
   my_stories: {
     ga: 'Mo Chuid Scéalta',
     en: 'My Stories' },
+  my_stories_description: {
+    ga: 'tá an rannóg seo oscailte do mhúinteoirí a scéalta féin a chumadh nó a uaslódáil ó fhoinsí eile. Ní fheicfear scéalta sa rannóg seo go poiblí ar an suiomh - ach is féidir iad a úsáid lena gcuid ranganna féin.',
+    en: '[not yet written]' },
   title: {
     ga: 'Teideal',
     en: 'Title' },
@@ -219,10 +222,10 @@ const translations = {
     ga: 'Caithfidh an comhad bheith ina íomhá (.png, .jpg, .jpeg)',
     en: 'Uploaded file must be an image (.png, .jpg, .jpeg)'},
   upload_docx_file: {
-    ga: 'Úaslód comhad .docx',
+    ga: 'Uaslódáil comhad .docx',
     en: 'Upload a .docx file'},
   upload_png_file_optional: {
-    ga: '(Roghnach) Úaslód comhad .png',
+    ga: '(Roghnach) Uaslódáil comhad .png',
     en: '(Optional) Upload a .docx file'},
   create_dr_story_from_docx: {
     ga: 'Cruthaigh scéal don Ríomhléitheoir ó do chomhad .docx féin',
@@ -230,6 +233,12 @@ const translations = {
   file_uploaded: {
     ga: 'Comhad uaslódáilte',
     en: 'File uploaded'},
+  go_to_dr_story: {
+    ga: 'Oscail do scéal sa Ríomhléitheoir',
+    en: 'View story in Digital Reader'},
+  go_to_dr_story_library: {
+    ga: 'Oscail leabharlann an Ríomhléitheora',
+    en: 'Go to Digital Reader story library'},
   /*adminStoryCollectionOpts: {
     leaving_cert_stories: {
       ga: 'Prós Comónta Ainmnithe don Ardteistiméireacht',
@@ -257,9 +266,21 @@ const translations = {
   processing: {
     ga: 'Á phróiseáil',
     en: 'Processing' },
+  step_one_converting: {
+    ga: 'Céim 1: á ullmhú',
+    en: 'Step 1: preparing' },
+  step_one_converted: {
+    ga: 'Céim 1: ullmhaithe',
+    en: 'Céim 1: prepared' },
   enter_to_split_message: {
     ga: "Brúigh ENTER laistigh d'abairt chun é a scoilteadh ina dhá",
     en: 'Press ENTER within a sentence to split it in two' },
+  split_and_merge_instructions: {
+  ga: "*Le cabhrú an tsintéis a fháil ceart, briseann an córas suas an scéal ina n-abairtí aonaracha i gCéim 1. Féach ar na habairtí i do scéal le bheith cinnte gur éirigh leis an gcóras an tasc a dhéanamh i gceart. Brú eochair CR (carriage return) más maith leat abairt a bhriseadh suas agus brú ar ‘ceangal le chéile’ chun dhá ‘abairt’ a chomhcheangal.",
+  en: 'Press ENTER within a sentence to split it in two' },
+  merge: {
+    ga: "ceangal le chéile",
+    en: 'merge' },
   confirm_sentences: {
     ga: 'Ar dheimhnigh tú na habairtí atá thíos ?',
     en: 'Have you confirmed the below sentences?' },
@@ -273,11 +294,29 @@ const translations = {
     ga: 'Níor fhéadadh ar a laghad abairt amháin a shintéisiú',
     en: 'There were issues synthesising one or more sentences' },
   grammatical_info: {
-    ga: 'Eolas Gramadach',
+    ga: 'Eolas Gramadaí',
     en: 'Grammatical Info.' },
   dictionary_entry: {
-    ga: 'Iontráil Foclóra',
-    en: 'Dictionary Entry' },
+    ga: 'Foclóir',
+    en: 'Dictionary' },
+  word_frequencies: {
+    ga: 'Miníocht na bhFocal',
+    en: 'Word Frequencies' },
+  numerical: {
+    ga: 'Ord Uimhreach',
+    en: 'Numerical' },
+  alphabetical: {
+    ga: 'Ord Aibítire',
+    en: 'Alphabetical' },
+  lemma: {
+    ga: 'An Bunfhocal',
+    en: 'Base Form' },
+  tags: {
+    ga: 'Clibeanna',
+    en: 'Tags' },
+  count: {
+    ga: 'Líon',
+    en: 'Count' },
   sentence_translation: {
     ga: 'Sentence Translation',
     en: 'Aistriúchán Abairte' },
@@ -285,11 +324,21 @@ const translations = {
     ga: 'Ceart go leor',
     en: 'Okay' },
   verified_dr_stories: {
-    ga: 'Scéalta Bailí',
+    ga: 'Scéalta Deimhnithe',
     en: 'Verified Stories' },
+  verified_dr_stories_description: {
+    ga: 'scéalta iad seo atá uaslódáilte ag foireann An Scéalaí',
+    en: 'these stories were uploaded by the An Scéalaí team' },
   public_dr_stories: {
     ga: 'Scéalta an Phobail',
     en: 'Community Stories' },
+  public_dr_stories_description: {
+    ga: ` tá an rannóg seo oscailte do mhúinteoirí chun a scéalta féin a uaslódáil agus a roinnt lena gcomhleacaithe 
+\nNB 
+\nní mór cúram a dhéanamh do chearta cóipchirt; 
+\nní bheidh sé de chumas ag An Scéalaí na profaí seo a cheartú
+`,
+    en: '[not yet written]' },
   contents: {
     ga: 'Clár Scéalta',
     en: 'Contents' },
@@ -473,9 +522,15 @@ const translations = {
   male: {
     ga: 'Fireann',
     en: 'Male' },
+  male_shortened: {
+    ga: 'Fir.',
+    en: 'Male' },
   female: {
     ga: 'Baineann',
     en: 'Female' },
+  female_shortened: {
+    ga: 'Bain.',
+    en: 'Fem.' },
   non_binary: {
     ga: 'Uilíoch',
     en: 'Non-Binary' },

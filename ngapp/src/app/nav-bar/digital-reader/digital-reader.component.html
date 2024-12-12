@@ -49,23 +49,32 @@
       <div *ngIf="storyState!=''" class="processIcon" style="margin: auto; width: 50%; padding:0 10%;">
         <div *ngIf="storyState=='processed'" class="processedIcon">
           {{ ts.l.uploaded }} <i class="fas fa-check"></i> <br><br>
-          <div>
+          <div><a [routerLink]="['../dr-story-viewer']"
+            [queryParams]="{ storyId: createdStoryId }"
+            target="_blank">
+            {{ ts.l.go_to_dr_story }}
+          </a></div> <br>
+          <div><a [routerLink]="['../dr-library']"
+          target="_blank">
+            {{ ts.l.go_to_dr_story_library }}
+          </a></div> <br>
+          <!--<div>
             View story in story viewer [Unimplemented]
-          </div> <br>
-          <div>
+          </div> <br>-->
+          <!--<div>
             Go to story library [Unimplemented]
-          </div> <br>
+          </div> <br>-->
         </div>
         <div *ngIf="storyState=='processing'" class="processedIcon">
           {{ ts.l.processing }}
           <i class="fas fa-save"> </i>
         </div>
         <div *ngIf="storyState=='converting'" class="processedIcon">
-          converting
+          {{ ts.l.step_one_converting }}
           <i class="fas fa-save"> </i>
         </div>
         <div *ngIf="storyState=='converted'" class="processedIcon">
-          converted
+          {{ ts.l.step_one_converted }}
           <i class="fas fa-check"></i>
         </div>
       </div>
@@ -127,7 +136,7 @@
     *ngFor="let sent of drStoryService.segmentedSentences; index as i"
     [attr.sentNumber]="i+1">
       <button class="sentenceMerger" tabindex="-1"
-      (click)="mergeSentences($event.target)">▲ merge ▼</button><br>
+      (click)="mergeSentences($event.target)">▲ {{ this.ts.l.merge }} ▼</button><br>
       <!--<span [hidden]="(sent.text.match('/\./g') || []).length < 2" >test highlighting</span>-->
       <b>{{ i+1 }}  </b><span
       class="sentencePreview"

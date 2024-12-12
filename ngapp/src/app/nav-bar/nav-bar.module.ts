@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {TooltipPosition, MatTooltipModule} from '@angular/material/tooltip';
 
 import { NavBarRoutingModule } from './nav-bar-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -70,7 +71,8 @@ import { FiosComponent } from './fios/fios.component';
     FormsModule,
     MatInputModule,
     //MatFormFieldModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ]
 })
 export class NavBarModule { }
