@@ -6,7 +6,8 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 
 const http = axios.create({
-  baseURL: "https://abair.ie/api2",
+  //baseURL: "https://abair.ie/api2",
+  baseURL: "http://10.0.0.2:4040",
   headers: {
     "Content-Type": "application/json",
     //"Access-Control-Allow-Origin": "*"
