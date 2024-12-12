@@ -174,8 +174,8 @@ const translations = {
     ga: 'Mo Chuid Scéalta',
     en: 'My Stories' },
   my_stories_description: {
-    ga: 'tá an rannóg seo oscailte do mhúinteoirí a scéalta féin a chumadh nó a uaslódáil ó fhoinsí eile. Ní fheicfear scéalta sa rannóg seo go poiblí ar an suiomh - ach is féidir iad a úsáid lena gcuid ranganna féin.',
-    en: '[not yet written]' },
+    ga: 'tá an rannóg seo oscailte do mhúinteoirí a scéalta féin a chumadh nó a uaslódáil ó fhoinsí eile. Ní fheicfear scéalta sa rannóg seo go poiblí ar an suiomh (mura mian leis an úsáideoir) - ach is féidir iad a úsáid lena gcuid ranganna féin.',
+    en: 'This section is open for teachers to create their own stories or upload them from other sources. These stories will not be seen publicly (unless the user wants them to be) - but teachers can use them with their own classes.' },
   title: {
     ga: 'Teideal',
     en: 'Title' },
@@ -276,8 +276,8 @@ const translations = {
     ga: "Brúigh ENTER laistigh d'abairt chun é a scoilteadh ina dhá",
     en: 'Press ENTER within a sentence to split it in two' },
   split_and_merge_instructions: {
-  ga: "*Le cabhrú an tsintéis a fháil ceart, briseann an córas suas an scéal ina n-abairtí aonaracha i gCéim 1. Féach ar na habairtí i do scéal le bheith cinnte gur éirigh leis an gcóras an tasc a dhéanamh i gceart. Brú eochair CR (carriage return) más maith leat abairt a bhriseadh suas agus brú ar ‘ceangal le chéile’ chun dhá ‘abairt’ a chomhcheangal.",
-  en: 'Press ENTER within a sentence to split it in two' },
+    ga: "*Le cabhrú an tsintéis a fháil ceart, briseann an córas suas an scéal ina n-abairtí aonaracha i gCéim 1. Féach ar na habairtí i do scéal le bheith cinnte gur éirigh leis an gcóras an tasc a dhéanamh i gceart. Brú eochair CR (carriage return) más maith leat abairt a bhriseadh suas agus brú ar ‘ceangal le chéile’ chun dhá ‘abairt’ a chomhcheangal.",
+    en: "*To help get the synthesis right, the system breaks up the story into individual sentences in Step 1. Look at the sentences in your story to make sure the system did this correctly. Press the CR (carriage return) key if you would like to break up a sentence and press 'merge' to combine two 'sentences'." },
   merge: {
     ga: "ceangal le chéile",
     en: 'merge' },
@@ -362,7 +362,10 @@ const translations = {
 \nní mór cúram a dhéanamh do chearta cóipchirt; 
 \nní bheidh sé de chumas ag An Scéalaí na profaí seo a cheartú
 `,
-    en: '[not yet written]' },
+    en: `This section is open for teachers to create upload own stories and share them publicly.
+    \nNB 
+\nYou must acknowledge any copyrighted material used;
+\nThe An Scéalaí team will not have the capacity to correct these.` },
   contents: {
     ga: 'Clár Scéalta',
     en: 'Contents' },
