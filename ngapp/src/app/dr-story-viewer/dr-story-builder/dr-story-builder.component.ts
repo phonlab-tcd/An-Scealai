@@ -29,6 +29,9 @@ import { constructHTML } from '@phonlab-tcd/json2html';
 
 import tippy, { hideAll, createSingleton } from 'tippy.js';
 
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { InstructionsDialogComponent } from "../../dialogs/instructions-dialog/instructions-dialog.component";
+
 const dialectToVoiceIndex = new Map<string, number>([
   ["Connacht f", 0],
   ["Ulster f", 1],
@@ -101,6 +104,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   public grammarHeading:string = '';
 
+  dialogRef: MatDialogRef<unknown>;
+
   constructor(
     
     private auth: AuthenticationService,
@@ -110,7 +115,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     public ts: TranslationService,
     protected sanitizer: DomSanitizer,
     private drStoryService: DigitalReaderStoryService,
-    public snackbar:MatSnackBar
+    public snackbar:MatSnackBar,
+    private dialog: MatDialog,
   ) {}
 
   async ngOnInit() {
@@ -1112,6 +1118,31 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
 
   sideBarWordFreqSort(type:string) {
     this.sideBarDisplaySort = type;
+  }
+
+  openInstructionsPopup() {
+    this.dialogRef = this.dialog.open(InstructionsDialogComponent, {
+      data: {
+        title: this.ts.l.dr_story_instructions_title,
+        body: [
+          this.ts.l.dr_story_controls_1,
+          this.ts.l.dr_story_keyboard_nav_1,
+          this.ts.l.dr_story_keyboard_nav_2,
+          this.ts.l.dr_story_mouse_nav_1,
+          this.ts.l.dr_story_mouse_nav_2,
+          this.ts.l.dr_story_mouse_nav_3,
+          this.ts.l.dr_story_mouse_nav_4
+        ],
+        //type: "create-dr-story",
+        /*data: [
+          //this.ts.l.enter_title,
+          //this.dialectOptions,
+          //[this.ts.l.title, this.ts.l.collections_default, this.ts.l.thumbnail, this.ts.l.make_public],
+        ],*/
+        cancelText: this.ts.l.closeSubmition,
+      },
+      width: "100vh",
+    });
   }
 
 }

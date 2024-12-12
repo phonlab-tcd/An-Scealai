@@ -66,6 +66,15 @@
         </mat-sidenav-container>-->
 
         <div class="Toolbar">
+            <div class="instructionsContainer">
+                <button
+                class="instructions"
+                [ngClass]="{'paused': audioPaused===true}"
+                [attr.aria-label]="'instructions button'"
+                (click)="openInstructionsPopup()"
+                ><mat-icon>info_outline</mat-icon></button>
+            </div>
+
             <div class="playbackControls">
                 <!--<button
                 (click)="play()"

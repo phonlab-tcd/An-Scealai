@@ -293,6 +293,30 @@ const translations = {
   problem_with_synth: {
     ga: 'Níor fhéadadh ar a laghad abairt amháin a shintéisiú',
     en: 'There were issues synthesising one or more sentences' },
+  dr_story_instructions_title: {
+    ga: 'Treoracha',
+    en: 'Instructions' },
+  dr_story_controls_1: {
+    ga: '<b>Cliceáil</b> ar na <b>cnaipí</b> nó <b>brú</b> ar an <b>spásbharra</b> chun an scéal a <b>chasadh</b> nó a <b>stopadh</b>.',
+    en: '<b>Click</b> on the <b>buttons</b> or <b>press</b> the <b>space bar</b> to <b>play</b> or <b>pause</b> the story.' },
+  dr_story_keyboard_nav_1: {
+    ga: 'Téigh tríd an scéal leis an mhéarchlár leis na <b>saigheadeochracha</b> <b>deis</b> is <b>clé</b>.',
+    en: 'Navigate the story with your keyboard using the <b>left</b> and <b>right</b> <b>arrow keys</b>.' },
+  dr_story_keyboard_nav_2: {
+    ga: 'Brú ar <b>ctrl</b> agus ceann de na <b>saigheadeochracha</b> chun dul tríd an scéal abairt ar abairt.',
+    en: 'Hold <b>ctrl+arrow</b> to navigate sentence by sentence.' },
+  dr_story_mouse_nav_1: {
+    ga: '<b>Cliceáil</b> ar fhocal lena chloisteáil.',
+    en: '<b>Click</b> on a word to hear it spoken.' },
+  dr_story_mouse_nav_2: {
+    ga: '<b>Cliceáil</b> ar fhocal <b>faoi dhó</b> leis an abairt iomlán a chloisteáil.',
+    en: '<b>Double click</b> on a word to hear the entire sentence spoken.' },
+  dr_story_mouse_nav_3: {
+    ga: 'Cuir an <b>luchóg os cionn focail</b> chun an t-eolas gramadaí a fheiceáil.',
+    en: '<b>Hover over a word</b> to see its grammatical info.' },
+  dr_story_mouse_nav_4: {
+    ga: '<b>Cliceáil</b> ar <b>mír-aníos focail</b> chun tuilleadh eolais faoi a fháil.',
+    en: '<b>Click</b> on the <b>word pop ups</b> to see further information about it.' },
   grammatical_info: {
     ga: 'Eolas Gramadaí',
     en: 'Grammatical Info.' },
