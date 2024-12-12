@@ -38,7 +38,7 @@ async function synthesiseAndStoreSent (req:any) {
 
             // make a call to the synthesis API
             console.log('storing!')
-            const audioObj = await http.post('/synthesise', 
+            const audioObj = await http.post('/synthesis', 
               reqBody
             )
             .catch( (err) => {
