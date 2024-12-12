@@ -916,6 +916,13 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
     }
     console.log(audioObj)
 
+    // in case there was a problem during the batch synthesis
+    if (audioObj) {
+      if (audioObj.audioUrl == "data:audio/mp3;base64,undefined") {
+        audioObj = null;
+      }
+    }
+
     // if the audio has not yet been created and, synthesise it and add it to the list.
     if (!audioObj) {
       audioObj = await this.synthRequest(this.currentSentence?.textContent, this.speaker);

@@ -48,7 +48,7 @@ async function synthesiseAndStoreSent (req:any) {
             });
 
             console.log(audioObj);
-            if (audioObj) {
+            if (audioObj && (audioObj.data.audioContent != "undefined")) {
             
               const storedSent = await DigitalReaderSentenceAudio.create({
                 drStoryId: req.body.drStoryId,
@@ -61,6 +61,9 @@ async function synthesiseAndStoreSent (req:any) {
               resolve('Response: ' + storedSent)
               return;
 
+            } else {
+              resolve('undefined response from synthesis API')
+              return;
             }
           }
           resolve('error storing the audio')
