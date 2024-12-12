@@ -801,7 +801,8 @@ export class DigitalReaderStoryBuilderComponent implements OnInit {
                 if (index==0) reconstructedSentence.setAttribute('firstWordId', this.drStoryService.parseSegId(word.id, 'word'));
                 word.removeAttribute('class'); // remove highlighting interactibility
                 word.removeAttribute('id'); //
-                if (word.getAttribute('lemma')==lemma && word.getAttribute('tags')==tags) {
+                //if (word.getAttribute('lemma')==lemma && word.getAttribute('tags')==tags) {
+                if (word.getAttribute('lemma')==lemma) {
                   word.classList.add('currentWord');
                 }
               })

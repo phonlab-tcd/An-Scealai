@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     return res.status(200).json([]);
   }
 
-  try {
+  /*try {
     const digitalReaderStories = await DigitalReaderStory.aggregate([
       {$project: {
         title: 1,
@@ -53,6 +53,96 @@ module.exports = async (req, res) => {
                       $eq: ["$$word.attrs.tags", req.body.tags]
                     },
                   ]
+                }
+              }
+            },
+            as: "word",
+            in: "$$word.attrs.sentid"
+          }
+        }
+      }},
+      {$project: {
+        title: 1,
+        sentences: {
+          $filter: {
+            input: "$sentences",
+            as: "sentence",
+            cond: {
+              $in: ["$$sentence.id", "$sent_ids"]
+            }
+          }
+        },
+        words: {
+          $filter: {
+            input: "$words",
+            as: "word",
+            cond: {
+              $in: ["$$word.attrs.sentid", "$sent_ids"]
+            }
+          }
+        }
+      }},
+      {$project: {
+        sentences: {
+          $map: {
+            input: "$sentences",
+            as: "sentence",
+            in: {
+              sent: "$$sentence",
+              words: {
+                $filter: {
+                  input: "$words",
+                  as: "word",
+                  cond: {
+                    $eq: [
+                      "$$word.attrs.sentid",
+                      "$$sentence.id"
+                    ]
+                  }
+                }
+              },
+              obj_id: "$_id",
+              title: "$title"
+            }
+          }
+        }
+      }},
+      {$match: { 
+        "sentences.0": {
+            "$exists": true 
+        }
+      }}
+    ])
+
+    if (!digitalReaderStories) {
+      res.status(200).json([]);
+    } else {
+      res.status(200).json(digitalReaderStories);
+    }
+  }*/
+  try {
+    const digitalReaderStories = await DigitalReaderStory.aggregate([
+      {$project: {
+        title: 1,
+        sentences: "$story.sentences",
+        words: "$story.words",
+        public: 1
+      }},
+      {$match: {
+        public: true
+      }},
+      {$project: {
+        title: 1,
+        sentences: 1,
+        words: 1,
+        sent_ids: {
+          $map: {
+            input: {
+              $filter: {
+                input: "$words",
+                as: "word",
+                cond: {
+                    $eq: ["$$word.attrs.lemma", req.body.lemma]
                 }
               }
             },
