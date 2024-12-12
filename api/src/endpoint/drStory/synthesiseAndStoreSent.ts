@@ -37,7 +37,7 @@ async function synthesiseAndStoreSent (req:any) {
           if (!(Array.isArray(story) && story.length!==0) && drStory) {
 
             // make a call to the synthesis API
-            console.log('storing!')
+            /*console.log('storing!')
             const audioObj = await http.post('/synthesis', 
               reqBody
             )
@@ -45,7 +45,10 @@ async function synthesiseAndStoreSent (req:any) {
               //console.log(err);
               resolve('error synthesising the audio')
               return;
-            });
+            });*/
+            const audioObj = null;
+            // Above code is commented out as with the new synth API, the Abair synthesis server gets overwhelmed and crashes.
+            // Will ask John about the internal port for the /api2 API.
 
             console.log(audioObj);
             if (audioObj && (audioObj.data.audioContent != "undefined")) {
