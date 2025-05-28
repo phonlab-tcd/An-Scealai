@@ -14,12 +14,10 @@ const ApiOptions = {
   audioEncoding: ["MP3", "LINEAR16", "OGG_OPUS", "wav"],
   outputType: ["JSON", "HTML", "JSON_WITH_TIMING"],
   voiceCode: [
-    "ga_UL_anb_nemo",
-    "ga_CO_snc_nemo",
+    "ga_UL_anb_piper",
     "ga_CO_snc_piper",
-    "ga_MU_nnc_nemo",
+    "ga_MU_nnc_piper",
     "ga_MU_cmg_nnmnkwii",
-    "ga_CO_pmc_nemo",
   ],
 } as const;
 
@@ -33,7 +31,7 @@ type VoiceConfig = {
   readonly gender: "male" | "female";
   readonly shortCode: "nnc" | "anb" | "snc" | "cmg" | "pmc";
   readonly dialect: "ulster" | "connacht" | "munster";
-  readonly algorithm: "piper" | "nemo" | "dnn" | "hts" | "multidialect";
+  readonly algorithm: "piper" | "dnn" | "hts" | "multidialect";
 };
 
 // function to check that all possible voices are of the type VoiceChecks (typescript will check that codes are valid)
@@ -45,33 +43,33 @@ export const voices = asVoice([
     name: "Sibéal",
     gender: "female",
     shortCode: "snc",
-    code: "ga_CO_snc_nemo",
+    code: "ga_CO_snc_piper",
     dialect: "connacht",
-    algorithm: "nemo",
+    algorithm: "piper",
   },
   {
     name: "Áine",
     gender: "female",
     shortCode: "anb",
-    code: "ga_UL_anb_nemo",
+    code: "ga_UL_anb_piper",
     dialect: "ulster",
-    algorithm: "nemo",
+    algorithm: "piper",
   },
-  {
-    name: "Pádraig",
-    gender: "male",
-    shortCode: "pmc",
-    code: "ga_CO_pmc_nemo",
-    dialect: "connacht",
-    algorithm: "nemo",
-  },
+  // {
+  //   name: "Pádraig",
+  //   gender: "male",
+  //   shortCode: "pmc",
+  //   code: "ga_CO_pmc_nemo",
+  //   dialect: "connacht",
+  //   algorithm: "nemo",
+  // },
   {
     name: "Neasa",
     gender: "female",
     shortCode: "nnc",
-    code: "ga_MU_nnc_nemo",
+    code: "ga_MU_nnc_piper",
     dialect: "munster",
-    algorithm: "nemo",
+    algorithm: "piper",
   },
   {
     name: "Colm",
@@ -218,11 +216,11 @@ export class SynthesisService {
   ): (typeof ApiOptions.voiceCode)[number] {
     switch (dialect) {
       case "donegal":
-        return "ga_UL_anb_nemo";
+        return "ga_UL_anb_piper";
       case "kerry":
-        return "ga_MU_nnc_nemo";
+        return "ga_MU_nnc_piper";
       default: // connemara
-        return "ga_CO_snc_nemo";
+        return "ga_CO_snc_piper";
     }
   }
 
