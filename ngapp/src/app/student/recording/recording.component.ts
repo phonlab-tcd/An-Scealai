@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from "@angular/core";
 import { TranslationService } from "app/core/services/translation.service";
 import { StoryService } from "app/core/services/story.service";
 import { RecordingService } from "../../core/services/recording.service";
@@ -6,14 +12,20 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Story } from "../../core/models/story";
 import { Recording } from "../../core/models/recording";
-import { SynthesisService, Voice, Paragraph, Sentence, Section, } from "app/core/services/synthesis.service";
+import {
+  SynthesisService,
+  Voice,
+  Paragraph,
+  Sentence,
+  Section,
+} from "app/core/services/synthesis.service";
 import { EventType } from "../../core/models/event";
 import { EngagementService } from "app/core/services/engagement.service";
 import { firstValueFrom } from "rxjs";
-import { requestMediaPermissions } from 'mic-check';
+import { requestMediaPermissions } from "mic-check";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BasicDialogComponent } from "../../dialogs/basic-dialog/basic-dialog.component";
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from "@angular/core";
 
 @Component({
   selector: "app-recording",
@@ -69,7 +81,7 @@ export class RecordingComponent implements OnInit, OnDestroy {
   dialogRef: MatDialogRef<unknown> | undefined;
 
   // ASR variables
-  url_ASR_API = "https://phoneticsrv3.lcs.tcd.ie/asr_api/recognise";
+  url_ASR_API = "https://api.abair.ie/v3/recognition/recognise";
   sentenceTranscriptions: string[] | null[] = [];
   paragraphTranscriptions: string[] | null[] = [];
   sectionTranscriptions: string[] | null[] = [];
@@ -94,21 +106,23 @@ export class RecordingComponent implements OnInit, OnDestroy {
 
     const storyId = this.route.snapshot.paramMap.get("id");
     if (!storyId) {
-      console.log("Can't initialise, story id is null")
+      console.log("Can't initialise, story id is null");
       return;
     }
     this.story = await firstValueFrom(this.storyService.getStory(storyId));
 
     // check if browser microphone allowed before loading recordings
-    requestMediaPermissions({audio: true, video: false})
-    .then(async () => {
-      // load story recordings if they exist, otherwise create a new recording object
-      this.story.activeRecording? this.loadRecordings() : this.createNewRecording();
-    })
-    .catch((err) => {
-      // open dialog requesting microphone access if not allowed
-      this.openMicRequestDialog();
-    });
+    requestMediaPermissions({ audio: true, video: false })
+      .then(async () => {
+        // load story recordings if they exist, otherwise create a new recording object
+        this.story.activeRecording
+          ? this.loadRecordings()
+          : this.createNewRecording();
+      })
+      .catch((err) => {
+        // open dialog requesting microphone access if not allowed
+        this.openMicRequestDialog();
+      });
   }
 
   /**
@@ -150,7 +164,9 @@ export class RecordingComponent implements OnInit, OnDestroy {
     if (recordingElement) {
       // remove css highlighting for currently highlighted recording (from archive)
       if (this.lastClickedRecordingId) {
-        document.getElementById(this.lastClickedRecordingId)?.classList.remove("clickedresultCard");
+        document
+          .getElementById(this.lastClickedRecordingId)
+          ?.classList.remove("clickedresultCard");
       }
       this.lastClickedRecordingId = id;
       // add css highlighting to the newly clicked recording
@@ -163,10 +179,14 @@ export class RecordingComponent implements OnInit, OnDestroy {
    */
   async createNewRecording() {
     // create a new active recording with the story text
-    const newRecording = await firstValueFrom( this.recordingService.create(new Recording(this.story)) );
+    const newRecording = await firstValueFrom(
+      this.recordingService.create(new Recording(this.story))
+    );
 
     // set this new recording as the story's current active recording
-    this.story = await firstValueFrom( this.storyService.updateActiveRecording(this.story._id, newRecording._id) );
+    this.story = await firstValueFrom(
+      this.storyService.updateActiveRecording(this.story._id, newRecording._id)
+    );
 
     // load the story's recordings (now just an array containing this new recording object)
     this.loadRecordings();
@@ -181,7 +201,9 @@ export class RecordingComponent implements OnInit, OnDestroy {
       console.log("Can't archive recording, current recording is null");
       return;
     }
-    await firstValueFrom( this.recordingService.updateArchiveStatus(this.currentRecording._id) );
+    await firstValueFrom(
+      this.recordingService.updateArchiveStatus(this.currentRecording._id)
+    );
     this.createNewRecording();
   }
 
@@ -191,7 +213,8 @@ export class RecordingComponent implements OnInit, OnDestroy {
    */
   async loadSynthesis(story: Story, voice?: Voice) {
     this.synthesisFinishedLoading = false;
-    [this.paragraphs, this.sentences] = await this.synthesis.synthesiseStoryText(story.text, voice);
+    [this.paragraphs, this.sentences] =
+      await this.synthesis.synthesiseStoryText(story.text, voice);
     this.chosenSections = this.paragraphs;
     this.audioFinishedLoading = true;
     this.synthesisFinishedLoading = true;
@@ -219,18 +242,26 @@ export class RecordingComponent implements OnInit, OnDestroy {
 
     // load in paragraph audio and transcriptions
     for (let i = 0; i < recording.paragraphIndices.length; ++i) {
-      let res = await firstValueFrom( this.recordingService.getAudio(recording.paragraphAudioIds[i]) );
+      let res = await firstValueFrom(
+        this.recordingService.getAudio(recording.paragraphAudioIds[i])
+      );
       this.paragraphBlobs[i] = res;
-      this.paragraphAudioSources[recording.paragraphIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-      this.paragraphTranscriptions[recording.paragraphIndices[i]] = recording.paragraphTranscriptions[recording.paragraphIndices[i]];
+      this.paragraphAudioSources[recording.paragraphIndices[i]] =
+        this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      this.paragraphTranscriptions[recording.paragraphIndices[i]] =
+        recording.paragraphTranscriptions[recording.paragraphIndices[i]];
     }
 
     // load in sentence audio and transcriptions
     for (let i = 0; i < recording.sentenceIndices.length; ++i) {
-      let res = await firstValueFrom( this.recordingService.getAudio(recording.sentenceAudioIds[i]) );
+      let res = await firstValueFrom(
+        this.recordingService.getAudio(recording.sentenceAudioIds[i])
+      );
       this.sentenceBlobs[i] = res;
-      this.sentenceAudioSources[recording.sentenceIndices[i]] = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
-      this.sentenceTranscriptions[recording.sentenceIndices[i]] = recording.sentenceTranscriptions[recording.sentenceIndices[i]];
+      this.sentenceAudioSources[recording.sentenceIndices[i]] =
+        this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(res));
+      this.sentenceTranscriptions[recording.sentenceIndices[i]] =
+        recording.sentenceTranscriptions[recording.sentenceIndices[i]];
     }
 
     // set the default section to paragraph data
@@ -246,10 +277,9 @@ export class RecordingComponent implements OnInit, OnDestroy {
    * or sentenceChunks
    */
   recordAudio(index: number) {
-    this.engagement.addEvent(
-      EventType["RECORD-STORY"],
-      {storyId: this.story._id}
-    );
+    this.engagement.addEvent(EventType["RECORD-STORY"], {
+      storyId: this.story._id,
+    });
 
     let media = {
       tag: "audio",
@@ -403,12 +433,16 @@ export class RecordingComponent implements OnInit, OnDestroy {
     };
 
     // update the recording object with the indices/audio files for the new data
-    let updatedRecording = await firstValueFrom( this.recordingService.update(this.story.activeRecording, trackData) );
+    let updatedRecording = await firstValueFrom(
+      this.recordingService.update(this.story.activeRecording, trackData)
+    );
 
     // reload the current recording to display the updated audio/transcriptions
     if (updatedRecording && this.currentRecording) {
       this.recordingSaved = true;
-      const currentRecordingIndex = this.recordings.indexOf(this.currentRecording);
+      const currentRecordingIndex = this.recordings.indexOf(
+        this.currentRecording
+      );
       this.recordings.splice(currentRecordingIndex, 1, updatedRecording);
     } else {
       alert("Error while saving audio");
@@ -422,8 +456,7 @@ export class RecordingComponent implements OnInit, OnDestroy {
       return this.isRecordingSentence[index];
     } else if (section instanceof Paragraph) {
       return this.isRecordingParagraph[index];
-    }
-    else {
+    } else {
       console.log("This section is neither a paragraph or sentence");
       return;
     }
@@ -484,19 +517,18 @@ export class RecordingComponent implements OnInit, OnDestroy {
       },
       width: "50vh",
     });
-    
-    this.dialogRef.afterClosed().subscribe( async (res) => {
-        this.dialogRef = undefined;
-        console.log(res);
-        if(res) {
-          this.ngOnInit();
-        }
-        else this.goToDashboard();
-      });
+
+    this.dialogRef.afterClosed().subscribe(async (res) => {
+      this.dialogRef = undefined;
+      console.log(res);
+      if (res) {
+        this.ngOnInit();
+      } else this.goToDashboard();
+    });
   }
 
   ngOnDestroy(): void {
-    this.paragraphs.forEach(paragraph => paragraph.dispose());
-    this.sentences.forEach(sentence => sentence.dispose());
+    this.paragraphs.forEach((paragraph) => paragraph.dispose());
+    this.sentences.forEach((sentence) => sentence.dispose());
   }
 }
