@@ -10,7 +10,7 @@ import { SynthesisCacheService } from "app/core/services/synthesis-cache.service
 
 // variable defining the different options for API calls
 const ApiOptions = {
-  base_url: "https://www.abair.ie/api2/synthesise",
+  base_url: "https://api.abair.ie/v3/synthesis",
   audioEncoding: ["MP3", "LINEAR16", "OGG_OPUS", "wav"],
   outputType: ["JSON", "HTML", "JSON_WITH_TIMING"],
   voiceCode: [
@@ -41,11 +41,46 @@ const asVoice = (x: readonly VoiceConfig[]) => x;
 
 // list of possible voice configurations for synthesis
 export const voices = asVoice([
-  { name: "Sibéal", gender: "female", shortCode: "snc", code: "ga_CO_snc_nemo", dialect: "connacht", algorithm: "nemo", },
-  { name: "Áine", gender: "female", shortCode: "anb", code: "ga_UL_anb_nemo", dialect: "ulster", algorithm: "nemo", },
-  { name: "Pádraig", gender: "male", shortCode: "pmc", code: "ga_CO_pmc_nemo", dialect: "connacht", algorithm: "nemo", },
-  { name: "Neasa", gender: "female", shortCode: "nnc", code: "ga_MU_nnc_nemo", dialect: "munster", algorithm: "nemo", },
-  { name: "Colm", gender: "male", shortCode: "cmg", code: "ga_MU_cmg_nnmnkwii", dialect: "munster", algorithm: "dnn", },
+  {
+    name: "Sibéal",
+    gender: "female",
+    shortCode: "snc",
+    code: "ga_CO_snc_nemo",
+    dialect: "connacht",
+    algorithm: "nemo",
+  },
+  {
+    name: "Áine",
+    gender: "female",
+    shortCode: "anb",
+    code: "ga_UL_anb_nemo",
+    dialect: "ulster",
+    algorithm: "nemo",
+  },
+  {
+    name: "Pádraig",
+    gender: "male",
+    shortCode: "pmc",
+    code: "ga_CO_pmc_nemo",
+    dialect: "connacht",
+    algorithm: "nemo",
+  },
+  {
+    name: "Neasa",
+    gender: "female",
+    shortCode: "nnc",
+    code: "ga_MU_nnc_nemo",
+    dialect: "munster",
+    algorithm: "nemo",
+  },
+  {
+    name: "Colm",
+    gender: "male",
+    shortCode: "cmg",
+    code: "ga_MU_cmg_nnmnkwii",
+    dialect: "munster",
+    algorithm: "dnn",
+  },
 ] as const);
 
 // type defining an entry in the VoiceConfig array
@@ -98,9 +133,10 @@ export class SynthesisService {
     if (!audioEncoding) audioEncoding = ApiOptions.audioEncoding[0];
 
     // Get audio from cache if text already synthesised => TODO test
-    const cacheKey = this.createCacheId(textInput, voice.code, speed)
+    const cacheKey = this.createCacheId(textInput, voice.code, speed);
     if (useCache) {
-      const cachedAudio = this.synthCacheService.getSynthesisResponseForSentence( cacheKey );
+      const cachedAudio =
+        this.synthCacheService.getSynthesisResponseForSentence(cacheKey);
       if (cachedAudio) return of(cachedAudio);
     }
 
@@ -118,7 +154,7 @@ export class SynthesisService {
         speakingRate: speed,
         pitch: 1,
       },
-      timing: "WORD"
+      timing: "WORD",
     };
 
     const httpOptions = {
@@ -128,12 +164,23 @@ export class SynthesisService {
     };
 
     // Otherwise send text to api
-    return this.http.post<any>("https://abair.ie/api2/synthesise", reqBody, httpOptions)
+    return this.http
+      .post<any>("https://api.abair.ie/v3/synthesis", reqBody, httpOptions)
       .pipe(
         // construct returned api audio url with given encoding preferences
-        map((data: { audioContent: string, timing: {word: string, end: number, originalWord: string}[] }) => {
-          return {audioUrl: this.prependAudioUrlPrefix(data.audioContent, audioEncoding!), timing: data.timing}
-        }
+        map(
+          (data: {
+            audioContent: string;
+            timing: { word: string; end: number; originalWord: string }[];
+          }) => {
+            return {
+              audioUrl: this.prependAudioUrlPrefix(
+                data.audioContent,
+                audioEncoding!
+              ),
+              timing: data.timing,
+            };
+          }
         ),
         // store audio in cache
         tap((data) =>
@@ -142,8 +189,8 @@ export class SynthesisService {
       );
   }
 
-  createCacheId(textInput: string, voice: string, speed: number ): string {
-    return this.synthCacheService.createCacheKey( textInput, voice, speed );
+  createCacheId(textInput: string, voice: string, speed: number): string {
+    return this.synthCacheService.createCacheKey(textInput, voice, speed);
   }
 
   /**
@@ -153,7 +200,12 @@ export class SynthesisService {
    * @returns constructed audio url
    */
   prependAudioUrlPrefix(base64AudioData: string, encoding: AudioEncoding) {
-    return ( "data:" + audioEncodingToDataUriMimeType.get(encoding) + ";base64," + base64AudioData );
+    return (
+      "data:" +
+      audioEncodingToDataUriMimeType.get(encoding) +
+      ";base64," +
+      base64AudioData
+    );
   }
 
   /**
@@ -161,14 +213,16 @@ export class SynthesisService {
    * @param dialect dialect of story
    * @returns voice code
    */
-  getVoiceForDialect(dialect: 'connemara' | 'kerry' | 'donegal'): typeof ApiOptions.voiceCode[number] {
+  getVoiceForDialect(
+    dialect: "connemara" | "kerry" | "donegal"
+  ): (typeof ApiOptions.voiceCode)[number] {
     switch (dialect) {
-      case 'donegal':
-        return 'ga_UL_anb_nemo';
-      case 'kerry':
-        return 'ga_MU_nnc_nemo';
+      case "donegal":
+        return "ga_UL_anb_nemo";
+      case "kerry":
+        return "ga_MU_nnc_nemo";
       default: // connemara
-        return 'ga_CO_snc_nemo';
+        return "ga_CO_snc_nemo";
     }
   }
 
@@ -182,9 +236,8 @@ export class SynthesisService {
    */
   async synthesiseStoryText(
     storyText: string,
-    voice: Voice | undefined = undefined,
+    voice: Voice | undefined = undefined
   ): Promise<[Paragraph[], Sentence[]]> {
-
     // split the story into paragraphs
     const storyParagraphs = storyText.split(/\n\s*\n/);
 
@@ -193,7 +246,7 @@ export class SynthesisService {
 
     let startTime = 0;
     let paragraphDuration = 0;
-    
+
     for (let paragraphEntry of storyParagraphs) {
       const paragraphSentences: Sentence[] = [];
       paragraphEntry = paragraphEntry.trim();
@@ -205,11 +258,17 @@ export class SynthesisService {
       for (let sentenceEntry of storySentences) {
         // synthesise the sentence text
         try {
-          const synthesisedSentence = await firstValueFrom(this.synthesiseText(sentenceEntry, voice));
+          const synthesisedSentence = await firstValueFrom(
+            this.synthesiseText(sentenceEntry, voice)
+          );
           startTime = 0;
           // create spans for each word in the synthesis response
           const wordSpans = synthesisedSentence.timing.map((entry: any) => {
-            const span = this.wordToSpan(entry.originalWord, startTime, entry.end - startTime);
+            const span = this.wordToSpan(
+              entry.originalWord,
+              startTime,
+              entry.end - startTime
+            );
             startTime = entry.end;
             sentenceDuration = sentenceDuration + entry.end;
             paragraphDuration = paragraphDuration + sentenceDuration;
@@ -228,11 +287,16 @@ export class SynthesisService {
       }
 
       // combine sentence audio urls to creat a paragraph level audio url
-      const combinedBlobUrl = await this.combineAudioSources(paragraphAudioUrls);
+      const combinedBlobUrl = await this.combineAudioSources(
+        paragraphAudioUrls
+      );
       const audio = new Audio(combinedBlobUrl);
 
       // combine sentence spans to form a paragraph
-      const spans: HTMLSpanElement[] = paragraphSentences.reduce( (acc, sentence) => acc.concat(sentence.spans), [] );
+      const spans: HTMLSpanElement[] = paragraphSentences.reduce(
+        (acc, sentence) => acc.concat(sentence.spans),
+        []
+      );
       const paragraph = new Paragraph(audio, spans, paragraphDuration);
       paragraphs.push(paragraph);
     }
@@ -253,7 +317,7 @@ export class SynthesisService {
   /**
    * Creates a span element for the given word, using synthesised timing info
    * @param word word from a given sentence
-   * @param startTime timing of when word is spoken in synthesised sentence 
+   * @param startTime timing of when word is spoken in synthesised sentence
    * @param duration duration of the spoken word in the audio
    * @returns span with meta data stored as attributes
    */
@@ -265,15 +329,15 @@ export class SynthesisService {
     span.classList.add("highlightable");
     return span;
   }
-  
+
   /**
    * Creates a div with all the word spans of a given sentence
    * @param wordSpans array of spans for each synthesised word
    * @returns a div containing all the span elements
    */
   wordSpanToSentenceSpan(wordSpans: Node[]) {
-    const divElement = document.createElement('div');
-    wordSpans.forEach(span => {
+    const divElement = document.createElement("div");
+    wordSpans.forEach((span) => {
       divElement.appendChild(span);
     });
     return divElement;
@@ -285,12 +349,10 @@ export class SynthesisService {
    * @returns A new audio url of combined sentence audio
    */
   async combineAudioSources(audioUrls: string[]) {
-    const proms = audioUrls.map((uri) =>
-      fetch(uri).then((r) => r.blob())
-    );
+    const proms = audioUrls.map((uri) => fetch(uri).then((r) => r.blob()));
 
     const blobs = await Promise.all(proms);
-    const blob = new Blob(blobs, { type: 'mp3' });
+    const blob = new Blob(blobs, { type: "mp3" });
     return URL.createObjectURL(blob);
   }
 }
@@ -319,7 +381,7 @@ export abstract class Section {
     duration: number
   ) {
     this.audio = audio;
-    this.audio.addEventListener('ended', () => {
+    this.audio.addEventListener("ended", () => {
       this.stop();
     });
     this.spans = spans;
@@ -382,7 +444,7 @@ export abstract class Section {
     for (const s of this.spans) {
       s.classList.remove("highlight");
       s.classList.remove("noHighlight");
-      console.log("REMOVE HIGHLIGHT: ", s)
+      console.log("REMOVE HIGHLIGHT: ", s);
     }
     this.highlightTimeouts.forEach((t) => clearTimeout(t));
   }
@@ -390,7 +452,7 @@ export abstract class Section {
   /** Unsubscribe the event listeners */
   dispose() {
     if (!this.audio.paused) this.stop();
-    this.audio.removeEventListener('ended', () => {
+    this.audio.removeEventListener("ended", () => {
       this.stop();
     });
   }
